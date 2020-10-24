@@ -1,0 +1,17 @@
+{
+	"variants": {
+		"facing=north,powered=false": { "model": "redtec:block/redstone_contact", "x": 90 },
+		"facing=south,powered=false": { "model": "redtec:block/redstone_contact", "x": 90, "y": 180 },
+		"facing=east,powered=false": { "model": "redtec:block/redstone_contact", "x": 90, "y": 90 },
+		"facing=west,powered=false": { "model": "redtec:block/redstone_contact", "x": 90, "y": -90 },
+		"facing=up,powered=false": { "model": "redtec:block/redstone_contact"},
+		"facing=down,powered=false": { "model": "redtec:block/redstone_contact", "x": 180 },
+		
+		"facing=north,powered=true": { "model": "redtec:block/redstone_contact_active", "x": 90 },
+		"facing=south,powered=true": { "model": "redtec:block/redstone_contact_active", "x": 90, "y": 180 },
+		"facing=east,powered=true": { "model": "redtec:block/redstone_contact_active", "x": 90, "y": 90 },
+		"facing=west,powered=true": { "model": "redtec:block/redstone_contact_active", "x": 90, "y": -90 },
+		"facing=up,powered=true": { "model": "redtec:block/redstone_contact_active"},
+		"facing=down,powered=true": { "model": "redtec:block/redstone_contact_active", "x": 180 }
+	}
+}

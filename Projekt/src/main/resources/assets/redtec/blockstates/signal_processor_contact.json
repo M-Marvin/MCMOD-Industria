@@ -1,0 +1,17 @@
+{
+	"variants": {
+		"facing=north,open=false": { "model": "redtec:block/signal_processor_contact_close" },
+		"facing=south,open=false": { "model": "redtec:block/signal_processor_contact_close", "y": 180 },
+		"facing=east,open=false": { "model": "redtec:block/signal_processor_contact_close", "y": 90 },
+		"facing=west,open=false": { "model": "redtec:block/signal_processor_contact_close", "y": -90 },
+		"facing=up,open=false": { "model": "redtec:block/signal_processor_contact_close", "x": -90 },
+		"facing=down,open=false": { "model": "redtec:block/signal_processor_contact_close", "x": 90 },
+		
+		"facing=north,open=true": { "model": "redtec:block/signal_processor_contact_open" },
+		"facing=south,open=true": { "model": "redtec:block/signal_processor_contact_open", "y": 180 },
+		"facing=east,open=true": { "model": "redtec:block/signal_processor_contact_open", "y": 90 },
+		"facing=west,open=true": { "model": "redtec:block/signal_processor_contact_open", "y": -90 },
+		"facing=up,open=true": { "model": "redtec:block/signal_processor_contact_open", "x": -90 },
+		"facing=down,open=true": { "model": "redtec:block/signal_processor_contact_open", "x": 90 }
+	}
+}

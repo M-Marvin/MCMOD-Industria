@@ -1,0 +1,11 @@
+{
+	"parent": "redtec:blockitem/button_element",
+    "overrides": [
+        {
+            "predicate": {
+                "custom_model_data": 1
+            },
+            "model": "redtec:blockitem/button_element_pressed"
+        }
+    ]
+}

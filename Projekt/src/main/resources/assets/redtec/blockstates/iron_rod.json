@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "redtec:block/iron_rod",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "redtec:block/iron_rod",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "redtec:block/iron_rod",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "redtec:block/iron_rod",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "redtec:block/iron_rod"
+    },
+    "facing=west": {
+      "model": "redtec:block/iron_rod",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

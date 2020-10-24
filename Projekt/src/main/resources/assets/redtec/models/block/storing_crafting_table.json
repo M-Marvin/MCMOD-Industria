@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "redtec:block/crafting_table_front",
+    "north": "redtec:block/crafting_table_front",
+    "south": "redtec:block/crafting_table_side",
+    "east": "redtec:block/crafting_table_side",
+    "west": "redtec:block/crafting_table_front",
+    "up": "redtec:block/crafting_table_top",
+    "down": "redtec:block/advanced_piston_bottom"
+  }
+}

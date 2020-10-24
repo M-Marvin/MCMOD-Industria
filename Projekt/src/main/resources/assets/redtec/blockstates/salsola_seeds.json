@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "age=0": { "model": "redtec:block/salsola_stage_0" },
+    "age=1": { "model": "redtec:block/salsola_stage_1" },
+    "age=2": { "model": "redtec:block/salsola_stage_2" },
+    "age=3": { "model": "redtec:block/salsola_stage_3" }
+  }
+}

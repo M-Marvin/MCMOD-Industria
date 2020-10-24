@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "redtec:block/advanced_piston_top_sticky",
+    "side": "redtec:block/linear_conector_side"
+  }
+}

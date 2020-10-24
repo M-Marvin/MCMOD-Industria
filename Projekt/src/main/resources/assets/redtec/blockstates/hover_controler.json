@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=north": { "model": "redtec:block/hover_controler" },
+		"facing=south": { "model": "redtec:block/hover_controler", "y": 180 },
+		"facing=east": { "model": "redtec:block/hover_controler", "y": 90 },
+		"facing=west": { "model": "redtec:block/hover_controler", "y": -90 }
+	}
+}

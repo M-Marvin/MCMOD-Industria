@@ -1,0 +1,22 @@
+{
+	"multipart": [
+		{	"when": {"facing": "north" }, 
+			"apply": { "model": "redtec:block/antenna_conector" }
+		},
+		{	"when": {"facing": "south" }, 
+			"apply": { "model": "redtec:block/antenna_conector", "y": 180 }
+		},
+		{	"when": {"facing": "east" }, 
+			"apply": { "model": "redtec:block/antenna_conector", "y": 90 }
+		},
+		{	"when": {"facing": "west" }, 
+			"apply": { "model": "redtec:block/antenna_conector", "y": -90 }
+		},
+		{	"when": {"facing": "up" }, 
+			"apply": { "model": "redtec:block/antenna_conector", "x": -90, "y": -90 }
+		},
+		{	"when": {"facing": "down" }, 
+			"apply": { "model": "redtec:block/antenna_conector", "x": 90, "y": 90}
+		}
+	]
+}

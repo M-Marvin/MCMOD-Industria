@@ -1,0 +1,8 @@
+{
+	"block.hover_extension.activated": {
+		"sounds": [
+			"redtec:hover_extension_activate"
+		],
+		"subtitle": "sound.redtec.block.hover_extension.activated"
+	}
+}

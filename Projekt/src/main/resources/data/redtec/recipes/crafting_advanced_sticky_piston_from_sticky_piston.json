@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "EEE",
+    "BKB",
+    "BKB"
+  ],
+  "key": {
+    "E": {
+      "item": "minecraft:iron_ingot"
+    },
+    "B": {
+      "item": "minecraft:cobblestone"
+    },
+    "K": {
+      "item": "minecraft:sticky_piston"
+    }
+  },
+  "result": {
+    "item": "redtec:advanced_sticky_piston"
+  }
+}

@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.Rarity;
 
 public class ModGameRegistry {
 	
@@ -21,9 +22,16 @@ public class ModGameRegistry {
 		itemsToRegister.add(item);
 	}
 	
+	public static void registerBlock(Block block, ItemGroup group, Rarity rarity) {
+		blocksToRegister.add(block);
+		Item blockItem = group != null ? new BlockItem(block, new Item.Properties().group(group).rarity(rarity)) : new BlockItem(block, new Item.Properties().rarity(rarity));
+		blockItem.setRegistryName(block.getRegistryName());
+		itemsToRegister.add(blockItem);
+	}
+	
 	public static void registerBlock(Block block, ItemGroup group) {
 		blocksToRegister.add(block);
-		Item blockItem = new BlockItem(block, new Item.Properties().group(group));
+		Item blockItem = group != null ? new BlockItem(block, new Item.Properties().group(group)) : new BlockItem(block, new Item.Properties());
 		blockItem.setRegistryName(block.getRegistryName());
 		itemsToRegister.add(blockItem);
 	}

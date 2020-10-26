@@ -65,6 +65,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 	@SuppressWarnings("unused")
 	public void update() {
 		
+		
 		// Wird jeden Tick aufgerufen
 		
 		for (ElectricityNetwork networks : this.networks) {

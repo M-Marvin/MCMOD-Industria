@@ -1,0 +1,57 @@
+{
+  "variants": {
+    "type=vertical_down,facing=east": {
+      "model": "redtec:block/jigsaw",
+      "x": 90,
+      "y": 90
+    },
+    "type=vertical_down,facing=north": {
+      "model": "redtec:block/jigsaw",
+      "x": 90
+    },
+    "type=vertical_down,facing=south": {
+      "model": "redtec:block/jigsaw",
+      "x": 90,
+      "y": 180
+    },
+    "type=vertical_down,facing=west": {
+      "model": "redtec:block/jigsaw",
+      "x": 90,
+      "y": 270
+    },
+    "type=horizontal,facing=east": {
+      "model": "redtec:block/jigsaw",
+      "y": 90
+    },
+    "type=horizontal,facing=north": {
+      "model": "redtec:block/jigsaw"
+    },
+    "type=horizontal,facing=south": {
+      "model": "redtec:block/jigsaw",
+      "y": 180
+    },
+    "type=vertical_up,facing=east": {
+      "model": "redtec:block/jigsaw",
+      "x": 270,
+      "y": 270
+    },
+    "type=vertical_up,facing=north": {
+      "model": "redtec:block/jigsaw",
+      "x": 270,
+      "y": 180
+    },
+    "type=vertical_up,facing=south": {
+      "model": "redtec:block/jigsaw",
+      "x": 270
+    },
+    "type=vertical_up,facing=west": {
+      "model": "redtec:block/jigsaw",
+      "x": 270,
+      "y": 90
+    },
+    "type=horizontal,facing=west": {
+      "model": "redtec:block/jigsaw",
+      "y": 270
+    }
+  }
+}

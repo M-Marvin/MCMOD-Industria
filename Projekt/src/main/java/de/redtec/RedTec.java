@@ -19,6 +19,7 @@ import de.redtec.blocks.BlockHoverControler;
 import de.redtec.blocks.BlockHoverExtension;
 import de.redtec.blocks.BlockInfinityPowerSource;
 import de.redtec.blocks.BlockIronRod;
+import de.redtec.blocks.BlockJigsaw;
 import de.redtec.blocks.BlockLinearConector;
 import de.redtec.blocks.BlockPanelLamp;
 import de.redtec.blocks.BlockPowerEmiting;
@@ -36,6 +37,7 @@ import de.redtec.blocks.BlockStackedRedstoneWire;
 import de.redtec.blocks.BlockStoringCraftingTable;
 import de.redtec.gui.ScreenHarvester;
 import de.redtec.gui.ScreenHoverControler;
+import de.redtec.gui.ScreenJigsaw;
 import de.redtec.gui.ScreenProcessor;
 import de.redtec.gui.ScreenReciver;
 import de.redtec.gui.ScreenStoredCrafting;
@@ -48,7 +50,9 @@ import de.redtec.items.ItemSalsola;
 import de.redtec.items.panelitems.ItemButtonElement;
 import de.redtec.items.panelitems.ItemLampElement;
 import de.redtec.items.panelitems.ItemLeverElement;
+import de.redtec.packet.CEditJigsawTileEntityPacket;
 import de.redtec.packet.CEditProcessorCodePacket;
+import de.redtec.packet.CGenerateJigsaw;
 import de.redtec.renderer.BlockControllPanelItemRenderer;
 import de.redtec.renderer.TileEntityAdvancedMovingBlockRenderer;
 import de.redtec.renderer.TileEntityControllPanelRenderer;
@@ -127,7 +131,6 @@ public class RedTec {
 	public static final Item salsola = new ItemSalsola();
 	public static final Item empty_blueprint = new ItemEmptyBlueprint();
 	public static final Item blueprint = new ItemBlueprint();
-	
 	public static final Item lever_element = new ItemLeverElement();
 	public static final Item button_element = new ItemButtonElement();
 	public static final Item lamp_element = new ItemLampElement();
@@ -157,6 +160,7 @@ public class RedTec {
 	public static final Block hover_extension = new BlockHoverExtension();
 	public static final Block controll_panel = new BlockControllPanel();
 	public static final Block harvester = new BlockHarvester();
+	public static final Block jigsaw = new BlockJigsaw();
 	
 	public static final Block infinity_power_source = new BlockInfinityPowerSource();
 	public static final Block panel_lamp = new BlockPanelLamp();
@@ -211,8 +215,6 @@ public class RedTec {
 		ModGameRegistry.registerBlock(copper_cable, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(infinity_power_source, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(panel_lamp, ItemGroup.REDSTONE);
-		
-		// register Building Blocks
 		ModGameRegistry.registerBlock(steel_block, ItemGroup.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(copper_block, ItemGroup.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(aluminium_block, ItemGroup.BUILDING_BLOCKS);
@@ -233,6 +235,7 @@ public class RedTec {
 		ModGameRegistry.registerBlock(iron_rod, ItemGroup.DECORATIONS);
 		ModGameRegistry.registerBlock(stone_corner, ItemGroup.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(salsola_seeds, ItemGroup.MISC);
+		ModGameRegistry.registerBlock(jigsaw, null, Rarity.EPIC);
 		
 		// register Items
 		ModGameRegistry.registerItem(redstone_ingot);
@@ -268,6 +271,8 @@ public class RedTec {
 		
 		// Register Packets
 		NETWORK.registerMessage(0, CEditProcessorCodePacket.class, CEditProcessorCodePacket::encode, CEditProcessorCodePacket::new, CEditProcessorCodePacket::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+		NETWORK.registerMessage(1, CEditJigsawTileEntityPacket.class, CEditJigsawTileEntityPacket::encode, CEditJigsawTileEntityPacket::new, CEditJigsawTileEntityPacket::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+		NETWORK.registerMessage(2, CGenerateJigsaw.class, CGenerateJigsaw::encode, CGenerateJigsaw::new, CGenerateJigsaw::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		
 		// Dispenser Behaviors
 		IDispenseItemBehavior placeBlockBehavior = new IDispenseItemBehavior() {
@@ -324,6 +329,7 @@ public class RedTec {
 		ScreenManager.registerFactory(ModContainerType.HOVER_CONTROLER, ScreenHoverControler::new);
 		ScreenManager.registerFactory(ModContainerType.REDSTONE_RECIVER, ScreenReciver::new);
 		ScreenManager.registerFactory(ModContainerType.HARVESTER, ScreenHarvester::new);
+		ScreenManager.registerFactory(ModContainerType.JIGSAW, ScreenJigsaw::new);
 		
 	}
 	

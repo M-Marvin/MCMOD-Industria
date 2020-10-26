@@ -104,13 +104,18 @@ public class AdvancedStrukture {
 				
 				CompoundNBT compound = nbt.get(index);
 				TileEntity tileEntity = world.getTileEntity(pos);
-				tileEntity.setPos(pos);
-				if (!(tileEntity instanceof BannerTileEntity)) tileEntity.func_230337_a_(state, compound);
-				tileEntity.setPos(pos);
 				
-				if (tileEntity instanceof IPostMoveHandledTE) {
+				if (tileEntity != null) {
 					
-					((IPostMoveHandledTE) tileEntity).handlePostMove(tileEntity.getPos(), this.moveDirection, moveDistance, false);
+					tileEntity.setPos(pos);
+					if (!(tileEntity instanceof BannerTileEntity)) tileEntity.func_230337_a_(state, compound);
+					tileEntity.setPos(pos);
+					
+					if (tileEntity instanceof IPostMoveHandledTE) {
+						
+						((IPostMoveHandledTE) tileEntity).handlePostMove(tileEntity.getPos(), this.moveDirection, moveDistance, false);
+						
+					}
 					
 				}
 				
@@ -165,8 +170,6 @@ public class AdvancedStrukture {
 		int minY = this.blocks.get(0).getY();
 		int maxY = this.blocks.get(0).getY();
 		BlockPos center = calculateCenterAtY(-1);
-		
-		System.out.println(center);
 		
 		for (BlockPos block : this.blocks) {
 			
@@ -359,10 +362,18 @@ public class AdvancedStrukture {
 			
 			if (pos.getY() == y || y == -1) {
 				
-				if (pos.getX() > maxX || maxX == -1) maxX = pos.getX();
-				if (pos.getZ() > maxZ || maxZ == -1) maxZ = pos.getZ();
-				if (pos.getX() < minX || minX == -1) minX = pos.getX();
-				if (pos.getZ() < minZ || minX == -1) minZ = pos.getZ();
+				if (pos.getX() > maxX || maxX == -1) {
+					maxX = pos.getX();
+				}
+				if (pos.getZ() > maxZ || maxZ == -1) {
+					maxZ = pos.getZ();
+				}
+				if (pos.getX() < minX || minX == -1) {
+					minX = pos.getX();
+				}
+				if (pos.getZ() < minZ || minZ == -1) {
+					minZ = pos.getZ();
+				}
 				
 			}
 			

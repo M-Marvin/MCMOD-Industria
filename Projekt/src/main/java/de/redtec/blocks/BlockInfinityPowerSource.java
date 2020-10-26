@@ -17,7 +17,7 @@ import net.minecraft.world.server.ServerWorld;
 public class BlockInfinityPowerSource extends BlockContainerBase implements IElectricConnective {
 
 	public BlockInfinityPowerSource() {
-		super("infinity_power_source", Material.ROCK, -1, SoundType.STONE);
+		super("infinity_power_source", Properties.create(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(-1.0F, 3600000.0F).noDrops());
 	}
 
 	@Override

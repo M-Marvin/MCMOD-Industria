@@ -12,7 +12,7 @@
 "block.redtec.signal_processor_contact": "Prozessor Fassung",
 "block.redtec.conector_block": "Verbundblock",
 "block.redtec.rail_piston": "Linear Kolben",
-"block.redtec.redstone_contact": "Redstone Kontakt";
+"block.redtec.redstone_contact": "Redstone Kontakt",
 "block.redtec.button_block": "Knopfblock",
 "block.redtec.smooth_cobblestone": "Glatter Bruchstein",
 "block.redtec.iron_platting": "Eisenblech",
@@ -25,7 +25,7 @@
 "block.redtec.iron_rod": "Eisenstab",
 "block.redtec.radial_conector": "Radialer Verbundblock",
 "block.redtec.salsola_seeds": "Salzkraut-Samen",
-"block.redtec.hover_controler": "Struktur-Kontroll-Block";
+"block.redtec.hover_controler": "Struktur-Kontroll-Block",
 "block.redtec.hover_extension": "Struktur-Antriebs-Erweiterungs-Block",
 "block.redtec.controll_panel": "Schaltpult",
 "block.redtec.harvester": "Ernteblock",
@@ -38,12 +38,13 @@
 "block.redtec.bauxit": "Bauxit",
 "block.redtec.redstone_alloy_block": "Redstone-Legierungsblock",
 "block.redtec.redstone_alloy_platting": "Redstone-Legierungsblech",
+"block.redtec.jigsaw": "Verbundblock",
 
 "item.redtec.lever_element": "Schaltpult Hebel",
 "item.redtec.button_element": "Schaltpult Knopf",
 "item.redtec.lamp_element": "Schaltpult Lampe",
 
-"item.redtec.salsola": "Salzkraut";
+"item.redtec.salsola": "Salzkraut",
 "item.redtec.redstone_ingot": "Redstonebarren",
 "item.redtec.redstone_nugget": "Redstonenugget",
 "item.redtec.copper_nugget": "Kupfernugget",
@@ -63,5 +64,17 @@
 
 "sound.redtec.block.hover_extension.activated": "Antrieb aktiviert",
 
-"redtec.storing_crafting_table.container": "Werkbank"
+"redtec.storing_crafting_table.container": "Werkbank",
+"redtec.jigsaw_block.pool": "Struktur Liste:",
+"redtec.jigsaw_block.name": "Jigsaw Verbindungsname:",
+"redtec.jigsaw_block.targetName": "Ziel Jigsaw Verbindungsname:",
+"redtec.jigsaw_block.state": "Wird zu:",
+"redtec.jigsaw_block.connection": "Verbindung:",
+"redtec.jigsaw_block.orientation.locked": "Ausgerichtet",
+"redtec.jigsaw_block.orientation.rotateable": "Rotierbar",
+"redtec.jigsaw_block.keepJigsaws.on": "Verb. behalten: An",
+"redtec.jigsaw_block.keepJigsaws.off": "Verb. behalten: Aus",
+"redtec.jigsaw_block.generate": "Generieren",
+"redtec.jigsaw_block.levels": "Levels: %s"
+
 }

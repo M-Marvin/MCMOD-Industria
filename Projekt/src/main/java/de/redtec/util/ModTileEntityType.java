@@ -5,10 +5,13 @@ import com.mojang.datafixers.types.Type;
 import de.redtec.RedTec;
 import de.redtec.tileentity.TileEntityAdvancedMovingBlock;
 import de.redtec.tileentity.TileEntityControllPanel;
+import de.redtec.tileentity.TileEntityFluidInput;
+import de.redtec.tileentity.TileEntityFluidPipe;
 import de.redtec.tileentity.TileEntityHarvester;
 import de.redtec.tileentity.TileEntityHoverControler;
 import de.redtec.tileentity.TileEntityJigsaw;
 import de.redtec.tileentity.TileEntityLockedCompositeBlock;
+import de.redtec.tileentity.TileEntityMGenerator;
 import de.redtec.tileentity.TileEntityRedstoneReciver;
 import de.redtec.tileentity.TileEntitySignalAntenna;
 import de.redtec.tileentity.TileEntitySignalProcessorContact;
@@ -37,6 +40,9 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityHarvester> HARVESTER = register("harvester", TileEntityType.Builder.create(TileEntityHarvester::new, RedTec.harvester));
 	public static final TileEntityType<TileEntitySimpleBlockTicking> SIMPLE_BLOCK_TICKING = register("simple_block_ticking", TileEntityType.Builder.create(TileEntitySimpleBlockTicking::new, RedTec.panel_lamp, RedTec.infinity_power_source));
 	public static final TileEntityType<TileEntityJigsaw> JIGSAW = register("jigsaw", TileEntityType.Builder.create(TileEntityJigsaw::new, RedTec.jigsaw));
+	public static final TileEntityType<TileEntityMGenerator> GENERATOR = register("generator", TileEntityType.Builder.create(TileEntityMGenerator::new, RedTec.generator));
+	public static final TileEntityType<TileEntityFluidPipe> FLUID_PIPE = register("fluid_pipe", TileEntityType.Builder.create(TileEntityFluidPipe::new, RedTec.fluid_pipe));
+	public static final TileEntityType<TileEntityFluidInput> FLUID_INPUT = register("fluid_input", TileEntityType.Builder.create(TileEntityFluidInput::new, RedTec.fluid_input));
 	
 	@SuppressWarnings("deprecation")
 	private static <T extends TileEntity> TileEntityType<T> register(String key, TileEntityType.Builder<T> builder) {

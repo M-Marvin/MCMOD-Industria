@@ -10,6 +10,8 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
@@ -104,6 +106,15 @@ public class BlockHoverControler extends BlockContainerBase implements ISignalCo
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
 		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+	}
+
+	@Override
+	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+		TileEntity te = worldIn.getTileEntity(pos);
+		if (te instanceof IInventory) {
+			InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) te);
+		}
+		super.onBlockHarvested(worldIn, pos, state, player);
 	}
 	
 }

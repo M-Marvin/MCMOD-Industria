@@ -1,4 +1,4 @@
-package de.specialrecipes;
+package de.redtec.specialrecipes;
 
 import de.redtec.items.ItemProcessor;
 import net.minecraft.inventory.CraftingInventory;

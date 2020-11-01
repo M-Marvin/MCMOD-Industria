@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.redtec.RedTec;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.SoundType;
@@ -30,6 +31,11 @@ public abstract class BlockContainerBase extends ContainerBlock {
 		List<ItemStack> drops = new ArrayList<ItemStack>();
 		drops.add(new ItemStack(Item.getItemFromBlock(this), 1));
 		return drops;
+	}
+	
+	@Override
+	public BlockRenderType getRenderType(BlockState state) {
+		return BlockRenderType.MODEL;
 	}
 	
 }

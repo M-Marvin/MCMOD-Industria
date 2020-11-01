@@ -1,9 +1,9 @@
 {
 	"multipart": [
-		{ "when": {"middle_closed": "true"}, "apply": {
+		{ "when": {"middle": "close"}, "apply": {
 			"model": "redtec:block/copper_cable_mid"
 		}},
-		{ "when": {"middle_closed": "false"}, "apply": {
+		{ "when": {"middle": "open"}, "apply": {
 			"model": "redtec:block/copper_cable_mid_uninsulated"
 		}},
 		{ "when": {"north": "true"}, "apply": {

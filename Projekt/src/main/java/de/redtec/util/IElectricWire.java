@@ -22,4 +22,9 @@ public interface IElectricWire extends IElectricConnective {
 		return true;
 	}
 	
+	@Override
+	default DeviceType getDeviceType() {
+		return DeviceType.WIRE;
+	}
+	
 }

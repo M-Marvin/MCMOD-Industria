@@ -1,4 +1,4 @@
-package de.specialrecipes;
+package de.redtec.specialrecipes;
 
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;

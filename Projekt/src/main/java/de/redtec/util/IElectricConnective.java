@@ -12,6 +12,7 @@ public interface IElectricConnective {
 	public int getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side);
 	public default void onNetworkChanges(World worldIn, BlockPos pos, BlockState state, ElectricityNetwork network) {}
 	public boolean canConnect(Direction side, BlockState state);
+	public DeviceType getDeviceType();
 	
 	public default ElectricityNetwork getNetwork(World worldIn, BlockPos pos) {
 		
@@ -22,15 +23,8 @@ public interface IElectricConnective {
 		
 	}
 	
-	public default void updateNetwork(World worldIn, BlockPos pos, Direction face) {
-		ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(worldIn);
-		handler.calculateNetwork(worldIn, pos, face);
-	}
-	
 	public default void updateNetwork(World worldIn, BlockPos pos) {
-		for (Direction d : Direction.values()) {
-			this.updateNetwork(worldIn, pos, d);
-		}
+		ElectricityNetworkHandler.getHandlerForWorld(worldIn).updateNetwork(worldIn, pos);
 	}
 	
 	public static enum Voltage {
@@ -45,6 +39,18 @@ public interface IElectricConnective {
 		
 		public int getVoltage() {
 			return voltage;
+		}
+		
+	}
+	
+	public static enum DeviceType {
+		
+		MASCHINE(),WIRE(),SWITCH();
+		
+		boolean canConnectWith(DeviceType type) {
+			if (this == MASCHINE) return type == WIRE;
+			if (this == SWITCH) return type == WIRE;
+			return true;
 		}
 		
 	}

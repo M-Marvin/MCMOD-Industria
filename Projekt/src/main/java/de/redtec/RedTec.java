@@ -14,6 +14,8 @@ import de.redtec.blocks.BlockConectorBlock;
 import de.redtec.blocks.BlockControllPanel;
 import de.redtec.blocks.BlockCornerBlockBase;
 import de.redtec.blocks.BlockElektricWire;
+import de.redtec.blocks.BlockFluidInput;
+import de.redtec.blocks.BlockFluidPipe;
 import de.redtec.blocks.BlockHarvester;
 import de.redtec.blocks.BlockHoverControler;
 import de.redtec.blocks.BlockHoverExtension;
@@ -21,6 +23,7 @@ import de.redtec.blocks.BlockInfinityPowerSource;
 import de.redtec.blocks.BlockIronRod;
 import de.redtec.blocks.BlockJigsaw;
 import de.redtec.blocks.BlockLinearConector;
+import de.redtec.blocks.BlockMGenerator;
 import de.redtec.blocks.BlockPanelLamp;
 import de.redtec.blocks.BlockPowerEmiting;
 import de.redtec.blocks.BlockRDCapacitor;
@@ -38,6 +41,7 @@ import de.redtec.blocks.BlockStoringCraftingTable;
 import de.redtec.gui.ScreenHarvester;
 import de.redtec.gui.ScreenHoverControler;
 import de.redtec.gui.ScreenJigsaw;
+import de.redtec.gui.ScreenMGenerator;
 import de.redtec.gui.ScreenProcessor;
 import de.redtec.gui.ScreenReciver;
 import de.redtec.gui.ScreenStoredCrafting;
@@ -53,6 +57,7 @@ import de.redtec.items.panelitems.ItemLeverElement;
 import de.redtec.packet.CEditJigsawTileEntityPacket;
 import de.redtec.packet.CEditProcessorCodePacket;
 import de.redtec.packet.CGenerateJigsaw;
+import de.redtec.packet.SSendENHandeler;
 import de.redtec.renderer.BlockControllPanelItemRenderer;
 import de.redtec.renderer.TileEntityAdvancedMovingBlockRenderer;
 import de.redtec.renderer.TileEntityControllPanelRenderer;
@@ -162,9 +167,14 @@ public class RedTec {
 	public static final Block harvester = new BlockHarvester();
 	public static final Block jigsaw = new BlockJigsaw();
 	
+	public static final Block generator = new BlockMGenerator();
 	public static final Block infinity_power_source = new BlockInfinityPowerSource();
 	public static final Block panel_lamp = new BlockPanelLamp();
-	public static final Block copper_cable = new BlockElektricWire("copper_cable", 3400, 4);
+	public static final Block copper_cable = new BlockElektricWire("copper_cable", 18000, 4);
+	public static final Block electrolyt_copper_cable = new BlockElektricWire("electrolyt_copper_cable", 36000, 4);
+	public static final Block aluminium_cable = new BlockElektricWire("aluminium_cable", 73000, 8);
+	public static final Block fluid_pipe = new BlockFluidPipe();
+	public static final Block fluid_input = new BlockFluidInput();
 	
 	public static final Block bauxit = new BlockBase("bauxit", Material.ROCK, 1F, SoundType.STONE);
 	public static final Block bauxit_ore = new BlockBase("bauxit_ore", Material.ROCK, 1.5F, SoundType.STONE);
@@ -183,6 +193,13 @@ public class RedTec {
 	public static final Block redstone_alloy_platting = new BlockPowerEmiting("redstone_alloy_platting", Material.IRON, 1.2F, SoundType.METAL, 4);
 	public static final Block chiseled_smooth_stone = new BlockBase("chiseled_smooth_stone", Material.ROCK, 1.5F, SoundType.STONE);
 	public static final Block smooth_cobblestone = new BlockBase("smooth_cobblestone", Material.ROCK, 2, SoundType.STONE);
+	
+	public static final ItemGroup MACHINES = new ItemGroup("machines") {
+		@Override
+		public ItemStack createIcon() {
+			return new ItemStack(generator);
+		}
+	};
 	
 	public RedTec() {
 		
@@ -212,9 +229,11 @@ public class RedTec {
 		ModGameRegistry.registerBlock(hover_extension, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(controll_panel, ItemGroup.REDSTONE, () -> BlockControllPanelItemRenderer::new);
 		ModGameRegistry.registerBlock(harvester, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(copper_cable, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(infinity_power_source, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(panel_lamp, ItemGroup.REDSTONE);
+		ModGameRegistry.registerBlock(copper_cable, MACHINES);
+		ModGameRegistry.registerBlock(electrolyt_copper_cable, MACHINES);
+		ModGameRegistry.registerBlock(aluminium_cable, MACHINES);
+		ModGameRegistry.registerBlock(infinity_power_source, null);
+		ModGameRegistry.registerBlock(panel_lamp, MACHINES);
 		ModGameRegistry.registerBlock(steel_block, ItemGroup.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(copper_block, ItemGroup.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(aluminium_block, ItemGroup.BUILDING_BLOCKS);
@@ -236,6 +255,9 @@ public class RedTec {
 		ModGameRegistry.registerBlock(stone_corner, ItemGroup.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(salsola_seeds, ItemGroup.MISC);
 		ModGameRegistry.registerBlock(jigsaw, null, Rarity.EPIC);
+		ModGameRegistry.registerBlock(generator, MACHINES);
+		ModGameRegistry.registerBlock(fluid_pipe, MACHINES);
+		ModGameRegistry.registerBlock(fluid_input, MACHINES);
 		
 		// register Items
 		ModGameRegistry.registerItem(redstone_ingot);
@@ -273,6 +295,7 @@ public class RedTec {
 		NETWORK.registerMessage(0, CEditProcessorCodePacket.class, CEditProcessorCodePacket::encode, CEditProcessorCodePacket::new, CEditProcessorCodePacket::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		NETWORK.registerMessage(1, CEditJigsawTileEntityPacket.class, CEditJigsawTileEntityPacket::encode, CEditJigsawTileEntityPacket::new, CEditJigsawTileEntityPacket::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		NETWORK.registerMessage(2, CGenerateJigsaw.class, CGenerateJigsaw::encode, CGenerateJigsaw::new, CGenerateJigsaw::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+		NETWORK.registerMessage(3, SSendENHandeler.class, SSendENHandeler::encode, SSendENHandeler::new, SSendENHandeler::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));		
 		
 		// Dispenser Behaviors
 		IDispenseItemBehavior placeBlockBehavior = new IDispenseItemBehavior() {
@@ -330,6 +353,7 @@ public class RedTec {
 		ScreenManager.registerFactory(ModContainerType.REDSTONE_RECIVER, ScreenReciver::new);
 		ScreenManager.registerFactory(ModContainerType.HARVESTER, ScreenHarvester::new);
 		ScreenManager.registerFactory(ModContainerType.JIGSAW, ScreenJigsaw::new);
+		ScreenManager.registerFactory(ModContainerType.GENERATOR, ScreenMGenerator::new);
 		
 	}
 	
@@ -338,7 +362,7 @@ public class RedTec {
     	
         @SubscribeEvent
         public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
-            IForgeRegistry<Block> registry = blockRegistryEvent.getRegistry();
+        	IForgeRegistry<Block> registry = blockRegistryEvent.getRegistry();
         	Block[] blocksToRegister = ModGameRegistry.getBlocksToRegister();
     		for (Block block : blocksToRegister) {
             	registry.register(block);

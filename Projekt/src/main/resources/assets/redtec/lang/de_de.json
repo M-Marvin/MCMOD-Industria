@@ -39,6 +39,12 @@
 "block.redtec.redstone_alloy_block": "Redstone-Legierungsblock",
 "block.redtec.redstone_alloy_platting": "Redstone-Legierungsblech",
 "block.redtec.jigsaw": "Verbundblock",
+"block.redtec.generator": "Mobiler Generator",
+"block.redtec.copper_cable": "Kupferekabel",
+"block.redtec.electrolyt_copper_cable": "Elektrolyt Kupferkabel",
+"block.redtec.aluminium_cable": "Aluminiumkabel",
+"block.redtec.infinity_power_source": "Endlose Energiequelle",
+"block.redtec.panel_lamp": "Beleuchtung",
 
 "item.redtec.lever_element": "Schaltpult Hebel",
 "item.redtec.button_element": "Schaltpult Knopf",
@@ -75,6 +81,10 @@
 "redtec.jigsaw_block.keepJigsaws.on": "Verb. behalten: An",
 "redtec.jigsaw_block.keepJigsaws.off": "Verb. behalten: Aus",
 "redtec.jigsaw_block.generate": "Generieren",
-"redtec.jigsaw_block.levels": "Levels: %s"
+"redtec.jigsaw_block.levels": "Levels: %s",
+"redtec.generator.remainingFuel": "Treibstoff",
+
+"death.attack.electric_shock": "%1$s starb durch einen Stromschlag.",
+"death.attack.electric_shock.player": "%1$s starb durch einen Stromschlag beim Kampf gegen %2$s."
 
 }

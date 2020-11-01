@@ -11,9 +11,11 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -29,7 +31,7 @@ public abstract class BlockWiring extends BlockBase implements IWaterLoggable {
 	public static final BooleanProperty WEST = BooleanProperty.create("west");
 	public static final BooleanProperty DOWN = BooleanProperty.create("down");
 	public static final BooleanProperty UP = BooleanProperty.create("up");
-	public static final BooleanProperty MIDDLE_CLOSED = BooleanProperty.create("middle_closed");
+	public static final EnumProperty<MiddleState> MIDDLE = EnumProperty.create("middle", MiddleState.class);
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	public static final BooleanProperty[] CONNECTIONS = new BooleanProperty[] {DOWN, UP, NORTH, SOUTH, WEST, EAST};
 	
@@ -61,7 +63,7 @@ public abstract class BlockWiring extends BlockBase implements IWaterLoggable {
 	
 	@Override
 	protected void fillStateContainer(Builder<Block, BlockState> builder) {
-		builder.add(NORTH, SOUTH, EAST, WEST, UP, DOWN, MIDDLE_CLOSED, WATERLOGGED);
+		builder.add(NORTH, SOUTH, EAST, WEST, UP, DOWN, MIDDLE, WATERLOGGED);
 	}
 	
 	@Override
@@ -85,14 +87,21 @@ public abstract class BlockWiring extends BlockBase implements IWaterLoggable {
 		for (Direction side : Direction.values()) {
 			
 			BooleanProperty prop = CONNECTIONS[side.getIndex()];
-			boolean mustConnect = canConnectTo(state, worldIn, pos, pos.offset(side), side);
+			boolean mustConnect = canConnectTo(state, worldIn, pos, pos.offset(side), side.getOpposite());
 			boolean isConnected = state.get(prop);
 			
 			if (mustConnect != isConnected) state = state.with(prop, mustConnect);
 			
 		}
 		
-		state = state.with(MIDDLE_CLOSED, !hasOpenEnd(state));
+		int connections = countConnections(state);
+		MiddleState mState = MiddleState.CLOSE;
+		if (connections == 1 && !state.get(DOWN)) {
+			mState = MiddleState.NONE;
+		} else if (connections == 1 || connections == 0) {
+			mState = MiddleState.OPEN;
+		}
+		state = state.with(MIDDLE, mState);
 		
 		return state;
 		
@@ -101,7 +110,7 @@ public abstract class BlockWiring extends BlockBase implements IWaterLoggable {
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		
-		VoxelShape shape = S_MIDDLE;
+		VoxelShape shape = state.get(MIDDLE) != MiddleState.NONE ? S_MIDDLE : VoxelShapes.empty();
 		for (Direction direction : Direction.values()) {
 			if (state.get(CONNECTIONS[direction.getIndex()])) {
 				shape = VoxelShapes.or(shape, SHAPES[direction.getIndex()]);
@@ -118,13 +127,37 @@ public abstract class BlockWiring extends BlockBase implements IWaterLoggable {
 	}
 	
 	public boolean hasOpenEnd(BlockState state) {
+		return countConnections(state) <= 1;
+	}
+	
+	public int countConnections(BlockState state) {
 		int connections = 0;
 		for (BooleanProperty side : CONNECTIONS) {
 			if (state.get(side)) connections++;
 		}
-		return connections <= 1;
+		return connections;
 	}
 	
 	public abstract boolean canConnectTo(BlockState wireState, World worldIn, BlockPos wirePos, BlockPos connectPos, Direction direction);
-	
+
+	public static enum MiddleState implements IStringSerializable {
+		
+		CLOSE("close"),OPEN("open"),NONE("none");
+		
+		private String name;
+		
+		private MiddleState(String name) {
+			this.name = name;
+		}
+		
+		public String getName() {
+			return name;
+		}
+
+		@Override
+		public String func_176610_l() {
+			return this.name;
+		}
+		
+	}
 }

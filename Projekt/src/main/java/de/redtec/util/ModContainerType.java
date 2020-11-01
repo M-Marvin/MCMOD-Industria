@@ -4,6 +4,7 @@ import de.redtec.RedTec;
 import de.redtec.gui.ContainerHarvester;
 import de.redtec.gui.ContainerHoverControler;
 import de.redtec.gui.ContainerJigsaw;
+import de.redtec.gui.ContainerMGenerator;
 import de.redtec.gui.ContainerProcessor;
 import de.redtec.gui.ContainerReciver;
 import de.redtec.gui.ContainerStoredCrafting;
@@ -23,5 +24,6 @@ public class ModContainerType {
 	public static final ContainerType<ContainerReciver> REDSTONE_RECIVER = Registry.register(Registry.MENU, new ResourceLocation(RedTec.MODID, "reciver"), IForgeContainerType.create(ContainerReciver::new));
 	public static final ContainerType<ContainerHarvester> HARVESTER = Registry.register(Registry.MENU, new ResourceLocation(RedTec.MODID, "harvester"), IForgeContainerType.create(ContainerHarvester::new));
 	public static final ContainerType<ContainerJigsaw> JIGSAW = Registry.register(Registry.MENU, new ResourceLocation(RedTec.MODID, "jigsaw"), IForgeContainerType.create(ContainerJigsaw::new));
+	public static final ContainerType<ContainerMGenerator> GENERATOR = Registry.register(Registry.MENU, new ResourceLocation(RedTec.MODID, "generator"), IForgeContainerType.create(ContainerMGenerator::new));
 	
 }

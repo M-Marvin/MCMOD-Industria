@@ -4,5 +4,71 @@
 			"redtec:hover_extension_activate"
 		],
 		"subtitle": "sound.redtec.block.hover_extension.activated"
+	},
+	"block.machine.start": {
+		"sounds": [
+			"redtec:machine_start"
+		],
+		"subtitle": "sound.redtec.block.machine.start"
+	},
+	"block.machine.stop": {
+		"sounds": [
+			"redtec:machine_stop"
+		],
+		"subtitle": "sound.redtec.block.machine.stop"
+	},
+	"block.machine.loop": {
+		"sounds": [
+			"redtec:machine_loop"
+		],
+		"subtitle": "sound.redtec.block.machine.loop"
+	},
+	"block.macerator.loop": {
+		"sounds": [
+			"redtec:macerator_loop"
+		],
+		"subtitle": "sound.redtec.block.macerator.loop"
+	},
+	"block.compressor.loop": {
+		"sounds": [
+			"redtec:compressor_loop"
+		],
+		"subtitle": "sound.redtec.block.compressor.loop"
+	},
+	"block.generator.loop": {
+		"sounds": [
+			"redtec:generator_loop"
+		],
+		"subtitle": "sound.redtec.block.generator.loop"
+	},
+	"block.machine.interrupt": {
+		"sounds": [
+			"redtec:machine_interrupt"
+		],
+		"subtitle": "sound.redtec.block.machine.interrupt"
+	},
+	"block.miner.loop": {
+		"sounds": [
+			"redtec:miner_loop"
+		],
+		"subtitle": "sound.redtec.block.miner.loop"
+	},
+	"block.pump.loop": {
+		"sounds": [
+			"redtec:pump_loop"
+		],
+		"subtitle": "sound.redtec.block.pump.loop"
+	},
+	"block.sparking_cable": {
+		"sounds": [
+			"redtec:sparking_cable"
+		],
+		"subtitle": "sound.redtec.block.sparking_cable"
+	},
+	"block.transformator.loop": {
+		"sounds": [
+			"redtec:transformator_loop"
+		],
+		"subtitle": "sound.redtec.block.transformator.loop"
 	}
 }

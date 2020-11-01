@@ -81,7 +81,7 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 			
 			Random rand = this.world.rand;
 			this.powered = power;
-			if (this.powered) this.generateStructure(false, rand.nextInt(20), rand);
+			if (this.powered) this.generateStructure(false, rand.nextInt(20), new Random(rand.nextLong()));
 			
 		}
 		
@@ -122,71 +122,76 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 						files.put(index++, file);
 					}
 				}
-				String randomFile = index == 1 ? files.get(0) : files.get(rand.nextInt(index - 1));
+				
+				String randomFile = files.size() > 1 ? files.get(rand.nextInt(index - 1)) : files.get(0);
 				
 				ResourceLocation resourceStructure = ResourceLocation.tryCreate(randomFile);
 				Template template = JigsawFileManager.getTemplate(world, resourceStructure);
 				
-				JigsawType alowedType = this.getBlockState().get(BlockJigsaw.TYPE).getOppesite();
-				List<BlockInfo> jigawBlocks = template.func_215381_a(BlockPos.ZERO, new PlacementSettings(), RedTec.jigsaw);
-				
-				List<BlockInfo> filteredJigsaws = new ArrayList<BlockInfo>();
-				for (BlockInfo block : jigawBlocks) {
-					ResourceLocation jigsawName = ResourceLocation.tryCreate(block.nbt.getString("name"));
-					if (jigsawName.toString().equals(this.targetName.toString()) && block.state.get(BlockJigsaw.TYPE) == alowedType) filteredJigsaws.add(block);
-				}
-				
-				if (filteredJigsaws.size() != 0) {
+				if (template != null) {
 					
-					BlockInfo randomJigsaw = filteredJigsaws.size() > 1 ? filteredJigsaws.get(rand.nextInt(filteredJigsaws.size())) : filteredJigsaws.get(0);
+					JigsawType alowedType = this.getBlockState().get(BlockJigsaw.TYPE).getOppesite();
+					List<BlockInfo> jigawBlocks = template.func_215381_a(BlockPos.ZERO, new PlacementSettings(), RedTec.jigsaw);
 					
-					Rotation rotation = Rotation.NONE;
-					
-					if (alowedType != JigsawType.HORIZONTAL && !this.lockOrientation) {
-						
-						rotation = Rotation.randomRotation(rand);
-						
-					} else {
-						
-						Direction compare1 = this.getBlockState().get(BlockJigsaw.FACING);
-						Direction compare2 = alowedType == JigsawType.HORIZONTAL ? randomJigsaw.state.get(BlockJigsaw.FACING).getOpposite() : randomJigsaw.state.get(BlockJigsaw.FACING);
-						
-						if (compare1 == compare2) {
-							rotation = Rotation.NONE;
-						} else if (compare1 == compare2.getOpposite()) {
-							rotation = Rotation.CLOCKWISE_180;
-						} else if (compare1.rotateYCCW() == compare2) {
-							rotation = Rotation.CLOCKWISE_90;
-						} else if (compare1.rotateY() == compare2) {
-							rotation = Rotation.COUNTERCLOCKWISE_90;
-						}
-						
+					List<BlockInfo> filteredJigsaws = new ArrayList<BlockInfo>();
+					for (BlockInfo block : jigawBlocks) {
+						ResourceLocation jigsawName = ResourceLocation.tryCreate(block.nbt.getString("name"));
+						if (jigsawName.toString().equals(this.targetName.toString()) && block.state.get(BlockJigsaw.TYPE) == alowedType) filteredJigsaws.add(block);
 					}
 					
-					PlacementSettings placement = (new PlacementSettings())
-							.setMirror(Mirror.NONE)
-							.setRotation(rotation)
-							.setIgnoreEntities(false)
-							.setChunk((ChunkPos)null);
-					
-					BlockPos offset = randomJigsaw.pos;
-					offset = Template.getTransformedPos(offset, Mirror.NONE, rotation, BlockPos.ZERO);
-					offset = offset.offset(this.getFacing().getOpposite());
-					
-					BlockPos generationPos = this.pos.subtract(offset);
-					
-					template.func_237144_a_(world, generationPos, placement, rand);
-					
-					for (BlockInfo jigsaw : jigawBlocks) {
-
-						BlockPos transformedPos = Template.getTransformedPos(jigsaw.pos, Mirror.NONE, rotation, BlockPos.ZERO);
-						transformedPos = generationPos.add(transformedPos);
+					if (filteredJigsaws.size() != 0) {
 						
-						TileEntity tileEntity = world.getTileEntity(transformedPos);
+						BlockInfo randomJigsaw = filteredJigsaws.size() > 1 ? filteredJigsaws.get(rand.nextInt(filteredJigsaws.size())) : filteredJigsaws.get(0);
 						
-						if (tileEntity instanceof TileEntityJigsaw) {
+						Rotation rotation = Rotation.NONE;
+						
+						if (alowedType != JigsawType.HORIZONTAL && !this.lockOrientation) {
 							
-							((TileEntityJigsaw) tileEntity).generateStructure(keepJigsaws, levels - 1, rand);
+							rotation = Rotation.randomRotation(rand);
+							
+						} else {
+							
+							Direction compare1 = this.getBlockState().get(BlockJigsaw.FACING);
+							Direction compare2 = alowedType == JigsawType.HORIZONTAL ? randomJigsaw.state.get(BlockJigsaw.FACING).getOpposite() : randomJigsaw.state.get(BlockJigsaw.FACING);
+							
+							if (compare1 == compare2) {
+								rotation = Rotation.NONE;
+							} else if (compare1 == compare2.getOpposite()) {
+								rotation = Rotation.CLOCKWISE_180;
+							} else if (compare1.rotateYCCW() == compare2) {
+								rotation = Rotation.CLOCKWISE_90;
+							} else if (compare1.rotateY() == compare2) {
+								rotation = Rotation.COUNTERCLOCKWISE_90;
+							}
+							
+						}
+						
+						PlacementSettings placement = (new PlacementSettings())
+								.setMirror(Mirror.NONE)
+								.setRotation(rotation)
+								.setIgnoreEntities(false)
+								.setChunk((ChunkPos)null);
+						
+						BlockPos offset = randomJigsaw.pos;
+						offset = Template.getTransformedPos(offset, Mirror.NONE, rotation, BlockPos.ZERO);
+						offset = offset.offset(this.getFacing().getOpposite());
+						
+						BlockPos generationPos = this.pos.subtract(offset);
+						
+						template.func_237144_a_(world, generationPos, placement, rand);
+						
+						for (BlockInfo jigsaw : jigawBlocks) {
+
+							BlockPos transformedPos = Template.getTransformedPos(jigsaw.pos, Mirror.NONE, rotation, BlockPos.ZERO);
+							transformedPos = generationPos.add(transformedPos);
+							
+							TileEntity tileEntity = world.getTileEntity(transformedPos);
+							
+							if (tileEntity instanceof TileEntityJigsaw) {
+								
+								((TileEntityJigsaw) tileEntity).generateStructure(keepJigsaws, levels - 1, rand);
+								
+							}
 							
 						}
 						

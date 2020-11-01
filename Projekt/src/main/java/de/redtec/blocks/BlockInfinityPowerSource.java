@@ -4,6 +4,7 @@ import java.util.Random;
 
 import de.redtec.tileentity.TileEntitySimpleBlockTicking;
 import de.redtec.util.IElectricConnective;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -26,6 +27,11 @@ public class BlockInfinityPowerSource extends BlockContainerBase implements IEle
 	}
 
 	@Override
+	public BlockRenderType getRenderType(BlockState state) {
+		return BlockRenderType.MODEL;
+	}
+	
+	@Override
 	public int getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
 		return -16;
 	}
@@ -43,6 +49,11 @@ public class BlockInfinityPowerSource extends BlockContainerBase implements IEle
 	@Override
 	public TileEntity createNewTileEntity(IBlockReader worldIn) {
 		return new TileEntitySimpleBlockTicking();
+	}
+
+	@Override
+	public DeviceType getDeviceType() {
+		return DeviceType.MASCHINE;
 	}
 	
 }

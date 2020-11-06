@@ -11,6 +11,8 @@ import de.redtec.blocks.BlockHoverExtension;
 import de.redtec.gui.ContainerHoverControler;
 import de.redtec.util.AdvancedPistonBlockStructureHelper;
 import de.redtec.util.AdvancedStrukture;
+import de.redtec.util.ElectricityNetworkHandler;
+import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
 import de.redtec.util.ItemStackHelper;
 import de.redtec.util.ModTileEntityType;
 import net.minecraft.block.BlockState;
@@ -21,19 +23,22 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class TileEntityHoverControler extends TileEntity implements IInventory, INamedContainerProvider {
+public class TileEntityHoverControler extends TileEntity implements IInventory, INamedContainerProvider, ITickableTileEntity {
 	
 	/**
 	 * TODO
 	 * 
 	 * - Antriebs-Elemente (eventuell Strom betrieben), zum bestimmen der max. Block Anzahl getHoverForce()
 	 */
+	
+	private int energyTimer;
 	
 	private final int maxScannBlocks = 10000;
 	private ItemStack actionItemForward;
@@ -59,37 +64,46 @@ public class TileEntityHoverControler extends TileEntity implements IInventory, 
 	
 	public void onControll(ItemStack actionItem, boolean state) {
 		
+		ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(world);
+		handler.updateNetwork(world, pos);
+		ElectricityNetwork network = handler.getNetwork(pos);
+		boolean hasEnergy = network.canMachinesRun() && this.energyTimer > 0;
+		
 		if (!wasLastTickPowered(actionItem) && state) {
 			
 			setWasPowered(actionItem, true);
 			
-			if (!ItemStackHelper.isItemStackItemEqual(actionItem, actionItemRotate, false)) {
+			if (hasEnergy) {
 				
-				if (wasLastTickPowered(this.actionItemRotate)) {
+				if (!ItemStackHelper.isItemStackItemEqual(actionItem, actionItemRotate, false)) {
 					
-					boolean left = ItemStackHelper.isItemStackItemEqual(actionItem, actionItemLeft, false);
-					boolean right = ItemStackHelper.isItemStackItemEqual(actionItem, actionItemRight, false);
-					
-					if (left || right) {
+					if (wasLastTickPowered(this.actionItemRotate)) {
 						
-						doRotate(right);
+						boolean left = ItemStackHelper.isItemStackItemEqual(actionItem, actionItemLeft, false);
+						boolean right = ItemStackHelper.isItemStackItemEqual(actionItem, actionItemRight, false);
 						
-					}
-					
-				} else {
-					
-					Direction direction = null;
-					Direction blockFacing = getBlockState().get(BlockHoverControler.FACING);
-					if (ItemStackHelper.isItemStackItemEqual(actionItem, actionItemForward, false)) direction = blockFacing;
-					else if (ItemStackHelper.isItemStackItemEqual(actionItem, actionItemBackward, false)) direction = blockFacing.getOpposite();
-					else if (ItemStackHelper.isItemStackItemEqual(actionItem, actionItemLeft, false)) direction = blockFacing.rotateYCCW();
-					else if (ItemStackHelper.isItemStackItemEqual(actionItem, actionItemRight, false)) direction = blockFacing.rotateY();
-					else if (ItemStackHelper.isItemStackItemEqual(actionItem, actionItemUp, false)) direction = Direction.UP;
-					else if (ItemStackHelper.isItemStackItemEqual(actionItem, actionItemDown, false)) direction = Direction.DOWN;
-					
-					if (direction != null) {
+						if (left || right) {
+							
+							doRotate(right);
+							
+						}
 						
-						this.doMove(direction);
+					} else {
+						
+						Direction direction = null;
+						Direction blockFacing = getBlockState().get(BlockHoverControler.FACING);
+						if (ItemStackHelper.isItemStackItemEqual(actionItem, actionItemForward, false)) direction = blockFacing;
+						else if (ItemStackHelper.isItemStackItemEqual(actionItem, actionItemBackward, false)) direction = blockFacing.getOpposite();
+						else if (ItemStackHelper.isItemStackItemEqual(actionItem, actionItemLeft, false)) direction = blockFacing.rotateYCCW();
+						else if (ItemStackHelper.isItemStackItemEqual(actionItem, actionItemRight, false)) direction = blockFacing.rotateY();
+						else if (ItemStackHelper.isItemStackItemEqual(actionItem, actionItemUp, false)) direction = Direction.UP;
+						else if (ItemStackHelper.isItemStackItemEqual(actionItem, actionItemDown, false)) direction = Direction.DOWN;
+						
+						if (direction != null) {
+							
+							this.doMove(direction);
+							
+						}
 						
 					}
 					
@@ -100,6 +114,7 @@ public class TileEntityHoverControler extends TileEntity implements IInventory, 
 		} else if (wasLastTickPowered(actionItem) && !state) {
 			
 			setWasPowered(actionItem, false);
+			this.energyTimer = 100;
 			
 		}
 		
@@ -301,6 +316,17 @@ public class TileEntityHoverControler extends TileEntity implements IInventory, 
 	@Override
 	public ITextComponent getDisplayName() {
 		return new TranslationTextComponent("block.redtec.hover_controler");
+	}
+
+	@Override
+	public void tick() {
+		if (!this.world.isRemote()) {
+			if (this.energyTimer > 0) this.energyTimer--;
+		}
+	}
+	
+	public boolean needEnergy() {
+		return this.energyTimer > 0;
 	}
 	
 }

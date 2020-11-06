@@ -41,6 +41,14 @@ public interface IElectricConnective {
 			return voltage;
 		}
 		
+		public static Voltage byVoltageInt(int voltage) {
+			if (voltage >= LowVoltage.getVoltage()) return LowVoltage;
+			if (voltage >= NormalVoltage.getVoltage()) return NormalVoltage;
+			if (voltage >= HightVoltage.getVoltage()) return HightVoltage;
+			if (voltage >= ExtremVoltage.getVoltage()) return ExtremVoltage;
+			return NoLimit;
+		}
+		
 	}
 	
 	public static enum DeviceType {

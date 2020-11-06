@@ -24,6 +24,7 @@ import de.redtec.blocks.BlockIronRod;
 import de.redtec.blocks.BlockJigsaw;
 import de.redtec.blocks.BlockLinearConector;
 import de.redtec.blocks.BlockMGenerator;
+import de.redtec.blocks.BlockMSteamGenerator;
 import de.redtec.blocks.BlockPanelLamp;
 import de.redtec.blocks.BlockPowerEmiting;
 import de.redtec.blocks.BlockRDCapacitor;
@@ -38,6 +39,9 @@ import de.redtec.blocks.BlockSignalWire;
 import de.redtec.blocks.BlockStackedRedstoneTorch;
 import de.redtec.blocks.BlockStackedRedstoneWire;
 import de.redtec.blocks.BlockStoringCraftingTable;
+import de.redtec.fluids.BlockMaterialFluid;
+import de.redtec.fluids.ItemFluidBucket;
+import de.redtec.fluids.ModFluids;
 import de.redtec.gui.ScreenHarvester;
 import de.redtec.gui.ScreenHoverControler;
 import de.redtec.gui.ScreenJigsaw;
@@ -61,6 +65,7 @@ import de.redtec.packet.SSendENHandeler;
 import de.redtec.renderer.BlockControllPanelItemRenderer;
 import de.redtec.renderer.TileEntityAdvancedMovingBlockRenderer;
 import de.redtec.renderer.TileEntityControllPanelRenderer;
+import de.redtec.renderer.TileEntityMSteamGeneratorRenderer;
 import de.redtec.renderer.TileEntitySignalProcessorContactRenderer;
 import de.redtec.util.ModContainerType;
 import de.redtec.util.ModGameRegistry;
@@ -175,6 +180,7 @@ public class RedTec {
 	public static final Block aluminium_cable = new BlockElektricWire("aluminium_cable", 73000, 8);
 	public static final Block fluid_pipe = new BlockFluidPipe();
 	public static final Block fluid_input = new BlockFluidInput();
+	public static final Block steam_generator = new BlockMSteamGenerator();
 	
 	public static final Block bauxit = new BlockBase("bauxit", Material.ROCK, 1F, SoundType.STONE);
 	public static final Block bauxit_ore = new BlockBase("bauxit_ore", Material.ROCK, 1.5F, SoundType.STONE);
@@ -194,6 +200,10 @@ public class RedTec {
 	public static final Block chiseled_smooth_stone = new BlockBase("chiseled_smooth_stone", Material.ROCK, 1.5F, SoundType.STONE);
 	public static final Block smooth_cobblestone = new BlockBase("smooth_cobblestone", Material.ROCK, 2, SoundType.STONE);
 	
+	//public static final FlowingFluidBlock steam = new ModFlowingFluidBlock("steam", ModFluids.STEAM, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
+	public static final Block steam = new BlockMaterialFluid("steam", ModFluids.STEAM, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
+	public static final Item steam_bucket = new ItemFluidBucket(ModFluids.STEAM, "steam_bucket", ItemGroup.MATERIALS);
+	
 	public static final ItemGroup MACHINES = new ItemGroup("machines") {
 		@Override
 		public ItemStack createIcon() {
@@ -212,8 +222,8 @@ public class RedTec {
 		ModGameRegistry.registerBlock(stacked_redstone_wire, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(advanced_piston, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(advanced_sticky_piston, ItemGroup.REDSTONE);
-		ModGameRegistry.registerTechnicalBlock(advanced_piston_head, ItemGroup.REDSTONE);
-		ModGameRegistry.registerTechnicalBlock(advanced_moving_block, ItemGroup.REDSTONE);
+		ModGameRegistry.registerTechnicalBlock(advanced_piston_head);
+		ModGameRegistry.registerTechnicalBlock(advanced_moving_block);
 		ModGameRegistry.registerBlock(redstone_reciver, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(signal_wire, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(signal_antenna_conector, ItemGroup.REDSTONE);
@@ -258,6 +268,10 @@ public class RedTec {
 		ModGameRegistry.registerBlock(generator, MACHINES);
 		ModGameRegistry.registerBlock(fluid_pipe, MACHINES);
 		ModGameRegistry.registerBlock(fluid_input, MACHINES);
+		ModGameRegistry.registerBlock(steam_generator, MACHINES);
+		
+		ModGameRegistry.registerTechnicalBlock(steam);
+		ModGameRegistry.registerItem(steam_bucket);
 		
 		// register Items
 		ModGameRegistry.registerItem(redstone_ingot);
@@ -346,6 +360,7 @@ public class RedTec {
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ADVANCED_PISTON, TileEntityAdvancedMovingBlockRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SIGNAL_PROCESSOR, TileEntitySignalProcessorContactRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CONTROLL_PANEL, TileEntityControllPanelRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.STEAM_GENERATOR, TileEntityMSteamGeneratorRenderer::new);
 		
 		ScreenManager.registerFactory(ModContainerType.STORED_CRAFTING, ScreenStoredCrafting::new);
 		ScreenManager.registerFactory(ModContainerType.PROCESSOR, ScreenProcessor::new);

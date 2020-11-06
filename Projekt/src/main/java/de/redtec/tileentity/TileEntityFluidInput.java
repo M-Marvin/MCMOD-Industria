@@ -87,7 +87,9 @@ public class TileEntityFluidInput extends TileEntity implements IFluidConnective
 			
 			if (network.canMachinesRun() && canSourceFluid()) {
 				
-				world.playSound(null, pos, ModSoundEvents.PUMP_LOOP, SoundCategory.BLOCKS, 1, 1);
+				if (this.world.getGameTime() % 100L == 0L) {
+					world.playSound(null, pos, ModSoundEvents.PUMP_LOOP, SoundCategory.BLOCKS, 1, 1);
+				}
 				
 				if (this.progress++ >= 40) {
 					

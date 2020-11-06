@@ -1,6 +1,7 @@
 package de.redtec.blocks;
 
 import de.redtec.tileentity.TileEntityHoverControler;
+import de.redtec.util.IElectricConnective;
 import de.redtec.util.ISignalConnective;
 import de.redtec.util.RedstoneControlSignal;
 import net.minecraft.block.Block;
@@ -31,7 +32,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockHoverControler extends BlockContainerBase implements ISignalConnective {
+public class BlockHoverControler extends BlockContainerBase implements ISignalConnective, IElectricConnective {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	
@@ -115,6 +116,30 @@ public class BlockHoverControler extends BlockContainerBase implements ISignalCo
 			InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) te);
 		}
 		super.onBlockHarvested(worldIn, pos, state, player);
+	}
+
+	@Override
+	public Voltage getVoltage(World world, BlockPos pos, BlockState state, Direction side) {
+		return Voltage.NormalVoltage;
+	}
+
+	@Override
+	public int getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if (tileEntity instanceof TileEntityHoverControler) {
+			return ((TileEntityHoverControler) tileEntity).needEnergy() ? 10 : 0;
+		}
+		return 0;
+	}
+
+	@Override
+	public boolean canConnect(Direction side, BlockState state) {
+		return true;
+	}
+
+	@Override
+	public DeviceType getDeviceType() {
+		return DeviceType.MASCHINE;
 	}
 	
 }

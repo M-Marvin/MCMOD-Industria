@@ -178,7 +178,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 //					System.out.println("Network Capacity: " + network.capacity);
 //					System.out.println("Network Current: " + network.current);
 //					
-//					System.out.println(networks.size());
+//					System.out.println(this.networks.size());
 //					System.out.println(getNetwork(position).current);
 					
 				}
@@ -186,6 +186,8 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 			}
 			
 			for (ElectricityNetwork network1 : this.networks.toArray(new ElectricityNetwork[] {})) {
+				
+				if (network1.positions.size() <= 1) this.networks.remove(network1);
 				
 				int lastUpdate = (int) (System.currentTimeMillis() - network1.lastUpdated);
 				if (lastUpdate > 500) this.networks.remove(network1);
@@ -307,7 +309,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 		}
 		
 		public boolean canMachinesRun() {
-			return this.needCurrent <= this.current;
+			return this.needCurrent <= this.current && this.current > 0;
 		}
 		
 		public Voltage getVoltage() {

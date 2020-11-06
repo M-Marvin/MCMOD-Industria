@@ -43,7 +43,7 @@ public class ModGameRegistry {
 		itemsToRegister.add(blockItem);
 	}
 	
-	public static void registerTechnicalBlock(Block block, ItemGroup group) {
+	public static void registerTechnicalBlock(Block block) {
 		blocksToRegister.add(block);
 	}
 	

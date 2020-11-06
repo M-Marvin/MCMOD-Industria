@@ -9,7 +9,6 @@ import de.redtec.util.IElectricWire;
 import de.redtec.util.ModDamageSource;
 import de.redtec.util.ModSoundEvents;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.CactusBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;

@@ -173,6 +173,25 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 				
 			}
 			
+			if (!this.fluid.isEmpty()) {
+				
+				for (Direction d : Direction.values()) {
+					
+					TileEntity te = this.world.getTileEntity(pos.offset(d));
+					
+					if (te instanceof IFluidConnective && !(te instanceof TileEntityFluidPipe)) {
+						
+						IFluidConnective device = (IFluidConnective) te;
+						FluidStack fluidRemaining = device.insertFluid(this.fluid);
+						if (fluidRemaining == this.fluid) continue;
+						this.fluid = fluidRemaining;
+						
+					}
+					
+				}
+				
+			}
+			
 		}
 		
 		

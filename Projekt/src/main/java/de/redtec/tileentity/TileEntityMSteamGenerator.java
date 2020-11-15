@@ -1,10 +1,18 @@
 package de.redtec.tileentity;
 
+import java.util.ArrayList;
+
 import de.redtec.blocks.BlockMSteamGenerator;
+import de.redtec.dynamicsounds.SoundMSteamGeneratorLoop;
+import de.redtec.fluids.BlockMaterialFluid;
+import de.redtec.fluids.ModFluids;
+import de.redtec.registys.ModTileEntityType;
+import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.IElectricConnective.Voltage;
 import de.redtec.util.IFluidConnective;
-import de.redtec.util.ModTileEntityType;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.CompoundNBT;
@@ -15,23 +23,30 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fluids.FluidStack;
 
 public class TileEntityMSteamGenerator extends TileEntity implements IFluidConnective, ITickableTileEntity {
 	
-	private final int maxFluid;
-	private TEPart part;
-	private FluidStack steamIn;
-	private FluidStack steamOut;
-	private int generatedAmperes;
-	private Voltage generatedVoltage;
-	private final int maxEnergy;
+	protected TEPart part;
+	protected FluidStack steamIn;
+	protected FluidStack steamOut;
+	protected float generatedAmperes;
+	public final Voltage generatedVoltage;
+	public final int maxEnergy;
+	public final int maxFluid;
+	public final int wattPerMB;
+	
+	public float turbinRotation;
+	public float accerlation;
 	
 	public TileEntityMSteamGenerator() {
 		super(ModTileEntityType.STEAM_GENERATOR);
 		this.part = TEPart.CENTER;
 		this.maxFluid = 2000;
-		this.maxEnergy = 32000; // TODO HV -> 1000V * 32A = 32000W
+		this.maxEnergy = 3680; // Max Watt/tick -> 74W = 1mb
+		this.wattPerMB = 74;
+		this.generatedVoltage = Voltage.NormalVoltage; // Generated Voltage
 		this.steamIn = FluidStack.EMPTY;
 		this.steamOut = FluidStack.EMPTY;
 	}
@@ -51,7 +66,9 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 		if (this.part == TEPart.CENTER) {
 			if (!this.steamIn.isEmpty()) compound.put("SteamIn", this.steamIn.writeToNBT(new CompoundNBT()));
 			if (!this.steamOut.isEmpty()) compound.put("SteamOut", this.steamOut.writeToNBT(new CompoundNBT()));
-			
+			compound.putFloat("GeneratedAmperes", this.generatedAmperes);
+			compound.putFloat("Accerlation", this.accerlation);
+			compound.putFloat("TurbinRotation", this.turbinRotation);
 		}
 		return super.write(compound);
 	}
@@ -62,7 +79,9 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 		if (this.part == TEPart.CENTER) {
 			this.steamIn = FluidStack.loadFluidStackFromNBT(compound.getCompound("SteamIn"));
 			this.steamOut = FluidStack.loadFluidStackFromNBT(compound.getCompound("SteamOut"));
-			
+			this.generatedAmperes = compound.getFloat("GeneratedAmperes");
+			this.accerlation = compound.getFloat("Accerlation");
+			this.turbinRotation = compound.getFloat("TurbinRotation");
 		}
 		super.func_230337_a_(state, compound);
 	}
@@ -125,6 +144,7 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 		
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void tick() {
 		
@@ -134,31 +154,85 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 			
 			if (this.part == TEPart.CENTER) {
 				
-				int capacity = this.maxFluid - this.steamOut.getAmount();
-				int transfer = Math.min(steamIn.getAmount(), capacity);
+				int capacity = Math.min(this.maxFluid - this.steamOut.getAmount(), this.maxEnergy / wattPerMB);
+				int transfer = Math.max(0, Math.min(steamIn.getAmount(), capacity));
 				
-				if (!this.steamIn.isEmpty() && transfer > 0 && this.generatedAmperes * this.generatedVoltage.getVoltage() <= this.maxEnergy) {
+				if (transfer > 0) {
 					
 					this.steamIn.shrink(transfer);
 					if (this.steamOut.isEmpty()) {
-						this.steamOut = new FluidStack(Fluids.WATER, transfer);
+						this.steamOut = new FluidStack(ModFluids.STEAM, transfer);
 					} else {
 						this.steamOut.grow(transfer);
 					}
 					
-					int generatedEnergy = transfer; // TODO
-					int generatedVoltageI = generatedEnergy * 2;
-					this.generatedVoltage = Voltage.byVoltageInt(generatedVoltageI);
-					this.generatedAmperes = generatedEnergy / this.generatedVoltage.getVoltage();
+					float speed = transfer / (float) (this.maxEnergy / this.wattPerMB);
+					this.accerlation = Math.min(20F, this.accerlation + speed * 0.06F);
 					
 				} else {
-					this.generatedAmperes = 0;
-					this.generatedVoltage = Voltage.NoLimit;
+					
+					this.accerlation = Math.max(0F, this.accerlation - 0.04F);
+					
 				}
+
+				float capacityEnergy = this.maxEnergy * this.accerlation;
+				this.generatedAmperes = capacityEnergy / this.generatedVoltage.getVoltage();
 				
 				if (!this.steamOut.isEmpty()) {
 					
-					// TODO Exhaust Uncompressed Stem
+					Direction direction = this.getBlockState().get(BlockMSteamGenerator.FACING);
+					
+					if (this.steamOut.getAmount() >= 1000) {
+						
+						BlockPos pos1 = this.pos.offset(direction, 2);
+						BlockPos pos2 = this.pos.offset(direction.getOpposite(), 1);
+						
+						BlockPos exhaustPos = this.world.rand.nextBoolean() ? pos1 : pos2;
+						BlockState replaceState = this.world.getBlockState(exhaustPos);
+						
+						if (replaceState.isAir()) {
+							
+							this.world.setBlockState(exhaustPos, this.steamOut.getFluid().getDefaultState().getBlockState());
+							this.steamOut.shrink(1000);
+							
+						} else if (replaceState.getBlock() instanceof BlockMaterialFluid) {
+							
+							((BlockMaterialFluid) replaceState.getBlock()).pushFluid(new ArrayList<BlockPos>(), replaceState, (ServerWorld) this.world, exhaustPos, world.rand);
+							replaceState = this.world.getBlockState(exhaustPos);
+							
+							if (replaceState.isAir()) {
+								
+								this.world.setBlockState(exhaustPos, this.steamOut.getFluid().getDefaultState().getBlockState());
+								this.steamOut.shrink(1000);
+								
+							}
+							
+						}
+						
+					}
+					
+				}
+				
+				this.turbinRotation += this.accerlation;
+				if (this.turbinRotation >= 360) this.turbinRotation -= 360;
+				
+			} else if (this.part == TEPart.ELECTRICITY) {
+				
+				ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(this.world);
+				handler.updateNetwork(world, pos);
+				
+			}
+			
+		} else if (this.part == TEPart.CENTER) {
+			
+			if (this.accerlation > 0) {
+				
+				SoundHandler soundHandler = Minecraft.getInstance().getSoundHandler();
+				
+				if (this.turbinSound == null ? true : !soundHandler.isPlaying(turbinSound)) {
+					
+					this.turbinSound = new SoundMSteamGeneratorLoop(this);
+					soundHandler.play(this.turbinSound);
 					
 				}
 				
@@ -168,7 +242,10 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 		
 	}
 	
+	private SoundMSteamGeneratorLoop turbinSound;
+	
 	public BlockPos getCenterTE() {
+		if (this.part == TEPart.CENTER) return this.pos;
 		if (BlockMSteamGenerator.getInternPartPos(this.getBlockState()).getZ() == 1) {
 			return this.part == TEPart.ELECTRICITY ? this.pos.up() : this.pos.down();
 		} else {
@@ -178,10 +255,30 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 	}
 	
 	public Voltage getVoltage() {
-		return this.generatedVoltage;
+		
+		BlockPos centerPos = getCenterTE();
+		TileEntity tileEntity = this.world.getTileEntity(centerPos);
+		
+		if (tileEntity instanceof TileEntityMSteamGenerator) {
+			TileEntityMSteamGenerator center = (TileEntityMSteamGenerator) tileEntity;
+			return center.generatedAmperes > 0 ? center.generatedVoltage : Voltage.NoLimit;
+		}
+		
+		return Voltage.NoLimit;
+		
 	}
-	public int getGenerateCurrent() {
-		return this.generatedAmperes;
+	public float getGenerateCurrent() {
+		
+		BlockPos centerPos = getCenterTE();
+		TileEntity tileEntity = this.world.getTileEntity(centerPos);
+		
+		if (tileEntity instanceof TileEntityMSteamGenerator) {
+			TileEntityMSteamGenerator center = (TileEntityMSteamGenerator) tileEntity;
+			return center.generatedAmperes;
+		}
+		
+		return 0;
+		
 	}
 	
 	@Override

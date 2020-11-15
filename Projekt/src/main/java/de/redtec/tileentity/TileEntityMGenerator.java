@@ -3,12 +3,16 @@ package de.redtec.tileentity;
 import javax.annotation.Nullable;
 
 import de.redtec.blocks.BlockMGenerator;
+import de.redtec.dynamicsounds.ISimpleMachineSound;
+import de.redtec.dynamicsounds.SoundMachine;
 import de.redtec.gui.ContainerMGenerator;
+import de.redtec.registys.ModSoundEvents;
+import de.redtec.registys.ModTileEntityType;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
-import de.redtec.util.ModSoundEvents;
-import de.redtec.util.ModTileEntityType;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -20,12 +24,11 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.ForgeHooks;
 
-public class TileEntityMGenerator extends TileEntityInventoryBase implements INamedContainerProvider, ISidedInventory, ITickableTileEntity {
+public class TileEntityMGenerator extends TileEntityInventoryBase implements INamedContainerProvider, ISidedInventory, ITickableTileEntity, ISimpleMachineSound {
 	
 	public int fuelTime;
 	public float burnTime;
@@ -112,22 +115,41 @@ public class TileEntityMGenerator extends TileEntityInventoryBase implements INa
 					this.producingPower = 0;
 				}
 				
-				if (this.world.getGameTime() % 64L == 0L) {
-					world.playSound(null, pos, ModSoundEvents.GENERATOR_LOOP, SoundCategory.BLOCKS, 1, 1);
-				}
-				
 			} else {
-				this.producingPower = 0;	
+				this.producingPower = 0;
 			}
 			
 			boolean active = this.producingPower > 0;
 			boolean activeState = this.getBlockState().get(BlockMGenerator.ACTIVE);
 			if (active != activeState) this.world.setBlockState(pos, this.getBlockState().with(BlockMGenerator.ACTIVE, active));
 			
+		} else {
+			
+			if (this.isSoundRunning()) {
+				
+				SoundHandler soundHandler = Minecraft.getInstance().getSoundHandler();
+				
+				if (this.sound == null ? true : !soundHandler.isPlaying(sound)) {
+					
+					this.sound = new SoundMachine(this, ModSoundEvents.GENERATOR_LOOP);
+					soundHandler.play(this.sound);
+					
+				}
+				
+			}
+			
+			
 		}
 		
 	}
-
+	
+	private SoundMachine sound;
+	
+	@Override
+	public boolean isSoundRunning() {
+		return this.getBlockState().get(BlockMGenerator.ACTIVE);
+	}
+	
 	public boolean canWork() {
 		return this.burnTime > 0 || this.hasFuelItems();
 	}

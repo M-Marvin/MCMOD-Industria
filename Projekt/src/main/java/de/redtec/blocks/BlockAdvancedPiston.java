@@ -11,7 +11,6 @@ import com.google.common.collect.Maps;
 import de.redtec.RedTec;
 import de.redtec.tileentity.TileEntityAdvancedMovingBlock;
 import de.redtec.util.AdvancedPistonBlockStructureHelper;
-import de.redtec.util.INoInventoryTE;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -318,7 +317,7 @@ public static boolean canPush(BlockState blockStateIn, World worldIn, BlockPos p
             TileEntity tileEntity = worldIn.getTileEntity(blockpos1);
             if (tileEntity != null && blockstate.getBlock() != RedTec.advanced_moving_block) {
             	list12.add(tileEntity.write(new CompoundNBT()));
-                if (!(tileEntity instanceof INoInventoryTE)) worldIn.removeTileEntity(blockpos1);
+                //if (!(tileEntity instanceof INoInventoryTE)) worldIn.removeTileEntity(blockpos1);
             } else {
             	list12.add(null);
             }

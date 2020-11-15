@@ -1,4 +1,4 @@
-package de.redtec.util;
+package de.redtec.registys;
 
 import net.minecraft.util.DamageSource;
 

@@ -13,12 +13,12 @@ public interface IElectricWire extends IElectricConnective {
 	}
 	
 	@Override
-	default int getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
+	default float getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
 		return 0;
 	}
 	
 	@Override
-	default boolean canConnect(Direction side, BlockState state) {
+	default boolean canConnect(Direction side, World world, BlockPos pos, BlockState state) {
 		return true;
 	}
 	

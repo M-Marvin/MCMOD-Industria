@@ -32,12 +32,12 @@ public class BlockInfinityPowerSource extends BlockContainerBase implements IEle
 	}
 	
 	@Override
-	public int getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
+	public float getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
 		return -16;
 	}
 
 	@Override
-	public boolean canConnect(Direction side, BlockState state) {
+	public boolean canConnect(Direction side, World world, BlockPos pos, BlockState state) {
 		return true;
 	}
 	

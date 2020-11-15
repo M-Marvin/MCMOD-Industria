@@ -6,7 +6,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import de.redtec.gui.ContainerHarvester;
-import de.redtec.util.ModTileEntityType;
+import de.redtec.registys.ModTileEntityType;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

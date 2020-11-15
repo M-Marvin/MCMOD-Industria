@@ -1,6 +1,8 @@
-package de.redtec.worldgen;
+package de.redtec.registys;
 
 import de.redtec.RedTec;
+import de.redtec.worldgen.SimpleOrePlacementConfig;
+import de.redtec.worldgen.StoneOreFeatureConfig;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;

@@ -8,7 +8,7 @@ import de.redtec.blocks.BlockSignalProcessorContact;
 import de.redtec.items.ItemProcessor;
 import de.redtec.items.ItemProcessor.OperatorResult;
 import de.redtec.items.ItemProcessor.OperatorType;
-import de.redtec.util.ModTileEntityType;
+import de.redtec.registys.ModTileEntityType;
 import de.redtec.util.RedstoneControlSignal;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;

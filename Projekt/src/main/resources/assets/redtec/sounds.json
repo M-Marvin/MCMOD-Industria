@@ -5,23 +5,11 @@
 		],
 		"subtitle": "sound.redtec.block.hover_extension.activated"
 	},
-	"block.machine.start": {
+	"block.turbin.loop": {
 		"sounds": [
-			"redtec:machine_start"
+			"redtec:turbin_loop"
 		],
-		"subtitle": "sound.redtec.block.machine.start"
-	},
-	"block.machine.stop": {
-		"sounds": [
-			"redtec:machine_stop"
-		],
-		"subtitle": "sound.redtec.block.machine.stop"
-	},
-	"block.machine.loop": {
-		"sounds": [
-			"redtec:machine_loop"
-		],
-		"subtitle": "sound.redtec.block.machine.loop"
+		"subtitle": "sound.redtec.block.turbin.loop"
 	},
 	"block.macerator.loop": {
 		"sounds": [
@@ -40,12 +28,6 @@
 			"redtec:generator_loop"
 		],
 		"subtitle": "sound.redtec.block.generator.loop"
-	},
-	"block.machine.interrupt": {
-		"sounds": [
-			"redtec:machine_interrupt"
-		],
-		"subtitle": "sound.redtec.block.machine.interrupt"
 	},
 	"block.miner.loop": {
 		"sounds": [

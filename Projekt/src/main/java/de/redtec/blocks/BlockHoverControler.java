@@ -1,6 +1,12 @@
 package de.redtec.blocks;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.function.Supplier;
+
 import de.redtec.tileentity.TileEntityHoverControler;
+import de.redtec.util.IAdvancedBlockInfo;
 import de.redtec.util.IElectricConnective;
 import de.redtec.util.ISignalConnective;
 import de.redtec.util.RedstoneControlSignal;
@@ -9,6 +15,7 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
@@ -27,12 +34,14 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockHoverControler extends BlockContainerBase implements ISignalConnective, IElectricConnective {
+public class BlockHoverControler extends BlockContainerBase implements ISignalConnective, IElectricConnective, IAdvancedBlockInfo {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	
@@ -124,7 +133,7 @@ public class BlockHoverControler extends BlockContainerBase implements ISignalCo
 	}
 
 	@Override
-	public int getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
+	public float getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if (tileEntity instanceof TileEntityHoverControler) {
 			return ((TileEntityHoverControler) tileEntity).needEnergy() ? 10 : 0;
@@ -133,13 +142,27 @@ public class BlockHoverControler extends BlockContainerBase implements ISignalCo
 	}
 
 	@Override
-	public boolean canConnect(Direction side, BlockState state) {
+	public boolean canConnect(Direction side, World world, BlockPos pos, BlockState state) {
 		return true;
 	}
 
 	@Override
 	public DeviceType getDeviceType() {
 		return DeviceType.MASCHINE;
+	}
+
+	@Override
+	public List<ITextComponent> getBlockInfo() {
+		List<ITextComponent> info = new ArrayList<ITextComponent>();
+		info.add(new TranslationTextComponent("redtec.block.info.needEnergy", (10 * Voltage.NormalVoltage.getVoltage() / 1000F) + "k"));
+		info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.NormalVoltage.getVoltage()));
+		info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 10));
+		return info;
+	}
+
+	@Override
+	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
+		return null;
 	}
 	
 }

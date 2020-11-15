@@ -9,13 +9,11 @@ import com.google.common.collect.Maps;
 
 import de.redtec.RedTec;
 import de.redtec.util.AdvancedPistonBlockStructureHelper;
-import de.redtec.util.INoInventoryTE;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
@@ -25,11 +23,11 @@ import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -155,7 +153,7 @@ public class BlockRailPiston extends BlockBase {
             TileEntity tileEntity = worldIn.getTileEntity(blockpos1);
             if (tileEntity != null && blockstate.getBlock() != RedTec.advanced_moving_block) {
             	list12.add(tileEntity.write(new CompoundNBT()));
-                if (!(tileEntity instanceof INoInventoryTE)) worldIn.removeTileEntity(blockpos1);
+                //if (!(tileEntity instanceof INoInventoryTE)) worldIn.removeTileEntity(blockpos1);
             } else {
             	list12.add(null);
             }
@@ -260,11 +258,6 @@ public class BlockRailPiston extends BlockBase {
 	@Override
 	public boolean canProvidePower(BlockState state) {
 		return true;
-	}
-	
-	@Override
-	public PushReaction getPushReaction(BlockState state) {
-		return PushReaction.PUSH_ONLY;
 	}
 	
 	@Override

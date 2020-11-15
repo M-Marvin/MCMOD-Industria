@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 import de.redtec.RedTec;
 import de.redtec.blocks.BlockControllPanel;
 import de.redtec.items.panelitems.ItemPanelElement;
-import de.redtec.util.ModTileEntityType;
+import de.redtec.registys.ModTileEntityType;
 import de.redtec.util.RedstoneControlSignal;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;

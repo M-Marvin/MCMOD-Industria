@@ -121,7 +121,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 							for (Direction attachSide : attacheSides) {
 								
 								Voltage voltage = device1.getVoltage(world, device.getKey(), state, attachSide);
-								int needCurrent = device1.getNeededCurrent(world, device.getKey(), state, attachSide);
+								float needCurrent = device1.getNeededCurrent(world, device.getKey(), state, attachSide);
 								
 								if (needCurrent > 0) {
 									
@@ -207,7 +207,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 			IElectricConnective device = (IElectricConnective) state.getBlock();
 			DeviceType type = device.getDeviceType();
 			
-			if ((direction != null ? device.canConnect(direction, state) : true) && lastDevice.canConnectWith(type)) {
+			if ((direction != null ? device.canConnect(direction, world, scannPos, state) : true) && lastDevice.canConnectWith(type)) {
 				
 				boolean flag = false;
 				
@@ -228,7 +228,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 				
 				for (Direction d : Direction.values()) {
 					
-					if (device.canConnect(d.getOpposite(), state) && (direction != null ? d != direction.getOpposite() : true)) {
+					if (device.canConnect(d.getOpposite(), world, scannPos, state) && (direction != null ? d != direction.getOpposite() : true)) {
 						
 						BlockPos pos2 = scannPos.offset(d);
 						boolean flag1 = this.scann(world, pos2, d, posList, scannDepth + 1, type);
@@ -272,10 +272,10 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 	public static class ElectricityNetwork {
 		
 		public HashMap<BlockPos, List<Direction>> positions;
-		public int current;
+		public float current;
 		public Voltage voltage;
-		public int capacity;
-		public int needCurrent;
+		public float capacity;
+		public float needCurrent;
 		public long lastUpdated;
 		
 		public ElectricityNetwork() {
@@ -316,15 +316,15 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 			return voltage;
 		}
 		
-		public int getCurrent() {
+		public float getCurrent() {
 			return current;
 		}
 		
-		public int getNeedCurrent() {
+		public float getNeedCurrent() {
 			return needCurrent;
 		}
 		
-		public int getCapacity() {
+		public float getCapacity() {
 			return capacity;
 		}
 		
@@ -333,8 +333,8 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 		}
 		
 		public CompoundNBT write(CompoundNBT nbt) {
-			nbt.putInt("Current", this.current);
-			nbt.putInt("NeedCurrent", this.needCurrent);
+			nbt.putFloat("Current", this.current);
+			nbt.putFloat("NeedCurrent", this.needCurrent);
 			nbt.putString("Voltage", this.voltage.toString());
 			ListNBT deviceList = new ListNBT();
 			for (Entry<BlockPos, List<Direction>> entry : this.positions.entrySet()) {
@@ -353,8 +353,8 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 		
 		public static ElectricityNetwork read(CompoundNBT nbt) {
 			ElectricityNetwork network = new ElectricityNetwork();
-			network.current = nbt.getInt("Current");
-			network.needCurrent = nbt.getInt("NeedCurrent");
+			network.current = nbt.getFloat("Current");
+			network.needCurrent = nbt.getFloat("NeedCurrent");
 			network.voltage = Voltage.valueOf(nbt.getString("Voltage"));
 			ListNBT deviceList = nbt.getList("Devices", 10);
 			for (int i = 0; i < deviceList.size(); i++) {

@@ -1,7 +1,7 @@
 package de.redtec.tileentity;
 
 import de.redtec.gui.ContainerReciver;
-import de.redtec.util.ModTileEntityType;
+import de.redtec.registys.ModTileEntityType;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

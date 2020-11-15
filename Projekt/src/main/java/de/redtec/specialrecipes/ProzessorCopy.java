@@ -1,6 +1,7 @@
 package de.redtec.specialrecipes;
 
 import de.redtec.items.ItemProcessor;
+import de.redtec.registys.ModSerializer;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -95,7 +96,7 @@ public class ProzessorCopy extends SpecialRecipe {
 
 	@Override
 	public IRecipeSerializer<?> getSerializer() {
-		return Serializer.CRAFTING_PROCESSOR_COPY;
+		return ModSerializer.CRAFTING_PROCESSOR_COPY;
 	}
 
 }

@@ -2,8 +2,12 @@ package de.redtec.blocks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.function.Supplier;
 
+import de.redtec.renderer.BlockControllPanelItemRenderer;
 import de.redtec.tileentity.TileEntityControllPanel;
+import de.redtec.util.IAdvancedBlockInfo;
 import de.redtec.util.ISignalConnective;
 import de.redtec.util.RedstoneControlSignal;
 import net.minecraft.block.Block;
@@ -13,6 +17,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.IWaterLoggable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
@@ -35,11 +40,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-public class BlockControllPanel extends BlockContainerBase implements ISignalConnective, IWaterLoggable {
+public class BlockControllPanel extends BlockContainerBase implements ISignalConnective, IWaterLoggable, IAdvancedBlockInfo {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -180,6 +186,16 @@ public class BlockControllPanel extends BlockContainerBase implements ISignalCon
 	@Override
 	public FluidState getFluidState(BlockState state) {
 		return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluid().getDefaultState() : Fluids.EMPTY.getDefaultState();
+	}
+	
+	@Override
+	public List<ITextComponent> getBlockInfo() {
+		return new ArrayList<ITextComponent>();
+	}
+	
+	@Override
+	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
+		return () -> BlockControllPanelItemRenderer::new;
 	}
 	
 }

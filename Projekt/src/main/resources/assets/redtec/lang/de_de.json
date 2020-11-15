@@ -45,6 +45,12 @@
 "block.redtec.aluminium_cable": "Aluminiumkabel",
 "block.redtec.infinity_power_source": "Endlose Energiequelle",
 "block.redtec.panel_lamp": "Beleuchtung",
+"block.redtec.steam": "Dampf",
+"block.redtec.steam_generator": "Dampf-Turbinen Generator",
+"block.redtec.fluid_input": "Fluessigkeits Pumpe",
+"block.redtec.fluid_pipe": "Fluessigkeits Leitung",
+
+"item.redtec.steam_bucket": "Dampfeimer",
 
 "item.redtec.lever_element": "Schaltpult Hebel",
 "item.redtec.button_element": "Schaltpult Knopf",
@@ -69,6 +75,17 @@
 "item.redtec.netherite_processor": "Verbesserter Signal Prozessor",
 
 "sound.redtec.block.hover_extension.activated": "Antrieb aktiviert",
+
+"redtec.block.info.maxCurrent": "Max. Strom: %1$s A",
+"redtec.block.info.maxMB": "Max. Durchfluss: %1$s mb/Tick",
+"redtec.block.info.needEnergy": "Leistung: %1$s W",
+"redtec.block.info.needVoltage": "Spannung: %1$s V",
+"redtec.block.info.needCurrent": "Strom: %1$s A",
+"redtec.block.info.steamGenerator": "\nErzeugt Strom durch den Druck des hindurchstroehmenden Dampfes. \nBenoetigte Zeit zum Hoch- und Runterfahren, beeinflusst Energie-Output.",
+"redtec.block.info.steamGenerator.maxMB": "Max. Durchfluss: %1$s mb/Tick",
+"redtec.block.info.fluidInput": "\nSaugt Fluessigkeiten und Gase ein.",
+"redtec.block.info.fluidInput.mb": "Produktion: %1$s mb/Tick",
+"redtec.block.info.generator": "\nIneffizienter aber kompakter Generator. \nTreibstoffverbrauch abhaengig von Auslastung.",
 
 "redtec.storing_crafting_table.container": "Werkbank",
 "redtec.jigsaw_block.pool": "Struktur Liste:",

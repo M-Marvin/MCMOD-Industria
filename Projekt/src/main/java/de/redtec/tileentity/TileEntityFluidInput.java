@@ -1,23 +1,28 @@
 package de.redtec.tileentity;
 
 import de.redtec.blocks.BlockFluidInput;
+import de.redtec.dynamicsounds.ISimpleMachineSound;
+import de.redtec.dynamicsounds.SoundMachine;
+import de.redtec.registys.ModSoundEvents;
+import de.redtec.registys.ModTileEntityType;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
+import de.redtec.util.FluidTankHelper;
 import de.redtec.util.IFluidConnective;
-import de.redtec.util.ModSoundEvents;
-import de.redtec.util.ModTileEntityType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 
-public class TileEntityFluidInput extends TileEntity implements IFluidConnective, ITickableTileEntity {
+public class TileEntityFluidInput extends TileEntity implements IFluidConnective, ITickableTileEntity, ISimpleMachineSound {
 	
 	private int progress;
 	private final int maxFluid;
@@ -55,20 +60,6 @@ public class TileEntityFluidInput extends TileEntity implements IFluidConnective
 	
 	@Override
 	public FluidStack insertFluid(FluidStack fluid) {
-		if (this.fluid.isEmpty()) {
-			int transfer = Math.min(this.maxFluid, fluid.getAmount());
-			this.fluid = new FluidStack(fluid.getFluid(), transfer);
-			FluidStack rest = fluid.copy();
-			rest.shrink(transfer);
-			return rest;
-		} else if (this.fluid.getFluid() == fluid.getFluid()) {
-			int capacity = this.maxFluid - this.fluid.getAmount();
-			int transfer = Math.min(capacity, fluid.getAmount());
-			this.fluid.grow(transfer);
-			FluidStack rest = fluid.copy();
-			rest.shrink(transfer);
-			return rest;
-		}
 		return fluid;
 	}
 	
@@ -79,33 +70,28 @@ public class TileEntityFluidInput extends TileEntity implements IFluidConnective
 
 	@Override
 	public void tick() {
+		
 		if (!this.world.isRemote) {
 			
 			ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(world);
 			handler.updateNetwork(world, pos);
 			ElectricityNetwork network = handler.getNetwork(pos);
 			
-			if (network.canMachinesRun() && canSourceFluid()) {
+			if (network.canMachinesRun() && canSourceFluid() && this.progress++ >= 10) {
 				
-				if (this.world.getGameTime() % 100L == 0L) {
-					world.playSound(null, pos, ModSoundEvents.PUMP_LOOP, SoundCategory.BLOCKS, 1, 1);
-				}
+				this.progress = 0;
 				
-				if (this.progress++ >= 40) {
-					
-					Direction facing = this.getBlockState().get(BlockFluidInput.FACING);
-					FluidState fluidState = this.world.getFluidState(pos.offset(facing));
-					
-					if (this.fluid.isEmpty()) {
-						this.fluid = new FluidStack(fluidState.getFluid(), 1000);
-					} else {
-						this.fluid.grow(1000);
-					}
-					
-					this.world.setBlockState(pos.offset(facing), Blocks.AIR.getDefaultState());
-					
-					this.progress = 0;
-					
+				BlockPos tankBeginPos = this.pos.offset(this.getBlockState().get(BlockFluidInput.FACING));
+				BlockPos sourcePos = new FluidTankHelper(this.world, tankBeginPos).extractFluidFromTank();
+				FluidState sourceFluid = this.world.getFluidState(sourcePos);
+				FluidStack fluid = new FluidStack(sourceFluid.getFluid(), 1000);
+
+				this.world.setBlockState(sourcePos, Blocks.AIR.getDefaultState());
+				
+				if (this.fluid.isEmpty()) {
+					this.fluid = fluid;
+				} else {
+					this.fluid.grow(fluid.getAmount());
 				}
 				
 			}
@@ -116,22 +102,49 @@ public class TileEntityFluidInput extends TileEntity implements IFluidConnective
 				
 			}
 			
-		}
-	}
-
-	public boolean canSourceFluid() {
-		
-		Direction direction = this.getBlockState().get(BlockFluidInput.FACING);
-		FluidState fluidState = this.world.getFluidState(pos.offset(direction));
-		
-		if (!fluidState.isEmpty()) {
+		} else {
 			
-			Fluid fluid = fluidState.getFluid();
-			if (fluid == this.fluid.getFluid()|| this.fluid.isEmpty()) {
+			if (this.isSoundRunning()) {
 				
-				if (fluidState.isSource()) return this.fluid.getAmount() <= 500;
+				SoundHandler soundHandler = Minecraft.getInstance().getSoundHandler();
+				
+				if (this.sound == null ? true : !soundHandler.isPlaying(sound)) {
+					
+					this.sound = new SoundMachine(this, ModSoundEvents.PUMP_LOOP);
+					soundHandler.play(this.sound);
+					
+				}
 				
 			}
+			
+			
+		}
+		
+	}
+
+	private SoundMachine sound;
+	
+	@Override
+	public boolean isSoundRunning() {
+
+		ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(world);
+		ElectricityNetwork network = handler.getNetwork(pos);
+		
+		return network.canMachinesRun() && canSourceFluid();
+		
+	}
+	
+	public boolean canSourceFluid() {
+		
+		BlockPos tankBeginPos = this.pos.offset(this.getBlockState().get(BlockFluidInput.FACING));
+		BlockPos sourceBlock = new FluidTankHelper(this.world, tankBeginPos).extractFluidFromTank();
+		
+		if (sourceBlock != null) {
+			
+			FluidState sourceFluid = this.world.getFluidState(sourceBlock);
+			FluidStack fluid = new FluidStack(sourceFluid.getFluid(), 1000);
+			
+			return this.fluid.isEmpty() || (this.maxFluid - this.fluid.getAmount() >= 1000 && this.fluid.getFluid() == fluid.getFluid());
 			
 		}
 		

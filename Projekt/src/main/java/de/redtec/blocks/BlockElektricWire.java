@@ -1,25 +1,33 @@
 package de.redtec.blocks;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Callable;
+import java.util.function.Supplier;
 
+import de.redtec.registys.ModDamageSource;
+import de.redtec.registys.ModSoundEvents;
 import de.redtec.util.ElectricityNetworkHandler;
+import de.redtec.util.IAdvancedBlockInfo;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
 import de.redtec.util.IElectricConnective;
 import de.redtec.util.IElectricWire;
-import de.redtec.util.ModDamageSource;
-import de.redtec.util.ModSoundEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-public class BlockElektricWire extends BlockWiring implements IElectricWire {
+public class BlockElektricWire extends BlockWiring implements IElectricWire, IAdvancedBlockInfo {
 	
 	protected final int maximumPower;
 	
@@ -40,7 +48,7 @@ public class BlockElektricWire extends BlockWiring implements IElectricWire {
 		if (otherState.getBlock() instanceof IElectricWire) {
 			return true;
 		} else if (otherState.getBlock() instanceof IElectricConnective) {
-			return ((IElectricConnective) otherState.getBlock()).canConnect(direction.getOpposite(), otherState);
+			return ((IElectricConnective) otherState.getBlock()).canConnect(direction.getOpposite(), worldIn, connectPos, otherState);
 		}
 		
 		return false;
@@ -104,6 +112,18 @@ public class BlockElektricWire extends BlockWiring implements IElectricWire {
 			
 		}
 		
+	}
+
+	@Override
+	public List<ITextComponent> getBlockInfo() {
+		List<ITextComponent> info = new ArrayList<ITextComponent>();
+		info.add(new TranslationTextComponent("redtec.block.info.maxCurrent", this.maximumPower));
+		return info;
+	}
+
+	@Override
+	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
+		return null;
 	}
 	
 }

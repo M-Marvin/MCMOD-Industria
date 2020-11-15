@@ -91,25 +91,24 @@ public class TileEntityMSteamGeneratorModel extends EntityModel<Entity> {
 	private final ModelRenderer part36;
 
 	public TileEntityMSteamGeneratorModel() {
-		
+
 		textureWidth = 256;
 		textureHeight = 256;
 
 		root = new ModelRenderer(this);
 		root.setRotationPoint(0.0F, 24.0F, 0.0F);
-		root.setTextureOffset(0, 7).addBox(-40.0F, -48.0F, -8.0F, 48.0F, 48.0F, 32.0F, 0.0F, false);
 		root.setTextureOffset(167, 33).addBox(-19.0F, -27.0F, -7.0F, 27.0F, 6.0F, 4.0F, 0.0F, false);
+		root.setTextureOffset(0, 7).addBox(-40.0F, -48.0F, -8.0F, 48.0F, 48.0F, 32.0F, 0.0F, false);
 
 		shaft = new ModelRenderer(this);
 		shaft.setRotationPoint(-16.0F, -24.0F, -8.0F);
 		root.addChild(shaft);
-		setRotationAngle(shaft, 0.0F, 0.0F, -0.0873F);
 		
 
 		turbin1 = new ModelRenderer(this);
 		turbin1.setRotationPoint(0.0F, 0.0F, 8.0F);
 		shaft.addChild(turbin1);
-		turbin1.setTextureOffset(135, 0).addBox(-2.0F, -2.0F, -8.0F, 4.0F, 4.0F, 16.0F, 0.0F, false);
+		turbin1.setTextureOffset(135, 0).addBox(-2.0F, -2.0F, -9.0F, 4.0F, 4.0F, 17.0F, 0.0F, false);
 
 		blade = new ModelRenderer(this);
 		blade.setRotationPoint(0.0F, 0.0F, 0.0F);
@@ -330,7 +329,7 @@ public class TileEntityMSteamGeneratorModel extends EntityModel<Entity> {
 		turbin2.setRotationPoint(0.0F, 0.0F, 24.0F);
 		shaft.addChild(turbin2);
 		setRotationAngle(turbin2, 0.0F, 0.0F, 0.1745F);
-		turbin2.setTextureOffset(135, 0).addBox(-2.0F, -2.0F, -8.0F, 4.0F, 4.0F, 16.0F, 0.0F, false);
+		turbin2.setTextureOffset(135, 0).addBox(-2.0F, -2.0F, -8.0F, 4.0F, 4.0F, 17.0F, 0.0F, false);
 
 		blade19 = new ModelRenderer(this);
 		blade19.setRotationPoint(0.0F, 0.0F, 0.0F);
@@ -567,7 +566,7 @@ public class TileEntityMSteamGeneratorModel extends EntityModel<Entity> {
 	
 	public void setTurbinRotation(float rotation) {
 		
-		this.shaft.rotateAngleZ = (rotation % 1F) * 360F;
+		this.shaft.rotateAngleZ = rotation;
 		
 	}
 	

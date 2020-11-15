@@ -2,7 +2,9 @@ package de.redtec.fluids;
 
 import de.redtec.RedTec;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.IBucketPickupHandler;
+import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
@@ -11,10 +13,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
+import net.minecraft.world.World;
 
-public abstract class MaterialFluid extends Fluid implements IBucketPickupHandler {
-		
+public abstract class MaterialFluid extends FlowingFluid implements IBucketPickupHandler {
+	
 	@Override
 	public Item getFilledBucket() {
 		return RedTec.steam_bucket;
@@ -26,7 +30,7 @@ public abstract class MaterialFluid extends Fluid implements IBucketPickupHandle
 	}
 
 	@Override
-	protected Vector3d getFlow(IBlockReader p_215663_1_, BlockPos p_215663_2_, FluidState p_215663_3_) {
+	public Vector3d getFlow(IBlockReader p_215663_1_, BlockPos p_215663_2_, FluidState p_215663_3_) {
 		return new Vector3d(0, 0, 0);
 	}
 
@@ -68,6 +72,37 @@ public abstract class MaterialFluid extends Fluid implements IBucketPickupHandle
 	@Override
 	protected boolean ticksRandomly() {
 		return true;
+	}
+	
+	@Override
+	public void tick(World worldIn, BlockPos pos, FluidState state) {}
+	
+	@Override
+	public Fluid getFlowingFluid() {
+		return this;
+	}
+
+	@Override
+	public Fluid getStillFluid() {
+		return this;
+	}
+
+	@Override
+	protected boolean canSourcesMultiply() {
+		return false;
+	}
+
+	@Override
+	public void beforeReplacingBlock(IWorld worldIn, BlockPos pos, BlockState state) {}
+	
+	@Override
+	protected int getSlopeFindDistance(IWorldReader worldIn) {
+		return 0;
+	}
+
+	@Override
+	protected int getLevelDecreasePerBlock(IWorldReader worldIn) {
+		return 0;
 	}
 	
 }

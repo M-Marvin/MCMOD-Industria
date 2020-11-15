@@ -1,6 +1,6 @@
 package de.redtec.tileentity;
 
-import de.redtec.util.ModTileEntityType;
+import de.redtec.registys.ModTileEntityType;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.server.ServerWorld;

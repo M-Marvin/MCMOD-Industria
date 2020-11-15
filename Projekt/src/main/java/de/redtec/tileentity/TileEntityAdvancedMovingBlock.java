@@ -4,8 +4,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import de.redtec.RedTec;
+import de.redtec.registys.ModTileEntityType;
 import de.redtec.util.IPostMoveHandledTE;
-import de.redtec.util.ModTileEntityType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

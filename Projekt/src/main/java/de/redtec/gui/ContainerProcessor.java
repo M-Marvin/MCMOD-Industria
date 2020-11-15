@@ -1,8 +1,8 @@
 package de.redtec.gui;
 
+import de.redtec.registys.ModContainerType;
 import de.redtec.tileentity.TileEntitySignalProcessorContact;
 import de.redtec.util.ContainerTileEntity;
-import de.redtec.util.ModContainerType;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketBuffer;
 

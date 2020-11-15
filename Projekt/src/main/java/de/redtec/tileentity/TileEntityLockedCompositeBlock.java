@@ -3,8 +3,8 @@ package de.redtec.tileentity;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.redtec.registys.ModTileEntityType;
 import de.redtec.util.IPostMoveHandledTE;
-import de.redtec.util.ModTileEntityType;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;

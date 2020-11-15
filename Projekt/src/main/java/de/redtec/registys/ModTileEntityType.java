@@ -1,4 +1,4 @@
-package de.redtec.util;
+package de.redtec.registys;
 
 import com.mojang.datafixers.types.Type;
 
@@ -23,8 +23,8 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.datafix.TypeReferences;
-import net.minecraft.util.registry.Registry;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 public class ModTileEntityType {
@@ -45,10 +45,12 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityFluidInput> FLUID_INPUT = register("fluid_input", TileEntityType.Builder.create(TileEntityFluidInput::new, RedTec.fluid_input));
 	public static final TileEntityType<TileEntityMSteamGenerator> STEAM_GENERATOR = register("steam_generator", TileEntityType.Builder.create(TileEntityMSteamGenerator::new, RedTec.steam_generator));
 	
-	@SuppressWarnings("deprecation")
 	private static <T extends TileEntity> TileEntityType<T> register(String key, TileEntityType.Builder<T> builder) {
-      Type<?> type = Util.func_240976_a_(TypeReferences.BLOCK_ENTITY, key);
-      return Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(RedTec.MODID, key), builder.build(type));
+		Type<?> type = Util.func_240976_a_(TypeReferences.BLOCK_ENTITY, key);
+		TileEntityType<T> tileEntityType = builder.build(type);
+		tileEntityType.setRegistryName(new ResourceLocation(RedTec.MODID, key));
+		ForgeRegistries.TILE_ENTITIES.register(tileEntityType);
+		return tileEntityType;
 	}
 	
 }

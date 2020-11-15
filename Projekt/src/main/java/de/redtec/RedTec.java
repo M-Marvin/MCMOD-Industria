@@ -40,7 +40,7 @@ import de.redtec.blocks.BlockStackedRedstoneTorch;
 import de.redtec.blocks.BlockStackedRedstoneWire;
 import de.redtec.blocks.BlockStoringCraftingTable;
 import de.redtec.fluids.BlockMaterialFluid;
-import de.redtec.fluids.ItemFluidBucket;
+import de.redtec.fluids.ItemMaterialFluidBucket;
 import de.redtec.fluids.ModFluids;
 import de.redtec.gui.ScreenHarvester;
 import de.redtec.gui.ScreenHoverControler;
@@ -62,16 +62,15 @@ import de.redtec.packet.CEditJigsawTileEntityPacket;
 import de.redtec.packet.CEditProcessorCodePacket;
 import de.redtec.packet.CGenerateJigsaw;
 import de.redtec.packet.SSendENHandeler;
-import de.redtec.renderer.BlockControllPanelItemRenderer;
+import de.redtec.registys.ModConfiguredFeatures;
+import de.redtec.registys.ModContainerType;
+import de.redtec.registys.ModTileEntityType;
 import de.redtec.renderer.TileEntityAdvancedMovingBlockRenderer;
 import de.redtec.renderer.TileEntityControllPanelRenderer;
 import de.redtec.renderer.TileEntityMSteamGeneratorRenderer;
 import de.redtec.renderer.TileEntitySignalProcessorContactRenderer;
-import de.redtec.util.ModContainerType;
 import de.redtec.util.ModGameRegistry;
-import de.redtec.util.ModTileEntityType;
 import de.redtec.worldgen.BiomeHelper;
-import de.redtec.worldgen.ModConfiguredFeatures;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -175,9 +174,9 @@ public class RedTec {
 	public static final Block generator = new BlockMGenerator();
 	public static final Block infinity_power_source = new BlockInfinityPowerSource();
 	public static final Block panel_lamp = new BlockPanelLamp();
-	public static final Block copper_cable = new BlockElektricWire("copper_cable", 18000, 4);
-	public static final Block electrolyt_copper_cable = new BlockElektricWire("electrolyt_copper_cable", 36000, 4);
-	public static final Block aluminium_cable = new BlockElektricWire("aluminium_cable", 73000, 8);
+	public static final Block copper_cable = new BlockElektricWire("copper_cable", 16, 4);
+	public static final Block electrolyt_copper_cable = new BlockElektricWire("electrolyt_copper_cable", 32, 4);
+	public static final Block aluminium_cable = new BlockElektricWire("aluminium_cable", 64, 8);
 	public static final Block fluid_pipe = new BlockFluidPipe();
 	public static final Block fluid_input = new BlockFluidInput();
 	public static final Block steam_generator = new BlockMSteamGenerator();
@@ -202,7 +201,7 @@ public class RedTec {
 	
 	//public static final FlowingFluidBlock steam = new ModFlowingFluidBlock("steam", ModFluids.STEAM, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
 	public static final Block steam = new BlockMaterialFluid("steam", ModFluids.STEAM, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
-	public static final Item steam_bucket = new ItemFluidBucket(ModFluids.STEAM, "steam_bucket", ItemGroup.MATERIALS);
+	public static final Item steam_bucket = new ItemMaterialFluidBucket(ModFluids.STEAM, "steam_bucket", ItemGroup.MATERIALS);
 	
 	public static final ItemGroup MACHINES = new ItemGroup("machines") {
 		@Override
@@ -237,7 +236,7 @@ public class RedTec {
 		ModGameRegistry.registerBlock(radial_conector, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(hover_engine, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(hover_extension, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(controll_panel, ItemGroup.REDSTONE, () -> BlockControllPanelItemRenderer::new);
+		ModGameRegistry.registerBlock(controll_panel, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(harvester, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(copper_cable, MACHINES);
 		ModGameRegistry.registerBlock(electrolyt_copper_cable, MACHINES);
@@ -356,6 +355,8 @@ public class RedTec {
 		RenderTypeLookup.setRenderLayer(signal_wire, RenderType.getCutoutMipped());
 		RenderTypeLookup.setRenderLayer(signal_processor_contact, RenderType.getCutoutMipped());
 		RenderTypeLookup.setRenderLayer(salsola_seeds, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(steam, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(steam_generator, RenderType.getTranslucent());
 		
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ADVANCED_PISTON, TileEntityAdvancedMovingBlockRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SIGNAL_PROCESSOR, TileEntitySignalProcessorContactRenderer::new);

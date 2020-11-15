@@ -1,15 +1,21 @@
 package de.redtec.blocks;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Callable;
+import java.util.function.Supplier;
 
 import de.redtec.tileentity.TileEntitySimpleBlockTicking;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
+import de.redtec.util.IAdvancedBlockInfo;
 import de.redtec.util.IElectricConnective;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
@@ -22,11 +28,13 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-public class BlockPanelLamp extends BlockContainerBase implements IElectricConnective {
+public class BlockPanelLamp extends BlockContainerBase implements IElectricConnective, IAdvancedBlockInfo {
 	
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -62,12 +70,12 @@ public class BlockPanelLamp extends BlockContainerBase implements IElectricConne
 	}
 
 	@Override
-	public int getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
+	public float getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
 		return 1;
 	}
 
 	@Override
-	public boolean canConnect(Direction side, BlockState state) {
+	public boolean canConnect(Direction side, World world, BlockPos pos, BlockState state) {
 		return side == state.get(FACING).getOpposite();
 	}
 	
@@ -80,7 +88,13 @@ public class BlockPanelLamp extends BlockContainerBase implements IElectricConne
 	public void onNetworkChanges(World worldIn, BlockPos pos, BlockState state, ElectricityNetwork network) {
 		
 		boolean active = state.get(LIT);
-		boolean powered = network.canMachinesRun() && network.getVoltage() == Voltage.NormalVoltage; // TODO
+		boolean powered = network.canMachinesRun() && network.getVoltage() == Voltage.NormalVoltage; // TODO LowVoltage
+		
+		if (network.getVoltage().getVoltage() > Voltage.LowVoltage.getVoltage()) {
+			
+			// TODO Explode
+			
+		}
 		
 		if (active != powered) worldIn.setBlockState(pos, state.with(LIT, powered));
 		
@@ -124,6 +138,20 @@ public class BlockPanelLamp extends BlockContainerBase implements IElectricConne
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
 		return state.with(FACING, rot.rotate(state.get(FACING)));
+	}
+
+	@Override
+	public List<ITextComponent> getBlockInfo() {
+		List<ITextComponent> info = new ArrayList<ITextComponent>();
+		info.add(new TranslationTextComponent("redtec.block.info.needEnergy", 1 * Voltage.LowVoltage.getVoltage()));
+		info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.LowVoltage.getVoltage()));
+		info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 1));
+		return info;
+	}
+
+	@Override
+	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
+		return null;
 	}
 		
 }

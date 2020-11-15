@@ -1,7 +1,7 @@
 package de.redtec.gui;
 
+import de.redtec.registys.ModContainerType;
 import de.redtec.tileentity.TileEntityJigsaw;
-import de.redtec.util.ModContainerType;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;

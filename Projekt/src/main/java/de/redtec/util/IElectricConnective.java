@@ -9,9 +9,9 @@ import net.minecraft.world.World;
 public interface IElectricConnective {
 	
 	public Voltage getVoltage(World world, BlockPos pos, BlockState state, Direction side);
-	public int getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side);
+	public float getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side);
 	public default void onNetworkChanges(World worldIn, BlockPos pos, BlockState state, ElectricityNetwork network) {}
-	public boolean canConnect(Direction side, BlockState state);
+	public boolean canConnect(Direction side, World world, BlockPos pos, BlockState state);
 	public DeviceType getDeviceType();
 	
 	public default ElectricityNetwork getNetwork(World worldIn, BlockPos pos) {
@@ -46,6 +46,14 @@ public interface IElectricConnective {
 			if (voltage >= NormalVoltage.getVoltage()) return NormalVoltage;
 			if (voltage >= HightVoltage.getVoltage()) return HightVoltage;
 			if (voltage >= ExtremVoltage.getVoltage()) return ExtremVoltage;
+			return voltage <= 0 ? NoLimit : LowVoltage;
+		}
+		
+		public static Voltage byName(String name) {
+			if (name == LowVoltage.name()) return LowVoltage;
+			if (name == NormalVoltage.name()) return NormalVoltage;
+			if (name == HightVoltage.name()) return HightVoltage;
+			if (name == ExtremVoltage.name()) return ExtremVoltage;
 			return NoLimit;
 		}
 		

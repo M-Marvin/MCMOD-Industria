@@ -1,6 +1,6 @@
 package de.redtec.blocks;
 
-import de.redtec.util.ModSoundEvents;
+import de.redtec.registys.ModSoundEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;

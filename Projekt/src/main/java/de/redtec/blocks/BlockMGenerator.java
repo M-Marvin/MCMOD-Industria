@@ -1,12 +1,19 @@
 package de.redtec.blocks;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.function.Supplier;
+
 import de.redtec.tileentity.TileEntityMGenerator;
+import de.redtec.util.IAdvancedBlockInfo;
 import de.redtec.util.IElectricConnective;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
@@ -25,11 +32,13 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMGenerator extends BlockContainerBase implements IElectricConnective {
+public class BlockMGenerator extends BlockContainerBase implements IElectricConnective, IAdvancedBlockInfo {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
@@ -64,7 +73,7 @@ public class BlockMGenerator extends BlockContainerBase implements IElectricConn
 	}
 	
 	@Override
-	public int getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
+	public float getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
 		TileEntity te = world.getTileEntity(pos);
 		if (te instanceof TileEntityMGenerator) {
 			return ((TileEntityMGenerator) te).canWork() ? -8 : 0;
@@ -73,7 +82,7 @@ public class BlockMGenerator extends BlockContainerBase implements IElectricConn
 	}
 	
 	@Override
-	public boolean canConnect(Direction side, BlockState state) {
+	public boolean canConnect(Direction side, World world, BlockPos pos, BlockState state) {
 		return side != state.get(FACING).getOpposite();
 	}
 	
@@ -113,6 +122,21 @@ public class BlockMGenerator extends BlockContainerBase implements IElectricConn
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
 		return state.with(FACING, rot.rotate(state.get(FACING)));
+	}
+
+	@Override
+	public List<ITextComponent> getBlockInfo() {
+		List<ITextComponent> info = new ArrayList<ITextComponent>();
+		info.add(new TranslationTextComponent("redtec.block.info.needEnergy", (8 * Voltage.NormalVoltage.getVoltage() / 1000F) + "k"));
+		info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.NormalVoltage.getVoltage()));
+		info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 8));
+		info.add(new TranslationTextComponent("redtec.block.info.generator"));
+		return info;
+	}
+
+	@Override
+	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
+		return null;
 	}
 	
 }

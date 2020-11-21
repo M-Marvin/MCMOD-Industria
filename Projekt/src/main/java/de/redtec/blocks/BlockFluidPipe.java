@@ -15,10 +15,14 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
@@ -74,6 +78,23 @@ public class BlockFluidPipe extends BlockWiring implements ITileEntityProvider, 
 	@Override
 	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
 		return null;
+	}
+	
+	@Override
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+		
+		if (player.isSneaking()) {
+			
+			TileEntity te = worldIn.getTileEntity(pos);
+			
+			if (te instanceof TileEntityFluidPipe) {
+				((TileEntityFluidPipe) te).clear();
+				return ActionResultType.SUCCESS;
+			}
+			
+		}
+		
+		return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
 	}
 
 }

@@ -62,8 +62,6 @@ public class TileEntityMSteamGeneratorRenderer extends TileEntityRenderer<TileEn
 			float partialAccerlation = (partialTicks) * tileEntityIn.accerlation;
 			float rotation = (tileEntityIn.turbinRotation + partialAccerlation) / 360F;
 			
-			//System.out.println(tileEntityIn.turbinRotation);
-			
 			steamGeneratorModel.setTurbinRotation((float) (rotation * Math.PI * 2));
 			steamGeneratorModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 			

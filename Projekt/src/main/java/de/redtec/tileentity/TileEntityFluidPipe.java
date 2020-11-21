@@ -220,5 +220,9 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 	public boolean canConnect(Direction side) {
 		return true;
 	}
+
+	public void clear() {
+		this.fluid = FluidStack.EMPTY;
+	}
 	
 }

@@ -1,4 +1,4 @@
-package de.redtec.fluids;
+package de.redtec.fluids.util;
 
 import javax.annotation.Nullable;
 
@@ -21,10 +21,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
 
-public class ItemMaterialFluidBucket extends BucketItem {
+public class ItemGasBucket extends BucketItem {
 	
 	@SuppressWarnings("deprecation")
-	public ItemMaterialFluidBucket(Fluid containedFluidIn, String name, ItemGroup group) {
+	public ItemGasBucket(Fluid containedFluidIn, String name, ItemGroup group) {
 		super(containedFluidIn, new Properties().group(group).maxStackSize(1));
 		this.setRegistryName(new ResourceLocation(RedTec.MODID, name));
 	}

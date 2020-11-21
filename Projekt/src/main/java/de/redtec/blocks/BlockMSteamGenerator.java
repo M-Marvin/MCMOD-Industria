@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
+import de.redtec.renderer.BlockMSteamGeneratorItemRenderer;
 import de.redtec.tileentity.TileEntityMSteamGenerator;
 import de.redtec.tileentity.TileEntityMSteamGenerator.TEPart;
 import de.redtec.util.IAdvancedBlockInfo;
@@ -101,7 +102,7 @@ public class BlockMSteamGenerator extends BlockMultiPart implements IElectricCon
 
 	@Override
 	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
-		return null;
+		return () -> BlockMSteamGeneratorItemRenderer::new;
 	}
 	
 }

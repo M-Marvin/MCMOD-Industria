@@ -1,7 +1,7 @@
 package de.redtec.util;
 
 import de.redtec.RedTec;
-import de.redtec.fluids.BlockMaterialFluid;
+import de.redtec.fluids.util.BlockGasFluid;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.IBucketPickupHandler;
 import net.minecraft.entity.player.PlayerEntity;
@@ -45,7 +45,7 @@ public class Events {
 		BlockPos fluidPos = new BlockPos(x, y, z);
 		FluidState fluidState = worldIn.getFluidState(fluidPos);
 		
-		if (fluidState.getBlockState().getBlock() instanceof BlockMaterialFluid) {
+		if (fluidState.getBlockState().getBlock() instanceof BlockGasFluid) {
 			
 			ItemStack bucketItem = playerIn.getHeldItemMainhand();
 						

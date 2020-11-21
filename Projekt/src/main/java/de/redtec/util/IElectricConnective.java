@@ -3,6 +3,7 @@ package de.redtec.util;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -27,14 +28,16 @@ public interface IElectricConnective {
 		ElectricityNetworkHandler.getHandlerForWorld(worldIn).updateNetwork(worldIn, pos);
 	}
 	
-	public static enum Voltage {
+	public static enum Voltage implements IStringSerializable {
 		
-		NoLimit(-1),LowVoltage(24),NormalVoltage(230),HightVoltage(1000),ExtremVoltage(20000);
+		NoLimit(-1, "no_limit"),LowVoltage(24, "low"),NormalVoltage(230, "normal"),HightVoltage(1000, "hight"),ExtremVoltage(20000, "extrem");
 		
 		protected int voltage;
+		protected String name;
 		
-		Voltage(int voltage) {
+		Voltage(int voltage, String name) {
 			this.voltage = voltage;
+			this.name = name;
 		}
 		
 		public int getVoltage() {
@@ -55,6 +58,24 @@ public interface IElectricConnective {
 			if (name == HightVoltage.name()) return HightVoltage;
 			if (name == ExtremVoltage.name()) return ExtremVoltage;
 			return NoLimit;
+		}
+
+		@Override
+		public String func_176610_l() {
+			return this.name;
+		}
+
+		public Voltage next() {
+			
+			if (this == LowVoltage) {
+				return NormalVoltage;
+			} else if (this == NormalVoltage) {
+				return HightVoltage;
+			} else if (this == HightVoltage) {
+				return ExtremVoltage;
+			}
+			return LowVoltage;
+			
 		}
 		
 	}

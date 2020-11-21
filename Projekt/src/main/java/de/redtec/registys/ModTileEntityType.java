@@ -6,11 +6,13 @@ import de.redtec.RedTec;
 import de.redtec.tileentity.TileEntityAdvancedMovingBlock;
 import de.redtec.tileentity.TileEntityControllPanel;
 import de.redtec.tileentity.TileEntityFluidInput;
+import de.redtec.tileentity.TileEntityFluidOutput;
 import de.redtec.tileentity.TileEntityFluidPipe;
 import de.redtec.tileentity.TileEntityHarvester;
 import de.redtec.tileentity.TileEntityHoverControler;
 import de.redtec.tileentity.TileEntityJigsaw;
 import de.redtec.tileentity.TileEntityLockedCompositeBlock;
+import de.redtec.tileentity.TileEntityMCoalHeater;
 import de.redtec.tileentity.TileEntityMGenerator;
 import de.redtec.tileentity.TileEntityMSteamGenerator;
 import de.redtec.tileentity.TileEntityRedstoneReciver;
@@ -43,7 +45,9 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityMGenerator> GENERATOR = register("generator", TileEntityType.Builder.create(TileEntityMGenerator::new, RedTec.generator));
 	public static final TileEntityType<TileEntityFluidPipe> FLUID_PIPE = register("fluid_pipe", TileEntityType.Builder.create(TileEntityFluidPipe::new, RedTec.fluid_pipe));
 	public static final TileEntityType<TileEntityFluidInput> FLUID_INPUT = register("fluid_input", TileEntityType.Builder.create(TileEntityFluidInput::new, RedTec.fluid_input));
+	public static final TileEntityType<TileEntityFluidOutput> FLUID_OUTPUT = register("fluid_output", TileEntityType.Builder.create(TileEntityFluidOutput::new, RedTec.fluid_output));
 	public static final TileEntityType<TileEntityMSteamGenerator> STEAM_GENERATOR = register("steam_generator", TileEntityType.Builder.create(TileEntityMSteamGenerator::new, RedTec.steam_generator));
+	public static final TileEntityType<TileEntityMCoalHeater> COAL_HEATER = register("coal_heater", TileEntityType.Builder.create(TileEntityMCoalHeater::new, RedTec.coal_heater));
 	
 	private static <T extends TileEntity> TileEntityType<T> register(String key, TileEntityType.Builder<T> builder) {
 		Type<?> type = Util.func_240976_a_(TypeReferences.BLOCK_ENTITY, key);

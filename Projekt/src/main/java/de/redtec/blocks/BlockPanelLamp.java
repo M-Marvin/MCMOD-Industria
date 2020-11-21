@@ -13,6 +13,7 @@ import de.redtec.util.IElectricConnective;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
@@ -32,6 +33,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.server.ServerWorld;
 
 public class BlockPanelLamp extends BlockContainerBase implements IElectricConnective, IAdvancedBlockInfo {
@@ -66,12 +68,12 @@ public class BlockPanelLamp extends BlockContainerBase implements IElectricConne
 	
 	@Override
 	public Voltage getVoltage(World world, BlockPos pos, BlockState state, Direction side) {
-		return Voltage.NormalVoltage; // TODO
+		return Voltage.LowVoltage;
 	}
-
+	
 	@Override
 	public float getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
-		return 1;
+		return 0.1F;
 	}
 
 	@Override
@@ -88,11 +90,12 @@ public class BlockPanelLamp extends BlockContainerBase implements IElectricConne
 	public void onNetworkChanges(World worldIn, BlockPos pos, BlockState state, ElectricityNetwork network) {
 		
 		boolean active = state.get(LIT);
-		boolean powered = network.canMachinesRun() && network.getVoltage() == Voltage.NormalVoltage; // TODO LowVoltage
+		boolean powered = network.canMachinesRun() && network.getVoltage() == Voltage.LowVoltage;
 		
 		if (network.getVoltage().getVoltage() > Voltage.LowVoltage.getVoltage()) {
-			
-			// TODO Explode
+
+			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
+			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
 			
 		}
 		
@@ -139,13 +142,13 @@ public class BlockPanelLamp extends BlockContainerBase implements IElectricConne
 	public BlockState rotate(BlockState state, Rotation rot) {
 		return state.with(FACING, rot.rotate(state.get(FACING)));
 	}
-
+	
 	@Override
 	public List<ITextComponent> getBlockInfo() {
 		List<ITextComponent> info = new ArrayList<ITextComponent>();
-		info.add(new TranslationTextComponent("redtec.block.info.needEnergy", 1 * Voltage.LowVoltage.getVoltage()));
+		info.add(new TranslationTextComponent("redtec.block.info.needEnergy", 0.1F * Voltage.LowVoltage.getVoltage()));
 		info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.LowVoltage.getVoltage()));
-		info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 1));
+		info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 0.1F));
 		return info;
 	}
 
@@ -153,5 +156,5 @@ public class BlockPanelLamp extends BlockContainerBase implements IElectricConne
 	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
 		return null;
 	}
-		
+	
 }

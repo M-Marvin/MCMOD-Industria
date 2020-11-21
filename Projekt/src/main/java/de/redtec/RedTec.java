@@ -15,6 +15,7 @@ import de.redtec.blocks.BlockControllPanel;
 import de.redtec.blocks.BlockCornerBlockBase;
 import de.redtec.blocks.BlockElektricWire;
 import de.redtec.blocks.BlockFluidInput;
+import de.redtec.blocks.BlockFluidOutput;
 import de.redtec.blocks.BlockFluidPipe;
 import de.redtec.blocks.BlockHarvester;
 import de.redtec.blocks.BlockHoverControler;
@@ -23,8 +24,11 @@ import de.redtec.blocks.BlockInfinityPowerSource;
 import de.redtec.blocks.BlockIronRod;
 import de.redtec.blocks.BlockJigsaw;
 import de.redtec.blocks.BlockLinearConector;
+import de.redtec.blocks.BlockMCoalHeater;
 import de.redtec.blocks.BlockMGenerator;
 import de.redtec.blocks.BlockMSteamGenerator;
+import de.redtec.blocks.BlockMTransformatorCoil;
+import de.redtec.blocks.BlockMTransformatorContact;
 import de.redtec.blocks.BlockPanelLamp;
 import de.redtec.blocks.BlockPowerEmiting;
 import de.redtec.blocks.BlockRDCapacitor;
@@ -39,12 +43,15 @@ import de.redtec.blocks.BlockSignalWire;
 import de.redtec.blocks.BlockStackedRedstoneTorch;
 import de.redtec.blocks.BlockStackedRedstoneWire;
 import de.redtec.blocks.BlockStoringCraftingTable;
-import de.redtec.fluids.BlockMaterialFluid;
-import de.redtec.fluids.ItemMaterialFluidBucket;
+import de.redtec.fluids.BlockHotWater;
+import de.redtec.fluids.BlockSteam;
 import de.redtec.fluids.ModFluids;
+import de.redtec.fluids.util.ItemFluidBucket;
+import de.redtec.fluids.util.ItemGasBucket;
 import de.redtec.gui.ScreenHarvester;
 import de.redtec.gui.ScreenHoverControler;
 import de.redtec.gui.ScreenJigsaw;
+import de.redtec.gui.ScreenMCoalHeater;
 import de.redtec.gui.ScreenMGenerator;
 import de.redtec.gui.ScreenProcessor;
 import de.redtec.gui.ScreenReciver;
@@ -179,7 +186,11 @@ public class RedTec {
 	public static final Block aluminium_cable = new BlockElektricWire("aluminium_cable", 64, 8);
 	public static final Block fluid_pipe = new BlockFluidPipe();
 	public static final Block fluid_input = new BlockFluidInput();
+	public static final Block fluid_output = new BlockFluidOutput();
 	public static final Block steam_generator = new BlockMSteamGenerator();
+	public static final Block coal_heater = new BlockMCoalHeater();
+	public static final Block transformator_contact = new BlockMTransformatorContact();
+	public static final Block transformator_coil = new BlockMTransformatorCoil();
 	
 	public static final Block bauxit = new BlockBase("bauxit", Material.ROCK, 1F, SoundType.STONE);
 	public static final Block bauxit_ore = new BlockBase("bauxit_ore", Material.ROCK, 1.5F, SoundType.STONE);
@@ -199,9 +210,12 @@ public class RedTec {
 	public static final Block chiseled_smooth_stone = new BlockBase("chiseled_smooth_stone", Material.ROCK, 1.5F, SoundType.STONE);
 	public static final Block smooth_cobblestone = new BlockBase("smooth_cobblestone", Material.ROCK, 2, SoundType.STONE);
 	
-	//public static final FlowingFluidBlock steam = new ModFlowingFluidBlock("steam", ModFluids.STEAM, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
-	public static final Block steam = new BlockMaterialFluid("steam", ModFluids.STEAM, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
-	public static final Item steam_bucket = new ItemMaterialFluidBucket(ModFluids.STEAM, "steam_bucket", ItemGroup.MATERIALS);
+	public static final Block steam = new BlockSteam("steam", ModFluids.STEAM);
+	public static final Item steam_bucket = new ItemGasBucket(ModFluids.STEAM, "steam_bucket", ItemGroup.MATERIALS);
+	public static final Block preasurized_steam = new BlockSteam("preasurized_steam", ModFluids.PREASURIZED_STEAM);
+	public static final Item preasurized_steam_bucket = new ItemGasBucket(ModFluids.PREASURIZED_STEAM, "preasurized_steam_bucket", ItemGroup.MATERIALS);
+	public static final Block hot_water = new BlockHotWater("hot_water", ModFluids.HOT_WATER);
+	public static final Item hot_water_bucket = new ItemFluidBucket(ModFluids.HOT_WATER, "hot_water_bucket", ItemGroup.MATERIALS);
 	
 	public static final ItemGroup MACHINES = new ItemGroup("machines") {
 		@Override
@@ -267,10 +281,18 @@ public class RedTec {
 		ModGameRegistry.registerBlock(generator, MACHINES);
 		ModGameRegistry.registerBlock(fluid_pipe, MACHINES);
 		ModGameRegistry.registerBlock(fluid_input, MACHINES);
+		ModGameRegistry.registerBlock(fluid_output, MACHINES);
 		ModGameRegistry.registerBlock(steam_generator, MACHINES);
+		ModGameRegistry.registerBlock(coal_heater, MACHINES);
+		ModGameRegistry.registerBlock(transformator_coil, MACHINES);
+		ModGameRegistry.registerBlock(transformator_contact, MACHINES);
 		
 		ModGameRegistry.registerTechnicalBlock(steam);
 		ModGameRegistry.registerItem(steam_bucket);
+		ModGameRegistry.registerTechnicalBlock(preasurized_steam);
+		ModGameRegistry.registerItem(preasurized_steam_bucket);
+		ModGameRegistry.registerTechnicalBlock(hot_water);
+		ModGameRegistry.registerItem(hot_water_bucket);
 		
 		// register Items
 		ModGameRegistry.registerItem(redstone_ingot);
@@ -357,6 +379,10 @@ public class RedTec {
 		RenderTypeLookup.setRenderLayer(salsola_seeds, RenderType.getCutoutMipped());
 		RenderTypeLookup.setRenderLayer(steam, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(steam_generator, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModFluids.HOT_WATER, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_HOT_WATER, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModFluids.STEAM, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModFluids.PREASURIZED_STEAM, RenderType.getTranslucent());
 		
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ADVANCED_PISTON, TileEntityAdvancedMovingBlockRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SIGNAL_PROCESSOR, TileEntitySignalProcessorContactRenderer::new);
@@ -370,6 +396,7 @@ public class RedTec {
 		ScreenManager.registerFactory(ModContainerType.HARVESTER, ScreenHarvester::new);
 		ScreenManager.registerFactory(ModContainerType.JIGSAW, ScreenJigsaw::new);
 		ScreenManager.registerFactory(ModContainerType.GENERATOR, ScreenMGenerator::new);
+		ScreenManager.registerFactory(ModContainerType.COAL_HEATER, ScreenMCoalHeater::new);
 		
 	}
 	

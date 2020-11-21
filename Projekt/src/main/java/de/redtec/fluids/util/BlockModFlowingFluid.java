@@ -1,4 +1,4 @@
-package de.redtec.fluids;
+package de.redtec.fluids.util;
 
 import de.redtec.RedTec;
 import net.minecraft.block.FlowingFluidBlock;

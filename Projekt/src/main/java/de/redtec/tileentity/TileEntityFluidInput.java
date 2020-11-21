@@ -15,11 +15,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.BucketItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraftforge.fluids.FluidStack;
 
 public class TileEntityFluidInput extends TileEntity implements IFluidConnective, ITickableTileEntity, ISimpleMachineSound {
@@ -27,6 +33,7 @@ public class TileEntityFluidInput extends TileEntity implements IFluidConnective
 	private int progress;
 	private final int maxFluid;
 	private FluidStack fluid;
+	private Fluid filterFluid;
 	
 	public TileEntityFluidInput() {
 		super(ModTileEntityType.FLUID_INPUT);
@@ -38,13 +45,17 @@ public class TileEntityFluidInput extends TileEntity implements IFluidConnective
 	public CompoundNBT write(CompoundNBT compound) {
 		if (!this.fluid.isEmpty()) compound.put("Fluid", this.fluid.writeToNBT(new CompoundNBT()));
 		compound.putInt("progress", this.progress);
+		if (this.filterFluid != null) compound.putString("FluidFilter", this.filterFluid.getRegistryName().toString());
 		return super.write(compound);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void func_230337_a_(BlockState state, CompoundNBT compund) {
 		this.fluid = FluidStack.loadFluidStackFromNBT(compund.getCompound("Fluid"));
 		this.progress = compund.getInt("progress");
+		if (compund.contains("FluidFilter")) this.filterFluid = Registry.FLUID.getOrDefault(new ResourceLocation(compund.getString("FluidFilter")));
+		if (this.filterFluid == Fluids.EMPTY) this.filterFluid = null;
 		super.func_230337_a_(state, compund);
 	}
 	
@@ -67,7 +78,29 @@ public class TileEntityFluidInput extends TileEntity implements IFluidConnective
 	public Fluid getFluidType() {
 		return this.fluid.getFluid();
 	}
-
+	
+	public boolean setFilter(ItemStack bucketStack) {
+		
+		Item item = bucketStack.getItem();
+		
+		if (item instanceof BucketItem) {
+			
+			Fluid fluid = ((BucketItem) item).getFluid();
+			
+			if (fluid == Fluids.EMPTY) {
+				this.filterFluid = null;
+			} else {
+				this.filterFluid = fluid;
+			}
+			
+			return true;
+			
+		}
+		
+		return false;
+		
+	}
+	
 	@Override
 	public void tick() {
 		
@@ -82,7 +115,7 @@ public class TileEntityFluidInput extends TileEntity implements IFluidConnective
 				this.progress = 0;
 				
 				BlockPos tankBeginPos = this.pos.offset(this.getBlockState().get(BlockFluidInput.FACING));
-				BlockPos sourcePos = new FluidTankHelper(this.world, tankBeginPos).extractFluidFromTank();
+				BlockPos sourcePos = new FluidTankHelper(this.world, tankBeginPos).extractFluidFromTank(this.filterFluid == null ? this.world.getFluidState(tankBeginPos).getFluid() : this.filterFluid);
 				FluidState sourceFluid = this.world.getFluidState(sourcePos);
 				FluidStack fluid = new FluidStack(sourceFluid.getFluid(), 1000);
 
@@ -137,14 +170,14 @@ public class TileEntityFluidInput extends TileEntity implements IFluidConnective
 	public boolean canSourceFluid() {
 		
 		BlockPos tankBeginPos = this.pos.offset(this.getBlockState().get(BlockFluidInput.FACING));
-		BlockPos sourceBlock = new FluidTankHelper(this.world, tankBeginPos).extractFluidFromTank();
+		BlockPos sourceBlock = new FluidTankHelper(this.world, tankBeginPos).extractFluidFromTank(this.filterFluid == null ? this.world.getFluidState(tankBeginPos).getFluid() : this.filterFluid);
 		
 		if (sourceBlock != null) {
 			
 			FluidState sourceFluid = this.world.getFluidState(sourceBlock);
 			FluidStack fluid = new FluidStack(sourceFluid.getFluid(), 1000);
 			
-			return this.fluid.isEmpty() || (this.maxFluid - this.fluid.getAmount() >= 1000 && this.fluid.getFluid() == fluid.getFluid());
+			return this.fluid.isEmpty() || (this.maxFluid - this.fluid.getAmount() >= 1000 && this.fluid.getFluid().isEquivalentTo(fluid.getFluid()));
 			
 		}
 		

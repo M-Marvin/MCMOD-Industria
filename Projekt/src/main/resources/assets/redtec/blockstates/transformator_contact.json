@@ -1,0 +1,13 @@
+{
+	"multipart": [
+        {
+			"apply": { "model": "redtec:block/transformator_contact" }
+		},
+		{   "when": { "input": "true" },
+			"apply": { "model": "redtec:block/transformator_input" }
+		},
+		{   "when": { "input": "false" },
+			"apply": { "model": "redtec:block/transformator_output" }
+		}
+	]
+}

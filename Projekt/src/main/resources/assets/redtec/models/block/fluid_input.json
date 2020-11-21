@@ -3,6 +3,6 @@
   "textures": {
     "top": "redtec:block/fluid_input_top",
     "bottom": "redtec:block/fluid_input_bottom",
-    "side": "redtec:block/machine_side"
+    "side": "redtec:block/fluid_input_side"
   }
 }

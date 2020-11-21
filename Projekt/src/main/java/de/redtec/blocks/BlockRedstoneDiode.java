@@ -75,8 +75,6 @@ public abstract class BlockRedstoneDiode extends BlockBase {
 			this.updateState(state, worldIn, pos, blockIn, fromPos);
 		} else {
 			
-			System.out.println("DROPS");
-			
 			TileEntity tileentity = state.hasTileEntity() ? worldIn.getTileEntity(pos) : null;
 			spawnDrops(state, worldIn, pos, tileentity);
 			worldIn.removeBlock(pos, false);

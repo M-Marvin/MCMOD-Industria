@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"facing=north": { "model": "redtec:block/fluid_output", "x": 90 },
+		"facing=south": { "model": "redtec:block/fluid_output", "x": 90, "y": 180 },
+		"facing=east": { "model": "redtec:block/fluid_output", "x": 90, "y": 90 },
+		"facing=west": { "model": "redtec:block/fluid_output", "x": 90, "y": -90 },
+		"facing=up": { "model": "redtec:block/fluid_output"},
+		"facing=down": { "model": "redtec:block/fluid_output", "x": 180 }
+	}
+}

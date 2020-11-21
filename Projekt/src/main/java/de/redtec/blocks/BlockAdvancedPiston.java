@@ -74,7 +74,7 @@ public class BlockAdvancedPiston extends DirectionalBlock {
 		return drops;
 	}
 
-   public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
       if (state.get(EXTENDED)) {
          switch((Direction)state.get(FACING)) {
          case DOWN:

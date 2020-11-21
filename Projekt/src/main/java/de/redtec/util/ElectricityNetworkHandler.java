@@ -92,7 +92,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 				
 				ElectricityNetwork network = getNetwork(position);
 				
-				if (!network.isUpdated() && !world.isRemote()) {
+				if (!network.isUpdated((ServerWorld) world) && !world.isRemote()) {
 					
 					network.positions.clear();
 					boolean flag = this.scann(world, position, null, network.positions, 0, DeviceType.WIRE);
@@ -157,7 +157,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 						BlockPos pos = device.getKey();
 						BlockState state = world.getBlockState(pos);
 						
-						if (state.getBlock() instanceof IElectricConnective && !(state.getBlock() instanceof IElectricWire)) {
+						if (state.getBlock() instanceof IElectricConnective) {
 							
 							((IElectricConnective) state.getBlock()).onNetworkChanges(world, pos, state, network);
 							
@@ -292,9 +292,10 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 			return false;
 		}
 		
-		public boolean isUpdated() {
+		public boolean isUpdated(ServerWorld world) {
 			
-			long time = System.currentTimeMillis();
+			long time = world.getGameTime();
+			
 			if (this.lastUpdated != time) {
 				this.lastUpdated = time;
 				return false;

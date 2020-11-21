@@ -49,8 +49,14 @@
 "block.redtec.steam_generator": "Dampf-Turbinen Generator",
 "block.redtec.fluid_input": "Fluessigkeits Pumpe",
 "block.redtec.fluid_pipe": "Fluessigkeits Leitung",
+"block.redtec.fluid_output": "Fluessigkeits Auslass",
+"block.redtec.transformator_coil": "Transformator Spulenerweiterung",
+"block.redtec.transformator_contact": "Transformator Anschluss",
+"block.redtec.coal_heater": "Kohle-Heizer",
 
 "item.redtec.steam_bucket": "Dampfeimer",
+"item.redtec.preasurized_steam_bucket": "Dampfeimer",
+"item.redtec.hot_water_bucket": "Eimer kondensiertes Wasser",
 
 "item.redtec.lever_element": "Schaltpult Hebel",
 "item.redtec.button_element": "Schaltpult Knopf",
@@ -76,6 +82,7 @@
 
 "sound.redtec.block.hover_extension.activated": "Antrieb aktiviert",
 
+"redtec.block.info.power": "Leistung: %1$s VA",
 "redtec.block.info.maxCurrent": "Max. Strom: %1$s A",
 "redtec.block.info.maxMB": "Max. Durchfluss: %1$s mb/Tick",
 "redtec.block.info.needEnergy": "Leistung: %1$s W",
@@ -85,7 +92,10 @@
 "redtec.block.info.steamGenerator.maxMB": "Max. Durchfluss: %1$s mb/Tick",
 "redtec.block.info.fluidInput": "\nSaugt Fluessigkeiten und Gase ein.",
 "redtec.block.info.fluidInput.mb": "Produktion: %1$s mb/Tick",
+"redtec.block.info.fluidOutput": "Auslass fuer Fluessigkeiten und Gase.",
 "redtec.block.info.generator": "\nIneffizienter aber kompakter Generator. \nTreibstoffverbrauch abhaengig von Auslastung.",
+"redtec.block.info.transformator": "\nTransferiert Leistung am Eingang auf Ausdgang,\nmit einstellbarer Spannung.\nJeder Transformatorblock erhöhrt die Leistung.",
+"redtec.block.info.coalHeater": "Verbrennt Treibstoff und erhitzt Wasser zu Dampf.\nBei nicht destiliertem Wasser enstehen Rueckstaende.",
 
 "redtec.storing_crafting_table.container": "Werkbank",
 "redtec.jigsaw_block.pool": "Struktur Liste:",
@@ -101,7 +111,13 @@
 "redtec.jigsaw_block.levels": "Levels: %s",
 "redtec.generator.remainingFuel": "Treibstoff",
 
+"itemGroup.machines": "Maschinen",
+
 "death.attack.electric_shock": "%1$s starb durch einen Stromschlag.",
-"death.attack.electric_shock.player": "%1$s starb durch einen Stromschlag beim Kampf gegen %2$s."
+"death.attack.electric_shock.player": "%1$s starb durch einen Stromschlag beim Kampf gegen %2$s.",
+"death.attack.hot_fluid": "%1$s wurde gekocht.",
+"death.attack.hot_fluid.player": "%1$s wurde gekocht beim Kampf gegen %2$s.",
+"death.attack.hot_steam": "%1$s wurde Dampfgegart.",
+"death.attack.hot_steam.player": "%1$s wurde Dampfgegart beim Kampf gegen %2$s."
 
 }

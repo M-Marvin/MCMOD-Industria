@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import de.redtec.blocks.BlockMSteamGenerator;
 import de.redtec.dynamicsounds.SoundMSteamGeneratorLoop;
-import de.redtec.fluids.BlockMaterialFluid;
 import de.redtec.fluids.ModFluids;
+import de.redtec.fluids.util.BlockGasFluid;
 import de.redtec.registys.ModTileEntityType;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.IElectricConnective.Voltage;
@@ -14,7 +14,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -195,9 +194,9 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 							this.world.setBlockState(exhaustPos, this.steamOut.getFluid().getDefaultState().getBlockState());
 							this.steamOut.shrink(1000);
 							
-						} else if (replaceState.getBlock() instanceof BlockMaterialFluid) {
+						} else if (replaceState.getBlock() instanceof BlockGasFluid) {
 							
-							((BlockMaterialFluid) replaceState.getBlock()).pushFluid(new ArrayList<BlockPos>(), replaceState, (ServerWorld) this.world, exhaustPos, world.rand);
+							((BlockGasFluid) replaceState.getBlock()).pushFluid(new ArrayList<BlockPos>(), replaceState, (ServerWorld) this.world, exhaustPos, world.rand);
 							replaceState = this.world.getBlockState(exhaustPos);
 							
 							if (replaceState.isAir()) {
@@ -318,7 +317,7 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 	
 	@Override
 	public Fluid getFluidType() {
-		return Fluids.LAVA; // TODO
+		return ModFluids.PREASURIZED_STEAM;
 	}
 	
 	@Override

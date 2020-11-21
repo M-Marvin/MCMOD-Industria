@@ -1,0 +1,59 @@
+package de.redtec.blocks;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.function.Supplier;
+
+import de.redtec.tileentity.TileEntityFluidOutput;
+import de.redtec.util.IAdvancedBlockInfo;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.StateContainer.Builder;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.IBlockReader;
+
+public class BlockFluidOutput extends BlockContainerBase implements IAdvancedBlockInfo {
+	
+	public static final DirectionProperty FACING = BlockStateProperties.FACING;
+	
+	public BlockFluidOutput() {
+		super("fluid_output", Material.IRON, 2F, SoundType.METAL);
+	}
+	
+	@Override
+	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+		builder.add(FACING);
+	}
+	
+	@Override
+	public BlockState getStateForPlacement(BlockItemUseContext context) {
+		return this.getDefaultState().with(FACING, context.getNearestLookingDirection().getOpposite());
+	}
+	
+	@Override
+	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+		return new TileEntityFluidOutput();
+	}
+	
+	@Override
+	public List<ITextComponent> getBlockInfo() {
+		List<ITextComponent> info = new ArrayList<ITextComponent>();
+		info.add(new TranslationTextComponent("redtec.block.info.fluidOutput"));
+		return info;
+	}
+
+	@Override
+	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
+		return null;
+	}
+	
+}

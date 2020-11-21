@@ -6,22 +6,30 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import de.redtec.tileentity.TileEntityFluidInput;
+import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
 import de.redtec.util.IAdvancedBlockInfo;
 import de.redtec.util.IElectricConnective;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
@@ -86,6 +94,36 @@ public class BlockFluidInput extends BlockContainerBase implements IElectricConn
 	@Override
 	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
 		return null;
+	}
+	
+	@Override
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+		
+		ItemStack heldStack = player.getHeldItemMainhand();
+		TileEntity te = worldIn.getTileEntity(pos);
+		
+		if (!heldStack.isEmpty() && te instanceof TileEntityFluidInput) {
+			
+			boolean success = ((TileEntityFluidInput) te).setFilter(heldStack);
+			
+			if (success) return ActionResultType.SUCCESS;
+			
+		}
+		
+		return ActionResultType.PASS;
+		
+	}
+	
+	@Override
+	public void onNetworkChanges(World worldIn, BlockPos pos, BlockState state, ElectricityNetwork network) {
+
+		if (network.getVoltage().getVoltage() > Voltage.NormalVoltage.getVoltage()) {
+
+			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
+			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+			
+		}
+		
 	}
 	
 }

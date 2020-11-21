@@ -9,15 +9,17 @@ import java.util.function.Supplier;
 import de.redtec.registys.ModDamageSource;
 import de.redtec.registys.ModSoundEvents;
 import de.redtec.util.ElectricityNetworkHandler;
-import de.redtec.util.IAdvancedBlockInfo;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
+import de.redtec.util.IAdvancedBlockInfo;
 import de.redtec.util.IElectricConnective;
 import de.redtec.util.IElectricWire;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Direction;
@@ -25,6 +27,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.World;
 
 public class BlockElektricWire extends BlockWiring implements IElectricWire, IAdvancedBlockInfo {
@@ -100,15 +103,15 @@ public class BlockElektricWire extends BlockWiring implements IElectricWire, IAd
 		
 		BlockState stateIn = worldIn.getBlockState(pos);
 		
-		if (hasOpenEnd(stateIn)) {
+		if (hasOpenEnd(stateIn) && entityIn instanceof LivingEntity) {
 			
 			ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(worldIn);
 			ElectricityNetwork network = handler.getNetwork(pos);
 			Voltage voltage = network.getVoltage();
 			
-			int particleCount = voltage.getVoltage() / 100;
+			int dammge = voltage.getVoltage() / 100;
 
-			entityIn.attackEntityFrom(ModDamageSource.ELCTRIC_SHOCK, particleCount);
+			if (dammge > 0) entityIn.attackEntityFrom(ModDamageSource.ELCTRIC_SHOCK, dammge);
 			
 		}
 		
@@ -124,6 +127,20 @@ public class BlockElektricWire extends BlockWiring implements IElectricWire, IAd
 	@Override
 	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
 		return null;
+	}
+	
+	@Override
+	public void onNetworkChanges(World worldIn, BlockPos pos, BlockState state, ElectricityNetwork network) {
+		
+		float current = network.getCurrent();
+		
+		if (this.maximumPower < current) {
+			
+			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
+			worldIn.setBlockState(pos, Blocks.STONE.getDefaultState());
+			
+		}
+		
 	}
 	
 }

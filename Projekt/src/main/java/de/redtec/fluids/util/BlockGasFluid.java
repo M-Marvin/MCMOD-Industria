@@ -1,4 +1,4 @@
-package de.redtec.fluids;
+package de.redtec.fluids.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.IBucketPickupHandler;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
@@ -22,11 +23,11 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-public class BlockMaterialFluid extends BlockBase implements IBucketPickupHandler {
+public class BlockGasFluid extends BlockBase implements IBucketPickupHandler {
 	
-	protected Fluid fluid;
+	protected GasFluid fluid;
 	
-	public BlockMaterialFluid(String name, Fluid fluid, Properties properties) {
+	public BlockGasFluid(String name, GasFluid fluid, Properties properties) {
 		super(name, properties);
 		this.fluid = fluid;
 	}
@@ -35,10 +36,19 @@ public class BlockMaterialFluid extends BlockBase implements IBucketPickupHandle
 	@Override
 	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
 		
-		if (worldIn.getBlockState(pos.up(this.fluid.getAttributes().isGaseous() ? 1 : -1)).isAir()) {
+		BlockState replaceState = worldIn.getBlockState(pos.up(this.fluid.getAttributes().isGaseous() ? 1 : -1));
+		
+		if (replaceState.isAir()) {
 			
 			worldIn.setBlockState(pos.up(this.fluid.getAttributes().isGaseous() ? 1 : -1), this.getDefaultState(), 2);
 			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+			this.fluid.onMoved(worldIn, pos, this.fluid.getAttributes().isGaseous() ? Direction.UP : Direction.DOWN, state.getFluidState(), worldIn.rand);
+			
+		} else if (replaceState.getBlock() instanceof FlowingFluidBlock) {
+			
+			worldIn.setBlockState(pos.up(this.fluid.getAttributes().isGaseous() ? 1 : -1), this.getDefaultState(), 2);
+			worldIn.setBlockState(pos, replaceState, 2);
+			this.fluid.onMoved(worldIn, pos, this.fluid.getAttributes().isGaseous() ? Direction.UP : Direction.DOWN, state.getFluidState(), worldIn.rand);
 			
 		} else {
 			
@@ -47,17 +57,20 @@ public class BlockMaterialFluid extends BlockBase implements IBucketPickupHandle
 			Direction.Plane.HORIZONTAL.forEach((d) -> {
 				
 				BlockPos replacePos = pos.offset(d);
-				BlockState replaceState = worldIn.getBlockState(replacePos);
+				BlockState replaceState2 = worldIn.getBlockState(replacePos);
 				
-				if (replaceState.isAir()) directions.add(d);
+				if (replaceState2.isAir() || replaceState2.getBlock() instanceof FlowingFluidBlock) directions.add(d);
 				
 			});
 			
 			if (directions.size() > 0) {
 				
-				BlockPos replacePos = pos.offset(directions.get(random.nextInt(directions.size())));
-				worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+				Direction direction = directions.get(random.nextInt(directions.size()));
+				BlockPos replacePos = pos.offset(direction);
+				BlockState replaceState3 = worldIn.getBlockState(replacePos);
+				worldIn.setBlockState(pos, replaceState3, 2);
 				worldIn.setBlockState(replacePos, this.getDefaultState());
+				this.fluid.onMoved(worldIn, replacePos, direction, state.getFluidState(), worldIn.rand);
 				
 			}
 			
@@ -90,9 +103,6 @@ public class BlockMaterialFluid extends BlockBase implements IBucketPickupHandle
 			Direction d = directions.get(random.nextInt(directions.size()));
 			
 			BlockPos replacePos = pos.offset(d);
-			BlockState replaceState = world.getBlockState(replacePos);
-			
-			((MaterialFluid) this.fluid).beforeReplacingBlock(world, replacePos, replaceState);
 			
 			world.setBlockState(replacePos, this.getDefaultState(), 2);
 			world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
@@ -107,7 +117,7 @@ public class BlockMaterialFluid extends BlockBase implements IBucketPickupHandle
 				BlockPos pos2 = pos.offset(d);
 				BlockState pushState = world.getBlockState(pos2);
 				
-				if (pushState.getBlock() instanceof BlockMaterialFluid && !pushPath.contains(pos2)) pushableDirections.add(d);
+				if (pushState.getBlock() instanceof BlockGasFluid && !pushPath.contains(pos2)) pushableDirections.add(d);
 				
 			}
 			
@@ -119,13 +129,13 @@ public class BlockMaterialFluid extends BlockBase implements IBucketPickupHandle
 				
 				pushPath.add(pushPos);
 				
-				((BlockMaterialFluid) pushState.getBlock()).pushFluid(pushPath, pushState, world, pushPos, random);
+				((BlockGasFluid) pushState.getBlock()).pushFluid(pushPath, pushState, world, pushPos, random);
 				
 				BlockState replaceState = world.getBlockState(pushPos);
 				
 				if (replaceState.isAir()) {
 					
-					((MaterialFluid) this.fluid).beforeReplacingBlock(world, pushPos, replaceState);
+					//((GasFluid) this.fluid).beforeReplacingBlock(world, pushPos, replaceState);
 					
 					world.setBlockState(pushPos, this.getDefaultState(), 2);
 					world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);

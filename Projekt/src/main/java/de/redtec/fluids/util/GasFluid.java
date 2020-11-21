@@ -1,10 +1,10 @@
-package de.redtec.fluids;
+package de.redtec.fluids.util;
+
+import java.util.Random;
 
 import de.redtec.RedTec;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.IBucketPickupHandler;
-import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
@@ -13,11 +13,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-public abstract class MaterialFluid extends FlowingFluid implements IBucketPickupHandler {
+public abstract class GasFluid extends Fluid implements IBucketPickupHandler {
 	
 	@Override
 	public Item getFilledBucket() {
@@ -77,32 +76,34 @@ public abstract class MaterialFluid extends FlowingFluid implements IBucketPicku
 	@Override
 	public void tick(World worldIn, BlockPos pos, FluidState state) {}
 	
-	@Override
-	public Fluid getFlowingFluid() {
-		return this;
-	}
-
-	@Override
-	public Fluid getStillFluid() {
-		return this;
-	}
-
-	@Override
-	protected boolean canSourcesMultiply() {
-		return false;
-	}
-
-	@Override
-	public void beforeReplacingBlock(IWorld worldIn, BlockPos pos, BlockState state) {}
+	public void onMoved(World worldIn, BlockPos pos, Direction moveDirection, FluidState state, Random random) {};
 	
-	@Override
-	protected int getSlopeFindDistance(IWorldReader worldIn) {
-		return 0;
-	}
-
-	@Override
-	protected int getLevelDecreasePerBlock(IWorldReader worldIn) {
-		return 0;
-	}
+//	@Override
+//	public Fluid getFlowingFluid() {
+//		return this;
+//	}
+//
+//	@Override
+//	public Fluid getStillFluid() {
+//		return this;
+//	}
+//
+//	@Override
+//	protected boolean canSourcesMultiply() {
+//		return false;
+//	}
+//
+//	@Override
+//	public void beforeReplacingBlock(IWorld worldIn, BlockPos pos, BlockState state) {}
+//	
+//	@Override
+//	protected int getSlopeFindDistance(IWorldReader worldIn) {
+//		return 0;
+//	}
+//
+//	@Override
+//	protected int getLevelDecreasePerBlock(IWorldReader worldIn) {
+//		return 0;
+//	}
 	
 }

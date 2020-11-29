@@ -17,6 +17,7 @@ import de.redtec.blocks.BlockElektricWire;
 import de.redtec.blocks.BlockFluidInput;
 import de.redtec.blocks.BlockFluidOutput;
 import de.redtec.blocks.BlockFluidPipe;
+import de.redtec.blocks.BlockFuseBox;
 import de.redtec.blocks.BlockHarvester;
 import de.redtec.blocks.BlockHoverControler;
 import de.redtec.blocks.BlockHoverExtension;
@@ -26,12 +27,14 @@ import de.redtec.blocks.BlockJigsaw;
 import de.redtec.blocks.BlockLinearConector;
 import de.redtec.blocks.BlockMCoalHeater;
 import de.redtec.blocks.BlockMGenerator;
+import de.redtec.blocks.BlockMMultimeter;
 import de.redtec.blocks.BlockMSteamGenerator;
 import de.redtec.blocks.BlockMTransformatorCoil;
 import de.redtec.blocks.BlockMTransformatorContact;
 import de.redtec.blocks.BlockPanelLamp;
 import de.redtec.blocks.BlockPowerEmiting;
 import de.redtec.blocks.BlockRDCapacitor;
+import de.redtec.blocks.BlockRDPulseCounter;
 import de.redtec.blocks.BlockRadialConector;
 import de.redtec.blocks.BlockRailPiston;
 import de.redtec.blocks.BlockRedstoneContact;
@@ -43,7 +46,7 @@ import de.redtec.blocks.BlockSignalWire;
 import de.redtec.blocks.BlockStackedRedstoneTorch;
 import de.redtec.blocks.BlockStackedRedstoneWire;
 import de.redtec.blocks.BlockStoringCraftingTable;
-import de.redtec.fluids.BlockHotWater;
+import de.redtec.fluids.BlockDestilledWater;
 import de.redtec.fluids.BlockSteam;
 import de.redtec.fluids.ModFluids;
 import de.redtec.fluids.util.ItemFluidBucket;
@@ -59,6 +62,9 @@ import de.redtec.gui.ScreenStoredCrafting;
 import de.redtec.items.ItemBase;
 import de.redtec.items.ItemBlueprint;
 import de.redtec.items.ItemEmptyBlueprint;
+import de.redtec.items.ItemEnergyMeter;
+import de.redtec.items.ItemFluidMeter;
+import de.redtec.items.ItemFuse;
 import de.redtec.items.ItemProcessor;
 import de.redtec.items.ItemRemoteControll;
 import de.redtec.items.ItemSalsola;
@@ -74,6 +80,7 @@ import de.redtec.registys.ModContainerType;
 import de.redtec.registys.ModTileEntityType;
 import de.redtec.renderer.TileEntityAdvancedMovingBlockRenderer;
 import de.redtec.renderer.TileEntityControllPanelRenderer;
+import de.redtec.renderer.TileEntityFuseBoxRenderer;
 import de.redtec.renderer.TileEntityMSteamGeneratorRenderer;
 import de.redtec.renderer.TileEntitySignalProcessorContactRenderer;
 import de.redtec.util.ModGameRegistry;
@@ -127,30 +134,7 @@ public class RedTec {
 			PROTOCOL_VERSION::equals,
 			PROTOCOL_VERSION::equals);
 	
-	public static final Item copper_ingot = new ItemBase("copper_ingot", ItemGroup.MATERIALS);
-	public static final Item electrolyt_copper_ingot = new ItemBase("electrolyt_copper_ingot", ItemGroup.MATERIALS);
-	public static final Item aluminium_ingot = new ItemBase("aluminium_ingot", ItemGroup.MATERIALS);
-	public static final Item steel_ingot = new ItemBase("steel_ingot", ItemGroup.MATERIALS);
-	public static final Item copper_nugget = new ItemBase("copper_nugget", ItemGroup.MATERIALS);
-	public static final Item electrolyt_copper_nugget = new ItemBase("electrolyt_copper_nugget", ItemGroup.MATERIALS);
-	public static final Item aluminium_nugget = new ItemBase("aluminium_nugget", ItemGroup.MATERIALS);
-	public static final Item steel_nugget = new ItemBase("steel_nugget", ItemGroup.MATERIALS);
-	public static final Item redstone_nugget = new ItemBase("redstone_nugget", ItemGroup.MATERIALS);
-	
-	public static final Item redstone_ingot = new ItemBase("redstone_ingot", ItemGroup.MATERIALS);
-	public static final Item redstone_alloy_dust = new ItemBase("redstone_alloy_dust", ItemGroup.MATERIALS);
-	public static final Item remote_control = new ItemRemoteControll();
-	public static final Item iron_processor = new ItemProcessor("iron_processor", 4, false, Rarity.UNCOMMON);
-	public static final Item redstone_processor = new ItemProcessor("redstone_processor", 7, false, Rarity.UNCOMMON);
-	public static final Item emerald_processor = new ItemProcessor("emerald_processor", 10, false, Rarity.RARE);
-	public static final Item netherite_processor = new ItemProcessor("netherite_processor", 14, true, Rarity.EPIC);
-	public static final Item salsola = new ItemSalsola();
-	public static final Item empty_blueprint = new ItemEmptyBlueprint();
-	public static final Item blueprint = new ItemBlueprint();
-	public static final Item lever_element = new ItemLeverElement();
-	public static final Item button_element = new ItemButtonElement();
-	public static final Item lamp_element = new ItemLampElement();
-	
+	public static final Block pulse_counter = new BlockRDPulseCounter();
 	public static final Block capacitor = new BlockRDCapacitor();
 	public static final Block stacked_redstone_torch = new BlockStackedRedstoneTorch();
 	public static final Block stacked_redstone_wire = new BlockStackedRedstoneWire();
@@ -191,6 +175,8 @@ public class RedTec {
 	public static final Block coal_heater = new BlockMCoalHeater();
 	public static final Block transformator_contact = new BlockMTransformatorContact();
 	public static final Block transformator_coil = new BlockMTransformatorCoil();
+	public static final Block fuse_box = new BlockFuseBox();
+	public static final Block block_multimeter = new BlockMMultimeter();
 	
 	public static final Block bauxit = new BlockBase("bauxit", Material.ROCK, 1F, SoundType.STONE);
 	public static final Block bauxit_ore = new BlockBase("bauxit_ore", Material.ROCK, 1.5F, SoundType.STONE);
@@ -210,12 +196,10 @@ public class RedTec {
 	public static final Block chiseled_smooth_stone = new BlockBase("chiseled_smooth_stone", Material.ROCK, 1.5F, SoundType.STONE);
 	public static final Block smooth_cobblestone = new BlockBase("smooth_cobblestone", Material.ROCK, 2, SoundType.STONE);
 	
-	public static final Block steam = new BlockSteam("steam", ModFluids.STEAM);
+	public static final Block steam = new BlockSteam();
 	public static final Item steam_bucket = new ItemGasBucket(ModFluids.STEAM, "steam_bucket", ItemGroup.MATERIALS);
-	public static final Block preasurized_steam = new BlockSteam("preasurized_steam", ModFluids.PREASURIZED_STEAM);
-	public static final Item preasurized_steam_bucket = new ItemGasBucket(ModFluids.PREASURIZED_STEAM, "preasurized_steam_bucket", ItemGroup.MATERIALS);
-	public static final Block hot_water = new BlockHotWater("hot_water", ModFluids.HOT_WATER);
-	public static final Item hot_water_bucket = new ItemFluidBucket(ModFluids.HOT_WATER, "hot_water_bucket", ItemGroup.MATERIALS);
+	public static final Block destilled_water = new BlockDestilledWater();
+	public static final Item destilled_water_bucket = new ItemFluidBucket(ModFluids.DESTILLED_WATER, "destilled_water_bucket", ItemGroup.MATERIALS);
 	
 	public static final ItemGroup MACHINES = new ItemGroup("machines") {
 		@Override
@@ -224,6 +208,37 @@ public class RedTec {
 		}
 	};
 	
+	public static final Item copper_ingot = new ItemBase("copper_ingot", ItemGroup.MATERIALS);
+	public static final Item electrolyt_copper_ingot = new ItemBase("electrolyt_copper_ingot", ItemGroup.MATERIALS);
+	public static final Item aluminium_ingot = new ItemBase("aluminium_ingot", ItemGroup.MATERIALS);
+	public static final Item steel_ingot = new ItemBase("steel_ingot", ItemGroup.MATERIALS);
+	public static final Item copper_nugget = new ItemBase("copper_nugget", ItemGroup.MATERIALS);
+	public static final Item electrolyt_copper_nugget = new ItemBase("electrolyt_copper_nugget", ItemGroup.MATERIALS);
+	public static final Item aluminium_nugget = new ItemBase("aluminium_nugget", ItemGroup.MATERIALS);
+	public static final Item steel_nugget = new ItemBase("steel_nugget", ItemGroup.MATERIALS);
+	public static final Item redstone_nugget = new ItemBase("redstone_nugget", ItemGroup.MATERIALS);
+	public static final Item redstone_ingot = new ItemBase("redstone_ingot", ItemGroup.MATERIALS);
+	public static final Item redstone_alloy_dust = new ItemBase("redstone_alloy_dust", ItemGroup.MATERIALS);
+	public static final Item salsola = new ItemSalsola();
+	
+	public static final Item remote_control = new ItemRemoteControll();
+	public static final Item iron_processor = new ItemProcessor("iron_processor", 4, false, Rarity.UNCOMMON);
+	public static final Item redstone_processor = new ItemProcessor("redstone_processor", 7, false, Rarity.UNCOMMON);
+	public static final Item emerald_processor = new ItemProcessor("emerald_processor", 10, false, Rarity.RARE);
+	public static final Item netherite_processor = new ItemProcessor("netherite_processor", 14, true, Rarity.EPIC);
+	public static final Item empty_blueprint = new ItemEmptyBlueprint();
+	public static final Item blueprint = new ItemBlueprint();
+	public static final Item lever_element = new ItemLeverElement();
+	public static final Item button_element = new ItemButtonElement();
+	public static final Item lamp_element = new ItemLampElement();
+	public static final Item fuse_elv = new ItemFuse("fuse_elv", 8);
+	public static final Item fuse_lv = new ItemFuse("fuse_lv", 16);
+	public static final Item fuse_nv = new ItemFuse("fuse_nv", 32);
+	public static final Item fuse_hv = new ItemFuse("fuse_hv", 64);
+	
+	public static final Item fluid_meter = new ItemFluidMeter();
+	public static final Item energy_meter = new ItemEnergyMeter();
+	
 	public RedTec() {
 		
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
@@ -231,6 +246,7 @@ public class RedTec {
 		
 		// register Blocks
 		ModGameRegistry.registerBlock(capacitor, ItemGroup.REDSTONE);
+		ModGameRegistry.registerBlock(pulse_counter, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(stacked_redstone_torch, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(stacked_redstone_wire, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(advanced_piston, ItemGroup.REDSTONE);
@@ -286,13 +302,13 @@ public class RedTec {
 		ModGameRegistry.registerBlock(coal_heater, MACHINES);
 		ModGameRegistry.registerBlock(transformator_coil, MACHINES);
 		ModGameRegistry.registerBlock(transformator_contact, MACHINES);
+		ModGameRegistry.registerBlock(fuse_box, MACHINES);
+		ModGameRegistry.registerBlock(block_multimeter, MACHINES);
 		
 		ModGameRegistry.registerTechnicalBlock(steam);
 		ModGameRegistry.registerItem(steam_bucket);
-		ModGameRegistry.registerTechnicalBlock(preasurized_steam);
-		ModGameRegistry.registerItem(preasurized_steam_bucket);
-		ModGameRegistry.registerTechnicalBlock(hot_water);
-		ModGameRegistry.registerItem(hot_water_bucket);
+		ModGameRegistry.registerTechnicalBlock(destilled_water);
+		ModGameRegistry.registerItem(destilled_water_bucket);
 		
 		// register Items
 		ModGameRegistry.registerItem(redstone_ingot);
@@ -315,6 +331,12 @@ public class RedTec {
 		ModGameRegistry.registerItem(aluminium_nugget);
 		ModGameRegistry.registerItem(redstone_ingot);
 		ModGameRegistry.registerItem(redstone_nugget);
+		ModGameRegistry.registerItem(fluid_meter);
+		ModGameRegistry.registerItem(energy_meter);
+		ModGameRegistry.registerItem(fuse_elv);
+		ModGameRegistry.registerItem(fuse_lv);
+		ModGameRegistry.registerItem(fuse_nv);
+		ModGameRegistry.registerItem(fuse_hv);
 		
 		// register Functional Items
 		ModGameRegistry.registerItem(lever_element);
@@ -372,6 +394,7 @@ public class RedTec {
 	private void clientSetup(final FMLClientSetupEvent event) {
 		
 		RenderTypeLookup.setRenderLayer(capacitor, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(pulse_counter, RenderType.getCutoutMipped());
 		RenderTypeLookup.setRenderLayer(stacked_redstone_torch, RenderType.getCutoutMipped());
 		RenderTypeLookup.setRenderLayer(stacked_redstone_wire, RenderType.getCutoutMipped());
 		RenderTypeLookup.setRenderLayer(signal_wire, RenderType.getCutoutMipped());
@@ -379,15 +402,15 @@ public class RedTec {
 		RenderTypeLookup.setRenderLayer(salsola_seeds, RenderType.getCutoutMipped());
 		RenderTypeLookup.setRenderLayer(steam, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(steam_generator, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.HOT_WATER, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_HOT_WATER, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModFluids.DESTILLED_WATER, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_DESTILLED_WATER, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.STEAM, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.PREASURIZED_STEAM, RenderType.getTranslucent());
 		
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ADVANCED_PISTON, TileEntityAdvancedMovingBlockRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SIGNAL_PROCESSOR, TileEntitySignalProcessorContactRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CONTROLL_PANEL, TileEntityControllPanelRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.STEAM_GENERATOR, TileEntityMSteamGeneratorRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.FUSE_BOX, TileEntityFuseBoxRenderer::new);
 		
 		ScreenManager.registerFactory(ModContainerType.STORED_CRAFTING, ScreenStoredCrafting::new);
 		ScreenManager.registerFactory(ModContainerType.PROCESSOR, ScreenProcessor::new);

@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import de.redtec.blocks.BlockFluidInput;
 import de.redtec.fluids.util.BlockGasFluid;
 import de.redtec.registys.ModTileEntityType;
+import de.redtec.util.FluidStackStateTagHelper;
 import de.redtec.util.FluidTankHelper;
 import de.redtec.util.IFluidConnective;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -51,6 +53,7 @@ public class TileEntityFluidOutput extends TileEntity implements ITickableTileEn
 		if (this.fluid.isEmpty()) {
 			int transfer = Math.min(this.maxFluid, fluid.getAmount());
 			this.fluid = new FluidStack(fluid.getFluid(), transfer);
+			this.fluid.setTag(fluid.getTag());
 			FluidStack rest = fluid.copy();
 			rest.shrink(transfer);
 			return rest;
@@ -58,6 +61,7 @@ public class TileEntityFluidOutput extends TileEntity implements ITickableTileEn
 			int capacity = this.maxFluid - this.fluid.getAmount();
 			int transfer = Math.min(capacity, fluid.getAmount());
 			this.fluid.grow(transfer);
+			this.fluid.setTag(fluid.getTag());
 			FluidStack rest = fluid.copy();
 			rest.shrink(transfer);
 			return rest;
@@ -89,7 +93,9 @@ public class TileEntityFluidOutput extends TileEntity implements ITickableTileEn
 				
 				if (outputPos != null) {
 					
-					this.world.setBlockState(outputPos, this.fluid.getFluid().getDefaultState().getBlockState());
+					FluidState fluidState = FluidStackStateTagHelper.makeStateFromStack(this.fluid);
+					
+					this.world.setBlockState(outputPos, fluidState.getBlockState());
 					this.fluid.shrink(1000);
 					
 				} else {
@@ -102,8 +108,10 @@ public class TileEntityFluidOutput extends TileEntity implements ITickableTileEn
 						replaceState = this.world.getBlockState(tankBeginPos);
 						
 						if (replaceState.isAir()) {
-
-							this.world.setBlockState(tankBeginPos, this.fluid.getFluid().getDefaultState().getBlockState());
+							
+							FluidState fluidState = FluidStackStateTagHelper.makeStateFromStack(this.fluid);
+							
+							this.world.setBlockState(tankBeginPos, fluidState.getBlockState());
 							this.fluid.shrink(1000);
 							
 						}
@@ -116,6 +124,11 @@ public class TileEntityFluidOutput extends TileEntity implements ITickableTileEn
 			
 		}
 		
+	}
+
+	@Override
+	public FluidStack getStorage() {
+		return this.fluid;
 	}
 
 }

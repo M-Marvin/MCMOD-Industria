@@ -11,6 +11,8 @@ import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -20,14 +22,26 @@ import net.minecraftforge.fluids.FluidAttributes;
 
 public class FluidSteam extends GasFluid implements IBucketPickupHandler {
 	
+	public static final BooleanProperty PREASURIZED = BooleanProperty.create("preasurized");
+	
+	public FluidSteam() {
+		this.setDefaultState(this.stateContainer.getBaseState().with(PREASURIZED, false));
+	}
+	
 	@Override
 	public Item getFilledBucket() {
 		return RedTec.steam_bucket;
 	}
 	
 	@Override
+	protected void fillStateContainer(Builder<Fluid, FluidState> builder) {
+		builder.add(PREASURIZED);
+		super.fillStateContainer(builder);
+	}
+	
+	@Override
 	protected BlockState getBlockState(FluidState state) {
-		return RedTec.steam.getDefaultState();
+		return RedTec.steam.getDefaultState().with(BlockSteam.PREASURIZED, state.get(PREASURIZED));
 	}
 	
 	@Override
@@ -52,12 +66,20 @@ public class FluidSteam extends GasFluid implements IBucketPickupHandler {
 						
 			if (world.getBlockState(pos.offset(moveDirection)).getFluidState().getFluid() == this) world.setBlockState(pos.offset(moveDirection), Blocks.AIR.getDefaultState());
 			
-			FallingBlockEntity condensetWater = new FallingBlockEntity(world, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, ModFluids.HOT_WATER.getDefaultState().getBlockState());
+			FallingBlockEntity condensetWater = new FallingBlockEntity(world, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, ModFluids.DESTILLED_WATER.getDefaultState().with(FluidDestilledWater.HOT, true).getBlockState());
 			condensetWater.fallTime = -1000;
 			world.addEntity(condensetWater);
 			
 		}
 		
+	}
+
+	public FluidState getPreasurized() {
+		return this.getDefaultState().with(PREASURIZED, true);
+	}
+	
+	public FluidState getNormal() {
+		return this.getDefaultState().with(PREASURIZED, false);
 	}
 	
 }

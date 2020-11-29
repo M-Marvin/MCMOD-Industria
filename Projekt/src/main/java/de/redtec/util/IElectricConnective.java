@@ -14,6 +14,12 @@ public interface IElectricConnective {
 	public default void onNetworkChanges(World worldIn, BlockPos pos, BlockState state, ElectricityNetwork network) {}
 	public boolean canConnect(Direction side, World world, BlockPos pos, BlockState state);
 	public DeviceType getDeviceType();
+	public default boolean isSwitchClosed(World worldIn, BlockPos pos, BlockState state) {
+		return true;
+	}
+	public default boolean beforNetworkChanges(World world, BlockPos pos, BlockState state, ElectricityNetwork network) {
+		return false;
+	}
 	
 	public default ElectricityNetwork getNetwork(World worldIn, BlockPos pos) {
 		

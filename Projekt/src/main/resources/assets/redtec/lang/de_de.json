@@ -1,5 +1,6 @@
 {
 "block.redtec.capacitor": "Redstone-Kondensator",
+"block.redtec.pulse_counter": "Redstone-Impulsgeber",
 "block.redtec.stacked_redstone_torch": "Stapelbare Redstone-Fackeln",
 "block.redtec.stacked_redstone_wire": "Redstone-Leitung",
 "block.redtec.advanced_piston": "Verstaerkter Kolben",
@@ -53,10 +54,12 @@
 "block.redtec.transformator_coil": "Transformator Spulenerweiterung",
 "block.redtec.transformator_contact": "Transformator Anschluss",
 "block.redtec.coal_heater": "Kohle-Heizer",
+"block.redtec.fuse_box": "Sicherungskasten",
 
 "item.redtec.steam_bucket": "Dampfeimer",
-"item.redtec.preasurized_steam_bucket": "Dampfeimer",
-"item.redtec.hot_water_bucket": "Eimer kondensiertes Wasser",
+"item.redtec.destilled_water_bucket": "Eimer kondensiertes Wasser",
+"item.redtec.fluid_meter": "Fluessigkeits Prueffer",
+"item.redtec.energy_meter": "Multimeter",
 
 "item.redtec.lever_element": "Schaltpult Hebel",
 "item.redtec.button_element": "Schaltpult Knopf",
@@ -79,8 +82,19 @@
 "item.redtec.redstone_processor": "Mittlerer Signal Prozessor",
 "item.redtec.emerald_processor": "Grosser Prozessor",
 "item.redtec.netherite_processor": "Verbesserter Signal Prozessor",
+"item.redtec.fuse_elv": "Sicherungseinsatz",
+"item.redtec.fuse_lv": "Sicherungseinsatz",
+"item.redtec.fuse_nv": "Sicherungseinsatz",
+"item.redtec.fuse_hv": "Sicherungseinsatz",
+
+"fluid.redtec.destilled_water": "Kondensiertes Wasser",
+"fluid.redtec.steam": "Dampf",
 
 "sound.redtec.block.hover_extension.activated": "Antrieb aktiviert",
+
+"redtec.item.energy_meter.meassure.pass": "Energie an %1$s: %2$sV %3$sA %4$sW Ferfuegbar. %5$sW (%6$sA)",
+"redtec.item.energy_meter.meassure.fail": "Beoetigte Energie an %1$s: %2$sV %3$sA %4$sW Ferfuegbar: %5$sW (%6$sA)",
+"redtec.item.fluid_meter.meassure": "Fluessigkeit in %1$s: %2$s %3$smb",
 
 "redtec.block.info.power": "Leistung: %1$s VA",
 "redtec.block.info.maxCurrent": "Max. Strom: %1$s A",
@@ -94,8 +108,10 @@
 "redtec.block.info.fluidInput.mb": "Produktion: %1$s mb/Tick",
 "redtec.block.info.fluidOutput": "Auslass fuer Fluessigkeiten und Gase.",
 "redtec.block.info.generator": "\nIneffizienter aber kompakter Generator. \nTreibstoffverbrauch abhaengig von Auslastung.",
-"redtec.block.info.transformator": "\nTransferiert Leistung am Eingang auf Ausdgang,\nmit einstellbarer Spannung.\nJeder Transformatorblock erhöhrt die Leistung.",
+"redtec.block.info.transformator": "\nTransferiert Leistung am Eingang auf Ausdgang,\nmit einstellbarer Spannung.\nJeder Transformatorblock erhoehrt die Leistung.",
 "redtec.block.info.coalHeater": "Verbrennt Treibstoff und erhitzt Wasser zu Dampf.\nBei nicht destiliertem Wasser enstehen Rueckstaende.",
+"redtec.block.info.fuseBox": "Schaltet ab wenn der Strom die Grenze der eingesetzten Sicherung ueberschreitet.",
+"redtec.item.info.fuseMax": "Max. Strom: %1$s A",
 
 "redtec.storing_crafting_table.container": "Werkbank",
 "redtec.jigsaw_block.pool": "Struktur Liste:",

@@ -31,8 +31,10 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 	public FluidStack getFluid(int amount) {
 		if (!this.fluid.isEmpty()) {
 			int transfer = Math.min(this.fluid.getAmount(), amount);
+			FluidStack fluidOut = new FluidStack(this.fluid.getFluid(), transfer);
+			fluidOut.setTag(this.fluid.getTag());
 			this.fluid.shrink(transfer);
-			return new FluidStack(this.fluid.getFluid(), transfer);
+			return fluidOut;
 		}
 		return FluidStack.EMPTY;
 	}
@@ -42,6 +44,7 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 		if (this.fluid.isEmpty()) {
 			int transfer = Math.min(this.maxFluid, fluid.getAmount());
 			this.fluid = new FluidStack(fluid.getFluid(), transfer);
+			this.fluid.setTag(fluid.getTag());
 			FluidStack rest = fluid.copy();
 			rest.shrink(transfer);
 			if (this.fluid.getAmount() == this.maxFluid && !rest.isEmpty()) rest = pushFluid(rest, null);
@@ -50,6 +53,7 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 			int capacity = this.maxFluid - this.fluid.getAmount();
 			int transfer = Math.min(capacity, fluid.getAmount());
 			this.fluid.grow(transfer);
+			this.fluid.setTag(fluid.getTag());
 			FluidStack rest = fluid.copy();
 			rest.shrink(transfer);
 			if (this.fluid.getAmount() == this.maxFluid && !rest.isEmpty()) rest = pushFluid(rest, null);
@@ -98,8 +102,10 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 						int transfer = Math.min(fluidIn.getAmount(), pipe.maxFluid - pipe.fluid.getAmount());
 						if (pipe.fluid.isEmpty()) {
 							pipe.fluid = new FluidStack(fluidIn.getFluid(), transfer);
+							pipe.fluid.setTag(this.fluid.getTag());
 						} else {
 							pipe.fluid.grow(transfer);
+							pipe.fluid.setTag(this.fluid.getTag());
 						}
 						fluidIn.shrink(transfer);
 						
@@ -180,6 +186,7 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 								} else {
 									pipe.fluid.grow(transfer);
 								}
+								pipe.fluid.setTag(this.fluid.getTag());
 								
 							}
 							
@@ -224,5 +231,10 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 	public void clear() {
 		this.fluid = FluidStack.EMPTY;
 	}
-	
+
+	@Override
+	public FluidStack getStorage() {
+		return this.fluid;
+	}
+
 }

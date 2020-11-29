@@ -7,6 +7,7 @@ import de.redtec.registys.ModSoundEvents;
 import de.redtec.registys.ModTileEntityType;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
+import de.redtec.util.FluidStackStateTagHelper;
 import de.redtec.util.FluidTankHelper;
 import de.redtec.util.IFluidConnective;
 import net.minecraft.block.BlockState;
@@ -117,8 +118,8 @@ public class TileEntityFluidInput extends TileEntity implements IFluidConnective
 				BlockPos tankBeginPos = this.pos.offset(this.getBlockState().get(BlockFluidInput.FACING));
 				BlockPos sourcePos = new FluidTankHelper(this.world, tankBeginPos).extractFluidFromTank(this.filterFluid == null ? this.world.getFluidState(tankBeginPos).getFluid() : this.filterFluid);
 				FluidState sourceFluid = this.world.getFluidState(sourcePos);
-				FluidStack fluid = new FluidStack(sourceFluid.getFluid(), 1000);
-
+				FluidStack fluid = FluidStackStateTagHelper.makeStackFromState(sourceFluid);
+				
 				this.world.setBlockState(sourcePos, Blocks.AIR.getDefaultState());
 				
 				if (this.fluid.isEmpty()) {
@@ -126,6 +127,8 @@ public class TileEntityFluidInput extends TileEntity implements IFluidConnective
 				} else {
 					this.fluid.grow(fluid.getAmount());
 				}
+				
+				this.fluid.setTag(fluid.getTag());
 				
 			}
 			
@@ -188,6 +191,11 @@ public class TileEntityFluidInput extends TileEntity implements IFluidConnective
 	@Override
 	public boolean canConnect(Direction side) {
 		return side == this.getBlockState().get(BlockFluidInput.FACING).getOpposite();
+	}
+
+	@Override
+	public FluidStack getStorage() {
+		return this.fluid;
 	}
 
 }

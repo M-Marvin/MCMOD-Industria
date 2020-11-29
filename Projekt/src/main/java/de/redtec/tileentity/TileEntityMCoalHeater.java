@@ -3,6 +3,7 @@ package de.redtec.tileentity;
 import de.redtec.blocks.BlockMCoalHeater;
 import de.redtec.dynamicsounds.ISimpleMachineSound;
 import de.redtec.dynamicsounds.SoundMachine;
+import de.redtec.fluids.FluidDestilledWater;
 import de.redtec.fluids.ModFluids;
 import de.redtec.gui.ContainerMCoalHeater;
 import de.redtec.registys.ModSoundEvents;
@@ -60,7 +61,7 @@ public class TileEntityMCoalHeater extends TileEntityInventoryBase implements IN
 					isWorking = true;
 				}
 				
-				if (isWorking) {
+				if (isWorking ? this.world.getGameTime() %10 == 0 : false) {
 					
 					for (int y = 1; y <= 6; y++) {
 						for (int x = -1; x <= 2; x++) {
@@ -81,13 +82,21 @@ public class TileEntityMCoalHeater extends TileEntityInventoryBase implements IN
 												
 											} else {
 												
-												this.world.setBlockState(pos2, ModFluids.PREASURIZED_STEAM.getDefaultState().getBlockState());
+												this.world.setBlockState(pos2,ModFluids.STEAM.getPreasurized().getBlockState());
 												
 											}
 											
-										} else if (sourceFluid.getFluid() == ModFluids.HOT_WATER) {
-
-											this.world.setBlockState(pos2, ModFluids.PREASURIZED_STEAM.getDefaultState().getBlockState());
+										} else if (sourceFluid.getFluid() == ModFluids.DESTILLED_WATER) {
+											
+											if (sourceFluid.get(FluidDestilledWater.HOT)) {
+												
+												this.world.setBlockState(pos2, ModFluids.STEAM.getPreasurized().getBlockState());
+												
+											} else {
+												
+												this.world.setBlockState(pos2, ModFluids.DESTILLED_WATER.getHot().getBlockState());
+												
+											}
 											
 										}
 										

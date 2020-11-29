@@ -4,13 +4,18 @@ import net.minecraft.client.audio.TickableSound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class SoundMachine extends TickableSound {
+
+	protected World world;
+	protected BlockPos pos;
 	
-	protected TileEntity machine;
-public SoundMachine(TileEntity machine, SoundEvent soundIn) {
+	public SoundMachine(TileEntity machine, SoundEvent soundIn) {
 		super(soundIn, SoundCategory.BLOCKS);
-		this.machine = machine;
+		this.pos = machine.getPos();
+		this.world = machine.getWorld();
 		this.x = machine.getPos().getX();
 		this.y = machine.getPos().getY();
 		this.z = machine.getPos().getZ();
@@ -22,8 +27,10 @@ public SoundMachine(TileEntity machine, SoundEvent soundIn) {
 
 	@Override
 	public void tick() {
+
+		TileEntity machine = this.world.getTileEntity(pos);
 		
-		if ((this.machine instanceof ISimpleMachineSound ? ((ISimpleMachineSound) this.machine).isSoundRunning() : false) && !this.machine.isRemoved()) {
+		if ((machine instanceof ISimpleMachineSound ? ((ISimpleMachineSound) machine).isSoundRunning() : false) && !machine.isRemoved()) {
 			
 			this.x = machine.getPos().getX();
 			this.y = machine.getPos().getY();

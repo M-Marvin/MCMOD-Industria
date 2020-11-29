@@ -118,7 +118,7 @@ public class BlockSignalAntennaConector extends BlockContainerBase implements IS
 				((TileEntitySignalAntenna) te).setChanelItem(null);
 				BlockPos pos2 = pos.offset(hit.getFace());
 				worldIn.addEntity(new ItemEntity(worldIn, pos2.getX() + 0.5F, pos2.getY() + 0.5F, pos2.getZ() + 0.5F, stack));
-								
+				
 			}
 			
 		}

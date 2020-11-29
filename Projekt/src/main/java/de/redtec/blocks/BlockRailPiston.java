@@ -153,7 +153,7 @@ public class BlockRailPiston extends BlockBase {
             TileEntity tileEntity = worldIn.getTileEntity(blockpos1);
             if (tileEntity != null && blockstate.getBlock() != RedTec.advanced_moving_block) {
             	list12.add(tileEntity.write(new CompoundNBT()));
-                //if (!(tileEntity instanceof INoInventoryTE)) worldIn.removeTileEntity(blockpos1);
+                worldIn.removeTileEntity(blockpos1);
             } else {
             	list12.add(null);
             }

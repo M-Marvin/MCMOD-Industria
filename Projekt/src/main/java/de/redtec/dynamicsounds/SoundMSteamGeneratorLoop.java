@@ -3,15 +3,20 @@ package de.redtec.dynamicsounds;
 import de.redtec.registys.ModSoundEvents;
 import de.redtec.tileentity.TileEntityMSteamGenerator;
 import net.minecraft.client.audio.TickableSound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class SoundMSteamGeneratorLoop extends TickableSound {
 
-	protected TileEntityMSteamGenerator tileEntity;
+	protected World world;
+	protected BlockPos pos;
 	
 	public SoundMSteamGeneratorLoop(TileEntityMSteamGenerator tileEntity) {
 		super(ModSoundEvents.TURBIN_LOOP, SoundCategory.BLOCKS);
-		this.tileEntity = tileEntity;
+		this.pos = tileEntity.getPos();
+		this.world = tileEntity.getWorld();
 		this.x = tileEntity.getPos().getX();
 		this.y = tileEntity.getPos().getY();
 		this.z = tileEntity.getPos().getZ();
@@ -24,10 +29,13 @@ public class SoundMSteamGeneratorLoop extends TickableSound {
 	@Override
 	public void tick() {
 		
-		if (tileEntity.accerlation > 0 && !tileEntity.isRemoved()) {
+		TileEntity te = this.world.getTileEntity(pos);
+		TileEntityMSteamGenerator tileEntity = te instanceof TileEntityMSteamGenerator ? (TileEntityMSteamGenerator) te : new TileEntityMSteamGenerator();
+		
+		if (tileEntity.accerlation > 0) {
 			
-			this.pitch = this.tileEntity.accerlation / 20F * 2F;
-			this.volume = this.tileEntity.accerlation / 20F;
+			this.pitch = tileEntity.accerlation / 20F * 2F;
+			this.volume = tileEntity.accerlation / 20F;
 			
 			this.x = tileEntity.getPos().getX();
 			this.y = tileEntity.getPos().getY();

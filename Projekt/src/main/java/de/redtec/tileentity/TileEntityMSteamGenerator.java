@@ -4,10 +4,12 @@ import java.util.ArrayList;
 
 import de.redtec.blocks.BlockMSteamGenerator;
 import de.redtec.dynamicsounds.SoundMSteamGeneratorLoop;
+import de.redtec.fluids.FluidSteam;
 import de.redtec.fluids.ModFluids;
 import de.redtec.fluids.util.BlockGasFluid;
 import de.redtec.registys.ModTileEntityType;
 import de.redtec.util.ElectricityNetworkHandler;
+import de.redtec.util.FluidStackStateTagHelper;
 import de.redtec.util.IElectricConnective.Voltage;
 import de.redtec.util.IFluidConnective;
 import net.minecraft.block.BlockState;
@@ -173,8 +175,8 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 					this.accerlation = Math.max(0F, this.accerlation - 0.04F);
 					
 				}
-
-				float capacityEnergy = this.maxEnergy * this.accerlation;
+				
+				float capacityEnergy = this.maxEnergy * this.accerlation / 20;
 				this.generatedAmperes = capacityEnergy / this.generatedVoltage.getVoltage();
 				
 				if (!this.steamOut.isEmpty()) {
@@ -295,6 +297,12 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 			
 			TileEntityMSteamGenerator center = (TileEntityMSteamGenerator) tileEntity;
 			
+			if (fluid.getFluid() == this.getFluidType()) {
+				if (!FluidStackStateTagHelper.makeStateFromStack(fluid).get(FluidSteam.PREASURIZED)) return fluid;
+			} else {
+				return fluid;
+			}
+			
 			if (center.steamIn.isEmpty()) {
 				int transfer = Math.min(this.maxFluid, fluid.getAmount());
 				center.steamIn = new FluidStack(fluid.getFluid(), transfer);
@@ -317,7 +325,7 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 	
 	@Override
 	public Fluid getFluidType() {
-		return ModFluids.PREASURIZED_STEAM;
+		return ModFluids.STEAM;
 	}
 	
 	@Override
@@ -334,5 +342,10 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 		this.deserializeNBT(pkt.getNbtCompound());
 	}
-	
+
+	@Override
+	public FluidStack getStorage() {
+		return this.steamIn;
+	}
+
 }

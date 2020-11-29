@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "redtec:item/steam_bucket"
+    "layer0": "redtec:item/destilled_water_bucket"
   }
 }

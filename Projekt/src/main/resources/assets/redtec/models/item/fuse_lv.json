@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "redtec:item/hot_water_bucket"
+    "layer0": "redtec:item/fuse_lv"
   }
 }

@@ -2,7 +2,6 @@ package de.redtec.items;
 
 import de.redtec.RedTec;
 import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
@@ -17,7 +16,7 @@ import net.minecraft.world.World;
 public class ItemEmptyBlueprint extends ItemBase {
 	
 	public ItemEmptyBlueprint() {
-		super("empty_blueprint", ItemGroup.MISC);
+		super("empty_blueprint", RedTec.MACHINES);
 	}
 	
 	@Override

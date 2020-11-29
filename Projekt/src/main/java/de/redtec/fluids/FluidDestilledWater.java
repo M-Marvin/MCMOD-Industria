@@ -11,6 +11,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
+import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -21,16 +22,28 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidAttributes;
 
-public abstract class FluidHotWater extends FlowingFluid {
+public abstract class FluidDestilledWater extends FlowingFluid {
+	
+	public static final BooleanProperty HOT = BooleanProperty.create("hot");
+	
+	public FluidDestilledWater() {
+		this.setDefaultState(this.stateContainer.getBaseState().with(HOT, false));
+	}
+	
+	@Override
+	protected void fillStateContainer(Builder<Fluid, FluidState> builder) {
+		builder.add(HOT);
+		super.fillStateContainer(builder);
+	}
 	
 	@Override
 	public Fluid getFlowingFluid() {
-		return ModFluids.FLOWING_HOT_WATER;
+		return ModFluids.FLOWING_DESTILLED_WATER;
 	}
 
 	@Override
 	public Fluid getStillFluid() {
-		return ModFluids.HOT_WATER;
+		return ModFluids.DESTILLED_WATER;
 	}
 
 	@Override
@@ -53,7 +66,7 @@ public abstract class FluidHotWater extends FlowingFluid {
 
 	@Override
 	public Item getFilledBucket() {
-		return RedTec.hot_water_bucket;
+		return RedTec.destilled_water_bucket;
 	}
 
 	@Override
@@ -73,24 +86,35 @@ public abstract class FluidHotWater extends FlowingFluid {
 
 	@Override
 	protected BlockState getBlockState(FluidState state) {
-		return RedTec.hot_water.getDefaultState().with(BlockModFlowingFluid.LEVEL, getLevelFromState(state));
+		return RedTec.destilled_water.getDefaultState().with(BlockModFlowingFluid.LEVEL, getLevelFromState(state)).with(BlockDestilledWater.HOT, state.get(HOT));
 	}
 	
 	@Override
 	protected FluidAttributes createAttributes() {
 		return FluidAttributes.builder(
-				new ResourceLocation(RedTec.MODID, "block/hot_water_still"), 
-				new ResourceLocation(RedTec.MODID, "block/hot_water_flow"))
+				new ResourceLocation(RedTec.MODID, "block/destilled_water_still"), 
+				new ResourceLocation(RedTec.MODID, "block/destilled_water_flow"))
 					.overlay(new ResourceLocation(RedTec.MODID, "block/fluid_overlay"))
 					.build(this);
 	}
 	
 	@Override
 	public boolean isEquivalentTo(Fluid fluidIn) {
-		return fluidIn == ModFluids.HOT_WATER || fluidIn == ModFluids.FLOWING_HOT_WATER;
+		return fluidIn == ModFluids.DESTILLED_WATER || fluidIn == ModFluids.FLOWING_DESTILLED_WATER;
+	}
+
+	@Override
+	protected void randomTick(World world, BlockPos pos, FluidState state, Random random) {
+
+		if (random.nextInt(80) == 0 && state.get(HOT)) {
+			
+			world.setBlockState(pos, state.with(HOT, false).getBlockState());
+			
+		}
+		
 	}
 	
-	public static class Still extends FluidHotWater {
+	public static class Still extends FluidDestilledWater {
 
 		@Override
 		public boolean isSource(FluidState state) {
@@ -127,6 +151,8 @@ public abstract class FluidHotWater extends FlowingFluid {
 				
 			}
 			
+			super.randomTick(world, pos, state, random);
+			
 		}
 		
 		@Override
@@ -136,7 +162,7 @@ public abstract class FluidHotWater extends FlowingFluid {
 		
 	}
 	
-	public static class Flow extends FluidHotWater {
+	public static class Flow extends FluidDestilledWater {
 
 		@Override
 		public boolean isSource(FluidState state) {
@@ -154,6 +180,47 @@ public abstract class FluidHotWater extends FlowingFluid {
 			super.fillStateContainer(builder);
 		}
 		
+		@Override
+		public void tick(World worldIn, BlockPos pos, FluidState state) {
+
+			super.tick(worldIn, pos, state);
+			
+			if (state.get(FlowingFluid.FALLING)) {
+				FluidState source = worldIn.getFluidState(pos.up());
+				if (source.getFluid().isEquivalentTo(this)) worldIn.setBlockState(pos, state.with(HOT, source.get(HOT)).getBlockState());
+			} else {
+
+				for (Direction d : Direction.Plane.HORIZONTAL) {
+					
+					BlockPos blockpos = pos.offset(d);
+					FluidState fluid = worldIn.getFluidState(blockpos);
+					
+					if (fluid.getFluid().isEquivalentTo(this)) {
+						
+						int level1 = fluid.getLevel();
+						int level2 = state.getLevel();
+						
+						if (level1 > level2) {
+							worldIn.setBlockState(pos, state.with(HOT, fluid.get(HOT)).getBlockState());
+							break;
+						}
+						
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+	}
+
+	public FluidState getHot() {
+		return this.getDefaultState().with(HOT, true);
+	}
+	
+	public FluidState getCold() {
+		return this.getDefaultState().with(HOT, false);
 	}
 	
 }

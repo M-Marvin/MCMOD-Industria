@@ -14,7 +14,7 @@ public class SSendENHandeler {
 	public CompoundNBT enTag;
 	
 	public SSendENHandeler(ElectricityNetworkHandler handler) {
-		this.enTag = handler.serializeNBT();
+		this.enTag = handler.makeUpdateTag();
 	}
 	
 	public SSendENHandeler(PacketBuffer buf) {

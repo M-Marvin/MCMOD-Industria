@@ -92,7 +92,7 @@ public class BlockPanelLamp extends BlockContainerBase implements IElectricConne
 		boolean active = state.get(LIT);
 		boolean powered = network.canMachinesRun() && network.getVoltage() == Voltage.LowVoltage;
 		
-		if (network.getVoltage().getVoltage() > Voltage.LowVoltage.getVoltage()) {
+		if (network.getVoltage().getVoltage() > Voltage.LowVoltage.getVoltage() && network.getCurrent() > 0) {
 
 			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
 			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());

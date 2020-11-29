@@ -32,7 +32,7 @@ public class TileEntityMGenerator extends TileEntityInventoryBase implements INa
 	
 	public int fuelTime;
 	public float burnTime;
-	public int producingPower;
+	public float producingPower;
 	
 	public TileEntityMGenerator() {
 		super(ModTileEntityType.GENERATOR, 1);
@@ -41,7 +41,7 @@ public class TileEntityMGenerator extends TileEntityInventoryBase implements INa
 	@Override
 	public CompoundNBT write(CompoundNBT compound) {
 		compound.putFloat("burnTime", this.burnTime);
-		compound.putInt("producingPower", this.producingPower);
+		compound.putFloat("producingPower", this.producingPower);
 		compound.putInt("fuelTime", this.fuelTime);
 		return super.write(compound);
 	}
@@ -49,7 +49,7 @@ public class TileEntityMGenerator extends TileEntityInventoryBase implements INa
 	@Override
 	public void func_230337_a_(BlockState state, CompoundNBT compound) {
 		this.burnTime = compound.getFloat("burnTime");
-		this.producingPower = compound.getInt("producingPower");
+		this.producingPower = compound.getFloat("producingPower");
 		this.fuelTime = compound.getInt("fuelTime");
 		super.func_230337_a_(state, compound);
 	}
@@ -106,7 +106,7 @@ public class TileEntityMGenerator extends TileEntityInventoryBase implements INa
 				
 				if (this.burnTime > 0) {
 					this.burnTime -= f;
-					this.producingPower = (int) (8 * f);
+					this.producingPower = 8 * f;
 				} else if (hasFuelItems()) {
 					this.burnTime = ForgeHooks.getBurnTime(this.itemstacks.get(0));
 					this.fuelTime = (int) this.burnTime;

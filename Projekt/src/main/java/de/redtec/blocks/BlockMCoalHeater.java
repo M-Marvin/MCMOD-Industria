@@ -98,7 +98,7 @@ public class BlockMCoalHeater extends BlockContainerBase implements IAdvancedBlo
 		}
 		
 	}
-
+	
 	@Override
 	public List<ITextComponent> getBlockInfo() {
 		List<ITextComponent> info = new ArrayList<ITextComponent>();

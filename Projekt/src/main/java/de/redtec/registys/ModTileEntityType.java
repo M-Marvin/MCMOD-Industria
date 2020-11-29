@@ -8,12 +8,14 @@ import de.redtec.tileentity.TileEntityControllPanel;
 import de.redtec.tileentity.TileEntityFluidInput;
 import de.redtec.tileentity.TileEntityFluidOutput;
 import de.redtec.tileentity.TileEntityFluidPipe;
+import de.redtec.tileentity.TileEntityFuseBox;
 import de.redtec.tileentity.TileEntityHarvester;
 import de.redtec.tileentity.TileEntityHoverControler;
 import de.redtec.tileentity.TileEntityJigsaw;
 import de.redtec.tileentity.TileEntityLockedCompositeBlock;
 import de.redtec.tileentity.TileEntityMCoalHeater;
 import de.redtec.tileentity.TileEntityMGenerator;
+import de.redtec.tileentity.TileEntityMMultimeter;
 import de.redtec.tileentity.TileEntityMSteamGenerator;
 import de.redtec.tileentity.TileEntityRedstoneReciver;
 import de.redtec.tileentity.TileEntitySignalAntenna;
@@ -40,7 +42,7 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityHoverControler> HOVER_CONTROLER = register("hover_controler", TileEntityType.Builder.create(TileEntityHoverControler::new, RedTec.hover_engine));
 	public static final TileEntityType<TileEntityControllPanel> CONTROLL_PANEL = register("controll_panel", TileEntityType.Builder.create(TileEntityControllPanel::new, RedTec.controll_panel));
 	public static final TileEntityType<TileEntityHarvester> HARVESTER = register("harvester", TileEntityType.Builder.create(TileEntityHarvester::new, RedTec.harvester));
-	public static final TileEntityType<TileEntitySimpleBlockTicking> SIMPLE_BLOCK_TICKING = register("simple_block_ticking", TileEntityType.Builder.create(TileEntitySimpleBlockTicking::new, RedTec.panel_lamp, RedTec.infinity_power_source));
+	public static final TileEntityType<TileEntitySimpleBlockTicking> SIMPLE_BLOCK_TICKING = register("simple_block_ticking", TileEntityType.Builder.create(TileEntitySimpleBlockTicking::new, RedTec.panel_lamp, RedTec.infinity_power_source, RedTec.transformator_contact));
 	public static final TileEntityType<TileEntityJigsaw> JIGSAW = register("jigsaw", TileEntityType.Builder.create(TileEntityJigsaw::new, RedTec.jigsaw));
 	public static final TileEntityType<TileEntityMGenerator> GENERATOR = register("generator", TileEntityType.Builder.create(TileEntityMGenerator::new, RedTec.generator));
 	public static final TileEntityType<TileEntityFluidPipe> FLUID_PIPE = register("fluid_pipe", TileEntityType.Builder.create(TileEntityFluidPipe::new, RedTec.fluid_pipe));
@@ -48,6 +50,8 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityFluidOutput> FLUID_OUTPUT = register("fluid_output", TileEntityType.Builder.create(TileEntityFluidOutput::new, RedTec.fluid_output));
 	public static final TileEntityType<TileEntityMSteamGenerator> STEAM_GENERATOR = register("steam_generator", TileEntityType.Builder.create(TileEntityMSteamGenerator::new, RedTec.steam_generator));
 	public static final TileEntityType<TileEntityMCoalHeater> COAL_HEATER = register("coal_heater", TileEntityType.Builder.create(TileEntityMCoalHeater::new, RedTec.coal_heater));
+	public static final TileEntityType<TileEntityFuseBox> FUSE_BOX = register("fuse_box", TileEntityType.Builder.create(TileEntityFuseBox::new, RedTec.fuse_box));
+	public static final TileEntityType<TileEntityMMultimeter> MULTIMETER = register("block_multimeter", TileEntityType.Builder.create(TileEntityMMultimeter::new, RedTec.block_multimeter));
 	
 	private static <T extends TileEntity> TileEntityType<T> register(String key, TileEntityType.Builder<T> builder) {
 		Type<?> type = Util.func_240976_a_(TypeReferences.BLOCK_ENTITY, key);

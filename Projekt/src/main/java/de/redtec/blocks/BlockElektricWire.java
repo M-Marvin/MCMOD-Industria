@@ -67,30 +67,34 @@ public class BlockElektricWire extends BlockWiring implements IElectricWire, IAd
 			ElectricityNetwork network = handler.getNetwork(pos);
 			Voltage voltage = network.getVoltage();
 			
-			int particleCount = voltage.getVoltage() / 10;
-			
-			if (particleCount > 0) {
+			if (network.getCurrent() > 0) {
 				
-				for (int i = 0; i < particleCount; i++) {
+				int particleCount = voltage.getVoltage() / 10;
+
+				if (particleCount > 0) {
 					
+					for (int i = 0; i < particleCount; i++) {
+						
+						
+						IParticleData particle = ParticleTypes.CRIT;
+						
+						double x = pos.getX() + 0.5d;
+						double y = pos.getY() + 0.2d;
+						double z = pos.getZ() + 0.5d;
+						
+						double xSpeed = rand.nextFloat() - 0.5F;
+						double ySpeed = rand.nextFloat() - 0.5F;
+						double zSpeed = rand.nextFloat() - 0.5F;
+						
+						double range = 2d;
+						
+						worldIn.addParticle(particle, x, y, z, xSpeed * range, ySpeed * range, zSpeed * range);
+						
+					}
 					
-					IParticleData particle = ParticleTypes.CRIT;
-					
-					double x = pos.getX() + 0.5d;
-					double y = pos.getY() + 0.2d;
-					double z = pos.getZ() + 0.5d;
-					
-					double xSpeed = rand.nextFloat() - 0.5F;
-					double ySpeed = rand.nextFloat() - 0.5F;
-					double zSpeed = rand.nextFloat() - 0.5F;
-					
-					double range = 2d;
-					
-					worldIn.addParticle(particle, x, y, z, xSpeed * range, ySpeed * range, zSpeed * range);
+					worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), ModSoundEvents.SPARKING_CABLE, SoundCategory.BLOCKS, 0.5F, rand.nextFloat() * 0.2F + 0.8F, false);
 					
 				}
-				
-				worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), ModSoundEvents.SPARKING_CABLE, SoundCategory.BLOCKS, 0.5F, rand.nextFloat() * 0.2F + 0.8F, false);
 				
 			}
 			

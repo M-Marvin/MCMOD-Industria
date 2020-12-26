@@ -27,6 +27,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -42,6 +44,7 @@ public class BlockFuseBox extends BlockContainerBase implements IElectricConnect
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final BooleanProperty ON = BooleanProperty.create("on");
+	
 	protected static final VoxelShape EAST_OPEN_AABB = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 11.0D, 16.0D, 16.0D);
 	protected static final VoxelShape WEST_OPEN_AABB = Block.makeCuboidShape(5.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
 	protected static final VoxelShape SOUTH_OPEN_AABB = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 11.0D);
@@ -200,6 +203,16 @@ public class BlockFuseBox extends BlockContainerBase implements IElectricConnect
 	}
 
 	@Override
+	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+		TileEntity te = worldIn.getTileEntity(pos);
+		if (te instanceof TileEntityFuseBox) {
+			ItemStack stack = ((TileEntityFuseBox) te).getFuse();
+			if (stack != null ? !stack.isEmpty() : false) worldIn.addEntity(new ItemEntity(worldIn, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, stack));
+		}
+		super.onBlockHarvested(worldIn, pos, state, player);
+	}
+	
+	@Override
 	public List<ITextComponent> getBlockInfo() {
 		List<ITextComponent> info = new ArrayList<ITextComponent>();
 		info.add(new TranslationTextComponent("redtec.block.info.fuseBox"));
@@ -208,8 +221,17 @@ public class BlockFuseBox extends BlockContainerBase implements IElectricConnect
 
 	@Override
 	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public BlockState rotate(BlockState state, Rotation rot) {
+		return state.with(FACING, rot.rotate(state.get(FACING)));
+	}
+	
+	@Override
+	public BlockState mirror(BlockState state, Mirror mirrorIn) {
+		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
 	}
 	
 }

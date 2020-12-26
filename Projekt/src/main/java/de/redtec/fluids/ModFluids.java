@@ -2,6 +2,9 @@
 package de.redtec.fluids;
 
 import de.redtec.RedTec;
+import de.redtec.fluids.util.BlockGasFluid;
+import net.minecraft.block.Block;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
@@ -18,6 +21,10 @@ public class ModFluids {
 		p_215710_1_.setRegistryName(new ResourceLocation(RedTec.MODID, key));
 		ForgeRegistries.FLUIDS.register(p_215710_1_);
 		return p_215710_1_;
+	}
+	
+	public static boolean isFluidBlock(Block block) {
+		return block instanceof FlowingFluidBlock || block instanceof BlockGasFluid;
 	}
 	
 }

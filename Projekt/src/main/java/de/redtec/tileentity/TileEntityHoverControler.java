@@ -217,6 +217,7 @@ public class TileEntityHoverControler extends TileEntity implements IInventory, 
 			chanelStates.putBoolean(entry.getKey(), entry.getValue());
 		}
 		compound.put("chanelStates", chanelStates);
+		compound.putInt("energyTimer", this.energyTimer);
 		return super.write(compound);
 	}
 	
@@ -234,6 +235,7 @@ public class TileEntityHoverControler extends TileEntity implements IInventory, 
 		for (String chanel : chanelStates.keySet()) {
 			this.chanelState.put(chanel, chanelStates.getBoolean(chanel));
 		}
+		this.energyTimer = compound.getInt("energyTimer");
 		super.func_230337_a_(state, compound);
 	}
 	

@@ -33,6 +33,7 @@ import de.redtec.blocks.BlockMTransformatorCoil;
 import de.redtec.blocks.BlockMTransformatorContact;
 import de.redtec.blocks.BlockPanelLamp;
 import de.redtec.blocks.BlockPowerEmiting;
+import de.redtec.blocks.BlockPowerSwitch;
 import de.redtec.blocks.BlockRDCapacitor;
 import de.redtec.blocks.BlockRDPulseCounter;
 import de.redtec.blocks.BlockRadialConector;
@@ -81,6 +82,7 @@ import de.redtec.registys.ModTileEntityType;
 import de.redtec.renderer.TileEntityAdvancedMovingBlockRenderer;
 import de.redtec.renderer.TileEntityControllPanelRenderer;
 import de.redtec.renderer.TileEntityFuseBoxRenderer;
+import de.redtec.renderer.TileEntityGaugeRenderer;
 import de.redtec.renderer.TileEntityMSteamGeneratorRenderer;
 import de.redtec.renderer.TileEntitySignalProcessorContactRenderer;
 import de.redtec.util.ModGameRegistry;
@@ -177,6 +179,7 @@ public class RedTec {
 	public static final Block transformator_coil = new BlockMTransformatorCoil();
 	public static final Block fuse_box = new BlockFuseBox();
 	public static final Block block_multimeter = new BlockMMultimeter();
+	public static final Block power_switch = new BlockPowerSwitch();
 	
 	public static final Block bauxit = new BlockBase("bauxit", Material.ROCK, 1F, SoundType.STONE);
 	public static final Block bauxit_ore = new BlockBase("bauxit_ore", Material.ROCK, 1.5F, SoundType.STONE);
@@ -304,6 +307,7 @@ public class RedTec {
 		ModGameRegistry.registerBlock(transformator_contact, MACHINES);
 		ModGameRegistry.registerBlock(fuse_box, MACHINES);
 		ModGameRegistry.registerBlock(block_multimeter, MACHINES);
+		ModGameRegistry.registerBlock(power_switch, MACHINES);
 		
 		ModGameRegistry.registerTechnicalBlock(steam);
 		ModGameRegistry.registerItem(steam_bucket);
@@ -405,12 +409,14 @@ public class RedTec {
 		RenderTypeLookup.setRenderLayer(ModFluids.DESTILLED_WATER, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_DESTILLED_WATER, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.STEAM, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(block_multimeter, RenderType.getCutout());
 		
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ADVANCED_PISTON, TileEntityAdvancedMovingBlockRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SIGNAL_PROCESSOR, TileEntitySignalProcessorContactRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CONTROLL_PANEL, TileEntityControllPanelRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.STEAM_GENERATOR, TileEntityMSteamGeneratorRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.FUSE_BOX, TileEntityFuseBoxRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.MULTIMETER, TileEntityGaugeRenderer::new);
 		
 		ScreenManager.registerFactory(ModContainerType.STORED_CRAFTING, ScreenStoredCrafting::new);
 		ScreenManager.registerFactory(ModContainerType.PROCESSOR, ScreenProcessor::new);

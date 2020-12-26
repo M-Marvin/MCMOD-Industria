@@ -1,5 +1,7 @@
 package de.redtec.blocks;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -15,6 +17,7 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class BlockRedstoneContact extends BlockBase {
 	
@@ -25,7 +28,7 @@ public class BlockRedstoneContact extends BlockBase {
 		super("redstone_contact", Material.WOOD, 0.7F, SoundType.WOOD);
 		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, false));
 	}
-	
+		
 	@Override
 	protected void fillStateContainer(Builder<Block, BlockState> builder) {
 		builder.add(POWERED, FACING);
@@ -33,8 +36,7 @@ public class BlockRedstoneContact extends BlockBase {
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		BlockState state = this.getDefaultState().with(FACING, context.getNearestLookingDirection().getOpposite());
-		return updateState(state, context.getWorld(), context.getPos());
+		return this.getDefaultState().with(FACING, context.getNearestLookingDirection().getOpposite());
 	}
 	
 	@Override
@@ -42,21 +44,60 @@ public class BlockRedstoneContact extends BlockBase {
 		
 		BlockState newState = updateState(state, worldIn, pos);
 		worldIn.setBlockState(pos, newState);
-		if (state.get(POWERED) != newState.get(POWERED)) worldIn.notifyNeighborsOfStateExcept(pos.offset(state.get(FACING).getOpposite()), this, state.get(FACING));
+		if (state.get(POWERED) != newState.get(POWERED)) {
+			worldIn.notifyNeighborsOfStateExcept(pos.offset(state.get(FACING).getOpposite()), this, state.get(FACING));
+		}
 		
 	}
 	
 	public BlockState updateState(BlockState state, World world, BlockPos pos) {
 		
-		BlockState otherBlock = world.getBlockState(pos.offset(state.get(FACING)));
-		if (otherBlock.getBlock() == this) {
-			boolean powered = otherBlock.get(FACING).getOpposite() == state.get(FACING);
-			state = state.with(POWERED, powered);
-		} else {
-			state = state.with(POWERED, false);
+		Direction facing = state.get(FACING);
+		BlockState otherBlock1 = world.getBlockState(pos.offset(state.get(FACING), 1));
+		BlockState otherBlock2 = world.getBlockState(pos.offset(state.get(FACING), 2));
+		boolean power =	(otherBlock1.getBlock() == this ? otherBlock1.get(FACING).getOpposite() == facing : false) ||
+						(otherBlock2.getBlock() == this ? otherBlock2.get(FACING).getOpposite() == facing : false);
+		boolean powered = state.get(POWERED);
+		
+		if (power != powered) {
+			
+			state = state.with(POWERED, power);
+			world.getPendingBlockTicks().scheduleTick(pos.offset(state.get(FACING), 2), this, 1);
+			
 		}
 		
 		return state;
+		
+	}
+	
+	@Override
+	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
+		
+		BlockState newState = updateState(state, worldIn, pos);
+		worldIn.setBlockState(pos, newState);
+		
+	}
+	
+	@Override
+	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
+
+		BlockState newState = updateState(state, worldIn, pos);
+		worldIn.setBlockState(pos, newState);
+		if (state.get(POWERED) != newState.get(POWERED)) {
+			worldIn.notifyNeighborsOfStateExcept(pos.offset(state.get(FACING).getOpposite()), this, state.get(FACING));
+		}
+		
+	}
+	
+	@Override
+	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		
+		if (newState.getBlock() != state.getBlock()) {
+			
+			worldIn.notifyNeighborsOfStateExcept(pos.offset(state.get(FACING).getOpposite()), this, state.get(FACING));
+			worldIn.getPendingBlockTicks().scheduleTick(pos.offset(state.get(FACING), 2), this, 1);
+			
+		}
 		
 	}
 	

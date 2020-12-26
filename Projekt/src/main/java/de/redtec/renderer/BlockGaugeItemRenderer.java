@@ -10,25 +10,29 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3f;
 
-public class BlockMSteamGeneratorItemRenderer extends ItemStackTileEntityRenderer {
+public class BlockGaugeItemRenderer extends ItemStackTileEntityRenderer {
 
-	private TileEntityMSteamGeneratorModel steamGeneratorModel;
+	private TileEntityGaugeModel gaugeModel;
 	
-	public static final ResourceLocation STEAM_GENERATOR_TEXTURES = new ResourceLocation(RedTec.MODID, "textures/block/steam_generator.png");
+	public static final ResourceLocation GAUGE_TEXTURES = new ResourceLocation(RedTec.MODID, "textures/block/gauge.png");
 	
-	public BlockMSteamGeneratorItemRenderer() {
-		this.steamGeneratorModel = new TileEntityMSteamGeneratorModel();
+	public BlockGaugeItemRenderer() {
+		this.gaugeModel = new TileEntityGaugeModel();
 	}
 	
 	@Override
 	public void func_239207_a_(ItemStack stack, TransformType type, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		
-		IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.getEntityTranslucent(STEAM_GENERATOR_TEXTURES));
+		IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.getEntityTranslucent(GAUGE_TEXTURES));
 		
 		matrixStackIn.push();
 		
-		steamGeneratorModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
+		matrixStackIn.rotate(Vector3f.XP.rotationDegrees(180));
+		matrixStackIn.translate(0.5F, -1.5F, -0.5F);
+		
+		gaugeModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 		
 		matrixStackIn.pop();
 		

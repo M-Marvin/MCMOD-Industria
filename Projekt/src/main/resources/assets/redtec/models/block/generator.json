@@ -3,6 +3,6 @@
   "textures": {
     "top": "redtec:block/generator_top",
     "front": "redtec:block/generator_front",
-    "side": "redtec:block/machine_side"
+    "side": "redtec:block/steel_platting"
   }
 }

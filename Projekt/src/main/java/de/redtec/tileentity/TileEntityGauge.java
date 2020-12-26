@@ -1,42 +1,33 @@
 package de.redtec.tileentity;
 
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 
-public abstract class TileEntityGauge extends TileEntity implements ITickableTileEntity {
+public abstract class TileEntityGauge extends TileEntity {
 	
-	public String name;
-	public float value;
-	
+	// Client only
+	public float currentGaugeValue;
+
 	public TileEntityGauge(TileEntityType<?> tileEntityTypeIn) {
 		super(tileEntityTypeIn);
 	}
 	
-	public String getName() {
-		return name;
-	}
+	public abstract String getUnit();
 	
-	public float getValue() {
-		return value;
+	public abstract float getValue();
+	
+	@Override
+	public CompoundNBT serializeNBT() {
+		CompoundNBT nbt = super.serializeNBT();
+		if (this.world.isRemote()) nbt.putFloat("currentGaugeValue", this.currentGaugeValue);
+		return nbt;
 	}
 	
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		CompoundNBT compound = new CompoundNBT();
-		compound.putString("Name", this.name);
-		compound.putFloat("Value", this.value);
-		return new SUpdateTileEntityPacket(pos, 0, compound);
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		CompoundNBT compound = pkt.getNbtCompound();
-		this.name = compound.getString("Name");
-		this.value = compound.getFloat("Value");
+	public void deserializeNBT(CompoundNBT nbt) {
+		if (nbt.contains("currentGaugeValue")) this.currentGaugeValue = nbt.getFloat("currentGaugeValue");
+		super.deserializeNBT(nbt);
 	}
 	
 }

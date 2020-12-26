@@ -1,18 +1,18 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "redtec:block/fuse_box_front",
+		"1": "redtec:block/steel_platting",
 		"2": "redtec:block/fuse_box_side",
 		"5": "redtec:block/fuse_box_front2_on",
-		"particle": "redtec:block/fuse_box_front",
-		"2_3": "redtec:block/fuse_box_back"
+		"particle": "redtec:block/steel_platting",
+		"6": "redtec:block/steel_platting"
 	},
 	"elements": [
 		{
 			"from": [0, 0, 0],
 			"to": [16, 16, 11],
 			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#2_3"},
+				"north": {"uv": [0, 0, 16, 16], "texture": "#6"},
 				"east": {"uv": [0, 0, 16, 11], "rotation": 90, "texture": "#2"},
 				"south": {"uv": [0, 0, 16, 16], "texture": "#1"},
 				"west": {"uv": [0, 0, 16, 11], "rotation": 270, "texture": "#2"},

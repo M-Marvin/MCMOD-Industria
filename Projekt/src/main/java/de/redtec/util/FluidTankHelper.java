@@ -3,18 +3,18 @@ package de.redtec.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.redtec.fluids.ModFluids;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class FluidTankHelper {
 	
-	public static final int MAX_OUTLET_RANGE = 16;
-	public static final int MAX_SCANN_DEPTH = 50000;
+	public static final int MAX_TANK_RANGE = 64;
+	public static final int MAX_SCANN_DEPTH = 128;
 	protected BlockPos beginPos;
 	protected World world;
 	
@@ -26,142 +26,116 @@ public class FluidTankHelper {
 	@SuppressWarnings("deprecation")
 	public BlockPos insertFluidInTank(Fluid fluid) {
 		
-		List<BlockPos> tankBlocks = new ArrayList<BlockPos>();
-		
-		scannForTankBlocks(tankBlocks, beginPos, 0, fluid);
-		
-		if (tankBlocks.size() > 0) {
+		int bottomY = this.beginPos.getY();
+		for (; bottomY > 0; bottomY--) {
+			BlockPos testPos = new BlockPos(this.beginPos.getX(), bottomY, this.beginPos.getZ());
+			BlockState blockState = this.world.getBlockState(testPos);
 			
-			int maxY = this.beginPos.getY();
-			int minY = 256;
+			if (!blockState.isAir() && !ModFluids.isFluidBlock(blockState.getBlock())) {
+				bottomY = Math.min(bottomY + 1, this.beginPos.getY());
+				break;
+			}
+		}
+		
+		List<BlockPos> outletPosList = new ArrayList<BlockPos>();
+		for (int y = bottomY; y <= this.beginPos.getY(); y++) {
 			
-			for (BlockPos pos : tankBlocks) {
+			BlockPos scannPos = new BlockPos(this.beginPos.getX(), y, this.beginPos.getZ());
+			
+			this.scannDepth = 0;
+			scannForTankBlocks(outletPosList, scannPos);
+			
+			if (outletPosList.size() > 0) {
 				
-				if ((this.world.getBlockState(pos).isAir() || !this.world.getFluidState(pos).isSource())) {
-
-					if (pos.getY() > maxY) maxY = pos.getY();
-					if (pos.getY() < minY) minY = pos.getY();
+				for (BlockPos outletPos : outletPosList) {
+					
+					FluidState fluidState = this.world.getFluidState(outletPos);
+					
+					if (fluidState.isEmpty() ? true : !fluidState.isSource()) return outletPos;
 					
 				}
 				
 			}
 			
-			for (int y = minY; y <= maxY; y++) {
-				
-				for (BlockPos outletPos : tankBlocks) {
-					
-					if (outletPos.getY() == y && (fluid.isEquivalentTo(this.world.getFluidState(outletPos).getFluid()) ? !this.world.getFluidState(outletPos).isSource() : this.world.getBlockState(outletPos).isAir())) {
-						
-						return outletPos;
-						
-					}
-					
-				}
-				
-			}
+			outletPosList.clear();
 			
 		}
 		
 		return null;
-		
-	}
-	
-	public BlockPos extractFluidFromTank(Fluid fluidInTank) {
-		
-		if (fluidInTank != Fluids.EMPTY) {
-			
-			List<BlockPos> fluidBlocks = new ArrayList<BlockPos>();
-			scannForExtracteableFluids(fluidBlocks, beginPos, 0, fluidInTank);
-			
-			if (fluidBlocks.size() > 0) {
-				
-				int maxY = this.beginPos.getY();
-				for (BlockPos pos : fluidBlocks) {
-					if (fluidInTank.getAttributes().isGaseous() ? pos.getY() < maxY : pos.getY() > maxY && this.world.getFluidState(pos).getFluid() == fluidInTank) maxY = pos.getY();
-				}
-				
-				BlockPos sourcePos = null;
-				
-				for (BlockPos fluidPos : fluidBlocks) {
-					
-					if (fluidPos.getY() == maxY && this.world.getFluidState(fluidPos).isSource()) {
-						
-						FluidState extractingFluid = this.world.getFluidState(fluidPos);
-						
-						if (extractingFluid.isSource() && extractingFluid.getFluid().isEquivalentTo(fluidInTank)) {
-							
-							sourcePos = fluidPos;
-							
-						}
-						
-					}
-					
-				}
-				
-				return sourcePos;
-				
-			}
-			
-		}
-		
-		return null;
-		
-	}
-	
-	public void scannForExtracteableFluids(List<BlockPos> scannList, BlockPos scannPos, int scannDepth, Fluid fluid) {
-		
-		Direction fluidDirection = fluid.getAttributes().isGaseous() ? Direction.DOWN : Direction.UP;
-		FluidState state = this.world.getFluidState(scannPos);
-		
-		if (!state.isEmpty() ? state.getFluid().isEquivalentTo(fluid) : false) {
-			
-			scannList.add(scannPos);
-			
-			if (scannDepth <= MAX_SCANN_DEPTH) {
-				
-				for (Direction d : Direction.values()) {
-					
-					if (d != fluidDirection.getOpposite()) {
-						
-						if (!scannList.contains(scannPos.offset(d))) scannForExtracteableFluids(scannList, scannPos.offset(d), scannDepth++, fluid);
-						
-					}
-					
-				}
-				
-			}
-			
-		}
 		
 	}
 	
 	@SuppressWarnings("deprecation")
-	public void scannForTankBlocks(List<BlockPos> scannList, BlockPos scannPos, int scannDepth, Fluid fluid) {
+	public BlockPos extractFluidFromTank(Fluid fluidInTank) {
 		
-		Direction fluidDirection = Direction.UP;
-		BlockState state = this.world.getBlockState(scannPos);
-		FluidState fluidState = state.getFluidState();
+		boolean gas = fluidInTank.getAttributes().isGaseous();
 		
-		if (fluid.isEquivalentTo(fluidState.getFluid()) || state.isAir()) {
+		int topY = this.beginPos.getY();
+		for (; gas ? (topY > 0) : (topY < 256); topY += gas ? -1 : +1) {
 			
-			scannList.add(scannPos);
+			BlockPos testPos = new BlockPos(this.beginPos.getX(), topY, this.beginPos.getZ());
+			BlockState blockState = this.world.getBlockState(testPos);
 			
-			int distX = Math.max(this.beginPos.getX(), scannPos.getX()) - Math.min(this.beginPos.getX(), scannPos.getX());
-			int distZ = Math.max(this.beginPos.getZ(), scannPos.getZ()) - Math.min(this.beginPos.getZ(), scannPos.getZ());
-			boolean isInRange = distX + distZ < MAX_OUTLET_RANGE;
-			
-			if (scannDepth <= MAX_SCANN_DEPTH && isInRange) {
+			if (!blockState.isAir() && !ModFluids.isFluidBlock(blockState.getBlock())) {
 				
-				for (Direction d : Direction.values()) {
+				topY = gas ? Math.min(this.beginPos.getY(), topY + 1) : Math.max(this.beginPos.getY(), topY - 1);
+				break;
+			}
+		}
+		
+		List<BlockPos> sourcePosList = new ArrayList<BlockPos>();
+		for (int y = this.beginPos.getY(); gas ? y >= topY : y <= topY; y += gas ? -1 : +1) {
+			
+			BlockPos scannPos = new BlockPos(this.beginPos.getX(), y, this.beginPos.getZ());
+			
+			this.scannDepth = 0;
+			scannForTankBlocks(sourcePosList, scannPos);
+			
+			if (sourcePosList.size() > 0) {
+				
+				for (BlockPos sourcePos : sourcePosList) {
 					
-					if (d != fluidDirection) {
-						
-						if (!scannList.contains(scannPos.offset(d))) scannForTankBlocks(scannList, scannPos.offset(d), scannDepth++, fluid);
-						
-					}
+					FluidState fluidState = this.world.getFluidState(sourcePos);
+					
+					if (fluidState.isEmpty() ? false : fluidState.isSource() && fluidInTank.isEquivalentTo(fluidState.getFluid())) return sourcePos;
 					
 				}
 				
+			}
+			
+			sourcePosList.clear();
+			
+		}
+		
+		return null;
+		
+	}
+	
+	private int scannDepth;
+	@SuppressWarnings("deprecation")
+	public void scannForTankBlocks(List<BlockPos> scannList, BlockPos scannPos) {
+		
+		BlockState blockState = this.world.getBlockState(scannPos);
+		
+		if (blockState.isAir() || ModFluids.isFluidBlock(blockState.getBlock())) {
+			
+			scannList.add(scannPos);
+			this.scannDepth++;
+			
+			int distX = Math.max(this.beginPos.getX(), scannPos.getX()) - Math.min(this.beginPos.getX(), scannPos.getX());
+			int distZ = Math.max(this.beginPos.getZ(), scannPos.getZ()) - Math.min(this.beginPos.getZ(), scannPos.getZ());
+			boolean isInRange = distX + distZ < MAX_TANK_RANGE;
+			
+			if (scannDepth <= MAX_SCANN_DEPTH && isInRange) {
+				
+				for (int i = 0; i < 4; i++) {
+					
+					Direction d = Direction.byHorizontalIndex(i);
+					
+					if (!scannList.contains(scannPos.offset(d))) scannForTankBlocks(scannList, scannPos.offset(d));
+					
+				}
+												
 			}
 			
 		}

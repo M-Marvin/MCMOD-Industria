@@ -55,6 +55,8 @@
 "block.redtec.transformator_contact": "Transformator Anschluss",
 "block.redtec.coal_heater": "Kohle-Heizer",
 "block.redtec.fuse_box": "Sicherungskasten",
+"block.redtec.power_switch": "Schalter",
+"block.redtec.multimeter": "Multimeter",
 
 "item.redtec.steam_bucket": "Dampfeimer",
 "item.redtec.destilled_water_bucket": "Eimer kondensiertes Wasser",
@@ -111,6 +113,8 @@
 "redtec.block.info.transformator": "\nTransferiert Leistung am Eingang auf Ausdgang,\nmit einstellbarer Spannung.\nJeder Transformatorblock erhoehrt die Leistung.",
 "redtec.block.info.coalHeater": "Verbrennt Treibstoff und erhitzt Wasser zu Dampf.\nBei nicht destiliertem Wasser enstehen Rueckstaende.",
 "redtec.block.info.fuseBox": "Schaltet ab wenn der Strom die Grenze der eingesetzten Sicherung ueberschreitet.",
+"redtec.block.info.powerSwitch": "Kann mit Redstone angesteuert werden, und die Verbindung zwischen Stromleitungen trennen.",
+"redtec.block.info.multimeter": "Misst Spannung Strom oder Leistung der Energie die durch es hindurch fliest.\n(Achtung: im Spannungs-Modus leitet es nicht!)",
 "redtec.item.info.fuseMax": "Max. Strom: %1$s A",
 
 "redtec.storing_crafting_table.container": "Werkbank",

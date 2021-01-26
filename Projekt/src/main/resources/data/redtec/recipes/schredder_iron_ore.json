@@ -1,0 +1,19 @@
+{
+  "type": "redtec:schredder",
+  "ingredient": {
+    "item": "minecraft:iron_ore"
+  },
+  "results": [
+    {
+      "item": "redtec:crushed_stone",
+      "count": 4
+    },
+    {
+      "item": "redtec:iron_oxid",
+      "count": 1
+    }
+  ],
+  "schreddertime": 110,
+  "schreddertool": "redtec:schredder_crusher",
+  "schredderdamage": 30
+}

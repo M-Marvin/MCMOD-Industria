@@ -10,6 +10,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
@@ -25,6 +26,11 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 		super(ModTileEntityType.FLUID_PIPE);
 		this.fluid = FluidStack.EMPTY;
 		this.maxFluid = 2000;
+	}
+	
+	public TileEntityFluidPipe(TileEntityType<?> type) {
+		super(type);
+		maxFluid = 2000;
 	}
 	
 	@Override
@@ -81,11 +87,11 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 	
 	public FluidStack pushFluid(FluidStack fluidIn, Direction callDirection) {
 		
-		return pushFluid0(fluidIn, callDirection, new ArrayList<BlockPos>(), 0);
+		return pushFluid0(fluidIn, callDirection, new ArrayList<BlockPos>(), 0, this.maxFluid);
 		
 	}
 
-	private FluidStack pushFluid0(FluidStack fluidIn, Direction callDirection, List<BlockPos> scannList, int scannDepth) {
+	public FluidStack pushFluid0(FluidStack fluidIn, Direction callDirection, List<BlockPos> scannList, int scannDepth, int maxFlow) {
 		
 		if (!fluidIn.isEmpty()) {
 			
@@ -99,17 +105,28 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 					
 					if (pipe.fluid.isEmpty() || (this.getFluidType() == pipe.getFluidType() && pipe.fluid.getAmount() < pipe.maxFluid)) {
 						
-						int transfer = Math.min(fluidIn.getAmount(), pipe.maxFluid - pipe.fluid.getAmount());
-						if (pipe.fluid.isEmpty()) {
-							pipe.fluid = new FluidStack(fluidIn.getFluid(), transfer);
-							pipe.fluid.setTag(this.fluid.getTag());
-						} else {
-							pipe.fluid.grow(transfer);
-							pipe.fluid.setTag(this.fluid.getTag());
+						if (pipe instanceof TileEntityFluidValve) {
+							maxFlow = Math.min(((TileEntityFluidValve) pipe).maxFlow, maxFlow);
 						}
-						fluidIn.shrink(transfer);
 						
-						if (fluidIn.isEmpty()) return FluidStack.EMPTY;
+						int transfer = Math.min(Math.min(fluidIn.getAmount(), pipe.maxFluid - pipe.fluid.getAmount()), maxFlow);
+						
+						if (transfer > 0) {
+							if (pipe.fluid.isEmpty()) {
+								pipe.fluid = new FluidStack(fluidIn.getFluid(), transfer);
+								pipe.fluid.setTag(this.fluid.getTag());
+							} else {
+								pipe.fluid.grow(transfer);
+								pipe.fluid.setTag(this.fluid.getTag());
+							}
+							fluidIn.shrink(transfer);
+						}
+						
+						if (transfer == 0) return fluidIn;
+						
+						if (fluidIn.isEmpty()) {
+							return FluidStack.EMPTY;
+						}
 						
 					}
 					
@@ -129,7 +146,7 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 						
 						TileEntityFluidPipe pipe = (TileEntityFluidPipe) te;
 						
-						fluidIn = pipe.pushFluid0(fluidIn, d, scannList, scannDepth++);
+						fluidIn = pipe.pushFluid0(fluidIn, d, scannList, scannDepth++, maxFlow);
 						
 						if (fluidIn.isEmpty()) return FluidStack.EMPTY;
 						
@@ -178,6 +195,8 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 								int transfer = differenz / 2;
 								
 								transfer = Math.min(this.fluid.getAmount() / inputs, transfer);
+								int maxFlow = pipe instanceof TileEntityFluidValve ? ((TileEntityFluidValve) pipe).maxFlow : pipe.maxFluid;
+								transfer = transfer < 0 ? Math.max(transfer, -maxFlow) : Math.min(transfer, maxFlow);
 								
 								this.fluid.shrink(transfer);
 								

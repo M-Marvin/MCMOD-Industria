@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -61,7 +62,14 @@ public class AdvancedStrukture {
 			
 			if (!state.isAir()) {
 				
-				if (!world.getBlockState(block.offset(this.moveDirection, moveDistance)).isAir() && !this.blocks.contains(block.offset(this.moveDirection, moveDistance)) && world.getBlockState(block.offset(this.moveDirection, moveDistance)).getBlock() != Blocks.WATER) {
+				BlockState replaceState = world.getBlockState(block.offset(this.moveDirection, moveDistance));
+				boolean flag = replaceState.isAir();
+				if (!flag) {
+					if (replaceState.getPushReaction() == PushReaction.DESTROY) flag = true;
+					if (state.getPushReaction() == PushReaction.DESTROY) flag = true;
+				}
+				
+				if (!flag && !this.blocks.contains(block.offset(this.moveDirection, moveDistance)) && world.getBlockState(block.offset(this.moveDirection, moveDistance)).getBlock() != Blocks.WATER) {
 					return false;
 				}
 				

@@ -1,11 +1,11 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "redtec:block/steel_platting",
+		"1": "redtec:block/aluminium_plates",
 		"2": "redtec:block/fuse_box_side",
 		"4": "redtec:block/fuse_box_front2",
-		"particle": "redtec:block/steel_platting",
-		"6": "redtec:block/steel_platting"
+		"particle": "redtec:block/aluminium_plates",
+		"6": "redtec:block/aluminium_plates"
 	},
 	"elements": [
 		{

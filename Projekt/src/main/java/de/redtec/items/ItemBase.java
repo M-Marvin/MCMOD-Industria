@@ -11,6 +11,11 @@ public class ItemBase extends Item {
 		super(properties);
 	}
 	
+	public ItemBase(String name, Item.Properties properties) {
+		super(properties);
+		this.setRegistryName(RedTec.MODID, name);
+	}
+	
 	public ItemBase(String name, ItemGroup itemGroup) {
 		super(new Properties().group(itemGroup));
 		this.setRegistryName(RedTec.MODID, name);

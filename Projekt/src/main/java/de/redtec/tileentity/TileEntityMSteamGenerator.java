@@ -289,7 +289,7 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 	
 	@Override
 	public FluidStack insertFluid(FluidStack fluid) {
-
+		
 		BlockPos centerPos = getCenterTE();
 		TileEntity tileEntity = this.world.getTileEntity(centerPos);
 		
@@ -298,7 +298,24 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 			TileEntityMSteamGenerator center = (TileEntityMSteamGenerator) tileEntity;
 			
 			if (fluid.getFluid() == this.getFluidType()) {
-				if (!FluidStackStateTagHelper.makeStateFromStack(fluid).get(FluidSteam.PREASURIZED)) return fluid;
+				if (!FluidStackStateTagHelper.makeStateFromStack(fluid).get(FluidSteam.PREASURIZED)) {
+
+					if (center.steamOut.isEmpty()) {
+						int transfer = Math.min(this.maxFluid, fluid.getAmount());
+						center.steamOut = new FluidStack(fluid.getFluid(), transfer);
+						FluidStack rest = fluid.copy();
+						rest.shrink(transfer);
+						return rest;
+					} else if (center.steamOut.getFluid() == fluid.getFluid()) {
+						int capacity = this.maxFluid - center.steamOut.getAmount();
+						int transfer = Math.min(capacity, fluid.getAmount());
+						center.steamOut.grow(transfer);
+						FluidStack rest = fluid.copy();
+						rest.shrink(transfer);
+						return rest;
+					}
+					
+				}
 			} else {
 				return fluid;
 			}

@@ -114,7 +114,7 @@ public abstract class BlockMultiPart extends BlockContainerBase {
 		BlockPos pos = getInternPartPos(state);
 		return pos.equals(getCenter());
 	}
-	
+		
 	public HashMap<BlockPos, BlockState> makeParts(Direction facing, BlockPos centerPos) {
 		
 		HashMap<BlockPos, BlockState> parts = new HashMap<BlockPos, BlockState>();

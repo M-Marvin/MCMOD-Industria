@@ -70,16 +70,7 @@ public class BlockMCoalHeater extends BlockContainerBase implements IAdvancedBlo
 		return ActionResultType.PASS;
 		
 	}
-
-	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
-		TileEntity te = worldIn.getTileEntity(pos);
-		if (te instanceof IInventory) {
-			InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) te);
-		}
-		super.onBlockHarvested(worldIn, pos, state, player);
-	}
-	
+		
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		

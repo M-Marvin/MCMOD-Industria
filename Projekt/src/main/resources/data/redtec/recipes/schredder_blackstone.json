@@ -1,0 +1,15 @@
+{
+  "type": "redtec:schredder",
+  "ingredient": {
+    "item": "minecraft:blackstone"
+  },
+  "results": [
+    {
+      "item": "redtec:crushed_blackstone",
+      "count": 4
+    }
+  ],
+  "schreddertime": 110,
+  "schreddertool": "redtec:schredder_crusher",
+  "schredderdamage": 20
+}

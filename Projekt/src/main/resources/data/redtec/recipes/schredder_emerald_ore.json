@@ -1,0 +1,19 @@
+{
+  "type": "redtec:schredder",
+  "ingredient": {
+    "item": "minecraft:emerald_ore"
+  },
+  "results": [
+    {
+      "item": "redtec:crushed_stone",
+      "count": 2
+    },
+    {
+      "item": "minecraft:emerald",
+      "count": 2
+    }
+  ],
+  "schreddertime": 120,
+  "schreddertool": "redtec:schredder_crusher",
+  "schredderdamage": 70
+}

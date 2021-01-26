@@ -1,0 +1,19 @@
+{
+  "type": "redtec:schredder",
+  "ingredient": {
+    "item": "minecraft:nether_gold_ore"
+  },
+  "results": [
+    {
+      "item": "redtec:crushed_netherrack",
+      "count": 4
+    },
+    {
+      "item": "minecraft:gold_nugget",
+      "count": 12
+    }
+  ],
+  "schreddertime": 50,
+  "schreddertool": "redtec:schredder_crusher",
+  "schredderdamage": 5
+}

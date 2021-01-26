@@ -7,5 +7,6 @@ public class ModDamageSource {
 	public static final DamageSource ELCTRIC_SHOCK = new DamageSource("electric_shock");
 	public static final DamageSource HOT_FLUID = new DamageSource("hot_fluid");
 	public static final DamageSource HOT_STEAM = new DamageSource("hot_steam");
+	public static final DamageSource SCHREDDER = new DamageSource("schredder");
 	
 }

@@ -1,0 +1,19 @@
+{
+  "type": "redtec:schredder",
+  "ingredient": {
+    "item": "minecraft:gold_ore"
+  },
+  "results": [
+    {
+      "item": "redtec:crushed_stone",
+      "count": 4
+    },
+    {
+      "item": "minecraft:gold_nugget",
+      "count": 12
+    }
+  ],
+  "schreddertime": 90,
+  "schreddertool": "redtec:schredder_crusher",
+  "schredderdamage": 15
+}

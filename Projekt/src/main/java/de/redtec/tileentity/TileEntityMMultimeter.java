@@ -1,5 +1,6 @@
 package de.redtec.tileentity;
 
+import de.redtec.RedTec;
 import de.redtec.blocks.BlockMMultimeter;
 import de.redtec.registys.ModTileEntityType;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
@@ -35,8 +36,11 @@ public class TileEntityMMultimeter extends TileEntityGauge implements ITickableT
 	}
 	
 	public void updateValue(float value, DecimalUnit unit) {
-		this.value = value;
-		this.decimalUnit = unit;
+		if (unit != this.decimalUnit || value != this.value) {
+			this.decimalUnit = unit;	
+			this.value = value;
+			this.world.notifyNeighborsOfStateChange(pos, RedTec.block_multimeter);
+		}
 	}
 	
 	@Override

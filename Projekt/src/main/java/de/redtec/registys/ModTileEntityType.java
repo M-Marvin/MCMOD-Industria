@@ -8,14 +8,17 @@ import de.redtec.tileentity.TileEntityControllPanel;
 import de.redtec.tileentity.TileEntityFluidInput;
 import de.redtec.tileentity.TileEntityFluidOutput;
 import de.redtec.tileentity.TileEntityFluidPipe;
+import de.redtec.tileentity.TileEntityFluidValve;
 import de.redtec.tileentity.TileEntityFuseBox;
 import de.redtec.tileentity.TileEntityHarvester;
 import de.redtec.tileentity.TileEntityHoverControler;
 import de.redtec.tileentity.TileEntityJigsaw;
 import de.redtec.tileentity.TileEntityLockedCompositeBlock;
 import de.redtec.tileentity.TileEntityMCoalHeater;
+import de.redtec.tileentity.TileEntityMElectricFurnace;
 import de.redtec.tileentity.TileEntityMGenerator;
 import de.redtec.tileentity.TileEntityMMultimeter;
+import de.redtec.tileentity.TileEntityMSchredder;
 import de.redtec.tileentity.TileEntityMSteamGenerator;
 import de.redtec.tileentity.TileEntityRedstoneReciver;
 import de.redtec.tileentity.TileEntitySignalAntenna;
@@ -52,6 +55,9 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityMCoalHeater> COAL_HEATER = register("coal_heater", TileEntityType.Builder.create(TileEntityMCoalHeater::new, RedTec.coal_heater));
 	public static final TileEntityType<TileEntityFuseBox> FUSE_BOX = register("fuse_box", TileEntityType.Builder.create(TileEntityFuseBox::new, RedTec.fuse_box));
 	public static final TileEntityType<TileEntityMMultimeter> MULTIMETER = register("block_multimeter", TileEntityType.Builder.create(TileEntityMMultimeter::new, RedTec.block_multimeter));
+	public static final TileEntityType<TileEntityFluidValve> FLUID_VALVE = register("fluid_valve", TileEntityType.Builder.create(TileEntityFluidValve::new, RedTec.fluid_valve));
+	public static final TileEntityType<TileEntityMElectricFurnace> ELECTRIC_FURNACE = register("electric_furnace", TileEntityType.Builder.create(TileEntityMElectricFurnace::new, RedTec.electric_furnace));
+	public static final TileEntityType<TileEntityMSchredder> SCHREDDER = register("schredder", TileEntityType.Builder.create(TileEntityMSchredder::new, RedTec.schredder));
 	
 	private static <T extends TileEntity> TileEntityType<T> register(String key, TileEntityType.Builder<T> builder) {
 		Type<?> type = Util.func_240976_a_(TypeReferences.BLOCK_ENTITY, key);

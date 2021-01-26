@@ -179,7 +179,7 @@ public class TileEntityHoverControler extends TileEntity implements IInventory, 
 	}
 	
 	public int getHoverForce() {
-		return 10000;
+		return 20000;
 	}
 	
 	public int getMoveDistance(AdvancedStrukture structure) {

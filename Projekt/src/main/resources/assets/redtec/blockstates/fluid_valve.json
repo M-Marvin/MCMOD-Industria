@@ -1,0 +1,25 @@
+{
+	"multipart": [
+		{ "when": {"open": "true"}, "apply": {
+			"model": "redtec:block/fluid_valve_open"
+		}},
+		{ "when": {"open": "false"}, "apply": {
+			"model": "redtec:block/fluid_valve_close"
+		}},
+		{ "when": {"north": "true"}, "apply": {
+			"model": "redtec:block/fluid_pipe_side"
+		}},
+		{ "when": {"south": "true"}, "apply": {
+			"model": "redtec:block/fluid_pipe_side",
+			"y": 180
+		}},
+		{ "when": {"east": "true"}, "apply": {
+			"model": "redtec:block/fluid_pipe_side",
+			"y": 90
+		}},
+		{ "when": {"west": "true"}, "apply": {
+			"model": "redtec:block/fluid_pipe_side",
+			"y": 270
+		}}
+	]
+}

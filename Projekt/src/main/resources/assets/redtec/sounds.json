@@ -52,5 +52,11 @@
 			"redtec:transformator_loop"
 		],
 		"subtitle": "sound.redtec.block.transformator.loop"
+	},
+	"block.schredder.loop": {
+		"sounds": [
+			"redtec:schredder_loop"
+		],
+		"subtitle": "sound.redtec.block.schredder.loop"
 	}
 }

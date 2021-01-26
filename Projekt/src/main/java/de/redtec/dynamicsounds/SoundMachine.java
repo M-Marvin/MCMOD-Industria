@@ -21,13 +21,13 @@ public class SoundMachine extends TickableSound {
 		this.z = machine.getPos().getZ();
 		this.repeat = true;
 		this.repeatDelay = 0;
-		this.volume = 1;
-		this.pitch = 1;
+		this.volume = 1F;
+		this.pitch = 1F;
 	}
 
 	@Override
 	public void tick() {
-
+		
 		TileEntity machine = this.world.getTileEntity(pos);
 		
 		if ((machine instanceof ISimpleMachineSound ? ((ISimpleMachineSound) machine).isSoundRunning() : false) && !machine.isRemoved()) {

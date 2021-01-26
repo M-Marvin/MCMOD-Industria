@@ -197,4 +197,31 @@ public class BlockMMultimeter extends BlockContainerBase implements IElectricCon
 		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
 	}
 	
+	@Override
+	public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos) {
+		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		if (tileEntity instanceof TileEntityMMultimeter) {
+			switch (((TileEntityMMultimeter) tileEntity).decimalUnit) {
+			case MILLI: return 0;
+			case NONE: return 1;
+			case KILO: return 2;
+			case MEGA: return 3;
+			}
+		}
+		return 0;
+	}
+	
+	@Override
+	public boolean hasComparatorInputOverride(BlockState state) {
+		return true;
+	}
+	
+	@Override
+	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+		TileEntity tileEntity = blockAccess.getTileEntity(pos);
+		if (tileEntity instanceof TileEntityMMultimeter) {
+			return (int) (((TileEntityMMultimeter) tileEntity).getValue() / 1000 * 15);
+		}
+		return 0;
+	}
 }

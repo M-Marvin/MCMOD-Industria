@@ -129,7 +129,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 								
 								if (needCurrent >= 0) {
 									
-									if (voltage.getVoltage() > network.voltage.getVoltage()) network.voltage = voltage;
+									if (voltage.getVoltage() > network.voltage.getVoltage() && needCurrent == 0) network.voltage = voltage;
 									if (!hasCurrentAdded) {
 										network.needCurrent += needCurrent;
 										hasCurrentAdded = true;
@@ -258,7 +258,6 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 							
 							if (needCurrent >= 0) {
 								
-								if (voltage.getVoltage() > network.voltage.getVoltage()) network.voltage = voltage;
 								if (!hasCurrentAdded) {
 									network.needCurrent += needCurrent;
 									hasCurrentAdded = true;
@@ -279,6 +278,8 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 					}
 					
 				}
+				
+				network.voltage = Voltage.LowVoltage;
 				
 				if (network.needCurrent <= network.capacity) {
 					network.current = network.needCurrent;
@@ -349,6 +350,26 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 								sides.add(d.getOpposite());
 								posList.put(scannPos, sides);
 								
+							}
+							
+						}
+						
+					}
+					
+				}
+				
+				if (flag) {
+					
+					List<BlockPos> multiParts = device.getMultiBlockParts(world, scannPos, state);
+					
+					if (multiParts != null) {
+						
+						for (BlockPos multiPart : multiParts) {
+							
+							if (!posList.containsKey(multiPart)) {
+								scann(world, multiPart, null, posList, scannDepth++, lastDevice);
+							} else {
+								continue;
 							}
 							
 						}

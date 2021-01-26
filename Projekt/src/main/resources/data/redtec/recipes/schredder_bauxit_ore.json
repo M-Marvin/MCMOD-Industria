@@ -1,0 +1,19 @@
+{
+  "type": "redtec:schredder",
+  "ingredient": {
+    "item": "redtec:bauxit_ore"
+  },
+  "results": [
+    {
+      "item": "redtec:crushed_stone",
+      "count": 2
+    },
+    {
+      "item": "redtec:crushed_bauxite",
+      "count": 2
+    }
+  ],
+  "schreddertime": 90,
+  "schreddertool": "redtec:schredder_crusher",
+  "schredderdamage": 30
+}

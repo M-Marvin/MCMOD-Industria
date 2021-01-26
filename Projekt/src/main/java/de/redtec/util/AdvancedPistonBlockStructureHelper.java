@@ -121,7 +121,7 @@ public class AdvancedPistonBlockStructureHelper {
          return true;
       } else if (!BlockAdvancedPiston.canPush(blockstate, this.world, origin, this.moveDirection, false, facingIn) && !(this.doIgnorPushBeahavior && !blockstate.isAir())) {
     	  return true;
-      } else if (origin.equals(this.pistonPos)) {
+      } if (origin.equals(this.pistonPos)) {
          return true;
       } else if (this.toMove.contains(origin)) {
          return true;

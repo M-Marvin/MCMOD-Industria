@@ -18,4 +18,12 @@ public class ItemStackHelper {
 		
 	}
 	
+	public static boolean canMergeRecipeStacks(ItemStack stack, ItemStack recipeItem) {
+		
+		if (stack.isEmpty()) return true;
+		if (stack.getItem() == recipeItem.getItem() && stack.getMaxStackSize() - stack.getCount() >= recipeItem.getCount()) return true;
+		return false;
+		
+	}
+	
 }

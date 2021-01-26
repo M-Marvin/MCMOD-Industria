@@ -3,7 +3,7 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "redtec:block/panel_lamp",
-		"2": "redtec:block/steel_platting",
+		"2": "redtec:block/aluminium_plates",
 		"particle": "redtec:block/panel_lamp"
 	},
 	"elements": [

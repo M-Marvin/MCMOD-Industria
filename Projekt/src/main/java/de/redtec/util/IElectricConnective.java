@@ -1,5 +1,7 @@
 package de.redtec.util;
 
+import java.util.List;
+
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
@@ -19,6 +21,9 @@ public interface IElectricConnective {
 	}
 	public default boolean beforNetworkChanges(World world, BlockPos pos, BlockState state, ElectricityNetwork network) {
 		return false;
+	}
+	public default List<BlockPos> getMultiBlockParts(World world, BlockPos pos, BlockState state) {
+		return null;
 	}
 	
 	public default ElectricityNetwork getNetwork(World worldIn, BlockPos pos) {

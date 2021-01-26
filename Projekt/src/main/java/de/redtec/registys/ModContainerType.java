@@ -5,7 +5,9 @@ import de.redtec.gui.ContainerHarvester;
 import de.redtec.gui.ContainerHoverControler;
 import de.redtec.gui.ContainerJigsaw;
 import de.redtec.gui.ContainerMCoalHeater;
+import de.redtec.gui.ContainerMElectricFurnace;
 import de.redtec.gui.ContainerMGenerator;
+import de.redtec.gui.ContainerMSchredder;
 import de.redtec.gui.ContainerProcessor;
 import de.redtec.gui.ContainerReciver;
 import de.redtec.gui.ContainerStoredCrafting;
@@ -28,6 +30,8 @@ public class ModContainerType {
 	public static final ContainerType<ContainerJigsaw> JIGSAW = register(new ResourceLocation(RedTec.MODID, "jigsaw"), ContainerJigsaw::new);
 	public static final ContainerType<ContainerMGenerator> GENERATOR = register(new ResourceLocation(RedTec.MODID, "generator"), ContainerMGenerator::new);
 	public static final ContainerType<ContainerMCoalHeater> COAL_HEATER = register(new ResourceLocation(RedTec.MODID, "coal_heater"), ContainerMCoalHeater::new);
+	public static final ContainerType<ContainerMElectricFurnace> ELECTRIC_FURNACE = register(new ResourceLocation(RedTec.MODID, "electric_furnace"), ContainerMElectricFurnace::new);
+	public static final ContainerType<ContainerMSchredder> SCHREDDER = register(new ResourceLocation(RedTec.MODID, "schredder"), ContainerMSchredder::new);
 	
 	protected static <T extends Container> ContainerType<T> register(ResourceLocation key, IContainerFactory<T> factory) {
 		ContainerType<T> type = IForgeContainerType.create(factory);

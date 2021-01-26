@@ -17,6 +17,7 @@ import de.redtec.blocks.BlockElektricWire;
 import de.redtec.blocks.BlockFluidInput;
 import de.redtec.blocks.BlockFluidOutput;
 import de.redtec.blocks.BlockFluidPipe;
+import de.redtec.blocks.BlockFluidValve;
 import de.redtec.blocks.BlockFuseBox;
 import de.redtec.blocks.BlockHarvester;
 import de.redtec.blocks.BlockHoverControler;
@@ -26,8 +27,10 @@ import de.redtec.blocks.BlockIronRod;
 import de.redtec.blocks.BlockJigsaw;
 import de.redtec.blocks.BlockLinearConector;
 import de.redtec.blocks.BlockMCoalHeater;
+import de.redtec.blocks.BlockMElectricFurnace;
 import de.redtec.blocks.BlockMGenerator;
 import de.redtec.blocks.BlockMMultimeter;
+import de.redtec.blocks.BlockMSchredder;
 import de.redtec.blocks.BlockMSteamGenerator;
 import de.redtec.blocks.BlockMTransformatorCoil;
 import de.redtec.blocks.BlockMTransformatorContact;
@@ -56,7 +59,9 @@ import de.redtec.gui.ScreenHarvester;
 import de.redtec.gui.ScreenHoverControler;
 import de.redtec.gui.ScreenJigsaw;
 import de.redtec.gui.ScreenMCoalHeater;
+import de.redtec.gui.ScreenMElectricFurnace;
 import de.redtec.gui.ScreenMGenerator;
+import de.redtec.gui.ScreenMSchredder;
 import de.redtec.gui.ScreenProcessor;
 import de.redtec.gui.ScreenReciver;
 import de.redtec.gui.ScreenStoredCrafting;
@@ -69,6 +74,7 @@ import de.redtec.items.ItemFuse;
 import de.redtec.items.ItemProcessor;
 import de.redtec.items.ItemRemoteControll;
 import de.redtec.items.ItemSalsola;
+import de.redtec.items.ItemSchredderToolCrusher;
 import de.redtec.items.panelitems.ItemButtonElement;
 import de.redtec.items.panelitems.ItemLampElement;
 import de.redtec.items.panelitems.ItemLeverElement;
@@ -83,6 +89,7 @@ import de.redtec.renderer.TileEntityAdvancedMovingBlockRenderer;
 import de.redtec.renderer.TileEntityControllPanelRenderer;
 import de.redtec.renderer.TileEntityFuseBoxRenderer;
 import de.redtec.renderer.TileEntityGaugeRenderer;
+import de.redtec.renderer.TileEntityMSchredderRenderer;
 import de.redtec.renderer.TileEntityMSteamGeneratorRenderer;
 import de.redtec.renderer.TileEntitySignalProcessorContactRenderer;
 import de.redtec.util.ModGameRegistry;
@@ -171,6 +178,7 @@ public class RedTec {
 	public static final Block electrolyt_copper_cable = new BlockElektricWire("electrolyt_copper_cable", 32, 4);
 	public static final Block aluminium_cable = new BlockElektricWire("aluminium_cable", 64, 8);
 	public static final Block fluid_pipe = new BlockFluidPipe();
+	public static final Block fluid_valve = new BlockFluidValve();
 	public static final Block fluid_input = new BlockFluidInput();
 	public static final Block fluid_output = new BlockFluidOutput();
 	public static final Block steam_generator = new BlockMSteamGenerator();
@@ -180,8 +188,10 @@ public class RedTec {
 	public static final Block fuse_box = new BlockFuseBox();
 	public static final Block block_multimeter = new BlockMMultimeter();
 	public static final Block power_switch = new BlockPowerSwitch();
+	public static final Block electric_furnace = new BlockMElectricFurnace();
+	public static final Block schredder = new BlockMSchredder();
 	
-	public static final Block bauxit = new BlockBase("bauxit", Material.ROCK, 1F, SoundType.STONE);
+	public static final Block bauxit = new BlockBase("bauxit", Material.ROCK, 1.5F, SoundType.STONE);
 	public static final Block bauxit_ore = new BlockBase("bauxit_ore", Material.ROCK, 1.5F, SoundType.STONE);
 	public static final Block copper_ore = new BlockBase("copper_ore", Material.ROCK, 3F, SoundType.STONE);
 	public static final Block copper_block = new BlockBase("copper_block", Material.IRON, 1.2F, SoundType.METAL);
@@ -189,13 +199,13 @@ public class RedTec {
 	public static final Block aluminium_block = new BlockBase("aluminium_block", Material.IRON, 1.2F, SoundType.METAL);
 	public static final Block electrolyt_copper_block = new BlockBase("electrolyt_copper_block", Material.IRON, 1.2F, SoundType.METAL);
 	public static final Block steel_block = new BlockBase("steel_block", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block gold_platting = new BlockBase("gold_platting", Material.IRON, 0.9F, SoundType.METAL);
-	public static final Block iron_platting = new BlockBase("iron_platting", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block copper_platting = new BlockBase("copper_platting", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block aluminium_platting = new BlockBase("aluminium_platting", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block electrolyt_copper_platting = new BlockBase("electrolyt_copper_platting", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block steel_platting = new BlockBase("steel_platting", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block redstone_alloy_platting = new BlockPowerEmiting("redstone_alloy_platting", Material.IRON, 1.2F, SoundType.METAL, 4);
+	public static final Block gold_plates = new BlockBase("gold_plates", Material.IRON, 0.9F, SoundType.METAL);
+	public static final Block iron_plates = new BlockBase("iron_plates", Material.IRON, 1.2F, SoundType.METAL);
+	public static final Block copper_plates = new BlockBase("copper_plates", Material.IRON, 1.2F, SoundType.METAL);
+	public static final Block aluminium_plates = new BlockBase("aluminium_plates", Material.IRON, 1.2F, SoundType.METAL);
+	public static final Block electrolyt_copper_plates = new BlockBase("electrolyt_copper_plates", Material.IRON, 1.2F, SoundType.METAL);
+	public static final Block steel_plates = new BlockBase("steel_plates", Material.IRON, 1.2F, SoundType.METAL);
+	public static final Block redstone_alloy_plates = new BlockPowerEmiting("redstone_alloy_plates", Material.IRON, 1.2F, SoundType.METAL, 4);
 	public static final Block chiseled_smooth_stone = new BlockBase("chiseled_smooth_stone", Material.ROCK, 1.5F, SoundType.STONE);
 	public static final Block smooth_cobblestone = new BlockBase("smooth_cobblestone", Material.ROCK, 2, SoundType.STONE);
 	
@@ -223,6 +233,12 @@ public class RedTec {
 	public static final Item redstone_ingot = new ItemBase("redstone_ingot", ItemGroup.MATERIALS);
 	public static final Item redstone_alloy_dust = new ItemBase("redstone_alloy_dust", ItemGroup.MATERIALS);
 	public static final Item salsola = new ItemSalsola();
+	public static final Item crushed_stone = new ItemBase("crushed_stone", ItemGroup.MATERIALS);
+	public static final Item crushed_blackstone = new ItemBase("crushed_blackstone", ItemGroup.MATERIALS);
+	public static final Item crushed_netherrack = new ItemBase("crushed_netherrack", ItemGroup.MATERIALS);
+	public static final Item crushed_bauxite = new ItemBase("crushed_bauxite", ItemGroup.MATERIALS);
+	public static final Item iron_oxid = new ItemBase("iron_oxid", ItemGroup.MATERIALS);
+	public static final Item copper_oxid = new ItemBase("copper_oxid", ItemGroup.MATERIALS);
 	
 	public static final Item remote_control = new ItemRemoteControll();
 	public static final Item iron_processor = new ItemProcessor("iron_processor", 4, false, Rarity.UNCOMMON);
@@ -238,6 +254,7 @@ public class RedTec {
 	public static final Item fuse_lv = new ItemFuse("fuse_lv", 16);
 	public static final Item fuse_nv = new ItemFuse("fuse_nv", 32);
 	public static final Item fuse_hv = new ItemFuse("fuse_hv", 64);
+	public static final Item schredder_crusher = new ItemSchredderToolCrusher();
 	
 	public static final Item fluid_meter = new ItemFluidMeter();
 	public static final Item energy_meter = new ItemEnergyMeter();
@@ -284,13 +301,13 @@ public class RedTec {
 		ModGameRegistry.registerBlock(copper_ore, ItemGroup.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(bauxit, ItemGroup.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(bauxit_ore, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(iron_platting, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(gold_platting, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(steel_platting, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(copper_platting, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(aluminium_platting, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(electrolyt_copper_platting, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(redstone_alloy_platting, ItemGroup.BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(iron_plates, ItemGroup.BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(gold_plates, ItemGroup.BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(steel_plates, ItemGroup.BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(copper_plates, ItemGroup.BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(aluminium_plates, ItemGroup.BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(electrolyt_copper_plates, ItemGroup.BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(redstone_alloy_plates, ItemGroup.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(smooth_cobblestone, ItemGroup.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(chiseled_smooth_stone, ItemGroup.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(iron_rod, ItemGroup.DECORATIONS);
@@ -299,6 +316,7 @@ public class RedTec {
 		ModGameRegistry.registerBlock(jigsaw, null, Rarity.EPIC);
 		ModGameRegistry.registerBlock(generator, MACHINES);
 		ModGameRegistry.registerBlock(fluid_pipe, MACHINES);
+		ModGameRegistry.registerBlock(fluid_valve, MACHINES);
 		ModGameRegistry.registerBlock(fluid_input, MACHINES);
 		ModGameRegistry.registerBlock(fluid_output, MACHINES);
 		ModGameRegistry.registerBlock(steam_generator, MACHINES);
@@ -308,6 +326,8 @@ public class RedTec {
 		ModGameRegistry.registerBlock(fuse_box, MACHINES);
 		ModGameRegistry.registerBlock(block_multimeter, MACHINES);
 		ModGameRegistry.registerBlock(power_switch, MACHINES);
+		ModGameRegistry.registerBlock(electric_furnace, MACHINES);
+		ModGameRegistry.registerBlock(schredder, MACHINES);
 		
 		ModGameRegistry.registerTechnicalBlock(steam);
 		ModGameRegistry.registerItem(steam_bucket);
@@ -315,6 +335,12 @@ public class RedTec {
 		ModGameRegistry.registerItem(destilled_water_bucket);
 		
 		// register Items
+		ModGameRegistry.registerItem(crushed_blackstone);
+		ModGameRegistry.registerItem(crushed_netherrack);
+		ModGameRegistry.registerItem(crushed_bauxite);
+		ModGameRegistry.registerItem(iron_oxid);
+		ModGameRegistry.registerItem(copper_oxid);
+		ModGameRegistry.registerItem(crushed_stone);
 		ModGameRegistry.registerItem(redstone_ingot);
 		ModGameRegistry.registerItem(redstone_alloy_dust);
 		ModGameRegistry.registerItem(remote_control);
@@ -341,6 +367,7 @@ public class RedTec {
 		ModGameRegistry.registerItem(fuse_lv);
 		ModGameRegistry.registerItem(fuse_nv);
 		ModGameRegistry.registerItem(fuse_hv);
+		ModGameRegistry.registerItem(schredder_crusher);
 		
 		// register Functional Items
 		ModGameRegistry.registerItem(lever_element);
@@ -410,6 +437,7 @@ public class RedTec {
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_DESTILLED_WATER, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.STEAM, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(block_multimeter, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(fluid_valve, RenderType.getCutout());
 		
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ADVANCED_PISTON, TileEntityAdvancedMovingBlockRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SIGNAL_PROCESSOR, TileEntitySignalProcessorContactRenderer::new);
@@ -417,6 +445,7 @@ public class RedTec {
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.STEAM_GENERATOR, TileEntityMSteamGeneratorRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.FUSE_BOX, TileEntityFuseBoxRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.MULTIMETER, TileEntityGaugeRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SCHREDDER, TileEntityMSchredderRenderer::new);
 		
 		ScreenManager.registerFactory(ModContainerType.STORED_CRAFTING, ScreenStoredCrafting::new);
 		ScreenManager.registerFactory(ModContainerType.PROCESSOR, ScreenProcessor::new);
@@ -426,6 +455,8 @@ public class RedTec {
 		ScreenManager.registerFactory(ModContainerType.JIGSAW, ScreenJigsaw::new);
 		ScreenManager.registerFactory(ModContainerType.GENERATOR, ScreenMGenerator::new);
 		ScreenManager.registerFactory(ModContainerType.COAL_HEATER, ScreenMCoalHeater::new);
+		ScreenManager.registerFactory(ModContainerType.ELECTRIC_FURNACE, ScreenMElectricFurnace::new);
+		ScreenManager.registerFactory(ModContainerType.SCHREDDER, ScreenMSchredder::new);
 		
 	}
 	

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "redtec:crushed_blackstone"
+    }
+  },
+  "result": {
+    "item": "minecraft:blackstone"
+  }
+}

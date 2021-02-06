@@ -16,6 +16,7 @@ import de.redtec.registys.ModSoundEvents;
 import de.redtec.registys.ModTileEntityType;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
+import de.redtec.util.IElectricConnective.Voltage;
 import de.redtec.util.ItemStackHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -83,7 +84,7 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 			ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos);
 			
 			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(world).getNetwork(pos);
-			this.hasPower = network.canMachinesRun();
+			this.hasPower = network.canMachinesRun() == Voltage.HightVoltage;
 			this.isWorking = this.hasPower ? this.canWork() : false;
 			
 			if (this.isWorking) {
@@ -152,15 +153,10 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 							
 						}
 						
-					} 
-					
+					}
+										
 				}
 				
-			}
-			
-			if (this.getStackInSlot(0).isEmpty()) {
-				this.progress = 0;
-				this.progressTotal = 0;
 			}
 			
 		} else {
@@ -319,17 +315,17 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 	
 	@Override
 	public int[] getSlotsForFace(Direction side) {
-		return side == Direction.DOWN ? new int[] {3, 2, 1} : new int[] {0};
+		return new int[] {0, 1, 2, 3};
 	}
 	
 	@Override
 	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
-		return true;
+		return index == 0;
 	}
 
 	@Override
 	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
-		return true;
+		return index > 0 && index <= 3;
 	}
 
 	public boolean canWork() {

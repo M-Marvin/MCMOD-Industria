@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "redtec:copper_solution",
+    "redtec:flowing_copper_solution"
+  ]
+}

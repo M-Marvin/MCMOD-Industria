@@ -58,5 +58,23 @@
 			"redtec:schredder_loop"
 		],
 		"subtitle": "sound.redtec.block.schredder.loop"
+	},
+	"block.blender.loop": {
+		"sounds": [
+			"redtec:blender_loop"
+		],
+		"subtitle": "sound.redtec.block.blender.loop"
+	},
+	"block.raffinery.loop": {
+		"sounds": [
+			"redtec:raffinery_loop"
+		],
+		"subtitle": "sound.redtec.block.raffinery.loop"
+	},
+	"block.thermal_zentrifuge.loop": {
+		"sounds": [
+			"redtec:thermal_zentrifuge_loop"
+		],
+		"subtitle": "sound.redtec.block.thermal_zentrifuge.loop"
 	}
 }

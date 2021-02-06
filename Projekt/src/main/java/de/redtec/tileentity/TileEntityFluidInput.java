@@ -7,6 +7,7 @@ import de.redtec.registys.ModSoundEvents;
 import de.redtec.registys.ModTileEntityType;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
+import de.redtec.util.IElectricConnective.Voltage;
 import de.redtec.util.FluidStackStateTagHelper;
 import de.redtec.util.FluidTankHelper;
 import de.redtec.util.IFluidConnective;
@@ -111,7 +112,7 @@ public class TileEntityFluidInput extends TileEntity implements IFluidConnective
 			handler.updateNetwork(world, pos);
 			ElectricityNetwork network = handler.getNetwork(pos);
 			
-			if (network.canMachinesRun() && canSourceFluid() && this.progress++ >= 10) {
+			if (network.canMachinesRun() == Voltage.NormalVoltage && canSourceFluid() && this.progress++ >= 10) {
 				
 				this.progress = 0;
 				
@@ -166,7 +167,7 @@ public class TileEntityFluidInput extends TileEntity implements IFluidConnective
 		ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(world);
 		ElectricityNetwork network = handler.getNetwork(pos);
 		
-		return network.canMachinesRun() && canSourceFluid();
+		return network.canMachinesRun() == Voltage.NormalVoltage && canSourceFluid();
 		
 	}
 	

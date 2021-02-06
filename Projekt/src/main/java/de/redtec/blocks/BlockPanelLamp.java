@@ -90,7 +90,7 @@ public class BlockPanelLamp extends BlockContainerBase implements IElectricConne
 	public void onNetworkChanges(World worldIn, BlockPos pos, BlockState state, ElectricityNetwork network) {
 		
 		boolean active = state.get(LIT);
-		boolean powered = network.canMachinesRun() && network.getVoltage() == Voltage.LowVoltage;
+		boolean powered = network.canMachinesRun() == Voltage.LowVoltage;
 		
 		if (network.getVoltage().getVoltage() > Voltage.LowVoltage.getVoltage() && network.getCurrent() > 0) {
 

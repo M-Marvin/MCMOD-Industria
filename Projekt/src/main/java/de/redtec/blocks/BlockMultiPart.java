@@ -14,11 +14,16 @@ import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
-public abstract class BlockMultiPart extends BlockContainerBase {
+public abstract class BlockMultiPart<T extends TileEntity> extends BlockContainerBase {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	public static final IntegerProperty POS_X = IntegerProperty.create("pos_x", 0, 6);
@@ -155,6 +160,38 @@ public abstract class BlockMultiPart extends BlockContainerBase {
 		default: return internOffset;
 		}
 		
+	}
+
+	@SuppressWarnings("unchecked")
+	public T getCenterTE(BlockPos pos, BlockState state, IBlockReader world) {
+		BlockPos partPos = BlockMultiPart.getInternPartPos(state);
+		BlockPos partOffset = BlockMultiPart.rotateOffset(partPos, state.get(BlockMultiPart.FACING));
+		BlockPos centerTEPos = pos.subtract(partOffset);
+		TileEntity tileEntity = world.getTileEntity(centerTEPos);
+		try {
+			return (T) tileEntity;
+		} catch (ClassCastException e) {
+			return null;
+		}
+		
+	}
+	
+	public static TileEntity getSCenterTE(BlockPos pos, BlockState state, IWorld world) {
+		BlockPos partPos = BlockMultiPart.getInternPartPos(state);
+		BlockPos partOffset = BlockMultiPart.rotateOffset(partPos, state.get(BlockMultiPart.FACING));
+		BlockPos centerTEPos = pos.subtract(partOffset);
+		TileEntity tileEntity = world.getTileEntity(centerTEPos);
+		return tileEntity;
+	}
+
+	@Override
+	public BlockState mirror(BlockState state, Mirror mirrorIn) {
+		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+	}
+	
+	@Override
+	public BlockState rotate(BlockState state, Rotation rot) {
+		return state.with(FACING, rot.rotate(state.get(FACING)));
 	}
 	
 }

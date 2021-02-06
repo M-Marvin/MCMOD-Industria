@@ -47,23 +47,25 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 	
 	@Override
 	public FluidStack insertFluid(FluidStack fluid) {
-		if (this.fluid.isEmpty()) {
-			int transfer = Math.min(this.maxFluid, fluid.getAmount());
-			this.fluid = new FluidStack(fluid.getFluid(), transfer);
-			this.fluid.setTag(fluid.getTag());
-			FluidStack rest = fluid.copy();
-			rest.shrink(transfer);
-			if (this.fluid.getAmount() == this.maxFluid && !rest.isEmpty()) rest = pushFluid(rest, null);
-			return rest;
-		} else if (this.fluid.getFluid() == fluid.getFluid()) {
-			int capacity = this.maxFluid - this.fluid.getAmount();
-			int transfer = Math.min(capacity, fluid.getAmount());
-			this.fluid.grow(transfer);
-			this.fluid.setTag(fluid.getTag());
-			FluidStack rest = fluid.copy();
-			rest.shrink(transfer);
-			if (this.fluid.getAmount() == this.maxFluid && !rest.isEmpty()) rest = pushFluid(rest, null);
-			return rest;
+		if (!fluid.isEmpty()) {
+			if (this.fluid.isEmpty()) {
+				int transfer = Math.min(this.maxFluid, fluid.getAmount());
+				this.fluid = new FluidStack(fluid.getFluid(), transfer);
+				this.fluid.setTag(fluid.getTag());
+				FluidStack rest = fluid.copy();
+				rest.shrink(transfer);
+				if (this.fluid.getAmount() == this.maxFluid && !rest.isEmpty()) rest = pushFluid(rest, null);
+				return rest;
+			} else if (this.fluid.getFluid() == fluid.getFluid()) {
+				int capacity = this.maxFluid - this.fluid.getAmount();
+				int transfer = Math.min(capacity, fluid.getAmount());
+				this.fluid.grow(transfer);
+				this.fluid.setTag(fluid.getTag());
+				FluidStack rest = fluid.copy();
+				rest.shrink(transfer);
+				if (this.fluid.getAmount() == this.maxFluid && !rest.isEmpty()) rest = pushFluid(rest, null);
+				return rest;
+			}
 		}
 		return fluid;
 	}

@@ -26,7 +26,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockMSteamGenerator extends BlockMultiPart implements IElectricConnective, IAdvancedBlockInfo {
+public class BlockMSteamGenerator extends BlockMultiPart<TileEntityMSteamGenerator> implements IElectricConnective, IAdvancedBlockInfo {
 	
 	public BlockMSteamGenerator() {
 		super("steam_generator", Material.IRON, 8F, SoundType.METAL, 3, 3, 2);
@@ -98,6 +98,11 @@ public class BlockMSteamGenerator extends BlockMultiPart implements IElectricCon
 		info.add(new TranslationTextComponent("redtec.block.info.steamGenerator.maxMB", 50));
 		info.add(new TranslationTextComponent("redtec.block.info.steamGenerator"));
 		return info;
+	}
+	
+	@Override
+	public int getStackSize() {
+		return 1;
 	}
 
 	@Override

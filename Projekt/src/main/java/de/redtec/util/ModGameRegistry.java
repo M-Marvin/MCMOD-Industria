@@ -31,7 +31,7 @@ public class ModGameRegistry {
 			Supplier<Callable<ItemStackTileEntityRenderer>> ister = ((IAdvancedBlockInfo) block).getISTER();
 			blockItem = group != null ? new ItemBlockAdvancedInfo(block, new Item.Properties().group(group).rarity(rarity).setISTER(ister), info) : new ItemBlockAdvancedInfo(block, new Item.Properties().rarity(rarity).setISTER(ister), info);
 		} else {
-			blockItem = group != null ? new BlockItem(block, new Item.Properties().group(group).rarity(rarity)) : new BlockItem(block, new Item.Properties().rarity(rarity));
+			blockItem = group != null ? new BlockItem(block, new Item.Properties().group(group).rarity(rarity).maxStackSize(((IAdvancedBlockInfo) block).getStackSize())) : new BlockItem(block, new Item.Properties().rarity(rarity));
 		}
 		blockItem.setRegistryName(block.getRegistryName());
 		itemsToRegister.add(blockItem);
@@ -43,7 +43,7 @@ public class ModGameRegistry {
 		if (block instanceof IAdvancedBlockInfo) {
 			List<ITextComponent> info = ((IAdvancedBlockInfo) block).getBlockInfo();
 			Supplier<Callable<ItemStackTileEntityRenderer>> ister = ((IAdvancedBlockInfo) block).getISTER();
-			blockItem = group != null ? new ItemBlockAdvancedInfo(block, new Item.Properties().group(group).setISTER(ister), info) : new ItemBlockAdvancedInfo(block, new Item.Properties(), info);
+			blockItem = group != null ? new ItemBlockAdvancedInfo(block, new Item.Properties().group(group).setISTER(ister).maxStackSize(((IAdvancedBlockInfo) block).getStackSize()), info) : new ItemBlockAdvancedInfo(block, new Item.Properties(), info);
 		} else {
 			blockItem = group != null ? new BlockItem(block, new Item.Properties().group(group)) : new BlockItem(block, new Item.Properties());
 		}

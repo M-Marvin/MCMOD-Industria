@@ -19,6 +19,9 @@ public class ModSoundEvents {
 	public static final SoundEvent TRANSFORMATOR_LOOP = register("block.transformator.loop");
 	public static final SoundEvent SPARKING_CABLE = register("block.sparking_cable");
 	public static final SoundEvent SCHREDDER_LOOP = register("block.schredder.loop");
+	public static final SoundEvent BLENDER_LOOP = register("block.blender.loop");
+	public static final SoundEvent RAFFINERY_LOOP = register("block.raffinery.loop");
+	public static final SoundEvent THERMAL_ZENTRIFUGE_LOOP = register("block.thermal_zentrifuge.loop");
 	
 	private static SoundEvent register(String key) {
 		SoundEvent event = new SoundEvent(new ResourceLocation(RedTec.MODID, key));

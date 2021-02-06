@@ -19,7 +19,7 @@ public class ContainerMSchredder extends ContainerTileEntity<TileEntityMSchredde
 
 	@Override
 	public int getSlots() {
-		return 2;
+		return 5;
 	}
 
 	@Override

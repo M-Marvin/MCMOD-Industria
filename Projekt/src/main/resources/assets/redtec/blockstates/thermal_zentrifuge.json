@@ -1,0 +1,13 @@
+{
+	"variants": {
+		"facing=north,active=false": { "model": "redtec:block/thermal_zentrifuge" },
+		"facing=south,active=false": { "model": "redtec:block/thermal_zentrifuge", "y": 180 },
+		"facing=east,active=false": { "model": "redtec:block/thermal_zentrifuge", "y": 90 },
+		"facing=west,active=false": { "model": "redtec:block/thermal_zentrifuge", "y": -90 },
+		
+		"facing=north,active=true": { "model": "redtec:block/thermal_zentrifuge_on" },
+		"facing=south,active=true": { "model": "redtec:block/thermal_zentrifuge_on", "y": 180 },
+		"facing=east,active=true": { "model": "redtec:block/thermal_zentrifuge_on", "y": 90 },
+		"facing=west,active=true": { "model": "redtec:block/thermal_zentrifuge_on", "y": -90 }
+	}
+}

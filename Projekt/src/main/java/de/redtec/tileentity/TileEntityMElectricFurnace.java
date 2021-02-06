@@ -8,6 +8,7 @@ import de.redtec.gui.ContainerMElectricFurnace;
 import de.redtec.registys.ModTileEntityType;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
+import de.redtec.util.IElectricConnective.Voltage;
 import de.redtec.util.ItemStackHelper;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.BlockState;
@@ -53,7 +54,7 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 			this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
 			
 			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(this.world).getNetwork(this.pos);
-			this.hasPower = network.canMachinesRun();
+			this.hasPower = network.canMachinesRun() == Voltage.NormalVoltage;
 			this.world.setBlockState(pos, this.getBlockState().with(BlockMElectricFurnace.LIT, this.cookTimeTotal > 0));
 			
 			if (!this.getStackInSlot(0).isEmpty()) {
@@ -100,7 +101,7 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 				
 			} 
 			
-			if (this.cookTime > 0 && (findRecipe() == null || !network.canMachinesRun())) {
+			if (this.cookTime > 0 && (findRecipe() == null || network.canMachinesRun() != Voltage.NormalVoltage)) {
 				
 				this.cookTime -= 2;
 				if (this.cookTime < 0) {
@@ -145,17 +146,17 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 	
 	@Override
 	public int[] getSlotsForFace(Direction side) {
-		return new int[] {side == Direction.DOWN ? 1 : 0};
+		return new int[] {0, 1};
 	}
 
 	@Override
 	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
-		return true;
+		return index == 0;
 	}
 
 	@Override
 	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
-		return true;
+		return index == 1;
 	}
 
 	@Override

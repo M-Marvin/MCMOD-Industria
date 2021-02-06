@@ -94,7 +94,7 @@ public abstract class FluidDestilledWater extends FlowingFluid {
 		return FluidAttributes.builder(
 				new ResourceLocation(RedTec.MODID, "block/destilled_water_still"), 
 				new ResourceLocation(RedTec.MODID, "block/destilled_water_flow"))
-					.overlay(new ResourceLocation(RedTec.MODID, "block/fluid_overlay"))
+					.overlay(new ResourceLocation(RedTec.MODID, "block/destilled_water_overlay"))
 					.build(this);
 	}
 	

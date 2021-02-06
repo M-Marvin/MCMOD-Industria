@@ -155,7 +155,7 @@ public class BlockFuseBox extends BlockContainerBase implements IElectricConnect
 	}
 	
 	@Override
-	public boolean beforNetworkChanges(World world, BlockPos pos, BlockState state, ElectricityNetwork network) {
+	public boolean beforNetworkChanges(World world, BlockPos pos, BlockState state, ElectricityNetwork network, int lap) {
 		
 		ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(world);
 		

@@ -16,6 +16,15 @@ public class ModFluids {
 	public static final FluidDestilledWater FLOWING_DESTILLED_WATER = register("flowing_destilled_water", new FluidDestilledWater.Flow());
 	public static final FluidDestilledWater DESTILLED_WATER = register("destilled_water", new FluidDestilledWater.Still());
 	public static final FluidSteam STEAM = register("steam", new FluidSteam());
+	public static final FluidSulfuricAcid SULFURIC_ACID = register("sulfuric_acid", new FluidSulfuricAcid.Still());
+	public static final FluidSulfuricAcid FLOWING_SULFURIC_ACID = register("flowing_sulfuric_acid", new FluidSulfuricAcid.Flow());
+	
+	public static final FluidOreIronSolution FLOWING_IRON_SOLUTION = register("flowing_iron_solution", new FluidOreIronSolution.Flow());
+	public static final FluidOreIronSolution IRON_SOLUTION = register("iron_solution", new FluidOreIronSolution.Still());
+	public static final FluidOreCopperSolution FLOWING_COPPER_SOLUTION = register("flowing_copper_solution", new FluidOreCopperSolution.Flow());
+	public static final FluidOreCopperSolution COPPER_SOLUTION = register("copper_solution", new FluidOreCopperSolution.Still());
+	public static final FluidOreAluminiumSolution FLOWING_ALUMINIUM_SOLUTION = register("flowing_aluminium_solution", new FluidOreAluminiumSolution.Flow());
+	public static final FluidOreAluminiumSolution ALUMINIUM_SOLUTION = register("aluminium_solution", new FluidOreAluminiumSolution.Still());
 	
 	private static <T extends Fluid> T register(String key, T p_215710_1_) {
 		p_215710_1_.setRegistryName(new ResourceLocation(RedTec.MODID, key));

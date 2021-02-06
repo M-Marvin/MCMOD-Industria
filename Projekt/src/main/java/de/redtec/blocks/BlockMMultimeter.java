@@ -144,7 +144,7 @@ public class BlockMMultimeter extends BlockContainerBase implements IElectricCon
 	}
 	
 	@Override
-	public boolean beforNetworkChanges(World world, BlockPos pos, BlockState state, ElectricityNetwork network) {
+	public boolean beforNetworkChanges(World world, BlockPos pos, BlockState state, ElectricityNetwork network, int lap) {
 		
 		TileEntity te = world.getTileEntity(pos);
 		

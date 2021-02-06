@@ -25,7 +25,7 @@ public class ContainerMElectricFurnace extends ContainerTileEntity<TileEntityMEl
 	@Override
 	public void init() {
 		
-		this.addSlot(new Slot(this.tileEntity, 1, 116, 35));
+		this.addSlot(new CraftingResultSlot(this.tileEntity, 1, 116, 35));
 		this.addSlot(new Slot(this.tileEntity, 0, 56, 34));
 		
 		for(int k = 0; k < 3; ++k) {

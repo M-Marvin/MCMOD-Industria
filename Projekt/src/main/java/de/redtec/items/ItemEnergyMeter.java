@@ -53,15 +53,11 @@ public class ItemEnergyMeter extends ItemBase {
 				NumberFormat format = new DecimalFormat("0.00");
 				
 				float currentPower = network.getCurrent() * network.getVoltage().getVoltage();
-				float needPower = network.getNeedCurrent() * network.getVoltage().getVoltage();
 				float capacityPower = network.getCapacity() * network.getVoltage().getVoltage();
 				String currentPowerS = currentPower >= 1000 ? (format.format((currentPower / 1000)) + "k") : format.format(currentPower);
-				String needPowerS = needPower >= 1000 ? (format.format((needPower / 1000)) + "k") :  format.format(needPower) + "";
 				String capacityPowerS = capacityPower >= 1000 ? (format.format((capacityPower / 1000)) + "k") : format.format(capacityPower);
 				
-				ITextComponent line1 = new TranslationTextComponent("redtec.item.energy_meter.meassure.pass", blockItem.getDisplayName(), network.getVoltage().getVoltage(), format.format(network.getCurrent()), currentPowerS, capacityPowerS, format.format(network.getCapacity()));
-				ITextComponent line2 = new TranslationTextComponent("redtec.item.energy_meter.meassure.fail", blockItem.getDisplayName(), network.getVoltage().getVoltage(), format.format(network.getNeedCurrent()), needPowerS, capacityPowerS, format.format(network.getCapacity()));
-				ITextComponent line = network.canMachinesRun() ? line1 : line2;
+				ITextComponent line = new TranslationTextComponent("redtec.item.energy_meter.meassure", blockItem.getDisplayName(), network.getVoltage().getVoltage(), format.format(network.getCurrent()), currentPowerS, capacityPowerS, format.format(network.getCapacity()));
 				
 				playerIn.sendStatusMessage(line, true);
 				

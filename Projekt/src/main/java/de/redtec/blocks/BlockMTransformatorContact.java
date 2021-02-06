@@ -7,6 +7,7 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import de.redtec.RedTec;
+import de.redtec.registys.ModSoundEvents;
 import de.redtec.tileentity.TileEntitySimpleBlockTicking;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
@@ -25,6 +26,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -64,7 +66,7 @@ public class BlockMTransformatorContact extends BlockContainerBase implements IE
 			int transferPower = getPower(world, pos);
 			float needCurrent = Math.min(transferPower, needEnergy) / state.get(VOLTAGE).getVoltage();
 			
-			return needCurrent;
+			return Math.max(0.001F, needCurrent);
 			
 		} else {
 			
@@ -229,6 +231,33 @@ public class BlockMTransformatorContact extends BlockContainerBase implements IE
 	@Override
 	public TileEntity createNewTileEntity(IBlockReader worldIn) {
 		return new TileEntitySimpleBlockTicking();
+	}
+	
+	@Override
+	public boolean beforNetworkChanges(World world, BlockPos pos, BlockState state, ElectricityNetwork network, int lap) {
+		
+		if (network.canMachinesRun() == Voltage.NoLimit && lap < 3) {
+			
+			List<BlockPos> blocks = getBlocks(world, pos);
+			for (BlockPos pos1 : blocks) {
+				BlockState state1 = world.getBlockState(pos1);
+				if (state1.getBlock() == RedTec.transformator_contact) {
+					ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos1);
+				}
+			}
+			
+		}
+		
+		return false;
+		
+	}
+	
+	@Override
+	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+		if (ElectricityNetworkHandler.getHandlerForWorld(worldIn).getNetwork(pos).getCurrent() > 0.5F) {
+			worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), ModSoundEvents.TRANSFORMATOR_LOOP, SoundCategory.BLOCKS, 1F, 1, false);
+		}
+		super.animateTick(stateIn, worldIn, pos, rand);
 	}
 	
 }

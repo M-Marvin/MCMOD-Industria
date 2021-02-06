@@ -25,6 +25,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
@@ -117,13 +119,23 @@ public class BlockFluidInput extends BlockContainerBase implements IElectricConn
 	@Override
 	public void onNetworkChanges(World worldIn, BlockPos pos, BlockState state, ElectricityNetwork network) {
 
-		if (network.getVoltage().getVoltage() > Voltage.NormalVoltage.getVoltage()) {
+		if (network.getVoltage().getVoltage() > Voltage.NormalVoltage.getVoltage() && network.getCurrent() > 0) {
 
 			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
 			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
 			
 		}
 		
+	}
+
+	@Override
+	public BlockState mirror(BlockState state, Mirror mirrorIn) {
+		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+	}
+	
+	@Override
+	public BlockState rotate(BlockState state, Rotation rot) {
+		return state.with(FACING, rot.rotate(state.get(FACING)));
 	}
 	
 }

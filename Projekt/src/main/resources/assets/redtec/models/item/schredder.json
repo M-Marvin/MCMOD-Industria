@@ -1,7 +1,7 @@
 {
 	"parent": "builtin/entity",
     "textures": {
-        "particle": "redtec:block/steam_generator"
+        "particle": "redtec:block/schredder"
     },
 	"display": {
 		"thirdperson_righthand": {

@@ -1,0 +1,19 @@
+{
+  "type": "redtec:blending",
+  "ingredientItems": [
+    {
+      "item": "redtec:copper_oxid"
+    }
+  ],
+  "ingredientFluids": [
+    {
+      "fluid": "redtec:sulfuric_acid",
+      "amount": 1000
+    }
+  ],
+  "resultFluid":  {
+    "fluid": "redtec:copper_solution",
+    "amount": 1500
+  },
+  "mixingTime": 100
+}

@@ -46,7 +46,7 @@ public class AdvancedStrukture {
 		return moveDirection;
 	}
 	
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "static-access" })
 	public boolean doMove(World world, int moveDistance) {
 		
 		List<BlockPos> positions = new ArrayList<BlockPos>();
@@ -73,6 +73,7 @@ public class AdvancedStrukture {
 					return false;
 				}
 				
+				if (world.isOutsideBuildHeight(block.offset(this.moveDirection, moveDistance))) return false;
 				positions.add(block);
 				states.add(state);
 				

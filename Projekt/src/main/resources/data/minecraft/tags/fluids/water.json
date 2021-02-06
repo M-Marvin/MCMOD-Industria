@@ -2,6 +2,14 @@
   "replace": false,
   "values": [
     "redtec:destilled_water",
-    "redtec:flowing_destilled_water"
+    "redtec:flowing_destilled_water",
+    "redtec:sulfuric_acid",
+    "redtec:flowing_sulfuric_acid",
+    "redtec:iron_solution",
+    "redtec:flowing_iron_solution",
+    "redtec:copper_solution",
+    "redtec:flowing_copper_solution",
+    "redtec:aluminium_solution",
+    "redtec:flowing_aluminium_solution"
   ]
 }

@@ -1,0 +1,24 @@
+{
+  "type": "redtec:blending",
+  "ingredientItems": [
+    {
+      "item": "redtec:sulfur_dioxid",
+      "count": 3
+    },
+    {
+      "item": "minecraft:blaze_powder",
+      "count": 1
+    }
+  ],
+  "ingredientFluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 800
+    }
+  ],
+  "resultFluid":  {
+    "fluid": "redtec:sulfuric_acid",
+    "amount": 1000
+  },
+  "mixingTime": 150
+}

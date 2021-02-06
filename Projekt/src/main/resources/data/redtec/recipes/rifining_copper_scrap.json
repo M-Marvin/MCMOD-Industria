@@ -1,0 +1,18 @@
+{
+  "type": "redtec:rifining",
+  "ingredientFluid": {
+    "fluid": "redtec:copper_solution",
+    "amount": 500
+  },
+  "resultFluid":  {
+    "fluid": "redtec:sulfuric_acid",
+    "amount": 20
+  },
+  "resultItems": [
+    {
+      "item": "redtec:copper_nugget",
+      "count": 8
+    }
+  ],
+  "rifiningTime": 200
+}

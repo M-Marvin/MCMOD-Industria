@@ -70,54 +70,6 @@ public class TileEntityInventoryBase extends TileEntity implements IInventory {
 		return true;
 	}
 	
-//	public List<ItemStack> tryToInser(List<ItemStack> items) {
-//		
-//		for (ItemStack stack2 : items) {
-//			
-//			for (int i = 0; i < this.slots; i++) {
-//
-//				ItemStack stack = this.itemstacks.get(i);
-//				
-//				if (stack.getItem() == stack2.getItem() && !stack2.isEmpty()) {
-//					
-//					if (stack.hasTag() ? stack.getTag().equals(stack2.getTag()) : !stack2.hasTag()) {
-//						
-//						int capacity = stack.getMaxStackSize() - stack.getCount();
-//						int transfer = Math.min(stack2.getCount(), capacity);
-//						
-//						if (transfer > 0) {
-//							
-//							stack.grow(transfer);
-//							stack2.shrink(transfer);
-//							
-//						}
-//						
-//					}
-//					
-//				} else if (stack.isEmpty()) {
-//					
-//					stack = stack2.copy();
-//					stack2.shrink(stack2.getCount());
-//					
-//				}
-//				
-//				this.itemstacks.set(i, stack);
-//				
-//				if (stack2.isEmpty()) break;
-//				
-//			}
-//			
-//		}
-//		
-//		List<ItemStack> remainingItems = new ArrayList<ItemStack>();
-//		for (ItemStack stack : items) {
-//			if (!stack.isEmpty()) remainingItems.add(stack);
-//		}
-//		
-//		return remainingItems;
-//		
-//	}
-	
 	@Override
 	public CompoundNBT write(CompoundNBT compound) {
 		net.minecraft.inventory.ItemStackHelper.saveAllItems(compound, this.itemstacks);
@@ -126,6 +78,7 @@ public class TileEntityInventoryBase extends TileEntity implements IInventory {
 	
 	@Override
 	public void func_230337_a_(BlockState state, CompoundNBT compound) {
+		this.itemstacks.clear();
 		net.minecraft.inventory.ItemStackHelper.loadAllItems(compound, this.itemstacks);
 		super.func_230337_a_(state, compound);
 	}

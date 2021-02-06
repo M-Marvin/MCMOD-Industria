@@ -19,7 +19,7 @@ public interface IElectricConnective {
 	public default boolean isSwitchClosed(World worldIn, BlockPos pos, BlockState state) {
 		return true;
 	}
-	public default boolean beforNetworkChanges(World world, BlockPos pos, BlockState state, ElectricityNetwork network) {
+	public default boolean beforNetworkChanges(World world, BlockPos pos, BlockState state, ElectricityNetwork network, int lap) {
 		return false;
 	}
 	public default List<BlockPos> getMultiBlockParts(World world, BlockPos pos, BlockState state) {

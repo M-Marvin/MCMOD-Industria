@@ -13,4 +13,8 @@ public interface IAdvancedBlockInfo {
 	
 	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER();
 	
+	public default int getStackSize() {
+		return 64;
+	}
+	
 }

@@ -1,0 +1,87 @@
+{
+	"multipart": [
+		{ "when": {"facing": "north"}, "apply": {
+			"model": "redtec:block/conveyor_belt_base",
+			"y": 180
+		}},
+		{ "when": {"right": "close", "facing": "north"}, "apply": {
+			"model": "redtec:block/conveyor_belt_close",
+			"y": 0
+		}},
+		{ "when": {"left": "close", "facing": "north"}, "apply": {
+			"model": "redtec:block/conveyor_belt_close",
+			"y": 180
+		}},
+		{ "when": {"right": "open", "facing": "north"}, "apply": {
+			"model": "redtec:block/conveyor_belt_open",
+			"y": 0
+		}},
+		{ "when": {"left": "open", "facing": "north"}, "apply": {
+			"model": "redtec:block/conveyor_belt_open",
+			"y": 180
+		}},
+		
+		{ "when": {"facing": "south"}, "apply": {
+			"model": "redtec:block/conveyor_belt_base",
+			"y": 0
+		}},
+		{ "when": {"right": "close", "facing": "south"}, "apply": {
+			"model": "redtec:block/conveyor_belt_close",
+			"y": 180
+		}},
+		{ "when": {"left": "close", "facing": "south"}, "apply": {
+			"model": "redtec:block/conveyor_belt_close",
+			"y": 0
+		}},
+		{ "when": {"right": "open", "facing": "south"}, "apply": {
+			"model": "redtec:block/conveyor_belt_open",
+			"y": 180
+		}},
+		{ "when": {"left": "open", "facing": "south"}, "apply": {
+			"model": "redtec:block/conveyor_belt_open",
+			"y": 0
+		}},
+		
+		{ "when": {"facing": "east"}, "apply": {
+			"model": "redtec:block/conveyor_belt_base",
+			"y": 270
+		}},
+		{ "when": {"right": "close", "facing": "east"}, "apply": {
+			"model": "redtec:block/conveyor_belt_close",
+			"y": 90
+		}},
+		{ "when": {"left": "close", "facing": "east"}, "apply": {
+			"model": "redtec:block/conveyor_belt_close",
+			"y": 270
+		}},
+		{ "when": {"right": "open", "facing": "east"}, "apply": {
+			"model": "redtec:block/conveyor_belt_open",
+			"y": 90
+		}},
+		{ "when": {"left": "open", "facing": "east"}, "apply": {
+			"model": "redtec:block/conveyor_belt_open",
+			"y": 270
+		}},
+		
+		{ "when": {"facing": "west"}, "apply": {
+			"model": "redtec:block/conveyor_belt_base",
+			"y": 90
+		}},
+		{ "when": {"right": "close", "facing": "west"}, "apply": {
+			"model": "redtec:block/conveyor_belt_close",
+			"y": 270
+		}},
+		{ "when": {"left": "close", "facing": "west"}, "apply": {
+			"model": "redtec:block/conveyor_belt_close",
+			"y": 90
+		}},
+		{ "when": {"right": "open", "facing": "west"}, "apply": {
+			"model": "redtec:block/conveyor_belt_open",
+			"y": 270
+		}},
+		{ "when": {"left": "open", "facing": "west"}, "apply": {
+			"model": "redtec:block/conveyor_belt_open",
+			"y": 90
+		}}
+	]
+}

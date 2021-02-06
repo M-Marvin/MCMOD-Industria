@@ -1,9 +1,9 @@
 {
   "type": "minecraft:smelting",
   "ingredient": {
-    "item": "redtec:copper_oxid"
+    "item": "redtec:crushed_copper_ore"
   },
   "result": "redtec:copper_ingot",
   "experience": 0.3,
-  "cookingtime": 160
+  "cookingtime": 140
 }

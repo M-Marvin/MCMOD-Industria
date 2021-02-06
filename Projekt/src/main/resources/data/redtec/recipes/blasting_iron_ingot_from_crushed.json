@@ -1,7 +1,7 @@
 {
   "type": "minecraft:blasting",
   "ingredient": {
-    "item": "redtec:iron_oxid"
+    "item": "redtec:crushed_iron_ore"
   },
   "result": "minecraft:iron_ingot",
   "experience": 0.2,

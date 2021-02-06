@@ -1,0 +1,19 @@
+{
+  "type": "redtec:blending",
+  "ingredientItems": [
+    {
+      "item": "redtec:iron_oxid"
+    }
+  ],
+  "ingredientFluids": [
+    {
+      "fluid": "redtec:sulfuric_acid",
+      "amount": 1000
+    }
+  ],
+  "resultFluid":  {
+    "fluid": "redtec:iron_solution",
+    "amount": 1500
+  },
+  "mixingTime": 100
+}

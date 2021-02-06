@@ -1,7 +1,10 @@
 package de.redtec.registys;
 
 import de.redtec.RedTec;
+import de.redtec.recipetypes.BlendingRecipe;
+import de.redtec.recipetypes.RifiningRecipe;
 import de.redtec.recipetypes.SchredderRecipe;
+import de.redtec.recipetypes.ThermalZentrifugeRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.ResourceLocation;
@@ -12,6 +15,9 @@ import net.minecraftforge.fml.common.Mod;
 public class ModRecipeTypes {
 	
 	public static final IRecipeType<SchredderRecipe> SCHREDDER = register("schredder");
+	public static final IRecipeType<BlendingRecipe> BLENDING = register("blending");
+	public static final IRecipeType<RifiningRecipe> RIFINING = register("rifining");
+	public static final IRecipeType<ThermalZentrifugeRecipe> THERMAL_ZENTRIFUGE = register("thermal_zentrifuge");
 	
 	static <T extends IRecipe<?>> IRecipeType<T> register(String key) {
 		ResourceLocation registryKey = new ResourceLocation(RedTec.MODID, key);

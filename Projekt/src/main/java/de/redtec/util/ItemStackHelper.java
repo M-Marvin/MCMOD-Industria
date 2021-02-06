@@ -1,6 +1,7 @@
 package de.redtec.util;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 public class ItemStackHelper {
 	
@@ -22,6 +23,14 @@ public class ItemStackHelper {
 		
 		if (stack.isEmpty()) return true;
 		if (stack.getItem() == recipeItem.getItem() && stack.getMaxStackSize() - stack.getCount() >= recipeItem.getCount()) return true;
+		return false;
+		
+	}
+	
+	public static boolean canMergeRecipeFluidStacks(FluidStack fluidStack, FluidStack recipeStack, int maxFluidStorage) {
+		
+		if (fluidStack.isEmpty()) return true;
+		if (fluidStack.getFluid() == recipeStack.getFluid() && fluidStack.getAmount() + recipeStack.getAmount() <= maxFluidStorage) return true;
 		return false;
 		
 	}

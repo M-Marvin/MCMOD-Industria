@@ -175,6 +175,7 @@ public class TileEntityMCoalHeater extends TileEntityInventoryBase implements IN
 
 	@Override
 	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+		System.out.println(itemStackIn);
 		return index == 0 && ForgeHooks.getBurnTime(itemStackIn) > 0;
 	}
 

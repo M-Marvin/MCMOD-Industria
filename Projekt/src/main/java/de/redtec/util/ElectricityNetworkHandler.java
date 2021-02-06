@@ -89,58 +89,66 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 	}
 	
 	public void calculateNetwork(World world, BlockPos position) {
-		
+				
 		if (this.isServerInstace) {
 			
 			if (world.getBlockState(position).getBlock() instanceof IElectricConnective) {
 				
 				ElectricityNetwork network = getNetwork(position);
+				List<Direction> attachList = new ArrayList<Direction>();
+				network.positions.put(position, attachList);
 				
 				if (!network.isUpdated((ServerWorld) world) && !world.isRemote()) {
 					
-					network.positions.clear();
-					boolean flag = this.scann(world, position, null, network.positions, 0, DeviceType.WIRE);
-					
-					// If no Device Found, add it self, to prevent endless new Networks;
-					if (!flag) {
-						List<Direction> attachList = new ArrayList<Direction>();
-						network.positions.put(position, attachList);
-					}
-					
-					if (network.positions.size() <= 1) network.lastUpdated = 0;
-					network.needCurrent = 0;
-					network.voltage = Voltage.NoLimit;
-					network.capacity = 0;
-					
-					for (Entry<BlockPos, List<Direction>> device : network.positions.entrySet()) {
+					int lap = 3;
+					while (lap <= 3) {
 						
-						BlockState state = world.getBlockState(device.getKey());
-						List<Direction> attacheSides = device.getValue();
+						lap++;
 						
-						if (state.getBlock() instanceof IElectricConnective && !(state.getBlock() instanceof IElectricWire)) {
+						network.positions.clear();
+						boolean flag = this.scann(world, position, null, network.positions, 0, DeviceType.WIRE);
+						
+						// If no Device Found, add it self, to prevent endless new Networks;
+						if (!flag) {
+							network.positions.put(position, attachList);
+						}
+						
+						if (network.positions.size() <= 1) network.lastUpdated = 0;
+						network.needCurrent = 0;
+						network.voltage = Voltage.NoLimit;
+						network.capacity = 0;
+						
+						for (Entry<BlockPos, List<Direction>> device : network.positions.entrySet()) {
 							
-							IElectricConnective device1 = (IElectricConnective) state.getBlock();
+							BlockState state = world.getBlockState(device.getKey());
+							List<Direction> attacheSides = device.getValue();
 							
-							boolean hasCurrentAdded = false;
-							for (Direction attachSide : attacheSides) {
+							if (state.getBlock() instanceof IElectricConnective && !(state.getBlock() instanceof IElectricWire)) {
 								
-								Voltage voltage = device1.getVoltage(world, device.getKey(), state, attachSide);
-								float needCurrent = device1.getNeededCurrent(world, device.getKey(), state, attachSide);
+								IElectricConnective device1 = (IElectricConnective) state.getBlock();
 								
-								if (needCurrent >= 0) {
+								boolean hasCurrentAdded = false;
+								for (Direction attachSide : attacheSides) {
 									
-									if (voltage.getVoltage() > network.voltage.getVoltage() && needCurrent == 0) network.voltage = voltage;
-									if (!hasCurrentAdded) {
-										network.needCurrent += needCurrent;
-										hasCurrentAdded = true;
-									}
+									Voltage voltage = device1.getVoltage(world, device.getKey(), state, attachSide);
+									float needCurrent = device1.getNeededCurrent(world, device.getKey(), state, attachSide);
 									
-								} else if (needCurrent < 0) {
-									
-									if (voltage.getVoltage() > network.voltage.getVoltage()) network.voltage = voltage;
-									if (!hasCurrentAdded) {
-										network.capacity += -needCurrent;
-										hasCurrentAdded = true;
+									if (needCurrent >= 0) {
+										
+										//if (voltage.getVoltage() > network.voltage.getVoltage() && needCurrent != 0) network.voltage = voltage;
+										if (!hasCurrentAdded) {
+											network.needCurrent += needCurrent;
+											hasCurrentAdded = true;
+										}
+										
+									} else if (needCurrent < 0) {
+										
+										if (voltage.getVoltage() > network.voltage.getVoltage()) network.voltage = voltage;
+										if (!hasCurrentAdded) {
+											network.capacity += -needCurrent;
+											hasCurrentAdded = true;
+										}
+										
 									}
 									
 								}
@@ -149,31 +157,28 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 							
 						}
 						
-					}
-					
-					if (network.needCurrent <= network.capacity) {
-						network.current = network.needCurrent;
-					} else {
-						network.current = network.capacity;
-					}
-
-					boolean abbortUpdate = false;
-					
-					for (Entry<BlockPos, List<Direction>> device : network.positions.entrySet()) {
+						if (network.needCurrent <= network.capacity) {
+							network.current = network.needCurrent;
+						} else {
+							network.current = network.capacity;
+						}
 						
-						BlockPos pos = device.getKey();
-						BlockState state = world.getBlockState(pos);
-						
-						if (state.getBlock() instanceof IElectricConnective) {
+						boolean abbortUpdate = false;
+						for (Entry<BlockPos, List<Direction>> device : network.positions.entrySet()) {
 							
-							boolean result = ((IElectricConnective) state.getBlock()).beforNetworkChanges(world, pos, state, network);
-							if (result) abbortUpdate = true;
+							BlockPos pos = device.getKey();
+							BlockState state = world.getBlockState(pos);
+							
+							if (state.getBlock() instanceof IElectricConnective) {
+								
+								boolean result = ((IElectricConnective) state.getBlock()).beforNetworkChanges(world, pos, state, network, lap);
+								if (result) abbortUpdate = true;
+								
+							}
 							
 						}
 						
-					}
-					
-					if (!abbortUpdate) {
+						if (abbortUpdate) continue;
 						
 						for (Entry<BlockPos, List<Direction>> device : network.positions.entrySet()) {
 							
@@ -187,6 +192,8 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 							}
 							
 						}
+						
+						break;
 						
 					}
 					
@@ -202,15 +209,18 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 				
 			}
 			
-			for (ElectricityNetwork network1 : this.networks.toArray(new ElectricityNetwork[] {})) {
-				
-				if (network1.positions.size() <= 1) this.networks.remove(network1);
+			List<ElectricityNetwork> newList = new ArrayList<>();
+			for (ElectricityNetwork network1 : this.networks) {
 				
 				int lastUpdate = (int) (world.getGameTime() - network1.lastUpdated);
-				if (lastUpdate > 500) this.networks.remove(network1);
+				if (network1.positions.size() > 1 && lastUpdate < 500) {
+					newList.add(network1);
+				}
 				
 			}
 
+			networks = newList;
+			
 			if (world.getGameTime() % 100 == 0 && !hasUpdated) {
 				
 				hasUpdated = true;
@@ -435,7 +445,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 		
 		public boolean contains(BlockPos pos) {
 			for (BlockPos pos1 : this.positions.keySet()) {
-				if (pos1.toLong() == pos.toLong()) return true;
+				if (pos1.equals(pos)) return true;
 			}
 			return false;
 		}
@@ -457,8 +467,9 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 			return Math.max(1F, (float) this.needCurrent / this.current);
 		}
 		
-		public boolean canMachinesRun() {
-			return this.needCurrent - this.current <= 0.001 && this.current > 0;
+		public Voltage canMachinesRun() {
+			boolean hasPower = this.needCurrent - this.current <= 0.001 && this.current > 0;
+			return hasPower ? this.voltage : Voltage.NoLimit;
 		}
 		
 		public Voltage getVoltage() {
@@ -517,6 +528,15 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 				network.positions.put(position, sides);
 			}
 			return network;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof ElectricityNetwork) {
+				ElectricityNetwork other = (ElectricityNetwork) obj;
+				return other.getConnectedBlocks().equals(this.getConnectedBlocks());
+			}
+			return false;
 		}
 		
 	}

@@ -3,6 +3,7 @@ package de.redtec.tileentity;
 import de.redtec.RedTec;
 import de.redtec.blocks.BlockMMultimeter;
 import de.redtec.registys.ModTileEntityType;
+import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
@@ -30,6 +31,7 @@ public class TileEntityMMultimeter extends TileEntityGauge implements ITickableT
 		if (!world.isRemote()) {
 			
 			this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
+			ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos);
 			
 		}
 		

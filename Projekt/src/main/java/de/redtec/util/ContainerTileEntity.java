@@ -43,48 +43,27 @@ public abstract class ContainerTileEntity<T extends TileEntity> extends Containe
 	public abstract int getSlots();
 	
 	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
-	      ItemStack itemstack = ItemStack.EMPTY;
-	      Slot slot = this.inventorySlots.get(index);
-	      if (slot != null && slot.getHasStack()) {
-	         ItemStack itemstack1 = slot.getStack();
-	         itemstack = itemstack1.copy();
-	         if (index == 0) {
-	            if (!this.mergeItemStack(itemstack1, this.getSlots(), 36 + this.getSlots(), true)) {
-	               return ItemStack.EMPTY;
-	            }
-	            
-	            slot.onSlotChange(itemstack1, itemstack);
-	         } else if (index >= this.getSlots() && index < 36 + this.getSlots()) {
-	            if (!this.mergeItemStack(itemstack1, 1, this.getSlots(), false)) {
-	               if (index < 37) {
-	                  if (!this.mergeItemStack(itemstack1, 37, 36 + this.getSlots(), false)) {
-	                     return ItemStack.EMPTY;
-	                  }
-	               } else if (!this.mergeItemStack(itemstack1, this.getSlots(), 37, false)) {
-	                  return ItemStack.EMPTY;
-	               }
-	            }
-	         } else if (!this.mergeItemStack(itemstack1, this.getSlots(), 36 + this.getSlots(), false)) {
-	            return ItemStack.EMPTY;
-	         }
-
-	         if (itemstack1.isEmpty()) {
-	            slot.putStack(ItemStack.EMPTY);
-	         } else {
-	            slot.onSlotChanged();
-	         }
-
-	         if (itemstack1.getCount() == itemstack.getCount()) {
-	            return ItemStack.EMPTY;
-	         }
-
-	         ItemStack itemstack2 = slot.onTake(playerIn, itemstack1);
-	         if (index == 0) {
-	            playerIn.dropItem(itemstack2, false);
-	         }
-	      }
-
-	      return itemstack;
+		ItemStack itemstack = ItemStack.EMPTY;
+		Slot slot = this.inventorySlots.get(index);
+		if (slot != null && slot.getHasStack()) {
+			ItemStack itemstack1 = slot.getStack();
+			itemstack = itemstack1.copy();
+			if (index < this.getSlots()) {
+				if (!this.mergeItemStack(itemstack1, this.getSlots(), this.inventorySlots.size(), true)) {
+					return ItemStack.EMPTY;
+				}
+			} else if (!this.mergeItemStack(itemstack1, 0, this.getSlots(), false)) {
+				return ItemStack.EMPTY;
+			}
+			
+			if (itemstack1.isEmpty()) {
+				slot.putStack(ItemStack.EMPTY);
+			} else {
+				slot.onSlotChanged();
+			}
+		}
+		
+		return itemstack;
 	}
 	
 	public abstract void init();
@@ -97,9 +76,9 @@ public abstract class ContainerTileEntity<T extends TileEntity> extends Containe
 		return tileEntity;
 	}
 	
-	public static class CraftingResultSlot2 extends Slot {
+	public static class CraftingResultSlot extends Slot {
 		
-		public CraftingResultSlot2(IInventory inventoryIn, int index, int xPosition, int yPosition) {
+		public CraftingResultSlot(IInventory inventoryIn, int index, int xPosition, int yPosition) {
 			super(inventoryIn, index, xPosition, yPosition);
 		}
 			

@@ -48,7 +48,7 @@ public class TileEntityMSchredderRenderer extends TileEntityRenderer<TileEntityM
 			matrixStackIn.rotate(facing.getRotation());
 			matrixStackIn.rotate(Vector3f.XP.rotationDegrees(90));
 			matrixStackIn.translate(0F, -1F, 0F);
-
+			
 			schredderModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 			
 			ItemSchredderTool tool = tileEntityIn.getToolItem();

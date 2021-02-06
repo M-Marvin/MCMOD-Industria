@@ -25,7 +25,7 @@ public class ContainerStoredCrafting extends ContainerTileEntity<TileEntityStori
 	@Override
 	public void init() {
 		
-		this.addSlot(new CraftingResultSlot2(this.tileEntity, 9, 124, 35));
+		this.addSlot(new CraftingResultSlot(this.tileEntity, 9, 124, 35));
 		this.addSlot(new Slot(this.tileEntity, 10, 85, 53));
 		
 		for(int i = 0; i < 3; ++i) {

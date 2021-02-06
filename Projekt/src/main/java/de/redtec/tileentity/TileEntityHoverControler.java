@@ -14,6 +14,7 @@ import de.redtec.util.AdvancedPistonBlockStructureHelper;
 import de.redtec.util.AdvancedStrukture;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
+import de.redtec.util.IElectricConnective.Voltage;
 import de.redtec.util.ItemStackHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -67,7 +68,7 @@ public class TileEntityHoverControler extends TileEntity implements IInventory, 
 		ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(world);
 		handler.updateNetwork(world, pos);
 		ElectricityNetwork network = handler.getNetwork(pos);
-		boolean hasEnergy = network.canMachinesRun() && this.energyTimer > 0;
+		boolean hasEnergy = network.canMachinesRun() == Voltage.NormalVoltage && this.energyTimer > 0;
 		
 		if (!wasLastTickPowered(actionItem) && state) {
 			
@@ -76,6 +77,8 @@ public class TileEntityHoverControler extends TileEntity implements IInventory, 
 			if (hasEnergy) {
 				
 				if (!ItemStackHelper.isItemStackItemEqual(actionItem, actionItemRotate, false)) {
+
+					if (pos.getY() == 74) System.out.println("TSET222");
 					
 					if (wasLastTickPowered(this.actionItemRotate)) {
 						

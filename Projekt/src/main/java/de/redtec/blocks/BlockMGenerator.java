@@ -88,16 +88,12 @@ public class BlockMGenerator extends BlockContainerBase implements IElectricConn
 	
 	@Override
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
-		
 		if (tileEntity instanceof TileEntityMGenerator) {
 			if (!worldIn.isRemote()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
 			return ActionResultType.CONSUME;
 		}
-		
 		return ActionResultType.PASS;
-		
 	}
 
 	@Override

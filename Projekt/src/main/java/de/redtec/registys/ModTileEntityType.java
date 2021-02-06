@@ -5,6 +5,7 @@ import com.mojang.datafixers.types.Type;
 import de.redtec.RedTec;
 import de.redtec.tileentity.TileEntityAdvancedMovingBlock;
 import de.redtec.tileentity.TileEntityControllPanel;
+import de.redtec.tileentity.TileEntityConveyorBelt;
 import de.redtec.tileentity.TileEntityFluidInput;
 import de.redtec.tileentity.TileEntityFluidOutput;
 import de.redtec.tileentity.TileEntityFluidPipe;
@@ -14,12 +15,16 @@ import de.redtec.tileentity.TileEntityHarvester;
 import de.redtec.tileentity.TileEntityHoverControler;
 import de.redtec.tileentity.TileEntityJigsaw;
 import de.redtec.tileentity.TileEntityLockedCompositeBlock;
+import de.redtec.tileentity.TileEntityMAlloyFurnace;
+import de.redtec.tileentity.TileEntityMBlender;
 import de.redtec.tileentity.TileEntityMCoalHeater;
 import de.redtec.tileentity.TileEntityMElectricFurnace;
 import de.redtec.tileentity.TileEntityMGenerator;
 import de.redtec.tileentity.TileEntityMMultimeter;
+import de.redtec.tileentity.TileEntityMRaffinery;
 import de.redtec.tileentity.TileEntityMSchredder;
 import de.redtec.tileentity.TileEntityMSteamGenerator;
+import de.redtec.tileentity.TileEntityMThermalZentrifuge;
 import de.redtec.tileentity.TileEntityRedstoneReciver;
 import de.redtec.tileentity.TileEntitySignalAntenna;
 import de.redtec.tileentity.TileEntitySignalProcessorContact;
@@ -58,6 +63,11 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityFluidValve> FLUID_VALVE = register("fluid_valve", TileEntityType.Builder.create(TileEntityFluidValve::new, RedTec.fluid_valve));
 	public static final TileEntityType<TileEntityMElectricFurnace> ELECTRIC_FURNACE = register("electric_furnace", TileEntityType.Builder.create(TileEntityMElectricFurnace::new, RedTec.electric_furnace));
 	public static final TileEntityType<TileEntityMSchredder> SCHREDDER = register("schredder", TileEntityType.Builder.create(TileEntityMSchredder::new, RedTec.schredder));
+	public static final TileEntityType<TileEntityMBlender> BLENDER = register("blender", TileEntityType.Builder.create(TileEntityMBlender::new, RedTec.blender));
+	public static final TileEntityType<TileEntityMRaffinery> RAFFINERY = register("raffinery", TileEntityType.Builder.create(TileEntityMRaffinery::new, RedTec.raffinery));
+	public static final TileEntityType<TileEntityMAlloyFurnace> ALLOY_FURNACE = register("alloy_furnace", TileEntityType.Builder.create(TileEntityMAlloyFurnace::new, RedTec.alloy_furnace));
+	public static final TileEntityType<TileEntityConveyorBelt> CONVEYOR_BELT = register("conveyor_belt", TileEntityType.Builder.create(TileEntityConveyorBelt::new, RedTec.conveyor_belt));
+	public static final TileEntityType<TileEntityMThermalZentrifuge> THERMAL_ZENTRIFUGE = register("thermal_zentrifuge", TileEntityType.Builder.create(TileEntityMThermalZentrifuge::new, RedTec.thermal_zentrifuge));
 	
 	private static <T extends TileEntity> TileEntityType<T> register(String key, TileEntityType.Builder<T> builder) {
 		Type<?> type = Util.func_240976_a_(TypeReferences.BLOCK_ENTITY, key);

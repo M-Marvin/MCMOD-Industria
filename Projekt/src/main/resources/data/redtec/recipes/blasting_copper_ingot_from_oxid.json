@@ -4,6 +4,6 @@
     "item": "redtec:copper_oxid"
   },
   "result": "redtec:copper_ingot",
-  "experience": 0.2,
-  "cookingtime": 50
+  "experience": 0.3,
+  "cookingtime": 90
 }

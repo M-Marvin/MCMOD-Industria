@@ -71,7 +71,7 @@ public class BlockMThermalZentrifuge extends BlockContainerBase implements IElec
 
 	@Override
 	public boolean canConnect(Direction side, World world, BlockPos pos, BlockState state) {
-		return side != state.get(FACING);
+		return side != state.get(FACING).getOpposite();
 	}
 
 	@Override

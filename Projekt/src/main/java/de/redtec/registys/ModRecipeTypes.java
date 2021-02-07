@@ -5,6 +5,7 @@ import de.redtec.recipetypes.BlendingRecipe;
 import de.redtec.recipetypes.RifiningRecipe;
 import de.redtec.recipetypes.SchredderRecipe;
 import de.redtec.recipetypes.ThermalZentrifugeRecipe;
+import de.redtec.recipetypes.WashingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.ResourceLocation;
@@ -18,6 +19,7 @@ public class ModRecipeTypes {
 	public static final IRecipeType<BlendingRecipe> BLENDING = register("blending");
 	public static final IRecipeType<RifiningRecipe> RIFINING = register("rifining");
 	public static final IRecipeType<ThermalZentrifugeRecipe> THERMAL_ZENTRIFUGE = register("thermal_zentrifuge");
+	public static final IRecipeType<WashingRecipe> WASHING = register("washing");
 	
 	static <T extends IRecipe<?>> IRecipeType<T> register(String key) {
 		ResourceLocation registryKey = new ResourceLocation(RedTec.MODID, key);

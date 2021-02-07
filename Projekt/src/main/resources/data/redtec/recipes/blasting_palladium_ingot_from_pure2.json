@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "redtec:pure_palladium"
+  },
+  "result": "redtec:palladium_ingot",
+  "experience": 0.3,
+  "cookingtime": 50
+}

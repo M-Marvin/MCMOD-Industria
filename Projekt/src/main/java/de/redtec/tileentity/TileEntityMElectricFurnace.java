@@ -35,6 +35,7 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 	public int cookTime;
 	public int cookTimeTotal;
 	public boolean hasPower;
+	public boolean isWorking;
 	protected final Object2IntOpenHashMap<ResourceLocation> usedRecipes = new Object2IntOpenHashMap<>();
 	
 	public TileEntityMElectricFurnace() {
@@ -55,9 +56,11 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 			
 			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(this.world).getNetwork(this.pos);
 			this.hasPower = network.canMachinesRun() == Voltage.NormalVoltage;
-			this.world.setBlockState(pos, this.getBlockState().with(BlockMElectricFurnace.LIT, this.cookTimeTotal > 0));
+			this.isWorking = canWork() && this.hasPower;
 			
-			if (!this.getStackInSlot(0).isEmpty()) {
+			if (isWorking != getBlockState().get(BlockMElectricFurnace.LIT)) this.world.setBlockState(pos, this.getBlockState().with(BlockMElectricFurnace.LIT, this.isWorking));
+			
+			if (this.isWorking) {
 				
 				FurnaceRecipe recipe = findRecipe();
 				
@@ -113,6 +116,10 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 			
 		}
 		
+	}
+	
+	public boolean canWork() {
+		return this.findRecipe() != null;
 	}
 	
 	public FurnaceRecipe findRecipe() {

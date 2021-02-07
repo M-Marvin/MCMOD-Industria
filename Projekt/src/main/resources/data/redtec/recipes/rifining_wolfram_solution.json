@@ -1,0 +1,18 @@
+{
+  "type": "redtec:rifining",
+  "ingredientFluid": {
+    "fluid": "redtec:wolfram_solution",
+    "amount": 500
+  },
+  "resultFluid":  {
+    "fluid": "redtec:water",
+    "amount": 500
+  },
+  "resultItems": [
+    {
+      "item": "redtec:wolfram_nugget",
+      "count": 8
+    }
+  ],
+  "rifiningTime": 200
+}

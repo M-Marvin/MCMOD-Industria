@@ -13,7 +13,7 @@
       "count": 1
     }
   ],
-  "schreddertime": 110,
+  "schreddertime": 100,
   "schreddertool": "redtec:schredder_crusher",
-  "schredderdamage": 30
+  "schredderdamage": 60
 }

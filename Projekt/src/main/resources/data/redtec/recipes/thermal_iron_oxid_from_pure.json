@@ -1,0 +1,14 @@
+{
+  "type": "redtec:thermal_zentrifuge",
+  "ingredient": {
+    "item": "redtec:pure_iron_ore",
+    "count": 1
+  },
+  "resultItems": [
+    {
+      "item": "redtec:iron_oxid",
+      "count": 1
+    }
+  ],
+  "rifiningTime": 100
+}

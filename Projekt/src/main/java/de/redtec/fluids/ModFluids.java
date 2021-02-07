@@ -18,13 +18,18 @@ public class ModFluids {
 	public static final FluidSteam STEAM = register("steam", new FluidSteam());
 	public static final FluidSulfuricAcid SULFURIC_ACID = register("sulfuric_acid", new FluidSulfuricAcid.Still());
 	public static final FluidSulfuricAcid FLOWING_SULFURIC_ACID = register("flowing_sulfuric_acid", new FluidSulfuricAcid.Flow());
-	
+	public static final FluidNatronLye NATRON_LYE = register("natron_lye", new FluidNatronLye.Still());
+	public static final FluidNatronLye FLOWING_NATRON_LYE = register("flowing_natron_lye", new FluidNatronLye.Flow());
 	public static final FluidOreIronSolution FLOWING_IRON_SOLUTION = register("flowing_iron_solution", new FluidOreIronSolution.Flow());
 	public static final FluidOreIronSolution IRON_SOLUTION = register("iron_solution", new FluidOreIronSolution.Still());
 	public static final FluidOreCopperSolution FLOWING_COPPER_SOLUTION = register("flowing_copper_solution", new FluidOreCopperSolution.Flow());
 	public static final FluidOreCopperSolution COPPER_SOLUTION = register("copper_solution", new FluidOreCopperSolution.Still());
 	public static final FluidOreAluminiumSolution FLOWING_ALUMINIUM_SOLUTION = register("flowing_aluminium_solution", new FluidOreAluminiumSolution.Flow());
 	public static final FluidOreAluminiumSolution ALUMINIUM_SOLUTION = register("aluminium_solution", new FluidOreAluminiumSolution.Still());
+	public static final FluidOreWolframSolution FLOWING_WOLFRAM_SOLUTION = register("flowing_wolfram_solution", new FluidOreWolframSolution.Flow());
+	public static final FluidOreWolframSolution WOLFRAM_SOLUTION = register("wolfram_solution", new FluidOreWolframSolution.Still());
+	public static final FluidOreTinSolution FLOWING_TIN_SOLUTION = register("flowing_tin_solution", new FluidOreTinSolution.Flow());
+	public static final FluidOreTinSolution TIN_SOLUTION = register("tin_solution", new FluidOreTinSolution.Still());
 	
 	private static <T extends Fluid> T register(String key, T p_215710_1_) {
 		p_215710_1_.setRegistryName(new ResourceLocation(RedTec.MODID, key));

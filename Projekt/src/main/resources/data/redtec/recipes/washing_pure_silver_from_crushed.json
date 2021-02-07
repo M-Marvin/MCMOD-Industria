@@ -1,0 +1,18 @@
+{
+  "type": "redtec:washing",
+  "ingredient": {
+    "item": "redtec:crushed_silver_ore",
+    "count": 1
+  },
+  "resultItems": [
+    {
+      "item": "redtec:pure_silver_ore",
+      "count": 1
+    },
+    {
+      "item": "redtec:crushed_stone",
+      "count": 1
+    }
+  ],
+  "washingTime": 100
+}

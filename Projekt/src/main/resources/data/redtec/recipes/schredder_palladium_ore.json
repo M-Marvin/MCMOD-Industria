@@ -1,0 +1,19 @@
+{
+  "type": "redtec:schredder",
+  "ingredient": {
+    "item": "redtec:palladium_ore"
+  },
+  "results": [
+    {
+      "item": "redtec:crushed_stone",
+      "count": 4
+    },
+    {
+      "item": "redtec:crushed_palladium_ore",
+      "count": 1
+    }
+  ],
+  "schreddertime": 100,
+  "schreddertool": "redtec:schredder_crusher",
+  "schredderdamage": 60
+}

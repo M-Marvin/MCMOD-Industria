@@ -20,7 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 public class ItemFluidMeter extends ItemBase {
 
 	public ItemFluidMeter() {
-		super("fluid_meter", RedTec.MACHINES);
+		super("fluid_meter", RedTec.TOOLS);
 	}
 
 	@SuppressWarnings("deprecation")

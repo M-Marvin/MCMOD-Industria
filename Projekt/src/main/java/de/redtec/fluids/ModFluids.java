@@ -30,6 +30,9 @@ public class ModFluids {
 	public static final FluidOreWolframSolution WOLFRAM_SOLUTION = register("wolfram_solution", new FluidOreWolframSolution.Still());
 	public static final FluidOreTinSolution FLOWING_TIN_SOLUTION = register("flowing_tin_solution", new FluidOreTinSolution.Flow());
 	public static final FluidOreTinSolution TIN_SOLUTION = register("tin_solution", new FluidOreTinSolution.Still());
+	public static final FluidChemicalWater FLOWING_CHEMICAL_WATER = register("flowing_chemical_water", new FluidChemicalWater.Flow());
+	public static final FluidChemicalWater CHEMICAL_WATER = register("chemical_water", new FluidChemicalWater.Still());
+	
 	
 	private static <T extends Fluid> T register(String key, T p_215710_1_) {
 		p_215710_1_.setRegistryName(new ResourceLocation(RedTec.MODID, key));

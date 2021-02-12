@@ -5,8 +5,8 @@
     "amount": 500
   },
   "resultFluid":  {
-    "fluid": "redtec:water",
-    "amount": 500
+    "fluid": "redtec:chemical_water",
+    "amount": 300
   },
   "resultItems": [
     {

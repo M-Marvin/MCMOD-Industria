@@ -26,6 +26,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -34,6 +35,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -54,6 +56,7 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 	public int progressTotal;
 	public boolean isWorking;
 	public boolean hasPower;
+	public RifiningRecipe currentRecipe;
 	
 	public TileEntityMRaffinery() {
 		super(ModTileEntityType.RAFFINERY, 7);
@@ -89,13 +92,17 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 					
 					RifiningRecipe recipe = findRecipe();
 					
-					if (recipe != null) {
+					if (recipe != null && !isPostProcessing()) {
+						this.currentRecipe = recipe;
+					}
+					
+					if (this.currentRecipe != null) {
 						
-						if (	ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(0), recipe.getRecipeOutput()) &&
-								ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(1), recipe.getRecipeOutput2()) &&
-								ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(2), recipe.getRecipeOutput3())) {
+						if (	ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(0), currentRecipe.getRecipeOutput()) &&
+								ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(1), currentRecipe.getRecipeOutput2()) &&
+								ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(2), currentRecipe.getRecipeOutput3())) {
 							
-							this.progressTotal = recipe.getRifiningTime() / 3;
+							this.progressTotal = currentRecipe.getRifiningTime() / 3;
 							
 							if (this.progress4 > 0) {
 								
@@ -106,9 +113,9 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 									this.progress4 = 0;
 									
 									if (this.fluidOut.isEmpty()) {
-										this.fluidOut = recipe.getRecipeOutputFluid();
+										this.fluidOut = currentRecipe.getRecipeOutputFluid();
 									} else {
-										this.fluidOut.grow(recipe.getRecipeOutputFluid().getAmount());
+										this.fluidOut.grow(currentRecipe.getRecipeOutputFluid().getAmount());
 									}
 									
 								}
@@ -120,12 +127,12 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 								if (this.progress3 >= this.progressTotal) {
 									
 									this.progress3 = 0;
-									if (!recipe.getRecipeOutputFluid().isEmpty()) this.progress4 = 1;
+									if (!currentRecipe.getRecipeOutputFluid().isEmpty()) this.progress4 = 1;
 									
 									if (this.getStackInSlot(2).isEmpty()) {
-										this.setInventorySlotContents(2, recipe.getRecipeOutput3());
+										this.setInventorySlotContents(2, currentRecipe.getRecipeOutput3());
 									} else {
-										this.getStackInSlot(2).grow(recipe.getRecipeOutput3().getCount());
+										this.getStackInSlot(2).grow(currentRecipe.getRecipeOutput3().getCount());
 									}
 									
 								}
@@ -137,16 +144,16 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 								if (this.progress2 >= this.progressTotal) {
 									
 									this.progress2 = 0;
-									if (!recipe.getRecipeOutput3().isEmpty()) {
+									if (!currentRecipe.getRecipeOutput3().isEmpty()) {
 										this.progress3 = 1;
 									} else {
 										this.progress4 = 1;
 									}
 									
 									if (this.getStackInSlot(1).isEmpty()) {
-										this.setInventorySlotContents(1, recipe.getRecipeOutput2());
+										this.setInventorySlotContents(1, currentRecipe.getRecipeOutput2());
 									} else {
-										this.getStackInSlot(1).grow(recipe.getRecipeOutput2().getCount());
+										this.getStackInSlot(1).grow(currentRecipe.getRecipeOutput2().getCount());
 									}
 									
 								}
@@ -158,19 +165,19 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 								if (this.progress1 >= this.progressTotal) {
 									
 									this.progress1 = 0;
-									if (!recipe.getRecipeOutput2().isEmpty()) {
+									if (!currentRecipe.getRecipeOutput2().isEmpty()) {
 										this.progress2 = 1;
 									} else {
 										this.progress4 = 1;
 									}
 									
 									if (this.getStackInSlot(0).isEmpty()) {
-										this.setInventorySlotContents(0, recipe.getRecipeOutput());
+										this.setInventorySlotContents(0, currentRecipe.getRecipeOutput());
 									} else {
-										this.getStackInSlot(0).grow(recipe.getRecipeOutput().getCount());
+										this.getStackInSlot(0).grow(currentRecipe.getRecipeOutput().getCount());
 									}
 									
-									this.fluidIn.shrink(recipe.fluidIn.getAmount());
+									this.fluidIn.shrink(currentRecipe.fluidIn.getAmount());
 									
 								}
 								
@@ -185,6 +192,7 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 					this.progress2 = 0;
 					this.progress3 = 0;
 					this.progress4 = 0;
+					this.currentRecipe = null;
 				}
 				
 			} else if (BlockMultiPart.getInternPartPos(this.getBlockState()).equals(new BlockPos(1, 3, 0))) {
@@ -255,7 +263,11 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 	}
 	
 	public boolean canWork() {
-		return this.findRecipe() != null;
+		return this.findRecipe() != null || isPostProcessing();
+	}
+	
+	public boolean isPostProcessing() {
+		return this.progress2 > 0 || this.progress3 > 0 || this.progress4 > 0;
 	}
 	
 	public RifiningRecipe findRecipe() {
@@ -369,6 +381,7 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 		compound.putInt("progress3", this.progress3);
 		compound.putInt("progress4", this.progress4);
 		compound.putInt("progressTotal", this.progressTotal);
+		if (this.currentRecipe != null) compound.putString("Recipe", this.currentRecipe.getId().toString());
 		return super.write(compound);
 	}
 	
@@ -376,6 +389,7 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 	public void func_230337_a_(BlockState state, CompoundNBT compound) {
 		this.fluidIn = FluidStack.EMPTY;
 		this.fluidOut = FluidStack.EMPTY;
+		this.currentRecipe = null;
 		if (compound.contains("FluidIn")) this.fluidIn = FluidStack.loadFluidStackFromNBT(compound.getCompound("FluidIn"));
 		if (compound.contains("FluidOut")) this.fluidOut = FluidStack.loadFluidStackFromNBT(compound.getCompound("FluidOut"));
 		this.hasPower = compound.getBoolean("hasPower");
@@ -385,6 +399,10 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 		this.progress3 = compound.getInt("progress3");
 		this.progress4 = compound.getInt("progress4");
 		this.progressTotal = compound.getInt("progressTotal");
+		if (compound.contains("Recipe")) {
+			Optional<? extends IRecipe<?>> recipe = this.world.getRecipeManager().getRecipe(new ResourceLocation(compound.getString("Recipe")));
+			if (recipe.isPresent()) this.currentRecipe = (RifiningRecipe) recipe.get();
+		}
 		super.func_230337_a_(state, compound);
 	}
 	

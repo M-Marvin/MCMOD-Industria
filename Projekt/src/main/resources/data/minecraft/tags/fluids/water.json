@@ -14,6 +14,8 @@
     "redtec:aluminium_solution",
     "redtec:flowing_aluminium_solution",
     "redtec:wolfram_solution",
-    "redtec:flowing_wolfram_solution"
+    "redtec:flowing_wolfram_solution",
+    "redtec:chemical_water",
+    "redtec:flowing_chemical_water"
   ]
 }

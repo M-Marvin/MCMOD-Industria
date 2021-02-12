@@ -56,6 +56,7 @@ import de.redtec.blocks.BlockSignalWire;
 import de.redtec.blocks.BlockStackedRedstoneTorch;
 import de.redtec.blocks.BlockStackedRedstoneWire;
 import de.redtec.blocks.BlockStoringCraftingTable;
+import de.redtec.fluids.BlockChemicalWater;
 import de.redtec.fluids.BlockDestilledWater;
 import de.redtec.fluids.BlockNatronLye;
 import de.redtec.fluids.BlockOreSolution;
@@ -157,6 +158,37 @@ public class RedTec {
 			() -> RedTec.PROTOCOL_VERSION, 
 			PROTOCOL_VERSION::equals,
 			PROTOCOL_VERSION::equals);
+
+	public static final ItemGroup MACHINES = new ItemGroup("machines") {
+		@Override
+		public ItemStack createIcon() {
+			return new ItemStack(generator);
+		}
+	};
+	public static final ItemGroup BUILDING_BLOCKS = new ItemGroup("building_blocks") {
+		@Override
+		public ItemStack createIcon() {
+			return new ItemStack(steel_plates);
+		}
+	};
+	public static final ItemGroup DECORATIONS = new ItemGroup("decorations") {
+		@Override
+		public ItemStack createIcon() {
+			return new ItemStack(iron_rod);
+		}
+	};
+	public static final ItemGroup TOOLS = new ItemGroup("tools") {
+		@Override
+		public ItemStack createIcon() {
+			return new ItemStack(energy_meter);
+		}
+	};
+	public static final ItemGroup MATERIALS = new ItemGroup("materials") {
+		@Override
+		public ItemStack createIcon() {
+			return new ItemStack(copper_ingot);
+		}
+	};
 	
 	public static final Block pulse_counter = new BlockRDPulseCounter();
 	public static final Block capacitor = new BlockRDCapacitor();
@@ -237,89 +269,84 @@ public class RedTec {
 	public static final Block smooth_cobblestone = new BlockBase("smooth_cobblestone", Material.ROCK, 2, SoundType.STONE);
 	
 	public static final Block steam = new BlockSteam();
-	public static final Item steam_bucket = new ItemGasBucket(ModFluids.STEAM, "steam_bucket", ItemGroup.MATERIALS);
+	public static final Item steam_bucket = new ItemGasBucket(ModFluids.STEAM, "steam_bucket", MATERIALS);
 	public static final Block destilled_water = new BlockDestilledWater();
-	public static final Item destilled_water_bucket = new ItemFluidBucket(ModFluids.DESTILLED_WATER, "destilled_water_bucket", ItemGroup.MATERIALS);
+	public static final Item destilled_water_bucket = new ItemFluidBucket(ModFluids.DESTILLED_WATER, "destilled_water_bucket", MATERIALS);
 	public static final Block sulfuric_acid = new BlockSulfuricAcid();
-	public static final Item sulfuric_acid_bucket = new ItemFluidBucket(ModFluids.SULFURIC_ACID, "sulfuric_acid_bucket", ItemGroup.MATERIALS);
+	public static final Item sulfuric_acid_bucket = new ItemFluidBucket(ModFluids.SULFURIC_ACID, "sulfuric_acid_bucket", MATERIALS);
 	public static final Block natron_lye = new BlockNatronLye();
-	public static final Item natron_lye_bucket = new ItemFluidBucket(ModFluids.NATRON_LYE, "natron_lye_bucket", ItemGroup.MATERIALS);
+	public static final Item natron_lye_bucket = new ItemFluidBucket(ModFluids.NATRON_LYE, "natron_lye_bucket", MATERIALS);
+	public static final Block chemical_water = new BlockChemicalWater();
+	public static final Item chemical_water_bucket = new ItemFluidBucket(ModFluids.CHEMICAL_WATER, "chemical_water_bucket", MATERIALS);
 	
 	public static final Block iron_solution = new BlockOreSolution("iron_solution", ModFluids.IRON_SOLUTION);
-	public static final Item iron_solution_bucket = new ItemFluidBucket(ModFluids.IRON_SOLUTION, "iron_solution_bucket", ItemGroup.MATERIALS);
+	public static final Item iron_solution_bucket = new ItemFluidBucket(ModFluids.IRON_SOLUTION, "iron_solution_bucket", MATERIALS);
 	public static final Block copper_solution = new BlockOreSolution("copper_solution", ModFluids.COPPER_SOLUTION);
-	public static final Item copper_solution_bucket = new ItemFluidBucket(ModFluids.COPPER_SOLUTION, "copper_solution_bucket", ItemGroup.MATERIALS);
+	public static final Item copper_solution_bucket = new ItemFluidBucket(ModFluids.COPPER_SOLUTION, "copper_solution_bucket", MATERIALS);
 	public static final Block aluminium_solution = new BlockOreSolution("aluminium_solution", ModFluids.ALUMINIUM_SOLUTION);
-	public static final Item aluminium_solution_bucket = new ItemFluidBucket(ModFluids.ALUMINIUM_SOLUTION, "aluminium_solution_bucket", ItemGroup.MATERIALS);
+	public static final Item aluminium_solution_bucket = new ItemFluidBucket(ModFluids.ALUMINIUM_SOLUTION, "aluminium_solution_bucket", MATERIALS);
 	public static final Block wolfram_solution = new BlockOreSolution("wolfram_solution", ModFluids.WOLFRAM_SOLUTION);
-	public static final Item wolfram_solution_bucket = new ItemFluidBucket(ModFluids.WOLFRAM_SOLUTION, "wolfram_solution_bucket", ItemGroup.MATERIALS);
+	public static final Item wolfram_solution_bucket = new ItemFluidBucket(ModFluids.WOLFRAM_SOLUTION, "wolfram_solution_bucket", MATERIALS);
 	public static final Block tin_solution = new BlockOreSolution("tin_solution", ModFluids.TIN_SOLUTION);
-	public static final Item tin_solution_bucket = new ItemFluidBucket(ModFluids.TIN_SOLUTION, "tin_solution_bucket", ItemGroup.MATERIALS);
+	public static final Item tin_solution_bucket = new ItemFluidBucket(ModFluids.TIN_SOLUTION, "tin_solution_bucket", MATERIALS);
 	
-	public static final ItemGroup MACHINES = new ItemGroup("machines") {
-		@Override
-		public ItemStack createIcon() {
-			return new ItemStack(generator);
-		}
-	};
+	public static final Item monel_ingot = new ItemBase("monel_ingot", MATERIALS);
+	public static final Item tin_ingot = new ItemBase("tin_ingot", MATERIALS);
+	public static final Item silver_ingot = new ItemBase("silver_ingot", MATERIALS);
+	public static final Item palladium_ingot = new ItemBase("palladium_ingot", MATERIALS);
+	public static final Item wolfram_ingot = new ItemBase("wolfram_ingot", MATERIALS);
+	public static final Item nickel_ingot = new ItemBase("nickel_ingot", MATERIALS);
+	public static final Item copper_ingot = new ItemBase("copper_ingot", MATERIALS);
+	public static final Item electrolyt_copper_ingot = new ItemBase("electrolyt_copper_ingot", MATERIALS);
+	public static final Item aluminium_ingot = new ItemBase("aluminium_ingot", MATERIALS);
+	public static final Item steel_ingot = new ItemBase("steel_ingot", MATERIALS);
+	public static final Item redstone_ingot = new ItemBase("redstone_ingot", MATERIALS);
 	
-	public static final Item monel_ingot = new ItemBase("monel_ingot", ItemGroup.MATERIALS);
-	public static final Item tin_ingot = new ItemBase("tin_ingot", ItemGroup.MATERIALS);
-	public static final Item silver_ingot = new ItemBase("silver_ingot", ItemGroup.MATERIALS);
-	public static final Item palladium_ingot = new ItemBase("palladium_ingot", ItemGroup.MATERIALS);
-	public static final Item wolfram_ingot = new ItemBase("wolfram_ingot", ItemGroup.MATERIALS);
-	public static final Item nickel_ingot = new ItemBase("nickel_ingot", ItemGroup.MATERIALS);
-	public static final Item copper_ingot = new ItemBase("copper_ingot", ItemGroup.MATERIALS);
-	public static final Item electrolyt_copper_ingot = new ItemBase("electrolyt_copper_ingot", ItemGroup.MATERIALS);
-	public static final Item aluminium_ingot = new ItemBase("aluminium_ingot", ItemGroup.MATERIALS);
-	public static final Item steel_ingot = new ItemBase("steel_ingot", ItemGroup.MATERIALS);
-	public static final Item redstone_ingot = new ItemBase("redstone_ingot", ItemGroup.MATERIALS);
-	
-	public static final Item monel_nugget = new ItemBase("monel_nugget", ItemGroup.MATERIALS);
-	public static final Item tin_nugget = new ItemBase("tin_nugget", ItemGroup.MATERIALS);
-	public static final Item silver_nugget = new ItemBase("silver_nugget", ItemGroup.MATERIALS);
-	public static final Item palladium_nugget = new ItemBase("palladium_nugget", ItemGroup.MATERIALS);
-	public static final Item wolfram_nugget = new ItemBase("wolfram_nugget", ItemGroup.MATERIALS);
-	public static final Item nickel_nugget = new ItemBase("nickel_nugget", ItemGroup.MATERIALS);
-	public static final Item copper_nugget = new ItemBase("copper_nugget", ItemGroup.MATERIALS);
-	public static final Item electrolyt_copper_nugget = new ItemBase("electrolyt_copper_nugget", ItemGroup.MATERIALS);
-	public static final Item aluminium_nugget = new ItemBase("aluminium_nugget", ItemGroup.MATERIALS);
-	public static final Item steel_nugget = new ItemBase("steel_nugget", ItemGroup.MATERIALS);
-	public static final Item redstone_nugget = new ItemBase("redstone_nugget", ItemGroup.MATERIALS);
+	public static final Item monel_nugget = new ItemBase("monel_nugget", MATERIALS);
+	public static final Item tin_nugget = new ItemBase("tin_nugget", MATERIALS);
+	public static final Item silver_nugget = new ItemBase("silver_nugget", MATERIALS);
+	public static final Item palladium_nugget = new ItemBase("palladium_nugget", MATERIALS);
+	public static final Item wolfram_nugget = new ItemBase("wolfram_nugget", MATERIALS);
+	public static final Item nickel_nugget = new ItemBase("nickel_nugget", MATERIALS);
+	public static final Item copper_nugget = new ItemBase("copper_nugget", MATERIALS);
+	public static final Item electrolyt_copper_nugget = new ItemBase("electrolyt_copper_nugget", MATERIALS);
+	public static final Item aluminium_nugget = new ItemBase("aluminium_nugget", MATERIALS);
+	public static final Item steel_nugget = new ItemBase("steel_nugget", MATERIALS);
+	public static final Item redstone_nugget = new ItemBase("redstone_nugget", MATERIALS);
 	
 	
-	public static final Item redstone_alloy_dust = new ItemBase("redstone_alloy_dust", ItemGroup.MATERIALS);
+	public static final Item redstone_alloy_dust = new ItemBase("redstone_alloy_dust", MATERIALS);
 	
 	
 	public static final Item salsola = new ItemSalsola();
-	public static final Item crushed_stone = new ItemBase("crushed_stone", ItemGroup.MATERIALS);
-	public static final Item crushed_blackstone = new ItemBase("crushed_blackstone", ItemGroup.MATERIALS);
-	public static final Item crushed_netherrack = new ItemBase("crushed_netherrack", ItemGroup.MATERIALS);
-	public static final Item crushed_bauxite = new ItemBase("crushed_bauxite", ItemGroup.MATERIALS);
-	public static final Item crushed_wolframite = new ItemBase("crushed_wolframite", ItemGroup.MATERIALS);
-	public static final Item crushed_iron_ore = new ItemBase("crushed_iron_ore", ItemGroup.MATERIALS);
-	public static final Item crushed_copper_ore = new ItemBase("crushed_copper_ore", ItemGroup.MATERIALS);
-	public static final Item crushed_gold_ore = new ItemBase("crushed_gold_ore", ItemGroup.MATERIALS);
-	public static final Item crushed_tin_ore = new ItemBase("crushed_tin_ore", ItemGroup.MATERIALS);
-	public static final Item crushed_silver_ore = new ItemBase("crushed_silver_ore", ItemGroup.MATERIALS);
-	public static final Item crushed_palladium_ore = new ItemBase("crushed_palladium_ore", ItemGroup.MATERIALS);
-	public static final Item crushed_nickel_ore = new ItemBase("crushed_nickel_ore", ItemGroup.MATERIALS);
-	public static final Item iron_oxid = new ItemBase("iron_oxid", ItemGroup.MATERIALS);
-	public static final Item copper_oxid = new ItemBase("copper_oxid", ItemGroup.MATERIALS);
-	public static final Item tin_oxid = new ItemBase("tin_oxid", ItemGroup.MATERIALS);
-	public static final Item pure_gold = new ItemBase("pure_gold", ItemGroup.MATERIALS);
-	public static final Item pure_silver = new ItemBase("pure_silver", ItemGroup.MATERIALS);
-	public static final Item pure_palladium = new ItemBase("pure_palladium", ItemGroup.MATERIALS);
-	public static final Item pure_nickel = new ItemBase("pure_nickel", ItemGroup.MATERIALS);
-	public static final Item pure_tin_ore = new ItemBase("pure_tin_ore", ItemGroup.MATERIALS);
-	public static final Item pure_iron_ore = new ItemBase("pure_iron_ore", ItemGroup.MATERIALS);
-	public static final Item pure_copper_ore = new ItemBase("pure_copper_ore", ItemGroup.MATERIALS);
-	public static final Item pure_gold_ore = new ItemBase("pure_gold_ore", ItemGroup.MATERIALS);
-	public static final Item pure_silver_ore = new ItemBase("pure_silver_ore", ItemGroup.MATERIALS);
-	public static final Item pure_palladium_ore = new ItemBase("pure_palladium_ore", ItemGroup.MATERIALS);
-	public static final Item pure_nickel_ore = new ItemBase("pure_nickel_ore", ItemGroup.MATERIALS);
-	public static final Item sulfur = new ItemBase("sulfur", ItemGroup.MATERIALS);
-	public static final Item sulfur_dioxid = new ItemBase("sulfur_dioxid", ItemGroup.MATERIALS);
+	public static final Item crushed_stone = new ItemBase("crushed_stone", MATERIALS);
+	public static final Item crushed_blackstone = new ItemBase("crushed_blackstone", MATERIALS);
+	public static final Item crushed_netherrack = new ItemBase("crushed_netherrack", MATERIALS);
+	public static final Item crushed_bauxite = new ItemBase("crushed_bauxite", MATERIALS);
+	public static final Item crushed_wolframite = new ItemBase("crushed_wolframite", MATERIALS);
+	public static final Item crushed_iron_ore = new ItemBase("crushed_iron_ore", MATERIALS);
+	public static final Item crushed_copper_ore = new ItemBase("crushed_copper_ore", MATERIALS);
+	public static final Item crushed_gold_ore = new ItemBase("crushed_gold_ore", MATERIALS);
+	public static final Item crushed_tin_ore = new ItemBase("crushed_tin_ore", MATERIALS);
+	public static final Item crushed_silver_ore = new ItemBase("crushed_silver_ore", MATERIALS);
+	public static final Item crushed_palladium_ore = new ItemBase("crushed_palladium_ore", MATERIALS);
+	public static final Item crushed_nickel_ore = new ItemBase("crushed_nickel_ore", MATERIALS);
+	public static final Item iron_oxid = new ItemBase("iron_oxid", MATERIALS);
+	public static final Item copper_oxid = new ItemBase("copper_oxid", MATERIALS);
+	public static final Item tin_oxid = new ItemBase("tin_oxid", MATERIALS);
+	public static final Item pure_gold = new ItemBase("pure_gold", MATERIALS);
+	public static final Item pure_silver = new ItemBase("pure_silver", MATERIALS);
+	public static final Item pure_palladium = new ItemBase("pure_palladium", MATERIALS);
+	public static final Item pure_nickel = new ItemBase("pure_nickel", MATERIALS);
+	public static final Item pure_tin_ore = new ItemBase("pure_tin_ore", MATERIALS);
+	public static final Item pure_iron_ore = new ItemBase("pure_iron_ore", MATERIALS);
+	public static final Item pure_copper_ore = new ItemBase("pure_copper_ore", MATERIALS);
+	public static final Item pure_gold_ore = new ItemBase("pure_gold_ore", MATERIALS);
+	public static final Item pure_silver_ore = new ItemBase("pure_silver_ore", MATERIALS);
+	public static final Item pure_palladium_ore = new ItemBase("pure_palladium_ore", MATERIALS);
+	public static final Item pure_nickel_ore = new ItemBase("pure_nickel_ore", MATERIALS);
+	public static final Item sulfur = new ItemBase("sulfur", MATERIALS);
+	public static final Item sulfur_dioxid = new ItemBase("sulfur_dioxid", MATERIALS);
 	
 	public static final Item remote_control = new ItemRemoteControll();
 	public static final Item iron_processor = new ItemProcessor("iron_processor", 4, false, Rarity.UNCOMMON);
@@ -374,32 +401,32 @@ public class RedTec {
 		ModGameRegistry.registerBlock(aluminium_cable, MACHINES);
 		ModGameRegistry.registerBlock(infinity_power_source, null);
 		ModGameRegistry.registerBlock(panel_lamp, MACHINES);
-		ModGameRegistry.registerBlock(steel_block, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(copper_block, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(aluminium_block, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(electrolyt_copper_block, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(redstone_alloy_block, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(tin_ore, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(silver_ore, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(palladium_ore, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(copper_ore, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(nickel_ore, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(bauxit, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(bauxit_ore, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(wolframit, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(wolframit_ore, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(iron_plates, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(gold_plates, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(steel_plates, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(copper_plates, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(aluminium_plates, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(electrolyt_copper_plates, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(redstone_alloy_plates, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(smooth_cobblestone, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(chiseled_smooth_stone, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(iron_rod, ItemGroup.DECORATIONS);
-		ModGameRegistry.registerBlock(stone_corner, ItemGroup.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(salsola_seeds, ItemGroup.MISC);
+		ModGameRegistry.registerBlock(steel_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(copper_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(aluminium_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(electrolyt_copper_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(redstone_alloy_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(tin_ore, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(silver_ore, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(palladium_ore, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(copper_ore, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(nickel_ore, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(bauxit, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(bauxit_ore, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(wolframit, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(wolframit_ore, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(iron_plates, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(gold_plates, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(steel_plates, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(copper_plates, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(aluminium_plates, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(electrolyt_copper_plates, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(redstone_alloy_plates, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(smooth_cobblestone, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(chiseled_smooth_stone, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(iron_rod, DECORATIONS);
+		ModGameRegistry.registerBlock(stone_corner, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(salsola_seeds, MATERIALS);
 		ModGameRegistry.registerBlock(jigsaw, null, Rarity.EPIC);
 		ModGameRegistry.registerBlock(generator, MACHINES);
 		ModGameRegistry.registerBlock(fluid_pipe, MACHINES);
@@ -441,6 +468,8 @@ public class RedTec {
 		ModGameRegistry.registerItem(wolfram_solution_bucket);
 		ModGameRegistry.registerTechnicalBlock(tin_solution);
 		ModGameRegistry.registerItem(tin_solution_bucket);
+		ModGameRegistry.registerTechnicalBlock(chemical_water);
+		ModGameRegistry.registerItem(chemical_water_bucket);
 		
 		// register Items
 		ModGameRegistry.registerItem(crushed_blackstone);
@@ -600,6 +629,8 @@ public class RedTec {
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_TIN_SOLUTION, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.NATRON_LYE, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_NATRON_LYE, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModFluids.CHEMICAL_WATER, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_CHEMICAL_WATER, RenderType.getTranslucent());
 		
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ADVANCED_PISTON, TileEntityAdvancedMovingBlockRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SIGNAL_PROCESSOR, TileEntitySignalProcessorContactRenderer::new);

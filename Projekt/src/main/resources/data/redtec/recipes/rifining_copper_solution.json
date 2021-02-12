@@ -5,17 +5,13 @@
     "amount": 500
   },
   "resultFluid":  {
-    "fluid": "redtec:sulfuric_acid",
-    "amount": 20
+    "fluid": "redtec:chemical_water",
+    "amount": 300
   },
   "resultItems": [
     {
       "item": "redtec:copper_nugget",
       "count": 8
-    },
-    {
-      "item": "redtec:sulfur",
-      "count": 1
     }
   ],
   "rifiningTime": 200

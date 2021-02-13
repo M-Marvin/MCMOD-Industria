@@ -1,0 +1,12 @@
+{
+  "homepage": "https://github.com/M-Marvin/MCMOD-RedTec",
+  "1.16.3": {
+    "0.1-pre": "<changelog for this version>",
+    "0.2-pre": "<changelog for this version>",
+    "0.3-pre": "<changelog for this version>"
+  },
+  "promos": {
+    "1.16.3": "0.3-pre",
+    "1.16.3": "0.3-pre"
+  }
+}

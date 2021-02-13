@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "redstone_alloy_block",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "redtec:redstone_ingot"
+    }
+  },
+  "result": {
+    "item": "redtec:redstone_alloy_block"
+  }
+}

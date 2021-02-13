@@ -1,6 +1,6 @@
 {
-    "pack": {
-        "description": "The default Resources for RedTec",
-        "pack_format": 5
-    }
+  "pack": {
+    "pack_format": 7,
+    "description": "Daten- und Resourcenpacket für RedTec 1.16"
+  }
 }

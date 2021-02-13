@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "silver_block",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "redtec:silver_ingot"
+    }
+  },
+  "result": {
+    "item": "redtec:silver_block"
+  }
+}

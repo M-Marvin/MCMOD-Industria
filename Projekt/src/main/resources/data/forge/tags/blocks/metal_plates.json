@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "redtec:copper_plates",
+    "redtec:tin_plates",
+    "redtec:silver_plates",
+    "redtec:palladium_plates",
+    "redtec:nickel_plates",
+    "redtec:redstone_alloy_plates",
+    "redtec:monel_plates",
+    "redtec:nickel_plates",
+    "redtec:wolfram_plates",
+    "redtec:aluminium_plates",
+    "redtec:electrolyt_copper_plates",
+    "redtec:steel_plates"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "redtec:monel_ingot"
+    }
+  ],
+  "result": {
+    "item": "redtec:monel_nugget",
+    "count": 9
+  }
+}

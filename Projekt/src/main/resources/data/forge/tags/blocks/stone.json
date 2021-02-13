@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "redtec:bauxit",
+    "redtec:bauxit_ore",
+    "redtec:wolframit",
+    "redtec:wolframit_ore"
+  ]
+}

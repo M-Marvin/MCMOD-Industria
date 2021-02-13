@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "tin_block",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "redtec:tin_ingot"
+    }
+  },
+  "result": {
+    "item": "redtec:tin_block"
+  }
+}

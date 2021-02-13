@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "redtec:nickel_ingot"
+    }
+  ],
+  "result": {
+    "item": "redtec:nickel_nugget",
+    "count": 9
+  }
+}

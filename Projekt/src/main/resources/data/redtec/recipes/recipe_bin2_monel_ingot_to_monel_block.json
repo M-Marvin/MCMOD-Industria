@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "monel_block",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "redtec:monel_ingot"
+    }
+  },
+  "result": {
+    "item": "redtec:monel_block"
+  }
+}

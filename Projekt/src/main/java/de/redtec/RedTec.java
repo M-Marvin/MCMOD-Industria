@@ -258,6 +258,14 @@ public class RedTec {
 	public static final Block aluminium_block = new BlockBase("aluminium_block", Material.IRON, 1.2F, SoundType.METAL);
 	public static final Block electrolyt_copper_block = new BlockBase("electrolyt_copper_block", Material.IRON, 1.2F, SoundType.METAL);
 	public static final Block steel_block = new BlockBase("steel_block", Material.IRON, 1.2F, SoundType.METAL);
+	
+	public static final Block monel_block = new BlockBase("monel_block", Material.IRON, 1.2F, SoundType.METAL);
+	public static final Block nickel_block = new BlockBase("nickel_block", Material.IRON, 1.2F, SoundType.METAL);
+	public static final Block wolfram_block = new BlockBase("wolfram_block", Material.IRON, 1.2F, SoundType.METAL);
+	public static final Block silver_block = new BlockBase("silver_block", Material.IRON, 1.2F, SoundType.METAL);
+	public static final Block palladium_block = new BlockBase("palladium_block", Material.IRON, 1.2F, SoundType.METAL);
+	public static final Block tin_block = new BlockBase("tin_block", Material.IRON, 1.2F, SoundType.METAL);
+	
 	public static final Block gold_plates = new BlockBase("gold_plates", Material.IRON, 0.9F, SoundType.METAL);
 	public static final Block iron_plates = new BlockBase("iron_plates", Material.IRON, 1.2F, SoundType.METAL);
 	public static final Block copper_plates = new BlockBase("copper_plates", Material.IRON, 1.2F, SoundType.METAL);
@@ -313,10 +321,6 @@ public class RedTec {
 	public static final Item aluminium_nugget = new ItemBase("aluminium_nugget", MATERIALS);
 	public static final Item steel_nugget = new ItemBase("steel_nugget", MATERIALS);
 	public static final Item redstone_nugget = new ItemBase("redstone_nugget", MATERIALS);
-	
-	
-	public static final Item redstone_alloy_dust = new ItemBase("redstone_alloy_dust", MATERIALS);
-	
 	
 	public static final Item salsola = new ItemSalsola();
 	public static final Item crushed_stone = new ItemBase("crushed_stone", MATERIALS);
@@ -374,7 +378,7 @@ public class RedTec {
 		
 		// register Blocks
 		ModGameRegistry.registerBlock(capacitor, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(pulse_counter, ItemGroup.REDSTONE);
+		ModGameRegistry.registerBlock(pulse_counter, ItemGroup.REDSTONE); 
 		ModGameRegistry.registerBlock(stacked_redstone_torch, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(stacked_redstone_wire, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(advanced_piston, ItemGroup.REDSTONE);
@@ -406,6 +410,12 @@ public class RedTec {
 		ModGameRegistry.registerBlock(aluminium_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(electrolyt_copper_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(redstone_alloy_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(tin_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(palladium_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(silver_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(wolfram_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(nickel_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(monel_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(tin_ore, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(silver_ore, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(palladium_ore, BUILDING_BLOCKS);
@@ -500,7 +510,6 @@ public class RedTec {
 		ModGameRegistry.registerItem(pure_palladium_ore);
 		ModGameRegistry.registerItem(crushed_stone);
 		ModGameRegistry.registerItem(redstone_ingot);
-		ModGameRegistry.registerItem(redstone_alloy_dust);
 		ModGameRegistry.registerItem(remote_control);
 		ModGameRegistry.registerItem(iron_processor);
 		ModGameRegistry.registerItem(redstone_processor);

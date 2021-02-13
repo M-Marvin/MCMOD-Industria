@@ -2,18 +2,14 @@
   "type": "redtec:blending",
   "ingredientItems": [
     {
-      "item": "redtec:sulfur_dioxid",
-      "count": 3
-    },
-    {
-      "item": "minecraft:blaze_powder",
-      "count": 1
+      "item": "redtec:sulfur",
+      "count": 2
     }
   ],
   "ingredientFluids": [
     {
-      "fluid": "minecraft:water",
-      "amount": 800
+      "fluid": "redtec:natron_lye",
+      "amount": 1000
     }
   ],
   "resultFluid":  {

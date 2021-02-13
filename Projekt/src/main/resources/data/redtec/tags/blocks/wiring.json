@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "redtec:copper_cable",
+    "redtec:electrolyt_copper_cable",
+    "redtec:aluminium_cable",
+    "redtec:fluid_pipe",
+    "redtec:signal_wire",
+    "redtec:stacked_redstone_wire",
+    "minecraft:redstone_wire"
+  ]
+}

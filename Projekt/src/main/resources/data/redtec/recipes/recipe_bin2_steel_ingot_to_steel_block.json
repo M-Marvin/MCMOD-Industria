@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "steel_block",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "redtec:steel_ingot"
+    }
+  },
+  "result": {
+    "item": "redtec:steel_block"
+  }
+}

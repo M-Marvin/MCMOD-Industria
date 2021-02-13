@@ -20,8 +20,12 @@ public class BlockOreSolution extends BlockModFlowingFluid {
 	
 	@Override
 	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-		
-		if ((entityIn instanceof LivingEntity) && ((LivingEntity) entityIn).getActivePotionEffect(Effects.POISON) == null) ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, 200, 1));
+		if (entityIn instanceof LivingEntity) {
+			
+			EffectInstance effect = ((LivingEntity) entityIn).getActivePotionEffect(Effects.POISON);
+			if (effect != null ? effect.getDuration() < 100 : true) ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, 200, 0));
+			
+		}
 		
 	}
 	

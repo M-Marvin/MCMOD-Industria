@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "redtec:copper_ore",
+    "redtec:tin_ore",
+    "redtec:silver_ore",
+    "redtec:palladium_ore",
+    "redtec:nickel_ore"
+  ]
+}

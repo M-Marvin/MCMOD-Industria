@@ -32,7 +32,13 @@ public class BlockSulfuricAcid extends BlockModFlowingFluid {
 			entityIn.remove();
 			worldIn.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1, 1);
 		}
-		if (entityIn instanceof LivingEntity) ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.WITHER, 200, 2));
+		
+		if (entityIn instanceof LivingEntity) {
+			
+			EffectInstance effect = ((LivingEntity) entityIn).getActivePotionEffect(Effects.WITHER);
+			if (effect != null ? effect.getDuration() < 100 : true) ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.WITHER, 100, 1));
+			
+		}
 		
 	}
 	

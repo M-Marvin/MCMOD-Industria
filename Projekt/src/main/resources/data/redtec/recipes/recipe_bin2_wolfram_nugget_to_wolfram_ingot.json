@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "wolfram_ingot",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "redtec:wolfram_nugget"
+    }
+  },
+  "result": {
+    "item": "redtec:wolfram_ingot"
+  }
+}

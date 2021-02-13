@@ -1,32 +1,21 @@
-modLoader="javafml" #mandatory
-loaderVersion="[33,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+modLoader="javafml"
+loaderVersion="[33,)"
 
 license="All rights reserved"
+issueTrackerURL="https://github.com/M-Marvin/MCMOD-RedTec/issues"
 
-issueTrackerURL="http://my.issue.tracker/" #optional
+[[mods]]
+modId="redtec"
+version="0.2-pre"
+displayName="RedTec"
+displayURL="https://github.com/M-Marvin/MCMOD-RedTec"
+credits="M_Marvin, Hase222 (McStockWeintraube)"
+authors="M_Marvin, Hase222 (McStockWeintraube)"
+logoFile="logo.png"
 
-[[mods]] #mandatory
-
-modId="redtec" #mandatory
-
-version="${file.jarVersion}" #mandatory
-
-displayName="RedTec" #mandatory
-
-updateJSONURL="http://myurl.me/" #optional
-
-displayURL="http://example.com/" #optional
-
-logoFile="examplemod.png" #optional
-
-credits="Thanks for this example mod goes to Java" #optional
-
-authors="Love, Cheese and small house plants" #optional
+updateJSONURL="https://github.com/M-Marvin/MCMOD-RedTec/blob/main/ModUpdate.json"
 
 description='''
-This is a long form description of the mod. You can write whatever you want here
-
-Have some lorem ipsum.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mollis lacinia magna. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed sagittis luctus odio eu tempus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque volutpat ligula eget lacus auctor sagittis. In hac habitasse platea dictumst. Nunc gravida elit vitae sem vehicula efficitur. Donec mattis ipsum et arcu lobortis, eleifend sagittis sem rutrum. Cras pharetra quam eget posuere fermentum. Sed id tincidunt justo. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Ein Mod der diverse neue Baumaterialien, Items, Resourcen und Maschinen hinzufügt.
+Unter anderem Elektrizitäfct, Rezepte mit Flüssigkeiten und neue Erze.
 '''

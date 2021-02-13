@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "redtec:copper_block",
+    "redtec:tin_block",
+    "redtec:silver_block",
+    "redtec:palladium_block",
+    "redtec:nickel_block",
+    "redtec:redstone_alloy_block",
+    "redtec:monel_block",
+    "redtec:nickel_block",
+    "redtec:wolfram_block",
+    "redtec:aluminium_block",
+    "redtec:electrolyt_copper_block",
+    "redtec:steel_block"
+  ]
+}

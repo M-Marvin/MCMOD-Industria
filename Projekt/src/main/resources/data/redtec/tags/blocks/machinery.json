@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "redtec:generator",
+    "redtec:raffinery",
+    "redtec:alloy_furnace",
+    "redtec:schredder",
+    "redtec:blender",
+    "redtec:fluid_input",
+    "redtec:fluid_output",
+    "redtec:steam_generator",
+    "redtec:fuse_box",
+    "redtec:transformator_coil",
+    "redtec:transformator_contact",
+    "redtec:multimeter",
+    "redtec:power_switch",
+    "redtec:electric_furnace",
+    "redtec:thermal_zentrifuge"
+  ]
+}

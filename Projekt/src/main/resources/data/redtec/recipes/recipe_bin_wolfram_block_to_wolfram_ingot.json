@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "redtec:wolfram_block"
+    }
+  ],
+  "result": {
+    "item": "redtec:wolfram_ingot",
+    "count": 9
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "iron_plate",
+  "pattern": [
+    "H",
+    "#"
+  ],
+  "key": {
+    "H": {
+      "item": "redtec:hammer"
+    },
+    "#": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "redtec:iron_plate"
+  }
+}

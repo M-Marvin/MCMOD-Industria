@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "nickel_plate",
+  "pattern": [
+    "H",
+    "#"
+  ],
+  "key": {
+    "H": {
+      "item": "redtec:hammer"
+    },
+    "#": {
+      "item": "redtec:nickel_ingot"
+    }
+  },
+  "result": {
+    "item": "redtec:nickel_plate"
+  }
+}

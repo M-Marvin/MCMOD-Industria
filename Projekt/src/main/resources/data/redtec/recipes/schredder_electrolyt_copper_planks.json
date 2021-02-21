@@ -1,0 +1,15 @@
+{
+  "type": "redtec:schredder",
+  "ingredient": {
+    "item": "redtec:electrolyt_copper_planks"
+  },
+  "results": [
+    {
+      "item": "redtec:electrolyt_copper_nugget",
+      "count": 16
+    }
+  ],
+  "schreddertime": 60,
+  "schreddertool": "redtec:schredder_crusher",
+  "schredderdamage": 60
+}

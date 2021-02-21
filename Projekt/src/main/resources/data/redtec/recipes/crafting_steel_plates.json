@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "steel_plates",
+  "pattern": [
+    "###",
+    "# #",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "redtec:steel_plate"
+    }
+  },
+  "result": {
+    "item": "redtec:steel_plates",
+    "count": 4
+  }
+}

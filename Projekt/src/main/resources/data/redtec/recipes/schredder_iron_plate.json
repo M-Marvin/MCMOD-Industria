@@ -1,0 +1,15 @@
+{
+  "type": "redtec:schredder",
+  "ingredient": {
+    "item": "redtec:iron_plate"
+  },
+  "results": [
+    {
+      "item": "minecraft:iron_nugget",
+      "count": 8
+    }
+  ],
+  "schreddertime": 30,
+  "schreddertool": "redtec:schredder_crusher",
+  "schredderdamage": 30
+}

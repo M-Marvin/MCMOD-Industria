@@ -1,0 +1,15 @@
+{
+  "type": "redtec:schredder",
+  "ingredient": {
+    "item": "redtec:netherite_plate"
+  },
+  "results": [
+    {
+      "item": "minecraft:netherite_scrap",
+      "count": 4
+    }
+  ],
+  "schreddertime": 30,
+  "schreddertool": "redtec:schredder_crusher",
+  "schredderdamage": 30
+}

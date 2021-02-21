@@ -13,7 +13,7 @@
   ],
   "resultFluid":  {
     "fluid": "redtec:tin_solution",
-    "amount": 1500
+    "amount": 1000
   },
   "mixingTime": 100
 }

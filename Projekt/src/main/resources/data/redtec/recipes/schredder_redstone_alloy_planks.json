@@ -1,0 +1,15 @@
+{
+  "type": "redtec:schredder",
+  "ingredient": {
+    "item": "redtec:redstone_alloy_planks"
+  },
+  "results": [
+    {
+      "item": "redtec:redstone_nugget",
+      "count": 16
+    }
+  ],
+  "schreddertime": 60,
+  "schreddertool": "redtec:schredder_crusher",
+  "schredderdamage": 60
+}

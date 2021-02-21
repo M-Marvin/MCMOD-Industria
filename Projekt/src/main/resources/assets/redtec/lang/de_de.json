@@ -69,7 +69,7 @@
 "block.redtec.coal_heater": "Kohleheizer",
 "block.redtec.fuse_box": "Sicherungskasten",
 "block.redtec.power_switch": "Schalter",
-"block.redtec.multimeter": "Tragbares Multimeter",
+"block.redtec.multimeter": "Multimeter",
 "block.redtec.fluid_valve": "Ventil",
 "block.redtec.schredder": "Schredder",
 "block.redtec.electric_furnace": "Elektrischer Ofen",
@@ -90,6 +90,7 @@
 "item.redtec.chemical_water_bucket": "Abwassereimer",
 "item.redtec.fluid_meter": "Fl\u00fcssigkeitspr\u00fcfer",
 "item.redtec.energy_meter": "Multimeter",
+"item.redtec.hammer": "Hammer",
 
 "item.redtec.lever_element": "Schaltpult-Hebel",
 "item.redtec.button_element": "Schaltpult-Knopf",

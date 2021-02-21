@@ -1,0 +1,15 @@
+{
+  "type": "redtec:schredder",
+  "ingredient": {
+    "item": "redtec:copper_plate"
+  },
+  "results": [
+    {
+      "item": "redtec:copper_nugget",
+      "count": 8
+    }
+  ],
+  "schreddertime": 30,
+  "schreddertool": "redtec:schredder_crusher",
+  "schredderdamage": 30
+}

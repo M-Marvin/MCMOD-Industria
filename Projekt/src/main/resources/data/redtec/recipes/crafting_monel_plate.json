@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "monel_plate",
+  "pattern": [
+    "H",
+    "#"
+  ],
+  "key": {
+    "H": {
+      "item": "redtec:hammer"
+    },
+    "#": {
+      "item": "redtec:monel_ingot"
+    }
+  },
+  "result": {
+    "item": "redtec:monel_plate"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "nickel_planks",
+  "pattern": [
+    "###",
+    "   ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "redtec:nickel_plate"
+    }
+  },
+  "result": {
+    "item": "redtec:nickel_planks",
+    "count": 3
+  }
+}

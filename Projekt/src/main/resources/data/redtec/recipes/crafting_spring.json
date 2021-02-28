@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "HPC"
+  ],
+  "key": {
+    "H": {
+      "item": "redtec:hammer"
+    },
+    "C": {
+      "item": "redtec:cuter"
+    },
+    "P": {
+      "item": "redtec:iron_plate"
+    }
+  },
+  "result": {
+    "item": "redtec:spring",
+    "count": 2
+  }
+}

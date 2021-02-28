@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WGW",
+    "CFC",
+    "WFW"
+  ],
+  "key": {
+    "G": {
+      "item": "redtec:steel_plates"
+    },
+    "W": {
+      "item": "redtec:steel_plate"
+    },
+    "C": {
+      "item": "redtec:transformator_coil"
+    },
+    "F": {
+      "item": "minecraft:blast_furnace"
+    }
+  },
+  "result": {
+    "item": "redtec:alloy_furnace"
+  }
+}

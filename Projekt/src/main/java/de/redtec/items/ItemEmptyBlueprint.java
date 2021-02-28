@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 public class ItemEmptyBlueprint extends ItemBase {
 	
 	public ItemEmptyBlueprint() {
-		super("empty_blueprint", RedTec.MACHINES);
+		super("empty_blueprint", RedTec.TOOLS);
 	}
 	
 	@Override

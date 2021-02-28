@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AAA",
+    "DDD",
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "item": "redtec:aluminium_plate"
+    },
+    "D": {
+      "item": "redtec:led"
+    }
+  },
+  "result": {
+    "item": "redtec:panel_lamp",
+    "count": 2
+  }
+}

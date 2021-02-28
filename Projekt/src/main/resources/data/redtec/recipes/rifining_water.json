@@ -1,0 +1,22 @@
+{
+  "type": "redtec:rifining",
+  "ingredientFluid": {
+    "fluid": "minecraft:water",
+    "amount": 1500
+  },
+  "resultFluid":  {
+    "fluid": "redtec:destilled_water",
+    "amount": 1500
+  },
+  "resultItems": [
+    {
+      "item": "minecraft:stone",
+      "count": 1
+    },
+    {
+      "item": "redtec:salt",
+      "count": 2
+    }
+  ],
+  "rifiningTime": 100
+}

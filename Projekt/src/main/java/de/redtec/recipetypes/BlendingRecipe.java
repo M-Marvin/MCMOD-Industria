@@ -36,7 +36,6 @@ public class BlendingRecipe implements IRecipe<IInventory> {
 			
 			// Check items
 			ItemStack[] neededItems = this.itemsIn.clone();
-			int i2 = 0;
 			for (int i = 0; i < 3; i++) {
 				ItemStack itemIn = inv.getStackInSlot(i);
 				int i1;
@@ -45,12 +44,11 @@ public class BlendingRecipe implements IRecipe<IInventory> {
 					if (neededItems[i1].getItem().equals(itemIn.getItem()) && neededItems[i1].getCount() <= itemIn.getCount()) {
 						neededItems[i1] = null;
 						i1 = -1;
-						i2++;
 						break;
 					}
 				}				
 				// Too many items
-				if (i1 != -1 && i2 < neededItems.length && !itemIn.isEmpty()) return false;
+				if (i1 != -1 && !itemIn.isEmpty()) return false;
 			}
 			
 			for (ItemStack item : neededItems) {
@@ -60,7 +58,6 @@ public class BlendingRecipe implements IRecipe<IInventory> {
 			
 			// Check fluids
 			FluidStack[] neededFluids = this.fluidsIn.clone();
-			i2 = 0;
 			for (int i = 0; i < 2; i++) {
 				FluidStack fluidIn = i == 0 ? ((TileEntityMBlender) inv).fluidIn1 : ((TileEntityMBlender) inv).fluidIn2;
 				int i1;
@@ -69,13 +66,12 @@ public class BlendingRecipe implements IRecipe<IInventory> {
 					if (neededFluids[i1].getFluid().equals(fluidIn.getFluid()) && neededFluids[i1].getAmount() <= fluidIn.getAmount()) {
 						neededFluids[i1] = null;
 						i1 = -1;
-						i2++;
 						break;
 					}
 				}
 				
 				// Too many fluids
-				if (i1 != -1 && i2 < neededFluids.length && !fluidIn.isEmpty()) return false;
+				if (i1 != -1 && !fluidIn.isEmpty()) return false;
 			}
 			
 			for (FluidStack fluid : neededFluids) {
@@ -117,6 +113,10 @@ public class BlendingRecipe implements IRecipe<IInventory> {
 	
 	public int getMixingTime() {
 		return this.mixingTime;
+	}
+	
+	public ItemStack[] getItemsIn() {
+		return itemsIn;
 	}
 	
 	@Override

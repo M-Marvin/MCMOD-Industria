@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "EEE",
+    "EBE",
+    "EEE"
+  ],
+  "key": {
+    "E": {
+      "item": "redtec:steel_plate"
+    },
+    "B": {
+      "item": "redtec:steel_ingot"
+    }
+  },
+  "result": {
+    "item": "redtec:turbin"
+  }
+}

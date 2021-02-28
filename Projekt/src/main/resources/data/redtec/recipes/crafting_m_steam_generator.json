@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GWG",
+    "WTW",
+    "GWG"
+  ],
+  "key": {
+    "W": {
+      "item": "redtec:wolfram_plate"
+    },
+    "G": {
+      "item": "redtec:wolfram_plates"
+    },
+    "T": {
+      "item": "redtec:turbin"
+    }
+  },
+  "result": {
+    "item": "redtec:steam_generator"
+  }
+}

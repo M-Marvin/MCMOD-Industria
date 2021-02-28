@@ -55,6 +55,7 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 			this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
 			
 			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(this.world).getNetwork(this.pos);
+			ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos);
 			this.hasPower = network.canMachinesRun() == Voltage.NormalVoltage;
 			this.isWorking = canWork() && this.hasPower;
 			

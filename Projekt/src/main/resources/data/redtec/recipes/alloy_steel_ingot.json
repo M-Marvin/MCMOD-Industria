@@ -1,0 +1,18 @@
+{
+  "type": "redtec:alloy",
+  "ingredientItems": [
+    {
+      "item": "minecraft:iron_ingot",
+      "count": 1
+    },
+    {
+      "item": "redtec:coal_coke",
+      "count": 1
+    }
+  ],
+  "resultItem":  {
+    "item": "redtec:steel_ingot",
+    "count": 1
+  },
+  "smeltingTime": 150
+}

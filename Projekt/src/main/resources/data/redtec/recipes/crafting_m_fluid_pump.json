@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SGS",
+    "SMS",
+    "DTD"
+  ],
+  "key": {
+    "S": {
+      "item": "redtec:steel_plate"
+    },
+    "M": {
+      "item": "redtec:motor"
+    },
+    "T": {
+      "item": "redtec:turbin"
+    },
+    "G": {
+      "item": "redtec:steel_plates"
+    },
+    "D": {
+      "item": "redtec:monel_plate"
+    }
+  },
+  "result": {
+    "item": "redtec:fluid_input"
+  }
+}

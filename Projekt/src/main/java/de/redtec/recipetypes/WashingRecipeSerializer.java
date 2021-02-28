@@ -11,11 +11,11 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-public class WashingRecipeSerialize<T extends WashingRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T> {
+public class WashingRecipeSerializer<T extends WashingRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T> {
 	
 	private IFactory<T> factory;
 	
-	public WashingRecipeSerialize(IFactory<T> factory) {
+	public WashingRecipeSerializer(IFactory<T> factory) {
 		this.factory = factory;
 	}
 	
@@ -26,7 +26,7 @@ public class WashingRecipeSerialize<T extends WashingRecipe> extends ForgeRegist
 		ItemStack itemOut2 = resultArray.size() > 1 ? ShapedRecipe.deserializeItem(resultArray.get(1).getAsJsonObject()) : ItemStack.EMPTY;
 		ItemStack itemOut3 = resultArray.size() > 2 ? ShapedRecipe.deserializeItem(resultArray.get(2).getAsJsonObject()) : ItemStack.EMPTY;
 		int washingTime = json.get("washingTime").getAsInt();
-		return this.factory.create(recipeId, itemIn, itemOut1, itemOut2, itemOut3, washingTime);
+		return this.factory.create(recipeId, itemOut1, itemIn, itemOut2, itemOut3, washingTime);
 	}
 	
 	public T read(ResourceLocation recipeId, PacketBuffer buffer) {
@@ -35,7 +35,7 @@ public class WashingRecipeSerialize<T extends WashingRecipe> extends ForgeRegist
 		ItemStack itemOut2 = buffer.readItemStack();
 		ItemStack itemOut3 = buffer.readItemStack();
 		int washingTime = buffer.readInt();
-		return factory.create(recipeId, itemIn, itemOut1, itemOut2, itemOut3, washingTime);
+		return factory.create(recipeId, itemOut1, itemIn, itemOut2, itemOut3, washingTime);
 	}
 	
 	@Override
@@ -48,7 +48,7 @@ public class WashingRecipeSerialize<T extends WashingRecipe> extends ForgeRegist
 	}
 	
 	public interface IFactory<T extends WashingRecipe> {
-		T create(ResourceLocation id, Ingredient itemIn, ItemStack itemOut1, ItemStack itemOut2, ItemStack itemOut3, int washingTime);
+		T create(ResourceLocation id, ItemStack itemOut1, Ingredient itemIn, ItemStack itemOut2, ItemStack itemOut3, int washingTime);
 	}
 	
 }

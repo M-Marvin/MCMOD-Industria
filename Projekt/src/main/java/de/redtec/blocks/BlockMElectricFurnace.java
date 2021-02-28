@@ -78,9 +78,9 @@ public class BlockMElectricFurnace extends BlockContainerBase implements IElectr
 	@Override
 	public List<ITextComponent> getBlockInfo() {
 		List<ITextComponent> info = new ArrayList<ITextComponent>();
-		info.add(new TranslationTextComponent("redtec.block.info.needEnergy", (0 * Voltage.NormalVoltage.getVoltage() / 1000F) + "k"));
+		info.add(new TranslationTextComponent("redtec.block.info.needEnergy", (8 * Voltage.NormalVoltage.getVoltage() / 1000F) + "k"));
 		info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.NormalVoltage.getVoltage()));
-		info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 0));
+		info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 8));
 		info.add(new TranslationTextComponent("redtec.block.info.electricFurnace"));
 		return info;
 	}

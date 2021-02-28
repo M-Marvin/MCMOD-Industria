@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "P P",
+    " P ",
+    "IBI"
+  ],
+  "key": {
+    "P": {
+      "item": "redtec:iron_plate"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "B": {
+      "item": "redtec:rubber"
+    }
+  },
+  "result": {
+    "item": "redtec:cuter"
+  }
+}

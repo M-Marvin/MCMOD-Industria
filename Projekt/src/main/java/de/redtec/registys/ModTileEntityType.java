@@ -25,6 +25,7 @@ import de.redtec.tileentity.TileEntityMRaffinery;
 import de.redtec.tileentity.TileEntityMSchredder;
 import de.redtec.tileentity.TileEntityMSteamGenerator;
 import de.redtec.tileentity.TileEntityMThermalZentrifuge;
+import de.redtec.tileentity.TileEntityMotor;
 import de.redtec.tileentity.TileEntityRedstoneReciver;
 import de.redtec.tileentity.TileEntitySignalAntenna;
 import de.redtec.tileentity.TileEntitySignalProcessorContact;
@@ -68,6 +69,7 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityMAlloyFurnace> ALLOY_FURNACE = register("alloy_furnace", TileEntityType.Builder.create(TileEntityMAlloyFurnace::new, RedTec.alloy_furnace));
 	public static final TileEntityType<TileEntityConveyorBelt> CONVEYOR_BELT = register("conveyor_belt", TileEntityType.Builder.create(TileEntityConveyorBelt::new, RedTec.conveyor_belt));
 	public static final TileEntityType<TileEntityMThermalZentrifuge> THERMAL_ZENTRIFUGE = register("thermal_zentrifuge", TileEntityType.Builder.create(TileEntityMThermalZentrifuge::new, RedTec.thermal_zentrifuge));
+	public static final TileEntityType<TileEntityMotor> MOTOR = register("motor", TileEntityType.Builder.create(TileEntityMotor::new, RedTec.motor));
 	
 	private static <T extends TileEntity> TileEntityType<T> register(String key, TileEntityType.Builder<T> builder) {
 		Type<?> type = Util.func_240976_a_(TypeReferences.BLOCK_ENTITY, key);

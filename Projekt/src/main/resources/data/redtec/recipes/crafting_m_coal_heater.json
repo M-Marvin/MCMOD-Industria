@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CEC",
+    "C C",
+    "CCC"
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:cobblestone"
+    },
+    "E": {
+      "item": "redtec:iron_plate"
+    }
+  },
+  "result": {
+    "item": "redtec:coal_heater"
+  }
+}

@@ -14,11 +14,9 @@ public class ItemHammer extends ItemBase {
 		return true;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public ItemStack getContainerItem(ItemStack itemStack) {
 		int dammage = itemStack.getDamage() + 1;
-		System.out.println(dammage + " " + this.getMaxDamage());
 		if (dammage > this.getMaxDamage(itemStack)) {
 			return ItemStack.EMPTY.copy();
 		} else {

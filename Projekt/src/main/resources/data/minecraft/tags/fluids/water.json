@@ -16,6 +16,8 @@
     "redtec:wolfram_solution",
     "redtec:flowing_wolfram_solution",
     "redtec:chemical_water",
-    "redtec:flowing_chemical_water"
+    "redtec:flowing_chemical_water",
+    "redtec:raw_oil",
+    "redtec:flowing_raw_oil"
   ]
 }

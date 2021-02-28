@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " C ",
+    "DPD",
+    " C "
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:clay_ball"
+    },
+    "D": {
+      "item": "redtec:copper_wire"
+    },
+    "P": {
+      "item": "redtec:nickel_plate"
+    }
+  },
+  "result": {
+    "item": "redtec:resistor",
+    "count": 4
+  }
+}

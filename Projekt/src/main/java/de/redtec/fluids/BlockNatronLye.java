@@ -4,6 +4,7 @@ import java.util.Random;
 
 import de.redtec.fluids.util.BlockModFlowingFluid;
 import de.redtec.registys.ModDamageSource;
+import de.redtec.registys.ModFluids;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;

@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ACA",
+    "AEA",
+    "RKR"
+  ],
+  "key": {
+    "C": {
+      "item": "redtec:aluminium_plates"
+    },
+    "A": {
+      "item": "redtec:aluminium_plate"
+    },
+    "E": {
+      "item": "redtec:iron_rod"
+    },
+    "K": {
+      "item": "redtec:transformator_coil"
+    },
+    "R": {
+      "item": "redtec:resistor"
+    }
+  },
+  "result": {
+    "item": "redtec:multimeter"
+  }
+}

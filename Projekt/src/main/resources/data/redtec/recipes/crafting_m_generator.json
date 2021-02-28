@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SGS",
+    "CRC",
+    "SFS"
+  ],
+  "key": {
+    "S": {
+      "item": "redtec:steel_plate"
+    },
+    "C": {
+      "item": "redtec:transformator_coil"
+    },
+    "R": {
+      "item": "redtec:resistor"
+    },
+    "G": {
+      "item": "redtec:steel_plates"
+    },
+    "F": {
+      "item": "minecraft:furnace"
+    }
+  },
+  "result": {
+    "item": "redtec:generator"
+  }
+}

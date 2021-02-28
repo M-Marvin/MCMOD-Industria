@@ -1,6 +1,8 @@
 package de.redtec.registys;
 
 import de.redtec.RedTec;
+import de.redtec.recipetypes.AlloyRecipe;
+import de.redtec.recipetypes.AlloyRecipeSerializer;
 import de.redtec.recipetypes.BlendingRecipe;
 import de.redtec.recipetypes.BlendingRecipeSerializer;
 import de.redtec.recipetypes.RifiningRecipe;
@@ -10,7 +12,7 @@ import de.redtec.recipetypes.SchredderRecipeSerializer;
 import de.redtec.recipetypes.ThermalZentrifugeRecipe;
 import de.redtec.recipetypes.ThermalZentrifugeRecipeSerializer;
 import de.redtec.recipetypes.WashingRecipe;
-import de.redtec.recipetypes.WashingRecipeSerialize;
+import de.redtec.recipetypes.WashingRecipeSerializer;
 import de.redtec.specialrecipes.ProzessorCopy;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -27,7 +29,8 @@ public class ModSerializer {
 	public static final BlendingRecipeSerializer<BlendingRecipe> BLENDING = register("blending", new BlendingRecipeSerializer<BlendingRecipe>(BlendingRecipe::new));
 	public static final RifiningRecipeSerializer<RifiningRecipe> RIFINING = register("rifining", new RifiningRecipeSerializer<RifiningRecipe>(RifiningRecipe::new));
 	public static final ThermalZentrifugeRecipeSerializer<ThermalZentrifugeRecipe> THERMAL_ZENTRIFUGE = register("thermal_zentrifuge", new ThermalZentrifugeRecipeSerializer<ThermalZentrifugeRecipe>(ThermalZentrifugeRecipe::new));
-	public static final WashingRecipeSerialize<WashingRecipe> WASHING = register("washing", new WashingRecipeSerialize<WashingRecipe>(WashingRecipe::new));
+	public static final WashingRecipeSerializer<WashingRecipe> WASHING = register("washing", new WashingRecipeSerializer<WashingRecipe>(WashingRecipe::new));
+	public static final AlloyRecipeSerializer<AlloyRecipe> ALLOY = register("alloy", new AlloyRecipeSerializer<AlloyRecipe>(AlloyRecipe::new));
 	
 	static <S extends IRecipeSerializer<T>, T extends IRecipe<?>> S register(String key, S recipeSerializer) {
 		recipeSerializer.setRegistryName(new ResourceLocation(RedTec.MODID, key));

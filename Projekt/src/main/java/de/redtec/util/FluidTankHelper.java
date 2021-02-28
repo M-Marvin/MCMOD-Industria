@@ -3,7 +3,7 @@ package de.redtec.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.redtec.fluids.ModFluids;
+import de.redtec.registys.ModFluids;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;

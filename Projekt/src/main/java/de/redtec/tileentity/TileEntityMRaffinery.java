@@ -100,7 +100,8 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 						
 						if (	ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(0), currentRecipe.getRecipeOutput()) &&
 								ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(1), currentRecipe.getRecipeOutput2()) &&
-								ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(2), currentRecipe.getRecipeOutput3())) {
+								ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(2), currentRecipe.getRecipeOutput3()) &&
+								(this.fluidOut.getFluid() == currentRecipe.fluidOut.getFluid() || this.fluidOut.isEmpty()) ? this.fluidOut.getAmount() + currentRecipe.fluidOut.getAmount() < this.maxFluidStorage : false) {
 							
 							this.progressTotal = currentRecipe.getRifiningTime() / 3;
 							
@@ -187,12 +188,6 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 						
 					}
 					
-				} else {
-					this.progress1 = 0;
-					this.progress2 = 0;
-					this.progress3 = 0;
-					this.progress4 = 0;
-					this.currentRecipe = null;
 				}
 				
 			} else if (BlockMultiPart.getInternPartPos(this.getBlockState()).equals(new BlockPos(1, 3, 0))) {
@@ -216,16 +211,16 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 				switch(facing) {
 				default:
 				case NORTH:
-					oz = 2;
-					ox = 2;
+					oz = 0;
+					ox = 1;
 					break;
 				case EAST:
 					ox = -1;
 					oz = 2;
 					break;
 				case SOUTH:
-					ox = -1;
-					oz = -1;
+					ox = -3;
+					oz = 0;
 					break;
 				case WEST:
 					ox = 2;
@@ -297,7 +292,7 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 
 	@Override
 	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
-		return true;
+		return !this.isPostProcessing();
 	}
 	
 	@Override

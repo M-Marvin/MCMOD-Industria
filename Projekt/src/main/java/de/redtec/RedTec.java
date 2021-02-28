@@ -56,18 +56,20 @@ import de.redtec.blocks.BlockSignalWire;
 import de.redtec.blocks.BlockStackedRedstoneTorch;
 import de.redtec.blocks.BlockStackedRedstoneWire;
 import de.redtec.blocks.BlockStoringCraftingTable;
+import de.redtec.blocks.BlockMotor;
 import de.redtec.fluids.BlockChemicalWater;
 import de.redtec.fluids.BlockDestilledWater;
 import de.redtec.fluids.BlockNatronLye;
 import de.redtec.fluids.BlockOreSolution;
+import de.redtec.fluids.BlockRawOil;
 import de.redtec.fluids.BlockSteam;
 import de.redtec.fluids.BlockSulfuricAcid;
-import de.redtec.fluids.ModFluids;
 import de.redtec.fluids.util.ItemFluidBucket;
 import de.redtec.fluids.util.ItemGasBucket;
 import de.redtec.gui.ScreenHarvester;
 import de.redtec.gui.ScreenHoverControler;
 import de.redtec.gui.ScreenJigsaw;
+import de.redtec.gui.ScreenMAlloyFurnace;
 import de.redtec.gui.ScreenMBlender;
 import de.redtec.gui.ScreenMCoalHeater;
 import de.redtec.gui.ScreenMElectricFurnace;
@@ -80,6 +82,7 @@ import de.redtec.gui.ScreenReciver;
 import de.redtec.gui.ScreenStoredCrafting;
 import de.redtec.items.ItemBase;
 import de.redtec.items.ItemBlueprint;
+import de.redtec.items.ItemCuter;
 import de.redtec.items.ItemEmptyBlueprint;
 import de.redtec.items.ItemEnergyMeter;
 import de.redtec.items.ItemFluidMeter;
@@ -98,6 +101,7 @@ import de.redtec.packet.CGenerateJigsaw;
 import de.redtec.packet.SSendENHandeler;
 import de.redtec.registys.ModConfiguredFeatures;
 import de.redtec.registys.ModContainerType;
+import de.redtec.registys.ModFluids;
 import de.redtec.registys.ModTileEntityType;
 import de.redtec.renderer.TileEntityAdvancedMovingBlockRenderer;
 import de.redtec.renderer.TileEntityControllPanelRenderer;
@@ -220,6 +224,9 @@ public class RedTec {
 	public static final Block harvester = new BlockHarvester();
 	public static final Block jigsaw = new BlockJigsaw();
 	
+	// Mechanic
+	public static final Block motor = new BlockMotor();
+	
 	// Machinery
 	public static final Block conveyor_spliter = new BlockConveyorSpliter();
 	public static final Block conveyor_belt = new BlockConveyorBelt();
@@ -274,7 +281,7 @@ public class RedTec {
 	// Deko Blocks
 	public static final Block gold_plates = new BlockBase("gold_plates", Material.IRON, 1.2F, SoundType.METAL);
 	public static final Block iron_plates = new BlockBase("iron_plates", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block netherite_plates = new BlockPowerEmiting("netherite_plates", Material.IRON, 2.4F, SoundType.field_235594_P_, 4);
+	public static final Block netherite_plates = new BlockBase("netherite_plates", Material.IRON, 2.4F, SoundType.field_235594_P_);
 	public static final Block copper_plates = new BlockBase("copper_plates", Material.IRON, 1.2F, SoundType.METAL);
 	public static final Block aluminium_plates = new BlockBase("aluminium_plates", Material.IRON, 1.2F, SoundType.METAL);
 	public static final Block electrolyt_copper_plates = new BlockBase("electrolyt_copper_plates", Material.IRON, 1.2F, SoundType.METAL);
@@ -322,6 +329,8 @@ public class RedTec {
 	public static final Item wolfram_solution_bucket = new ItemFluidBucket(ModFluids.WOLFRAM_SOLUTION, "wolfram_solution_bucket", MATERIALS);
 	public static final Block tin_solution = new BlockOreSolution("tin_solution", ModFluids.TIN_SOLUTION);
 	public static final Item tin_solution_bucket = new ItemFluidBucket(ModFluids.TIN_SOLUTION, "tin_solution_bucket", MATERIALS);
+	public static final Block raw_oil = new BlockRawOil();
+	public static final Item raw_oil_bucket = new ItemFluidBucket(ModFluids.RAW_OIL, "raw_oil_bucket", MATERIALS);
 	
 	// Ingots and Nuggets
 	public static final Item monel_ingot = new ItemBase("monel_ingot", MATERIALS);
@@ -346,7 +355,6 @@ public class RedTec {
 	public static final Item aluminium_nugget = new ItemBase("aluminium_nugget", MATERIALS);
 	public static final Item steel_nugget = new ItemBase("steel_nugget", MATERIALS);
 	public static final Item redstone_nugget = new ItemBase("redstone_nugget", MATERIALS);
-	
 	public static final Item monel_dust = new ItemBase("monel_dust", MATERIALS);
 	public static final Item tin_dust = new ItemBase("tin_dust", MATERIALS);
 	public static final Item silver_dust = new ItemBase("silver_dust", MATERIALS);
@@ -358,7 +366,6 @@ public class RedTec {
 	public static final Item aluminium_dust = new ItemBase("aluminium_dust", MATERIALS);
 	public static final Item steel_dust = new ItemBase("steel_dust", MATERIALS);
 	public static final Item redstone_alloy_dust = new ItemBase("redstone_alloy_dust", MATERIALS);
-	
 	public static final Item tpo_monel_dust = new ItemBase("tpo_monel_dust", MATERIALS);
 	public static final Item tpo_tin_dust = new ItemBase("tpo_tin_dust", MATERIALS);
 	public static final Item tpo_silver_dust = new ItemBase("tpo_silver_dust", MATERIALS);
@@ -370,7 +377,6 @@ public class RedTec {
 	public static final Item tpo_aluminium_dust = new ItemBase("tpo_aluminium_dust", MATERIALS);
 	public static final Item tpo_steel_dust = new ItemBase("tpo_steel_dust", MATERIALS);
 	public static final Item tpo_redstone_alloy_dust = new ItemBase("tpo_redstone_alloy_dust", MATERIALS);
-	
 	public static final Item monel_plate = new ItemBase("monel_plate", MATERIALS);
 	public static final Item tin_plate = new ItemBase("tin_plate", MATERIALS);
 	public static final Item silver_plate = new ItemBase("silver_plate", MATERIALS);
@@ -382,6 +388,9 @@ public class RedTec {
 	public static final Item aluminium_plate = new ItemBase("aluminium_plate", MATERIALS);
 	public static final Item steel_plate = new ItemBase("steel_plate", MATERIALS);
 	public static final Item redstone_alloy_plate = new ItemBase("redstone_alloy_plate", MATERIALS);
+	public static final Item iron_plate = new ItemBase("iron_plate", MATERIALS);
+	public static final Item gold_plate = new ItemBase("gold_plate", MATERIALS);
+	public static final Item netherite_plate = new ItemBase("netherite_plate", MATERIALS);
 	
 	// Resource Items
 	public static final Item salsola = new ItemSalsola();
@@ -414,6 +423,27 @@ public class RedTec {
 	public static final Item sulfur = new ItemBase("sulfur", MATERIALS);
 	public static final Item sulfur_dioxid = new ItemBase("sulfur_dioxid", MATERIALS);
 	
+	// Crafting items
+	public static final Item bearing = new ItemBase("bearing", MATERIALS);
+	public static final Item spring = new ItemBase("spring", MATERIALS);
+	public static final Item led = new ItemBase("led", MATERIALS);
+	public static final Item turbin = new ItemBase("turbin", MATERIALS);
+	public static final Item condensator = new ItemBase("condensator", MATERIALS);
+	public static final Item resistor = new ItemBase("resistor", MATERIALS);
+	public static final Item rotor = new ItemBase("rotor", MATERIALS);
+	public static final Item motor_coil = new ItemBase("motor_coil", MATERIALS);
+	public static final Item copper_wire = new ItemBase("copper_wire", MATERIALS);
+	public static final Item electrolyt_copper_wire = new ItemBase("electrolyt_copper_wire", MATERIALS);
+	public static final Item aluminium_wire = new ItemBase("aluminium_wire", MATERIALS);
+	public static final Item rubber = new ItemBase("rubber", MATERIALS);
+	public static final Item plastic_pellets = new ItemBase("plastic_pellets", MATERIALS);
+	public static final Item polymer_resin = new ItemBase("polymer_resin", MATERIALS);
+	public static final Item coal_coke = new ItemBase("coal_coke", MATERIALS);
+	public static final Item silicon = new ItemBase("silicon", MATERIALS);
+	public static final Item electrolyt_paper = new ItemBase("electrolyt_paper", MATERIALS);
+	public static final Item salt = new ItemBase("salt", MATERIALS);
+	public static final Item natrium = new ItemBase("natrium", MATERIALS);
+	
 	// Functional Items
 	public static final Item remote_control = new ItemRemoteControll();
 	public static final Item iron_processor = new ItemProcessor("iron_processor", 4, false, Rarity.UNCOMMON);
@@ -435,6 +465,7 @@ public class RedTec {
 	public static final Item fluid_meter = new ItemFluidMeter();
 	public static final Item energy_meter = new ItemEnergyMeter();
 	public static final Item hammer = new ItemHammer();
+	public static final Item cuter = new ItemCuter();
 	
 	public RedTec() {
 		
@@ -546,6 +577,9 @@ public class RedTec {
 		ModGameRegistry.registerBlock(conveyor_spliter, MACHINES);
 		ModGameRegistry.registerBlock(thermal_zentrifuge, MACHINES);
 		
+		// TODO
+		ModGameRegistry.registerBlock(motor, MACHINES);
+		
 		ModGameRegistry.registerTechnicalBlock(steam);
 		ModGameRegistry.registerItem(steam_bucket);
 		ModGameRegistry.registerTechnicalBlock(destilled_water);
@@ -554,6 +588,8 @@ public class RedTec {
 		ModGameRegistry.registerItem(sulfuric_acid_bucket);
 		ModGameRegistry.registerTechnicalBlock(natron_lye);
 		ModGameRegistry.registerItem(natron_lye_bucket);
+		ModGameRegistry.registerTechnicalBlock(raw_oil);
+		ModGameRegistry.registerItem(raw_oil_bucket);
 		
 		ModGameRegistry.registerTechnicalBlock(iron_solution);
 		ModGameRegistry.registerItem(iron_solution_bucket);
@@ -663,7 +699,30 @@ public class RedTec {
 		ModGameRegistry.registerItem(palladium_plate);
 		ModGameRegistry.registerItem(nickel_plate);
 		ModGameRegistry.registerItem(monel_plate);
+		ModGameRegistry.registerItem(gold_plate);
+		ModGameRegistry.registerItem(iron_plate);
+		ModGameRegistry.registerItem(netherite_plate);
 		ModGameRegistry.registerItem(hammer);
+		ModGameRegistry.registerItem(cuter);
+		ModGameRegistry.registerItem(aluminium_wire);
+		ModGameRegistry.registerItem(copper_wire);
+		ModGameRegistry.registerItem(electrolyt_copper_wire);
+		ModGameRegistry.registerItem(rotor);
+		ModGameRegistry.registerItem(motor_coil);
+		ModGameRegistry.registerItem(plastic_pellets);
+		ModGameRegistry.registerItem(polymer_resin);
+		ModGameRegistry.registerItem(rubber);
+		ModGameRegistry.registerItem(resistor);
+		ModGameRegistry.registerItem(condensator);
+		ModGameRegistry.registerItem(turbin);
+		ModGameRegistry.registerItem(led);
+		ModGameRegistry.registerItem(spring);
+		ModGameRegistry.registerItem(bearing);
+		ModGameRegistry.registerItem(coal_coke);
+		ModGameRegistry.registerItem(silicon);
+		ModGameRegistry.registerItem(electrolyt_paper);
+		ModGameRegistry.registerItem(salt);
+		ModGameRegistry.registerItem(natrium);
 		
 		ModGameRegistry.registerItem(fluid_meter);
 		ModGameRegistry.registerItem(energy_meter);
@@ -762,6 +821,8 @@ public class RedTec {
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_NATRON_LYE, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.CHEMICAL_WATER, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_CHEMICAL_WATER, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModFluids.RAW_OIL, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_RAW_OIL, RenderType.getTranslucent());
 		
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ADVANCED_PISTON, TileEntityAdvancedMovingBlockRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SIGNAL_PROCESSOR, TileEntitySignalProcessorContactRenderer::new);
@@ -787,6 +848,7 @@ public class RedTec {
 		ScreenManager.registerFactory(ModContainerType.BLENDER, ScreenMBlender::new);
 		ScreenManager.registerFactory(ModContainerType.RAFFINERY, ScreenMRaffinery::new);
 		ScreenManager.registerFactory(ModContainerType.THERMAL_ZENTRIFUGE, ScreenMThermalZentrifuge::new);
+		ScreenManager.registerFactory(ModContainerType.ALLOY_FURNACE, ScreenMAlloyFurnace::new);
 		
 	}
 	

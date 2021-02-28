@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "EEE",
+    "GCG",
+    "EEE"
+  ],
+  "key": {
+    "E": {
+      "item": "redtec:iron_plate"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "C": {
+      "item": "redtec:aluminium_wire"
+    }
+  },
+  "result": {
+    "item": "redtec:fuse_hv",
+    "count": 2
+  }
+}

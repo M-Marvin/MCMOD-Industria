@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "KEK",
+    "KEK",
+    "KEK"
+  ],
+  "key": {
+    "E": {
+      "item": "minecraft:iron_ingot"
+    },
+    "K": {
+      "item": "redtec:copper_wire"
+    }
+  },
+  "result": {
+    "item": "redtec:motor_coil",
+    "count": 4
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WGW",
+    "CTC",
+    "WMW"
+  ],
+  "key": {
+    "G": {
+      "item": "redtec:steel_plates"
+    },
+    "W": {
+      "item": "redtec:wolfram_plate"
+    },
+    "C": {
+      "item": "redtec:transformator_coil"
+    },
+    "T": {
+      "item": "minecraft:hopper"
+    },
+    "M": {
+      "item": "redtec:motor"
+    }
+  },
+  "result": {
+    "item": "redtec:thermal_zentrifuge"
+  }
+}

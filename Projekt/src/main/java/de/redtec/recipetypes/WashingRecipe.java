@@ -20,7 +20,7 @@ public class WashingRecipe implements IRecipe<IInventory> {
 	public ItemStack itemOut3;
 	public int washingTime;
 	
-	public WashingRecipe(ResourceLocation id, Ingredient itemIn, ItemStack itemOut1, ItemStack itemOut2, ItemStack itemOut3, int washingTime) {
+	public WashingRecipe(ResourceLocation id, ItemStack itemOut1, Ingredient itemIn, ItemStack itemOut2, ItemStack itemOut3, int washingTime) {
 		this.id = id;
 		this.itemIn = itemIn;
 		this.itemOut1 = itemOut1;

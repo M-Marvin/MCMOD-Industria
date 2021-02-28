@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AKA",
+    "RER",
+    "AKA"
+  ],
+  "key": {
+    "A": {
+      "item": "redtec:aluminium_plate"
+    },
+    "K": {
+      "item": "redtec:copper_plate"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "E": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "redtec:power_switch"
+  }
+}

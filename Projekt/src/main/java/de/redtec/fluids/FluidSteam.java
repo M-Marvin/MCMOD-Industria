@@ -4,6 +4,7 @@ import java.util.Random;
 
 import de.redtec.RedTec;
 import de.redtec.fluids.util.GasFluid;
+import de.redtec.registys.ModFluids;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.IBucketPickupHandler;

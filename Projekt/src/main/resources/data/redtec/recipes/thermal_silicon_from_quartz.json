@@ -1,0 +1,14 @@
+{
+  "type": "redtec:thermal_zentrifuge",
+  "ingredient": {
+    "item": "redtec:quartz",
+    "count": 1
+  },
+  "resultItems": [
+    {
+      "item": "redtec:silicon",
+      "count": 1
+    }
+  ],
+  "rifiningTime": 50
+}

@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "KKO",
+    "KKI",
+    "GMG"
+  ],
+  "key": {
+    "K": {
+      "item": "minecraft:cauldron"
+    },
+    "G": {
+      "item": "redtec:steel_plates"
+    },
+    "I": {
+      "item": "redtec:fluid_input"
+    },
+    "O": {
+      "item": "redtec:fluid_output"
+    },
+    "M": {
+      "item": "redtec:motor"
+    }
+  },
+  "result": {
+    "item": "redtec:blender"
+  }
+}

@@ -1,6 +1,7 @@
 package de.redtec.registys;
 
 import de.redtec.RedTec;
+import de.redtec.recipetypes.AlloyRecipe;
 import de.redtec.recipetypes.BlendingRecipe;
 import de.redtec.recipetypes.RifiningRecipe;
 import de.redtec.recipetypes.SchredderRecipe;
@@ -20,6 +21,7 @@ public class ModRecipeTypes {
 	public static final IRecipeType<RifiningRecipe> RIFINING = register("rifining");
 	public static final IRecipeType<ThermalZentrifugeRecipe> THERMAL_ZENTRIFUGE = register("thermal_zentrifuge");
 	public static final IRecipeType<WashingRecipe> WASHING = register("washing");
+	public static final IRecipeType<AlloyRecipe> ALLOY = register("alloy");
 	
 	static <T extends IRecipe<?>> IRecipeType<T> register(String key) {
 		ResourceLocation registryKey = new ResourceLocation(RedTec.MODID, key);

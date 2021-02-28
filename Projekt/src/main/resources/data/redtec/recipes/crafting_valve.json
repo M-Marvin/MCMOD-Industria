@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " E ",
+    "PMP",
+    "CRC"
+  ],
+  "key": {
+    "P": {
+      "item": "redtec:fluid_pipe"
+    },
+    "M": {
+      "item": "redtec:monel_plate"
+    },
+    "E": {
+      "item": "redtec:iron_plate"
+    },
+    "C": {
+      "item": "redtec:copper_plate"
+    },
+    "R": {
+      "item": "redtec:rubber"
+    }
+  },
+  "result": {
+    "item": "redtec:fluid_valve"
+  }
+}

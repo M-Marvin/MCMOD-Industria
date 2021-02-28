@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "P",
+    "C"
+  ],
+  "key": {
+    "P": {
+      "item": "redtec:electrolyt_copper_plate"
+    },
+    "C": {
+      "item": "redtec:cuter"
+    }
+  },
+  "result": {
+    "item": "redtec:electrolyt_copper_wire",
+    "count": 3
+  }
+}

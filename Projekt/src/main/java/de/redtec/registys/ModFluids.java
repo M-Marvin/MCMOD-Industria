@@ -1,7 +1,18 @@
 
-package de.redtec.fluids;
+package de.redtec.registys;
 
 import de.redtec.RedTec;
+import de.redtec.fluids.FluidChemicalWater;
+import de.redtec.fluids.FluidDestilledWater;
+import de.redtec.fluids.FluidNatronLye;
+import de.redtec.fluids.FluidOreAluminiumSolution;
+import de.redtec.fluids.FluidOreCopperSolution;
+import de.redtec.fluids.FluidOreIronSolution;
+import de.redtec.fluids.FluidOreTinSolution;
+import de.redtec.fluids.FluidOreWolframSolution;
+import de.redtec.fluids.FluidRawOil;
+import de.redtec.fluids.FluidSteam;
+import de.redtec.fluids.FluidSulfuricAcid;
 import de.redtec.fluids.util.BlockGasFluid;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowingFluidBlock;
@@ -32,7 +43,8 @@ public class ModFluids {
 	public static final FluidOreTinSolution TIN_SOLUTION = register("tin_solution", new FluidOreTinSolution.Still());
 	public static final FluidChemicalWater FLOWING_CHEMICAL_WATER = register("flowing_chemical_water", new FluidChemicalWater.Flow());
 	public static final FluidChemicalWater CHEMICAL_WATER = register("chemical_water", new FluidChemicalWater.Still());
-	
+	public static final FluidRawOil FLOWING_RAW_OIL = register("flowing_raw_oil", new FluidRawOil.Flow());
+	public static final FluidRawOil RAW_OIL = register("raw_oil", new FluidRawOil.Still());
 	
 	private static <T extends Fluid> T register(String key, T p_215710_1_) {
 		p_215710_1_.setRegistryName(new ResourceLocation(RedTec.MODID, key));

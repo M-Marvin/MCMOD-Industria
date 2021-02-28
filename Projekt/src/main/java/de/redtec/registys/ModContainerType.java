@@ -4,6 +4,7 @@ import de.redtec.RedTec;
 import de.redtec.gui.ContainerHarvester;
 import de.redtec.gui.ContainerHoverControler;
 import de.redtec.gui.ContainerJigsaw;
+import de.redtec.gui.ContainerMAlloyFurnace;
 import de.redtec.gui.ContainerMBlender;
 import de.redtec.gui.ContainerMCoalHeater;
 import de.redtec.gui.ContainerMElectricFurnace;
@@ -38,6 +39,7 @@ public class ModContainerType {
 	public static final ContainerType<ContainerMBlender> BLENDER = register(new ResourceLocation(RedTec.MODID, "blender"), ContainerMBlender::new);
 	public static final ContainerType<ContainerMRaffinery> RAFFINERY = register(new ResourceLocation(RedTec.MODID, "raffinery"), ContainerMRaffinery::new);
 	public static final ContainerType<ContainerMThermalZentrifuge> THERMAL_ZENTRIFUGE = register(new ResourceLocation(RedTec.MODID, "thermal_zentrifuge"), ContainerMThermalZentrifuge::new);
+	public static final ContainerType<ContainerMAlloyFurnace> ALLOY_FURNACE = register(new ResourceLocation(RedTec.MODID, "alloy_furnace"), ContainerMAlloyFurnace::new);
 	
 	protected static <T extends Container> ContainerType<T> register(ResourceLocation key, IContainerFactory<T> factory) {
 		ContainerType<T> type = IForgeContainerType.create(factory);

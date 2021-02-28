@@ -1,0 +1,22 @@
+{
+	"multipart": [
+		{	"when": {"facing": "north" }, 
+			"apply": { "model": "redtec:block/motor" }
+		},
+		{	"when": {"facing": "south" }, 
+			"apply": { "model": "redtec:block/motor", "y": 180 }
+		},
+		{	"when": {"facing": "east" }, 
+			"apply": { "model": "redtec:block/motor", "y": 90 }
+		},
+		{	"when": {"facing": "west" }, 
+			"apply": { "model": "redtec:block/motor", "y": -90 }
+		},
+		{	"when": {"facing": "up" }, 
+			"apply": { "model": "redtec:block/motor_vertical" }
+		},
+		{	"when": {"facing": "down" }, 
+			"apply": { "model": "redtec:block/motor_vertical", "x": 180}
+		}
+	]
+}

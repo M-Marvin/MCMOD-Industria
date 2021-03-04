@@ -37,6 +37,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.util.text.ITextComponent;
@@ -78,7 +79,7 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote()) {
+		if (!this.world.isRemote() && BlockMultiPart.getInternPartPos(getBlockState()).equals(BlockPos.ZERO)) {
 			
 			this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
 			ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos);

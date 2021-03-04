@@ -1,0 +1,18 @@
+{
+  "type": "redtec:fluid_bath",
+  "ingredientFluid": {
+    "fluid": "redtec:sulfuric_acid",
+    "amount": 1000
+  },
+  "wasteFluid":  {
+  },
+  "ingredientItem": {
+    "item": "minecraft:paper",
+    "count": 1
+  },
+  "resultItem": {
+    "item": "redtec:electrolyt_paper",
+    "count": 1
+  },
+  "processTime": 300
+}

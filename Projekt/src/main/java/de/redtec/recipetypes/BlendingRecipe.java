@@ -3,7 +3,6 @@ package de.redtec.recipetypes;
 import de.redtec.registys.ModRecipeTypes;
 import de.redtec.registys.ModSerializer;
 import de.redtec.tileentity.TileEntityMBlender;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -12,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
-public class BlendingRecipe implements IRecipe<IInventory> {
+public class BlendingRecipe implements IRecipe<TileEntityMBlender> {
 	
 	public ResourceLocation id;
 	public ItemStack[] itemsIn;
@@ -30,70 +29,61 @@ public class BlendingRecipe implements IRecipe<IInventory> {
 	}
 
 	@Override
-	public boolean matches(IInventory inv, World worldIn) {
-		
-		if (inv instanceof TileEntityMBlender) {
-			
-			// Check items
-			ItemStack[] neededItems = this.itemsIn.clone();
-			for (int i = 0; i < 3; i++) {
-				ItemStack itemIn = inv.getStackInSlot(i);
-				int i1;
-				for (i1 = 0; i1 < neededItems.length; i1++) {
-					if (neededItems[i1] == null) continue;
-					if (neededItems[i1].getItem().equals(itemIn.getItem()) && neededItems[i1].getCount() <= itemIn.getCount()) {
-						neededItems[i1] = null;
-						i1 = -1;
-						break;
-					}
-				}				
-				// Too many items
-				if (i1 != -1 && !itemIn.isEmpty()) return false;
-			}
-			
-			for (ItemStack item : neededItems) {
-				// To low items
-				if (item != null) return false;
-			}
-			
-			// Check fluids
-			FluidStack[] neededFluids = this.fluidsIn.clone();
-			for (int i = 0; i < 2; i++) {
-				FluidStack fluidIn = i == 0 ? ((TileEntityMBlender) inv).fluidIn1 : ((TileEntityMBlender) inv).fluidIn2;
-				int i1;
-				for (i1 = 0; i1 < neededFluids.length; i1++) {
-					if (neededFluids[i1] == null) continue;
-					if (neededFluids[i1].getFluid().equals(fluidIn.getFluid()) && neededFluids[i1].getAmount() <= fluidIn.getAmount()) {
-						neededFluids[i1] = null;
-						i1 = -1;
-						break;
-					}
+	public boolean matches(TileEntityMBlender inv, World worldIn) {
+
+		// Check items
+		ItemStack[] neededItems = this.itemsIn.clone();
+		for (int i = 0; i < 3; i++) {
+			ItemStack itemIn = inv.getStackInSlot(i);
+			int i1;
+			for (i1 = 0; i1 < neededItems.length; i1++) {
+				if (neededItems[i1] == null) continue;
+				if (neededItems[i1].getItem().equals(itemIn.getItem()) && neededItems[i1].getCount() <= itemIn.getCount()) {
+					neededItems[i1] = null;
+					i1 = -1;
+					break;
 				}
-				
-				// Too many fluids
-				if (i1 != -1 && !fluidIn.isEmpty()) return false;
-			}
-			
-			for (FluidStack fluid : neededFluids) {
-				// To low fluids
-				if (fluid != null) return false;
-			}
-			
-			return true;
-			
-		} else {
-			
-			// Not an blender instance
-			return false;
-			
+			}				
+			// Too many items
+			if (i1 != -1 && !itemIn.isEmpty()) return false;
 		}
+		
+		for (ItemStack item : neededItems) {
+			// To low items
+			if (item != null) return false;
+		}
+		
+		// Check fluids
+		FluidStack[] neededFluids = this.fluidsIn.clone();
+		for (int i = 0; i < 2; i++) {
+			FluidStack fluidIn = i == 0 ? inv.fluidIn1 : inv.fluidIn2;
+			int i1;
+			for (i1 = 0; i1 < neededFluids.length; i1++) {
+				if (neededFluids[i1] == null) continue;
+				if (neededFluids[i1].getFluid().equals(fluidIn.getFluid()) && neededFluids[i1].getAmount() <= fluidIn.getAmount()) {
+					neededFluids[i1] = null;
+					i1 = -1;
+					break;
+				}
+			}
+			
+			// Too many fluids
+			if (i1 != -1 && !fluidIn.isEmpty()) return false;
+		}
+		
+		for (FluidStack fluid : neededFluids) {
+			// To low fluids
+			if (fluid != null) return false;
+		}
+		
+		return true;
 		
 	}
 	
 	
 	
 	@Override
-	public ItemStack getCraftingResult(IInventory inv) {
+	public ItemStack getCraftingResult(TileEntityMBlender inv) {
 		return this.fluidOut.getFluid().getAttributes().getBucket(this.fluidOut);
 	}
 

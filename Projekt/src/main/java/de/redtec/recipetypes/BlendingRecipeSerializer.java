@@ -69,10 +69,14 @@ public class BlendingRecipeSerializer<T extends BlendingRecipe> extends ForgeReg
 	@SuppressWarnings("deprecation")
 	public static FluidStack deserializeFluidStack(JsonObject json) {
 		
-		ResourceLocation fluidName = new ResourceLocation(json.get("fluid").getAsString());
-		Fluid fluid = Registry.FLUID.getOrDefault(fluidName);
-		int amount = json.has("amount") ? json.get("amount").getAsInt() : 1;
-		return new FluidStack(fluid, amount);
+		if (json.has("fluid")) {
+			ResourceLocation fluidName = new ResourceLocation(json.get("fluid").getAsString());
+			Fluid fluid = Registry.FLUID.getOrDefault(fluidName);
+			int amount = json.has("amount") ? json.get("amount").getAsInt() : 1;
+			return new FluidStack(fluid, amount);
+		} else {
+			return FluidStack.EMPTY;
+		}
 		
 	}
 	

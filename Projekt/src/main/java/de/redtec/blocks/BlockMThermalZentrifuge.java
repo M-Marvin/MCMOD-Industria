@@ -41,7 +41,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 public class BlockMThermalZentrifuge extends BlockContainerBase implements IElectricConnective, ISidedInventoryProvider, IAdvancedBlockInfo {
 	
-	public static final DirectionProperty FACING = BlockStateProperties.FACING;
+	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 	
 	public BlockMThermalZentrifuge() {

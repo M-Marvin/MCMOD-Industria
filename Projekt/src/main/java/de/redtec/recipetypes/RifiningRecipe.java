@@ -3,7 +3,6 @@ package de.redtec.recipetypes;
 import de.redtec.registys.ModRecipeTypes;
 import de.redtec.registys.ModSerializer;
 import de.redtec.tileentity.TileEntityMRaffinery;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -12,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
-public class RifiningRecipe implements IRecipe<IInventory> {
+public class RifiningRecipe implements IRecipe<TileEntityMRaffinery> {
 	
 	public ResourceLocation id;
 	public ItemStack[] itemsOut;
@@ -30,22 +29,12 @@ public class RifiningRecipe implements IRecipe<IInventory> {
 	}
 	
 	@Override
-	public boolean matches(IInventory inv, World worldIn) {
-		
-		if (inv instanceof TileEntityMRaffinery) {
-			
-			return ((TileEntityMRaffinery) inv).fluidIn.getFluid() == this.fluidIn.getFluid() && ((TileEntityMRaffinery) inv).fluidIn.getAmount() >= this.fluidIn.getAmount();
-			
-		} else {
-			
-			return false;
-			
-		}
-		
+	public boolean matches(TileEntityMRaffinery inv, World worldIn) {
+		return inv.fluidIn.getFluid() == this.fluidIn.getFluid() && inv.fluidIn.getAmount() >= this.fluidIn.getAmount();		
 	}
 	
 	@Override
-	public ItemStack getCraftingResult(IInventory inv) {
+	public ItemStack getCraftingResult(TileEntityMRaffinery inv) {
 		return this.itemsOut[0].copy();
 	}
 

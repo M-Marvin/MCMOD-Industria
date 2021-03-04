@@ -5,6 +5,8 @@ import de.redtec.recipetypes.AlloyRecipe;
 import de.redtec.recipetypes.AlloyRecipeSerializer;
 import de.redtec.recipetypes.BlendingRecipe;
 import de.redtec.recipetypes.BlendingRecipeSerializer;
+import de.redtec.recipetypes.FluidBathRecipe;
+import de.redtec.recipetypes.FluidBathRecipeSerializer;
 import de.redtec.recipetypes.RifiningRecipe;
 import de.redtec.recipetypes.RifiningRecipeSerializer;
 import de.redtec.recipetypes.SchredderRecipe;
@@ -31,11 +33,12 @@ public class ModSerializer {
 	public static final ThermalZentrifugeRecipeSerializer<ThermalZentrifugeRecipe> THERMAL_ZENTRIFUGE = register("thermal_zentrifuge", new ThermalZentrifugeRecipeSerializer<ThermalZentrifugeRecipe>(ThermalZentrifugeRecipe::new));
 	public static final WashingRecipeSerializer<WashingRecipe> WASHING = register("washing", new WashingRecipeSerializer<WashingRecipe>(WashingRecipe::new));
 	public static final AlloyRecipeSerializer<AlloyRecipe> ALLOY = register("alloy", new AlloyRecipeSerializer<AlloyRecipe>(AlloyRecipe::new));
+	public static final FluidBathRecipeSerializer<FluidBathRecipe> FLUID_BATH = register("fluid_bath", new FluidBathRecipeSerializer<FluidBathRecipe>(FluidBathRecipe::new));
 	
 	static <S extends IRecipeSerializer<T>, T extends IRecipe<?>> S register(String key, S recipeSerializer) {
 		recipeSerializer.setRegistryName(new ResourceLocation(RedTec.MODID, key));
 		ForgeRegistries.RECIPE_SERIALIZERS.register(recipeSerializer);
 		return recipeSerializer;
 	}
-
+	
 }

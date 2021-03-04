@@ -79,6 +79,7 @@
 "block.redtec.thermal_zentrifuge": "Thermalzentrifuge",
 "block.redtec.motor": "Elektromotor (WIP)",
 "block.redtec.alloy_furnace": "Legierungsofen",
+"block.redtec.fluid_bath": "Fl\u00fcssigkeits Produktionsanlage",
 
 "item.redtec.steam_bucket": "Dampfeimer",
 "item.redtec.destilled_water_bucket": "Eimer kondensiertes Wasser",

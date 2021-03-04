@@ -394,7 +394,7 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 		this.progress3 = compound.getInt("progress3");
 		this.progress4 = compound.getInt("progress4");
 		this.progressTotal = compound.getInt("progressTotal");
-		if (compound.contains("Recipe")) {
+		if (compound.contains("Recipe") && this.world != null) {
 			Optional<? extends IRecipe<?>> recipe = this.world.getRecipeManager().getRecipe(new ResourceLocation(compound.getString("Recipe")));
 			if (recipe.isPresent()) this.currentRecipe = (RifiningRecipe) recipe.get();
 		}

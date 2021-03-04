@@ -32,6 +32,7 @@ import de.redtec.blocks.BlockMAlloyFurnace;
 import de.redtec.blocks.BlockMBlender;
 import de.redtec.blocks.BlockMCoalHeater;
 import de.redtec.blocks.BlockMElectricFurnace;
+import de.redtec.blocks.BlockMFluidBath;
 import de.redtec.blocks.BlockMGenerator;
 import de.redtec.blocks.BlockMMultimeter;
 import de.redtec.blocks.BlockMRaffinery;
@@ -40,6 +41,7 @@ import de.redtec.blocks.BlockMSteamGenerator;
 import de.redtec.blocks.BlockMThermalZentrifuge;
 import de.redtec.blocks.BlockMTransformatorCoil;
 import de.redtec.blocks.BlockMTransformatorContact;
+import de.redtec.blocks.BlockMotor;
 import de.redtec.blocks.BlockPanelLamp;
 import de.redtec.blocks.BlockPowerEmiting;
 import de.redtec.blocks.BlockPowerSwitch;
@@ -56,7 +58,6 @@ import de.redtec.blocks.BlockSignalWire;
 import de.redtec.blocks.BlockStackedRedstoneTorch;
 import de.redtec.blocks.BlockStackedRedstoneWire;
 import de.redtec.blocks.BlockStoringCraftingTable;
-import de.redtec.blocks.BlockMotor;
 import de.redtec.fluids.BlockChemicalWater;
 import de.redtec.fluids.BlockDestilledWater;
 import de.redtec.fluids.BlockNatronLye;
@@ -73,6 +74,7 @@ import de.redtec.gui.ScreenMAlloyFurnace;
 import de.redtec.gui.ScreenMBlender;
 import de.redtec.gui.ScreenMCoalHeater;
 import de.redtec.gui.ScreenMElectricFurnace;
+import de.redtec.gui.ScreenMFluidBath;
 import de.redtec.gui.ScreenMGenerator;
 import de.redtec.gui.ScreenMRaffinery;
 import de.redtec.gui.ScreenMSchredder;
@@ -109,6 +111,7 @@ import de.redtec.renderer.TileEntityConveyorBeltRenderer;
 import de.redtec.renderer.TileEntityFuseBoxRenderer;
 import de.redtec.renderer.TileEntityGaugeRenderer;
 import de.redtec.renderer.TileEntityMBlenderRenderer;
+import de.redtec.renderer.TileEntityMFluidBathRenderer;
 import de.redtec.renderer.TileEntityMRaffineryRenderer;
 import de.redtec.renderer.TileEntityMSchredderRenderer;
 import de.redtec.renderer.TileEntityMSteamGeneratorRenderer;
@@ -253,6 +256,7 @@ public class RedTec {
 	public static final Block raffinery = new BlockMRaffinery();
 	public static final Block alloy_furnace = new BlockMAlloyFurnace();
 	public static final Block thermal_zentrifuge = new BlockMThermalZentrifuge();
+	public static final Block fluid_bath = new BlockMFluidBath();
 	
 	// Ore and Resource Blocks
 	public static final Block bauxit = new BlockBase("bauxit", Material.ROCK, 1.5F, SoundType.STONE);
@@ -576,6 +580,7 @@ public class RedTec {
 		ModGameRegistry.registerBlock(conveyor_belt, MACHINES);
 		ModGameRegistry.registerBlock(conveyor_spliter, MACHINES);
 		ModGameRegistry.registerBlock(thermal_zentrifuge, MACHINES);
+		ModGameRegistry.registerBlock(fluid_bath, MACHINES);
 		
 		// TODO
 		ModGameRegistry.registerBlock(motor, MACHINES);
@@ -612,7 +617,6 @@ public class RedTec {
 		ModGameRegistry.registerItem(tin_oxid);
 		ModGameRegistry.registerItem(iron_oxid);
 		ModGameRegistry.registerItem(copper_oxid);
-		ModGameRegistry.registerItem(tin_oxid);
 		ModGameRegistry.registerItem(pure_gold);
 		ModGameRegistry.registerItem(pure_silver);
 		ModGameRegistry.registerItem(pure_palladium);
@@ -649,9 +653,7 @@ public class RedTec {
 		ModGameRegistry.registerItem(steel_nugget);
 		ModGameRegistry.registerItem(aluminium_ingot);
 		ModGameRegistry.registerItem(aluminium_nugget);
-		ModGameRegistry.registerItem(redstone_ingot);
 		ModGameRegistry.registerItem(redstone_nugget);
-		ModGameRegistry.registerItem(aluminium_ingot);
 		ModGameRegistry.registerItem(tin_ingot);
 		ModGameRegistry.registerItem(tin_nugget);
 		ModGameRegistry.registerItem(wolfram_ingot);
@@ -665,7 +667,6 @@ public class RedTec {
 		ModGameRegistry.registerItem(monel_ingot);
 		ModGameRegistry.registerItem(monel_nugget);
 		ModGameRegistry.registerItem(copper_dust);
-		ModGameRegistry.registerItem(copper_nugget);
 		ModGameRegistry.registerItem(electrolyt_copper_dust);
 		ModGameRegistry.registerItem(tpo_electrolyt_copper_dust);
 		ModGameRegistry.registerItem(steel_dust);
@@ -692,7 +693,6 @@ public class RedTec {
 		ModGameRegistry.registerItem(steel_plate);
 		ModGameRegistry.registerItem(aluminium_plate);
 		ModGameRegistry.registerItem(redstone_alloy_plate);
-		ModGameRegistry.registerItem(aluminium_plate);
 		ModGameRegistry.registerItem(tin_plate);
 		ModGameRegistry.registerItem(wolfram_plate);
 		ModGameRegistry.registerItem(silver_plate);
@@ -723,7 +723,6 @@ public class RedTec {
 		ModGameRegistry.registerItem(electrolyt_paper);
 		ModGameRegistry.registerItem(salt);
 		ModGameRegistry.registerItem(natrium);
-		
 		ModGameRegistry.registerItem(fluid_meter);
 		ModGameRegistry.registerItem(energy_meter);
 		ModGameRegistry.registerItem(fuse_elv);
@@ -834,6 +833,7 @@ public class RedTec {
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.BLENDER, TileEntityMBlenderRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CONVEYOR_BELT, TileEntityConveyorBeltRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.RAFFINERY, TileEntityMRaffineryRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.FLUID_BATH, TileEntityMFluidBathRenderer::new);
 		
 		ScreenManager.registerFactory(ModContainerType.STORED_CRAFTING, ScreenStoredCrafting::new);
 		ScreenManager.registerFactory(ModContainerType.PROCESSOR, ScreenProcessor::new);
@@ -849,6 +849,7 @@ public class RedTec {
 		ScreenManager.registerFactory(ModContainerType.RAFFINERY, ScreenMRaffinery::new);
 		ScreenManager.registerFactory(ModContainerType.THERMAL_ZENTRIFUGE, ScreenMThermalZentrifuge::new);
 		ScreenManager.registerFactory(ModContainerType.ALLOY_FURNACE, ScreenMAlloyFurnace::new);
+		ScreenManager.registerFactory(ModContainerType.FLUID_BATH, ScreenMFluidBath::new);
 		
 	}
 	

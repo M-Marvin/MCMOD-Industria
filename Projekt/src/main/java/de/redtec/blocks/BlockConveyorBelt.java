@@ -81,9 +81,23 @@ public class BlockConveyorBelt extends BlockContainerBase implements IAdvancedBl
 		Direction facing = state.get(FACING);
 		BlockState stateRight = world.getBlockState(pos.offset(facing.rotateY()));
 		BlockState stateLeft = world.getBlockState(pos.offset(facing.rotateYCCW()));
-		state = state.with(RIGHT, (stateRight.getBlock() == this ? stateRight.get(FACING) == facing.rotateYCCW() : false) ? BeltState.OPEN : BeltState.CLOSE);
-		state = state.with(LEFT, (stateLeft.getBlock() == this ? stateLeft.get(FACING) == facing.rotateY() : false) ? BeltState.OPEN : BeltState.CLOSE);
+		state = state.with(RIGHT, canConnectWithState(stateRight, facing.rotateY()) ? BeltState.OPEN : BeltState.CLOSE);
+		state = state.with(LEFT, canConnectWithState(stateLeft, facing.rotateYCCW()) ? BeltState.OPEN : BeltState.CLOSE);
 		return state;
+	}
+	
+	public boolean canConnectWithState(BlockState state, Direction side) {
+		if (state.getBlock() instanceof BlockConveyorSpliter) {
+			Direction facing = state.get(FACING);
+			if (state.get(RIGHT) == BeltState.OPEN) {
+				return side == facing.rotateYCCW();
+			} else if (state.get(LEFT) == BeltState.OPEN) {
+				return side == facing.rotateY();
+			}
+		} else if (state.getBlock() instanceof BlockConveyorBelt) {
+			return state.get(FACING) == side.getOpposite();
+		}
+		return false;
 	}
 	
 	@Override

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RKK",
+    "EFF"
+  ],
+  "key": {
+    "R": {
+      "item": "redtec:bearing"
+    },
+    "K": {
+      "item": "redtec:iron_rod"
+    },
+    "E": {
+      "item": "redtec:spring"
+    },
+    "F": {
+      "item": "redtec:conveyor_belt"
+    }
+  },
+  "result": {
+    "item": "redtec:conveyor_spliter",
+    "count": 2
+  }
+}

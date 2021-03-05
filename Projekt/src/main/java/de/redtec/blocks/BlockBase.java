@@ -15,14 +15,30 @@ import net.minecraftforge.common.ToolType;
 
 public class BlockBase extends Block {
 	
+	protected boolean overrideDrops;
+	
 	public BlockBase(String name, Properties properties) {
 		super(properties);
 		this.setRegistryName(RedTec.MODID, name);
+		this.overrideDrops = true;
 	}
 	
 	public BlockBase(String name, Material material, float hardnessAndResistance, SoundType sound) {
 		super(Properties.create(material).hardnessAndResistance(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)));
 		this.setRegistryName(RedTec.MODID, name);
+		this.overrideDrops = true;
+	}
+
+	public BlockBase(String name, Properties properties, boolean overrideDrops) {
+		super(properties);
+		this.setRegistryName(RedTec.MODID, name);
+		this.overrideDrops = overrideDrops;
+	}
+	
+	public BlockBase(String name, Material material, float hardnessAndResistance, SoundType sound, boolean overrideDrops) {
+		super(Properties.create(material).hardnessAndResistance(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)));
+		this.setRegistryName(RedTec.MODID, name);
+		this.overrideDrops = overrideDrops;
 	}
 	
 	public static ToolType getDefaultToolType(Material material) {
@@ -36,9 +52,13 @@ public class BlockBase extends Block {
 	@SuppressWarnings("deprecation")
 	@Override
 	public List<ItemStack> getDrops(BlockState state, Builder builder) {
-		List<ItemStack> drops = new ArrayList<ItemStack>();
-		drops.add(new ItemStack(Item.getItemFromBlock(this), 1));
-		return drops;
+		if (this.overrideDrops) {
+			List<ItemStack> drops = new ArrayList<ItemStack>();
+			drops.add(new ItemStack(Item.getItemFromBlock(this), 1));
+			return drops;
+		} else {
+			return super.getDrops(state, builder);
+		}
 	}
 	
 }

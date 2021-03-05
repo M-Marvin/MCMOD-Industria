@@ -268,6 +268,7 @@ public class RedTec {
 	public static final Block silver_ore = new BlockBase("silver_ore", Material.ROCK, 3F, SoundType.STONE);
 	public static final Block palladium_ore = new BlockBase("palladium_ore", Material.ROCK, 3F, SoundType.STONE);
 	public static final Block nickel_ore = new BlockBase("nickel_ore", Material.ROCK, 3F, SoundType.STONE);
+	public static final Block sulfur_ore = new BlockBase("sulfur_ore", Material.ROCK, 3F, SoundType.STONE, false);
 	public static final Block copper_block = new BlockBase("copper_block", Material.IRON, 1.2F, SoundType.METAL);
 	public static final Block redstone_alloy_block = new BlockPowerEmiting("redstone_alloy_block", Material.IRON, 1.2F, SoundType.METAL, 8);
 	public static final Block aluminium_block = new BlockBase("aluminium_block", Material.IRON, 1.2F, SoundType.METAL);
@@ -279,8 +280,6 @@ public class RedTec {
 	public static final Block silver_block = new BlockBase("silver_block", Material.IRON, 1.2F, SoundType.METAL);
 	public static final Block palladium_block = new BlockBase("palladium_block", Material.IRON, 1.2F, SoundType.METAL);
 	public static final Block tin_block = new BlockBase("tin_block", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block chiseled_smooth_stone = new BlockBase("chiseled_smooth_stone", Material.ROCK, 1.5F, SoundType.STONE);
-	public static final Block smooth_cobblestone = new BlockBase("smooth_cobblestone", Material.ROCK, 2, SoundType.STONE);
 	
 	// Deko Blocks
 	public static final Block gold_plates = new BlockBase("gold_plates", Material.IRON, 1.2F, SoundType.METAL);
@@ -311,6 +310,8 @@ public class RedTec {
 	public static final Block nickel_planks = new BlockPowerEmiting("nickel_planks", Material.IRON, 1.2F, SoundType.METAL, 4);
 	public static final Block monel_planks = new BlockPowerEmiting("monel_planks", Material.IRON, 1.2F, SoundType.METAL, 4);
 	public static final Block netherite_planks = new BlockPowerEmiting("netherite_planks", Material.IRON, 2.4F, SoundType.field_235594_P_, 4);
+	public static final Block chiseled_smooth_stone = new BlockBase("chiseled_smooth_stone", Material.ROCK, 1.5F, SoundType.STONE);
+	public static final Block smooth_cobblestone = new BlockBase("smooth_cobblestone", Material.ROCK, 2, SoundType.STONE);
 	
 	// Fluids and Buckets
 	public static final Block steam = new BlockSteam();
@@ -441,6 +442,7 @@ public class RedTec {
 	public static final Item aluminium_wire = new ItemBase("aluminium_wire", MATERIALS);
 	public static final Item rubber = new ItemBase("rubber", MATERIALS);
 	public static final Item plastic_pellets = new ItemBase("plastic_pellets", MATERIALS);
+	public static final Item plastic_plate = new ItemBase("plastic_plate", MATERIALS);
 	public static final Item polymer_resin = new ItemBase("polymer_resin", MATERIALS);
 	public static final Item coal_coke = new ItemBase("coal_coke", MATERIALS);
 	public static final Item silicon = new ItemBase("silicon", MATERIALS);
@@ -553,6 +555,7 @@ public class RedTec {
 		ModGameRegistry.registerBlock(nickel_planks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(monel_planks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(netherite_planks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(sulfur_ore, BUILDING_BLOCKS);
 		
 		ModGameRegistry.registerBlock(smooth_cobblestone, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(chiseled_smooth_stone, BUILDING_BLOCKS);
@@ -732,6 +735,7 @@ public class RedTec {
 		ModGameRegistry.registerItem(schredder_crusher);
 		ModGameRegistry.registerItem(sulfur);
 		ModGameRegistry.registerItem(sulfur_dioxid);
+		ModGameRegistry.registerItem(plastic_plate);
 		
 		// register Functional Items
 		ModGameRegistry.registerItem(lever_element);

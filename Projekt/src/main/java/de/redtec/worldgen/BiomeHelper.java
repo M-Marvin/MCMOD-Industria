@@ -6,9 +6,11 @@ import java.util.List;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
 
+import net.minecraft.util.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeGenerationSettings;
 import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.GenerationStage.Decoration;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
@@ -30,6 +32,25 @@ public class BiomeHelper {
 		biomeFeatures.set(decoration.ordinal(), features);
 		
 		ObfuscationReflectionHelper.setPrivateValue(BiomeGenerationSettings.class, biome.func_242440_e(), biomeFeatures, "field_242484_f");
+		
+	}
+	
+	@SafeVarargs
+	public static void addToBiome(Biome iterateBiome, Decoration decorationType, ConfiguredFeature<?, ?> feature, RegistryKey<Biome>... biomes) {
+		
+		boolean flag = false;
+		for (RegistryKey<Biome> b : biomes) {
+			if (b.func_240901_a_().equals(iterateBiome.getRegistryName())) {
+				flag = true;
+				break;
+			}
+		}
+		
+		if (flag) {
+			
+			addFeature(iterateBiome, decorationType, feature);
+			
+		}
 		
 	}
 	

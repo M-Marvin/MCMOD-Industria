@@ -41,7 +41,7 @@ public class TileEntityMMultimeter extends TileEntityGauge implements ITickableT
 		if (unit != this.decimalUnit || value != this.value) {
 			this.decimalUnit = unit;	
 			this.value = value;
-			this.world.notifyNeighborsOfStateChange(pos, RedTec.block_multimeter);
+			this.world.notifyNeighborsOfStateChange(pos, RedTec.multimeter);
 		}
 	}
 	

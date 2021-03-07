@@ -27,7 +27,7 @@ public abstract class BlockRedstoneDiode extends BlockBase {
 	public static final DirectionProperty FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
 	
 	protected BlockRedstoneDiode(String name) {
-		super(name, Material.MISCELLANEOUS, 0, SoundType.WOOD);
+		super(name, Material.MISCELLANEOUS, 0, SoundType.WOOD, true);
 	}
 	
 	@Override

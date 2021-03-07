@@ -46,7 +46,7 @@ public class BlockHoverControler extends BlockContainerBase implements ISignalCo
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	
 	public BlockHoverControler() {
-		super("hover_controler", Material.IRON, 2, SoundType.ANVIL);
+		super("hover_controler", Material.IRON, 6, SoundType.ANVIL);
 	}
 	
 	@Override

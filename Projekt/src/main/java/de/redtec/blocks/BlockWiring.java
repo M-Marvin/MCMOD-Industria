@@ -45,7 +45,7 @@ public abstract class BlockWiring extends BlockBase implements IWaterLoggable {
 	public final VoxelShape[] SHAPES;
 	
 	public BlockWiring(String name, Material material, float hardnessAndResistance, SoundType sound, int size) {
-		super(name, material, hardnessAndResistance, sound);
+		super(name, material, hardnessAndResistance, sound, true);
 		int halfSize = size / 2;
 		this.S_NORTH = Block.makeCuboidShape(8 - halfSize, 0, 0, 8 + halfSize, halfSize * 2, 8 - halfSize);
 		this.S_SOUTH = Block.makeCuboidShape(8 - halfSize, 0, 8 + halfSize, 8 + halfSize, halfSize * 2, 16);

@@ -39,7 +39,7 @@ public class BlockRedstoneReciver extends BlockContainerBase implements ISignalC
 	public static final BooleanProperty POWERED = BooleanProperty.create("powered");
 	
 	public BlockRedstoneReciver() {
-		super("redstone_reciver", Material.ROCK, 1, SoundType.STONE);
+		super("redstone_reciver", Material.ROCK, 1.5F, 0.5F, SoundType.STONE);
 		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(TRANSIVER_MODE, false).with(POWERED, false));
 	}
 	

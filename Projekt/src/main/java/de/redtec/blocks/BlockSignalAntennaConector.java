@@ -35,7 +35,7 @@ public class BlockSignalAntennaConector extends BlockContainerBase implements IS
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	
 	public BlockSignalAntennaConector() {
-		super("antenna_conector", Material.IRON, 1, SoundType.METAL);
+		super("antenna_conector", Material.IRON, 1.5F, 0.5F, SoundType.METAL);
 	}
 	
 	@Override

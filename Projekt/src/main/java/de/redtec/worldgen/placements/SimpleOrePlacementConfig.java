@@ -1,4 +1,4 @@
-package de.redtec.worldgen;
+package de.redtec.worldgen.placements;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

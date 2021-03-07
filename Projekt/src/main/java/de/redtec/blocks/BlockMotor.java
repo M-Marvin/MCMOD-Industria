@@ -25,7 +25,7 @@ public class BlockMotor extends BlockContainerBase implements IElectricConnectiv
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	
 	public BlockMotor() {
-		super("motor", Material.IRON, 2F, SoundType.METAL);
+		super("motor", Material.IRON, 3F, SoundType.METAL);
 	}
 	
 	@Override

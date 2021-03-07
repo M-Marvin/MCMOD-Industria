@@ -42,7 +42,7 @@ public class BlockRailPiston extends BlockBase {
 	private int maxPushBlocks;
 	
 	public BlockRailPiston() {
-		super("rail_piston", Material.ROCK, 1, SoundType.STONE);
+		super("rail_piston", Material.ROCK, 1.5F, 0.5F, SoundType.STONE, true);
 		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, false));
 		this.maxPushBlocks = 1000;
 	}

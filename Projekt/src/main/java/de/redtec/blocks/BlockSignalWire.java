@@ -55,7 +55,7 @@ public class BlockSignalWire extends BlockBase implements ISignalConnective, IWa
 	public static final VoxelShape[] SHAPES = new VoxelShape[] {S_DOWN, S_UP, S_NORTH, S_SOUTH, S_WEST, S_EAST};
 	
 	public BlockSignalWire() {
-		super("signal_wire", Material.ROCK, 1, SoundType.LANTERN);
+		super("signal_wire", Material.ROCK, 1F, 0.5F, SoundType.LANTERN, true);
 		this.setDefaultState(this.stateContainer.getBaseState().with(NORTH, AttachType.NONE).with(SOUTH, AttachType.NONE).with(EAST, AttachType.NONE).with(WEST, AttachType.NONE));
 	}
 	

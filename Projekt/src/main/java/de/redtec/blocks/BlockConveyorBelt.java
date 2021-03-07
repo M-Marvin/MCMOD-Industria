@@ -50,7 +50,7 @@ public class BlockConveyorBelt extends BlockContainerBase implements IAdvancedBl
 	}
 	
 	public BlockConveyorBelt() {
-		super("conveyor_belt", Material.IRON, 1.5F, SoundType.LADDER);
+		super("conveyor_belt", Material.IRON, 1.5F, SoundType.LADDER, true);
 		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(RIGHT, BeltState.CLOSE).with(LEFT, BeltState.CLOSE));
 	}
 	
@@ -90,9 +90,9 @@ public class BlockConveyorBelt extends BlockContainerBase implements IAdvancedBl
 		if (state.getBlock() instanceof BlockConveyorSpliter) {
 			Direction facing = state.get(FACING);
 			if (state.get(RIGHT) == BeltState.OPEN) {
-				return side == facing.rotateYCCW();
+				return side == facing.rotateYCCW() || side == facing.getOpposite();
 			} else if (state.get(LEFT) == BeltState.OPEN) {
-				return side == facing.rotateY();
+				return side == facing.rotateY() || side == facing.getOpposite();
 			}
 		} else if (state.getBlock() instanceof BlockConveyorBelt) {
 			return state.get(FACING) == side.getOpposite();

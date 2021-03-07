@@ -20,6 +20,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Mirror;
@@ -34,7 +35,7 @@ import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.Template.BlockInfo;
 import net.minecraft.world.server.ServerWorld;
 
-public class TileEntityJigsaw extends TileEntity implements INamedContainerProvider {
+public class TileEntityJigsaw extends TileEntity implements INamedContainerProvider, ITickableTileEntity {
 	
 	public ResourceLocation poolFile;
 	public ResourceLocation name;
@@ -221,6 +222,23 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 	@Override
 	public ITextComponent getDisplayName() {
 		return NarratorChatListener.EMPTY;
+	}
+
+	// Called from worldgeneration (JigsawFeature)
+	public void setWaitForGenerate(int generationLevels, Random rand) {
+		this.waitForGenerateLevels = generationLevels;
+		this.randForGeneration = rand;
+	}
+	protected int waitForGenerateLevels = -1;
+	protected Random randForGeneration = null;
+
+	@Override
+	public void tick() {
+		if (!this.world.isRemote() && this.waitForGenerateLevels > 0) {
+			this.generateStructure(false, this.waitForGenerateLevels, this.randForGeneration);
+			this.waitForGenerateLevels = -1;
+			this.randForGeneration = null;
+		}
 	}
 	
 }

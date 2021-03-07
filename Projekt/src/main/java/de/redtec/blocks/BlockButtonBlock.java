@@ -26,7 +26,7 @@ public class BlockButtonBlock extends BlockBase {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	
 	public BlockButtonBlock() {
-		super("button_block", Material.WOOD, 1, SoundType.WOOD);
+		super("button_block", Material.WOOD, 0.5F, SoundType.WOOD, true);
 		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, false));
 	}
 	

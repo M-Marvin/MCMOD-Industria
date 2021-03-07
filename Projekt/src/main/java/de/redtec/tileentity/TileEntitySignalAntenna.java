@@ -67,7 +67,7 @@ public class TileEntitySignalAntenna extends TileEntity {
 	public void reciveSignal(RedstoneControlSignal signal) {
 		
 		BlockState state = world.getBlockState(pos);
-		if (!sendedSignals.contains(signal) && state.getBlock() == RedTec.signal_antenna_conector) {
+		if (!sendedSignals.contains(signal) && state.getBlock() == RedTec.antenna_conector) {
 			sendedSignals.add(signal);
 			((BlockSignalAntennaConector) state.getBlock()).sendSignal(world, pos, signal);
 		}

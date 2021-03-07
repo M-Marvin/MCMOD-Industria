@@ -16,6 +16,7 @@ public class ModTags {
 	public static final ITag<Fluid> HOT_WATER = tagFluid("hot_water");
 	public static final ITag<Fluid> STEAM = tagFluid("steam");
 	public static final ITag<Block> CONVEYOR_BELT = tagBlock("conveyor_belt");
+	public static final ITag<Block> DIRT = tagBlockForge("dirt");
 	
 	private static IOptionalNamedTag<Fluid> tagFluid(String name) {
 		return FluidTags.createOptional(new ResourceLocation(RedTec.MODID, name));
@@ -23,6 +24,10 @@ public class ModTags {
 	
 	private static IOptionalNamedTag<Block> tagBlock(String name) {
 		return BlockTags.createOptional(new ResourceLocation(RedTec.MODID, name));
+	}
+
+	private static IOptionalNamedTag<Block> tagBlockForge(String name) {
+		return BlockTags.createOptional(new ResourceLocation("forge", name));
 	}
 	
 }

@@ -27,7 +27,9 @@ import de.redtec.blocks.BlockHoverExtension;
 import de.redtec.blocks.BlockInfinityPowerSource;
 import de.redtec.blocks.BlockIronRod;
 import de.redtec.blocks.BlockJigsaw;
+import de.redtec.blocks.BlockLeavesBase;
 import de.redtec.blocks.BlockLinearConector;
+import de.redtec.blocks.BlockLogBase;
 import de.redtec.blocks.BlockMAlloyFurnace;
 import de.redtec.blocks.BlockMBlender;
 import de.redtec.blocks.BlockMCoalHeater;
@@ -122,6 +124,7 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.DispenserBlock;
+import net.minecraft.block.FireBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.gui.ScreenManager;
@@ -139,9 +142,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.GenerationStage.Decoration;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -209,24 +214,23 @@ public class RedTec {
 	public static final Block advanced_moving_block = new BlockAdvancedMovingBlock("advanced_moving_block");
 	public static final Block redstone_reciver = new BlockRedstoneReciver();
 	public static final Block signal_wire = new BlockSignalWire();
-	public static final Block signal_antenna_conector = new BlockSignalAntennaConector();
+	public static final Block antenna_conector = new BlockSignalAntennaConector();
 	public static final Block linear_conector = new BlockLinearConector();
-	public static final Block storing_crafting_table = new BlockStoringCraftingTable();
 	public static final Block signal_processor_contact = new BlockSignalProcessorContact();
 	public static final Block rail_piston = new BlockRailPiston();
 	public static final Block conector_block = new BlockConectorBlock();
 	public static final Block redstone_contact = new BlockRedstoneContact();
 	public static final Block button_block = new BlockButtonBlock();
-	public static final Block stone_corner = new BlockCornerBlockBase("stone_corner", () -> Blocks.STONE.getDefaultState(), AbstractBlock.Properties.create(Material.ROCK).sound(SoundType.STONE));
 	public static final Block iron_rod = new BlockIronRod();
 	public static final Block radial_conector = new BlockRadialConector();
-	public static final Block salsola_seeds = new BlockSalsolaSeeds();
-	public static final Block hover_engine = new BlockHoverControler();
+	public static final Block hover_controler = new BlockHoverControler();
 	public static final Block hover_extension = new BlockHoverExtension();
 	public static final Block controll_panel = new BlockControllPanel();
 	public static final Block harvester = new BlockHarvester();
 	public static final Block jigsaw = new BlockJigsaw();
 	
+	// TODO
+	public static final Block storing_crafting_table = new BlockStoringCraftingTable();	
 	// Mechanic
 	public static final Block motor = new BlockMotor();
 	
@@ -248,7 +252,7 @@ public class RedTec {
 	public static final Block transformator_contact = new BlockMTransformatorContact();
 	public static final Block transformator_coil = new BlockMTransformatorCoil();
 	public static final Block fuse_box = new BlockFuseBox();
-	public static final Block block_multimeter = new BlockMMultimeter();
+	public static final Block multimeter = new BlockMMultimeter();
 	public static final Block power_switch = new BlockPowerSwitch();
 	public static final Block electric_furnace = new BlockMElectricFurnace();
 	public static final Block schredder = new BlockMSchredder();
@@ -266,52 +270,59 @@ public class RedTec {
 	public static final Block copper_ore = new BlockBase("copper_ore", Material.ROCK, 3F, SoundType.STONE);
 	public static final Block tin_ore = new BlockBase("tin_ore", Material.ROCK, 3F, SoundType.STONE);
 	public static final Block silver_ore = new BlockBase("silver_ore", Material.ROCK, 3F, SoundType.STONE);
-	public static final Block palladium_ore = new BlockBase("palladium_ore", Material.ROCK, 3F, SoundType.STONE);
+	public static final Block palladium_ore = new BlockBase("palladium_ore", Material.ROCK, 4F, 3F, SoundType.STONE);
 	public static final Block nickel_ore = new BlockBase("nickel_ore", Material.ROCK, 3F, SoundType.STONE);
-	public static final Block sulfur_ore = new BlockBase("sulfur_ore", Material.ROCK, 3F, SoundType.STONE, false);
-	public static final Block copper_block = new BlockBase("copper_block", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block redstone_alloy_block = new BlockPowerEmiting("redstone_alloy_block", Material.IRON, 1.2F, SoundType.METAL, 8);
-	public static final Block aluminium_block = new BlockBase("aluminium_block", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block electrolyt_copper_block = new BlockBase("electrolyt_copper_block", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block steel_block = new BlockBase("steel_block", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block monel_block = new BlockBase("monel_block", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block nickel_block = new BlockBase("nickel_block", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block wolfram_block = new BlockBase("wolfram_block", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block silver_block = new BlockBase("silver_block", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block palladium_block = new BlockBase("palladium_block", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block tin_block = new BlockBase("tin_block", Material.IRON, 1.2F, SoundType.METAL);
+	public static final Block sulfur_ore = new BlockBase("sulfur_ore", Material.ROCK, 3F, SoundType.STONE);
+	public static final Block copper_block = new BlockBase("copper_block", Material.IRON, 5F, 6F, SoundType.METAL);
+	public static final Block redstone_alloy_block = new BlockPowerEmiting("redstone_alloy_block", Material.IRON, 5F, 6F, SoundType.METAL, 8);
+	public static final Block aluminium_block = new BlockBase("aluminium_block", Material.IRON, 2F, 4F, SoundType.METAL);
+	public static final Block electrolyt_copper_block = new BlockBase("electrolyt_copper_block", Material.IRON, 5F, 6F, SoundType.METAL);
+	public static final Block steel_block = new BlockBase("steel_block", Material.IRON, 5F, 6F, SoundType.METAL);
+	public static final Block monel_block = new BlockBase("monel_block", Material.IRON, 5F, 6F, SoundType.METAL);
+	public static final Block nickel_block = new BlockBase("nickel_block", Material.IRON, 5F, 6F, SoundType.METAL);
+	public static final Block wolfram_block = new BlockBase("wolfram_block", Material.IRON, 7F, 10F, SoundType.METAL);
+	public static final Block silver_block = new BlockBase("silver_block", Material.IRON, 5F, 6F, SoundType.METAL);
+	public static final Block palladium_block = new BlockBase("palladium_block", Material.IRON, 5F, 6F, SoundType.METAL);
+	public static final Block tin_block = new BlockBase("tin_block", Material.IRON, 5F, 6F, SoundType.METAL);
 	
 	// Deko Blocks
-	public static final Block gold_plates = new BlockBase("gold_plates", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block iron_plates = new BlockBase("iron_plates", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block netherite_plates = new BlockBase("netherite_plates", Material.IRON, 2.4F, SoundType.field_235594_P_);
-	public static final Block copper_plates = new BlockBase("copper_plates", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block aluminium_plates = new BlockBase("aluminium_plates", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block electrolyt_copper_plates = new BlockBase("electrolyt_copper_plates", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block steel_plates = new BlockBase("steel_plates", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block redstone_alloy_plates = new BlockPowerEmiting("redstone_alloy_plates", Material.IRON, 1.2F, SoundType.METAL, 4);
-	public static final Block tin_plates = new BlockPowerEmiting("tin_plates", Material.IRON, 1.2F, SoundType.METAL, 4);
-	public static final Block silver_plates = new BlockPowerEmiting("silver_plates", Material.IRON, 1.2F, SoundType.METAL, 4);
-	public static final Block palladium_plates = new BlockPowerEmiting("palladium_plates", Material.IRON, 1.2F, SoundType.METAL, 4);
-	public static final Block wolfram_plates = new BlockPowerEmiting("wolfram_plates", Material.IRON, 1.2F, SoundType.METAL, 4);
-	public static final Block nickel_plates = new BlockPowerEmiting("nickel_plates", Material.IRON, 1.2F, SoundType.METAL, 4);
-	public static final Block monel_plates = new BlockPowerEmiting("monel_plates", Material.IRON, 1.2F, SoundType.METAL, 4);
-	public static final Block gold_planks = new BlockBase("gold_planks", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block iron_planks = new BlockBase("iron_planks", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block copper_planks = new BlockBase("copper_planks", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block aluminium_planks = new BlockBase("aluminium_planks", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block electrolyt_copper_planks = new BlockBase("electrolyt_copper_planks", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block steel_planks = new BlockBase("steel_planks", Material.IRON, 1.2F, SoundType.METAL);
-	public static final Block redstone_alloy_planks = new BlockPowerEmiting("redstone_alloy_planks", Material.IRON, 1.2F, SoundType.METAL, 4);
-	public static final Block tin_planks = new BlockPowerEmiting("tin_planks", Material.IRON, 1.2F, SoundType.METAL, 4);
-	public static final Block silver_planks = new BlockPowerEmiting("silver_planks", Material.IRON, 1.2F, SoundType.METAL, 4);
-	public static final Block palladium_planks = new BlockPowerEmiting("palladium_planks", Material.IRON, 1.2F, SoundType.METAL, 4);
-	public static final Block wolfram_planks = new BlockPowerEmiting("wolfram_planks", Material.IRON, 1.2F, SoundType.METAL, 4);
-	public static final Block nickel_planks = new BlockPowerEmiting("nickel_planks", Material.IRON, 1.2F, SoundType.METAL, 4);
-	public static final Block monel_planks = new BlockPowerEmiting("monel_planks", Material.IRON, 1.2F, SoundType.METAL, 4);
-	public static final Block netherite_planks = new BlockPowerEmiting("netherite_planks", Material.IRON, 2.4F, SoundType.field_235594_P_, 4);
-	public static final Block chiseled_smooth_stone = new BlockBase("chiseled_smooth_stone", Material.ROCK, 1.5F, SoundType.STONE);
-	public static final Block smooth_cobblestone = new BlockBase("smooth_cobblestone", Material.ROCK, 2, SoundType.STONE);
+	public static final Block gold_plates = new BlockBase("gold_plates", Material.IRON, 1.5F, 2.2F, SoundType.METAL);
+	public static final Block iron_plates = new BlockBase("iron_plates", Material.IRON, 2.5F, 3F, SoundType.METAL);
+	public static final Block netherite_plates = new BlockBase("netherite_plates", Material.IRON, 25F, 600F, SoundType.field_235594_P_);
+	public static final Block copper_plates = new BlockBase("copper_plates", Material.IRON, 2.5F, 3F, SoundType.METAL);
+	public static final Block aluminium_plates = new BlockBase("aluminium_plates", Material.IRON, 1.5F, 2F, SoundType.METAL);
+	public static final Block electrolyt_copper_plates = new BlockBase("electrolyt_copper_plates", Material.IRON, 2.5F, 3F, SoundType.METAL);
+	public static final Block steel_plates = new BlockBase("steel_plates", Material.IRON, 2.5F, 3F, SoundType.METAL);
+	public static final Block redstone_alloy_plates = new BlockPowerEmiting("redstone_alloy_plates", Material.IRON, 2.5F, 3F, SoundType.METAL, 4);
+	public static final Block tin_plates = new BlockBase("tin_plates", Material.IRON, 2.5F, 3F, SoundType.METAL);
+	public static final Block silver_plates = new BlockBase("silver_plates", Material.IRON, 2.5F, 3F, SoundType.METAL);
+	public static final Block palladium_plates = new BlockBase("palladium_plates", Material.IRON, 2.5F, 3F, SoundType.METAL);
+	public static final Block wolfram_plates = new BlockBase("wolfram_plates", Material.IRON, 3.5F, 3.7F, SoundType.METAL);
+	public static final Block nickel_plates = new BlockBase("nickel_plates", Material.IRON, 2.5F, 3F, SoundType.METAL);
+	public static final Block monel_plates = new BlockBase("monel_plates", Material.IRON, 2.5F, 3F, SoundType.METAL);
+	public static final Block gold_planks = new BlockBase("gold_planks", Material.IRON, 1.5F, 2F, SoundType.METAL);
+	public static final Block iron_planks = new BlockBase("iron_planks", Material.IRON, 2.5F, 3F, SoundType.METAL);
+	public static final Block copper_planks = new BlockBase("copper_planks", Material.IRON, 2.5F, 3F, SoundType.METAL);
+	public static final Block aluminium_planks = new BlockBase("aluminium_planks", Material.IRON, 1.5F, 2F, SoundType.METAL);
+	public static final Block electrolyt_copper_planks = new BlockBase("electrolyt_copper_planks", Material.IRON, 2.5F, 3F, SoundType.METAL);
+	public static final Block steel_planks = new BlockBase("steel_planks", Material.IRON, 2.5F, 3F, SoundType.METAL);
+	public static final Block redstone_alloy_planks = new BlockPowerEmiting("redstone_alloy_planks", Material.IRON, 2.5F, 3F, SoundType.METAL, 4);
+	public static final Block tin_planks = new BlockBase("tin_planks", Material.IRON, 2.5F, 3F, SoundType.METAL);
+	public static final Block silver_planks = new BlockBase("silver_planks", Material.IRON, 2.5F, 3F, SoundType.METAL);
+	public static final Block palladium_planks = new BlockBase("palladium_planks", Material.IRON, 2.5F, 3F, SoundType.METAL);
+	public static final Block wolfram_planks = new BlockBase("wolfram_planks", Material.IRON, 3.5F, 3.7F, SoundType.METAL);
+	public static final Block nickel_planks = new BlockBase("nickel_planks", Material.IRON, 2.5F, 3F, SoundType.METAL);
+	public static final Block monel_planks = new BlockBase("monel_planks", Material.IRON, 2.5F, 3F, SoundType.METAL);
+	public static final Block netherite_planks = new BlockBase("netherite_planks", Material.IRON, 25F, 600F, SoundType.field_235594_P_);
+	public static final Block chiseled_smooth_stone = new BlockBase("chiseled_smooth_stone", Material.ROCK, 2F, 6F, SoundType.STONE);
+	public static final Block smooth_cobblestone = new BlockBase("smooth_cobblestone", Material.ROCK, 2F, 6F, SoundType.STONE);
+	public static final Block stone_corner = new BlockCornerBlockBase("stone_corner", () -> Blocks.STONE.getDefaultState(), AbstractBlock.Properties.create(Material.ROCK).sound(SoundType.STONE));
+	
+	// Nature Blocks
+	public static final Block salsola_seeds = new BlockSalsolaSeeds();
+	public static final Block rubber_log = new BlockLogBase("rubber_log", Material.WOOD, 2F, SoundType.WOOD);
+	public static final Block rubber_wood = new BlockLogBase("rubber_wood", Material.WOOD, 2F, SoundType.WOOD);
+	public static final Block rubber_laves = new BlockLeavesBase("rubber_leaves", Material.WOOD, 0.2F, 0.2F, SoundType.PLANT);
 	
 	// Fluids and Buckets
 	public static final Block steam = new BlockSteam();
@@ -489,7 +500,7 @@ public class RedTec {
 		ModGameRegistry.registerTechnicalBlock(advanced_moving_block);
 		ModGameRegistry.registerBlock(redstone_reciver, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(signal_wire, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(signal_antenna_conector, ItemGroup.REDSTONE);
+		ModGameRegistry.registerBlock(antenna_conector, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(linear_conector, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(storing_crafting_table, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(signal_processor_contact, ItemGroup.REDSTONE);
@@ -498,7 +509,7 @@ public class RedTec {
 		ModGameRegistry.registerBlock(redstone_contact, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(button_block, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(radial_conector, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(hover_engine, ItemGroup.REDSTONE);
+		ModGameRegistry.registerBlock(hover_controler, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(hover_extension, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(controll_panel, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(harvester, ItemGroup.REDSTONE);
@@ -573,7 +584,7 @@ public class RedTec {
 		ModGameRegistry.registerBlock(transformator_coil, MACHINES);
 		ModGameRegistry.registerBlock(transformator_contact, MACHINES);
 		ModGameRegistry.registerBlock(fuse_box, MACHINES);
-		ModGameRegistry.registerBlock(block_multimeter, MACHINES);
+		ModGameRegistry.registerBlock(multimeter, MACHINES);
 		ModGameRegistry.registerBlock(power_switch, MACHINES);
 		ModGameRegistry.registerBlock(electric_furnace, MACHINES);
 		ModGameRegistry.registerBlock(schredder, MACHINES);
@@ -584,8 +595,10 @@ public class RedTec {
 		ModGameRegistry.registerBlock(conveyor_spliter, MACHINES);
 		ModGameRegistry.registerBlock(thermal_zentrifuge, MACHINES);
 		ModGameRegistry.registerBlock(fluid_bath, MACHINES);
+		ModGameRegistry.registerBlock(rubber_log, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(rubber_wood, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(rubber_laves, DECORATIONS);
 		
-		// TODO
 		ModGameRegistry.registerBlock(motor, MACHINES);
 		
 		ModGameRegistry.registerTechnicalBlock(steam);
@@ -785,6 +798,9 @@ public class RedTec {
 				BiomeHelper.addFeature(biome, Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.COPPER_ORE);
 				BiomeHelper.addFeature(biome, Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.BAUXIT_STONE_ORE);
 			}
+			
+			BiomeHelper.addToBiome(biome, Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.RUBBER_TREE, Biomes.SWAMP_HILLS, Biomes.JUNGLE, Biomes.JUNGLE_EDGE, Biomes.JUNGLE_HILLS, Biomes.MODIFIED_JUNGLE, Biomes.MODIFIED_JUNGLE_EDGE);
+			
 		}
 		
 	}
@@ -804,12 +820,13 @@ public class RedTec {
 		RenderTypeLookup.setRenderLayer(ModFluids.DESTILLED_WATER, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_DESTILLED_WATER, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.STEAM, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(block_multimeter, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(multimeter, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(fluid_valve, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(blender, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(rubber_laves, RenderType.getCutout());
+		
 		RenderTypeLookup.setRenderLayer(ModFluids.SULFURIC_ACID, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_SULFURIC_ACID, RenderType.getTranslucent());
-		
 		RenderTypeLookup.setRenderLayer(ModFluids.IRON_SOLUTION, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_IRON_SOLUTION, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.COPPER_SOLUTION, RenderType.getTranslucent());

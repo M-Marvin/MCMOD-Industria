@@ -39,7 +39,7 @@ public class BlockConectorBlock extends BlockBase implements IAdvancedStickyBloc
 	public static final BooleanProperty[] SIDES = new BooleanProperty[] {DOWN, UP, NORTH, SOUTH, WEST, EAST};
 	
 	public BlockConectorBlock() {
-		super("conector_block", Material.WOOD, 1, SoundType.WOOD);
+		super("conector_block", Material.WOOD, 1.5F, 0.5F, SoundType.WOOD, true);
 		this.setDefaultState(this.stateContainer.getBaseState().with(NORTH, false).with(SOUTH, false).with(EAST, false).with(WEST, false).with(UP, false).with(DOWN, false));
 	}
 	

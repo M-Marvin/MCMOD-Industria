@@ -27,7 +27,7 @@ public class BlockStackedRedstoneTorch extends BlockBase {
 	public static final BooleanProperty LIT = BooleanProperty.create("lit");
 	
 	public BlockStackedRedstoneTorch() {
-		super("stacked_redstone_torch", Material.ROCK, 2, SoundType.LANTERN);
+		super("stacked_redstone_torch", Material.IRON, 1.5F, 0.5F, SoundType.LANTERN, true);
 		this.setDefaultState(this.stateContainer.getBaseState().with(LIT, false));
 	}
 	

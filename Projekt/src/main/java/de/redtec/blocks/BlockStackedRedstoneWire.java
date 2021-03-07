@@ -60,7 +60,7 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 	public static final VoxelShape[] SHAPES = new VoxelShape[] {S_DOWN, S_UP, S_NORTH, S_SOUTH, S_WEST, S_EAST};
 	
 	public BlockStackedRedstoneWire() {
-		super("stacked_redstone_wire", Material.ROCK, 1, SoundType.LANTERN);
+		super("stacked_redstone_wire", Material.IRON, 1.5F, 0.5F, SoundType.LANTERN, true);
 		this.setDefaultState(this.stateContainer.getBaseState().with(NORTH, AttachType.NONE).with(SOUTH, AttachType.NONE).with(EAST, AttachType.NONE).with(WEST, AttachType.NONE).with(POWERED, false));
 	}
 	

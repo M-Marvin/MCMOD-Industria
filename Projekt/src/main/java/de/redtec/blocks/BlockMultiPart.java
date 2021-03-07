@@ -35,7 +35,7 @@ public abstract class BlockMultiPart<T extends TileEntity> extends BlockContaine
 	protected final int sizeZ;
 	
 	public BlockMultiPart(String name, Material material, float hardnessAndResistance, SoundType sound, int sizeX, int sizeY, int sizeZ) {
-		super(name, material, hardnessAndResistance, sound);
+		super(name, Properties.create(material).hardnessAndResistance(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)).notSolid());
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
 		this.sizeZ = sizeZ;

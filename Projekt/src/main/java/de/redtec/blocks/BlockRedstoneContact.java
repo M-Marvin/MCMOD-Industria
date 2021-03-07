@@ -25,7 +25,7 @@ public class BlockRedstoneContact extends BlockBase {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	
 	public BlockRedstoneContact() {
-		super("redstone_contact", Material.WOOD, 0.7F, SoundType.WOOD);
+		super("redstone_contact", Material.WOOD, 1.5F, SoundType.WOOD, true);
 		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, false));
 	}
 		

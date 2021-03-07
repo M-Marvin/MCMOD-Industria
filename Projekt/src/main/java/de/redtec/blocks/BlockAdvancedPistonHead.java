@@ -93,7 +93,7 @@ public class BlockAdvancedPistonHead extends DirectionalBlock {
    }
 
    public BlockAdvancedPistonHead(String name) {
-      super(Properties.create(Material.ROCK).hardnessAndResistance(6).sound(SoundType.STONE).doesNotBlockMovement());
+      super(Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 0.5F).sound(SoundType.STONE).doesNotBlockMovement());
       this.setRegistryName(RedTec.MODID, name);
       this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(TYPE, PistonType.DEFAULT).with(SHORT, Boolean.valueOf(false)));
    }

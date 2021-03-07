@@ -37,7 +37,7 @@ public class BlockHarvester extends BlockContainerBase {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	
 	public BlockHarvester() {
-		super("harvester", Material.ROCK, 1, SoundType.STONE);
+		super("harvester", Material.ROCK, 3.5F, SoundType.STONE);
 		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, false));
 	}
 	

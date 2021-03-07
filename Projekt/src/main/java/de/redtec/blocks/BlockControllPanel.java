@@ -57,7 +57,7 @@ public class BlockControllPanel extends BlockContainerBase implements ISignalCon
 	protected static final VoxelShape TOP_AABB = Block.makeCuboidShape(0.0D, 13.0D, 0.0D, 16.0D, 16.0D, 16.0D);
 	
 	public BlockControllPanel() {
-		super("controll_panel", Material.IRON, 2.2F, SoundType.STONE);
+		super("controll_panel", Material.IRON, 2.2F, SoundType.STONE, true);
 	}
 	
 	@Override

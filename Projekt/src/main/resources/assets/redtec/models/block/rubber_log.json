@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "redtec:block/rubber_log_end",
+    "side": "redtec:block/rubber_log"
+  }
+}

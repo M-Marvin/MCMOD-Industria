@@ -27,7 +27,7 @@ public class BlockLinearConector extends BlockBase implements IAdvancedStickyBlo
 	private static final IntegerProperty RANGE = IntegerProperty.create("range", 1, 12);
 	
 	public BlockLinearConector() {
-		super("linear_conector", Material.ROCK, 1, SoundType.STONE);
+		super("linear_conector", Material.ROCK, 1.5F, 0.5F, SoundType.STONE, true);
 	}
 	
 	@Override

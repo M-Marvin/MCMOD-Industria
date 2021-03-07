@@ -1,4 +1,4 @@
-package de.redtec.worldgen;
+package de.redtec.worldgen.placements;
 
 import java.util.Random;
 import java.util.stream.IntStream;

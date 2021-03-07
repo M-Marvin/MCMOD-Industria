@@ -1,8 +1,5 @@
 package de.redtec.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.redtec.RedTec;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -12,12 +9,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext.Builder;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 
 public abstract class BlockContainerBase extends ContainerBlock {
 	
@@ -27,16 +22,31 @@ public abstract class BlockContainerBase extends ContainerBlock {
 	}
 	
 	public BlockContainerBase(String name, Material material, float hardnessAndResistance, SoundType sound) {
-		super(Properties.create(material).hardnessAndResistance(hardnessAndResistance).sound(sound));
+		super(Properties.create(material).hardnessAndResistance(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)));
 		this.setRegistryName(RedTec.MODID, name);
 	}
 	
-	@SuppressWarnings("deprecation")
-	@Override
-	public List<ItemStack> getDrops(BlockState state, Builder builder) {
-		List<ItemStack> drops = new ArrayList<ItemStack>();
-		drops.add(new ItemStack(Item.getItemFromBlock(this), 1));
-		return drops;
+	public BlockContainerBase(String name, Material material, float hardness, float resistance, SoundType sound) {
+		super(Properties.create(material).hardnessAndResistance(hardness, resistance).sound(sound).harvestTool(getDefaultToolType(material)));
+		this.setRegistryName(RedTec.MODID, name);
+	}
+
+	public BlockContainerBase(String name, Material material, float hardnessAndResistance, SoundType sound, boolean dropsEver) {
+		super(Properties.create(material).hardnessAndResistance(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)));
+		this.setRegistryName(RedTec.MODID, name);
+	}
+	
+	public BlockContainerBase(String name, Material material, float hardness, float resistance, SoundType sound, boolean dropsEver) {
+		super(Properties.create(material).hardnessAndResistance(hardness, resistance).sound(sound).harvestTool(getDefaultToolType(material)));
+		this.setRegistryName(RedTec.MODID, name);
+	}
+	
+	public static ToolType getDefaultToolType(Material material) {
+		if (material == Material.ROCK || material == Material.IRON) return ToolType.PICKAXE;
+		if (material == Material.SAND || material == Material.EARTH) return ToolType.SHOVEL;
+		if (material == Material.WOOD) return ToolType.AXE;
+		if (material == Material.ORGANIC) return ToolType.HOE;
+		return null;
 	}
 	
 	@Override

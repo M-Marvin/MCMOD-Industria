@@ -43,7 +43,7 @@ public class BlockAdvancedMovingBlock extends ContainerBlock {
    public static final EnumProperty<PistonType> TYPE = PistonHeadBlock.TYPE;
 
    public BlockAdvancedMovingBlock(String name) {
-      super(Properties.create(Material.PISTON).doesNotBlockMovement()); // TODO
+      super(Properties.create(Material.PISTON).doesNotBlockMovement());
       this.setRegistryName(RedTec.MODID, name);
       this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(TYPE, PistonType.DEFAULT));
    }

@@ -69,8 +69,9 @@ public class BlockMFluidBath extends BlockMultiPart<TileEntityMFluidBath> implem
 		} else if (ipos.equals(new BlockPos(1, 1, 2))) {
 			return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 0, 4, 16, 16, 16), Block.makeCuboidShape(15, 0, 0, 16, 16, 4)), state.get(BlockMultiPart.FACING));
 		}
+
+		return Block.makeCuboidShape(0, 0, 0, 16, 16, 16);
 		
-		return Block.makeCuboidShape(0.0001F, 0.0001F, 0.0001F, 15.9999F, 15.9999F, 15.9999F);
 	}
 	
 	@Override

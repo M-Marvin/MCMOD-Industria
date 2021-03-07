@@ -11,8 +11,8 @@ public class BlockPowerEmiting extends BlockBase {
 	
 	public final int powerStrength;
 	
-	public BlockPowerEmiting(String name, Material material, float hardnessAndResistance, SoundType sound, int powerStrength) {
-		super(name, material, hardnessAndResistance, sound);
+	public BlockPowerEmiting(String name, Material material, float hardness, float resistance, SoundType sound, int powerStrength) {
+		super(name, material, hardness, resistance, sound);
 		this.powerStrength = powerStrength;
 	}
 	

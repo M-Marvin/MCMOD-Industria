@@ -59,7 +59,7 @@ public class BlockAdvancedPiston extends DirectionalBlock {
    private int maxPushBlocks;
    
    public BlockAdvancedPiston(boolean sticky, String name) {
-      super(Properties.create(Material.ROCK).hardnessAndResistance(1).sound(SoundType.STONE));
+      super(Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 0.5F).sound(SoundType.STONE));
       this.setRegistryName(RedTec.MODID, name);
       this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(EXTENDED, Boolean.valueOf(false)));
       this.isSticky = sticky;

@@ -86,8 +86,9 @@ public class BlockMRaffinery extends BlockMultiPart<TileEntityMRaffinery> implem
 		} else if (ipos.equals(new BlockPos(2, 3, 0))) {
 			return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(1, 0, 2, 15, 12, 16), Block.makeCuboidShape(2, 12, 3, 14, 17, 15)), facing);
 		}
+
+		return Block.makeCuboidShape(0, 0, 0, 16, 16, 16);
 		
-		return Block.makeCuboidShape(0.001F, 0.001F, 0.001F, 15.999F, 15.999F, 15.999F);
 	}
 	
 	@Override

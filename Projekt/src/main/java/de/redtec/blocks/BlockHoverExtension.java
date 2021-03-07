@@ -18,7 +18,7 @@ public class BlockHoverExtension extends BlockBase {
 	public static final BooleanProperty ACTIVATED = BooleanProperty.create("activated");
 	
 	public BlockHoverExtension() {
-		super("hover_extension", Material.IRON, 2, SoundType.ANVIL);
+		super("hover_extension", Material.IRON, 6, SoundType.ANVIL);
 		this.setDefaultState(this.stateContainer.getBaseState().with(ACTIVATED, false));
 	}
 	

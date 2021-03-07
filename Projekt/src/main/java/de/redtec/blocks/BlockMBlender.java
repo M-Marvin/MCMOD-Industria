@@ -84,7 +84,7 @@ public class BlockMBlender extends BlockMultiPart<TileEntityMBlender> implements
 			return VoxelHelper.rotateShape(Block.makeCuboidShape(0, 0, 0, 16, 16, 5), facing);
 		}
 		
-		return VoxelShapes.create(0.001F, 0.001F, 0.001F, 0.999F, 0.999F, 0.999F);
+		return Block.makeCuboidShape(0, 0, 0, 16, 16, 16);
 		
 	}
 	

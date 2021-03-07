@@ -33,7 +33,7 @@ public class BlockRadialConector extends BlockContainerBase implements IAdvanced
 	private int maxScannDepth = 3000;
 	
 	public BlockRadialConector() {
-		super("radial_conector", Material.WOOD, 1, SoundType.WOOD);
+		super("radial_conector", Material.WOOD, 1.5F, 0.5F, SoundType.WOOD, true);
 		this.setDefaultState(this.stateContainer.getBaseState().with(LOCKED, false).with(MANUAL_LOCK, false));
 	}
 	

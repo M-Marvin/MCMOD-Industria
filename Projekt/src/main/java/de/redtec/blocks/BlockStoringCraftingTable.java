@@ -21,7 +21,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 public class BlockStoringCraftingTable extends BlockContainerBase {
 
 	public BlockStoringCraftingTable() {
-		super("storing_crafting_table", Material.ROCK, 2.5F, SoundType.field_235594_P_);
+		super("storing_crafting_table", Material.ROCK, 2.5F, SoundType.NETHERITE);
 	}
 
 	@Override

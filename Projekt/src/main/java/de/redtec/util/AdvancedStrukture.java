@@ -117,7 +117,7 @@ public class AdvancedStrukture {
 				if (tileEntity != null) {
 					
 					tileEntity.setPos(pos);
-					if (!(tileEntity instanceof BannerTileEntity)) tileEntity.func_230337_a_(state, compound);
+					if (!(tileEntity instanceof BannerTileEntity)) tileEntity.read(state, compound);
 					tileEntity.setPos(pos);
 					
 					if (tileEntity instanceof IPostMoveHandledTE) {
@@ -230,7 +230,7 @@ public class AdvancedStrukture {
 				
 				CompoundNBT compound = nbt.get(index);
 				TileEntity tileEntity = world.getTileEntity(pos);
-				tileEntity.func_230337_a_(state, compound);
+				tileEntity.read(state, compound);
 				tileEntity.setPos(pos);
 				
 				if (tileEntity instanceof IPostMoveHandledTE) {

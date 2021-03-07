@@ -47,37 +47,18 @@ public class BlockConveyorSpliter extends BlockConveyorBelt {
 		return this.getDefaultState().with(FACING, facing).with(RIGHT, getHingeSide(context) ? BeltState.OPEN : BeltState.CLOSE).with(LEFT, !getHingeSide(context) ? BeltState.OPEN : BeltState.CLOSE).with(ACTIVE, false);
 	}
 	
+	// TODO
 	// Copied placement-code from vanilla DoorBlock
 	private boolean getHingeSide(BlockItemUseContext p_208073_1_) {
-		IBlockReader iblockreader = p_208073_1_.getWorld();
 		BlockPos blockpos = p_208073_1_.getPos();
 		Direction direction = p_208073_1_.getPlacementHorizontalFacing();
-		BlockPos blockpos1 = blockpos.up();
-		Direction direction1 = direction.rotateYCCW();
-		BlockPos blockpos2 = blockpos.offset(direction1);
-		BlockState blockstate = iblockreader.getBlockState(blockpos2);
-		BlockPos blockpos3 = blockpos1.offset(direction1);
-		BlockState blockstate1 = iblockreader.getBlockState(blockpos3);
-		Direction direction2 = direction.rotateY();
-		BlockPos blockpos4 = blockpos.offset(direction2);
-		BlockState blockstate2 = iblockreader.getBlockState(blockpos4);
-		BlockPos blockpos5 = blockpos1.offset(direction2);
-		BlockState blockstate3 = iblockreader.getBlockState(blockpos5);
-		int i = (blockstate.func_235785_r_(iblockreader, blockpos2) ? -1 : 0) + (blockstate1.func_235785_r_(iblockreader, blockpos3) ? -1 : 0) + (blockstate2.func_235785_r_(iblockreader, blockpos4) ? 1 : 0) + (blockstate3.func_235785_r_(iblockreader, blockpos5) ? 1 : 0);
-		if (i <= 0) {
-			if (i >= 0) {
-				int j = direction.getXOffset();
-				int k = direction.getZOffset();
-				Vector3d vector3d = p_208073_1_.getHitVec();
-				double d0 = vector3d.x - (double)blockpos.getX();
-				double d1 = vector3d.z - (double)blockpos.getZ();
-				return (j >= 0 || !(d1 < 0.5D)) && (j <= 0 || !(d1 > 0.5D)) && (k >= 0 || !(d0 > 0.5D)) && (k <= 0 || !(d0 < 0.5D)) ? false : true;
-			} else {
-				return false;
-			}
-		} else {
-			return true;
-		}
+		
+		int j = direction.getXOffset();
+		int k = direction.getZOffset();
+		Vector3d vector3d = p_208073_1_.getHitVec();
+		double d0 = vector3d.x - (double)blockpos.getX();
+		double d1 = vector3d.z - (double)blockpos.getZ();
+		return (j >= 0 || !(d1 < 0.5D)) && (j <= 0 || !(d1 > 0.5D)) && (k >= 0 || !(d0 > 0.5D)) && (k <= 0 || !(d0 < 0.5D)) ? false : true;
 	}
 	
 	@Override

@@ -3,7 +3,7 @@ package de.redtec.tileentity;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.IFluidConnective;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
@@ -82,9 +82,9 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 	}
 	
 	@Override
-	public void func_230337_a_(BlockState state, CompoundNBT compound) {
+	public void read(BlockState state, CompoundNBT compound) {
 		this.fluid = FluidStack.loadFluidStackFromNBT(compound.getCompound("Fluid"));
-		super.func_230337_a_(state, compound);
+		super.read(state, compound);
 	}
 	
 	public FluidStack pushFluid(FluidStack fluidIn, Direction callDirection) {

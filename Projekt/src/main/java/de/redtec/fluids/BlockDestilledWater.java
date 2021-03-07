@@ -3,9 +3,9 @@ package de.redtec.fluids;
 import java.util.Random;
 
 import de.redtec.fluids.util.BlockModFlowingFluid;
-import de.redtec.registys.ModDamageSource;
-import de.redtec.registys.ModFluids;
-import de.redtec.registys.ModTags;
+import de.redtec.typeregistys.ModDamageSource;
+import de.redtec.typeregistys.ModFluids;
+import de.redtec.typeregistys.ModTags;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

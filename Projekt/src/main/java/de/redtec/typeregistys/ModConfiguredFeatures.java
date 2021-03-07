@@ -1,4 +1,4 @@
-package de.redtec.registys;
+package de.redtec.typeregistys;
 
 import de.redtec.RedTec;
 import de.redtec.blocks.BlockJigsaw.JigsawType;
@@ -28,7 +28,7 @@ public class ModConfiguredFeatures {
 	public static final ConfiguredFeature<?, ?> COPPER_ORE = registerConfiguredFeature("copper_ore", 
 			Feature.ORE.withConfiguration(
 					new OreFeatureConfig(
-							OreFeatureConfig.FillerBlockType.field_241882_a, 
+							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
 							RedTec.copper_ore.getDefaultState(),
 							10
 					)
@@ -42,7 +42,7 @@ public class ModConfiguredFeatures {
 	public static final ConfiguredFeature<?, ?> BAUXIT_STONE_ORE = registerConfiguredFeature("bauxit_stone_ore",
 			ModFeature.STONE_ORE.withConfiguration(
 					new StoneOreFeatureConfig(
-							OreFeatureConfig.FillerBlockType.field_241882_a,
+							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
 							RedTec.bauxit.getDefaultState(),
 							RedTec.bauxit_ore.getDefaultState(),
 							42
@@ -70,14 +70,14 @@ public class ModConfiguredFeatures {
 							new HorizontalSpreadPlacementConfig(2)
 					)
 			).withPlacement(
-					Placement.field_242906_k.configure(new NoPlacementConfig())
+					Placement.HEIGHTMAP_WORLD_SURFACE.configure(new NoPlacementConfig())
 			).withPlacement(
-					Placement.field_242898_b.configure(new ChanceConfig(10))
+					Placement.CHANCE.configure(new ChanceConfig(10))
 			)
 	);
 	
 	public static ConfiguredFeature<?, ?> registerConfiguredFeature(String key, ConfiguredFeature<?, ?> configuredFeature) {
-		return Registry.register(WorldGenRegistries.field_243653_e, new ResourceLocation(RedTec.MODID, key), configuredFeature);
+		return Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(RedTec.MODID, key), configuredFeature);
 	}
 	
 }

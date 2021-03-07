@@ -243,8 +243,8 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 		}
 		
 		@Override
-		public String func_176610_l() {
-			return this.name;
+		public String getString() {
+			return name;
 		}
 		
 	}

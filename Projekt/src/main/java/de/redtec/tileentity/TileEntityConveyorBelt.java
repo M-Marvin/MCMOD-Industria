@@ -7,7 +7,7 @@ import de.redtec.RedTec;
 import de.redtec.blocks.BlockConveyorBelt;
 import de.redtec.blocks.BlockConveyorSpliter;
 import de.redtec.blocks.BlockConveyorBelt.BeltState;
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModTileEntityType;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.inventory.IInventory;
@@ -398,13 +398,13 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 	}
 	
 	@Override
-	public void func_230337_a_(BlockState state, CompoundNBT compound) {
+	public void read(BlockState state, CompoundNBT compound) {
 		this.beltMoveStateIn = compound.getInt("conveyorStateIn");
 		this.beltMoveStateOut = compound.getInt("conveyorStateOut");
 		this.beltMoveStateOutSecondary = compound.getInt("conveyorStateOutSecondary");
 		this.beltInsertSide = compound.getInt("conveyorInsertSide");
 		this.moveTimer = compound.getInt("moveTimer");
-		super.func_230337_a_(state, compound);
+		super.read(state, compound);
 	}
 	
 	@Override

@@ -1,7 +1,7 @@
 package de.redtec.dynamicsounds;
 
-import de.redtec.registys.ModSoundEvents;
 import de.redtec.tileentity.TileEntityMSteamGenerator;
+import de.redtec.typeregistys.ModSoundEvents;
 import net.minecraft.client.audio.TickableSound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
@@ -43,7 +43,7 @@ public class SoundMSteamGeneratorLoop extends TickableSound {
 			
 		} else {
 			
-			this.func_239509_o_();
+			this.finishPlaying();
 			
 		}
 		

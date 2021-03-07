@@ -6,7 +6,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import de.redtec.gui.ContainerHarvester;
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModTileEntityType;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -136,9 +136,9 @@ public class TileEntityHarvester extends TileEntity implements IInventory, IName
 	}
 	
 	@Override
-	public void func_230337_a_(BlockState state, CompoundNBT compound) {
+	public void read(BlockState state, CompoundNBT compound) {
 		net.minecraft.inventory.ItemStackHelper.loadAllItems(compound, this.itemstacks);
-		super.func_230337_a_(state, compound);
+		super.read(state, compound);
 	}
 	
 	@Override

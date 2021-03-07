@@ -1,6 +1,6 @@
 package de.redtec.tileentity;
 
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModTileEntityType;
 import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.tileentity.TileEntity;
 

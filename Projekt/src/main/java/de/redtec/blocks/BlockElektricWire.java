@@ -6,8 +6,8 @@ import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
-import de.redtec.registys.ModDamageSource;
-import de.redtec.registys.ModSoundEvents;
+import de.redtec.typeregistys.ModDamageSource;
+import de.redtec.typeregistys.ModSoundEvents;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
 import de.redtec.util.IAdvancedBlockInfo;

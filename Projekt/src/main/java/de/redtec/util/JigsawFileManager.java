@@ -63,7 +63,7 @@ public class JigsawFileManager {
 	}
 	
 	private static IResourceManager getResourceManager(ServerWorld world) {
-		return world.getServer().getDataPackRegistries().func_240970_h_();
+		return world.getServer().getDataPackRegistries().getResourceManager();
 	}
 	
 	@SuppressWarnings("deprecation")

@@ -19,19 +19,20 @@ public static final ResourceLocation SCHREDDER_GUI_TEXTURES = new ResourceLocati
 	}
 	
 	@SuppressWarnings("deprecation")
-	protected void func_230450_a_(MatrixStack p_230450_1_, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
-		
+	@Override
+	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.field_230706_i_.getTextureManager().bindTexture(SCHREDDER_GUI_TEXTURES);
+		this.minecraft.getTextureManager().bindTexture(SCHREDDER_GUI_TEXTURES);
 		int i = this.guiLeft;
-		int j = (this.field_230709_l_ - this.ySize) / 2;
-		this.func_238474_b_(p_230450_1_, i, j, 0, 0, this.xSize, this.ySize);
+		int j = (this.height - this.ySize) / 2;
+		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
 		
 		TileEntityMSchredder te = this.container.getTileEntity();
 		float progress = (float) te.progress / this.container.getTileEntity().progressTotal;
 		
-		this.func_238474_b_(p_230450_1_, i + 64, j + 32, 176, 0, (int) (progress * 48), 19);
-		if (te.hasPower) this.func_238474_b_(p_230450_1_, i + 44, j + 53, 176, 19, 16, 16);
+		this.blit(matrixStack, i + 64, j + 32, 176, 0, (int) (progress * 48), 19);
+		if (te.hasPower) this.blit(matrixStack, i + 44, j + 53, 176, 19, 16, 16);
 		
 	}
 	

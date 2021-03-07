@@ -198,7 +198,7 @@ public class BlockRailPiston extends BlockBase {
             BlockPos blockpos5 = entry.getKey();
             BlockState blockstate2 = entry.getValue();
             blockstate2.updateDiagonalNeighbors(worldIn, blockpos5, 2);
-            blockstate3.func_235734_a_(worldIn, blockpos5, 2);
+            blockstate3.updateNeighbours(worldIn, blockpos5, 2);
             blockstate3.updateDiagonalNeighbors(worldIn, blockpos5, 2);
          }
 

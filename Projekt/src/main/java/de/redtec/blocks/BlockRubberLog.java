@@ -2,7 +2,6 @@ package de.redtec.blocks;
 
 import java.util.Random;
 
-import de.redtec.registys.ModSoundEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -10,7 +9,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 
@@ -36,8 +34,8 @@ public class BlockRubberLog extends BlockLogBase {
 			this.name = name;
 		}
 		@Override
-		public String func_176610_l() {
-			return this.name;
+		public String getString() {
+			return name;
 		}
 	}
 	

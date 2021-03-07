@@ -1,7 +1,7 @@
 package de.redtec.tileentity;
 
 import de.redtec.items.ItemFuse;
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModTileEntityType;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -74,9 +74,9 @@ public class TileEntityFuseBox extends TileEntity implements ITickableTileEntity
 	}
 	
 	@Override
-	public void func_230337_a_(BlockState state, CompoundNBT compound) {
+	public void read(BlockState state, CompoundNBT compound) {
 		this.fuse = ItemStack.read(compound.getCompound("Fuse"));
-		super.func_230337_a_(state, compound);
+		super.read(state, compound);
 	}
 	
 	@Override

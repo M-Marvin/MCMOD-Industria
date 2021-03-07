@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import de.redtec.RedTec;
 import de.redtec.blocks.BlockRubberLog.RipeState;
-import de.redtec.registys.ModSoundEvents;
-import de.redtec.registys.ModTags;
+import de.redtec.typeregistys.ModSoundEvents;
+import de.redtec.typeregistys.ModTags;
 import de.redtec.util.VoxelHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -67,7 +68,7 @@ public class BlockTreeTap extends BlockBase {
 			Direction logSide = state.get(FACING).getOpposite();
 			BlockState logState = worldIn.getBlockState(pos.offset(logSide));
 			
-			if (ModTags.RUBBER_LOGS.func_230235_a_(logState.getBlock())) {
+			if (ModTags.RUBBER_LOGS.contains(logState.getBlock())) {
 				
 				List<BlockPos> logs = getLogs(pos.offset(logSide), worldIn);
 				
@@ -103,9 +104,9 @@ public class BlockTreeTap extends BlockBase {
 			itemstack.shrink(1);
 			worldIn.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), ModSoundEvents.TREE_TAP_HARVEST, SoundCategory.NEUTRAL, 1.0F, 1.0F);
 			if (itemstack.isEmpty()) {
-			   player.setHeldItem(handIn, new ItemStack(Items.HONEY_BOTTLE));
-			} else if (!player.inventory.addItemStackToInventory(new ItemStack(Items.HONEY_BOTTLE))) {
-			   player.dropItem(new ItemStack(Items.HONEY_BOTTLE), false);
+			   player.setHeldItem(handIn, new ItemStack(RedTec.raw_rubber_bottle));
+			} else if (!player.inventory.addItemStackToInventory(new ItemStack(RedTec.raw_rubber_bottle))) {
+			   player.dropItem(new ItemStack(RedTec.raw_rubber_bottle), false);
 			}
 			
 			worldIn.setBlockState(pos, state.with(STAGE, stage - 1));
@@ -126,7 +127,7 @@ public class BlockTreeTap extends BlockBase {
 	protected void scannAt(List<BlockPos> posList, World world, BlockPos scannPos, int scannDepth) {
 		if (!posList.contains(scannPos) && scannDepth < 128) {
 			BlockState scannState = world.getBlockState(scannPos);
-			if (ModTags.RUBBER_LOGS.func_230235_a_(scannState.getBlock())) {
+			if (ModTags.RUBBER_LOGS.contains(scannState.getBlock())) {
 				posList.add(scannPos);
 				for (Direction d : Direction.values()) {
 					this.scannAt(posList, world, scannPos.offset(d), scannDepth + 1);
@@ -139,7 +140,7 @@ public class BlockTreeTap extends BlockBase {
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
 		Direction side = context.getFace();
 		BlockState logState = context.getWorld().getBlockState(context.getPos().offset(side.getOpposite()));
-		if (ModTags.RUBBER_LOGS.func_230235_a_(logState.getBlock())) {
+		if (ModTags.RUBBER_LOGS.contains(logState.getBlock())) {
 			return this.getDefaultState().with(FACING, side);	
 		}
 		return context.getWorld().getBlockState(context.getPos());
@@ -151,7 +152,7 @@ public class BlockTreeTap extends BlockBase {
 		Direction logSide = state.get(FACING).getOpposite();
 		BlockState logState = worldIn.getBlockState(pos.offset(logSide));
 		
-		if (fromPos.equals(pos.offset(logSide)) && !ModTags.RUBBER_LOGS.func_230235_a_(logState.getBlock())) {
+		if (fromPos.equals(pos.offset(logSide)) && !ModTags.RUBBER_LOGS.contains(logState.getBlock())) {
 			
 			worldIn.destroyBlock(pos, true);
 			

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import de.redtec.blocks.BlockFluidInput;
 import de.redtec.fluids.util.BlockGasFluid;
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.FluidStackStateTagHelper;
 import de.redtec.util.FluidTankHelper;
 import de.redtec.util.IFluidConnective;
@@ -37,9 +37,9 @@ public class TileEntityFluidOutput extends TileEntity implements ITickableTileEn
 	}
 	
 	@Override
-	public void func_230337_a_(BlockState state, CompoundNBT compund) {
+	public void read(BlockState state, CompoundNBT compund) {
 		this.fluid = FluidStack.loadFluidStackFromNBT(compund.getCompound("Fluid"));
-		super.func_230337_a_(state, compund);
+		super.read(state, compund);
 	}
 	
 	@Override

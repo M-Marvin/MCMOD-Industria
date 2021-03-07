@@ -3,7 +3,7 @@ package de.redtec.tileentity;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.IPostMoveHandledTE;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
@@ -54,14 +54,14 @@ public class TileEntityLockedCompositeBlock extends TileEntity implements IPostM
 	}
 	
 	@Override
-	public void func_230337_a_(BlockState state, CompoundNBT compound) {
+	public void read(BlockState state, CompoundNBT compound) {
 		ListNBT list = compound.getList("StoredPositions", 10);
 		this.storedPositions.clear();
 		for (int i = 0; i < list.size(); i++) {
 			CompoundNBT posTag = list.getCompound(i);
 			this.storedPositions.add(NBTUtil.readBlockPos(posTag));
 		}
-		super.func_230337_a_(state, compound);
+		super.read(state, compound);
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class TileEntityLockedCompositeBlock extends TileEntity implements IPostM
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.func_230337_a_(null, pkt.getNbtCompound());
+		this.read(null, pkt.getNbtCompound());
 	}
 	
 }

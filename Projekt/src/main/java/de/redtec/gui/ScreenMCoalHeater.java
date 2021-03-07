@@ -22,26 +22,27 @@ public static final ResourceLocation COAL_HEATER_GUI_TEXTURES = new ResourceLoca
 	public ScreenMCoalHeater(ContainerMCoalHeater screenContainer, PlayerInventory inv, ITextComponent titleIn) {
 		super(screenContainer, inv, titleIn);
 	}
-	
+
 	@SuppressWarnings("deprecation")
-	protected void func_230450_a_(MatrixStack p_230450_1_, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
-		
+	@Override
+	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.field_230706_i_.getTextureManager().bindTexture(COAL_HEATER_GUI_TEXTURES);
+		this.minecraft.getTextureManager().bindTexture(COAL_HEATER_GUI_TEXTURES);
 		int i = this.guiLeft;
-		int j = (this.field_230709_l_ - this.ySize) / 2;
-		this.func_238474_b_(p_230450_1_, i, j, 0, 0, this.xSize, this.ySize);
+		int j = (this.height - this.ySize) / 2;
+		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
 		
 		TileEntityMCoalHeater te = this.container.getTileEntity();
 		int burnProgress = (int) (te.burnTime / te.fuelTime * 14);
 		int remainingFuel = (int) te.burnTime + (te.hasFuelItems() ? te.getStackInSlot(0).getCount() * ForgeHooks.getBurnTime(te.getStackInSlot(0)) : 0);
 		
-		this.func_238474_b_(p_230450_1_, i + 53, j + 54 + 14 - burnProgress, 176, 0 + 14 - burnProgress, 14, burnProgress);
+		this.blit(matrixStack, i + 53, j + 54 + 14 - burnProgress, 176, 0 + 14 - burnProgress, 14, burnProgress);
 		
 		int red = new Color(255, 0, 0).getRGB();
 		int white = new Color(63, 63, 63).getRGB();
-		this.field_230712_o_.func_243248_b(p_230450_1_, new TranslationTextComponent("redtec.generator.remainingFuel"), i + 90, j + 36, white);
-		this.field_230712_o_.func_243248_b(p_230450_1_, new StringTextComponent("" + remainingFuel), i + 90, j + 46, remainingFuel < 500 ? red : white);
+		this.font.func_243248_b(matrixStack, new TranslationTextComponent("redtec.generator.remainingFuel"), i + 90, j + 36, white);
+		this.font.func_243248_b(matrixStack, new StringTextComponent("" + remainingFuel), i + 90, j + 46, remainingFuel < 500 ? red : white);
 		
 	}
 	

@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import de.redtec.RedTec;
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.IPostMoveHandledTE;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -217,8 +217,8 @@ public class TileEntityAdvancedMovingBlock extends TileEntity implements ITickab
       }
    }
 
-   private static boolean func_227021_a_(AxisAlignedBB p_227021_0_, Entity p_227021_1_) {
-      return p_227021_1_.getPushReaction() == PushReaction.NORMAL && p_227021_1_.func_233570_aj_() && p_227021_1_.getPosX() >= p_227021_0_.minX && p_227021_1_.getPosX() <= p_227021_0_.maxX && p_227021_1_.getPosZ() >= p_227021_0_.minZ && p_227021_1_.getPosZ() <= p_227021_0_.maxZ;
+   private static boolean func_227021_a_(AxisAlignedBB bounds, Entity entity) {
+      return entity.getPushReaction() == PushReaction.NORMAL && entity.canBePushed() && entity.getPosX() >= bounds.minX && entity.getPosX() <= bounds.maxX && entity.getPosZ() >= bounds.minZ && entity.getPosZ() <= bounds.maxZ;
    }
 
    private boolean func_227025_y_() {
@@ -291,7 +291,7 @@ public class TileEntityAdvancedMovingBlock extends TileEntity implements ITickab
             this.world.setBlockState(this.pos, blockstate, 3);
             if (this.pistonState.hasTileEntity() && this.pistonTileEntity != null) {
             	TileEntity te = this.world.getTileEntity(this.pos);
-          	  	te.func_230337_a_(this.pistonState, this.pistonTileEntity);
+          	  	te.read(this.pistonState, this.pistonTileEntity);
           	  	te.setPos(this.pos);
           	  	if (te instanceof IPostMoveHandledTE) {
           	  		((IPostMoveHandledTE) te).handlePostMove2(this.pos, this.extending ? this.pistonFacing : this.pistonFacing.getOpposite(), 1, false);
@@ -320,7 +320,7 @@ public class TileEntityAdvancedMovingBlock extends TileEntity implements ITickab
                   Block.replaceBlock(this.pistonState, blockstate, this.world, this.pos, 3);
                   if (this.pistonState.hasTileEntity() && this.pistonTileEntity != null) {
                   	TileEntity te = this.world.getTileEntity(this.pos);
-              	  	te.func_230337_a_(this.pistonState, this.pistonTileEntity);
+              	  	te.read(this.pistonState, this.pistonTileEntity);
               	  	te.setPos(this.pos);
               	  	if (te instanceof IPostMoveHandledTE) {
             	  		((IPostMoveHandledTE) te).handlePostMove(this.pos, this.extending ? this.pistonFacing : this.pistonFacing.getOpposite(), 1, false);
@@ -330,7 +330,7 @@ public class TileEntityAdvancedMovingBlock extends TileEntity implements ITickab
                       this.remove();
                   }
                } else {
-                  if (blockstate.func_235901_b_(BlockStateProperties.WATERLOGGED) && blockstate.get(BlockStateProperties.WATERLOGGED)) {
+                  if (blockstate.hasProperty(BlockStateProperties.WATERLOGGED) && blockstate.get(BlockStateProperties.WATERLOGGED)) {
                      blockstate = blockstate.with(BlockStateProperties.WATERLOGGED, Boolean.valueOf(false));
                   }
                   
@@ -340,7 +340,7 @@ public class TileEntityAdvancedMovingBlock extends TileEntity implements ITickab
                 	  this.world.setBlockState(this.pos, blockstate, 67);
                       if (this.pistonState.hasTileEntity() && this.pistonTileEntity != null) {
                     	TileEntity te = this.pistonState.createTileEntity(this.world);
-                    	te.func_230337_a_(blockstate, this.pistonTileEntity);
+                    	te.read(blockstate, this.pistonTileEntity);
                     	te.setPos(this.pos);
                   	  	this.world.setTileEntity(this.pos, te);
                   	  	te.validate();
@@ -372,8 +372,8 @@ public class TileEntityAdvancedMovingBlock extends TileEntity implements ITickab
       }
    }
 
-   public void func_230337_a_(BlockState p_230337_1_, CompoundNBT p_230337_2_) {
-      super.func_230337_a_(p_230337_1_, p_230337_2_);
+   public void read(BlockState p_230337_1_, CompoundNBT p_230337_2_) {
+      super.read(p_230337_1_, p_230337_2_);
       this.pistonState = NBTUtil.readBlockState(p_230337_2_.getCompound("blockState"));
       if (this.pistonState.hasTileEntity()) this.pistonTileEntity = p_230337_2_.getCompound("tileData"); 
       this.pistonFacing = Direction.byIndex(p_230337_2_.getInt("facing"));

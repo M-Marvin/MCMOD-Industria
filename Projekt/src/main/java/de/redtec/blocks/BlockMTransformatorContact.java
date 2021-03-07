@@ -7,8 +7,8 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import de.redtec.RedTec;
-import de.redtec.registys.ModSoundEvents;
 import de.redtec.tileentity.TileEntitySimpleBlockTicking;
+import de.redtec.typeregistys.ModSoundEvents;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
 import de.redtec.util.IAdvancedBlockInfo;

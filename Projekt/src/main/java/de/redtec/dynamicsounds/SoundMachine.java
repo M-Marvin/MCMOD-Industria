@@ -38,7 +38,7 @@ public class SoundMachine extends TickableSound {
 			
 		} else {
 			
-			this.func_239509_o_();
+			this.finishPlaying();
 			
 		}
 		

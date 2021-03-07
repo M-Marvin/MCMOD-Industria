@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " R ",
+    "EEE",
+    "  E"
+  ],
+  "key": {
+    "R": {
+      "item": "redtec:iron_rod"
+    },
+    "E": {
+      "item": "redtec:iron_plate"
+    }
+  },
+  "result": {
+    "item": "redtec:tree_tap"
+  }
+}

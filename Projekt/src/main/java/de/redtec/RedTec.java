@@ -29,7 +29,6 @@ import de.redtec.blocks.BlockIronRod;
 import de.redtec.blocks.BlockJigsaw;
 import de.redtec.blocks.BlockLeavesBase;
 import de.redtec.blocks.BlockLinearConector;
-import de.redtec.blocks.BlockLogBase;
 import de.redtec.blocks.BlockMAlloyFurnace;
 import de.redtec.blocks.BlockMBlender;
 import de.redtec.blocks.BlockMCoalHeater;
@@ -53,6 +52,7 @@ import de.redtec.blocks.BlockRadialConector;
 import de.redtec.blocks.BlockRailPiston;
 import de.redtec.blocks.BlockRedstoneContact;
 import de.redtec.blocks.BlockRedstoneReciver;
+import de.redtec.blocks.BlockRubberLog;
 import de.redtec.blocks.BlockSalsolaSeeds;
 import de.redtec.blocks.BlockSignalAntennaConector;
 import de.redtec.blocks.BlockSignalProcessorContact;
@@ -60,6 +60,8 @@ import de.redtec.blocks.BlockSignalWire;
 import de.redtec.blocks.BlockStackedRedstoneTorch;
 import de.redtec.blocks.BlockStackedRedstoneWire;
 import de.redtec.blocks.BlockStoringCraftingTable;
+import de.redtec.blocks.BlockTreeTap;
+import de.redtec.blocks.BlockSaplingBase;
 import de.redtec.fluids.BlockChemicalWater;
 import de.redtec.fluids.BlockDestilledWater;
 import de.redtec.fluids.BlockNatronLye;
@@ -124,7 +126,6 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.DispenserBlock;
-import net.minecraft.block.FireBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.gui.ScreenManager;
@@ -146,7 +147,6 @@ import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.GenerationStage.Decoration;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -320,9 +320,10 @@ public class RedTec {
 	
 	// Nature Blocks
 	public static final Block salsola_seeds = new BlockSalsolaSeeds();
-	public static final Block rubber_log = new BlockLogBase("rubber_log", Material.WOOD, 2F, SoundType.WOOD);
-	public static final Block rubber_wood = new BlockLogBase("rubber_wood", Material.WOOD, 2F, SoundType.WOOD);
+	public static final Block rubber_log = new BlockRubberLog("rubber_log", Material.WOOD, 2F, SoundType.WOOD);
+	public static final Block rubber_wood = new BlockRubberLog("rubber_wood", Material.WOOD, 2F, SoundType.WOOD);
 	public static final Block rubber_laves = new BlockLeavesBase("rubber_leaves", Material.WOOD, 0.2F, 0.2F, SoundType.PLANT);
+	public static final Block rubber_sapling = new BlockSaplingBase("rubber_sapling", new ResourceLocation(RedTec.MODID, "nature/rubber_tree"));
 	
 	// Fluids and Buckets
 	public static final Block steam = new BlockSteam();
@@ -460,6 +461,7 @@ public class RedTec {
 	public static final Item electrolyt_paper = new ItemBase("electrolyt_paper", MATERIALS);
 	public static final Item salt = new ItemBase("salt", MATERIALS);
 	public static final Item natrium = new ItemBase("natrium", MATERIALS);
+	public static final Item raw_rubber_bottle = new ItemBase("raw_rubber_bottle", MATERIALS);
 	
 	// Functional Items
 	public static final Item remote_control = new ItemRemoteControll();
@@ -483,6 +485,7 @@ public class RedTec {
 	public static final Item energy_meter = new ItemEnergyMeter();
 	public static final Item hammer = new ItemHammer();
 	public static final Item cuter = new ItemCuter();
+	public static final Block tree_tap = new BlockTreeTap();
 	
 	public RedTec() {
 		
@@ -598,6 +601,8 @@ public class RedTec {
 		ModGameRegistry.registerBlock(rubber_log, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(rubber_wood, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(rubber_laves, DECORATIONS);
+		ModGameRegistry.registerBlock(rubber_sapling, DECORATIONS);
+		ModGameRegistry.registerBlock(tree_tap, TOOLS);
 		
 		ModGameRegistry.registerBlock(motor, MACHINES);
 		
@@ -749,6 +754,7 @@ public class RedTec {
 		ModGameRegistry.registerItem(sulfur);
 		ModGameRegistry.registerItem(sulfur_dioxid);
 		ModGameRegistry.registerItem(plastic_plate);
+		ModGameRegistry.registerItem(raw_rubber_bottle);
 		
 		// register Functional Items
 		ModGameRegistry.registerItem(lever_element);
@@ -824,6 +830,7 @@ public class RedTec {
 		RenderTypeLookup.setRenderLayer(fluid_valve, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(blender, RenderType.getCutoutMipped());
 		RenderTypeLookup.setRenderLayer(rubber_laves, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(rubber_sapling, RenderType.getCutout());
 		
 		RenderTypeLookup.setRenderLayer(ModFluids.SULFURIC_ACID, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_SULFURIC_ACID, RenderType.getTranslucent());

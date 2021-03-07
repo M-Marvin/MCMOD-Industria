@@ -22,6 +22,7 @@ public class ModSoundEvents {
 	public static final SoundEvent BLENDER_LOOP = register("block.blender.loop");
 	public static final SoundEvent RAFFINERY_LOOP = register("block.raffinery.loop");
 	public static final SoundEvent THERMAL_ZENTRIFUGE_LOOP = register("block.thermal_zentrifuge.loop");
+	public static final SoundEvent TREE_TAP_HARVEST = register("block.tree_tap.harvest");
 	
 	private static SoundEvent register(String key) {
 		SoundEvent event = new SoundEvent(new ResourceLocation(RedTec.MODID, key));

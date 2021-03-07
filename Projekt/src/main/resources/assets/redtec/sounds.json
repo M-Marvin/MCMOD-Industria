@@ -76,5 +76,13 @@
 			"redtec:thermal_zentrifuge_loop"
 		],
 		"subtitle": "sound.redtec.block.thermal_zentrifuge.loop"
+	},
+	"block.tree_tap.harvest": {
+		"sounds": [
+			"redtec:tree_tap_1",
+			"redtec:tree_tap_2",
+			"redtec:tree_tap_3"
+		],
+		"subtitle": "sound.redtec.block.tree_tap.harvest"
 	}
 }

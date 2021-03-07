@@ -17,6 +17,7 @@ public class ModTags {
 	public static final ITag<Fluid> STEAM = tagFluid("steam");
 	public static final ITag<Block> CONVEYOR_BELT = tagBlock("conveyor_belt");
 	public static final ITag<Block> DIRT = tagBlockForge("dirt");
+	public static final ITag<Block> RUBBER_LOGS = tagBlock("rubber_logs");
 	
 	private static IOptionalNamedTag<Fluid> tagFluid(String name) {
 		return FluidTags.createOptional(new ResourceLocation(RedTec.MODID, name));

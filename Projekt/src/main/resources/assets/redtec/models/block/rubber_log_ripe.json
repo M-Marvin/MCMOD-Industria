@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "redtec:block/rubber_log",
+    "down": "redtec:block/rubber_log_end",
+    "up": "redtec:block/rubber_log_end",
+    "north": "redtec:block/rubber_log_ripe",
+    "east": "redtec:block/rubber_log",
+    "south": "redtec:block/rubber_log",
+    "west": "redtec:block/rubber_log"
+  }
+}

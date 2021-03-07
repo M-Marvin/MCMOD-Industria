@@ -1,16 +1,46 @@
 {
   "variants": {
-    "axis=x": {
+    "axis=x,ripe_state=cant_be_ripe": {
       "model": "redtec:block/rubber_wood",
       "x": 90,
       "y": 90
     },
-    "axis=y": {
+    "axis=y,ripe_state=cant_be_ripe": {
       "model": "redtec:block/rubber_wood"
     },
-    "axis=z": {
+    "axis=z,ripe_state=cant_be_ripe": {
       "model": "redtec:block/rubber_wood",
       "x": 90
-    }
+    },
+    "axis=x,ripe_state=can_be_ripe": {
+      "model": "redtec:block/rubber_wood",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y,ripe_state=can_be_ripe": {
+      "model": "redtec:block/rubber_wood"
+    },
+    "axis=z,ripe_state=can_be_ripe": {
+      "model": "redtec:block/rubber_wood",
+      "x": 90
+    },
+    "axis=x,ripe_state=ripe": [
+      {"model": "redtec:block/rubber_wood_ripe", "z": 90, "x": 0},
+      {"model": "redtec:block/rubber_wood_ripe", "z": 90, "x": 90},
+      {"model": "redtec:block/rubber_wood_ripe", "z": 90, "x": 180},
+      {"model": "redtec:block/rubber_wood_ripe", "z": 90, "x": 270}
+    ],
+    "axis=y,ripe_state=ripe": [
+      {"model": "redtec:block/rubber_wood_ripe", "y": 0},
+      {"model": "redtec:block/rubber_wood_ripe", "y": 90},
+      {"model": "redtec:block/rubber_wood_ripe", "y": 180},
+      {"model": "redtec:block/rubber_wood_ripe", "y": 270}
+    ],
+    "axis=z,ripe_state=ripe": [
+      {"model": "redtec:block/rubber_wood_ripe", "x": 90, "z": 0},
+      {"model": "redtec:block/rubber_wood_ripe", "x": 90, "z": 90},
+      {"model": "redtec:block/rubber_wood_ripe", "x": 90, "z": 180},
+      {"model": "redtec:block/rubber_wood_ripe", "x": 90, "z": 270}
+    ]
   }
 }

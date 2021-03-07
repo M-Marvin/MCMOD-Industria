@@ -39,7 +39,6 @@ public class BlockBase extends Block {
 		if (material == Material.SAND || material == Material.EARTH) return ToolType.SHOVEL;
 		if (material == Material.WOOD) return ToolType.AXE;
 		if (material == Material.ORGANIC) return ToolType.HOE;
-		System.out.println("ERROR");
 		return null;
 	}
 	

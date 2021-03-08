@@ -30,15 +30,119 @@ public class ModConfiguredFeatures {
 					new OreFeatureConfig(
 							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
 							RedTec.copper_ore.getDefaultState(),
-							10
+							14
 					)
-			)
-			.withPlacement(
+			).withPlacement(
 					ModPlacement.SIMPLE_ORE.configure(
-							new SimpleOrePlacementConfig(11, 45, 15)
+							new SimpleOrePlacementConfig(11, 45, 14)
 					)
 			)
 	);
+	public static final ConfiguredFeature<?, ?> NICKEL_ORE = registerConfiguredFeature("nickel_ore", 
+			Feature.ORE.withConfiguration(
+					new OreFeatureConfig(
+							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
+							RedTec.nickel_ore.getDefaultState(),
+							8
+					)
+			).withPlacement(
+					ModPlacement.SIMPLE_ORE.configure(
+							new SimpleOrePlacementConfig(0, 64, 6)
+					)
+			)
+	);
+	public static final ConfiguredFeature<?, ?> TIN_ORE = registerConfiguredFeature("tin_ore", 
+			Feature.ORE.withConfiguration(
+					new OreFeatureConfig(
+							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
+							RedTec.tin_ore.getDefaultState(),
+							12
+					)
+			).withPlacement(
+					ModPlacement.SIMPLE_ORE.configure(
+							new SimpleOrePlacementConfig(0, 48, 6)
+					)
+			)
+	);
+	public static final ConfiguredFeature<?, ?> TIN_ORE_EXTRA = registerConfiguredFeature("tin_ore_extra", 
+			Feature.ORE.withConfiguration(
+					new OreFeatureConfig(
+							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
+							RedTec.tin_ore.getDefaultState(),
+							12
+					)
+			).withPlacement(
+					ModPlacement.SIMPLE_ORE.configure(
+							new SimpleOrePlacementConfig(0, 48, 6)
+					)
+			)
+	);
+	public static final ConfiguredFeature<?, ?> SILVER_ORE = registerConfiguredFeature("silver_ore", 
+			Feature.ORE.withConfiguration(
+					new OreFeatureConfig(
+							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
+							RedTec.silver_ore.getDefaultState(),
+							6
+					)
+			).withPlacement(
+					ModPlacement.SIMPLE_ORE.configure(
+							new SimpleOrePlacementConfig(16, 40, 1)
+					)
+			)
+	);
+	public static final ConfiguredFeature<?, ?> SILVER_ORE_EXTRA = registerConfiguredFeature("silver_ore_extra", 
+			Feature.ORE.withConfiguration(
+					new OreFeatureConfig(
+							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
+							RedTec.silver_ore.getDefaultState(),
+							3
+					)
+			).withPlacement(
+					ModPlacement.SIMPLE_ORE.configure(
+							new SimpleOrePlacementConfig(16, 40, 1)
+					)
+			)
+	);
+	public static final ConfiguredFeature<?, ?> PALLADIUM_ORE = registerConfiguredFeature("palladium_ore", 
+			Feature.ORE.withConfiguration(
+					new OreFeatureConfig(
+							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
+							RedTec.palladium_ore.getDefaultState(),
+							2
+					)
+			).withPlacement(
+					ModPlacement.SIMPLE_ORE.configure(
+							new SimpleOrePlacementConfig(0, 16, 1)
+					)
+			)
+	);
+	public static final ConfiguredFeature<?, ?> PALLADIUM_ORE_EXTRA = registerConfiguredFeature("palladium_ore_extra", 
+			Feature.ORE.withConfiguration(
+					new OreFeatureConfig(
+							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
+							RedTec.palladium_ore.getDefaultState(),
+							2
+					)
+			).withPlacement(
+					ModPlacement.SIMPLE_ORE.configure(
+							new SimpleOrePlacementConfig(0, 16, 1)
+					)
+			)
+	);
+	public static final ConfiguredFeature<?, ?> SULFUR_ORE = registerConfiguredFeature("sulfur_ore", 
+			Feature.ORE.withConfiguration(
+					new OreFeatureConfig(
+							OreFeatureConfig.FillerBlockType.BASE_STONE_NETHER, 
+							RedTec.sulfur_ore.getDefaultState(),
+							10
+					)
+			).withPlacement(
+					ModPlacement.SIMPLE_ORE.configure(
+							new SimpleOrePlacementConfig(0, 64, 15)
+					)
+			)
+	);
+	
 	public static final ConfiguredFeature<?, ?> BAUXIT_STONE_ORE = registerConfiguredFeature("bauxit_stone_ore",
 			ModFeature.STONE_ORE.withConfiguration(
 					new StoneOreFeatureConfig(
@@ -47,10 +151,45 @@ public class ModConfiguredFeatures {
 							RedTec.bauxit_ore.getDefaultState(),
 							42
 					)
-			)
-			.withPlacement(
+			).withPlacement(
 					ModPlacement.SIMPLE_ORE.configure(
-							new SimpleOrePlacementConfig(45, 256, 3)
+							new SimpleOrePlacementConfig(45, 256, 4)
+					)
+			)
+	);
+	public static final ConfiguredFeature<?, ?> WOLFRAM_STONE_ORE = registerConfiguredFeature("wolfram_stone_ore",
+			ModFeature.STONE_ORE.withConfiguration(
+					new StoneOreFeatureConfig(
+							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
+							RedTec.wolframit.getDefaultState(),
+							RedTec.wolframit_ore.getDefaultState(),
+							42
+					)
+			).withPlacement(
+					ModPlacement.SIMPLE_ORE.configure(
+							new SimpleOrePlacementConfig(0, 32, 1)
+					)
+			).withPlacement(
+					Placement.CHANCE.configure(
+							new ChanceConfig(5)
+					)
+			)
+	);
+	
+	public static final ConfiguredFeature<?, ?> OIL_DEPOT = registerConfiguredFeature("oil_depot",
+			Feature.ORE.withConfiguration(
+					new OreFeatureConfig(
+							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
+							ModFluids.RAW_OIL.getDefaultState().getBlockState(),
+							128
+					)
+			).withPlacement(
+					ModPlacement.SIMPLE_ORE.configure(
+							new SimpleOrePlacementConfig(0, 30, 6)
+					)
+			).withPlacement(
+					Placement.CHANCE.configure(
+							new ChanceConfig(180)
 					)
 			)
 	);

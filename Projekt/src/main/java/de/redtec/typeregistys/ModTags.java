@@ -15,6 +15,11 @@ public class ModTags {
 	
 	public static final ITag<Fluid> HOT_WATER = tagFluid("hot_water");
 	public static final ITag<Fluid> STEAM = tagFluid("steam");
+	public static final ITag<Fluid> RAW_OIL = tagFluid("raw_oil");
+	public static final ITag<Fluid> CHEMICAL_WATER = tagFluid("chemical_water");
+	public static final ITag<Fluid> SULFURIC_ACID = tagFluid("sulfuric_acid");
+	public static final ITag<Fluid> NATRON_LYE = tagFluid("natron_lye");
+	
 	public static final ITag<Block> CONVEYOR_BELT = tagBlock("conveyor_belt");
 	public static final ITag<Block> DIRT = tagBlockForge("dirt");
 	public static final ITag<Block> RUBBER_LOGS = tagBlock("rubber_logs");

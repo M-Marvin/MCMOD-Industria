@@ -1,5 +1,6 @@
 package de.redtec.blocks;
 
+import de.redtec.util.IBurnableBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -13,7 +14,7 @@ import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
-public class BlockLogBase extends BlockBase {
+public class BlockLogBase extends BlockBase implements IBurnableBlock {
 	
 	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
 
@@ -40,6 +41,11 @@ public class BlockLogBase extends BlockBase {
 	@Override
 	public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
 		return 5;
+	}
+
+	@Override
+	public int getBurnTime() {
+		return 750;
 	}
 	
 }

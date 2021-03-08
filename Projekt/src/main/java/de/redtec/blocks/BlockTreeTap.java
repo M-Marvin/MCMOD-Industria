@@ -29,6 +29,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -45,7 +46,14 @@ public class BlockTreeTap extends BlockBase {
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return VoxelHelper.rotateShape(Block.makeCuboidShape(4, 4, 4, 10, 10, 10), state.get(FACING));
+		
+		VoxelShape shape = Block.makeCuboidShape(5, 2, 2, 11, 6, 8);
+		shape = VoxelShapes.or(shape, Block.makeCuboidShape(7, 8, 4, 9, 10, 6));
+		shape = VoxelShapes.or(shape, Block.makeCuboidShape(7, 10, 4, 9, 12, 16));
+		shape = VoxelShapes.or(shape, Block.makeCuboidShape(6, 10, 8, 10, 13, 12));
+		shape = VoxelShapes.or(shape, Block.makeCuboidShape(7, 13, 9, 9, 15, 11));
+		shape = VoxelShapes.or(shape, Block.makeCuboidShape(5, 15, 9, 11, 16, 11));
+		return VoxelHelper.rotateShape(shape, state.get(FACING));
 	}
 	
 	@Override

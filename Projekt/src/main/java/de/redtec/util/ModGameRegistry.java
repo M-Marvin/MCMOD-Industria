@@ -33,28 +33,54 @@ public class ModGameRegistry {
 	
 	public static void registerBlock(Block block, ItemGroup group, Rarity rarity) {
 		blocksToRegister.add(block);
-		BlockItem blockItem;
+		List<ITextComponent> info = null;
+		int burnTime = -1;
+		Item.Properties properties = new Item.Properties().group(group).rarity(rarity);
+		
 		if (block instanceof IAdvancedBlockInfo) {
-			List<ITextComponent> info = ((IAdvancedBlockInfo) block).getBlockInfo();
+			info = ((IAdvancedBlockInfo) block).getBlockInfo();
 			Supplier<Callable<ItemStackTileEntityRenderer>> ister = ((IAdvancedBlockInfo) block).getISTER();
-			blockItem = group != null ? new ItemBlockAdvancedInfo(block, new Item.Properties().group(group).rarity(rarity).setISTER(ister), info) : new ItemBlockAdvancedInfo(block, new Item.Properties().rarity(rarity).setISTER(ister), info);
-		} else {
-			blockItem = group != null ? new BlockItem(block, new Item.Properties().group(group).rarity(rarity).maxStackSize(((IAdvancedBlockInfo) block).getStackSize())) : new BlockItem(block, new Item.Properties().rarity(rarity));
+			properties = properties.setISTER(ister);
 		}
+		
+		if (block instanceof IBurnableBlock) {
+			burnTime = ((IBurnableBlock) block).getBurnTime();
+		}
+		
+		Item blockItem;
+		if (burnTime != -1 || info != null) {
+			blockItem = new ItemBlockAdvancedInfo(block, properties, info, burnTime);
+		} else {
+			blockItem = new BlockItem(block, properties);
+		}
+		
 		blockItem.setRegistryName(block.getRegistryName());
 		itemsToRegister.add(blockItem);
 	}
 	
 	public static void registerBlock(Block block, ItemGroup group) {
 		blocksToRegister.add(block);
-		Item blockItem;
+		List<ITextComponent> info = null;
+		int burnTime = 0;
+		Item.Properties properties = new Item.Properties().group(group);
+		
 		if (block instanceof IAdvancedBlockInfo) {
-			List<ITextComponent> info = ((IAdvancedBlockInfo) block).getBlockInfo();
+			info = ((IAdvancedBlockInfo) block).getBlockInfo();
 			Supplier<Callable<ItemStackTileEntityRenderer>> ister = ((IAdvancedBlockInfo) block).getISTER();
-			blockItem = group != null ? new ItemBlockAdvancedInfo(block, new Item.Properties().group(group).setISTER(ister).maxStackSize(((IAdvancedBlockInfo) block).getStackSize()), info) : new ItemBlockAdvancedInfo(block, new Item.Properties(), info);
-		} else {
-			blockItem = group != null ? new BlockItem(block, new Item.Properties().group(group)) : new BlockItem(block, new Item.Properties());
+			properties = properties.setISTER(ister);
 		}
+		
+		if (block instanceof IBurnableBlock) {
+			burnTime = ((IBurnableBlock) block).getBurnTime();
+		}
+		
+		Item blockItem;
+		if (burnTime > 0 || info != null) {
+			blockItem = new ItemBlockAdvancedInfo(block, properties, info, burnTime);
+		} else {
+			blockItem = new BlockItem(block, properties);
+		}
+		
 		blockItem.setRegistryName(block.getRegistryName());
 		itemsToRegister.add(blockItem);
 	}

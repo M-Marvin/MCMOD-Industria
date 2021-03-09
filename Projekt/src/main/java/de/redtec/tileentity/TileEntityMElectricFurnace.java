@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import de.redtec.blocks.BlockMElectricFurnace;
 import de.redtec.gui.ContainerMElectricFurnace;
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
 import de.redtec.util.IElectricConnective.Voltage;
@@ -186,7 +186,7 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 	}
 	
 	@Override
-	public void func_230337_a_(BlockState state, CompoundNBT compound) {
+	public void read(BlockState state, CompoundNBT compound) {
 		this.cookTime = compound.getInt("cookTime");
 		this.cookTimeTotal = compound.getInt("cookTimeTotal");
 		this.hasPower = compound.getBoolean("hasPower");
@@ -194,7 +194,7 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 		for(String s : compoundnbt.keySet()) {
 			this.usedRecipes.put(new ResourceLocation(s), compoundnbt.getInt(s));
 		}
-		super.func_230337_a_(state, compound);
+		super.read(state, compound);
 	}
 	
 	@Override

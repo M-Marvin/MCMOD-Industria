@@ -1,5 +1,5 @@
 
-package de.redtec.registys;
+package de.redtec.typeregistys;
 
 import de.redtec.RedTec;
 import de.redtec.fluids.FluidChemicalWater;

@@ -149,9 +149,9 @@ public class BlockConveyorBelt extends BlockContainerBase implements IAdvancedBl
 		public String getName() {
 			return name;
 		}
-
+		
 		@Override
-		public String func_176610_l() {
+		public String getString() {
 			return name;
 		}
 		

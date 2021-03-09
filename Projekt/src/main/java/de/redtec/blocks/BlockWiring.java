@@ -155,7 +155,7 @@ public abstract class BlockWiring extends BlockBase implements IWaterLoggable {
 		}
 
 		@Override
-		public String func_176610_l() {
+		public String getString() {
 			return this.name;
 		}
 		

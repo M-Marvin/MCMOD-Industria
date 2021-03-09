@@ -6,8 +6,8 @@ import de.redtec.blocks.BlockMGenerator;
 import de.redtec.dynamicsounds.ISimpleMachineSound;
 import de.redtec.dynamicsounds.SoundMachine;
 import de.redtec.gui.ContainerMGenerator;
-import de.redtec.registys.ModSoundEvents;
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModSoundEvents;
+import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.BlockState;
@@ -47,11 +47,11 @@ public class TileEntityMGenerator extends TileEntityInventoryBase implements INa
 	}
 	
 	@Override
-	public void func_230337_a_(BlockState state, CompoundNBT compound) {
+	public void read(BlockState state, CompoundNBT compound) {
 		this.burnTime = compound.getFloat("burnTime");
 		this.producingPower = compound.getFloat("producingPower");
 		this.fuelTime = compound.getInt("fuelTime");
-		super.func_230337_a_(state, compound);
+		super.read(state, compound);
 	}
 
 	@Override

@@ -19,9 +19,9 @@ public class JigsawFeatureConfig implements IFeatureConfig {
 	public static final Codec<JigsawFeatureConfig> CODEC = RecordCodecBuilder.create((codec) -> {
 		return codec.group(RuleTest.field_237127_c_.fieldOf("target").forGetter((config) -> {
 			return config.target;
-		}), BlockState.field_235877_b_.fieldOf("jigsawState").forGetter((config) ->  {
+		}), BlockState.CODEC.fieldOf("jigsawState").forGetter((config) ->  {
 			return config.jigsawState;
-		}), CompoundNBT.field_240597_a_.fieldOf("jigsawData").forGetter((config) -> {
+		}), CompoundNBT.CODEC.fieldOf("jigsawData").forGetter((config) -> {
 			return config.jigsawData;
 		}), Codec.INT.fieldOf("levelsMin").forGetter((config) -> {
 			return config.levelsMin;

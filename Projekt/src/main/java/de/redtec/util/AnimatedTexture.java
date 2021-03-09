@@ -140,7 +140,7 @@ public class AnimatedTexture extends SimpleTexture implements ITickable {
 			int frameOffset = this.frames[this.frame] * 8;
 			
 			Minecraft.getInstance().getTextureManager().bindTexture(this.textureLocation);		
-			screen.func_238474_b_(matrixStack, x + 8, y, 0, frameOffset, width, height);
+			screen.blit(matrixStack, x + 8, y, 0, frameOffset, width, height);
 			
 		}
 		

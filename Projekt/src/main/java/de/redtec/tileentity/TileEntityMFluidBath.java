@@ -7,8 +7,8 @@ import de.redtec.blocks.BlockMultiPart;
 import de.redtec.dynamicsounds.ISimpleMachineSound;
 import de.redtec.gui.ContainerMFluidBath;
 import de.redtec.recipetypes.FluidBathRecipe;
-import de.redtec.registys.ModRecipeTypes;
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModRecipeTypes;
+import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
 import de.redtec.util.FluidBucketHelper;
@@ -163,7 +163,7 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements IFl
 	}
 	
 	@Override
-	public void func_230337_a_(BlockState state, CompoundNBT compound) {
+	public void read(BlockState state, CompoundNBT compound) {
 		this.fluidIn = FluidStack.loadFluidStackFromNBT(compound.getCompound("fluidIn"));
 		this.fluidOut = FluidStack.loadFluidStackFromNBT(compound.getCompound("fluidOut"));
 		this.progress = compound.getInt("process");
@@ -175,7 +175,7 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements IFl
 			Optional<? extends IRecipe<?>> recipe = this.world.getRecipeManager().getRecipe(new ResourceLocation(compound.getString("Recipe")));
 			if (recipe.isPresent()) this.lastRecipe = (FluidBathRecipe) recipe.get();
 		}
-		super.func_230337_a_(state, compound);
+		super.read(state, compound);
 	}
 	
 	public boolean canWork() {

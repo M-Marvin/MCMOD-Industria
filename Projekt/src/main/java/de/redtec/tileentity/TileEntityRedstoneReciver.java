@@ -1,7 +1,7 @@
 package de.redtec.tileentity;
 
 import de.redtec.gui.ContainerReciver;
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModTileEntityType;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -30,10 +30,10 @@ public class TileEntityRedstoneReciver extends TileEntity implements INamedConta
 	}
 	
 	@Override
-	public void func_230337_a_(BlockState state, CompoundNBT compound) {
+	public void read(BlockState state, CompoundNBT compound) {
 		this.chanelItem = ItemStack.read(compound.getCompound("ChanelItem"));
 		if (this.chanelItem.isEmpty()) this.chanelItem = ItemStack.EMPTY;
-		super.func_230337_a_(state, compound);
+		super.read(state, compound);
 	}
 //	
 //	public void setChanelItem(ItemStack chanelItem) {

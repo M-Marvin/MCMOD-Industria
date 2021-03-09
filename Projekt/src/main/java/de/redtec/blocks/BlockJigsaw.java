@@ -110,8 +110,8 @@ public class BlockJigsaw extends BlockContainerBase {
 		}
 		
 		@Override
-		public String func_176610_l() {
-			return this.name;
+		public String getString() {
+			return name;
 		}
 		
 		public JigsawType getOppesite() {

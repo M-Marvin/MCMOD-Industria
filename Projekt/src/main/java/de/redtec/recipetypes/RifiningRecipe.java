@@ -1,8 +1,8 @@
 package de.redtec.recipetypes;
 
-import de.redtec.registys.ModRecipeTypes;
-import de.redtec.registys.ModSerializer;
 import de.redtec.tileentity.TileEntityMRaffinery;
+import de.redtec.typeregistys.ModRecipeTypes;
+import de.redtec.typeregistys.ModSerializer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;

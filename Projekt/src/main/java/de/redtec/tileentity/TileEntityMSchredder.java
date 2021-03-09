@@ -10,10 +10,10 @@ import de.redtec.dynamicsounds.SoundMachine;
 import de.redtec.gui.ContainerMSchredder;
 import de.redtec.items.ItemSchredderTool;
 import de.redtec.recipetypes.SchredderRecipe;
-import de.redtec.registys.ModDamageSource;
-import de.redtec.registys.ModRecipeTypes;
-import de.redtec.registys.ModSoundEvents;
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModDamageSource;
+import de.redtec.typeregistys.ModRecipeTypes;
+import de.redtec.typeregistys.ModSoundEvents;
+import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
 import de.redtec.util.IElectricConnective.Voltage;
@@ -296,12 +296,12 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 	}
 	
 	@Override
-	public void func_230337_a_(BlockState state, CompoundNBT compound) {
+	public void read(BlockState state, CompoundNBT compound) {
 		this.isWorking = compound.getBoolean("isWorking");
 		this.hasPower = compound.getBoolean("hasPower");
 		this.progress = compound.getInt("progress");
 		this.progressTotal = compound.getInt("progressTotal");
-		super.func_230337_a_(state, compound);
+		super.read(state, compound);
 	}
 	
 	@Override

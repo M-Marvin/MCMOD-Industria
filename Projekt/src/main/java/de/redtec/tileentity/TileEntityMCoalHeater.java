@@ -5,9 +5,9 @@ import de.redtec.dynamicsounds.ISimpleMachineSound;
 import de.redtec.dynamicsounds.SoundMachine;
 import de.redtec.fluids.FluidDestilledWater;
 import de.redtec.gui.ContainerMCoalHeater;
-import de.redtec.registys.ModFluids;
-import de.redtec.registys.ModSoundEvents;
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModFluids;
+import de.redtec.typeregistys.ModSoundEvents;
+import de.redtec.typeregistys.ModTileEntityType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowingFluidBlock;
@@ -157,10 +157,10 @@ public class TileEntityMCoalHeater extends TileEntityInventoryBase implements IN
 	}
 	
 	@Override
-	public void func_230337_a_(BlockState state, CompoundNBT compound) {
+	public void read(BlockState state, CompoundNBT compound) {
 		this.burnTime = compound.getFloat("burnTime");
 		this.fuelTime = compound.getInt("fuelTime");
-		super.func_230337_a_(state, compound);
+		super.read(state, compound);
 	}
 	
 	@Override

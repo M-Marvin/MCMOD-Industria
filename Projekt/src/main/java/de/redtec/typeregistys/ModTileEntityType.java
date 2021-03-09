@@ -1,4 +1,4 @@
-package de.redtec.registys;
+package de.redtec.typeregistys;
 
 import com.mojang.datafixers.types.Type;
 
@@ -74,7 +74,7 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityMFluidBath> FLUID_BATH = register("fluid_bath", TileEntityType.Builder.create(TileEntityMFluidBath::new, RedTec.fluid_bath));
 	
 	private static <T extends TileEntity> TileEntityType<T> register(String key, TileEntityType.Builder<T> builder) {
-		Type<?> type = Util.func_240976_a_(TypeReferences.BLOCK_ENTITY, key);
+		Type<?> type = Util.attemptDataFix(TypeReferences.BLOCK_ENTITY, key);
 		TileEntityType<T> tileEntityType = builder.build(type);
 		tileEntityType.setRegistryName(new ResourceLocation(RedTec.MODID, key));
 		ForgeRegistries.TILE_ENTITIES.register(tileEntityType);

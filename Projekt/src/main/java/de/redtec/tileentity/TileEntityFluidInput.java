@@ -3,8 +3,8 @@ package de.redtec.tileentity;
 import de.redtec.blocks.BlockFluidInput;
 import de.redtec.dynamicsounds.ISimpleMachineSound;
 import de.redtec.dynamicsounds.SoundMachine;
-import de.redtec.registys.ModSoundEvents;
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModSoundEvents;
+import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
 import de.redtec.util.IElectricConnective.Voltage;
@@ -53,12 +53,12 @@ public class TileEntityFluidInput extends TileEntity implements IFluidConnective
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public void func_230337_a_(BlockState state, CompoundNBT compund) {
+	public void read(BlockState state, CompoundNBT compund) {
 		this.fluid = FluidStack.loadFluidStackFromNBT(compund.getCompound("Fluid"));
 		this.progress = compund.getInt("progress");
 		if (compund.contains("FluidFilter")) this.filterFluid = Registry.FLUID.getOrDefault(new ResourceLocation(compund.getString("FluidFilter")));
 		if (this.filterFluid == Fluids.EMPTY) this.filterFluid = null;
-		super.func_230337_a_(state, compund);
+		super.read(state, compund);
 	}
 	
 	@Override

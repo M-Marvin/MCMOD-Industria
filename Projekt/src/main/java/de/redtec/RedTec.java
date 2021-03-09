@@ -1,5 +1,8 @@
 package de.redtec;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
@@ -54,6 +57,7 @@ import de.redtec.blocks.BlockRedstoneContact;
 import de.redtec.blocks.BlockRedstoneReciver;
 import de.redtec.blocks.BlockRubberLog;
 import de.redtec.blocks.BlockSalsolaSeeds;
+import de.redtec.blocks.BlockSaplingBase;
 import de.redtec.blocks.BlockSignalAntennaConector;
 import de.redtec.blocks.BlockSignalProcessorContact;
 import de.redtec.blocks.BlockSignalWire;
@@ -61,7 +65,6 @@ import de.redtec.blocks.BlockStackedRedstoneTorch;
 import de.redtec.blocks.BlockStackedRedstoneWire;
 import de.redtec.blocks.BlockStoringCraftingTable;
 import de.redtec.blocks.BlockTreeTap;
-import de.redtec.blocks.BlockSaplingBase;
 import de.redtec.fluids.BlockChemicalWater;
 import de.redtec.fluids.BlockDestilledWater;
 import de.redtec.fluids.BlockNatronLye;
@@ -105,10 +108,6 @@ import de.redtec.packet.CEditJigsawTileEntityPacket;
 import de.redtec.packet.CEditProcessorCodePacket;
 import de.redtec.packet.CGenerateJigsaw;
 import de.redtec.packet.SSendENHandeler;
-import de.redtec.registys.ModConfiguredFeatures;
-import de.redtec.registys.ModContainerType;
-import de.redtec.registys.ModFluids;
-import de.redtec.registys.ModTileEntityType;
 import de.redtec.renderer.TileEntityAdvancedMovingBlockRenderer;
 import de.redtec.renderer.TileEntityControllPanelRenderer;
 import de.redtec.renderer.TileEntityConveyorBeltRenderer;
@@ -120,8 +119,11 @@ import de.redtec.renderer.TileEntityMRaffineryRenderer;
 import de.redtec.renderer.TileEntityMSchredderRenderer;
 import de.redtec.renderer.TileEntityMSteamGeneratorRenderer;
 import de.redtec.renderer.TileEntitySignalProcessorContactRenderer;
+import de.redtec.typeregistys.ModConfiguredFeatures;
+import de.redtec.typeregistys.ModContainerType;
+import de.redtec.typeregistys.ModFluids;
+import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.ModGameRegistry;
-import de.redtec.worldgen.BiomeHelper;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -142,12 +144,17 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biome.Category;
 import net.minecraft.world.biome.Biomes;
+import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.GenerationStage.Decoration;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -157,7 +164,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 
 @Mod("redtec")
@@ -233,6 +239,8 @@ public class RedTec {
 	public static final Block storing_crafting_table = new BlockStoringCraftingTable();	
 	// Mechanic
 	public static final Block motor = new BlockMotor();
+	// Items
+	public static final Item sulfur_dioxid = new ItemBase("sulfur_dioxid", MATERIALS);
 	
 	// Machinery
 	public static final Block conveyor_spliter = new BlockConveyorSpliter();
@@ -288,7 +296,7 @@ public class RedTec {
 	// Deko Blocks
 	public static final Block gold_plates = new BlockBase("gold_plates", Material.IRON, 1.5F, 2.2F, SoundType.METAL);
 	public static final Block iron_plates = new BlockBase("iron_plates", Material.IRON, 2.5F, 3F, SoundType.METAL);
-	public static final Block netherite_plates = new BlockBase("netherite_plates", Material.IRON, 25F, 600F, SoundType.field_235594_P_);
+	public static final Block netherite_plates = new BlockBase("netherite_plates", Material.IRON, 25F, 600F, SoundType.NETHERITE);
 	public static final Block copper_plates = new BlockBase("copper_plates", Material.IRON, 2.5F, 3F, SoundType.METAL);
 	public static final Block aluminium_plates = new BlockBase("aluminium_plates", Material.IRON, 1.5F, 2F, SoundType.METAL);
 	public static final Block electrolyt_copper_plates = new BlockBase("electrolyt_copper_plates", Material.IRON, 2.5F, 3F, SoundType.METAL);
@@ -313,7 +321,7 @@ public class RedTec {
 	public static final Block wolfram_planks = new BlockBase("wolfram_planks", Material.IRON, 3.5F, 3.7F, SoundType.METAL);
 	public static final Block nickel_planks = new BlockBase("nickel_planks", Material.IRON, 2.5F, 3F, SoundType.METAL);
 	public static final Block monel_planks = new BlockBase("monel_planks", Material.IRON, 2.5F, 3F, SoundType.METAL);
-	public static final Block netherite_planks = new BlockBase("netherite_planks", Material.IRON, 25F, 600F, SoundType.field_235594_P_);
+	public static final Block netherite_planks = new BlockBase("netherite_planks", Material.IRON, 25F, 600F, SoundType.NETHERITE);
 	public static final Block chiseled_smooth_stone = new BlockBase("chiseled_smooth_stone", Material.ROCK, 2F, 6F, SoundType.STONE);
 	public static final Block smooth_cobblestone = new BlockBase("smooth_cobblestone", Material.ROCK, 2F, 6F, SoundType.STONE);
 	public static final Block stone_corner = new BlockCornerBlockBase("stone_corner", () -> Blocks.STONE.getDefaultState(), AbstractBlock.Properties.create(Material.ROCK).sound(SoundType.STONE));
@@ -438,8 +446,8 @@ public class RedTec {
 	public static final Item pure_palladium_ore = new ItemBase("pure_palladium_ore", MATERIALS);
 	public static final Item pure_nickel_ore = new ItemBase("pure_nickel_ore", MATERIALS);
 	public static final Item sulfur = new ItemBase("sulfur", MATERIALS);
-	public static final Item sulfur_dioxid = new ItemBase("sulfur_dioxid", MATERIALS);
-	
+	public static final Item crude_steel = new ItemBase("crude_steel", MATERIALS);
+		
 	// Crafting items
 	public static final Item bearing = new ItemBase("bearing", MATERIALS);
 	public static final Item spring = new ItemBase("spring", MATERIALS);
@@ -461,7 +469,8 @@ public class RedTec {
 	public static final Item electrolyt_paper = new ItemBase("electrolyt_paper", MATERIALS);
 	public static final Item salt = new ItemBase("salt", MATERIALS);
 	public static final Item natrium = new ItemBase("natrium", MATERIALS);
-	public static final Item raw_rubber_bottle = new ItemBase("raw_rubber_bottle", MATERIALS);
+	public static final Item raw_rubber_bottle = new ItemBase("raw_rubber_bottle", MATERIALS, 16);
+	public static final Item rubber_bottle = new ItemBase("rubber_bottle", MATERIALS, 16, Items.GLASS_BOTTLE);
 	
 	// Functional Items
 	public static final Item remote_control = new ItemRemoteControll();
@@ -491,6 +500,7 @@ public class RedTec {
 		
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, this::onBiomeLoadingEvent);
 		
 		// register Blocks
 		ModGameRegistry.registerBlock(capacitor, ItemGroup.REDSTONE);
@@ -755,6 +765,8 @@ public class RedTec {
 		ModGameRegistry.registerItem(sulfur_dioxid);
 		ModGameRegistry.registerItem(plastic_plate);
 		ModGameRegistry.registerItem(raw_rubber_bottle);
+		ModGameRegistry.registerItem(rubber_bottle);
+		ModGameRegistry.registerItem(crude_steel);
 		
 		// register Functional Items
 		ModGameRegistry.registerItem(lever_element);
@@ -794,20 +806,26 @@ public class RedTec {
 		});
 		
 		// World Generation Settings (Adding Features to the specific Biomes)
-		for (Biome biome : ForgeRegistries.BIOMES) {
-			if (biome.getCategory().equals(Biome.Category.NETHER)) {
-				//Nether
-			} else if (biome.getCategory().equals(Biome.Category.THEEND)) {
-				//End
-			} else {
-				//Overworld
-				BiomeHelper.addFeature(biome, Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.COPPER_ORE);
-				BiomeHelper.addFeature(biome, Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.BAUXIT_STONE_ORE);
-			}
-			
-			BiomeHelper.addToBiome(biome, Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.RUBBER_TREE, Biomes.SWAMP_HILLS, Biomes.JUNGLE, Biomes.JUNGLE_EDGE, Biomes.JUNGLE_HILLS, Biomes.MODIFIED_JUNGLE, Biomes.MODIFIED_JUNGLE_EDGE);
-			
-		}
+		ModGameRegistry.addFeatureToOverworldBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.COPPER_ORE);
+		ModGameRegistry.addFeatureToOverworldBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.TIN_ORE);
+		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.TIN_ORE_EXTRA, Category.JUNGLE);
+		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.TIN_ORE_EXTRA, Category.SAVANNA);
+		ModGameRegistry.addFeatureToOverworldBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.NICKEL_ORE);
+		ModGameRegistry.addFeatureToOverworldBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.SILVER_ORE);
+		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.SILVER_ORE_EXTRA, Category.JUNGLE);
+		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.SILVER_ORE_EXTRA, Category.EXTREME_HILLS);
+		ModGameRegistry.addFeatureToOverworldBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.PALLADIUM_ORE);
+		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.PALLADIUM_ORE_EXTRA, Category.SWAMP);
+		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.PALLADIUM_ORE_EXTRA, Category.TAIGA);
+		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.SULFUR_ORE, Category.NETHER);
+		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.BAUXIT_STONE_ORE, Category.JUNGLE);
+		ModGameRegistry.addFeatureToOverworldBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.WOLFRAM_STONE_ORE);
+		
+		// TODO
+		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.OIL_DEPOT, Category.DESERT);
+		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.OIL_DEPOT, Category.OCEAN);
+		
+		ModGameRegistry.addFeatureToBiomes(Decoration.VEGETAL_DECORATION, ModConfiguredFeatures.RUBBER_TREE, Biomes.SWAMP_HILLS, Biomes.JUNGLE, Biomes.JUNGLE_EDGE, Biomes.JUNGLE_HILLS, Biomes.MODIFIED_JUNGLE, Biomes.MODIFIED_JUNGLE_EDGE);
 		
 	}
 	
@@ -831,6 +849,7 @@ public class RedTec {
 		RenderTypeLookup.setRenderLayer(blender, RenderType.getCutoutMipped());
 		RenderTypeLookup.setRenderLayer(rubber_laves, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(rubber_sapling, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(tree_tap, RenderType.getCutoutMipped());
 		
 		RenderTypeLookup.setRenderLayer(ModFluids.SULFURIC_ACID, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_SULFURIC_ACID, RenderType.getTranslucent());
@@ -881,27 +900,38 @@ public class RedTec {
 		
 	}
 	
-    @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
-    public static class Events {
-    	
-        @SubscribeEvent
-        public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
-        	IForgeRegistry<Block> registry = blockRegistryEvent.getRegistry();
-        	Block[] blocksToRegister = ModGameRegistry.getBlocksToRegister();
-    		for (Block block : blocksToRegister) {
-            	registry.register(block);
-            }
-        }
-        
-        @SubscribeEvent
-        public static void onItemsRegistry(final RegistryEvent.Register<Item> itemRegistryEvent) {
-            IForgeRegistry<Item> registry = itemRegistryEvent.getRegistry();
-            Item[] itemsToRegister = ModGameRegistry.getItemsToRegister();
-            for (Item item : itemsToRegister) {
-            	registry.register(item);
-            }
-        }
-        
-    }
+	// Registration Code
+	
+	@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
+	public static class Events {
+		
+		@SubscribeEvent
+		public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
+			IForgeRegistry<Block> registry = blockRegistryEvent.getRegistry();
+			Block[] blocksToRegister = ModGameRegistry.getBlocksToRegister();
+			for (Block block : blocksToRegister) {
+				registry.register(block);
+			}
+		}
+		
+		@SubscribeEvent
+		public static void onItemsRegistry(final RegistryEvent.Register<Item> itemRegistryEvent) {
+			IForgeRegistry<Item> registry = itemRegistryEvent.getRegistry();
+			Item[] itemsToRegister = ModGameRegistry.getItemsToRegister();
+			for (Item item : itemsToRegister) {
+				registry.register(item);
+			}
+		}
+		
+	}
+	
+	public void onBiomeLoadingEvent(final BiomeLoadingEvent event) {
+		for (GenerationStage.Decoration decoration : GenerationStage.Decoration.values()) {
+			List<ConfiguredFeature<?, ?>> features = ModGameRegistry.getFeaturesToRegister().getOrDefault(event.getName(), new HashMap<GenerationStage.Decoration, List<ConfiguredFeature<?, ?>>>()).getOrDefault(decoration, new ArrayList<>());
+			for (ConfiguredFeature<?, ?> feature : features) {
+				event.getGeneration().getFeatures(decoration).add(() -> feature);
+			}
+		}
+	}
 	
 }

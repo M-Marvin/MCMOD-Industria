@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 import de.redtec.RedTec;
 import de.redtec.blocks.BlockControllPanel;
 import de.redtec.items.panelitems.ItemPanelElement;
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.RedstoneControlSignal;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
@@ -193,7 +193,7 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.func_230337_a_(this.getBlockState(), pkt.getNbtCompound());
+		this.read(this.getBlockState(), pkt.getNbtCompound());
 	}
 	
 	@Override
@@ -203,7 +203,7 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 	}
 	
 	@Override
-	public void func_230337_a_(BlockState state, CompoundNBT compound) {
+	public void read(BlockState state, CompoundNBT compound) {
 		ListNBT list = compound.getList("PanelElements", 10);
 		this.panelElements.clear();
 		for (int i = 0; i < list.size(); i++) {
@@ -217,7 +217,7 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 			}
 			this.panelElements.put(pos, stack);
 		}
-		super.func_230337_a_(state, compound);
+		super.read(state, compound);
 	}
 	
 	public static final class Pos {

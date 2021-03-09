@@ -72,7 +72,7 @@ public interface IElectricConnective {
 		}
 
 		@Override
-		public String func_176610_l() {
+		public String getString() {
 			return this.name;
 		}
 

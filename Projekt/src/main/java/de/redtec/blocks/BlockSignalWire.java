@@ -184,8 +184,8 @@ public class BlockSignalWire extends BlockBase implements ISignalConnective, IWa
 		}
 		
 		@Override
-		public String func_176610_l() {
-			return this.name;
+		public String getString() {
+			return name;
 		}
 		
 	}

@@ -39,7 +39,7 @@ public class ItemGasBucket extends BucketItem {
 		boolean flag1 = blockstate.isAir() || flag || block instanceof ILiquidContainer && ((ILiquidContainer)block).canContainFluid(worldIn, posIn, blockstate, this.getFluid());
 		if (!flag1) {
 			return p_180616_4_ != null && this.tryPlaceContainedLiquid(player, worldIn, p_180616_4_.getPos().offset(p_180616_4_.getFace()), (BlockRayTraceResult)null);
-		} else if (worldIn.func_230315_m_().func_236040_e_() && this.getFluid().isIn(FluidTags.WATER)) {
+		} else if (worldIn.getDimensionType().isUltrawarm() && this.getFluid().isIn(FluidTags.WATER)) {
 			int i = posIn.getX();
 			int j = posIn.getY();
 			int k = posIn.getZ();

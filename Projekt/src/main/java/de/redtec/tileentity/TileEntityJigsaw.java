@@ -9,7 +9,7 @@ import de.redtec.RedTec;
 import de.redtec.blocks.BlockJigsaw;
 import de.redtec.blocks.BlockJigsaw.JigsawType;
 import de.redtec.gui.ContainerJigsaw;
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.JigsawFileManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -64,14 +64,14 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 	}
 	
 	@Override
-	public void func_230337_a_(BlockState state, CompoundNBT compound) {
+	public void read(BlockState state, CompoundNBT compound) {
 		this.poolFile = ResourceLocation.tryCreate(compound.getString("poolFile"));
 		this.name = ResourceLocation.tryCreate(compound.getString("name"));
 		this.targetName = ResourceLocation.tryCreate(compound.getString("targetName"));
 		this.replaceState = ResourceLocation.tryCreate(compound.getString("replaceState"));
 		this.lockOrientation = compound.getBoolean("lockOrientation");
 		this.powered = compound.getBoolean("powered");
-		super.func_230337_a_(state, compound);
+		super.read(state, compound);
 	}
 	
 	public void onNeighborChange() {

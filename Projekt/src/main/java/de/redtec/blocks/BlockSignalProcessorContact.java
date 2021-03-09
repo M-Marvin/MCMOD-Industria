@@ -213,7 +213,8 @@ public class BlockSignalProcessorContact extends BlockContainerBase implements I
 				default: offVec = new Vector3f(0, 0, 0); break;
 				}
 				
-				worldIn.addParticle(ParticleTypes.field_239816_ap_, pos.getX() + 0.5F + offVec.getX(), pos.getY() + 0.4F + offVec.getY(), pos.getZ() + 0.5F + offVec.getZ(), 0, 0, 0);
+				worldIn.addParticle(ParticleTypes.DRIPPING_OBSIDIAN_TEAR, pos.getX() + 0.5F + offVec.getX(), pos.getY() + 0.4F + offVec.getY(), pos.getZ() + 0.5F + offVec.getZ(), 0, 0, 0);
+				
 				
 			}
 			

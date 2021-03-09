@@ -14,7 +14,6 @@ import de.redtec.util.AdvancedPistonBlockStructureHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.CommandBlockBlock;
 import net.minecraft.block.DirectionalBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -219,7 +218,7 @@ public class BlockAdvancedPiston extends DirectionalBlock {
          worldIn.setBlockState(pos, blockstate, 20);
          worldIn.setTileEntity(pos, BlockAdvancedMovingBlock.createTilePiston(this.getDefaultState().with(FACING, Direction.byIndex(param & 7)), null, direction, false, true));
          worldIn.func_230547_a_(pos, blockstate.getBlock());
-         blockstate.func_235734_a_(worldIn, pos, 2);
+         blockstate.updateNeighbours(worldIn, pos, 2);
          if (this.isSticky) {
             BlockPos blockpos = pos.add(direction.getXOffset() * 2, direction.getYOffset() * 2, direction.getZOffset() * 2);
             BlockState blockstate1 = worldIn.getBlockState(blockpos);
@@ -261,17 +260,14 @@ public static boolean canPush(BlockState blockStateIn, World worldIn, BlockPos p
       if (pos.getY() >= 0 && pos.getY() <= worldIn.getHeight() - 1 && worldIn.getWorldBorder().contains(pos)) {
          if (blockStateIn.isAir()) {
             return true;
-         } else if (!blockStateIn.isIn(Blocks.OBSIDIAN) && !blockStateIn.isIn(Blocks.field_235399_ni_) && !blockStateIn.isIn(Blocks.field_235400_nj_)) {
+         } else if (!blockStateIn.isIn(Blocks.OBSIDIAN) && !blockStateIn.isIn(Blocks.CRYING_OBSIDIAN)) {
         	if (facing == Direction.DOWN && pos.getY() == 0) {
                return false;
             } else if (facing == Direction.UP && pos.getY() == worldIn.getHeight() - 1) {
                return false;
             } else {
                if (!blockStateIn.isIn(Blocks.PISTON) && !blockStateIn.isIn(Blocks.STICKY_PISTON) && !blockStateIn.isIn(RedTec.advanced_piston) && !blockStateIn.isIn(RedTec.advanced_sticky_piston)) {
-                  if (blockStateIn.getBlockHardness(worldIn, pos) == -1.0F && !(blockStateIn.getBlock() instanceof CommandBlockBlock)) {
-                     return false;
-                  }
-                 
+                  
                   switch(blockStateIn.getPushReaction()) {
                   case BLOCK:
                      return false;
@@ -283,7 +279,6 @@ public static boolean canPush(BlockState blockStateIn, World worldIn, BlockPos p
                } else if (blockStateIn.get(EXTENDED)) {
                   return false;
                }
-
                return true;
             }
          } else {
@@ -371,7 +366,7 @@ public static boolean canPush(BlockState blockStateIn, World worldIn, BlockPos p
             BlockPos blockpos5 = entry.getKey();
             BlockState blockstate2 = entry.getValue();
             blockstate2.updateDiagonalNeighbors(worldIn, blockpos5, 2);
-            blockstate3.func_235734_a_(worldIn, blockpos5, 2);
+            blockstate3.updateNeighbours(worldIn, blockpos5, 2);
             blockstate3.updateDiagonalNeighbors(worldIn, blockpos5, 2);
          }
 

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "redtec:rubber_log"
+    }
+  },
+  "result": {
+    "item": "redtec:rubber_wood",
+    "count": 3
+  }
+}

@@ -24,12 +24,12 @@ public class BlockBase extends Block {
 	}
 
 	public BlockBase(String name, Material material, float hardnessAndResistance, SoundType sound) {
-		super(Properties.create(material).hardnessAndResistance(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)).func_235861_h_());
+		super(Properties.create(material).hardnessAndResistance(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)).setRequiresTool());
 		this.setRegistryName(RedTec.MODID, name);
 	}
 	
 	public BlockBase(String name, Material material, float hardness, float resistance, SoundType sound) {
-		super(Properties.create(material).hardnessAndResistance(hardness, resistance).sound(sound).harvestTool(getDefaultToolType(material)).func_235861_h_());
+		super(Properties.create(material).hardnessAndResistance(hardness, resistance).sound(sound).harvestTool(getDefaultToolType(material)).setRequiresTool());
 		this.setRegistryName(RedTec.MODID, name);
 	}
 	

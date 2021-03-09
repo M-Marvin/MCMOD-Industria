@@ -2,7 +2,7 @@ package de.redtec.tileentity;
 
 import de.redtec.RedTec;
 import de.redtec.blocks.BlockMMultimeter;
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.BlockState;
@@ -56,10 +56,10 @@ public class TileEntityMMultimeter extends TileEntityGauge implements ITickableT
 	}
 
 	@Override
-	public void func_230337_a_(BlockState state, CompoundNBT compound) {
+	public void read(BlockState state, CompoundNBT compound) {
 		this.value = compound.getFloat("Value");
 		this.decimalUnit = DecimalUnit.byUnit(compound.getString("Unit"));
-		super.func_230337_a_(state, compound);
+		super.read(state, compound);
 	}
 	
 	@Override
@@ -109,7 +109,7 @@ public class TileEntityMMultimeter extends TileEntityGauge implements ITickableT
 		}
 
 		@Override
-		public String func_176610_l() {
+		public String getString() {
 			return this.name;
 		}
 		

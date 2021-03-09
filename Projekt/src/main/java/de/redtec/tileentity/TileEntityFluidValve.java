@@ -3,7 +3,7 @@ package de.redtec.tileentity;
 import java.util.ArrayList;
 
 import de.redtec.blocks.BlockFluidValve;
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModTileEntityType;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -68,9 +68,9 @@ public class TileEntityFluidValve extends TileEntityFluidPipe {
 	}
 	
 	@Override
-	public void func_230337_a_(BlockState state, CompoundNBT compound) {
+	public void read(BlockState state, CompoundNBT compound) {
 		this.maxFlow = (int) compound.getFloat("flowRate");
-		super.func_230337_a_(state, compound);
+		super.read(state, compound);
 	}
 	
 }

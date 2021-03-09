@@ -2,7 +2,7 @@ package de.redtec.fluids;
 
 import de.redtec.RedTec;
 import de.redtec.fluids.util.BlockModFlowingFluid;
-import de.redtec.registys.ModFluids;
+import de.redtec.typeregistys.ModFluids;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;

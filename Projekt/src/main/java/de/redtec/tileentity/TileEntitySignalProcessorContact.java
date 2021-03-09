@@ -8,7 +8,7 @@ import de.redtec.blocks.BlockSignalProcessorContact;
 import de.redtec.items.ItemProcessor;
 import de.redtec.items.ItemProcessor.OperatorResult;
 import de.redtec.items.ItemProcessor.OperatorType;
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.RedstoneControlSignal;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -135,7 +135,7 @@ public class TileEntitySignalProcessorContact extends TileEntity implements ITic
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.func_230337_a_(this.getBlockState(), pkt.getNbtCompound());
+		this.read(this.getBlockState(), pkt.getNbtCompound());
 	}
 	
 	@Override
@@ -163,7 +163,7 @@ public class TileEntitySignalProcessorContact extends TileEntity implements ITic
 	}
 	
 	@Override
-	public void func_230337_a_(BlockState state, CompoundNBT compound) {
+	public void read(BlockState state, CompoundNBT compound) {
 		if (compound.contains("Processor")) {
 			ItemStack processorStack = ItemStack.read(compound.getCompound("Processor"));
 			this.setProcessorStack(processorStack);
@@ -182,7 +182,7 @@ public class TileEntitySignalProcessorContact extends TileEntity implements ITic
 				this.variables.put(variableName, new OperatorResult(value, type));
 			}
 		}
-		super.func_230337_a_(state, compound);
+		super.read(state, compound);
 	}
 	
 	@Override

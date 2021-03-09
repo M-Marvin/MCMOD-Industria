@@ -5,7 +5,7 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 
 import de.redtec.gui.ContainerStoredCrafting;
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.ContainerDummy;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -86,7 +86,7 @@ public class TileEntityStoringCraftingTable extends LockableTileEntity implement
 	}
 	
 	@Override
-	public void func_230337_a_(BlockState state, CompoundNBT compound) {
+	public void read(BlockState state, CompoundNBT compound) {
 		ListNBT itemsNBT = compound.getList("Items", 10);
 		for (int i = 0; i < itemsNBT.size(); i++) {
 			CompoundNBT stackNBT = itemsNBT.getCompound(i);
@@ -101,7 +101,7 @@ public class TileEntityStoringCraftingTable extends LockableTileEntity implement
 			ItemStack stack = ItemStack.read(stackNBT);
 			this.remainingItems.set(index, stack);
 		}
-		super.func_230337_a_(state, compound);
+		super.read(state, compound);
 	}
 
 	@Override

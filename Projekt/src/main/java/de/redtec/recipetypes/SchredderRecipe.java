@@ -1,7 +1,7 @@
 package de.redtec.recipetypes;
 
-import de.redtec.registys.ModRecipeTypes;
-import de.redtec.registys.ModSerializer;
+import de.redtec.typeregistys.ModRecipeTypes;
+import de.redtec.typeregistys.ModSerializer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

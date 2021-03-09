@@ -12,9 +12,9 @@ public class StoneOreFeatureConfig implements IFeatureConfig {
 	public static final Codec<StoneOreFeatureConfig> CODEC = RecordCodecBuilder.create((codec) -> {
 		return codec.group(RuleTest.field_237127_c_.fieldOf("target").forGetter((config) -> {
 			return config.target;
-		}), BlockState.field_235877_b_.fieldOf("stoneState").forGetter((config) -> {
+		}), BlockState.CODEC.fieldOf("stoneState").forGetter((config) -> {
 			return config.stoneState;
-		}), BlockState.field_235877_b_.fieldOf("oreState").forGetter((config) ->  {
+		}), BlockState.CODEC.fieldOf("oreState").forGetter((config) ->  {
 			return config.oreState;
 		}), Codec.INT.fieldOf("size").forGetter((config) -> {
 			return config.size;

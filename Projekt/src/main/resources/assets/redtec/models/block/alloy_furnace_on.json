@@ -2,7 +2,7 @@
   "parent": "minecraft:block/orientable",
   "textures": {
     "top": "redtec:block/steel_machine_top",
-    "front": "redtec:block/alloy_furnace_front_on",
+    "front": "redtec:block/alloy_furnace_front_lit",
     "side": "redtec:block/steel_machine_side"
   }
 }

@@ -6,8 +6,8 @@ import de.redtec.blocks.BlockMSteamGenerator;
 import de.redtec.dynamicsounds.SoundMSteamGeneratorLoop;
 import de.redtec.fluids.FluidSteam;
 import de.redtec.fluids.util.BlockGasFluid;
-import de.redtec.registys.ModFluids;
-import de.redtec.registys.ModTileEntityType;
+import de.redtec.typeregistys.ModFluids;
+import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.FluidStackStateTagHelper;
 import de.redtec.util.IElectricConnective.Voltage;
@@ -75,7 +75,7 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 	}
 	
 	@Override
-	public void func_230337_a_(BlockState state, CompoundNBT compound) {
+	public void read(BlockState state, CompoundNBT compound) {
 		this.part = TEPart.fromName(compound.getString("Part"));
 		if (this.part == TEPart.CENTER) {
 			this.steamIn = FluidStack.loadFluidStackFromNBT(compound.getCompound("SteamIn"));
@@ -84,7 +84,7 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 			this.accerlation = compound.getFloat("Accerlation");
 			this.turbinRotation = compound.getFloat("TurbinRotation");
 		}
-		super.func_230337_a_(state, compound);
+		super.read(state, compound);
 	}
 	
 	@Override

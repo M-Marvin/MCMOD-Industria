@@ -1,7 +1,7 @@
 package de.redtec.gui;
 
-import de.redtec.registys.ModContainerType;
 import de.redtec.tileentity.TileEntityHoverControler;
+import de.redtec.typeregistys.ModContainerType;
 import de.redtec.util.ContainerTileEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;

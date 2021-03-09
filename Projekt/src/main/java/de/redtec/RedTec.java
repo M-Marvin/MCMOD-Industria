@@ -239,6 +239,8 @@ public class RedTec {
 	public static final Block storing_crafting_table = new BlockStoringCraftingTable();	
 	// Mechanic
 	public static final Block motor = new BlockMotor();
+	// Items
+	public static final Item sulfur_dioxid = new ItemBase("sulfur_dioxid", MATERIALS);
 	
 	// Machinery
 	public static final Block conveyor_spliter = new BlockConveyorSpliter();
@@ -444,8 +446,8 @@ public class RedTec {
 	public static final Item pure_palladium_ore = new ItemBase("pure_palladium_ore", MATERIALS);
 	public static final Item pure_nickel_ore = new ItemBase("pure_nickel_ore", MATERIALS);
 	public static final Item sulfur = new ItemBase("sulfur", MATERIALS);
-	public static final Item sulfur_dioxid = new ItemBase("sulfur_dioxid", MATERIALS);
-	
+	public static final Item crude_steel = new ItemBase("crude_steel", MATERIALS);
+		
 	// Crafting items
 	public static final Item bearing = new ItemBase("bearing", MATERIALS);
 	public static final Item spring = new ItemBase("spring", MATERIALS);
@@ -468,7 +470,7 @@ public class RedTec {
 	public static final Item salt = new ItemBase("salt", MATERIALS);
 	public static final Item natrium = new ItemBase("natrium", MATERIALS);
 	public static final Item raw_rubber_bottle = new ItemBase("raw_rubber_bottle", MATERIALS, 16);
-	public static final Item rubber_bottle = new ItemBase("rubber_bottle", MATERIALS, 16);
+	public static final Item rubber_bottle = new ItemBase("rubber_bottle", MATERIALS, 16, Items.GLASS_BOTTLE);
 	
 	// Functional Items
 	public static final Item remote_control = new ItemRemoteControll();
@@ -764,6 +766,7 @@ public class RedTec {
 		ModGameRegistry.registerItem(plastic_plate);
 		ModGameRegistry.registerItem(raw_rubber_bottle);
 		ModGameRegistry.registerItem(rubber_bottle);
+		ModGameRegistry.registerItem(crude_steel);
 		
 		// register Functional Items
 		ModGameRegistry.registerItem(lever_element);

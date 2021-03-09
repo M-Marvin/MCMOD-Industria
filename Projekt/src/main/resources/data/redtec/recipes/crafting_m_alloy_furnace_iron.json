@@ -8,10 +8,10 @@
   ],
   "key": {
     "G": {
-      "item": "redtec:steel_plates"
+      "item": "redtec:iron_plates"
     },
     "W": {
-      "item": "redtec:steel_plate"
+      "item": "redtec:iron_plate"
     },
     "C": {
       "item": "redtec:transformator_coil"

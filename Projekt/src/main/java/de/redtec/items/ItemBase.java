@@ -25,6 +25,11 @@ public class ItemBase extends Item {
 		super(new Properties().group(itemGroup).maxStackSize(maxStackSize));
 		this.setRegistryName(RedTec.MODID, name);
 	}
+
+	public ItemBase(String name, ItemGroup itemGroup, int maxStackSize, Item containItem) {
+		super(new Properties().group(itemGroup).maxStackSize(maxStackSize).containerItem(containItem));
+		this.setRegistryName(RedTec.MODID, name);
+	}
 	
 	public ItemBase(String name, ItemGroup itemGroup, Rarity rarity) {
 		super(new Properties().group(itemGroup).rarity(rarity));

@@ -11,8 +11,8 @@
     }
   ],
   "resultItem":  {
-    "item": "redtec:steel_ingot",
+    "item": "redtec:crude_steel",
     "count": 1
   },
-  "smeltingTime": 150
+  "smeltingTime": 250
 }

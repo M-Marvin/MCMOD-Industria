@@ -1,0 +1,18 @@
+{
+  "type": "redtec:alloy",
+  "ingredientItems": [
+    {
+      "item": "redtec:crude_steel",
+      "count": 1
+    },
+    {
+      "item": "redtec:aluminium_nugget",
+      "count": 2
+    }
+  ],
+  "resultItem":  {
+    "item": "redtec:steel_ingot",
+    "count": 2
+  },
+  "smeltingTime": 100
+}

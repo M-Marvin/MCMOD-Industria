@@ -8,7 +8,7 @@
   ],
   "key": {
     "S": {
-      "item": "redtec:steel_plate"
+      "item": "redtec:iron_plate"
     },
     "C": {
       "item": "redtec:transformator_coil"
@@ -17,7 +17,7 @@
       "item": "redtec:resistor"
     },
     "G": {
-      "item": "redtec:steel_plates"
+      "item": "redtec:iron_plates"
     },
     "F": {
       "item": "minecraft:furnace"

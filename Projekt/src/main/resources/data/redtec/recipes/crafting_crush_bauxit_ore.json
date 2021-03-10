@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "H",
+    "#"
+  ],
+  "key": {
+    "H": {
+      "item": "redtec:hammer"
+    },
+    "#": {
+      "item": "redtec:bauxit_ore"
+    }
+  },
+  "result": {
+    "item": "redtec:crushed_bauxit",
+    "count": 1
+  }
+}

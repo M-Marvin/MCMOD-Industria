@@ -153,7 +153,7 @@ public class ModConfiguredFeatures {
 					)
 			).withPlacement(
 					ModPlacement.SIMPLE_ORE.configure(
-							new SimpleOrePlacementConfig(45, 256, 4)
+							new SimpleOrePlacementConfig(20, 180, 5)
 					)
 			)
 	);

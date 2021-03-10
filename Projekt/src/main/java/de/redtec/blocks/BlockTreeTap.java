@@ -85,9 +85,10 @@ public class BlockTreeTap extends BlockBase {
 					logState = worldIn.getBlockState(logPos);
 					boolean isRipe = logState.get(BlockRubberLog.RIPE_STATE) == RipeState.IS_RIPE;
 					
-					if (isRipe) {
+					if (isRipe && stage < 4) {
 						
 						worldIn.setBlockState(pos, state.with(STAGE, stage + 1));
+						worldIn.setBlockState(logPos, logState.with(BlockRubberLog.RIPE_STATE, RipeState.CAN_BE_RIPE));
 						break;
 						
 					}

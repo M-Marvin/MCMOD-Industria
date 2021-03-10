@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "copper_ingot",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "redtec:aluminium_nugget"
+    }
+  },
+  "result": {
+    "item": "redtec:aluminium_ingot"
+  }
+}

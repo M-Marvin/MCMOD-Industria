@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "redtec:polished_diorite_bricks"
+  },
+  "result": "redtec:cracked_polished_diorite_bricks",
+  "experience": 0.3,
+  "cookingtime": 100
+}

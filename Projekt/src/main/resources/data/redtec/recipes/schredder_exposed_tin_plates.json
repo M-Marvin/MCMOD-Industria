@@ -1,0 +1,23 @@
+{
+  "type": "redtec:schredder",
+  "ingredient": [
+    {
+      "item": "redtec:exposed_tin_plates"
+    },
+    {
+      "item": "redtec:weathered_tin_plates"
+    },
+    {
+      "item": "redtec:oxidized_tin_plates"
+    }
+  ],
+  "results": [
+    {
+      "item": "redtec:tin_nugget",
+      "count": 1
+    }
+  ],
+  "schreddertime": 60,
+  "schreddertool": "redtec:schredder_crusher",
+  "schredderdamage": 60
+}

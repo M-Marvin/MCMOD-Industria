@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "redtec:polished_bauxite_bricks"
+  },
+  "result": "redtec:cracked_polished_bauxite_bricks",
+  "experience": 0.3,
+  "cookingtime": 100
+}

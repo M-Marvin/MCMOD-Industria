@@ -1,0 +1,17 @@
+{
+  "type": "redtec:schredder",
+  "ingredient": [
+    {
+      "item": "redtec:exposed_steel_plates"
+    }
+  ],
+  "results": [
+    {
+      "item": "redtec:iron_nugget",
+      "count": 9
+    }
+  ],
+  "schreddertime": 60,
+  "schreddertool": "redtec:schredder_crusher",
+  "schredderdamage": 60
+}

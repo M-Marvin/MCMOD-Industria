@@ -1,8 +1,10 @@
 package de.redtec.typeregistys;
 
 import de.redtec.RedTec;
+import net.minecraft.block.SoundType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraftforge.common.util.ForgeSoundType;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -23,6 +25,12 @@ public class ModSoundEvents {
 	public static final SoundEvent RAFFINERY_LOOP = register("block.raffinery.loop");
 	public static final SoundEvent THERMAL_ZENTRIFUGE_LOOP = register("block.thermal_zentrifuge.loop");
 	public static final SoundEvent TREE_TAP_HARVEST = register("block.tree_tap.harvest");
+	
+	public static final SoundEvent CARDBOARD_HIT = register("material.cardboard.hit");
+	public static final SoundEvent CARDBOARD_PLACE = register("material.cardboard.place");
+	public static final SoundEvent CARDBOARD_BREAK = register("material.cardboard.break");
+	public static final SoundEvent CARDBOARD_STEP = register("material.cardboard.step");
+	public static final SoundType CARDBOARD = new ForgeSoundType(3, 0.8F, () -> CARDBOARD_BREAK, () -> CARDBOARD_STEP, () -> CARDBOARD_PLACE, () -> CARDBOARD_HIT, () -> CARDBOARD_STEP);
 	
 	private static SoundEvent register(String key) {
 		SoundEvent event = new SoundEvent(new ResourceLocation(RedTec.MODID, key));

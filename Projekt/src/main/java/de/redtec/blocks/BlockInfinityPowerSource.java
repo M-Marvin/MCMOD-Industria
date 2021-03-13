@@ -23,7 +23,7 @@ public class BlockInfinityPowerSource extends BlockContainerBase implements IEle
 
 	@Override
 	public Voltage getVoltage(World world, BlockPos pos, BlockState state, Direction side) {
-		return Voltage.LowVoltage;
+		return Voltage.NormalVoltage;
 	}
 
 	@Override

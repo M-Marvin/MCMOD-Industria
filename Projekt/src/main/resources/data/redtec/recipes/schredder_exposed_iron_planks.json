@@ -1,0 +1,23 @@
+{
+  "type": "redtec:schredder",
+  "ingredient": [
+    {
+      "item": "redtec:exposed_iron_planks"
+    },
+    {
+      "item": "redtec:weathered_iron_planks"
+    },
+    {
+      "item": "redtec:oxidized_iron_planks"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:iron_nugget",
+      "count": 18
+    }
+  ],
+  "schreddertime": 60,
+  "schreddertool": "redtec:schredder_crusher",
+  "schredderdamage": 60
+}

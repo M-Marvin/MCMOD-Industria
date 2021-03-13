@@ -1,6 +1,7 @@
 package de.redtec.recipetypes;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import net.minecraft.item.Item;
@@ -9,6 +10,7 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -22,7 +24,8 @@ public class SchredderRecipeSerializer<T extends SchredderRecipe> extends ForgeR
 	}
 	
 	public T read(ResourceLocation recipeId, JsonObject json) {
-		Ingredient itemIn = Ingredient.deserialize(json.get("ingredient").getAsJsonObject());
+		JsonElement jsonelement = (JsonElement)(JSONUtils.isJsonArray(json, "ingredient") ? JSONUtils.getJsonArray(json, "ingredient") : JSONUtils.getJsonObject(json, "ingredient"));
+		Ingredient itemIn = Ingredient.deserialize(jsonelement);
 		JsonArray resultArray = json.get("results").getAsJsonArray();
 		ItemStack itemOut1 = ShapedRecipe.deserializeItem(resultArray.get(0).getAsJsonObject());
 		ItemStack itemOut2 = resultArray.size() > 1 ? ShapedRecipe.deserializeItem(resultArray.get(1).getAsJsonObject()) : ItemStack.EMPTY;

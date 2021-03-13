@@ -96,7 +96,7 @@ public class FluidTankHelper {
 			BlockState groundState = this.world.getBlockState(scannPos.down());
 			FluidState groundFluid = groundState.getFluidState();
 			
-			if ((blockState.isAir() || ModFluids.isFluidBlock(blockState.getBlock())) && (!groundState.isAir() || (groundFluid.isEmpty() ? false : groundFluid.isSource()))) {
+			if ((blockState.isAir() || ModFluids.isFluidBlock(blockState.getBlock())) && ((!groundState.isAir() && !ModFluids.isFluidBlock(groundState.getBlock())) || (groundFluid.isEmpty() ? false : groundFluid.isSource()))) {
 				
 				scannList.add(scannPos);
 				this.scannDepth++;

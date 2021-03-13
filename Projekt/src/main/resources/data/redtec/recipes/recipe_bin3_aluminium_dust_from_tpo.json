@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "aluminium_dust",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "redtec:tpo_aluminium_dust"
+    }
+  },
+  "result": {
+    "item": "redtec:aluminium_dust"
+  }
+}

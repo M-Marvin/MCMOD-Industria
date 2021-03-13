@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "redtec:steel_dust"
+  },
+  "result": "redtec:steel_ingot",
+  "experience": 0.0,
+  "cookingtime": 100
+}

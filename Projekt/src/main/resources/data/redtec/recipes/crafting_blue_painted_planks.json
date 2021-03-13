@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "blue_painted_planks",
+  "ingredients": [
+    {
+      "item": "minecraft:blue_dye"
+    },
+    {
+      "item": "redtec:white_painted_planks"
+    }
+  ],
+  "result": {
+    "item": "redtec:blue_painted_planks"
+  }
+}

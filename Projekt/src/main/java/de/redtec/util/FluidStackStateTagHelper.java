@@ -54,7 +54,7 @@ public class FluidStackStateTagHelper {
 				String valueName = entry.getString("Value");
 				
 				Property<?> prop = getProperty(name, propertys);
-				state = setPropertyInState(valueName, prop, state);
+				if (prop != null) state = setPropertyInState(valueName, prop, state);
 				
 			}
 			

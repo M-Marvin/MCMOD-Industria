@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "wolfram_dust",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "redtec:tpo_wolfram_dust"
+    }
+  },
+  "result": {
+    "item": "redtec:wolfram_dust"
+  }
+}

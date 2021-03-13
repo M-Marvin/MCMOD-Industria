@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"": [
+			{ "model": "redtec:block/limestone_sheet" },
+			{ "model": "redtec:block/limestone_sheet", "y": 90 },
+			{ "model": "redtec:block/limestone_sheet", "y": 180 },
+			{ "model": "redtec:block/limestone_sheet", "y": 270 }
+		]
+	}
+}

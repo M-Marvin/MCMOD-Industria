@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "redtec:monel_dust"
+  },
+  "result": "redtec:monel_ingot",
+  "experience": 0.0,
+  "cookingtime": 200
+}

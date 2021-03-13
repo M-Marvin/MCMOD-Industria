@@ -8,6 +8,10 @@
     {
       "item": "redtec:coal_coke",
       "count": 1
+    },
+    {
+      "item": "redtec:lime",
+      "count": 1
     }
   ],
   "resultItem":  {

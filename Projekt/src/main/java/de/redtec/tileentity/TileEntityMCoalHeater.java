@@ -1,5 +1,6 @@
 package de.redtec.tileentity;
 
+import de.redtec.RedTec;
 import de.redtec.blocks.BlockMCoalHeater;
 import de.redtec.dynamicsounds.ISimpleMachineSound;
 import de.redtec.dynamicsounds.SoundMachine;
@@ -9,7 +10,6 @@ import de.redtec.typeregistys.ModFluids;
 import de.redtec.typeregistys.ModSoundEvents;
 import de.redtec.typeregistys.ModTileEntityType;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
@@ -40,6 +40,7 @@ public class TileEntityMCoalHeater extends TileEntityInventoryBase implements IN
 		super(ModTileEntityType.COAL_HEATER, 2);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void tick() {
 		
@@ -76,9 +77,16 @@ public class TileEntityMCoalHeater extends TileEntityInventoryBase implements IN
 										
 										if (sourceFluid.getFluid() == Fluids.WATER) {
 											
-											if (this.world.rand.nextInt(30) == 0) {
+											if (this.world.rand.nextInt(1) == 0) {
 												
-												this.world.setBlockState(pos2, Blocks.DIORITE.getDefaultState());
+												BlockState bottomState = this.world.getBlockState(pos2.down());
+												
+												if (bottomState.getBlock() == RedTec.limestone_sheet) {
+													this.world.setBlockState(pos2, RedTec.limestone_sheet.getDefaultState());
+													this.world.setBlockState(pos2.down(), RedTec.limestone.getDefaultState());
+												} else if (bottomState.getFluidState().getFluid() == Fluids.EMPTY && !bottomState.isAir()) {
+													this.world.setBlockState(pos2, RedTec.limestone_sheet.getDefaultState());
+												}
 												
 											} else {
 												
@@ -175,7 +183,6 @@ public class TileEntityMCoalHeater extends TileEntityInventoryBase implements IN
 
 	@Override
 	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
-		System.out.println(itemStackIn);
 		return index == 0 && ForgeHooks.getBurnTime(itemStackIn) > 0;
 	}
 

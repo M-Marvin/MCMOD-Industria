@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "monel_dust",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "redtec:tpo_monel_dust"
+    }
+  },
+  "result": {
+    "item": "redtec:monel_dust"
+  }
+}

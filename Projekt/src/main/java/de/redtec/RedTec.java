@@ -13,6 +13,7 @@ import de.redtec.blocks.BlockAdvancedPiston;
 import de.redtec.blocks.BlockAdvancedPistonHead;
 import de.redtec.blocks.BlockBase;
 import de.redtec.blocks.BlockBurnable;
+import de.redtec.blocks.BlockBurnedCable;
 import de.redtec.blocks.BlockButtonBlock;
 import de.redtec.blocks.BlockConectorBlock;
 import de.redtec.blocks.BlockControllPanel;
@@ -32,6 +33,7 @@ import de.redtec.blocks.BlockInfinityPowerSource;
 import de.redtec.blocks.BlockIronRod;
 import de.redtec.blocks.BlockJigsaw;
 import de.redtec.blocks.BlockLeavesBase;
+import de.redtec.blocks.BlockLimestoneSheet;
 import de.redtec.blocks.BlockLinearConector;
 import de.redtec.blocks.BlockMAlloyFurnace;
 import de.redtec.blocks.BlockMBlender;
@@ -255,6 +257,7 @@ public class RedTec {
 	public static final Block copper_cable = new BlockElektricWire("copper_cable", 16, 4);
 	public static final Block electrolyt_copper_cable = new BlockElektricWire("electrolyt_copper_cable", 32, 4);
 	public static final Block aluminium_cable = new BlockElektricWire("aluminium_cable", 64, 8);
+	public static final Block burned_cable = new BlockBurnedCable();
 	public static final Block fluid_pipe = new BlockFluidPipe();
 	public static final Block fluid_valve = new BlockFluidValve();
 	public static final Block fluid_input = new BlockFluidInput();
@@ -363,8 +366,25 @@ public class RedTec {
 	public static final Block cracked_polished_wolframite_bricks = new BlockBase("cracked_polished_wolframite_bricks", Material.ROCK, 1.5F, 6F, SoundType.STONE);
 	public static final Block cracked_polished_bauxite_bricks = new BlockBase("cracked_polished_bauxite_bricks", Material.ROCK, 1.5F, 6F, SoundType.STONE);
 	public static final Block limestone = new BlockBase("limestone", Material.ROCK, 1.5F, 6F, SoundType.STONE);
+	public static final Block limestone_sheet = new BlockLimestoneSheet();
 	public static final Block polished_wolframite = new BlockBase("polished_wolframite", Material.ROCK, 1.5F, 6F, SoundType.STONE);
 	public static final Block polished_bauxite = new BlockBase("polished_bauxite", Material.ROCK, 1.5F, 6F, SoundType.STONE);
+	public static final Block white_painted_planks = new BlockBurnable("white_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block orange_painted_planks = new BlockBurnable("orange_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block magenta_painted_planks = new BlockBurnable("magenta_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block light_blue_painted_planks = new BlockBurnable("light_blue_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block yellow_painted_planks = new BlockBurnable("yellow_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block lime_painted_planks = new BlockBurnable("lime_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block pink_painted_planks = new BlockBurnable("pink_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block gray_painted_planks = new BlockBurnable("gray_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block light_gray_painted_planks = new BlockBurnable("light_gray_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block cyan_painted_planks = new BlockBurnable("cyan_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block purple_painted_planks = new BlockBurnable("purple_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block blue_painted_planks = new BlockBurnable("blue_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block brown_painted_planks = new BlockBurnable("brown_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block green_painted_planks = new BlockBurnable("green_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block red_painted_planks = new BlockBurnable("red_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block black_painted_planks = new BlockBurnable("black_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
 	
 	public static final Block stone_corner = new BlockCornerBlockBase("stone_corner", () -> Blocks.STONE.getDefaultState(), AbstractBlock.Properties.create(Material.ROCK).sound(SoundType.STONE));
 	
@@ -433,6 +453,10 @@ public class RedTec {
 	public static final Item aluminium_dust = new ItemBase("aluminium_dust", MATERIALS);
 	public static final Item steel_dust = new ItemBase("steel_dust", MATERIALS);
 	public static final Item redstone_alloy_dust = new ItemBase("redstone_alloy_dust", MATERIALS);
+	public static final Item iron_dust = new ItemBase("iron_dust", MATERIALS);
+	public static final Item gold_dust = new ItemBase("gold_dust", MATERIALS);
+	public static final Item tpo_iron_dust = new ItemBase("tpo_iron_dust", MATERIALS);
+	public static final Item tpo_gold_dust = new ItemBase("tpo_gold_dust", MATERIALS);
 	public static final Item tpo_monel_dust = new ItemBase("tpo_monel_dust", MATERIALS);
 	public static final Item tpo_tin_dust = new ItemBase("tpo_tin_dust", MATERIALS);
 	public static final Item tpo_silver_dust = new ItemBase("tpo_silver_dust", MATERIALS);
@@ -489,7 +513,8 @@ public class RedTec {
 	public static final Item pure_nickel_ore = new ItemBase("pure_nickel_ore", MATERIALS);
 	public static final Item sulfur = new ItemBase("sulfur", MATERIALS);
 	public static final Item crude_steel = new ItemBase("crude_steel", MATERIALS);
-		
+	public static final Item lime = new ItemBase("lime", MATERIALS);
+	
 	// Crafting items
 	public static final Item bearing = new ItemBase("bearing", MATERIALS);
 	public static final Item spring = new ItemBase("spring", MATERIALS);
@@ -572,6 +597,7 @@ public class RedTec {
 		ModGameRegistry.registerBlock(copper_cable, MACHINES);
 		ModGameRegistry.registerBlock(electrolyt_copper_cable, MACHINES);
 		ModGameRegistry.registerBlock(aluminium_cable, MACHINES);
+		ModGameRegistry.registerBlock(burned_cable, MACHINES);
 		ModGameRegistry.registerBlock(infinity_power_source, null);
 		ModGameRegistry.registerBlock(panel_lamp, MACHINES);
 		ModGameRegistry.registerBlock(steel_block, BUILDING_BLOCKS);
@@ -692,6 +718,24 @@ public class RedTec {
 		ModGameRegistry.registerBlock(exposed_steel_plates, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(polished_wolframite, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(polished_bauxite, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(white_painted_planks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(orange_painted_planks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(magenta_painted_planks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(light_blue_painted_planks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(yellow_painted_planks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(lime_painted_planks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(pink_painted_planks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(gray_painted_planks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(light_gray_painted_planks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(cyan_painted_planks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(purple_painted_planks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(blue_painted_planks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(brown_painted_planks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(green_painted_planks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(red_painted_planks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(black_painted_planks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(limestone, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(limestone_sheet, DECORATIONS);
 		
 		ModGameRegistry.registerBlock(motor, MACHINES);
 		
@@ -776,6 +820,7 @@ public class RedTec {
 		ModGameRegistry.registerItem(nickel_nugget);
 		ModGameRegistry.registerItem(monel_ingot);
 		ModGameRegistry.registerItem(monel_nugget);
+		ModGameRegistry.registerItem(tpo_copper_dust);
 		ModGameRegistry.registerItem(copper_dust);
 		ModGameRegistry.registerItem(electrolyt_copper_dust);
 		ModGameRegistry.registerItem(tpo_electrolyt_copper_dust);
@@ -798,6 +843,10 @@ public class RedTec {
 		ModGameRegistry.registerItem(tpo_nickel_dust);
 		ModGameRegistry.registerItem(monel_dust);
 		ModGameRegistry.registerItem(tpo_monel_dust);
+		ModGameRegistry.registerItem(iron_dust);
+		ModGameRegistry.registerItem(tpo_iron_dust);
+		ModGameRegistry.registerItem(gold_dust);
+		ModGameRegistry.registerItem(tpo_gold_dust);
 		ModGameRegistry.registerItem(copper_plate);
 		ModGameRegistry.registerItem(electrolyt_copper_plate);
 		ModGameRegistry.registerItem(steel_plate);
@@ -847,6 +896,7 @@ public class RedTec {
 		ModGameRegistry.registerItem(rubber_bottle);
 		ModGameRegistry.registerItem(crude_steel);
 		ModGameRegistry.registerItem(cardboard_sheet);
+		ModGameRegistry.registerItem(lime);
 		
 		// register Functional Items
 		ModGameRegistry.registerItem(lever_element);

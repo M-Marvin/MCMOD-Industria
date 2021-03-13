@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "nickel_dust",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "redtec:tpo_nickel_dust"
+    }
+  },
+  "result": {
+    "item": "redtec:nickel_dust"
+  }
+}

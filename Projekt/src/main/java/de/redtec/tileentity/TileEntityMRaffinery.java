@@ -92,7 +92,7 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 					
 					RifiningRecipe recipe = findRecipe();
 					
-					if (recipe != null && !isPostProcessing()) {
+					if (recipe != null) {
 						this.currentRecipe = recipe;
 					}
 					

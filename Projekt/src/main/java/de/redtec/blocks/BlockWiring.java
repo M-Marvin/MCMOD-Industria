@@ -160,4 +160,5 @@ public abstract class BlockWiring extends BlockBase implements IWaterLoggable {
 		}
 		
 	}
+	
 }

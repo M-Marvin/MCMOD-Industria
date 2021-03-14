@@ -1,10 +1,9 @@
 package de.redtec.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
+import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.tileentity.TileEntityFuseBox;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
@@ -35,7 +34,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
@@ -211,14 +209,14 @@ public class BlockFuseBox extends BlockContainerBase implements IElectricConnect
 		}
 		super.onBlockHarvested(worldIn, pos, state, player);
 	}
-	
-	@Override
-	public List<ITextComponent> getBlockInfo() {
-		List<ITextComponent> info = new ArrayList<ITextComponent>();
-		info.add(new TranslationTextComponent("redtec.block.info.fuseBox"));
-		return info;
-	}
 
+	@Override
+	public IBlockToolType getBlockInfo() {
+		return (stack, info, flag) -> {
+			info.add(new TranslationTextComponent("redtec.block.info.fuseBox"));
+		};
+	}
+	
 	@Override
 	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
 		return null;

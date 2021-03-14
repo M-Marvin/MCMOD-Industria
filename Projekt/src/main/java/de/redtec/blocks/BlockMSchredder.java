@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
+import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.renderer.BlockMSchredderItemRenderer;
 import de.redtec.tileentity.TileEntityMSchredder;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
@@ -34,7 +35,6 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.IBlockReader;
@@ -71,13 +71,13 @@ public class BlockMSchredder extends BlockMultiPart<TileEntityMSchredder> implem
 	}
 	
 	@Override
-	public List<ITextComponent> getBlockInfo() {
-		List<ITextComponent> info = new ArrayList<ITextComponent>();
-		info.add(new TranslationTextComponent("redtec.block.info.needEnergy", 0.8F * Voltage.HightVoltage.getVoltage()));
-		info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.HightVoltage.getVoltage()));
-		info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 0.8F));
-		info.add(new TranslationTextComponent("redtec.block.info.schredder"));
-		return info;
+	public IBlockToolType getBlockInfo() {
+		return (stack, info, flag) -> {
+			info.add(new TranslationTextComponent("redtec.block.info.needEnergy", 0.8F * Voltage.HightVoltage.getVoltage()));
+			info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.HightVoltage.getVoltage()));
+			info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 0.8F));
+			info.add(new TranslationTextComponent("redtec.block.info.schredder"));
+		};
 	}
 	
 	@Override

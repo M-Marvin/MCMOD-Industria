@@ -1,11 +1,10 @@
 package de.redtec.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
+import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.tileentity.TileEntitySimpleBlockTicking;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
 import de.redtec.util.IAdvancedBlockInfo;
@@ -29,11 +28,10 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.server.ServerWorld;
 
 public class BlockPanelLamp extends BlockContainerBase implements IElectricConnective, IAdvancedBlockInfo {
@@ -144,14 +142,14 @@ public class BlockPanelLamp extends BlockContainerBase implements IElectricConne
 	}
 	
 	@Override
-	public List<ITextComponent> getBlockInfo() {
-		List<ITextComponent> info = new ArrayList<ITextComponent>();
-		info.add(new TranslationTextComponent("redtec.block.info.needEnergy", 0.1F * Voltage.LowVoltage.getVoltage()));
-		info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.LowVoltage.getVoltage()));
-		info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 0.1F));
-		return info;
+	public IBlockToolType getBlockInfo() {
+		return (stack, info, flag) -> {
+			info.add(new TranslationTextComponent("redtec.block.info.needEnergy", 0.1F * Voltage.LowVoltage.getVoltage()));
+			info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.LowVoltage.getVoltage()));
+			info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 0.1F));
+		};
 	}
-
+	
 	@Override
 	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
 		return null;

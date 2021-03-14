@@ -1,10 +1,9 @@
 package de.redtec.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
+import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.tileentity.TileEntityMElectricFurnace;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
 import de.redtec.util.IAdvancedBlockInfo;
@@ -29,7 +28,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.IBlockReader;
@@ -74,17 +72,17 @@ public class BlockMElectricFurnace extends BlockContainerBase implements IElectr
 		return ActionResultType.PASS;
 		
 	}
-	
-	@Override
-	public List<ITextComponent> getBlockInfo() {
-		List<ITextComponent> info = new ArrayList<ITextComponent>();
-		info.add(new TranslationTextComponent("redtec.block.info.needEnergy", (8 * Voltage.NormalVoltage.getVoltage() / 1000F) + "k"));
-		info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.NormalVoltage.getVoltage()));
-		info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 8));
-		info.add(new TranslationTextComponent("redtec.block.info.electricFurnace"));
-		return info;
-	}
 
+	@Override
+	public IBlockToolType getBlockInfo() {
+		return (stack, info, flag) -> {
+			info.add(new TranslationTextComponent("redtec.block.info.needEnergy", (8 * Voltage.NormalVoltage.getVoltage() / 1000F) + "k"));
+			info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.NormalVoltage.getVoltage()));
+			info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 8));
+			info.add(new TranslationTextComponent("redtec.block.info.electricFurnace"));
+		};
+	}
+	
 	@Override
 	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
 		return null;

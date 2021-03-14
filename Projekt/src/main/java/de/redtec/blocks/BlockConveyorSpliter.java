@@ -1,8 +1,6 @@
 package de.redtec.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
@@ -13,7 +11,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
@@ -26,13 +23,13 @@ public class BlockConveyorSpliter extends BlockConveyorBelt {
 		super("conveyor_spliter");
 		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(RIGHT, BeltState.CLOSE).with(LEFT, BeltState.CLOSE));
 	}
-	
+
 	@Override
-	public List<ITextComponent> getBlockInfo() {
-		List<ITextComponent> info = new ArrayList<ITextComponent>();
-		info.add(new TranslationTextComponent("redtec.block.info.maxItems", "~1.3"));
-		info.add(new TranslationTextComponent("redtec.block.info.conveyorSpliter"));
-		return info;
+	public IBlockToolType getBlockInfo() {
+		return (stack, info, flag) -> {
+			info.add(new TranslationTextComponent("redtec.block.info.maxItems", "~1.3"));
+			info.add(new TranslationTextComponent("redtec.block.info.conveyorSpliter"));
+		};
 	}
 	
 	@Override

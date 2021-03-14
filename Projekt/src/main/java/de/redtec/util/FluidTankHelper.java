@@ -43,7 +43,7 @@ public class FluidTankHelper {
 			BlockPos scannPos = new BlockPos(this.beginPos.getX(), y, this.beginPos.getZ());
 			
 			this.scannDepth = 0;
-			scannForTankBlocks(outletPosList, scannPos, true);
+			scannForTankBlocks(outletPosList, scannPos, true, fluid);
 			
 			if (outletPosList.size() > 0) {
 				
@@ -68,7 +68,7 @@ public class FluidTankHelper {
 	public BlockPos extractFluidFromTank(Fluid fluidInTank) {
 		
 		List<BlockPos> scannList = new ArrayList<BlockPos>();
-		scannForTankBlocks(scannList, this.beginPos, false);
+		scannForTankBlocks(scannList, this.beginPos, false, fluidInTank);
 		
 		if (scannList.size() > 0) {
 			
@@ -88,7 +88,7 @@ public class FluidTankHelper {
 	
 	private int scannDepth;
 	@SuppressWarnings("deprecation")
-	public void scannForTankBlocks(List<BlockPos> scannList, BlockPos scannPos, boolean checkAir) {
+	public void scannForTankBlocks(List<BlockPos> scannList, BlockPos scannPos, boolean checkAir, Fluid fluid) {
 		
 		if (checkAir) {
 			
@@ -96,7 +96,7 @@ public class FluidTankHelper {
 			BlockState groundState = this.world.getBlockState(scannPos.down());
 			FluidState groundFluid = groundState.getFluidState();
 			
-			if ((blockState.isAir() || ModFluids.isFluidBlock(blockState.getBlock())) && ((!groundState.isAir() && !ModFluids.isFluidBlock(groundState.getBlock())) || (groundFluid.isEmpty() ? false : groundFluid.isSource()))) {
+			if ((blockState.isAir() || ModFluids.isFluidBlock(blockState.getBlock())) && ((!groundState.isAir() && !ModFluids.isFluidBlock(groundState.getBlock())) || (groundFluid.isEmpty() ? false : groundFluid.isSource()) || fluid.getAttributes().isGaseous())) {
 				
 				scannList.add(scannPos);
 				this.scannDepth++;
@@ -111,7 +111,7 @@ public class FluidTankHelper {
 						
 						Direction d = Direction.byHorizontalIndex(i);
 						
-						if (!scannList.contains(scannPos.offset(d))) scannForTankBlocks(scannList, scannPos.offset(d), checkAir);
+						if (!scannList.contains(scannPos.offset(d))) scannForTankBlocks(scannList, scannPos.offset(d), checkAir, fluid);
 						
 					}
 													
@@ -138,7 +138,7 @@ public class FluidTankHelper {
 						
 						if (d != Direction.DOWN) {
 							
-							if (!scannList.contains(scannPos.offset(d))) scannForTankBlocks(scannList, scannPos.offset(d), checkAir);
+							if (!scannList.contains(scannPos.offset(d))) scannForTankBlocks(scannList, scannPos.offset(d), checkAir, fluid);
 							
 						}
 						

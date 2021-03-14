@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
+import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.renderer.BlockControllPanelItemRenderer;
 import de.redtec.tileentity.TileEntityControllPanel;
 import de.redtec.util.IAdvancedBlockInfo;
@@ -40,7 +41,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
@@ -189,8 +189,8 @@ public class BlockControllPanel extends BlockContainerBase implements ISignalCon
 	}
 	
 	@Override
-	public List<ITextComponent> getBlockInfo() {
-		return new ArrayList<ITextComponent>();
+	public IBlockToolType getBlockInfo() {
+		return (stack, info, flag) -> {};
 	}
 	
 	@Override

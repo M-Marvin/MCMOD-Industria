@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+      	{
+      	  "type": "minecraft:item",
+      	  "functions": [
+      	    {
+      	      "function": "copy_nbt",
+      	      "source": "block_entity",
+      	      "ops": [
+      	        {
+      	          "source": "CableBlock",
+      	          "target": "BlockEntityTag.CableBlock",
+      	          "op": "replace"
+      	        }
+      	      ]
+      	    }
+      	  ],
+      	  "name": "redtec:burned_cable"
+      	}
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
+    }
+  ]
+}

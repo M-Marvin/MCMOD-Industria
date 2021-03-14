@@ -7,6 +7,7 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import de.redtec.items.ItemBlockAdvancedInfo;
+import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.item.BlockItem;
@@ -15,7 +16,6 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Rarity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.GenerationStage.Decoration;
@@ -33,7 +33,7 @@ public class ModGameRegistry {
 	
 	public static void registerBlock(Block block, ItemGroup group, Rarity rarity) {
 		blocksToRegister.add(block);
-		List<ITextComponent> info = null;
+		IBlockToolType info = null;
 		int burnTime = -1;
 		Item.Properties properties = new Item.Properties().group(group).rarity(rarity);
 		
@@ -60,7 +60,7 @@ public class ModGameRegistry {
 	
 	public static void registerBlock(Block block, ItemGroup group) {
 		blocksToRegister.add(block);
-		List<ITextComponent> info = null;
+		IBlockToolType info = null;
 		int burnTime = 0;
 		Item.Properties properties = new Item.Properties().group(group);
 		

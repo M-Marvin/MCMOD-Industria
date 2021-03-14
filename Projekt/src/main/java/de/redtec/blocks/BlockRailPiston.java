@@ -9,6 +9,7 @@ import com.google.common.collect.Maps;
 
 import de.redtec.RedTec;
 import de.redtec.util.AdvancedPistonBlockStructureHelper;
+import de.redtec.util.IAdvancedStickyBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -34,7 +35,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockRailPiston extends BlockBase {
+public class BlockRailPiston extends BlockBase implements IAdvancedStickyBlock {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -268,6 +269,18 @@ public class BlockRailPiston extends BlockBase {
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
 		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+	}
+
+	@Override
+	public boolean addBlocksToMove(AdvancedPistonBlockStructureHelper pistonStructureHelper, BlockPos pos, BlockState state, World world) {
+		for (Direction d : Direction.values()) {
+			BlockPos pos2 = pos.offset(d);
+			if (world.getBlockState(pos2).getBlock() == RedTec.conector_block) {
+				Direction moveDirection = getMoveDirectionForFace(d, state.get(FACING));
+				pistonStructureHelper.addBlockLine(pos2, moveDirection);
+			}
+		}
+		return true;
 	}
 	
 }

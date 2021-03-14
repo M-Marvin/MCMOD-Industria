@@ -1,11 +1,10 @@
 package de.redtec.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
+import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.typeregistys.ModDamageSource;
 import de.redtec.typeregistys.ModSoundEvents;
 import de.redtec.util.ElectricityNetworkHandler;
@@ -14,7 +13,6 @@ import de.redtec.util.IAdvancedBlockInfo;
 import de.redtec.util.IElectricConnective;
 import de.redtec.util.IElectricWire;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
@@ -25,7 +23,6 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.World;
@@ -122,10 +119,10 @@ public class BlockElektricWire extends BlockWiring implements IElectricWire, IAd
 	}
 
 	@Override
-	public List<ITextComponent> getBlockInfo() {
-		List<ITextComponent> info = new ArrayList<ITextComponent>();
-		info.add(new TranslationTextComponent("redtec.block.info.maxCurrent", this.maximumPower));
-		return info;
+	public IBlockToolType getBlockInfo() {
+		return (stack, info, flag) -> {
+			info.add(new TranslationTextComponent("redtec.block.info.maxCurrent", this.maximumPower));
+		};
 	}
 
 	@Override
@@ -141,7 +138,7 @@ public class BlockElektricWire extends BlockWiring implements IElectricWire, IAd
 		if (this.maximumPower < current) {
 			
 			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
-			worldIn.setBlockState(pos, Blocks.STONE.getDefaultState());
+			BlockBurnedCable.crateBurnedCable(state, pos, worldIn);
 			
 		}
 		

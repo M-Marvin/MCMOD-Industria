@@ -1,10 +1,9 @@
 package de.redtec.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
+import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.tileentity.TileEntityHoverControler;
 import de.redtec.util.IAdvancedBlockInfo;
 import de.redtec.util.IElectricConnective;
@@ -34,7 +33,6 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
@@ -150,16 +148,16 @@ public class BlockHoverControler extends BlockContainerBase implements ISignalCo
 	public DeviceType getDeviceType() {
 		return DeviceType.MASCHINE;
 	}
-
+	
 	@Override
-	public List<ITextComponent> getBlockInfo() {
-		List<ITextComponent> info = new ArrayList<ITextComponent>();
-		info.add(new TranslationTextComponent("redtec.block.info.needEnergy", (10 * Voltage.NormalVoltage.getVoltage() / 1000F) + "k"));
-		info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.NormalVoltage.getVoltage()));
-		info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 10));
-		return info;
+	public IBlockToolType getBlockInfo() {
+		return (stack, info, flag) -> {
+			info.add(new TranslationTextComponent("redtec.block.info.needEnergy", (10 * Voltage.NormalVoltage.getVoltage() / 1000F) + "k"));
+			info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.NormalVoltage.getVoltage()));
+			info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 10));
+		};
 	}
-
+	
 	@Override
 	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
 		return null;

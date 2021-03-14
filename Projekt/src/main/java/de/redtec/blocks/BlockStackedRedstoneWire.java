@@ -203,6 +203,16 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 		return (flag && blockState.get(POWERED) && blockState.get(CONNECTIONS[side.getOpposite().getIndex()]) == AttachType.REDSTONE) ? 8 : 0;
 	}
 	
+	@Override
+	public int getStrongPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+		return this.getWeakPower(blockState, blockAccess, pos, side);
+	}
+	
+	@Override
+	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
+		return true;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
@@ -276,6 +286,13 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 		wires.forEach((wire) -> {
 			BlockState state = worldIn.getBlockState(wire);
 			worldIn.setBlockState(wire, state.with(POWERED, powered));
+			for (Direction d : Direction.values()) {
+				BlockPos notifyPos = wire.offset(d);
+				BlockState notifyState = worldIn.getBlockState(notifyPos);
+				if (notifyState.getBlock() != RedTec.stacked_redstone_wire) {
+					worldIn.notifyNeighborsOfStateChange(notifyPos, RedTec.stacked_redstone_wire);
+				}
+			}
 		});
 		
 	}

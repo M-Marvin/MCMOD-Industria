@@ -13,10 +13,12 @@ import de.redtec.tileentity.TileEntityFluidValve;
 import de.redtec.tileentity.TileEntityFuseBox;
 import de.redtec.tileentity.TileEntityHarvester;
 import de.redtec.tileentity.TileEntityHoverControler;
+import de.redtec.tileentity.TileEntityItemDetector;
 import de.redtec.tileentity.TileEntityJigsaw;
 import de.redtec.tileentity.TileEntityLockedCompositeBlock;
 import de.redtec.tileentity.TileEntityMAlloyFurnace;
 import de.redtec.tileentity.TileEntityMBlender;
+import de.redtec.tileentity.TileEntityMBurnedCable;
 import de.redtec.tileentity.TileEntityMCoalHeater;
 import de.redtec.tileentity.TileEntityMElectricFurnace;
 import de.redtec.tileentity.TileEntityMFluidBath;
@@ -72,6 +74,8 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityMThermalZentrifuge> THERMAL_ZENTRIFUGE = register("thermal_zentrifuge", TileEntityType.Builder.create(TileEntityMThermalZentrifuge::new, RedTec.thermal_zentrifuge));
 	public static final TileEntityType<TileEntityMotor> MOTOR = register("motor", TileEntityType.Builder.create(TileEntityMotor::new, RedTec.motor));
 	public static final TileEntityType<TileEntityMFluidBath> FLUID_BATH = register("fluid_bath", TileEntityType.Builder.create(TileEntityMFluidBath::new, RedTec.fluid_bath));
+	public static final TileEntityType<TileEntityMBurnedCable> BURNED_CABLE = register("burned_cable", TileEntityType.Builder.create(TileEntityMBurnedCable::new, RedTec.burned_cable));
+	public static final TileEntityType<TileEntityItemDetector> ITEM_DETECTOR = register("item_detector", TileEntityType.Builder.create(TileEntityItemDetector::new, RedTec.item_detector));
 	
 	private static <T extends TileEntity> TileEntityType<T> register(String key, TileEntityType.Builder<T> builder) {
 		Type<?> type = Util.attemptDataFix(TypeReferences.BLOCK_ENTITY, key);

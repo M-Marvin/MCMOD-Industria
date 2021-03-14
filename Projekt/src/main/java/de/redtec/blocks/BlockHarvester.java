@@ -86,7 +86,7 @@ public class BlockHarvester extends BlockContainerBase {
 			
 			if (power && tileEntity instanceof TileEntityHarvester) {
 				
-				List<ItemStack> items = harvest(pos.offset(state.get(FACING)), worldIn);
+				List<ItemStack> items = harvest(pos, pos.offset(state.get(FACING)), worldIn);
 				
 				if (items != null) {
 					
@@ -107,7 +107,7 @@ public class BlockHarvester extends BlockContainerBase {
 	}
 	
 	@SuppressWarnings({ "static-access", "deprecation" })
-	public List<ItemStack> harvest(BlockPos harvestPos, World world) {
+	public List<ItemStack> harvest(BlockPos pos, BlockPos harvestPos, World world) {
 
 		BlockState harvestState = world.getBlockState(harvestPos);
 		
@@ -120,12 +120,26 @@ public class BlockHarvester extends BlockContainerBase {
 			TileEntity tileEntity = world.getTileEntity(harvestPos);
 			List<ItemStack> drops = harvestState.getBlock().getDrops(harvestState, (ServerWorld) world, harvestPos, tileEntity);
 			
-			world.destroyBlock(harvestPos, false);
+			world.addBlockEvent(pos, this, 1, 0);
 			
 			return drops;
-			
 		}
 		
+	}
+	
+	@SuppressWarnings({ "deprecation" })
+	@Override
+	public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int id, int param) {
+		
+		if (id == 1) {
+			
+			BlockPos harvestPos = pos.offset(state.get(FACING));
+			worldIn.destroyBlock(harvestPos, false);
+			
+			return true;
+		}
+		
+		return super.eventReceived(state, worldIn, pos, id, param);
 	}
 
 	@Override

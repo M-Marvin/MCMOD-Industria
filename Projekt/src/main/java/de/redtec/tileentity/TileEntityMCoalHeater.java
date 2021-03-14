@@ -68,7 +68,7 @@ public class TileEntityMCoalHeater extends TileEntityInventoryBase implements IN
 						for (int x = -1; x <= 2; x++) {
 							for (int z = -1; z <= 2; z++) {
 								
-								if (this.world.rand.nextInt(10) == 0) {
+								if (this.world.rand.nextInt(6) == 0) {
 									
 									BlockPos pos2 = this.pos.add(new BlockPos(x, y, z));
 									FluidState sourceFluid = this.world.getFluidState(pos2);
@@ -77,7 +77,7 @@ public class TileEntityMCoalHeater extends TileEntityInventoryBase implements IN
 										
 										if (sourceFluid.getFluid() == Fluids.WATER) {
 											
-											if (this.world.rand.nextInt(1) == 0) {
+											if (this.world.rand.nextInt(5) == 0) {
 												
 												BlockState bottomState = this.world.getBlockState(pos2.down());
 												

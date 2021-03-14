@@ -1,11 +1,10 @@
 package de.redtec.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
+import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.tileentity.TileEntityMAlloyFurnace;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
 import de.redtec.util.IAdvancedBlockInfo;
@@ -35,7 +34,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.IBlockReader;
@@ -70,13 +68,13 @@ public class BlockMAlloyFurnace extends BlockContainerBase implements IElectricC
 	}
 	
 	@Override
-	public List<ITextComponent> getBlockInfo() {
-		List<ITextComponent> info = new ArrayList<ITextComponent>();
-		info.add(new TranslationTextComponent("redtec.block.info.needEnergy", (1 * Voltage.HightVoltage.getVoltage() / 1000F) + "k"));
-		info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.HightVoltage.getVoltage()));
-		info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 1));
-		info.add(new TranslationTextComponent("redtec.block.info.alloyFurnace"));
-		return info;
+	public IBlockToolType getBlockInfo() {
+		return (stack, info, flag) -> {
+			info.add(new TranslationTextComponent("redtec.block.info.needEnergy", (1 * Voltage.HightVoltage.getVoltage() / 1000F) + "k"));
+			info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.HightVoltage.getVoltage()));
+			info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 1));
+			info.add(new TranslationTextComponent("redtec.block.info.alloyFurnace"));
+		};
 	}
 	
 	@Override

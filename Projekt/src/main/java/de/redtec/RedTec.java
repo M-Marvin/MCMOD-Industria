@@ -31,6 +31,7 @@ import de.redtec.blocks.BlockHoverControler;
 import de.redtec.blocks.BlockHoverExtension;
 import de.redtec.blocks.BlockInfinityPowerSource;
 import de.redtec.blocks.BlockIronRod;
+import de.redtec.blocks.BlockItemDetector;
 import de.redtec.blocks.BlockJigsaw;
 import de.redtec.blocks.BlockLeavesBase;
 import de.redtec.blocks.BlockLimestoneSheet;
@@ -193,25 +194,25 @@ public class RedTec {
 	public static final ItemGroup BUILDING_BLOCKS = new ItemGroup("building_blocks") {
 		@Override
 		public ItemStack createIcon() {
-			return new ItemStack(steel_plates);
+			return new ItemStack(cracked_polished_granite_bricks);
 		}
 	};
 	public static final ItemGroup DECORATIONS = new ItemGroup("decorations") {
 		@Override
 		public ItemStack createIcon() {
-			return new ItemStack(iron_rod);
+			return new ItemStack(rubber_laves);
 		}
 	};
 	public static final ItemGroup TOOLS = new ItemGroup("tools") {
 		@Override
 		public ItemStack createIcon() {
-			return new ItemStack(energy_meter);
+			return new ItemStack(hammer);
 		}
 	};
 	public static final ItemGroup MATERIALS = new ItemGroup("materials") {
 		@Override
 		public ItemStack createIcon() {
-			return new ItemStack(copper_dust);
+			return new ItemStack(rubber);
 		}
 	};
 	
@@ -240,6 +241,7 @@ public class RedTec {
 	public static final Block controll_panel = new BlockControllPanel();
 	public static final Block harvester = new BlockHarvester();
 	public static final Block jigsaw = new BlockJigsaw();
+	public static final Block item_detector = new BlockItemDetector();
 	
 	// TODO
 	public static final Block storing_crafting_table = new BlockStoringCraftingTable();	
@@ -736,6 +738,7 @@ public class RedTec {
 		ModGameRegistry.registerBlock(black_painted_planks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(limestone, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(limestone_sheet, DECORATIONS);
+		ModGameRegistry.registerBlock(item_detector, ItemGroup.REDSTONE);
 		
 		ModGameRegistry.registerBlock(motor, MACHINES);
 		
@@ -980,6 +983,7 @@ public class RedTec {
 		RenderTypeLookup.setRenderLayer(rubber_laves, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(rubber_sapling, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(tree_tap, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(burned_cable, RenderType.getCutoutMipped());
 		
 		RenderTypeLookup.setRenderLayer(ModFluids.SULFURIC_ACID, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_SULFURIC_ACID, RenderType.getTranslucent());

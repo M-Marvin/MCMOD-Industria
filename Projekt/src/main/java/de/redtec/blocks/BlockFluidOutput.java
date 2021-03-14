@@ -1,10 +1,9 @@
 package de.redtec.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
+import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.tileentity.TileEntityFluidOutput;
 import de.redtec.util.IAdvancedBlockInfo;
 import net.minecraft.block.Block;
@@ -19,7 +18,6 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 
@@ -45,14 +43,14 @@ public class BlockFluidOutput extends BlockContainerBase implements IAdvancedBlo
 	public TileEntity createNewTileEntity(IBlockReader worldIn) {
 		return new TileEntityFluidOutput();
 	}
-	
-	@Override
-	public List<ITextComponent> getBlockInfo() {
-		List<ITextComponent> info = new ArrayList<ITextComponent>();
-		info.add(new TranslationTextComponent("redtec.block.info.fluidOutput"));
-		return info;
-	}
 
+	@Override
+	public IBlockToolType getBlockInfo() {
+		return (stack, info, flag) -> {
+			info.add(new TranslationTextComponent("redtec.block.info.fluidOutput"));
+		};
+	}
+	
 	@Override
 	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
 		return null;

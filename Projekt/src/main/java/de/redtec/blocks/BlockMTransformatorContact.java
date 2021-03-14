@@ -7,6 +7,7 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import de.redtec.RedTec;
+import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.tileentity.TileEntitySimpleBlockTicking;
 import de.redtec.typeregistys.ModSoundEvents;
 import de.redtec.util.ElectricityNetworkHandler;
@@ -31,7 +32,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
@@ -211,11 +211,11 @@ public class BlockMTransformatorContact extends BlockContainerBase implements IE
 	}
 	
 	@Override
-	public List<ITextComponent> getBlockInfo() {
-		List<ITextComponent> info = new ArrayList<ITextComponent>();
-		info.add(new TranslationTextComponent("redtec.block.info.power", 1000));
-		info.add(new TranslationTextComponent("redtec.block.info.transformator"));
-		return info;
+	public IBlockToolType getBlockInfo() {
+		return (stack, info, flag) -> {
+			info.add(new TranslationTextComponent("redtec.block.info.power", 1000));
+			info.add(new TranslationTextComponent("redtec.block.info.transformator"));
+		};
 	}
 	
 	@Override

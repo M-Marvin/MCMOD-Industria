@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import de.redtec.RedTec;
-import de.redtec.blocks.BlockControllPanel;
+import de.redtec.blocks.BlockRControllPanel;
 import de.redtec.items.panelitems.ItemPanelElement;
 import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.RedstoneControlSignal;
@@ -59,7 +59,7 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 		BlockState state = getBlockState();
 		if (state.getBlock() == RedTec.controll_panel) {
 			
-			((BlockControllPanel) state.getBlock()).sendSignal(this.world, this.pos, signal);
+			((BlockRControllPanel) state.getBlock()).sendSignal(this.world, this.pos, signal);
 			
 		}
 		
@@ -73,7 +73,7 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 			
 			if (removedItem != null) {
 				
-				Direction facing = this.getBlockState().get(BlockControllPanel.FACING);
+				Direction facing = this.getBlockState().get(BlockRControllPanel.FACING);
 				
 				this.world.addEntity(new ItemEntity(
 						this.world, 

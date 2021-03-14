@@ -155,7 +155,7 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 	
 	public static boolean isRedstoneSource(BlockState attachState, Direction direction) {
 		return	(attachState.getBlock() == RedTec.stacked_redstone_torch && (direction == Direction.DOWN || direction == Direction.UP)) ||
-				attachState.getBlock() instanceof PistonBlock || attachState.getBlock() instanceof BlockAdvancedPiston;
+				attachState.getBlock() instanceof PistonBlock || attachState.getBlock() instanceof BlockRAdvancedPiston;
 	}
 	
 	@SuppressWarnings("unchecked")

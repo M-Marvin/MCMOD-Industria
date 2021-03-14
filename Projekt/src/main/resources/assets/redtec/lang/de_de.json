@@ -163,6 +163,7 @@
 "block.redtec.limestone": "Kalkstein",
 "block.redtec.limestone_sheet": "Kalkablagerung",
 "block.redtec.item_detector": "Itemsensor",
+"block.redtec.computer": "Computer",
 
 "item.redtec.steam_bucket": "Dampfeimer",
 "item.redtec.destilled_water_bucket": "Eimer kondensiertes Wasser",
@@ -380,6 +381,9 @@
 "redtec.jigsaw_block.generate": "Generieren",
 "redtec.jigsaw_block.levels": "Levels: %s",
 "redtec.generator.remainingFuel": "Treibstoff",
+"redtec.computer.saveChanges": "Sav",
+"redtec.computer.abbort": "Exit",
+"redtec.computer.start": "Run",
 
 "itemGroup.machines": "Maschinen",
 "itemGroup.building_blocks": "Baumaterial",

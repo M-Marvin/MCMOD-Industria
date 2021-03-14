@@ -3,7 +3,7 @@ package de.redtec.packet;
 import java.util.function.Supplier;
 
 import de.redtec.RedTec;
-import de.redtec.tileentity.TileEntitySignalProcessorContact;
+import de.redtec.tileentity.TileEntityRSignalProcessorContact;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
@@ -39,9 +39,9 @@ public class CEditProcessorCodePacket {
 			World world = ctx.getSender().world;
 			TileEntity contactTileEntity = world.getTileEntity(packet.pos);
 			
-			if (contactTileEntity instanceof TileEntitySignalProcessorContact) {
+			if (contactTileEntity instanceof TileEntityRSignalProcessorContact) {
 				
-				boolean flag = ((TileEntitySignalProcessorContact) contactTileEntity).setProcessorStack(packet.processorStack);
+				boolean flag = ((TileEntityRSignalProcessorContact) contactTileEntity).setProcessorStack(packet.processorStack);
 				
 				if (!flag) RedTec.LOGGER.error("Invalid Processor Item in CEditProcessorPacket @ " + packet.pos);
 				

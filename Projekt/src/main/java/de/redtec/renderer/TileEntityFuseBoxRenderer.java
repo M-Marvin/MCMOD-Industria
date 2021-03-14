@@ -2,8 +2,8 @@ package de.redtec.renderer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
-import de.redtec.blocks.BlockSignalProcessorContact;
-import de.redtec.tileentity.TileEntityFuseBox;
+import de.redtec.blocks.BlockRSignalProcessorContact;
+import de.redtec.tileentity.TileEntityMFuseBox;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.vector.Vector3f;
 
-public class TileEntityFuseBoxRenderer extends TileEntityRenderer<TileEntityFuseBox> {
+public class TileEntityFuseBoxRenderer extends TileEntityRenderer<TileEntityMFuseBox> {
 
 	private ItemRenderer itemRenderer;
 	
@@ -25,7 +25,7 @@ public class TileEntityFuseBoxRenderer extends TileEntityRenderer<TileEntityFuse
 	}
 
 	@Override
-	public void render(TileEntityFuseBox tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+	public void render(TileEntityMFuseBox tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		
 		if (!tileEntityIn.getFuse().isEmpty()) {
 			
@@ -34,7 +34,7 @@ public class TileEntityFuseBoxRenderer extends TileEntityRenderer<TileEntityFuse
 						
 			matrixStackIn.push();
 				
-				Direction direction = state.get(BlockSignalProcessorContact.FACING);
+				Direction direction = state.get(BlockRSignalProcessorContact.FACING);
 				matrixStackIn.translate(0.5F, 0.5F, 0.5F);
 				matrixStackIn.rotate(direction.getRotation());
 				matrixStackIn.rotate(Vector3f.XP.rotationDegrees(90));

@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import de.redtec.blocks.BlockAdvancedPiston;
+import de.redtec.blocks.BlockRAdvancedPiston;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.util.Direction;
@@ -93,7 +93,7 @@ public class AdvancedPistonBlockStructureHelper {
       this.toDestroy.clear();
       BlockState blockstate = this.world.getBlockState(this.blockToMove);
       
-      if (!BlockAdvancedPiston.canPush(blockstate, this.world, this.blockToMove, this.moveDirection, false, this.facing)) {
+      if (!BlockRAdvancedPiston.canPush(blockstate, this.world, this.blockToMove, this.moveDirection, false, this.facing)) {
          if (this.extending && blockstate.getPushReaction() == PushReaction.DESTROY) {
             this.toDestroy.add(this.blockToMove);
             return true;
@@ -119,7 +119,7 @@ public class AdvancedPistonBlockStructureHelper {
       BlockState blockstate = this.world.getBlockState(origin);
       if (world.isAirBlock(origin) || this.toMove.contains(origin)) {
          return true;
-      } else if (!BlockAdvancedPiston.canPush(blockstate, this.world, origin, this.moveDirection, false, facingIn) && !(this.doIgnorPushBeahavior && !blockstate.isAir())) {
+      } else if (!BlockRAdvancedPiston.canPush(blockstate, this.world, origin, this.moveDirection, false, facingIn) && !(this.doIgnorPushBeahavior && !blockstate.isAir())) {
     	  return true;
       } if (origin.equals(this.pistonPos)) {
          return true;
@@ -136,7 +136,7 @@ public class AdvancedPistonBlockStructureHelper {
                BlockPos blockpos = origin.offset(this.moveDirection.getOpposite(), i);
                oldState = blockstate;
                blockstate = this.world.getBlockState(blockpos);
-               if (blockstate.isAir(this.world, blockpos) || !oldState.canStickTo(blockstate) || !(BlockAdvancedPiston.canPush(blockstate, this.world, blockpos, this.moveDirection, false, this.moveDirection.getOpposite()) || this.doIgnorPushBeahavior) || blockpos.equals(this.pistonPos)) {
+               if (blockstate.isAir(this.world, blockpos) || !oldState.canStickTo(blockstate) || !(BlockRAdvancedPiston.canPush(blockstate, this.world, blockpos, this.moveDirection, false, this.moveDirection.getOpposite()) || this.doIgnorPushBeahavior) || blockpos.equals(this.pistonPos)) {
             	   break;
                }
                
@@ -204,7 +204,7 @@ public class AdvancedPistonBlockStructureHelper {
                   return true;
                }
 
-               if (!(BlockAdvancedPiston.canPush(blockstate, this.world, blockpos1, this.moveDirection, true, this.moveDirection) || this.doIgnorPushBeahavior) || blockpos1.equals(this.pistonPos)) {
+               if (!(BlockRAdvancedPiston.canPush(blockstate, this.world, blockpos1, this.moveDirection, true, this.moveDirection) || this.doIgnorPushBeahavior) || blockpos1.equals(this.pistonPos)) {
             	   return false;
                }
 

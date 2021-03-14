@@ -1,7 +1,7 @@
 package de.redtec.items;
 
 import de.redtec.blocks.BlockSignalAntennaConector;
-import de.redtec.tileentity.TileEntitySignalAntenna;
+import de.redtec.tileentity.TileEntityRSignalAntenna;
 import de.redtec.util.RedstoneControlSignal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
@@ -74,9 +74,9 @@ public class ItemRemoteControll extends ItemBase {
 		
 		for (TileEntity te2 : worldIn.loadedTileEntityList) {
 			
-			if (te2 instanceof TileEntitySignalAntenna) {
+			if (te2 instanceof TileEntityRSignalAntenna) {
 				
-				TileEntitySignalAntenna antenna = (TileEntitySignalAntenna) te2;
+				TileEntityRSignalAntenna antenna = (TileEntityRSignalAntenna) te2;
 				
 				int range2 = antenna.getRange();
 				int distance = BlockSignalAntennaConector.getDistance(pos, antenna.getPos());

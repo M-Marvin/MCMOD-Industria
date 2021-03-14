@@ -9,33 +9,33 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.redtec.blocks.BlockAdvancedMovingBlock;
-import de.redtec.blocks.BlockAdvancedPiston;
-import de.redtec.blocks.BlockAdvancedPistonHead;
+import de.redtec.blocks.BlockRAdvancedPiston;
+import de.redtec.blocks.BlockRAdvancedPistonHead;
 import de.redtec.blocks.BlockBase;
 import de.redtec.blocks.BlockBurnable;
 import de.redtec.blocks.BlockBurnedCable;
-import de.redtec.blocks.BlockButtonBlock;
-import de.redtec.blocks.BlockConectorBlock;
-import de.redtec.blocks.BlockControllPanel;
+import de.redtec.blocks.BlockRButtonBlock;
+import de.redtec.blocks.BlockRConectorBlock;
+import de.redtec.blocks.BlockRControllPanel;
 import de.redtec.blocks.BlockConveyorBelt;
 import de.redtec.blocks.BlockConveyorSpliter;
 import de.redtec.blocks.BlockCornerBlockBase;
 import de.redtec.blocks.BlockElektricWire;
-import de.redtec.blocks.BlockFluidInput;
-import de.redtec.blocks.BlockFluidOutput;
+import de.redtec.blocks.BlockMFluidInput;
+import de.redtec.blocks.BlockMFluidOutput;
 import de.redtec.blocks.BlockFluidPipe;
 import de.redtec.blocks.BlockFluidValve;
-import de.redtec.blocks.BlockFuseBox;
-import de.redtec.blocks.BlockHarvester;
-import de.redtec.blocks.BlockHoverControler;
-import de.redtec.blocks.BlockHoverExtension;
+import de.redtec.blocks.BlockMFuseBox;
+import de.redtec.blocks.BlockRHarvester;
+import de.redtec.blocks.BlockRHoverControler;
+import de.redtec.blocks.BlockRHoverExtension;
 import de.redtec.blocks.BlockInfinityPowerSource;
 import de.redtec.blocks.BlockIronRod;
-import de.redtec.blocks.BlockItemDetector;
+import de.redtec.blocks.BlockRItemDetector;
 import de.redtec.blocks.BlockJigsaw;
 import de.redtec.blocks.BlockLeavesBase;
 import de.redtec.blocks.BlockLimestoneSheet;
-import de.redtec.blocks.BlockLinearConector;
+import de.redtec.blocks.BlockRLinearConector;
 import de.redtec.blocks.BlockMAlloyFurnace;
 import de.redtec.blocks.BlockMBlender;
 import de.redtec.blocks.BlockMCoalHeater;
@@ -50,24 +50,25 @@ import de.redtec.blocks.BlockMThermalZentrifuge;
 import de.redtec.blocks.BlockMTransformatorCoil;
 import de.redtec.blocks.BlockMTransformatorContact;
 import de.redtec.blocks.BlockMotor;
-import de.redtec.blocks.BlockPanelLamp;
+import de.redtec.blocks.BlockNComputer;
+import de.redtec.blocks.BlockMPanelLamp;
 import de.redtec.blocks.BlockPowerEmiting;
-import de.redtec.blocks.BlockPowerSwitch;
+import de.redtec.blocks.BlockMPowerSwitch;
 import de.redtec.blocks.BlockRDCapacitor;
 import de.redtec.blocks.BlockRDPulseCounter;
-import de.redtec.blocks.BlockRadialConector;
-import de.redtec.blocks.BlockRailPiston;
-import de.redtec.blocks.BlockRedstoneContact;
-import de.redtec.blocks.BlockRedstoneReciver;
+import de.redtec.blocks.BlockRRadialConector;
+import de.redtec.blocks.BlockRRailPiston;
+import de.redtec.blocks.BlockRRedstoneContact;
+import de.redtec.blocks.BlockRRedstoneReciver;
 import de.redtec.blocks.BlockRubberLog;
 import de.redtec.blocks.BlockSalsolaSeeds;
 import de.redtec.blocks.BlockSaplingBase;
 import de.redtec.blocks.BlockSignalAntennaConector;
-import de.redtec.blocks.BlockSignalProcessorContact;
+import de.redtec.blocks.BlockRSignalProcessorContact;
 import de.redtec.blocks.BlockSignalWire;
 import de.redtec.blocks.BlockStackedRedstoneTorch;
 import de.redtec.blocks.BlockStackedRedstoneWire;
-import de.redtec.blocks.BlockStoringCraftingTable;
+import de.redtec.blocks.BlockMStoringCraftingTable;
 import de.redtec.blocks.BlockTreeTap;
 import de.redtec.blocks.BlockWeathering;
 import de.redtec.fluids.BlockChemicalWater;
@@ -79,8 +80,8 @@ import de.redtec.fluids.BlockSteam;
 import de.redtec.fluids.BlockSulfuricAcid;
 import de.redtec.fluids.util.ItemFluidBucket;
 import de.redtec.fluids.util.ItemGasBucket;
-import de.redtec.gui.ScreenHarvester;
-import de.redtec.gui.ScreenHoverControler;
+import de.redtec.gui.ScreenRHarvester;
+import de.redtec.gui.ScreenRHoverControler;
 import de.redtec.gui.ScreenJigsaw;
 import de.redtec.gui.ScreenMAlloyFurnace;
 import de.redtec.gui.ScreenMBlender;
@@ -91,9 +92,10 @@ import de.redtec.gui.ScreenMGenerator;
 import de.redtec.gui.ScreenMRaffinery;
 import de.redtec.gui.ScreenMSchredder;
 import de.redtec.gui.ScreenMThermalZentrifuge;
-import de.redtec.gui.ScreenProcessor;
-import de.redtec.gui.ScreenReciver;
-import de.redtec.gui.ScreenStoredCrafting;
+import de.redtec.gui.ScreenNComputer;
+import de.redtec.gui.ScreenRProcessor;
+import de.redtec.gui.ScreenRReciver;
+import de.redtec.gui.ScreenMStoredCrafting;
 import de.redtec.items.ItemBase;
 import de.redtec.items.ItemBlueprint;
 import de.redtec.items.ItemBurneable;
@@ -103,6 +105,7 @@ import de.redtec.items.ItemEnergyMeter;
 import de.redtec.items.ItemFluidMeter;
 import de.redtec.items.ItemFuse;
 import de.redtec.items.ItemHammer;
+import de.redtec.items.ItemHardDrive;
 import de.redtec.items.ItemProcessor;
 import de.redtec.items.ItemRemoteControll;
 import de.redtec.items.ItemSalsola;
@@ -110,6 +113,7 @@ import de.redtec.items.ItemSchredderToolCrusher;
 import de.redtec.items.panelitems.ItemButtonElement;
 import de.redtec.items.panelitems.ItemLampElement;
 import de.redtec.items.panelitems.ItemLeverElement;
+import de.redtec.packet.CEditComputerCode;
 import de.redtec.packet.CEditJigsawTileEntityPacket;
 import de.redtec.packet.CEditProcessorCodePacket;
 import de.redtec.packet.CGenerateJigsaw;
@@ -200,7 +204,7 @@ public class RedTec {
 	public static final ItemGroup DECORATIONS = new ItemGroup("decorations") {
 		@Override
 		public ItemStack createIcon() {
-			return new ItemStack(rubber_laves);
+			return new ItemStack(rubber_leaves);
 		}
 	};
 	public static final ItemGroup TOOLS = new ItemGroup("tools") {
@@ -221,56 +225,59 @@ public class RedTec {
 	public static final Block capacitor = new BlockRDCapacitor();
 	public static final Block stacked_redstone_torch = new BlockStackedRedstoneTorch();
 	public static final Block stacked_redstone_wire = new BlockStackedRedstoneWire();
-	public static final Block advanced_piston = new BlockAdvancedPiston(false, "advanced_piston");
-	public static final Block advanced_piston_head = new BlockAdvancedPistonHead("advanced_piston_head");
-	public static final Block advanced_sticky_piston = new BlockAdvancedPiston(true, "advanced_sticky_piston");
+	public static final Block advanced_piston = new BlockRAdvancedPiston(false, "advanced_piston");
+	public static final Block advanced_piston_head = new BlockRAdvancedPistonHead("advanced_piston_head");
+	public static final Block advanced_sticky_piston = new BlockRAdvancedPiston(true, "advanced_sticky_piston");
 	public static final Block advanced_moving_block = new BlockAdvancedMovingBlock("advanced_moving_block");
-	public static final Block redstone_reciver = new BlockRedstoneReciver();
+	public static final Block redstone_reciver = new BlockRRedstoneReciver();
 	public static final Block signal_wire = new BlockSignalWire();
 	public static final Block antenna_conector = new BlockSignalAntennaConector();
-	public static final Block linear_conector = new BlockLinearConector();
-	public static final Block signal_processor_contact = new BlockSignalProcessorContact();
-	public static final Block rail_piston = new BlockRailPiston();
-	public static final Block conector_block = new BlockConectorBlock();
-	public static final Block redstone_contact = new BlockRedstoneContact();
-	public static final Block button_block = new BlockButtonBlock();
+	public static final Block linear_conector = new BlockRLinearConector();
+	public static final Block signal_processor_contact = new BlockRSignalProcessorContact();
+	public static final Block rail_piston = new BlockRRailPiston();
+	public static final Block conector_block = new BlockRConectorBlock();
+	public static final Block redstone_contact = new BlockRRedstoneContact();
+	public static final Block button_block = new BlockRButtonBlock();
 	public static final Block iron_rod = new BlockIronRod();
-	public static final Block radial_conector = new BlockRadialConector();
-	public static final Block hover_controler = new BlockHoverControler();
-	public static final Block hover_extension = new BlockHoverExtension();
-	public static final Block controll_panel = new BlockControllPanel();
-	public static final Block harvester = new BlockHarvester();
+	public static final Block radial_conector = new BlockRRadialConector();
+	public static final Block hover_controler = new BlockRHoverControler();
+	public static final Block hover_extension = new BlockRHoverExtension();
+	public static final Block controll_panel = new BlockRControllPanel();
+	public static final Block harvester = new BlockRHarvester();
 	public static final Block jigsaw = new BlockJigsaw();
-	public static final Block item_detector = new BlockItemDetector();
+	public static final Block item_detector = new BlockRItemDetector();
 	
 	// TODO
-	public static final Block storing_crafting_table = new BlockStoringCraftingTable();	
+	public static final Block storing_crafting_table = new BlockMStoringCraftingTable();	
 	// Mechanic
 	public static final Block motor = new BlockMotor();
 	// Items
-	public static final Item sulfur_dioxid = new ItemBase("sulfur_dioxid", MATERIALS);
+	//public static final Item sulfur_dioxid = new ItemBase("sulfur_dioxid", MATERIALS);
+	
+	// Networks
+	public static final Block computer = new BlockNComputer();
 	
 	// Machinery
 	public static final Block conveyor_spliter = new BlockConveyorSpliter();
 	public static final Block conveyor_belt = new BlockConveyorBelt();
 	public static final Block generator = new BlockMGenerator();
 	public static final Block infinity_power_source = new BlockInfinityPowerSource();
-	public static final Block panel_lamp = new BlockPanelLamp();
+	public static final Block panel_lamp = new BlockMPanelLamp();
 	public static final Block copper_cable = new BlockElektricWire("copper_cable", 16, 4);
 	public static final Block electrolyt_copper_cable = new BlockElektricWire("electrolyt_copper_cable", 32, 4);
 	public static final Block aluminium_cable = new BlockElektricWire("aluminium_cable", 64, 8);
 	public static final Block burned_cable = new BlockBurnedCable();
 	public static final Block fluid_pipe = new BlockFluidPipe();
 	public static final Block fluid_valve = new BlockFluidValve();
-	public static final Block fluid_input = new BlockFluidInput();
-	public static final Block fluid_output = new BlockFluidOutput();
+	public static final Block fluid_input = new BlockMFluidInput();
+	public static final Block fluid_output = new BlockMFluidOutput();
 	public static final Block steam_generator = new BlockMSteamGenerator();
 	public static final Block coal_heater = new BlockMCoalHeater();
 	public static final Block transformator_contact = new BlockMTransformatorContact();
 	public static final Block transformator_coil = new BlockMTransformatorCoil();
-	public static final Block fuse_box = new BlockFuseBox();
+	public static final Block fuse_box = new BlockMFuseBox();
 	public static final Block multimeter = new BlockMMultimeter();
-	public static final Block power_switch = new BlockPowerSwitch();
+	public static final Block power_switch = new BlockMPowerSwitch();
 	public static final Block electric_furnace = new BlockMElectricFurnace();
 	public static final Block schredder = new BlockMSchredder();
 	public static final Block blender = new BlockMBlender();
@@ -394,7 +401,7 @@ public class RedTec {
 	public static final Block salsola_seeds = new BlockSalsolaSeeds();
 	public static final Block rubber_log = new BlockRubberLog("rubber_log", Material.WOOD, 2F, SoundType.WOOD);
 	public static final Block rubber_wood = new BlockRubberLog("rubber_wood", Material.WOOD, 2F, SoundType.WOOD);
-	public static final Block rubber_laves = new BlockLeavesBase("rubber_leaves", Material.WOOD, 0.2F, 0.2F, SoundType.PLANT);
+	public static final Block rubber_leaves = new BlockLeavesBase("rubber_leaves", Material.WOOD, 0.2F, 0.2F, SoundType.PLANT);
 	public static final Block rubber_sapling = new BlockSaplingBase("rubber_sapling", new ResourceLocation(RedTec.MODID, "nature/rubber_tree"));
 	
 	// Fluids and Buckets
@@ -558,6 +565,7 @@ public class RedTec {
 	public static final Item fuse_nv = new ItemFuse("fuse_nv", 32);
 	public static final Item fuse_hv = new ItemFuse("fuse_hv", 64);
 	public static final Item schredder_crusher = new ItemSchredderToolCrusher();
+	public static final Item hard_drive = new ItemHardDrive();
 	
 	// Tools
 	public static final Item fluid_meter = new ItemFluidMeter();
@@ -681,7 +689,7 @@ public class RedTec {
 		ModGameRegistry.registerBlock(fluid_bath, MACHINES);
 		ModGameRegistry.registerBlock(rubber_log, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(rubber_wood, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(rubber_laves, DECORATIONS);
+		ModGameRegistry.registerBlock(rubber_leaves, DECORATIONS);
 		ModGameRegistry.registerBlock(rubber_sapling, DECORATIONS);
 		ModGameRegistry.registerBlock(tree_tap, TOOLS);
 		ModGameRegistry.registerBlock(salt_block, BUILDING_BLOCKS);
@@ -739,6 +747,7 @@ public class RedTec {
 		ModGameRegistry.registerBlock(limestone, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(limestone_sheet, DECORATIONS);
 		ModGameRegistry.registerBlock(item_detector, ItemGroup.REDSTONE);
+		ModGameRegistry.registerBlock(computer, MACHINES);
 		
 		ModGameRegistry.registerBlock(motor, MACHINES);
 		
@@ -893,13 +902,13 @@ public class RedTec {
 		ModGameRegistry.registerItem(fuse_hv);
 		ModGameRegistry.registerItem(schredder_crusher);
 		ModGameRegistry.registerItem(sulfur);
-		ModGameRegistry.registerItem(sulfur_dioxid);
 		ModGameRegistry.registerItem(plastic_plate);
 		ModGameRegistry.registerItem(raw_rubber_bottle);
 		ModGameRegistry.registerItem(rubber_bottle);
 		ModGameRegistry.registerItem(crude_steel);
 		ModGameRegistry.registerItem(cardboard_sheet);
 		ModGameRegistry.registerItem(lime);
+		ModGameRegistry.registerItem(hard_drive);
 		
 		// register Functional Items
 		ModGameRegistry.registerItem(lever_element);
@@ -916,6 +925,7 @@ public class RedTec {
 		NETWORK.registerMessage(1, CEditJigsawTileEntityPacket.class, CEditJigsawTileEntityPacket::encode, CEditJigsawTileEntityPacket::new, CEditJigsawTileEntityPacket::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		NETWORK.registerMessage(2, CGenerateJigsaw.class, CGenerateJigsaw::encode, CGenerateJigsaw::new, CGenerateJigsaw::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		NETWORK.registerMessage(3, SSendENHandeler.class, SSendENHandeler::encode, SSendENHandeler::new, SSendENHandeler::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));		
+		NETWORK.registerMessage(4, CEditComputerCode.class, CEditComputerCode::encode, CEditComputerCode::new, CEditComputerCode::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		
 		// Dispenser Behaviors
 		IDispenseItemBehavior placeBlockBehavior = new IDispenseItemBehavior() {
@@ -980,7 +990,7 @@ public class RedTec {
 		RenderTypeLookup.setRenderLayer(multimeter, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(fluid_valve, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(blender, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(rubber_laves, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(rubber_leaves, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(rubber_sapling, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(tree_tap, RenderType.getCutoutMipped());
 		RenderTypeLookup.setRenderLayer(burned_cable, RenderType.getCutoutMipped());
@@ -1016,11 +1026,11 @@ public class RedTec {
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.RAFFINERY, TileEntityMRaffineryRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.FLUID_BATH, TileEntityMFluidBathRenderer::new);
 		
-		ScreenManager.registerFactory(ModContainerType.STORED_CRAFTING, ScreenStoredCrafting::new);
-		ScreenManager.registerFactory(ModContainerType.PROCESSOR, ScreenProcessor::new);
-		ScreenManager.registerFactory(ModContainerType.HOVER_CONTROLER, ScreenHoverControler::new);
-		ScreenManager.registerFactory(ModContainerType.REDSTONE_RECIVER, ScreenReciver::new);
-		ScreenManager.registerFactory(ModContainerType.HARVESTER, ScreenHarvester::new);
+		ScreenManager.registerFactory(ModContainerType.STORED_CRAFTING, ScreenMStoredCrafting::new);
+		ScreenManager.registerFactory(ModContainerType.PROCESSOR, ScreenRProcessor::new);
+		ScreenManager.registerFactory(ModContainerType.HOVER_CONTROLER, ScreenRHoverControler::new);
+		ScreenManager.registerFactory(ModContainerType.REDSTONE_RECIVER, ScreenRReciver::new);
+		ScreenManager.registerFactory(ModContainerType.HARVESTER, ScreenRHarvester::new);
 		ScreenManager.registerFactory(ModContainerType.JIGSAW, ScreenJigsaw::new);
 		ScreenManager.registerFactory(ModContainerType.GENERATOR, ScreenMGenerator::new);
 		ScreenManager.registerFactory(ModContainerType.COAL_HEATER, ScreenMCoalHeater::new);
@@ -1031,6 +1041,7 @@ public class RedTec {
 		ScreenManager.registerFactory(ModContainerType.THERMAL_ZENTRIFUGE, ScreenMThermalZentrifuge::new);
 		ScreenManager.registerFactory(ModContainerType.ALLOY_FURNACE, ScreenMAlloyFurnace::new);
 		ScreenManager.registerFactory(ModContainerType.FLUID_BATH, ScreenMFluidBath::new);
+		ScreenManager.registerFactory(ModContainerType.COMPUTER, ScreenNComputer::new);
 		
 	}
 	

@@ -9,6 +9,9 @@ import de.redtec.items.ItemProcessor;
 import de.redtec.items.ItemProcessor.OperatorResult;
 import de.redtec.items.ItemProcessor.OperatorType;
 import de.redtec.typeregistys.ModTileEntityType;
+import de.redtec.util.INetworkDevice;
+import de.redtec.util.INetworkDevice.NetworkDeviceIP;
+import de.redtec.util.INetworkDevice.NetworkMessage;
 import de.redtec.util.RedstoneControlSignal;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,8 +31,9 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public class TileEntityRSignalProcessorContact extends TileEntity implements ITickableTileEntity, INamedContainerProvider {
 	
-	private ItemStack processorStack;
-	private HashMap<String, ItemProcessor.OperatorResult> variables = new HashMap<String, ItemProcessor.OperatorResult>();
+	public NetworkDeviceIP deviceIP;
+	public ItemStack processorStack;
+	public HashMap<String, ItemProcessor.OperatorResult> variables = new HashMap<String, ItemProcessor.OperatorResult>();
 	
 	private boolean lastSuccessState;
 	
@@ -110,8 +114,6 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 					BlockState state = this.world.getBlockState(this.pos);
 					if (state.getBlock() == RedTec.signal_processor_contact) {
 						
-						//System.out.println(signal.getChanelItem().getDisplayName().getUnformattedComponentText() + " " + signal.isPowered());
-						
 						((BlockRSignalProcessorContact) state.getBlock()).sendSignal(this.world, this.pos, signal);
 						
 					}
@@ -159,6 +161,7 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 			}
 		}
 		compound.put("Memory", bufferNBT);
+		compound.put("DeviceIP", this.deviceIP.writeNBT());
 		return super.write(compound);
 	}
 	
@@ -182,6 +185,7 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 				this.variables.put(variableName, new OperatorResult(value, type));
 			}
 		}
+		this.deviceIP = NetworkDeviceIP.read(compound.getCompound("DeviceIP"));
 		super.read(state, compound);
 	}
 	
@@ -205,6 +209,52 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 			return new TranslationTextComponent(RedTec.signal_processor_contact.getTranslationKey());
 		}
 		
+	}
+
+	public void onMessageRecived(NetworkMessage message) {
+		String cmdName = message.getDataBuffer().readString();
+		if (cmdName.equals("resetMemory")) {
+			this.variables.clear();
+			sendResponse(message.getSenderIP(), "respReset", null);
+		} else if (cmdName.equals("setBVariable")) {
+			String variable = message.getDataBuffer().readString();
+			boolean value = message.getDataBuffer().readBoolean();
+			this.variables.put(variable, new OperatorResult(value, OperatorType.BOOL));
+			sendResponse(message.getSenderIP(), "respSetB", null);
+		} else if (cmdName.equals("setIVariable")) {
+			String variable = message.getDataBuffer().readString();
+			int value = message.getDataBuffer().readInt();
+			this.variables.put(variable, new OperatorResult(value, OperatorType.INT));
+			sendResponse(message.getSenderIP(), "respSetI", null);
+		} else if (cmdName.equals("getBVariable")) {
+			String variableName = message.getDataBuffer().readString();
+			OperatorResult value = this.variables.getOrDefault(variableName, new OperatorResult(false, OperatorType.BOOL));
+			if (value.getType() == OperatorType.BOOL) {
+				sendResponse(message.getSenderIP(), "respGetB", value);
+			}
+		} else if (cmdName.equals("getIVariable")) {
+			String variableName = message.getDataBuffer().readString();
+			OperatorResult value = this.variables.getOrDefault(variableName, new OperatorResult(false, OperatorType.INT));
+			if (value.getType() == OperatorType.INT) {
+				sendResponse(message.getSenderIP(), "respGetI", value);
+			}
+		}
+	}
+	
+	protected void sendResponse(NetworkDeviceIP targetIP, String cmd, OperatorResult variable) {
+		BlockState state = getBlockState();
+		INetworkDevice device = state.getBlock() instanceof INetworkDevice ? (INetworkDevice) state.getBlock() : null;
+		if (device != null) {
+			NetworkMessage message = new NetworkMessage();
+			message.setTargetIP(targetIP);
+			message.getDataBuffer().writeString(cmd);
+			if (variable.getType() == OperatorType.BOOL) {
+				message.getDataBuffer().writeBoolean(variable.getBValue());
+			} else {
+				message.getDataBuffer().writeInt(variable.getIValue());
+			}
+			device.sendMessage(message, world, pos, state);
+		}
 	}
 		
 }

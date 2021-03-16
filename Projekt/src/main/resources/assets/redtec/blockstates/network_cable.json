@@ -1,0 +1,28 @@
+{
+	"multipart": [
+		{ "when": {"middle": "close"}, "apply": {
+			"model": "redtec:block/network_cable_mid"
+		}},
+		{ "when": {"middle": "open"}, "apply": {
+			"model": "redtec:block/network_cable_mid_uninsulated"
+		}},
+		{ "when": {"north": "true"}, "apply": {
+			"model": "redtec:block/network_cable_side"
+		}},
+		{ "when": {"south": "true"}, "apply": {
+			"model": "redtec:block/network_cable_side",
+			"y": 180
+		}},
+		{ "when": {"east": "true"}, "apply": {
+			"model": "redtec:block/network_cable_side",
+			"y": 90
+		}},
+		{ "when": {"west": "true"}, "apply": {
+			"model": "redtec:block/network_cable_side",
+			"y": 270
+		}},
+		{ "when": {"up": "true"}, "apply": {
+			"model": "redtec:block/network_cable_up"
+		}}
+	]
+}

@@ -2,6 +2,9 @@ package de.redtec.blocks;
 
 import java.util.HashMap;
 
+import de.redtec.tileentity.TileEntityAdvancedMovingBlock;
+import de.redtec.util.AdvancedPistonBlockStructureHelper;
+import de.redtec.util.IAdvancedStickyBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -23,7 +26,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
-public abstract class BlockMultiPart<T extends TileEntity> extends BlockContainerBase {
+public abstract class BlockMultiPart<T extends TileEntity> extends BlockContainerBase implements IAdvancedStickyBlock {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	public static final IntegerProperty POS_X = IntegerProperty.create("pos_x", 0, 6);
@@ -181,7 +184,7 @@ public abstract class BlockMultiPart<T extends TileEntity> extends BlockContaine
 		BlockPos partOffset = BlockMultiPart.rotateOffset(partPos, state.get(BlockMultiPart.FACING));
 		BlockPos centerTEPos = pos.subtract(partOffset);
 		TileEntity tileEntity = world.getTileEntity(centerTEPos);
-		return tileEntity;
+		return tileEntity instanceof TileEntityAdvancedMovingBlock ? null : tileEntity; // Prevent crash when moving MultiBlocks
 	}
 
 	@Override
@@ -192,6 +195,19 @@ public abstract class BlockMultiPart<T extends TileEntity> extends BlockContaine
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
 		return state.with(FACING, rot.rotate(state.get(FACING)));
+	}
+	
+	@Override
+	public boolean addBlocksToMove(AdvancedPistonBlockStructureHelper pistonStructureHelper, BlockPos pos, BlockState state, World world) {
+		BlockPos partPos = BlockMultiPart.getInternPartPos(state);
+		BlockPos partOffset = BlockMultiPart.rotateOffset(partPos, state.get(BlockMultiPart.FACING));
+		BlockPos centerOffset = BlockMultiPart.rotateOffset(this.getCenter(), state.get(BlockMultiPart.FACING));
+		BlockPos centerTEPos = pos.subtract(partOffset).add(centerOffset);
+		
+		for (BlockPos pos2 : this.makeParts(state.get(FACING), centerTEPos).keySet()) {
+			pistonStructureHelper.addBlockLine(pos2, pistonStructureHelper.getMoveDirection());
+		}
+		return true;
 	}
 	
 }

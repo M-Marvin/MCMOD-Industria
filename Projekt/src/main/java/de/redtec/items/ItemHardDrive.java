@@ -1,9 +1,16 @@
 package de.redtec.items;
 
+import java.util.List;
+
 import de.redtec.RedTec;
 import de.redtec.util.DriveManager;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 public class ItemHardDrive extends ItemBase {
@@ -26,6 +33,15 @@ public class ItemHardDrive extends ItemBase {
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		CompoundNBT tag = stack.getTag();
+		if (tag != null) {
+			if (tag.contains("DriveName")) tooltip.add(new StringTextComponent("\u00A77" + new TranslationTextComponent("redtec.item.info.driveName", tag.getString("DriveName")).getString()));
+			tooltip.add(new StringTextComponent("\u00A77" + new TranslationTextComponent("redtec.block.info.driveName").getString()));
+		}
 	}
 	
 }

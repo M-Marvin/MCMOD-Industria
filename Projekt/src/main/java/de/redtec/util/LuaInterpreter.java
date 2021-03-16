@@ -7,11 +7,8 @@ import java.io.StringReader;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.lib.LibFunction;
 import org.luaj.vm2.lib.TwoArgFunction;
 import org.luaj.vm2.lib.jse.JsePlatform;
-
-import com.google.common.base.Supplier;
 
 public class LuaInterpreter {
 	
@@ -19,13 +16,15 @@ public class LuaInterpreter {
 	
 	protected String crashMessage;
 	protected Thread executionThread;
-	protected Supplier<Boolean> violation;
+	protected ILuaThreadViolating violation;
 	protected OutputStream outputStream;
 	protected boolean isExecuted;
+	protected TwoArgFunction[] librarys;
 	
-	public LuaInterpreter(Supplier<Boolean> violation, OutputStream outputStream) {
+	public LuaInterpreter(ILuaThreadViolating violation, OutputStream outputStream, TwoArgFunction... librarys) {
 		this.violation = violation;
 		this.outputStream = outputStream;
+		this.librarys = librarys;
 	}
 	
 	/**
@@ -38,7 +37,9 @@ public class LuaInterpreter {
 		try {
 			
 			Globals globals = JsePlatform.standardGlobals();
-			globals.load(new computer());
+			for (TwoArgFunction lib : this.librarys) {
+				globals.load(lib);
+			}
 			globals.STDOUT = new PrintStream(outputStream);
 			LuaValue luaCode = globals.load(new StringReader(stringCode), "BOOTDRIVE");
 			
@@ -76,7 +77,7 @@ public class LuaInterpreter {
 	 */
 	public int checkExecutationState() {
 		if (isCodeRunning()) {
-			if (!this.violation.get()) {
+			if (!this.violation.isViolating()) {
 				stopExecuting();
 			} else if (this.isExecuted) {
 				stopExecuting();
@@ -115,31 +116,9 @@ public class LuaInterpreter {
 	public String getCrashMessage() {
 		return crashMessage;
 	}
-	
-	// "computer" API
-	protected class computer extends TwoArgFunction {
-		
-		// "skip"
-		final class skip extends LibFunction  {
-			@Override
-			public LuaValue call() {
-				if (violation.get()) {
-					//LuaInterpreter.this.executionTimer = MAX_TIMEOUT;
-				} else {
-					stopExecuting();
-				}
-				return LuaValue.NIL;
-			}
-		}
-		
-		@Override
-		public LuaValue call(LuaValue modname, LuaValue env) {
-			LuaValue library = tableOf();
-			library.set("skip", new skip());
-			env.set("computer", library);
-			return env;
-		}
-		
+
+	public static interface ILuaThreadViolating {
+		public boolean isViolating();
 	}
 	
 }

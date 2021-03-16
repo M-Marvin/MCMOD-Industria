@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "redtec:block/copper_wire",
-		"particle": "redtec:block/copper_wire"
+		"0": "redtec:block/network_wire",
+		"particle": "redtec:block/network_wire"
 	},
 	"elements": [
 		{

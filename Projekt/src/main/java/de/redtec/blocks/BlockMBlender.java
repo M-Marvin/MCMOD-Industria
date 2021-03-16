@@ -98,7 +98,7 @@ public class BlockMBlender extends BlockMultiPart<TileEntityMBlender> implements
 	@Override
 	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
 		TileEntityMBlender tileEntity = getCenterTE(pos, state, worldIn);
-		InventoryHelper.dropInventoryItems(worldIn, tileEntity.getPos(), (IInventory) tileEntity);
+		if (tileEntity != null) InventoryHelper.dropInventoryItems(worldIn, tileEntity.getPos(), (IInventory) tileEntity);
 		super.onBlockHarvested(worldIn, pos, state, player);
 	}
 	

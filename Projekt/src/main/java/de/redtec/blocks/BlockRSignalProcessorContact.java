@@ -3,6 +3,7 @@ package de.redtec.blocks;
 import java.util.Random;
 
 import de.redtec.tileentity.TileEntityRSignalProcessorContact;
+import de.redtec.util.INetworkDevice;
 import de.redtec.util.ISignalConnective;
 import de.redtec.util.ItemStackHelper;
 import de.redtec.util.RedstoneControlSignal;
@@ -45,7 +46,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockRSignalProcessorContact extends BlockContainerBase implements ISignalConnective, IWaterLoggable {
+public class BlockRSignalProcessorContact extends BlockContainerBase implements ISignalConnective, IWaterLoggable, INetworkDevice {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final BooleanProperty OPEN = BooleanProperty.create("open");
@@ -215,7 +216,6 @@ public class BlockRSignalProcessorContact extends BlockContainerBase implements 
 				
 				worldIn.addParticle(ParticleTypes.DRIPPING_OBSIDIAN_TEAR, pos.getX() + 0.5F + offVec.getX(), pos.getY() + 0.4F + offVec.getY(), pos.getZ() + 0.5F + offVec.getZ(), 0, 0, 0);
 				
-				
 			}
 			
 		}
@@ -259,6 +259,42 @@ public class BlockRSignalProcessorContact extends BlockContainerBase implements 
 	@Override
 	public FluidState getFluidState(BlockState state) {
 		return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluid().getDefaultState() : Fluids.EMPTY.getDefaultState();
+	}
+
+	@Override
+	public NetworkDeviceType getNetworkType() {
+		return NetworkDeviceType.DEVICE;
+	}
+
+	@Override
+	public NetworkDeviceIP getIP(BlockPos pos, BlockState state, World world) {
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if (tileEntity instanceof TileEntityRSignalProcessorContact) {
+			return ((TileEntityRSignalProcessorContact) tileEntity).deviceIP;
+		}
+		return NetworkDeviceIP.DEFAULT;
+	}
+
+	@Override
+	public void setIP(NetworkDeviceIP ip, BlockPos pos, BlockState state, World world) {
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if (tileEntity instanceof TileEntityRSignalProcessorContact) {
+			((TileEntityRSignalProcessorContact) tileEntity).deviceIP = ip;
+		}
+	}
+
+	@Override
+	public boolean canConectNetworkWire(IWorldReader world, BlockPos pos, Direction side) {
+		BlockState state = world.getBlockState(pos);
+		return state.getBlock() == this ? side != state.get(FACING) : false;
+	}
+	
+	@Override
+	public void onMessageRecived(NetworkMessage message, World world, BlockPos pos, BlockState state) {
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if (tileEntity instanceof TileEntityRSignalProcessorContact) {
+			((TileEntityRSignalProcessorContact) tileEntity).onMessageRecived(message);
+		}
 	}
 	
 }

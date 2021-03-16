@@ -52,9 +52,9 @@ public class ScreenNComputer extends ContainerScreen<ContainerNComputer> {
     		this.children.add(this.codeFields[i2]);
     	}
 		
-    	this.saveChanges = addButton(new Button(i + 158, 121, 22, 20, new StringTextComponent(""), this::onSaveChanges));
-    	this.abbort = addButton(new Button(i + 158, 102, 22, 20, new StringTextComponent(""), this::onAbbort));
-    	this.startComputer = addButton(new Button(i + 158, 83, 22, 20, new StringTextComponent(""), this::onRun));
+    	this.saveChanges = this.addButton(new Button(i + 158, j + 122, 22, 20, new StringTextComponent(""), this::onSaveChanges));
+    	this.abbort = this.addButton(new Button(i + 158, j + 103, 22, 20, new StringTextComponent(""), this::onAbbort));
+    	this.startComputer = this.addButton(new Button(i + 158, j + 84, 22, 20, new StringTextComponent(""), this::onRun));
     	
     	this.consoleLine = new TextFieldWidget(this.font, i + 21, j + 133, 129, 10, new TranslationTextComponent("console"));
     	this.consoleLine.setEnableBackgroundDrawing(false);
@@ -177,14 +177,13 @@ public class ScreenNComputer extends ContainerScreen<ContainerNComputer> {
 		}
 		this.consoleLine.render(matrixStack, x, y, partialTicks);
 		
-		
 	}
 	
 	@Override
 	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
 		this.font.func_243248_b(matrixStack, this.title, (float)this.titleX, (float)this.titleY, 4210752);
 		this.font.func_243248_b(matrixStack, this.playerInventory.getDisplayName(), (float)this.playerInventoryTitleX, (float)this.playerInventoryTitleY + 52, 4210752);
-
+		
 		this.minecraft.getTextureManager().bindTexture(COMPUTER_GUI_TEXTURES);
 		this.blit(matrixStack, 147, 65, !this.container.getTileEntity().isComputerRunning() ? 147 : 176, 65, 20, 18);
 		this.blit(matrixStack, 147, 84, 147, 84, 20, 18);

@@ -51,6 +51,7 @@ import de.redtec.blocks.BlockMTransformatorCoil;
 import de.redtec.blocks.BlockMTransformatorContact;
 import de.redtec.blocks.BlockMotor;
 import de.redtec.blocks.BlockNComputer;
+import de.redtec.blocks.BlockNetworkCable;
 import de.redtec.blocks.BlockMPanelLamp;
 import de.redtec.blocks.BlockPowerEmiting;
 import de.redtec.blocks.BlockMPowerSwitch;
@@ -128,6 +129,7 @@ import de.redtec.renderer.TileEntityMFluidBathRenderer;
 import de.redtec.renderer.TileEntityMRaffineryRenderer;
 import de.redtec.renderer.TileEntityMSchredderRenderer;
 import de.redtec.renderer.TileEntityMSteamGeneratorRenderer;
+import de.redtec.renderer.TileEntityNComputerRenderer;
 import de.redtec.renderer.TileEntitySignalProcessorContactRenderer;
 import de.redtec.typeregistys.ModConfiguredFeatures;
 import de.redtec.typeregistys.ModContainerType;
@@ -267,6 +269,7 @@ public class RedTec {
 	public static final Block electrolyt_copper_cable = new BlockElektricWire("electrolyt_copper_cable", 32, 4);
 	public static final Block aluminium_cable = new BlockElektricWire("aluminium_cable", 64, 8);
 	public static final Block burned_cable = new BlockBurnedCable();
+	public static final Block network_cable = new BlockNetworkCable();
 	public static final Block fluid_pipe = new BlockFluidPipe();
 	public static final Block fluid_valve = new BlockFluidValve();
 	public static final Block fluid_input = new BlockMFluidInput();
@@ -748,6 +751,7 @@ public class RedTec {
 		ModGameRegistry.registerBlock(limestone_sheet, DECORATIONS);
 		ModGameRegistry.registerBlock(item_detector, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(computer, MACHINES);
+		ModGameRegistry.registerBlock(network_cable, MACHINES);
 		
 		ModGameRegistry.registerBlock(motor, MACHINES);
 		
@@ -1025,6 +1029,7 @@ public class RedTec {
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CONVEYOR_BELT, TileEntityConveyorBeltRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.RAFFINERY, TileEntityMRaffineryRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.FLUID_BATH, TileEntityMFluidBathRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.COMPUTER, TileEntityNComputerRenderer::new);
 		
 		ScreenManager.registerFactory(ModContainerType.STORED_CRAFTING, ScreenMStoredCrafting::new);
 		ScreenManager.registerFactory(ModContainerType.PROCESSOR, ScreenRProcessor::new);

@@ -39,9 +39,9 @@ public class ItemHardDrive extends ItemBase {
 	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		CompoundNBT tag = stack.getTag();
 		if (tag != null) {
-			if (tag.contains("DriveName")) tooltip.add(new StringTextComponent("\u00A77" + new TranslationTextComponent("redtec.item.info.driveName", tag.getString("DriveName")).getString()));
-			tooltip.add(new StringTextComponent("\u00A77" + new TranslationTextComponent("redtec.block.info.driveName").getString()));
+			if (tag.contains("DriveName")) tooltip.add(new StringTextComponent("\u00A77" + new TranslationTextComponent("redtec.item.info.name", tag.getString("DriveName")).getString()));
 		}
+		tooltip.add(new StringTextComponent("\u00A77" + new TranslationTextComponent("redtec.item.info.drive").getString()));
 	}
 	
 }

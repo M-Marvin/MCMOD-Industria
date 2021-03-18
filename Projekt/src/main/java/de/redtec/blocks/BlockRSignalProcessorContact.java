@@ -1,8 +1,12 @@
 package de.redtec.blocks;
 
 import java.util.Random;
+import java.util.concurrent.Callable;
+import java.util.function.Supplier;
 
+import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.tileentity.TileEntityRSignalProcessorContact;
+import de.redtec.util.IAdvancedBlockInfo;
 import de.redtec.util.INetworkDevice;
 import de.redtec.util.ISignalConnective;
 import de.redtec.util.ItemStackHelper;
@@ -14,6 +18,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.IWaterLoggable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -41,12 +46,13 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockRSignalProcessorContact extends BlockContainerBase implements ISignalConnective, IWaterLoggable, INetworkDevice {
+public class BlockRSignalProcessorContact extends BlockContainerBase implements ISignalConnective, IWaterLoggable, INetworkDevice, IAdvancedBlockInfo {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final BooleanProperty OPEN = BooleanProperty.create("open");
@@ -295,6 +301,18 @@ public class BlockRSignalProcessorContact extends BlockContainerBase implements 
 		if (tileEntity instanceof TileEntityRSignalProcessorContact) {
 			((TileEntityRSignalProcessorContact) tileEntity).onMessageRecived(message);
 		}
+	}
+
+	@Override
+	public IBlockToolType getBlockInfo() {
+		return (stack, info, flag) -> {
+			info.add(new TranslationTextComponent("redtec.block.info.signalProcessor"));
+		};
+	}
+
+	@Override
+	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
+		return null;
 	}
 	
 }

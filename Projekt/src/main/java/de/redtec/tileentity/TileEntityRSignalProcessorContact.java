@@ -39,6 +39,7 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 	
 	public TileEntityRSignalProcessorContact() {
 		super(ModTileEntityType.SIGNAL_PROCESSOR);
+		this.deviceIP = NetworkDeviceIP.DEFAULT;
 		this.processorStack = ItemStack.EMPTY;
 	}
 	
@@ -212,28 +213,28 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 	}
 
 	public void onMessageRecived(NetworkMessage message) {
-		String cmdName = message.getDataBuffer().readString();
-		if (cmdName.equals("resetMemory")) {
+		String cmdName = message.readString();
+		if (cmdName.equals("resetMemory") && message.getArgCount() == 0) {
 			this.variables.clear();
 			sendResponse(message.getSenderIP(), "respReset", null);
-		} else if (cmdName.equals("setBVariable")) {
-			String variable = message.getDataBuffer().readString();
-			boolean value = message.getDataBuffer().readBoolean();
+		} else if (cmdName.equals("setBVariable") && message.getArgCount() == 2) {
+			String variable = message.readString();
+			boolean value = message.readBoolean();
 			this.variables.put(variable, new OperatorResult(value, OperatorType.BOOL));
 			sendResponse(message.getSenderIP(), "respSetB", null);
-		} else if (cmdName.equals("setIVariable")) {
-			String variable = message.getDataBuffer().readString();
-			int value = message.getDataBuffer().readInt();
+		} else if (cmdName.equals("setIVariable") && message.getArgCount() == 2) {
+			String variable = message.readString();
+			int value = message.readInt();
 			this.variables.put(variable, new OperatorResult(value, OperatorType.INT));
 			sendResponse(message.getSenderIP(), "respSetI", null);
-		} else if (cmdName.equals("getBVariable")) {
-			String variableName = message.getDataBuffer().readString();
+		} else if (cmdName.equals("getBVariable") && message.getArgCount() == 1) {
+			String variableName = message.readString();
 			OperatorResult value = this.variables.getOrDefault(variableName, new OperatorResult(false, OperatorType.BOOL));
 			if (value.getType() == OperatorType.BOOL) {
 				sendResponse(message.getSenderIP(), "respGetB", value);
 			}
-		} else if (cmdName.equals("getIVariable")) {
-			String variableName = message.getDataBuffer().readString();
+		} else if (cmdName.equals("getIVariable") && message.getArgCount() == 1) {
+			String variableName = message.readString();
 			OperatorResult value = this.variables.getOrDefault(variableName, new OperatorResult(false, OperatorType.INT));
 			if (value.getType() == OperatorType.INT) {
 				sendResponse(message.getSenderIP(), "respGetI", value);
@@ -247,11 +248,13 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 		if (device != null) {
 			NetworkMessage message = new NetworkMessage();
 			message.setTargetIP(targetIP);
-			message.getDataBuffer().writeString(cmd);
-			if (variable.getType() == OperatorType.BOOL) {
-				message.getDataBuffer().writeBoolean(variable.getBValue());
-			} else {
-				message.getDataBuffer().writeInt(variable.getIValue());
+			message.writeString(cmd);
+			if (variable != null) {
+				if (variable.getType() == OperatorType.BOOL) {
+					message.writeBoolean(variable.getBValue());
+				} else {
+					message.writeInt(variable.getIValue());
+				}
 			}
 			device.sendMessage(message, world, pos, state);
 		}

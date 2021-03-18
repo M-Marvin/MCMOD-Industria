@@ -5,15 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import de.redtec.RedTec;
-import de.redtec.packet.SSendENHandeler;
-import de.redtec.util.IElectricConnective.DeviceType;
-import de.redtec.util.IElectricConnective.Voltage;
+import de.redtec.util.INetworkDevice.NetworkDeviceType;
+import de.redtec.util.INetworkDevice.NetworkMessage;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.nbt.StringNBT;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
@@ -21,57 +20,27 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
-import net.minecraftforge.fml.network.PacketDistributor;
 
 public class NetworkWireHandler extends WorldSavedData {
 
 	protected static NetworkWireHandler clientInstance;
 	
-	protected boolean hasUpdated;
-	
 	private boolean isServerInstace;
-	private List<ElectricityNetwork> networks;
-	private IWorld world;
 	
 	public NetworkWireHandler() {
 		this(true);
 	}
 	
 	public NetworkWireHandler(boolean serverInstance) {
-		super("elctric_networks");
+		super("data_networks");
 		this.isServerInstace = serverInstance;
-		this.networks = new ArrayList<NetworkWireHandler.ElectricityNetwork>();
-	}
-	
-	@Override
-	public void read(CompoundNBT compound) {
-		
-		this.networks.clear();
-		ListNBT networkTag = compound.getList("Networks", 10);
-		for (int i = 0; i < networkTag.size(); i++) {
-			this.networks.add(ElectricityNetwork.read(networkTag.getCompound(i)));
-		}
-		
-	}
-
-	@Override
-	public CompoundNBT write(CompoundNBT compound) {
-		
-		ListNBT networkTag = new ListNBT();
-		for (ElectricityNetwork net : this.networks) {
-			networkTag.add(net.write(new CompoundNBT()));
-		}
-		compound.put("Networks", networkTag);
-		return compound;
-		
 	}
 	
 	public static NetworkWireHandler getHandlerForWorld(IWorld world) {
 		
 		if (!world.isRemote()) {
 			DimensionSavedDataManager storage = ((ServerWorld) world).getSavedData();
-			NetworkWireHandler handler = storage.getOrCreate(NetworkWireHandler::new, "elctric_networks");
-			handler.world = world;
+			NetworkWireHandler handler = storage.getOrCreate(NetworkWireHandler::new, "data_networks");
 			return handler;
 		} else {
 			if (clientInstance == null) clientInstance = new NetworkWireHandler(false);
@@ -83,248 +52,49 @@ public class NetworkWireHandler extends WorldSavedData {
 	public boolean isServerInstace() {
 		return isServerInstace;
 	}
-		
-	public void updateNetwork(World world, BlockPos pos) {
-		this.calculateNetwork(world, pos);
-	}
 	
-	public void calculateNetwork(World world, BlockPos position) {
-				
-//		if (this.isServerInstace) {
-//			
-//			if (world.getBlockState(position).getBlock() instanceof IElectricConnective) {
-//				
-//				ElectricityNetwork network = getNetwork(position);
-//				List<Direction> attachList = new ArrayList<Direction>();
-//				network.positions.put(position, attachList);
-//				
-//				if (!network.isUpdated((ServerWorld) world) && !world.isRemote()) {
-//					
-//					int lap = 3;
-//					while (lap <= 3) {
-//						
-//						lap++;
-//						
-//						network.positions.clear();
-//						boolean flag = this.scann(world, position, null, network.positions, 0, DeviceType.WIRE);
-//						
-//						// If no Device Found, add it self, to prevent endless new Networks;
-//						if (!flag) {
-//							network.positions.put(position, attachList);
-//						}
-//						
-//						if (network.positions.size() <= 1) network.lastUpdated = 0;
-//						network.needCurrent = 0;
-//						network.voltage = Voltage.NoLimit;
-//						network.capacity = 0;
-//						
-//						for (Entry<BlockPos, List<Direction>> device : network.positions.entrySet()) {
-//							
-//							BlockState state = world.getBlockState(device.getKey());
-//							List<Direction> attacheSides = device.getValue();
-//							
-//							if (state.getBlock() instanceof IElectricConnective && !(state.getBlock() instanceof IElectricWire)) {
-//								
-//								IElectricConnective device1 = (IElectricConnective) state.getBlock();
-//								
-//								boolean hasCurrentAdded = false;
-//								for (Direction attachSide : attacheSides) {
-//									
-//									Voltage voltage = device1.getVoltage(world, device.getKey(), state, attachSide);
-//									float needCurrent = device1.getNeededCurrent(world, device.getKey(), state, attachSide);
-//									
-//									if (needCurrent >= 0) {
-//										
-//										//if (voltage.getVoltage() > network.voltage.getVoltage() && needCurrent != 0) network.voltage = voltage;
-//										if (!hasCurrentAdded) {
-//											network.needCurrent += needCurrent;
-//											hasCurrentAdded = true;
-//										}
-//										
-//									} else if (needCurrent < 0) {
-//										
-//										if (voltage.getVoltage() > network.voltage.getVoltage()) network.voltage = voltage;
-//										if (!hasCurrentAdded) {
-//											network.capacity += -needCurrent;
-//											hasCurrentAdded = true;
-//										}
-//										
-//									}
-//									
-//								}
-//								
-//							}
-//							
-//						}
-//						
-//						if (network.needCurrent <= network.capacity) {
-//							network.current = network.needCurrent;
-//						} else {
-//							network.current = network.capacity;
-//						}
-//						
-//						boolean abbortUpdate = false;
-//						for (Entry<BlockPos, List<Direction>> device : network.positions.entrySet()) {
-//							
-//							BlockPos pos = device.getKey();
-//							BlockState state = world.getBlockState(pos);
-//							
-//							if (state.getBlock() instanceof IElectricConnective) {
-//								
-//								boolean result = ((IElectricConnective) state.getBlock()).beforNetworkChanges(world, pos, state, network, lap);
-//								if (result) abbortUpdate = true;
-//								
-//							}
-//							
-//						}
-//						
-//						if (abbortUpdate) continue;
-//						
-//						for (Entry<BlockPos, List<Direction>> device : network.positions.entrySet()) {
-//							
-//							BlockPos pos = device.getKey();
-//							BlockState state = world.getBlockState(pos);
-//							
-//							if (state.getBlock() instanceof IElectricConnective) {
-//								
-//								((IElectricConnective) state.getBlock()).onNetworkChanges(world, pos, state, network);
-//								
-//							}
-//							
-//						}
-//						
-//						break;
-//						
-//					}
-//					
-////					System.out.println("Network Voltage: " + network.voltage);
-////					System.out.println("Network Current Needed:  " + network.needCurrent);
-////					System.out.println("Network Capacity: " + network.capacity);
-////					System.out.println("Network Current: " + network.current);
-////					
-////					System.out.println(this.networks.size());
-////					System.out.println(getNetwork(position).current);
-//					
-//				}
-//				
-//			}
-//			
-//			List<ElectricityNetwork> newList = new ArrayList<>();
-//			for (ElectricityNetwork network1 : this.networks) {
-//				
-//				int lastUpdate = (int) (world.getGameTime() - network1.lastUpdated);
-//				if (network1.positions.size() > 1 && lastUpdate < 500) {
-//					newList.add(network1);
-//				}
-//				
-//			}
-//
-//			networks = newList;
-//			
-//			if (world.getGameTime() % 100 == 0 && !hasUpdated) {
-//				
-//				hasUpdated = true;
-//				SSendENHandeler packet = new SSendENHandeler(this);
-//				RedTec.NETWORK.send(PacketDistributor.ALL.noArg(), packet);
-//				
-//			} else if (world.getGameTime() % 100 > 0) {
-//				hasUpdated = false;
-//			}
-//			
-//		}
+	public void sendMessage(World world, BlockPos pos, NetworkMessage message) {
 		
-	}
-	
-	public ElectricityNetwork getNetworkState(World world, BlockPos position, Direction direction) {
+		DataNetwork network = getNetwork(world, pos);
 		
-		if (this.isServerInstace) {
+		if (network.contains(pos)) {
 			
-			if (world.getBlockState(position).getBlock() instanceof IElectricConnective) {
-					
-				ElectricityNetwork network = new ElectricityNetwork();
-				List<Direction> sideList = new ArrayList<Direction>();
-				sideList.add(direction.getOpposite());
-				network.positions.put(position, sideList);
-				this.scann(world, position.offset(direction), direction, network.positions, 0, DeviceType.WIRE);
+			for (Entry<BlockPos, List<Direction>> deviceEntry : network.positions.entrySet()) {
+				BlockPos devicePos = deviceEntry.getKey();
+				BlockState deviceState = world.getBlockState(devicePos);
+				INetworkDevice device = deviceState.getBlock() instanceof INetworkDevice ? (INetworkDevice) deviceState.getBlock() : null;
 				
-				network.needCurrent = 0;
-				network.voltage = Voltage.NoLimit;
-				network.capacity = 0;
-				
-				for (Entry<BlockPos, List<Direction>> device : network.positions.entrySet()) {
+				if (device != null ? device.getNetworkType() != NetworkDeviceType.WIRING : false) {
 					
-					BlockState state = world.getBlockState(device.getKey());
-					List<Direction> attacheSides = device.getValue();
+					NetworkMessage messageClone = message.copy();
 					
-					if (state.getBlock() instanceof IElectricConnective && !(state.getBlock() instanceof IElectricWire)) {
-						
-						IElectricConnective device1 = (IElectricConnective) state.getBlock();
-						
-						boolean hasCurrentAdded = false;
-						for (Direction attachSide : attacheSides) {
+					if (!devicePos.equals(pos)) {
+						if (device.isReciver(messageClone, world, devicePos, deviceState)) {
 							
-							Voltage voltage = device1.getVoltage(world, device.getKey(), state, attachSide);
-							float needCurrent = device1.getNeededCurrent(world, device.getKey(), state, attachSide);
-							
-							if (needCurrent >= 0) {
-								
-								if (!hasCurrentAdded) {
-									network.needCurrent += needCurrent;
-									hasCurrentAdded = true;
-								}
-								
-							} else if (needCurrent < 0) {
-								
-								if (voltage.getVoltage() > network.voltage.getVoltage()) network.voltage = voltage;
-								if (!hasCurrentAdded) {
-									network.capacity += -needCurrent;
-									hasCurrentAdded = true;
-								}
-								
-							}
+							device.onMessageRecived(messageClone, world, devicePos, deviceState);
 							
 						}
-						
 					}
 					
 				}
 				
-				network.voltage = Voltage.LowVoltage;
-				
-				if (network.needCurrent <= network.capacity) {
-					network.current = network.needCurrent;
-				} else {
-					network.current = network.capacity;
-				}
-				
-//					System.out.println("Network Voltage: " + network.voltage);
-//					System.out.println("Network Current Needed:  " + network.needCurrent);
-//					System.out.println("Network Capacity: " + network.capacity);
-//					System.out.println("Network Current: " + network.current);
-//					
-//					System.out.println(this.networks.size());
-//					System.out.println(getNetwork(position).current);
-				
-				return network;
-				
 			}
-					
+			
 		}
-		
-		return new ElectricityNetwork();
 		
 	}
 	
-	protected boolean scann(World world, BlockPos scannPos, Direction direction, HashMap<BlockPos, List<Direction>> posList, int scannDepth, DeviceType lastDevice) {
+	protected boolean scann(World world, BlockPos scannPos, Direction direction, HashMap<BlockPos, List<Direction>> posList, int scannDepth, NetworkDeviceType lastDevice) {
 		
 		BlockState state = world.getBlockState(scannPos);
+		TileEntity tileEntity = world.getTileEntity(scannPos);
+		INetworkDevice device = state.getBlock() instanceof INetworkDevice ? (INetworkDevice) state.getBlock() : tileEntity instanceof INetworkDevice ? (INetworkDevice) tileEntity : null;
 		
-		if (state.getBlock() instanceof IElectricConnective && scannDepth < 50000) {
+		if (device != null && scannDepth < 50000) {
 			
-			IElectricConnective device = (IElectricConnective) state.getBlock();
-			DeviceType type = device.getDeviceType();
+			NetworkDeviceType type = device.getNetworkType();
 			
-			if ((direction != null ? device.canConnect(direction, world, scannPos, state) : true) && lastDevice.canConnectWith(type)) {
+			if ((direction != null ? device.canConectNetworkWire(world, scannPos, direction) : true) && lastDevice.canConnectWith(type)) {
 				
 				boolean flag = false;
 				
@@ -343,13 +113,13 @@ public class NetworkWireHandler extends WorldSavedData {
 					flag = true;
 				}
 				
-				boolean flag2 = device.getDeviceType() == DeviceType.SWITCH ? device.isSwitchClosed(world, scannPos, state) : true;
+				boolean flag2 = device.getNetworkType() == NetworkDeviceType.SWITCH ? device.isNetworkSwitchClosed(world, scannPos, state) : true;
 				
 				if (flag2) {
 
 					for (Direction d : Direction.values()) {
 						
-						if (device.canConnect(d.getOpposite(), world, scannPos, state) && (direction != null ? d != direction.getOpposite() : true)) {
+						if (device.canConectNetworkWire(world, scannPos, d.getOpposite()) && (direction != null ? d != direction.getOpposite() : true)) {
 							
 							BlockPos pos2 = scannPos.offset(d);
 							boolean flag1 = this.scann(world, pos2, d, posList, scannDepth + 1, type);
@@ -403,49 +173,33 @@ public class NetworkWireHandler extends WorldSavedData {
 		
 	}
 	
-	public ElectricityNetwork getNetwork(BlockPos pos) {
+	public DataNetwork getNetwork(World world, BlockPos position) {
 		
-		for (ElectricityNetwork net : this.networks) {
+		if (this.isServerInstace) {
 			
-			if (net.contains(pos)) return net;
-			
-		}
+			if (world.getBlockState(position).getBlock() instanceof INetworkDevice) {
 				
-		ElectricityNetwork network = new ElectricityNetwork();
-		this.networks.add(network);
-		return network;
-		
-	}
-
-	public CompoundNBT makeUpdateTag() {
-		
-		CompoundNBT compound = new CompoundNBT();
-		ListNBT networkTag = new ListNBT();
-		for (ElectricityNetwork net : this.networks) {
-			if (((World) world).getGameTime() - net.lastUpdated < 500) {
+				DataNetwork network = new DataNetwork();
+				List<Direction> sideList = new ArrayList<Direction>();
+				network.positions.put(position, sideList);
+				this.scann(world, position, null, network.positions, 0, NetworkDeviceType.WIRING);
 				
-				networkTag.add(net.write(new CompoundNBT()));
+				return network;
+				
 			}
+					
 		}
-		compound.put("Networks", networkTag);
-		return compound;
+		
+		return new DataNetwork();
 		
 	}
 	
-	public static class ElectricityNetwork {
+	public static class DataNetwork {
 		
 		public HashMap<BlockPos, List<Direction>> positions;
-		public float current;
-		public Voltage voltage;
-		public float capacity;
-		public float needCurrent;
-		public long lastUpdated;
 		
-		public ElectricityNetwork() {
+		public DataNetwork() {
 			this.positions = new HashMap<BlockPos, List<Direction>>();
-			this.voltage = Voltage.NoLimit;
-			this.current = 0;
-			this.capacity = 0;
 		}
 		
 		public boolean contains(BlockPos pos) {
@@ -455,52 +209,11 @@ public class NetworkWireHandler extends WorldSavedData {
 			return false;
 		}
 		
-		public boolean isUpdated(ServerWorld world) {
-			
-			long time = world.getGameTime();
-			
-			if (this.lastUpdated != time) {
-				this.lastUpdated = time;
-				return false;
-			}
-			
-			return true;
-			
-		}
-		
-		public float getGeneratorProductivity() {
-			return Math.max(1F, (float) this.needCurrent / this.current);
-		}
-		
-		public Voltage canMachinesRun() {
-			boolean hasPower = this.needCurrent - this.current <= 0.001 && this.current > 0;
-			return hasPower ? this.voltage : Voltage.NoLimit;
-		}
-		
-		public Voltage getVoltage() {
-			return voltage;
-		}
-		
-		public float getCurrent() {
-			return current;
-		}
-		
-		public float getNeedCurrent() {
-			return needCurrent;
-		}
-		
-		public float getCapacity() {
-			return capacity;
-		}
-		
 		public BlockPos[] getConnectedBlocks() {
 			return this.positions.keySet().toArray(new BlockPos[this.positions.size()]);
 		}
 		
 		public CompoundNBT write(CompoundNBT nbt) {
-			nbt.putFloat("Current", this.current);
-			nbt.putFloat("NeedCurrent", this.needCurrent);
-			nbt.putString("Voltage", this.voltage.toString());
 			ListNBT deviceList = new ListNBT();
 			for (Entry<BlockPos, List<Direction>> entry : this.positions.entrySet()) {
 				CompoundNBT entryTag = new CompoundNBT();
@@ -516,11 +229,8 @@ public class NetworkWireHandler extends WorldSavedData {
 			return nbt;
 		}
 		
-		public static ElectricityNetwork read(CompoundNBT nbt) {
-			ElectricityNetwork network = new ElectricityNetwork();
-			network.current = nbt.getFloat("Current");
-			network.needCurrent = nbt.getFloat("NeedCurrent");
-			network.voltage = Voltage.valueOf(nbt.getString("Voltage"));
+		public static DataNetwork read(CompoundNBT nbt) {
+			DataNetwork network = new DataNetwork();
 			ListNBT deviceList = nbt.getList("Devices", 10);
 			for (int i = 0; i < deviceList.size(); i++) {
 				CompoundNBT entryTag = deviceList.getCompound(i);
@@ -537,13 +247,22 @@ public class NetworkWireHandler extends WorldSavedData {
 
 		@Override
 		public boolean equals(Object obj) {
-			if (obj instanceof ElectricityNetwork) {
-				ElectricityNetwork other = (ElectricityNetwork) obj;
+			if (obj instanceof DataNetwork) {
+				DataNetwork other = (DataNetwork) obj;
 				return other.getConnectedBlocks().equals(this.getConnectedBlocks());
 			}
 			return false;
 		}
 		
+	}
+
+	@Override
+	public void read(CompoundNBT nbt) {
+	}
+
+	@Override
+	public CompoundNBT write(CompoundNBT compound) {
+		return new CompoundNBT();
 	}
 	
 }

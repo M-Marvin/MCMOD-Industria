@@ -104,4 +104,12 @@ public class DriveManager {
 		
 	}
 	
+	public static boolean containsDrive(String path, String... drives) {
+		String drive0 = path.substring(0, 2);
+		for (String drive : drives) {
+			if (drive0.equals(drive)) return true;
+		}
+		return false;
+	}
+	
 }

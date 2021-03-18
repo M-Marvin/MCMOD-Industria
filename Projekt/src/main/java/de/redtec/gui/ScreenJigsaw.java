@@ -217,5 +217,5 @@ public class ScreenJigsaw extends ContainerScreen<ContainerJigsaw>{
 		if (this.showLockOrientation) drawString(matrixStack, this.font, new TranslationTextComponent("redtec.jigsaw_block.connection"), this.width / 2 - 153, 156, 16777215);
 		
 	}
-
+	
 }

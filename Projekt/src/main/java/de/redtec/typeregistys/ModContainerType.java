@@ -14,6 +14,7 @@ import de.redtec.gui.ContainerMRaffinery;
 import de.redtec.gui.ContainerMSchredder;
 import de.redtec.gui.ContainerMThermalZentrifuge;
 import de.redtec.gui.ContainerNComputer;
+import de.redtec.gui.ContainerNetworkConfigurator;
 import de.redtec.gui.ContainerRProcessor;
 import de.redtec.gui.ContainerReciver;
 import de.redtec.gui.ContainerMStoredCrafting;
@@ -44,6 +45,7 @@ public class ModContainerType {
 	public static final ContainerType<ContainerMAlloyFurnace> ALLOY_FURNACE = register(new ResourceLocation(RedTec.MODID, "alloy_furnace"), ContainerMAlloyFurnace::new);
 	public static final ContainerType<ContainerMFluidBath> FLUID_BATH = register(new ResourceLocation(RedTec.MODID, "fluid_bath"), ContainerMFluidBath::new);
 	public static final ContainerType<ContainerNComputer> COMPUTER = register(new ResourceLocation(RedTec.MODID, "computer"), ContainerNComputer::new);
+	public static final ContainerType<ContainerNetworkConfigurator> NETWORK_CONFIGURATOR = register(new ResourceLocation(RedTec.MODID, "network_configurator"), ContainerNetworkConfigurator::new);
 	
 	protected static <T extends Container> ContainerType<T> register(ResourceLocation key, IContainerFactory<T> factory) {
 		ContainerType<T> type = IForgeContainerType.create(factory);

@@ -94,6 +94,7 @@ import de.redtec.gui.ScreenMRaffinery;
 import de.redtec.gui.ScreenMSchredder;
 import de.redtec.gui.ScreenMThermalZentrifuge;
 import de.redtec.gui.ScreenNComputer;
+import de.redtec.gui.ScreenNetworkConfigurator;
 import de.redtec.gui.ScreenRProcessor;
 import de.redtec.gui.ScreenRReciver;
 import de.redtec.gui.ScreenMStoredCrafting;
@@ -107,6 +108,7 @@ import de.redtec.items.ItemFluidMeter;
 import de.redtec.items.ItemFuse;
 import de.redtec.items.ItemHammer;
 import de.redtec.items.ItemHardDrive;
+import de.redtec.items.ItemNetworkConfigurator;
 import de.redtec.items.ItemProcessor;
 import de.redtec.items.ItemRemoteControll;
 import de.redtec.items.ItemSalsola;
@@ -114,6 +116,7 @@ import de.redtec.items.ItemSchredderToolCrusher;
 import de.redtec.items.panelitems.ItemButtonElement;
 import de.redtec.items.panelitems.ItemLampElement;
 import de.redtec.items.panelitems.ItemLeverElement;
+import de.redtec.packet.CConfigureNetworkDevice;
 import de.redtec.packet.CEditComputerCode;
 import de.redtec.packet.CEditJigsawTileEntityPacket;
 import de.redtec.packet.CEditProcessorCodePacket;
@@ -576,6 +579,7 @@ public class RedTec {
 	public static final Item hammer = new ItemHammer();
 	public static final Item cuter = new ItemCuter();
 	public static final Block tree_tap = new BlockTreeTap();
+	public static final Item network_configurtor = new ItemNetworkConfigurator();
 	
 	public RedTec() {
 		
@@ -913,6 +917,7 @@ public class RedTec {
 		ModGameRegistry.registerItem(cardboard_sheet);
 		ModGameRegistry.registerItem(lime);
 		ModGameRegistry.registerItem(hard_drive);
+		ModGameRegistry.registerItem(network_configurtor);
 		
 		// register Functional Items
 		ModGameRegistry.registerItem(lever_element);
@@ -930,6 +935,7 @@ public class RedTec {
 		NETWORK.registerMessage(2, CGenerateJigsaw.class, CGenerateJigsaw::encode, CGenerateJigsaw::new, CGenerateJigsaw::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		NETWORK.registerMessage(3, SSendENHandeler.class, SSendENHandeler::encode, SSendENHandeler::new, SSendENHandeler::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));		
 		NETWORK.registerMessage(4, CEditComputerCode.class, CEditComputerCode::encode, CEditComputerCode::new, CEditComputerCode::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+		NETWORK.registerMessage(5, CConfigureNetworkDevice.class, CConfigureNetworkDevice::encode, CConfigureNetworkDevice::new, CConfigureNetworkDevice::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		
 		// Dispenser Behaviors
 		IDispenseItemBehavior placeBlockBehavior = new IDispenseItemBehavior() {
@@ -1047,6 +1053,7 @@ public class RedTec {
 		ScreenManager.registerFactory(ModContainerType.ALLOY_FURNACE, ScreenMAlloyFurnace::new);
 		ScreenManager.registerFactory(ModContainerType.FLUID_BATH, ScreenMFluidBath::new);
 		ScreenManager.registerFactory(ModContainerType.COMPUTER, ScreenNComputer::new);
+		ScreenManager.registerFactory(ModContainerType.NETWORK_CONFIGURATOR, ScreenNetworkConfigurator::new);
 		
 	}
 	

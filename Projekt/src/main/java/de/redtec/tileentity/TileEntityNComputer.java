@@ -2,11 +2,16 @@ package de.redtec.tileentity;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import org.luaj.vm2.LuaString;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.Varargs;
+import org.luaj.vm2.lib.OneArgFunction;
 import org.luaj.vm2.lib.TwoArgFunction;
+import org.luaj.vm2.lib.VarArgFunction;
 import org.luaj.vm2.lib.ZeroArgFunction;
 
 import de.redtec.gui.ContainerNComputer;
@@ -46,14 +51,15 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 	protected short driveValidationTime;
 	protected LuaInterpreter luaInterpreter;
 	protected ByteArrayOutputStream outputStream;
+	protected HashMap<NetworkDeviceIP, NetworkMessage> sendMessages;
 	protected List<NetworkMessage> recivedMessages;
+	protected NetworkDeviceIP lastSendedTarget;
 	
 	public boolean isRunning;
 	public boolean hasPower;
 	public String consoleLine;
 	public NetworkDeviceIP deviceIP;
 	
-
 	// "computer" LUA API
 	protected class computer extends TwoArgFunction {
 		
@@ -61,55 +67,57 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 		final class sendMessage extends TwoArgFunction  {
 			@Override
 			public LuaValue call(LuaValue targetIP, LuaValue argTable) {
-				LuaTable ip = targetIP.checktable();
-				LuaTable args = argTable.checktable();
-				NetworkDeviceIP nip = new NetworkDeviceIP((byte) ip.get(0).checkint(), (byte) ip.get(1).checkint(), (byte) ip.get(2).checkint(), (byte) ip.get(3).checkint());
-				NetworkMessage msg = new NetworkMessage();
-				msg.setTargetIP(nip);
-				for (int i = 0; i < args.length(); i++) {
-					LuaValue arg = args.get(i);
-					if (arg.isboolean()) {
-						msg.getDataBuffer().writeBoolean(arg.checkboolean());
-					} else if (arg.isint()) {
-						msg.getDataBuffer().writeInt(arg.checkint());
-					} else if (arg.isstring()) {
-						msg.getDataBuffer().writeString(arg.tostring().toString());
+				if (TileEntityNComputer.this.sendMessages.size() < 16) {
+					LuaString ip = targetIP.checkstring();
+					String[] ipS = ip.toString().split("\\.");
+					LuaTable args = argTable.checktable();
+					NetworkDeviceIP nip = new NetworkDeviceIP(Byte.valueOf(ipS[0]), Byte.valueOf(ipS[1]), Byte.valueOf(ipS[2]), Byte.valueOf(ipS[3]));
+					NetworkMessage msg = new NetworkMessage();
+					msg.setTargetIP(nip);
+					for (int i = 1; i <= args.length(); i++) {
+						LuaValue arg = args.get(i);
+						if (arg.isboolean()) {
+							msg.writeBoolean(arg.checkboolean());
+						} else if (arg.isint()) {
+							msg.writeInt(arg.checkint());
+						} else if (arg.isstring()) {
+							msg.writeString(arg.tostring().toString());
+						}
 					}
+					TileEntityNComputer.this.sendMessages.put(msg.getTargetIP(), msg);
 				}
-				TileEntityNComputer.this.sendMessage(msg);
 				return LuaValue.NONE;
 			}
 		}
 		// "pullMessage"
-		final class pullMessage extends ZeroArgFunction {
+		final class pullMessage extends VarArgFunction {
 			@Override
-			public LuaValue call() {
+			public Varargs invoke(Varargs args) {
 				if (TileEntityNComputer.this.recivedMessages.size() > 0) {
 					NetworkMessage message = TileEntityNComputer.this.recivedMessages.get(0);
-					TileEntityNComputer.this.recivedMessages.remove(0);
-					LuaTable table = new LuaTable();
-					LuaTable ipTable = new LuaTable();
-					for (byte b : message.getSenderIP().getIP()) {
-						ipTable.add(b);
-					}
-					table.add(ipTable);
-					LuaTable ip2Table = new LuaTable();
-					for (byte b : message.getTargetIP().getIP()) {
-						ip2Table.add(b);
-					}
-					table.add(ip2Table);
-					for (Object arg : message.getArgs()) {
-						if (arg instanceof Integer) {
-							table.add(LuaValue.valueOf((int) arg));
-						} else if (arg instanceof String) {
-							table.add(LuaValue.valueOf((String) arg));
-						} else if (arg instanceof Boolean) {
-							table.add(LuaValue.valueOf((Boolean) arg));
+					
+					if (message != null) {
+						TileEntityNComputer.this.recivedMessages.remove(0);
+						List<LuaValue> table = new ArrayList<LuaValue>();
+						
+						table.add(LuaValue.valueOf(message.getSenderIP().getIP()[0] + "." + message.getSenderIP().getIP()[1] + "." + message.getSenderIP().getIP()[2] + "." + message.getSenderIP().getIP()[3]));
+						table.add(LuaValue.valueOf(message.getTargetIP().getIP()[0] + "." + message.getTargetIP().getIP()[1] + "." + message.getTargetIP().getIP()[2] + "." + message.getTargetIP().getIP()[3]));
+						
+						for (Object arg : message.getArgs()) {
+							if (arg instanceof Integer) {
+								table.add(LuaValue.valueOf((int) arg));
+							} else if (arg instanceof String) {
+								table.add(LuaValue.valueOf((String) arg));
+							} else if (arg instanceof Boolean) {
+								table.add(LuaValue.valueOf((Boolean) arg));
+							}
 						}
+						
+						Varargs ret = LuaValue.varargsOf(table.toArray(new LuaValue[] {}));
+						return ret;
 					}
-					return table;
 				}
-				return LuaValue.NIL;
+				return LuaValue.varargsOf(new LuaValue[] {LuaValue.NIL});
 			}
 		}
 		// "restart"
@@ -128,13 +136,71 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 				return LuaValue.NONE;
 			}
 		}
+		// "sleep"
+		final class sleep extends OneArgFunction {
+			@Override
+			public LuaValue call(LuaValue milis) {
+				int m = milis.checkint();
+				try {
+					TileEntityNComputer.this.luaInterpreter.validateTime();
+					Thread.sleep(m);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				return LuaValue.NONE;
+			}
+		}
+		// "loadFile" (String path)
+		final class loadFile extends OneArgFunction {
+			@Override
+			public LuaValue call(LuaValue path) {
+				String discPath = path.checkstring().toString();
+				if (DriveManager.containsDrive(discPath, TileEntityNComputer.this.getBootDrive(), TileEntityNComputer.this.getDriveSlot())) {
+					String script = DriveManager.loadDataFromDrive(discPath, (ServerWorld) world);
+					String name = discPath.split("/")[discPath.split("/").length - 1];
+					return TileEntityNComputer.this.luaInterpreter.loadScript(script, name);
+				}
+				return LuaValue.NONE;
+			}
+		}
+		// "readFile" (String path)
+		final class readFile extends OneArgFunction {
+			@Override
+			public LuaValue call(LuaValue path) {
+				String discPath = path.checkstring().toString();
+				if (DriveManager.containsDrive(discPath, TileEntityNComputer.this.getBootDrive(), TileEntityNComputer.this.getDriveSlot())) {
+					String file = DriveManager.loadDataFromDrive(discPath, (ServerWorld) world);
+					return LuaValue.valueOf(file);
+				}
+				return LuaValue.NONE;
+			}
+		}	
+		// "writeFile" (String path, String content)
+		final class writeFile extends TwoArgFunction {
+			@Override
+			public LuaValue call(LuaValue path, LuaValue content) {
+				String discPath = path.checkstring().toString();
+				if (DriveManager.containsDrive(discPath, TileEntityNComputer.this.getBootDrive(), TileEntityNComputer.this.getDriveSlot())) {
+					String file = content.checkstring().toString();
+					DriveManager.saveDataInDrive(discPath, file, (ServerWorld) world);
+				}
+				return LuaValue.NONE;
+			}
+		}
+		protected LuaValue env;
 		
 		@Override
 		public LuaValue call(LuaValue modname, LuaValue env) {
 			LuaValue library = tableOf();
-			library.set("skip", new sendMessage());
+			this.env = env;
+			library.set("sendMessage", new sendMessage());
+			library.set("pullMessage", new pullMessage());
 			library.set("shutdown", new shutdown());
 			library.set("restart", new restart());
+			library.set("sleep", new sleep());
+			library.set("loadFile", new loadFile());
+			library.set("writeFile", new writeFile());
+			library.set("readFile", new readFile());
 			env.set("computer", library);
 			return env;
 		}
@@ -145,7 +211,9 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 		super(ModTileEntityType.COMPUTER, 2);
 		this.outputStream = new ByteArrayOutputStream();
 		this.recivedMessages = new ArrayList<INetworkDevice.NetworkMessage>();
-		this.luaInterpreter = new LuaInterpreter(this, this.outputStream, new computer());
+		this.sendMessages = new HashMap<INetworkDevice.NetworkDeviceIP, INetworkDevice.NetworkMessage>();
+		this.luaInterpreter = new LuaInterpreter(this, this.outputStream, 50, new computer());
+		this.deviceIP = NetworkDeviceIP.DEFAULT;
 	}
 	
 	@Override
@@ -184,7 +252,13 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 				
 				if (this.cachedBootCode != null) {
 					
-					int response = this.luaInterpreter.checkExecutationState();
+					int response = this.luaInterpreter.updateExecutationState();
+					
+					byte[] consoleOutput = this.outputStream.toByteArray();
+					this.outputStream.reset();
+					String[] lines = new String(consoleOutput).split("\n");
+					String line = lines[lines.length -1];
+					if (line.length() > 0) this.consoleLine = line.substring(0, line.length() - 1);
 					
 					if (response == -1) {
 						this.isRunning = false;
@@ -192,18 +266,22 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 					} else if (response == 0) {
 						this.isRunning = false;
 						this.consoleLine = "Sequenze complete!";
-					} else if (response == 1) {
-						byte[] consoleOutput = this.outputStream.toByteArray();
-						this.outputStream.reset();
-						String[] lines = new String(consoleOutput).split("\n");
-						String line = lines[lines.length -1];
-						if (line.length() > 0) this.consoleLine = line.substring(0, line.length() - 1);
 					}
-					
+										
+				}
+				
+				if (this.sendMessages.size() > 0) {
+					for (NetworkDeviceIP target : this.sendMessages.keySet()) {
+						this.sendMessage(this.sendMessages.get(target));
+						this.sendMessages.remove(target);
+						return;
+					}
 				}
 				
 			} else {
 				this.powerStartupTime = 0;
+				this.sendMessages.clear();
+				this.recivedMessages.clear();
 			}
 			
 		}
@@ -355,9 +433,8 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 	}
 	
 	public void onMessageRecived(NetworkMessage message) {
-		if (this.recivedMessages.size() < 16) {
-			this.recivedMessages.add(message);
-		}
+		if (this.recivedMessages.size() > 16 && message != null) this.recivedMessages.clear();
+		this.recivedMessages.add(message);
 	}
 	
 	public void sendMessage(NetworkMessage msg) {

@@ -3,7 +3,6 @@ package de.redtec.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.netty.buffer.Unpooled;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
@@ -29,7 +28,12 @@ public interface INetworkDevice {
 	}
 	
 	public default void sendMessage(NetworkMessage message, World world, BlockPos pos, BlockState state) {
-		// TODO
+		message.setSenderIP(this.getIP(pos, state, world));
+		NetworkWireHandler.getHandlerForWorld(world).sendMessage(world, pos, message);
+	}
+
+	public default boolean isNetworkSwitchClosed(World world, BlockPos scannPos, BlockState state) {
+		return true;
 	}
 	
 	public static class NetworkDeviceIP {
@@ -94,12 +98,34 @@ public interface INetworkDevice {
 		public static NetworkDeviceIP readBuf(PacketBuffer buffer) {
 			return new NetworkDeviceIP(buffer.readByteArray());
 		}
+
+		public NetworkDeviceIP copy() {
+			return new NetworkDeviceIP(this.ip[0], this.ip[1], this.ip[2], this.ip[3]);
+		}
+
+		public String getString() {
+			return this.ip[0] + "." + this.ip[1] + "." + this.ip[2] + "." + this.ip[3];
+		}
+		
+		public static NetworkDeviceIP ipFromString(String s) {
+			String[] ss = s.split("\\.");
+			byte[] ipBytes = new byte[4];
+			try {
+				ipBytes[0] = Byte.parseByte(ss[0]);
+				ipBytes[1] = Byte.parseByte(ss[1]);
+				ipBytes[2] = Byte.parseByte(ss[2]);
+				ipBytes[3] = Byte.parseByte(ss[3]);
+			} catch (Exception e) {
+				return null;
+			}
+			return new NetworkDeviceIP(ipBytes);
+		}
 		
 	}
 	
 	public static enum NetworkDeviceType {
 		
-		WIRING(),DEVICE();
+		WIRING(),DEVICE(), SWITCH(); // SWITCH NOT IMPLEMENTED YET
 		
 		public boolean canConnectWith(NetworkDeviceType type) {
 			if (this == WIRING) {
@@ -119,16 +145,10 @@ public interface INetworkDevice {
 		
 		public NetworkDeviceIP senderIP;
 		public NetworkDeviceIP targetIP;
-		public PacketBuffer dataBuffer;
-		public List<Byte> formatBuffer;
+		public List<Object> data;
 		
 		public NetworkMessage() {
-			this.dataBuffer = new PacketBuffer(Unpooled.buffer(256));
-			this.formatBuffer = new ArrayList<Byte>();
-		}
-		
-		public PacketBuffer getDataBuffer() {
-			return dataBuffer;
+			this.data = new ArrayList<Object>();
 		}
 		
 		public void setSenderIP(NetworkDeviceIP senderIP) {
@@ -147,38 +167,61 @@ public interface INetworkDevice {
 			return targetIP;
 		}
 		
-		public void writeBuf(PacketBuffer buffer) {
-			this.senderIP.writeBuf(buffer);
-			this.targetIP.writeBuf(buffer);
-			byte[] barr = new byte[this.formatBuffer.size()];
-			for (int i = 0; i < this.formatBuffer.size(); i++) barr[i] = this.formatBuffer.get(i);
-			buffer.writeByteArray(barr);
-			buffer.writeBytes(this.dataBuffer.array());
-		}
-		
-		public static NetworkMessage readBuf(PacketBuffer buffer) {
-			NetworkMessage msg = new NetworkMessage();
-			msg.targetIP = NetworkDeviceIP.readBuf(buffer);
-			msg.senderIP = NetworkDeviceIP.readBuf(buffer);
-			byte[] barr = buffer.readByteArray();
-			for (byte b : barr) msg.formatBuffer.add(b);
-			msg.dataBuffer = new PacketBuffer(Unpooled.buffer(256));
-			msg.dataBuffer.writeByteArray(buffer.readByteArray());
-			return msg;
-		}
-		
 		public Object[] getArgs() {
-			List<Object> args = new ArrayList<Object>();
-			for (byte b : this.formatBuffer) {
-				if (b == BUFFER_BOOL) {
-					args.add(this.dataBuffer.readBoolean());
-				} else if (b == BUFFER_INT) {
-					args.add(this.dataBuffer.readInt());
-				} else if (b == BUFFER_STRING) {
-					args.add(this.dataBuffer.readString());
-				}
+			return data.toArray(new Object[] {});
+		}
+		
+		public NetworkMessage copy() {
+			NetworkMessage message = new NetworkMessage();
+			message.targetIP = this.targetIP.copy();
+			message.senderIP = this.senderIP.copy();
+			for (Object o : this.data) message.data.add(o);
+			return message;
+		}
+		
+		public String readString() {
+			if (this.data.size() == 0) return "";
+			if (this.data.get(0) instanceof String) {
+				return (String) this.data.remove(0);
 			}
-			return args.toArray(new Object[] {});
+			return "";
+		}
+		public int readInt() {
+			if (this.data.size() == 0) return 0;
+			if (this.data.get(0) instanceof Integer) {
+				return (Integer) this.data.remove(0);
+			}
+			return 0;
+		}
+		public boolean readBoolean() {
+			if (this.data.size() == 0) return false;
+			if (this.data.get(0) instanceof Boolean) {
+				return (Boolean) this.data.remove(0);
+			}
+			return false;
+		}
+		
+		public void writeString(String string) {
+			this.data.add(string);
+		}
+		public void writeInt(int integer) {
+			this.data.add(integer);
+		}
+		public void writeBoolean(boolean bool) {
+			this.data.add(bool);
+		}
+		
+		public int getArgCount() {
+			return this.data.size();
+		}
+		
+		@Override
+		public String toString() {
+			String string = "NetworkMessage[target=" + this.targetIP + ",sender=" + this.senderIP + ",args={";
+			for (Object o : this.getArgs()) {
+				string = string + o + ",";
+			}
+			return string.substring(0, string.length() - 1) + "}]";
 		}
 		
 	}

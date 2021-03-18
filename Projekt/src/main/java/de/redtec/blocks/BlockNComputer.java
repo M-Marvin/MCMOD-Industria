@@ -57,11 +57,8 @@ public class BlockNComputer extends BlockMultiPart<TileEntityNComputer> implemen
 	@Override
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		TileEntity tileEntity = getCenterTE(pos, state, worldIn);
-		if (tileEntity instanceof TileEntityNComputer && !worldIn.isRemote()) {
-			NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
-			return ActionResultType.CONSUME;
-		}
-		return ActionResultType.PASS;
+		if (tileEntity instanceof TileEntityNComputer && !worldIn.isRemote()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
+		return ActionResultType.SUCCESS;
 	}
 
 	@Override
@@ -72,7 +69,7 @@ public class BlockNComputer extends BlockMultiPart<TileEntityNComputer> implemen
 	@Override
 	public float getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
 		TileEntityNComputer tileEntity = getCenterTE(pos, state, world);
-		return tileEntity.isComputerRunning() ? 20 : 0;
+		return tileEntity.isComputerRunning() ? 20 : 0.1F;
 	}
 
 	@Override
@@ -134,7 +131,7 @@ public class BlockNComputer extends BlockMultiPart<TileEntityNComputer> implemen
 		TileEntityNComputer tileEntity = getCenterTE(pos, state, world);
 		return tileEntity.deviceIP;
 	}
-
+	
 	@Override
 	public void setIP(NetworkDeviceIP ip, BlockPos pos, BlockState state, World world) {
 		TileEntityNComputer tileEntity = getCenterTE(pos, state, world);

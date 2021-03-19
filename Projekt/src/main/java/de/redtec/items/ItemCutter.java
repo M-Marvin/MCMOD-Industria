@@ -1,12 +1,14 @@
 package de.redtec.items;
 
 import de.redtec.RedTec;
+import de.redtec.typeregistys.ModToolType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTier;
 
-public class ItemCuter extends ItemBase {
-
-	public ItemCuter() {
-		super("cuter", new Properties().group(RedTec.TOOLS).maxStackSize(1).defaultMaxDamage(120));
+public class ItemCutter extends ItemToolBase {
+	
+	public ItemCutter() {
+		super("cutter", 0.5F, 0.4F, ModToolType.CUTTER, ItemTier.IRON, new Properties().group(RedTec.TOOLS).maxStackSize(1).defaultMaxDamage(240));
 	}
 	
 	@Override

@@ -101,7 +101,7 @@ import de.redtec.gui.ScreenMStoredCrafting;
 import de.redtec.items.ItemBase;
 import de.redtec.items.ItemBlueprint;
 import de.redtec.items.ItemBurneable;
-import de.redtec.items.ItemCuter;
+import de.redtec.items.ItemCutter;
 import de.redtec.items.ItemEmptyBlueprint;
 import de.redtec.items.ItemEnergyMeter;
 import de.redtec.items.ItemFluidMeter;
@@ -577,7 +577,7 @@ public class RedTec {
 	public static final Item fluid_meter = new ItemFluidMeter();
 	public static final Item energy_meter = new ItemEnergyMeter();
 	public static final Item hammer = new ItemHammer();
-	public static final Item cuter = new ItemCuter();
+	public static final Item cutter = new ItemCutter();
 	public static final Block tree_tap = new BlockTreeTap();
 	public static final Item network_configurtor = new ItemNetworkConfigurator();
 	
@@ -882,7 +882,7 @@ public class RedTec {
 		ModGameRegistry.registerItem(iron_plate);
 		ModGameRegistry.registerItem(netherite_plate);
 		ModGameRegistry.registerItem(hammer);
-		ModGameRegistry.registerItem(cuter);
+		ModGameRegistry.registerItem(cutter);
 		ModGameRegistry.registerItem(aluminium_wire);
 		ModGameRegistry.registerItem(copper_wire);
 		ModGameRegistry.registerItem(electrolyt_copper_wire);

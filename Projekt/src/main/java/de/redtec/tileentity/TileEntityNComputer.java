@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.luaj.vm2.LuaString;
 import org.luaj.vm2.LuaTable;
@@ -51,9 +52,9 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 	protected short driveValidationTime;
 	protected LuaInterpreter luaInterpreter;
 	protected ByteArrayOutputStream outputStream;
-	protected HashMap<NetworkDeviceIP, NetworkMessage> sendMessages;
-	protected List<NetworkMessage> recivedMessages;
-	protected NetworkDeviceIP lastSendedTarget;
+	protected List<NetworkMessage> sendMessages;
+	protected HashMap<NetworkDeviceIP, NetworkMessage> recivedMessages;
+	protected NetworkDeviceIP lastReciveTarget;
 	
 	public boolean isRunning;
 	public boolean hasPower;
@@ -73,6 +74,7 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 					LuaTable args = argTable.checktable();
 					NetworkDeviceIP nip = new NetworkDeviceIP(Byte.valueOf(ipS[0]), Byte.valueOf(ipS[1]), Byte.valueOf(ipS[2]), Byte.valueOf(ipS[3]));
 					NetworkMessage msg = new NetworkMessage();
+					msg.setSendTime(TileEntityNComputer.this.world.getGameTime());
 					msg.setTargetIP(nip);
 					for (int i = 1; i <= args.length(); i++) {
 						LuaValue arg = args.get(i);
@@ -84,7 +86,8 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 							msg.writeString(arg.tostring().toString());
 						}
 					}
-					TileEntityNComputer.this.sendMessages.put(msg.getTargetIP(), msg);
+					if (TileEntityNComputer.this.sendMessages.size() > 120) TileEntityNComputer.this.sendMessages.clear();
+					TileEntityNComputer.this.sendMessages.add(msg);
 				}
 				return LuaValue.NONE;
 			}
@@ -94,10 +97,21 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 			@Override
 			public Varargs invoke(Varargs args) {
 				if (TileEntityNComputer.this.recivedMessages.size() > 0) {
-					NetworkMessage message = TileEntityNComputer.this.recivedMessages.get(0);
 					
-					if (message != null) {
-						TileEntityNComputer.this.recivedMessages.remove(0);
+					NetworkDeviceIP oldestIP = null;
+					long priority = 0L;
+					for (Entry<NetworkDeviceIP, NetworkMessage> entry : TileEntityNComputer.this.recivedMessages.entrySet()) {
+						long msgPri = TileEntityNComputer.this.world.getGameTime() - entry.getValue().getSendTime();
+						if (msgPri > priority) {
+							priority = msgPri;
+							oldestIP = entry.getKey();
+						}
+					}
+					
+					if (oldestIP != null) {
+						
+						NetworkMessage message = TileEntityNComputer.this.recivedMessages.remove(oldestIP);
+						
 						List<LuaValue> table = new ArrayList<LuaValue>();
 						
 						table.add(LuaValue.valueOf(message.getSenderIP().getIP()[0] + "." + message.getSenderIP().getIP()[1] + "." + message.getSenderIP().getIP()[2] + "." + message.getSenderIP().getIP()[3]));
@@ -144,9 +158,7 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 				try {
 					TileEntityNComputer.this.luaInterpreter.validateTime();
 					Thread.sleep(m);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				} catch (InterruptedException e) {}
 				return LuaValue.NONE;
 			}
 		}
@@ -170,9 +182,9 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 				String discPath = path.checkstring().toString();
 				if (DriveManager.containsDrive(discPath, TileEntityNComputer.this.getBootDrive(), TileEntityNComputer.this.getDriveSlot())) {
 					String file = DriveManager.loadDataFromDrive(discPath, (ServerWorld) world);
-					return LuaValue.valueOf(file);
+					return LuaValue.valueOf(new String(file));
 				}
-				return LuaValue.NONE;
+				return LuaValue.NIL;
 			}
 		}	
 		// "writeFile" (String path, String content)
@@ -210,8 +222,8 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 	public TileEntityNComputer() {
 		super(ModTileEntityType.COMPUTER, 2);
 		this.outputStream = new ByteArrayOutputStream();
-		this.recivedMessages = new ArrayList<INetworkDevice.NetworkMessage>();
-		this.sendMessages = new HashMap<INetworkDevice.NetworkDeviceIP, INetworkDevice.NetworkMessage>();
+		this.recivedMessages = new HashMap<NetworkDeviceIP, INetworkDevice.NetworkMessage>();;
+		this.sendMessages = new ArrayList<INetworkDevice.NetworkMessage>();
 		this.luaInterpreter = new LuaInterpreter(this, this.outputStream, 50, new computer());
 		this.deviceIP = NetworkDeviceIP.DEFAULT;
 	}
@@ -270,12 +282,19 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 										
 				}
 				
-				if (this.sendMessages.size() > 0) {
-					for (NetworkDeviceIP target : this.sendMessages.keySet()) {
-						this.sendMessage(this.sendMessages.get(target));
-						this.sendMessages.remove(target);
-						return;
+				NetworkMessage message = null;
+				long priority = 0L;
+				for (NetworkMessage msg : this.sendMessages) {
+					long msgPri = this.world.getGameTime() - msg.getSendTime();
+					if (msgPri > priority) {
+						priority = msgPri;
+						message = msg;
 					}
+				}
+				
+				if (message != null) {
+					this.sendMessage(message);
+					this.sendMessages.remove(message);
 				}
 				
 			} else {
@@ -433,8 +452,7 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 	}
 	
 	public void onMessageRecived(NetworkMessage message) {
-		if (this.recivedMessages.size() > 16 && message != null) this.recivedMessages.clear();
-		this.recivedMessages.add(message);
+		this.recivedMessages.put(message.getSenderIP(), message);
 	}
 	
 	public void sendMessage(NetworkMessage msg) {

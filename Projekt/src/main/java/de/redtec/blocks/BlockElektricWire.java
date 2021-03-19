@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.typeregistys.ModDamageSource;
 import de.redtec.typeregistys.ModSoundEvents;
+import de.redtec.typeregistys.ModToolType;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
 import de.redtec.util.IAdvancedBlockInfo;
@@ -25,6 +26,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.Explosion.Mode;
+import net.minecraftforge.common.ToolType;
 import net.minecraft.world.World;
 
 public class BlockElektricWire extends BlockWiring implements IElectricWire, IAdvancedBlockInfo {
@@ -34,6 +36,11 @@ public class BlockElektricWire extends BlockWiring implements IElectricWire, IAd
 	public BlockElektricWire(String name, int maximumPower, int size) {
 		super(name, Material.WOOL, 0.2F, SoundType.CLOTH, size);
 		this.maximumPower = maximumPower;
+	}
+	
+	@Override
+	public ToolType getHarvestTool(BlockState state) {
+		return ModToolType.CUTTER;
 	}
 	
 	public int getMaximumPower() {

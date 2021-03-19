@@ -163,7 +163,7 @@ public class BlockRRedstoneReciver extends BlockContainerBase implements ISignal
 	
 	@Override
 	public int getStrongPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-		return blockState.get(POWERED) && !blockState.get(TRANSIVER_MODE) ? 15 : 0;
+		return 0;
 	}
 	
 	@Override

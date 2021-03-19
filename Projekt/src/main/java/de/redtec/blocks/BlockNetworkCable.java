@@ -1,5 +1,6 @@
 package de.redtec.blocks;
 
+import de.redtec.typeregistys.ModToolType;
 import de.redtec.util.INetworkDevice;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -8,11 +9,17 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 
 public class BlockNetworkCable extends BlockWiring implements INetworkDevice {
 	
 	public BlockNetworkCable() {
 		super("network_cable", Material.WOOL, 0.2F, SoundType.CLOTH, 4);
+	}
+
+	@Override
+	public ToolType getHarvestTool(BlockState state) {
+		return ModToolType.CUTTER;
 	}
 	
 	@Override

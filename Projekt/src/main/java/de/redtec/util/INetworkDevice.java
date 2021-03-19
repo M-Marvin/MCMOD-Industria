@@ -28,7 +28,7 @@ public interface INetworkDevice {
 	}
 	
 	public default void sendMessage(NetworkMessage message, World world, BlockPos pos, BlockState state) {
-		message.setSenderIP(this.getIP(pos, state, world));
+		message.setSenderIP(this.getIP(pos, state, world), world.getGameTime());
 		NetworkWireHandler.getHandlerForWorld(world).sendMessage(world, pos, message);
 	}
 
@@ -121,6 +121,11 @@ public interface INetworkDevice {
 			return new NetworkDeviceIP(ipBytes);
 		}
 		
+		@Override
+		public int hashCode() {
+			return this.getString().hashCode();
+		}
+		
 	}
 	
 	public static enum NetworkDeviceType {
@@ -146,13 +151,15 @@ public interface INetworkDevice {
 		public NetworkDeviceIP senderIP;
 		public NetworkDeviceIP targetIP;
 		public List<Object> data;
+		public long sendTime;
 		
 		public NetworkMessage() {
 			this.data = new ArrayList<Object>();
 		}
 		
-		public void setSenderIP(NetworkDeviceIP senderIP) {
+		public void setSenderIP(NetworkDeviceIP senderIP, long gameTime) {
 			this.senderIP = senderIP;
+			this.sendTime = gameTime;
 		}
 		
 		public void setTargetIP(NetworkDeviceIP targetIP) {
@@ -176,6 +183,7 @@ public interface INetworkDevice {
 			message.targetIP = this.targetIP.copy();
 			message.senderIP = this.senderIP.copy();
 			for (Object o : this.data) message.data.add(o);
+			message.sendTime = this.sendTime;
 			return message;
 		}
 		
@@ -222,6 +230,19 @@ public interface INetworkDevice {
 				string = string + o + ",";
 			}
 			return string.substring(0, string.length() - 1) + "}]";
+		}
+
+		public long getSendTime() {
+			return sendTime;
+		}
+		
+		public void setSendTime(long sendTime) {
+			this.sendTime = sendTime;
+		}
+		
+		@Override
+		public int hashCode() {
+			return this.toString().hashCode();
 		}
 		
 	}

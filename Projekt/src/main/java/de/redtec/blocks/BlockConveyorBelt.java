@@ -157,7 +157,7 @@ public class BlockConveyorBelt extends BlockContainerBase implements IAdvancedBl
 	
 	@Override
 	public IBlockToolType getBlockInfo() {
-		return (stack, info, flag) -> {
+		return (stack, info) -> {
 			info.add(new TranslationTextComponent("redtec.block.info.maxItems", "~1.3"));
 		};
 	}

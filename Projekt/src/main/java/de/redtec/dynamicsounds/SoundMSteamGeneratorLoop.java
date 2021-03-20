@@ -2,19 +2,17 @@ package de.redtec.dynamicsounds;
 
 import de.redtec.tileentity.TileEntityMSteamGenerator;
 import de.redtec.typeregistys.ModSoundEvents;
-import net.minecraft.client.audio.TickableSound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class SoundMSteamGeneratorLoop extends TickableSound {
+public class SoundMSteamGeneratorLoop extends SoundMachine {
 
 	protected World world;
 	protected BlockPos pos;
 	
 	public SoundMSteamGeneratorLoop(TileEntityMSteamGenerator tileEntity) {
-		super(ModSoundEvents.TURBIN_LOOP, SoundCategory.BLOCKS);
+		super(tileEntity, ModSoundEvents.TURBIN_LOOP);
 		this.pos = tileEntity.getPos();
 		this.world = tileEntity.getWorld();
 		this.x = tileEntity.getPos().getX();

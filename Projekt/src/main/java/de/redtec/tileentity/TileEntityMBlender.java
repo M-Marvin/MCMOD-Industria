@@ -7,7 +7,6 @@ import de.redtec.blocks.BlockMBlender;
 import de.redtec.blocks.BlockMSchredder;
 import de.redtec.blocks.BlockMultiPart;
 import de.redtec.dynamicsounds.ISimpleMachineSound;
-import de.redtec.dynamicsounds.SoundMachine;
 import de.redtec.gui.ContainerMBlender;
 import de.redtec.recipetypes.BlendingRecipe;
 import de.redtec.typeregistys.ModDamageSource;
@@ -20,9 +19,8 @@ import de.redtec.util.FluidBucketHelper;
 import de.redtec.util.IElectricConnective.Voltage;
 import de.redtec.util.IFluidConnective;
 import de.redtec.util.ItemStackHelper;
+import de.redtec.util.MachineSoundHelper;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -258,15 +256,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 						
 					}
 					
-					
-					SoundHandler soundHandler = Minecraft.getInstance().getSoundHandler();
-					
-					if (this.maschineSound == null ? true : !soundHandler.isPlaying(maschineSound)) {
-						
-						this.maschineSound = new SoundMachine(this, ModSoundEvents.BLENDER_LOOP);
-						soundHandler.play(this.maschineSound);
-						
-					}
+					MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.BLENDER_LOOP);
 					
 				}
 				
@@ -281,8 +271,6 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 		}
 		
 	}
-	
-	private SoundMachine maschineSound;
 	
 	public boolean canWork() {
 		return findRecipe() != null || getEntitysInInput().size() > 0;

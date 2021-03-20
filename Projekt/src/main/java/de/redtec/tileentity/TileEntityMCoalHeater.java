@@ -3,16 +3,14 @@ package de.redtec.tileentity;
 import de.redtec.RedTec;
 import de.redtec.blocks.BlockMCoalHeater;
 import de.redtec.dynamicsounds.ISimpleMachineSound;
-import de.redtec.dynamicsounds.SoundMachine;
 import de.redtec.fluids.FluidDestilledWater;
 import de.redtec.gui.ContainerMCoalHeater;
 import de.redtec.typeregistys.ModFluids;
 import de.redtec.typeregistys.ModSoundEvents;
 import de.redtec.typeregistys.ModTileEntityType;
+import de.redtec.util.MachineSoundHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.FluidState;
@@ -127,23 +125,14 @@ public class TileEntityMCoalHeater extends TileEntityInventoryBase implements IN
 			
 			if (this.isSoundRunning()) {
 				
-				SoundHandler soundHandler = Minecraft.getInstance().getSoundHandler();
-				
-				if (this.sound == null ? true : !soundHandler.isPlaying(sound)) {
-					
-					this.sound = new SoundMachine(this, ModSoundEvents.GENERATOR_LOOP); // TODO
-					soundHandler.play(this.sound);
-					
-				}
+				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.GENERATOR_LOOP);
 				
 			}
 			
 		}
 		
 	}
-
-	private SoundMachine sound;
-
+	
 	@Override
 	public boolean isSoundRunning() {
 		return this.getBlockState().get(BlockMCoalHeater.LIT);

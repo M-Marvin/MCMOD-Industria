@@ -72,7 +72,7 @@ public class BlockMSchredder extends BlockMultiPart<TileEntityMSchredder> implem
 	
 	@Override
 	public IBlockToolType getBlockInfo() {
-		return (stack, info, flag) -> {
+		return (stack, info) -> {
 			info.add(new TranslationTextComponent("redtec.block.info.needEnergy", 0.8F * Voltage.HightVoltage.getVoltage()));
 			info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.HightVoltage.getVoltage()));
 			info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 0.8F));

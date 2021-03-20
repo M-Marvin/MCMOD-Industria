@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import de.redtec.blocks.BlockMultiPart;
 import de.redtec.dynamicsounds.ISimpleMachineSound;
-import de.redtec.dynamicsounds.SoundMachine;
 import de.redtec.gui.ContainerMRaffinery;
 import de.redtec.recipetypes.RifiningRecipe;
 import de.redtec.typeregistys.ModRecipeTypes;
@@ -16,9 +15,8 @@ import de.redtec.util.FluidBucketHelper;
 import de.redtec.util.IElectricConnective.Voltage;
 import de.redtec.util.IFluidConnective;
 import de.redtec.util.ItemStackHelper;
+import de.redtec.util.MachineSoundHelper;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluid;
@@ -236,22 +234,13 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 				float z = this.pos.getZ() + oz + (world.rand.nextFloat() + 1.0F) * width;
 				this.world.addParticle(paricle, x, y, z, 0, 0, 0);
 				
-				SoundHandler soundHandler = Minecraft.getInstance().getSoundHandler();
-				
-				if (this.maschineSound == null ? true : !soundHandler.isPlaying(maschineSound)) {
-					
-					this.maschineSound = new SoundMachine(this, ModSoundEvents.RAFFINERY_LOOP);
-					soundHandler.play(this.maschineSound);
-					
-				}
+				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.RAFFINERY_LOOP);
 				
 			}
 		}
 		
 	}
-
-	private SoundMachine maschineSound;
-
+	
 	@Override
 	public boolean isSoundRunning() {
 		return this.isWorking;

@@ -75,7 +75,7 @@ public class BlockMElectricFurnace extends BlockContainerBase implements IElectr
 
 	@Override
 	public IBlockToolType getBlockInfo() {
-		return (stack, info, flag) -> {
+		return (stack, info) -> {
 			info.add(new TranslationTextComponent("redtec.block.info.needEnergy", (8 * Voltage.NormalVoltage.getVoltage() / 1000F) + "k"));
 			info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.NormalVoltage.getVoltage()));
 			info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 8));

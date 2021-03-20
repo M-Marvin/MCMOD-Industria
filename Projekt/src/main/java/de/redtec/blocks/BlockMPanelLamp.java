@@ -143,7 +143,7 @@ public class BlockMPanelLamp extends BlockContainerBase implements IElectricConn
 	
 	@Override
 	public IBlockToolType getBlockInfo() {
-		return (stack, info, flag) -> {
+		return (stack, info) -> {
 			info.add(new TranslationTextComponent("redtec.block.info.needEnergy", 0.1F * Voltage.LowVoltage.getVoltage()));
 			info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.LowVoltage.getVoltage()));
 			info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 0.1F));

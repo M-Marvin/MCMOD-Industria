@@ -68,7 +68,7 @@ public class BlockFluidPipe extends BlockWiring implements ITileEntityProvider, 
 	
 	@Override
 	public IBlockToolType getBlockInfo() {
-		return (stack, info, flag) -> {
+		return (stack, info) -> {
 			info.add(new TranslationTextComponent("redtec.block.info.maxMB", 2000));
 		};
 	}

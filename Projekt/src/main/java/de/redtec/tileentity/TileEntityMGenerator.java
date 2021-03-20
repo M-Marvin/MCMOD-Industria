@@ -4,15 +4,13 @@ import javax.annotation.Nullable;
 
 import de.redtec.blocks.BlockMGenerator;
 import de.redtec.dynamicsounds.ISimpleMachineSound;
-import de.redtec.dynamicsounds.SoundMachine;
 import de.redtec.gui.ContainerMGenerator;
 import de.redtec.typeregistys.ModSoundEvents;
 import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
+import de.redtec.util.MachineSoundHelper;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -127,23 +125,14 @@ public class TileEntityMGenerator extends TileEntityInventoryBase implements INa
 			
 			if (this.isSoundRunning()) {
 				
-				SoundHandler soundHandler = Minecraft.getInstance().getSoundHandler();
-				
-				if (this.sound == null ? true : !soundHandler.isPlaying(sound)) {
-					
-					this.sound = new SoundMachine(this, ModSoundEvents.GENERATOR_LOOP);
-					soundHandler.play(this.sound);
-					
-				}
-				
+				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.GENERATOR_LOOP);
+								
 			}
 			
 			
 		}
 		
 	}
-	
-	private SoundMachine sound;
 	
 	@Override
 	public boolean isSoundRunning() {

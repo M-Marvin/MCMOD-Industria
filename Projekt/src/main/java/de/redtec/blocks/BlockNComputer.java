@@ -101,7 +101,7 @@ public class BlockNComputer extends BlockMultiPart<TileEntityNComputer> implemen
 
 	@Override
 	public IBlockToolType getBlockInfo() {
-		return (stack, info, flag) -> {
+		return (stack, info) -> {
 			info.add(new TranslationTextComponent("redtec.block.info.needEnergy", 20F * Voltage.LowVoltage.getVoltage()));
 			info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.LowVoltage.getVoltage()));
 			info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 20F));

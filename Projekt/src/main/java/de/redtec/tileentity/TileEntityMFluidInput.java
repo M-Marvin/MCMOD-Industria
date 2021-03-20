@@ -2,19 +2,17 @@ package de.redtec.tileentity;
 
 import de.redtec.blocks.BlockMFluidInput;
 import de.redtec.dynamicsounds.ISimpleMachineSound;
-import de.redtec.dynamicsounds.SoundMachine;
 import de.redtec.typeregistys.ModSoundEvents;
 import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
-import de.redtec.util.IElectricConnective.Voltage;
 import de.redtec.util.FluidStackStateTagHelper;
 import de.redtec.util.FluidTankHelper;
+import de.redtec.util.IElectricConnective.Voltage;
 import de.redtec.util.IFluidConnective;
+import de.redtec.util.MachineSoundHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
@@ -143,14 +141,7 @@ public class TileEntityMFluidInput extends TileEntity implements IFluidConnectiv
 			
 			if (this.isSoundRunning()) {
 				
-				SoundHandler soundHandler = Minecraft.getInstance().getSoundHandler();
-				
-				if (this.sound == null ? true : !soundHandler.isPlaying(sound)) {
-					
-					this.sound = new SoundMachine(this, ModSoundEvents.PUMP_LOOP);
-					soundHandler.play(this.sound);
-					
-				}
+				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.PUMP_LOOP);
 				
 			}
 			
@@ -158,8 +149,6 @@ public class TileEntityMFluidInput extends TileEntity implements IFluidConnectiv
 		}
 		
 	}
-
-	private SoundMachine sound;
 	
 	@Override
 	public boolean isSoundRunning() {

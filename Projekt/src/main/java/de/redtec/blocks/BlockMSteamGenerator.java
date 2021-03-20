@@ -89,7 +89,7 @@ public class BlockMSteamGenerator extends BlockMultiPart<TileEntityMSteamGenerat
 	
 	@Override
 	public IBlockToolType getBlockInfo() {
-		return (stack, info, flag) -> {
+		return (stack, info) -> {
 			info.add(new TranslationTextComponent("redtec.block.info.needEnergy", (5000F / 1000F) + "k"));
 			info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.NormalVoltage.getVoltage()));
 			info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 5000 / Voltage.NormalVoltage.getVoltage()));

@@ -26,7 +26,7 @@ public class BlockConveyorSpliter extends BlockConveyorBelt {
 
 	@Override
 	public IBlockToolType getBlockInfo() {
-		return (stack, info, flag) -> {
+		return (stack, info) -> {
 			info.add(new TranslationTextComponent("redtec.block.info.maxItems", "~1.3"));
 			info.add(new TranslationTextComponent("redtec.block.info.conveyorSpliter"));
 		};

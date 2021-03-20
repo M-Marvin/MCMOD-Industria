@@ -212,7 +212,7 @@ public class BlockMTransformatorContact extends BlockContainerBase implements IE
 	
 	@Override
 	public IBlockToolType getBlockInfo() {
-		return (stack, info, flag) -> {
+		return (stack, info) -> {
 			info.add(new TranslationTextComponent("redtec.block.info.power", 1000));
 			info.add(new TranslationTextComponent("redtec.block.info.transformator"));
 		};

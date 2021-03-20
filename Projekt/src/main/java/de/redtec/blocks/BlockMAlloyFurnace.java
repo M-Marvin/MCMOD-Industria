@@ -69,7 +69,7 @@ public class BlockMAlloyFurnace extends BlockContainerBase implements IElectricC
 	
 	@Override
 	public IBlockToolType getBlockInfo() {
-		return (stack, info, flag) -> {
+		return (stack, info) -> {
 			info.add(new TranslationTextComponent("redtec.block.info.needEnergy", (1 * Voltage.HightVoltage.getVoltage() / 1000F) + "k"));
 			info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.HightVoltage.getVoltage()));
 			info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 1));

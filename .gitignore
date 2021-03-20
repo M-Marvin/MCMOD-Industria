@@ -1,3 +1,5 @@
 Projekt/*
 !Projekt/src
+!Projekt/lib
+!Projekt/build.gradle
 /.metadata/

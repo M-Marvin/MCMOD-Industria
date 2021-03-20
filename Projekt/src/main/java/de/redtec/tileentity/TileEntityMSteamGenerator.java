@@ -3,7 +3,6 @@ package de.redtec.tileentity;
 import java.util.ArrayList;
 
 import de.redtec.blocks.BlockMSteamGenerator;
-import de.redtec.dynamicsounds.SoundMSteamGeneratorLoop;
 import de.redtec.fluids.FluidSteam;
 import de.redtec.fluids.util.BlockGasFluid;
 import de.redtec.typeregistys.ModFluids;
@@ -12,9 +11,8 @@ import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.FluidStackStateTagHelper;
 import de.redtec.util.IElectricConnective.Voltage;
 import de.redtec.util.IFluidConnective;
+import de.redtec.util.MachineSoundHelper;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -228,22 +226,13 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 			
 			if (this.accerlation > 0) {
 				
-				SoundHandler soundHandler = Minecraft.getInstance().getSoundHandler();
-				
-				if (this.turbinSound == null ? true : !soundHandler.isPlaying(turbinSound)) {
-					
-					this.turbinSound = new SoundMSteamGeneratorLoop(this);
-					soundHandler.play(this.turbinSound);
-					
-				}
-				
+				MachineSoundHelper.startSoundTurbinIfNotRunning(this);
+								
 			}
 			
 		}
 		
 	}
-	
-	private SoundMSteamGeneratorLoop turbinSound;
 	
 	public BlockPos getCenterTE() {
 		if (this.part == TEPart.CENTER) return this.pos;

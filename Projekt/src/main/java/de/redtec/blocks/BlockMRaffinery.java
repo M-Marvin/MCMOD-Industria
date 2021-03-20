@@ -104,7 +104,7 @@ public class BlockMRaffinery extends BlockMultiPart<TileEntityMRaffinery> implem
 	
 	@Override
 	public IBlockToolType getBlockInfo() {
-		return (stack, info, flag) -> {
+		return (stack, info) -> {
 			info.add(new TranslationTextComponent("redtec.block.info.needEnergy", (2F * Voltage.HightVoltage.getVoltage() / 1000F) + "k"));
 			info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.HightVoltage.getVoltage()));
 			info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 2F));

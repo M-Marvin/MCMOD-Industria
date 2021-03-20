@@ -145,7 +145,7 @@ public class BlockBurnedCable extends BlockElektricWire {
 	
 	@Override
 	public IBlockToolType getBlockInfo() {
-		return (stack, info, flag) -> {
+		return (stack, info) -> {
 			Block cableType = getBurnedCableFromStack(stack);
 			info.add(new TranslationTextComponent("redtec.block.info.maxCurrent", this.maximumPower));
 			if (cableType != null) info.add(new TranslationTextComponent("redtec.block.info.burnedCableType", cableType.getTranslatedName()));

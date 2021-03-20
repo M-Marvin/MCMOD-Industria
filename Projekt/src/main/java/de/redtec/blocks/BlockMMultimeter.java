@@ -170,7 +170,7 @@ public class BlockMMultimeter extends BlockContainerBase implements IElectricCon
 
 	@Override
 	public IBlockToolType getBlockInfo() {
-		return (stack, info, flag) -> {
+		return (stack, info) -> {
 			info.add(new TranslationTextComponent("redtec.block.info.multimeter"));
 		};
 	}

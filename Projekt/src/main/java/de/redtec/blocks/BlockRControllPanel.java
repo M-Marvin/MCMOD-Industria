@@ -190,7 +190,7 @@ public class BlockRControllPanel extends BlockContainerBase implements ISignalCo
 	
 	@Override
 	public IBlockToolType getBlockInfo() {
-		return (stack, info, flag) -> {};
+		return (stack, info) -> {};
 	}
 	
 	@Override

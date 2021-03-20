@@ -212,7 +212,7 @@ public class BlockMFuseBox extends BlockContainerBase implements IElectricConnec
 
 	@Override
 	public IBlockToolType getBlockInfo() {
-		return (stack, info, flag) -> {
+		return (stack, info) -> {
 			info.add(new TranslationTextComponent("redtec.block.info.fuseBox"));
 		};
 	}

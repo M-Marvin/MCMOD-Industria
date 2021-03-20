@@ -8,6 +8,7 @@ import de.redtec.dynamicsounds.ISimpleMachineSound;
 import de.redtec.gui.ContainerMFluidBath;
 import de.redtec.recipetypes.FluidBathRecipe;
 import de.redtec.typeregistys.ModRecipeTypes;
+import de.redtec.typeregistys.ModSoundEvents;
 import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.ElectricityNetworkHandler;
 import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
@@ -15,6 +16,7 @@ import de.redtec.util.FluidBucketHelper;
 import de.redtec.util.IElectricConnective.Voltage;
 import de.redtec.util.IFluidConnective;
 import de.redtec.util.ItemStackHelper;
+import de.redtec.util.MachineSoundHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -143,7 +145,11 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements IFl
 			
 		} else {
 			
-			
+			if (this.isWorking) {
+				
+				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.RAFFINERY_LOOP);
+				
+			}
 			
 		}
 		

@@ -3,73 +3,73 @@ package de.redtec;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.redtec.blocks.BlockAdvancedMovingBlock;
-import de.redtec.blocks.BlockRAdvancedPiston;
-import de.redtec.blocks.BlockRAdvancedPistonHead;
 import de.redtec.blocks.BlockBase;
 import de.redtec.blocks.BlockBurnable;
 import de.redtec.blocks.BlockBurnedCable;
-import de.redtec.blocks.BlockRButtonBlock;
-import de.redtec.blocks.BlockRConectorBlock;
-import de.redtec.blocks.BlockRControllPanel;
 import de.redtec.blocks.BlockConveyorBelt;
 import de.redtec.blocks.BlockConveyorSpliter;
 import de.redtec.blocks.BlockCornerBlockBase;
 import de.redtec.blocks.BlockElektricWire;
-import de.redtec.blocks.BlockMFluidInput;
-import de.redtec.blocks.BlockMFluidOutput;
 import de.redtec.blocks.BlockFluidPipe;
 import de.redtec.blocks.BlockFluidValve;
-import de.redtec.blocks.BlockMFuseBox;
-import de.redtec.blocks.BlockRHarvester;
-import de.redtec.blocks.BlockRHoverControler;
-import de.redtec.blocks.BlockRHoverExtension;
 import de.redtec.blocks.BlockInfinityPowerSource;
 import de.redtec.blocks.BlockIronRod;
-import de.redtec.blocks.BlockRItemDetector;
 import de.redtec.blocks.BlockJigsaw;
 import de.redtec.blocks.BlockLeavesBase;
 import de.redtec.blocks.BlockLimestoneSheet;
-import de.redtec.blocks.BlockRLinearConector;
 import de.redtec.blocks.BlockMAlloyFurnace;
 import de.redtec.blocks.BlockMBlender;
 import de.redtec.blocks.BlockMCoalHeater;
 import de.redtec.blocks.BlockMElectricFurnace;
 import de.redtec.blocks.BlockMFluidBath;
+import de.redtec.blocks.BlockMFluidInput;
+import de.redtec.blocks.BlockMFluidOutput;
+import de.redtec.blocks.BlockMFuseBox;
 import de.redtec.blocks.BlockMGenerator;
 import de.redtec.blocks.BlockMMultimeter;
+import de.redtec.blocks.BlockMPanelLamp;
+import de.redtec.blocks.BlockMPowerSwitch;
 import de.redtec.blocks.BlockMRaffinery;
 import de.redtec.blocks.BlockMSchredder;
 import de.redtec.blocks.BlockMSteamGenerator;
+import de.redtec.blocks.BlockMStoringCraftingTable;
 import de.redtec.blocks.BlockMThermalZentrifuge;
 import de.redtec.blocks.BlockMTransformatorCoil;
 import de.redtec.blocks.BlockMTransformatorContact;
 import de.redtec.blocks.BlockMotor;
 import de.redtec.blocks.BlockNComputer;
 import de.redtec.blocks.BlockNetworkCable;
-import de.redtec.blocks.BlockMPanelLamp;
 import de.redtec.blocks.BlockPowerEmiting;
-import de.redtec.blocks.BlockMPowerSwitch;
+import de.redtec.blocks.BlockRAdvancedPiston;
+import de.redtec.blocks.BlockRAdvancedPistonHead;
+import de.redtec.blocks.BlockRButtonBlock;
+import de.redtec.blocks.BlockRConectorBlock;
+import de.redtec.blocks.BlockRControllPanel;
 import de.redtec.blocks.BlockRDCapacitor;
 import de.redtec.blocks.BlockRDPulseCounter;
+import de.redtec.blocks.BlockRHarvester;
+import de.redtec.blocks.BlockRHoverControler;
+import de.redtec.blocks.BlockRHoverExtension;
+import de.redtec.blocks.BlockRItemDetector;
+import de.redtec.blocks.BlockRLinearConector;
 import de.redtec.blocks.BlockRRadialConector;
 import de.redtec.blocks.BlockRRailPiston;
 import de.redtec.blocks.BlockRRedstoneContact;
 import de.redtec.blocks.BlockRRedstoneReciver;
+import de.redtec.blocks.BlockRSignalProcessorContact;
 import de.redtec.blocks.BlockRubberLog;
 import de.redtec.blocks.BlockSalsolaSeeds;
 import de.redtec.blocks.BlockSaplingBase;
 import de.redtec.blocks.BlockSignalAntennaConector;
-import de.redtec.blocks.BlockRSignalProcessorContact;
 import de.redtec.blocks.BlockSignalWire;
 import de.redtec.blocks.BlockStackedRedstoneTorch;
 import de.redtec.blocks.BlockStackedRedstoneWire;
-import de.redtec.blocks.BlockMStoringCraftingTable;
 import de.redtec.blocks.BlockTreeTap;
 import de.redtec.blocks.BlockWeathering;
 import de.redtec.fluids.BlockChemicalWater;
@@ -81,23 +81,6 @@ import de.redtec.fluids.BlockSteam;
 import de.redtec.fluids.BlockSulfuricAcid;
 import de.redtec.fluids.util.ItemFluidBucket;
 import de.redtec.fluids.util.ItemGasBucket;
-import de.redtec.gui.ScreenRHarvester;
-import de.redtec.gui.ScreenRHoverControler;
-import de.redtec.gui.ScreenJigsaw;
-import de.redtec.gui.ScreenMAlloyFurnace;
-import de.redtec.gui.ScreenMBlender;
-import de.redtec.gui.ScreenMCoalHeater;
-import de.redtec.gui.ScreenMElectricFurnace;
-import de.redtec.gui.ScreenMFluidBath;
-import de.redtec.gui.ScreenMGenerator;
-import de.redtec.gui.ScreenMRaffinery;
-import de.redtec.gui.ScreenMSchredder;
-import de.redtec.gui.ScreenMThermalZentrifuge;
-import de.redtec.gui.ScreenNComputer;
-import de.redtec.gui.ScreenNetworkConfigurator;
-import de.redtec.gui.ScreenRProcessor;
-import de.redtec.gui.ScreenRReciver;
-import de.redtec.gui.ScreenMStoredCrafting;
 import de.redtec.items.ItemBase;
 import de.redtec.items.ItemBlueprint;
 import de.redtec.items.ItemBurneable;
@@ -116,68 +99,29 @@ import de.redtec.items.ItemSchredderToolCrusher;
 import de.redtec.items.panelitems.ItemButtonElement;
 import de.redtec.items.panelitems.ItemLampElement;
 import de.redtec.items.panelitems.ItemLeverElement;
-import de.redtec.packet.CConfigureNetworkDevice;
-import de.redtec.packet.CEditComputerCode;
-import de.redtec.packet.CEditJigsawTileEntityPacket;
-import de.redtec.packet.CEditProcessorCodePacket;
-import de.redtec.packet.CGenerateJigsaw;
-import de.redtec.packet.SSendENHandeler;
-import de.redtec.renderer.TileEntityAdvancedMovingBlockRenderer;
-import de.redtec.renderer.TileEntityControllPanelRenderer;
-import de.redtec.renderer.TileEntityConveyorBeltRenderer;
-import de.redtec.renderer.TileEntityFuseBoxRenderer;
-import de.redtec.renderer.TileEntityGaugeRenderer;
-import de.redtec.renderer.TileEntityMBlenderRenderer;
-import de.redtec.renderer.TileEntityMFluidBathRenderer;
-import de.redtec.renderer.TileEntityMRaffineryRenderer;
-import de.redtec.renderer.TileEntityMSchredderRenderer;
-import de.redtec.renderer.TileEntityMSteamGeneratorRenderer;
-import de.redtec.renderer.TileEntityNComputerRenderer;
-import de.redtec.renderer.TileEntitySignalProcessorContactRenderer;
-import de.redtec.typeregistys.ModConfiguredFeatures;
-import de.redtec.typeregistys.ModContainerType;
 import de.redtec.typeregistys.ModFluids;
 import de.redtec.typeregistys.ModSoundEvents;
-import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.ModGameRegistry;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.dispenser.IDispenseItemBehavior;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.Rarity;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.biome.Biome.Category;
-import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.GenerationStage.Decoration;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -193,7 +137,7 @@ public class RedTec {
 			() -> RedTec.PROTOCOL_VERSION, 
 			PROTOCOL_VERSION::equals,
 			PROTOCOL_VERSION::equals);
-
+	
 	public static final ItemGroup MACHINES = new ItemGroup("machines") {
 		@Override
 		public ItemStack createIcon() {
@@ -583,10 +527,6 @@ public class RedTec {
 	
 	public RedTec() {
 		
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
-		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, this::onBiomeLoadingEvent);
-		
 		// register Blocks
 		ModGameRegistry.registerBlock(capacitor, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(pulse_counter, ItemGroup.REDSTONE); 
@@ -924,143 +864,20 @@ public class RedTec {
 		ModGameRegistry.registerItem(button_element);
 		ModGameRegistry.registerItem(lamp_element);
 		
-	}
-	
-	@SuppressWarnings("deprecation")
-	private void setup(final FMLCommonSetupEvent event) {
-		
-		// Register Packets
-		NETWORK.registerMessage(0, CEditProcessorCodePacket.class, CEditProcessorCodePacket::encode, CEditProcessorCodePacket::new, CEditProcessorCodePacket::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		NETWORK.registerMessage(1, CEditJigsawTileEntityPacket.class, CEditJigsawTileEntityPacket::encode, CEditJigsawTileEntityPacket::new, CEditJigsawTileEntityPacket::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		NETWORK.registerMessage(2, CGenerateJigsaw.class, CGenerateJigsaw::encode, CGenerateJigsaw::new, CGenerateJigsaw::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		NETWORK.registerMessage(3, SSendENHandeler.class, SSendENHandeler::encode, SSendENHandeler::new, SSendENHandeler::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));		
-		NETWORK.registerMessage(4, CEditComputerCode.class, CEditComputerCode::encode, CEditComputerCode::new, CEditComputerCode::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		NETWORK.registerMessage(5, CConfigureNetworkDevice.class, CConfigureNetworkDevice::encode, CConfigureNetworkDevice::new, CConfigureNetworkDevice::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		
-		// Dispenser Behaviors
-		IDispenseItemBehavior placeBlockBehavior = new IDispenseItemBehavior() {
-			@Override
-			public ItemStack dispense(IBlockSource source, ItemStack stack) {
-				BlockPos pos = source.getBlockPos().offset(source.getBlockState().get(BlockStateProperties.FACING));
-				Block block = Block.getBlockFromItem(stack.getItem());
-				if (block != null && source.getWorld().getBlockState(pos).isAir() && block.isValidPosition(block.getDefaultState(), source.getWorld(), pos)) {
-					source.getWorld().setBlockState(pos, block.getDefaultState());
-					stack.shrink(1);
-					return stack;
-				}
-				return stack;
-			}
-		};
-		Registry.BLOCK.stream().forEach((block) -> {
-			Item item = Item.getItemFromBlock(block);
-			if (item != null) {
-				if (item != Items.TNT) DispenserBlock.registerDispenseBehavior(item, placeBlockBehavior);
-			}
-		});
-		
-		// World Generation Settings (Adding Features to the specific Biomes)
-		ModGameRegistry.addFeatureToOverworldBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.COPPER_ORE);
-		ModGameRegistry.addFeatureToOverworldBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.TIN_ORE);
-		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.TIN_ORE_EXTRA, Category.JUNGLE);
-		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.TIN_ORE_EXTRA, Category.SAVANNA);
-		ModGameRegistry.addFeatureToOverworldBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.NICKEL_ORE);
-		ModGameRegistry.addFeatureToOverworldBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.SILVER_ORE);
-		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.SILVER_ORE_EXTRA, Category.JUNGLE);
-		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.SILVER_ORE_EXTRA, Category.EXTREME_HILLS);
-		ModGameRegistry.addFeatureToOverworldBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.PALLADIUM_ORE);
-		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.PALLADIUM_ORE_EXTRA, Category.SWAMP);
-		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.PALLADIUM_ORE_EXTRA, Category.TAIGA);
-		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.SULFUR_ORE, Category.NETHER);
-		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.BAUXIT_STONE_ORE, Category.JUNGLE);
-		ModGameRegistry.addFeatureToOverworldBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.WOLFRAM_STONE_ORE);
-		
-		// TODO
-		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.OIL_DEPOT, Category.DESERT);
-		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.OIL_DEPOT, Category.OCEAN);
-		
-		ModGameRegistry.addFeatureToBiomes(Decoration.VEGETAL_DECORATION, ModConfiguredFeatures.RUBBER_TREE, Biomes.SWAMP_HILLS, Biomes.JUNGLE, Biomes.JUNGLE_EDGE, Biomes.JUNGLE_HILLS, Biomes.MODIFIED_JUNGLE, Biomes.MODIFIED_JUNGLE_EDGE);
-		
-	}
-	
-	@OnlyIn(Dist.CLIENT)
-	private void clientSetup(final FMLClientSetupEvent event) {
-		
-		RenderTypeLookup.setRenderLayer(capacitor, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(pulse_counter, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(stacked_redstone_torch, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(stacked_redstone_wire, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(signal_wire, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(signal_processor_contact, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(salsola_seeds, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(steam, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(steam_generator, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.DESTILLED_WATER, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_DESTILLED_WATER, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.STEAM, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(multimeter, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(fluid_valve, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(blender, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(rubber_leaves, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(rubber_sapling, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(tree_tap, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(burned_cable, RenderType.getCutoutMipped());
-		
-		RenderTypeLookup.setRenderLayer(ModFluids.SULFURIC_ACID, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_SULFURIC_ACID, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.IRON_SOLUTION, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_IRON_SOLUTION, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.COPPER_SOLUTION, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_COPPER_SOLUTION, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.WOLFRAM_SOLUTION, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_WOLFRAM_SOLUTION, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.ALUMINIUM_SOLUTION, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_ALUMINIUM_SOLUTION, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.TIN_SOLUTION, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_TIN_SOLUTION, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.NATRON_LYE, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_NATRON_LYE, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.CHEMICAL_WATER, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_CHEMICAL_WATER, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.RAW_OIL, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_RAW_OIL, RenderType.getTranslucent());
-		
-		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ADVANCED_PISTON, TileEntityAdvancedMovingBlockRenderer::new);
-		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SIGNAL_PROCESSOR, TileEntitySignalProcessorContactRenderer::new);
-		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CONTROLL_PANEL, TileEntityControllPanelRenderer::new);
-		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.STEAM_GENERATOR, TileEntityMSteamGeneratorRenderer::new);
-		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.FUSE_BOX, TileEntityFuseBoxRenderer::new);
-		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.MULTIMETER, TileEntityGaugeRenderer::new);
-		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SCHREDDER, TileEntityMSchredderRenderer::new);
-		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.BLENDER, TileEntityMBlenderRenderer::new);
-		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CONVEYOR_BELT, TileEntityConveyorBeltRenderer::new);
-		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.RAFFINERY, TileEntityMRaffineryRenderer::new);
-		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.FLUID_BATH, TileEntityMFluidBathRenderer::new);
-		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.COMPUTER, TileEntityNComputerRenderer::new);
-		
-		ScreenManager.registerFactory(ModContainerType.STORED_CRAFTING, ScreenMStoredCrafting::new);
-		ScreenManager.registerFactory(ModContainerType.PROCESSOR, ScreenRProcessor::new);
-		ScreenManager.registerFactory(ModContainerType.HOVER_CONTROLER, ScreenRHoverControler::new);
-		ScreenManager.registerFactory(ModContainerType.REDSTONE_RECIVER, ScreenRReciver::new);
-		ScreenManager.registerFactory(ModContainerType.HARVESTER, ScreenRHarvester::new);
-		ScreenManager.registerFactory(ModContainerType.JIGSAW, ScreenJigsaw::new);
-		ScreenManager.registerFactory(ModContainerType.GENERATOR, ScreenMGenerator::new);
-		ScreenManager.registerFactory(ModContainerType.COAL_HEATER, ScreenMCoalHeater::new);
-		ScreenManager.registerFactory(ModContainerType.ELECTRIC_FURNACE, ScreenMElectricFurnace::new);
-		ScreenManager.registerFactory(ModContainerType.SCHREDDER, ScreenMSchredder::new);
-		ScreenManager.registerFactory(ModContainerType.BLENDER, ScreenMBlender::new);
-		ScreenManager.registerFactory(ModContainerType.RAFFINERY, ScreenMRaffinery::new);
-		ScreenManager.registerFactory(ModContainerType.THERMAL_ZENTRIFUGE, ScreenMThermalZentrifuge::new);
-		ScreenManager.registerFactory(ModContainerType.ALLOY_FURNACE, ScreenMAlloyFurnace::new);
-		ScreenManager.registerFactory(ModContainerType.FLUID_BATH, ScreenMFluidBath::new);
-		ScreenManager.registerFactory(ModContainerType.COMPUTER, ScreenNComputer::new);
-		ScreenManager.registerFactory(ModContainerType.NETWORK_CONFIGURATOR, ScreenNetworkConfigurator::new);
+		try {
+			FMLJavaModLoadingContext.get().getModEventBus().addListener(Client::setup);
+		} catch (BootstrapMethodError e) {
+			LOGGER.log(Level.INFO, "Skip ClientSettup on Server startS");
+		}
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(Server::setup);
+		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, this::onBiomeLoadingEvent);
 		
 	}
 	
 	// Registration Code
 	
 	@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
-	public static class Events {
+	public static class RegistryEvents {
 		
 		@SubscribeEvent
 		public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {

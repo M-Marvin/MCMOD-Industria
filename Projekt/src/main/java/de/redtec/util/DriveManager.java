@@ -91,7 +91,7 @@ public class DriveManager {
 				streamReader.close();
 				inputStream.close();
 				
-				return code.substring(0, code.length() - 1);
+				return code.substring(0, code.length() - (code.length() > 0 ? 1 : 0));
 				
 			}
 			

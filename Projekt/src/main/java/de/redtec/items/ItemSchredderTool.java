@@ -8,13 +8,8 @@ public abstract class ItemSchredderTool extends ItemBase {
 	
 	protected ItemSchredderToolModel toolModel;
 	
-	public ItemSchredderTool(String name, int durability, ItemSchredderToolModel toolModel) {
+	public ItemSchredderTool(String name, int durability) {
 		super(name, new Properties().group(RedTec.MACHINES).maxStackSize(8).defaultMaxDamage(durability));
-		this.toolModel = toolModel;
-	}
-	
-	public ItemSchredderToolModel getModel() {
-		return toolModel;
 	}
 	
 	public abstract ResourceLocation getModelTexture();

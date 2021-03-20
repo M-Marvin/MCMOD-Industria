@@ -65,7 +65,7 @@ public class BlockElektricWire extends BlockWiring implements IElectricWire, IAd
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		
-		if (hasOpenEnd(stateIn) && rand.nextInt(10) == 0) {
+		if (hasOpenEnd(stateIn) && rand.nextInt(4) == 0) {
 			
 			ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(worldIn);
 			ElectricityNetwork network = handler.getNetwork(pos);
@@ -74,7 +74,7 @@ public class BlockElektricWire extends BlockWiring implements IElectricWire, IAd
 			if (network.getCurrent() > 0) {
 				
 				int particleCount = voltage.getVoltage() / 10;
-
+				
 				if (particleCount > 0) {
 					
 					for (int i = 0; i < particleCount; i++) {
@@ -127,7 +127,7 @@ public class BlockElektricWire extends BlockWiring implements IElectricWire, IAd
 
 	@Override
 	public IBlockToolType getBlockInfo() {
-		return (stack, info, flag) -> {
+		return (stack, info) -> {
 			info.add(new TranslationTextComponent("redtec.block.info.maxCurrent", this.maximumPower));
 		};
 	}

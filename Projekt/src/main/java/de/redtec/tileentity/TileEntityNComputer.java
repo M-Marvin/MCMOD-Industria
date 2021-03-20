@@ -277,7 +277,6 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 						this.consoleLine = this.luaInterpreter.getCrashMessage();
 					} else if (response == 0) {
 						this.isRunning = false;
-						this.consoleLine = "Sequenze complete!";
 					}
 										
 				}

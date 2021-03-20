@@ -25,7 +25,7 @@ public class ItemBlockAdvancedInfo extends BlockItem {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		List<ITextComponent> infoLines = new ArrayList<ITextComponent>();
-		if (this.info != null) this.info.addInformation(stack, infoLines, flagIn);
+		if (this.info != null) this.info.addInformation(stack, infoLines);
 		for (ITextComponent line : infoLines) {
 			tooltip.add(new StringTextComponent("\u00A77" + line.getString()));
 		}
@@ -40,7 +40,7 @@ public class ItemBlockAdvancedInfo extends BlockItem {
 	
 	@FunctionalInterface
 	public static interface IBlockToolType {
-		public void addInformation(ItemStack stack, List<ITextComponent> info, ITooltipFlag flagIn);
+		public void addInformation(ItemStack stack, List<ITextComponent> info);
 	}
 	
 }

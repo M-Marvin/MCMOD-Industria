@@ -12,8 +12,8 @@ INSTALLATION/KOPIEREN DES PROJEKTES
 
 Das Projekt ist ein standart Forge-Mod Workspace.
 Um das Projekt zu kopieren muss nach der bei der Forge 1.16.3 MDK beigelegten README ein Workspace erstellt werden,
-und anschliesend der "src" Ordner der den Example-Mod enthält, druch den "Projekt/src" Ordner dieses Projektes
-ersetzt werden.
+und anschliesend der "src" Ordner, der "lib" Ordner und die build.gradle durch die Ordner bzw die Datei
+dieses Projektes ersetzt werden.
 
 Alternativ kann auch aus dem von GitHub angelegten Projektordner (Repositories Ordner) ein Workspace erstellt werden,
 indem die MDK von Forge in diesem Ordner entpackt und installiert wird.

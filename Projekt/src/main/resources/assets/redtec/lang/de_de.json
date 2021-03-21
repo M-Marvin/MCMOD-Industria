@@ -370,7 +370,7 @@
 "redtec.block.info.burnedCable": "\nLeitet zwar noch Strom, sollte aber nicht verwendet werden ...\nBrandgefahr",
 "redtec.block.info.burnedCableType": "Verbrantes %1$s",
 "redtec.block.info.computer": "\nSpezielle Maschine die Berechnungen ausf\u00fchren und Abl\u00e4ufe steuern kann.\nWird mit LUA-Script auf Festplatten programmiert.",
-"redtec.block.info.signalProcessor": "\nFassung für Prozessoren.\nKann einfache Signale logisch verarbeiten.\nKann auch \u00fcber Netzwerk mit einem Computer verbunden werden.",
+"redtec.block.info.signalProcessor": "\nFassung f\u00fcr Prozessoren.\nKann einfache Signale logisch verarbeiten.\nKann auch \u00fcber Netzwerk mit einem Computer verbunden werden.",
 "redtec.item.info.drive": "\nKann Dateien enthalten die von Computern ausgef\u00fchrt bzw gelesen/geschrieben werden k\u00f6nnen.\nJede Festplatte hat einen Ordner im Weltordner.",
 "redtec.item.info.name": "Laufwerkname: %1$s",
 "redtec.item.info.fuseMax": "Max. Strom: %1$s A",

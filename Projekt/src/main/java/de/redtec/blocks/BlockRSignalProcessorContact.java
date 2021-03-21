@@ -108,7 +108,7 @@ public class BlockRSignalProcessorContact extends BlockContainerBase implements 
 				TileEntity tileEntity = worldIn.getTileEntity(pos);
 				if (tileEntity instanceof TileEntityRSignalProcessorContact) ((TileEntityRSignalProcessorContact) tileEntity).getVariables().clear();
 				
-				return ActionResultType.SUCCESS;
+				return ActionResultType.CONSUME;
 				
 			} else if (state.get(OPEN)) {
 				

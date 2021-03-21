@@ -144,7 +144,7 @@ public class TileEntityRItemDetector extends TileEntity implements ITickableTile
 	@Override
 	public void read(BlockState state, CompoundNBT nbt) {
 		this.itemFilter = ItemStack.EMPTY;
-		if (nbt.contains("ItemFilter")) this.itemFilter = ItemStack.read(nbt.getCompound("FilterItem"));
+		if (nbt.contains("ItemFilter")) this.itemFilter = ItemStack.read(nbt.getCompound("ItemFilter"));
 		this.itemFilter.setCount(1);
 		super.read(state, nbt);
 	}

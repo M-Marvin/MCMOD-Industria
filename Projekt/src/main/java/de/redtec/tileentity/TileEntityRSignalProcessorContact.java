@@ -131,14 +131,13 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 	
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		CompoundNBT compound = new CompoundNBT();
-		this.write(compound);
+		CompoundNBT compound = this.serializeNBT();
 		return new SUpdateTileEntityPacket(this.pos, 0, compound);
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.read(this.getBlockState(), pkt.getNbtCompound());
+		this.deserializeNBT(pkt.getNbtCompound());
 	}
 	
 	@Override
@@ -168,6 +167,7 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 	
 	@Override
 	public void read(BlockState state, CompoundNBT compound) {
+		this.processorStack = ItemStack.EMPTY;
 		if (compound.contains("Processor")) {
 			ItemStack processorStack = ItemStack.read(compound.getCompound("Processor"));
 			this.setProcessorStack(processorStack);

@@ -103,7 +103,7 @@ public class BlockRControllPanel extends BlockContainerBase implements ISignalCo
 		Direction face = hit.getFace();
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
 		
-		if (face == facing && tileEntity instanceof TileEntityControllPanel) {
+		if (face == facing && tileEntity instanceof TileEntityControllPanel && !worldIn.isRemote()) {
 			
 			int hitX = (int) ((hit.getHitVec().x - hit.getPos().getX()) * 16);
 			int hitY = (int) ((hit.getHitVec().y - hit.getPos().getY()) * 16);
@@ -120,7 +120,7 @@ public class BlockRControllPanel extends BlockContainerBase implements ISignalCo
 			
 		}
 		
-		return ActionResultType.PASS;
+		return ActionResultType.CONSUME;
 		
 	}
 

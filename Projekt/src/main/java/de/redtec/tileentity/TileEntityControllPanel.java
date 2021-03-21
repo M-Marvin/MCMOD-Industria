@@ -23,6 +23,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.ITextComponent;
 
 public class TileEntityControllPanel extends TileEntity implements ITickableTileEntity {
 	
@@ -132,6 +133,10 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 	public boolean addElement(ItemStack elementStack, int x, int y) {
 		
 		if (elementStack.getItem() instanceof ItemPanelElement) {
+			
+			ITextComponent name = elementStack.getDisplayName();
+			elementStack.setTag(new CompoundNBT());
+			elementStack.setDisplayName(name);
 			
 			AxisAlignedBB bounds = ((ItemPanelElement) elementStack.getItem()).getCollisionBounds();
 			AxisAlignedBB collision = bounds.offset(x, y, 0);

@@ -39,7 +39,7 @@ public class BlockRRedstoneReciver extends BlockContainerBase implements ISignal
 	public static final BooleanProperty POWERED = BooleanProperty.create("powered");
 	
 	public BlockRRedstoneReciver() {
-		super("redstone_reciver", Material.ROCK, 1.5F, 0.5F, SoundType.STONE);
+		super("redstone_reciver", Material.ROCK, 2.5F, 1.5F, SoundType.STONE);
 		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(TRANSIVER_MODE, false).with(POWERED, false));
 	}
 	
@@ -140,7 +140,7 @@ public class BlockRRedstoneReciver extends BlockContainerBase implements ISignal
 			if (player.isSneaking()) {
 				
 				worldIn.setBlockState(pos, state.with(TRANSIVER_MODE, !state.get(TRANSIVER_MODE)));
-
+				
 				return ActionResultType.CONSUME;
 				
 			} else {

@@ -102,15 +102,20 @@ public class BlockRSignalProcessorContact extends BlockContainerBase implements 
 			
 			if (player.isSneaking()) {
 				
-				worldIn.setBlockState(pos, state.with(OPEN, !state.get(OPEN)));
 				worldIn.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, state.get(OPEN) ? SoundEvents.BLOCK_WOODEN_TRAPDOOR_CLOSE : SoundEvents.BLOCK_WOODEN_TRAPDOOR_OPEN, SoundCategory.BLOCKS, 1, 1, false);
 				
-				TileEntity tileEntity = worldIn.getTileEntity(pos);
-				if (tileEntity instanceof TileEntityRSignalProcessorContact) ((TileEntityRSignalProcessorContact) tileEntity).getVariables().clear();
+				if (!worldIn.isRemote()) {
+					
+					worldIn.setBlockState(pos, state.with(OPEN, !state.get(OPEN)));
+					
+					TileEntity tileEntity = worldIn.getTileEntity(pos);
+					if (tileEntity instanceof TileEntityRSignalProcessorContact) ((TileEntityRSignalProcessorContact) tileEntity).getVariables().clear();
+					
+				}
 				
 				return ActionResultType.CONSUME;
 				
-			} else if (state.get(OPEN)) {
+			} else if (state.get(OPEN) && !worldIn.isRemote()) {
 				
 				TileEntity tileEntity = worldIn.getTileEntity(pos);
 				ItemStack heldStack = player.getHeldItemMainhand();

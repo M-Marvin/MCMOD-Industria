@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import de.redtec.blocks.BlockBase;
+import de.redtec.tileentity.TileEntitySimpleBlockTicking;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -13,6 +14,7 @@ import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.IBucketPickupHandler;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -30,6 +32,22 @@ public class BlockGasFluid extends BlockBase implements IBucketPickupHandler {
 	public BlockGasFluid(String name, GasFluid fluid, Properties properties) {
 		super(name, properties);
 		this.fluid = fluid;
+		
+	}
+	
+	@Override
+	public boolean hasTileEntity(BlockState state) {
+		return true;
+	}
+	
+	@Override
+	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+		return new TileEntitySimpleBlockTicking();
+	}
+	
+	@Override
+	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
+		if (worldIn.rand.nextInt(200) == 0) this.randomTick(state, worldIn, pos, worldIn.rand);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -112,7 +130,7 @@ public class BlockGasFluid extends BlockBase implements IBucketPickupHandler {
 			
 			List<Direction> pushableDirections = new ArrayList<Direction>();
 			
-			for (Direction d : Direction.values()) {
+			for (Direction d : new Direction[] {Direction.UP, Direction.DOWN, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {
 				
 				BlockPos pos2 = pos.offset(d);
 				BlockState pushState = world.getBlockState(pos2);

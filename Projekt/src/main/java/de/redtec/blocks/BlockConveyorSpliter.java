@@ -3,12 +3,9 @@ package de.redtec.blocks;
 import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer.Builder;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -21,7 +18,6 @@ import net.minecraft.world.World;
 public class BlockConveyorSpliter extends BlockConveyorBelt {
 	
 	public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
-	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	
 	public BlockConveyorSpliter() {
 		super("conveyor_spliter");
@@ -35,15 +31,10 @@ public class BlockConveyorSpliter extends BlockConveyorBelt {
 			info.add(new TranslationTextComponent("redtec.block.info.conveyorSpliter"));
 		};
 	}
-
-	@Override
-	public FluidState getFluidState(BlockState state) {
-		return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluid().getDefaultState() : Fluids.EMPTY.getDefaultState();
-	}
 	
 	@Override
 	protected void fillStateContainer(Builder<Block, BlockState> builder) {
-		builder.add(ACTIVE, WATERLOGGED);
+		builder.add(ACTIVE);
 		super.fillStateContainer(builder);
 	}
 	

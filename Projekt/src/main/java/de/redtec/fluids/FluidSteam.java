@@ -63,13 +63,17 @@ public class FluidSteam extends GasFluid implements IBucketPickupHandler {
 	@Override
 	public void onMoved(World world, BlockPos pos, Direction moveDirection, FluidState state, Random random) {
 		
-		if (random.nextInt(20) == 0 && world.canSeeSky(pos) && pos.getY() < 150) {
+		if (random.nextInt(20) == 0 && world.canSeeSky(pos)) {
 					
 			if (world.getBlockState(pos.offset(moveDirection)).getFluidState().getFluid() == this) world.setBlockState(pos.offset(moveDirection), Blocks.AIR.getDefaultState());
 			
-			FallingBlockEntity condensetWater = new FallingBlockEntity(world, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, ModFluids.DESTILLED_WATER.getDefaultState().with(FluidDestilledWater.HOT, true).getBlockState());
-			condensetWater.fallTime = -1000;
-			world.addEntity(condensetWater);
+			if (pos.getY() < 150) {
+
+				FallingBlockEntity condensetWater = new FallingBlockEntity(world, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, ModFluids.DESTILLED_WATER.getDefaultState().with(FluidDestilledWater.HOT, true).getBlockState());
+				condensetWater.fallTime = -1000;
+				world.addEntity(condensetWater);
+				
+			}
 			
 		}
 		

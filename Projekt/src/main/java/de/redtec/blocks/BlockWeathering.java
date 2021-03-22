@@ -26,7 +26,7 @@ public class BlockWeathering extends BlockBase {
 	@Override
 	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
 		
-		if (random.nextInt(1200) == 0) {
+		if (random.nextInt(2400) == 0) {
 			
 			worldIn.setBlockState(pos, this.weatheredBlock.getDefaultState());
 			

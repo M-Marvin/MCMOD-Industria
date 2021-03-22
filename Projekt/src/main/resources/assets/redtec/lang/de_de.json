@@ -351,7 +351,7 @@
 "redtec.block.info.steamGenerator.maxMB": "Max. Durchfluss: %1$s mb/Tick",
 "redtec.block.info.fluidInput": "\nSaugt Fl\u00fcssigkeiten und Gase ein, um sie in Rohren weiterzuleiten.",
 "redtec.block.info.fluidInput.mb": "Produktion: %1$s mb/Tick",
-"redtec.block.info.fluidOutput": "Schüttet Fl\u00fcssigkeiten und Gase aus.",
+"redtec.block.info.fluidOutput": "Sch\u00fcttet Fl\u00fcssigkeiten und Gase aus.",
 "redtec.block.info.generator": "\nIneffizienter aber kompakter Generator. \nTreibstoffverbrauch abh\u00e4ngig von Auslastung.",
 "redtec.block.info.transformator": "\nTransferiert Leistung am Eingang auf Ausgang,\nmit einstellbarer Spannung.\nJeder Transformatorblock erh\u00f6ht die maximale Leistung.",
 "redtec.block.info.coalHeater": "Verbrennt Treibstoff und erhitzt Wasser zu Dampf.\nBei nicht destilliertem Wasser enstehen Rueckst\u00e4nde.",

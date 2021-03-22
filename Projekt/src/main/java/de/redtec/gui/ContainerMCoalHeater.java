@@ -19,7 +19,7 @@ public class ContainerMCoalHeater extends ContainerTileEntity<TileEntityMCoalHea
 	
 	@Override
 	public int getSlots() {
-		return 1;
+		return 2;
 	}
 
 	@Override

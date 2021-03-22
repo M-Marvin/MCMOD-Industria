@@ -12,10 +12,13 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer.Builder;
@@ -42,6 +45,7 @@ public class BlockConveyorBelt extends BlockContainerBase implements IAdvancedBl
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final EnumProperty<BeltState> RIGHT = EnumProperty.create("right", BeltState.class);
 	public static final EnumProperty<BeltState> LEFT = EnumProperty.create("left", BeltState.class);
+	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	
 	public BlockConveyorBelt(String name) {
 		super(name, Material.IRON, 1.5F, SoundType.LADDER);
@@ -49,7 +53,12 @@ public class BlockConveyorBelt extends BlockContainerBase implements IAdvancedBl
 	
 	public BlockConveyorBelt() {
 		super("conveyor_belt", Material.IRON, 1.5F, SoundType.LADDER, true);
-		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(RIGHT, BeltState.CLOSE).with(LEFT, BeltState.CLOSE));
+		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(RIGHT, BeltState.CLOSE).with(LEFT, BeltState.CLOSE).with(WATERLOGGED, false));
+	}
+
+	@Override
+	public FluidState getFluidState(BlockState state) {
+		return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluid().getDefaultState() : Fluids.EMPTY.getDefaultState();
 	}
 	
 	@Override
@@ -72,7 +81,7 @@ public class BlockConveyorBelt extends BlockContainerBase implements IAdvancedBl
 	
 	@Override
 	protected void fillStateContainer(Builder<Block, BlockState> builder) {
-		builder.add(FACING, RIGHT, LEFT);
+		builder.add(FACING, RIGHT, LEFT, WATERLOGGED);
 	}
 	
 	public BlockState updateState(World world, BlockPos pos, BlockState state) {

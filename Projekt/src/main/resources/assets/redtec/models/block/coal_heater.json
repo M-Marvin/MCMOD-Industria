@@ -2,7 +2,7 @@
 	"parent": "minecraft:block/cube_bottom_top",
 	"textures": {
 		"top": "redtec:block/coal_heater_top",
-		"bottom": "redtec:block/machine_side",
+		"bottom": "redtec:block/coal_heater_bottom",
 		"side": "redtec:block/coal_heater_side"
 	}
 }

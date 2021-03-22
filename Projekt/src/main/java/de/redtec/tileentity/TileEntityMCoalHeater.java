@@ -22,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -80,10 +81,10 @@ public class TileEntityMCoalHeater extends TileEntityInventoryBase implements IN
 												BlockState bottomState = this.world.getBlockState(pos2.down());
 												
 												if (bottomState.getBlock() == RedTec.limestone_sheet) {
-													this.world.setBlockState(pos2, RedTec.limestone_sheet.getDefaultState());
+													this.world.setBlockState(pos2, RedTec.limestone_sheet.getDefaultState().with(BlockStateProperties.WATERLOGGED, true));
 													this.world.setBlockState(pos2.down(), RedTec.limestone.getDefaultState());
 												} else if (bottomState.getFluidState().getFluid() == Fluids.EMPTY && !bottomState.isAir()) {
-													this.world.setBlockState(pos2, RedTec.limestone_sheet.getDefaultState());
+													this.world.setBlockState(pos2, RedTec.limestone_sheet.getDefaultState().with(BlockStateProperties.WATERLOGGED, true));
 												}
 												
 											} else {

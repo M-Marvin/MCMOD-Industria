@@ -13,6 +13,8 @@ import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -71,6 +73,16 @@ public class BlockMotor extends BlockContainerBase implements IElectricConnectiv
 	@Override
 	public DeviceType getDeviceType() {
 		return DeviceType.MASCHINE;
+	}
+
+	@Override
+	public BlockState mirror(BlockState state, Mirror mirrorIn) {
+		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+	}
+	
+	@Override
+	public BlockState rotate(BlockState state, Rotation rot) {
+		return state.with(FACING, rot.rotate(state.get(FACING)));
 	}
 
 }

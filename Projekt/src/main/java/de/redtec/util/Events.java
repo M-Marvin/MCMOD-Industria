@@ -58,7 +58,7 @@ public class Events {
 					
 					SoundEvent soundevent = fluid.isIn(FluidTags.LAVA) ? SoundEvents.ITEM_BUCKET_FILL_LAVA : SoundEvents.ITEM_BUCKET_FILL;
 					playerIn.playSound(soundevent, 1.0F, 1.0F);
-					ItemStack itemstack1 = DrinkHelper.fill(bucketItem, playerIn, new ItemStack(fluid.getFilledBucket()));
+					ItemStack itemstack1 = DrinkHelper.fill(bucketItem.copy(), playerIn, new ItemStack(fluid.getFilledBucket()));
 					if (!worldIn.isRemote) {
 						CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity)playerIn, new ItemStack(fluid.getFilledBucket()));
 						playerIn.setItemStackToSlot(EquipmentSlotType.MAINHAND, itemstack1);

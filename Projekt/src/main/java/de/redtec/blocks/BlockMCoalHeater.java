@@ -35,7 +35,7 @@ public class BlockMCoalHeater extends BlockContainerBase implements IAdvancedBlo
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
 	
 	public BlockMCoalHeater() {
-		super("coal_heater", Material.IRON, 2F, SoundType.METAL);
+		super("coal_heater", Material.ROCK, 4F, SoundType.STONE);
 	}
 	
 	@Override

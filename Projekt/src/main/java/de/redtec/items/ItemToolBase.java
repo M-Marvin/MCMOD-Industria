@@ -21,6 +21,11 @@ public class ItemToolBase extends ToolItem {
 		this.toolType = toolType;
 	}
 	
+	@Override
+	public boolean isRepairable(ItemStack stack) {
+		return false;
+	}
+	
 	public float getDestroySpeed(ItemStack stack, BlockState state) {
 	   if (getToolTypes(stack).stream().anyMatch(e -> state.isToolEffective(e))) return efficiency;
 	   return state.getBlock().getHarvestTool(state) == this.toolType ? this.efficiency : 1.0F;

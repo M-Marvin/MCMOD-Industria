@@ -68,7 +68,7 @@ public abstract class BlockMultiPart<T extends TileEntity> extends BlockContaine
 			
 		}
 		
-		worldIn.removeBlock(centerPos, false);
+		if (!isCenter(state)) worldIn.removeBlock(centerPos, false);
 		
 		super.onBlockHarvested(worldIn, centerPos, centerState, player);
 		

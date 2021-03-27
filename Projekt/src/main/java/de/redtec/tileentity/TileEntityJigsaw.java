@@ -5,15 +5,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import de.redtec.RedTec;
 import de.redtec.blocks.BlockJigsaw;
 import de.redtec.blocks.BlockJigsaw.JigsawType;
 import de.redtec.gui.ContainerJigsaw;
 import de.redtec.typeregistys.ModTileEntityType;
+import de.redtec.util.ItemStackHelper;
 import de.redtec.util.JigsawFileManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.chat.NarratorChatListener;
+import net.minecraft.command.arguments.BlockStateParser;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -28,7 +33,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.Template;
@@ -40,7 +44,7 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 	public ResourceLocation poolFile;
 	public ResourceLocation name;
 	public ResourceLocation targetName;
-	public ResourceLocation replaceState;
+	public BlockState replaceState;
 	public boolean powered;
 	public boolean lockOrientation;
 	
@@ -49,7 +53,7 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 		this.poolFile = new ResourceLocation(RedTec.MODID, "empty");
 		this.name = new ResourceLocation(RedTec.MODID, "empty");
 		this.targetName = new ResourceLocation(RedTec.MODID, "empty");
-		this.replaceState = Blocks.AIR.getRegistryName();
+		this.replaceState = Blocks.AIR.getDefaultState();
 	}
 	
 	@Override
@@ -57,7 +61,7 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 		compound.putString("poolFile", this.poolFile.toString());
 		compound.putString("name", this.name.toString());
 		compound.putString("targetName", this.targetName.toString());
-		compound.putString("replaceState", this.replaceState.toString());
+		compound.putString("replaceState", ItemStackHelper.getBlockStateString(this.replaceState));
 		compound.putBoolean("lockOrientation", this.lockOrientation);
 		compound.putBoolean("powered", this.powered);
 		return super.write(compound);
@@ -68,7 +72,15 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 		this.poolFile = ResourceLocation.tryCreate(compound.getString("poolFile"));
 		this.name = ResourceLocation.tryCreate(compound.getString("name"));
 		this.targetName = ResourceLocation.tryCreate(compound.getString("targetName"));
-		this.replaceState = ResourceLocation.tryCreate(compound.getString("replaceState"));
+		this.replaceState = Blocks.AIR.getDefaultState();
+		try {
+			BlockStateParser parser = new BlockStateParser(new StringReader(compound.contains("replaceState") ? compound.getString("replaceState") : "minecraft:air"), true);
+			parser.parse(false);
+			this.replaceState = parser.getState();
+		} catch (CommandSyntaxException e) {
+			RedTec.LOGGER.error("Cant parse BlockState!");
+			e.printStackTrace();
+		}
 		this.lockOrientation = compound.getBoolean("lockOrientation");
 		this.powered = compound.getBoolean("powered");
 		super.read(state, compound);
@@ -204,8 +216,6 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 			
 			if (!keepJigsaws) {
 				
-				@SuppressWarnings("deprecation")
-				BlockState replaceState = Registry.BLOCK.getOrDefault(this.replaceState).getDefaultState();
 				world.setBlockState(pos, replaceState, 2);
 				
 			}

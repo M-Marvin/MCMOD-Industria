@@ -63,7 +63,7 @@ public class BlockSaplingBase extends SaplingBlock {
 			if (tileEntity instanceof TileEntityJigsaw) {
 				
 				TileEntityJigsaw jigsaw = (TileEntityJigsaw) tileEntity;
-				jigsaw.replaceState = jigsawReplace.getBlock().getRegistryName();
+				jigsaw.replaceState = jigsawReplace.getBlock().getDefaultState();
 				jigsaw.targetName = this.jigsawConnectionName;
 				jigsaw.poolFile = this.jigsawPool;
 				jigsaw.lockOrientation = false;

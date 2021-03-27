@@ -40,6 +40,7 @@ public class TileEntityRHoverControler extends TileEntity implements IInventory,
 	 */
 	
 	private int energyTimer;
+	private int moveTimer;
 	
 	private final int maxScannBlocks = 10000;
 	private ItemStack actionItemForward;
@@ -74,11 +75,9 @@ public class TileEntityRHoverControler extends TileEntity implements IInventory,
 			
 			setWasPowered(actionItem, true);
 			
-			if (hasEnergy) {
+			if (hasEnergy && this.moveTimer <= 0) {
 				
 				if (!ItemStackHelper.isItemStackItemEqual(actionItem, actionItemRotate, false)) {
-
-					if (pos.getY() == 74) System.out.println("TSET222");
 					
 					if (wasLastTickPowered(this.actionItemRotate)) {
 						
@@ -87,6 +86,7 @@ public class TileEntityRHoverControler extends TileEntity implements IInventory,
 						
 						if (left || right) {
 							
+							this.moveTimer = 10;
 							doRotate(right);
 							
 						}
@@ -104,6 +104,7 @@ public class TileEntityRHoverControler extends TileEntity implements IInventory,
 						
 						if (direction != null) {
 							
+							this.moveTimer = 10;
 							this.doMove(direction);
 							
 						}
@@ -221,6 +222,7 @@ public class TileEntityRHoverControler extends TileEntity implements IInventory,
 		}
 		compound.put("chanelStates", chanelStates);
 		compound.putInt("energyTimer", this.energyTimer);
+		compound.putInt("moveTimer", this.moveTimer);
 		return super.write(compound);
 	}
 	
@@ -239,6 +241,7 @@ public class TileEntityRHoverControler extends TileEntity implements IInventory,
 			this.chanelState.put(chanel, chanelStates.getBoolean(chanel));
 		}
 		this.energyTimer = compound.getInt("energyTimer");
+		this.moveTimer = compound.getInt("moveTimer");
 		super.read(state, compound);
 	}
 	
@@ -327,6 +330,7 @@ public class TileEntityRHoverControler extends TileEntity implements IInventory,
 	public void tick() {
 		if (!this.world.isRemote()) {
 			if (this.energyTimer > 0) this.energyTimer--;
+			if (this.moveTimer > 0) this.moveTimer--;
 		}
 	}
 	

@@ -11,6 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
@@ -78,6 +79,7 @@ public abstract class FluidRawOil extends FlowingFluid {
 				new ResourceLocation(RedTec.MODID, "block/raw_oil_still"), 
 				new ResourceLocation(RedTec.MODID, "block/raw_oil_flow"))
 					.overlay(new ResourceLocation(RedTec.MODID, "block/raw_oil_overlay"))
+					.sound(SoundEvents.ITEM_BUCKET_FILL_LAVA, SoundEvents.ITEM_BUCKET_FILL_LAVA)
 					.build(this);
 	}
 	

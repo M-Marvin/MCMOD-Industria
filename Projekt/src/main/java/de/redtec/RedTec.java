@@ -351,7 +351,7 @@ public class RedTec {
 	public static final Block salsola_seeds = new BlockSalsolaSeeds();
 	public static final Block rubber_log = new BlockRubberLog("rubber_log", Material.WOOD, 2F, SoundType.WOOD);
 	public static final Block rubber_wood = new BlockRubberLog("rubber_wood", Material.WOOD, 2F, SoundType.WOOD);
-	public static final Block rubber_leaves = new BlockLeavesBase("rubber_leaves", Material.WOOD, 0.2F, 0.2F, SoundType.PLANT);
+	public static final Block rubber_leaves = new BlockLeavesBase("rubber_leaves", Material.LEAVES, 0.2F, 0.2F, SoundType.PLANT);
 	public static final Block rubber_sapling = new BlockSaplingBase("rubber_sapling", new ResourceLocation(RedTec.MODID, "nature/rubber_tree"));
 	
 	// Fluids and Buckets

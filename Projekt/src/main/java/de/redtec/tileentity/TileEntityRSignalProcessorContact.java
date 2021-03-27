@@ -261,5 +261,5 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 			device.sendMessage(message, world, pos, state);
 		}
 	}
-		
+	
 }

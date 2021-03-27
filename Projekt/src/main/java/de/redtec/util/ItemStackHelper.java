@@ -1,5 +1,6 @@
 package de.redtec.util;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -33,6 +34,17 @@ public class ItemStackHelper {
 		if (fluidStack.getFluid() == recipeStack.getFluid() && fluidStack.getAmount() + recipeStack.getAmount() <= maxFluidStorage) return true;
 		return false;
 		
+	}
+	
+	public static String getBlockStateString(BlockState state) {
+		String s = state.toString();
+		if (s.startsWith("Block{")) {
+			s = s.split("Block\\{")[1];
+			if (s.contains("}")) {
+				return s.split("\\}").length > 1 ? s.split("\\}")[0] + s.split("\\}")[1] : s.split("\\}")[0];
+			}
+		}
+		return "minecraft:air";
 	}
 	
 }

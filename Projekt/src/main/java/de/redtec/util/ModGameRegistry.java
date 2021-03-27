@@ -35,12 +35,14 @@ public class ModGameRegistry {
 		blocksToRegister.add(block);
 		IBlockToolType info = null;
 		int burnTime = -1;
+		int stackSize = 64;
 		Item.Properties properties = new Item.Properties().group(group).rarity(rarity);
 		
 		if (block instanceof IAdvancedBlockInfo) {
 			info = ((IAdvancedBlockInfo) block).getBlockInfo();
 			Supplier<Callable<ItemStackTileEntityRenderer>> ister = ((IAdvancedBlockInfo) block).getISTER();
 			properties = properties.setISTER(ister);
+			stackSize = ((IAdvancedBlockInfo) block).getStackSize();
 		}
 		
 		if (block instanceof IBurnableBlock) {
@@ -48,8 +50,8 @@ public class ModGameRegistry {
 		}
 		
 		Item blockItem;
-		if (burnTime != -1 || info != null) {
-			blockItem = new ItemBlockAdvancedInfo(block, properties, info, burnTime);
+		if (burnTime != -1 || info != null || stackSize != 64) {
+			blockItem = new ItemBlockAdvancedInfo(block, properties.maxStackSize(stackSize), info, burnTime);
 		} else {
 			blockItem = new BlockItem(block, properties);
 		}
@@ -62,12 +64,14 @@ public class ModGameRegistry {
 		blocksToRegister.add(block);
 		IBlockToolType info = null;
 		int burnTime = 0;
+		int stackSize = 64;
 		Item.Properties properties = new Item.Properties().group(group);
 		
 		if (block instanceof IAdvancedBlockInfo) {
 			info = ((IAdvancedBlockInfo) block).getBlockInfo();
 			Supplier<Callable<ItemStackTileEntityRenderer>> ister = ((IAdvancedBlockInfo) block).getISTER();
 			properties = properties.setISTER(ister);
+			stackSize = ((IAdvancedBlockInfo) block).getStackSize();
 		}
 		
 		if (block instanceof IBurnableBlock) {
@@ -75,8 +79,8 @@ public class ModGameRegistry {
 		}
 		
 		Item blockItem;
-		if (burnTime > 0 || info != null) {
-			blockItem = new ItemBlockAdvancedInfo(block, properties, info, burnTime);
+		if (burnTime > 0 || info != null || stackSize != 64) {
+			blockItem = new ItemBlockAdvancedInfo(block, properties.maxStackSize(stackSize), info, burnTime);
 		} else {
 			blockItem = new BlockItem(block, properties);
 		}

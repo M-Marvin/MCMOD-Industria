@@ -221,8 +221,8 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 					oz = 0;
 					break;
 				case WEST:
-					ox = 2;
-					oz = -1;
+					ox = -1;
+					oz = -2;
 					break;
 				}
 				;

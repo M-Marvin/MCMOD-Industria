@@ -6,7 +6,6 @@ import java.util.Random;
 
 import de.redtec.blocks.BlockBase;
 import de.redtec.tileentity.TileEntitySimpleBlockTicking;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -22,7 +21,6 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 public class BlockGasFluid extends BlockBase implements IBucketPickupHandler {
@@ -95,11 +93,6 @@ public class BlockGasFluid extends BlockBase implements IBucketPickupHandler {
 		}
 		
 		super.randomTick(state, worldIn, pos, random);
-	}
-	
-	@Override
-	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-		if (!worldIn.isRemote()) this.randomTick(state, (ServerWorld) worldIn, pos, worldIn.rand);
 	}
 	
 	@SuppressWarnings("deprecation")

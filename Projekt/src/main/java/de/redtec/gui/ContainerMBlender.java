@@ -19,7 +19,7 @@ public class ContainerMBlender extends ContainerTileEntity<TileEntityMBlender> {
 
 	@Override
 	public int getSlots() {
-		return 7;
+		return 9;
 	}
 
 	@Override

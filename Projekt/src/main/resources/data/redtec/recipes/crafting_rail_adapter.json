@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SRS",
+    "SCS",
+    "SGS"
+  ],
+  "key": {
+    "S": {
+      "item": "redtec:steel_plate"
+    },
+    "C": {
+      "item": "redtec:transformator_coil"
+    },
+    "G": {
+      "item": "redtec:steel_plates"
+    },
+    "R": {
+      "item": "redtec:steel_rail"
+    }
+  },
+  "result": {
+    "item": "redtec:rail_adapter"
+  }
+}

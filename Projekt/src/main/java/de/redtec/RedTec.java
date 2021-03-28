@@ -18,6 +18,8 @@ import de.redtec.blocks.BlockCornerBlockBase;
 import de.redtec.blocks.BlockElektricWire;
 import de.redtec.blocks.BlockFluidPipe;
 import de.redtec.blocks.BlockFluidValve;
+import de.redtec.blocks.BlockTInductiveRail;
+import de.redtec.blocks.BlockTRailAdapter;
 import de.redtec.blocks.BlockInfinityPowerSource;
 import de.redtec.blocks.BlockIronRod;
 import de.redtec.blocks.BlockJigsaw;
@@ -70,6 +72,7 @@ import de.redtec.blocks.BlockSignalAntennaConector;
 import de.redtec.blocks.BlockSignalWire;
 import de.redtec.blocks.BlockStackedRedstoneTorch;
 import de.redtec.blocks.BlockStackedRedstoneWire;
+import de.redtec.blocks.BlockTSteelRail;
 import de.redtec.blocks.BlockTreeTap;
 import de.redtec.blocks.BlockWeathering;
 import de.redtec.fluids.BlockChemicalWater;
@@ -205,6 +208,11 @@ public class RedTec {
 	
 	// Networks
 	public static final Block computer = new BlockNComputer();
+	
+	// Rail
+	public static final Block steel_rail = new BlockTSteelRail();
+	public static final Block inductive_rail = new BlockTInductiveRail();
+	public static final Block rail_adapter = new BlockTRailAdapter();
 	
 	// Machinery
 	public static final Block conveyor_spliter = new BlockConveyorSpliter();
@@ -696,6 +704,9 @@ public class RedTec {
 		ModGameRegistry.registerBlock(item_detector, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(computer, MACHINES);
 		ModGameRegistry.registerBlock(network_cable, MACHINES);
+		ModGameRegistry.registerBlock(steel_rail, ItemGroup.TRANSPORTATION);
+		ModGameRegistry.registerBlock(inductive_rail, ItemGroup.TRANSPORTATION);
+		ModGameRegistry.registerBlock(rail_adapter, ItemGroup.TRANSPORTATION);
 		
 		ModGameRegistry.registerBlock(motor, MACHINES);
 		

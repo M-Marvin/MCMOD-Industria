@@ -59,7 +59,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 		
 		ListNBT networkTag = new ListNBT();
 		for (ElectricityNetwork net : this.networks) {
-			networkTag.add(net.write(new CompoundNBT()));
+			if (!net.isEmpty()) networkTag.add(net.write(new CompoundNBT()));
 		}
 		compound.put("Networks", networkTag);
 		return compound;
@@ -448,6 +448,10 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 			this.capacity = 0;
 		}
 		
+		public boolean isEmpty() {
+			return this.positions.isEmpty();
+		}
+
 		public boolean contains(BlockPos pos) {
 			for (BlockPos pos1 : this.positions.keySet()) {
 				if (pos1.equals(pos)) return true;

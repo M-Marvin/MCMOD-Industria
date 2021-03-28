@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "C C",
+    "SRS",
+    "C C"
+  ],
+  "key": {
+    "S": {
+      "item": "redtec:steel_ingot"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    },
+    "C": {
+      "item": "redtec:motor_coil"
+    }
+  },
+  "result": {
+    "item": "redtec:inductive_rail",
+    "count": 8
+  }
+}

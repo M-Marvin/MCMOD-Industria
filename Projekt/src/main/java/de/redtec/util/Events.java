@@ -71,4 +71,9 @@ public class Events {
 		
 	}
 	
+	@SubscribeEvent
+	public static final void onWorldTick(net.minecraftforge.event.TickEvent.WorldTickEvent event) {
+		if (!event.world.isRemote()) MinecartBoostHandler.getHandlerForWorld(event.world).updateMinecarts();
+	}
+	
 }

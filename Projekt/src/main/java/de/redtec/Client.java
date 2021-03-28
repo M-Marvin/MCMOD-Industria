@@ -67,6 +67,8 @@ public class Client {
 		RenderTypeLookup.setRenderLayer(RedTec.rubber_sapling, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(RedTec.tree_tap, RenderType.getCutoutMipped());
 		RenderTypeLookup.setRenderLayer(RedTec.burned_cable, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(RedTec.steel_rail, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(RedTec.inductive_rail, RenderType.getCutout());
 		
 		RenderTypeLookup.setRenderLayer(ModFluids.SULFURIC_ACID, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_SULFURIC_ACID, RenderType.getTranslucent());

@@ -12,6 +12,7 @@ import de.redtec.typeregistys.ModConfiguredFeatures;
 import de.redtec.util.ModGameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.DispenserBlock;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IDispenseItemBehavior;
 import net.minecraft.item.Item;
@@ -45,7 +46,7 @@ public class Server {
 			public ItemStack dispense(IBlockSource source, ItemStack stack) {
 				BlockPos pos = source.getBlockPos().offset(source.getBlockState().get(BlockStateProperties.FACING));
 				Block block = Block.getBlockFromItem(stack.getItem());
-				if (block != null && source.getWorld().getBlockState(pos).isAir() && block.isValidPosition(block.getDefaultState(), source.getWorld(), pos)) {
+				if (block != null && (source.getWorld().getBlockState(pos).isAir() || source.getWorld().getBlockState(pos).getBlock() instanceof FlowingFluidBlock) && block.isValidPosition(block.getDefaultState(), source.getWorld(), pos)) {
 					source.getWorld().setBlockState(pos, block.getDefaultState());
 					stack.shrink(1);
 					return stack;

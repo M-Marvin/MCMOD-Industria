@@ -19,6 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 
 public class BlockRailStraightBase extends AbstractRailBlock {
 	
@@ -26,7 +27,7 @@ public class BlockRailStraightBase extends AbstractRailBlock {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	  
 	public BlockRailStraightBase(String name) {
-		super(true, AbstractBlock.Properties.create(Material.MISCELLANEOUS).doesNotBlockMovement().hardnessAndResistance(0.7F).sound(SoundType.METAL));
+		super(true, AbstractBlock.Properties.create(Material.MISCELLANEOUS).doesNotBlockMovement().hardnessAndResistance(0.7F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE));
 		this.setRegistryName(new ResourceLocation(RedTec.MODID, name));
 		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, false));
 	}

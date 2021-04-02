@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import de.redtec.RedTec;
+import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -68,13 +69,14 @@ public class MinecartBoostHandler extends WorldSavedData {
 		for (Entry<AbstractMinecartEntity, Long> entry : ((HashMap<AbstractMinecartEntity, Long>) this.boostedMinecarts.clone()).entrySet()) {
 			
 			long tagAge = world.getGameTime() - entry.getValue();
-			if (tagAge > 150) {
+			if (tagAge > 350) {
 				this.stopBoosted(entry.getKey());
 			}
 			
 			Block railBlock1 = world.getBlockState(entry.getKey().getPosition()).getBlock();
 			Block railBlock2 = world.getBlockState(entry.getKey().getPosition().down()).getBlock();
-			if (railBlock1 != RedTec.steel_rail && railBlock1 != RedTec.inductive_rail && railBlock2 != RedTec.steel_rail && railBlock2 != RedTec.inductive_rail) {
+			if (railBlock1 != RedTec.steel_rail && railBlock1 != RedTec.inductive_rail && railBlock2 != RedTec.steel_rail && railBlock2 != RedTec.inductive_rail && (railBlock1 instanceof AbstractRailBlock || railBlock2 instanceof AbstractRailBlock)) {
+				
 				this.stopBoosted(entry.getKey());
 			}
 			

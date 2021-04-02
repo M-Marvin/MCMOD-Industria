@@ -281,16 +281,19 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 	public static void updatePoweredState(World worldIn, BlockPos pos) {
 		
 		List<BlockPos> wires = new ArrayList<BlockPos>();
-		boolean powered = listConnectedWires(worldIn, pos, wires, 0);
+		boolean power = listConnectedWires(worldIn, pos, wires, 0);
 		
 		wires.forEach((wire) -> {
 			BlockState state = worldIn.getBlockState(wire);
-			worldIn.setBlockState(wire, state.with(POWERED, powered));
-			for (Direction d : Direction.values()) {
-				BlockPos notifyPos = wire.offset(d);
-				BlockState notifyState = worldIn.getBlockState(notifyPos);
-				if (notifyState.getBlock() != RedTec.stacked_redstone_wire) {
-					worldIn.notifyNeighborsOfStateChange(notifyPos, RedTec.stacked_redstone_wire);
+			boolean powered = state.get(POWERED);
+			worldIn.setBlockState(wire, state.with(POWERED, power));
+			if (powered != power) {
+				for (Direction d : Direction.values()) {
+					BlockPos notifyPos = wire.offset(d);
+					BlockState notifyState = worldIn.getBlockState(notifyPos);
+					if (notifyState.getBlock() != RedTec.stacked_redstone_wire) {
+						worldIn.notifyNeighborsOfStateChange(notifyPos, RedTec.stacked_redstone_wire);
+					}
 				}
 			}
 		});

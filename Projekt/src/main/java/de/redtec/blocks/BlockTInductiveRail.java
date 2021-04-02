@@ -18,7 +18,6 @@ public class BlockTInductiveRail extends BlockRailStraightBase {
 	
 	@Override
 	public void onMinecartPass(BlockState state, World world, BlockPos pos, AbstractMinecartEntity cart) {
-		
 		if (state.get(POWERED)) {
 			float mul = 1.1F;
 			Vector3d motion = cart.getMotion();

@@ -15,6 +15,8 @@ import de.redtec.gui.ContainerJigsaw;
 import de.redtec.typeregistys.ModTileEntityType;
 import de.redtec.util.ItemStackHelper;
 import de.redtec.util.JigsawFileManager;
+import de.redtec.util.JigsawTemplateProcessor;
+import de.redtec.util.JigsawTemplateProcessor.JigsawReplacement;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.chat.NarratorChatListener;
@@ -25,6 +27,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.StringNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -125,29 +128,48 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 			
 			if (list != null && levels > 0 && !hasAlreadyGenerated && !this.targetName.getPath().equals("empty")) {
 				
-				HashMap<Integer, String> files = new HashMap<Integer, String>();
+				HashMap<Integer, Integer> structures = new HashMap<Integer, Integer>();
 				int index = 0;
+				int structIndex = 0;
 				for (int i = 0; i < list.size(); i++) {
 					CompoundNBT entry = list.getCompound(i);
 					int chance = entry.getInt("chance");
-					String file = entry.getString("file");
 					for (int i1 = 0; i1 < chance; i1++) {
-						files.put(index++, file);
+						structures.put(index++, structIndex);
+					}
+					structIndex++;
+				}
+				
+				int randomStructureId = structures.size() > 1 ? structures.get(rand.nextInt(index - 1)) : structures.get(0);
+				CompoundNBT structureNBT = list.getCompound(randomStructureId);
+				
+				ResourceLocation resourceStructure = ResourceLocation.tryCreate(structureNBT.getString("file"));
+				JigsawReplacement replaceMode = JigsawReplacement.fromName(structureNBT.getString("replaceBlocks"));
+				ListNBT blockList = structureNBT.contains("blocks") ? structureNBT.getList("blocks", 8) : new ListNBT();
+				
+				List<BlockState> blocks = new ArrayList<BlockState>();
+				
+				for (int i = 0; i < blockList.size(); i++) {
+					StringNBT stringNBT = (StringNBT) blockList.get(i);
+					BlockStateParser parser = new BlockStateParser(new StringReader(stringNBT.getString()), true);
+					try {
+						parser.parse(false);
+						blocks.add(parser.getState());
+					} catch (CommandSyntaxException e) {
+						RedTec.LOGGER.warn("Cant parse replace-list block " + stringNBT.getString() + " in jigsaw metafile " + resourceStructure + "!");
 					}
 				}
 				
-				String randomFile = files.size() > 1 ? files.get(rand.nextInt(index - 1)) : files.get(0);
-				
-				ResourceLocation resourceStructure = ResourceLocation.tryCreate(randomFile);
 				Template template = JigsawFileManager.getTemplate(world, resourceStructure);
 				
 				if (template != null) {
 					
 					JigsawType alowedType = this.getBlockState().get(BlockJigsaw.TYPE).getOppesite();
-					List<BlockInfo> jigawBlocks = template.func_215381_a(BlockPos.ZERO, new PlacementSettings(), RedTec.jigsaw);
+					
+					List<BlockInfo> jigsawBlocks = template.func_215381_a(BlockPos.ZERO, new PlacementSettings(), RedTec.jigsaw);
 					
 					List<BlockInfo> filteredJigsaws = new ArrayList<BlockInfo>();
-					for (BlockInfo block : jigawBlocks) {
+					for (BlockInfo block : jigsawBlocks) {
 						ResourceLocation jigsawName = ResourceLocation.tryCreate(block.nbt.getString("name"));
 						if (jigsawName.toString().equals(this.targetName.toString()) && block.state.get(BlockJigsaw.TYPE) == alowedType) filteredJigsaws.add(block);
 					}
@@ -183,7 +205,8 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 								.setMirror(Mirror.NONE)
 								.setRotation(rotation)
 								.setIgnoreEntities(false)
-								.setChunk((ChunkPos)null);
+								.setChunk((ChunkPos)null)
+								.addProcessor(new JigsawTemplateProcessor(replaceMode, blocks));
 						
 						BlockPos offset = randomJigsaw.pos;
 						offset = Template.getTransformedPos(offset, Mirror.NONE, rotation, BlockPos.ZERO);
@@ -193,8 +216,8 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 						
 						template.func_237144_a_(world, generationPos, placement, rand);
 						
-						for (BlockInfo jigsaw : jigawBlocks) {
-
+						for (BlockInfo jigsaw : jigsawBlocks) {
+							
 							BlockPos transformedPos = Template.getTransformedPos(jigsaw.pos, Mirror.NONE, rotation, BlockPos.ZERO);
 							transformedPos = generationPos.add(transformedPos);
 							

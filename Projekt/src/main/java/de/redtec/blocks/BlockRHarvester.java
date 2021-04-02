@@ -79,6 +79,18 @@ public class BlockRHarvester extends BlockContainerBase {
 		boolean power = worldIn.getRedstonePowerFromNeighbors(fromPos) > 0 || worldIn.isBlockPowered(pos);
 		
 		if (powered != power) {
+			worldIn.addBlockEvent(pos, this, 1, power ? 1 : 0);
+		}
+		
+	}
+	
+	@SuppressWarnings({ "deprecation" })
+	@Override
+	public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int id, int param) {
+		
+		if (id == 1) {
+
+			boolean power = param == 1;
 			
 			worldIn.setBlockState(pos, state.with(POWERED, power));
 			
@@ -105,6 +117,7 @@ public class BlockRHarvester extends BlockContainerBase {
 			
 		}
 		
+		return super.eventReceived(state, worldIn, pos, id, param);
 	}
 	
 	@SuppressWarnings({ "static-access", "deprecation" })
@@ -121,28 +134,13 @@ public class BlockRHarvester extends BlockContainerBase {
 			TileEntity tileEntity = world.getTileEntity(harvestPos);
 			List<ItemStack> drops = harvestState.getBlock().getDrops(harvestState, (ServerWorld) world, harvestPos, tileEntity);
 			
-			world.addBlockEvent(pos, this, 1, 0);
+			world.destroyBlock(harvestPos, false);
 			
 			return drops;
 		}
 		
 	}
 	
-	@SuppressWarnings({ "deprecation" })
-	@Override
-	public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int id, int param) {
-		
-		if (id == 1) {
-			
-			BlockPos harvestPos = pos.offset(state.get(FACING));
-			worldIn.destroyBlock(harvestPos, false);
-			
-			return true;
-		}
-		
-		return super.eventReceived(state, worldIn, pos, id, param);
-	}
-
 	@Override
 	public TileEntity createNewTileEntity(IBlockReader worldIn) {
 		return new TileEntityRHarvester();

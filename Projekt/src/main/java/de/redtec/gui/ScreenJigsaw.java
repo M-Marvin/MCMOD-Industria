@@ -240,4 +240,9 @@ public class ScreenJigsaw extends ContainerScreen<ContainerJigsaw>{
 		
 	}
 	
+	@Override
+	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
+		this.font.func_243248_b(matrixStack, this.title, (float)this.titleX, (float)this.titleY, 4210752);
+	}
+	
 }

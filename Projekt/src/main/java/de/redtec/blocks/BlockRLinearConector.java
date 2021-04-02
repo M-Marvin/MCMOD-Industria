@@ -1,11 +1,13 @@
 package de.redtec.blocks;
 
+import de.redtec.RedTec;
 import de.redtec.util.AdvancedPistonBlockStructureHelper;
 import de.redtec.util.IAdvancedStickyBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.EnumProperty;
@@ -96,11 +98,14 @@ public class BlockRLinearConector extends BlockBase implements IAdvancedStickyBl
 			BlockState state2 = world.getBlockState(pos2);
 			if (!BlockRAdvancedPiston.canPush(state1, world, pos1, pistonStructureHelper.getMoveDirection(), true, pistonStructureHelper.getMoveDirection())) return false; // Check if Block in Push DIrection is Moveable
 			if (!BlockRAdvancedPiston.canPush(state2, world, pos2, pistonStructureHelper.getMoveDirection(), true, pistonStructureHelper.getMoveDirection())) return false;
-			if (pos1.equals(pistonStructureHelper.getPistonPos()) || state1.isAir()) flag12 = false;
-			if (pos2.equals(pistonStructureHelper.getPistonPos()) || state2.isAir()) flag22 = false;
+			if (pos1.equals(pistonStructureHelper.getPistonPos()) || state1.isAir() || state1.getPushReaction() == PushReaction.DESTROY) flag12 = false;
+			if (pos2.equals(pistonStructureHelper.getPistonPos()) || state2.isAir() || state2.getPushReaction() == PushReaction.DESTROY) flag22 = false;
 			
-			boolean flag1 = !flag12 ? true : pistonStructureHelper.addBlockLine(pos1, pistonStructureHelper.getMoveDirection()); // Start new Detecting at the Blcok (if not Diabled)
+			boolean flag1 = !flag12 ? true : pistonStructureHelper.addBlockLine(pos1, pistonStructureHelper.getMoveDirection());
 			boolean flag2 = !flag22 ? true : pistonStructureHelper.addBlockLine(pos2, pistonStructureHelper.getMoveDirection());
+			
+			if (state1.getBlock() == RedTec.conector_block) flag12 = false;
+			if (state2.getBlock() == RedTec.conector_block) flag22 = false;
 			
 			if (!flag1 || !flag2) return false;
 			

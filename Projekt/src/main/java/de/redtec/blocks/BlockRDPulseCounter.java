@@ -154,6 +154,7 @@ public class BlockRDPulseCounter extends BlockRedstoneDiode {
 	        BlockPos inputPos = pos.offset(stateIn.get(FACING).getOpposite());
 			int power = worldIn.getRedstonePower(inputPos, stateIn.get(FACING).getOpposite());
 			
+			// TODO
 	        if (power == 15) {
 	        	
 				d0 = (double)pos.getX() + 0.5D + (rand.nextDouble() - 0.5D) * 0.2D;

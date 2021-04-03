@@ -5,7 +5,7 @@ import java.util.List;
 
 import de.redtec.RedTec;
 import de.redtec.typeregistys.ModTileEntityType;
-import de.redtec.util.IPostMoveHandledTE;
+import de.redtec.util.blockfeatures.IPostMoveHandledTE;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

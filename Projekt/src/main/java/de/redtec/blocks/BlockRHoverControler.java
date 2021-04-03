@@ -5,10 +5,10 @@ import java.util.function.Supplier;
 
 import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.tileentity.TileEntityRHoverControler;
-import de.redtec.util.IAdvancedBlockInfo;
-import de.redtec.util.IElectricConnective;
-import de.redtec.util.ISignalConnective;
-import de.redtec.util.RedstoneControlSignal;
+import de.redtec.util.blockfeatures.IAdvancedBlockInfo;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock;
+import de.redtec.util.blockfeatures.ISignalConnectiveBlock;
+import de.redtec.util.types.RedstoneControlSignal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -39,7 +39,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockRHoverControler extends BlockContainerBase implements ISignalConnective, IElectricConnective, IAdvancedBlockInfo {
+public class BlockRHoverControler extends BlockContainerBase implements ISignalConnectiveBlock, IElectricConnectiveBlock, IAdvancedBlockInfo {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	

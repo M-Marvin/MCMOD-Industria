@@ -8,11 +8,11 @@ import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.typeregistys.ModDamageSource;
 import de.redtec.typeregistys.ModSoundEvents;
 import de.redtec.typeregistys.ModToolType;
-import de.redtec.util.ElectricityNetworkHandler;
-import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
-import de.redtec.util.IAdvancedBlockInfo;
-import de.redtec.util.IElectricConnective;
-import de.redtec.util.IElectricWire;
+import de.redtec.util.blockfeatures.IAdvancedBlockInfo;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock;
+import de.redtec.util.blockfeatures.IElectricWireBlock;
+import de.redtec.util.handler.ElectricityNetworkHandler;
+import de.redtec.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -29,7 +29,7 @@ import net.minecraft.world.Explosion.Mode;
 import net.minecraftforge.common.ToolType;
 import net.minecraft.world.World;
 
-public class BlockElektricWire extends BlockWiring implements IElectricWire, IAdvancedBlockInfo {
+public class BlockElektricWire extends BlockWiring implements IElectricWireBlock, IAdvancedBlockInfo {
 	
 	protected final int maximumPower;
 	
@@ -52,10 +52,10 @@ public class BlockElektricWire extends BlockWiring implements IElectricWire, IAd
 		
 		BlockState otherState = worldIn.getBlockState(connectPos);
 		
-		if (otherState.getBlock() instanceof IElectricWire) {
+		if (otherState.getBlock() instanceof IElectricWireBlock) {
 			return true;
-		} else if (otherState.getBlock() instanceof IElectricConnective) {
-			return ((IElectricConnective) otherState.getBlock()).canConnect(direction.getOpposite(), worldIn, connectPos, otherState);
+		} else if (otherState.getBlock() instanceof IElectricConnectiveBlock) {
+			return ((IElectricConnectiveBlock) otherState.getBlock()).canConnect(direction.getOpposite(), worldIn, connectPos, otherState);
 		}
 		
 		return false;

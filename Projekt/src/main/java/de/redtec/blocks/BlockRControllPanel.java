@@ -8,9 +8,9 @@ import java.util.function.Supplier;
 import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.renderer.BlockControllPanelItemRenderer;
 import de.redtec.tileentity.TileEntityControllPanel;
-import de.redtec.util.IAdvancedBlockInfo;
-import de.redtec.util.ISignalConnective;
-import de.redtec.util.RedstoneControlSignal;
+import de.redtec.util.blockfeatures.IAdvancedBlockInfo;
+import de.redtec.util.blockfeatures.ISignalConnectiveBlock;
+import de.redtec.util.types.RedstoneControlSignal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -45,7 +45,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-public class BlockRControllPanel extends BlockContainerBase implements ISignalConnective, IWaterLoggable, IAdvancedBlockInfo {
+public class BlockRControllPanel extends BlockContainerBase implements ISignalConnectiveBlock, IWaterLoggable, IAdvancedBlockInfo {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;

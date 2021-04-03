@@ -3,7 +3,7 @@ package de.redtec.typeregistys;
 import com.mojang.serialization.Codec;
 
 import de.redtec.RedTec;
-import de.redtec.util.JigsawTemplateProcessor;
+import de.redtec.structureprocessor.JigsawTemplateProcessor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.feature.template.IStructureProcessorType;

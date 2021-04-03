@@ -6,6 +6,7 @@ import de.redtec.gui.ContainerRHoverControler;
 import de.redtec.gui.ContainerJigsaw;
 import de.redtec.gui.ContainerMAlloyFurnace;
 import de.redtec.gui.ContainerMBlender;
+import de.redtec.gui.ContainerMChunkLoader;
 import de.redtec.gui.ContainerMCoalHeater;
 import de.redtec.gui.ContainerMElectricFurnace;
 import de.redtec.gui.ContainerMFluidBath;
@@ -46,6 +47,7 @@ public class ModContainerType {
 	public static final ContainerType<ContainerMFluidBath> FLUID_BATH = register(new ResourceLocation(RedTec.MODID, "fluid_bath"), ContainerMFluidBath::new);
 	public static final ContainerType<ContainerNComputer> COMPUTER = register(new ResourceLocation(RedTec.MODID, "computer"), ContainerNComputer::new);
 	public static final ContainerType<ContainerNetworkConfigurator> NETWORK_CONFIGURATOR = register(new ResourceLocation(RedTec.MODID, "network_configurator"), ContainerNetworkConfigurator::new);
+	public static final ContainerType<ContainerMChunkLoader> CHUNK_LAODER = register(new ResourceLocation(RedTec.MODID, "chunk_loader"), ContainerMChunkLoader::new);
 	
 	protected static <T extends Container> ContainerType<T> register(ResourceLocation key, IContainerFactory<T> factory) {
 		ContainerType<T> type = IForgeContainerType.create(factory);

@@ -5,10 +5,10 @@ import java.util.function.Supplier;
 
 import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.tileentity.TileEntityMFuseBox;
-import de.redtec.util.ElectricityNetworkHandler;
-import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
-import de.redtec.util.IAdvancedBlockInfo;
-import de.redtec.util.IElectricConnective;
+import de.redtec.util.blockfeatures.IAdvancedBlockInfo;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock;
+import de.redtec.util.handler.ElectricityNetworkHandler;
+import de.redtec.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -38,7 +38,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockMFuseBox extends BlockContainerBase implements IElectricConnective, IAdvancedBlockInfo {
+public class BlockMFuseBox extends BlockContainerBase implements IElectricConnectiveBlock, IAdvancedBlockInfo {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final BooleanProperty ON = BooleanProperty.create("on");

@@ -2,8 +2,8 @@ package de.redtec.packet;
 
 import java.util.function.Supplier;
 
-import de.redtec.util.INetworkDevice;
-import de.redtec.util.INetworkDevice.NetworkDeviceIP;
+import de.redtec.util.blockfeatures.INetworkDevice;
+import de.redtec.util.blockfeatures.INetworkDevice.NetworkDeviceIP;
 import net.minecraft.block.BlockState;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;

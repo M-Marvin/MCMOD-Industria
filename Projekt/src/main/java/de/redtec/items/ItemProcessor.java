@@ -5,7 +5,7 @@ import java.util.Map.Entry;
 
 import de.redtec.gui.ContainerRProcessor;
 import de.redtec.tileentity.TileEntityRSignalProcessorContact;
-import de.redtec.util.ContainerTileEntity;
+import de.redtec.util.blockfeatures.ContainerTileEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;

@@ -8,10 +8,10 @@ import java.util.function.Supplier;
 import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.renderer.BlockMFluidBathItemRenderer;
 import de.redtec.tileentity.TileEntityMFluidBath;
-import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
-import de.redtec.util.IAdvancedBlockInfo;
-import de.redtec.util.IElectricConnective;
-import de.redtec.util.VoxelHelper;
+import de.redtec.util.blockfeatures.IAdvancedBlockInfo;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock;
+import de.redtec.util.handler.VoxelHelper;
+import de.redtec.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -42,7 +42,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMFluidBath extends BlockMultiPart<TileEntityMFluidBath> implements IElectricConnective, IAdvancedBlockInfo, ISidedInventoryProvider {
+public class BlockMFluidBath extends BlockMultiPart<TileEntityMFluidBath> implements IElectricConnectiveBlock, IAdvancedBlockInfo, ISidedInventoryProvider {
 
 	public BlockMFluidBath() {
 		super("fluid_bath", Material.IRON, 3F, SoundType.METAL, 2, 2, 3);

@@ -2,9 +2,9 @@ package de.redtec.items;
 
 import de.redtec.RedTec;
 import de.redtec.gui.ContainerNetworkConfigurator;
-import de.redtec.util.INetworkDevice;
-import de.redtec.util.INetworkDevice.NetworkDeviceIP;
-import de.redtec.util.INetworkDevice.NetworkDeviceType;
+import de.redtec.util.blockfeatures.INetworkDevice;
+import de.redtec.util.blockfeatures.INetworkDevice.NetworkDeviceIP;
+import de.redtec.util.blockfeatures.INetworkDevice.NetworkDeviceType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;

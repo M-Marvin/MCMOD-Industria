@@ -6,9 +6,9 @@ import java.util.function.Supplier;
 
 import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.tileentity.TileEntityMAlloyFurnace;
-import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
-import de.redtec.util.IAdvancedBlockInfo;
-import de.redtec.util.IElectricConnective;
+import de.redtec.util.blockfeatures.IAdvancedBlockInfo;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock;
+import de.redtec.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -45,7 +45,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMAlloyFurnace extends BlockContainerBase implements IElectricConnective, IAdvancedBlockInfo, ISidedInventoryProvider {
+public class BlockMAlloyFurnace extends BlockContainerBase implements IElectricConnectiveBlock, IAdvancedBlockInfo, ISidedInventoryProvider {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;

@@ -8,10 +8,10 @@ import java.util.function.Supplier;
 import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.renderer.BlockMBlenderItemRenderer;
 import de.redtec.tileentity.TileEntityMBlender;
-import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
-import de.redtec.util.IAdvancedBlockInfo;
-import de.redtec.util.IElectricConnective;
-import de.redtec.util.VoxelHelper;
+import de.redtec.util.blockfeatures.IAdvancedBlockInfo;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock;
+import de.redtec.util.handler.VoxelHelper;
+import de.redtec.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -42,7 +42,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMBlender extends BlockMultiPart<TileEntityMBlender> implements IElectricConnective, IAdvancedBlockInfo, ISidedInventoryProvider {
+public class BlockMBlender extends BlockMultiPart<TileEntityMBlender> implements IElectricConnectiveBlock, IAdvancedBlockInfo, ISidedInventoryProvider {
 	
 	public BlockMBlender() {
 		super("blender", Material.IRON, 4F, SoundType.METAL, 3, 3, 3);

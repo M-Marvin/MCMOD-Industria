@@ -7,9 +7,10 @@ import de.redtec.packet.CEditComputerCode;
 import de.redtec.packet.CEditJigsawTileEntityPacket;
 import de.redtec.packet.CEditProcessorCodePacket;
 import de.redtec.packet.CGenerateJigsaw;
+import de.redtec.packet.CUpdateChunkLoader;
 import de.redtec.packet.SSendENHandeler;
 import de.redtec.typeregistys.ModConfiguredFeatures;
-import de.redtec.util.ModGameRegistry;
+import de.redtec.util.handler.ModGameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.FlowingFluidBlock;
@@ -39,6 +40,7 @@ public class Server {
 		RedTec.NETWORK.registerMessage(3, SSendENHandeler.class, SSendENHandeler::encode, SSendENHandeler::new, SSendENHandeler::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));		
 		RedTec.NETWORK.registerMessage(4, CEditComputerCode.class, CEditComputerCode::encode, CEditComputerCode::new, CEditComputerCode::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		RedTec.NETWORK.registerMessage(5, CConfigureNetworkDevice.class, CConfigureNetworkDevice::encode, CConfigureNetworkDevice::new, CConfigureNetworkDevice::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+		RedTec.NETWORK.registerMessage(6, CUpdateChunkLoader.class, CUpdateChunkLoader::encode, CUpdateChunkLoader::new, CUpdateChunkLoader::handle);
 		
 		// Dispenser Behaviors
 		IDispenseItemBehavior placeBlockBehavior = new IDispenseItemBehavior() {

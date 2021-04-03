@@ -7,8 +7,8 @@ import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.renderer.BlockMSteamGeneratorItemRenderer;
 import de.redtec.tileentity.TileEntityMSteamGenerator;
 import de.redtec.tileentity.TileEntityMSteamGenerator.TEPart;
-import de.redtec.util.IAdvancedBlockInfo;
-import de.redtec.util.IElectricConnective;
+import de.redtec.util.blockfeatures.IAdvancedBlockInfo;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -24,7 +24,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockMSteamGenerator extends BlockMultiPart<TileEntityMSteamGenerator> implements IElectricConnective, IAdvancedBlockInfo {
+public class BlockMSteamGenerator extends BlockMultiPart<TileEntityMSteamGenerator> implements IElectricConnectiveBlock, IAdvancedBlockInfo {
 	
 	public BlockMSteamGenerator() {
 		super("steam_generator", Material.IRON, 8F, SoundType.METAL, 3, 3, 2);

@@ -1,7 +1,7 @@
 package de.redtec.gui;
 
 import de.redtec.typeregistys.ModContainerType;
-import de.redtec.util.INetworkDevice.NetworkDeviceIP;
+import de.redtec.util.blockfeatures.INetworkDevice.NetworkDeviceIP;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;

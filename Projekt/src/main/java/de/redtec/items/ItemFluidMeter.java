@@ -1,7 +1,7 @@
 package de.redtec.items;
 
 import de.redtec.RedTec;
-import de.redtec.util.IFluidConnective;
+import de.redtec.util.blockfeatures.IFluidConnective;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;

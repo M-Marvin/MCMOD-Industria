@@ -1,7 +1,7 @@
 package de.redtec.blocks;
 
 import de.redtec.typeregistys.ModToolType;
-import de.redtec.util.INetworkDevice;
+import de.redtec.util.blockfeatures.INetworkDevice;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;

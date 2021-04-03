@@ -5,9 +5,9 @@ import java.util.function.Supplier;
 
 import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.tileentity.TileEntityMFluidInput;
-import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
-import de.redtec.util.IAdvancedBlockInfo;
-import de.redtec.util.IElectricConnective;
+import de.redtec.util.blockfeatures.IAdvancedBlockInfo;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock;
+import de.redtec.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -33,7 +33,7 @@ import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockMFluidInput extends BlockContainerBase implements IElectricConnective, IAdvancedBlockInfo {
+public class BlockMFluidInput extends BlockContainerBase implements IElectricConnectiveBlock, IAdvancedBlockInfo {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	

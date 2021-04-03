@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AWA",
+    "W W",
+    "AWA"
+  ],
+  "key": {
+    "W": {
+      "item": "redtec:wolfram_plate"
+    },
+    "A": {
+      "item": "redtec:aluminium_ingot"
+    }
+  },
+  "result": {
+    "item": "redtec:reinforced_casing",
+    "count": 4
+  }
+}

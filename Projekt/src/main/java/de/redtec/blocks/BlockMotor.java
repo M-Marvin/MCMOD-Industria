@@ -1,8 +1,8 @@
 package de.redtec.blocks;
 
 import de.redtec.tileentity.TileEntityMotor;
-import de.redtec.util.IElectricConnective;
-import de.redtec.util.VoxelHelper;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock;
+import de.redtec.util.handler.VoxelHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -22,7 +22,7 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockMotor extends BlockContainerBase implements IElectricConnective {
+public class BlockMotor extends BlockContainerBase implements IElectricConnectiveBlock {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	

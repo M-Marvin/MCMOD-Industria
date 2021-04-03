@@ -7,7 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import de.redtec.RedTec;
 import de.redtec.tileentity.TileEntityJigsaw;
-import de.redtec.util.ItemStackHelper;
+import de.redtec.util.handler.ItemStackHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.command.arguments.BlockStateParser;

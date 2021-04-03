@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.redtec.typeregistys.ModTileEntityType;
-import de.redtec.util.IPostMoveHandledTE;
+import de.redtec.util.blockfeatures.IPostMoveHandledTE;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;

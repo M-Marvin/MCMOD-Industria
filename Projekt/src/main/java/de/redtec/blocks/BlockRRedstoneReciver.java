@@ -1,9 +1,9 @@
 package de.redtec.blocks;
 
 import de.redtec.tileentity.TileEntityRedstoneReciver;
-import de.redtec.util.ISignalConnective;
-import de.redtec.util.ItemStackHelper;
-import de.redtec.util.RedstoneControlSignal;
+import de.redtec.util.blockfeatures.ISignalConnectiveBlock;
+import de.redtec.util.handler.ItemStackHelper;
+import de.redtec.util.types.RedstoneControlSignal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -32,7 +32,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockRRedstoneReciver extends BlockContainerBase implements ISignalConnective {
+public class BlockRRedstoneReciver extends BlockContainerBase implements ISignalConnectiveBlock {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final BooleanProperty TRANSIVER_MODE = BooleanProperty.create("transiver_mode");

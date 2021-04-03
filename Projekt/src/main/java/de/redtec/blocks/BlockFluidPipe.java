@@ -7,8 +7,8 @@ import javax.annotation.Nullable;
 
 import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.tileentity.TileEntityFluidPipe;
-import de.redtec.util.IAdvancedBlockInfo;
-import de.redtec.util.IFluidConnective;
+import de.redtec.util.blockfeatures.IAdvancedBlockInfo;
+import de.redtec.util.blockfeatures.IFluidConnective;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;

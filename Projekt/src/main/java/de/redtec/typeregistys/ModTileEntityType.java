@@ -6,12 +6,14 @@ import de.redtec.RedTec;
 import de.redtec.tileentity.TileEntityAdvancedMovingBlock;
 import de.redtec.tileentity.TileEntityControllPanel;
 import de.redtec.tileentity.TileEntityConveyorBelt;
+import de.redtec.tileentity.TileEntityEnderCore;
 import de.redtec.tileentity.TileEntityFluidPipe;
 import de.redtec.tileentity.TileEntityFluidValve;
 import de.redtec.tileentity.TileEntityJigsaw;
 import de.redtec.tileentity.TileEntityMAlloyFurnace;
 import de.redtec.tileentity.TileEntityMBlender;
 import de.redtec.tileentity.TileEntityMBurnedCable;
+import de.redtec.tileentity.TileEntityMChunkLoader;
 import de.redtec.tileentity.TileEntityMCoalHeater;
 import de.redtec.tileentity.TileEntityMElectricFurnace;
 import de.redtec.tileentity.TileEntityMFluidBath;
@@ -46,6 +48,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 public class ModTileEntityType {
 	
+	public static final TileEntityType<TileEntitySimpleBlockTicking> SIMPLE_BLOCK_TICKING = register("simple_block_ticking", TileEntityType.Builder.create(TileEntitySimpleBlockTicking::new, RedTec.panel_lamp, RedTec.infinity_power_source, RedTec.transformator_contact, RedTec.steam, RedTec.rail_adapter));
 	public static final TileEntityType<TileEntityAdvancedMovingBlock> ADVANCED_PISTON = register("advanced_piston", TileEntityType.Builder.create(TileEntityAdvancedMovingBlock::new, RedTec.advanced_moving_block));
 	public static final TileEntityType<TileEntityRedstoneReciver> REMOTE_CONTROLER = register("remote_controler", TileEntityType.Builder.create(TileEntityRedstoneReciver::new, RedTec.advanced_moving_block));
 	public static final TileEntityType<TileEntityRSignalAntenna> SIGNAL_ANTENNA = register("signal_antenna", TileEntityType.Builder.create(TileEntityRSignalAntenna::new, RedTec.antenna_conector));
@@ -55,7 +58,6 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityRHoverControler> HOVER_CONTROLER = register("hover_controler", TileEntityType.Builder.create(TileEntityRHoverControler::new, RedTec.hover_controler));
 	public static final TileEntityType<TileEntityControllPanel> CONTROLL_PANEL = register("controll_panel", TileEntityType.Builder.create(TileEntityControllPanel::new, RedTec.controll_panel));
 	public static final TileEntityType<TileEntityRHarvester> HARVESTER = register("harvester", TileEntityType.Builder.create(TileEntityRHarvester::new, RedTec.harvester));
-	public static final TileEntityType<TileEntitySimpleBlockTicking> SIMPLE_BLOCK_TICKING = register("simple_block_ticking", TileEntityType.Builder.create(TileEntitySimpleBlockTicking::new, RedTec.panel_lamp, RedTec.infinity_power_source, RedTec.transformator_contact, RedTec.steam, RedTec.rail_adapter));
 	public static final TileEntityType<TileEntityJigsaw> JIGSAW = register("jigsaw", TileEntityType.Builder.create(TileEntityJigsaw::new, RedTec.jigsaw));
 	public static final TileEntityType<TileEntityMGenerator> GENERATOR = register("generator", TileEntityType.Builder.create(TileEntityMGenerator::new, RedTec.generator));
 	public static final TileEntityType<TileEntityFluidPipe> FLUID_PIPE = register("fluid_pipe", TileEntityType.Builder.create(TileEntityFluidPipe::new, RedTec.fluid_pipe));
@@ -78,6 +80,8 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityMBurnedCable> BURNED_CABLE = register("burned_cable", TileEntityType.Builder.create(TileEntityMBurnedCable::new, RedTec.burned_cable));
 	public static final TileEntityType<TileEntityRItemDetector> ITEM_DETECTOR = register("item_detector", TileEntityType.Builder.create(TileEntityRItemDetector::new, RedTec.item_detector));
 	public static final TileEntityType<TileEntityNComputer> COMPUTER = register("computer", TileEntityType.Builder.create(TileEntityNComputer::new, RedTec.computer));
+	public static final TileEntityType<TileEntityMChunkLoader> CHUNK_LOADER = register("chunk_loader", TileEntityType.Builder.create(TileEntityMChunkLoader::new, RedTec.chunk_loader));
+	public static final TileEntityType<TileEntityEnderCore> ENDER_CORE = register("ender_core", TileEntityType.Builder.create(TileEntityEnderCore::new, RedTec.ender_core));
 	
 	private static <T extends TileEntity> TileEntityType<T> register(String key, TileEntityType.Builder<T> builder) {
 		Type<?> type = Util.attemptDataFix(TypeReferences.BLOCK_ENTITY, key);

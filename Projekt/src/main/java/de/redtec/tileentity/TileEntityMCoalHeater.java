@@ -8,7 +8,7 @@ import de.redtec.gui.ContainerMCoalHeater;
 import de.redtec.typeregistys.ModFluids;
 import de.redtec.typeregistys.ModSoundEvents;
 import de.redtec.typeregistys.ModTileEntityType;
-import de.redtec.util.MachineSoundHelper;
+import de.redtec.util.handler.MachineSoundHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.entity.player.PlayerEntity;

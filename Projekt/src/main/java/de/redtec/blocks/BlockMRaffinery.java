@@ -8,10 +8,10 @@ import java.util.function.Supplier;
 import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.renderer.BlockMRaffineryItemRenderer;
 import de.redtec.tileentity.TileEntityMRaffinery;
-import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
-import de.redtec.util.IAdvancedBlockInfo;
-import de.redtec.util.IElectricConnective;
-import de.redtec.util.VoxelHelper;
+import de.redtec.util.blockfeatures.IAdvancedBlockInfo;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock;
+import de.redtec.util.handler.VoxelHelper;
+import de.redtec.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -42,7 +42,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMRaffinery extends BlockMultiPart<TileEntityMRaffinery> implements IElectricConnective, IAdvancedBlockInfo, ISidedInventoryProvider {
+public class BlockMRaffinery extends BlockMultiPart<TileEntityMRaffinery> implements IElectricConnectiveBlock, IAdvancedBlockInfo, ISidedInventoryProvider {
 
 	public BlockMRaffinery() {
 		super("raffinery", Material.IRON, 4F, SoundType.METAL, 3, 4, 2);

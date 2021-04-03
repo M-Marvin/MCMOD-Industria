@@ -3,6 +3,7 @@ package de.redtec;
 import de.redtec.gui.ScreenJigsaw;
 import de.redtec.gui.ScreenMAlloyFurnace;
 import de.redtec.gui.ScreenMBlender;
+import de.redtec.gui.ScreenMChunkLoader;
 import de.redtec.gui.ScreenMCoalHeater;
 import de.redtec.gui.ScreenMElectricFurnace;
 import de.redtec.gui.ScreenMFluidBath;
@@ -21,6 +22,7 @@ import de.redtec.renderer.ItemSchredderToolCrusherModel;
 import de.redtec.renderer.TileEntityAdvancedMovingBlockRenderer;
 import de.redtec.renderer.TileEntityControllPanelRenderer;
 import de.redtec.renderer.TileEntityConveyorBeltRenderer;
+import de.redtec.renderer.TileEntityEnderCoreRenderer;
 import de.redtec.renderer.TileEntityFuseBoxRenderer;
 import de.redtec.renderer.TileEntityGaugeRenderer;
 import de.redtec.renderer.TileEntityMBlenderRenderer;
@@ -101,6 +103,7 @@ public class Client {
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.RAFFINERY, TileEntityMRaffineryRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.FLUID_BATH, TileEntityMFluidBathRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.COMPUTER, TileEntityNComputerRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ENDER_CORE, TileEntityEnderCoreRenderer::new);
 		
 		ScreenManager.registerFactory(ModContainerType.STORED_CRAFTING, ScreenMStoredCrafting::new);
 		ScreenManager.registerFactory(ModContainerType.PROCESSOR, ScreenRProcessor::new);
@@ -119,6 +122,7 @@ public class Client {
 		ScreenManager.registerFactory(ModContainerType.FLUID_BATH, ScreenMFluidBath::new);
 		ScreenManager.registerFactory(ModContainerType.COMPUTER, ScreenNComputer::new);
 		ScreenManager.registerFactory(ModContainerType.NETWORK_CONFIGURATOR, ScreenNetworkConfigurator::new);
+		ScreenManager.registerFactory(ModContainerType.CHUNK_LAODER, ScreenMChunkLoader::new);
 		
 		ModClientBindings.bindModelToitem(RedTec.schredder_crusher, new ResourceLocation(RedTec.MODID, "textures/item/schredder_crusher.png"), new ItemSchredderToolCrusherModel());
 		

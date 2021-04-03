@@ -8,10 +8,10 @@ import java.util.function.Supplier;
 import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.renderer.BlockMSchredderItemRenderer;
 import de.redtec.tileentity.TileEntityMSchredder;
-import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
-import de.redtec.util.IAdvancedBlockInfo;
-import de.redtec.util.IElectricConnective;
-import de.redtec.util.VoxelHelper;
+import de.redtec.util.blockfeatures.IAdvancedBlockInfo;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock;
+import de.redtec.util.handler.VoxelHelper;
+import de.redtec.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -42,7 +42,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMSchredder extends BlockMultiPart<TileEntityMSchredder> implements IElectricConnective, IAdvancedBlockInfo, ISidedInventoryProvider {
+public class BlockMSchredder extends BlockMultiPart<TileEntityMSchredder> implements IElectricConnectiveBlock, IAdvancedBlockInfo, ISidedInventoryProvider {
 	
 	public static final VoxelShape BASE = Block.makeCuboidShape(0, 0, 0, 16, 14, 16);
 	public static final VoxelShape CORNER_1 = VoxelShapes.or(Block.makeCuboidShape(0, -2, 0, 16, 14, 1), Block.makeCuboidShape(0, -2, 0, 2, 16, 16));

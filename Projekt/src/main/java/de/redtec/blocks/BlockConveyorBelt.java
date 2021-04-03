@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 
 import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.tileentity.TileEntityConveyorBelt;
-import de.redtec.util.IAdvancedBlockInfo;
+import de.redtec.util.blockfeatures.IAdvancedBlockInfo;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;

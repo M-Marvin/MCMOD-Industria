@@ -168,6 +168,9 @@
 "block.redtec.steel_rail": "Stahlschiene",
 "block.redtec.inductive_rail": "Induktions Antriebsschine",
 "block.redtec.rail_adapter": "Indutkionsschienen Adapter",
+"block.redtec.reinforced_casing": "Verst\u00e4rktes Gestell",
+"block.redtec.ender_core": "Enderkern (WIP)",
+"block.redtec.chunk_loader": "Chunkloader",
 
 "item.redtec.steam_bucket": "Dampfeimer",
 "item.redtec.destilled_water_bucket": "Eimer kondensiertes Wasser",
@@ -375,6 +378,7 @@
 "redtec.block.info.computer": "\nSpezielle Maschine die Berechnungen ausf\u00fchren und Abl\u00e4ufe steuern kann.\nWird mit LUA-Script auf Festplatten programmiert.",
 "redtec.block.info.signalProcessor": "\nFassung f\u00fcr Prozessoren.\nKann einfache Signale logisch verarbeiten.\nKann auch \u00fcber Netzwerk mit einem Computer verbunden werden.",
 "redtec.block.info.railAdapter": "\nZur Stromversorgung von Induktions Antriebsschienen.\nNur versorgte Schienen beschleunigen die Lore, Geschwindigkeit bleibt auf Stahlschienen ca 200 Bl\u00f6cke lang erhalten.",
+"redtec.block.info.chunkLoader": "\nH\u00e4lt ausw\u00e4hlbare Bereiche im umkreis geladen, auch wenn kein Spieler in der n\u00e4he ist.",
 "redtec.item.info.drive": "\nKann Dateien enthalten die von Computern ausgef\u00fchrt bzw gelesen/geschrieben werden k\u00f6nnen.\nJede Festplatte hat einen Ordner im Weltordner.",
 "redtec.item.info.name": "Laufwerkname: %1$s",
 "redtec.item.info.fuseMax": "Max. Strom: %1$s A",

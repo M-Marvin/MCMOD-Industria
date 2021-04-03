@@ -3,8 +3,8 @@ package de.redtec.blocks;
 import java.util.HashMap;
 
 import de.redtec.tileentity.TileEntityAdvancedMovingBlock;
-import de.redtec.util.AdvancedPistonBlockStructureHelper;
-import de.redtec.util.IAdvancedStickyBlock;
+import de.redtec.util.blockfeatures.IAdvancedStickyBlock;
+import de.redtec.util.types.AdvancedPistonBlockStructureHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;

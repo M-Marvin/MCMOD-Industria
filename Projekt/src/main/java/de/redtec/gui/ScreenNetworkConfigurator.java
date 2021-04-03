@@ -6,7 +6,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 
 import de.redtec.RedTec;
 import de.redtec.packet.CConfigureNetworkDevice;
-import de.redtec.util.INetworkDevice.NetworkDeviceIP;
+import de.redtec.util.blockfeatures.INetworkDevice.NetworkDeviceIP;
 import net.minecraft.client.gui.DialogTexts;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;

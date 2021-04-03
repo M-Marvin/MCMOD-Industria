@@ -1,0 +1,19 @@
+{
+  "type": "redtec:schredder",
+  "ingredient": {
+    "item": "redtec:sulfur_ore"
+  },
+  "results": [
+    {
+      "item": "redtec:crushed_netherrack",
+      "count": 4
+    },
+    {
+      "item": "minecraft:sulfur",
+      "count": 4
+    }
+  ],
+  "schreddertime": 30,
+  "schreddertool": "redtec:schredder_crusher",
+  "schredderdamage": 1
+}

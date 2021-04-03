@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 import de.redtec.gui.ContainerMStoredCrafting;
 import de.redtec.typeregistys.ModTileEntityType;
-import de.redtec.util.ContainerDummy;
+import de.redtec.util.gui.ContainerDummy;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

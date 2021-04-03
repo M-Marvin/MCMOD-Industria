@@ -6,7 +6,7 @@ import java.util.List;
 import de.redtec.RedTec;
 import de.redtec.blocks.BlockSignalAntennaConector;
 import de.redtec.typeregistys.ModTileEntityType;
-import de.redtec.util.RedstoneControlSignal;
+import de.redtec.util.types.RedstoneControlSignal;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;

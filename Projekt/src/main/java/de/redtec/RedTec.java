@@ -14,6 +14,7 @@ import de.redtec.blocks.BlockBurnable;
 import de.redtec.blocks.BlockBurnedCable;
 import de.redtec.blocks.BlockConveyorBelt;
 import de.redtec.blocks.BlockConveyorSpliter;
+import de.redtec.blocks.BlockEnderCore;
 import de.redtec.blocks.BlockCornerBlockBase;
 import de.redtec.blocks.BlockElektricWire;
 import de.redtec.blocks.BlockFluidPipe;
@@ -27,6 +28,7 @@ import de.redtec.blocks.BlockLeavesBase;
 import de.redtec.blocks.BlockLimestoneSheet;
 import de.redtec.blocks.BlockMAlloyFurnace;
 import de.redtec.blocks.BlockMBlender;
+import de.redtec.blocks.BlockMChunkLoader;
 import de.redtec.blocks.BlockMCoalHeater;
 import de.redtec.blocks.BlockMElectricFurnace;
 import de.redtec.blocks.BlockMFluidBath;
@@ -65,6 +67,7 @@ import de.redtec.blocks.BlockRRailPiston;
 import de.redtec.blocks.BlockRRedstoneContact;
 import de.redtec.blocks.BlockRRedstoneReciver;
 import de.redtec.blocks.BlockRSignalProcessorContact;
+import de.redtec.blocks.BlockReinforcedCasing;
 import de.redtec.blocks.BlockRubberLog;
 import de.redtec.blocks.BlockSalsolaSeeds;
 import de.redtec.blocks.BlockSaplingBase;
@@ -104,7 +107,7 @@ import de.redtec.items.panelitems.ItemLampElement;
 import de.redtec.items.panelitems.ItemLeverElement;
 import de.redtec.typeregistys.ModFluids;
 import de.redtec.typeregistys.ModSoundEvents;
-import de.redtec.util.ModGameRegistry;
+import de.redtec.util.handler.ModGameRegistry;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -243,6 +246,7 @@ public class RedTec {
 	public static final Block alloy_furnace = new BlockMAlloyFurnace();
 	public static final Block thermal_zentrifuge = new BlockMThermalZentrifuge();
 	public static final Block fluid_bath = new BlockMFluidBath();
+	public static final Block chunk_loader = new BlockMChunkLoader();
 	
 	// Ore and Resource Blocks
 	public static final Block bauxit = new BlockBase("bauxit", Material.ROCK, 1.5F, SoundType.STONE);
@@ -352,6 +356,8 @@ public class RedTec {
 	public static final Block green_painted_planks = new BlockBurnable("green_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
 	public static final Block red_painted_planks = new BlockBurnable("red_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
 	public static final Block black_painted_planks = new BlockBurnable("black_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block reinforced_casing = new BlockReinforcedCasing();
+	public static final Block ender_core = new BlockEnderCore();
 	
 	public static final Block stone_corner = new BlockCornerBlockBase("stone_corner", () -> Blocks.STONE.getDefaultState(), AbstractBlock.Properties.create(Material.ROCK).sound(SoundType.STONE));
 	
@@ -614,7 +620,9 @@ public class RedTec {
 		ModGameRegistry.registerBlock(monel_planks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(netherite_planks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(sulfur_ore, BUILDING_BLOCKS);
-		
+		ModGameRegistry.registerBlock(reinforced_casing, DECORATIONS);
+		ModGameRegistry.registerBlock(ender_core, DECORATIONS);
+				
 		ModGameRegistry.registerBlock(smooth_cobblestone, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(chiseled_smooth_stone, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(iron_rod, DECORATIONS);
@@ -707,6 +715,7 @@ public class RedTec {
 		ModGameRegistry.registerBlock(steel_rail, ItemGroup.TRANSPORTATION);
 		ModGameRegistry.registerBlock(inductive_rail, ItemGroup.TRANSPORTATION);
 		ModGameRegistry.registerBlock(rail_adapter, ItemGroup.TRANSPORTATION);
+		ModGameRegistry.registerBlock(chunk_loader, MACHINES);
 		
 		ModGameRegistry.registerBlock(motor, MACHINES);
 		

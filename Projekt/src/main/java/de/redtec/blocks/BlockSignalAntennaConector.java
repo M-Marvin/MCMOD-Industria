@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.redtec.tileentity.TileEntityRSignalAntenna;
-import de.redtec.util.ISignalConnective;
-import de.redtec.util.RedstoneControlSignal;
+import de.redtec.util.blockfeatures.ISignalConnectiveBlock;
+import de.redtec.util.types.RedstoneControlSignal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -30,7 +30,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-public class BlockSignalAntennaConector extends BlockContainerBase implements ISignalConnective {
+public class BlockSignalAntennaConector extends BlockContainerBase implements ISignalConnectiveBlock {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	

@@ -1,7 +1,7 @@
 package de.redtec.items.panelitems;
 
 import de.redtec.tileentity.TileEntityControllPanel;
-import de.redtec.util.RedstoneControlSignal;
+import de.redtec.util.types.RedstoneControlSignal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;

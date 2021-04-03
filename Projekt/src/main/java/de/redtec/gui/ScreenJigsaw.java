@@ -9,7 +9,7 @@ import de.redtec.blocks.BlockJigsaw;
 import de.redtec.blocks.BlockJigsaw.JigsawType;
 import de.redtec.packet.CEditJigsawTileEntityPacket;
 import de.redtec.packet.CGenerateJigsaw;
-import de.redtec.util.ItemStackHelper;
+import de.redtec.util.handler.ItemStackHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.DialogTexts;

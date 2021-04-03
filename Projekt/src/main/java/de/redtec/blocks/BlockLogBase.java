@@ -1,6 +1,6 @@
 package de.redtec.blocks;
 
-import de.redtec.util.IBurnableBlock;
+import de.redtec.util.blockfeatures.IBurnableBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;

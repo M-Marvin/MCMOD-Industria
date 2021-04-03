@@ -5,7 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import de.redtec.RedTec;
 import de.redtec.tileentity.TileEntityMRaffinery;
-import de.redtec.util.FluidBarTexture;
+import de.redtec.util.gui.FluidBarTexture;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;

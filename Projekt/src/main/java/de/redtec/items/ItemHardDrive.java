@@ -3,7 +3,7 @@ package de.redtec.items;
 import java.util.List;
 
 import de.redtec.RedTec;
-import de.redtec.util.DriveManager;
+import de.redtec.util.handler.DriveManager;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;

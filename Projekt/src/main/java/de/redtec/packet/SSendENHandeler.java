@@ -2,7 +2,7 @@ package de.redtec.packet;
 
 import java.util.function.Supplier;
 
-import de.redtec.util.ElectricityNetworkHandler;
+import de.redtec.util.handler.ElectricityNetworkHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.nbt.CompoundNBT;

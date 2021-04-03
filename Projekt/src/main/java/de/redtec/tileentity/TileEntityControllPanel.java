@@ -7,7 +7,7 @@ import de.redtec.RedTec;
 import de.redtec.blocks.BlockRControllPanel;
 import de.redtec.items.panelitems.ItemPanelElement;
 import de.redtec.typeregistys.ModTileEntityType;
-import de.redtec.util.RedstoneControlSignal;
+import de.redtec.util.types.RedstoneControlSignal;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;

@@ -1,6 +1,6 @@
 package de.redtec.blocks;
 
-import de.redtec.util.MinecartBoostHandler;
+import de.redtec.util.handler.MinecartBoostHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.redtec.tileentity.TileEntityRLockedCompositeBlock;
-import de.redtec.util.AdvancedPistonBlockStructureHelper;
-import de.redtec.util.IAdvancedStickyBlock;
+import de.redtec.util.blockfeatures.IAdvancedStickyBlock;
+import de.redtec.util.types.AdvancedPistonBlockStructureHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;

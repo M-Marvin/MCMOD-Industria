@@ -6,11 +6,11 @@ import java.util.function.Supplier;
 
 import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.tileentity.TileEntityRSignalProcessorContact;
-import de.redtec.util.IAdvancedBlockInfo;
-import de.redtec.util.INetworkDevice;
-import de.redtec.util.ISignalConnective;
-import de.redtec.util.ItemStackHelper;
-import de.redtec.util.RedstoneControlSignal;
+import de.redtec.util.blockfeatures.IAdvancedBlockInfo;
+import de.redtec.util.blockfeatures.INetworkDevice;
+import de.redtec.util.blockfeatures.ISignalConnectiveBlock;
+import de.redtec.util.handler.ItemStackHelper;
+import de.redtec.util.types.RedstoneControlSignal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -52,7 +52,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockRSignalProcessorContact extends BlockContainerBase implements ISignalConnective, IWaterLoggable, INetworkDevice, IAdvancedBlockInfo {
+public class BlockRSignalProcessorContact extends BlockContainerBase implements ISignalConnectiveBlock, IWaterLoggable, INetworkDevice, IAdvancedBlockInfo {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final BooleanProperty OPEN = BooleanProperty.create("open");

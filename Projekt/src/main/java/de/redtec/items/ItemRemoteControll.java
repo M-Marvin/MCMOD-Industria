@@ -2,7 +2,7 @@ package de.redtec.items;
 
 import de.redtec.blocks.BlockSignalAntennaConector;
 import de.redtec.tileentity.TileEntityRSignalAntenna;
-import de.redtec.util.RedstoneControlSignal;
+import de.redtec.util.types.RedstoneControlSignal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;

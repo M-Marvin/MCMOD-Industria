@@ -8,9 +8,9 @@ import java.util.function.Supplier;
 import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.renderer.BlockNComputerItemRenderer;
 import de.redtec.tileentity.TileEntityNComputer;
-import de.redtec.util.IAdvancedBlockInfo;
-import de.redtec.util.IElectricConnective;
-import de.redtec.util.INetworkDevice;
+import de.redtec.util.blockfeatures.IAdvancedBlockInfo;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock;
+import de.redtec.util.blockfeatures.INetworkDevice;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -33,7 +33,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockNComputer extends BlockMultiPart<TileEntityNComputer> implements IElectricConnective, IAdvancedBlockInfo, INetworkDevice {
+public class BlockNComputer extends BlockMultiPart<TileEntityNComputer> implements IElectricConnectiveBlock, IAdvancedBlockInfo, INetworkDevice {
 	
 	public BlockNComputer() {
 		super("computer", Material.IRON, 2F, SoundType.METAL, 1, 2, 2);

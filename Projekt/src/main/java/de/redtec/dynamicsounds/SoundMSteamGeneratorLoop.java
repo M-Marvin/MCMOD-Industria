@@ -28,23 +28,26 @@ public class SoundMSteamGeneratorLoop extends SoundMachine {
 	public void tick() {
 		
 		TileEntity te = this.world.getTileEntity(pos);
-		TileEntityMSteamGenerator tileEntity = te instanceof TileEntityMSteamGenerator ? (TileEntityMSteamGenerator) te : new TileEntityMSteamGenerator();
 		
-		if (tileEntity.accerlation > 0) {
+		if (te instanceof TileEntityMSteamGenerator) {
+			TileEntityMSteamGenerator tileEntity = (TileEntityMSteamGenerator) te;
 			
-			this.pitch = tileEntity.accerlation / 20F * 2F;
-			this.volume = tileEntity.accerlation / 20F;
-			
-			this.x = tileEntity.getPos().getX();
-			this.y = tileEntity.getPos().getY();
-			this.z = tileEntity.getPos().getZ();
-			
-		} else {
-			
-			this.finishPlaying();
-			
+			if (tileEntity.accerlation > 0) {
+				
+				this.pitch = tileEntity.accerlation / 20F * 2F;
+				this.volume = tileEntity.accerlation / 20F;
+				
+				this.x = tileEntity.getPos().getX();
+				this.y = tileEntity.getPos().getY();
+				this.z = tileEntity.getPos().getZ();
+				
+			} else {
+				
+				this.finishPlaying();
+				
+			}
 		}
-		
+ 		
 	}
 
 }

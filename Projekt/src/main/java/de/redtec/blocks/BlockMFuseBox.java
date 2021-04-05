@@ -91,27 +91,29 @@ public class BlockMFuseBox extends BlockContainerBase implements IElectricConnec
 			
 			if ((heldStack.isEmpty() || !fuseStack.isEmpty()) && player.isSneaking()) {
 				
-				ItemStack removeStack = ((TileEntityMFuseBox) te).removeFuse();
-				BlockPos pos2 = pos.offset(hit.getFace());
-				worldIn.addEntity(new ItemEntity(worldIn, pos2.getX() + 0.5F, pos2.getY() + 0.5F, pos2.getZ() + 0.5F, removeStack));
+				if (!worldIn.isRemote()) {
+					ItemStack removeStack = ((TileEntityMFuseBox) te).removeFuse();
+					BlockPos pos2 = pos.offset(hit.getFace());
+					worldIn.addEntity(new ItemEntity(worldIn, pos2.getX() + 0.5F, pos2.getY() + 0.5F, pos2.getZ() + 0.5F, removeStack));
+				}
 				return ActionResultType.SUCCESS;
 				
 			} else if (!heldStack.isEmpty() && fuseStack.isEmpty()) {
 				
-				boolean success = ((TileEntityMFuseBox) te).insertFuse(heldStack);
-				if (success && !player.isCreative()) {
-					heldStack.shrink(1);
-					return ActionResultType.SUCCESS;
+				if (!worldIn.isRemote()) {
+					boolean success = ((TileEntityMFuseBox) te).insertFuse(heldStack);
+					if (success && !player.isCreative()) {
+						heldStack.shrink(1);
+					}
 				}
+				return ActionResultType.SUCCESS;
 				
 			} else {
 				
 				if (((TileEntityMFuseBox) te).canSwitch()) {
-					
-					worldIn.setBlockState(pos, state.with(ON, !state.get(ON)));
+					if (!worldIn.isRemote()) worldIn.setBlockState(pos, state.with(ON, !state.get(ON)));
 					worldIn.playSound(null, pos, SoundEvents.BLOCK_WOODEN_BUTTON_CLICK_ON, SoundCategory.BLOCKS, 1, 0.5F);
 					return ActionResultType.SUCCESS;
-					
 				}
 				
 			}

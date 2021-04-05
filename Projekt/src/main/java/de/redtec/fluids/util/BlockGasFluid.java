@@ -45,13 +45,14 @@ public class BlockGasFluid extends BlockBase implements IBucketPickupHandler {
 	
 	@Override
 	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
-		if (worldIn.rand.nextInt(200) == 0) this.randomTick(state, worldIn, pos, worldIn.rand);
+		if (worldIn.rand.nextInt(150) == 0) this.randomTick(state, worldIn, pos, worldIn.rand);
 	}
 	
 	@SuppressWarnings("deprecation")
 	@Override
 	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
 		
+		state = worldIn.getBlockState(pos);
 		BlockState replaceState = worldIn.getBlockState(pos.up(this.fluid.getAttributes().isGaseous() ? 1 : -1));
 		
 		if (replaceState.isAir()) {
@@ -115,7 +116,7 @@ public class BlockGasFluid extends BlockBase implements IBucketPickupHandler {
 			
 			BlockPos replacePos = pos.offset(d);
 			
-			world.setBlockState(replacePos, this.getDefaultState(), 2);
+			world.setBlockState(replacePos, state, 2);
 			world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 			
 			
@@ -146,9 +147,7 @@ public class BlockGasFluid extends BlockBase implements IBucketPickupHandler {
 				
 				if (replaceState.isAir()) {
 					
-					//((GasFluid) this.fluid).beforeReplacingBlock(world, pushPos, replaceState);
-					
-					world.setBlockState(pushPos, this.getDefaultState(), 2);
+					world.setBlockState(pushPos, state, 2);
 					world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 					
 				}

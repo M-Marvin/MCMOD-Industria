@@ -21,6 +21,11 @@ public class TileEntityInventoryBase extends TileEntity implements IInventory {
 	}
 	
 	@Override
+	public double getMaxRenderDistanceSquared() {
+		return 300F;
+	}
+	
+	@Override
 	public void clear() {
 		for (int i = 0; i < this.slots; i++) {
 			this.itemstacks.set(i, ItemStack.EMPTY);

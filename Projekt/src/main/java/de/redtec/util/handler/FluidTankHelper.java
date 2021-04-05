@@ -26,16 +26,18 @@ public class FluidTankHelper {
 	@SuppressWarnings("deprecation")
 	public BlockPos insertFluidInTank(Fluid fluid) {
 		
+		boolean flag = fluid.getAttributes().isGaseous();
 		int bottomY = this.beginPos.getY();
-		for (; bottomY > 0; bottomY--) {
+		for (; flag ? (bottomY < this.beginPos.getY() + 30) : (bottomY > 0); bottomY += flag ? 1 : -1) {
 			BlockPos testPos = new BlockPos(this.beginPos.getX(), bottomY, this.beginPos.getZ());
 			BlockState blockState = this.world.getBlockState(testPos);
 			
 			if (!blockState.isAir() && !ModFluids.isFluidBlock(blockState.getBlock())) {
-				bottomY = Math.min(bottomY + 1, this.beginPos.getY());
+				bottomY = Math.min(bottomY + (flag ? -1 : 1), this.beginPos.getY());
 				break;
 			}
 		}
+		if (bottomY >= this.beginPos.getY() + 30 && flag) bottomY = this.beginPos.getY();
 		
 		List<BlockPos> outletPosList = new ArrayList<BlockPos>();
 		for (int y = bottomY; y <= this.beginPos.getY(); y++) {

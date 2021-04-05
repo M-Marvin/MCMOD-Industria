@@ -22,11 +22,11 @@ import net.minecraft.world.World;
 
 public class BlockSteam extends BlockGasFluid {
 	
-	public static final BooleanProperty PREASURIZED = BooleanProperty.create("preasurized");
+	public static final BooleanProperty PRESSURIZED = BooleanProperty.create("pressurized");
 	
 	public BlockSteam() {
 		super("steam", ModFluids.STEAM, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
-		this.setDefaultState(this.stateContainer.getBaseState().with(PREASURIZED, false));
+		this.setDefaultState(this.stateContainer.getBaseState().with(PRESSURIZED, false));
 	}
 	
 	@Override
@@ -36,13 +36,13 @@ public class BlockSteam extends BlockGasFluid {
 	
 	@Override
 	protected void fillStateContainer(Builder<Block, BlockState> builder) {
-		builder.add(PREASURIZED);
+		builder.add(PRESSURIZED);
 		super.fillStateContainer(builder);
 	}
 
 	@Override
 	public FluidState getFluidState(BlockState state) {
-		return super.getFluidState(state).with(FluidSteam.PREASURIZED, state.get(PREASURIZED));
+		return super.getFluidState(state).with(FluidSteam.PRESSURIZED, state.get(PRESSURIZED));
 	}
 	
 	@Override

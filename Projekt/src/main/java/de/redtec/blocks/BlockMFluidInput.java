@@ -65,7 +65,7 @@ public class BlockMFluidInput extends BlockContainerBase implements IElectricCon
 	public float getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
 		TileEntity te = world.getTileEntity(pos);
 		if (te instanceof TileEntityMFluidInput) {
-			return ((TileEntityMFluidInput) te).canSourceFluid() ? 3 : 0;
+			return ((TileEntityMFluidInput) te).canSourceFluid() ? 1 : 0;
 		}
 		return 0;
 	}
@@ -83,9 +83,9 @@ public class BlockMFluidInput extends BlockContainerBase implements IElectricCon
 	@Override
 	public IBlockToolType getBlockInfo() {
 		return (stack, info) -> {
-			info.add(new TranslationTextComponent("redtec.block.info.needEnergy", 3 * Voltage.NormalVoltage.getVoltage()));
+			info.add(new TranslationTextComponent("redtec.block.info.needEnergy", 1 * Voltage.NormalVoltage.getVoltage()));
 			info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.NormalVoltage.getVoltage()));
-			info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 3));
+			info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 1));
 			info.add(new TranslationTextComponent("redtec.block.info.fluidInput.mb", 100));
 			info.add(new TranslationTextComponent("redtec.block.info.fluidInput"));
 		};

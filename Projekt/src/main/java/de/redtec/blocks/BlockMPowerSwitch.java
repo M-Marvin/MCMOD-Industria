@@ -51,6 +51,7 @@ public class BlockMPowerSwitch extends BlockBase implements IElectricConnectiveB
 	
 	public BlockMPowerSwitch() {
 		super("power_switch", Material.IRON, 1.5F, SoundType.METAL);
+		this.setDefaultState(this.stateContainer.getBaseState().with(CLOSED, false).with(POWERED, false));
 	}
 	
 	@Override

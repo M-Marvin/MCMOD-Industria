@@ -1,6 +1,7 @@
 package de.redtec.util.handler;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.redtec.dynamicsounds.SoundMSteamGeneratorLoop;
 import de.redtec.dynamicsounds.SoundMachine;
@@ -9,25 +10,26 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class MachineSoundHelper {
 	
-	protected static HashMap<TileEntity, SoundMachine> soundMap = new HashMap<TileEntity, SoundMachine>();
+	protected static List<SoundMachine> soundMap = new ArrayList<SoundMachine>();
 	
 	public static void startSoundIfNotRunning(TileEntity tileEntity, SoundEvent soundEvent) {
 		
 		SoundHandler soundHandler = Minecraft.getInstance().getSoundHandler();
 		
-		SoundMachine sound = soundMap.get(tileEntity);
+		SoundMachine sound = getSoundForTileEntity(tileEntity);
 				
-		if (sound == null ? true : !soundHandler.isPlaying(sound)) {
+		if (sound == null || sound.isDonePlaying()) {
 			
 			sound = new SoundMachine(tileEntity, soundEvent);
 			soundHandler.play(sound);
-			soundMap.put(tileEntity, sound);
+			soundMap.add(sound);
 			
 		}
 		
@@ -37,15 +39,27 @@ public class MachineSoundHelper {
 		
 		SoundHandler soundHandler = Minecraft.getInstance().getSoundHandler();
 		
-		SoundMachine turbinSound = soundMap.get(tileEntity);
+		SoundMachine turbinSound = getSoundForTileEntity(tileEntity);
 		
-		if (turbinSound == null ? true : !soundHandler.isPlaying(turbinSound)) {
+		if (turbinSound == null || turbinSound.isDonePlaying()) {
 			
 			turbinSound = new SoundMSteamGeneratorLoop(tileEntity);
 			soundHandler.play(turbinSound);
+			soundMap.add(turbinSound);
 			
 		}
 		
+	}
+	
+	public static SoundMachine getSoundForTileEntity(TileEntity tileEntity) {
+		BlockPos tilePos = tileEntity.getPos();
+		SoundMachine tileSound = null;
+		for (SoundMachine sound : soundMap) {
+			if (new BlockPos(sound.getX(), sound.getY(), sound.getZ()).equals(tilePos)) {
+				tileSound = sound;
+			}
+		}
+		return tileSound;
 	}
 	
 }

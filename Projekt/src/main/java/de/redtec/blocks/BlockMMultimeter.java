@@ -65,7 +65,7 @@ public class BlockMMultimeter extends BlockContainerBase implements IElectricCon
 	@Override
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
-		if (player.isSneaking()) {
+		if (player.isSneaking() && !worldIn.isRemote()) {
 			
 			MessurementType unit = state.get(UNIT);
 			if (unit == MessurementType.VOLT) {

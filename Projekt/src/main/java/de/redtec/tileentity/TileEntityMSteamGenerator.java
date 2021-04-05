@@ -287,7 +287,7 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 			TileEntityMSteamGenerator center = (TileEntityMSteamGenerator) tileEntity;
 			
 			if (fluid.getFluid() == this.getFluidType()) {
-				if (!FluidStackStateTagHelper.makeStateFromStack(fluid).get(FluidSteam.PREASURIZED)) {
+				if (!FluidStackStateTagHelper.makeStateFromStack(fluid).get(FluidSteam.PRESSURIZED)) {
 
 					if (center.steamOut.isEmpty()) {
 						int transfer = Math.min(this.maxFluid, fluid.getAmount());

@@ -2,7 +2,7 @@
   "parent": "minecraft:block/orientable",
   "textures": {
     "top": "redtec:block/steel_machine_top",
-    "front": "redtec:block/chunk_loader",
-    "side": "redtec:block/chunk_loader"
+    "front": "redtec:block/alloy_furnace_front",
+    "side": "redtec:block/steel_machine_side"
   }
 }

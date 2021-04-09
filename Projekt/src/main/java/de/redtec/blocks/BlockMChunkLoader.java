@@ -7,9 +7,12 @@ import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.tileentity.TileEntityMChunkLoader;
 import de.redtec.util.blockfeatures.IAdvancedBlockInfo;
 import de.redtec.util.blockfeatures.IElectricConnectiveBlock;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock.Voltage;
+import de.redtec.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
@@ -28,6 +31,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.Explosion.Mode;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class BlockMChunkLoader extends BlockContainerBase implements IElectricConnectiveBlock, IAdvancedBlockInfo {
@@ -105,6 +109,18 @@ public class BlockMChunkLoader extends BlockContainerBase implements IElectricCo
 	@Override
 	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
 		return null;
+	}
+
+	@Override
+	public void onNetworkChanges(World worldIn, BlockPos pos, BlockState state, ElectricityNetwork network) {
+
+		if (network.getVoltage().getVoltage() > Voltage.HightVoltage.getVoltage() && network.getCurrent() > 0) {
+
+			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
+			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+			
+		}
+		
 	}
 	
 }

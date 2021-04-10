@@ -7,6 +7,7 @@ import de.redtec.RedTec;
 import de.redtec.blocks.BlockMultiPart;
 import de.redtec.items.ItemSchredderTool;
 import de.redtec.tileentity.TileEntityMSchredder;
+import de.redtec.typeregistys.ModClientBindings;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -59,10 +60,10 @@ public class TileEntityMSchredderRenderer extends TileEntityRenderer<TileEntityM
 				float partialToAdd = partialTicks < tileEntityIn.lastPartial ? partialTicks : partialTicks - tileEntityIn.lastPartial;
 				tileEntityIn.rotation += motion * partialToAdd;
 				
-				ItemSchredderToolModel toolModel = tool.getModel();
+				ItemSchredderToolModel toolModel = (ItemSchredderToolModel) ModClientBindings.getBindedModel(tool).getModel();
 				toolModel.setRotationState(tileEntityIn.rotation);
 				
-				vertexBuffer = bufferIn.getBuffer(RenderType.getEntityTranslucent(tool.getModelTexture()));
+				vertexBuffer = bufferIn.getBuffer(RenderType.getEntityTranslucent(ModClientBindings.getBindedModel(tool).getTextureLoc()));
 				toolModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 				
 			}

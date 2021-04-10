@@ -1,17 +1,16 @@
 package de.redtec.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
+import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.renderer.BlockGaugeItemRenderer;
 import de.redtec.tileentity.TileEntityMMultimeter;
 import de.redtec.tileentity.TileEntityMMultimeter.DecimalUnit;
 import de.redtec.tileentity.TileEntityMMultimeter.MessurementType;
-import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
-import de.redtec.util.IAdvancedBlockInfo;
-import de.redtec.util.IElectricConnective;
+import de.redtec.util.blockfeatures.IAdvancedBlockInfo;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock;
+import de.redtec.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -35,12 +34,11 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockMMultimeter extends BlockContainerBase implements IElectricConnective, IAdvancedBlockInfo {
+public class BlockMMultimeter extends BlockContainerBase implements IElectricConnectiveBlock, IAdvancedBlockInfo {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	public static final EnumProperty<TileEntityMMultimeter.MessurementType> UNIT = EnumProperty.create("unit", TileEntityMMultimeter.MessurementType.class);
@@ -67,7 +65,7 @@ public class BlockMMultimeter extends BlockContainerBase implements IElectricCon
 	@Override
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
-		if (player.isSneaking()) {
+		if (player.isSneaking() && !worldIn.isRemote()) {
 			
 			MessurementType unit = state.get(UNIT);
 			if (unit == MessurementType.VOLT) {
@@ -169,12 +167,12 @@ public class BlockMMultimeter extends BlockContainerBase implements IElectricCon
 		return state.get(UNIT) != TileEntityMMultimeter.MessurementType.VOLT;
 		
 	}
-	
+
 	@Override
-	public List<ITextComponent> getBlockInfo() {
-		List<ITextComponent> info = new ArrayList<ITextComponent>();
-		info.add(new TranslationTextComponent("redtec.block.info.multimeter"));
-		return info;
+	public IBlockToolType getBlockInfo() {
+		return (stack, info) -> {
+			info.add(new TranslationTextComponent("redtec.block.info.multimeter"));
+		};
 	}
 	
 	@Override
@@ -224,4 +222,5 @@ public class BlockMMultimeter extends BlockContainerBase implements IElectricCon
 		}
 		return 0;
 	}
+	
 }

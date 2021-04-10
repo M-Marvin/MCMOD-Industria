@@ -3,9 +3,9 @@ package de.redtec.items;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import de.redtec.gui.ContainerProcessor;
-import de.redtec.tileentity.TileEntitySignalProcessorContact;
-import de.redtec.util.ContainerTileEntity;
+import de.redtec.gui.ContainerRProcessor;
+import de.redtec.tileentity.TileEntityRSignalProcessorContact;
+import de.redtec.util.blockfeatures.ContainerTileEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -35,8 +35,8 @@ public class ItemProcessor extends ItemBase {
 		return this.maxLineCount;
 	}
 	
-	public ContainerTileEntity<TileEntitySignalProcessorContact> createContainer(int id, PlayerInventory playerInv, TileEntitySignalProcessorContact tileEntity) {
-		return new ContainerProcessor(id, playerInv, tileEntity);
+	public ContainerTileEntity<TileEntityRSignalProcessorContact> createContainer(int id, PlayerInventory playerInv, TileEntityRSignalProcessorContact tileEntity) {
+		return new ContainerRProcessor(id, playerInv, tileEntity);
 	}
 	
 	public ITextComponent getScreenTitle(ItemStack stack) {

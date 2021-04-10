@@ -3,18 +3,16 @@ package de.redtec.tileentity;
 import java.util.ArrayList;
 
 import de.redtec.blocks.BlockMSteamGenerator;
-import de.redtec.dynamicsounds.SoundMSteamGeneratorLoop;
 import de.redtec.fluids.FluidSteam;
 import de.redtec.fluids.util.BlockGasFluid;
 import de.redtec.typeregistys.ModFluids;
 import de.redtec.typeregistys.ModTileEntityType;
-import de.redtec.util.ElectricityNetworkHandler;
-import de.redtec.util.FluidStackStateTagHelper;
-import de.redtec.util.IElectricConnective.Voltage;
-import de.redtec.util.IFluidConnective;
+import de.redtec.util.blockfeatures.IFluidConnective;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock.Voltage;
+import de.redtec.util.handler.ElectricityNetworkHandler;
+import de.redtec.util.handler.FluidStackStateTagHelper;
+import de.redtec.util.handler.MachineSoundHelper;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -45,9 +43,9 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 		super(ModTileEntityType.STEAM_GENERATOR);
 		this.part = TEPart.CENTER;
 		this.maxFluid = 2000;
-		this.maxEnergy = 3680; // Max Watt/tick -> 74W = 1mb
-		this.wattPerMB = 74;
-		this.generatedVoltage = Voltage.NormalVoltage; // Generated Voltage
+		this.maxEnergy = 5000; // Max Watt/tick
+		this.wattPerMB = 100;
+		this.generatedVoltage = Voltage.NormalVoltage;
 		this.steamIn = FluidStack.EMPTY;
 		this.steamOut = FluidStack.EMPTY;
 	}
@@ -228,22 +226,13 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 			
 			if (this.accerlation > 0) {
 				
-				SoundHandler soundHandler = Minecraft.getInstance().getSoundHandler();
-				
-				if (this.turbinSound == null ? true : !soundHandler.isPlaying(turbinSound)) {
-					
-					this.turbinSound = new SoundMSteamGeneratorLoop(this);
-					soundHandler.play(this.turbinSound);
-					
-				}
-				
+				MachineSoundHelper.startSoundTurbinIfNotRunning(this);
+								
 			}
 			
 		}
 		
 	}
-	
-	private SoundMSteamGeneratorLoop turbinSound;
 	
 	public BlockPos getCenterTE() {
 		if (this.part == TEPart.CENTER) return this.pos;
@@ -298,7 +287,7 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 			TileEntityMSteamGenerator center = (TileEntityMSteamGenerator) tileEntity;
 			
 			if (fluid.getFluid() == this.getFluidType()) {
-				if (!FluidStackStateTagHelper.makeStateFromStack(fluid).get(FluidSteam.PREASURIZED)) {
+				if (!FluidStackStateTagHelper.makeStateFromStack(fluid).get(FluidSteam.PRESSURIZED)) {
 
 					if (center.steamOut.isEmpty()) {
 						int transfer = Math.min(this.maxFluid, fluid.getAmount());

@@ -5,12 +5,13 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
+import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.renderer.BlockMFluidBathItemRenderer;
 import de.redtec.tileentity.TileEntityMFluidBath;
-import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
-import de.redtec.util.IAdvancedBlockInfo;
-import de.redtec.util.IElectricConnective;
-import de.redtec.util.VoxelHelper;
+import de.redtec.util.blockfeatures.IAdvancedBlockInfo;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock;
+import de.redtec.util.handler.VoxelHelper;
+import de.redtec.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -34,7 +35,6 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.IBlockReader;
@@ -42,7 +42,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMFluidBath extends BlockMultiPart<TileEntityMFluidBath> implements IElectricConnective, IAdvancedBlockInfo, ISidedInventoryProvider {
+public class BlockMFluidBath extends BlockMultiPart<TileEntityMFluidBath> implements IElectricConnectiveBlock, IAdvancedBlockInfo, ISidedInventoryProvider {
 
 	public BlockMFluidBath() {
 		super("fluid_bath", Material.IRON, 3F, SoundType.METAL, 2, 2, 3);
@@ -84,7 +84,7 @@ public class BlockMFluidBath extends BlockMultiPart<TileEntityMFluidBath> implem
 	@Override
 	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
 		TileEntityMFluidBath tileEntity = getCenterTE(pos, state, worldIn);
-		InventoryHelper.dropInventoryItems(worldIn, tileEntity.getPos(), (IInventory) tileEntity);
+		if (tileEntity != null) InventoryHelper.dropInventoryItems(worldIn, tileEntity.getPos(), (IInventory) tileEntity);
 		super.onBlockHarvested(worldIn, pos, state, player);
 	}
 	
@@ -97,15 +97,15 @@ public class BlockMFluidBath extends BlockMultiPart<TileEntityMFluidBath> implem
 	public TileEntity createNewTileEntity(IBlockReader worldIn) {
 		return new TileEntityMFluidBath();
 	}
-
+	
 	@Override
-	public List<ITextComponent> getBlockInfo() {
-		List<ITextComponent> info = new ArrayList<ITextComponent>();
-		info.add(new TranslationTextComponent("redtec.block.info.needEnergy", 2F * Voltage.NormalVoltage.getVoltage()));
-		info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.NormalVoltage.getVoltage()));
-		info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 2F));
-		info.add(new TranslationTextComponent("redtec.block.info.fluidBath"));
-		return info;
+	public IBlockToolType getBlockInfo() {
+		return (stack, info) -> {
+			info.add(new TranslationTextComponent("redtec.block.info.needEnergy", 2F * Voltage.NormalVoltage.getVoltage()));
+			info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.NormalVoltage.getVoltage()));
+			info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 2F));
+			info.add(new TranslationTextComponent("redtec.block.info.fluidBath"));
+		};
 	}
 	
 	@Override

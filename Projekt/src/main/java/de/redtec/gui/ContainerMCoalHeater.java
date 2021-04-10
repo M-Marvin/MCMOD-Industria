@@ -2,7 +2,7 @@ package de.redtec.gui;
 
 import de.redtec.tileentity.TileEntityMCoalHeater;
 import de.redtec.typeregistys.ModContainerType;
-import de.redtec.util.ContainerTileEntity;
+import de.redtec.util.blockfeatures.ContainerTileEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.network.PacketBuffer;
@@ -19,7 +19,7 @@ public class ContainerMCoalHeater extends ContainerTileEntity<TileEntityMCoalHea
 	
 	@Override
 	public int getSlots() {
-		return 1;
+		return 2;
 	}
 
 	@Override

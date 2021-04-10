@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import de.redtec.RedTec;
-import de.redtec.blocks.BlockControllPanel;
+import de.redtec.blocks.BlockRControllPanel;
 import de.redtec.items.panelitems.ItemPanelElement;
 import de.redtec.tileentity.TileEntityControllPanel;
 import de.redtec.tileentity.TileEntityControllPanel.Pos;
@@ -27,7 +27,7 @@ public class TileEntityControllPanelRenderer extends TileEntityRenderer<TileEnti
 	public void render(TileEntityControllPanel tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		
 		HashMap<Pos, ItemStack> elements = tileEntityIn.getPanelElements();
-		Direction facing = tileEntityIn.getBlockState().getBlock() == RedTec.controll_panel ? tileEntityIn.getBlockState().get(BlockControllPanel.FACING) : Direction.NORTH;
+		Direction facing = tileEntityIn.getBlockState().getBlock() == RedTec.controll_panel ? tileEntityIn.getBlockState().get(BlockRControllPanel.FACING) : Direction.NORTH;
 		
 		matrixStackIn.push();
 		

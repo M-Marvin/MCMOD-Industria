@@ -6,7 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import de.redtec.RedTec;
 import de.redtec.blocks.BlockJigsaw;
 import de.redtec.tileentity.TileEntityJigsaw;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -44,10 +43,10 @@ public class JigsawFeatureConfig implements IFeatureConfig {
 		this.levelsMax = levelsMax;
 	}
 	
-	public JigsawFeatureConfig(RuleTest target, Direction horizontalDirection, BlockJigsaw.JigsawType verticalDirection, ResourceLocation structurePool, ResourceLocation connectionName, Block replaceState, boolean horizontalLocked, int generationLevelsMin, int generationLevelsMax) {
+	public JigsawFeatureConfig(RuleTest target, Direction horizontalDirection, BlockJigsaw.JigsawType verticalDirection, ResourceLocation structurePool, ResourceLocation connectionName, BlockState replaceState, boolean horizontalLocked, int generationLevelsMin, int generationLevelsMax) {
 		
 		TileEntityJigsaw tileEntity = new TileEntityJigsaw();
-		tileEntity.replaceState = replaceState.getRegistryName();
+		tileEntity.replaceState = replaceState;
 		tileEntity.lockOrientation = horizontalLocked;
 		tileEntity.poolFile = structurePool;
 		tileEntity.targetName = connectionName;

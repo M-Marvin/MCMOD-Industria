@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SGS",
+    "WEW",
+    "SCS"
+  ],
+  "key": {
+    "S": {
+      "item": "redtec:steel_plate"
+    },
+    "G": {
+      "item": "redtec:steel_plates"
+    },
+    "W": {
+      "item": "redtec:wolfram_plate"
+    },
+    "C": {
+      "item": "redtec:transformator_coil"
+    },
+    "E": {
+      "item": "redtec:ender_core"
+    }
+  },
+  "result": {
+    "item": "redtec:chunk_loader"
+  }
+}

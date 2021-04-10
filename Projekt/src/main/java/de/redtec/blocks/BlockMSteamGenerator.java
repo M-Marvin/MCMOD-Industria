@@ -1,15 +1,14 @@
 package de.redtec.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
+import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.renderer.BlockMSteamGeneratorItemRenderer;
 import de.redtec.tileentity.TileEntityMSteamGenerator;
 import de.redtec.tileentity.TileEntityMSteamGenerator.TEPart;
-import de.redtec.util.IAdvancedBlockInfo;
-import de.redtec.util.IElectricConnective;
+import de.redtec.util.blockfeatures.IAdvancedBlockInfo;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -21,12 +20,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockMSteamGenerator extends BlockMultiPart<TileEntityMSteamGenerator> implements IElectricConnective, IAdvancedBlockInfo {
+public class BlockMSteamGenerator extends BlockMultiPart<TileEntityMSteamGenerator> implements IElectricConnectiveBlock, IAdvancedBlockInfo {
 	
 	public BlockMSteamGenerator() {
 		super("steam_generator", Material.IRON, 8F, SoundType.METAL, 3, 3, 2);
@@ -88,16 +86,16 @@ public class BlockMSteamGenerator extends BlockMultiPart<TileEntityMSteamGenerat
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		return VoxelShapes.create(0.01F, 0.01F, 0.01F, 0.99F, 0.99F, 0.99F);
 	}
-
+	
 	@Override
-	public List<ITextComponent> getBlockInfo() {
-		List<ITextComponent> info = new ArrayList<ITextComponent>();
-		info.add(new TranslationTextComponent("redtec.block.info.needEnergy", "3.68k"));
-		info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.NormalVoltage.getVoltage()));
-		info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 3680 / Voltage.NormalVoltage.getVoltage()));
-		info.add(new TranslationTextComponent("redtec.block.info.steamGenerator.maxMB", 50));
-		info.add(new TranslationTextComponent("redtec.block.info.steamGenerator"));
-		return info;
+	public IBlockToolType getBlockInfo() {
+		return (stack, info) -> {
+			info.add(new TranslationTextComponent("redtec.block.info.needEnergy", (5000F / 1000F) + "k"));
+			info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.NormalVoltage.getVoltage()));
+			info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 5000 / Voltage.NormalVoltage.getVoltage()));
+			info.add(new TranslationTextComponent("redtec.block.info.steamGenerator.maxMB", 50));
+			info.add(new TranslationTextComponent("redtec.block.info.steamGenerator"));
+		};
 	}
 	
 	@Override

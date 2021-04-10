@@ -155,7 +155,7 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 	
 	public static boolean isRedstoneSource(BlockState attachState, Direction direction) {
 		return	(attachState.getBlock() == RedTec.stacked_redstone_torch && (direction == Direction.DOWN || direction == Direction.UP)) ||
-				attachState.getBlock() instanceof PistonBlock || attachState.getBlock() instanceof BlockAdvancedPiston;
+				attachState.getBlock() instanceof PistonBlock || attachState.getBlock() instanceof BlockRAdvancedPiston;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -201,6 +201,16 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
 		boolean flag = blockAccess.getBlockState(pos.offset(side.getOpposite())).getBlock() != this;
 		return (flag && blockState.get(POWERED) && blockState.get(CONNECTIONS[side.getOpposite().getIndex()]) == AttachType.REDSTONE) ? 8 : 0;
+	}
+	
+	@Override
+	public int getStrongPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+		return this.getWeakPower(blockState, blockAccess, pos, side);
+	}
+	
+	@Override
+	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
+		return true;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -271,11 +281,21 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 	public static void updatePoweredState(World worldIn, BlockPos pos) {
 		
 		List<BlockPos> wires = new ArrayList<BlockPos>();
-		boolean powered = listConnectedWires(worldIn, pos, wires, 0);
+		boolean power = listConnectedWires(worldIn, pos, wires, 0);
 		
 		wires.forEach((wire) -> {
 			BlockState state = worldIn.getBlockState(wire);
-			worldIn.setBlockState(wire, state.with(POWERED, powered));
+			boolean powered = state.get(POWERED);
+			worldIn.setBlockState(wire, state.with(POWERED, power));
+			if (powered != power) {
+				for (Direction d : Direction.values()) {
+					BlockPos notifyPos = wire.offset(d);
+					BlockState notifyState = worldIn.getBlockState(notifyPos);
+					if (notifyState.getBlock() != RedTec.stacked_redstone_wire) {
+						worldIn.notifyNeighborsOfStateChange(notifyPos, RedTec.stacked_redstone_wire);
+					}
+				}
+			}
 		});
 		
 	}

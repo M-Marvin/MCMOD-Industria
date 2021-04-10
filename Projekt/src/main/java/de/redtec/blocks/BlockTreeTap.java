@@ -8,7 +8,7 @@ import de.redtec.RedTec;
 import de.redtec.blocks.BlockRubberLog.RipeState;
 import de.redtec.typeregistys.ModSoundEvents;
 import de.redtec.typeregistys.ModTags;
-import de.redtec.util.VoxelHelper;
+import de.redtec.util.handler.VoxelHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.redtec.typeregistys.ModTileEntityType;
-import de.redtec.util.IFluidConnective;
+import de.redtec.util.blockfeatures.IFluidConnective;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.CompoundNBT;

@@ -3,9 +3,9 @@ package de.redtec.blocks;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.redtec.tileentity.TileEntitySignalAntenna;
-import de.redtec.util.ISignalConnective;
-import de.redtec.util.RedstoneControlSignal;
+import de.redtec.tileentity.TileEntityRSignalAntenna;
+import de.redtec.util.blockfeatures.ISignalConnectiveBlock;
+import de.redtec.util.types.RedstoneControlSignal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -30,7 +30,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-public class BlockSignalAntennaConector extends BlockContainerBase implements ISignalConnective {
+public class BlockSignalAntennaConector extends BlockContainerBase implements ISignalConnectiveBlock {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	
@@ -55,7 +55,7 @@ public class BlockSignalAntennaConector extends BlockContainerBase implements IS
 	
 	@Override
 	public TileEntity createNewTileEntity(IBlockReader worldIn) {
-		return new TileEntitySignalAntenna();
+		return new TileEntityRSignalAntenna();
 	}
 	
 	@Override
@@ -63,19 +63,19 @@ public class BlockSignalAntennaConector extends BlockContainerBase implements IS
 		
 		TileEntity te = worldIn.getTileEntity(pos);
 		
-		if (te instanceof TileEntitySignalAntenna && !worldIn.isRemote()) {
+		if (te instanceof TileEntityRSignalAntenna && !worldIn.isRemote()) {
 			
-			int range1 = ((TileEntitySignalAntenna) te).getRange();
-			ItemStack chanelItem = ((TileEntitySignalAntenna) te).getChanelItem();
+			int range1 = ((TileEntityRSignalAntenna) te).getRange();
+			ItemStack chanelItem = ((TileEntityRSignalAntenna) te).getChanelItem();
 			
 			List<TileEntity> tileEntitys = new ArrayList<TileEntity>();
 			tileEntitys.addAll(worldIn.loadedTileEntityList);
 			
 			for (TileEntity te2 : tileEntitys) {
 				
-				if (te2 instanceof TileEntitySignalAntenna && !te2.getPos().equals(te.getPos())) {
+				if (te2 instanceof TileEntityRSignalAntenna && !te2.getPos().equals(te.getPos())) {
 					
-					TileEntitySignalAntenna antenna = (TileEntitySignalAntenna) te2;
+					TileEntityRSignalAntenna antenna = (TileEntityRSignalAntenna) te2;
 					
 					int range2 = antenna.getRange();
 					int distance = getDistance(te.getPos(), antenna.getPos());
@@ -101,21 +101,21 @@ public class BlockSignalAntennaConector extends BlockContainerBase implements IS
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 
 		TileEntity te = worldIn.getTileEntity(pos);
-		if (te instanceof TileEntitySignalAntenna) {
+		if (te instanceof TileEntityRSignalAntenna) {
 			
 			ItemStack heldItem = player.getHeldItemMainhand();
 			
-			if (((TileEntitySignalAntenna) te).getChanelItem() == null && !heldItem.isEmpty()) {
+			if (((TileEntityRSignalAntenna) te).getChanelItem() == null && !heldItem.isEmpty()) {
 				
 				ItemStack item = heldItem.copy();
 				item.setCount(1);
-				((TileEntitySignalAntenna) te).setChanelItem(item);
+				((TileEntityRSignalAntenna) te).setChanelItem(item);
 				heldItem.shrink(1);
 				
-			} else if (((TileEntitySignalAntenna) te).getChanelItem() != null && player.isSneaking()) {
+			} else if (((TileEntityRSignalAntenna) te).getChanelItem() != null && player.isSneaking()) {
 				
-				ItemStack stack = ((TileEntitySignalAntenna) te).getChanelItem();
-				((TileEntitySignalAntenna) te).setChanelItem(null);
+				ItemStack stack = ((TileEntityRSignalAntenna) te).getChanelItem();
+				((TileEntityRSignalAntenna) te).setChanelItem(null);
 				BlockPos pos2 = pos.offset(hit.getFace());
 				worldIn.addEntity(new ItemEntity(worldIn, pos2.getX() + 0.5F, pos2.getY() + 0.5F, pos2.getZ() + 0.5F, stack));
 				
@@ -130,8 +130,8 @@ public class BlockSignalAntennaConector extends BlockContainerBase implements IS
 	@Override
 	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
 		TileEntity te = worldIn.getTileEntity(pos);
-		if (te instanceof TileEntitySignalAntenna) {
-			ItemStack stack = ((TileEntitySignalAntenna) te).getChanelItem();
+		if (te instanceof TileEntityRSignalAntenna) {
+			ItemStack stack = ((TileEntityRSignalAntenna) te).getChanelItem();
 			if (stack != null ? !stack.isEmpty() : false) worldIn.addEntity(new ItemEntity(worldIn, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, stack));
 		}
 		super.onBlockHarvested(worldIn, pos, state, player);

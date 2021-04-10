@@ -2,7 +2,7 @@ package de.redtec.gui;
 
 import de.redtec.tileentity.TileEntityMBlender;
 import de.redtec.typeregistys.ModContainerType;
-import de.redtec.util.ContainerTileEntity;
+import de.redtec.util.blockfeatures.ContainerTileEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.network.PacketBuffer;
@@ -19,7 +19,7 @@ public class ContainerMBlender extends ContainerTileEntity<TileEntityMBlender> {
 
 	@Override
 	public int getSlots() {
-		return 7;
+		return 9;
 	}
 
 	@Override

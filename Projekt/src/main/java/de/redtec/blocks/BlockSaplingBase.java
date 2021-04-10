@@ -55,15 +55,15 @@ public class BlockSaplingBase extends SaplingBlock {
 			if (!net.minecraftforge.event.ForgeEventFactory.saplingGrowTree(world, rand, pos)) return;
 			
 			BlockState jigsawReplace = world.getBlockState(pos.down());
-			world.setBlockState(pos.down(), RedTec.jigsaw.getDefaultState().with(BlockJigsaw.TYPE, BlockJigsaw.JigsawType.VERTICAL_UP));
 			world.setBlockState(pos, Blocks.AIR.getDefaultState());
-			
+			world.setBlockState(pos.down(), RedTec.jigsaw.getDefaultState().with(BlockJigsaw.TYPE, BlockJigsaw.JigsawType.VERTICAL_UP));
+				
 			TileEntity tileEntity = world.getTileEntity(pos.down());
 			
 			if (tileEntity instanceof TileEntityJigsaw) {
 				
 				TileEntityJigsaw jigsaw = (TileEntityJigsaw) tileEntity;
-				jigsaw.replaceState = jigsawReplace.getBlock().getRegistryName();
+				jigsaw.replaceState = jigsawReplace.getBlock().getDefaultState();
 				jigsaw.targetName = this.jigsawConnectionName;
 				jigsaw.poolFile = this.jigsawPool;
 				jigsaw.lockOrientation = false;

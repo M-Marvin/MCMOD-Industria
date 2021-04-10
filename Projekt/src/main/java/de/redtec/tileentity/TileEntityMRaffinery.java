@@ -4,21 +4,19 @@ import java.util.Optional;
 
 import de.redtec.blocks.BlockMultiPart;
 import de.redtec.dynamicsounds.ISimpleMachineSound;
-import de.redtec.dynamicsounds.SoundMachine;
 import de.redtec.gui.ContainerMRaffinery;
 import de.redtec.recipetypes.RifiningRecipe;
 import de.redtec.typeregistys.ModRecipeTypes;
 import de.redtec.typeregistys.ModSoundEvents;
 import de.redtec.typeregistys.ModTileEntityType;
-import de.redtec.util.ElectricityNetworkHandler;
-import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
-import de.redtec.util.FluidBucketHelper;
-import de.redtec.util.IElectricConnective.Voltage;
-import de.redtec.util.IFluidConnective;
-import de.redtec.util.ItemStackHelper;
+import de.redtec.util.blockfeatures.IFluidConnective;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock.Voltage;
+import de.redtec.util.handler.ElectricityNetworkHandler;
+import de.redtec.util.handler.FluidBucketHelper;
+import de.redtec.util.handler.ItemStackHelper;
+import de.redtec.util.handler.MachineSoundHelper;
+import de.redtec.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluid;
@@ -223,8 +221,8 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 					oz = 0;
 					break;
 				case WEST:
-					ox = 2;
-					oz = -1;
+					ox = -1;
+					oz = -2;
 					break;
 				}
 				;
@@ -236,22 +234,13 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 				float z = this.pos.getZ() + oz + (world.rand.nextFloat() + 1.0F) * width;
 				this.world.addParticle(paricle, x, y, z, 0, 0, 0);
 				
-				SoundHandler soundHandler = Minecraft.getInstance().getSoundHandler();
-				
-				if (this.maschineSound == null ? true : !soundHandler.isPlaying(maschineSound)) {
-					
-					this.maschineSound = new SoundMachine(this, ModSoundEvents.RAFFINERY_LOOP);
-					soundHandler.play(this.maschineSound);
-					
-				}
+				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.RAFFINERY_LOOP);
 				
 			}
 		}
 		
 	}
-
-	private SoundMachine maschineSound;
-
+	
 	@Override
 	public boolean isSoundRunning() {
 		return this.isWorking;

@@ -1,20 +1,19 @@
 package de.redtec.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
+import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.typeregistys.ModDamageSource;
 import de.redtec.typeregistys.ModSoundEvents;
-import de.redtec.util.ElectricityNetworkHandler;
-import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
-import de.redtec.util.IAdvancedBlockInfo;
-import de.redtec.util.IElectricConnective;
-import de.redtec.util.IElectricWire;
+import de.redtec.typeregistys.ModToolType;
+import de.redtec.util.blockfeatures.IAdvancedBlockInfo;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock;
+import de.redtec.util.blockfeatures.IElectricWireBlock;
+import de.redtec.util.handler.ElectricityNetworkHandler;
+import de.redtec.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
@@ -25,18 +24,23 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.Explosion.Mode;
+import net.minecraftforge.common.ToolType;
 import net.minecraft.world.World;
 
-public class BlockElektricWire extends BlockWiring implements IElectricWire, IAdvancedBlockInfo {
+public class BlockElektricWire extends BlockWiring implements IElectricWireBlock, IAdvancedBlockInfo {
 	
 	protected final int maximumPower;
 	
 	public BlockElektricWire(String name, int maximumPower, int size) {
 		super(name, Material.WOOL, 0.2F, SoundType.CLOTH, size);
 		this.maximumPower = maximumPower;
+	}
+	
+	@Override
+	public ToolType getHarvestTool(BlockState state) {
+		return ModToolType.CUTTER;
 	}
 	
 	public int getMaximumPower() {
@@ -48,10 +52,10 @@ public class BlockElektricWire extends BlockWiring implements IElectricWire, IAd
 		
 		BlockState otherState = worldIn.getBlockState(connectPos);
 		
-		if (otherState.getBlock() instanceof IElectricWire) {
+		if (otherState.getBlock() instanceof IElectricWireBlock) {
 			return true;
-		} else if (otherState.getBlock() instanceof IElectricConnective) {
-			return ((IElectricConnective) otherState.getBlock()).canConnect(direction.getOpposite(), worldIn, connectPos, otherState);
+		} else if (otherState.getBlock() instanceof IElectricConnectiveBlock) {
+			return ((IElectricConnectiveBlock) otherState.getBlock()).canConnect(direction.getOpposite(), worldIn, connectPos, otherState);
 		}
 		
 		return false;
@@ -61,7 +65,7 @@ public class BlockElektricWire extends BlockWiring implements IElectricWire, IAd
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		
-		if (hasOpenEnd(stateIn) && rand.nextInt(10) == 0) {
+		if (hasOpenEnd(stateIn) && rand.nextInt(4) == 0) {
 			
 			ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(worldIn);
 			ElectricityNetwork network = handler.getNetwork(pos);
@@ -70,7 +74,7 @@ public class BlockElektricWire extends BlockWiring implements IElectricWire, IAd
 			if (network.getCurrent() > 0) {
 				
 				int particleCount = voltage.getVoltage() / 10;
-
+				
 				if (particleCount > 0) {
 					
 					for (int i = 0; i < particleCount; i++) {
@@ -122,10 +126,10 @@ public class BlockElektricWire extends BlockWiring implements IElectricWire, IAd
 	}
 
 	@Override
-	public List<ITextComponent> getBlockInfo() {
-		List<ITextComponent> info = new ArrayList<ITextComponent>();
-		info.add(new TranslationTextComponent("redtec.block.info.maxCurrent", this.maximumPower));
-		return info;
+	public IBlockToolType getBlockInfo() {
+		return (stack, info) -> {
+			info.add(new TranslationTextComponent("redtec.block.info.maxCurrent", this.maximumPower));
+		};
 	}
 
 	@Override
@@ -141,7 +145,7 @@ public class BlockElektricWire extends BlockWiring implements IElectricWire, IAd
 		if (this.maximumPower < current) {
 			
 			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
-			worldIn.setBlockState(pos, Blocks.STONE.getDefaultState());
+			BlockBurnedCable.crateBurnedCable(state, pos, worldIn);
 			
 		}
 		

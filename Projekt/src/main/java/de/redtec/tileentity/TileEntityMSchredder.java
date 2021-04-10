@@ -6,7 +6,6 @@ import java.util.Optional;
 import de.redtec.blocks.BlockMSchredder;
 import de.redtec.blocks.BlockMultiPart;
 import de.redtec.dynamicsounds.ISimpleMachineSound;
-import de.redtec.dynamicsounds.SoundMachine;
 import de.redtec.gui.ContainerMSchredder;
 import de.redtec.items.ItemSchredderTool;
 import de.redtec.recipetypes.SchredderRecipe;
@@ -14,13 +13,12 @@ import de.redtec.typeregistys.ModDamageSource;
 import de.redtec.typeregistys.ModRecipeTypes;
 import de.redtec.typeregistys.ModSoundEvents;
 import de.redtec.typeregistys.ModTileEntityType;
-import de.redtec.util.ElectricityNetworkHandler;
-import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
-import de.redtec.util.IElectricConnective.Voltage;
-import de.redtec.util.ItemStackHelper;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock.Voltage;
+import de.redtec.util.handler.ElectricityNetworkHandler;
+import de.redtec.util.handler.ItemStackHelper;
+import de.redtec.util.handler.MachineSoundHelper;
+import de.redtec.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -191,23 +189,14 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 					}
 					
 				}
-
-				SoundHandler soundHandler = Minecraft.getInstance().getSoundHandler();
 				
-				if (this.maschineSound == null ? true : !soundHandler.isPlaying(maschineSound)) {
-					
-					this.maschineSound = new SoundMachine(this, ModSoundEvents.SCHREDDER_LOOP);
-					soundHandler.play(this.maschineSound);
-					
-				}
+				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.SCHREDDER_LOOP);
 				
 			}
 			
 		}
 		
 	}
-	
-	private SoundMachine maschineSound;
 	
 	private List<Entity> getEntitysInInput() {
 

@@ -2,7 +2,15 @@ package de.redtec.packet;
 
 import java.util.function.Supplier;
 
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
+import de.redtec.RedTec;
 import de.redtec.tileentity.TileEntityJigsaw;
+import de.redtec.util.handler.ItemStackHelper;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.command.arguments.BlockStateParser;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -16,10 +24,10 @@ public class CEditJigsawTileEntityPacket {
 	public ResourceLocation poolFile;
 	public ResourceLocation name;
 	public ResourceLocation targetName;
-	public ResourceLocation replaceState;
+	public BlockState replaceState;
 	public boolean lockOrientation;
 	
-	public CEditJigsawTileEntityPacket(BlockPos pos, ResourceLocation poolFile, ResourceLocation name, ResourceLocation targetName, ResourceLocation replaceState, boolean lockOrientation) {
+	public CEditJigsawTileEntityPacket(BlockPos pos, ResourceLocation poolFile, ResourceLocation name, ResourceLocation targetName, BlockState replaceState, boolean lockOrientation) {
 		this.pos = pos;
 		this.poolFile = poolFile;
 		this.name = name;
@@ -33,7 +41,15 @@ public class CEditJigsawTileEntityPacket {
 		this.poolFile = buf.readResourceLocation();
 		this.name = buf.readResourceLocation();
 		this.targetName = buf.readResourceLocation();
-		this.replaceState = buf.readResourceLocation();
+		try {
+			BlockStateParser parser = new BlockStateParser(new StringReader(buf.readString()), true);
+			parser.parse(false);
+			this.replaceState = parser.getState();
+		} catch (CommandSyntaxException e) {
+			this.replaceState = Blocks.AIR.getDefaultState();
+			RedTec.LOGGER.error("Cant parse BlockState!");
+			e.printStackTrace();
+		}
 		this.lockOrientation = buf.readBoolean();
 	}
 		
@@ -42,7 +58,7 @@ public class CEditJigsawTileEntityPacket {
 		buf.writeResourceLocation(packet.poolFile);
 		buf.writeResourceLocation(packet.name);
 		buf.writeResourceLocation(packet.targetName);
-		buf.writeResourceLocation(packet.replaceState);
+		buf.writeString(ItemStackHelper.getBlockStateString(packet.replaceState));
 		buf.writeBoolean(packet.lockOrientation);
 	}
 	

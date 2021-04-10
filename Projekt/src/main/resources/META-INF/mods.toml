@@ -6,7 +6,7 @@ issueTrackerURL="https://github.com/M-Marvin/MCMOD-RedTec/issues"
 
 [[mods]]
 modId="redtec"
-version="0.2-pre"
+version="1.0-debug"
 displayName="RedTec"
 displayURL="https://github.com/M-Marvin/MCMOD-RedTec"
 credits="M_Marvin, Hase222 (McStockWeintraube)"
@@ -16,6 +16,6 @@ logoFile="logo.png"
 updateJSONURL="https://github.com/M-Marvin/MCMOD-RedTec/blob/main/ModUpdate.json"
 
 description='''
-Ein Mod der diverse neue Baumaterialien, Items, Resourcen und Maschinen hinzufügt.
-Unter anderem Elektrizitäfct, Rezepte mit Flüssigkeiten und neue Erze.
+Ein Mod der diverse neue Baumaterialien, Items, Resourcen und Maschinen hinzuf\u00fcgt.
+Unter anderem Elektrizit\u00e4t, Rezepte mit Fl\u00fcssigkeiten und neue Erze.
 '''

@@ -5,9 +5,9 @@ import java.util.Random;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
+import de.redtec.RedTec;
 import de.redtec.tileentity.TileEntityAdvancedMovingBlock;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.PistonBlock;
 import net.minecraft.block.PistonHeadBlock;
 import net.minecraft.client.Minecraft;
@@ -42,12 +42,12 @@ public class TileEntityAdvancedMovingBlockRenderer extends TileEntityRenderer<Ti
             BlockModelRenderer.enableCache();
             matrixStackIn.push();
             matrixStackIn.translate((double)tileEntityIn.getOffsetX(partialTicks), (double)tileEntityIn.getOffsetY(partialTicks), (double)tileEntityIn.getOffsetZ(partialTicks));
-            if (blockstate.isIn(Blocks.PISTON_HEAD) && tileEntityIn.getProgress(partialTicks) <= 4.0F) {
+            if (blockstate.isIn(RedTec.advanced_piston_head) && tileEntityIn.getProgress(partialTicks) <= 4.0F) {
                blockstate = blockstate.with(PistonHeadBlock.SHORT, Boolean.valueOf(tileEntityIn.getProgress(partialTicks) <= 0.5F));
                this.func_228876_a_(blockpos, blockstate, matrixStackIn, bufferIn, world, false, combinedOverlayIn);
             } else if (tileEntityIn.shouldPistonHeadBeRendered() && !tileEntityIn.isExtending()) {
-               PistonType pistontype = blockstate.isIn(Blocks.STICKY_PISTON) ? PistonType.STICKY : PistonType.DEFAULT;
-               BlockState blockstate1 = Blocks.PISTON_HEAD.getDefaultState().with(PistonHeadBlock.TYPE, pistontype).with(PistonHeadBlock.FACING, blockstate.get(PistonBlock.FACING));
+               PistonType pistontype = blockstate.isIn(RedTec.advanced_sticky_piston) ? PistonType.STICKY : PistonType.DEFAULT;
+               BlockState blockstate1 = RedTec.advanced_piston_head.getDefaultState().with(PistonHeadBlock.TYPE, pistontype).with(PistonHeadBlock.FACING, blockstate.get(PistonBlock.FACING));
                blockstate1 = blockstate1.with(PistonHeadBlock.SHORT, Boolean.valueOf(tileEntityIn.getProgress(partialTicks) >= 0.5F));
                this.func_228876_a_(blockpos, blockstate1, matrixStackIn, bufferIn, world, false, combinedOverlayIn);
                BlockPos blockpos1 = blockpos.offset(tileEntityIn.getMotionDirection());

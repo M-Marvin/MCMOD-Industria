@@ -199,7 +199,7 @@ public class ModConfiguredFeatures {
 			ModFeature.JIGSAW_FEATURE.withConfiguration(new JigsawFeatureConfig(
 					new TagMatchRuleTest(ModTags.DIRT), Direction.NORTH, JigsawType.VERTICAL_UP, 
 					new ResourceLocation(RedTec.MODID, "nature/rubber_tree"), new ResourceLocation(RedTec.MODID, "tree_log"),
-					Blocks.DIRT, false, 1, 1)
+					Blocks.DIRT.getDefaultState(), false, 1, 1)
 			).withPlacement(
 					ModPlacement.VERTICAL_OFFSET.configure(
 							new VerticalOffsetPlacementConfig(-1)

@@ -5,12 +5,13 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
+import de.redtec.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.redtec.renderer.BlockMSchredderItemRenderer;
 import de.redtec.tileentity.TileEntityMSchredder;
-import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
-import de.redtec.util.IAdvancedBlockInfo;
-import de.redtec.util.IElectricConnective;
-import de.redtec.util.VoxelHelper;
+import de.redtec.util.blockfeatures.IAdvancedBlockInfo;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock;
+import de.redtec.util.handler.VoxelHelper;
+import de.redtec.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -34,7 +35,6 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.IBlockReader;
@@ -42,7 +42,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMSchredder extends BlockMultiPart<TileEntityMSchredder> implements IElectricConnective, IAdvancedBlockInfo, ISidedInventoryProvider {
+public class BlockMSchredder extends BlockMultiPart<TileEntityMSchredder> implements IElectricConnectiveBlock, IAdvancedBlockInfo, ISidedInventoryProvider {
 	
 	public static final VoxelShape BASE = Block.makeCuboidShape(0, 0, 0, 16, 14, 16);
 	public static final VoxelShape CORNER_1 = VoxelShapes.or(Block.makeCuboidShape(0, -2, 0, 16, 14, 1), Block.makeCuboidShape(0, -2, 0, 2, 16, 16));
@@ -71,13 +71,13 @@ public class BlockMSchredder extends BlockMultiPart<TileEntityMSchredder> implem
 	}
 	
 	@Override
-	public List<ITextComponent> getBlockInfo() {
-		List<ITextComponent> info = new ArrayList<ITextComponent>();
-		info.add(new TranslationTextComponent("redtec.block.info.needEnergy", 0.8F * Voltage.HightVoltage.getVoltage()));
-		info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.HightVoltage.getVoltage()));
-		info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 0.8F));
-		info.add(new TranslationTextComponent("redtec.block.info.schredder"));
-		return info;
+	public IBlockToolType getBlockInfo() {
+		return (stack, info) -> {
+			info.add(new TranslationTextComponent("redtec.block.info.needEnergy", 0.8F * Voltage.HightVoltage.getVoltage()));
+			info.add(new TranslationTextComponent("redtec.block.info.needVoltage", Voltage.HightVoltage.getVoltage()));
+			info.add(new TranslationTextComponent("redtec.block.info.needCurrent", 0.8F));
+			info.add(new TranslationTextComponent("redtec.block.info.schredder"));
+		};
 	}
 	
 	@Override
@@ -110,7 +110,7 @@ public class BlockMSchredder extends BlockMultiPart<TileEntityMSchredder> implem
 	@Override
 	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
 		TileEntityMSchredder tileEntity = getCenterTE(pos, state, worldIn);
-		InventoryHelper.dropInventoryItems(worldIn, tileEntity.getPos(), (IInventory) tileEntity);
+		if (tileEntity != null) InventoryHelper.dropInventoryItems(worldIn, tileEntity.getPos(), (IInventory) tileEntity);
 		super.onBlockHarvested(worldIn, pos, state, player);
 	}
 	

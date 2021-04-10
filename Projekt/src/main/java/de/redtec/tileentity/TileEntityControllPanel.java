@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import de.redtec.RedTec;
-import de.redtec.blocks.BlockControllPanel;
+import de.redtec.blocks.BlockRControllPanel;
 import de.redtec.items.panelitems.ItemPanelElement;
 import de.redtec.typeregistys.ModTileEntityType;
-import de.redtec.util.RedstoneControlSignal;
+import de.redtec.util.types.RedstoneControlSignal;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -23,6 +23,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.ITextComponent;
 
 public class TileEntityControllPanel extends TileEntity implements ITickableTileEntity {
 	
@@ -59,7 +60,7 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 		BlockState state = getBlockState();
 		if (state.getBlock() == RedTec.controll_panel) {
 			
-			((BlockControllPanel) state.getBlock()).sendSignal(this.world, this.pos, signal);
+			((BlockRControllPanel) state.getBlock()).sendSignal(this.world, this.pos, signal);
 			
 		}
 		
@@ -73,7 +74,7 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 			
 			if (removedItem != null) {
 				
-				Direction facing = this.getBlockState().get(BlockControllPanel.FACING);
+				Direction facing = this.getBlockState().get(BlockRControllPanel.FACING);
 				
 				this.world.addEntity(new ItemEntity(
 						this.world, 
@@ -132,6 +133,10 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 	public boolean addElement(ItemStack elementStack, int x, int y) {
 		
 		if (elementStack.getItem() instanceof ItemPanelElement) {
+			
+			ITextComponent name = elementStack.getDisplayName();
+			elementStack.setTag(new CompoundNBT());
+			elementStack.setDisplayName(name);
 			
 			AxisAlignedBB bounds = ((ItemPanelElement) elementStack.getItem()).getCollisionBounds();
 			AxisAlignedBB collision = bounds.offset(x, y, 0);

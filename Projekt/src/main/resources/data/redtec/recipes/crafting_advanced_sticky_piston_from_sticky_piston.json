@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "group": "advanced_sticky_piston",
   "pattern": [
     "EEE",
     "BKB",

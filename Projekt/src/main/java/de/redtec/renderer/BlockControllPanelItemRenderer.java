@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import de.redtec.RedTec;
-import de.redtec.blocks.BlockControllPanel;
+import de.redtec.blocks.BlockRControllPanel;
 import de.redtec.items.panelitems.ItemPanelElement;
 import de.redtec.tileentity.TileEntityControllPanel.Pos;
 import net.minecraft.client.Minecraft;
@@ -24,7 +24,7 @@ public class BlockControllPanelItemRenderer extends ItemStackTileEntityRenderer 
 	@Override
 	public void func_239207_a_(ItemStack stack, TransformType type, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		
-		Minecraft.getInstance().getBlockRendererDispatcher().renderBlock(RedTec.controll_panel.getDefaultState().with(BlockControllPanel.FACING, Direction.UP), matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+		Minecraft.getInstance().getBlockRendererDispatcher().renderBlock(RedTec.controll_panel.getDefaultState().with(BlockRControllPanel.FACING, Direction.UP), matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
 		
 		HashMap<Pos, ItemStack> elements = getElementsFromStack(stack);
 		

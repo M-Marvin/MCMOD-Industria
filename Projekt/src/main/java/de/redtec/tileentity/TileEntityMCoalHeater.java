@@ -3,16 +3,14 @@ package de.redtec.tileentity;
 import de.redtec.RedTec;
 import de.redtec.blocks.BlockMCoalHeater;
 import de.redtec.dynamicsounds.ISimpleMachineSound;
-import de.redtec.dynamicsounds.SoundMachine;
 import de.redtec.fluids.FluidDestilledWater;
 import de.redtec.gui.ContainerMCoalHeater;
 import de.redtec.typeregistys.ModFluids;
 import de.redtec.typeregistys.ModSoundEvents;
 import de.redtec.typeregistys.ModTileEntityType;
+import de.redtec.util.handler.MachineSoundHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.FluidState;
@@ -24,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -68,7 +67,7 @@ public class TileEntityMCoalHeater extends TileEntityInventoryBase implements IN
 						for (int x = -1; x <= 2; x++) {
 							for (int z = -1; z <= 2; z++) {
 								
-								if (this.world.rand.nextInt(10) == 0) {
+								if (this.world.rand.nextInt(6) == 0) {
 									
 									BlockPos pos2 = this.pos.add(new BlockPos(x, y, z));
 									FluidState sourceFluid = this.world.getFluidState(pos2);
@@ -77,15 +76,15 @@ public class TileEntityMCoalHeater extends TileEntityInventoryBase implements IN
 										
 										if (sourceFluid.getFluid() == Fluids.WATER) {
 											
-											if (this.world.rand.nextInt(1) == 0) {
+											if (this.world.rand.nextInt(5) == 0) {
 												
 												BlockState bottomState = this.world.getBlockState(pos2.down());
 												
 												if (bottomState.getBlock() == RedTec.limestone_sheet) {
-													this.world.setBlockState(pos2, RedTec.limestone_sheet.getDefaultState());
+													this.world.setBlockState(pos2, RedTec.limestone_sheet.getDefaultState().with(BlockStateProperties.WATERLOGGED, true));
 													this.world.setBlockState(pos2.down(), RedTec.limestone.getDefaultState());
 												} else if (bottomState.getFluidState().getFluid() == Fluids.EMPTY && !bottomState.isAir()) {
-													this.world.setBlockState(pos2, RedTec.limestone_sheet.getDefaultState());
+													this.world.setBlockState(pos2, RedTec.limestone_sheet.getDefaultState().with(BlockStateProperties.WATERLOGGED, true));
 												}
 												
 											} else {
@@ -127,23 +126,14 @@ public class TileEntityMCoalHeater extends TileEntityInventoryBase implements IN
 			
 			if (this.isSoundRunning()) {
 				
-				SoundHandler soundHandler = Minecraft.getInstance().getSoundHandler();
-				
-				if (this.sound == null ? true : !soundHandler.isPlaying(sound)) {
-					
-					this.sound = new SoundMachine(this, ModSoundEvents.GENERATOR_LOOP); // TODO
-					soundHandler.play(this.sound);
-					
-				}
+				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.GENERATOR_LOOP);
 				
 			}
 			
 		}
 		
 	}
-
-	private SoundMachine sound;
-
+	
 	@Override
 	public boolean isSoundRunning() {
 		return this.getBlockState().get(BlockMCoalHeater.LIT);

@@ -79,7 +79,7 @@ public class BlockAdvancedMovingBlock extends ContainerBlock {
    public void onPlayerDestroy(IWorld worldIn, BlockPos pos, BlockState state) {
       BlockPos blockpos = pos.offset(state.get(FACING).getOpposite());
       BlockState blockstate = worldIn.getBlockState(blockpos);
-      if (blockstate.getBlock() instanceof BlockAdvancedPiston && blockstate.get(BlockAdvancedPiston.EXTENDED)) {
+      if (blockstate.getBlock() instanceof BlockRAdvancedPiston && blockstate.get(BlockRAdvancedPiston.EXTENDED)) {
          worldIn.removeBlock(blockpos, false);
       }
 

@@ -1,18 +1,16 @@
 package de.redtec.tileentity;
 
 import de.redtec.dynamicsounds.ISimpleMachineSound;
-import de.redtec.dynamicsounds.SoundMachine;
 import de.redtec.gui.ContainerMAlloyFurnace;
 import de.redtec.recipetypes.AlloyRecipe;
 import de.redtec.typeregistys.ModRecipeTypes;
 import de.redtec.typeregistys.ModTileEntityType;
-import de.redtec.util.ElectricityNetworkHandler;
-import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
-import de.redtec.util.IElectricConnective.Voltage;
-import de.redtec.util.ItemStackHelper;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock.Voltage;
+import de.redtec.util.handler.ElectricityNetworkHandler;
+import de.redtec.util.handler.ItemStackHelper;
+import de.redtec.util.handler.MachineSoundHelper;
+import de.redtec.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -130,22 +128,13 @@ public class TileEntityMAlloyFurnace extends TileEntityInventoryBase implements 
 
 			if (this.isWorking && this.progress > 0) {
 				
-				SoundHandler soundHandler = Minecraft.getInstance().getSoundHandler();
-				
-				if (this.maschineSound == null ? true : !soundHandler.isPlaying(maschineSound)) {
-					
-					this.maschineSound = new SoundMachine(this, SoundEvents.BLOCK_BLASTFURNACE_FIRE_CRACKLE);
-					soundHandler.play(this.maschineSound);
-					
-				}
-				
+				MachineSoundHelper.startSoundIfNotRunning(this, SoundEvents.BLOCK_BLASTFURNACE_FIRE_CRACKLE);
+								
 			}
 			
 		}
 		
 	}
-
-	private SoundMachine maschineSound;
 	
 	public boolean canWork() {
 		return this.findRecipe() != null;

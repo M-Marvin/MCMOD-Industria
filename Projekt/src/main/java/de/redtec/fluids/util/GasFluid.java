@@ -2,12 +2,10 @@ package de.redtec.fluids.util;
 
 import java.util.Random;
 
-import de.redtec.RedTec;
 import net.minecraft.block.Block;
 import net.minecraft.block.IBucketPickupHandler;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
-import net.minecraft.item.Item;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -18,11 +16,6 @@ import net.minecraft.world.World;
 
 public abstract class GasFluid extends Fluid implements IBucketPickupHandler {
 	
-	@Override
-	public Item getFilledBucket() {
-		return RedTec.steam_bucket;
-	}
-
 	@Override
 	protected boolean canDisplace(FluidState p_215665_1_, IBlockReader p_215665_2_, BlockPos p_215665_3_, Fluid p_215665_4_, Direction p_215665_5_) {
 		return false;

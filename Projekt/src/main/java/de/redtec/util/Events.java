@@ -2,6 +2,9 @@ package de.redtec.util;
 
 import de.redtec.RedTec;
 import de.redtec.fluids.util.BlockGasFluid;
+import de.redtec.util.handler.ChunkLoadHandler;
+import de.redtec.util.handler.JigsawFileManager;
+import de.redtec.util.handler.MinecartBoostHandler;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.IBucketPickupHandler;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,7 +23,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid=RedTec.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
@@ -58,7 +63,7 @@ public class Events {
 					
 					SoundEvent soundevent = fluid.isIn(FluidTags.LAVA) ? SoundEvents.ITEM_BUCKET_FILL_LAVA : SoundEvents.ITEM_BUCKET_FILL;
 					playerIn.playSound(soundevent, 1.0F, 1.0F);
-					ItemStack itemstack1 = DrinkHelper.fill(bucketItem, playerIn, new ItemStack(fluid.getFilledBucket()));
+					ItemStack itemstack1 = DrinkHelper.fill(bucketItem.copy(), playerIn, new ItemStack(fluid.getFilledBucket()));
 					if (!worldIn.isRemote) {
 						CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity)playerIn, new ItemStack(fluid.getFilledBucket()));
 						playerIn.setItemStackToSlot(EquipmentSlotType.MAINHAND, itemstack1);
@@ -69,6 +74,20 @@ public class Events {
 			
 		}
 		
+	}
+	
+	protected static long lastServerWorldTick = 0L;
+	@SubscribeEvent
+	public static final void onWorldTick(net.minecraftforge.event.TickEvent.WorldTickEvent event) {
+		if (!event.world.isRemote() && event.phase == Phase.START && event.side == LogicalSide.SERVER) {
+			if (lastServerWorldTick != event.world.getGameTime()) {
+				lastServerWorldTick = event.world.getGameTime();
+				MinecartBoostHandler.getHandlerForWorld(event.world).updateMinecarts();
+			}
+			if (event.world.loadedTileEntityList.size() > 0) {
+				ChunkLoadHandler.getHandlerForWorld(event.world).updateChunkForceLoads();
+			}
+		}
 	}
 	
 }

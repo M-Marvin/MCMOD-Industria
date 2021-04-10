@@ -1,12 +1,14 @@
 package de.redtec.items;
 
 import de.redtec.RedTec;
+import de.redtec.typeregistys.ModToolType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTier;
 
-public class ItemHammer extends ItemBase {
+public class ItemHammer extends ItemToolBase {
 
 	public ItemHammer() {
-		super("hammer", new Properties().group(RedTec.TOOLS).maxStackSize(1).defaultMaxDamage(120));
+		super("hammer", 1.5F, 0.5F, ModToolType.HAMMER, ItemTier.IRON, new Properties().group(RedTec.TOOLS).maxStackSize(1).defaultMaxDamage(320));
 	}
 	
 	@Override

@@ -1,19 +1,24 @@
 package de.redtec.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import de.redtec.RedTec;
 import de.redtec.blocks.BlockJigsaw;
 import de.redtec.blocks.BlockJigsaw.JigsawType;
 import de.redtec.packet.CEditJigsawTileEntityPacket;
 import de.redtec.packet.CGenerateJigsaw;
+import de.redtec.util.handler.ItemStackHelper;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.DialogTexts;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.AbstractSlider;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.command.arguments.BlockStateParser;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -50,10 +55,17 @@ public class ScreenJigsaw extends ContainerScreen<ContainerJigsaw>{
 	}
 	
 	private boolean isInputValid() {
+		boolean stateVliad = false;
+		try {
+			BlockStateParser parser = new BlockStateParser(new StringReader(this.replaceState.getText()), true);
+			parser.parse(false);
+			stateVliad = true;
+		} catch (CommandSyntaxException e) {}
 		return	ResourceLocation.isResouceNameValid(this.poolName.getText()) &&
 				ResourceLocation.isResouceNameValid(this.name.getText()) &&
 				ResourceLocation.isResouceNameValid(this.targetName.getText()) &&
-				ResourceLocation.isResouceNameValid(this.replaceState.getText());
+				stateVliad;
+		
 	}
 	
 	private void updateTileEntity() {
@@ -61,8 +73,18 @@ public class ScreenJigsaw extends ContainerScreen<ContainerJigsaw>{
 		ResourceLocation poolName = ResourceLocation.tryCreate(this.poolName.getText());
 		ResourceLocation name = ResourceLocation.tryCreate(this.name.getText());
 		ResourceLocation targetName = ResourceLocation.tryCreate(this.targetName.getText());
-		ResourceLocation replaceState = ResourceLocation.tryCreate(this.replaceState.getText());
 		boolean lock = this.lock;
+		
+		BlockState replaceState;
+		try {
+			BlockStateParser parser = new BlockStateParser(new StringReader(this.replaceState.getText()), true);
+			parser.parse(false);
+			replaceState = parser.getState();
+		} catch (CommandSyntaxException e) {
+			replaceState = Blocks.AIR.getDefaultState();
+			RedTec.LOGGER.error("Cant parse BlockState!");
+			e.printStackTrace();
+		}
 		
 		RedTec.NETWORK.sendToServer(new CEditJigsawTileEntityPacket(this.container.getTileEntity().getPos(), poolName, name, targetName, replaceState, lock));
 		
@@ -142,7 +164,7 @@ public class ScreenJigsaw extends ContainerScreen<ContainerJigsaw>{
 		this.minecraft.keyboardListener.enableRepeatEvents(true);
 		this.replaceState = new TextFieldWidget(this.font, this.width / 2 - 152, 125, 300, 20, new TranslationTextComponent("jigsaw.replaceState"));
 		this.replaceState.setMaxStringLength(128);
-		this.replaceState.setText(this.container.getTileEntity().replaceState.toString());
+		this.replaceState.setText(ItemStackHelper.getBlockStateString(this.container.getTileEntity().replaceState));
 		this.replaceState.setResponder((string) -> {
 			this.onChangeField();
 		});
@@ -217,5 +239,10 @@ public class ScreenJigsaw extends ContainerScreen<ContainerJigsaw>{
 		if (this.showLockOrientation) drawString(matrixStack, this.font, new TranslationTextComponent("redtec.jigsaw_block.connection"), this.width / 2 - 153, 156, 16777215);
 		
 	}
-
+	
+	@Override
+	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
+		this.font.func_243248_b(matrixStack, this.title, (float)this.titleX, (float)this.titleY, 4210752);
+	}
+	
 }

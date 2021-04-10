@@ -3,8 +3,8 @@ package de.redtec.blocks;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import de.redtec.util.ISignalConnective;
-import de.redtec.util.RedstoneControlSignal;
+import de.redtec.util.blockfeatures.ISignalConnectiveBlock;
+import de.redtec.util.types.RedstoneControlSignal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -32,7 +32,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-public class BlockSignalWire extends BlockBase implements ISignalConnective, IWaterLoggable {
+public class BlockSignalWire extends BlockBase implements ISignalConnectiveBlock, IWaterLoggable {
 	
 	public static final EnumProperty<AttachType> NORTH = EnumProperty.create("north", AttachType.class);
 	public static final EnumProperty<AttachType> SOUTH = EnumProperty.create("south", AttachType.class);
@@ -123,7 +123,7 @@ public class BlockSignalWire extends BlockBase implements ISignalConnective, IWa
 	}
 	
 	public static boolean isConective(BlockState attachState, Direction direction, BlockPos pos, IWorldReader world) {
-		return attachState.getBlock() instanceof ISignalConnective ? ((ISignalConnective) attachState.getBlock()).canConectSignalWire(world, pos, direction.getOpposite()) : false;
+		return attachState.getBlock() instanceof ISignalConnectiveBlock ? ((ISignalConnectiveBlock) attachState.getBlock()).canConectSignalWire(world, pos, direction.getOpposite()) : false;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -226,7 +226,7 @@ public class BlockSignalWire extends BlockBase implements ISignalConnective, IWa
 			BlockState state2 = worldIn.getBlockState(entry.getKey());
 			boolean isSender = entry.getKey().equals(pos.offset(side));
 			
-			if (state2.getBlock() != this && !isSender && state2.getBlock() instanceof ISignalConnective) ((ISignalConnective) state2.getBlock()).onReciveSignal(worldIn, entry.getKey(), signal, entry.getValue());
+			if (state2.getBlock() != this && !isSender && state2.getBlock() instanceof ISignalConnectiveBlock) ((ISignalConnectiveBlock) state2.getBlock()).onReciveSignal(worldIn, entry.getKey(), signal, entry.getValue());
 			
 		}
 		
@@ -238,7 +238,7 @@ public class BlockSignalWire extends BlockBase implements ISignalConnective, IWa
 			
 			BlockState state = world.getBlockState(scannPos.offset(direction));
 			
-			if (state.getBlock() instanceof ISignalConnective && !foundDevices.containsKey(scannPos.offset(direction)) && scannCount < 200 && ((ISignalConnective) state.getBlock()).canConectSignalWire(world, scannPos.offset(direction), direction.getOpposite())) {
+			if (state.getBlock() instanceof ISignalConnectiveBlock && !foundDevices.containsKey(scannPos.offset(direction)) && scannCount < 200 && ((ISignalConnectiveBlock) state.getBlock()).canConectSignalWire(world, scannPos.offset(direction), direction.getOpposite())) {
 				
 				foundDevices.put(scannPos.offset(direction), direction.getOpposite());
 				

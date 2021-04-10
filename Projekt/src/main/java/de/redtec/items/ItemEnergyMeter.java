@@ -4,9 +4,9 @@ import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.NumberFormat;
 
 import de.redtec.RedTec;
-import de.redtec.util.ElectricityNetworkHandler;
-import de.redtec.util.ElectricityNetworkHandler.ElectricityNetwork;
-import de.redtec.util.IElectricConnective;
+import de.redtec.util.blockfeatures.IElectricConnectiveBlock;
+import de.redtec.util.handler.ElectricityNetworkHandler;
+import de.redtec.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -43,7 +43,7 @@ public class ItemEnergyMeter extends ItemBase {
 			BlockState state = worldIn.getBlockState(pos);
 			Block block = state.getBlock();
 			
-			if (block instanceof IElectricConnective) {
+			if (block instanceof IElectricConnectiveBlock) {
 				
 				ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(worldIn);
 				ElectricityNetwork network = handler.getNetwork(pos);

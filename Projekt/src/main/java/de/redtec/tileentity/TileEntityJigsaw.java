@@ -5,21 +5,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import de.redtec.RedTec;
 import de.redtec.blocks.BlockJigsaw;
 import de.redtec.blocks.BlockJigsaw.JigsawType;
 import de.redtec.gui.ContainerJigsaw;
+import de.redtec.structureprocessor.JigsawTemplateProcessor;
+import de.redtec.structureprocessor.JigsawTemplateProcessor.JigsawReplacement;
 import de.redtec.typeregistys.ModTileEntityType;
-import de.redtec.util.JigsawFileManager;
+import de.redtec.util.handler.ItemStackHelper;
+import de.redtec.util.handler.JigsawFileManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.chat.NarratorChatListener;
+import net.minecraft.command.arguments.BlockStateParser;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.StringNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -28,7 +36,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.Template;
@@ -40,7 +47,7 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 	public ResourceLocation poolFile;
 	public ResourceLocation name;
 	public ResourceLocation targetName;
-	public ResourceLocation replaceState;
+	public BlockState replaceState;
 	public boolean powered;
 	public boolean lockOrientation;
 	
@@ -49,7 +56,7 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 		this.poolFile = new ResourceLocation(RedTec.MODID, "empty");
 		this.name = new ResourceLocation(RedTec.MODID, "empty");
 		this.targetName = new ResourceLocation(RedTec.MODID, "empty");
-		this.replaceState = Blocks.AIR.getRegistryName();
+		this.replaceState = Blocks.AIR.getDefaultState();
 	}
 	
 	@Override
@@ -57,7 +64,7 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 		compound.putString("poolFile", this.poolFile.toString());
 		compound.putString("name", this.name.toString());
 		compound.putString("targetName", this.targetName.toString());
-		compound.putString("replaceState", this.replaceState.toString());
+		compound.putString("replaceState", ItemStackHelper.getBlockStateString(this.replaceState));
 		compound.putBoolean("lockOrientation", this.lockOrientation);
 		compound.putBoolean("powered", this.powered);
 		return super.write(compound);
@@ -68,7 +75,15 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 		this.poolFile = ResourceLocation.tryCreate(compound.getString("poolFile"));
 		this.name = ResourceLocation.tryCreate(compound.getString("name"));
 		this.targetName = ResourceLocation.tryCreate(compound.getString("targetName"));
-		this.replaceState = ResourceLocation.tryCreate(compound.getString("replaceState"));
+		this.replaceState = Blocks.AIR.getDefaultState();
+		try {
+			BlockStateParser parser = new BlockStateParser(new StringReader(compound.contains("replaceState") ? compound.getString("replaceState") : "minecraft:air"), true);
+			parser.parse(false);
+			this.replaceState = parser.getState();
+		} catch (CommandSyntaxException e) {
+			RedTec.LOGGER.error("Cant parse BlockState!");
+			e.printStackTrace();
+		}
 		this.lockOrientation = compound.getBoolean("lockOrientation");
 		this.powered = compound.getBoolean("powered");
 		super.read(state, compound);
@@ -113,29 +128,48 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 			
 			if (list != null && levels > 0 && !hasAlreadyGenerated && !this.targetName.getPath().equals("empty")) {
 				
-				HashMap<Integer, String> files = new HashMap<Integer, String>();
+				HashMap<Integer, Integer> structures = new HashMap<Integer, Integer>();
 				int index = 0;
+				int structIndex = 0;
 				for (int i = 0; i < list.size(); i++) {
 					CompoundNBT entry = list.getCompound(i);
 					int chance = entry.getInt("chance");
-					String file = entry.getString("file");
 					for (int i1 = 0; i1 < chance; i1++) {
-						files.put(index++, file);
+						structures.put(index++, structIndex);
+					}
+					structIndex++;
+				}
+				
+				int randomStructureId = structures.size() > 1 ? structures.get(rand.nextInt(index - 1)) : structures.get(0);
+				CompoundNBT structureNBT = list.getCompound(randomStructureId);
+				
+				ResourceLocation resourceStructure = ResourceLocation.tryCreate(structureNBT.getString("file"));
+				JigsawReplacement replaceMode = JigsawReplacement.fromName(structureNBT.getString("replaceBlocks"));
+				ListNBT blockList = structureNBT.contains("blocks") ? structureNBT.getList("blocks", 8) : new ListNBT();
+				
+				List<BlockState> blocks = new ArrayList<BlockState>();
+				
+				for (int i = 0; i < blockList.size(); i++) {
+					StringNBT stringNBT = (StringNBT) blockList.get(i);
+					BlockStateParser parser = new BlockStateParser(new StringReader(stringNBT.getString()), true);
+					try {
+						parser.parse(false);
+						blocks.add(parser.getState());
+					} catch (CommandSyntaxException e) {
+						RedTec.LOGGER.warn("Cant parse replace-list block " + stringNBT.getString() + " in jigsaw metafile " + resourceStructure + "!");
 					}
 				}
 				
-				String randomFile = files.size() > 1 ? files.get(rand.nextInt(index - 1)) : files.get(0);
-				
-				ResourceLocation resourceStructure = ResourceLocation.tryCreate(randomFile);
 				Template template = JigsawFileManager.getTemplate(world, resourceStructure);
 				
 				if (template != null) {
 					
 					JigsawType alowedType = this.getBlockState().get(BlockJigsaw.TYPE).getOppesite();
-					List<BlockInfo> jigawBlocks = template.func_215381_a(BlockPos.ZERO, new PlacementSettings(), RedTec.jigsaw);
+					
+					List<BlockInfo> jigsawBlocks = template.func_215381_a(BlockPos.ZERO, new PlacementSettings(), RedTec.jigsaw);
 					
 					List<BlockInfo> filteredJigsaws = new ArrayList<BlockInfo>();
-					for (BlockInfo block : jigawBlocks) {
+					for (BlockInfo block : jigsawBlocks) {
 						ResourceLocation jigsawName = ResourceLocation.tryCreate(block.nbt.getString("name"));
 						if (jigsawName.toString().equals(this.targetName.toString()) && block.state.get(BlockJigsaw.TYPE) == alowedType) filteredJigsaws.add(block);
 					}
@@ -171,7 +205,8 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 								.setMirror(Mirror.NONE)
 								.setRotation(rotation)
 								.setIgnoreEntities(false)
-								.setChunk((ChunkPos)null);
+								.setChunk((ChunkPos)null)
+								.addProcessor(new JigsawTemplateProcessor(replaceMode, blocks));
 						
 						BlockPos offset = randomJigsaw.pos;
 						offset = Template.getTransformedPos(offset, Mirror.NONE, rotation, BlockPos.ZERO);
@@ -181,8 +216,8 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 						
 						template.func_237144_a_(world, generationPos, placement, rand);
 						
-						for (BlockInfo jigsaw : jigawBlocks) {
-
+						for (BlockInfo jigsaw : jigsawBlocks) {
+							
 							BlockPos transformedPos = Template.getTransformedPos(jigsaw.pos, Mirror.NONE, rotation, BlockPos.ZERO);
 							transformedPos = generationPos.add(transformedPos);
 							
@@ -204,8 +239,6 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 			
 			if (!keepJigsaws) {
 				
-				@SuppressWarnings("deprecation")
-				BlockState replaceState = Registry.BLOCK.getOrDefault(this.replaceState).getDefaultState();
 				world.setBlockState(pos, replaceState, 2);
 				
 			}

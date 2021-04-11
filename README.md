@@ -1,5 +1,5 @@
-# MCMOD-RedTec
-Minecraft RedTec Mod für MC 1.16.5
+# MCMOD-Industria
+Minecraft Industria Mod für MC 1.16.5 (vorher "RedTec")
 
 ======================================================================================================================
 MOD BESCHREIBUNG (kopiert aus der mod.toml)
@@ -23,6 +23,6 @@ Hab ich bisher aber nicht getestet!
 COMPILLIERTE DATEI/FERTIGER MOD
 
 Der fertige mod befindet sich (wenn die Build-Funktion ausgeführt wurde) in *ProjektOrdner*/build/libs.
-Die veröffendlichten versionen können auf https://github.com/M-Marvin/MCMOD-RedTec runtergeladen werden.
+Die veröffendlichten versionen können auf https://github.com/M-Marvin/MCMOD-Industria runtergeladen werden.
 
 ======================================================================================================================

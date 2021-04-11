@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SGS",
+    "SMS",
+    "DTD"
+  ],
+  "key": {
+    "S": {
+      "item": "industria:steel_plate"
+    },
+    "M": {
+      "item": "industria:motor"
+    },
+    "T": {
+      "item": "industria:turbin"
+    },
+    "G": {
+      "item": "industria:steel_plates"
+    },
+    "D": {
+      "item": "industria:monel_plate"
+    }
+  },
+  "result": {
+    "item": "industria:fluid_input"
+  }
+}

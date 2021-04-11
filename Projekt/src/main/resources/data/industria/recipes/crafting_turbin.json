@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "EEE",
+    "EBE",
+    "EEE"
+  ],
+  "key": {
+    "E": {
+      "item": "industria:steel_plate"
+    },
+    "B": {
+      "item": "industria:steel_ingot"
+    }
+  },
+  "result": {
+    "item": "industria:turbin",
+    "count": 3
+  }
+}

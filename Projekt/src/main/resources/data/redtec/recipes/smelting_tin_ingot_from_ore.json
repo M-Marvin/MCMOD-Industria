@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "redtec:crushed_tin_ore"
-  },
-  "result": "redtec:tin_ingot",
-  "experience": 0.3,
-  "cookingtime": 150
-}

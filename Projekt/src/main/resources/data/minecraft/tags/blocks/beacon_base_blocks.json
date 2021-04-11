@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "redtec:silver_block",
-    "redtec:palladium_block"
+    "industria:silver_block",
+    "industria:palladium_block"
   ]
 }

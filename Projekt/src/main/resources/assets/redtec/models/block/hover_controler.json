@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/cube_bottom_top",
-  "textures": {
-    "top": "redtec:block/hover_controler_top",
-    "bottom": "redtec:block/hover_controler_bottom",
-    "side": "redtec:block/hover_controler"
-  }
-}

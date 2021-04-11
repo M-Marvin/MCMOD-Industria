@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "redtec:polished_wolframite_bricks"
-  },
-  "result": "redtec:cracked_polished_wolframite_bricks",
-  "experience": 0.3,
-  "cookingtime": 100
-}

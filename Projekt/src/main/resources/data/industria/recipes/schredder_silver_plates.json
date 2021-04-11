@@ -1,0 +1,15 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "industria:silver_plates"
+  },
+  "results": [
+    {
+      "item": "industria:pure_silver",
+      "count": 2
+    }
+  ],
+  "schreddertime": 60,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 60
+}

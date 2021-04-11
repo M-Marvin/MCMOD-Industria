@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "industria:monel_ingot"
+    }
+  ],
+  "result": {
+    "item": "industria:monel_nugget",
+    "count": 9
+  }
+}

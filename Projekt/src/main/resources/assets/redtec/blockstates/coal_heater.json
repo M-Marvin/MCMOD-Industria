@@ -1,6 +1,0 @@
-{
-	"variants": {
-		"lit=false": { "model": "redtec:block/coal_heater" },
-		"lit=true": { "model": "redtec:block/coal_heater_lit" }
-	}
-}

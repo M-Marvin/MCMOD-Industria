@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "ingredient": {
-    "item": "redtec:pure_iron_ore"
-  },
-  "result": "minecraft:iron_ingot",
-  "experience": 0.3,
-  "cookingtime": 100
-}

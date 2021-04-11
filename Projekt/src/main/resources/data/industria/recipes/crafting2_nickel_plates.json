@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "nickel_plates",
+  "pattern": [
+    "###",
+    "# #",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:nickel_plate"
+    }
+  },
+  "result": {
+    "item": "industria:nickel_plates",
+    "count": 4
+  }
+}

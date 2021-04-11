@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=north": { "model": "industria:block/rail_piston" },
+		"facing=south": { "model": "industria:block/rail_piston", "y": 180 },
+		"facing=east": { "model": "industria:block/rail_piston", "y": 90 },
+		"facing=west": { "model": "industria:block/rail_piston", "y": -90 }
+	}
+}

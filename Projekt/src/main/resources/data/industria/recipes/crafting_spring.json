@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "HPC"
+  ],
+  "key": {
+    "H": {
+      "item": "industria:hammer"
+    },
+    "C": {
+      "item": "industria:cutter"
+    },
+    "P": {
+      "item": "industria:iron_plate"
+    }
+  },
+  "result": {
+    "item": "industria:spring",
+    "count": 2
+  }
+}

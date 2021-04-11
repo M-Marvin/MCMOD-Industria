@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "industria:palladium_dust"
+  },
+  "result": "industria:palladium_ingot",
+  "experience": 0.0,
+  "cookingtime": 200
+}

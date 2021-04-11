@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "wolfram_block",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:wolfram_ingot"
+    }
+  },
+  "result": {
+    "item": "industria:wolfram_block"
+  }
+}

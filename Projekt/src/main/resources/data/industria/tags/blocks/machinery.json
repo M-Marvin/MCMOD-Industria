@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "industria:generator",
+    "industria:raffinery",
+    "industria:alloy_furnace",
+    "industria:schredder",
+    "industria:blender",
+    "industria:fluid_input",
+    "industria:fluid_output",
+    "industria:steam_generator",
+    "industria:fuse_box",
+    "industria:transformator_coil",
+    "industria:transformator_contact",
+    "industria:multimeter",
+    "industria:power_switch",
+    "industria:electric_furnace",
+    "industria:thermal_zentrifuge"
+  ]
+}

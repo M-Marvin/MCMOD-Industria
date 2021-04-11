@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "industria:block/redstone_contact_top",
+    "bottom": "industria:block/redstone_contact_bottom",
+    "side": "industria:block/redstone_contact_side"
+  }
+}

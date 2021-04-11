@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ESE",
+    "ETE",
+    "CRC"
+  ],
+  "key": {
+    "E": {
+      "item": "industria:iron_plate"
+    },
+    "S": {
+      "item": "industria:iron_rod"
+    },
+    "T": {
+      "item": "industria:motor_coil"
+    },
+    "R": {
+      "item": "industria:resistor"
+    },
+    "C": {
+      "item": "industria:copper_wire"
+    }
+  },
+  "result": {
+    "item": "industria:energy_meter"
+  }
+}

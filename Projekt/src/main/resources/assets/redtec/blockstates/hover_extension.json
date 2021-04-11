@@ -1,6 +1,0 @@
-{
-	"variants": {
-		"activated=false": { "model": "redtec:block/hover_extension" },
-		"activated=true": { "model": "redtec:block/hover_extension_active" }
-	}
-}

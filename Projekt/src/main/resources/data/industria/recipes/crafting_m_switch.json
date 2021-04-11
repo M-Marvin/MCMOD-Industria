@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AKA",
+    "RER",
+    "AKA"
+  ],
+  "key": {
+    "A": {
+      "item": "industria:aluminium_plate"
+    },
+    "K": {
+      "item": "industria:copper_plate"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "E": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "industria:power_switch"
+  }
+}

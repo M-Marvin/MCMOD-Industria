@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/template_piston",
-  "textures": {
-    "platform": "redtec:block/advanced_piston_top",
-    "bottom": "redtec:block/advanced_piston_bottom",
-    "side": "redtec:block/advanced_piston_side"
-  }
-}

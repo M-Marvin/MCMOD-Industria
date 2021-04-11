@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "redtec:wolframit_ore",
-    "redtec:wolframit"
+    "industria:wolframit_ore",
+    "industria:wolframit"
   ]
 }

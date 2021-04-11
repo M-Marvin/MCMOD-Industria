@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "H",
+    "#"
+  ],
+  "key": {
+    "H": {
+      "item": "industria:hammer"
+    },
+    "#": {
+      "item": "industria:bauxit_ore"
+    }
+  },
+  "result": {
+    "item": "industria:crushed_bauxite",
+    "count": 1
+  }
+}

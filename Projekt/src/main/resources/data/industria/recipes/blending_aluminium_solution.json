@@ -1,0 +1,20 @@
+{
+  "type": "industria:blending",
+  "ingredientItems": [
+    {
+      "item": "industria:crushed_bauxite",
+      "count": 3
+    }
+  ],
+  "ingredientFluids": [
+    {
+      "fluid": "industria:sulfuric_acid",
+      "amount": 1000
+    }
+  ],
+  "resultFluid":  {
+    "fluid": "industria:aluminium_solution",
+    "amount": 1000
+  },
+  "mixingTime": 100
+}

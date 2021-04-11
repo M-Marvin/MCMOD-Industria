@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "III",
+    "WWW",
+    "III"
+  ],
+  "key": {
+    "I": {
+      "item": "industria:rubber"
+    },
+    "W": {
+      "item": "industria:electrolyt_copper_wire"
+    }
+  },
+  "result": {
+    "item": "industria:electrolyt_copper_cable",
+    "count": 16
+  }
+}

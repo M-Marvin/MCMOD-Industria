@@ -1,17 +1,17 @@
 {
   "replace": false,
   "values": [
-    "redtec:copper_block",
-    "redtec:tin_block",
-    "redtec:silver_block",
-    "redtec:palladium_block",
-    "redtec:nickel_block",
-    "redtec:redstone_alloy_block",
-    "redtec:monel_block",
-    "redtec:nickel_block",
-    "redtec:wolfram_block",
-    "redtec:aluminium_block",
-    "redtec:electrolyt_copper_block",
-    "redtec:steel_block"
+    "industria:copper_block",
+    "industria:tin_block",
+    "industria:silver_block",
+    "industria:palladium_block",
+    "industria:nickel_block",
+    "industria:redstone_alloy_block",
+    "industria:monel_block",
+    "industria:nickel_block",
+    "industria:wolfram_block",
+    "industria:aluminium_block",
+    "industria:electrolyt_copper_block",
+    "industria:steel_block"
   ]
 }

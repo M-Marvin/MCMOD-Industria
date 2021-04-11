@@ -2,20 +2,20 @@ modLoader="javafml"
 loaderVersion="[33,)"
 
 license="All rights reserved"
-issueTrackerURL="https://github.com/M-Marvin/MCMOD-RedTec/issues"
+issueTrackerURL="https://github.com/M-Marvin/MCMOD-Industria/issues"
 
 [[mods]]
-modId="redtec"
+modId="industria"
 version="1.0-debug"
-displayName="RedTec"
-displayURL="https://github.com/M-Marvin/MCMOD-RedTec"
+displayName="Industria"
+displayURL="https://github.com/M-Marvin/MCMOD-Industria"
 credits="M_Marvin, Hase222 (McStockWeintraube)"
 authors="M_Marvin, Hase222 (McStockWeintraube)"
 logoFile="logo.png"
 
-updateJSONURL="https://github.com/M-Marvin/MCMOD-RedTec/blob/main/ModUpdate.json"
+updateJSONURL="https://github.com/M-Marvin/MCMOD-Industria/blob/main/ModUpdate.json"
 
 description='''
-Ein Mod der diverse neue Baumaterialien, Items, Resourcen und Maschinen hinzuf\u00fcgt.
-Unter anderem Elektrizit\u00e4t, Rezepte mit Fl\u00fcssigkeiten und neue Erze.
+Ein Mod der diverse neue Baumaterialien, Items, Resourcen und Maschinen hinzuf\u00a7fcgt.
+Unter anderem Elektrizit\u00a7e4t, Rezepte mit Fl\u00a7fcssigkeiten und neue Erze.
 '''

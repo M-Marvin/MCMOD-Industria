@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "industria:silver_ore"
+  },
+  "result": "industria:silver_ingot",
+  "experience": 0.7,
+  "cookingtime": 100
+}

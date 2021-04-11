@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "industria:block/hover_controler_top",
+    "bottom": "industria:block/hover_controler_bottom",
+    "side": "industria:block/hover_controler"
+  }
+}

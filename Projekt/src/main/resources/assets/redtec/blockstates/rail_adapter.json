@@ -1,6 +1,0 @@
-{
-	"variants": {
-		"powered=false": { "model": "redtec:block/rail_adapter" },
-		"powered=true": { "model": "redtec:block/rail_adapter_on" }
-	}
-}

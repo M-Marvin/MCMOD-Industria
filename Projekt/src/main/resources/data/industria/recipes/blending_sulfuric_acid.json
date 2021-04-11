@@ -1,0 +1,20 @@
+{
+  "type": "industria:blending",
+  "ingredientItems": [
+    {
+      "item": "industria:sulfur",
+      "count": 2
+    }
+  ],
+  "ingredientFluids": [
+    {
+      "fluid": "industria:natron_lye",
+      "amount": 1000
+    }
+  ],
+  "resultFluid":  {
+    "fluid": "industria:sulfuric_acid",
+    "amount": 1000
+  },
+  "mixingTime": 150
+}

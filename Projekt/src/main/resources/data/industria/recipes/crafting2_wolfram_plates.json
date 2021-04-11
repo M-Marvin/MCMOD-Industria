@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "wolfram_plates",
+  "pattern": [
+    "###",
+    "# #",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:wolfram_plate"
+    }
+  },
+  "result": {
+    "item": "industria:wolfram_plates",
+    "count": 4
+  }
+}

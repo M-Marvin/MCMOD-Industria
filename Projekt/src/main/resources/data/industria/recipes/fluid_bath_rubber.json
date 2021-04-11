@@ -1,0 +1,20 @@
+{
+  "type": "industria:fluid_bath",
+  "ingredientFluid": {
+    "fluid": "minecraft:water",
+    "amount": 250
+  },
+  "wasteFluid":  {
+    "fluid": "industria:chemical_water",
+    "amount": 200
+  },
+  "ingredientItem": {
+    "item": "industria:polymer_resin",
+    "count": 1
+  },
+  "resultItem": {
+    "item": "industria:rubber",
+    "count": 1
+  },
+  "processTime": 300
+}

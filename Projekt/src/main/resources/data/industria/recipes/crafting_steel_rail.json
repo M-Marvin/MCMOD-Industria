@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "S S",
+    "SRS",
+    "S S"
+  ],
+  "key": {
+    "S": {
+      "item": "industria:steel_ingot"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "industria:steel_rail",
+    "count": 16
+  }
+}

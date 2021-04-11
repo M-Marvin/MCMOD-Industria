@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "steel_dust",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:tpo_steel_dust"
+    }
+  },
+  "result": {
+    "item": "industria:steel_dust"
+  }
+}

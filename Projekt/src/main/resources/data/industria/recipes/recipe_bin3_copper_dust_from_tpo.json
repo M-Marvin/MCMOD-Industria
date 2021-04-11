@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "copper_dust",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:tpo_copper_dust"
+    }
+  },
+  "result": {
+    "item": "industria:copper_dust"
+  }
+}

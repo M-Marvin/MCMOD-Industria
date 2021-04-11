@@ -1,0 +1,19 @@
+{
+  "type": "industria:blending",
+  "ingredientItems": [
+    {
+      "item": "industria:copper_oxid"
+    }
+  ],
+  "ingredientFluids": [
+    {
+      "fluid": "industria:sulfuric_acid",
+      "amount": 1000
+    }
+  ],
+  "resultFluid":  {
+    "fluid": "industria:copper_solution",
+    "amount": 1000
+  },
+  "mixingTime": 100
+}

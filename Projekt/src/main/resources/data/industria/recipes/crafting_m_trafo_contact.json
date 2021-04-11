@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "RKR"
+  ],
+  "key": {
+    "R": {
+      "item": "industria:rubber"
+    },
+    "C": {
+      "item": "industria:transformator_coil"
+    },
+    "K": {
+      "item": "industria:copper_plate"
+    }
+  },
+  "result": {
+    "item": "industria:transformator_contact",
+    "count": 2
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "industria:tin_ore"
+  },
+  "results": [
+    {
+      "item": "industria:crushed_stone",
+      "count": 4
+    },
+    {
+      "item": "industria:crushed_tin_ore",
+      "count": 1
+    }
+  ],
+  "schreddertime": 80,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 30
+}

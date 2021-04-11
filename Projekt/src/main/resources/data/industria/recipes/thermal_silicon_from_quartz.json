@@ -1,0 +1,14 @@
+{
+  "type": "industria:thermal_zentrifuge",
+  "ingredient": {
+    "item": "minecraft:quartz",
+    "count": 1
+  },
+  "resultItems": [
+    {
+      "item": "industria:silicon",
+      "count": 1
+    }
+  ],
+  "rifiningTime": 50
+}

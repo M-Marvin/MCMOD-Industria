@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "P P",
+    " P ",
+    "IBI"
+  ],
+  "key": {
+    "P": {
+      "item": "industria:iron_plate"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "B": {
+      "item": "industria:rubber"
+    }
+  },
+  "result": {
+    "item": "industria:cutter"
+  }
+}

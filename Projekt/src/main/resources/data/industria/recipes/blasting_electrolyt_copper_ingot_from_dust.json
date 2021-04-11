@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "industria:electrolyt_copper_dust"
+  },
+  "result": "industria:electrolyt_copper_ingot",
+  "experience": 0.0,
+  "cookingtime": 100
+}

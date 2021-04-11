@@ -1,0 +1,15 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "minecraft:blackstone"
+  },
+  "results": [
+    {
+      "item": "industria:crushed_blackstone",
+      "count": 4
+    }
+  ],
+  "schreddertime": 110,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 20
+}

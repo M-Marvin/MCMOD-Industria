@@ -1,0 +1,23 @@
+{
+  "type": "industria:schredder",
+  "ingredient": [
+    {
+      "item": "industria:exposed_steel_planks"
+    },
+    {
+      "item": "industria:weathered_steel_planks"
+    },
+    {
+      "item": "industria:oxidized_steel_planks"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:iron_nugget",
+      "count": 18
+    }
+  ],
+  "schreddertime": 60,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 60
+}

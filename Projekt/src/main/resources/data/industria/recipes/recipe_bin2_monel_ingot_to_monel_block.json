@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "monel_block",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:monel_ingot"
+    }
+  },
+  "result": {
+    "item": "industria:monel_block"
+  }
+}

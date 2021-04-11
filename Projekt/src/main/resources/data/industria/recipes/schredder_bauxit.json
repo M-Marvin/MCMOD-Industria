@@ -1,0 +1,15 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "industria:bauxit"
+  },
+  "results": [
+    {
+      "item": "industria:crushed_bauxite",
+      "count": 4
+    }
+  ],
+  "schreddertime": 90,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 20
+}

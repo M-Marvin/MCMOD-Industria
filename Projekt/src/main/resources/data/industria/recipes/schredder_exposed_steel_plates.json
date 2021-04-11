@@ -1,0 +1,23 @@
+{
+  "type": "industria:schredder",
+  "ingredient": [
+    {
+      "item": "industria:exposed_steel_plates"
+    },
+    {
+      "item": "industria:weathered_steel_plates"
+    },
+    {
+      "item": "industria:oxidized_steel_plates"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:iron_nugget",
+      "count": 9
+    }
+  ],
+  "schreddertime": 60,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 60
+}

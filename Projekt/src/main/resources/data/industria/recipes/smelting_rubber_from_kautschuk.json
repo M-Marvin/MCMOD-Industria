@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "industria:raw_rubber_bottle"
+  },
+  "result": "industria:rubber_bottle",
+  "experience": 0.6,
+  "cookingtime": 60
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:polished_bauxite"
+    }
+  },
+  "result": {
+    "item": "industria:polished_bauxite_bricks",
+    "count": 4
+  }
+}

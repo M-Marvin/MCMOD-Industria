@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:plastic_pellets"
+    }
+  },
+  "result": {
+    "item": "industria:plastic_plate",
+    "count": 2
+  }
+}

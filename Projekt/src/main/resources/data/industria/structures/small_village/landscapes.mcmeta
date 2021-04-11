@@ -1,0 +1,12 @@
+{
+	"structures": [
+		{
+			"chance": 2,
+			"file": "industria:small_village/landscape_01"
+		},
+		{
+			"chance": 2,
+			"file": "industria:small_village/landscape_02"
+		}
+	]
+}

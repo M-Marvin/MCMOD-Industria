@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "redtec:pure_gold"
-  },
-  "result": "minecraft:gold_ingot",
-  "experience": 0.3,
-  "cookingtime": 100
-}

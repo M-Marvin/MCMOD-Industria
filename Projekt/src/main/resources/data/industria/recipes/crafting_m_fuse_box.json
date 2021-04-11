@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AKA",
+    "A A",
+    "AKA"
+  ],
+  "key": {
+    "A": {
+      "item": "industria:aluminium_plate"
+    },
+    "K": {
+      "item": "industria:copper_plate"
+    }
+  },
+  "result": {
+    "item": "industria:fuse_box"
+  }
+}

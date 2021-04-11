@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RRR",
+    "EEE"
+  ],
+  "key": {
+    "R": {
+      "item": "industria:rubber"
+    },
+    "E": {
+      "item": "industria:iron_plate"
+    }
+  },
+  "result": {
+    "item": "industria:conveyor_belt",
+    "count": 8
+  }
+}

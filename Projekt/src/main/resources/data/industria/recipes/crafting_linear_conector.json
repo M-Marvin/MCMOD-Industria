@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CKC",
+    "CSC",
+    "CKC"
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:cobblestone"
+    },
+    "K": {
+      "item": "industria:conector_block"
+    },
+    "S": {
+      "item": "minecraft:slime_block"
+    }
+  },
+  "result": {
+    "item": "industria:linear_conector"
+  }
+}

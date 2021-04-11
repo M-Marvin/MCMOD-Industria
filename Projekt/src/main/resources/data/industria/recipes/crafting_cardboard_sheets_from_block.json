@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "industria:cardboard_block"
+    }
+  ],
+  "result": {
+    "item": "industria:cardboard_sheet",
+    "count": 9
+  }
+}

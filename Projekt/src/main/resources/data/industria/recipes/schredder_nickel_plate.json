@@ -1,0 +1,15 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "industria:nickel_plate"
+  },
+  "results": [
+    {
+      "item": "industria:nickel_nugget",
+      "count": 9
+    }
+  ],
+  "schreddertime": 30,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 30
+}

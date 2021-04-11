@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "alloy_furnace",
+  "pattern": [
+    "WGW",
+    "CFC",
+    "WFW"
+  ],
+  "key": {
+    "G": {
+      "item": "industria:iron_plates"
+    },
+    "W": {
+      "item": "industria:iron_plate"
+    },
+    "C": {
+      "item": "industria:transformator_coil"
+    },
+    "F": {
+      "item": "minecraft:blast_furnace"
+    }
+  },
+  "result": {
+    "item": "industria:alloy_furnace"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "industria:pure_gold_ore"
+  },
+  "result": "minecraft:gold_ingot",
+  "experience": 0.3,
+  "cookingtime": 100
+}

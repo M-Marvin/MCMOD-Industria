@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "redtec:block/light_gray_painted_planks"
-  }
-}

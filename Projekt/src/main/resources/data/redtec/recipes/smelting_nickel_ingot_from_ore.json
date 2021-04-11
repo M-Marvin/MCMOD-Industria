@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "redtec:crushed_nickel_ore"
-  },
-  "result": "redtec:nickel_ingot",
-  "experience": 0.3,
-  "cookingtime": 150
-}

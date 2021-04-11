@@ -1,0 +1,19 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "industria:copper_ore"
+  },
+  "results": [
+    {
+      "item": "industria:crushed_stone",
+      "count": 4
+    },
+    {
+      "item": "industria:crushed_copper_ore",
+      "count": 1
+    }
+  ],
+  "schreddertime": 100,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 20
+}

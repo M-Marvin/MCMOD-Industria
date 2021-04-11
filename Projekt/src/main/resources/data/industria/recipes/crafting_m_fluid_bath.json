@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "KLK",
+    "PMP",
+    "ASA"
+  ],
+  "key": {
+    "A": {
+      "item": "industria:aluminium_plates"
+    },
+    "S": {
+      "item": "industria:steel_plates"
+    },
+    "L": {
+      "item": "industria:aluminium_plate"
+    },
+    "K": {
+      "item": "industria:copper_plate"
+    },
+    "M": {
+      "item": "industria:motor"
+    },
+    "P": {
+      "item": "industria:fluid_input"
+    }
+  },
+  "result": {
+    "item": "industria:fluid_bath"
+  }
+}

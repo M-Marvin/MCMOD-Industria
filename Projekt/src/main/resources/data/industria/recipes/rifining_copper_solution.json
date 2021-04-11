@@ -1,0 +1,18 @@
+{
+  "type": "industria:rifining",
+  "ingredientFluid": {
+    "fluid": "industria:copper_solution",
+    "amount": 500
+  },
+  "resultFluid":  {
+    "fluid": "industria:chemical_water",
+    "amount": 300
+  },
+  "resultItems": [
+    {
+      "item": "industria:copper_nugget",
+      "count": 8
+    }
+  ],
+  "rifiningTime": 200
+}

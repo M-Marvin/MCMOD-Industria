@@ -1,6 +1,0 @@
-{
-	"variants": {
-		"lit=false": { "model": "redtec:block/stacked_redstone_torch" },
-		"lit=true": { "model": "redtec:block/stacked_redstone_torch_lit" }
-	}
-}

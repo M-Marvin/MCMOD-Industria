@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RKK",
+    "EFF"
+  ],
+  "key": {
+    "R": {
+      "item": "industria:bearing"
+    },
+    "K": {
+      "item": "industria:iron_rod"
+    },
+    "E": {
+      "item": "industria:spring"
+    },
+    "F": {
+      "item": "industria:conveyor_belt"
+    }
+  },
+  "result": {
+    "item": "industria:conveyor_spliter",
+    "count": 2
+  }
+}

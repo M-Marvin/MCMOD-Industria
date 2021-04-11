@@ -1,0 +1,22 @@
+{
+  "type": "industria:alloy",
+  "ingredientItems": [
+    {
+      "item": "minecraft:iron_ingot",
+      "count": 1
+    },
+    {
+      "item": "industria:coal_coke",
+      "count": 1
+    },
+    {
+      "item": "industria:lime",
+      "count": 1
+    }
+  ],
+  "resultItem":  {
+    "item": "industria:crude_steel",
+    "count": 1
+  },
+  "smeltingTime": 300
+}

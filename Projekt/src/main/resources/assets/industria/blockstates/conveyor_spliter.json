@@ -1,0 +1,157 @@
+{
+	"multipart": [
+		{ "when": {"facing": "north"}, "apply": {
+			"model": "industria:block/conveyor_spliter_base",
+			"y": 180
+		}},
+		{ "when": {"right": "close", "facing": "north"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 0
+		}},
+		{ "when": {"left": "close", "facing": "north"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 180
+		}},
+		{ "when": {"right": "open", "facing": "north"}, "apply": {
+			"model": "industria:block/conveyor_spliter_open",
+			"y": 0
+		}},
+		{ "when": {"left": "open", "facing": "north"}, "apply": {
+			"model": "industria:block/conveyor_spliter_open",
+			"y": 180
+		}},
+		{ "when": {"active": "false", "facing": "north", "right": "open"}, "apply": {
+			"model": "industria:block/conveyor_spliter_right",
+			"y": 180
+		}},
+		{ "when": {"active": "true", "facing": "north", "right": "open"}, "apply": {
+			"model": "industria:block/conveyor_spliter_right_active",
+			"y": 180
+		}},
+		{ "when": {"active": "false", "facing": "north", "left": "open"}, "apply": {
+			"model": "industria:block/conveyor_spliter_left",
+			"y": 180
+		}},
+		{ "when": {"active": "true", "facing": "north", "left": "open"}, "apply": {
+			"model": "industria:block/conveyor_spliter_left_active",
+			"y": 180
+		}},
+		
+		
+		
+		{ "when": {"facing": "south"}, "apply": {
+			"model": "industria:block/conveyor_spliter_base",
+			"y": 0
+		}},
+		{ "when": {"right": "close", "facing": "south"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 180
+		}},
+		{ "when": {"left": "close", "facing": "south"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 0
+		}},
+		{ "when": {"right": "open", "facing": "south"}, "apply": {
+			"model": "industria:block/conveyor_spliter_open",
+			"y": 180
+		}},
+		{ "when": {"left": "open", "facing": "south"}, "apply": {
+			"model": "industria:block/conveyor_spliter_open",
+			"y": 0
+		}},
+		{ "when": {"active": "false", "facing": "south", "right": "open"}, "apply": {
+			"model": "industria:block/conveyor_spliter_right",
+			"y": 0
+		}},
+		{ "when": {"active": "true", "facing": "south", "right": "open"}, "apply": {
+			"model": "industria:block/conveyor_spliter_right_active",
+			"y": 0
+		}},
+		{ "when": {"active": "false", "facing": "south", "left": "open"}, "apply": {
+			"model": "industria:block/conveyor_spliter_left",
+			"y": 0
+		}},
+		{ "when": {"active": "true", "facing": "south", "left": "open"}, "apply": {
+			"model": "industria:block/conveyor_spliter_left_active",
+			"y": 0
+		}},
+		
+		
+		
+		{ "when": {"facing": "east"}, "apply": {
+			"model": "industria:block/conveyor_spliter_base",
+			"y": 270
+		}},
+		{ "when": {"right": "close", "facing": "east"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 90
+		}},
+		{ "when": {"left": "close", "facing": "east"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 270
+		}},
+		{ "when": {"right": "open", "facing": "east"}, "apply": {
+			"model": "industria:block/conveyor_spliter_open",
+			"y": 90
+		}},
+		{ "when": {"left": "open", "facing": "east"}, "apply": {
+			"model": "industria:block/conveyor_spliter_open",
+			"y": 270
+		}},
+		{ "when": {"active": "false", "facing": "east", "right": "open"}, "apply": {
+			"model": "industria:block/conveyor_spliter_right",
+			"y": 270
+		}},
+		{ "when": {"active": "true", "facing": "east", "right": "open"}, "apply": {
+			"model": "industria:block/conveyor_spliter_right_active",
+			"y": 270
+		}},
+		{ "when": {"active": "false", "facing": "east", "left": "open"}, "apply": {
+			"model": "industria:block/conveyor_spliter_left",
+			"y": 270
+		}},
+		{ "when": {"active": "true", "facing": "east", "left": "open"}, "apply": {
+			"model": "industria:block/conveyor_spliter_left_active",
+			"y": 270
+		}},
+		
+		
+		
+		{ "when": {"facing": "west"}, "apply": {
+			"model": "industria:block/conveyor_spliter_base",
+			"y": 90
+		}},
+		{ "when": {"right": "close", "facing": "west"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 270
+		}},
+		{ "when": {"left": "close", "facing": "west"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 90
+		}},
+		{ "when": {"right": "open", "facing": "west"}, "apply": {
+			"model": "industria:block/conveyor_spliter_open",
+			"y": 270
+		}},
+		{ "when": {"left": "open", "facing": "west"}, "apply": {
+			"model": "industria:block/conveyor_spliter_open",
+			"y": 90
+		}},
+		{ "when": {"active": "false", "facing": "west", "right": "open"}, "apply": {
+			"model": "industria:block/conveyor_spliter_right",
+			"y": 90
+		}},
+		{ "when": {"active": "true", "facing": "west", "right": "open"}, "apply": {
+			"model": "industria:block/conveyor_spliter_right_active",
+			"y": 90
+		}},
+		{ "when": {"active": "false", "facing": "west", "left": "open"}, "apply": {
+			"model": "industria:block/conveyor_spliter_left",
+			"y": 90
+		}},
+		{ "when": {"active": "true", "facing": "west", "left": "open"}, "apply": {
+			"model": "industria:block/conveyor_spliter_left_active",
+			"y": 90
+		}}
+	]
+}

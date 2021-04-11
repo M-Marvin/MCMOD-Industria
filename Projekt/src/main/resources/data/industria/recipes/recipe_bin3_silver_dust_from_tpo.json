@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "silver_dust",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:tpo_silver_dust"
+    }
+  },
+  "result": {
+    "item": "industria:silver_dust"
+  }
+}

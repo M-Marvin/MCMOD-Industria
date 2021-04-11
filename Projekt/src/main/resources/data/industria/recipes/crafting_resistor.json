@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " C ",
+    "DPD",
+    " C "
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:clay_ball"
+    },
+    "D": {
+      "item": "industria:copper_wire"
+    },
+    "P": {
+      "item": "industria:nickel_plate"
+    }
+  },
+  "result": {
+    "item": "industria:resistor",
+    "count": 4
+  }
+}

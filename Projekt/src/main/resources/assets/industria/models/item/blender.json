@@ -1,0 +1,41 @@
+{
+	"parent": "builtin/entity",
+    "textures": {
+        "particle": "industria:block/blender"
+    },
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [30, 225, 0],
+			"translation": [1.5, 2.25, 0],
+			"scale": [0.2, 0.2, 0.2]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [30, 225, 0],
+			"translation": [1.5, 2.25, 0],
+			"scale": [0.2, 0.2, 0.2]
+		},
+		"firstperson_righthand": {
+			"rotation": [30, 225, 0],
+			"translation": [-2.5, -2, 0],
+			"scale": [0.2, 0.2, 0.2]
+		},
+		"firstperson_lefthand": {
+			"rotation": [30, 225, 0],
+			"translation": [-2.5, -2, 0],
+			"scale": [0.2, 0.2, 0.2]
+		},
+		"ground": {
+			"translation": [3, 3, 3],
+			"scale": [0.25, 0.25, 0.25]
+		},
+		"gui": {
+			"rotation": [30, 225, 0],
+			"translation": [-2.5, -2, 0],
+			"scale": [0.2, 0.2, 0.2]
+		},
+		"fixed": {
+			"translation": [2, -4, 0],
+			"scale": [0.3, 0.3, 0.3]
+		}
+	}
+}

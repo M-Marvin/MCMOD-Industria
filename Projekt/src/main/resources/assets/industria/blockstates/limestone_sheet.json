@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"": [
+			{ "model": "industria:block/limestone_sheet" },
+			{ "model": "industria:block/limestone_sheet", "y": 90 },
+			{ "model": "industria:block/limestone_sheet", "y": 180 },
+			{ "model": "industria:block/limestone_sheet", "y": 270 }
+		]
+	}
+}

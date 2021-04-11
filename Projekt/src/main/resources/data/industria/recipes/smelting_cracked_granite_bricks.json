@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "industria:polished_granite_bricks"
+  },
+  "result": "industria:cracked_polished_granite_bricks",
+  "experience": 0.3,
+  "cookingtime": 100
+}

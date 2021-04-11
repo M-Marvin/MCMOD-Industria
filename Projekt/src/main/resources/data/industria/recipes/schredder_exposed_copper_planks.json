@@ -1,0 +1,23 @@
+{
+  "type": "industria:schredder",
+  "ingredient": [
+    {
+      "item": "industria:exposed_copper_planks"
+    },
+    {
+      "item": "industria:weathered_copper_planks"
+    },
+    {
+      "item": "industria:oxidized_copper_planks"
+    }
+  ],
+  "results": [
+    {
+      "item": "industria:copper_nugget",
+      "count": 18
+    }
+  ],
+  "schreddertime": 60,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 60
+}

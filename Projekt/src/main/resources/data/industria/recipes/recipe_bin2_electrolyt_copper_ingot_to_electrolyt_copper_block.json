@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "electrolyt_copper_block",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:electrolyt_copper_ingot"
+    }
+  },
+  "result": {
+    "item": "industria:electrolyt_copper_block"
+  }
+}

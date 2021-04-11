@@ -1,0 +1,15 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "minecraft:netherrack"
+  },
+  "results": [
+    {
+      "item": "industria:crushed_netherrack",
+      "count": 4
+    }
+  ],
+  "schreddertime": 40,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 4
+}

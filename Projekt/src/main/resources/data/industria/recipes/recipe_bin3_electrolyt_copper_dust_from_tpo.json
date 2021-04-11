@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "electrolyt_copper_dust",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:tpo_electrolyt_copper_dust"
+    }
+  },
+  "result": {
+    "item": "industria:electrolyt_copper_dust"
+  }
+}

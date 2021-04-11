@@ -1,0 +1,18 @@
+{
+  "type": "industria:alloy",
+  "ingredientItems": [
+    {
+      "item": "minecraft:gold_ingot",
+      "count": 1
+    },
+    {
+      "item": "minecraft:redstone",
+      "count": 2
+    }
+  ],
+  "resultItem":  {
+    "item": "industria:redstone_ingot",
+    "count": 2
+  },
+  "smeltingTime": 150
+}

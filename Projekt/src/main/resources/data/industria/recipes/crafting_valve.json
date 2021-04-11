@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " E ",
+    "PMP",
+    "CRC"
+  ],
+  "key": {
+    "P": {
+      "item": "industria:fluid_pipe"
+    },
+    "M": {
+      "item": "industria:monel_plate"
+    },
+    "E": {
+      "item": "industria:iron_plate"
+    },
+    "C": {
+      "item": "industria:copper_plate"
+    },
+    "R": {
+      "item": "industria:rubber"
+    }
+  },
+  "result": {
+    "item": "industria:fluid_valve"
+  }
+}

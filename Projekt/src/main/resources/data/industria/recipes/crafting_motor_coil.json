@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "KEK",
+    "KEK",
+    "KEK"
+  ],
+  "key": {
+    "E": {
+      "item": "minecraft:iron_ingot"
+    },
+    "K": {
+      "item": "industria:copper_wire"
+    }
+  },
+  "result": {
+    "item": "industria:motor_coil",
+    "count": 4
+  }
+}

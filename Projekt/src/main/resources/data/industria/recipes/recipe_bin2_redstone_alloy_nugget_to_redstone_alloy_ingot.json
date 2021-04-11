@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "redstone_alloy_ingot",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:redstone_nugget"
+    }
+  },
+  "result": {
+    "item": "industria:redstone_ingot"
+  }
+}

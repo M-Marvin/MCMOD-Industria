@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "redstone_alloy_planks",
+  "pattern": [
+    "###",
+    "   ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:redstone_alloy_plate"
+    }
+  },
+  "result": {
+    "item": "industria:redstone_alloy_planks",
+    "count": 3
+  }
+}

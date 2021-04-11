@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "industria:monel_dust"
+  },
+  "result": "industria:monel_ingot",
+  "experience": 0.0,
+  "cookingtime": 100
+}

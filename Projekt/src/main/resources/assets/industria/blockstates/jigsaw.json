@@ -1,0 +1,57 @@
+{
+  "variants": {
+    "type=vertical_down,facing=east": {
+      "model": "industria:block/jigsaw",
+      "x": 90,
+      "y": 90
+    },
+    "type=vertical_down,facing=north": {
+      "model": "industria:block/jigsaw",
+      "x": 90
+    },
+    "type=vertical_down,facing=south": {
+      "model": "industria:block/jigsaw",
+      "x": 90,
+      "y": 180
+    },
+    "type=vertical_down,facing=west": {
+      "model": "industria:block/jigsaw",
+      "x": 90,
+      "y": 270
+    },
+    "type=horizontal,facing=east": {
+      "model": "industria:block/jigsaw",
+      "y": 90
+    },
+    "type=horizontal,facing=north": {
+      "model": "industria:block/jigsaw"
+    },
+    "type=horizontal,facing=south": {
+      "model": "industria:block/jigsaw",
+      "y": 180
+    },
+    "type=vertical_up,facing=east": {
+      "model": "industria:block/jigsaw",
+      "x": 270,
+      "y": 270
+    },
+    "type=vertical_up,facing=north": {
+      "model": "industria:block/jigsaw",
+      "x": 270,
+      "y": 180
+    },
+    "type=vertical_up,facing=south": {
+      "model": "industria:block/jigsaw",
+      "x": 270
+    },
+    "type=vertical_up,facing=west": {
+      "model": "industria:block/jigsaw",
+      "x": 270,
+      "y": 90
+    },
+    "type=horizontal,facing=west": {
+      "model": "industria:block/jigsaw",
+      "y": 270
+    }
+  }
+}

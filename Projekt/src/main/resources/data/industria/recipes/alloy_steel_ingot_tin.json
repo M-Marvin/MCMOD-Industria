@@ -1,0 +1,18 @@
+{
+  "type": "industria:alloy",
+  "ingredientItems": [
+    {
+      "item": "industria:crude_steel",
+      "count": 1
+    },
+    {
+      "item": "industria:tin_nugget",
+      "count": 3
+    }
+  ],
+  "resultItem":  {
+    "item": "industria:steel_ingot",
+    "count": 2
+  },
+  "smeltingTime": 100
+}

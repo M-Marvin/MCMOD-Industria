@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " A ",
+    "ALA",
+    "DKD"
+  ],
+  "key": {
+    "K": {
+      "item": "industria:copper_plate"
+    },
+    "D": {
+      "item": "industria:copper_wire"
+    },
+    "A": {
+      "item": "industria:aluminium_plate"
+    },
+    "L": {
+      "item": "industria:electrolyt_paper"
+    }
+  },
+  "result": {
+    "item": "industria:condensator",
+    "count": 4
+  }
+}

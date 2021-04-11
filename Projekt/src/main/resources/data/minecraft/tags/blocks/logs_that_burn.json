@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "redtec:rubber_log",
-    "redtec:rubber_wood"
+    "industria:rubber_log",
+    "industria:rubber_wood"
   ]
 }

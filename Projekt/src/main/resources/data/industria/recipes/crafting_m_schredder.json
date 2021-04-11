@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GSG",
+    "MTM",
+    "STS"
+  ],
+  "key": {
+    "S": {
+      "item": "industria:steel_plate"
+    },
+    "M": {
+      "item": "industria:motor"
+    },
+    "T": {
+      "item": "minecraft:hopper"
+    },
+    "G": {
+      "item": "industria:steel_plates"
+    }
+  },
+  "result": {
+    "item": "industria:schredder"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RR"
+  ],
+  "key": {
+    "R": {
+      "item": "industria:rubber_bottle"
+    }
+  },
+  "result": {
+    "item": "industria:rubber"
+  }
+}

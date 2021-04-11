@@ -1,0 +1,15 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "industria:netherite_planks"
+  },
+  "results": [
+    {
+      "item": "minecraft:netherite_scrap",
+      "count": 8
+    }
+  ],
+  "schreddertime": 60,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 60
+}

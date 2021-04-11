@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AWA",
+    "W W",
+    "AWA"
+  ],
+  "key": {
+    "W": {
+      "item": "industria:wolfram_plate"
+    },
+    "A": {
+      "item": "industria:aluminium_ingot"
+    }
+  },
+  "result": {
+    "item": "industria:reinforced_casing",
+    "count": 4
+  }
+}

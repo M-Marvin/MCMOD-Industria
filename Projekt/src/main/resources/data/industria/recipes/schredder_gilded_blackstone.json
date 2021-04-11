@@ -1,0 +1,19 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "minecraft:gilded_blackstone"
+  },
+  "results": [
+    {
+      "item": "industria:crushed_blackstone",
+      "count": 4
+    },
+    {
+      "item": "industria:crushed_gold_ore",
+      "count": 2
+    }
+  ],
+  "schreddertime": 120,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 40
+}

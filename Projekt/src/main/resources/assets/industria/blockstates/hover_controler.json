@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=north": { "model": "industria:block/hover_controler" },
+		"facing=south": { "model": "industria:block/hover_controler", "y": 180 },
+		"facing=east": { "model": "industria:block/hover_controler", "y": 90 },
+		"facing=west": { "model": "industria:block/hover_controler", "y": -90 }
+	}
+}

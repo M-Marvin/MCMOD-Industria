@@ -1,0 +1,23 @@
+{
+  "type": "industria:schredder",
+  "ingredient": [
+    {
+      "item": "industria:exposed_tin_plates"
+    },
+    {
+      "item": "industria:weathered_tin_plates"
+    },
+    {
+      "item": "industria:oxidized_tin_plates"
+    }
+  ],
+  "results": [
+    {
+      "item": "industria:tin_nugget",
+      "count": 1
+    }
+  ],
+  "schreddertime": 60,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 60
+}

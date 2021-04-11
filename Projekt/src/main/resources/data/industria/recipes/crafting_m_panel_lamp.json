@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AAA",
+    "DDD",
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "item": "industria:aluminium_plate"
+    },
+    "D": {
+      "item": "industria:led"
+    }
+  },
+  "result": {
+    "item": "industria:panel_lamp",
+    "count": 2
+  }
+}

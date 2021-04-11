@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "redtec:bauxit",
-    "redtec:bauxit_ore"
+    "industria:bauxit",
+    "industria:bauxit_ore"
   ]
 }

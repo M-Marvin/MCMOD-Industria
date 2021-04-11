@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "industria:crushed_tin_ore"
+  },
+  "result": "industria:tin_ingot",
+  "experience": 0.3,
+  "cookingtime": 150
+}

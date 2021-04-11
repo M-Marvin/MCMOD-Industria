@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "industria:polished_wolframite_bricks"
+  },
+  "result": "industria:cracked_polished_wolframite_bricks",
+  "experience": 0.3,
+  "cookingtime": 100
+}

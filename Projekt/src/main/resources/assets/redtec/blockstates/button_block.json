@@ -1,6 +1,0 @@
-{
-  "variants": {
-    "powered=true": { "model": "redtec:block/button_block_active" },
-    "powered=false": { "model": "redtec:block/button_block" }
-  }
-}

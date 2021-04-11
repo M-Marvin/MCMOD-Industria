@@ -1,0 +1,18 @@
+{
+  "type": "industria:washing",
+  "ingredient": {
+    "item": "industria:crushed_silver_ore",
+    "count": 1
+  },
+  "resultItems": [
+    {
+      "item": "industria:pure_silver_ore",
+      "count": 1
+    },
+    {
+      "item": "industria:crushed_stone",
+      "count": 1
+    }
+  ],
+  "washingTime": 100
+}

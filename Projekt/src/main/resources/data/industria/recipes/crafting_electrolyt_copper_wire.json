@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "P",
+    "C"
+  ],
+  "key": {
+    "P": {
+      "item": "industria:electrolyt_copper_plate"
+    },
+    "C": {
+      "item": "industria:cutter"
+    }
+  },
+  "result": {
+    "item": "industria:electrolyt_copper_wire",
+    "count": 3
+  }
+}

@@ -1,0 +1,17 @@
+{
+	"variants": {
+		"facing=north,on=false": { "model": "industria:block/fuse_box", "y": 180 },
+		"facing=south,on=false": { "model": "industria:block/fuse_box" },
+		"facing=east,on=false": { "model": "industria:block/fuse_box", "y": -90 },
+		"facing=west,on=false": { "model": "industria:block/fuse_box", "y": 90 },
+		"facing=up,on=false": { "model": "industria:block/fuse_box", "x": 90},
+		"facing=down,on=false": { "model": "industria:block/fuse_box", "x": -90 },
+		
+		"facing=north,on=true": { "model": "industria:block/fuse_box_on", "y": 180 },
+		"facing=south,on=true": { "model": "industria:block/fuse_box_on" },
+		"facing=east,on=true": { "model": "industria:block/fuse_box_on", "y": -90 },
+		"facing=west,on=true": { "model": "industria:block/fuse_box_on", "y": 90 },
+		"facing=up,on=true": { "model": "industria:block/fuse_box_on", "x": 90},
+		"facing=down,on=true": { "model": "industria:block/fuse_box_on", "x": -90 }
+	}
+}

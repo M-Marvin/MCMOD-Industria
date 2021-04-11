@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "ingredient": {
-    "item": "redtec:iron_oxid"
-  },
-  "result": "minecraft:iron_ingot",
-  "experience": 0.3,
-  "cookingtime": 90
-}

@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "redtec:wolfram_dust"
-  },
-  "result": "redtec:wolfram_ingot",
-  "experience": 0.0,
-  "cookingtime": 200
-}

@@ -1,0 +1,19 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "minecraft:redstone_ore"
+  },
+  "results": [
+    {
+      "item": "industria:crushed_stone",
+      "count": 2
+    },
+    {
+      "item": "minecraft:redstone",
+      "count": 3
+    }
+  ],
+  "schreddertime": 80,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 16
+}

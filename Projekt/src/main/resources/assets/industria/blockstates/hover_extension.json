@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"activated=false": { "model": "industria:block/hover_extension" },
+		"activated=true": { "model": "industria:block/hover_extension_active" }
+	}
+}

@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SGS",
+    "WEW",
+    "SCS"
+  ],
+  "key": {
+    "S": {
+      "item": "industria:steel_plate"
+    },
+    "G": {
+      "item": "industria:steel_plates"
+    },
+    "W": {
+      "item": "industria:wolfram_plate"
+    },
+    "C": {
+      "item": "industria:transformator_coil"
+    },
+    "E": {
+      "item": "industria:ender_core"
+    }
+  },
+  "result": {
+    "item": "industria:chunk_loader"
+  }
+}

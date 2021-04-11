@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "EEE",
+    "WWW",
+    "EEE"
+  ],
+  "key": {
+    "E": {
+      "item": "industria:steel_plate"
+    },
+    "W": {
+      "item": "industria:wolfram_plate"
+    }
+  },
+  "result": {
+    "item": "industria:schredder_crusher"
+  }
+}

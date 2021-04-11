@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "redstone_alloy_dust",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:tpo_redstone_alloy_dust"
+    }
+  },
+  "result": {
+    "item": "industria:redstone_alloy_dust"
+  }
+}

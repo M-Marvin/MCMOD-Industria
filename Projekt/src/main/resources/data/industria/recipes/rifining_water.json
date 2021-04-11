@@ -1,0 +1,22 @@
+{
+  "type": "industria:rifining",
+  "ingredientFluid": {
+    "fluid": "minecraft:water",
+    "amount": 1500
+  },
+  "resultFluid":  {
+    "fluid": "industria:destilled_water",
+    "amount": 1500
+  },
+  "resultItems": [
+    {
+      "item": "industria:lime",
+      "count": 2
+    },
+    {
+      "item": "industria:salt",
+      "count": 2
+    }
+  ],
+  "rifiningTime": 100
+}

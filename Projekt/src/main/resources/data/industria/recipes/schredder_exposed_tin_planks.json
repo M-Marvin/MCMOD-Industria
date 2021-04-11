@@ -1,0 +1,23 @@
+{
+  "type": "industria:schredder",
+  "ingredient": [
+    {
+      "item": "industria:exposed_tin_planks"
+    },
+    {
+      "item": "industria:weathered_tin_planks"
+    },
+    {
+      "item": "industria:oxidized_tin_planks"
+    }
+  ],
+  "results": [
+    {
+      "item": "industria:tin_nugget",
+      "count": 18
+    }
+  ],
+  "schreddertime": 60,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 60
+}

@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "ingredient": {
-    "item": "redtec:pure_silver"
-  },
-  "result": "redtec:silver_ingot",
-  "experience": 0.3,
-  "cookingtime": 50
-}

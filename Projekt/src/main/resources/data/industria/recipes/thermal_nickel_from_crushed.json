@@ -1,0 +1,18 @@
+{
+  "type": "industria:thermal_zentrifuge",
+  "ingredient": {
+    "item": "industria:crushed_nickel_ore",
+    "count": 1
+  },
+  "resultItems": [
+    {
+      "item": "industria:pure_nickel",
+      "count": 1
+    },
+    {
+      "item": "industria:tpo_copper_dust",
+      "count": 3
+    }
+  ],
+  "rifiningTime": 100
+}

@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "minecraft:coal"
-  },
-  "result": "redtec:coal_coke",
-  "experience": 0.3,
-  "cookingtime": 100
-}

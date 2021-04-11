@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "industria:raw_oil",
+    "industria:flowing_raw_oil"
+  ]
+}

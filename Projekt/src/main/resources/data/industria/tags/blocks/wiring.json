@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "industria:copper_cable",
+    "industria:electrolyt_copper_cable",
+    "industria:aluminium_cable",
+    "industria:fluid_pipe",
+    "industria:signal_wire",
+    "industria:stacked_redstone_wire",
+    "industria:network_cable",
+    "minecraft:redstone_wire"
+  ]
+}

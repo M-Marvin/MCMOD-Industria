@@ -1,0 +1,116 @@
+{
+	"block.hover_extension.activated": {
+		"sounds": [
+			"industria:hover_extension_activate"
+		],
+		"subtitle": "sound.industria.block.hover_extension.activated"
+	},
+	"block.turbin.loop": {
+		"sounds": [
+			"industria:turbin_loop"
+		],
+		"subtitle": "sound.industria.block.turbin.loop"
+	},
+	"block.macerator.loop": {
+		"sounds": [
+			"industria:macerator_loop"
+		],
+		"subtitle": "sound.industria.block.macerator.loop"
+	},
+	"block.compressor.loop": {
+		"sounds": [
+			"industria:compressor_loop"
+		],
+		"subtitle": "sound.industria.block.compressor.loop"
+	},
+	"block.generator.loop": {
+		"sounds": [
+			"industria:generator_loop"
+		],
+		"subtitle": "sound.industria.block.generator.loop"
+	},
+	"block.miner.loop": {
+		"sounds": [
+			"industria:miner_loop"
+		],
+		"subtitle": "sound.industria.block.miner.loop"
+	},
+	"block.pump.loop": {
+		"sounds": [
+			"industria:pump_loop"
+		],
+		"subtitle": "sound.industria.block.pump.loop"
+	},
+	"block.sparking_cable": {
+		"sounds": [
+			"industria:sparking_cable"
+		],
+		"subtitle": "sound.industria.block.sparking_cable"
+	},
+	"block.transformator.loop": {
+		"sounds": [
+			"industria:transformator_loop"
+		],
+		"subtitle": "sound.industria.block.transformator.loop"
+	},
+	"block.schredder.loop": {
+		"sounds": [
+			"industria:schredder_loop"
+		],
+		"subtitle": "sound.industria.block.schredder.loop"
+	},
+	"block.blender.loop": {
+		"sounds": [
+			"industria:blender_loop"
+		],
+		"subtitle": "sound.industria.block.blender.loop"
+	},
+	"block.raffinery.loop": {
+		"sounds": [
+			"industria:raffinery_loop"
+		],
+		"subtitle": "sound.industria.block.raffinery.loop"
+	},
+	"block.thermal_zentrifuge.loop": {
+		"sounds": [
+			"industria:thermal_zentrifuge_loop"
+		],
+		"subtitle": "sound.industria.block.thermal_zentrifuge.loop"
+	},
+	"block.tree_tap.harvest": {
+		"sounds": [
+			"industria:tree_tap_1",
+			"industria:tree_tap_2",
+			"industria:tree_tap_3"
+		],
+		"subtitle": "sound.industria.block.tree_tap.harvest"
+	},
+	"material.cardboard.hit": {
+		"sounds": [
+			"industria:material/cardboard_hit_1",
+			"industria:material/cardboard_hit_2"
+		],
+		"subtitle": "subtitles.block.generic.hit"
+	},
+	"material.cardboard.break": {
+		"sounds": [
+			"industria:material/cardboard_break_1"
+		],
+		"subtitle": "subtitles.block.generic.break"
+	},
+	"material.cardboard.place": {
+		"sounds": [
+			"industria:material/cardboard_place_1",
+			"industria:material/cardboard_place_2",
+			"industria:material/cardboard_place_3"
+		],
+		"subtitle": "subtitles.block.generic.place"
+	},
+	"material.cardboard.step": {
+		"sounds": [
+			"industria:material/cardboard_step_1",
+			"industria:material/cardboard_step_2"
+		],
+		"subtitle": "subtitles.block.generic.footsteps"
+	}
+}

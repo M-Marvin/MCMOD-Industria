@@ -1,0 +1,23 @@
+{
+  "type": "industria:schredder",
+  "ingredient": [
+    {
+      "item": "industria:exposed_copper_plates"
+    },
+    {
+      "item": "industria:weathered_copper_plates"
+    },
+    {
+      "item": "industria:oxidized_copper_plates"
+    }
+  ],
+  "results": [
+    {
+      "item": "industria:copper_nugget",
+      "count": 9
+    }
+  ],
+  "schreddertime": 60,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 60
+}

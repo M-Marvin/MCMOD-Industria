@@ -1,0 +1,14 @@
+{
+  "type": "industria:thermal_zentrifuge",
+  "ingredient": {
+    "item": "industria:salt",
+    "count": 2
+  },
+  "resultItems": [
+    {
+      "item": "industria:natrium",
+      "count": 1
+    }
+  ],
+  "rifiningTime": 100
+}

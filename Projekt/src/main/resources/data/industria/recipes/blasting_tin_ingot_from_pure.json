@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "industria:pure_tin_ore"
+  },
+  "result": "industria:tin_ingot",
+  "experience": 0.3,
+  "cookingtime": 100
+}

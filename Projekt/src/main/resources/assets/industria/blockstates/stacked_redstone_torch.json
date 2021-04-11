@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"lit=false": { "model": "industria:block/stacked_redstone_torch" },
+		"lit=true": { "model": "industria:block/stacked_redstone_torch_lit" }
+	}
+}

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ECE",
+    "GCG",
+    "ECE"
+  ],
+  "key": {
+    "E": {
+      "item": "industria:iron_plate"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "C": {
+      "item": "industria:copper_wire"
+    }
+  },
+  "result": {
+    "item": "industria:fuse_elv",
+    "count": 2
+  }
+}

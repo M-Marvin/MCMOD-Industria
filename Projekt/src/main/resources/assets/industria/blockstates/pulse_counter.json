@@ -1,0 +1,249 @@
+{
+    "multipart": [
+    	
+        {   "when": { "facing": "south", "powered": "false" },
+			"apply": { "model": "industria:block/pulse_counter_bottom_unpowered" }
+		},
+		{   "when": { "facing": "south", "powered": "true" },
+			"apply": { "model": "industria:block/pulse_counter_bottom_powered" }
+		},
+		{   "when": { "facing": "south", "active": "true" },
+			"apply": { "model": "industria:block/pulse_counter_bottom_active" }
+		},
+		{   "when": { "facing": "south", "active": "false" },
+			"apply": { "model": "industria:block/pulse_counter_bottom_inactive" }
+		},
+		{   "when": { "facing": "south", "count": "1" },
+			"apply": { "model": "industria:block/pulse_counter_1" }
+		},
+		{   "when": { "facing": "south", "count": "2" },
+			"apply": { "model": "industria:block/pulse_counter_2" }
+		},
+		{   "when": { "facing": "south", "count": "3" },
+			"apply": { "model": "industria:block/pulse_counter_3" }
+		},
+		{   "when": { "facing": "south", "count": "4" },
+			"apply": { "model": "industria:block/pulse_counter_4" }
+		},
+		{   "when": { "facing": "south", "count": "5" },
+			"apply": { "model": "industria:block/pulse_counter_5" }
+		},
+		{   "when": { "facing": "south", "count": "6" },
+			"apply": { "model": "industria:block/pulse_counter_6" }
+		},
+		{   "when": { "facing": "south", "count": "7" },
+			"apply": { "model": "industria:block/pulse_counter_7" }
+		},
+		{   "when": { "facing": "south", "count": "8" },
+			"apply": { "model": "industria:block/pulse_counter_8" }
+		},
+		{   "when": { "facing": "south", "count": "9" },
+			"apply": { "model": "industria:block/pulse_counter_9" }
+		},
+		{   "when": { "facing": "south", "count": "10" },
+			"apply": { "model": "industria:block/pulse_counter_10" }
+		},
+		{   "when": { "facing": "south", "count": "11" },
+			"apply": { "model": "industria:block/pulse_counter_11" }
+		},
+		{   "when": { "facing": "south", "count": "12" },
+			"apply": { "model": "industria:block/pulse_counter_12" }
+		},
+		{   "when": { "facing": "south", "count": "13" },
+			"apply": { "model": "industria:block/pulse_counter_13" }
+		},
+		{   "when": { "facing": "south", "count": "14" },
+			"apply": { "model": "industria:block/pulse_counter_14" }
+		},
+		{   "when": { "facing": "south", "count": "15" },
+			"apply": { "model": "industria:block/pulse_counter_15" }
+		},
+		{   "when": { "facing": "south", "count": "16" },
+			"apply": { "model": "industria:block/pulse_counter_16" }
+		},
+		
+        {   "when": { "facing": "north", "powered": "false" },
+			"apply": { "model": "industria:block/pulse_counter_bottom_unpowered", "y": 180 }
+		},
+		{   "when": { "facing": "north", "powered": "true" },
+			"apply": { "model": "industria:block/pulse_counter_bottom_powered", "y": 180 }
+		},
+		{   "when": { "facing": "north", "active": "true" },
+			"apply": { "model": "industria:block/pulse_counter_bottom_active", "y": 180 }
+		},
+		{   "when": { "facing": "north", "active": "false" },
+			"apply": { "model": "industria:block/pulse_counter_bottom_inactive", "y": 180 }
+		},
+		{   "when": { "facing": "north", "count": "1" },
+			"apply": { "model": "industria:block/pulse_counter_1", "y": 180 }
+		},
+		{   "when": { "facing": "north", "count": "2" },
+			"apply": { "model": "industria:block/pulse_counter_2", "y": 180 }
+		},
+		{   "when": { "facing": "north", "count": "3" },
+			"apply": { "model": "industria:block/pulse_counter_3", "y": 180 }
+		},
+		{   "when": { "facing": "north", "count": "4" },
+			"apply": { "model": "industria:block/pulse_counter_4", "y": 180 }
+		},
+		{   "when": { "facing": "north", "count": "5" },
+			"apply": { "model": "industria:block/pulse_counter_5", "y": 180 }
+		},
+		{   "when": { "facing": "north", "count": "6" },
+			"apply": { "model": "industria:block/pulse_counter_6", "y": 180 }
+		},
+		{   "when": { "facing": "north", "count": "7" },
+			"apply": { "model": "industria:block/pulse_counter_7", "y": 180 }
+		},
+		{   "when": { "facing": "north", "count": "8" },
+			"apply": { "model": "industria:block/pulse_counter_8", "y": 180 }
+		},
+		{   "when": { "facing": "north", "count": "9" },
+			"apply": { "model": "industria:block/pulse_counter_9", "y": 180 }
+		},
+		{   "when": { "facing": "north", "count": "10" },
+			"apply": { "model": "industria:block/pulse_counter_10", "y": 180 }
+		},
+		{   "when": { "facing": "north", "count": "11" },
+			"apply": { "model": "industria:block/pulse_counter_11", "y": 180 }
+		},
+		{   "when": { "facing": "north", "count": "12" },
+			"apply": { "model": "industria:block/pulse_counter_12", "y": 180 }
+		},
+		{   "when": { "facing": "north", "count": "13" },
+			"apply": { "model": "industria:block/pulse_counter_13", "y": 180 }
+		},
+		{   "when": { "facing": "north", "count": "14" },
+			"apply": { "model": "industria:block/pulse_counter_14", "y": 180 }
+		},
+		{   "when": { "facing": "north", "count": "15" },
+			"apply": { "model": "industria:block/pulse_counter_15", "y": 180 }
+		},
+		{   "when": { "facing": "north", "count": "16" },
+			"apply": { "model": "industria:block/pulse_counter_16", "y": 180 }
+		},
+		
+        {   "when": { "facing": "west", "powered": "false" },
+			"apply": { "model": "industria:block/pulse_counter_bottom_unpowered", "y": 90 }
+		},
+		{   "when": { "facing": "west", "powered": "true" },
+			"apply": { "model": "industria:block/pulse_counter_bottom_powered", "y": 90 }
+		},
+		{   "when": { "facing": "west", "active": "true" },
+			"apply": { "model": "industria:block/pulse_counter_bottom_active", "y": 90 }
+		},
+		{   "when": { "facing": "west", "active": "false" },
+			"apply": { "model": "industria:block/pulse_counter_bottom_inactive", "y": 90 }
+		},
+		{   "when": { "facing": "west", "count": "1" },
+			"apply": { "model": "industria:block/pulse_counter_1", "y": 90 }
+		},
+		{   "when": { "facing": "west", "count": "2" },
+			"apply": { "model": "industria:block/pulse_counter_2", "y": 90 }
+		},
+		{   "when": { "facing": "west", "count": "3" },
+			"apply": { "model": "industria:block/pulse_counter_3", "y": 90 }
+		},
+		{   "when": { "facing": "west", "count": "4" },
+			"apply": { "model": "industria:block/pulse_counter_4", "y": 90 }
+		},
+		{   "when": { "facing": "west", "count": "5" },
+			"apply": { "model": "industria:block/pulse_counter_5", "y": 90 }
+		},
+		{   "when": { "facing": "west", "count": "6" },
+			"apply": { "model": "industria:block/pulse_counter_6", "y": 90 }
+		},
+		{   "when": { "facing": "west", "count": "7" },
+			"apply": { "model": "industria:block/pulse_counter_7", "y": 90 }
+		},
+		{   "when": { "facing": "west", "count": "8" },
+			"apply": { "model": "industria:block/pulse_counter_8", "y": 90 }
+		},
+		{   "when": { "facing": "west", "count": "9" },
+			"apply": { "model": "industria:block/pulse_counter_9", "y": 90 }
+		},
+		{   "when": { "facing": "west", "count": "10" },
+			"apply": { "model": "industria:block/pulse_counter_10", "y": 90 }
+		},
+		{   "when": { "facing": "west", "count": "11" },
+			"apply": { "model": "industria:block/pulse_counter_11", "y": 90 }
+		},
+		{   "when": { "facing": "west", "count": "12" },
+			"apply": { "model": "industria:block/pulse_counter_12", "y": 90 }
+		},
+		{   "when": { "facing": "west", "count": "13" },
+			"apply": { "model": "industria:block/pulse_counter_13", "y": 90 }
+		},
+		{   "when": { "facing": "west", "count": "14" },
+			"apply": { "model": "industria:block/pulse_counter_14", "y": 90 }
+		},
+		{   "when": { "facing": "west", "count": "15" },
+			"apply": { "model": "industria:block/pulse_counter_15", "y": 90 }
+		},
+		{   "when": { "facing": "west", "count": "16" },
+			"apply": { "model": "industria:block/pulse_counter_16", "y": 90 }
+		},
+		
+        {   "when": { "facing": "east", "powered": "false" },
+			"apply": { "model": "industria:block/pulse_counter_bottom_unpowered", "y": 270 }
+		},
+		{   "when": { "facing": "east", "powered": "true" },
+			"apply": { "model": "industria:block/pulse_counter_bottom_powered", "y": 270 }
+		},
+		{   "when": { "facing": "east", "active": "true" },
+			"apply": { "model": "industria:block/pulse_counter_bottom_active", "y": 270 }
+		},
+		{   "when": { "facing": "east", "active": "false" },
+			"apply": { "model": "industria:block/pulse_counter_bottom_inactive", "y": 270 }
+		},
+		{   "when": { "facing": "east", "count": "1" },
+			"apply": { "model": "industria:block/pulse_counter_1", "y": 270 }
+		},
+		{   "when": { "facing": "east", "count": "2" },
+			"apply": { "model": "industria:block/pulse_counter_2", "y": 270 }
+		},
+		{   "when": { "facing": "east", "count": "3" },
+			"apply": { "model": "industria:block/pulse_counter_3", "y": 270 }
+		},
+		{   "when": { "facing": "east", "count": "4" },
+			"apply": { "model": "industria:block/pulse_counter_4", "y": 270 }
+		},
+		{   "when": { "facing": "east", "count": "5" },
+			"apply": { "model": "industria:block/pulse_counter_5", "y": 270 }
+		},
+		{   "when": { "facing": "east", "count": "6" },
+			"apply": { "model": "industria:block/pulse_counter_6", "y": 270 }
+		},
+		{   "when": { "facing": "east", "count": "7" },
+			"apply": { "model": "industria:block/pulse_counter_7", "y": 270 }
+		},
+		{   "when": { "facing": "east", "count": "8" },
+			"apply": { "model": "industria:block/pulse_counter_8", "y": 270 }
+		},
+		{   "when": { "facing": "east", "count": "9" },
+			"apply": { "model": "industria:block/pulse_counter_9", "y": 270 }
+		},
+		{   "when": { "facing": "east", "count": "10" },
+			"apply": { "model": "industria:block/pulse_counter_10", "y": 270 }
+		},
+		{   "when": { "facing": "east", "count": "11" },
+			"apply": { "model": "industria:block/pulse_counter_11", "y": 270 }
+		},
+		{   "when": { "facing": "east", "count": "12" },
+			"apply": { "model": "industria:block/pulse_counter_12", "y": 270 }
+		},
+		{   "when": { "facing": "east", "count": "13" },
+			"apply": { "model": "industria:block/pulse_counter_13", "y": 270 }
+		},
+		{   "when": { "facing": "east", "count": "14" },
+			"apply": { "model": "industria:block/pulse_counter_14", "y": 270 }
+		},
+		{   "when": { "facing": "east", "count": "15" },
+			"apply": { "model": "industria:block/pulse_counter_15", "y": 270 }
+		},
+		{   "when": { "facing": "east", "count": "16" },
+			"apply": { "model": "industria:block/pulse_counter_16", "y": 270 }
+		}
+		
+    ]
+}

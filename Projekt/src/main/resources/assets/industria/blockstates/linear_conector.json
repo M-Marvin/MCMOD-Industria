@@ -1,0 +1,13 @@
+{
+  "multipart": [
+    {  "when": { "axis": "x" }, 
+      "apply": { "model": "industria:block/linear_conector", "x": -90, "y": 90 }
+    },
+    {  "when": { "axis": "y" }, 
+      "apply": { "model": "industria:block/linear_conector" }
+    },
+    {  "when": { "axis": "z" }, 
+      "apply": { "model": "industria:block/linear_conector", "x": -90 }
+    }
+  ]
+}

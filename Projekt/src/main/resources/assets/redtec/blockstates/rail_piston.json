@@ -1,8 +1,0 @@
-{
-	"variants": {
-		"facing=north": { "model": "redtec:block/rail_piston" },
-		"facing=south": { "model": "redtec:block/rail_piston", "y": 180 },
-		"facing=east": { "model": "redtec:block/rail_piston", "y": 90 },
-		"facing=west": { "model": "redtec:block/rail_piston", "y": -90 }
-	}
-}

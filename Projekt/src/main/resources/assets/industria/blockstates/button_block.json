@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "powered=true": { "model": "industria:block/button_block_active" },
+    "powered=false": { "model": "industria:block/button_block" }
+  }
+}

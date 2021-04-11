@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "P",
+    "C"
+  ],
+  "key": {
+    "P": {
+      "item": "industria:aluminium_plate"
+    },
+    "C": {
+      "item": "industria:cutter"
+    }
+  },
+  "result": {
+    "item": "industria:aluminium_wire",
+    "count": 3
+  }
+}

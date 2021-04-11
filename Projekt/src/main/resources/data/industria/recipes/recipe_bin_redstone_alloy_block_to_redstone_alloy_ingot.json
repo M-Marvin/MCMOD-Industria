@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "industria:redstone_alloy_block"
+    }
+  ],
+  "result": {
+    "item": "industria:redstone_ingot",
+    "count": 9
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "industria:blending",
+  "ingredientItems": [
+    {
+      "item": "industria:iron_oxid"
+    }
+  ],
+  "ingredientFluids": [
+    {
+      "fluid": "industria:sulfuric_acid",
+      "amount": 1000
+    }
+  ],
+  "resultFluid":  {
+    "fluid": "industria:iron_solution",
+    "amount": 1000
+  },
+  "mixingTime": 100
+}

@@ -1,0 +1,15 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "minecraft:cobblestone"
+  },
+  "results": [
+    {
+      "item": "industria:crushed_stone",
+      "count": 4
+    }
+  ],
+  "schreddertime": 100,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 10
+}

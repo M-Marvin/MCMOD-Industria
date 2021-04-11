@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "ingredient": {
-    "item": "redtec:nickel_dust"
-  },
-  "result": "redtec:nickel_ingot",
-  "experience": 0.0,
-  "cookingtime": 100
-}

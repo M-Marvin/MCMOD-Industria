@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "EFE",
+    "EME",
+    "EFE"
+  ],
+  "key": {
+    "E": {
+      "item": "industria:iron_plate"
+    },
+    "F": {
+      "item": "industria:spring"
+    },
+    "M": {
+      "item": "industria:monel_plate"
+    }
+  },
+  "result": {
+    "item": "industria:bearing",
+    "count": 2
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "C C",
+    "SRS",
+    "C C"
+  ],
+  "key": {
+    "S": {
+      "item": "industria:steel_ingot"
+    },
+    "R": {
+      "item": "minecraft:stick"
+    },
+    "C": {
+      "item": "industria:motor_coil"
+    }
+  },
+  "result": {
+    "item": "industria:inductive_rail",
+    "count": 8
+  }
+}

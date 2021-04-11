@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " R ",
+    "EEE",
+    "  E"
+  ],
+  "key": {
+    "R": {
+      "item": "industria:iron_rod"
+    },
+    "E": {
+      "item": "industria:copper_plate"
+    }
+  },
+  "result": {
+    "item": "industria:tree_tap"
+  }
+}

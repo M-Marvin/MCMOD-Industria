@@ -1,0 +1,14 @@
+{
+  "type": "industria:thermal_zentrifuge",
+  "ingredient": {
+    "item": "industria:pure_silver_ore",
+    "count": 1
+  },
+  "resultItems": [
+    {
+      "item": "industria:pure_silver",
+      "count": 1
+    }
+  ],
+  "rifiningTime": 100
+}

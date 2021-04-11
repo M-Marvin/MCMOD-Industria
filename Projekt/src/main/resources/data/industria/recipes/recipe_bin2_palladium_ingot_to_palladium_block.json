@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "palladium_block",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:palladium_ingot"
+    }
+  },
+  "result": {
+    "item": "industria:palladium_block"
+  }
+}

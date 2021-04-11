@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "redtec:raw_rubber_bottle"
-  },
-  "result": "redtec:rubber_bottle",
-  "experience": 0.6,
-  "cookingtime": 60
-}

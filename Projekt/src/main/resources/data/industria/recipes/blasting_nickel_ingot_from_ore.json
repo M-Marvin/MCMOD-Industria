@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "industria:crushed_nickel_ore"
+  },
+  "result": "industria:nickel_ingot",
+  "experience": 0.3,
+  "cookingtime": 100
+}

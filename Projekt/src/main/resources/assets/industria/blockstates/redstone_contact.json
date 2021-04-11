@@ -1,0 +1,17 @@
+{
+	"variants": {
+		"facing=north,powered=false": { "model": "industria:block/redstone_contact", "x": 90 },
+		"facing=south,powered=false": { "model": "industria:block/redstone_contact", "x": 90, "y": 180 },
+		"facing=east,powered=false": { "model": "industria:block/redstone_contact", "x": 90, "y": 90 },
+		"facing=west,powered=false": { "model": "industria:block/redstone_contact", "x": 90, "y": -90 },
+		"facing=up,powered=false": { "model": "industria:block/redstone_contact"},
+		"facing=down,powered=false": { "model": "industria:block/redstone_contact", "x": 180 },
+		
+		"facing=north,powered=true": { "model": "industria:block/redstone_contact_active", "x": 90 },
+		"facing=south,powered=true": { "model": "industria:block/redstone_contact_active", "x": 90, "y": 180 },
+		"facing=east,powered=true": { "model": "industria:block/redstone_contact_active", "x": 90, "y": 90 },
+		"facing=west,powered=true": { "model": "industria:block/redstone_contact_active", "x": 90, "y": -90 },
+		"facing=up,powered=true": { "model": "industria:block/redstone_contact_active"},
+		"facing=down,powered=true": { "model": "industria:block/redstone_contact_active", "x": 180 }
+	}
+}

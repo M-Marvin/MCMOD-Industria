@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "industria:salt_bricks"
+  },
+  "result": "industria:cracked_salt_bricks",
+  "experience": 0.3,
+  "cookingtime": 100
+}

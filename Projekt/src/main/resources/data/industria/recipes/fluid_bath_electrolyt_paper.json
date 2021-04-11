@@ -1,0 +1,18 @@
+{
+  "type": "industria:fluid_bath",
+  "ingredientFluid": {
+    "fluid": "industria:sulfuric_acid",
+    "amount": 1000
+  },
+  "wasteFluid":  {
+  },
+  "ingredientItem": {
+    "item": "minecraft:paper",
+    "count": 1
+  },
+  "resultItem": {
+    "item": "industria:electrolyt_paper",
+    "count": 1
+  },
+  "processTime": 300
+}

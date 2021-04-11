@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "netherite_plates",
+  "pattern": [
+    "###",
+    "# #",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:netherite_plate"
+    }
+  },
+  "result": {
+    "item": "industria:netherite_plates",
+    "count": 4
+  }
+}

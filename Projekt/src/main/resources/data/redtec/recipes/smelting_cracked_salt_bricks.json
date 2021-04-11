@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "redtec:salt_bricks"
-  },
-  "result": "redtec:cracked_salt_bricks",
-  "experience": 0.3,
-  "cookingtime": 100
-}

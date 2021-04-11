@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/rail_flat",
-  "textures": {
-    "rail": "redtec:block/inductive_rail_on"
-  }
-}

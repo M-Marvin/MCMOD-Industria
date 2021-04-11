@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "industria:wolfram_dust"
+  },
+  "result": "industria:wolfram_ingot",
+  "experience": 0.0,
+  "cookingtime": 200
+}

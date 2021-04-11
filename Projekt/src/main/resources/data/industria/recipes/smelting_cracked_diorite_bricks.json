@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "industria:polished_diorite_bricks"
+  },
+  "result": "industria:cracked_polished_diorite_bricks",
+  "experience": 0.3,
+  "cookingtime": 100
+}

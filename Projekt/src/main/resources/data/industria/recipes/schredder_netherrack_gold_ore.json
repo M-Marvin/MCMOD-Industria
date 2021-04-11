@@ -1,0 +1,19 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "minecraft:nether_gold_ore"
+  },
+  "results": [
+    {
+      "item": "industria:crushed_netherrack",
+      "count": 4
+    },
+    {
+      "item": "industria:crushed_gold_ore",
+      "count": 1
+    }
+  ],
+  "schreddertime": 50,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 5
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "aluminium_plate",
+  "pattern": [
+    "H",
+    "#"
+  ],
+  "key": {
+    "H": {
+      "item": "industria:hammer"
+    },
+    "#": {
+      "item": "industria:aluminium_ingot"
+    }
+  },
+  "result": {
+    "item": "industria:aluminium_plate"
+  }
+}

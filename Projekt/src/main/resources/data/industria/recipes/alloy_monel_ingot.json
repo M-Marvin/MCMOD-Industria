@@ -1,0 +1,18 @@
+{
+  "type": "industria:alloy",
+  "ingredientItems": [
+    {
+      "item": "industria:nickel_ingot",
+      "count": 2
+    },
+    {
+      "item": "industria:copper_ingot",
+      "count": 2
+    }
+  ],
+  "resultItem":  {
+    "item": "industria:monel_ingot",
+    "count": 4
+  },
+  "smeltingTime": 150
+}

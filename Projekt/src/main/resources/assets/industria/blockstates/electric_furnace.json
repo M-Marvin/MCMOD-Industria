@@ -1,0 +1,13 @@
+{
+	"variants": {
+		"facing=north,lit=false": { "model": "industria:block/electric_furnace" },
+		"facing=south,lit=false": { "model": "industria:block/electric_furnace", "y": 180 },
+		"facing=east,lit=false": { "model": "industria:block/electric_furnace", "y": 90 },
+		"facing=west,lit=false": { "model": "industria:block/electric_furnace", "y": -90 },
+		
+		"facing=north,lit=true": { "model": "industria:block/electric_furnace_lit" },
+		"facing=south,lit=true": { "model": "industria:block/electric_furnace_lit", "y": 180 },
+		"facing=east,lit=true": { "model": "industria:block/electric_furnace_lit", "y": 90 },
+		"facing=west,lit=true": { "model": "industria:block/electric_furnace_lit", "y": -90 }
+	}
+}

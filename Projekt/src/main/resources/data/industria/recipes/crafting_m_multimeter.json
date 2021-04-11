@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ACA",
+    "AEA",
+    "RKR"
+  ],
+  "key": {
+    "C": {
+      "item": "industria:aluminium_plates"
+    },
+    "A": {
+      "item": "industria:aluminium_plate"
+    },
+    "E": {
+      "item": "industria:iron_rod"
+    },
+    "K": {
+      "item": "industria:transformator_coil"
+    },
+    "R": {
+      "item": "industria:resistor"
+    }
+  },
+  "result": {
+    "item": "industria:multimeter"
+  }
+}

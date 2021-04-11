@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "industria:block/rubber_log",
+    "down": "industria:block/rubber_log",
+    "up": "industria:block/rubber_log",
+    "north": "industria:block/rubber_log_ripe",
+    "east": "industria:block/rubber_log",
+    "south": "industria:block/rubber_log",
+    "west": "industria:block/rubber_log"
+  }
+}

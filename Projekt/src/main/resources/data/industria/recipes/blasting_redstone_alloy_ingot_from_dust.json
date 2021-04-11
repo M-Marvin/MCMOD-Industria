@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "industria:redstone_alloy_dust"
+  },
+  "result": "industria:redstone_ingot",
+  "experience": 0.0,
+  "cookingtime": 100
+}

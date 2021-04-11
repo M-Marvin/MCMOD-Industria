@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "EPE",
+    "EGE",
+    "ESE"
+  ],
+  "key": {
+    "E": {
+      "item": "industria:iron_plate"
+    },
+    "S": {
+      "item": "industria:spring"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "P": {
+      "item": "industria:fluid_pipe"
+    }
+  },
+  "result": {
+    "item": "industria:fluid_meter"
+  }
+}

@@ -1,0 +1,11 @@
+{
+	"parent": "industria:blockitem/lamp_element",
+    "overrides": [
+        {
+            "predicate": {
+                "custom_model_data": 1
+            },
+            "model": "industria:blockitem/lamp_element_lit"
+        }
+    ]
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing",
+  "base": {
+    "item": "industria:iron_processor"
+  },
+  "addition": {
+    "item": "industria:redstone_ingot"
+  },
+  "result": {
+    "item": "industria:redstone_processor"
+  }
+}

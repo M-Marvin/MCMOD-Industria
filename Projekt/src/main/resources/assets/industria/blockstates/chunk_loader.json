@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"active=true": { "model": "industria:block/chunk_loader_active" },
+		"active=false": { "model": "industria:block/chunk_loader" }
+	}
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "nickel_block",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:nickel_ingot"
+    }
+  },
+  "result": {
+    "item": "industria:nickel_block"
+  }
+}

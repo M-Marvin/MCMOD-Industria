@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "EEE",
+    "KKK",
+    "EEE"
+  ],
+  "key": {
+    "E": {
+      "item": "industria:iron_plate"
+    },
+    "K": {
+      "item": "industria:copper_plate"
+    }
+  },
+  "result": {
+    "item": "industria:rotor",
+    "count": 2
+  }
+}

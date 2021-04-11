@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "redtec:steel_rail",
-    "redtec:inductive_rail"
+    "industria:steel_rail",
+    "industria:inductive_rail"
   ]
 }

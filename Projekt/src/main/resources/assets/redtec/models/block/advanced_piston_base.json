@@ -1,8 +1,0 @@
-{
-    "parent": "minecraft:block/piston_extended",
-    "textures": {
-        "bottom": "redtec:block/advanced_piston_bottom",
-        "side": "redtec:block/advanced_piston_side",
-        "inside": "redtec:block/advanced_piston_inner"
-    }
-}

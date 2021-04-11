@@ -1,0 +1,22 @@
+{
+	"multipart": [
+		{	"when": {"facing": "north" }, 
+			"apply": { "model": "industria:block/antenna_conector" }
+		},
+		{	"when": {"facing": "south" }, 
+			"apply": { "model": "industria:block/antenna_conector", "y": 180 }
+		},
+		{	"when": {"facing": "east" }, 
+			"apply": { "model": "industria:block/antenna_conector", "y": 90 }
+		},
+		{	"when": {"facing": "west" }, 
+			"apply": { "model": "industria:block/antenna_conector", "y": -90 }
+		},
+		{	"when": {"facing": "up" }, 
+			"apply": { "model": "industria:block/antenna_conector", "x": -90, "y": -90 }
+		},
+		{	"when": {"facing": "down" }, 
+			"apply": { "model": "industria:block/antenna_conector", "x": 90, "y": 90}
+		}
+	]
+}

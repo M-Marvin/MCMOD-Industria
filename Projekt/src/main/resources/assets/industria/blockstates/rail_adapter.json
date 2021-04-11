@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"powered=false": { "model": "industria:block/rail_adapter" },
+		"powered=true": { "model": "industria:block/rail_adapter_on" }
+	}
+}

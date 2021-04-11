@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " G ",
+    "GSG",
+    "D D"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:glass"
+    },
+    "S": {
+      "item": "industria:silicon"
+    },
+    "D": {
+      "item": "industria:copper_wire"
+    }
+  },
+  "result": {
+    "item": "industria:led",
+    "count": 6
+  }
+}

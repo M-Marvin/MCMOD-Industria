@@ -1,6 +1,0 @@
-{
-	"variants": {
-		"active=true": { "model": "redtec:block/chunk_loader_active" },
-		"active=false": { "model": "redtec:block/chunk_loader" }
-	}
-}

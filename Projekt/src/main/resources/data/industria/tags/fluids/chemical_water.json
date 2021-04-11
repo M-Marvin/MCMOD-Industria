@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "industria:chemical_water",
+    "industria:flowing_chemical_water"
+  ]
+}

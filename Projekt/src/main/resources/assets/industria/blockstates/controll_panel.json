@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"facing=north": { "model": "industria:block/controll_panel", "x": 90 },
+		"facing=south": { "model": "industria:block/controll_panel", "x": 90, "y": 180 },
+		"facing=east": { "model": "industria:block/controll_panel", "x": 90, "y": 90 },
+		"facing=west": { "model": "industria:block/controll_panel", "x": 90, "y": -90 },
+		"facing=up": { "model": "industria:block/controll_panel"},
+		"facing=down": { "model": "industria:block/controll_panel", "x": 180 }
+	}
+}

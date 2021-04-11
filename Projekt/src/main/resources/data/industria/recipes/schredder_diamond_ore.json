@@ -1,0 +1,19 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "minecraft:diamond_ore"
+  },
+  "results": [
+    {
+      "item": "industria:crushed_stone",
+      "count": 3
+    },
+    {
+      "item": "minecraft:diamond",
+      "count": 1
+    }
+  ],
+  "schreddertime": 180,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 80
+}

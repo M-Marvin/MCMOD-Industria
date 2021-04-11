@@ -1,0 +1,19 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "industria:wolframit_ore"
+  },
+  "results": [
+    {
+      "item": "industria:crushed_stone",
+      "count": 2
+    },
+    {
+      "item": "industria:crushed_wolframite",
+      "count": 2
+    }
+  ],
+  "schreddertime": 90,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 60
+}

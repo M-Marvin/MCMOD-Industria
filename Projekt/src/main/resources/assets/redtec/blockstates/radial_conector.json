@@ -1,6 +1,0 @@
-{
-  "variants": {
-    "locked=true": { "model": "redtec:block/radial_conector_locked" },
-    "locked=false": { "model": "redtec:block/radial_conector" }
-  }
-}

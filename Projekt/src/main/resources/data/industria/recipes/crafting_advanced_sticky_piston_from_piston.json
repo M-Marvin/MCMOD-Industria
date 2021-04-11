@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "advanced_sticky_piston",
+  "ingredients": [
+    {
+      "item": "minecraft:slime_ball"
+    },
+    {
+      "item": "minecraft:slime_ball"
+    },
+    {
+      "item": "industria:advanced_piston"
+    }
+  ],
+  "result": {
+    "item": "industria:advanced_sticky_piston"
+  }
+}

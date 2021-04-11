@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "locked=true": { "model": "industria:block/radial_conector_locked" },
+    "locked=false": { "model": "industria:block/radial_conector" }
+  }
+}

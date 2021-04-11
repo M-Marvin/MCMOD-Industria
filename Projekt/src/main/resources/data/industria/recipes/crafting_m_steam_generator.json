@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GWG",
+    "WTW",
+    "GWG"
+  ],
+  "key": {
+    "W": {
+      "item": "industria:wolfram_plate"
+    },
+    "G": {
+      "item": "industria:wolfram_plates"
+    },
+    "T": {
+      "item": "industria:turbin"
+    }
+  },
+  "result": {
+    "item": "industria:steam_generator"
+  }
+}

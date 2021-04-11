@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCP",
+    "RRB",
+    "CCP"
+  ],
+  "key": {
+    "C": {
+      "item": "industria:motor_coil"
+    },
+    "R": {
+      "item": "industria:rotor"
+    },
+    "P": {
+      "item": "industria:iron_plate"
+    },
+    "B": {
+      "item": "industria:bearing"
+    }
+  },
+  "result": {
+    "item": "industria:motor"
+  }
+}

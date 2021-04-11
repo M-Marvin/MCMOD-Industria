@@ -1,0 +1,22 @@
+{
+	"multipart": [
+		{	"when": {"facing": "north" }, 
+			"apply": { "model": "industria:block/motor" }
+		},
+		{	"when": {"facing": "south" }, 
+			"apply": { "model": "industria:block/motor", "y": 180 }
+		},
+		{	"when": {"facing": "east" }, 
+			"apply": { "model": "industria:block/motor", "y": 90 }
+		},
+		{	"when": {"facing": "west" }, 
+			"apply": { "model": "industria:block/motor", "y": -90 }
+		},
+		{	"when": {"facing": "up" }, 
+			"apply": { "model": "industria:block/motor_vertical" }
+		},
+		{	"when": {"facing": "down" }, 
+			"apply": { "model": "industria:block/motor_vertical", "x": 180}
+		}
+	]
+}

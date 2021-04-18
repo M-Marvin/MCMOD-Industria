@@ -175,7 +175,11 @@
 "block.industria.reinforced_casing": "Verst\u00e4rktes Gestell",
 "block.industria.ender_core": "Enderkern (WIP)",
 "block.industria.chunk_loader": "Chunkloader",
+"block.industria.clean_cladding_white": "Verkleidung Weiﬂ",
+"block.industria.clean_cladding_black": "Verkleidung Schwartz",
+"block.industria.structure_scaffold": "Verbundgestell",
 
+"item.industria.structure_cladding_pane": "Verbundgestellverkleidung",
 "item.industria.steam_bucket": "Dampfeimer",
 "item.industria.destilled_water_bucket": "Eimer kondensiertes Wasser",
 "item.industria.sulfuric_acid_bucket": "Eimer schwefelsaure L\u00f6sung",
@@ -386,6 +390,7 @@
 "industria.item.info.drive": "\nKann Dateien enthalten die von Computern ausgef\u00fchrt bzw gelesen/geschrieben werden k\u00f6nnen.\nJede Festplatte hat einen Ordner im Weltordner.",
 "industria.item.info.name": "Laufwerkname: %1$s",
 "industria.item.info.fuseMax": "Max. Strom: %1$s A",
+"industria.item.info.structureCladdingPane": "Block: %1$s",
 
 "industria.network_configurator.ipField.valid": "Neue IP: G\u00dcLTIG",
 "industria.network_configurator.ipField.fail": "Neue IP: UNG\u00dcLTIG",

@@ -12,27 +12,27 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 
-public class BlockMBlenderItemRenderer extends ItemStackTileEntityRenderer {
-
-	private TileEntityMBlenderModel blenderModel;
+public class BlockMCoalHeaterItemRenderer extends ItemStackTileEntityRenderer {
 	
-	public static final ResourceLocation BLENDER_TEXTURES = new ResourceLocation(Industria.MODID, "textures/block/blender.png");
+	private TileEntityMCoalHeaterModel coalHeaterModel;
 	
-	public BlockMBlenderItemRenderer() {
-		this.blenderModel = new TileEntityMBlenderModel();
+	public static final ResourceLocation COAL_HEATER_TEXTURES = new ResourceLocation(Industria.MODID, "textures/block/coal_heater.png");
+	
+	public BlockMCoalHeaterItemRenderer() {
+		this.coalHeaterModel = new TileEntityMCoalHeaterModel();
 	}
 	
 	@Override
 	public void func_239207_a_(ItemStack stack, TransformType type, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		
-		IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.getEntityTranslucent(BLENDER_TEXTURES));
+		IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.getEntityTranslucent(COAL_HEATER_TEXTURES));
 		
 		matrixStackIn.push();
 		
 		matrixStackIn.rotate(Vector3f.XP.rotationDegrees(180));
 		matrixStackIn.translate(1.5F, -1.5F, -1.5F);
 		
-		blenderModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
+		coalHeaterModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 		
 		matrixStackIn.pop();
 		

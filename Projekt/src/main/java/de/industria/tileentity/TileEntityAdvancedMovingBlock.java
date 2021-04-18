@@ -69,7 +69,11 @@ public class TileEntityAdvancedMovingBlock extends TileEntity implements ITickab
    public CompoundNBT getUpdateTag() {
       return this.write(new CompoundNBT());
    }
-
+   
+   public CompoundNBT getPistonTileEntity() {
+	return pistonTileEntity;
+}
+   
    /**
     * Returns true if a piston is extending
     */

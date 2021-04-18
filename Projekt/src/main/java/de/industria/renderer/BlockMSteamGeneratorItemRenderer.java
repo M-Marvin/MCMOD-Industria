@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3f;
 
 public class BlockMSteamGeneratorItemRenderer extends ItemStackTileEntityRenderer {
 
@@ -27,6 +28,9 @@ public class BlockMSteamGeneratorItemRenderer extends ItemStackTileEntityRendere
 		IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.getEntityTranslucent(STEAM_GENERATOR_TEXTURES));
 		
 		matrixStackIn.push();
+
+		matrixStackIn.rotate(Vector3f.XP.rotationDegrees(180));
+		matrixStackIn.translate(1.5F, -1.5F, -1.5F);
 		
 		steamGeneratorModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 		

@@ -28,10 +28,9 @@ public class BlockNComputerItemRenderer extends ItemStackTileEntityRenderer {
 		IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.getEntityTranslucent(COMPUTER_TEXTURES));
 		
 		matrixStackIn.push();
-		
-		matrixStackIn.rotate(Vector3f.ZN.rotationDegrees(180));
-		matrixStackIn.translate(0, -1, 1);
-		matrixStackIn.translate(-0.5F, -0.5F, -0.5F);
+
+		matrixStackIn.rotate(Vector3f.XP.rotationDegrees(180));
+		matrixStackIn.translate(1.5F, -1.5F, -1.5F);
 		
 		computerModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 		

@@ -2,6 +2,7 @@ package de.industria.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.IWaterLoggable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.fluid.FluidState;
@@ -14,7 +15,7 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 
-public class BlockLimestoneSheet extends BlockBase {
+public class BlockLimestoneSheet extends BlockBase implements IWaterLoggable {
 	
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	

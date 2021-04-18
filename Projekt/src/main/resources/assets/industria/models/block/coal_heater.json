@@ -1,8 +1,5 @@
 {
-	"parent": "minecraft:block/cube_bottom_top",
 	"textures": {
-		"top": "industria:block/coal_heater_top",
-		"bottom": "industria:block/coal_heater_bottom",
-		"side": "industria:block/coal_heater_side"
+		"particle": "industria:block/steel_plates"
 	}
 }

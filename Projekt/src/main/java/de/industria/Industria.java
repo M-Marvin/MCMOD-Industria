@@ -17,6 +17,7 @@ import de.industria.blocks.BlockConveyorSpliter;
 import de.industria.blocks.BlockCornerBlockBase;
 import de.industria.blocks.BlockElektricWire;
 import de.industria.blocks.BlockEnderCore;
+import de.industria.blocks.BlockFallingDust;
 import de.industria.blocks.BlockFluidPipe;
 import de.industria.blocks.BlockFluidValve;
 import de.industria.blocks.BlockInfinityPowerSource;
@@ -73,9 +74,11 @@ import de.industria.blocks.BlockSignalAntennaConector;
 import de.industria.blocks.BlockSignalWire;
 import de.industria.blocks.BlockStackedRedstoneTorch;
 import de.industria.blocks.BlockStackedRedstoneWire;
+import de.industria.blocks.BlockStructureScaffold;
 import de.industria.blocks.BlockTInductiveRail;
 import de.industria.blocks.BlockTRailAdapter;
 import de.industria.blocks.BlockTSteelRail;
+import de.industria.blocks.BlockTileBlock;
 import de.industria.blocks.BlockTreeTap;
 import de.industria.blocks.BlockWeathering;
 import de.industria.fluids.BlockChemicalWater;
@@ -102,6 +105,7 @@ import de.industria.items.ItemProcessor;
 import de.industria.items.ItemRemoteControll;
 import de.industria.items.ItemSalsola;
 import de.industria.items.ItemSchredderToolCrusher;
+import de.industria.items.ItemStructureCladdingPane;
 import de.industria.items.panelitems.ItemButtonElement;
 import de.industria.items.panelitems.ItemLampElement;
 import de.industria.items.panelitems.ItemLeverElement;
@@ -201,6 +205,7 @@ public class Industria {
 	public static final Block harvester = new BlockRHarvester();
 	public static final Block jigsaw = new BlockJigsaw();
 	public static final Block item_detector = new BlockRItemDetector();
+	public static final Block structure_scaffold = new BlockStructureScaffold("structure_scaffold");
 	
 	// TODO
 	public static final Block storing_crafting_table = new BlockMStoringCraftingTable();	
@@ -273,6 +278,8 @@ public class Industria {
 	public static final Block cardboard_block = new BlockBurnable("cardboard_block", Material.WOOL, 0.2F, 2.5F, ModSoundEvents.CARDBOARD, 400, 30, 60, true);
 	
 	// Deko Blocks
+	public static final Block clean_cladding_white = new BlockTileBlock("clean_cladding_white");
+	public static final Block clean_cladding_black = new BlockTileBlock("clean_cladding_black");
 	public static final Block oxidized_copper_planks = new BlockBase("oxidized_copper_planks", Material.IRON, 2.5F, 3F, SoundType.METAL);
 	public static final Block oxidized_tin_planks = new BlockBase("oxidized_tin_planks", Material.IRON, 2.5F, 3F, SoundType.METAL);
 	public static final Block oxidized_iron_planks = new BlockBase("oxidized_iron_planks", Material.IRON, 2.5F, 3F, SoundType.METAL);
@@ -360,9 +367,7 @@ public class Industria {
 	public static final Block green_painted_planks = new BlockBurnable("green_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
 	public static final Block red_painted_planks = new BlockBurnable("red_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
 	public static final Block black_painted_planks = new BlockBurnable("black_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
-	public static final Block reinforced_casing = new BlockReinforcedCasing();
-	public static final Block ender_core = new BlockEnderCore();
-	
+		
 	public static final Block stone_corner = new BlockCornerBlockBase("stone_corner", () -> Blocks.STONE.getDefaultState(), AbstractBlock.Properties.create(Material.ROCK).sound(SoundType.STONE));
 	
 	// Nature Blocks
@@ -371,6 +376,11 @@ public class Industria {
 	public static final Block rubber_wood = new BlockRubberLog("rubber_wood", Material.WOOD, 2F, SoundType.WOOD);
 	public static final Block rubber_leaves = new BlockLeavesBase("rubber_leaves", Material.LEAVES, 0.2F, 0.2F, SoundType.PLANT);
 	public static final Block rubber_sapling = new BlockSaplingBase("rubber_sapling", new ResourceLocation(Industria.MODID, "nature/rubber_tree"));
+	
+	// Util Blocks
+	public static final Block reinforced_casing = new BlockReinforcedCasing();
+	public static final Block ender_core = new BlockEnderCore();
+	public static final Block ash_sheet = new BlockFallingDust("ash_sheet");
 	
 	// Fluids and Buckets
 	public static final Block steam = new BlockSteam();
@@ -534,6 +544,7 @@ public class Industria {
 	public static final Item fuse_hv = new ItemFuse("fuse_hv", 64);
 	public static final Item schredder_crusher = new ItemSchredderToolCrusher();
 	public static final Item hard_drive = new ItemHardDrive();
+	public static final Item structure_cladding_pane = new ItemStructureCladdingPane();
 	
 	// Tools
 	public static final Item fluid_meter = new ItemFluidMeter();
@@ -731,6 +742,10 @@ public class Industria {
 		ModGameRegistry.registerBlock(inductive_rail, ItemGroup.TRANSPORTATION);
 		ModGameRegistry.registerBlock(rail_adapter, ItemGroup.TRANSPORTATION);
 		ModGameRegistry.registerBlock(chunk_loader, MACHINES);
+		ModGameRegistry.registerBlock(clean_cladding_black, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(clean_cladding_white, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(structure_scaffold, ItemGroup.REDSTONE);
+		ModGameRegistry.registerBlock(ash_sheet, DECORATIONS);
 		
 		ModGameRegistry.registerBlock(motor, MACHINES);
 		
@@ -893,6 +908,7 @@ public class Industria {
 		ModGameRegistry.registerItem(lime);
 		ModGameRegistry.registerItem(hard_drive);
 		ModGameRegistry.registerItem(network_configurtor);
+		ModGameRegistry.registerItem(structure_cladding_pane);
 		
 		// register Functional Items
 		ModGameRegistry.registerItem(lever_element);

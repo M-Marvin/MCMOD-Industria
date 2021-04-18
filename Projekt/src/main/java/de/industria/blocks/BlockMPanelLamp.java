@@ -50,7 +50,7 @@ public class BlockMPanelLamp extends BlockContainerBase implements IElectricConn
 	protected static final VoxelShape TOP_AABB = Block.makeCuboidShape(0.0D, 14.0D, 0.0D, 16.0D, 16.0D, 16.0D);
 	
 	public BlockMPanelLamp() {
-		super("panel_lamp", Properties.create(Material.IRON).hardnessAndResistance(1).sound(SoundType.METAL).harvestTool(getDefaultToolType(Material.IRON)).setLightLevel((state) -> {return state.get(LIT) ? 15 : 0;}));
+		super("panel_lamp", Properties.create(Material.IRON).hardnessAndResistance(2.5F).sound(SoundType.METAL).harvestTool(getDefaultToolType(Material.IRON)).setLightLevel((state) -> {return state.get(LIT) ? 15 : 0;}));
 		this.setDefaultState(this.stateContainer.getBaseState().with(WATERLOGGED, false));
 	}
 	

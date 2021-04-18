@@ -26,12 +26,14 @@ import de.industria.renderer.TileEntityEnderCoreRenderer;
 import de.industria.renderer.TileEntityFuseBoxRenderer;
 import de.industria.renderer.TileEntityGaugeRenderer;
 import de.industria.renderer.TileEntityMBlenderRenderer;
+import de.industria.renderer.TileEntityMCoalHeaterRenderer;
 import de.industria.renderer.TileEntityMFluidBathRenderer;
 import de.industria.renderer.TileEntityMRaffineryRenderer;
 import de.industria.renderer.TileEntityMSchredderRenderer;
 import de.industria.renderer.TileEntityMSteamGeneratorRenderer;
 import de.industria.renderer.TileEntityNComputerRenderer;
 import de.industria.renderer.TileEntitySignalProcessorContactRenderer;
+import de.industria.renderer.TileEntityStructureScaffoldRenderer;
 import de.industria.typeregistys.ModClientBindings;
 import de.industria.typeregistys.ModContainerType;
 import de.industria.typeregistys.ModFluids;
@@ -71,6 +73,7 @@ public class Client {
 		RenderTypeLookup.setRenderLayer(Industria.burned_cable, RenderType.getCutoutMipped());
 		RenderTypeLookup.setRenderLayer(Industria.steel_rail, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(Industria.inductive_rail, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(Industria.structure_scaffold, RenderType.getCutoutMipped());
 		
 		RenderTypeLookup.setRenderLayer(ModFluids.SULFURIC_ACID, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_SULFURIC_ACID, RenderType.getTranslucent());
@@ -104,6 +107,8 @@ public class Client {
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.FLUID_BATH, TileEntityMFluidBathRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.COMPUTER, TileEntityNComputerRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ENDER_CORE, TileEntityEnderCoreRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.COAL_HEATER, TileEntityMCoalHeaterRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.STRUCTURE_SCAFFOLD, TileEntityStructureScaffoldRenderer::new);
 		
 		ScreenManager.registerFactory(ModContainerType.STORED_CRAFTING, ScreenMStoredCrafting::new);
 		ScreenManager.registerFactory(ModContainerType.PROCESSOR, ScreenRProcessor::new);

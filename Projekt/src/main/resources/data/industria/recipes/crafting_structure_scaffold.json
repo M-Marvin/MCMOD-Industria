@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SGS",
+    "GEG",
+    "SGS"
+  ],
+  "key": {
+    "S": {
+      "item": "industria:steel_plate"
+    },
+    "G": {
+      "item": "minecraft:iron_bars"
+    },
+    "E": {
+      "item": "industria:iron_plate"
+    }
+  },
+  "result": {
+    "item": "industria:structure_scaffold",
+    "count": 8
+  }
+}

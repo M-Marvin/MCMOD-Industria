@@ -1,7 +1,7 @@
 {
 	"parent": "builtin/entity",
     "textures": {
-        "particle": "industria:block/coal_heater"
+        "particle": "industria:block/structure_scaffold"
     },
 	"display": {
 		"thirdperson_righthand": {
@@ -11,7 +11,7 @@
 		},
 		"thirdperson_lefthand": {
 			"rotation": [75, 45, 0],
-			"translation": [5.25, 5.75, 0],
+			"translation": [0, 2.5, 0],
 			"scale": [0.375, 0.375, 0.375]
 		},
 		"firstperson_righthand": {
@@ -20,23 +20,17 @@
 		},
 		"firstperson_lefthand": {
 			"rotation": [0, 225, 0],
-			"translation": [5.25, 0, 4],
 			"scale": [0.4, 0.4, 0.4]
 		},
 		"ground": {
-			"translation": [-2, 3, -2],
+			"translation": [0, 3, 0],
 			"scale": [0.25, 0.25, 0.25]
 		},
 		"gui": {
 			"rotation": [30, 225, 0],
-			"translation": [4, 0, 0],
-			"scale": [0.35, 0.35, 0.35]
-		},
-		"head": {
-			"translation": [-7.5, 0, 0]
+			"scale": [0.625, 0.625, 0.625]
 		},
 		"fixed": {
-			"translation": [-4.75, 0, 0],
 			"scale": [0.5, 0.5, 0.5]
 		}
 	}

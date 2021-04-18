@@ -37,6 +37,7 @@ import de.industria.tileentity.TileEntityRSignalAntenna;
 import de.industria.tileentity.TileEntityRSignalProcessorContact;
 import de.industria.tileentity.TileEntityRedstoneReciver;
 import de.industria.tileentity.TileEntitySimpleBlockTicking;
+import de.industria.tileentity.TileEntityStructureScaffold;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
@@ -82,6 +83,7 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityNComputer> COMPUTER = register("computer", TileEntityType.Builder.create(TileEntityNComputer::new, Industria.computer));
 	public static final TileEntityType<TileEntityMChunkLoader> CHUNK_LOADER = register("chunk_loader", TileEntityType.Builder.create(TileEntityMChunkLoader::new, Industria.chunk_loader));
 	public static final TileEntityType<TileEntityEnderCore> ENDER_CORE = register("ender_core", TileEntityType.Builder.create(TileEntityEnderCore::new, Industria.ender_core));
+	public static final TileEntityType<TileEntityStructureScaffold> STRUCTURE_SCAFFOLD = register("structure_scaffold", TileEntityType.Builder.create(TileEntityStructureScaffold::new, Industria.structure_scaffold));
 	
 	private static <T extends TileEntity> TileEntityType<T> register(String key, TileEntityType.Builder<T> builder) {
 		Type<?> type = Util.attemptDataFix(TypeReferences.BLOCK_ENTITY, key);

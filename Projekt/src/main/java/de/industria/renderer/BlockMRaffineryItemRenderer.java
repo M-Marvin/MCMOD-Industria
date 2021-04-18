@@ -28,9 +28,9 @@ public class BlockMRaffineryItemRenderer extends ItemStackTileEntityRenderer {
 		IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.getEntityTranslucent(RAFFINERY_TEXTURES));
 		
 		matrixStackIn.push();
-		
+
 		matrixStackIn.rotate(Vector3f.XP.rotationDegrees(180));
-		matrixStackIn.translate(1.0F, -1.5F, -0.9F);
+		matrixStackIn.translate(1.5F, -1.5F, -1.5F);
 		
 		raffineryModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 		

@@ -85,6 +85,12 @@
 		],
 		"subtitle": "sound.industria.block.tree_tap.harvest"
 	},
+	"block.item_pipe.stream": {
+		"sounds": [
+			"industria:item_pipe_stream"
+		],
+		"subtitle": "sound.industria.block.item_pipe.stream"
+	},
 	"material.cardboard.hit": {
 		"sounds": [
 			"industria:material/cardboard_hit_1",

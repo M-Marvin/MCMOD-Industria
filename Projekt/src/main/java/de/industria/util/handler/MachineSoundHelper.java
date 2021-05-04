@@ -24,8 +24,8 @@ public class MachineSoundHelper {
 		SoundHandler soundHandler = Minecraft.getInstance().getSoundHandler();
 		
 		SoundMachine sound = getSoundForTileEntity(tileEntity);
-				
-		if (sound == null || sound.isDonePlaying()) {
+		
+		if (sound == null || sound.isDonePlaying() || !soundHandler.isPlaying(sound)) {
 			
 			sound = new SoundMachine(tileEntity, soundEvent);
 			soundHandler.play(sound);

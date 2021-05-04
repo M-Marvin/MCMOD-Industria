@@ -10,13 +10,13 @@ import de.industria.recipetypes.FluidBathRecipe;
 import de.industria.typeregistys.ModRecipeTypes;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
-import de.industria.util.blockfeatures.IFluidConnective;
 import de.industria.util.blockfeatures.IElectricConnectiveBlock.Voltage;
+import de.industria.util.blockfeatures.IFluidConnective;
 import de.industria.util.handler.ElectricityNetworkHandler;
+import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import de.industria.util.handler.FluidBucketHelper;
 import de.industria.util.handler.ItemStackHelper;
 import de.industria.util.handler.MachineSoundHelper;
-import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -28,8 +28,6 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -301,16 +299,6 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements IFl
 	@Override
 	public ITextComponent getDisplayName() {
 		return new TranslationTextComponent("block.industria.fluid_bath");
-	}
-	
-	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(this.pos, 0, this.serializeNBT());
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.deserializeNBT(pkt.getNbtCompound());
 	}
 	
 	@Override

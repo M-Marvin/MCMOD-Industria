@@ -224,7 +224,7 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 		this.outputStream = new ByteArrayOutputStream();
 		this.recivedMessages = new HashMap<NetworkDeviceIP, INetworkDevice.NetworkMessage>();;
 		this.sendMessages = new ArrayList<INetworkDevice.NetworkMessage>();
-		this.luaInterpreter = new LuaInterpreter(this, this.outputStream, 50, new computer());
+		this.luaInterpreter = new LuaInterpreter(this, this.outputStream, 500, new computer());
 		this.deviceIP = NetworkDeviceIP.DEFAULT;
 	}
 	
@@ -251,10 +251,19 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 			
 			if (this.isRunning) {
 				
-				if (this.powerStartupTime < 4) this.powerStartupTime++;
-				if (this.getBootDrive() == null || (!this.hasPower && this.powerStartupTime >= 4)) {
+				if (!this.hasPower && this.powerStartupTime < 4) {
+					this.powerStartupTime++;
+				} else {
+					this.powerStartupTime = 0;
+				}
+				
+				if (!this.hasPower && this.powerStartupTime >= 4) {
 					this.stopComputer();
 					if (!this.hasPower) this.consoleLine = "Power outage!";
+					return;
+				} else if (this.getBootDrive() == null) {
+					this.stopComputer();
+					if (!this.hasPower) this.consoleLine = "No Boot Drive!";
 					return;
 				}
 				
@@ -333,7 +342,7 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 	}
 	
 	public void restartComputer() {
-		this.luaInterpreter.stopExecuting();
+		this.stopComputer();
 		this.startComputer();
 	}
 	

@@ -7,6 +7,6 @@
     "east": "industria:block/crafting_table_side",
     "west": "industria:block/crafting_table_front",
     "up": "industria:block/crafting_table_top",
-    "down": "industria:block/advanced_piston_bottom"
+    "down": "industria:block/aluminium_machine_top"
   }
 }

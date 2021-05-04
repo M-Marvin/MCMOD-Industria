@@ -25,6 +25,7 @@ import de.industria.renderer.TileEntityConveyorBeltRenderer;
 import de.industria.renderer.TileEntityEnderCoreRenderer;
 import de.industria.renderer.TileEntityFuseBoxRenderer;
 import de.industria.renderer.TileEntityGaugeRenderer;
+import de.industria.renderer.TileEntityMBlastFurnaceRenderer;
 import de.industria.renderer.TileEntityMBlenderRenderer;
 import de.industria.renderer.TileEntityMCoalHeaterRenderer;
 import de.industria.renderer.TileEntityMFluidBathRenderer;
@@ -74,6 +75,7 @@ public class Client {
 		RenderTypeLookup.setRenderLayer(Industria.steel_rail, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(Industria.inductive_rail, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(Industria.structure_scaffold, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(Industria.item_pipe, RenderType.getCutoutMipped());
 		
 		RenderTypeLookup.setRenderLayer(ModFluids.SULFURIC_ACID, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_SULFURIC_ACID, RenderType.getTranslucent());
@@ -109,6 +111,7 @@ public class Client {
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ENDER_CORE, TileEntityEnderCoreRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.COAL_HEATER, TileEntityMCoalHeaterRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.STRUCTURE_SCAFFOLD, TileEntityStructureScaffoldRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.BLAST_FURNACE, TileEntityMBlastFurnaceRenderer::new);
 		
 		ScreenManager.registerFactory(ModContainerType.STORED_CRAFTING, ScreenMStoredCrafting::new);
 		ScreenManager.registerFactory(ModContainerType.PROCESSOR, ScreenRProcessor::new);

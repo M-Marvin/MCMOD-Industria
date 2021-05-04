@@ -18,8 +18,6 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
@@ -145,16 +143,6 @@ public class TileEntityMGenerator extends TileEntityInventoryBase implements INa
 	
 	public boolean hasFuelItems() {
 		return this.itemstacks.get(0).isEmpty() ? false : ForgeHooks.getBurnTime(this.itemstacks.get(0)) > 0;
-	}
-	
-	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(this.pos, 0, this.serializeNBT());
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.deserializeNBT(pkt.getNbtCompound());
 	}
 	
 }

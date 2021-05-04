@@ -29,8 +29,8 @@ public class ProzessorCopy extends SpecialRecipe {
 			
 			if (stack.getItem() instanceof ItemProcessor)  {
 				
-				if (stack.hasTag()) {
-					hasOneCode = !hasOneCode;
+				for (String line : ((ItemProcessor) stack.getItem()).getCodeLinesFromProcessor(stack)) {
+					if (!line.equals("")) hasOneCode = true;
 				}
 				
 				prozessors++;
@@ -47,18 +47,31 @@ public class ProzessorCopy extends SpecialRecipe {
 
 	@Override
 	public ItemStack getCraftingResult(CraftingInventory inv) {
-
+		
+		String[] codeToCopy = null;
+		int copyIndex = 0;
+		
 		for (int i = 0; i < 9; i++) {
 			
 			ItemStack stack = inv.getStackInSlot(i);
 			
 			if (stack.getItem() instanceof ItemProcessor)  {
 				
-				if (stack.hasTag()) {
+				if (codeToCopy != null && i != copyIndex) {
 					
-					ItemStack stack2 = new ItemStack(stack.getItem());
-					stack2.setTag(stack.getTag());
+					ItemStack stack2 = stack.copy();
+					((ItemProcessor) stack2.getItem()).storeCodeLinesInProcessor(stack2, codeToCopy);
 					return stack2;
+					
+				} else {
+
+					for (String line : ((ItemProcessor) stack.getItem()).getCodeLinesFromProcessor(stack)) {
+						if (!line.equals("")) {
+							codeToCopy = ((ItemProcessor) stack.getItem()).getCodeLinesFromProcessor(stack);
+							copyIndex = i;
+							i = 0;
+						}
+					}
 					
 				}
 				
@@ -66,7 +79,7 @@ public class ProzessorCopy extends SpecialRecipe {
 			
 		}
 		
-		return null;
+		return ItemStack.EMPTY;
 		
 	}
 

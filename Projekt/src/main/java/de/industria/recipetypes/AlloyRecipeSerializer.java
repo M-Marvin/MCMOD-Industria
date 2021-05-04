@@ -46,7 +46,6 @@ public class AlloyRecipeSerializer<T extends AlloyRecipe> extends ForgeRegistryE
 		}
 		buffer.writeItemStack(recipe.itemOut);
 		buffer.writeInt(recipe.smeltingTime);
-		buffer.writeInt(recipe.smeltingTime);
 	}
 	
 	public interface IFactory<T extends AlloyRecipe> {

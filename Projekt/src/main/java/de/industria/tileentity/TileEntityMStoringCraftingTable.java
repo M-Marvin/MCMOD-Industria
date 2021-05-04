@@ -6,7 +6,10 @@ import javax.annotation.Nullable;
 
 import de.industria.gui.ContainerMStoredCrafting;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.blockfeatures.IElectricConnectiveBlock.Voltage;
 import de.industria.util.gui.ContainerDummy;
+import de.industria.util.handler.ElectricityNetworkHandler;
+import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -19,6 +22,8 @@ import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.util.Direction;
@@ -28,9 +33,14 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public class TileEntityMStoringCraftingTable extends LockableTileEntity implements INamedContainerProvider, ITickableTileEntity, ISidedInventory {
 	
-	NonNullList<ItemStack> inventory;
-	NonNullList<ItemStack> remainingItems;
+	public NonNullList<ItemStack> inventory;
+	public NonNullList<ItemStack> remainingItems;
 	
+	public int progress;
+	public boolean canWork;
+	public boolean hasPower;
+	public boolean isWorking;
+		
 	public TileEntityMStoringCraftingTable() {
 		super(ModTileEntityType.STORING_CRAFTING_TABLE);
 		this.inventory = NonNullList.withSize(11, ItemStack.EMPTY);
@@ -82,6 +92,9 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 			}
 		}
 		compound.put("RemainingItems", remainingItemsNBT);
+		compound.putBoolean("hasPower", this.hasPower);
+		compound.putBoolean("isWorking", this.isWorking);
+		compound.putInt("Progress", this.progress);
 		return super.write(compound);
 	}
 	
@@ -101,42 +114,78 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 			ItemStack stack = ItemStack.read(stackNBT);
 			this.remainingItems.set(index, stack);
 		}
+		this.hasPower = compound.getBoolean("hasPower");
+		this.isWorking = compound.getBoolean("isWorking");
+		this.progress = compound.getInt("Progress");
 		super.read(state, compound);
 	}
+	
+	public CraftingInventory makeCraftMatrix() {
 
+		CraftingInventory craftMatrix = new CraftingInventory(new ContainerDummy(), 3, 3);
+		for (int i = 0; i < 9; i++) {
+			ItemStack stack = this.inventory.get(i);
+			if (stack.isEmpty()) {
+				return null;
+			} else if (stack.getItem() != this.inventory.get(10).getItem()) {
+				craftMatrix.setInventorySlotContents(i, this.getStackInSlot(i));
+			}
+		}
+		return craftMatrix;
+		
+	}
+	
+	public ICraftingRecipe findRecipe(CraftingInventory craftMatrix) {
+		
+		if (craftMatrix == null) return null;
+		Optional<ICraftingRecipe> recipe = this.world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftMatrix, this.world);
+		return recipe.isPresent() ? recipe.get() : null;
+		
+	}
+	
 	@Override
 	public void tick() {
 		
 		if (!this.world.isRemote() && !this.isEmpty()) {
 			
-			CraftingInventory craftMatrix = new CraftingInventory(new ContainerDummy(), 3, 3);
-			for (int i = 0; i < 9; i++) {
-				ItemStack stack = this.inventory.get(i);
-				if (stack.isEmpty()) {
-					return;
-				} else if (stack.getItem() != this.inventory.get(10).getItem()) {
-					craftMatrix.setInventorySlotContents(i, this.getStackInSlot(i));
-				}
-			}
-			Optional<ICraftingRecipe> recipe = this.world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftMatrix, this.world);
+			this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
 			
-			if (recipe.isPresent()) {
+			ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos);
+			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(world).getNetwork(pos);
+			
+			CraftingInventory craftMatrix = makeCraftMatrix();
+			ICraftingRecipe recipe = findRecipe(craftMatrix);
+			
+			canWork = false;
+			if (recipe != null) {
 				
-				ItemStack result = recipe.get().getCraftingResult(craftMatrix);
-				this.remainingItems = recipe.get().getRemainingItems(craftMatrix);
-				
-				boolean canCraft = false;
+				ItemStack result = recipe.getCraftingResult(craftMatrix);
 				ItemStack stack = this.getStackInSlot(9);
 				
 				if (stack.isEmpty()) {
-					this.inventory.set(9, result.copy());
-					canCraft = true;
+					canWork = true;
 				} else if (stack.getItem() == result.getItem() && stack.getCount() + result.getCount() <= result.getMaxStackSize()) {
-					stack.grow(result.getCount());
-					canCraft = true;
+					canWork = true;
 				}
+			}
+			
+			this.hasPower = network.canMachinesRun() == Voltage.NormalVoltage;
+			this.isWorking = this.canWork && hasPower;
+			
+			if (this.isWorking) {
 				
-				if (canCraft) {
+				if (this.progress >= 100) {
+
+					ItemStack result = recipe.getCraftingResult(craftMatrix);
+					ItemStack stack = this.getStackInSlot(9);
+					
+					this.remainingItems = recipe.getRemainingItems(craftMatrix);
+					
+					if (stack.isEmpty()) {
+						this.inventory.set(9, result.copy());
+					} else if (stack.getItem() == result.getItem() && stack.getCount() + result.getCount() <= result.getMaxStackSize()) {
+						stack.grow(result.getCount());
+					}
 					
 					for (int i = 0; i < 9; i++) {
 						
@@ -150,6 +199,12 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 						if (!remainingItem.isEmpty()) this.inventory.set(i, remainingItem.copy());
 						
 					}
+					
+					this.progress = 0;
+					
+				} else {
+					
+					this.progress++;
 					
 				}
 				
@@ -167,7 +222,9 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 	private boolean isRemainingItem(int index) {
 		ItemStack remainingItem = this.remainingItems.get(index);
 		ItemStack inventoryItem = this.inventory.get(index);
-		return remainingItem.getItem() == inventoryItem.getItem();
+		boolean flag = remainingItem.getItem() == inventoryItem.getItem();
+		if (flag) this.remainingItems.set(index, ItemStack.EMPTY);
+		return flag;
 	}
 	
 	@Override
@@ -226,18 +283,31 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 		}
 	}
 	
-   net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
-           net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.DOWN, Direction.NORTH);
-
-   @Override
-   public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
-      if (!this.removed && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-         if (facing == Direction.DOWN)
-            return handlers[0].cast();
-         else
-            return handlers[1].cast();
-      }
-      return super.getCapability(capability, facing);
-   }
+	net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
+		net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.DOWN, Direction.NORTH);
+	
+	@Override
+	public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
+		if (!this.removed && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+		if (facing == Direction.DOWN)
+			return handlers[0].cast();
+		else
+			return handlers[1].cast();
+		}
+		return super.getCapability(capability, facing);
+	}
+	
+	@Override
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		CompoundNBT nbt = this.serializeNBT();
+		nbt.remove("Items");
+		nbt.remove("RemainingItems");
+		return new SUpdateTileEntityPacket(pos, 0, nbt);
+	}
+	
+	@Override
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+		this.deserializeNBT(pkt.getNbtCompound());
+	}
 	
 }

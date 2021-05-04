@@ -19,7 +19,7 @@ public class ContainerMStoredCrafting extends ContainerTileEntity<TileEntityMSto
 
 	@Override
 	public int getSlots() {
-		return 10;
+		return 11;
 	}
 
 	@Override

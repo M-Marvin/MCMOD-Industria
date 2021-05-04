@@ -38,8 +38,8 @@ public class BlockEnderCoreItemRenderer extends ItemStackTileEntityRenderer {
 		if (rotationProgress > 360) rotationProgress -= 360;
 		float rotation = rotationProgress;
 		
-		matrixStackIn.rotate(Vector3f.XP.rotationDegrees(180));
-		matrixStackIn.translate(0.5F, -1.5F, -0.5F);
+		matrixStackIn.rotate(Vector3f.ZN.rotationDegrees(180));
+		matrixStackIn.translate(-0.5F, -1.5F, 0.5F);
 		
 		coreModel.setRotation(rotation);
 		coreModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);

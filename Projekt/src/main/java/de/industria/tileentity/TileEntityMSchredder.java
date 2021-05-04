@@ -15,9 +15,9 @@ import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.IElectricConnectiveBlock.Voltage;
 import de.industria.util.handler.ElectricityNetworkHandler;
+import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import de.industria.util.handler.ItemStackHelper;
 import de.industria.util.handler.MachineSoundHelper;
-import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
@@ -28,8 +28,6 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -291,16 +289,6 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 		this.progress = compound.getInt("progress");
 		this.progressTotal = compound.getInt("progressTotal");
 		super.read(state, compound);
-	}
-	
-	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(pos, 0, this.serializeNBT());
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.deserializeNBT(pkt.getNbtCompound());
 	}
 	
 	@Override

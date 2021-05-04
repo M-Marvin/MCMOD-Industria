@@ -9,8 +9,11 @@ import de.industria.tileentity.TileEntityConveyorBelt;
 import de.industria.tileentity.TileEntityEnderCore;
 import de.industria.tileentity.TileEntityFluidPipe;
 import de.industria.tileentity.TileEntityFluidValve;
+import de.industria.tileentity.TileEntityItemPipe;
+import de.industria.tileentity.TileEntityItemPipePreassurizer;
 import de.industria.tileentity.TileEntityJigsaw;
 import de.industria.tileentity.TileEntityMAlloyFurnace;
+import de.industria.tileentity.TileEntityMBlastFurnace;
 import de.industria.tileentity.TileEntityMBlender;
 import de.industria.tileentity.TileEntityMBurnedCable;
 import de.industria.tileentity.TileEntityMChunkLoader;
@@ -74,7 +77,7 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityMBlender> BLENDER = register("blender", TileEntityType.Builder.create(TileEntityMBlender::new, Industria.blender));
 	public static final TileEntityType<TileEntityMRaffinery> RAFFINERY = register("raffinery", TileEntityType.Builder.create(TileEntityMRaffinery::new, Industria.raffinery));
 	public static final TileEntityType<TileEntityMAlloyFurnace> ALLOY_FURNACE = register("alloy_furnace", TileEntityType.Builder.create(TileEntityMAlloyFurnace::new, Industria.alloy_furnace));
-	public static final TileEntityType<TileEntityConveyorBelt> CONVEYOR_BELT = register("conveyor_belt", TileEntityType.Builder.create(TileEntityConveyorBelt::new, Industria.conveyor_belt, Industria.conveyor_spliter));
+	public static final TileEntityType<TileEntityConveyorBelt> CONVEYOR_BELT = register("conveyor_belt", TileEntityType.Builder.create(TileEntityConveyorBelt::new, Industria.conveyor_belt, Industria.conveyor_spliter, Industria.conveyor_switch));
 	public static final TileEntityType<TileEntityMThermalZentrifuge> THERMAL_ZENTRIFUGE = register("thermal_zentrifuge", TileEntityType.Builder.create(TileEntityMThermalZentrifuge::new, Industria.thermal_zentrifuge));
 	public static final TileEntityType<TileEntityMotor> MOTOR = register("motor", TileEntityType.Builder.create(TileEntityMotor::new, Industria.motor));
 	public static final TileEntityType<TileEntityMFluidBath> FLUID_BATH = register("fluid_bath", TileEntityType.Builder.create(TileEntityMFluidBath::new, Industria.fluid_bath));
@@ -84,6 +87,9 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityMChunkLoader> CHUNK_LOADER = register("chunk_loader", TileEntityType.Builder.create(TileEntityMChunkLoader::new, Industria.chunk_loader));
 	public static final TileEntityType<TileEntityEnderCore> ENDER_CORE = register("ender_core", TileEntityType.Builder.create(TileEntityEnderCore::new, Industria.ender_core));
 	public static final TileEntityType<TileEntityStructureScaffold> STRUCTURE_SCAFFOLD = register("structure_scaffold", TileEntityType.Builder.create(TileEntityStructureScaffold::new, Industria.structure_scaffold));
+	public static final TileEntityType<TileEntityMBlastFurnace> BLAST_FURNACE = register("blast_furnace", TileEntityType.Builder.create(TileEntityMBlastFurnace::new, Industria.blast_furnace));
+	public static final TileEntityType<TileEntityItemPipe> ITEM_PIPE = register("item_pipe", TileEntityType.Builder.create(TileEntityItemPipe::new, Industria.item_pipe));
+	public static final TileEntityType<TileEntityItemPipePreassurizer> ITEM_PIPE_PREASSURIZER = register("item_pipe_preassurizer", TileEntityType.Builder.create(TileEntityItemPipePreassurizer::new, Industria.item_pipe_preassurizer));
 	
 	private static <T extends TileEntity> TileEntityType<T> register(String key, TileEntityType.Builder<T> builder) {
 		Type<?> type = Util.attemptDataFix(TypeReferences.BLOCK_ENTITY, key);

@@ -6,6 +6,7 @@ import java.util.stream.IntStream;
 import de.industria.Industria;
 import de.industria.blocks.BlockConveyorBelt;
 import de.industria.blocks.BlockConveyorSpliter;
+import de.industria.blocks.BlockConveyorSwitch;
 import de.industria.blocks.BlockConveyorBelt.BeltState;
 import de.industria.typeregistys.ModTileEntityType;
 import net.minecraft.block.BlockState;
@@ -86,8 +87,6 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 			if (!this.getStackInSlot(2).isEmpty()) {
 				if (canMoveOutSecondary() && beltMoveStateOutSecondary == 8) {
 					moveItemOutSecondary();
-				} else if (beltMoveStateOutSecondary == 4 && isNotConnectedSecondary()){
-					dropItem();
 				}
 			}
 			
@@ -101,11 +100,11 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 				this.beltMoveStateOut = 0;
 			}
 			
-			if (this.beltMoveStateIn < (this.getStackInSlot(1).isEmpty() ? 8 : this.beltMoveStateOut)) {
+			if (this.beltMoveStateIn < (this.getStackInSlot(1).isEmpty() ? 8 : this.beltMoveStateOut) && isEnabled()) {
 				if (this.moveTimer == 0) this.beltMoveStateIn++;
 			}
-
-			if (this.beltMoveStateOut < (canMoveOut() ? 8 : 4)) {
+			
+			if (this.beltMoveStateOut < (canMoveOut() ? 8 : 4) && isEnabled()) {
 				if (this.moveTimer == 0) this.beltMoveStateOut++;
 			}
 			
@@ -125,6 +124,14 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 			return state.get(BlockConveyorSpliter.ACTIVE);
 		}
 		return false;
+	}
+	
+	public boolean isEnabled() {
+		BlockState state = this.getBlockState();
+		if (state.getBlock() == Industria.conveyor_switch) {
+			return state.get(BlockConveyorSwitch.ENABLED);
+		}
+		return true;
 	}
 	
 	@SuppressWarnings("deprecation")

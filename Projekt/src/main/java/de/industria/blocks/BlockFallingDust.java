@@ -1,5 +1,8 @@
 package de.industria.blocks;
 
+import java.util.Random;
+
+import de.industria.util.handler.UtilHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -8,6 +11,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer.Builder;
@@ -22,13 +26,14 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class BlockFallingDust extends BlockFallingBase {
 	
-	public static final IntegerProperty LAYERS = IntegerProperty.create("layers", 1, 8);
+	public static final IntegerProperty LAYERS = IntegerProperty.create("layers", 1, 16);
 	
 	public BlockFallingDust(String name) {
-		super(name, Material.SAND, 2F, 3F, SoundType.SAND);
+		super(name, Material.SNOW, 0.8F, 0.4F, SoundType.SAND);
 	}
 	
 	@Override
@@ -39,7 +44,7 @@ public class BlockFallingDust extends BlockFallingBase {
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return Block.makeCuboidShape(0, 0, 0, 16, state.get(LAYERS) * 2, 16);
+		return Block.makeCuboidShape(0, 0, 0, 16, state.get(LAYERS), 16);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -54,7 +59,7 @@ public class BlockFallingDust extends BlockFallingBase {
 				
 				int layers = state.get(LAYERS);
 				
-				if (layers < 8) {
+				if (layers < 16) {
 					
 					if (!worldIn.isRemote()) {
 						
@@ -62,9 +67,12 @@ public class BlockFallingDust extends BlockFallingBase {
 						worldIn.setBlockState(pos, state);
 						worldIn.playSound(null, pos, state.getSoundType().getPlaceSound(), SoundCategory.BLOCKS, 1, 1);
 						
+						if (!player.isCreative()) heldStack.shrink(1);
+						
 					}
 					
-					updateSideFlow(state, worldIn, pos);
+					//updateSideFlow(state, worldIn, pos);
+					worldIn.getPendingBlockTicks().scheduleTick(pos, this, 1);
 					
 					return ActionResultType.SUCCESS;
 					
@@ -90,14 +98,14 @@ public class BlockFallingDust extends BlockFallingBase {
 				int layers = state.get(LAYERS);
 				int fallingLayers = layerState.get(LAYERS);
 				layers += fallingLayers;
-				int remainingLayers = layers > 8 ? layers % 8 : 0;
+				int remainingLayers = layers > 16 ? layers % 16 : 0;
 				layers -= remainingLayers;
 				
-				worldIn.setBlockState(pos, state.with(LAYERS, Math.min(8, layers)));
+				worldIn.setBlockState(pos, state.with(LAYERS, Math.min(16, layers)));
 				if (remainingLayers > 0) {
 					BlockState topReplaceState = worldIn.getBlockState(pos.up());
 					if (topReplaceState.isAir()) {
-						worldIn.setBlockState(pos.up(), this.getDefaultState().with(LAYERS, Math.min(8, remainingLayers)));
+						worldIn.setBlockState(pos.up(), this.getDefaultState().with(LAYERS, Math.min(16, remainingLayers)));
 					}
 				}
 				
@@ -106,7 +114,8 @@ public class BlockFallingDust extends BlockFallingBase {
 				
 			}
 			
-			this.updateSideFlow(state, worldIn, pos);
+			//this.updateSideFlow(state, worldIn, pos);
+			worldIn.getPendingBlockTicks().scheduleTick(pos, this, 1);
 			
 		}
 		
@@ -133,37 +142,51 @@ public class BlockFallingDust extends BlockFallingBase {
 			int layersUp = stateUp.get(LAYERS);
 			int layersDown = stateDown.get(LAYERS);
 			
-			if (layersDown < 8) {
+			if (layersDown < 16) {
 				
 				layersDown += layersUp;
-				int remainingLayers = layersDown > 8 ? layersDown % 8 : 0;
+				int remainingLayers = layersDown > 16 ? layersDown % 16 : 0;
 				layersDown -= remainingLayers;
 				
 				stateDown = stateDown.with(LAYERS, layersDown);
 				stateUp = remainingLayers > 0 ? stateUp.with(LAYERS, remainingLayers) : Blocks.AIR.getDefaultState();
 				
 				if (pos.up().equals(fromPos)) {
-					worldIn.setBlockState(fromPos, stateUp);
-					worldIn.setBlockState(pos, stateDown);
+					worldIn.setBlockState(fromPos, stateUp, 18);
+					worldIn.setBlockState(pos, stateDown, 18);
+					worldIn.notifyNeighborsOfStateChange(pos, this);
+					this.updateSideFlow(stateDown, worldIn, pos);
+					return;
 				} else if (pos.down().equals(fromPos)) {
-					worldIn.setBlockState(fromPos, stateDown);
-					worldIn.setBlockState(pos, stateUp);
+					worldIn.setBlockState(fromPos, stateDown, 18);
+					worldIn.setBlockState(pos, stateUp, 18);
+					worldIn.notifyNeighborsOfStateChange(fromPos, this);
+					this.updateSideFlow(stateDown, worldIn, fromPos);
+					return;
 				}
 				
 			}
 			
 		}
-		
-		updateSideFlow(state, worldIn, pos);
+
+		//this.updateSideFlow(state, worldIn, pos);
+		worldIn.getPendingBlockTicks().scheduleTick(pos, this, 1);
 		
 		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
 	}
 	
+	@Override
+	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
+		this.updateSideFlow(state, worldIn, pos);
+		super.tick(state, worldIn, pos, rand);
+	}
+	
+	@SuppressWarnings("deprecation")
 	protected void updateSideFlow(BlockState state, World world, BlockPos pos) {
 		
 		int layers = state.get(LAYERS);
 		
-		for (Direction d : Direction.values()) {
+		for (Direction d : UtilHelper.sortRandom(Direction.class, Direction.values(), world.rand)) {
 			
 			if (d.getAxis() != Axis.Y) {
 
@@ -176,10 +199,31 @@ public class BlockFallingDust extends BlockFallingBase {
 					int diff = layers2 - layers;
 					int transfer = (int) Math.floor(diff / 2);
 					
-					world.setBlockState(pos2, state2.with(LAYERS, layers2 + -transfer), 16);
-					layers += transfer;
-					state = state.with(LAYERS, layers);
-					world.setBlockState(pos, state);
+					if (transfer != 0) {
+						
+						world.setBlockState(pos2, state2.with(LAYERS, layers2 + -transfer), 18);
+						layers += transfer;
+						state = state.with(LAYERS, layers);
+						world.setBlockState(pos, state);
+						
+						world.notifyNeighborsOfStateChange(pos2, this);
+						
+					}
+					
+				} else if (state2.isAir()) {
+					
+					int diff = layers;
+					int transfer = (int) Math.floor(diff / 2);
+					
+					if (transfer != 0) {
+						layers -= transfer;
+						state = state.with(LAYERS, layers);
+						world.setBlockState(pos, state);
+						world.setBlockState(pos2, this.getDefaultState().with(LAYERS, transfer));
+
+						world.notifyNeighborsOfStateChange(pos2, this);
+						
+					}
 					
 				}
 				
@@ -187,6 +231,11 @@ public class BlockFallingDust extends BlockFallingBase {
 			
 		}
 		
+	}
+	
+	@Override
+	public boolean isReplaceable(BlockState state, Fluid fluid) {
+		return state.get(LAYERS) < 14;
 	}
 	
 }

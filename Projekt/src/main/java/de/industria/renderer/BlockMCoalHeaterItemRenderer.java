@@ -29,8 +29,8 @@ public class BlockMCoalHeaterItemRenderer extends ItemStackTileEntityRenderer {
 		
 		matrixStackIn.push();
 		
-		matrixStackIn.rotate(Vector3f.XP.rotationDegrees(180));
-		matrixStackIn.translate(1.5F, -1.5F, -1.5F);
+		matrixStackIn.rotate(Vector3f.ZN.rotationDegrees(180));
+		matrixStackIn.translate(-0.5F, -1.5F, 0.5F);
 		
 		coalHeaterModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 		

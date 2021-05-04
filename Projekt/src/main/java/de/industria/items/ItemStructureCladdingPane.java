@@ -19,6 +19,7 @@ import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -55,7 +56,7 @@ public class ItemStructureCladdingPane extends ItemBase {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(new TranslationTextComponent("industria.item.info.structureCladdingPane", getBlockState(stack).getBlock().getTranslatedName().getString()));
+		tooltip.add(new StringTextComponent("\u00A77" + new TranslationTextComponent("industria.item.info.structureCladdingPane", getBlockState(stack).getBlock().getTranslatedName().getString()).getString()));
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 	}
 	

@@ -1,6 +1,7 @@
 package de.industria.blocks;
 
 import de.industria.tileentity.TileEntityRItemDetector;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -29,7 +30,7 @@ public class BlockRItemDetector extends BlockContainerBase {
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	
 	public BlockRItemDetector() {
-		super("item_detector", Material.WOOD, 1.5F, SoundType.WOOD, true);
+		super("item_detector", AbstractBlock.Properties.create(Material.WOOD).hardnessAndResistance(1.5F).sound(SoundType.WOOD).harvestTool(getDefaultToolType(Material.WOOD)).setOpaque((state, world, pos) -> {return false;}));
 		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, false));
 	}
 	

@@ -14,6 +14,7 @@ import de.industria.blocks.BlockBurnable;
 import de.industria.blocks.BlockBurnedCable;
 import de.industria.blocks.BlockConveyorBelt;
 import de.industria.blocks.BlockConveyorSpliter;
+import de.industria.blocks.BlockConveyorSwitch;
 import de.industria.blocks.BlockCornerBlockBase;
 import de.industria.blocks.BlockElektricWire;
 import de.industria.blocks.BlockEnderCore;
@@ -22,10 +23,13 @@ import de.industria.blocks.BlockFluidPipe;
 import de.industria.blocks.BlockFluidValve;
 import de.industria.blocks.BlockInfinityPowerSource;
 import de.industria.blocks.BlockIronRod;
+import de.industria.blocks.BlockItemPipe;
+import de.industria.blocks.BlockItemPipePreassurizer;
 import de.industria.blocks.BlockJigsaw;
 import de.industria.blocks.BlockLeavesBase;
 import de.industria.blocks.BlockLimestoneSheet;
 import de.industria.blocks.BlockMAlloyFurnace;
+import de.industria.blocks.BlockMBlastFurnace;
 import de.industria.blocks.BlockMBlender;
 import de.industria.blocks.BlockMChunkLoader;
 import de.industria.blocks.BlockMCoalHeater;
@@ -223,6 +227,7 @@ public class Industria {
 	public static final Block rail_adapter = new BlockTRailAdapter();
 	
 	// Machinery
+	public static final Block conveyor_switch = new BlockConveyorSwitch();
 	public static final Block conveyor_spliter = new BlockConveyorSpliter();
 	public static final Block conveyor_belt = new BlockConveyorBelt();
 	public static final Block generator = new BlockMGenerator();
@@ -252,6 +257,9 @@ public class Industria {
 	public static final Block thermal_zentrifuge = new BlockMThermalZentrifuge();
 	public static final Block fluid_bath = new BlockMFluidBath();
 	public static final Block chunk_loader = new BlockMChunkLoader();
+	public static final Block blast_furnace = new BlockMBlastFurnace();
+	public static final Block item_pipe = new BlockItemPipe();
+	public static final Block item_pipe_preassurizer = new BlockItemPipePreassurizer();
 	
 	// Ore and Resource Blocks
 	public static final Block bauxit = new BlockBase("bauxit", Material.ROCK, 1.5F, SoundType.STONE);
@@ -380,7 +388,7 @@ public class Industria {
 	// Util Blocks
 	public static final Block reinforced_casing = new BlockReinforcedCasing();
 	public static final Block ender_core = new BlockEnderCore();
-	public static final Block ash_sheet = new BlockFallingDust("ash_sheet");
+	public static final Block ash = new BlockFallingDust("ash");
 	
 	// Fluids and Buckets
 	public static final Block steam = new BlockSteam();
@@ -637,7 +645,9 @@ public class Industria {
 		ModGameRegistry.registerBlock(sulfur_ore, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(reinforced_casing, DECORATIONS);
 		ModGameRegistry.registerBlock(ender_core, DECORATIONS);
-				
+		ModGameRegistry.registerBlock(item_pipe, MACHINES);
+		ModGameRegistry.registerBlock(item_pipe_preassurizer, MACHINES);
+		
 		ModGameRegistry.registerBlock(smooth_cobblestone, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(chiseled_smooth_stone, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(iron_rod, DECORATIONS);
@@ -663,8 +673,10 @@ public class Industria {
 		ModGameRegistry.registerBlock(alloy_furnace, MACHINES);
 		ModGameRegistry.registerBlock(conveyor_belt, MACHINES);
 		ModGameRegistry.registerBlock(conveyor_spliter, MACHINES);
+		ModGameRegistry.registerBlock(conveyor_switch, MACHINES);
 		ModGameRegistry.registerBlock(thermal_zentrifuge, MACHINES);
 		ModGameRegistry.registerBlock(fluid_bath, MACHINES);
+		ModGameRegistry.registerBlock(blast_furnace, MACHINES);
 		ModGameRegistry.registerBlock(rubber_log, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(rubber_wood, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(rubber_leaves, DECORATIONS);
@@ -745,7 +757,7 @@ public class Industria {
 		ModGameRegistry.registerBlock(clean_cladding_black, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(clean_cladding_white, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(structure_scaffold, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(ash_sheet, DECORATIONS);
+		ModGameRegistry.registerBlock(ash, DECORATIONS);
 		
 		ModGameRegistry.registerBlock(motor, MACHINES);
 		
@@ -918,7 +930,7 @@ public class Industria {
 		try {
 			FMLJavaModLoadingContext.get().getModEventBus().addListener(Client::setup);
 		} catch (BootstrapMethodError e) {
-			LOGGER.log(Level.INFO, "Skip ClientSettup on Server startS");
+			LOGGER.log(Level.INFO, "Skip ClientSettup on Server start!");
 		}
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(Server::setup);
 		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, this::onBiomeLoadingEvent);

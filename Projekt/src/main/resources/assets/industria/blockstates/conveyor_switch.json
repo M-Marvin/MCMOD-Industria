@@ -1,0 +1,175 @@
+{
+	"multipart": [
+		{ "when": {"facing": "north", "enabled": "false"}, "apply": {
+			"model": "industria:block/conveyor_switch_base_disabled",
+			"y": 180
+		}},
+		{ "when": {"right": "close", "facing": "north"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 0
+		}},
+		{ "when": {"left": "close", "facing": "north"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 180
+		}},
+		{ "when": {"right": "open", "facing": "north"}, "apply": {
+			"model": "industria:block/conveyor_belt_open",
+			"y": 0
+		}},
+		{ "when": {"left": "open", "facing": "north"}, "apply": {
+			"model": "industria:block/conveyor_belt_open",
+			"y": 180
+		}},
+		
+		{ "when": {"facing": "south", "enabled": "false"}, "apply": {
+			"model": "industria:block/conveyor_switch_base_disabled",
+			"y": 0
+		}},
+		{ "when": {"right": "close", "facing": "south"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 180
+		}},
+		{ "when": {"left": "close", "facing": "south"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 0
+		}},
+		{ "when": {"right": "open", "facing": "south"}, "apply": {
+			"model": "industria:block/conveyor_belt_open",
+			"y": 180
+		}},
+		{ "when": {"left": "open", "facing": "south"}, "apply": {
+			"model": "industria:block/conveyor_belt_open",
+			"y": 0
+		}},
+		
+		{ "when": {"facing": "east", "enabled": "false"}, "apply": {
+			"model": "industria:block/conveyor_switch_base_disabled",
+			"y": 270
+		}},
+		{ "when": {"right": "close", "facing": "east"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 90
+		}},
+		{ "when": {"left": "close", "facing": "east"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 270
+		}},
+		{ "when": {"right": "open", "facing": "east"}, "apply": {
+			"model": "industria:block/conveyor_belt_open",
+			"y": 90
+		}},
+		{ "when": {"left": "open", "facing": "east"}, "apply": {
+			"model": "industria:block/conveyor_belt_open",
+			"y": 270
+		}},
+		
+		{ "when": {"facing": "west", "enabled": "false"}, "apply": {
+			"model": "industria:block/conveyor_switch_base_disabled",
+			"y": 90
+		}},
+		{ "when": {"right": "close", "facing": "west"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 270
+		}},
+		{ "when": {"left": "close", "facing": "west"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 90
+		}},
+		{ "when": {"right": "open", "facing": "west"}, "apply": {
+			"model": "industria:block/conveyor_belt_open",
+			"y": 270
+		}},
+		{ "when": {"left": "open", "facing": "west"}, "apply": {
+			"model": "industria:block/conveyor_belt_open",
+			"y": 90
+		}},
+		
+		
+		
+		
+		
+		{ "when": {"facing": "north", "enabled": "true"}, "apply": {
+			"model": "industria:block/conveyor_switch_base_enabled",
+			"y": 180
+		}},
+		{ "when": {"right": "close", "facing": "north"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 0
+		}},
+		{ "when": {"left": "close", "facing": "north"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 180
+		}},
+		{ "when": {"right": "open", "facing": "north"}, "apply": {
+			"model": "industria:block/conveyor_belt_open",
+			"y": 0
+		}},
+		{ "when": {"left": "open", "facing": "north"}, "apply": {
+			"model": "industria:block/conveyor_belt_open",
+			"y": 180
+		}},
+		
+		{ "when": {"facing": "south", "enabled": "true"}, "apply": {
+			"model": "industria:block/conveyor_switch_base_enabled",
+			"y": 0
+		}},
+		{ "when": {"right": "close", "facing": "south"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 180
+		}},
+		{ "when": {"left": "close", "facing": "south"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 0
+		}},
+		{ "when": {"right": "open", "facing": "south"}, "apply": {
+			"model": "industria:block/conveyor_belt_open",
+			"y": 180
+		}},
+		{ "when": {"left": "open", "facing": "south"}, "apply": {
+			"model": "industria:block/conveyor_belt_open",
+			"y": 0
+		}},
+		
+		{ "when": {"facing": "east", "enabled": "true"}, "apply": {
+			"model": "industria:block/conveyor_switch_base_enabled",
+			"y": 270
+		}},
+		{ "when": {"right": "close", "facing": "east"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 90
+		}},
+		{ "when": {"left": "close", "facing": "east"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 270
+		}},
+		{ "when": {"right": "open", "facing": "east"}, "apply": {
+			"model": "industria:block/conveyor_belt_open",
+			"y": 90
+		}},
+		{ "when": {"left": "open", "facing": "east"}, "apply": {
+			"model": "industria:block/conveyor_belt_open",
+			"y": 270
+		}},
+		
+		{ "when": {"facing": "west", "enabled": "true"}, "apply": {
+			"model": "industria:block/conveyor_switch_base_enabled",
+			"y": 90
+		}},
+		{ "when": {"right": "close", "facing": "west"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 270
+		}},
+		{ "when": {"left": "close", "facing": "west"}, "apply": {
+			"model": "industria:block/conveyor_belt_close",
+			"y": 90
+		}},
+		{ "when": {"right": "open", "facing": "west"}, "apply": {
+			"model": "industria:block/conveyor_belt_open",
+			"y": 270
+		}},
+		{ "when": {"left": "open", "facing": "west"}, "apply": {
+			"model": "industria:block/conveyor_belt_open",
+			"y": 90
+		}}
+	]
+}

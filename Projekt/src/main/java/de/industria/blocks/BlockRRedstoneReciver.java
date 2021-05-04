@@ -125,7 +125,7 @@ public class BlockRRedstoneReciver extends BlockContainerBase implements ISignal
 		if (state.getBlock() == this ? !state.get(TRANSIVER_MODE) : false) {
 			
 			world.setBlockState(pos, state.with(POWERED, powered));
-			world.notifyNeighborsOfStateExcept(pos.offset(state.get(FACING)), this, state.get(FACING).getOpposite());
+			world.notifyNeighborsOfStateExcept(pos, this, state.get(FACING).getOpposite());
 						
 		}
 		
@@ -170,7 +170,7 @@ public class BlockRRedstoneReciver extends BlockContainerBase implements ISignal
 	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
 		return blockState.get(POWERED) && !blockState.get(TRANSIVER_MODE) ? 15 : 0;
 	}
-
+	
 	@Override
 	public boolean canConectSignalWire(IWorldReader world, BlockPos pos, Direction side) {
 		BlockState state = world.getBlockState(pos);

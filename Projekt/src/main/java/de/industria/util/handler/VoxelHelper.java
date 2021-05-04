@@ -2,6 +2,7 @@ package de.industria.util.handler;
 
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 
@@ -37,6 +38,32 @@ public class VoxelHelper {
 		}
 		
 		return newShape;
+		
+	}
+	
+	public static AxisAlignedBB rotateBounds(AxisAlignedBB box, Direction side) {
+		
+		int rad = 0;
+		switch(side) {
+		default:
+		case NORTH:
+			rad = 0;
+			break;
+		case EAST:
+			rad = 90;
+			break;
+		case SOUTH:
+			rad = 180;
+			break;
+		case WEST:
+			rad = 270;
+			break;
+		}
+		
+		float[] rotMin = rotatePoint((float) (box.minX - 0.5F), (float) (box.minZ - 0.5F), rad);
+		float[] rotMax = rotatePoint((float) (box.maxX - 0.5F), (float) (box.maxZ - 0.5F), rad);
+		
+		return new AxisAlignedBB(rotMin[0] + 0.5F, box.minY, rotMin[1] + 0.5F, rotMax[0] + 0.5F, box.maxY, rotMax[1] + 0.5F);
 		
 	}
 	

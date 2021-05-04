@@ -7,10 +7,10 @@
   ],
   "key": {
     "S": {
-      "item": "industria:steel_plate"
+      "item": "industria:aluminium_plate"
     },
     "G": {
-      "item": "industria:steel_plates"
+      "item": "industria:aluminium_plates"
     },
     "W": {
       "item": "industria:wolfram_plate"

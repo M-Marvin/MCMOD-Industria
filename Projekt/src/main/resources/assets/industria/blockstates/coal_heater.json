@@ -1,6 +1,5 @@
 {
 	"variants": {
-		"lit=false": { "model": "industria:block/coal_heater" },
-		"lit=true": { "model": "industria:block/coal_heater_lit" }
+		"": { "model": "industria:block/coal_heater" }
 	}
 }

@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SPS",
+    "KMK",
+    "SGS"
+  ],
+  "key": {
+    "S": {
+      "item": "industria:aluminium_plate"
+    },
+    "K": {
+      "item": "minecraft:piston"
+    },
+    "P": {
+      "item": "industria:redstone_processor"
+    },
+    "M": {
+      "item": "industria:motor"
+    },
+    "G": {
+      "item": "industria:aluminium_plates"
+    }
+  },
+  "result": {
+    "item": "industria:storing_crafting_table"
+  }
+}

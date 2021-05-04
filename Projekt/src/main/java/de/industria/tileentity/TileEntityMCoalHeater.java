@@ -18,10 +18,9 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -55,12 +54,21 @@ public class TileEntityMCoalHeater extends TileEntityInventoryBase implements IN
 			
 			Direction facing = getBlockState().get(BlockStateProperties.HORIZONTAL_FACING);
 			boolean powered = this.world.isBlockPowered(pos) || this.world.isBlockPowered(pos.add(facing.getOpposite().getDirectionVec())) || this.world.isBlockPowered(pos.add(facing.rotateY().getDirectionVec())) || this.world.isBlockPowered(pos.add(facing.rotateY().getDirectionVec()).add(facing.getOpposite().getDirectionVec()));
+			boolean fullOfAsh = (this.getStackInSlot(1).getItem() != Item.getItemFromBlock(Industria.ash) || this.getStackInSlot(1).getCount() >= 64) && !this.getStackInSlot(1).isEmpty();
 			
-			if (powered) {
+			if (powered && !fullOfAsh) {
 				
 				if (this.burnTime > 0) {
 					this.burnTime -= 1;
 					isWorking = true;
+					if (this.burnTime % 60 == 0) {
+						ItemStack ashStack = this.getStackInSlot(1);
+						if (ashStack.isEmpty()) {
+							this.setInventorySlotContents(1, new ItemStack(Industria.ash, 1));
+						} else if (ashStack.getItem() == Item.getItemFromBlock(Industria.ash) && ashStack.getCount() < 64) {
+							ashStack.grow(1);
+						}
+					}
 				} else if (hasFuelItems()) {
 					this.burnTime = ForgeHooks.getBurnTime(this.itemstacks.get(0));
 					this.fuelTime = (int) this.burnTime;
@@ -228,16 +236,6 @@ public class TileEntityMCoalHeater extends TileEntityInventoryBase implements IN
 	@Override
 	public ITextComponent getDisplayName() {
 		return new TranslationTextComponent("block.industria.coal_heater");
-	}
-	
-	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(pos, 0, this.serializeNBT());
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.deserializeNBT(pkt.getNbtCompound());
 	}
 	
 	@Override

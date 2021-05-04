@@ -101,7 +101,7 @@ public class BlockConveyorBelt extends BlockContainerBase implements IAdvancedBl
 			} else if (state.get(LEFT) == BeltState.OPEN) {
 				return side == facing.rotateY() || side == facing.getOpposite();
 			}
-		} else if (state.getBlock() instanceof BlockConveyorBelt) {
+		} else if (state.getBlock() instanceof BlockConveyorBelt || state.getBlock() instanceof BlockConveyorSwitch) {
 			return state.get(FACING) == side.getOpposite();
 		}
 		return false;

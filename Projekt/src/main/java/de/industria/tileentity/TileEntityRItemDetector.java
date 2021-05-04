@@ -51,15 +51,18 @@ public class TileEntityRItemDetector extends TileEntity implements ITickableTile
 				if (this.itemFilter.isEmpty()) {
 					if (!detectingStack.isEmpty()) return true;
 				} else {
-					ItemStack castedStack = detectingStack.copy();
-					castedStack.setCount(1);
-					if (ItemStack.areItemStacksEqual(this.itemFilter, castedStack)) return true;
+					if (matchItem(detectingStack)) return true;
 				}
 			}
 			
 		} else {
 			
-			int size = detectingInventory instanceof TileEntityConveyorBelt ? 1 : detectingInventory.getSizeInventory();
+			boolean isSpliter = false;
+			if (detectingInventory instanceof TileEntityConveyorBelt) {
+				if (((TileEntityConveyorBelt) detectingInventory).getBlockState().getBlock() == Industria.conveyor_spliter) isSpliter = true;
+			}
+			
+			int size = isSpliter ? 1 : detectingInventory.getSizeInventory();
 			
 			for (int i = 0; i < size; i++) {
 				ItemStack detectingStack = detectingInventory.getStackInSlot(i);
@@ -67,9 +70,7 @@ public class TileEntityRItemDetector extends TileEntity implements ITickableTile
 				if (this.itemFilter.isEmpty()) {
 					if (!detectingStack.isEmpty()) return true;
 				} else {
-					ItemStack castedStack = detectingStack.copy();
-					castedStack.setCount(1);
-					if (ItemStack.areItemStacksEqual(this.itemFilter, castedStack)) return true;
+					if (matchItem(detectingStack)) return true;
 				}
 				
 			}
@@ -78,6 +79,14 @@ public class TileEntityRItemDetector extends TileEntity implements ITickableTile
 		
 		return false;
 		
+	}
+	
+	public boolean matchItem(ItemStack stack) {
+		ItemStack castedStack = stack.copy();
+		castedStack.setCount(1);
+		castedStack.setDamage(0);
+		this.itemFilter.setDamage(0);
+		return ItemStack.areItemStacksEqual(this.itemFilter, castedStack);
 	}
 	
 	public List<ItemStack> getDetectingItems() {

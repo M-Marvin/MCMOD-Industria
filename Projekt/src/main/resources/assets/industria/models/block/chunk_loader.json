@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/orientable",
   "textures": {
-    "top": "industria:block/steel_machine_top",
+    "top": "industria:block/aluminium_machine_top",
     "front": "industria:block/chunk_loader",
     "side": "industria:block/chunk_loader"
   }

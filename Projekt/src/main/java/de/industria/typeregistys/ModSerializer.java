@@ -3,6 +3,8 @@ package de.industria.typeregistys;
 import de.industria.Industria;
 import de.industria.recipetypes.AlloyRecipe;
 import de.industria.recipetypes.AlloyRecipeSerializer;
+import de.industria.recipetypes.BlastFurnaceRecipe;
+import de.industria.recipetypes.BlastFurnaceRecipeSerializer;
 import de.industria.recipetypes.BlendingRecipe;
 import de.industria.recipetypes.BlendingRecipeSerializer;
 import de.industria.recipetypes.FluidBathRecipe;
@@ -26,7 +28,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 public class ModSerializer {
 	
-	public static final SpecialRecipeSerializer<ProzessorCopy> CRAFTING_PROCESSOR_COPY = register("crafting_processor_copy", new SpecialRecipeSerializer<>(ProzessorCopy::new));
+	public static final SpecialRecipeSerializer<ProzessorCopy> CRAFTING_PROCESSOR_COPY = register("crafting_special_processor_cloning", new SpecialRecipeSerializer<>(ProzessorCopy::new));
 	public static final SchredderRecipeSerializer<SchredderRecipe> SCHREDDER = register("schredder", new SchredderRecipeSerializer<SchredderRecipe>(SchredderRecipe::new));
 	public static final BlendingRecipeSerializer<BlendingRecipe> BLENDING = register("blending", new BlendingRecipeSerializer<BlendingRecipe>(BlendingRecipe::new));
 	public static final RifiningRecipeSerializer<RifiningRecipe> RIFINING = register("rifining", new RifiningRecipeSerializer<RifiningRecipe>(RifiningRecipe::new));
@@ -34,6 +36,7 @@ public class ModSerializer {
 	public static final WashingRecipeSerializer<WashingRecipe> WASHING = register("washing", new WashingRecipeSerializer<WashingRecipe>(WashingRecipe::new));
 	public static final AlloyRecipeSerializer<AlloyRecipe> ALLOY = register("alloy", new AlloyRecipeSerializer<AlloyRecipe>(AlloyRecipe::new));
 	public static final FluidBathRecipeSerializer<FluidBathRecipe> FLUID_BATH = register("fluid_bath", new FluidBathRecipeSerializer<FluidBathRecipe>(FluidBathRecipe::new));
+	public static final BlastFurnaceRecipeSerializer<BlastFurnaceRecipe> BLAST_FURNACE = register("blast_furnace", new BlastFurnaceRecipeSerializer<BlastFurnaceRecipe>(BlastFurnaceRecipe::new));
 	
 	static <S extends IRecipeSerializer<T>, T extends IRecipe<?>> S register(String key, S recipeSerializer) {
 		recipeSerializer.setRegistryName(new ResourceLocation(Industria.MODID, key));

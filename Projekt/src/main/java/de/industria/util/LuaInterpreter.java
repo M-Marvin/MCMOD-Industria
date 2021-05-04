@@ -47,7 +47,7 @@ public class LuaInterpreter {
 		
 		try {
 			
-			LuaValue luaCode = this.globals.load(new StringReader(stringCode), "BOOTDRIVE");
+			LuaValue luaCode = loadScript(stringCode, "BOOTDRIVE");
 			
 			this.executionThread = new Thread("LuaInterpreterExecutionThread") {
 				@Override
@@ -75,7 +75,7 @@ public class LuaInterpreter {
 	}
 	
 	/**
-	 * Loads am script.
+	 * Loads an script.
 	 * @param script
 	 * @return
 	 */
@@ -95,7 +95,7 @@ public class LuaInterpreter {
 			this.timeOutTimer++;
 			if (timeOutTimer >= timeOut) {
 				stopExecuting();
-				this.crashMessage = "RAM Overload (Loop to fast)!";
+				this.crashMessage = "RAM Overload (TimOut)!";
 				return -1;
 			} else if (!this.violation.isViolating()) {
 				stopExecuting();
@@ -132,6 +132,7 @@ public class LuaInterpreter {
 		if (this.executionThread != null) {
 			this.executionThread.interrupt();
 			this.executionThread.stop();
+			this.timeOutTimer = 0;
 		}
 		this.executionThread = null;
 	}

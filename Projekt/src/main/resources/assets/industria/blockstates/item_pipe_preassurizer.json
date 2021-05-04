@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"facing=north": { "model": "industria:block/item_pipe_preassurizer"},
+		"facing=south": { "model": "industria:block/item_pipe_preassurizer", "y": 180 },
+		"facing=east": { "model": "industria:block/item_pipe_preassurizer", "y": 90 },
+		"facing=west": { "model": "industria:block/item_pipe_preassurizer", "y": -90 },
+		"facing=up": { "model": "industria:block/item_pipe_preassurizer", "x": -90},
+		"facing=down": { "model": "industria:block/item_pipe_preassurizer", "x": 90 }
+	}
+}

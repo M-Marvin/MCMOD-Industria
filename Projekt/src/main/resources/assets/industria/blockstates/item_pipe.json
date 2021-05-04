@@ -1,0 +1,76 @@
+{
+	"multipart": [
+		
+		{ "when": {"facing": "down", "connection": "up"}, "apply": {
+			"model": "industria:block/item_pipe_stright"
+		}},
+		{ "when": {"facing": "north", "connection": "south"}, "apply": {
+			"model": "industria:block/item_pipe_stright_horizontal"
+		}},
+		{ "when": {"facing": "east", "connection": "west"}, "apply": {
+			"model": "industria:block/item_pipe_stright_horizontal", "y": 90
+		}},
+		{ "when": {"facing": "up", "connection": "down"}, "apply": {
+			"model": "industria:block/item_pipe_stright", "x": 180
+		}},
+		{ "when": {"facing": "south", "connection": "north"}, "apply": {
+			"model": "industria:block/item_pipe_stright_horizontal", "y": 180
+		}},
+		{ "when": {"facing": "west", "connection": "east"}, "apply": {
+			"model": "industria:block/item_pipe_stright_horizontal", "y": 270
+		}},
+		
+		
+		{ "when": {"facing": "down", "connection": "north"}, "apply": {
+			"model": "industria:block/item_pipe_corner_down"
+		}},
+		{ "when": {"facing": "down", "connection": "south"}, "apply": {
+			"model": "industria:block/item_pipe_corner_down", "y": 180
+		}},
+		{ "when": {"facing": "down", "connection": "east"}, "apply": {
+			"model": "industria:block/item_pipe_corner_down", "y": 90
+		}},
+		{ "when": {"facing": "down", "connection": "west"}, "apply": {
+			"model": "industria:block/item_pipe_corner_down", "y": 270
+		}},
+		
+		{ "when": {"facing": "up", "connection": "north"}, "apply": {
+			"model": "industria:block/item_pipe_corner_up"
+		}},
+		{ "when": {"facing": "up", "connection": "south"}, "apply": {
+			"model": "industria:block/item_pipe_corner_up", "y": 180
+		}},
+		{ "when": {"facing": "up", "connection": "east"}, "apply": {
+			"model": "industria:block/item_pipe_corner_up", "y": 90
+		}},
+		{ "when": {"facing": "up", "connection": "west"}, "apply": {
+			"model": "industria:block/item_pipe_corner_up", "y": 270
+		}},
+		
+		{ "when": {"facing": "north", "connection": "east"}, "apply": {
+			"model": "industria:block/item_pipe_corner_horizontal"
+		}},
+		{ "when": {"facing": "north", "connection": "west"}, "apply": {
+			"model": "industria:block/item_pipe_corner_horizontal", "y": -90
+		}},
+		{ "when": {"facing": "south", "connection": "east"}, "apply": {
+			"model": "industria:block/item_pipe_corner_horizontal", "y": 90
+		}},
+		{ "when": {"facing": "south", "connection": "west"}, "apply": {
+			"model": "industria:block/item_pipe_corner_horizontal", "y": 180
+		}},
+		{ "when": {"facing": "east", "connection": "north"}, "apply": {
+			"model": "industria:block/item_pipe_corner_horizontal"
+		}},
+		{ "when": {"facing": "east", "connection": "south"}, "apply": {
+			"model": "industria:block/item_pipe_corner_horizontal", "y": 90
+		}},
+		{ "when": {"facing": "west", "connection": "north"}, "apply": {
+			"model": "industria:block/item_pipe_corner_horizontal", "y": 270
+		}},
+		{ "when": {"facing": "west", "connection": "south"}, "apply": {
+			"model": "industria:block/item_pipe_corner_horizontal", "y": 180
+		}}
+		
+	]
+}

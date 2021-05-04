@@ -44,7 +44,6 @@ public class BlockConveyorSpliter extends BlockConveyorBelt {
 		return this.getDefaultState().with(FACING, facing).with(RIGHT, getHingeSide(context) ? BeltState.OPEN : BeltState.CLOSE).with(LEFT, !getHingeSide(context) ? BeltState.OPEN : BeltState.CLOSE).with(ACTIVE, false);
 	}
 	
-	// TODO
 	// Copied placement-code from vanilla DoorBlock
 	private boolean getHingeSide(BlockItemUseContext p_208073_1_) {
 		BlockPos blockpos = p_208073_1_.getPos();

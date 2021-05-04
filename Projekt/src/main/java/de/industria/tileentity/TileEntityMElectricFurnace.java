@@ -8,8 +8,8 @@ import de.industria.gui.ContainerMElectricFurnace;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.IElectricConnectiveBlock.Voltage;
 import de.industria.util.handler.ElectricityNetworkHandler;
-import de.industria.util.handler.ItemStackHelper;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
+import de.industria.util.handler.ItemStackHelper;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,8 +22,6 @@ import net.minecraft.item.crafting.FurnaceRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -195,16 +193,6 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 			this.usedRecipes.put(new ResourceLocation(s), compoundnbt.getInt(s));
 		}
 		super.read(state, compound);
-	}
-	
-	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(pos, 0, this.serializeNBT());
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.deserializeNBT(pkt.getNbtCompound());
 	}
 	
 }

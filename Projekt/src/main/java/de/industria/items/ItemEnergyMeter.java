@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 public class ItemEnergyMeter extends ItemBase {
 
 	public ItemEnergyMeter() {
-		super("energy_meter", Industria.TOOLS);
+		super("energy_meter", Industria.TOOLS, 1);
 	}
 	
 	@SuppressWarnings("deprecation")

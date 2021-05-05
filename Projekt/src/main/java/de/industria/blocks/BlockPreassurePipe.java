@@ -1,12 +1,18 @@
 package de.industria.blocks;
 
+import java.util.concurrent.Callable;
+import java.util.function.Supplier;
+
 import de.industria.Industria;
-import de.industria.tileentity.TileEntityItemPipe;
+import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
+import de.industria.tileentity.TileEntityPreassurePipe;
+import de.industria.util.blockfeatures.IAdvancedBlockInfo;
 import de.industria.util.handler.VoxelHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
@@ -20,10 +26,11 @@ import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockItemPipe extends BlockContainerBase {
+public class BlockPreassurePipe extends BlockContainerBase implements IAdvancedBlockInfo {
 	
 	public static final VoxelShape SHAPE_CORNER_DOWN = VoxelShapes.combineAndSimplify(Block.makeCuboidShape(2, 0, 0, 14, 14, 14), VoxelShapes.combineAndSimplify(Block.makeCuboidShape(3, 3, 0, 13, 13, 13), Block.makeCuboidShape(3, 0, 3, 13, 3, 13), IBooleanFunction.OR), IBooleanFunction.ONLY_FIRST);
 	public static final VoxelShape SHAPE_CORNER_UP = VoxelShapes.combineAndSimplify(Block.makeCuboidShape(2, 2, 0, 14, 16, 14), VoxelShapes.combineAndSimplify(Block.makeCuboidShape(3, 3, 0, 13, 13, 13), Block.makeCuboidShape(3, 13, 3, 13, 16, 13), IBooleanFunction.OR), IBooleanFunction.ONLY_FIRST);
@@ -34,8 +41,8 @@ public class BlockItemPipe extends BlockContainerBase {
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final DirectionProperty CONNECTION = DirectionProperty.create("connection", Direction.values());
 	
-	public BlockItemPipe() {
-		super("item_pipe", Material.GLASS, 1F, 2F, SoundType.GLASS);
+	public BlockPreassurePipe() {
+		super("preassure_pipe", Material.GLASS, 1F, 2F, SoundType.GLASS);
 		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.DOWN).with(CONNECTION, Direction.UP));
 	}
 	
@@ -77,7 +84,7 @@ public class BlockItemPipe extends BlockContainerBase {
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		
 		if (context.getEntity() instanceof PlayerEntity) {
-			if (((PlayerEntity) context.getEntity()).getHeldItemMainhand().getItem() == Item.getItemFromBlock(Industria.item_pipe)) return Block.makeCuboidShape(0, 0, 0, 16, 16, 16);
+			if (((PlayerEntity) context.getEntity()).getHeldItemMainhand().getItem() == Item.getItemFromBlock(Industria.preassure_pipe)) return Block.makeCuboidShape(0, 0, 0, 16, 16, 16);
 		}
 		
 		Direction facing = state.get(FACING);
@@ -105,9 +112,9 @@ public class BlockItemPipe extends BlockContainerBase {
 	public boolean canConnect(BlockState state, World world, BlockPos pos, Direction direction) {
 		BlockPos connectPos = pos.offset(direction);
 		BlockState connectState = world.getBlockState(connectPos);
-		if (connectState.getBlock() == Industria.item_pipe) {
+		if (connectState.getBlock() == Industria.preassure_pipe) {
 			return connectState.get(FACING) == direction.getOpposite() || connectState.get(CONNECTION) == direction.getOpposite();
-		} else if (connectState.getBlock() == Industria.item_pipe_preassurizer) {
+		} else if (connectState.getBlock() == Industria.pipe_preassurizer) {
 			return direction == connectState.get(FACING);
 		}
 		return false;
@@ -115,7 +122,19 @@ public class BlockItemPipe extends BlockContainerBase {
 	
 	@Override
 	public TileEntity createNewTileEntity(IBlockReader worldIn) {
-		return new TileEntityItemPipe();
+		return new TileEntityPreassurePipe();
 	}
-
+	
+	@Override
+	public IBlockToolType getBlockInfo() {
+		return (stack, info) -> {
+			info.add(new TranslationTextComponent("industria.block.info.preassurePipe"));
+		};
+	}
+	
+	@Override
+	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
+		return null;
+	}
+	
 }

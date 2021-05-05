@@ -3,6 +3,7 @@ package de.industria.typeregistys;
 
 import de.industria.Industria;
 import de.industria.fluids.FluidChemicalWater;
+import de.industria.fluids.FluidCompressedAir;
 import de.industria.fluids.FluidDestilledWater;
 import de.industria.fluids.FluidNatronLye;
 import de.industria.fluids.FluidOreAluminiumSolution;
@@ -45,6 +46,7 @@ public class ModFluids {
 	public static final FluidChemicalWater CHEMICAL_WATER = register("chemical_water", new FluidChemicalWater.Still());
 	public static final FluidRawOil FLOWING_RAW_OIL = register("flowing_raw_oil", new FluidRawOil.Flow());
 	public static final FluidRawOil RAW_OIL = register("raw_oil", new FluidRawOil.Still());
+	public static final FluidCompressedAir COMPRESSED_AIR = register("compressed_air", new FluidCompressedAir());
 	
 	private static <T extends Fluid> T register(String key, T p_215710_1_) {
 		p_215710_1_.setRegistryName(new ResourceLocation(Industria.MODID, key));

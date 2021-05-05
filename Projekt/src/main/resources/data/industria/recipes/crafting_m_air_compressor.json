@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WEW",
+    "MGT",
+    "WXW"
+  ],
+  "key": {
+    "X": {
+      "item": "industria:steel_plates"
+    },
+    "W": {
+      "item": "industria:steel_plate"
+    },
+    "G": {
+      "item": "industria:iron_rod"
+    },
+    "T": {
+      "item": "industria:aluminium_plates"
+    },
+    "M": {
+      "item": "industria:motor"
+    },
+    "E": {
+      "item": "minecraft:iron_bars"
+    }
+  },
+  "result": {
+    "item": "industria:air_compressor"
+  }
+}

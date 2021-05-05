@@ -23,11 +23,12 @@ import de.industria.blocks.BlockFluidPipe;
 import de.industria.blocks.BlockFluidValve;
 import de.industria.blocks.BlockInfinityPowerSource;
 import de.industria.blocks.BlockIronRod;
-import de.industria.blocks.BlockItemPipe;
-import de.industria.blocks.BlockItemPipePreassurizer;
+import de.industria.blocks.BlockPreassurePipe;
+import de.industria.blocks.BlockPipePreassurizer;
 import de.industria.blocks.BlockJigsaw;
 import de.industria.blocks.BlockLeavesBase;
 import de.industria.blocks.BlockLimestoneSheet;
+import de.industria.blocks.BlockMAirCompressor;
 import de.industria.blocks.BlockMAlloyFurnace;
 import de.industria.blocks.BlockMBlastFurnace;
 import de.industria.blocks.BlockMBlender;
@@ -86,6 +87,7 @@ import de.industria.blocks.BlockTileBlock;
 import de.industria.blocks.BlockTreeTap;
 import de.industria.blocks.BlockWeathering;
 import de.industria.fluids.BlockChemicalWater;
+import de.industria.fluids.BlockCompressedAir;
 import de.industria.fluids.BlockDestilledWater;
 import de.industria.fluids.BlockNatronLye;
 import de.industria.fluids.BlockOreSolution;
@@ -258,8 +260,9 @@ public class Industria {
 	public static final Block fluid_bath = new BlockMFluidBath();
 	public static final Block chunk_loader = new BlockMChunkLoader();
 	public static final Block blast_furnace = new BlockMBlastFurnace();
-	public static final Block item_pipe = new BlockItemPipe();
-	public static final Block item_pipe_preassurizer = new BlockItemPipePreassurizer();
+	public static final Block preassure_pipe = new BlockPreassurePipe();
+	public static final Block pipe_preassurizer = new BlockPipePreassurizer();
+	public static final Block air_compressor = new BlockMAirCompressor();
 	
 	// Ore and Resource Blocks
 	public static final Block bauxit = new BlockBase("bauxit", Material.ROCK, 1.5F, SoundType.STONE);
@@ -413,6 +416,8 @@ public class Industria {
 	public static final Item tin_solution_bucket = new ItemFluidBucket(ModFluids.TIN_SOLUTION, "tin_solution_bucket", MATERIALS);
 	public static final Block raw_oil = new BlockRawOil();
 	public static final Item raw_oil_bucket = new ItemFluidBucket(ModFluids.RAW_OIL, "raw_oil_bucket", MATERIALS);
+	public static final Block compressed_air = new BlockCompressedAir();
+	public static final Item compressed_air_bucket = new ItemGasBucket(ModFluids.COMPRESSED_AIR, "compressed_air_bucket", MATERIALS);
 	
 	// Ingots and Nuggets
 	public static final Item monel_ingot = new ItemBase("monel_ingot", MATERIALS);
@@ -645,8 +650,9 @@ public class Industria {
 		ModGameRegistry.registerBlock(sulfur_ore, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(reinforced_casing, DECORATIONS);
 		ModGameRegistry.registerBlock(ender_core, DECORATIONS);
-		ModGameRegistry.registerBlock(item_pipe, MACHINES);
-		ModGameRegistry.registerBlock(item_pipe_preassurizer, MACHINES);
+		ModGameRegistry.registerBlock(preassure_pipe, MACHINES);
+		ModGameRegistry.registerBlock(pipe_preassurizer, MACHINES);
+		ModGameRegistry.registerBlock(air_compressor, MACHINES);
 		
 		ModGameRegistry.registerBlock(smooth_cobblestone, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(chiseled_smooth_stone, BUILDING_BLOCKS);
@@ -784,6 +790,8 @@ public class Industria {
 		ModGameRegistry.registerItem(tin_solution_bucket);
 		ModGameRegistry.registerTechnicalBlock(chemical_water);
 		ModGameRegistry.registerItem(chemical_water_bucket);
+		ModGameRegistry.registerTechnicalBlock(compressed_air);
+		ModGameRegistry.registerItem(compressed_air_bucket);
 		
 		// register Items
 		ModGameRegistry.registerItem(crushed_blackstone);

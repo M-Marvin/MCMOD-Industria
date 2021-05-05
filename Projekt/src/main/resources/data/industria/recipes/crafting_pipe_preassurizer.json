@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "E E",
+    "E R",
+    "E E"
+  ],
+  "key": {
+    "E": {
+      "item": "industria:iron_plate"
+    },
+    "R": {
+      "item": "industria:fluid_pipe"
+    }
+  },
+  "result": {
+    "item": "industria:pipe_preassurizer"
+  }
+}

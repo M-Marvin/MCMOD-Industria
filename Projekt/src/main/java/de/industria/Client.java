@@ -1,6 +1,7 @@
 package de.industria;
 
 import de.industria.gui.ScreenJigsaw;
+import de.industria.gui.ScreenMAirCompressor;
 import de.industria.gui.ScreenMAlloyFurnace;
 import de.industria.gui.ScreenMBlender;
 import de.industria.gui.ScreenMChunkLoader;
@@ -25,6 +26,7 @@ import de.industria.renderer.TileEntityConveyorBeltRenderer;
 import de.industria.renderer.TileEntityEnderCoreRenderer;
 import de.industria.renderer.TileEntityFuseBoxRenderer;
 import de.industria.renderer.TileEntityGaugeRenderer;
+import de.industria.renderer.TileEntityMAirCompressorRenderer;
 import de.industria.renderer.TileEntityMBlastFurnaceRenderer;
 import de.industria.renderer.TileEntityMBlenderRenderer;
 import de.industria.renderer.TileEntityMCoalHeaterRenderer;
@@ -75,7 +77,7 @@ public class Client {
 		RenderTypeLookup.setRenderLayer(Industria.steel_rail, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(Industria.inductive_rail, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(Industria.structure_scaffold, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(Industria.item_pipe, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(Industria.preassure_pipe, RenderType.getCutoutMipped());
 		
 		RenderTypeLookup.setRenderLayer(ModFluids.SULFURIC_ACID, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_SULFURIC_ACID, RenderType.getTranslucent());
@@ -95,6 +97,7 @@ public class Client {
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_CHEMICAL_WATER, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.RAW_OIL, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_RAW_OIL, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModFluids.COMPRESSED_AIR, RenderType.getTranslucent());
 		
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ADVANCED_PISTON, TileEntityAdvancedMovingBlockRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SIGNAL_PROCESSOR, TileEntitySignalProcessorContactRenderer::new);
@@ -112,6 +115,7 @@ public class Client {
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.COAL_HEATER, TileEntityMCoalHeaterRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.STRUCTURE_SCAFFOLD, TileEntityStructureScaffoldRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.BLAST_FURNACE, TileEntityMBlastFurnaceRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.AIR_COMPRESSOR, TileEntityMAirCompressorRenderer::new);
 		
 		ScreenManager.registerFactory(ModContainerType.STORED_CRAFTING, ScreenMStoredCrafting::new);
 		ScreenManager.registerFactory(ModContainerType.PROCESSOR, ScreenRProcessor::new);
@@ -131,6 +135,7 @@ public class Client {
 		ScreenManager.registerFactory(ModContainerType.COMPUTER, ScreenNComputer::new);
 		ScreenManager.registerFactory(ModContainerType.NETWORK_CONFIGURATOR, ScreenNetworkConfigurator::new);
 		ScreenManager.registerFactory(ModContainerType.CHUNK_LAODER, ScreenMChunkLoader::new);
+		ScreenManager.registerFactory(ModContainerType.AIR_COMPRESSOR, ScreenMAirCompressor::new);
 		
 		ModClientBindings.bindModelToitem(Industria.schredder_crusher, new ResourceLocation(Industria.MODID, "textures/item/schredder_crusher.png"), new ItemSchredderToolCrusherModel());
 		

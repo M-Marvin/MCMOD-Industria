@@ -93,7 +93,7 @@ public class BlockMSteamGenerator extends BlockMultiPart<TileEntityMSteamGenerat
 			info.add(new TranslationTextComponent("industria.block.info.needEnergy", (5000F / 1000F) + "k"));
 			info.add(new TranslationTextComponent("industria.block.info.needVoltage", Voltage.NormalVoltage.getVoltage()));
 			info.add(new TranslationTextComponent("industria.block.info.needCurrent", 5000 / Voltage.NormalVoltage.getVoltage()));
-			info.add(new TranslationTextComponent("industria.block.info.steamGenerator.maxMB", 50));
+			info.add(new TranslationTextComponent("industria.block.info.maxMB", 50));
 			info.add(new TranslationTextComponent("industria.block.info.steamGenerator"));
 		};
 	}

@@ -9,9 +9,10 @@ import de.industria.tileentity.TileEntityConveyorBelt;
 import de.industria.tileentity.TileEntityEnderCore;
 import de.industria.tileentity.TileEntityFluidPipe;
 import de.industria.tileentity.TileEntityFluidValve;
-import de.industria.tileentity.TileEntityItemPipe;
-import de.industria.tileentity.TileEntityItemPipePreassurizer;
+import de.industria.tileentity.TileEntityPreassurePipe;
+import de.industria.tileentity.TileEntityPipePreassurizer;
 import de.industria.tileentity.TileEntityJigsaw;
+import de.industria.tileentity.TileEntityMAirCompressor;
 import de.industria.tileentity.TileEntityMAlloyFurnace;
 import de.industria.tileentity.TileEntityMBlastFurnace;
 import de.industria.tileentity.TileEntityMBlender;
@@ -52,7 +53,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 public class ModTileEntityType {
 	
-	public static final TileEntityType<TileEntitySimpleBlockTicking> SIMPLE_BLOCK_TICKING = register("simple_block_ticking", TileEntityType.Builder.create(TileEntitySimpleBlockTicking::new, Industria.panel_lamp, Industria.infinity_power_source, Industria.transformator_contact, Industria.steam, Industria.rail_adapter));
+	public static final TileEntityType<TileEntitySimpleBlockTicking> SIMPLE_BLOCK_TICKING = register("simple_block_ticking", TileEntityType.Builder.create(TileEntitySimpleBlockTicking::new, Industria.panel_lamp, Industria.infinity_power_source, Industria.transformator_contact, Industria.steam, Industria.compressed_air, Industria.rail_adapter));
 	public static final TileEntityType<TileEntityAdvancedMovingBlock> ADVANCED_PISTON = register("advanced_piston", TileEntityType.Builder.create(TileEntityAdvancedMovingBlock::new, Industria.advanced_moving_block));
 	public static final TileEntityType<TileEntityRedstoneReciver> REMOTE_CONTROLER = register("remote_controler", TileEntityType.Builder.create(TileEntityRedstoneReciver::new, Industria.advanced_moving_block));
 	public static final TileEntityType<TileEntityRSignalAntenna> SIGNAL_ANTENNA = register("signal_antenna", TileEntityType.Builder.create(TileEntityRSignalAntenna::new, Industria.antenna_conector));
@@ -88,8 +89,9 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityEnderCore> ENDER_CORE = register("ender_core", TileEntityType.Builder.create(TileEntityEnderCore::new, Industria.ender_core));
 	public static final TileEntityType<TileEntityStructureScaffold> STRUCTURE_SCAFFOLD = register("structure_scaffold", TileEntityType.Builder.create(TileEntityStructureScaffold::new, Industria.structure_scaffold));
 	public static final TileEntityType<TileEntityMBlastFurnace> BLAST_FURNACE = register("blast_furnace", TileEntityType.Builder.create(TileEntityMBlastFurnace::new, Industria.blast_furnace));
-	public static final TileEntityType<TileEntityItemPipe> ITEM_PIPE = register("item_pipe", TileEntityType.Builder.create(TileEntityItemPipe::new, Industria.item_pipe));
-	public static final TileEntityType<TileEntityItemPipePreassurizer> ITEM_PIPE_PREASSURIZER = register("item_pipe_preassurizer", TileEntityType.Builder.create(TileEntityItemPipePreassurizer::new, Industria.item_pipe_preassurizer));
+	public static final TileEntityType<TileEntityMAirCompressor> AIR_COMPRESSOR = register("air_compressor", TileEntityType.Builder.create(TileEntityMAirCompressor::new, Industria.air_compressor));
+	public static final TileEntityType<TileEntityPreassurePipe> ITEM_PIPE = register("item_pipe", TileEntityType.Builder.create(TileEntityPreassurePipe::new, Industria.preassure_pipe));
+	public static final TileEntityType<TileEntityPipePreassurizer> ITEM_PIPE_PREASSURIZER = register("item_pipe_preassurizer", TileEntityType.Builder.create(TileEntityPipePreassurizer::new, Industria.pipe_preassurizer));
 	
 	private static <T extends TileEntity> TileEntityType<T> register(String key, TileEntityType.Builder<T> builder) {
 		Type<?> type = Util.attemptDataFix(TypeReferences.BLOCK_ENTITY, key);

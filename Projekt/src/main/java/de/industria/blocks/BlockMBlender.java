@@ -10,8 +10,8 @@ import de.industria.renderer.BlockMBlenderItemRenderer;
 import de.industria.tileentity.TileEntityMBlender;
 import de.industria.util.blockfeatures.IAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IElectricConnectiveBlock;
-import de.industria.util.handler.VoxelHelper;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
+import de.industria.util.handler.VoxelHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -187,14 +187,11 @@ public class BlockMBlender extends BlockMultiPart<TileEntityMBlender> implements
 	
 	@Override
 	public void onNetworkChanges(World worldIn, BlockPos pos, BlockState state, ElectricityNetwork network) {
-
 		if (network.getVoltage().getVoltage() > Voltage.NormalVoltage.getVoltage() && network.getCurrent() > 0) {
-
 			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
 			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
 			
 		}
-		
 	}
 	
 }

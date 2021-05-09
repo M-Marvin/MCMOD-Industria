@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "industria:block/item_distributor_side_core",
+    "north": "industria:block/item_distributor_side_extension",
+    "south": "industria:block/item_distributor_side_extension",
+    "east": "industria:block/item_distributor_side_extension",
+    "west": "industria:block/item_distributor_side_extension",
+    "up": "industria:block/item_distributor_top",
+    "down": "industria:block/aluminium_machine_top"
+  }
+}

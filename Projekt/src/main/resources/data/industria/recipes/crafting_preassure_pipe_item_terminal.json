@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "E E",
+    "ETE",
+    "E E"
+  ],
+  "key": {
+    "E": {
+      "item": "industria:iron_plate"
+    },
+    "T": {
+      "item": "minecraft:hopper"
+    }
+  },
+  "result": {
+    "item": "industria:preassure_pipe_item_terminal",
+    "count": 2
+  }
+}

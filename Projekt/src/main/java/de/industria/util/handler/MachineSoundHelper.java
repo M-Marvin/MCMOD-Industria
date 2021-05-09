@@ -19,6 +19,20 @@ public class MachineSoundHelper {
 	
 	protected static List<SoundMachine> soundMap = new ArrayList<SoundMachine>();
 	
+	public static boolean isPlayingMachineSound(SoundEvent sound, int maxDistance, BlockPos origin) {
+		
+		for (SoundMachine machineSound : soundMap) {
+			if (machineSound.getSoundLocation() == sound.getName()) {
+				double distance = origin.distanceSq(machineSound.getX(), machineSound.getY(), machineSound.getZ(), true);
+				if (distance <= maxDistance && !machineSound.isDonePlaying()) {
+					return true;
+				}
+			}
+		}
+		return false;
+		
+	}
+	
 	public static void startSoundIfNotRunning(TileEntity tileEntity, SoundEvent soundEvent) {
 		
 		SoundHandler soundHandler = Minecraft.getInstance().getSoundHandler();
@@ -54,11 +68,16 @@ public class MachineSoundHelper {
 	public static SoundMachine getSoundForTileEntity(TileEntity tileEntity) {
 		BlockPos tilePos = tileEntity.getPos();
 		SoundMachine tileSound = null;
+		List<SoundMachine> soundsToRemove = new ArrayList<SoundMachine>();
 		for (SoundMachine sound : soundMap) {
 			if (new BlockPos(sound.getX(), sound.getY(), sound.getZ()).equals(tilePos)) {
+				if (sound.isDonePlaying()) {
+					soundsToRemove.add(sound);
+				}
 				tileSound = sound;
 			}
 		}
+		soundMap.removeAll(soundsToRemove);
 		return tileSound;
 	}
 	

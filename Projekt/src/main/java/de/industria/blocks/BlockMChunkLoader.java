@@ -83,9 +83,9 @@ public class BlockMChunkLoader extends BlockContainerBase implements IElectricCo
 	@Override
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
-		if (tileEntity instanceof TileEntityMChunkLoader) {
+		if (tileEntity instanceof INamedContainerProvider) {
 			if (!worldIn.isRemote()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
-			return ActionResultType.CONSUME;
+			return ActionResultType.SUCCESS;
 		}
 		return ActionResultType.PASS;
 	}

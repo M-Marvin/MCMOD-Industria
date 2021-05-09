@@ -3,7 +3,9 @@ package de.industria.tileentity;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.industria.Industria;
 import de.industria.blocks.BlockPipePreassurizer;
+import de.industria.blocks.BlockPreassurePipe;
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.IFluidConnective;
@@ -25,10 +27,9 @@ public class TileEntityPipePreassurizer extends TileEntityPreassurePipe implemen
 	
 	public final int maxStorage;
 	public FluidStack compressedAir;
-	public int airTimer;
 	
 	public TileEntityPipePreassurizer() {
-		super(ModTileEntityType.ITEM_PIPE_PREASSURIZER);
+		super(ModTileEntityType.PIPE_PREASSURIZER);
 		this.compressedAir = FluidStack.EMPTY;
 		this.maxStorage = 1000;
 	}
@@ -56,10 +57,14 @@ public class TileEntityPipePreassurizer extends TileEntityPreassurePipe implemen
 	public VoxelShape getItemDetectBounds() {
 		Direction facing = this.getBlockState().get(BlockPipePreassurizer.FACING);
 		int extraHeight = (int) (this.preassure * 16);
+		boolean flag1 = !((BlockPreassurePipe) Industria.preassure_pipe).canConnect(getBlockState(), world, pos, getInputSide());
+		boolean flag2 = !((BlockPreassurePipe) Industria.preassure_pipe).canConnect(getBlockState(), world, pos, getOutputSide());
+		int extraHeight1 = flag1 ? extraHeight : 0;
+		int extraHeight2 = flag2 ? extraHeight : 0;
 		if (facing.getAxis().isVertical()) {
-			return Block.makeCuboidShape(2, -extraHeight, 2, 14, 16 + extraHeight, 14);
+			return Block.makeCuboidShape(2, -extraHeight1, 2, 14, 16 + extraHeight2, 14);
 		} else {
-			return VoxelHelper.rotateShape(Block.makeCuboidShape(2, 2, -extraHeight, 14, 14, 16 + extraHeight), facing);
+			return VoxelHelper.rotateShape(Block.makeCuboidShape(2, 2, -extraHeight1, 14, 14, 16 + extraHeight2), facing);
 		}
 	}
 	
@@ -78,17 +83,19 @@ public class TileEntityPipePreassurizer extends TileEntityPreassurePipe implemen
 		
 		if (!this.world.isRemote) {
 			
-			if (this.isPreassurized() && this.world.getGameTime() % 10 == 0) {
+			if (this.isPreassurized() && this.world.getGameTime() % 20 == 0) {
 				
 				// Push
 				Direction outletDirection = getOutputSide();
 				BlockPos outletPos = this.pos.offset(outletDirection);
 				TileEntity nextPipe = this.world.getTileEntity(outletPos);
 				
-				if (nextPipe instanceof TileEntityPreassurePipe && this.world.getGameTime() % 20 == 0) {
+				boolean flag = true;
+				
+				if (nextPipe instanceof TileEntityPreassurePipe) {
 					
 					List<BlockPos> pipeStream = new ArrayList<BlockPos>();
-					((TileEntityPreassurePipe) nextPipe).preassurizePipe(outletDirection, preassure, pipeStream);
+					flag = ((TileEntityPreassurePipe) nextPipe).preassurizePipe(outletDirection, preassure, pipeStream);
 					
 				}
 				
@@ -97,7 +104,7 @@ public class TileEntityPipePreassurizer extends TileEntityPreassurePipe implemen
 				BlockPos inputPos = this.pos.offset(inputDirection);
 				nextPipe = this.world.getTileEntity(inputPos);
 				
-				if (nextPipe instanceof TileEntityPreassurePipe) {
+				if (nextPipe instanceof TileEntityPreassurePipe && flag) {
 					
 					List<BlockPos> pipeStream = new ArrayList<BlockPos>();
 					((TileEntityPreassurePipe) nextPipe).preassurizePipe(inputDirection, -preassure, pipeStream);
@@ -156,7 +163,6 @@ public class TileEntityPipePreassurizer extends TileEntityPreassurePipe implemen
 	@Override
 	public CompoundNBT write(CompoundNBT compound) {
 		compound.put("CompressedAir", this.compressedAir.writeToNBT(new CompoundNBT()));
-		compound.putInt("AirTimer", this.airTimer);
 		compound.putFloat("Preassure", this.preassure);
 		return super.write(compound);
 	}
@@ -164,7 +170,6 @@ public class TileEntityPipePreassurizer extends TileEntityPreassurePipe implemen
 	@Override
 	public void read(BlockState state, CompoundNBT nbt) {
 		this.compressedAir = FluidStack.loadFluidStackFromNBT(nbt.getCompound("CompressedAir"));
-		this.airTimer = nbt.getInt("AirTimer");
 		this.preassure = nbt.getFloat("Preassure");
 		super.read(state, nbt);
 	}

@@ -36,7 +36,7 @@ public class TileEntityPreassurePipe extends TileEntity implements ITickableTile
 	protected long lastPressurizing;
 	
 	public TileEntityPreassurePipe() {
-		this(ModTileEntityType.ITEM_PIPE);
+		this(ModTileEntityType.PREASSURE_PIPE);
 	}
 	
 	public TileEntityPreassurePipe(TileEntityType<?> tileEntityTypeIn) {
@@ -54,7 +54,7 @@ public class TileEntityPreassurePipe extends TileEntity implements ITickableTile
 	public Direction getOutputSide() {
 		return outputSide;
 	}
-
+	
 	public VoxelShape getItemDetectBounds() {
 		Direction outlet = this.getOutputSide();
 		int extraHeight = (int) ((this.preassure < 0 ? -this.preassure : this.preassure) * 16);
@@ -84,7 +84,9 @@ public class TileEntityPreassurePipe extends TileEntity implements ITickableTile
 			
 			if (isPreassurized()) {
 				
-				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.ITEM_PIPE_STRAM);
+				if (!MachineSoundHelper.isPlayingMachineSound(ModSoundEvents.ITEM_PIPE_STRAM, 7, this.pos)) {
+					MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.ITEM_PIPE_STRAM);
+				}
 				
 				IParticleData particle = ParticleTypes.CLOUD;
 				float speed = 0.05F * (this.preassure < 0 ? -1 : 1);

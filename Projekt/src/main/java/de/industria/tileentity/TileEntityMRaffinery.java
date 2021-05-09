@@ -63,7 +63,7 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(pos.add(-4, -1, -4), pos.add(4, 5, 4));
+		return new AxisAlignedBB(pos.add(-5, -1, -5), pos.add(5, 6, 5));
 	}
 	
 	@Override

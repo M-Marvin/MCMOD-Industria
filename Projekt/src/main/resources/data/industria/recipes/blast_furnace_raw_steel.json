@@ -1,0 +1,29 @@
+{
+  "type": "industria:blast_furnace",
+  "ingredientItems": [
+    {
+      "item": "minecraft:iron_ingot",
+      "count": 3
+    },
+    {
+      "item": "industria:coal_coke",
+      "count": 2
+    },
+    {
+      "item": "industria:lime",
+      "count": 2
+    }
+  ],
+  "resultItem": {
+    "item": "industria:crude_steel",
+    "count": 3
+  },
+  "wasteItem": {
+    "item": "industria:salt"
+  },
+  "consumtionFluid": {
+    "fluid": "industria:compressed_air",
+    "amount": 1000
+  },
+  "smeltingTime": 100
+}

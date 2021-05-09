@@ -12,7 +12,7 @@ import net.minecraft.util.text.ITextComponent;
 
 public class ScreenMAlloyFurnace extends ContainerScreen<ContainerMAlloyFurnace> {
 
-public static final ResourceLocation SCHREDDER_GUI_TEXTURES = new ResourceLocation(Industria.MODID, "textures/gui/alloy_furnace.png");
+public static final ResourceLocation ALLOY_FURNACE_GUI_TEXTURES = new ResourceLocation(Industria.MODID, "textures/gui/alloy_furnace.png");
 
 	public ScreenMAlloyFurnace(ContainerMAlloyFurnace screenContainer, PlayerInventory inv, ITextComponent titleIn) {
 		super(screenContainer, inv, titleIn);
@@ -23,7 +23,7 @@ public static final ResourceLocation SCHREDDER_GUI_TEXTURES = new ResourceLocati
 	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
 
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindTexture(SCHREDDER_GUI_TEXTURES);
+		this.minecraft.getTextureManager().bindTexture(ALLOY_FURNACE_GUI_TEXTURES);
 		int i = this.guiLeft;
 		int j = (this.height - this.ySize) / 2;
 		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);

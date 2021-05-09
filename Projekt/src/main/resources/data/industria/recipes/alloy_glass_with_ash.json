@@ -1,0 +1,18 @@
+{
+  "type": "industria:alloy",
+  "ingredientItems": [
+    {
+      "item": "minecraft:sand",
+      "count": 1
+    },
+    {
+      "item": "industria:ash",
+      "count": 4
+    }
+  ],
+  "resultItem":  {
+    "item": "minecraft:glass",
+    "count": 2
+  },
+  "smeltingTime": 100
+}

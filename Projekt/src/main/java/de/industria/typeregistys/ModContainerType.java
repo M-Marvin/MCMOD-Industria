@@ -3,9 +3,11 @@ package de.industria.typeregistys;
 import de.industria.Industria;
 import de.industria.gui.ContainerRHarvester;
 import de.industria.gui.ContainerRHoverControler;
+import de.industria.gui.ContainerItemDistributor;
 import de.industria.gui.ContainerJigsaw;
 import de.industria.gui.ContainerMAirCompressor;
 import de.industria.gui.ContainerMAlloyFurnace;
+import de.industria.gui.ContainerMBlastFurnace;
 import de.industria.gui.ContainerMBlender;
 import de.industria.gui.ContainerMChunkLoader;
 import de.industria.gui.ContainerMCoalHeater;
@@ -50,6 +52,8 @@ public class ModContainerType {
 	public static final ContainerType<ContainerNetworkConfigurator> NETWORK_CONFIGURATOR = register(new ResourceLocation(Industria.MODID, "network_configurator"), ContainerNetworkConfigurator::new);
 	public static final ContainerType<ContainerMChunkLoader> CHUNK_LAODER = register(new ResourceLocation(Industria.MODID, "chunk_loader"), ContainerMChunkLoader::new);
 	public static final ContainerType<ContainerMAirCompressor> AIR_COMPRESSOR = register(new ResourceLocation(Industria.MODID, "air_compressor"), ContainerMAirCompressor::new);
+	public static final ContainerType<ContainerItemDistributor> ITEM_DISTRIBUTOR = register(new ResourceLocation(Industria.MODID, "item_distributor"), ContainerItemDistributor::new);
+	public static final ContainerType<ContainerMBlastFurnace> BLAST_FURNACE = register (new ResourceLocation(Industria.MODID, "blast_furnace"), ContainerMBlastFurnace::new);
 	
 	protected static <T extends Container> ContainerType<T> register(ResourceLocation key, IContainerFactory<T> factory) {
 		ContainerType<T> type = IForgeContainerType.create(factory);

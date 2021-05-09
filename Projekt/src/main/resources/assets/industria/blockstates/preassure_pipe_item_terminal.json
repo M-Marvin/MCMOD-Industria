@@ -1,0 +1,17 @@
+{
+	"variants": {
+		"facing=north,input=true": { "model": "industria:block/item_pipe_terminal_input"},
+		"facing=south,input=true": { "model": "industria:block/item_pipe_terminal_input", "y": 180 },
+		"facing=east,input=true": { "model": "industria:block/item_pipe_terminal_input", "y": 90 },
+		"facing=west,input=true": { "model": "industria:block/item_pipe_terminal_input", "y": -90 },
+		"facing=up,input=true": { "model": "industria:block/item_pipe_terminal_input", "x": -90},
+		"facing=down,input=true": { "model": "industria:block/item_pipe_terminal_input", "x": 90 },
+		
+		"facing=north,input=false": { "model": "industria:block/item_pipe_terminal"},
+		"facing=south,input=false": { "model": "industria:block/item_pipe_terminal", "y": 180 },
+		"facing=east,input=false": { "model": "industria:block/item_pipe_terminal", "y": 90 },
+		"facing=west,input=false": { "model": "industria:block/item_pipe_terminal", "y": -90 },
+		"facing=up,input=false": { "model": "industria:block/item_pipe_terminal", "x": -90},
+		"facing=down,input=false": { "model": "industria:block/item_pipe_terminal", "x": 90 }
+	}
+}

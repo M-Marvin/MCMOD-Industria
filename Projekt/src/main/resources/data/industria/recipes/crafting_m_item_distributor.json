@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ATA",
+    "SPS",
+    "AGA"
+  ],
+  "key": {
+    "A": {
+      "item": "industria:aluminium_plate"
+    },
+    "G": {
+      "item": "industria:aluminium_plates"
+    },
+    "S": {
+      "item": "minecraft:dropper"
+    },
+    "P": {
+      "item": "industria:iron_processor"
+    },
+    "T": {
+      "item": "minecraft:hopper"
+    }
+  },
+  "result": {
+    "item": "industria:item_distributor",
+    "count": 2
+  }
+}

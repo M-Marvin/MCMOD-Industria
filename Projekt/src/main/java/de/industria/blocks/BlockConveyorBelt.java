@@ -5,12 +5,16 @@ import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.tileentity.TileEntityConveyorBelt;
+import de.industria.tileentity.TileEntityInventoryBase;
 import de.industria.util.blockfeatures.IAdvancedBlockInfo;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
@@ -126,6 +130,27 @@ public class BlockConveyorBelt extends BlockContainerBase implements IAdvancedBl
 	}
 	
 	@Override
+	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+		
+		if (entityIn instanceof ItemEntity && !worldIn.isRemote) {
+			
+			TileEntity tileEntity = worldIn.getTileEntity(pos);
+			
+			if (tileEntity instanceof TileEntityConveyorBelt) {
+				
+				if (((TileEntityConveyorBelt) tileEntity).getStackInSlot(0).isEmpty() && !((ItemEntity) entityIn).cannotPickup()) {
+					ItemStack stack = ((ItemEntity) entityIn).getItem();
+					entityIn.remove();
+					((TileEntityConveyorBelt) tileEntity).setInventorySlotContents(0, stack);
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+	@Override
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
 		if (tileEntity instanceof TileEntityConveyorBelt) {
@@ -133,6 +158,9 @@ public class BlockConveyorBelt extends BlockContainerBase implements IAdvancedBl
 				((TileEntityConveyorBelt) tileEntity).setInventorySlotContents(0, player.getHeldItemMainhand());
 				player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
 			} else {
+				for(int i = 0; i < ((TileEntityInventoryBase) tileEntity).getSizeInventory(); ++i) {
+					spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), ((TileEntityInventoryBase) tileEntity).getStackInSlot(i));
+				}
 				InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) tileEntity);
 				((TileEntityConveyorBelt) tileEntity).clear();
 			}
@@ -141,7 +169,21 @@ public class BlockConveyorBelt extends BlockContainerBase implements IAdvancedBl
 		return ActionResultType.PASS;
 	}
 	
-	
+	public static void spawnItemStack(World worldIn, double x, double y, double z, ItemStack stack) {
+		double d0 = (double)EntityType.ITEM.getWidth();
+		double d1 = 1.0D - d0;
+		double d2 = d0 / 2.0D;
+		double d3 = Math.floor(x) + worldIn.rand.nextDouble() * d1 + d2;
+		double d4 = Math.floor(y) + worldIn.rand.nextDouble() * d1;
+		double d5 = Math.floor(z) + worldIn.rand.nextDouble() * d1 + d2;
+		
+		while(!stack.isEmpty()) {
+			ItemEntity itementity = new ItemEntity(worldIn, d3, d4, d5, stack.split(worldIn.rand.nextInt(21) + 10));
+			itementity.setMotion(worldIn.rand.nextGaussian() * (double)0.05F, worldIn.rand.nextGaussian() * (double)0.05F + (double)0.2F, worldIn.rand.nextGaussian() * (double)0.05F);
+			itementity.setPickupDelay(15);
+			worldIn.addEntity(itementity);
+		}
+	}
 	
 	public static enum BeltState implements IStringSerializable {
 		

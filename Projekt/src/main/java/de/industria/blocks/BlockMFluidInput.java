@@ -101,15 +101,10 @@ public class BlockMFluidInput extends BlockContainerBase implements IElectricCon
 		
 		ItemStack heldStack = player.getHeldItemMainhand();
 		TileEntity te = worldIn.getTileEntity(pos);
-		
 		if (!heldStack.isEmpty() && te instanceof TileEntityMFluidInput) {
-			
 			boolean success = ((TileEntityMFluidInput) te).setFilter(heldStack);
-			
 			if (success) return ActionResultType.SUCCESS;
-			
 		}
-		
 		return ActionResultType.PASS;
 		
 	}

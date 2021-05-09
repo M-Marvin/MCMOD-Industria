@@ -66,7 +66,7 @@ public class BlockMElectricFurnace extends BlockContainerBase implements IElectr
 
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
 		
-		if (tileEntity instanceof TileEntityMElectricFurnace) {
+		if (tileEntity instanceof INamedContainerProvider) {
 			if (!worldIn.isRemote()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
 			return ActionResultType.SUCCESS;
 		}

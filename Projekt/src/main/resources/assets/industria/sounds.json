@@ -89,7 +89,7 @@
 		"sounds": [
 			"industria:item_pipe_stream"
 		],
-		"subtitle": "sound.industria.block.item_pipe.stream"
+		"subtitle": "sound.industria.block.preassure_pipe.stream"
 	},
 	"material.cardboard.hit": {
 		"sounds": [

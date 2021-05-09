@@ -110,7 +110,7 @@ public class BlockMThermalZentrifuge extends BlockContainerBase implements IElec
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
 		if (tileEntity instanceof INamedContainerProvider) {
 			if (!worldIn.isRemote()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
-			return ActionResultType.CONSUME;
+			return ActionResultType.SUCCESS;
 		}
 		return ActionResultType.PASS;
 	}

@@ -159,6 +159,7 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 		Vector3f motionVec = new Vector3f(motion.getXOffset() * 0.2F, 0.0F, motion.getZOffset() * 0.2F);
 		ItemEntity drop = new ItemEntity(this.world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, this.getStackInSlot(1));
 		drop.setMotion(motionVec.getX(), motionVec.getY(), motionVec.getZ());
+		drop.setPickupDelay(60);
 		this.world.addEntity(drop);
 		this.setInventorySlotContents(1, ItemStack.EMPTY);
 	}

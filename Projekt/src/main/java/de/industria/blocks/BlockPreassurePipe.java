@@ -21,6 +21,8 @@ import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -115,7 +117,9 @@ public class BlockPreassurePipe extends BlockContainerBase implements IAdvancedB
 		if (connectState.getBlock() == Industria.preassure_pipe) {
 			return connectState.get(FACING) == direction.getOpposite() || connectState.get(CONNECTION) == direction.getOpposite();
 		} else if (connectState.getBlock() == Industria.pipe_preassurizer) {
-			return direction == connectState.get(FACING);
+			return direction.getAxis() == connectState.get(FACING).getAxis();
+		} else if (connectState.getBlock() == Industria.preassure_pipe_item_terminal) {
+			return direction.getAxis() == connectState.get(FACING).getAxis();
 		}
 		return false;
 	}
@@ -135,6 +139,16 @@ public class BlockPreassurePipe extends BlockContainerBase implements IAdvancedB
 	@Override
 	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
 		return null;
+	}
+
+	@Override
+	public BlockState rotate(BlockState state, Rotation rot) {
+		return state.with(FACING, rot.rotate(state.get(FACING))).with(CONNECTION, rot.rotate(state.get(CONNECTION)));
+	}
+	
+	@Override
+	public BlockState mirror(BlockState state, Mirror mirrorIn) {
+		return state.with(FACING, mirrorIn.mirror(state.get(FACING))).with(CONNECTION, mirrorIn.mirror(state.get(CONNECTION)));
 	}
 	
 }

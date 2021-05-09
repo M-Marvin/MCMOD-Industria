@@ -146,7 +146,7 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote() && !this.isEmpty()) {
+		if (!this.world.isRemote()) {
 			
 			this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
 			

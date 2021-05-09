@@ -54,7 +54,7 @@ public class BlastFurnaceRecipe implements IRecipe<TileEntityMBlastFurnace> {
 			if (item != null) return false;
 		}
 		
-		return inv.fluidStorage.getFluid() == this.consumtionFluid.getFluid() && this.consumtionFluid.getAmount() <= inv.fluidStorage.getAmount();
+		return inv.oxygenStorage.getFluid() == this.consumtionFluid.getFluid() && this.consumtionFluid.getAmount() <= inv.oxygenStorage.getAmount();
 		
 	}
 	
@@ -69,7 +69,7 @@ public class BlastFurnaceRecipe implements IRecipe<TileEntityMBlastFurnace> {
 	}
 		
 	public ItemStack getWasteOut() {
-		return this.wasteOut;
+		return this.wasteOut.copy();
 	}
 	
 	public FluidStack getConsumtionFluid() {

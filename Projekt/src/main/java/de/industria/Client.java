@@ -1,8 +1,10 @@
 package de.industria;
 
+import de.industria.gui.ScreenItemDistributor;
 import de.industria.gui.ScreenJigsaw;
 import de.industria.gui.ScreenMAirCompressor;
 import de.industria.gui.ScreenMAlloyFurnace;
+import de.industria.gui.ScreenMBlastFurnace;
 import de.industria.gui.ScreenMBlender;
 import de.industria.gui.ScreenMChunkLoader;
 import de.industria.gui.ScreenMCoalHeater;
@@ -136,6 +138,8 @@ public class Client {
 		ScreenManager.registerFactory(ModContainerType.NETWORK_CONFIGURATOR, ScreenNetworkConfigurator::new);
 		ScreenManager.registerFactory(ModContainerType.CHUNK_LAODER, ScreenMChunkLoader::new);
 		ScreenManager.registerFactory(ModContainerType.AIR_COMPRESSOR, ScreenMAirCompressor::new);
+		ScreenManager.registerFactory(ModContainerType.ITEM_DISTRIBUTOR, ScreenItemDistributor::new);
+		ScreenManager.registerFactory(ModContainerType.BLAST_FURNACE, ScreenMBlastFurnace::new);
 		
 		ModClientBindings.bindModelToitem(Industria.schredder_crusher, new ResourceLocation(Industria.MODID, "textures/item/schredder_crusher.png"), new ItemSchredderToolCrusherModel());
 		

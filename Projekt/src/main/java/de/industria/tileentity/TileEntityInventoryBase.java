@@ -14,7 +14,7 @@ import net.minecraft.util.NonNullList;
 public class TileEntityInventoryBase extends TileEntity implements IInventory {
 
 	protected NonNullList<ItemStack> itemstacks;
-	protected int slots;
+	protected final int slots;
 	
 	public TileEntityInventoryBase(TileEntityType<?> tileEntityTypeIn, int slots) {
 		super(tileEntityTypeIn);

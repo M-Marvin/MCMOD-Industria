@@ -82,9 +82,9 @@ public class BlockMAlloyFurnace extends BlockContainerBase implements IElectricC
 	@Override
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
-		if (tileEntity instanceof TileEntityMAlloyFurnace) {
+		if (tileEntity instanceof INamedContainerProvider) {
 			if (!worldIn.isRemote()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
-			return ActionResultType.CONSUME;
+			return ActionResultType.SUCCESS;
 		}
 		return ActionResultType.PASS;
 	}

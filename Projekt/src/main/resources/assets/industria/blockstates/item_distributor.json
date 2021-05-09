@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"type=core": { "model": "industria:block/item_distributor_core" },
+		"type=extension": { "model": "industria:block/item_distributor_extension" }
+	}
+}

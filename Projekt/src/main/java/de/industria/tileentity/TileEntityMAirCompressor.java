@@ -99,6 +99,8 @@ public class TileEntityMAirCompressor extends TileEntity implements ITickableTil
 		} else {
 			
 			if (this.isWorking) {
+
+				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.COMPRESSOR_LOOP);
 				
 				if (this.world.rand.nextInt(10) == 0) {
 
@@ -138,8 +140,6 @@ public class TileEntityMAirCompressor extends TileEntity implements ITickableTil
 					this.world.addParticle(paricle, x, y, z, 0, 0, 0);
 					
 				}
-				
-				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.COMPRESSOR_LOOP);
 				
 			}
 			

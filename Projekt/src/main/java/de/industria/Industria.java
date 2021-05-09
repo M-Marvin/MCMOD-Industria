@@ -3,6 +3,7 @@ package de.industria;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -23,11 +24,11 @@ import de.industria.blocks.BlockFluidPipe;
 import de.industria.blocks.BlockFluidValve;
 import de.industria.blocks.BlockInfinityPowerSource;
 import de.industria.blocks.BlockIronRod;
-import de.industria.blocks.BlockPreassurePipe;
-import de.industria.blocks.BlockPipePreassurizer;
+import de.industria.blocks.BlockItemDistributor;
 import de.industria.blocks.BlockJigsaw;
 import de.industria.blocks.BlockLeavesBase;
 import de.industria.blocks.BlockLimestoneSheet;
+import de.industria.blocks.BlockLogBase;
 import de.industria.blocks.BlockMAirCompressor;
 import de.industria.blocks.BlockMAlloyFurnace;
 import de.industria.blocks.BlockMBlastFurnace;
@@ -53,7 +54,10 @@ import de.industria.blocks.BlockMTransformatorContact;
 import de.industria.blocks.BlockMotor;
 import de.industria.blocks.BlockNComputer;
 import de.industria.blocks.BlockNetworkCable;
+import de.industria.blocks.BlockPipePreassurizer;
 import de.industria.blocks.BlockPowerEmiting;
+import de.industria.blocks.BlockPreassurePipe;
+import de.industria.blocks.BlockPreassurePipeItemTerminal;
 import de.industria.blocks.BlockRAdvancedPiston;
 import de.industria.blocks.BlockRAdvancedPistonHead;
 import de.industria.blocks.BlockRButtonBlock;
@@ -131,6 +135,7 @@ import net.minecraft.item.Rarity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.world.gen.feature.Features;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
@@ -220,6 +225,10 @@ public class Industria {
 	// Items
 	//public static final Item sulfur_dioxid = new ItemBase("sulfur_dioxid", MATERIALS);
 	
+	// Sounds:
+	// - Heater
+	// - BlastFurance
+	
 	// Networks
 	public static final Block computer = new BlockNComputer();
 	
@@ -263,6 +272,7 @@ public class Industria {
 	public static final Block preassure_pipe = new BlockPreassurePipe();
 	public static final Block pipe_preassurizer = new BlockPipePreassurizer();
 	public static final Block air_compressor = new BlockMAirCompressor();
+	public static final Block item_distributor = new BlockItemDistributor();
 	
 	// Ore and Resource Blocks
 	public static final Block bauxit = new BlockBase("bauxit", Material.ROCK, 1.5F, SoundType.STONE);
@@ -287,6 +297,7 @@ public class Industria {
 	public static final Block palladium_block = new BlockBase("palladium_block", Material.IRON, 5F, 6F, SoundType.METAL);
 	public static final Block tin_block = new BlockBase("tin_block", Material.IRON, 5F, 6F, SoundType.METAL);
 	public static final Block cardboard_block = new BlockBurnable("cardboard_block", Material.WOOL, 0.2F, 2.5F, ModSoundEvents.CARDBOARD, 400, 30, 60, true);
+	public static final Block preassure_pipe_item_terminal = new BlockPreassurePipeItemTerminal();
 	
 	// Deko Blocks
 	public static final Block clean_cladding_white = new BlockTileBlock("clean_cladding_white");
@@ -378,7 +389,7 @@ public class Industria {
 	public static final Block green_painted_planks = new BlockBurnable("green_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
 	public static final Block red_painted_planks = new BlockBurnable("red_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
 	public static final Block black_painted_planks = new BlockBurnable("black_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
-		
+	
 	public static final Block stone_corner = new BlockCornerBlockBase("stone_corner", () -> Blocks.STONE.getDefaultState(), AbstractBlock.Properties.create(Material.ROCK).sound(SoundType.STONE));
 	
 	// Nature Blocks
@@ -387,6 +398,12 @@ public class Industria {
 	public static final Block rubber_wood = new BlockRubberLog("rubber_wood", Material.WOOD, 2F, SoundType.WOOD);
 	public static final Block rubber_leaves = new BlockLeavesBase("rubber_leaves", Material.LEAVES, 0.2F, 0.2F, SoundType.PLANT);
 	public static final Block rubber_sapling = new BlockSaplingBase("rubber_sapling", new ResourceLocation(Industria.MODID, "nature/rubber_tree"));
+	public static final Block maple_log = new BlockLogBase("maple_log", Material.WOOD, 2F, SoundType.WOOD);
+	public static final Block maple_wood = new BlockLogBase("maple_wood", Material.WOOD, 2F, SoundType.WOOD);
+	public static final Block maple_leaves = new BlockLeavesBase("maple_leaves", Material.LEAVES, 0.2F, 0.2F, SoundType.PLANT);
+	public static final Block mangrove_log = new BlockLogBase("mangrove_log", Material.WOOD, 2F, SoundType.WOOD);
+	public static final Block mangrove_wood = new BlockLogBase("mangrove_wood", Material.WOOD, 2F, SoundType.WOOD);
+	public static final Block mangrove_leaves = new BlockLeavesBase("mangrove_leaves", Material.LEAVES, 0.2F, 0.2F, SoundType.PLANT);
 	
 	// Util Blocks
 	public static final Block reinforced_casing = new BlockReinforcedCasing();
@@ -653,6 +670,8 @@ public class Industria {
 		ModGameRegistry.registerBlock(preassure_pipe, MACHINES);
 		ModGameRegistry.registerBlock(pipe_preassurizer, MACHINES);
 		ModGameRegistry.registerBlock(air_compressor, MACHINES);
+		ModGameRegistry.registerBlock(item_distributor, MACHINES);
+		ModGameRegistry.registerBlock(preassure_pipe_item_terminal, MACHINES);
 		
 		ModGameRegistry.registerBlock(smooth_cobblestone, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(chiseled_smooth_stone, BUILDING_BLOCKS);
@@ -687,6 +706,14 @@ public class Industria {
 		ModGameRegistry.registerBlock(rubber_wood, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(rubber_leaves, DECORATIONS);
 		ModGameRegistry.registerBlock(rubber_sapling, DECORATIONS);
+		ModGameRegistry.registerBlock(maple_log, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(maple_wood, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(maple_leaves, DECORATIONS);
+		
+		ModGameRegistry.registerBlock(mangrove_log, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(mangrove_wood, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(mangrove_leaves, DECORATIONS);
+		
 		ModGameRegistry.registerBlock(tree_tap, TOOLS);
 		ModGameRegistry.registerBlock(salt_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(salt_bricks, BUILDING_BLOCKS);
@@ -970,13 +997,21 @@ public class Industria {
 		
 	}
 	
+	//n45_GaqTjuM
 	public void onBiomeLoadingEvent(final BiomeLoadingEvent event) {
 		for (GenerationStage.Decoration decoration : GenerationStage.Decoration.values()) {
 			List<ConfiguredFeature<?, ?>> features = ModGameRegistry.getFeaturesToRegister().getOrDefault(event.getName(), new HashMap<GenerationStage.Decoration, List<ConfiguredFeature<?, ?>>>()).getOrDefault(decoration, new ArrayList<>());
 			for (ConfiguredFeature<?, ?> feature : features) {
 				event.getGeneration().getFeatures(decoration).add(() -> feature);
 			}
+			List<Supplier<ConfiguredFeature<?, ?>>> featuresToRemove = new ArrayList<Supplier<ConfiguredFeature<?, ?>>>();
+			event.getGeneration().getFeatures(decoration).forEach((registredFeature) -> {
+				if (registredFeature.get() == Features.ACACIA) featuresToRemove.add(registredFeature);
+				// This does not work, registredFeature always is an "minecraft:decorated" feature ...
+			});
+			event.getGeneration().getFeatures(decoration).removeAll(featuresToRemove);
 		}
+		
 	}
 	
 }

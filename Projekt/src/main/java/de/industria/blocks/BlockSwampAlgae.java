@@ -3,10 +3,10 @@ package de.industria.blocks;
 import java.util.Random;
 
 import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.util.handler.ItemStackHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.BushBlock;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.LeavesBlock;
@@ -62,7 +62,7 @@ public class BlockSwampAlgae extends BushBlock implements IGrowable {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void grow(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
-		ItemStackHelper.spawnItemStack(worldIn, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, new ItemStack(Item.getItemFromBlock(Industria.swamp_algae)));
+		ItemStackHelper.spawnItemStack(worldIn, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, new ItemStack(Item.getItemFromBlock(ModItems.swamp_algae)));
 	}
 	
 	@Override

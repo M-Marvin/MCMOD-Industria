@@ -3,7 +3,7 @@ package de.industria.blocks;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.renderer.BlockEnderCoreItemRenderer;
 import de.industria.tileentity.TileEntityEnderCore;
@@ -46,7 +46,7 @@ public class BlockEnderCore extends BlockContainerBase implements IAdvancedBlock
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		VoxelShape shape = Block.makeCuboidShape(5, 5, 5, 11, 11, 11);
-		return VoxelShapes.or(Industria.reinforced_casing.getShape(null, null, null, null), shape);
+		return VoxelShapes.or(ModItems.reinforced_casing.getShape(null, null, null, null), shape);
 	}
 	
 	@Override

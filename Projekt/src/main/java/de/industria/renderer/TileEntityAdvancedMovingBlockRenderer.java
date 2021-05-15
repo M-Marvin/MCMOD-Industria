@@ -9,6 +9,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.tileentity.TileEntityAdvancedMovingBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.PistonBlock;
@@ -53,12 +54,12 @@ public class TileEntityAdvancedMovingBlockRenderer extends TileEntityRenderer<Ti
 				BlockModelRenderer.enableCache();
 				matrixStackIn.push();
 				matrixStackIn.translate((double)tileEntityIn.getOffsetX(partialTicks), (double)tileEntityIn.getOffsetY(partialTicks), (double)tileEntityIn.getOffsetZ(partialTicks));
-				if (blockstate.isIn(Industria.advanced_piston_head) && tileEntityIn.getProgress(partialTicks) <= 4.0F) {
+				if (blockstate.isIn(ModItems.advanced_piston_head) && tileEntityIn.getProgress(partialTicks) <= 4.0F) {
 					blockstate = blockstate.with(PistonHeadBlock.SHORT, Boolean.valueOf(tileEntityIn.getProgress(partialTicks) <= 0.5F));
 					this.func_228876_a_(blockpos, blockstate, tileEntityIn.getPistonTileEntity(), matrixStackIn, bufferIn, world, false, combinedOverlayIn);
 				} else if (tileEntityIn.shouldPistonHeadBeRendered() && !tileEntityIn.isExtending()) {
-					PistonType pistontype = blockstate.isIn(Industria.advanced_sticky_piston) ? PistonType.STICKY : PistonType.DEFAULT;
-					BlockState blockstate1 = Industria.advanced_piston_head.getDefaultState().with(PistonHeadBlock.TYPE, pistontype).with(PistonHeadBlock.FACING, blockstate.get(PistonBlock.FACING));
+					PistonType pistontype = blockstate.isIn(ModItems.advanced_sticky_piston) ? PistonType.STICKY : PistonType.DEFAULT;
+					BlockState blockstate1 = ModItems.advanced_piston_head.getDefaultState().with(PistonHeadBlock.TYPE, pistontype).with(PistonHeadBlock.FACING, blockstate.get(PistonBlock.FACING));
 					blockstate1 = blockstate1.with(PistonHeadBlock.SHORT, Boolean.valueOf(tileEntityIn.getProgress(partialTicks) >= 0.5F));
 					this.func_228876_a_(blockpos, blockstate1, tileEntityIn.getTileData(), matrixStackIn, bufferIn, world, false, combinedOverlayIn);
 					BlockPos blockpos1 = blockpos.offset(tileEntityIn.getMotionDirection());

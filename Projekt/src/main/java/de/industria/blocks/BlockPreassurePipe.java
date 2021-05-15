@@ -3,7 +3,7 @@ package de.industria.blocks;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.tileentity.TileEntityPreassurePipe;
 import de.industria.util.blockfeatures.IAdvancedBlockInfo;
@@ -86,7 +86,7 @@ public class BlockPreassurePipe extends BlockContainerBase implements IAdvancedB
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		
 		if (context.getEntity() instanceof PlayerEntity) {
-			if (((PlayerEntity) context.getEntity()).getHeldItemMainhand().getItem() == Item.getItemFromBlock(Industria.preassure_pipe)) return Block.makeCuboidShape(0, 0, 0, 16, 16, 16);
+			if (((PlayerEntity) context.getEntity()).getHeldItemMainhand().getItem() == Item.getItemFromBlock(ModItems.preassure_pipe)) return Block.makeCuboidShape(0, 0, 0, 16, 16, 16);
 		}
 		
 		Direction facing = state.get(FACING);
@@ -114,11 +114,11 @@ public class BlockPreassurePipe extends BlockContainerBase implements IAdvancedB
 	public boolean canConnect(BlockState state, World world, BlockPos pos, Direction direction) {
 		BlockPos connectPos = pos.offset(direction);
 		BlockState connectState = world.getBlockState(connectPos);
-		if (connectState.getBlock() == Industria.preassure_pipe) {
+		if (connectState.getBlock() == ModItems.preassure_pipe) {
 			return connectState.get(FACING) == direction.getOpposite() || connectState.get(CONNECTION) == direction.getOpposite();
-		} else if (connectState.getBlock() == Industria.pipe_preassurizer) {
+		} else if (connectState.getBlock() == ModItems.pipe_preassurizer) {
 			return direction.getAxis() == connectState.get(FACING).getAxis();
-		} else if (connectState.getBlock() == Industria.preassure_pipe_item_terminal) {
+		} else if (connectState.getBlock() == ModItems.preassure_pipe_item_terminal) {
 			return direction.getAxis() == connectState.get(FACING).getAxis();
 		}
 		return false;

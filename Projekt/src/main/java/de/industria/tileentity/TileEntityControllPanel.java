@@ -3,7 +3,7 @@ package de.industria.tileentity;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.blocks.BlockRControllPanel;
 import de.industria.items.panelitems.ItemPanelElement;
 import de.industria.typeregistys.ModTileEntityType;
@@ -58,7 +58,7 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 	public void sendSignal(RedstoneControlSignal signal) {
 		
 		BlockState state = getBlockState();
-		if (state.getBlock() == Industria.controll_panel) {
+		if (state.getBlock() == ModItems.controll_panel) {
 			
 			((BlockRControllPanel) state.getBlock()).sendSignal(this.world, this.pos, signal);
 			

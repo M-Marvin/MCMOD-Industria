@@ -6,7 +6,7 @@ import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.tileentity.TileEntitySimpleBlockTicking;
 import de.industria.typeregistys.ModSoundEvents;
@@ -97,7 +97,7 @@ public class BlockMTransformatorContact extends BlockContainerBase implements IE
 			
 			BlockState state = world.getBlockState(pos2);
 			
-			if (state.getBlock() == Industria.transformator_contact) {
+			if (state.getBlock() == ModItems.transformator_contact) {
 				
 				if (state.get(INPUT)) {
 
@@ -134,7 +134,7 @@ public class BlockMTransformatorContact extends BlockContainerBase implements IE
 			
 			BlockState state = world.getBlockState(pos2);
 			
-			if (state.getBlock() == Industria.transformator_contact) {
+			if (state.getBlock() == ModItems.transformator_contact) {
 				
 				if (!state.get(INPUT)) {
 
@@ -173,7 +173,7 @@ public class BlockMTransformatorContact extends BlockContainerBase implements IE
 			
 			BlockState state = world.getBlockState(scannPos);
 			
-			if (state.getBlock() == Industria.transformator_coil || state.getBlock() == Industria.transformator_contact) {
+			if (state.getBlock() == ModItems.transformator_coil || state.getBlock() == ModItems.transformator_contact) {
 				
 				blockList.add(scannPos);
 				
@@ -241,7 +241,7 @@ public class BlockMTransformatorContact extends BlockContainerBase implements IE
 			List<BlockPos> blocks = getBlocks(world, pos);
 			for (BlockPos pos1 : blocks) {
 				BlockState state1 = world.getBlockState(pos1);
-				if (state1.getBlock() == Industria.transformator_contact) {
+				if (state1.getBlock() == ModItems.transformator_contact) {
 					ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos1);
 				}
 			}

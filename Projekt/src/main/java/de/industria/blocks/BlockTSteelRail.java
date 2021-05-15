@@ -1,6 +1,6 @@
 package de.industria.blocks;
 
-import de.industria.util.handler.MinecartBoostHandler;
+import de.industria.util.handler.MinecartHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.state.properties.RailShape;
@@ -17,7 +17,7 @@ public class BlockTSteelRail extends BlockRailBase {
 	@Override
 	public void onMinecartPass(BlockState state, World world, BlockPos pos, AbstractMinecartEntity cart) {
 		
-		if (MinecartBoostHandler.getHandlerForWorld(world).isBoosted(cart)) {
+		if (MinecartHandler.getHandlerForWorld(world).isBoosted(cart)) {
 			Vector3d motion = cart.getMotion();
 			double speed = Math.max(Math.abs(motion.x), Math.abs(motion.z));
 			RailShape shape = state.get(SHAPE);
@@ -33,7 +33,7 @@ public class BlockTSteelRail extends BlockRailBase {
 	
 	@Override
 	public float getRailMaxSpeed(BlockState state, World world, BlockPos pos, AbstractMinecartEntity cart) {
-		return MinecartBoostHandler.getHandlerForWorld(world).isBoosted(cart) ? 1F : 0.4F;
+		return MinecartHandler.getHandlerForWorld(world).isBoosted(cart) ? 1F : 0.4F;
 	}
 	
 }

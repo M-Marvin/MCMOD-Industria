@@ -3,7 +3,7 @@ package de.industria.tileentity;
 import java.util.Iterator;
 import java.util.List;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.IPostMoveHandledTE;
 import net.minecraft.block.Block;
@@ -284,7 +284,7 @@ public class TileEntityAdvancedMovingBlock extends TileEntity implements ITickab
          this.lastProgress = this.progress;
          this.world.removeTileEntity(this.pos);
          this.remove();
-         if (this.world.getBlockState(this.pos).isIn(Industria.advanced_moving_block)) {
+         if (this.world.getBlockState(this.pos).isIn(ModItems.advanced_moving_block)) {
             BlockState blockstate;
             if (this.shouldHeadBeRendered) {
                blockstate = Blocks.AIR.getDefaultState();
@@ -316,7 +316,7 @@ public class TileEntityAdvancedMovingBlock extends TileEntity implements ITickab
             ++this.field_242697_l;
          } else {
         	
-            if (this.pistonState != null && this.world.getBlockState(this.pos).isIn(Industria.advanced_moving_block)) {
+            if (this.pistonState != null && this.world.getBlockState(this.pos).isIn(ModItems.advanced_moving_block)) {
             	
                BlockState blockstate = this.pistonState;
                if (blockstate.isAir()) {

@@ -2,7 +2,7 @@ package de.industria.tileentity;
 
 import java.util.List;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.blocks.BlockPipePreassurizer;
 import de.industria.blocks.BlockPreassurePipe;
 import de.industria.blocks.BlockPreassurePipeItemTerminal;
@@ -54,8 +54,8 @@ public class TileEntityPreassurePipeItemTerminal extends TileEntityPreassurePipe
 	public VoxelShape getItemDetectBounds() {
 		Direction facing = this.getBlockState().get(BlockPipePreassurizer.FACING);
 		int extraHeight = (int) (this.preassure * 16);
-		boolean flag1 = !((BlockPreassurePipe) Industria.preassure_pipe).canConnect(getBlockState(), world, pos, getInputSide());
-		boolean flag2 = !((BlockPreassurePipe) Industria.preassure_pipe).canConnect(getBlockState(), world, pos, getOutputSide());
+		boolean flag1 = !((BlockPreassurePipe) ModItems.preassure_pipe).canConnect(getBlockState(), world, pos, getInputSide());
+		boolean flag2 = !((BlockPreassurePipe) ModItems.preassure_pipe).canConnect(getBlockState(), world, pos, getOutputSide());
 		int extraHeight1 = flag1 ? extraHeight : 0;
 		int extraHeight2 = flag2 ? extraHeight : 0;
 		if (facing.getAxis().isVertical()) {

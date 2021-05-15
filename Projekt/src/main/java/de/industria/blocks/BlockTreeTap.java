@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.blocks.BlockRubberLog.RipeState;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTags;
@@ -113,9 +113,9 @@ public class BlockTreeTap extends BlockBase {
 			itemstack.shrink(1);
 			worldIn.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), ModSoundEvents.TREE_TAP_HARVEST, SoundCategory.NEUTRAL, 1.0F, 1.0F);
 			if (itemstack.isEmpty()) {
-			   player.setHeldItem(handIn, new ItemStack(Industria.raw_rubber_bottle));
-			} else if (!player.inventory.addItemStackToInventory(new ItemStack(Industria.raw_rubber_bottle))) {
-			   player.dropItem(new ItemStack(Industria.raw_rubber_bottle), false);
+			   player.setHeldItem(handIn, new ItemStack(ModItems.raw_rubber_bottle));
+			} else if (!player.inventory.addItemStackToInventory(new ItemStack(ModItems.raw_rubber_bottle))) {
+			   player.dropItem(new ItemStack(ModItems.raw_rubber_bottle), false);
 			}
 			
 			worldIn.setBlockState(pos, state.with(STAGE, stage - 1));

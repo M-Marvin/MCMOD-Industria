@@ -3,7 +3,7 @@ package de.industria.worldgen;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.blocks.BlockJigsaw;
 import de.industria.tileentity.TileEntityJigsaw;
 import net.minecraft.block.BlockState;
@@ -51,7 +51,7 @@ public class JigsawFeatureConfig implements IFeatureConfig {
 		tileEntity.poolFile = structurePool;
 		tileEntity.targetName = connectionName;
 		this.jigsawData = tileEntity.serializeNBT();
-		this.jigsawState = Industria.jigsaw.getDefaultState().with(BlockJigsaw.FACING, horizontalDirection).with(BlockJigsaw.TYPE, verticalDirection);
+		this.jigsawState = ModItems.jigsaw.getDefaultState().with(BlockJigsaw.FACING, horizontalDirection).with(BlockJigsaw.TYPE, verticalDirection);
 		this.levelsMax = generationLevelsMax;
 		this.levelsMin = generationLevelsMin;
 		this.target = target;

@@ -3,7 +3,7 @@ package de.industria.tileentity;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.blocks.BlockSignalAntennaConector;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.types.RedstoneControlSignal;
@@ -58,8 +58,8 @@ public class TileEntityRSignalAntenna extends TileEntity {
 	
 	public boolean isValidAntennaBlock(BlockState state) {
 		
-		return	state.getBlock() == Industria.stacked_redstone_wire ||
-				state.getBlock() == Industria.stacked_redstone_torch ||
+		return	state.getBlock() == ModItems.stacked_redstone_wire ||
+				state.getBlock() == ModItems.stacked_redstone_torch ||
 				state.getBlock() == Blocks.IRON_BARS;
 		
 	}
@@ -67,7 +67,7 @@ public class TileEntityRSignalAntenna extends TileEntity {
 	public void reciveSignal(RedstoneControlSignal signal) {
 		
 		BlockState state = world.getBlockState(pos);
-		if (!sendedSignals.contains(signal) && state.getBlock() == Industria.antenna_conector) {
+		if (!sendedSignals.contains(signal) && state.getBlock() == ModItems.antenna_conector) {
 			sendedSignals.add(signal);
 			((BlockSignalAntennaConector) state.getBlock()).sendSignal(world, pos, signal);
 		}

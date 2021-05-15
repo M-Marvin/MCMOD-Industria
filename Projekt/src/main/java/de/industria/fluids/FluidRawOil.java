@@ -1,6 +1,7 @@
 package de.industria.fluids;
 
 import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.fluids.util.BlockModFlowingFluid;
 import de.industria.typeregistys.ModFluids;
 import net.minecraft.block.BlockState;
@@ -50,7 +51,7 @@ public abstract class FluidRawOil extends FlowingFluid {
 
 	@Override
 	public Item getFilledBucket() {
-		return Industria.raw_oil_bucket;
+		return ModItems.raw_oil_bucket;
 	}
 
 	@Override
@@ -70,7 +71,7 @@ public abstract class FluidRawOil extends FlowingFluid {
 
 	@Override
 	protected BlockState getBlockState(FluidState state) {
-		return Industria.raw_oil.getDefaultState().with(BlockModFlowingFluid.LEVEL, getLevelFromState(state));
+		return ModItems.raw_oil.getDefaultState().with(BlockModFlowingFluid.LEVEL, getLevelFromState(state));
 	}
 	
 	@Override

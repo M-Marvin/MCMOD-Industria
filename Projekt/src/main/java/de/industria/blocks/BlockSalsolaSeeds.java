@@ -1,6 +1,7 @@
 package de.industria.blocks;
 
 import de.industria.Industria;
+import de.industria.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -41,7 +42,7 @@ public class BlockSalsolaSeeds extends SweetBerryBushBlock {
 		} else if (i > 1) {
 			
 			int j = 1 + worldIn.rand.nextInt(2);
-			spawnAsEntity(worldIn, pos, new ItemStack(Industria.salsola, j + (flag ? 1 : 0)));
+			spawnAsEntity(worldIn, pos, new ItemStack(ModItems.salsola, j + (flag ? 1 : 0)));
 			spawnAsEntity(worldIn, pos, new ItemStack(Item.getItemFromBlock(this)));
 			worldIn.playSound((PlayerEntity)null, pos, SoundEvents.ITEM_SWEET_BERRIES_PICK_FROM_BUSH, SoundCategory.BLOCKS, 1.0F, 0.8F + worldIn.rand.nextFloat() * 0.4F);
 			worldIn.setBlockState(pos, state.with(AGE, 1), 2);

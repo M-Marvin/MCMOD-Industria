@@ -3,6 +3,7 @@ package de.industria.fluids;
 import java.util.Random;
 
 import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.fluids.util.BlockModFlowingFluid;
 import de.industria.typeregistys.ModFluids;
 import net.minecraft.block.BlockState;
@@ -56,7 +57,7 @@ public abstract class FluidSulfuricAcid extends FlowingFluid {
 
 	@Override
 	public Item getFilledBucket() {
-		return Industria.sulfuric_acid_bucket;
+		return ModItems.sulfuric_acid_bucket;
 	}
 
 	@Override
@@ -76,7 +77,7 @@ public abstract class FluidSulfuricAcid extends FlowingFluid {
 
 	@Override
 	protected BlockState getBlockState(FluidState state) {
-		return Industria.sulfuric_acid.getDefaultState().with(BlockModFlowingFluid.LEVEL, getLevelFromState(state));
+		return ModItems.sulfuric_acid.getDefaultState().with(BlockModFlowingFluid.LEVEL, getLevelFromState(state));
 	}
 	
 	@Override

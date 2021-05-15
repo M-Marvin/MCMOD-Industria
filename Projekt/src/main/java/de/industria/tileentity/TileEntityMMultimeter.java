@@ -1,6 +1,6 @@
 package de.industria.tileentity;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.blocks.BlockMMultimeter;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.handler.ElectricityNetworkHandler;
@@ -41,7 +41,7 @@ public class TileEntityMMultimeter extends TileEntityGauge implements ITickableT
 		if (unit != this.decimalUnit || value != this.value) {
 			this.decimalUnit = unit;	
 			this.value = value;
-			this.world.notifyNeighborsOfStateChange(pos, Industria.multimeter);
+			this.world.notifyNeighborsOfStateChange(pos, ModItems.multimeter);
 		}
 	}
 	

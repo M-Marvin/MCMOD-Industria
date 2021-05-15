@@ -58,36 +58,36 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-public class Client {
+public class ClientSetup {
 	
 	@OnlyIn(Dist.CLIENT)
 	public static void setup(final FMLClientSetupEvent event) {
 		
-		RenderTypeLookup.setRenderLayer(Industria.capacitor, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(Industria.pulse_counter, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(Industria.stacked_redstone_torch, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(Industria.stacked_redstone_wire, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(Industria.signal_wire, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(Industria.signal_processor_contact, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(Industria.salsola_seeds, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(Industria.steam, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(Industria.steam_generator, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModItems.capacitor, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.pulse_counter, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.stacked_redstone_torch, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.stacked_redstone_wire, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.signal_wire, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.signal_processor_contact, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.salsola_seeds, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.steam, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModItems.steam_generator, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.DESTILLED_WATER, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_DESTILLED_WATER, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.STEAM, RenderType.getTranslucent());
-		RenderTypeLookup.setRenderLayer(Industria.multimeter, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(Industria.fluid_valve, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(Industria.blender, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(Industria.rubber_leaves, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(Industria.rubber_sapling, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(Industria.tree_tap, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(Industria.burned_cable, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(Industria.steel_rail, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(Industria.inductive_rail, RenderType.getCutout());
-		RenderTypeLookup.setRenderLayer(Industria.structure_scaffold, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(Industria.preassure_pipe, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(Industria.swamp_algae, RenderType.getCutoutMipped());
-		RenderTypeLookup.setRenderLayer(Industria.hanging_vine, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.multimeter, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ModItems.fluid_valve, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ModItems.blender, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.rubber_leaves, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ModItems.rubber_sapling, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ModItems.tree_tap, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.burned_cable, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.steel_rail, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ModItems.inductive_rail, RenderType.getCutout());
+		RenderTypeLookup.setRenderLayer(ModItems.structure_scaffold, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.preassure_pipe, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.swamp_algae, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.hanging_vine, RenderType.getCutoutMipped());
 		
 		RenderTypeLookup.setRenderLayer(ModFluids.SULFURIC_ACID, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_SULFURIC_ACID, RenderType.getTranslucent());
@@ -149,30 +149,30 @@ public class Client {
 		ScreenManager.registerFactory(ModContainerType.ITEM_DISTRIBUTOR, ScreenItemDistributor::new);
 		ScreenManager.registerFactory(ModContainerType.BLAST_FURNACE, ScreenMBlastFurnace::new);
 		
-		ModClientBindings.bindModelToitem(Industria.schredder_crusher, new ResourceLocation(Industria.MODID, "textures/item/schredder_crusher.png"), new ItemSchredderToolCrusherModel());
+		ModClientBindings.bindModelToitem(ModItems.schredder_crusher, new ResourceLocation(Industria.MODID, "textures/item/schredder_crusher.png"), new ItemSchredderToolCrusherModel());
 		
 	}
 	
 	@SubscribeEvent
 	public static void setupBlockColors(ColorHandlerEvent.Block event) {
 		BlockColors colors = event.getBlockColors();
-		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getFoliageColor(world, pos) : FoliageColors.getDefault(), Industria.beech_leaves);
-		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getFoliageColor(world, pos) : FoliageColors.getDefault(), Industria.marple_leaves);
-		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getFoliageColor(world, pos) : FoliageColors.getDefault(), Industria.mangrove_leaves);
-		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getFoliageColor(world, pos) : FoliageColors.getDefault(), Industria.rubber_leaves);
-		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getFoliageColor(world, pos) : FoliageColors.getDefault(), Industria.swamp_algae);
-		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getFoliageColor(world, pos) : FoliageColors.getDefault(), Industria.hanging_vine);
+		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getFoliageColor(world, pos) : FoliageColors.getDefault(), ModItems.beech_leaves);
+		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getFoliageColor(world, pos) : FoliageColors.getDefault(), ModItems.marple_leaves);
+		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getFoliageColor(world, pos) : FoliageColors.getDefault(), ModItems.mangrove_leaves);
+		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getFoliageColor(world, pos) : FoliageColors.getDefault(), ModItems.rubber_leaves);
+		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getFoliageColor(world, pos) : FoliageColors.getDefault(), ModItems.swamp_algae);
+		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getFoliageColor(world, pos) : FoliageColors.getDefault(), ModItems.hanging_vine);
 	}
     
 	@SubscribeEvent
 	public static void setupItemColors(ColorHandlerEvent.Item event) {
 		ItemColors colors = event.getItemColors();
-		colors.register((stack, tint) -> FoliageColors.getDefault(), Industria.beech_leaves);
-		colors.register((stack, tint) -> FoliageColors.getDefault(), Industria.marple_leaves);
-		colors.register((stack, tint) -> FoliageColors.getDefault(), Industria.mangrove_leaves);
-		colors.register((stack, tint) -> FoliageColors.getDefault(), Industria.rubber_leaves);
-		colors.register((stack, tint) -> FoliageColors.getDefault(), Industria.swamp_algae);
-		colors.register((stack, tint) -> FoliageColors.getDefault(), Industria.hanging_vine);
+		colors.register((stack, tint) -> FoliageColors.getDefault(), ModItems.beech_leaves);
+		colors.register((stack, tint) -> FoliageColors.getDefault(), ModItems.marple_leaves);
+		colors.register((stack, tint) -> FoliageColors.getDefault(), ModItems.mangrove_leaves);
+		colors.register((stack, tint) -> FoliageColors.getDefault(), ModItems.rubber_leaves);
+		colors.register((stack, tint) -> FoliageColors.getDefault(), ModItems.swamp_algae);
+		colors.register((stack, tint) -> FoliageColors.getDefault(), ModItems.hanging_vine);
 	}
 	
 	

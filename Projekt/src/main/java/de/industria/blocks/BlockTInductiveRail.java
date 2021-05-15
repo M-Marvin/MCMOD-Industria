@@ -1,6 +1,6 @@
 package de.industria.blocks;
 
-import de.industria.util.handler.MinecartBoostHandler;
+import de.industria.util.handler.MinecartHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
@@ -23,13 +23,13 @@ public class BlockTInductiveRail extends BlockRailStraightBase {
 			Vector3d motion = cart.getMotion();
 			motion = motion.mul(mul, mul, mul);
 			cart.setMotion(motion);
-			MinecartBoostHandler.getHandlerForWorld(world).setBoosted(cart);
+			MinecartHandler.getHandlerForWorld(world).setBoosted(cart);
 		} else {
 			float mul = 0.9F;
 			Vector3d motion = cart.getMotion();
 			motion = motion.mul(mul, 1, mul);
 			cart.setMotion(motion);
-			MinecartBoostHandler.getHandlerForWorld(world).stopBoosted(cart);
+			MinecartHandler.getHandlerForWorld(world).stopBoosted(cart);
 		}
 		
 	}

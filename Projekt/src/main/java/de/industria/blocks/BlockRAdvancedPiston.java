@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.tileentity.TileEntityAdvancedMovingBlock;
 import de.industria.util.types.AdvancedPistonBlockStructureHelper;
 import net.minecraft.block.Block;
@@ -141,7 +142,7 @@ public class BlockRAdvancedPiston extends DirectionalBlock {
          BlockPos blockpos = pos.offset(direction, 2);
          BlockState blockstate = worldIn.getBlockState(blockpos);
          int i = 1;
-         if (blockstate.isIn(Industria.advanced_moving_block) && blockstate.get(FACING) == direction) {
+         if (blockstate.isIn(ModItems.advanced_moving_block) && blockstate.get(FACING) == direction) {
             TileEntity tileentity = worldIn.getTileEntity(blockpos);
             if (tileentity instanceof PistonTileEntity) {
                PistonTileEntity pistontileentity = (PistonTileEntity)tileentity;
@@ -214,7 +215,7 @@ public class BlockRAdvancedPiston extends DirectionalBlock {
             ((TileEntityAdvancedMovingBlock)tileentity1).clearPistonTileEntity();
          }
 
-         BlockState blockstate = Industria.advanced_moving_block.getDefaultState().with(BlockAdvancedMovingBlock.FACING, direction).with(BlockAdvancedMovingBlock.TYPE, this.isSticky ? PistonType.STICKY : PistonType.DEFAULT);
+         BlockState blockstate = ModItems.advanced_moving_block.getDefaultState().with(BlockAdvancedMovingBlock.FACING, direction).with(BlockAdvancedMovingBlock.TYPE, this.isSticky ? PistonType.STICKY : PistonType.DEFAULT);
          worldIn.setBlockState(pos, blockstate, 20);
          worldIn.setTileEntity(pos, BlockAdvancedMovingBlock.createTilePiston(this.getDefaultState().with(FACING, Direction.byIndex(param & 7)), null, direction, false, true));
          worldIn.func_230547_a_(pos, blockstate.getBlock());
@@ -223,7 +224,7 @@ public class BlockRAdvancedPiston extends DirectionalBlock {
             BlockPos blockpos = pos.add(direction.getXOffset() * 2, direction.getYOffset() * 2, direction.getZOffset() * 2);
             BlockState blockstate1 = worldIn.getBlockState(blockpos);
             boolean flag1 = false;
-            if (blockstate1.isIn(Industria.advanced_moving_block)) {
+            if (blockstate1.isIn(ModItems.advanced_moving_block)) {
                TileEntity tileentity = worldIn.getTileEntity(blockpos);
                if (tileentity instanceof PistonTileEntity) {
                   PistonTileEntity pistontileentity = (PistonTileEntity)tileentity;
@@ -266,7 +267,7 @@ public static boolean canPush(BlockState blockStateIn, World worldIn, BlockPos p
             } else if (facing == Direction.UP && pos.getY() == worldIn.getHeight() - 1) {
                return false;
             } else {
-               if (!blockStateIn.isIn(Blocks.PISTON) && !blockStateIn.isIn(Blocks.STICKY_PISTON) && !blockStateIn.isIn(Industria.advanced_piston) && !blockStateIn.isIn(Industria.advanced_sticky_piston)) {
+               if (!blockStateIn.isIn(Blocks.PISTON) && !blockStateIn.isIn(Blocks.STICKY_PISTON) && !blockStateIn.isIn(ModItems.advanced_piston) && !blockStateIn.isIn(ModItems.advanced_sticky_piston)) {
                   
                   switch(blockStateIn.getPushReaction()) {
                   case BLOCK:
@@ -292,7 +293,7 @@ public static boolean canPush(BlockState blockStateIn, World worldIn, BlockPos p
    @SuppressWarnings("deprecation")
    private boolean doMove(World worldIn, BlockPos pos, Direction directionIn, boolean extending) {
       BlockPos blockpos = pos.offset(directionIn);
-      if (!extending && worldIn.getBlockState(blockpos).isIn(Industria.advanced_piston_head)) {
+      if (!extending && worldIn.getBlockState(blockpos).isIn(ModItems.advanced_piston_head)) {
          worldIn.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 20);
       }
       
@@ -310,7 +311,7 @@ public static boolean canPush(BlockState blockStateIn, World worldIn, BlockPos p
             BlockState blockstate = worldIn.getBlockState(blockpos1);
             list1.add(blockstate);
             TileEntity tileEntity = worldIn.getTileEntity(blockpos1);
-            if (tileEntity != null && blockstate.getBlock() != Industria.advanced_moving_block) {
+            if (tileEntity != null && blockstate.getBlock() != ModItems.advanced_moving_block) {
             	list12.add(tileEntity.write(new CompoundNBT()));
                 worldIn.removeTileEntity(blockpos1);
             } else {
@@ -339,7 +340,7 @@ public static boolean canPush(BlockState blockStateIn, World worldIn, BlockPos p
             blockpos3 = blockpos3.offset(direction);
             map.remove(blockpos3);
             if (worldIn.isBlockLoaded(blockpos3)) {
-            	worldIn.setBlockState(blockpos3, Industria.advanced_moving_block.getDefaultState().with(FACING, directionIn), 68 );
+            	worldIn.setBlockState(blockpos3, ModItems.advanced_moving_block.getDefaultState().with(FACING, directionIn), 68 );
             	worldIn.removeTileEntity(blockpos3);
                 worldIn.setTileEntity(blockpos3, BlockAdvancedMovingBlock.createTilePiston(list1.get(l), list12.get(l), directionIn, extending, false));
             }
@@ -349,8 +350,8 @@ public static boolean canPush(BlockState blockStateIn, World worldIn, BlockPos p
 
          if (extending) {
             PistonType pistontype = this.isSticky ? PistonType.STICKY : PistonType.DEFAULT;
-            BlockState blockstate4 = Industria.advanced_piston_head.getDefaultState().with(BlockRAdvancedPistonHead.FACING, directionIn).with(BlockRAdvancedPistonHead.TYPE, pistontype);
-            BlockState blockstate6 = Industria.advanced_moving_block.getDefaultState().with(BlockAdvancedMovingBlock.FACING, directionIn).with(BlockAdvancedMovingBlock.TYPE, this.isSticky ? PistonType.STICKY : PistonType.DEFAULT);
+            BlockState blockstate4 = ModItems.advanced_piston_head.getDefaultState().with(BlockRAdvancedPistonHead.FACING, directionIn).with(BlockRAdvancedPistonHead.TYPE, pistontype);
+            BlockState blockstate6 = ModItems.advanced_moving_block.getDefaultState().with(BlockAdvancedMovingBlock.FACING, directionIn).with(BlockAdvancedMovingBlock.TYPE, this.isSticky ? PistonType.STICKY : PistonType.DEFAULT);
             map.remove(blockpos);
             worldIn.setBlockState(blockpos, blockstate6, 68 );
             worldIn.setTileEntity(blockpos, BlockAdvancedMovingBlock.createTilePiston(blockstate4, null, directionIn, true, true));
@@ -384,7 +385,7 @@ public static boolean canPush(BlockState blockStateIn, World worldIn, BlockPos p
          }
 
          if (extending) {
-            worldIn.notifyNeighborsOfStateChange(blockpos, Industria.advanced_piston_head);
+            worldIn.notifyNeighborsOfStateChange(blockpos, ModItems.advanced_piston_head);
          }
 
          return true;

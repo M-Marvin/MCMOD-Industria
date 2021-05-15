@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.industria.Industria;
+import de.industria.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -112,7 +113,7 @@ public class BlockRAdvancedPistonHead extends DirectionalBlock {
    }
 
    private boolean func_235682_a_(BlockState p_235682_1_, BlockState p_235682_2_) {
-      Block block = p_235682_1_.get(TYPE) == PistonType.DEFAULT ? Industria.advanced_piston : Industria.advanced_sticky_piston;
+      Block block = p_235682_1_.get(TYPE) == PistonType.DEFAULT ? ModItems.advanced_piston : ModItems.advanced_sticky_piston;
       return p_235682_2_.isIn(block) && p_235682_2_.get(BlockRAdvancedPiston.EXTENDED) && p_235682_2_.get(FACING) == p_235682_1_.get(FACING);
    }
    
@@ -156,7 +157,7 @@ public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState
    
    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
       BlockState blockstate = worldIn.getBlockState(pos.offset(state.get(FACING).getOpposite()));
-      return this.func_235682_a_(state, blockstate) || blockstate.isIn(Industria.advanced_moving_block) && blockstate.get(FACING) == state.get(FACING);
+      return this.func_235682_a_(state, blockstate) || blockstate.isIn(ModItems.advanced_moving_block) && blockstate.get(FACING) == state.get(FACING);
    }
    
    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
@@ -168,7 +169,7 @@ public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState
    }
 
    public ItemStack getItem(IBlockReader worldIn, BlockPos pos, BlockState state) {
-      return new ItemStack(state.get(TYPE) == PistonType.STICKY ? Industria.advanced_sticky_piston : Industria.advanced_piston);
+      return new ItemStack(state.get(TYPE) == PistonType.STICKY ? ModItems.advanced_sticky_piston : ModItems.advanced_piston);
    }
 
    /**

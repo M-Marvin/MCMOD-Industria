@@ -1,6 +1,6 @@
 package de.industria.tileentity;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.blocks.BlockMultiPart;
 import de.industria.dynamicsounds.ISimpleMachineSound;
 import de.industria.fluids.FluidDestilledWater;
@@ -73,11 +73,11 @@ public abstract class TileEntityMHeaterBase extends TileEntityInventoryBase impl
 												
 												BlockState bottomState = this.world.getBlockState(pos2.down());
 												
-												if (bottomState.getBlock() == Industria.limestone_sheet) {
-													this.world.setBlockState(pos2, Industria.limestone_sheet.getDefaultState().with(BlockStateProperties.WATERLOGGED, true));
-													this.world.setBlockState(pos2.down(), Industria.limestone.getDefaultState());
+												if (bottomState.getBlock() == ModItems.limestone_sheet) {
+													this.world.setBlockState(pos2, ModItems.limestone_sheet.getDefaultState().with(BlockStateProperties.WATERLOGGED, true));
+													this.world.setBlockState(pos2.down(), ModItems.limestone.getDefaultState());
 												} else if (bottomState.getFluidState().getFluid() == Fluids.EMPTY && !bottomState.isAir()) {
-													this.world.setBlockState(pos2, Industria.limestone_sheet.getDefaultState().with(BlockStateProperties.WATERLOGGED, true));
+													this.world.setBlockState(pos2, ModItems.limestone_sheet.getDefaultState().with(BlockStateProperties.WATERLOGGED, true));
 												}
 												
 											} else {

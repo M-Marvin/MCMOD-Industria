@@ -1,6 +1,6 @@
 package de.industria.blocks;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.util.blockfeatures.IAdvancedStickyBlock;
 import de.industria.util.types.AdvancedPistonBlockStructureHelper;
 import net.minecraft.block.Block;
@@ -104,8 +104,8 @@ public class BlockRLinearConector extends BlockBase implements IAdvancedStickyBl
 			boolean flag1 = !flag12 ? true : pistonStructureHelper.addBlockLine(pos1, pistonStructureHelper.getMoveDirection());
 			boolean flag2 = !flag22 ? true : pistonStructureHelper.addBlockLine(pos2, pistonStructureHelper.getMoveDirection());
 			
-			if (state1.getBlock() == Industria.conector_block) flag12 = false;
-			if (state2.getBlock() == Industria.conector_block) flag22 = false;
+			if (state1.getBlock() == ModItems.conector_block) flag12 = false;
+			if (state2.getBlock() == ModItems.conector_block) flag22 = false;
 			
 			if (!flag1 || !flag2) return false;
 			

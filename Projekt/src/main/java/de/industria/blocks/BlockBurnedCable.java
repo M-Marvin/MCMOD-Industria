@@ -2,7 +2,7 @@ package de.industria.blocks;
 
 import java.util.Random;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.tileentity.TileEntityMBurnedCable;
 import de.industria.typeregistys.ModDamageSource;
@@ -48,7 +48,7 @@ public class BlockBurnedCable extends BlockElektricWire {
 	}
 	
 	public static void crateBurnedCable(BlockState cableSate, BlockPos pos, World worldIn) {
-		BlockState burnedState = Industria.burned_cable.getDefaultState()
+		BlockState burnedState = ModItems.burned_cable.getDefaultState()
 				.with(NORTH, cableSate.get(NORTH))
 				.with(SOUTH, cableSate.get(SOUTH))
 				.with(EAST, cableSate.get(EAST))
@@ -64,7 +64,7 @@ public class BlockBurnedCable extends BlockElektricWire {
 	
 	public static Block getBurnedCableFromStack(ItemStack burnedCableStack) {
 		Item item = burnedCableStack.getItem();
-		if (item instanceof BlockItem ? ((BlockItem) item).getBlock() == Industria.burned_cable : false) {
+		if (item instanceof BlockItem ? ((BlockItem) item).getBlock() == ModItems.burned_cable : false) {
 			CompoundNBT tag = burnedCableStack.getChildTag("BlockEntityTag");
 			if (tag != null ? tag.contains("CableBlock") : false) {
 				ResourceLocation cableName = new ResourceLocation(tag.getString("CableBlock"));

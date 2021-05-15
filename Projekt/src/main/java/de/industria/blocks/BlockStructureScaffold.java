@@ -3,7 +3,7 @@ package de.industria.blocks;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.items.ItemStructureCladdingPane;
 import de.industria.tileentity.TileEntityStructureScaffold;
@@ -46,7 +46,7 @@ public class BlockStructureScaffold extends BlockContainerBase implements IAdvan
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		VoxelShape shape = VoxelShapes.empty();
 		ItemStack heldStack = context.getEntity() instanceof PlayerEntity ? ((PlayerEntity) context.getEntity()).getHeldItemMainhand() : ItemStack.EMPTY;
-		if (heldStack.getItem() == Industria.structure_scaffold.getItem(worldIn, pos, state).getItem()) {
+		if (heldStack.getItem() == ModItems.structure_scaffold.getItem(worldIn, pos, state).getItem()) {
 			shape = Block.makeCuboidShape(0, 0, 0, 16, 16, 16);
 		} else {
 			shape = VoxelShapes.combine(shape, Block.makeCuboidShape(0, 0, 0, 16, 1, 1), IBooleanFunction.OR);
@@ -95,7 +95,7 @@ public class BlockStructureScaffold extends BlockContainerBase implements IAdvan
 			
 			ItemStack stack = player.getHeldItemMainhand();
 			
-			if (stack.getItem() == Industria.structure_cladding_pane) {
+			if (stack.getItem() == ModItems.structure_cladding_pane) {
 				
 				if (!worldIn.isRemote()) {
 					
@@ -117,7 +117,7 @@ public class BlockStructureScaffold extends BlockContainerBase implements IAdvan
 				
 				return ActionResultType.CONSUME;
 				
-			} else if (stack.getItem() == Industria.hammer) {
+			} else if (stack.getItem() == ModItems.hammer) {
 
 				if (!worldIn.isRemote()) {
 					

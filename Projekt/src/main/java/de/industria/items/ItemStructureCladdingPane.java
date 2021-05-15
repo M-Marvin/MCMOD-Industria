@@ -6,6 +6,7 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.renderer.ItemStructureCladdingRenderer;
 import de.industria.util.handler.ItemStackHelper;
 import net.minecraft.block.BlockState;
@@ -35,7 +36,7 @@ public class ItemStructureCladdingPane extends ItemBase {
 	}
 	
 	public static ItemStack createBlockPane(BlockState blockState, int count) {
-		ItemStack stack = new ItemStack(Industria.structure_cladding_pane, count);
+		ItemStack stack = new ItemStack(ModItems.structure_cladding_pane, count);
 		setBlockState(stack, blockState);
 		return stack;
 	}

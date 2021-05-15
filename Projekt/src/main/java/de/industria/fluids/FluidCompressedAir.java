@@ -3,6 +3,7 @@ package de.industria.fluids;
 import java.util.Random;
 
 import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.fluids.util.GasFluid;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -27,7 +28,7 @@ public class FluidCompressedAir extends GasFluid implements IBucketPickupHandler
 	
 	@Override
 	protected BlockState getBlockState(FluidState state) {
-		return Industria.compressed_air.getDefaultState();
+		return ModItems.compressed_air.getDefaultState();
 	}
 	
 	@Override

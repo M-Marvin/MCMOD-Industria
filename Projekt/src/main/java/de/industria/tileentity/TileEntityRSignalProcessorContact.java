@@ -3,7 +3,7 @@ package de.industria.tileentity;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.blocks.BlockRSignalProcessorContact;
 import de.industria.items.ItemProcessor;
 import de.industria.items.ItemProcessor.OperatorResult;
@@ -113,7 +113,7 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 					RedstoneControlSignal signal = new RedstoneControlSignal(chanel, value.getBValue());
 					
 					BlockState state = this.world.getBlockState(this.pos);
-					if (state.getBlock() == Industria.signal_processor_contact) {
+					if (state.getBlock() == ModItems.signal_processor_contact) {
 						
 						((BlockRSignalProcessorContact) state.getBlock()).sendSignal(this.world, this.pos, signal);
 						
@@ -207,7 +207,7 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 		if (hasProcessor()) {
 			return ((ItemProcessor) this.getProcessorStack().getItem()).getScreenTitle(this.getProcessorStack());
 		} else {
-			return new TranslationTextComponent(Industria.signal_processor_contact.getTranslationKey());
+			return new TranslationTextComponent(ModItems.signal_processor_contact.getTranslationKey());
 		}
 		
 	}

@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.util.blockfeatures.IAdvancedStickyBlock;
 import de.industria.util.types.AdvancedPistonBlockStructureHelper;
 import net.minecraft.block.Block;
@@ -152,7 +152,7 @@ public class BlockRRailPiston extends BlockBase implements IAdvancedStickyBlock 
             BlockState blockstate = worldIn.getBlockState(blockpos1);
             list1.add(blockstate);
             TileEntity tileEntity = worldIn.getTileEntity(blockpos1);
-            if (tileEntity != null && blockstate.getBlock() != Industria.advanced_moving_block) {
+            if (tileEntity != null && blockstate.getBlock() != ModItems.advanced_moving_block) {
             	list12.add(tileEntity.write(new CompoundNBT()));
                 worldIn.removeTileEntity(blockpos1);
             } else {
@@ -181,7 +181,7 @@ public class BlockRRailPiston extends BlockBase implements IAdvancedStickyBlock 
             blockpos3 = blockpos3.offset(direction);
             map.remove(blockpos3);
             if (worldIn.isBlockLoaded(blockpos3)) {
-            	worldIn.setBlockState(blockpos3, Industria.advanced_moving_block.getDefaultState().with(BlockAdvancedMovingBlock.FACING, directionIn), 68 );
+            	worldIn.setBlockState(blockpos3, ModItems.advanced_moving_block.getDefaultState().with(BlockAdvancedMovingBlock.FACING, directionIn), 68 );
             	worldIn.removeTileEntity(blockpos3);
                 worldIn.setTileEntity(blockpos3, BlockAdvancedMovingBlock.createTilePiston(list1.get(l), list12.get(l), directionIn, true, false));
             }
@@ -275,7 +275,7 @@ public class BlockRRailPiston extends BlockBase implements IAdvancedStickyBlock 
 	public boolean addBlocksToMove(AdvancedPistonBlockStructureHelper pistonStructureHelper, BlockPos pos, BlockState state, World world) {
 		for (Direction d : Direction.values()) {
 			BlockPos pos2 = pos.offset(d);
-			if (world.getBlockState(pos2).getBlock() == Industria.conector_block) {
+			if (world.getBlockState(pos2).getBlock() == ModItems.conector_block) {
 				Direction moveDirection = getMoveDirectionForFace(d, state.get(FACING));
 				pistonStructureHelper.addBlockLine(pos2, moveDirection);
 			}

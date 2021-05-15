@@ -14,7 +14,7 @@ import de.industria.Industria;
 import de.industria.fluids.util.BlockGasFluid;
 import de.industria.util.handler.ChunkLoadHandler;
 import de.industria.util.handler.JigsawFileManager;
-import de.industria.util.handler.MinecartBoostHandler;
+import de.industria.util.handler.MinecartHandler;
 import de.industria.util.handler.ModGameRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.IBucketPickupHandler;
@@ -97,7 +97,7 @@ public class Events {
 		if (!event.world.isRemote() && event.phase == Phase.START && event.side == LogicalSide.SERVER) {
 			if (lastServerWorldTick != event.world.getGameTime()) {
 				lastServerWorldTick = event.world.getGameTime();
-				MinecartBoostHandler.getHandlerForWorld(event.world).updateMinecarts();
+				MinecartHandler.getHandlerForWorld(event.world).updateMinecarts();
 			}
 			if (event.world.loadedTileEntityList.size() > 0) {
 				ChunkLoadHandler.getHandlerForWorld(event.world).updateChunkForceLoads();

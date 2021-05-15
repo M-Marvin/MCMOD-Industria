@@ -3,7 +3,7 @@ package de.industria.blocks;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.util.blockfeatures.IAdvancedStickyBlock;
 import de.industria.util.types.AdvancedPistonBlockStructureHelper;
 import net.minecraft.block.Block;
@@ -95,7 +95,7 @@ public class BlockRConectorBlock extends BlockBase implements IAdvancedStickyBlo
 		
 		BlockState attachState = world.getBlockState(attachPos);
 		
-		if (attachState.getBlock() != Industria.rail_piston) {
+		if (attachState.getBlock() != ModItems.rail_piston) {
 
 			return pistonBlockStructureHelper.addBlockLine(attachPos, pistonBlockStructureHelper.getMoveDirection());
 			

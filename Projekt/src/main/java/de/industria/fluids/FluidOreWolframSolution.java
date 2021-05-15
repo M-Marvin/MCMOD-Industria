@@ -1,6 +1,7 @@
 package de.industria.fluids;
 
 import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.fluids.util.BlockModFlowingFluid;
 import de.industria.typeregistys.ModFluids;
 import net.minecraft.block.BlockState;
@@ -49,7 +50,7 @@ public abstract class FluidOreWolframSolution extends FlowingFluid {
 
 	@Override
 	public Item getFilledBucket() {
-		return Industria.wolfram_solution_bucket;
+		return ModItems.wolfram_solution_bucket;
 	}
 
 	@Override
@@ -69,7 +70,7 @@ public abstract class FluidOreWolframSolution extends FlowingFluid {
 
 	@Override
 	protected BlockState getBlockState(FluidState state) {
-		return Industria.wolfram_solution.getDefaultState().with(BlockModFlowingFluid.LEVEL, getLevelFromState(state));
+		return ModItems.wolfram_solution.getDefaultState().with(BlockModFlowingFluid.LEVEL, getLevelFromState(state));
 	}
 	
 	@Override

@@ -5,6 +5,7 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.blocks.BlockJigsaw;
 import de.industria.blocks.BlockJigsaw.JigsawType;
 import de.industria.packet.CEditJigsawTileEntityPacket;
@@ -134,7 +135,7 @@ public class ScreenJigsaw extends ContainerScreen<ContainerJigsaw>{
 	protected void init() {
 
 		BlockState jigsawState = this.container.getTileEntity().getBlockState();
-		this.showLockOrientation = jigsawState.getBlock() == Industria.jigsaw ? jigsawState.get(BlockJigsaw.TYPE) != JigsawType.HORIZONTAL : false;
+		this.showLockOrientation = jigsawState.getBlock() == ModItems.jigsaw ? jigsawState.get(BlockJigsaw.TYPE) != JigsawType.HORIZONTAL : false;
 		
 		this.minecraft.keyboardListener.enableRepeatEvents(true);
 		

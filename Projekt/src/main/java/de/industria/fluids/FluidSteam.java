@@ -3,6 +3,7 @@ package de.industria.fluids;
 import java.util.Random;
 
 import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.fluids.util.GasFluid;
 import de.industria.typeregistys.ModFluids;
 import net.minecraft.block.BlockState;
@@ -31,7 +32,7 @@ public class FluidSteam extends GasFluid implements IBucketPickupHandler {
 	
 	@Override
 	public Item getFilledBucket() {
-		return Industria.steam_bucket;
+		return ModItems.steam_bucket;
 	}
 	
 	@Override
@@ -42,7 +43,7 @@ public class FluidSteam extends GasFluid implements IBucketPickupHandler {
 	
 	@Override
 	protected BlockState getBlockState(FluidState state) {
-		return Industria.steam.getDefaultState().with(BlockSteam.PRESSURIZED, state.get(PRESSURIZED));
+		return ModItems.steam.getDefaultState().with(BlockSteam.PRESSURIZED, state.get(PRESSURIZED));
 	}
 	
 	@Override

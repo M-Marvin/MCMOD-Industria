@@ -2,7 +2,7 @@ package de.industria.blocks;
 
 import java.util.Random;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -26,12 +26,12 @@ public class BlockMarpleLeaves extends BlockLeavesBase {
 		
 		boolean hasRedNeighbor = false;
 		for (Direction d : Direction.values()) {
-			if (worldIn.getBlockState(pos.offset(d)).getBlock() == Industria.marple_leaves_red) hasRedNeighbor = true;
+			if (worldIn.getBlockState(pos.offset(d)).getBlock() == ModItems.marple_leaves_red) hasRedNeighbor = true;
 		}
 		
 		if (random.nextInt(hasRedNeighbor ? 1000 : 2000) == 0 && !state.get(PERSISTENT)) {
 			
-			worldIn.setBlockState(pos, Industria.marple_leaves_red.getDefaultState().with(DISTANCE, state.get(DISTANCE)).with(PERSISTENT, false));
+			worldIn.setBlockState(pos, ModItems.marple_leaves_red.getDefaultState().with(DISTANCE, state.get(DISTANCE)).with(PERSISTENT, false));
 			
 		} else {
 

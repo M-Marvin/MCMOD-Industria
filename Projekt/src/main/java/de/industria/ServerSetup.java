@@ -23,7 +23,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.network.NetworkDirection;
 
-public class Server {
+public class ServerSetup {
 	
 	@SuppressWarnings("deprecation")
 	public static void setup(final FMLCommonSetupEvent event) {

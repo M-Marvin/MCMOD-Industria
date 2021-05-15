@@ -3,7 +3,7 @@ package de.industria.tileentity;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.blocks.BlockConveyorBelt;
 import de.industria.blocks.BlockConveyorSpliter;
 import de.industria.blocks.BlockConveyorSwitch;
@@ -120,7 +120,7 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 	
 	public boolean hasSwitchedSecondary() {
 		BlockState state = this.getBlockState();
-		if (state.getBlock() == Industria.conveyor_spliter) {
+		if (state.getBlock() == ModItems.conveyor_spliter) {
 			return state.get(BlockConveyorSpliter.ACTIVE);
 		}
 		return false;
@@ -128,7 +128,7 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 	
 	public boolean isEnabled() {
 		BlockState state = this.getBlockState();
-		if (state.getBlock() == Industria.conveyor_switch) {
+		if (state.getBlock() == ModItems.conveyor_switch) {
 			return state.get(BlockConveyorSwitch.ENABLED);
 		}
 		return true;

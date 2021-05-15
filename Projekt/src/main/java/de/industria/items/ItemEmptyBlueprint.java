@@ -1,6 +1,7 @@
 package de.industria.items;
 
 import de.industria.Industria;
+import de.industria.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -112,7 +113,7 @@ public class ItemEmptyBlueprint extends ItemBase {
 				}
 			}
 			
-			ItemStack blueprintItem = new ItemStack(Industria.blueprint);
+			ItemStack blueprintItem = new ItemStack(ModItems.blueprint);
 			blueprintItem.setTagInfo("Blueprint", blueprint);
 			return blueprintItem;
 			

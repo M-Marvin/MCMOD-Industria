@@ -1,6 +1,7 @@
 package de.industria.typeregistys;
 
 import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.blocks.BlockJigsaw.JigsawType;
 import de.industria.worldgen.JigsawFeatureConfig;
 import de.industria.worldgen.StoneOreFeatureConfig;
@@ -29,7 +30,7 @@ public class ModConfiguredFeatures {
 			Feature.ORE.withConfiguration(
 					new OreFeatureConfig(
 							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
-							Industria.copper_ore.getDefaultState(),
+							ModItems.copper_ore.getDefaultState(),
 							14
 					)
 			).withPlacement(
@@ -42,7 +43,7 @@ public class ModConfiguredFeatures {
 			Feature.ORE.withConfiguration(
 					new OreFeatureConfig(
 							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
-							Industria.nickel_ore.getDefaultState(),
+							ModItems.nickel_ore.getDefaultState(),
 							8
 					)
 			).withPlacement(
@@ -55,7 +56,7 @@ public class ModConfiguredFeatures {
 			Feature.ORE.withConfiguration(
 					new OreFeatureConfig(
 							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
-							Industria.tin_ore.getDefaultState(),
+							ModItems.tin_ore.getDefaultState(),
 							12
 					)
 			).withPlacement(
@@ -68,7 +69,7 @@ public class ModConfiguredFeatures {
 			Feature.ORE.withConfiguration(
 					new OreFeatureConfig(
 							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
-							Industria.tin_ore.getDefaultState(),
+							ModItems.tin_ore.getDefaultState(),
 							12
 					)
 			).withPlacement(
@@ -81,7 +82,7 @@ public class ModConfiguredFeatures {
 			Feature.ORE.withConfiguration(
 					new OreFeatureConfig(
 							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
-							Industria.silver_ore.getDefaultState(),
+							ModItems.silver_ore.getDefaultState(),
 							6
 					)
 			).withPlacement(
@@ -94,7 +95,7 @@ public class ModConfiguredFeatures {
 			Feature.ORE.withConfiguration(
 					new OreFeatureConfig(
 							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
-							Industria.silver_ore.getDefaultState(),
+							ModItems.silver_ore.getDefaultState(),
 							3
 					)
 			).withPlacement(
@@ -107,7 +108,7 @@ public class ModConfiguredFeatures {
 			Feature.ORE.withConfiguration(
 					new OreFeatureConfig(
 							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
-							Industria.palladium_ore.getDefaultState(),
+							ModItems.palladium_ore.getDefaultState(),
 							2
 					)
 			).withPlacement(
@@ -120,7 +121,7 @@ public class ModConfiguredFeatures {
 			Feature.ORE.withConfiguration(
 					new OreFeatureConfig(
 							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
-							Industria.palladium_ore.getDefaultState(),
+							ModItems.palladium_ore.getDefaultState(),
 							2
 					)
 			).withPlacement(
@@ -133,7 +134,7 @@ public class ModConfiguredFeatures {
 			Feature.ORE.withConfiguration(
 					new OreFeatureConfig(
 							OreFeatureConfig.FillerBlockType.BASE_STONE_NETHER, 
-							Industria.sulfur_ore.getDefaultState(),
+							ModItems.sulfur_ore.getDefaultState(),
 							10
 					)
 			).withPlacement(
@@ -147,8 +148,8 @@ public class ModConfiguredFeatures {
 			ModFeature.STONE_ORE.withConfiguration(
 					new StoneOreFeatureConfig(
 							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
-							Industria.bauxit.getDefaultState(),
-							Industria.bauxit_ore.getDefaultState(),
+							ModItems.bauxit.getDefaultState(),
+							ModItems.bauxit_ore.getDefaultState(),
 							42
 					)
 			).withPlacement(
@@ -161,8 +162,8 @@ public class ModConfiguredFeatures {
 			ModFeature.STONE_ORE.withConfiguration(
 					new StoneOreFeatureConfig(
 							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
-							Industria.wolframit.getDefaultState(),
-							Industria.wolframit_ore.getDefaultState(),
+							ModItems.wolframit.getDefaultState(),
+							ModItems.wolframit_ore.getDefaultState(),
 							42
 					)
 			).withPlacement(

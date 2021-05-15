@@ -3,6 +3,7 @@ package de.industria.blocks;
 import java.util.Random;
 
 import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.tileentity.TileEntityJigsaw;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -56,7 +57,7 @@ public class BlockSaplingBase extends SaplingBlock {
 			
 			BlockState jigsawReplace = world.getBlockState(pos.down());
 			world.setBlockState(pos, Blocks.AIR.getDefaultState());
-			world.setBlockState(pos.down(), Industria.jigsaw.getDefaultState().with(BlockJigsaw.TYPE, BlockJigsaw.JigsawType.VERTICAL_UP));
+			world.setBlockState(pos.down(), ModItems.jigsaw.getDefaultState().with(BlockJigsaw.TYPE, BlockJigsaw.JigsawType.VERTICAL_UP));
 				
 			TileEntity tileEntity = world.getTileEntity(pos.down());
 			

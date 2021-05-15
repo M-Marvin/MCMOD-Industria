@@ -9,6 +9,7 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.blocks.BlockJigsaw;
 import de.industria.blocks.BlockJigsaw.JigsawType;
 import de.industria.gui.ContainerJigsaw;
@@ -121,7 +122,7 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 		
 		if (!this.world.isRemote()) {
 			
-			boolean hasAlreadyGenerated = this.world.getBlockState(pos.offset(this.getFacing())).getBlock() == Industria.jigsaw;
+			boolean hasAlreadyGenerated = this.world.getBlockState(pos.offset(this.getFacing())).getBlock() == ModItems.jigsaw;
 			
 			ServerWorld world = (ServerWorld) this.world;
 			ListNBT list = JigsawFileManager.getPoolList(world, this.poolFile);
@@ -166,7 +167,7 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 					
 					JigsawType alowedType = this.getBlockState().get(BlockJigsaw.TYPE).getOppesite();
 					
-					List<BlockInfo> jigsawBlocks = template.func_215381_a(BlockPos.ZERO, new PlacementSettings(), Industria.jigsaw);
+					List<BlockInfo> jigsawBlocks = template.func_215381_a(BlockPos.ZERO, new PlacementSettings(), ModItems.jigsaw);
 					
 					List<BlockInfo> filteredJigsaws = new ArrayList<BlockInfo>();
 					for (BlockInfo block : jigsawBlocks) {

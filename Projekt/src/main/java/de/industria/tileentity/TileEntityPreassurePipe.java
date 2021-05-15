@@ -2,7 +2,7 @@ package de.industria.tileentity;
 
 import java.util.List;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.blocks.BlockPreassurePipe;
 import de.industria.dynamicsounds.ISimpleMachineSound;
 import de.industria.typeregistys.ModSoundEvents;
@@ -58,7 +58,7 @@ public class TileEntityPreassurePipe extends TileEntity implements ITickableTile
 	public VoxelShape getItemDetectBounds() {
 		Direction outlet = this.getOutputSide();
 		int extraHeight = (int) ((this.preassure < 0 ? -this.preassure : this.preassure) * 16);
-		if (!((BlockPreassurePipe) Industria.preassure_pipe).canConnect(getBlockState(), world, pos, outlet)) {
+		if (!((BlockPreassurePipe) ModItems.preassure_pipe).canConnect(getBlockState(), world, pos, outlet)) {
 			if (outlet.getAxis().isVertical()) {
 				return outlet == Direction.UP ? Block.makeCuboidShape(3, 3, 3, 13, 16 + extraHeight, 13) : Block.makeCuboidShape(3, -extraHeight, 3, 13, 13, 13);
 			} else {
@@ -106,7 +106,7 @@ public class TileEntityPreassurePipe extends TileEntity implements ITickableTile
 					this.world.addParticle(particle, posX, posY, posZ, xOut, yOut, zOut);
 					this.world.addParticle(particle, posX + xIn, posY + yIn, posZ + zIn, -xIn, -yIn, -zIn);
 					
-					if (!((BlockPreassurePipe) Industria.preassure_pipe).canConnect(getBlockState(), world, pos, this.getOutputSide()) && this.world.rand.nextInt((int) (Math.max(4 / this.preassure, 1))) == 0) {
+					if (!((BlockPreassurePipe) ModItems.preassure_pipe).canConnect(getBlockState(), world, pos, this.getOutputSide()) && this.world.rand.nextInt((int) (Math.max(4 / this.preassure, 1))) == 0) {
 						if (this.preassure < 0) {
 //							TODO: Particles for negative preassure
 //							float xOut2 = (this.preassure < 0 ? getInputSide() : getOutputSide()).getXOffset() * speed * -this.preassure * 4;
@@ -168,7 +168,7 @@ public class TileEntityPreassurePipe extends TileEntity implements ITickableTile
 	
 	@SuppressWarnings("deprecation")
 	public boolean isOpenPipe(BlockPos pos, Direction outletDirection) {
-		if (((BlockPreassurePipe) Industria.preassure_pipe).canConnect(getBlockState(), this.world, this.pos, outletDirection)) {
+		if (((BlockPreassurePipe) ModItems.preassure_pipe).canConnect(getBlockState(), this.world, this.pos, outletDirection)) {
 			return true;
 		} else {
 			BlockState endState = this.world.getBlockState(pos);

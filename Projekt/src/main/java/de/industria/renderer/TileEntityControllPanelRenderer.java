@@ -5,7 +5,7 @@ import java.util.Map.Entry;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.blocks.BlockRControllPanel;
 import de.industria.items.panelitems.ItemPanelElement;
 import de.industria.tileentity.TileEntityControllPanel;
@@ -27,7 +27,7 @@ public class TileEntityControllPanelRenderer extends TileEntityRenderer<TileEnti
 	public void render(TileEntityControllPanel tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		
 		HashMap<Pos, ItemStack> elements = tileEntityIn.getPanelElements();
-		Direction facing = tileEntityIn.getBlockState().getBlock() == Industria.controll_panel ? tileEntityIn.getBlockState().get(BlockRControllPanel.FACING) : Direction.NORTH;
+		Direction facing = tileEntityIn.getBlockState().getBlock() == ModItems.controll_panel ? tileEntityIn.getBlockState().get(BlockRControllPanel.FACING) : Direction.NORTH;
 		
 		matrixStackIn.push();
 		

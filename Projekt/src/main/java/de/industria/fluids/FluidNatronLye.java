@@ -3,6 +3,7 @@ package de.industria.fluids;
 import java.util.Random;
 
 import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.fluids.util.BlockModFlowingFluid;
 import de.industria.typeregistys.ModFluids;
 import net.minecraft.block.BlockState;
@@ -56,7 +57,7 @@ public abstract class FluidNatronLye extends FlowingFluid {
 
 	@Override
 	public Item getFilledBucket() {
-		return Industria.natron_lye_bucket;
+		return ModItems.natron_lye_bucket;
 	}
 
 	@Override
@@ -76,7 +77,7 @@ public abstract class FluidNatronLye extends FlowingFluid {
 
 	@Override
 	protected BlockState getBlockState(FluidState state) {
-		return Industria.natron_lye.getDefaultState().with(BlockModFlowingFluid.LEVEL, getLevelFromState(state));
+		return ModItems.natron_lye.getDefaultState().with(BlockModFlowingFluid.LEVEL, getLevelFromState(state));
 	}
 	
 	@Override

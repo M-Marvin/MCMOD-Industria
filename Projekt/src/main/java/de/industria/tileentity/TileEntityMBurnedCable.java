@@ -1,6 +1,6 @@
 package de.industria.tileentity;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -15,7 +15,7 @@ public class TileEntityMBurnedCable extends TileEntity {
 	
 	public TileEntityMBurnedCable() {
 		super(ModTileEntityType.BURNED_CABLE);
-		this.cableBlock = Industria.copper_cable;
+		this.cableBlock = ModItems.copper_cable;
 	}
 	
 	public Block getCableBlock() {

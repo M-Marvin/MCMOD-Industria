@@ -3,6 +3,7 @@ package de.industria.fluids;
 import java.util.Random;
 
 import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.fluids.util.BlockModFlowingFluid;
 import de.industria.typeregistys.ModFluids;
 import net.minecraft.block.BlockState;
@@ -67,7 +68,7 @@ public abstract class FluidDestilledWater extends FlowingFluid {
 
 	@Override
 	public Item getFilledBucket() {
-		return Industria.destilled_water_bucket;
+		return ModItems.destilled_water_bucket;
 	}
 
 	@Override
@@ -87,7 +88,7 @@ public abstract class FluidDestilledWater extends FlowingFluid {
 
 	@Override
 	protected BlockState getBlockState(FluidState state) {
-		return Industria.destilled_water.getDefaultState().with(BlockModFlowingFluid.LEVEL, getLevelFromState(state)).with(BlockDestilledWater.HOT, state.get(HOT));
+		return ModItems.destilled_water.getDefaultState().with(BlockModFlowingFluid.LEVEL, getLevelFromState(state)).with(BlockDestilledWater.HOT, state.get(HOT));
 	}
 	
 	@Override

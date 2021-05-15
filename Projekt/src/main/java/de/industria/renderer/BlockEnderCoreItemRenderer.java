@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import de.industria.Industria;
+import de.industria.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -28,7 +29,7 @@ public class BlockEnderCoreItemRenderer extends ItemStackTileEntityRenderer {
 	@Override
 	public void func_239207_a_(ItemStack stack, TransformType type, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 
-		Minecraft.getInstance().getBlockRendererDispatcher().renderBlock(Industria.ender_core.getDefaultState(), matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+		Minecraft.getInstance().getBlockRendererDispatcher().renderBlock(ModItems.ender_core.getDefaultState(), matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
 		
 		IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.getEntityTranslucent(ENDER_CORE_TEXTURES));
 		

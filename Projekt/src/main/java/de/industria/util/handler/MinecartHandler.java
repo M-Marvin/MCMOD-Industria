@@ -3,7 +3,7 @@ package de.industria.util.handler;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
@@ -15,32 +15,32 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
 
-public class MinecartBoostHandler extends WorldSavedData {
+public class MinecartHandler extends WorldSavedData {
 	
-	protected static MinecartBoostHandler clientInstance;
+	protected static MinecartHandler clientInstance;
 	protected boolean isServerInstace;
 	protected World world;
 	
 	protected HashMap<AbstractMinecartEntity, Long> boostedMinecarts = new HashMap<AbstractMinecartEntity, Long>();
 	
-	public MinecartBoostHandler(IWorld world) {
+	public MinecartHandler(IWorld world) {
 		this(true);
 		this.world = (World) world;
 	}
 	
-	public MinecartBoostHandler(boolean serverInstance) {
+	public MinecartHandler(boolean serverInstance) {
 		super("minecartBoosts");
 		this.isServerInstace = serverInstance;
 	}
 	
-	public static MinecartBoostHandler getHandlerForWorld(IWorld world) {
+	public static MinecartHandler getHandlerForWorld(IWorld world) {
 		
 		if (!world.isRemote()) {
 			DimensionSavedDataManager storage = ((ServerWorld) world).getSavedData();
-			MinecartBoostHandler handler = storage.getOrCreate(() -> new MinecartBoostHandler(world), "minecartBoosts");
+			MinecartHandler handler = storage.getOrCreate(() -> new MinecartHandler(world), "minecartBoosts");
 			return handler;
 		} else {
-			if (clientInstance == null) clientInstance = new MinecartBoostHandler(false);
+			if (clientInstance == null) clientInstance = new MinecartHandler(false);
 			return clientInstance;
 		}
 		
@@ -76,7 +76,7 @@ public class MinecartBoostHandler extends WorldSavedData {
 			
 			Block railBlock1 = world.getBlockState(entry.getKey().getPosition()).getBlock();
 			Block railBlock2 = world.getBlockState(entry.getKey().getPosition().down()).getBlock();
-			if (railBlock1 != Industria.steel_rail && railBlock1 != Industria.inductive_rail && railBlock2 != Industria.steel_rail && railBlock2 != Industria.inductive_rail && (railBlock1 instanceof AbstractRailBlock || railBlock2 instanceof AbstractRailBlock)) {
+			if (railBlock1 != ModItems.steel_rail && railBlock1 != ModItems.inductive_rail && railBlock2 != ModItems.steel_rail && railBlock2 != ModItems.inductive_rail && (railBlock1 instanceof AbstractRailBlock || railBlock2 instanceof AbstractRailBlock)) {
 				this.stopBoosted(entry.getKey());
 			}
 			

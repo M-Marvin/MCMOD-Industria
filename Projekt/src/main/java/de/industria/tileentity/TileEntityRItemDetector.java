@@ -3,7 +3,7 @@ package de.industria.tileentity;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.blocks.BlockRItemDetector;
 import de.industria.typeregistys.ModTileEntityType;
 import net.minecraft.block.BlockState;
@@ -34,7 +34,7 @@ public class TileEntityRItemDetector extends TileEntity implements ITickableTile
 		
 		if (active != isActive) {
 			this.world.setBlockState(pos, this.getBlockState().with(BlockRItemDetector.POWERED, active));
-			this.world.notifyNeighborsOfStateChange(pos.offset(this.getBlockState().get(BlockRItemDetector.FACING).getOpposite()), Industria.item_detector);
+			this.world.notifyNeighborsOfStateChange(pos.offset(this.getBlockState().get(BlockRItemDetector.FACING).getOpposite()), ModItems.item_detector);
 		}
 		
 	}
@@ -59,7 +59,7 @@ public class TileEntityRItemDetector extends TileEntity implements ITickableTile
 			
 			boolean isSpliter = false;
 			if (detectingInventory instanceof TileEntityConveyorBelt) {
-				if (((TileEntityConveyorBelt) detectingInventory).getBlockState().getBlock() == Industria.conveyor_spliter) isSpliter = true;
+				if (((TileEntityConveyorBelt) detectingInventory).getBlockState().getBlock() == ModItems.conveyor_spliter) isSpliter = true;
 			}
 			
 			int size = isSpliter ? 1 : detectingInventory.getSizeInventory();

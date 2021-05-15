@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.blocks.BlockRHoverControler;
 import de.industria.blocks.BlockRHoverExtension;
 import de.industria.gui.ContainerRHoverControler;
@@ -32,12 +32,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class TileEntityRHoverControler extends TileEntity implements IInventory, INamedContainerProvider, ITickableTileEntity {
-	
-	/**
-	 * TODO
-	 * 
-	 * - Antriebs-Elemente (eventuell Strom betrieben), zum bestimmen der max. Block Anzahl getHoverForce()
-	 */
 	
 	private int energyTimer;
 	private int moveTimer;
@@ -194,7 +188,7 @@ public class TileEntityRHoverControler extends TileEntity implements IInventory,
 		for (BlockPos pos : structure.getBlocks()) {
 			
 			BlockState state = this.world.getBlockState(pos);
-			boolean speedBoost = state.getBlock() == Industria.hover_extension ? state.get(BlockRHoverExtension.ACTIVATED) : false;
+			boolean speedBoost = state.getBlock() == ModItems.hover_extension ? state.get(BlockRHoverExtension.ACTIVATED) : false;
 			
 			if (speedBoost && !checkedBlocks.contains(pos)) moveDistance += 1;
 			checkedBlocks.add(pos);

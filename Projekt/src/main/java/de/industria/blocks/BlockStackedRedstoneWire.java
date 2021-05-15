@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import de.industria.Industria;
+import de.industria.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -154,7 +154,7 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 	}
 	
 	public static boolean isRedstoneSource(BlockState attachState, Direction direction) {
-		return	(attachState.getBlock() == Industria.stacked_redstone_torch && (direction == Direction.DOWN || direction == Direction.UP)) ||
+		return	(attachState.getBlock() == ModItems.stacked_redstone_torch && (direction == Direction.DOWN || direction == Direction.UP)) ||
 				attachState.getBlock() instanceof PistonBlock || attachState.getBlock() instanceof BlockRAdvancedPiston;
 	}
 	
@@ -291,8 +291,8 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 				for (Direction d : Direction.values()) {
 					BlockPos notifyPos = wire.offset(d);
 					BlockState notifyState = worldIn.getBlockState(notifyPos);
-					if (notifyState.getBlock() != Industria.stacked_redstone_wire) {
-						worldIn.notifyNeighborsOfStateChange(notifyPos, Industria.stacked_redstone_wire);
+					if (notifyState.getBlock() != ModItems.stacked_redstone_wire) {
+						worldIn.notifyNeighborsOfStateChange(notifyPos, ModItems.stacked_redstone_wire);
 					}
 				}
 			}
@@ -305,7 +305,7 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 		BlockState scannState = worldIn.getBlockState(scannPos);
 		boolean powered = false;
 		
-		if (scannState.getBlock() == Industria.stacked_redstone_wire && !wires.contains(scannPos) && scannCount < 2000) {
+		if (scannState.getBlock() == ModItems.stacked_redstone_wire && !wires.contains(scannPos) && scannCount < 2000) {
 			
 			wires.add(scannPos);
 			if (isWirePowered(worldIn, scannPos)) powered = true;

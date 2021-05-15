@@ -174,5 +174,7 @@ public class Client {
 		colors.register((stack, tint) -> FoliageColors.getDefault(), Industria.swamp_algae);
 		colors.register((stack, tint) -> FoliageColors.getDefault(), Industria.hanging_vine);
 	}
-    
+	
+	
+	
 }

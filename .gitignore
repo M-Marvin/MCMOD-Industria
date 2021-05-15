@@ -1,5 +1,25 @@
-Projekt/*
-!Projekt/src
-!Projekt/lib
-!Projekt/build.gradle
-/.metadata/
+# eclipse
+Projekt/bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# idea
+Projekt/out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+Projekt/build
+.gradle
+
+# other
+Projekt/eclipse
+Projekt/run
+
+# Files from Forge MDK
+forge*changelog.txt

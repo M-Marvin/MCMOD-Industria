@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 
 import de.industria.Industria;
@@ -34,6 +36,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.world.gen.feature.Features;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -110,13 +113,13 @@ public class Events {
 				event.getGeneration().getFeatures(decoration).add(() -> feature);
 			}
 			
-//				List<Supplier<ConfiguredFeature<?, ?>>> featuresToRemove = new ArrayList<Supplier<ConfiguredFeature<?, ?>>>();
-//				event.getGeneration().getFeatures(decoration).forEach((registredFeature) -> {
-//					if (compareBiomes(registredFeature.get(), Features.OAK)) featuresToRemove.add(registredFeature);
-//					// This does not work, registredFeature always is an "minecraft:decorated" feature ...
-//				});
-//				System.out.println(featuresToRemove.size() + " Features deaktivated");
-//				event.getGeneration().getFeatures(decoration).removeAll(featuresToRemove);
+			List<Supplier<ConfiguredFeature<?, ?>>> featuresToRemove = new ArrayList<Supplier<ConfiguredFeature<?, ?>>>();
+			event.getGeneration().getFeatures(decoration).forEach((registredFeature) -> {
+				if (compareBiomes(registredFeature.get(), Features.OAK)) featuresToRemove.add(registredFeature);
+				// This does not work, registredFeature always is an "minecraft:decorated" feature ...
+			});
+			System.out.println(featuresToRemove.size() + " Features deaktivated");
+			event.getGeneration().getFeatures(decoration).removeAll(featuresToRemove);
 			
 		}
 		
@@ -127,7 +130,10 @@ public class Events {
 		Optional<JsonElement> registredJson = ConfiguredFeature.field_242763_a.encode(registredFeature, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).get().left();
 		Optional<JsonElement> searchedJson = ConfiguredFeature.field_242763_a.encode(feature, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).get().left();
 		if (!registredJson.isPresent() || !searchedJson.isPresent()) return false;
-		return registredJson.equals(searchedJson);
+		JsonObject json1 = registredJson.get().getAsJsonObject();
+		JsonObject json2 = searchedJson.get().getAsJsonObject();
+		System.out.println(json1);
+		return json1.equals(json2);
 	}
 	
 }

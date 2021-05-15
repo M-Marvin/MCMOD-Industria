@@ -1,10 +1,5 @@
 package de.industria;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.function.Supplier;
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,6 +17,7 @@ import de.industria.blocks.BlockEnderCore;
 import de.industria.blocks.BlockFallingDust;
 import de.industria.blocks.BlockFluidPipe;
 import de.industria.blocks.BlockFluidValve;
+import de.industria.blocks.BlockHangingVine;
 import de.industria.blocks.BlockInfinityPowerSource;
 import de.industria.blocks.BlockIronRod;
 import de.industria.blocks.BlockItemDistributor;
@@ -51,6 +47,7 @@ import de.industria.blocks.BlockMStoringCraftingTable;
 import de.industria.blocks.BlockMThermalZentrifuge;
 import de.industria.blocks.BlockMTransformatorCoil;
 import de.industria.blocks.BlockMTransformatorContact;
+import de.industria.blocks.BlockMarpleLeaves;
 import de.industria.blocks.BlockMotor;
 import de.industria.blocks.BlockNComputer;
 import de.industria.blocks.BlockNetworkCable;
@@ -84,6 +81,7 @@ import de.industria.blocks.BlockSignalWire;
 import de.industria.blocks.BlockStackedRedstoneTorch;
 import de.industria.blocks.BlockStackedRedstoneWire;
 import de.industria.blocks.BlockStructureScaffold;
+import de.industria.blocks.BlockSwampAlgae;
 import de.industria.blocks.BlockTInductiveRail;
 import de.industria.blocks.BlockTRailAdapter;
 import de.industria.blocks.BlockTSteelRail;
@@ -133,13 +131,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.Rarity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.Features;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -398,12 +390,18 @@ public class Industria {
 	public static final Block rubber_wood = new BlockRubberLog("rubber_wood", Material.WOOD, 2F, SoundType.WOOD);
 	public static final Block rubber_leaves = new BlockLeavesBase("rubber_leaves", Material.LEAVES, 0.2F, 0.2F, SoundType.PLANT);
 	public static final Block rubber_sapling = new BlockSaplingBase("rubber_sapling", new ResourceLocation(Industria.MODID, "nature/rubber_tree"));
-	public static final Block maple_log = new BlockLogBase("maple_log", Material.WOOD, 2F, SoundType.WOOD);
-	public static final Block maple_wood = new BlockLogBase("maple_wood", Material.WOOD, 2F, SoundType.WOOD);
-	public static final Block maple_leaves = new BlockLeavesBase("maple_leaves", Material.LEAVES, 0.2F, 0.2F, SoundType.PLANT);
+	public static final Block marple_log = new BlockLogBase("marple_log", Material.WOOD, 2F, SoundType.WOOD);
+	public static final Block marple_wood = new BlockLogBase("marple_wood", Material.WOOD, 2F, SoundType.WOOD);
+	public static final Block marple_leaves = new BlockMarpleLeaves();
+	public static final Block marple_leaves_red = new BlockLeavesBase("marple_leaves_red", Material.LEAVES, 0.2F, 0.2F, SoundType.PLANT);
 	public static final Block mangrove_log = new BlockLogBase("mangrove_log", Material.WOOD, 2F, SoundType.WOOD);
 	public static final Block mangrove_wood = new BlockLogBase("mangrove_wood", Material.WOOD, 2F, SoundType.WOOD);
 	public static final Block mangrove_leaves = new BlockLeavesBase("mangrove_leaves", Material.LEAVES, 0.2F, 0.2F, SoundType.PLANT);
+	public static final Block beech_log = new BlockLogBase("beech_log", Material.WOOD, 2F, SoundType.WOOD);
+	public static final Block beech_wood = new BlockLogBase("beech_wood", Material.WOOD, 2F, SoundType.WOOD);
+	public static final Block beech_leaves = new BlockLeavesBase("beech_leaves", Material.LEAVES, 0.2F, 0.2F, SoundType.PLANT);
+	public static final Block swamp_algae = new BlockSwampAlgae();
+	public static final Block hanging_vine = new BlockHangingVine();
 	
 	// Util Blocks
 	public static final Block reinforced_casing = new BlockReinforcedCasing();
@@ -706,13 +704,20 @@ public class Industria {
 		ModGameRegistry.registerBlock(rubber_wood, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(rubber_leaves, DECORATIONS);
 		ModGameRegistry.registerBlock(rubber_sapling, DECORATIONS);
-		ModGameRegistry.registerBlock(maple_log, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(maple_wood, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(maple_leaves, DECORATIONS);
+		ModGameRegistry.registerBlock(marple_log, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(marple_wood, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(marple_leaves, DECORATIONS);
+		ModGameRegistry.registerBlock(marple_leaves_red, DECORATIONS);
+		ModGameRegistry.registerBlock(swamp_algae, DECORATIONS);
+		ModGameRegistry.registerBlock(hanging_vine, DECORATIONS);
 		
 		ModGameRegistry.registerBlock(mangrove_log, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(mangrove_wood, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(mangrove_leaves, DECORATIONS);
+
+		ModGameRegistry.registerBlock(beech_log, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(beech_wood, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(beech_leaves, DECORATIONS);
 		
 		ModGameRegistry.registerBlock(tree_tap, TOOLS);
 		ModGameRegistry.registerBlock(salt_block, BUILDING_BLOCKS);
@@ -962,18 +967,19 @@ public class Industria {
 		ModGameRegistry.registerItem(button_element);
 		ModGameRegistry.registerItem(lamp_element);
 		
+		// Registration Code (Server | Client)
 		try {
 			FMLJavaModLoadingContext.get().getModEventBus().addListener(Client::setup);
+			FMLJavaModLoadingContext.get().getModEventBus().addListener(Client::setupBlockColors);
+			FMLJavaModLoadingContext.get().getModEventBus().addListener(Client::setupItemColors);
 		} catch (BootstrapMethodError e) {
 			LOGGER.log(Level.INFO, "Skip ClientSettup on Server start!");
 		}
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(Server::setup);
-		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, this::onBiomeLoadingEvent);
 		
 	}
 	
-	// Registration Code
-	
+	// Registration Code (Server + Client)
 	@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 	public static class RegistryEvents {
 		
@@ -993,23 +999,6 @@ public class Industria {
 			for (Item item : itemsToRegister) {
 				registry.register(item);
 			}
-		}
-		
-	}
-	
-	//n45_GaqTjuM
-	public void onBiomeLoadingEvent(final BiomeLoadingEvent event) {
-		for (GenerationStage.Decoration decoration : GenerationStage.Decoration.values()) {
-			List<ConfiguredFeature<?, ?>> features = ModGameRegistry.getFeaturesToRegister().getOrDefault(event.getName(), new HashMap<GenerationStage.Decoration, List<ConfiguredFeature<?, ?>>>()).getOrDefault(decoration, new ArrayList<>());
-			for (ConfiguredFeature<?, ?> feature : features) {
-				event.getGeneration().getFeatures(decoration).add(() -> feature);
-			}
-			List<Supplier<ConfiguredFeature<?, ?>>> featuresToRemove = new ArrayList<Supplier<ConfiguredFeature<?, ?>>>();
-			event.getGeneration().getFeatures(decoration).forEach((registredFeature) -> {
-				if (registredFeature.get() == Features.ACACIA) featuresToRemove.add(registredFeature);
-				// This does not work, registredFeature always is an "minecraft:decorated" feature ...
-			});
-			event.getGeneration().getFeatures(decoration).removeAll(featuresToRemove);
 		}
 		
 	}

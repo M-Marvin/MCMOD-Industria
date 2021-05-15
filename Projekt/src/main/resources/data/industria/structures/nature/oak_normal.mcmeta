@@ -1,0 +1,20 @@
+{
+	"structures": [
+		{
+			"chance": 1,
+			"file": "industria:nature/oak_normal_1"
+		},
+		{
+			"chance": 1,
+			"file": "industria:nature/oak_normal_2"
+		},
+		{
+			"chance": 1,
+			"file": "industria:nature/oak_normal_3"
+		},
+		{
+			"chance": 1,
+			"file": "industria:nature/oak_normal_4"
+		}
+	]
+}

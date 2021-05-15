@@ -34,11 +34,10 @@ public class BlockBase extends Block {
 	}
 	
 	public static ToolType getDefaultToolType(Material material) {
-		System.out.println(material);
 		if (material == Material.ROCK || material == Material.IRON) return ToolType.PICKAXE;
 		if (material == Material.SAND || material == Material.EARTH) return ToolType.SHOVEL;
 		if (material == Material.WOOD) return ToolType.AXE;
-		if (material == Material.ORGANIC) return ToolType.HOE;
+		if (material == Material.ORGANIC || material == Material.LEAVES) return ToolType.HOE;
 		return null;
 	}
 	

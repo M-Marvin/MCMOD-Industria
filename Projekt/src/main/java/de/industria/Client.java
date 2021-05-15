@@ -46,14 +46,20 @@ import de.industria.typeregistys.ModTileEntityType;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.color.BlockColors;
+import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.FoliageColors;
+import net.minecraft.world.biome.BiomeColors;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class Client {
-
+	
 	@OnlyIn(Dist.CLIENT)
 	public static void setup(final FMLClientSetupEvent event) {
 		
@@ -80,6 +86,8 @@ public class Client {
 		RenderTypeLookup.setRenderLayer(Industria.inductive_rail, RenderType.getCutout());
 		RenderTypeLookup.setRenderLayer(Industria.structure_scaffold, RenderType.getCutoutMipped());
 		RenderTypeLookup.setRenderLayer(Industria.preassure_pipe, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(Industria.swamp_algae, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(Industria.hanging_vine, RenderType.getCutoutMipped());
 		
 		RenderTypeLookup.setRenderLayer(ModFluids.SULFURIC_ACID, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_SULFURIC_ACID, RenderType.getTranslucent());
@@ -143,7 +151,28 @@ public class Client {
 		
 		ModClientBindings.bindModelToitem(Industria.schredder_crusher, new ResourceLocation(Industria.MODID, "textures/item/schredder_crusher.png"), new ItemSchredderToolCrusherModel());
 		
-		
 	}
 	
+	@SubscribeEvent
+	public static void setupBlockColors(ColorHandlerEvent.Block event) {
+		BlockColors colors = event.getBlockColors();
+		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getFoliageColor(world, pos) : FoliageColors.getDefault(), Industria.beech_leaves);
+		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getFoliageColor(world, pos) : FoliageColors.getDefault(), Industria.marple_leaves);
+		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getFoliageColor(world, pos) : FoliageColors.getDefault(), Industria.mangrove_leaves);
+		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getFoliageColor(world, pos) : FoliageColors.getDefault(), Industria.rubber_leaves);
+		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getFoliageColor(world, pos) : FoliageColors.getDefault(), Industria.swamp_algae);
+		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getFoliageColor(world, pos) : FoliageColors.getDefault(), Industria.hanging_vine);
+	}
+    
+	@SubscribeEvent
+	public static void setupItemColors(ColorHandlerEvent.Item event) {
+		ItemColors colors = event.getItemColors();
+		colors.register((stack, tint) -> FoliageColors.getDefault(), Industria.beech_leaves);
+		colors.register((stack, tint) -> FoliageColors.getDefault(), Industria.marple_leaves);
+		colors.register((stack, tint) -> FoliageColors.getDefault(), Industria.mangrove_leaves);
+		colors.register((stack, tint) -> FoliageColors.getDefault(), Industria.rubber_leaves);
+		colors.register((stack, tint) -> FoliageColors.getDefault(), Industria.swamp_algae);
+		colors.register((stack, tint) -> FoliageColors.getDefault(), Industria.hanging_vine);
+	}
+    
 }

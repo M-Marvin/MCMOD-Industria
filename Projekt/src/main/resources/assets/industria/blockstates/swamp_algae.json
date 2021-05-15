@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"half=bottom": { "model": "industria:block/swamp_algae_bottom" },
+		"half=top": { "model": "industria:block/swamp_algae_top" }
+	}
+}

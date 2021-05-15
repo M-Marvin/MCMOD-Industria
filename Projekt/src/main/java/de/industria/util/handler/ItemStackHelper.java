@@ -1,7 +1,10 @@
 package de.industria.util.handler;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
 public class ItemStackHelper {
@@ -45,6 +48,37 @@ public class ItemStackHelper {
 			}
 		}
 		return "minecraft:air";
+	}
+
+	public static void spawnItemStack(World worldIn, double x, double y, double z, ItemStack stack) {
+		double d0 = (double)EntityType.ITEM.getWidth();
+		double d1 = 1.0D - d0;
+		double d2 = d0 / 2.0D;
+		double d3 = Math.floor(x) + worldIn.rand.nextDouble() * d1 + d2;
+		double d4 = Math.floor(y) + worldIn.rand.nextDouble() * d1;
+		double d5 = Math.floor(z) + worldIn.rand.nextDouble() * d1 + d2;
+		
+		while(!stack.isEmpty()) {
+			ItemEntity itementity = new ItemEntity(worldIn, d3, d4, d5, stack.split(worldIn.rand.nextInt(21) + 10));
+			itementity.setMotion(worldIn.rand.nextGaussian() * (double)0.05F, worldIn.rand.nextGaussian() * (double)0.05F + (double)0.2F, worldIn.rand.nextGaussian() * (double)0.05F);
+			worldIn.addEntity(itementity);
+		}
+	}
+
+	public static void spawnItemStackWithPickupDelay(World worldIn, double x, double y, double z, ItemStack stack) {
+		double d0 = (double)EntityType.ITEM.getWidth();
+		double d1 = 1.0D - d0;
+		double d2 = d0 / 2.0D;
+		double d3 = Math.floor(x) + worldIn.rand.nextDouble() * d1 + d2;
+		double d4 = Math.floor(y) + worldIn.rand.nextDouble() * d1;
+		double d5 = Math.floor(z) + worldIn.rand.nextDouble() * d1 + d2;
+		
+		while(!stack.isEmpty()) {
+			ItemEntity itementity = new ItemEntity(worldIn, d3, d4, d5, stack.split(worldIn.rand.nextInt(21) + 10));
+			itementity.setMotion(worldIn.rand.nextGaussian() * (double)0.05F, worldIn.rand.nextGaussian() * (double)0.05F + (double)0.2F, worldIn.rand.nextGaussian() * (double)0.05F);
+			itementity.setPickupDelay(15);
+			worldIn.addEntity(itementity);
+		}
 	}
 	
 }

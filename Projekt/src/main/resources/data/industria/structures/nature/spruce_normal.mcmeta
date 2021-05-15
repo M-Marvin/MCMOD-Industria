@@ -2,15 +2,19 @@
 	"structures": [
 		{
 			"chance": 1,
-			"file": "industria:nature/spruce_normal_root_1"
+			"file": "industria:nature/spruce_normal_1"
 		},
 		{
 			"chance": 1,
-			"file": "industria:nature/spruce_normal_root_2"
+			"file": "industria:nature/spruce_normal_2"
 		},
 		{
 			"chance": 1,
-			"file": "industria:nature/spruce_normal_root_3"
+			"file": "industria:nature/spruce_normal_3"
+		},
+		{
+			"chance": 1,
+			"file": "industria:nature/spruce_normal_4"
 		}
 	]
 }

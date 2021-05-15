@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"part=plant": { "model": "industria:block/hanging_vine" },
+		"part=end": { "model": "industria:block/hanging_vine_end" }
+	}
+}

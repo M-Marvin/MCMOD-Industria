@@ -21,13 +21,9 @@ public class JigsawFeature extends Feature<JigsawFeatureConfig> {
 	@Override
 	public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, JigsawFeatureConfig config) {
 		
-		System.out.println("TSE " + pos);
-		
 		BlockState state = reader.getBlockState(pos);
 		
 		if (config.target.test(state, rand)) {
-
-			System.out.println("TSE2 " + pos);
 			
 			reader.setBlockState(pos, config.jigsawState, 2);
 			TileEntity tileEntity = reader.getTileEntity(pos);

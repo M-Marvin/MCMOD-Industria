@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "industria:block/marple_log_end",
+    "side": "industria:block/marple_log"
+  }
+}

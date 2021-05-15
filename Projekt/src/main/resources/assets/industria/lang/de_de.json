@@ -138,6 +138,22 @@
 "block.industria.rubber_wood": "Kautschukbaumholz",
 "block.industria.rubber_leaves": "Kautschukbaumlaub",
 "block.industria.rubber_sapling": "Kautschukbaumsetzling",
+
+"block.industria.swamp_algae": "Sumpfalge ",
+"block.industria.hanging_vine": "H\u00e4ngende Ranke",
+
+"block.industria.beech_log": "Buchenstamm",
+"block.industria.beech_wood": "Buchenholz",
+"block.industria.beech_leaves": "Buchenlaub",
+"block.industria.marple_log": "Ahornstamm",
+"block.industria.marple_wood": "Ahornholz",
+"block.industria.marple_leaves": "Ahornlaub",
+"block.industria.marple_leaves_red": "Rotes Ahornlaub",
+"block.industria.mangrove_log": "Mangrovenstamm",
+"block.industria.mangrove_wood": "Mangrovenholz",
+"block.industria.mangrove_leaves": "Mangrovenlaub",
+
+
 "block.industria.tree_tap": "Zapfhahn",
 "block.industria.polished_bauxite": "Polierter Bauxit",
 "block.industria.polished_wolframite": "Poliertes Wolframit",

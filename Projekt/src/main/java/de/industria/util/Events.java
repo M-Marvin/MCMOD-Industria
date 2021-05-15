@@ -1,10 +1,19 @@
 package de.industria.util;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+
+import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
+
 import de.industria.Industria;
 import de.industria.fluids.util.BlockGasFluid;
 import de.industria.util.handler.ChunkLoadHandler;
 import de.industria.util.handler.JigsawFileManager;
 import de.industria.util.handler.MinecartBoostHandler;
+import de.industria.util.handler.ModGameRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.IBucketPickupHandler;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,7 +32,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraftforge.event.TickEvent.Phase;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
@@ -88,6 +100,34 @@ public class Events {
 				ChunkLoadHandler.getHandlerForWorld(event.world).updateChunkForceLoads();
 			}
 		}
+	}
+	
+	@SubscribeEvent
+	public void onBiomeLoadingEvent(final BiomeLoadingEvent event) {
+		for (GenerationStage.Decoration decoration : GenerationStage.Decoration.values()) {
+			List<ConfiguredFeature<?, ?>> features = ModGameRegistry.getFeaturesToRegister().getOrDefault(event.getName(), new HashMap<GenerationStage.Decoration, List<ConfiguredFeature<?, ?>>>()).getOrDefault(decoration, new ArrayList<>());
+			for (ConfiguredFeature<?, ?> feature : features) {
+				event.getGeneration().getFeatures(decoration).add(() -> feature);
+			}
+			
+//				List<Supplier<ConfiguredFeature<?, ?>>> featuresToRemove = new ArrayList<Supplier<ConfiguredFeature<?, ?>>>();
+//				event.getGeneration().getFeatures(decoration).forEach((registredFeature) -> {
+//					if (compareBiomes(registredFeature.get(), Features.OAK)) featuresToRemove.add(registredFeature);
+//					// This does not work, registredFeature always is an "minecraft:decorated" feature ...
+//				});
+//				System.out.println(featuresToRemove.size() + " Features deaktivated");
+//				event.getGeneration().getFeatures(decoration).removeAll(featuresToRemove);
+			
+		}
+		
+	}
+
+	protected boolean compareBiomes(ConfiguredFeature<?, ?> registredFeature, ConfiguredFeature<?, ?> feature) {
+		// TODO Not Working
+		Optional<JsonElement> registredJson = ConfiguredFeature.field_242763_a.encode(registredFeature, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).get().left();
+		Optional<JsonElement> searchedJson = ConfiguredFeature.field_242763_a.encode(feature, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).get().left();
+		if (!registredJson.isPresent() || !searchedJson.isPresent()) return false;
+		return registredJson.equals(searchedJson);
 	}
 	
 }

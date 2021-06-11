@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "industria:block/salt_brick_slab"
+    },
+    "type=double": {
+      "model": "industria:block/salt_bricks"
+    },
+    "type=top": {
+      "model": "industria:block/salt_brick_slab_top"
+    }
+  }
+}

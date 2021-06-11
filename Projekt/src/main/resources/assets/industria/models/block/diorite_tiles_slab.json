@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "industria:block/diorite_tiles",
+    "top": "industria:block/diorite_tiles",
+    "side": "industria:block/diorite_tiles_slab_side"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+	"industria:white_painted_planks",
+	"industria:orange_painted_planks",
+	"industria:magenta_painted_planks",
+	"industria:light_blue_painted_planks",
+	"industria:yellow_painted_planks",
+	"industria:lime_painted_planks",
+	"industria:pink_painted_planks",
+	"industria:gray_painted_planks",
+	"industria:light_gray_painted_planks",
+	"industria:cyan_painted_planks",
+	"industria:purple_painted_planks",
+	"industria:blue_painted_planks",
+	"industria:brown_painted_planks",
+	"industria:green_painted_planks",
+	"industria:red_painted_planks",
+	"industria:black_painted_planks",
+    "industria:burned_planks"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "industria:block/andesite_bricks",
+    "top": "industria:block/andesite_bricks",
+    "side": "industria:block/andesite_brick_slab_side"
+  }
+}

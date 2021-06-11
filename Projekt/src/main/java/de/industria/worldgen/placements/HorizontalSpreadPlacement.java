@@ -18,13 +18,12 @@ public class HorizontalSpreadPlacement extends SimplePlacement<HorizontalSpreadP
 	@Override
 	protected Stream<BlockPos> getPositions(Random random, HorizontalSpreadPlacementConfig config, BlockPos pos) {
 		
-		int randCount = random.nextInt(config.countPerChunk);
+		int randCount = config.countPerChunk == 1 ? 1 : random.nextInt(config.countPerChunk) + 1;
 		
 		return IntStream.range(0, randCount).mapToObj((index) -> {
 			
-			int x = random.nextInt(15);
-			int z = random.nextInt(15);
-			
+			int x = random.nextInt(16);
+			int z = random.nextInt(16);
 			return pos.add(x, 0, z);
 			
 		});

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "industria:block/polished_prismarine_slab"
+    },
+    "type=double": {
+      "model": "industria:block/polished_prismarine"
+    },
+    "type=top": {
+      "model": "industria:block/polished_prismarine_slab_top"
+    }
+  }
+}

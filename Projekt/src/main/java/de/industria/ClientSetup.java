@@ -88,6 +88,8 @@ public class ClientSetup {
 		RenderTypeLookup.setRenderLayer(ModItems.preassure_pipe, RenderType.getCutoutMipped());
 		RenderTypeLookup.setRenderLayer(ModItems.swamp_algae, RenderType.getCutoutMipped());
 		RenderTypeLookup.setRenderLayer(ModItems.hanging_vine, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.burned_trapdoor, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.burned_door, RenderType.getCutoutMipped());
 		
 		RenderTypeLookup.setRenderLayer(ModFluids.SULFURIC_ACID, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_SULFURIC_ACID, RenderType.getTranslucent());

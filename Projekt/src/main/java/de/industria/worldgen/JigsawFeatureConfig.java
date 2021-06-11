@@ -44,7 +44,6 @@ public class JigsawFeatureConfig implements IFeatureConfig {
 	}
 	
 	public JigsawFeatureConfig(RuleTest target, Direction horizontalDirection, BlockJigsaw.JigsawType verticalDirection, ResourceLocation structurePool, ResourceLocation connectionName, BlockState replaceState, boolean horizontalLocked, int generationLevelsMin, int generationLevelsMax) {
-		
 		TileEntityJigsaw tileEntity = new TileEntityJigsaw();
 		tileEntity.replaceState = replaceState;
 		tileEntity.lockOrientation = horizontalLocked;

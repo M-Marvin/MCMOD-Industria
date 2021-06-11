@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "industria:block/polished_sandstone_slab"
+    },
+    "type=double": {
+      "model": "industria:block/polished_sandstone"
+    },
+    "type=top": {
+      "model": "industria:block/polished_sandstone_slab_top"
+    }
+  }
+}

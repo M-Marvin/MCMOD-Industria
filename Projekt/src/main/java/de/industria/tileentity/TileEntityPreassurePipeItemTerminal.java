@@ -98,7 +98,7 @@ public class TileEntityPreassurePipeItemTerminal extends TileEntityPreassurePipe
 								ItemStack item = ((ItemEntity) entity).getItem();
 								
 								if (ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(1), item)) {
-									
+
 									if (this.getStackInSlot(1).isEmpty()) {
 										this.setInventorySlotContents(1, item.copy());
 									} else {

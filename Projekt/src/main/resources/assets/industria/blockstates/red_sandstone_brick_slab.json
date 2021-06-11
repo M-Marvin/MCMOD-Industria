@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "industria:block/red_sandstone_brick_slab"
+    },
+    "type=double": {
+      "model": "industria:block/red_sandstone_bricks"
+    },
+    "type=top": {
+      "model": "industria:block/red_sandstone_brick_slab_top"
+    }
+  }
+}

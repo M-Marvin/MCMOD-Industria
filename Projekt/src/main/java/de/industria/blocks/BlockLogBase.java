@@ -1,36 +1,22 @@
 package de.industria.blocks;
 
+import de.industria.Industria;
 import de.industria.util.blockfeatures.IBurnableBlock;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.StateContainer.Builder;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
-public class BlockLogBase extends BlockBase implements IBurnableBlock {
+public class BlockLogBase extends RotatedPillarBlock implements IBurnableBlock {
 	
-	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
-
 	public BlockLogBase(String name, Material material, float hardnessAndResistance, SoundType sound) {
-		super(name, material, hardnessAndResistance, sound, true);
+		super(Properties.create(material).hardnessAndResistance(hardnessAndResistance).sound(sound).harvestTool(BlockBase.getDefaultToolType(material)));
 		this.setDefaultState(this.stateContainer.getBaseState().with(AXIS, Axis.Y));
-	}
-	
-	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
-		builder.add(AXIS);
-	}
-	
-	@Override
-	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(AXIS, context.getFace().getAxis());
+		this.setRegistryName(Industria.MODID, name);
 	}
 	
 	@Override

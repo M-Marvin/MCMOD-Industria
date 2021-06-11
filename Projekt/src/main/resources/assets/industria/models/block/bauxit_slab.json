@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "industria:block/bauxit",
+    "top": "industria:block/bauxit",
+    "side": "industria:block/bauxit_side"
+  }
+}

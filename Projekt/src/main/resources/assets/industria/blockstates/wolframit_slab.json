@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "industria:block/wolframit_slab"
+    },
+    "type=double": {
+      "model": "industria:block/wolframit"
+    },
+    "type=top": {
+      "model": "industria:block/wolframit_slab_top"
+    }
+  }
+}

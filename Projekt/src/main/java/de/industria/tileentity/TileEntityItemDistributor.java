@@ -31,7 +31,7 @@ public class TileEntityItemDistributor extends TileEntityInventoryBase implement
 				ItemStack stack = this.getStackInSlot(i);
 				ItemStack layout = getLayoutItem(i);
 				if (stack.getCount() < maxTransferAmount && !stack.isEmpty()) maxTransferAmount = stack.getCount();
-				if (layout.isEmpty() && stack.isEmpty() || ItemStackHelper.isItemStackItemEqual(layout, stack, false)) continue;
+				if (layout.isEmpty() && stack.isEmpty() || ItemStackHelper.isItemStackItemEqual(layout, stack, false) && stack.getCount() >= layout.getCount()) continue;
 				matches = false;
 				break;
 			}

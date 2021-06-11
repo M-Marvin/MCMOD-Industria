@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_top_rh",
+  "textures": {
+    "top": "industria:block/burned_door_top_1",
+    "bottom": "industria:block/burned_door_bottom_1"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "industria:block/bauxit_slab"
+    },
+    "type=double": {
+      "model": "industria:block/bauxit"
+    },
+    "type=top": {
+      "model": "industria:block/bauxit_slab_top"
+    }
+  }
+}

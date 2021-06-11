@@ -21,8 +21,15 @@ public class ModTags {
 	public static final ITag<Fluid> NATRON_LYE = tagFluid("natron_lye");
 	
 	public static final ITag<Block> CONVEYOR_BELT = tagBlock("conveyor_belt");
+	public static final ITag<Block> MACHINERY = tagBlock("machinery");
+	public static final ITag<Block> WIRING = tagBlock("wiring");
+	public static final ITag<Block> PREASSURE_PIPE = tagBlock("preassure_pipe");
 	public static final ITag<Block> DIRT = tagBlockForge("dirt");
 	public static final ITag<Block> RUBBER_LOGS = tagBlock("rubber_logs");
+	public static final ITag<Block> BEECH_LOGS = tagBlock("beech_logs");
+	public static final ITag<Block> MARPLE_LOGS = tagBlock("marple_logs");
+	public static final ITag<Block> MANGROVE_LOGS = tagBlock("mangrove_logs");
+	public static final ITag<Block> BURNED_WOOD = tagBlock("burned_wood");
 	
 	private static IOptionalNamedTag<Fluid> tagFluid(String name) {
 		return FluidTags.createOptional(new ResourceLocation(Industria.MODID, name));

@@ -8,6 +8,7 @@
     "industria:signal_wire",
     "industria:stacked_redstone_wire",
     "industria:network_cable",
-    "minecraft:redstone_wire"
+    "minecraft:redstone_wire",
+    "industria:preassure_pipe"
   ]
 }

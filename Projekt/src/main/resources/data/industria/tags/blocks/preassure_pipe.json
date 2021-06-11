@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "industria:preassure_pipe_item_terminal",
+    "industria:pipe_preassurizer",
+    "industria:preassure_pipe"
+  ]
+}

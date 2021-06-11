@@ -15,6 +15,9 @@
     "industria:multimeter",
     "industria:power_switch",
     "industria:electric_furnace",
-    "industria:thermal_zentrifuge"
+    "industria:thermal_zentrifuge",
+    "industria:blast_furnace",
+    "industria:air_compressor",
+    "industria:item_distributor"
   ]
 }

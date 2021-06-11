@@ -249,7 +249,9 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 	}
 	
 	public boolean isPostProcessing() {
-		return this.progress2 > 0 || this.progress3 > 0 || this.progress4 > 0;
+		return this.progress2 > 0 || this.progress3 > 0 || this.progress4 > 0 && (ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(0), currentRecipe.getRecipeOutput()) &&
+								ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(1), currentRecipe.getRecipeOutput2()) &&
+								ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(2), currentRecipe.getRecipeOutput3())) && (this.fluidOut.getFluid() == currentRecipe.fluidOut.getFluid() || this.fluidOut.isEmpty()) ? this.fluidOut.getAmount() + currentRecipe.fluidOut.getAmount() < this.maxFluidStorage : false;
 	}
 	
 	public RifiningRecipe findRecipe() {

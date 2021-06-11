@@ -13,7 +13,7 @@ credits="M_Marvin, Hase222 (McStockWeintraube)"
 authors="M_Marvin, Hase222 (McStockWeintraube)"
 logoFile="logo.png"
 
-updateJSONURL="https://github.com/M-Marvin/MCMOD-Industria/blob/main/ModUpdate.json"
+updateJSONURL="https://github.com/M-Marvin/MCMOD-Industria/ModUpdate.json"
 
 description='''
 Ein Mod der diverse neue Baumaterialien, Items, Resourcen und Maschinen hinzuf\u00a7fcgt.

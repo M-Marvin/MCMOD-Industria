@@ -46,7 +46,7 @@ public class BlockStructureScaffold extends BlockContainerBase implements IAdvan
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		VoxelShape shape = VoxelShapes.empty();
 		ItemStack heldStack = context.getEntity() instanceof PlayerEntity ? ((PlayerEntity) context.getEntity()).getHeldItemMainhand() : ItemStack.EMPTY;
-		if (heldStack.getItem() == ModItems.structure_scaffold.getItem(worldIn, pos, state).getItem()) {
+		if (heldStack.getItem() == ModItems.structure_scaffold.getItem(worldIn, pos, state).getItem() || heldStack.getItem() == ModItems.structure_cladding_pane) {
 			shape = Block.makeCuboidShape(0, 0, 0, 16, 16, 16);
 		} else {
 			shape = VoxelShapes.combine(shape, Block.makeCuboidShape(0, 0, 0, 16, 1, 1), IBooleanFunction.OR);

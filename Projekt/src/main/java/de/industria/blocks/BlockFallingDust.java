@@ -12,6 +12,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer.Builder;
@@ -33,7 +35,7 @@ public class BlockFallingDust extends BlockFallingBase {
 	public static final IntegerProperty LAYERS = IntegerProperty.create("layers", 1, 16);
 	
 	public BlockFallingDust(String name) {
-		super(name, Material.SNOW, 0.8F, 0.4F, SoundType.SAND);
+		super(name, Material.EARTH, 0.8F, 0.4F, SoundType.SAND);
 	}
 	
 	@Override
@@ -41,7 +43,7 @@ public class BlockFallingDust extends BlockFallingBase {
 		builder.add(LAYERS);
 		super.fillStateContainer(builder);
 	}
-	
+	 
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		return Block.makeCuboidShape(0, 0, 0, 16, state.get(LAYERS), 16);
@@ -198,6 +200,7 @@ public class BlockFallingDust extends BlockFallingBase {
 					int layers2 = state2.get(LAYERS);
 					int diff = layers2 - layers;
 					int transfer = (int) Math.floor(diff / 2);
+					if (transfer < 2) transfer = 0;
 					
 					if (transfer != 0) {
 						
@@ -214,6 +217,7 @@ public class BlockFallingDust extends BlockFallingBase {
 					
 					int diff = layers;
 					int transfer = (int) Math.floor(diff / 2);
+					if (transfer < 3) transfer = 0;
 					
 					if (transfer != 0) {
 						layers -= transfer;
@@ -231,6 +235,12 @@ public class BlockFallingDust extends BlockFallingBase {
 			
 		}
 		
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean isReplaceable(BlockState state, BlockItemUseContext useContext) {
+		return state.get(LAYERS) < 6 && useContext.getItem().getItem() != Item.getItemFromBlock(this);
 	}
 	
 	@Override

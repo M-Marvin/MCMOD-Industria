@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "industria:block/blue_nether_bricks",
+    "top": "industria:block/blue_nether_bricks",
+    "side": "industria:block/blue_nether_bricks"
+  }
+}

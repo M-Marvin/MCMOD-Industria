@@ -2,6 +2,12 @@
   "replace": false,
   "values": [
     "industria:rubber_log",
-    "industria:rubber_wood"
+    "industria:rubber_wood",
+    "industria:beech_log",
+    "industria:beech_wood",
+    "industria:marple_log",
+    "industria:marple_wood",
+    "industria:mangrove_log",
+    "industria:mangrove_wood"
   ]
 }

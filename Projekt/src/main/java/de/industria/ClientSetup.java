@@ -88,6 +88,24 @@ public class ClientSetup {
 		RenderTypeLookup.setRenderLayer(ModItems.preassure_pipe, RenderType.getCutoutMipped());
 		RenderTypeLookup.setRenderLayer(ModItems.swamp_algae, RenderType.getCutoutMipped());
 		RenderTypeLookup.setRenderLayer(ModItems.hanging_vine, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.burned_trapdoor, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.burned_door, RenderType.getCutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.white_stained_glass_slab, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModItems.orange_stained_glass_slab, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModItems.magenta_stained_glass_slab, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModItems.light_blue_stained_glass_slab, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModItems.yellow_stained_glass_slab, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModItems.green_stained_glass_slab, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModItems.pink_stained_glass_slab, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModItems.gray_stained_glass_slab, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModItems.light_gray_stained_glass_slab, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModItems.cyan_stained_glass_slab, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModItems.purple_stained_glass_slab, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModItems.black_stained_glass_slab, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModItems.blue_stained_glass_slab, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModItems.red_stained_glass_slab, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModItems.lime_stained_glass_slab, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModItems.brown_stained_glass_slab, RenderType.getTranslucent());
 		
 		RenderTypeLookup.setRenderLayer(ModFluids.SULFURIC_ACID, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_SULFURIC_ACID, RenderType.getTranslucent());

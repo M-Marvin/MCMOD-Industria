@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "industria:conveyor_spliter",
-    "industria:conveyor_belt"
+    "industria:conveyor_belt",
+    "industria:conveyor_switch"
   ]
 }

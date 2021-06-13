@@ -265,7 +265,7 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 	}
 	protected int waitForGenerateLevels = -1;
 	protected Random randForGeneration = null;
-
+	
 	@Override
 	public void tick() {
 		if (!this.world.isRemote() && this.waitForGenerateLevels > 0) {

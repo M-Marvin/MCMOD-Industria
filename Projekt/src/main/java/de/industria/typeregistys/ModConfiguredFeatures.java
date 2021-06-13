@@ -6,6 +6,7 @@ import de.industria.blocks.BlockJigsaw.JigsawType;
 import de.industria.worldgen.JigsawFeatureConfig;
 import de.industria.worldgen.StoneOreFeatureConfig;
 import de.industria.worldgen.placements.HorizontalSpreadPlacementConfig;
+import de.industria.worldgen.placements.ModChancePlacementConfig;
 import de.industria.worldgen.placements.SimpleOrePlacementConfig;
 import de.industria.worldgen.placements.VerticalOffsetPlacementConfig;
 import net.minecraft.block.Blocks;
@@ -144,12 +145,12 @@ public class ModConfiguredFeatures {
 			)
 	);
 	
-	public static final ConfiguredFeature<?, ?> BAUXIT_STONE_ORE = registerConfiguredFeature("bauxit_stone_ore",
+	public static final ConfiguredFeature<?, ?> BAUXIT_STONE_ORE = registerConfiguredFeature("bauxite_stone_ore",
 			ModFeature.STONE_ORE.withConfiguration(
 					new StoneOreFeatureConfig(
 							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
-							ModItems.bauxit.getDefaultState(),
-							ModItems.bauxit_ore.getDefaultState(),
+							ModItems.bauxite.getDefaultState(),
+							ModItems.bauxite_ore.getDefaultState(),
 							42
 					)
 			).withPlacement(
@@ -162,8 +163,8 @@ public class ModConfiguredFeatures {
 			ModFeature.STONE_ORE.withConfiguration(
 					new StoneOreFeatureConfig(
 							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
-							ModItems.wolframit.getDefaultState(),
-							ModItems.wolframit_ore.getDefaultState(),
+							ModItems.wolframite.getDefaultState(),
+							ModItems.wolframite_ore.getDefaultState(),
 							42
 					)
 			).withPlacement(
@@ -213,6 +214,84 @@ public class ModConfiguredFeatures {
 					Placement.HEIGHTMAP_WORLD_SURFACE.configure(new NoPlacementConfig())
 			).withPlacement(
 					Placement.CHANCE.configure(new ChanceConfig(10))
+			)
+	);
+	public static final ConfiguredFeature<?, ?> ACACIA_TREE = registerConfiguredFeature("acacia_tree",
+			ModFeature.JIGSAW_FEATURE.withConfiguration(new JigsawFeatureConfig(
+					new TagMatchRuleTest(ModTags.DIRT), Direction.NORTH, JigsawType.VERTICAL_UP, 
+					new ResourceLocation(Industria.MODID, "nature/acacia_normal"), new ResourceLocation(Industria.MODID, "tree_log"),
+					Blocks.DIRT.getDefaultState(), false, 1, 1)
+			).withPlacement(
+					ModPlacement.VERTICAL_OFFSET.configure(
+							new VerticalOffsetPlacementConfig(-2)
+					)
+			).withPlacement(
+					ModPlacement.HORIZONTAL_SPREAD.configure(
+							new HorizontalSpreadPlacementConfig(1)
+					)
+			).withPlacement(
+					Placement.HEIGHTMAP_WORLD_SURFACE.configure(new NoPlacementConfig())
+			).withPlacement(
+					Placement.CHANCE.configure(new ChanceConfig(10))
+			)
+	);
+	public static final ConfiguredFeature<?, ?> OAK_TREE_RARE = registerConfiguredFeature("oak_tree",
+			ModFeature.JIGSAW_FEATURE.withConfiguration(new JigsawFeatureConfig(
+					new TagMatchRuleTest(ModTags.DIRT), Direction.NORTH, JigsawType.VERTICAL_UP, 
+					new ResourceLocation(Industria.MODID, "nature/oak_normal"), new ResourceLocation(Industria.MODID, "tree_log"),
+					Blocks.DIRT.getDefaultState(), false, 1, 1)
+			).withPlacement(
+					ModPlacement.VERTICAL_OFFSET.configure(
+							new VerticalOffsetPlacementConfig(-2)
+					)
+			).withPlacement(
+					Placement.HEIGHTMAP_WORLD_SURFACE.configure(new NoPlacementConfig())
+			).withPlacement(
+					ModPlacement.HORIZONTAL_SPREAD.configure(
+							new HorizontalSpreadPlacementConfig(2)
+					)
+			).withPlacement(
+					ModPlacement.CHANCE.configure(
+						new ModChancePlacementConfig(20)
+					)
+			)
+	);
+	public static final ConfiguredFeature<?, ?> OAK_TREE_NORMAL = registerConfiguredFeature("oak_tree",
+			ModFeature.JIGSAW_FEATURE.withConfiguration(new JigsawFeatureConfig(
+					new TagMatchRuleTest(ModTags.DIRT), Direction.NORTH, JigsawType.VERTICAL_UP, 
+					new ResourceLocation(Industria.MODID, "nature/oak_normal"), new ResourceLocation(Industria.MODID, "tree_log"),
+					Blocks.DIRT.getDefaultState(), false, 1, 1)
+			).withPlacement(
+					ModPlacement.VERTICAL_OFFSET.configure(
+							new VerticalOffsetPlacementConfig(-2)
+					)
+			).withPlacement(
+					Placement.HEIGHTMAP_WORLD_SURFACE.configure(new NoPlacementConfig())
+			).withPlacement(
+					ModPlacement.HORIZONTAL_SPREAD.configure(
+							new HorizontalSpreadPlacementConfig(7)
+					)
+			).withPlacement(
+					ModPlacement.CHANCE.configure(
+						new ModChancePlacementConfig(85)
+					)
+			)
+	);
+	public static final ConfiguredFeature<?, ?> OAK_TREE_EXTRA = registerConfiguredFeature("oak_tree",
+			ModFeature.JIGSAW_FEATURE.withConfiguration(new JigsawFeatureConfig(
+					new TagMatchRuleTest(ModTags.DIRT), Direction.NORTH, JigsawType.VERTICAL_UP, 
+					new ResourceLocation(Industria.MODID, "nature/oak_normal"), new ResourceLocation(Industria.MODID, "tree_log"),
+					Blocks.DIRT.getDefaultState(), false, 1, 1)
+			).withPlacement(
+					ModPlacement.VERTICAL_OFFSET.configure(
+							new VerticalOffsetPlacementConfig(-2)
+					)
+			).withPlacement(
+					Placement.HEIGHTMAP_WORLD_SURFACE.configure(new NoPlacementConfig())
+			).withPlacement(
+					ModPlacement.HORIZONTAL_SPREAD.configure(
+							new HorizontalSpreadPlacementConfig(10)
+					)
 			)
 	);
 	

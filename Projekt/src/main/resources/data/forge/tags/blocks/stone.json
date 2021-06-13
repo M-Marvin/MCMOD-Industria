@@ -1,9 +1,9 @@
 {
   "replace": false,
   "values": [
-    "industria:bauxit",
-    "industria:bauxit_ore",
-    "industria:wolframit",
-    "industria:wolframit_ore"
+    "industria:bauxite",
+    "industria:bauxite_ore",
+    "industria:wolframite",
+    "industria:wolframite_ore"
   ]
 }

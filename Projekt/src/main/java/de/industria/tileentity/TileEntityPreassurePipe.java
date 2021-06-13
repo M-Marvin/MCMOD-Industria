@@ -13,6 +13,7 @@ import de.industria.util.handler.VoxelHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -60,12 +61,12 @@ public class TileEntityPreassurePipe extends TileEntity implements ITickableTile
 		int extraHeight = (int) ((this.preassure < 0 ? -this.preassure : this.preassure) * 16);
 		if (!((BlockPreassurePipe) ModItems.preassure_pipe).canConnect(getBlockState(), world, pos, outlet)) {
 			if (outlet.getAxis().isVertical()) {
-				return outlet == Direction.UP ? Block.makeCuboidShape(3, 3, 3, 13, 16 + extraHeight, 13) : Block.makeCuboidShape(3, -extraHeight, 3, 13, 13, 13);
+				return outlet == Direction.UP ? Block.makeCuboidShape(2, 2, 2, 14, 16 + extraHeight, 14) : Block.makeCuboidShape(2, -extraHeight, 2, 14, 14, 14);
 			} else {
-				return VoxelHelper.rotateShape(Block.makeCuboidShape(3, 3, -extraHeight, 13, 13, 13), outlet);
+				return VoxelHelper.rotateShape(Block.makeCuboidShape(2, 2, -extraHeight, 14, 14, 14), outlet);
 			}
 		}
-		return Block.makeCuboidShape(3, 3, 3, 13, 13, 13);
+		return Block.makeCuboidShape(2, 2, 2, 14, 14, 14);
 	}
 	
 	@Override
@@ -140,19 +141,28 @@ public class TileEntityPreassurePipe extends TileEntity implements ITickableTile
 						((ItemEntity) entity).ticksExisted = 0;
 					}
 					
-					entity.fallDistance = 0;
+					boolean flag = true;
+					if (entity instanceof PlayerEntity) {
+						if (entity.isSpectator()) flag = false;
+					}
 					
-					Vector3i motionVec1 = this.getInputSide().getOpposite().getDirectionVec();
-					Vector3i motionVec2 = this.getOutputSide().getDirectionVec();
-					
-					float acceleration = 0.1F;
-					Vector3d force = new Vector3d(motionVec1.getX() == 0 ? motionVec2.getX() : motionVec1.getX(), motionVec1.getY() == 0 ? motionVec2.getY() : motionVec1.getY(), motionVec1.getZ() == 0 ? motionVec2.getZ() : motionVec1.getZ());
-					force = force.mul(preassure * acceleration, preassure * acceleration, preassure * acceleration);
-					
-					Vector3d motion = entity.getMotion();
-					motion = motion.add(force);
-					motion = new Vector3d(MathHelper.castBounds(preassure, motion.x), MathHelper.castBounds(preassure, motion.y), MathHelper.castBounds(preassure, motion.z));
-					entity.setMotion(motion);
+					if (flag) {
+
+						entity.fallDistance = 0;
+						
+						Vector3i motionVec1 = this.getInputSide().getOpposite().getDirectionVec();
+						Vector3i motionVec2 = this.getOutputSide().getDirectionVec();
+						
+						float acceleration = 0.1F;
+						Vector3d force = new Vector3d(motionVec1.getX() == 0 ? motionVec2.getX() : motionVec1.getX(), motionVec1.getY() == 0 ? motionVec2.getY() : motionVec1.getY(), motionVec1.getZ() == 0 ? motionVec2.getZ() : motionVec1.getZ());
+						force = force.mul(preassure * acceleration, preassure * acceleration, preassure * acceleration);
+						
+						Vector3d motion = entity.getMotion();
+						motion = motion.add(force);
+						motion = new Vector3d(MathHelper.castBounds(preassure, motion.x), MathHelper.castBounds(preassure, motion.y), MathHelper.castBounds(preassure, motion.z));
+						entity.setMotion(motion);
+						
+					}
 					
 				});
 			});

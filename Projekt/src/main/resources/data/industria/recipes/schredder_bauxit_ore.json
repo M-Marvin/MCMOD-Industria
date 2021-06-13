@@ -1,7 +1,7 @@
 {
   "type": "industria:schredder",
   "ingredient": {
-    "item": "industria:bauxit_ore"
+    "item": "industria:bauxite_ore"
   },
   "results": [
     {

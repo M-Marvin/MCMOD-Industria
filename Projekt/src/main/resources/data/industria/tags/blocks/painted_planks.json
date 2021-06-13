@@ -1,21 +1,21 @@
 {
   "replace": false,
   "values": [
-	"white_painted_planks",
-	"orange_painted_planks",
-	"magenta_painted_planks",
-	"light_blue_painted_planks",
-	"yellow_painted_planks",
-	"lime_painted_planks",
-	"pink_painted_planks",
-	"gray_painted_planks",
-	"light_gray_painted_planks",
-	"cyan_painted_planks",
-	"purple_painted_planks",
-	"blue_painted_planks",
-	"brown_painted_planks",
-	"green_painted_planks",
-	"red_painted_planks",
-	"black_painted_planks"
+	"industria:white_painted_planks",
+	"industria:orange_painted_planks",
+	"industria:magenta_painted_planks",
+	"industria:light_blue_painted_planks",
+	"industria:yellow_painted_planks",
+	"industria:lime_painted_planks",
+	"industria:pink_painted_planks",
+	"industria:gray_painted_planks",
+	"industria:light_gray_painted_planks",
+	"industria:cyan_painted_planks",
+	"industria:purple_painted_planks",
+	"industria:blue_painted_planks",
+	"industria:brown_painted_planks",
+	"industria:green_painted_planks",
+	"industria:red_painted_planks",
+	"industria:black_painted_planks"
   ]
 }

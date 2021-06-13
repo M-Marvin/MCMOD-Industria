@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "industria:block/terracotta_slab"
+    },
+    "type=double": {
+      "model": "minecraft:block/terracotta"
+    },
+    "type=top": {
+      "model": "industria:block/terracotta_slab_top"
+    }
+  }
+}

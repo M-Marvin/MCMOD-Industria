@@ -30,10 +30,12 @@ public class ModGameRegistry {
 	private static List<Item> itemsToRegister = new ArrayList<Item>();
 	
 	public static void registerItem(Item item) {
+		if (itemsToRegister.contains(item)) throw new RuntimeException("Dupplicated Registry Entry: " + item.getRegistryName());
 		itemsToRegister.add(item);
 	}
 	
 	public static void registerBlock(Block block, ItemGroup group, Rarity rarity) {
+		if (blocksToRegister.contains(block)) throw new RuntimeException("Dupplicated Registry Entry: " + block.getRegistryName());
 		blocksToRegister.add(block);
 		IBlockToolType info = null;
 		int burnTime = -1;
@@ -63,6 +65,7 @@ public class ModGameRegistry {
 	}
 	
 	public static void registerBlock(Block block, ItemGroup group) {
+		if (blocksToRegister.contains(block)) throw new RuntimeException("Dupplicated Registry Entry: " + block.getRegistryName());
 		blocksToRegister.add(block);
 		IBlockToolType info = null;
 		int burnTime = 0;
@@ -92,6 +95,7 @@ public class ModGameRegistry {
 	}
 	
 	public static void registerTechnicalBlock(Block block) {
+		if (blocksToRegister.contains(block)) throw new RuntimeException("Dupplicated Registry Entry: " + block.getRegistryName());
 		blocksToRegister.add(block);
 	}
 	
@@ -104,6 +108,7 @@ public class ModGameRegistry {
 	}
 	
 	private static HashMap<ResourceLocation, HashMap<GenerationStage.Decoration, List<ConfiguredFeature<?, ?>>>> featuresToRegister = new HashMap<ResourceLocation, HashMap<GenerationStage.Decoration, List<ConfiguredFeature<?, ?>>>>();
+	private static HashMap<ResourceLocation, HashMap<GenerationStage.Decoration, List<ConfiguredFeature<?, ?>>>> featuresToDeactivate = new HashMap<ResourceLocation, HashMap<GenerationStage.Decoration, List<ConfiguredFeature<?, ?>>>>();;
 	
 	@SafeVarargs
 	public static void addFeatureToBiomes(GenerationStage.Decoration decoration, ConfiguredFeature<?, ?> feature, RegistryKey<Biome>... biomes) {
@@ -139,9 +144,48 @@ public class ModGameRegistry {
 			}
 		}
 	}
+
+	@SafeVarargs
+	public static void addFeatureToRemove(GenerationStage.Decoration decoration, ConfiguredFeature<?, ?> feature, RegistryKey<Biome>... biomes) {
+		for (RegistryKey<Biome> biome : biomes) {
+			HashMap<Decoration, List<ConfiguredFeature<?, ?>>> featureMap = featuresToDeactivate.getOrDefault(biome.getLocation(), new HashMap<GenerationStage.Decoration, List<ConfiguredFeature<?, ?>>>());
+			List<ConfiguredFeature<?, ?>> features = featureMap.getOrDefault(decoration, new ArrayList<ConfiguredFeature<?, ?>>());
+			features.add(feature);
+			featureMap.put(decoration, features);
+			featuresToDeactivate.put(biome.getRegistryName(), featureMap);
+		}
+	}
+	
+	public static void addFeatureToRemove(GenerationStage.Decoration decoration, ConfiguredFeature<?, ?> feature, Biome.Category category) {
+		for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
+			if (biome.getCategory() == category) {
+				HashMap<Decoration, List<ConfiguredFeature<?, ?>>> featureMap = featuresToDeactivate.getOrDefault(biome.getRegistryName(), new HashMap<GenerationStage.Decoration, List<ConfiguredFeature<?, ?>>>());
+				List<ConfiguredFeature<?, ?>> features = featureMap.getOrDefault(decoration, new ArrayList<ConfiguredFeature<?, ?>>());
+				features.add(feature);
+				featureMap.put(decoration, features);
+				featuresToDeactivate.put(biome.getRegistryName(), featureMap);
+			}
+		}
+	}
+	
+	public static void addFeatureToRemoveInOverworld(GenerationStage.Decoration decoration, ConfiguredFeature<?, ?> feature) {
+		for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
+			if (biome.getCategory() != Biome.Category.NETHER && biome.getCategory() != Biome.Category.THEEND) {
+				HashMap<Decoration, List<ConfiguredFeature<?, ?>>> featureMap = featuresToDeactivate.getOrDefault(biome.getRegistryName(), new HashMap<GenerationStage.Decoration, List<ConfiguredFeature<?, ?>>>());
+				List<ConfiguredFeature<?, ?>> features = featureMap.getOrDefault(decoration, new ArrayList<ConfiguredFeature<?, ?>>());
+				features.add(feature);
+				featureMap.put(decoration, features);
+				featuresToDeactivate.put(biome.getRegistryName(), featureMap);
+			}
+		}
+	}
 	
 	public static HashMap<ResourceLocation, HashMap<Decoration, List<ConfiguredFeature<?, ?>>>> getFeaturesToRegister() {
 		return featuresToRegister;
+	}
+	
+	public static HashMap<ResourceLocation, HashMap<Decoration, List<ConfiguredFeature<?, ?>>>> getFeaturesToDeactivate() {
+		return featuresToDeactivate;
 	}
 	
 }

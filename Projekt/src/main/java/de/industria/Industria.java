@@ -1,11 +1,16 @@
 package de.industria;
 
+import java.util.Optional;
+
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.industria.typeregistys.ModConfiguredFeatures;
+import de.industria.util.handler.MethodHelper;
 import de.industria.util.handler.ModGameRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -14,8 +19,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome.Category;
 import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.GenerationStage.Decoration;
+import net.minecraft.world.gen.feature.Features;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.VersionChecker;
+import net.minecraftforge.fml.VersionChecker.CheckResult;
+import net.minecraftforge.fml.VersionChecker.Status;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -70,9 +81,32 @@ public class Industria {
 		}
 	};
 	
+	public static CheckResult MOD_STATUS = null;
+	
 	public Industria() {
 		
+		// TODO
+		Optional<? extends ModContainer> modContainer = ModList.get().getModContainerById(MODID);
+		if (modContainer.isPresent()) {
+			MOD_STATUS = VersionChecker.getResult(modContainer.get().getModInfo());
+			
+			if (MOD_STATUS.status.equals(Status.PENDING)) {
+				try {
+					Thread.sleep(10000);
+					MOD_STATUS = VersionChecker.getResult(modContainer.get().getModInfo());
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+		}
+		
+		LOGGER.log(Level.INFO, "#####################################################################################");
+		LOGGER.log(Level.INFO, MOD_STATUS.status);
+		
 		// register Blocks
+		ModGameRegistry.registerBlock(ModItems.tree_tap, TOOLS);
 		ModGameRegistry.registerBlock(ModItems.capacitor, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(ModItems.pulse_counter, ItemGroup.REDSTONE); 
 		ModGameRegistry.registerBlock(ModItems.stacked_redstone_torch, ItemGroup.REDSTONE);
@@ -118,10 +152,10 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.palladium_ore, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.copper_ore, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.nickel_ore, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.bauxit, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.bauxit_ore, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.wolframit, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.wolframit_ore, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.bauxite, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.bauxite_ore, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.wolframite, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.wolframite_ore, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.iron_plates, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.gold_plates, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.steel_plates, BUILDING_BLOCKS);
@@ -158,6 +192,8 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.air_compressor, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.item_distributor, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.preassure_pipe_item_terminal, MACHINES);
+		
+		ModGameRegistry.registerBlock(ModItems.motor, MACHINES);
 		
 		ModGameRegistry.registerBlock(ModItems.smooth_cobblestone, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.chiseled_smooth_stone, BUILDING_BLOCKS);
@@ -202,15 +238,54 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.mangrove_log, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.mangrove_wood, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.mangrove_leaves, DECORATIONS);
-
+		
 		ModGameRegistry.registerBlock(ModItems.beech_log, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.beech_wood, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.beech_leaves, DECORATIONS);
 		
-		ModGameRegistry.registerBlock(ModItems.tree_tap, TOOLS);
-		ModGameRegistry.registerBlock(ModItems.salt_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.mossy_end_stone_bricks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.blue_nether_bricks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.polished_red_sandstone_bricks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.polished_sandstone_bricks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.salt_bricks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_blue_nether_bricks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_red_nether_bricks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_prismarine_bricks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_bricks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_quartz_bricks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_end_stone_bricks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_polished_red_sandstone_bricks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_polished_sandstone_bricks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.cracked_salt_bricks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_blackstone_tiles, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_quartz_tiles, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_diorite_tiles, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_granite_tiles, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_andesite_tiles, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_stone_tiles, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_bauxite_tiles, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_wolframite_tiles, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.chiseled_blue_nether_bricks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.chiseled_red_nether_bricks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.smooth_sandstone, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.smooth_diorite, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.smooth_granite, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.smooth_bauxite, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.polished_dark_prismarine, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.polished_prismarine, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.polished_end_stone, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.polished_red_sandstone, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.polished_sandstone, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.polished_stone, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.blackstone_tiles, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.quartz_tiles, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.diorite_tiles, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.granite_tiles, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.andesite_tiles, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.stone_tiles, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.bauxite_tiles, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.wolframite_tiles, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.salt_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.polished_andesite_bricks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.polished_diorite_bricks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.polished_granite_bricks, BUILDING_BLOCKS);
@@ -221,6 +296,239 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.cracked_polished_granite_bricks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.cracked_polished_wolframite_bricks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.cracked_polished_bauxite_bricks, BUILDING_BLOCKS);
+		
+		ModGameRegistry.registerBlock(ModItems.polished_dark_prismarine_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.polished_prismarine_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.polished_end_stone_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.polished_red_sandstone_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.polished_sandstone_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.polished_stone_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.polished_bauxite_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.polished_wolframite_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.blackstone_tiles_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.quartz_tiles_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.diorite_tiles_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.granite_tiles_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.andesite_tiles_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.stone_tiles_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.bauxite_tiles_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.wolframite_tiles_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_blackstone_tiles_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_quartz_tiles_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_diorite_tiles_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_granite_tiles_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_andesite_tiles_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_stone_tiles_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_bauxite_tiles_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_wolframite_tiles_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_quartz_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cracked_salt_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.blue_nether_brick_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.quartz_brick_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.red_sandstone_brick_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.sandstone_brick_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.diorite_brick_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.granite_brick_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.andesite_brick_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.bauxite_brick_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.wolframite_brick_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.salt_brick_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.smooth_basalt_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.smooth_diorite_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.smooth_granite_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.smooth_andesite_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.smooth_stone_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.smooth_bauxite_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.smooth_wolframite_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.mossy_end_stone_brick_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.white_terracotta_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.white_stained_glass_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.orange_stained_glass_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.magenta_stained_glass_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.light_blue_stained_glass_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.yellow_stained_glass_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.green_stained_glass_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.pink_stained_glass_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.gray_stained_glass_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.light_gray_stained_glass_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.cyan_stained_glass_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.purple_stained_glass_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.black_stained_glass_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.brown_stained_glass_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.lime_stained_glass_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.blue_stained_glass_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.red_stained_glass_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.glass_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.netherrack_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.terracotta_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.end_stone_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.bauxite_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.wolframite_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.iron_planks_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.salt_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.white_painted_planks_slab, BUILDING_BLOCKS);
+		
+//		ModGameRegistry.registerBlock(ModItems.cracked_warped_wart_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_nether_wart_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_netherrack_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_blackstone_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_prismarine_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_terracotta_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_quartz_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_end_stone_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_red_sandstone_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_sandstone_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_diorite_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_granite_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_andesite_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_stone_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_bauxite_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_wolframite_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_salt_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cut_red_sandstone_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cut_sandstone_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_warped_wart_slab, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_nether_wart_slab, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.white_terracotta_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.white_stained_glass_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.glass_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.netherrack_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.terracotta_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.end_stone_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.bauxite_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.wolframite_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.iron_plates_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.iron_planks_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.salt_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.white_painted_planks_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.burned_planks_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_dark_prismarine_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_prismarine_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_end_stone_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_red_sandstone_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_sandstone_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_diorite_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_granite_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_andesite_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_stone_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_bauxite_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_wolframite_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.mossy_end_stone_brick_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.mossy_end_stone_brick_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.purpur_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.smooth_quartz_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.smooth_basalt_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.smooth_red_sandstone_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.smooth_sandstone_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.smooth_diorite_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.smooth_granite_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.smooth_andesite_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.smooth_stone_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.smooth_bauxite_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.smooth_wolframite_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_blackstone_tiles_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_quartz_tiles_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_diorite_tiles_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_granite_tiles_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_andesite_tiles_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_stone_tiles_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_bauxite_tiles_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_wolframite_tiles_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.netherrack_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.dark_prismarine_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.terracotta_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.quartz_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.end_stone_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.stone_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.bauxite_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.wolframite_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.iron_plates_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.iron_planks_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.salt_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.white_painted_planks_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.burned_planks_fence, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.blackstone_tiles_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.quartz_tiles_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.diorite_tiles_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.granite_tiles_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.andesite_tiles_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.stone_tiles_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.bauxite_tiles_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.wolframite_tiles_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cut_red_sandstone_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cut_sandstone_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.blue_nether_brick_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.prismarine_brick_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.quartz_brick_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.red_sandstone_brick_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.sandstone_brick_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.diorite_brick_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.granite_brick_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.andesite_brick_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.bauxite_brick_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.wolframite_brick_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.salt_brick_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_warped_wart_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_nether_wart_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_netherrack_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_blackstone_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_prismarine_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_terracotta_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_quartz_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_end_stone_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_red_sandstone_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_sandstone_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_diorite_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_granite_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_andesite_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_stone_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_bauxite_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_wolframite_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_salt_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.blackstone_tiles_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.quartz_tiles_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.diorite_tiles_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.granite_tiles_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.andesite_tiles_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.stone_tiles_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.bauxite_tiles_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.wolframite_tiles_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.smooth_basalt_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.smooth_diorite_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.smooth_granite_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.smooth_andesite_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.smooth_bauxite_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.smooth_wolframite_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.blue_nether_brick_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.quartz_brick_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.red_sandstone_brick_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.sandstone_brick_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.diorite_brick_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.granite_brick_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.andesite_brick_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.bauxite_brick_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.wolframite_brick_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.salt_brick_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_dark_prismarine_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_prismarine_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_end_stone_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_red_sandstone_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_sandstone_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_stone_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_bauxite_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_wolframite_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_blackstone_tiles_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_quartz_tiles_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_diorite_tiles_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_granite_tiles_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_andesite_tiles_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_stone_tiles_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_bauxite_tiles_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_wolframite_tiles_stairs, BUILDING_BLOCKS);
+
+		
+		
+		
 		
 		ModGameRegistry.registerBlock(ModItems.exposed_copper_plates, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.exposed_tin_plates, BUILDING_BLOCKS);
@@ -284,8 +592,15 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.clean_cladding_white, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.structure_scaffold, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(ModItems.ash, DECORATIONS);
-		
-		ModGameRegistry.registerBlock(ModItems.motor, MACHINES);
+		ModGameRegistry.registerBlock(ModItems.burned_log, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.burned_planks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.burned_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.burned_stairs, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.burned_wood_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.burned_trapdoor, DECORATIONS);
+		ModGameRegistry.registerBlock(ModItems.burned_door, DECORATIONS);
+		ModGameRegistry.registerBlock(ModItems.burned_fence, DECORATIONS);
+		ModGameRegistry.registerBlock(ModItems.burned_scrap, DECORATIONS);
 		
 		ModGameRegistry.registerTechnicalBlock(ModItems.steam);
 		ModGameRegistry.registerItem(ModItems.steam_bucket);
@@ -380,7 +695,6 @@ public class Industria {
 		ModGameRegistry.registerItem(ModItems.tpo_aluminium_dust);
 		ModGameRegistry.registerItem(ModItems.redstone_alloy_dust);
 		ModGameRegistry.registerItem(ModItems.tpo_redstone_alloy_dust);
-		ModGameRegistry.registerItem(ModItems.aluminium_dust);
 		ModGameRegistry.registerItem(ModItems.tin_dust);
 		ModGameRegistry.registerItem(ModItems.tpo_tin_dust);
 		ModGameRegistry.registerItem(ModItems.wolfram_dust);
@@ -474,7 +788,45 @@ public class Industria {
 		// TODO
 		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.OIL_DEPOT, Category.DESERT);
 		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.OIL_DEPOT, Category.OCEAN);
+		
+		// Trees TODO: Rubber Tree Models
 		ModGameRegistry.addFeatureToBiomes(Decoration.VEGETAL_DECORATION, ModConfiguredFeatures.RUBBER_TREE, Biomes.SWAMP_HILLS, Biomes.JUNGLE, Biomes.JUNGLE_EDGE, Biomes.JUNGLE_HILLS, Biomes.MODIFIED_JUNGLE, Biomes.MODIFIED_JUNGLE_EDGE);
+		ModGameRegistry.addFeatureToRemove(Decoration.VEGETAL_DECORATION, Features.ACACIA, Category.SAVANNA);
+		ModGameRegistry.addFeatureToBiomes(Decoration.VEGETAL_DECORATION, ModConfiguredFeatures.ACACIA_TREE, Category.SAVANNA);
+//		ModGameRegistry.addFeatureToRemoveInOverworld(Decoration.VEGETAL_DECORATION, Features.FANCY_OAK);
+//		ModGameRegistry.addFeatureToRemoveInOverworld(Decoration.VEGETAL_DECORATION, Features.FANCY_OAK_BEES_0002);
+//		ModGameRegistry.addFeatureToRemoveInOverworld(Decoration.VEGETAL_DECORATION, Features.FANCY_OAK_BEES_002);
+//		ModGameRegistry.addFeatureToRemoveInOverworld(Decoration.VEGETAL_DECORATION, Features.FANCY_OAK_BEES_005);
+//		ModGameRegistry.addFeatureToRemoveInOverworld(Decoration.VEGETAL_DECORATION, Features.OAK_BADLANDS);
+//		ModGameRegistry.addFeatureToRemoveInOverworld(Decoration.VEGETAL_DECORATION, Features.OAK_BEES_0002);
+//		ModGameRegistry.addFeatureToRemoveInOverworld(Decoration.VEGETAL_DECORATION, Features.OAK_BEES_002);
+//		ModGameRegistry.addFeatureToRemoveInOverworld(Decoration.VEGETAL_DECORATION, Features.OAK_BEES_005);
+//		ModGameRegistry.addFeatureToRemoveInOverworld(Decoration.VEGETAL_DECORATION, Features.OAK);
+//		ModGameRegistry.addFeatureToBiomes(Decoration.VEGETAL_DECORATION, ModConfiguredFeatures.OAK_TREE_EXTRA, Biomes.FOREST, Biomes.FLOWER_FOREST, Biomes.WOODED_HILLS);
+		
+		// Vanilla FireInfo Overrides
+		MethodHelper.addFireSetting(Blocks.ACACIA_DOOR, 5, 20);
+		MethodHelper.addFireSetting(Blocks.OAK_DOOR, 5, 20);
+		MethodHelper.addFireSetting(Blocks.BIRCH_DOOR, 5, 20);
+		MethodHelper.addFireSetting(Blocks.DARK_OAK_DOOR, 5, 20);
+		MethodHelper.addFireSetting(Blocks.SPRUCE_DOOR, 5, 20);
+		MethodHelper.addFireSetting(Blocks.CHEST, 5, 20);
+		MethodHelper.addFireSetting(Blocks.TRAPPED_CHEST, 5, 20);
+		MethodHelper.addFireSetting(Blocks.OAK_TRAPDOOR, 5, 20);
+		MethodHelper.addFireSetting(Blocks.BIRCH_TRAPDOOR, 5, 20);
+		MethodHelper.addFireSetting(Blocks.ACACIA_TRAPDOOR, 5, 20);
+		MethodHelper.addFireSetting(Blocks.DARK_OAK_TRAPDOOR, 5, 20);
+		MethodHelper.addFireSetting(Blocks.SPRUCE_TRAPDOOR, 5, 20);
+		MethodHelper.addFireSetting(Blocks.OAK_SIGN, 10, 30);
+		MethodHelper.addFireSetting(Blocks.BIRCH_SIGN, 10, 30);
+		MethodHelper.addFireSetting(Blocks.ACACIA_SIGN, 10, 30);
+		MethodHelper.addFireSetting(Blocks.DARK_OAK_SIGN, 10, 30);
+		MethodHelper.addFireSetting(Blocks.SPRUCE_SIGN, 10, 30);
+		MethodHelper.addFireSetting(Blocks.OAK_PRESSURE_PLATE, 10, 30);
+		MethodHelper.addFireSetting(Blocks.BIRCH_PRESSURE_PLATE, 10, 30);
+		MethodHelper.addFireSetting(Blocks.ACACIA_PRESSURE_PLATE, 10, 30);
+		MethodHelper.addFireSetting(Blocks.DARK_OAK_PRESSURE_PLATE, 10, 30);
+		MethodHelper.addFireSetting(Blocks.SPRUCE_PRESSURE_PLATE, 10, 30);
 		
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::setup);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::setupBlockColors);

@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"": [
+	      {"model": "industria:block/burned_scrap", "y": 0},
+	      {"model": "industria:block/burned_scrap", "y": 90},
+	      {"model": "industria:block/burned_scrap", "y": 180},
+	      {"model": "industria:block/burned_scrap", "y": 270}
+	    ]
+    }
+}

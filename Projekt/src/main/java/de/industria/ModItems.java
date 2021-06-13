@@ -363,7 +363,6 @@ public class ModItems {
 	public static final Block cracked_stone_tiles = new BlockBase("cracked_stone_tiles", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block cracked_bauxite_tiles = new BlockBase("cracked_bauxite_tiles", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block cracked_wolframite_tiles = new BlockBase("cracked_wolframite_tiles", Material.ROCK, 1.5F, 6, SoundType.STONE);
-	public static final Block smooth_sandstone = new BlockBase("smooth_sandstone", Material.ROCK, 0.8F, SoundType.STONE);
 	public static final Block smooth_red_sandstone = new BlockBase("smooth_red_sandstone", Material.ROCK, 0.8F, SoundType.STONE);
 	public static final Block smooth_diorite = new BlockBase("smooth_diorite", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block smooth_granite = new BlockBase("smooth_granite", Material.ROCK, 1.5F, 6, SoundType.STONE);
@@ -382,6 +381,20 @@ public class ModItems {
 	
 	public static final Block cracked_blue_nether_brick_slab = new BlockSlabBase("cracked_blue_nether_brick_slab", Material.ROCK, 2, 6, SoundType.NETHER_BRICK);
 	public static final Block cracked_nether_brick_slab = new BlockSlabBase("cracked_nether_brick_slab", Material.ROCK, 2, 6, SoundType.NETHER_BRICK);
+	public static final Block cracked_red_nether_brick_slab = new BlockSlabBase("cracked_red_nether_brick_slab", Material.ROCK, 2, 6, SoundType.NETHER_BRICK);
+	public static final Block cracked_andesite_brick_slab = new BlockSlabBase("cracked_andesite_brick_slab", Material.ROCK, 2, 6, SoundType.STONE);
+	public static final Block cracked_diorite_brick_slab = new BlockSlabBase("cracked_diorite_brick_slab", Material.ROCK, 2, 6, SoundType.STONE);
+	public static final Block cracked_granite_brick_slab = new BlockSlabBase("cracked_granite_brick_slab", Material.ROCK, 2, 6, SoundType.STONE);
+	public static final Block cracked_bauxite_brick_slab = new BlockSlabBase("cracked_bauxite_brick_slab", Material.ROCK, 2, 6, SoundType.STONE);
+	public static final Block cracked_wolframite_brick_slab = new BlockSlabBase("cracked_wolframite_brick_slab", Material.ROCK, 2, 6, SoundType.STONE);
+	public static final Block cracked_brick_slab = new BlockSlabBase("cracked_brick_slab", Material.ROCK, 2, 6, SoundType.STONE);
+	public static final Block cracked_sandstone_brick_slab = new BlockSlabBase("cracked_sandstone_brick_slab", Material.ROCK, 2, 6, SoundType.STONE);
+	public static final Block cracked_red_sandstone_brick_slab = new BlockSlabBase("cracked_red_sandstone_brick_slab", Material.ROCK, 2, 6, SoundType.STONE);
+	public static final Block cracked_stone_brick_slab = new BlockSlabBase("cracked_stone_brick_slab", Material.ROCK, 2, 6, SoundType.STONE);
+	public static final Block cracked_blackstone_brick_slab = new BlockSlabBase("cracked_blackstone_brick_slab", Material.ROCK, 2, 6, SoundType.STONE);
+	public static final Block cracked_prismarine_brick_slab = new BlockSlabBase("cracked_prismarine_brick_slab", Material.ROCK, 2, 6, SoundType.STONE);
+	public static final Block cracked_quartz_brick_slab = new BlockSlabBase("cracked_quartz_brick_slab", Material.ROCK, 2, 6, SoundType.STONE);
+	public static final Block cracked_end_stone_brick_slab = new BlockSlabBase("cracked_end_stone_brick_slab", Material.ROCK, 3, 9, SoundType.STONE);
 	public static final Block netherrack_slab = new BlockSlabBase("netherrack_slab", Material.ROCK, 0.4F, SoundType.NETHERRACK);
 	public static final Block end_stone_slab = new BlockSlabBase("end_stone_slab", Material.ROCK, 3, 9, SoundType.STONE);
 	public static final Block diorite_slab = new BlockSlabBase("diorite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
@@ -399,7 +412,7 @@ public class ModItems {
 	public static final Block bauxite_brick_slab = new BlockSlabBase("bauxite_brick_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block wolframite_brick_slab = new BlockSlabBase("wolframite_brick_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block salt_brick_slab = new BlockSlabBase("salt_brick_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
-	public static final Block smooth_basalt_slab = new BlockSlabBase("smooth_basalt_slab", Material.ROCK, 1.25F, 4.2F, SoundType.STONE);
+	public static final Block cracked_salt_brick_slab = new BlockSlabBase("cracked_salt_brick_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block terracotta_slab = new BlockSlabBase("terracotta_slab", Material.ROCK, 1.25F, 4.2F, SoundType.STONE);
 	public static final BlockBurnedSlab burned_wood_slab = new BlockBurnedSlab();
 	public static final Block polished_red_sandstone_slab = new BlockSlabBase("polished_red_sandstone_slab", Material.ROCK, 2, 6, SoundType.STONE);
@@ -407,7 +420,7 @@ public class ModItems {
 	public static final Block polished_end_stone_slab = new BlockSlabBase("polished_end_stone_slab", Material.ROCK, 3, 9, SoundType.STONE);
 	public static final Block polished_prismarine_slab = new BlockSlabBase("polished_prismarine_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block polished_dark_prismarine_slab = new BlockSlabBase("polished_dark_prismarine_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
-	public static final Block glass_slab = new BlockSlabBase("glass_slab", Material.GLASS, 0.3F, SoundType.GLASS);
+	public static final Block glass_slab = new BlockGlassSlab("glass_slab");
 	public static final Block polished_stone_slab = new BlockSlabBase("polished_stone_slab", Material.ROCK, 2, 6, SoundType.STONE);
 	public static final Block polished_bauxite_slab = new BlockSlabBase("polished_bauxite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block polished_wolframite_slab = new BlockSlabBase("polished_wolframite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
@@ -423,7 +436,6 @@ public class ModItems {
 	public static final Block smooth_diorite_slab = new BlockSlabBase("smooth_diorite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block smooth_granite_slab = new BlockSlabBase("smooth_granite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block smooth_andesite_slab = new BlockSlabBase("smooth_andesite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
-	public static final Block smooth_stone_slab = new BlockSlabBase("smooth_stone_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block smooth_bauxite_slab = new BlockSlabBase("smooth_bauxite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block smooth_wolframite_slab = new BlockSlabBase("smooth_wolframite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block cracked_blackstone_tiles_slab = new BlockSlabBase("cracked_blackstone_tiles_slab", Material.ROCK, 2F, 6, SoundType.STONE);
@@ -434,8 +446,6 @@ public class ModItems {
 	public static final Block cracked_stone_tiles_slab = new BlockSlabBase("cracked_stone_tiles_slab", Material.ROCK, 2F, 6, SoundType.STONE);
 	public static final Block cracked_bauxite_tiles_slab = new BlockSlabBase("cracked_bauxite_tiles_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block cracked_wolframite_tiles_slab = new BlockSlabBase("cracked_wolframite_tiles_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
-	public static final Block cracked_quartz_slab = new BlockSlabBase("cracked_quartz_slab", Material.ROCK, 2F, 6, SoundType.STONE);
-	public static final Block cracked_salt_slab = new BlockSlabBase("cracked_salt_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block red_sandstone_brick_slab = new BlockSlabBase("red_sandstone_brick_slab", Material.ROCK, 2F, 6, SoundType.STONE);
 	public static final Block sandstone_brick_slab = new BlockSlabBase("sandstone_brick_slab", Material.ROCK, 2F, 6, SoundType.STONE);
 	

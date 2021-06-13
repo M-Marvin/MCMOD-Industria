@@ -3,6 +3,6 @@
   "textures": {
     "bottom": "industria:block/cracked_stone_tiles",
     "top": "industria:block/cracked_stone_tiles",
-    "side": "industria:block/cracked_stone_tiles_slab_side"
+    "side": "industria:block/cracked_stone_tiles"
   }
 }

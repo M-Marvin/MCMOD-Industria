@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "industria:block/cracked_bauxite_brick_slab"
+    },
+    "type=double": {
+      "model": "industria:block/cracked_bauxite_bricks"
+    },
+    "type=top": {
+      "model": "industria:block/cracked_bauxite_brick_slab_top"
+    }
+  }
+}

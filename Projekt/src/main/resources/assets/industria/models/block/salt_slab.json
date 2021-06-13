@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "industria:block/salt_block",
+    "top": "industria:block/salt_block",
+    "side": "industria:block/salt_slab_side"
+  }
+}

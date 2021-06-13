@@ -3,6 +3,6 @@
   "textures": {
     "bottom": "minecraft:block/smooth_andesite",
     "top": "industria:block/smooth_andesite",
-    "side": "minecraft:block/smooth_andesite_slab_side"
+    "side": "industria:block/smooth_andesite_slab_side"
   }
 }

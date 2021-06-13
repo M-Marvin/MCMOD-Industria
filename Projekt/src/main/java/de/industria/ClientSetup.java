@@ -106,6 +106,7 @@ public class ClientSetup {
 		RenderTypeLookup.setRenderLayer(ModItems.red_stained_glass_slab, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModItems.lime_stained_glass_slab, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModItems.brown_stained_glass_slab, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModItems.glass_slab, RenderType.getCutoutMipped());
 		
 		RenderTypeLookup.setRenderLayer(ModFluids.SULFURIC_ACID, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_SULFURIC_ACID, RenderType.getTranslucent());

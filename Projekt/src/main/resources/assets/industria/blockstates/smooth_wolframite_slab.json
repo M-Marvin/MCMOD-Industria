@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "industria:block/smooth_wolframite_slab"
+    },
+    "type=double": {
+      "model": "industria:block/smooth_wolframite"
+    },
+    "type=top": {
+      "model": "industria:block/smooth_wolframite_slab_top"
+    }
+  }
+}

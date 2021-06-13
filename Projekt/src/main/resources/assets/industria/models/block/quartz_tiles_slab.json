@@ -3,6 +3,6 @@
   "textures": {
     "bottom": "industria:block/quartz_tiles",
     "top": "industria:block/quartz_tiles",
-    "side": "industria:block/quartz_tiles_slab_side"
+    "side": "industria:block/quartz_tiles"
   }
 }

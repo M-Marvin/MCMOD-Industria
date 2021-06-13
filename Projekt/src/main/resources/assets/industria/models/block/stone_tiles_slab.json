@@ -3,6 +3,6 @@
   "textures": {
     "bottom": "industria:block/stone_tiles",
     "top": "industria:block/stone_tiles",
-    "side": "industria:block/stone_tiles_slab_side"
+    "side": "industria:block/stone_tiles"
   }
 }

@@ -3,6 +3,6 @@
   "textures": {
     "bottom": "industria:block/andesite_tiles",
     "top": "industria:block/andesite_tiles",
-    "side": "industria:block/andesite_tiles_slab_side"
+    "side": "industria:block/andesite_tiles"
   }
 }

@@ -3,6 +3,6 @@
   "textures": {
     "bottom": "industria:block/granite_tiles",
     "top": "industria:block/granite_tiles",
-    "side": "industria:block/granite_tiles_slab_side"
+    "side": "industria:block/granite_tiles"
   }
 }

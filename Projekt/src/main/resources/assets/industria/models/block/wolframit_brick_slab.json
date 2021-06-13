@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "industria:block/wolframite_bricks",
-    "top": "industria:block/wolframite_bricks",
-    "side": "industria:block/wolframit_brick_slab_side"
-  }
-}

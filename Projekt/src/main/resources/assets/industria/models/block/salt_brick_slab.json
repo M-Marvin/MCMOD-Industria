@@ -3,6 +3,6 @@
   "textures": {
     "bottom": "industria:block/salt_bricks",
     "top": "industria:block/salt_bricks",
-    "side": "industria:block/salt_brick_slab_side"
+    "side": "industria:block/salt_bricks"
   }
 }

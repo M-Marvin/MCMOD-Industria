@@ -3,6 +3,6 @@
   "textures": {
     "bottom": "industria:block/blue_nether_bricks",
     "top": "industria:block/blue_nether_bricks",
-    "side": "industria:block/blue_nether_brick_slab_side"
+    "side": "industria:block/blue_nether_bricks"
   }
 }

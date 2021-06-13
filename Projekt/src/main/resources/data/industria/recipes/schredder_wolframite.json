@@ -1,7 +1,7 @@
 {
   "type": "industria:schredder",
   "ingredient": {
-    "item": "industria:wolframit"
+    "item": "industria:wolframite"
   },
   "results": [
     {

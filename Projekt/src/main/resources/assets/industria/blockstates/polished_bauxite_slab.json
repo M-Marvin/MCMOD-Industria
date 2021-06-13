@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "industria:block/polished_bauxite_slab"
+    },
+    "type=double": {
+      "model": "industria:block/polished_bauxite"
+    },
+    "type=top": {
+      "model": "industria:block/polished_bauxite_slab_top"
+    }
+  }
+}

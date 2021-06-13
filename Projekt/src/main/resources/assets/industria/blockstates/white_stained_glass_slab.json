@@ -4,7 +4,7 @@
       "model": "industria:block/white_stained_glass_slab"
     },
     "type=double": {
-      "model": "industria:block/white_stained_glass"
+      "model": "minecraft:block/white_stained_glass"
     },
     "type=top": {
       "model": "industria:block/white_stained_glass_slab_top"

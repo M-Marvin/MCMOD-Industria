@@ -104,7 +104,7 @@ public class BlockBurnManager {
 			return ModItems.burned_stairs.getNotPersistant(); // TODO
 		}),
 		SLABS((state, world, pos) -> {
-			return ModItems.burned_slab.getNotPersistant(); // TODO
+			return ModItems.burned_wood_slab.getNotPersistant().with(BlockStateProperties.SLAB_TYPE, state.get(BlockStateProperties.SLAB_TYPE));
 		}),
 		FENCES((state, world, pos) -> {
 			return ModItems.burned_fence.getNotPersistant().with(BlockStateProperties.NORTH, state.get(BlockStateProperties.NORTH)).with(BlockStateProperties.SOUTH, state.get(BlockStateProperties.SOUTH)).with(BlockStateProperties.EAST, state.get(BlockStateProperties.EAST)).with(BlockStateProperties.WEST, state.get(BlockStateProperties.WEST)).with(BlockStateProperties.WATERLOGGED, state.get(BlockStateProperties.WATERLOGGED));

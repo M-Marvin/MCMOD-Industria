@@ -3,6 +3,6 @@
   "textures": {
     "bottom": "industria:block/blackstone_tiles",
     "top": "industria:block/blackstone_tiles",
-    "side": "industria:block/blackstone_tiles_slab_side"
+    "side": "industria:block/blackstone_tiles"
   }
 }

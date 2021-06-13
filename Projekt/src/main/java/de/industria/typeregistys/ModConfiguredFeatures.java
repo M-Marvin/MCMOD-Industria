@@ -145,12 +145,12 @@ public class ModConfiguredFeatures {
 			)
 	);
 	
-	public static final ConfiguredFeature<?, ?> BAUXIT_STONE_ORE = registerConfiguredFeature("bauxit_stone_ore",
+	public static final ConfiguredFeature<?, ?> BAUXIT_STONE_ORE = registerConfiguredFeature("bauxite_stone_ore",
 			ModFeature.STONE_ORE.withConfiguration(
 					new StoneOreFeatureConfig(
 							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
-							ModItems.bauxit.getDefaultState(),
-							ModItems.bauxit_ore.getDefaultState(),
+							ModItems.bauxite.getDefaultState(),
+							ModItems.bauxite_ore.getDefaultState(),
 							42
 					)
 			).withPlacement(
@@ -163,8 +163,8 @@ public class ModConfiguredFeatures {
 			ModFeature.STONE_ORE.withConfiguration(
 					new StoneOreFeatureConfig(
 							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
-							ModItems.wolframit.getDefaultState(),
-							ModItems.wolframit_ore.getDefaultState(),
+							ModItems.wolframite.getDefaultState(),
+							ModItems.wolframite_ore.getDefaultState(),
 							42
 					)
 			).withPlacement(

@@ -9,6 +9,7 @@ import de.industria.blocks.BlockBurnedDoor;
 import de.industria.blocks.BlockBurnedFence;
 import de.industria.blocks.BlockBurnedLog;
 import de.industria.blocks.BlockBurnedScrap;
+import de.industria.blocks.BlockBurnedSlab;
 import de.industria.blocks.BlockBurnedTrapdoor;
 import de.industria.blocks.BlockConveyorBelt;
 import de.industria.blocks.BlockConveyorSpliter;
@@ -19,6 +20,7 @@ import de.industria.blocks.BlockEnderCore;
 import de.industria.blocks.BlockFallingDust;
 import de.industria.blocks.BlockFluidPipe;
 import de.industria.blocks.BlockFluidValve;
+import de.industria.blocks.BlockGlassSlab;
 import de.industria.blocks.BlockHangingVine;
 import de.industria.blocks.BlockInfinityPowerSource;
 import de.industria.blocks.BlockIronRod;
@@ -123,7 +125,6 @@ import de.industria.items.panelitems.ItemLampElement;
 import de.industria.items.panelitems.ItemLeverElement;
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModSoundEvents;
-import de.industria.util.handler.ModGameRegistry;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -135,6 +136,7 @@ import net.minecraft.item.Rarity;
 import net.minecraft.util.ResourceLocation;
 
 public class ModItems {
+	
 	
 	// Redstone
 	public static final Block pulse_counter = new BlockRDPulseCounter();
@@ -217,10 +219,10 @@ public class ModItems {
 	public static final Block item_distributor = new BlockItemDistributor();
 	
 	// Ore and Resource Blocks
-	public static final Block bauxit = new BlockBase("bauxit", Material.ROCK, 1.5F, SoundType.STONE);
-	public static final Block bauxit_ore = new BlockBase("bauxit_ore", Material.ROCK, 1.5F, SoundType.STONE);
-	public static final Block wolframit = new BlockBase("wolframit", Material.ROCK, 1.5F, SoundType.STONE);
-	public static final Block wolframit_ore = new BlockBase("wolframit_ore", Material.ROCK, 1.5F, SoundType.STONE);
+	public static final Block bauxite = new BlockBase("bauxite", Material.ROCK, 1.5F, SoundType.STONE);
+	public static final Block bauxite_ore = new BlockBase("bauxite_ore", Material.ROCK, 1.5F, SoundType.STONE);
+	public static final Block wolframite = new BlockBase("wolframite", Material.ROCK, 1.5F, SoundType.STONE);
+	public static final Block wolframite_ore = new BlockBase("wolframite_ore", Material.ROCK, 1.5F, SoundType.STONE);
 	public static final Block copper_ore = new BlockBase("copper_ore", Material.ROCK, 3F, SoundType.STONE);
 	public static final Block tin_ore = new BlockBase("tin_ore", Material.ROCK, 3F, SoundType.STONE);
 	public static final Block silver_ore = new BlockBase("silver_ore", Material.ROCK, 3F, SoundType.STONE);
@@ -386,20 +388,20 @@ public class ModItems {
 	public static final Block granite_slab = new BlockSlabBase("granite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block andesite_slab = new BlockSlabBase("andesite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block stone_slab = new BlockSlabBase("stone_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
-	public static final Block bauxit_slab = new BlockSlabBase("bauxit_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
-	public static final Block wolframit_slab = new BlockSlabBase("wolframit_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
+	public static final Block bauxite_slab = new BlockSlabBase("bauxite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
+	public static final Block wolframite_slab = new BlockSlabBase("wolframite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block salt_slab = new BlockSlabBase("salt_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block blue_nether_brick_slab = new BlockSlabBase("blue_nether_brick_slab", Material.ROCK, 2, 6, SoundType.NETHER_BRICK);
 	public static final Block quartz_brick_slab = new BlockSlabBase("quartz_brick_slab", Material.ROCK, 2, 6, SoundType.STONE);
 	public static final Block diorite_brick_slab = new BlockSlabBase("diorite_brick_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block granite_brick_slab = new BlockSlabBase("granite_brick_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block andesite_brick_slab = new BlockSlabBase("andesite_brick_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
-	public static final Block bauxit_brick_slab = new BlockSlabBase("bauxit_brick_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
-	public static final Block wolframit_brick_slab = new BlockSlabBase("wolframit_brick_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
+	public static final Block bauxite_brick_slab = new BlockSlabBase("bauxite_brick_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
+	public static final Block wolframite_brick_slab = new BlockSlabBase("wolframite_brick_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block salt_brick_slab = new BlockSlabBase("salt_brick_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block smooth_basalt_slab = new BlockSlabBase("smooth_basalt_slab", Material.ROCK, 1.25F, 4.2F, SoundType.STONE);
 	public static final Block terracotta_slab = new BlockSlabBase("terracotta_slab", Material.ROCK, 1.25F, 4.2F, SoundType.STONE);
-	public static final Block burned_planks_slab = new BlockSlabBase("burned_planks_slab", Material.WOOD, 1F, 3, SoundType.STONE);
+	public static final BlockBurnedSlab burned_wood_slab = new BlockBurnedSlab();
 	public static final Block polished_red_sandstone_slab = new BlockSlabBase("polished_red_sandstone_slab", Material.ROCK, 2, 6, SoundType.STONE);
 	public static final Block polished_sandstone_slab = new BlockSlabBase("polished_sandstone_slab", Material.ROCK, 2, 6, SoundType.STONE);
 	public static final Block polished_end_stone_slab = new BlockSlabBase("polished_end_stone_slab", Material.ROCK, 3, 9, SoundType.STONE);
@@ -407,8 +409,8 @@ public class ModItems {
 	public static final Block polished_dark_prismarine_slab = new BlockSlabBase("polished_dark_prismarine_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block glass_slab = new BlockSlabBase("glass_slab", Material.GLASS, 0.3F, SoundType.GLASS);
 	public static final Block polished_stone_slab = new BlockSlabBase("polished_stone_slab", Material.ROCK, 2, 6, SoundType.STONE);
-	public static final Block polished_bauxit_slab = new BlockSlabBase("polished_bauxit_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
-	public static final Block polished_wolframit_slab = new BlockSlabBase("polished_wolframit_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
+	public static final Block polished_bauxite_slab = new BlockSlabBase("polished_bauxite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
+	public static final Block polished_wolframite_slab = new BlockSlabBase("polished_wolframite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block mossy_end_stone_brick_slab = new BlockSlabBase("mossy_end_stone_brick_slab", Material.ROCK, 3, 9, SoundType.STONE);
 	public static final Block blackstone_tiles_slab = new BlockSlabBase("blackstone_tiles_slab", Material.ROCK, 2, 6, SoundType.STONE);
 	public static final Block quartz_tiles_slab = new BlockSlabBase("quartz_tiles_slab", Material.ROCK, 2, 6, SoundType.STONE);
@@ -416,36 +418,23 @@ public class ModItems {
 	public static final Block granite_tiles_slab = new BlockSlabBase("granite_tiles_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block andesite_tiles_slab = new BlockSlabBase("andesite_tiles_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block stone_tiles_slab = new BlockSlabBase("stone_tiles_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
-	public static final Block bauxit_tiles_slab = new BlockSlabBase("bauxit_tiles_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
-	public static final Block wolframit_tiles_slab = new BlockSlabBase("wolframit_tiles_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
+	public static final Block bauxite_tiles_slab = new BlockSlabBase("bauxite_tiles_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
+	public static final Block wolframite_tiles_slab = new BlockSlabBase("wolframite_tiles_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block smooth_diorite_slab = new BlockSlabBase("smooth_diorite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block smooth_granite_slab = new BlockSlabBase("smooth_granite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block smooth_andesite_slab = new BlockSlabBase("smooth_andesite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block smooth_stone_slab = new BlockSlabBase("smooth_stone_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
-	public static final Block smooth_bauxit_slab = new BlockSlabBase("smooth_bauxit_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
-	public static final Block smooth_wolframit_slab = new BlockSlabBase("smooth_wolframit_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
+	public static final Block smooth_bauxite_slab = new BlockSlabBase("smooth_bauxite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
+	public static final Block smooth_wolframite_slab = new BlockSlabBase("smooth_wolframite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block cracked_blackstone_tiles_slab = new BlockSlabBase("cracked_blackstone_tiles_slab", Material.ROCK, 2F, 6, SoundType.STONE);
 	public static final Block cracked_quartz_tiles_slab = new BlockSlabBase("cracked_quartz_tiles_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block cracked_diorite_tiles_slab = new BlockSlabBase("cracked_diorite_tiles_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block cracked_granite_tiles_slab = new BlockSlabBase("cracked_granite_tiles_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block cracked_andesite_tiles_slab = new BlockSlabBase("cracked_andesite_tiles_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block cracked_stone_tiles_slab = new BlockSlabBase("cracked_stone_tiles_slab", Material.ROCK, 2F, 6, SoundType.STONE);
-	public static final Block cracked_bauxit_tiles_slab = new BlockSlabBase("cracked_bauxit_tiles_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
-	public static final Block cracked_wolframit_tiles_slab = new BlockSlabBase("cracked_wolframit_tiles_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
-	public static final Block cracked_netherrack_slab = new BlockSlabBase("cracked_netherrack_slab", Material.ROCK, 2F, 6, SoundType.STONE);
-	public static final Block cracked_blackstone_slab = new BlockSlabBase("cracked_blackstone_slab", Material.ROCK, 2F, 6, SoundType.STONE);
-	public static final Block cracked_prismarine_slab = new BlockSlabBase("cracked_prismarine_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
-	public static final Block cracked_terracotta_slab = new BlockSlabBase("cracked_terracotta_slab", Material.ROCK, 2F, 6, SoundType.STONE);
+	public static final Block cracked_bauxite_tiles_slab = new BlockSlabBase("cracked_bauxite_tiles_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
+	public static final Block cracked_wolframite_tiles_slab = new BlockSlabBase("cracked_wolframite_tiles_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block cracked_quartz_slab = new BlockSlabBase("cracked_quartz_slab", Material.ROCK, 2F, 6, SoundType.STONE);
-	public static final Block cracked_end_stone_slab = new BlockSlabBase("cracked_end_stone_slab", Material.ROCK, 3, 9, SoundType.STONE);
-	public static final Block cracked_red_sandstone_slab = new BlockSlabBase("cracked_red_sandstone_slab", Material.ROCK, 2F, 6, SoundType.STONE);
-	public static final Block cracked_sandstone_slab = new BlockSlabBase("cracked_sandstone_slab", Material.ROCK, 2F, 6, SoundType.STONE);
-	public static final Block cracked_diorite_slab = new BlockSlabBase("cracked_diorite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
-	public static final Block cracked_granite_slab = new BlockSlabBase("cracked_granite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
-	public static final Block cracked_andesite_slab = new BlockSlabBase("cracked_andesite_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
-	public static final Block cracked_stone_slab = new BlockSlabBase("cracked_stone_slab", Material.ROCK, 2, 6, SoundType.STONE);
-	public static final Block cracked_bauxit_slab = new BlockSlabBase("cracked_bauxit_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
-	public static final Block cracked_wolframit_slab = new BlockSlabBase("cracked_wolframit_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block cracked_salt_slab = new BlockSlabBase("cracked_salt_slab", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block red_sandstone_brick_slab = new BlockSlabBase("red_sandstone_brick_slab", Material.ROCK, 2F, 6, SoundType.STONE);
 	public static final Block sandstone_brick_slab = new BlockSlabBase("sandstone_brick_slab", Material.ROCK, 2F, 6, SoundType.STONE);
@@ -454,7 +443,22 @@ public class ModItems {
 	public static final Block iron_planks_slab = new BlockSlabBase("iron_planks_slab", Material.ROCK, 2.5F, 2F, SoundType.STONE);
 	public static final Block white_painted_planks_slab = new BlockWoodenSlabBase("white_painted_planks_slab", Material.ROCK, 2,3, SoundType.STONE);
 	public static final Block white_terracotta_slab = new BlockSlabBase("white_terracotta_slab", Material.ROCK, 1.25F, 4.2F, SoundType.STONE);
-	public static final Block white_stained_glass_slab = new BlockSlabBase("white_stained_glass_slab", Material.GLASS, 0.3F, SoundType.GLASS);
+	public static final Block white_stained_glass_slab = new BlockGlassSlab("white_stained_glass_slab");
+	public static final Block orange_stained_glass_slab = new BlockGlassSlab("orange_stained_glass_slab");
+	public static final Block magenta_stained_glass_slab = new BlockGlassSlab("magenta_stained_glass_slab");
+	public static final Block light_blue_stained_glass_slab = new BlockGlassSlab("light_blue_stained_glass_slab");
+	public static final Block yellow_stained_glass_slab = new BlockGlassSlab("yellow_stained_glass_slab");
+	public static final Block green_stained_glass_slab = new BlockGlassSlab("green_stained_glass_slab");
+	public static final Block pink_stained_glass_slab = new BlockGlassSlab("pink_stained_glass_slab");
+	public static final Block gray_stained_glass_slab = new BlockGlassSlab("gray_stained_glass_slab");
+	public static final Block light_gray_stained_glass_slab = new BlockGlassSlab("light_gray_stained_glass_slab");
+	public static final Block cyan_stained_glass_slab = new BlockGlassSlab("cyan_stained_glass_slab");
+	public static final Block purple_stained_glass_slab = new BlockGlassSlab("purple_stained_glass_slab");
+	public static final Block black_stained_glass_slab = new BlockGlassSlab("black_stained_glass_slab");
+	public static final Block brown_stained_glass_slab = new BlockGlassSlab("brown_stained_glass_slab");
+	public static final Block blue_stained_glass_slab = new BlockGlassSlab("blue_stained_glass_slab");
+	public static final Block lime_stained_glass_slab = new BlockGlassSlab("lime_stained_glass_slab");
+	public static final Block red_stained_glass_slab = new BlockGlassSlab("red_stained_glass_slab");
 	
 	public static final Block stone_corner = new BlockCornerBlockBase("stone_corner", () -> Blocks.STONE.getDefaultState(), AbstractBlock.Properties.create(Material.ROCK).sound(SoundType.STONE));
 	
@@ -467,8 +471,8 @@ public class ModItems {
 //		ModGameRegistry.registerBlock(ModItems.netherrack_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.terracotta_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.end_stone_stairs, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.bauxit_stairs, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.wolframit_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.bauxite_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.wolframite_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.iron_plates_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.iron_planks_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.salt_stairs, BUILDING_BLOCKS);
@@ -478,8 +482,8 @@ public class ModItems {
 //		ModGameRegistry.registerBlock(ModItems.cracked_granite_tiles_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.cracked_andesite_tiles_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.cracked_stone_tiles_stairs, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.cracked_bauxit_tiles_stairs, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.cracked_wolframit_tiles_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_bauxite_tiles_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_wolframite_tiles_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.blue_nether_brick_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.quartz_brick_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.red_sandstone_brick_stairs, BUILDING_BLOCKS);
@@ -487,8 +491,8 @@ public class ModItems {
 //		ModGameRegistry.registerBlock(ModItems.diorite_brick_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.granite_brick_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.andesite_brick_stairs, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.bauxit_brick_stairs, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.wolframit_brick_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.bauxite_brick_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.wolframite_brick_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.salt_brick_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.polished_dark_prismarine_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.polished_prismarine_stairs, BUILDING_BLOCKS);
@@ -496,8 +500,8 @@ public class ModItems {
 //		ModGameRegistry.registerBlock(ModItems.polished_red_sandstone_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.polished_sandstone_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.polished_stone_stairs, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.polished_bauxit_stairs, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.polished_wolframit_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_bauxite_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_wolframite_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.cracked_blue_nether_brick_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.cracked_nether_brick_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.cracked_netherrack_stairs, BUILDING_BLOCKS);
@@ -512,8 +516,8 @@ public class ModItems {
 //		ModGameRegistry.registerBlock(ModItems.cracked_granite_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.cracked_andesite_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.cracked_stone_stairs, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.cracked_bauxit_stairs, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.cracked_wolframit_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_bauxite_stairs, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_wolframite_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.cracked_salt_stairs, BUILDING_BLOCKS);
 //	ModGameRegistry.registerBlock(ModItems.cut_red_sandstone_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.cut_sandstone_stairs, null);
@@ -522,24 +526,24 @@ public class ModItems {
 //	ModGameRegistry.registerBlock(ModItems.diorite_brick_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.granite_brick_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.andesite_brick_stairs, null);
-//	ModGameRegistry.registerBlock(ModItems.bauxit_brick_stairs, null);
-//	ModGameRegistry.registerBlock(ModItems.wolframit_brick_stairs, null);
+//	ModGameRegistry.registerBlock(ModItems.bauxite_brick_stairs, null);
+//	ModGameRegistry.registerBlock(ModItems.wolframite_brick_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.salt_brick_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.polished_prismarine_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.polished_end_stone_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.polished_red_sandstone_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.polished_sandstone_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.polished_stone_stairs, null);
-//	ModGameRegistry.registerBlock(ModItems.polished_bauxit_stairs, null);
-//	ModGameRegistry.registerBlock(ModItems.polished_wolframit_stairs, null);
+//	ModGameRegistry.registerBlock(ModItems.polished_bauxite_stairs, null);
+//	ModGameRegistry.registerBlock(ModItems.polished_wolframite_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.white_terracotta_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.white_stained_glass_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.glass_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.netherrack_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.terracotta_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.end_stone_stairs, null);
-//	ModGameRegistry.registerBlock(ModItems.bauxit_stairs, null);
-//	ModGameRegistry.registerBlock(ModItems.wolframit_stairs, null);
+//	ModGameRegistry.registerBlock(ModItems.bauxite_stairs, null);
+//	ModGameRegistry.registerBlock(ModItems.wolframite_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.iron_plates_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.iron_planks_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.salt_stairs, null);
@@ -555,8 +559,8 @@ public class ModItems {
 //	ModGameRegistry.registerBlock(ModItems.cracked_granite_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.cracked_andesite_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.cracked_stone_stairs, null);
-//	ModGameRegistry.registerBlock(ModItems.cracked_bauxit_stairs, null);
-//	ModGameRegistry.registerBlock(ModItems.cracked_wolframit_stairs, null);
+//	ModGameRegistry.registerBlock(ModItems.cracked_bauxite_stairs, null);
+//	ModGameRegistry.registerBlock(ModItems.cracked_wolframite_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.cracked_salt_stairs, null);
 //	ModGameRegistry.registerBlock(ModItems.blackstone_tiles_stairs, BUILDING_BLOCKS);
 //	ModGameRegistry.registerBlock(ModItems.quartz_tiles_stairs, BUILDING_BLOCKS);
@@ -564,14 +568,14 @@ public class ModItems {
 //	ModGameRegistry.registerBlock(ModItems.granite_tiles_stairs, BUILDING_BLOCKS);
 //	ModGameRegistry.registerBlock(ModItems.andesite_tiles_stairs, BUILDING_BLOCKS);
 //	ModGameRegistry.registerBlock(ModItems.stone_tiles_stairs, BUILDING_BLOCKS);
-//	ModGameRegistry.registerBlock(ModItems.bauxit_tiles_stairs, BUILDING_BLOCKS);
-//	ModGameRegistry.registerBlock(ModItems.wolframit_tiles_stairs, BUILDING_BLOCKS);
+//	ModGameRegistry.registerBlock(ModItems.bauxite_tiles_stairs, BUILDING_BLOCKS);
+//	ModGameRegistry.registerBlock(ModItems.wolframite_tiles_stairs, BUILDING_BLOCKS);
 //	ModGameRegistry.registerBlock(ModItems.smooth_basalt_stairs, BUILDING_BLOCKS);
 //	ModGameRegistry.registerBlock(ModItems.smooth_diorite_stairs, BUILDING_BLOCKS);
 //	ModGameRegistry.registerBlock(ModItems.smooth_granite_stairs, BUILDING_BLOCKS);
 //	ModGameRegistry.registerBlock(ModItems.smooth_andesite_stairs, BUILDING_BLOCKS);
-//	ModGameRegistry.registerBlock(ModItems.smooth_bauxit_stairs, BUILDING_BLOCKS);
-//	ModGameRegistry.registerBlock(ModItems.smooth_wolframit_stairs, BUILDING_BLOCKS);
+//	ModGameRegistry.registerBlock(ModItems.smooth_bauxite_stairs, BUILDING_BLOCKS);
+//	ModGameRegistry.registerBlock(ModItems.smooth_wolframite_stairs, BUILDING_BLOCKS);
 //	
 //
 //		ModGameRegistry.registerBlock(ModItems.smooth_quartz_wall, BUILDING_BLOCKS);
@@ -582,16 +586,16 @@ public class ModItems {
 //		ModGameRegistry.registerBlock(ModItems.smooth_granite_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.smooth_andesite_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.smooth_stone_wall, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.smooth_bauxit_wall, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.smooth_wolframit_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.smooth_bauxite_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.smooth_wolframite_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.cracked_blackstone_tiles_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.cracked_quartz_tiles_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.cracked_diorite_tiles_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.cracked_granite_tiles_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.cracked_andesite_tiles_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.cracked_stone_tiles_wall, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.cracked_bauxit_tiles_wall, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.cracked_wolframit_tiles_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_bauxite_tiles_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_wolframite_tiles_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.polished_dark_prismarine_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.polished_prismarine_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.polished_end_stone_wall, BUILDING_BLOCKS);
@@ -601,8 +605,8 @@ public class ModItems {
 //		ModGameRegistry.registerBlock(ModItems.polished_granite_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.polished_andesite_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.polished_stone_wall, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.polished_bauxit_wall, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.polished_wolframit_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_bauxite_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.polished_wolframite_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.mossy_end_stone_brick_stairs, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.mossy_end_stone_brick_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.purpur_wall, BUILDING_BLOCKS);
@@ -612,8 +616,8 @@ public class ModItems {
 //		ModGameRegistry.registerBlock(ModItems.quartz_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.end_stone_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.stone_wall, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.bauxit_wall, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.wolframit_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.bauxite_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.wolframite_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.iron_plates_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.iron_planks_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.salt_wall, BUILDING_BLOCKS);
@@ -625,8 +629,8 @@ public class ModItems {
 //		ModGameRegistry.registerBlock(ModItems.granite_tiles_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.andesite_tiles_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.stone_tiles_wall, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.bauxit_tiles_wall, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.wolframit_tiles_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.bauxite_tiles_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.wolframite_tiles_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.cut_red_sandstone_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.cut_sandstone_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.polished_prismarine_wall, null);
@@ -637,8 +641,8 @@ public class ModItems {
 //		ModGameRegistry.registerBlock(ModItems.polished_granite_wall, null);
 //		ModGameRegistry.registerBlock(ModItems.polished_andesite_wall, null);
 //		ModGameRegistry.registerBlock(ModItems.polished_stone_wall, null);
-//		ModGameRegistry.registerBlock(ModItems.polished_bauxit_wall, null);
-//		ModGameRegistry.registerBlock(ModItems.polished_wolframit_wall, null);
+//		ModGameRegistry.registerBlock(ModItems.polished_bauxite_wall, null);
+//		ModGameRegistry.registerBlock(ModItems.polished_wolframite_wall, null);
 //		ModGameRegistry.registerBlock(ModItems.smooth_quartz_wall, null);
 //		ModGameRegistry.registerBlock(ModItems.smooth_basalt_wall, null);
 //		ModGameRegistry.registerBlock(ModItems.smooth_red_sandstone_wall, null);
@@ -651,8 +655,8 @@ public class ModItems {
 //		ModGameRegistry.registerBlock(ModItems.quartz_wall, null);
 //		ModGameRegistry.registerBlock(ModItems.end_stone_wall, null);
 //		ModGameRegistry.registerBlock(ModItems.stone_wall, null);
-//		ModGameRegistry.registerBlock(ModItems.bauxit_wall, null);
-//		ModGameRegistry.registerBlock(ModItems.wolframit_wall, null);
+//		ModGameRegistry.registerBlock(ModItems.bauxite_wall, null);
+//		ModGameRegistry.registerBlock(ModItems.wolframite_wall, null);
 //		ModGameRegistry.registerBlock(ModItems.iron_plates_wall, null);
 //		ModGameRegistry.registerBlock(ModItems.iron_planks_wall, null);
 //		ModGameRegistry.registerBlock(ModItems.salt_wall, null);
@@ -664,8 +668,8 @@ public class ModItems {
 //		ModGameRegistry.registerBlock(ModItems.diorite_brick_wall, null);
 //		ModGameRegistry.registerBlock(ModItems.granite_brick_wall, null);
 //		ModGameRegistry.registerBlock(ModItems.andesite_brick_wall, null);
-//		ModGameRegistry.registerBlock(ModItems.bauxit_brick_wall, null);
-//		ModGameRegistry.registerBlock(ModItems.wolframit_brick_wall, null);
+//		ModGameRegistry.registerBlock(ModItems.bauxite_brick_wall, null);
+//		ModGameRegistry.registerBlock(ModItems.wolframite_brick_wall, null);
 //		ModGameRegistry.registerBlock(ModItems.salt_brick_wall, null);
 //		ModGameRegistry.registerBlock(ModItems.cracked_blue_nether_brick_wall, null);
 //		ModGameRegistry.registerBlock(ModItems.cracked_nether_brick_wall, null);
@@ -676,8 +680,8 @@ public class ModItems {
 //		ModGameRegistry.registerBlock(ModItems.cracked_granite_wall, null);
 //		ModGameRegistry.registerBlock(ModItems.cracked_andesite_wall, null);
 //		ModGameRegistry.registerBlock(ModItems.cracked_stone_wall, null);
-//		ModGameRegistry.registerBlock(ModItems.cracked_bauxit_wall, null);
-//		ModGameRegistry.registerBlock(ModItems.cracked_wolframit_wall, null);
+//		ModGameRegistry.registerBlock(ModItems.cracked_bauxite_wall, null);
+//		ModGameRegistry.registerBlock(ModItems.cracked_wolframite_wall, null);
 //		ModGameRegistry.registerBlock(ModItems.cracked_salt_wall, null);
 //			ModGameRegistry.registerBlock(ModItems.blue_nether_brick_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.prismarine_brick_wall, BUILDING_BLOCKS);
@@ -687,8 +691,8 @@ public class ModItems {
 //		ModGameRegistry.registerBlock(ModItems.diorite_brick_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.granite_brick_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.andesite_brick_wall, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.bauxit_brick_wall, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.wolframit_brick_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.bauxite_brick_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.wolframite_brick_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.salt_brick_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.cracked_blue_nether_brick_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.cracked_nether_brick_wall, BUILDING_BLOCKS);
@@ -704,8 +708,8 @@ public class ModItems {
 //		ModGameRegistry.registerBlock(ModItems.cracked_granite_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.cracked_andesite_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.cracked_stone_wall, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.cracked_bauxit_wall, BUILDING_BLOCKS);
-//		ModGameRegistry.registerBlock(ModItems.cracked_wolframit_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_bauxite_wall, BUILDING_BLOCKS);
+//		ModGameRegistry.registerBlock(ModItems.cracked_wolframite_wall, BUILDING_BLOCKS);
 //		ModGameRegistry.registerBlock(ModItems.cracked_salt_wall, BUILDING_BLOCKS);
 //		
 //		
@@ -743,7 +747,6 @@ public class ModItems {
 	public static final BlockBurnedBlock burned_planks = new BlockBurnedBlock("burned_planks", 1.5F, 0.5F);
 	public static final BlockBurnedBlock burned_log = new BlockBurnedLog();
 	public static final BlockBurnedBlock burned_stairs = new BlockBurnedBlock("burned_stairs", 1.5F, 0.5F); // TODO
-	public static final BlockBurnedBlock burned_slab = new BlockBurnedBlock("burned_slab", 1.5F, 0.5F); // TODO
 	public static final BlockBurnedTrapdoor burned_trapdoor = new BlockBurnedTrapdoor();
 	public static final BlockBurnedDoor burned_door = new BlockBurnedDoor();
 	public static final BlockBurnedFence burned_fence = new BlockBurnedFence();

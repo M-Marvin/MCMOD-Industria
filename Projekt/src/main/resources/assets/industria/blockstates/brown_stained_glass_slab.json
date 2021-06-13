@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "industria:block/brown_stained_glass_slab"
+    },
+    "type=double": {
+      "model": "minecraft:block/brown_stained_glass"
+    },
+    "type=top": {
+      "model": "industria:block/brown_stained_glass_slab_top"
+    }
+  }
+}

@@ -18,6 +18,8 @@
     "industria:chemical_water",
     "industria:flowing_chemical_water",
     "industria:raw_oil",
-    "industria:flowing_raw_oil"
+    "industria:flowing_raw_oil",
+    "industria:liquid_concrete",
+    "industria:flowing_liquid_concrete"
   ]
 }

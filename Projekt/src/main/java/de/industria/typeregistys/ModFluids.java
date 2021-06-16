@@ -5,6 +5,7 @@ import de.industria.Industria;
 import de.industria.fluids.FluidChemicalWater;
 import de.industria.fluids.FluidCompressedAir;
 import de.industria.fluids.FluidDestilledWater;
+import de.industria.fluids.FluidLiquidConcrete;
 import de.industria.fluids.FluidNatronLye;
 import de.industria.fluids.FluidOreAluminiumSolution;
 import de.industria.fluids.FluidOreCopperSolution;
@@ -47,6 +48,8 @@ public class ModFluids {
 	public static final FluidRawOil FLOWING_RAW_OIL = register("flowing_raw_oil", new FluidRawOil.Flow());
 	public static final FluidRawOil RAW_OIL = register("raw_oil", new FluidRawOil.Still());
 	public static final FluidCompressedAir COMPRESSED_AIR = register("compressed_air", new FluidCompressedAir());
+	public static final FluidLiquidConcrete FLOWING_LIQUID_CONCRETE = register("flowing_liquid_concrete", new FluidLiquidConcrete.Flow());
+	public static final FluidLiquidConcrete LIQUID_CONCRETE = register("liquid_concrete", new FluidLiquidConcrete.Still());
 	
 	private static <T extends Fluid> T register(String key, T p_215710_1_) {
 		p_215710_1_.setRegistryName(new ResourceLocation(Industria.MODID, key));

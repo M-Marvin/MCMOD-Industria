@@ -203,6 +203,9 @@
 "block.industria.structure_scaffold": "Verbundgestell",
 "block.industria.ash": "Asche",
 "block.industria.item_distributor": "Itemverteiler",
+"block.industria.concrete": "Betonblock",
+"block.industria.concrete_slab": "Betonstufe",
+"block.industria.concrete_sheet": "Betonschicht",
 
 "item.industria.structure_cladding_pane": "Verbundgestellverkleidung",
 "item.industria.compressed_air_bucket": "Eimer komprimierte Luft",
@@ -217,6 +220,7 @@
 "item.industria.wolfram_solution_bucket": "Eimer Wolframl\u00f6sung",
 "item.industria.chemical_water_bucket": "Abwassereimer",
 "item.industria.raw_oil_bucket": "Roh\u00f6leimer",
+"item.industria.liquid_concrete_bucket": "Betoneimer",
 "item.industria.fluid_meter": "Fl\u00fcssigkeitspr\u00fcfer",
 "item.industria.energy_meter": "Multimeter",
 "item.industria.hammer": "Eisenhammer",
@@ -365,6 +369,7 @@
 "fluid.industria.chemical_water": "Abwasser",
 "fluid.industria.raw_oil": "Roh\u00f6l",
 "fluid.industria.compressed_air": "Komprimiere Luft",
+"fluid.industria.liquid_concrete": "Fl\u00fcssiger Beton",
 
 "sound.industria.block.hover_extension.activated": "Antrieb aktiviert",
 "sound.industria.block.turbin.loop": "Turbine dr\u00f6hnt",

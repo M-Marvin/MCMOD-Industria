@@ -11,6 +11,7 @@ import de.industria.blocks.BlockBurnedLog;
 import de.industria.blocks.BlockBurnedScrap;
 import de.industria.blocks.BlockBurnedSlab;
 import de.industria.blocks.BlockBurnedTrapdoor;
+import de.industria.blocks.BlockConcreteSheet;
 import de.industria.blocks.BlockConveyorBelt;
 import de.industria.blocks.BlockConveyorSpliter;
 import de.industria.blocks.BlockConveyorSwitch;
@@ -97,6 +98,7 @@ import de.industria.blocks.BlockWoodenSlabBase;
 import de.industria.fluids.BlockChemicalWater;
 import de.industria.fluids.BlockCompressedAir;
 import de.industria.fluids.BlockDestilledWater;
+import de.industria.fluids.BlockLiquidConcrete;
 import de.industria.fluids.BlockNatronLye;
 import de.industria.fluids.BlockOreSolution;
 import de.industria.fluids.BlockRawOil;
@@ -333,9 +335,8 @@ public class ModItems {
 	public static final Block green_painted_planks = new BlockBurnable("green_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
 	public static final Block red_painted_planks = new BlockBurnable("red_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
 	public static final Block black_painted_planks = new BlockBurnable("black_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
-	
-	
-	
+	public static final Block concrete = new BlockBase("concrete", Material.ROCK, 1.8F, SoundType.STONE);
+		
 	public static final Block blue_nether_bricks = new BlockBase("blue_nether_bricks", Material.ROCK, 2, 6, SoundType.NETHER_BRICK);
 	public static final Block cracked_blue_nether_bricks = new BlockBase("cracked_blue_nether_bricks", Material.ROCK, 2, 6, SoundType.NETHER_BRICK);
 	public static final Block cracked_red_nether_bricks = new BlockBase("cracked_red_nether_bricks", Material.ROCK, 2, 6, SoundType.NETHER_BRICK);
@@ -379,6 +380,7 @@ public class ModItems {
 	public static final Block bauxite_tiles = new BlockBase("bauxite_tiles", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block wolframite_tiles = new BlockBase("wolframite_tiles", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	
+	public static final Block concrete_slab = new BlockSlabBase("concrete_slab", Material.ROCK, 1.8F, SoundType.STONE);
 	public static final Block cracked_blue_nether_brick_slab = new BlockSlabBase("cracked_blue_nether_brick_slab", Material.ROCK, 2, 6, SoundType.NETHER_BRICK);
 	public static final Block cracked_nether_brick_slab = new BlockSlabBase("cracked_nether_brick_slab", Material.ROCK, 2, 6, SoundType.NETHER_BRICK);
 	public static final Block cracked_red_nether_brick_slab = new BlockSlabBase("cracked_red_nether_brick_slab", Material.ROCK, 2, 6, SoundType.NETHER_BRICK);
@@ -748,6 +750,7 @@ public class ModItems {
 	public static final Block beech_leaves = new BlockLeavesBase("beech_leaves", Material.LEAVES, 0.2F, 0.2F, SoundType.PLANT);
 	public static final Block swamp_algae = new BlockSwampAlgae();
 	public static final Block hanging_vine = new BlockHangingVine();
+	public static final Block concrete_sheet = new BlockConcreteSheet();
 	
 	// Util Blocks
 	public static final Block reinforced_casing = new BlockReinforcedCasing();
@@ -787,6 +790,8 @@ public class ModItems {
 	public static final Item raw_oil_bucket = new ItemFluidBucket(ModFluids.RAW_OIL, "raw_oil_bucket", Industria.MATERIALS);
 	public static final Block compressed_air = new BlockCompressedAir();
 	public static final Item compressed_air_bucket = new ItemGasBucket(ModFluids.COMPRESSED_AIR, "compressed_air_bucket", Industria.MATERIALS);
+	public static final Block liquid_concrete = new BlockLiquidConcrete();
+	public static final Item liquid_concrete_bucket = new ItemFluidBucket(ModFluids.LIQUID_CONCRETE, "liquid_concrete_bucket", Industria.MATERIALS);
 	
 	// Ingots and Nuggets
 	public static final Item monel_ingot = new ItemBase("monel_ingot", Industria.MATERIALS);

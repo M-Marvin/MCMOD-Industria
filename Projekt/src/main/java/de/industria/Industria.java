@@ -297,7 +297,10 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.cracked_polished_bauxite_bricks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.smooth_andesite, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.smooth_wolframite, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.concrete, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.concrete_sheet, DECORATIONS);
 		
+		ModGameRegistry.registerBlock(ModItems.concrete_slab, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.polished_dark_prismarine_slab, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.polished_prismarine_slab, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.polished_end_stone_slab, BUILDING_BLOCKS);
@@ -641,6 +644,8 @@ public class Industria {
 		ModGameRegistry.registerItem(ModItems.chemical_water_bucket);
 		ModGameRegistry.registerTechnicalBlock(ModItems.compressed_air);
 		ModGameRegistry.registerItem(ModItems.compressed_air_bucket);
+		ModGameRegistry.registerTechnicalBlock(ModItems.liquid_concrete);
+		ModGameRegistry.registerItem(ModItems.liquid_concrete_bucket);
 		
 		// register Items
 		ModGameRegistry.registerItem(ModItems.crushed_blackstone);

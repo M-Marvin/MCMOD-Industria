@@ -39,7 +39,7 @@ public class BlockSteam extends BlockGasFluid {
 		builder.add(PRESSURIZED);
 		super.fillStateContainer(builder);
 	}
-
+	
 	@Override
 	public FluidState getFluidState(BlockState state) {
 		return super.getFluidState(state).with(FluidSteam.PRESSURIZED, state.get(PRESSURIZED));

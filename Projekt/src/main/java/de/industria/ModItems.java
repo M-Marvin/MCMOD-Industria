@@ -94,7 +94,6 @@ import de.industria.blocks.BlockTSteelRail;
 import de.industria.blocks.BlockTileBlock;
 import de.industria.blocks.BlockTreeTap;
 import de.industria.blocks.BlockWeathering;
-import de.industria.blocks.BlockWoodenSlabBase;
 import de.industria.fluids.BlockChemicalWater;
 import de.industria.fluids.BlockCompressedAir;
 import de.industria.fluids.BlockDestilledWater;
@@ -108,6 +107,7 @@ import de.industria.fluids.util.ItemFluidBucket;
 import de.industria.fluids.util.ItemGasBucket;
 import de.industria.items.ItemBase;
 import de.industria.items.ItemBlueprint;
+import de.industria.items.ItemBrush;
 import de.industria.items.ItemBurneable;
 import de.industria.items.ItemCutter;
 import de.industria.items.ItemEmptyBlueprint;
@@ -336,7 +336,7 @@ public class ModItems {
 	public static final Block red_painted_planks = new BlockBurnable("red_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
 	public static final Block black_painted_planks = new BlockBurnable("black_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
 	public static final Block concrete = new BlockBase("concrete", Material.ROCK, 1.8F, SoundType.STONE);
-		
+	
 	public static final Block blue_nether_bricks = new BlockBase("blue_nether_bricks", Material.ROCK, 2, 6, SoundType.NETHER_BRICK);
 	public static final Block cracked_blue_nether_bricks = new BlockBase("cracked_blue_nether_bricks", Material.ROCK, 2, 6, SoundType.NETHER_BRICK);
 	public static final Block cracked_red_nether_bricks = new BlockBase("cracked_red_nether_bricks", Material.ROCK, 2, 6, SoundType.NETHER_BRICK);
@@ -380,6 +380,54 @@ public class ModItems {
 	public static final Block bauxite_tiles = new BlockBase("bauxite_tiles", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block wolframite_tiles = new BlockBase("wolframite_tiles", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	
+	public static final Block white_concrete_slab = new BlockSlabBase("white_concrete_slab", Material.ROCK, 1.8F, SoundType.STONE);
+	public static final Block orange_concrete_slab = new BlockSlabBase("orange_concrete_slab", Material.ROCK, 1.8F, SoundType.STONE);
+	public static final Block magenta_concrete_slab = new BlockSlabBase("magenta_concrete_slab", Material.ROCK, 1.8F, SoundType.STONE);
+	public static final Block light_blue_concrete_slab = new BlockSlabBase("light_blue_concrete_slab", Material.ROCK, 1.8F, SoundType.STONE);
+	public static final Block yellow_concrete_slab = new BlockSlabBase("yellow_concrete_slab", Material.ROCK, 1.8F, SoundType.STONE);
+	public static final Block lime_concrete_slab = new BlockSlabBase("lime_concrete_slab", Material.ROCK, 1.8F, SoundType.STONE);
+	public static final Block pink_concrete_slab = new BlockSlabBase("pink_concrete_slab", Material.ROCK, 1.8F, SoundType.STONE);
+	public static final Block gray_concrete_slab = new BlockSlabBase("gray_concrete_slab", Material.ROCK, 1.8F, SoundType.STONE);
+	public static final Block light_gray_concrete_slab = new BlockSlabBase("light_gray_concrete_slab", Material.ROCK, 1.8F, SoundType.STONE);
+	public static final Block cyan_concrete_slab = new BlockSlabBase("cyan_concrete_slab", Material.ROCK, 1.8F, SoundType.STONE);
+	public static final Block purple_concrete_slab = new BlockSlabBase("purple_concrete_slab", Material.ROCK, 1.8F, SoundType.STONE);
+	public static final Block blue_concrete_slab = new BlockSlabBase("blue_concrete_slab", Material.ROCK, 1.8F, SoundType.STONE);
+	public static final Block brown_concrete_slab = new BlockSlabBase("brown_concrete_slab", Material.ROCK, 1.8F, SoundType.STONE);
+	public static final Block green_concrete_slab = new BlockSlabBase("green_concrete_slab", Material.ROCK, 1.8F, SoundType.STONE);
+	public static final Block red_concrete_slab = new BlockSlabBase("red_concrete_slab", Material.ROCK, 1.8F, SoundType.STONE);
+	public static final Block black_concrete_slab = new BlockSlabBase("black_concrete_slab", Material.ROCK, 1.8F, SoundType.STONE);
+	public static final Block white_terracotta_slab = new BlockSlabBase("white_terracotta_slab", Material.ROCK, 2,3, SoundType.STONE);
+	public static final Block orange_terracotta_slab = new BlockSlabBase("orange_terracotta_slab", Material.ROCK, 2,3, SoundType.STONE);
+	public static final Block magenta_terracotta_slab = new BlockSlabBase("magenta_terracotta_slab", Material.ROCK, 2,3, SoundType.STONE);
+	public static final Block light_blue_terracotta_slab = new BlockSlabBase("light_blue_terracotta_slab", Material.ROCK, 2,3, SoundType.STONE);
+	public static final Block yellow_terracotta_slab = new BlockSlabBase("yellow_terracotta_slab", Material.ROCK, 2,3, SoundType.STONE);
+	public static final Block lime_terracotta_slab = new BlockSlabBase("lime_terracotta_slab", Material.ROCK, 2,3, SoundType.STONE);
+	public static final Block pink_terracotta_slab = new BlockSlabBase("pink_terracotta_slab", Material.ROCK, 2,3, SoundType.STONE);
+	public static final Block gray_terracotta_slab = new BlockSlabBase("gray_terracotta_slab", Material.ROCK, 2,3, SoundType.STONE);
+	public static final Block light_gray_terracotta_slab = new BlockSlabBase("light_gray_terracotta_slab", Material.ROCK, 2,3, SoundType.STONE);
+	public static final Block cyan_terracotta_slab = new BlockSlabBase("cyan_terracotta_slab", Material.ROCK, 2,3, SoundType.STONE);
+	public static final Block purple_terracotta_slab = new BlockSlabBase("purple_terracotta_slab", Material.ROCK, 2,3, SoundType.STONE);
+	public static final Block blue_terracotta_slab = new BlockSlabBase("blue_terracotta_slab", Material.ROCK, 2,3, SoundType.STONE);
+	public static final Block brown_terracotta_slab = new BlockSlabBase("brown_terracotta_slab", Material.ROCK, 2,3, SoundType.STONE);
+	public static final Block green_terracotta_slab = new BlockSlabBase("green_terracotta_slab", Material.ROCK, 2,3, SoundType.STONE);
+	public static final Block red_terracotta_slab = new BlockSlabBase("red_terracotta_slab", Material.ROCK, 2,3, SoundType.STONE);
+	public static final Block black_terracotta_slab = new BlockSlabBase("black_terracotta_slab", Material.ROCK, 2,3, SoundType.STONE);
+	public static final Block white_painted_planks_slab = new BlockBurnable("white_painted_planks_slab", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block orange_painted_planks_slab = new BlockBurnable("orange_painted_planks_slab", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block magenta_painted_planks_slab = new BlockBurnable("magenta_painted_planks_slab", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block light_blue_painted_planks_slab = new BlockBurnable("light_blue_painted_planks_slab", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block yellow_painted_planks_slab = new BlockBurnable("yellow_painted_planks_slab", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block lime_painted_planks_slab = new BlockBurnable("lime_painted_planks_slab", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block pink_painted_planks_slab = new BlockBurnable("pink_painted_planks_slab", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block gray_painted_planks_slab = new BlockBurnable("gray_painted_planks_slab", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block light_gray_painted_planks_slab = new BlockBurnable("light_gray_painted_planks_slab", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block cyan_painted_planks_slab = new BlockBurnable("cyan_painted_planks_slab", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block purple_painted_planks_slab = new BlockBurnable("purple_painted_planks_slab", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block blue_painted_planks_slab = new BlockBurnable("blue_painted_planks_slab", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block brown_painted_planks_slab = new BlockBurnable("brown_painted_planks_slab", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block green_painted_planks_slab = new BlockBurnable("green_painted_planks_slab", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block red_painted_planks_slab = new BlockBurnable("red_painted_planks_slab", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
+	public static final Block black_painted_planks_slab = new BlockBurnable("black_painted_planks_slab", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
 	public static final Block concrete_slab = new BlockSlabBase("concrete_slab", Material.ROCK, 1.8F, SoundType.STONE);
 	public static final Block cracked_blue_nether_brick_slab = new BlockSlabBase("cracked_blue_nether_brick_slab", Material.ROCK, 2, 6, SoundType.NETHER_BRICK);
 	public static final Block cracked_nether_brick_slab = new BlockSlabBase("cracked_nether_brick_slab", Material.ROCK, 2, 6, SoundType.NETHER_BRICK);
@@ -453,8 +501,6 @@ public class ModItems {
 	
 	// TODO
 	public static final Block iron_planks_slab = new BlockSlabBase("iron_planks_slab", Material.ROCK, 2.5F, 2F, SoundType.STONE);
-	public static final Block white_painted_planks_slab = new BlockWoodenSlabBase("white_painted_planks_slab", Material.ROCK, 2,3, SoundType.STONE);
-	public static final Block white_terracotta_slab = new BlockSlabBase("white_terracotta_slab", Material.ROCK, 1.25F, 4.2F, SoundType.STONE);
 	public static final Block white_stained_glass_slab = new BlockGlassSlab("white_stained_glass_slab");
 	public static final Block orange_stained_glass_slab = new BlockGlassSlab("orange_stained_glass_slab");
 	public static final Block magenta_stained_glass_slab = new BlockGlassSlab("magenta_stained_glass_slab");
@@ -940,5 +986,6 @@ public class ModItems {
 	public static final Item cutter = new ItemCutter();
 	public static final Block tree_tap = new BlockTreeTap();
 	public static final Item network_configurtor = new ItemNetworkConfigurator();
+	public static final Item brush = new ItemBrush();
 		
 }

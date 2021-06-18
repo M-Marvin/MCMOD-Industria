@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "industria:block/brown_concrete_slab"
+    },
+    "type=double": {
+      "model": "minecraft:block/brown_concrete"
+    },
+    "type=top": {
+      "model": "industria:block/brown_concrete_slab_top"
+    }
+  }
+}

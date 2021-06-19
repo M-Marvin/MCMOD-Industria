@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "industria:block/exposed_iron_planks",
+    "top": "industria:block/exposed_iron_planks",
+    "side": "industria:block/exposed_iron_planks"
+  }
+}

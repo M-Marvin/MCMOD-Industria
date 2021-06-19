@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "industria:block/wolfram_planks_slab"
+    },
+    "type=double": {
+      "model": "industria:block/wolfram_planks"
+    },
+    "type=top": {
+      "model": "industria:block/wolfram_planks_slab_top"
+    }
+  }
+}

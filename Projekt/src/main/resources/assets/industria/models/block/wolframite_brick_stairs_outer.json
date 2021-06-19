@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "minecraft:block/wolframite_brick",
+    "top": "minecraft:block/wolframite_brick",
+    "side": "minecraft:block/wolframite_brick"
+  }
+}

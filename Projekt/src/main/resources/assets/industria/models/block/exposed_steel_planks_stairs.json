@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "minecraft:block/exposed_steel_planks",
+    "top": "minecraft:block/exposed_steel_planks",
+    "side": "minecraft:block/exposed_steel_planks"
+  }
+}

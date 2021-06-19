@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "minecraft:block/silver_planks",
+    "top": "minecraft:block/silver_planks",
+    "side": "minecraft:block/silver_planks"
+  }
+}

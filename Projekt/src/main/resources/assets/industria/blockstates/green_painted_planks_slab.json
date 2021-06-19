@@ -4,7 +4,7 @@
       "model": "industria:block/green_painted_planks_slab"
     },
     "type=double": {
-      "model": "minecraft:block/green_painted_planks"
+      "model": "industria:block/green_painted_planks"
     },
     "type=top": {
       "model": "industria:block/green_painted_planks_slab_top"

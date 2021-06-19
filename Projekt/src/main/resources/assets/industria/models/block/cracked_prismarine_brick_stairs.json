@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "minecraft:block/cracked_prismarine_brick",
+    "top": "minecraft:block/cracked_prismarine_brick",
+    "side": "minecraft:block/cracked_prismarine_brick"
+  }
+}

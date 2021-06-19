@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 import de.industria.ModItems;
 import de.industria.blocks.BlockFallingDust;
+import de.industria.blocks.BlockStairsBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -101,7 +102,7 @@ public class BlockBurnManager {
 			return ModItems.burned_block.getNotPersistant();
 		}),
 		STAIRS((state, world, pos) -> {
-			return ModItems.burned_stairs.getNotPersistant(); // TODO
+			return ModItems.burned_stairs.getNotPersistant().with(BlockStairsBase.SHAPE, state.get(BlockStairsBase.SHAPE)).with(BlockStairsBase.HALF, state.get(BlockStairsBase.HALF)).with(BlockStairsBase.FACING, state.get(BlockStairsBase.FACING));
 		}),
 		SLABS((state, world, pos) -> {
 			return ModItems.burned_wood_slab.getNotPersistant().with(BlockStateProperties.SLAB_TYPE, state.get(BlockStateProperties.SLAB_TYPE));

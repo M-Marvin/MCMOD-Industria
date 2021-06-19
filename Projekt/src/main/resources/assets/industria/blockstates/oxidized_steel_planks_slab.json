@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "industria:block/oxidized_steel_planks_slab"
+    },
+    "type=double": {
+      "model": "industria:block/oxidized_steel_planks"
+    },
+    "type=top": {
+      "model": "industria:block/oxidized_steel_planks_slab_top"
+    }
+  }
+}

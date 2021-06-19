@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "industria:block/netherite_planks",
+    "top": "industria:block/netherite_planks",
+    "side": "industria:block/netherite_planks"
+  }
+}

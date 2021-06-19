@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "industria:block/oxidized_iron_planks",
+    "top": "industria:block/oxidized_iron_planks",
+    "side": "industria:block/oxidized_iron_planks"
+  }
+}

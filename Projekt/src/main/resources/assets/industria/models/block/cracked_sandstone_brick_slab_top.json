@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "industria:block/cracked_polished_sandstone_bricks",
+    "top": "industria:block/cracked_polished_sandstone_bricks",
+    "side": "industria:block/cracked_polished_sandstone_bricks"
+  }
+}
+w

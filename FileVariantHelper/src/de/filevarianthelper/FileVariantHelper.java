@@ -30,7 +30,8 @@ public class FileVariantHelper extends JFrame {
 	
 	public static void main(String... args) {
 		
-		new FileVariantHelper().start();
+		new Temp().start();
+		//new FileVariantHelper().start();
 		
 	}
 	

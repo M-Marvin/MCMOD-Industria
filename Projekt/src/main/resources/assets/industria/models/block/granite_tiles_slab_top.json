@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "industria:block/granite_tiles",
+    "top": "industria:block/granite_tiles",
+    "side": "industria:block/granite_tiles"
+  }
+}

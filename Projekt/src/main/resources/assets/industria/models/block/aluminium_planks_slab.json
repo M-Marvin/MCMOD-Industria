@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "industria:block/aluminium_planks",
+    "top": "industria:block/aluminium_planks",
+    "side": "industria:block/aluminium_planks"
+  }
+}

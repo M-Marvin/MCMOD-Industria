@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "industria:block/mossy_end_stone_bricks",
+    "top": "industria:block/mossy_end_stone_bricks",
+    "side": "industria:block/mossy_end_stone_bricks"
+  }
+}

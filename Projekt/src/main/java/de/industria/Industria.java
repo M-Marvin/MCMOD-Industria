@@ -409,6 +409,8 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.weathered_iron_planks_slab, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.weathered_steel_planks_slab, BUILDING_BLOCKS);
 		
+		ModGameRegistry.registerBlock(ModItems.lime_terracotta_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.purple_terracotta_slab, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.white_terracotta_slab, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.orange_terracotta_slab, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.magenta_terracotta_slab, BUILDING_BLOCKS);
@@ -437,6 +439,11 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.brown_painted_planks_slab, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.red_painted_planks_slab, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.black_painted_planks_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.lime_painted_planks_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.purple_painted_planks_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.purple_concrete_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.lime_concrete_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.white_concrete_slab, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.orange_concrete_slab, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.magenta_concrete_slab, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.light_blue_concrete_slab, BUILDING_BLOCKS);

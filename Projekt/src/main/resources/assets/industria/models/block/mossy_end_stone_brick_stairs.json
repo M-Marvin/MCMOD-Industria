@@ -1,8 +1,8 @@
 {
   "parent": "minecraft:block/stairs",
   "textures": {
-    "bottom": "minecraft:block/mossy_end_stone_brick",
-    "top": "minecraft:block/mossy_end_stone_brick",
-    "side": "minecraft:block/mossy_end_stone_brick"
+    "bottom": "industria:block/mossy_end_stone_bricks",
+    "top": "industria:block/mossy_end_stone_bricks",
+    "side": "industria:block/mossy_end_stone_bricks"
   }
 }

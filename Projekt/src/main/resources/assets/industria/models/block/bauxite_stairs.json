@@ -1,8 +1,8 @@
 {
   "parent": "minecraft:block/stairs",
   "textures": {
-    "bottom": "minecraft:block/bauxite",
-    "top": "minecraft:block/bauxite",
-    "side": "minecraft:block/bauxite"
+    "bottom": "industria:block/bauxite",
+    "top": "industria:block/bauxite",
+    "side": "industria:block/bauxite"
   }
 }

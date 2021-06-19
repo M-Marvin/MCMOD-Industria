@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/inner_stairs",
-  "textures": {
-    "bottom": "minecraft:block/polished_wolframite",
-    "top": "minecraft:block/polished_wolframite",
-    "side": "minecraft:block/polished_wolframite"
-  }
-}

@@ -1,8 +1,8 @@
 {
   "parent": "minecraft:block/stairs",
   "textures": {
-    "bottom": "minecraft:block/oxidized_copper_planks",
-    "top": "minecraft:block/oxidized_copper_planks",
-    "side": "minecraft:block/oxidized_copper_planks"
+    "bottom": "industria:block/oxidized_copper_planks",
+    "top": "industria:block/oxidized_copper_planks",
+    "side": "industria:block/oxidized_copper_planks"
   }
 }

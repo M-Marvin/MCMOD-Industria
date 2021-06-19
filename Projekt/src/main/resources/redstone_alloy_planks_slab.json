@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "industria:block/redstone_alloy_planks",
-    "top": "industria:block/redstone_alloy_planks",
-    "side": "industria:block/redstone_alloy_planks"
-  }
-}

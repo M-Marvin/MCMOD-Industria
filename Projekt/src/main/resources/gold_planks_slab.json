@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "industria:block/gold_planks",
-    "top": "industria:block/gold_planks",
-    "side": "industria:block/gold_planks"
-  }
-}

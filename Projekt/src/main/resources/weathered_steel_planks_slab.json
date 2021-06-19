@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "industria:block/weathered_steel_planks",
-    "top": "industria:block/weathered_steel_planks",
-    "side": "industria:block/weathered_steel_planks"
-  }
-}

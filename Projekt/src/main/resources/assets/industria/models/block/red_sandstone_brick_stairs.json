@@ -1,8 +1,8 @@
 {
   "parent": "minecraft:block/stairs",
   "textures": {
-    "bottom": "minecraft:block/red_sandstone_brick",
-    "top": "minecraft:block/red_sandstone_brick",
-    "side": "minecraft:block/red_sandstone_brick"
+    "bottom": "industria:block/polished_red_sandstone_bricks",
+    "top": "industria:block/polished_red_sandstone_bricks",
+    "side": "industria:block/polished_red_sandstone_bricks"
   }
 }

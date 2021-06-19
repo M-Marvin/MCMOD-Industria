@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/inner_stairs",
-  "textures": {
-    "bottom": "minecraft:block/exposed_copper_planks",
-    "top": "minecraft:block/exposed_copper_planks",
-    "side": "minecraft:block/exposed_copper_planks"
-  }
-}

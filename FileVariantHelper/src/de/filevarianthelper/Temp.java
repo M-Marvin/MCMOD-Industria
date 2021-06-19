@@ -12,8 +12,6 @@ import java.io.OutputStreamWriter;
 public class Temp {
 	
 	public static void main(String... args) {
-		
-		
 		new Temp().start();
 	}
 	
@@ -39,9 +37,9 @@ public class Temp {
 				reader.close();
 				
 				String json = sb.toString();
-				json = json.replace("minecraft:block/slab", "minecraft:block/slab_top");
+				json = json.replace("minecraft:block/stairs", "minecraft:block/outer_stairs");
 				
-				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(output, file.getName().replace("slab.json", "slab_top.json")))));
+				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(output, file.getName().replace("stairs.json", "stairs_outer.json")))));
 				writer.write(json);
 				writer.close();
 				

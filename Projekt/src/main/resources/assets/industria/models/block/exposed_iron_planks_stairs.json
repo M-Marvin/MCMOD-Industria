@@ -1,8 +1,8 @@
 {
   "parent": "minecraft:block/stairs",
   "textures": {
-    "bottom": "minecraft:block/exposed_iron_planks",
-    "top": "minecraft:block/exposed_iron_planks",
-    "side": "minecraft:block/exposed_iron_planks"
+    "bottom": "industria:block/exposed_iron_planks",
+    "top": "industria:block/exposed_iron_planks",
+    "side": "industria:block/exposed_iron_planks"
   }
 }

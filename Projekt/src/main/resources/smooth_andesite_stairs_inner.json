@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/inner_stairs",
-  "textures": {
-    "bottom": "minecraft:block/smooth_andesite",
-    "top": "minecraft:block/smooth_andesite",
-    "side": "minecraft:block/smooth_andesite"
-  }
-}

@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/stairs",
-  "textures": {
-    "bottom": "minecraft:block/oxidized_steel_planks",
-    "top": "minecraft:block/oxidized_steel_planks",
-    "side": "minecraft:block/oxidized_steel_planks"
-  }
-}

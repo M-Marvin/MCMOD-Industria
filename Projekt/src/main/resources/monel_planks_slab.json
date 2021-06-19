@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "industria:block/monel_planks",
-    "top": "industria:block/monel_planks",
-    "side": "industria:block/monel_planks"
-  }
-}

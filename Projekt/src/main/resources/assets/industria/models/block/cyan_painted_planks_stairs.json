@@ -1,8 +1,8 @@
 {
   "parent": "minecraft:block/stairs",
   "textures": {
-    "bottom": "minecraft:block/cyan_painted_planks",
-    "top": "minecraft:block/cyan_painted_planks",
-    "side": "minecraft:block/cyan_painted_planks"
+    "bottom": "industria:block/cyan_painted_planks",
+    "top": "industria:block/cyan_painted_planks",
+    "side": "industria:block/cyan_painted_planks"
   }
 }

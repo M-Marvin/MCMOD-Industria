@@ -1,8 +1,8 @@
 {
   "parent": "minecraft:block/stairs",
   "textures": {
-    "bottom": "minecraft:block/orange_painted_planks",
-    "top": "minecraft:block/orange_painted_planks",
-    "side": "minecraft:block/orange_painted_planks"
+    "bottom": "industria:block/orange_painted_planks",
+    "top": "industria:block/orange_painted_planks",
+    "side": "industria:block/orange_painted_planks"
   }
 }

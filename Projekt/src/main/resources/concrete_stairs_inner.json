@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/inner_stairs",
-  "textures": {
-    "bottom": "minecraft:block/concrete",
-    "top": "minecraft:block/concrete",
-    "side": "minecraft:block/concrete"
-  }
-}

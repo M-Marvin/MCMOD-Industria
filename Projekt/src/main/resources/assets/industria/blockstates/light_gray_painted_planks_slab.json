@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "industria:block/light_gray_painted_planks_slab"
+    },
+    "type=double": {
+      "model": "minecraft:block/light_gray_painted_planks"
+    },
+    "type=top": {
+      "model": "industria:block/light_gray_painted_planks_slab_top"
+    }
+  }
+}

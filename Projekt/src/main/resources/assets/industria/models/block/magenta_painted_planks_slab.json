@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "industria:block/magenta_painted_planks",
+    "top": "industria:block/magenta_painted_planks",
+    "side": "industria:block/magenta_painted_planks"
+  }
+}

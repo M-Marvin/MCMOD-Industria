@@ -2,7 +2,7 @@
   "parent": "minecraft:block/slab",
   "textures": {
     "bottom": "minecraft:block/terracotta",
-    "top": "industria:block/terracotta",
-    "side": "minecraft:block/terracotta_slab_side"
+    "top": "minecraft:block/terracotta",
+    "side": "minecraft:block/terracotta"
   }
 }

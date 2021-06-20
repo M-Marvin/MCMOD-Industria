@@ -6,6 +6,7 @@ import java.util.Random;
 
 import de.industria.blocks.BlockBase;
 import de.industria.tileentity.TileEntitySimpleBlockTicking;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -13,6 +14,9 @@ import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.IBucketPickupHandler;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer.Builder;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -25,12 +29,20 @@ import net.minecraft.world.server.ServerWorld;
 
 public class BlockGasFluid extends BlockBase implements IBucketPickupHandler {
 	
+	public static final BooleanProperty FALLING_NOT_IN_USE = BlockStateProperties.FALLING;
+	
 	protected GasFluid fluid;
 	
 	public BlockGasFluid(String name, GasFluid fluid, Properties properties) {
 		super(name, properties);
 		this.fluid = fluid;
 		
+	}
+
+	@Override
+	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+		builder.add(FALLING_NOT_IN_USE);
+		super.fillStateContainer(builder);
 	}
 	
 	@Override

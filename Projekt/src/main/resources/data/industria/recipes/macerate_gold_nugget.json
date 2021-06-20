@@ -1,0 +1,15 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "minecraft:gold_nugget"
+  },
+  "results": [
+    {
+      "item": "industria:tpo_gold_dust",
+      "count": 1
+    }
+  ],
+  "schreddertime": 80,
+  "schreddertool": "industria:schredder_macerator",
+  "schredderdamage": 8
+}

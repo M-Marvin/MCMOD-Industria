@@ -1,0 +1,15 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "industria:tin_ingot"
+  },
+  "results": [
+    {
+      "item": "industria:tin_dust",
+      "count": 1
+    }
+  ],
+  "schreddertime": 80,
+  "schreddertool": "industria:schredder_macerator",
+  "schredderdamage": 8
+}

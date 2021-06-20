@@ -6,6 +6,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.IBucketPickupHandler;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer.Builder;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -16,11 +19,19 @@ import net.minecraft.world.World;
 
 public abstract class GasFluid extends Fluid implements IBucketPickupHandler {
 	
+	public static final BooleanProperty FALLING_NOT_IN_USE = BlockStateProperties.FALLING;
+	
 	@Override
 	protected boolean canDisplace(FluidState p_215665_1_, IBlockReader p_215665_2_, BlockPos p_215665_3_, Fluid p_215665_4_, Direction p_215665_5_) {
 		return false;
 	}
-
+	
+	@Override
+	protected void fillStateContainer(Builder<Fluid, FluidState> builder) {
+		builder.add(FALLING_NOT_IN_USE);
+		super.fillStateContainer(builder);
+	}
+	
 	@Override
 	public Vector3d getFlow(IBlockReader p_215663_1_, BlockPos p_215663_2_, FluidState p_215663_3_) {
 		return new Vector3d(0, 0, 0);

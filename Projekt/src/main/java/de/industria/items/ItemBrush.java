@@ -2,6 +2,7 @@ package de.industria.items;
 
 import de.industria.Industria;
 import de.industria.ModItems;
+import de.industria.blocks.BlockStairsBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -9,6 +10,7 @@ import net.minecraft.block.PaneBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.ResourceLocation;
@@ -61,6 +63,20 @@ public class ItemBrush extends ItemBase {
 				Block dyedConcrete = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(color + "_concrete"));
 				if (dyedConcrete != null) {
 					world.setBlockState(clickedBlockPos, dyedConcrete.getDefaultState());
+					flag = true;
+				}
+			}
+			if (clickedBlock.getBlock() == ModItems.concrete_slab) {
+				Block dyedConcrete = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Industria.MODID, color + "_concrete_slab"));
+				if (dyedConcrete != null) {
+					world.setBlockState(clickedBlockPos, dyedConcrete.getDefaultState().with(BlockStateProperties.SLAB_TYPE, clickedBlock.get(BlockStateProperties.SLAB_TYPE)).with(BlockStateProperties.WATERLOGGED, clickedBlock.get(BlockStateProperties.WATERLOGGED)));
+					flag = true;
+				}
+			}
+			if (clickedBlock.getBlock() == ModItems.concrete_stairs) {
+				Block dyedConcrete = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Industria.MODID, color + "_concrete_stairs"));
+				if (dyedConcrete != null) {
+					world.setBlockState(clickedBlockPos, dyedConcrete.getDefaultState().with(BlockStairsBase.SHAPE, clickedBlock.get(BlockStairsBase.SHAPE)).with(BlockStairsBase.HALF, clickedBlock.get(BlockStairsBase.HALF)).with(BlockStairsBase.FACING, clickedBlock.get(BlockStairsBase.FACING)).with(BlockStateProperties.WATERLOGGED, clickedBlock.get(BlockStateProperties.WATERLOGGED)));
 					flag = true;
 				}
 			}

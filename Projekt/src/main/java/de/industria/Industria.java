@@ -986,6 +986,7 @@ public class Industria {
 		ModGameRegistry.registerItem(ModItems.fuse_nv);
 		ModGameRegistry.registerItem(ModItems.fuse_hv);
 		ModGameRegistry.registerItem(ModItems.schredder_crusher);
+		ModGameRegistry.registerItem(ModItems.schredder_macerator);
 		ModGameRegistry.registerItem(ModItems.sulfur);
 		ModGameRegistry.registerItem(ModItems.plastic_plate);
 		ModGameRegistry.registerItem(ModItems.raw_rubber_bottle);
@@ -996,12 +997,13 @@ public class Industria {
 		ModGameRegistry.registerItem(ModItems.hard_drive);
 		ModGameRegistry.registerItem(ModItems.network_configurtor);
 		ModGameRegistry.registerItem(ModItems.structure_cladding_pane);
+		ModGameRegistry.registerItem(ModItems.cement);
 		
 		// register Functional Items
 		ModGameRegistry.registerItem(ModItems.lever_element);
 		ModGameRegistry.registerItem(ModItems.button_element);
 		ModGameRegistry.registerItem(ModItems.lamp_element);
-
+		
 		// World Generation Settings (Adding Features to the specific Biomes)
 		ModGameRegistry.addFeatureToOverworldBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.COPPER_ORE);
 		ModGameRegistry.addFeatureToOverworldBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.TIN_ORE);

@@ -14,6 +14,7 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
@@ -39,22 +40,16 @@ public class BlockLiquidConcrete extends BlockModFlowingFluid {
 	
 	@Override
 	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-		
-//		if (entityIn instanceof LivingEntity) {
-//
-//			EffectInstance effect = ((LivingEntity) entityIn).getActivePotionEffect(Effects.POISON);
-//			if (effect != null ? effect.getDuration() < 100 : true) ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, 200, 1));
-//			effect = ((LivingEntity) entityIn).getActivePotionEffect(Effects.NAUSEA);
-//			if (effect != null ? effect.getDuration() < 100 : true) ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.NAUSEA, 400, 2));
-//			
-//		}
+
+		Vector3d motion = entityIn.getMotion().mul(new Vector3d(0.1F, 0.1F, 0.1F));
+		entityIn.setMotion(motion);
 		
 	}
 	
 	@Override
 	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
 		
-		if (random.nextInt(2) == 0) {
+		if (random.nextInt(20) == 0) {
 			
 			FluidState concreteDown = worldIn.getFluidState(pos.down());
 			FluidState concreteUp = worldIn.getFluidState(pos.up());

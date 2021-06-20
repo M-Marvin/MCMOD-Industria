@@ -22,6 +22,7 @@ import de.industria.gui.ScreenRHoverControler;
 import de.industria.gui.ScreenRProcessor;
 import de.industria.gui.ScreenRReciver;
 import de.industria.renderer.ItemSchredderToolCrusherModel;
+import de.industria.renderer.ItemSchredderToolMaceratorModel;
 import de.industria.renderer.TileEntityAdvancedMovingBlockRenderer;
 import de.industria.renderer.TileEntityControllPanelRenderer;
 import de.industria.renderer.TileEntityConveyorBeltRenderer;
@@ -169,6 +170,7 @@ public class ClientSetup {
 		ScreenManager.registerFactory(ModContainerType.BLAST_FURNACE, ScreenMBlastFurnace::new);
 		
 		ModClientBindings.bindModelToitem(ModItems.schredder_crusher, new ResourceLocation(Industria.MODID, "textures/item/schredder_crusher.png"), new ItemSchredderToolCrusherModel());
+		ModClientBindings.bindModelToitem(ModItems.schredder_macerator, new ResourceLocation(Industria.MODID, "textures/item/schredder_macerator.png"), new ItemSchredderToolMaceratorModel());
 		
 	}
 	

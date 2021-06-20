@@ -10,7 +10,6 @@ import net.minecraft.entity.Entity;
 // Exported for Minecraft version 1.15
 // Paste this class into your mod and generate all required imports
 
-
 public class ItemSchredderToolCrusherModel extends ItemSchredderToolModel {
 	private final ModelRenderer root;
 	private final ModelRenderer axe1;

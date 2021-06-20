@@ -28,6 +28,7 @@ import de.industria.items.ItemProcessor;
 import de.industria.items.ItemRemoteControll;
 import de.industria.items.ItemSalsola;
 import de.industria.items.ItemSchredderToolCrusher;
+import de.industria.items.ItemSchredderToolMacerator;
 import de.industria.items.ItemStructureCladdingPane;
 import de.industria.items.panelitems.ItemButtonElement;
 import de.industria.items.panelitems.ItemLampElement;
@@ -45,7 +46,6 @@ import net.minecraft.item.Rarity;
 import net.minecraft.util.ResourceLocation;
 
 public class ModItems {
-	
 	
 	// Redstone
 	public static final Block pulse_counter = new BlockRDPulseCounter();
@@ -889,6 +889,7 @@ public class ModItems {
 	public static final Item sulfur = new ItemBase("sulfur", Industria.MATERIALS);
 	public static final Item crude_steel = new ItemBase("crude_steel", Industria.MATERIALS);
 	public static final Item lime = new ItemBase("lime", Industria.MATERIALS);
+	public static final Item cement = new ItemBase("cement", Industria.MATERIALS);
 	
 	// Crafting items
 	public static final Item bearing = new ItemBase("bearing", Industria.MATERIALS);
@@ -931,6 +932,7 @@ public class ModItems {
 	public static final Item fuse_nv = new ItemFuse("fuse_nv", 32);
 	public static final Item fuse_hv = new ItemFuse("fuse_hv", 64);
 	public static final Item schredder_crusher = new ItemSchredderToolCrusher();
+	public static final Item schredder_macerator = new ItemSchredderToolMacerator();
 	public static final Item hard_drive = new ItemHardDrive();
 	public static final Item structure_cladding_pane = new ItemStructureCladdingPane();
 	
@@ -941,6 +943,6 @@ public class ModItems {
 	public static final Item cutter = new ItemCutter();
 	public static final Block tree_tap = new BlockTreeTap();
 	public static final Item network_configurtor = new ItemNetworkConfigurator();
-	public static final Item brush = new ItemBrush();
+	public static final ItemBrush brush = new ItemBrush();
 		
 }

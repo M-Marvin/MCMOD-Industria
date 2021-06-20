@@ -159,7 +159,64 @@ public class Events {
 		return jsonString.contains(jsonString2);
 	}
 	
-	
+//	@SubscribeEvent
+//	public static void onEntityAttacked(net.minecraftforge.event.entity.living.LivingAttackEvent event) {
+//
+//		try {
+//			
+//			DamageSource source = event.getSource();
+//			
+//			if (source instanceof EntityDamageSource) {
+//				
+//				Entity bullet = ((EntityDamageSource) source).getImmediateSource();
+//				LivingEntity target = event.getEntityLiving();
+//				
+//				if (bullet.getType() == EntityType.SHULKER_BULLET && target.getType() == EntityType.SHULKER) {
+//					
+//					BlockPos position = target.getPosition();
+//					World world = target.world;
+//					
+//					BlockPos shulkerRange = new BlockPos(8, 8, 8);
+//					List<ShulkerEntity> soroundingShulkers = world.getEntitiesWithinAABB(ShulkerEntity.class, new AxisAlignedBB(position.subtract(shulkerRange), position.add(shulkerRange)));
+//					float chanceToSpawn = 1;
+//					for (@SuppressWarnings("unused") ShulkerEntity shulkerInRange : soroundingShulkers) chanceToSpawn *= 0.8F;
+//					if (soroundingShulkers.size() > 5) chanceToSpawn = 0;
+//					
+//					System.out.println(chanceToSpawn);
+//					
+//					if (target.world.rand.nextFloat() <= chanceToSpawn) {
+//						
+//						Method teleportFunc = ShulkerEntity.class.getDeclaredMethod("tryTeleportToNewPosition");
+//						teleportFunc.setAccessible(true);
+//						boolean succes = (boolean) teleportFunc.invoke(target);
+//						
+//						if (succes) {
+//
+//							ShulkerEntity shulker = EntityType.SHULKER.create(world);
+//							shulker.setPosition(position.getX() + 0.5F, position.getY() + 0.5F, position.getZ() + 0.5F);
+//							world.addEntity(shulker);
+//							
+//							System.out.println("Spawn Shulker at " + position);
+//							
+//						}
+//						
+//					}
+//					
+//				}
+//				
+//			}
+//			
+//		} catch (NoSuchMethodException | SecurityException e) {
+//			e.printStackTrace();
+//		} catch (IllegalAccessException e) {
+//			e.printStackTrace();
+//		} catch (IllegalArgumentException e) {
+//			e.printStackTrace();
+//		} catch (InvocationTargetException e) {
+//			e.printStackTrace();
+//		}
+//		
+//	}
 	
 	@SubscribeEvent
 	public static void onBlockBurn(net.minecraftforge.event.world.BlockEvent.NeighborNotifyEvent event) {

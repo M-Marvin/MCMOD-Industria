@@ -1,0 +1,22 @@
+{
+  "type": "industria:alloy",
+  "ingredientItems": [
+    {
+      "item": "industria:crushed_iron_ore",
+      "count": 2
+    },
+    {
+      "item": "minecraft:clay_ball",
+      "count": 2
+    },
+    {
+      "item": "industria:lime",
+      "count": 4
+    }
+  ],
+  "resultItem":  {
+    "item": "industria:cement",
+    "count": 10
+  },
+  "smeltingTime": 120
+}

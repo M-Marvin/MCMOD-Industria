@@ -1,0 +1,15 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "industria:limestone"
+  },
+  "results": [
+    {
+      "item": "industria:lime",
+      "count": 4
+    }
+  ],
+  "schreddertime": 5,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 30
+}

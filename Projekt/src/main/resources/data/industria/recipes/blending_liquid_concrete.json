@@ -1,0 +1,24 @@
+{
+  "type": "industria:blending",
+  "ingredientItems": [
+    {
+      "item": "industria:cement",
+      "count": 6
+    },
+    {
+      "item": "minecraft:gravel",
+      "count": 1
+    }
+  ],
+  "ingredientFluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 600
+    }
+  ],
+  "resultFluid":  {
+    "fluid": "industria:liquid_concrete",
+    "amount": 1200
+  },
+  "mixingTime": 60
+}

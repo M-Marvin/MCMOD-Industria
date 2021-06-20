@@ -1,0 +1,18 @@
+{
+  "type": "industria:alloy",
+  "ingredientItems": [
+    {
+      "item": "industria:crushed_iron_ore",
+      "count": 2
+    },
+    {
+      "item": "industria:lime",
+      "count": 3
+    }
+  ],
+  "resultItem":  {
+    "item": "industria:cement",
+    "count": 6
+  },
+  "smeltingTime": 60
+}

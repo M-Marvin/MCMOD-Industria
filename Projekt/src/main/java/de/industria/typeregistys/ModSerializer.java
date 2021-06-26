@@ -9,6 +9,8 @@ import de.industria.recipetypes.BlendingRecipe;
 import de.industria.recipetypes.BlendingRecipeSerializer;
 import de.industria.recipetypes.FluidBathRecipe;
 import de.industria.recipetypes.FluidBathRecipeSerializer;
+import de.industria.recipetypes.MetalFormRecipe;
+import de.industria.recipetypes.MetalFormRecipeSerializer;
 import de.industria.recipetypes.RifiningRecipe;
 import de.industria.recipetypes.RifiningRecipeSerializer;
 import de.industria.recipetypes.SchredderRecipe;
@@ -39,6 +41,7 @@ public class ModSerializer {
 	public static final AlloyRecipeSerializer<AlloyRecipe> ALLOY = register("alloy", new AlloyRecipeSerializer<AlloyRecipe>(AlloyRecipe::new));
 	public static final FluidBathRecipeSerializer<FluidBathRecipe> FLUID_BATH = register("fluid_bath", new FluidBathRecipeSerializer<FluidBathRecipe>(FluidBathRecipe::new));
 	public static final BlastFurnaceRecipeSerializer<BlastFurnaceRecipe> BLAST_FURNACE = register("blast_furnace", new BlastFurnaceRecipeSerializer<BlastFurnaceRecipe>(BlastFurnaceRecipe::new));
+	public static final MetalFormRecipeSerializer<MetalFormRecipe> METAL_FORM = register("metal_form", new MetalFormRecipeSerializer<MetalFormRecipe>(MetalFormRecipe::new));
 	
 	static <S extends IRecipeSerializer<T>, T extends IRecipe<?>> S register(String key, S recipeSerializer) {
 		recipeSerializer.setRegistryName(new ResourceLocation(Industria.MODID, key));

@@ -39,6 +39,7 @@ public class Industria {
 	// TODO Sounds:
 	// - Heater
 	// - BlastFurance
+	// - MetalFormer
 	
 	public static final Logger LOGGER = LogManager.getLogger();
 	public static final String MODID = "industria";
@@ -224,6 +225,7 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.thermal_zentrifuge, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.fluid_bath, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.blast_furnace, MACHINES);
+		ModGameRegistry.registerBlock(ModItems.metal_former, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.rubber_log, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.rubber_wood, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.rubber_leaves, DECORATIONS);

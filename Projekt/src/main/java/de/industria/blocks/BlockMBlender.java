@@ -190,7 +190,6 @@ public class BlockMBlender extends BlockMultiPart<TileEntityMBlender> implements
 		if (network.getVoltage().getVoltage() > Voltage.NormalVoltage.getVoltage() && network.getCurrent() > 0) {
 			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
 			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
-			
 		}
 	}
 	

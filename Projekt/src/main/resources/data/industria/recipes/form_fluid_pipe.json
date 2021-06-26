@@ -1,0 +1,12 @@
+{
+  "type": "industria:metal_form",
+  "ingredientItem": {
+    "item": "industria:iron_plate",
+    "count": 1
+  },
+  "resultItem": {
+    "item": "industria:fluid_pipe",
+    "count": 4
+  },
+  "processTime": 60
+}

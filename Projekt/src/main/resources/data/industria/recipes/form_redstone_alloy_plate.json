@@ -1,0 +1,12 @@
+{
+  "type": "industria:metal_form",
+  "ingredientItem": {
+    "item": "industria:redstone_alloy_ingot",
+    "count": 1
+  },
+  "resultItem": {
+    "item": "industria:redstone_alloy_plate",
+    "count": 1
+  },
+  "processTime": 40
+}

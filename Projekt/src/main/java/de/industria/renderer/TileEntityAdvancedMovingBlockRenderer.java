@@ -1,14 +1,10 @@
 package de.industria.renderer;
 
-import java.lang.reflect.Field;
 import java.util.Random;
-
-import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
-import de.industria.Industria;
 import de.industria.ModItems;
 import de.industria.tileentity.TileEntityAdvancedMovingBlock;
 import net.minecraft.block.BlockState;
@@ -19,16 +15,10 @@ import net.minecraft.client.renderer.BlockModelRenderer;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.crash.CrashReport;
-import net.minecraft.crash.CrashReportCategory;
-import net.minecraft.crash.ReportedException;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.PistonType;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -86,50 +76,51 @@ public class TileEntityAdvancedMovingBlockRenderer extends TileEntityRenderer<Ti
 		this.blockRenderer.getBlockModelRenderer().renderModel(world, this.blockRenderer.getModelForState(state), state, pos, matrixStack, ivertexbuilder, p_228876_6_, new Random(), state.getPositionRandom(pos), p_228876_7_);
 		});
 		
-		if (state.hasTileEntity()) {
-	 		
-	 		TileEntity tileEntity = state.getBlock().createTileEntity(state, world);
-	 		tileEntity.deserializeNBT(tileData);
-	 		tileEntity.setWorldAndPos(world, pos); 
-	 					
- 			try {
- 		 		Field[] fields = FieldUtils.getAllFields(tileEntity.getClass());
- 				for (Field field : fields) {
- 					if (field.getName().equals("field_195045_e") || field.getName().equals("cachedBlockState")) {
- 						FieldUtils.writeField(tileEntity, field.getName(), state, true);
- 					}
- 				}
-			} catch (IllegalAccessException e) {
-				Industria.LOGGER.error("Access Error on render TileEbtity as MovingBlock!");
-				e.printStackTrace();
-			}
- 			
-	 		matrixStack.push();
-	 		matrixStack.translate(pos.getX(), pos.getY(), pos.getZ());
-	 		
-			TileEntityRenderer<TileEntity> tileentityrenderer = TileEntityRendererDispatcher.instance.getRenderer(tileEntity);
-			if (tileentityrenderer != null) {
-				runCrashReportable(tileEntity, () -> {
-					matrixStack.translate(-pos.getX(), -pos.getY(), -pos.getZ());
-					tileentityrenderer.render(tileEntity, 0, matrixStack, buffer, WorldRenderer.getCombinedLight(world, pos), OverlayTexture.NO_OVERLAY);
-				});
-			}
-	 		matrixStack.pop();
-			
-		}
+		// TODO: Bug seit letztem Forge Update, verusacht (warscheinlich) wilkürliche Abstürze ohne erkennbaren Grund.
+//		if (state.hasTileEntity()) {
+//	 		
+//	 		TileEntity tileEntity = state.getBlock().createTileEntity(state, world);
+//	 		tileEntity.deserializeNBT(tileData);
+//	 		tileEntity.setWorldAndPos(world, pos); 
+//	 					
+// 			try {
+// 		 		Field[] fields = FieldUtils.getAllFields(tileEntity.getClass());
+// 				for (Field field : fields) {
+// 					if (field.getName().equals("field_195045_e") || field.getName().equals("cachedBlockState")) {
+// 						FieldUtils.writeField(tileEntity, field.getName(), state, true);
+// 					}
+// 				}
+//			} catch (IllegalAccessException e) {
+//				Industria.LOGGER.error("Access Error on render TileEbtity as MovingBlock!");
+//				e.printStackTrace();
+//			}
+// 			
+//	 		matrixStack.push();
+//	 		matrixStack.translate(pos.getX(), pos.getY(), pos.getZ());
+//	 		
+//			TileEntityRenderer<TileEntity> tileentityrenderer = TileEntityRendererDispatcher.instance.getRenderer(tileEntity);
+//			if (tileentityrenderer != null) {
+//				runCrashReportable(tileEntity, () -> {
+//					matrixStack.translate(-pos.getX(), -pos.getY(), -pos.getZ());
+//					tileentityrenderer.render(tileEntity, 0, matrixStack, buffer, WorldRenderer.getCombinedLight(world, pos), OverlayTexture.NO_OVERLAY);
+//				});
+//			}
+//	 		matrixStack.pop();
+//			
+//		}
 		
 		net.minecraftforge.client.ForgeHooksClient.setRenderLayer(null);
 	}
 	
-	private static void runCrashReportable(TileEntity tileEntityIn, Runnable runnableIn) {
-		try {
-			runnableIn.run();
-		} catch (Throwable throwable) {
-			CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Rendering Block Entity");
-			CrashReportCategory crashreportcategory = crashreport.makeCategory("Block Entity Details");
-			tileEntityIn.addInfoToCrashReport(crashreportcategory);
-			throw new ReportedException(crashreport);
-		}
-	}
+//	private static void runCrashReportable(TileEntity tileEntityIn, Runnable runnableIn) {
+//		try {
+//			runnableIn.run();
+//		} catch (Throwable throwable) {
+//			CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Rendering Block Entity");
+//			CrashReportCategory crashreportcategory = crashreport.makeCategory("Block Entity Details");
+//			tileEntityIn.addInfoToCrashReport(crashreportcategory);
+//			throw new ReportedException(crashreport);
+//		}
+//	}
 	
 }

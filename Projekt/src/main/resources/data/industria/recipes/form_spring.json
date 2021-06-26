@@ -1,0 +1,12 @@
+{
+  "type": "industria:metal_form",
+  "ingredientItem": {
+    "item": "industria:fluid_pipe",
+    "count": 1
+  },
+  "resultItem": {
+    "item": "industria:spring",
+    "count": 1
+  },
+  "processTime": 60
+}

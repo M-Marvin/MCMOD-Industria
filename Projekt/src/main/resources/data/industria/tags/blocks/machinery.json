@@ -18,6 +18,7 @@
     "industria:thermal_zentrifuge",
     "industria:blast_furnace",
     "industria:air_compressor",
-    "industria:item_distributor"
+    "industria:item_distributor",
+    "industria:metal_former"
   ]
 }

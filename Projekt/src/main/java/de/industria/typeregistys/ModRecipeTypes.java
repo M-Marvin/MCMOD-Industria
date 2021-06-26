@@ -5,6 +5,7 @@ import de.industria.recipetypes.AlloyRecipe;
 import de.industria.recipetypes.BlastFurnaceRecipe;
 import de.industria.recipetypes.BlendingRecipe;
 import de.industria.recipetypes.FluidBathRecipe;
+import de.industria.recipetypes.MetalFormRecipe;
 import de.industria.recipetypes.RifiningRecipe;
 import de.industria.recipetypes.SchredderRecipe;
 import de.industria.recipetypes.ThermalZentrifugeRecipe;
@@ -26,6 +27,7 @@ public class ModRecipeTypes {
 	public static final IRecipeType<AlloyRecipe> ALLOY = register("alloy");
 	public static final IRecipeType<FluidBathRecipe> FLUID_BATH = register("fluid_bath");
 	public static final IRecipeType<BlastFurnaceRecipe> BLAST_FURNACE = register("blast_furnace");
+	public static final IRecipeType<MetalFormRecipe> METAL_FORM = register("metal_form");
 	
 	static <T extends IRecipe<?>> IRecipeType<T> register(String key) {
 		ResourceLocation registryKey = new ResourceLocation(Industria.MODID, key);

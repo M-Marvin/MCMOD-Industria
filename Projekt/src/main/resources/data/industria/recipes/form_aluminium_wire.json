@@ -1,0 +1,12 @@
+{
+  "type": "industria:metal_form",
+  "ingredientItem": {
+    "item": "industria:aluminium_plate",
+    "count": 1
+  },
+  "resultItem": {
+    "item": "industria:aluminium_wire",
+    "count": 6
+  },
+  "processTime": 100
+}

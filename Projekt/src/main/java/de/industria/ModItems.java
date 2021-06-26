@@ -126,6 +126,7 @@ public class ModItems {
 	public static final Block pipe_preassurizer = new BlockPipePreassurizer();
 	public static final Block air_compressor = new BlockMAirCompressor();
 	public static final Block item_distributor = new BlockItemDistributor();
+	public static final Block metal_former = new BlockMMetalFormer();
 	
 	// Ore and Resource Blocks
 	public static final Block bauxite = new BlockBase("bauxite", Material.ROCK, 1.5F, SoundType.STONE);

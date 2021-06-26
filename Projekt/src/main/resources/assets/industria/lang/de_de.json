@@ -122,6 +122,7 @@
 "block.industria.blender": "Mischanlage",
 "block.industria.raffinery": "Raffinerie",
 "block.industria.blast_furnace": "Hochofen",
+"block.industria.metal_former": "Biegemaschiene",
 
 "block.industria.conveyor_belt": "F\u00f6rderband",
 "block.industria.conveyor_switch": "Schaltbares F\u00f6rderband",
@@ -464,6 +465,7 @@
 "industria.block.info.preassurePipeTerminal": "\nRegelt den Luftstrom automatisch so, das nur Items eingesaugt werden, wenn sie auch ben\u00f6tigt werden (verhindert Staus).",
 "industria.block.info.itemDistributor": "Verteilt items gleichm\u00e4ssig nach einer Vorlage auf seinen Ausgang.\nN\u00fctzlich f\u00fcr Automatische Werkb\u00e4nke oder gleichm\u00e4ssiges verteilen von Items auf mehrere F\u00f6rderb\u00e4nder.\nVerbindet sich mit bis zu 8 benachbarten Verteilern.",
 "industria.block.info.blastFurnace": "\nErzeugt gro\u00dfe Hitze durch einblasen von Gas.\nWird haupts\u00e4chlich zur entziehung des Kohlenstoffs aus Eisen genutzt, um Rohstahl in gro\u00dfen mengen zu gewinnen.",
+"industria.block.info.metalFormer": "\nEffizienter im verformen von Metallteilen als eine automatische Werkbank.",
 "industria.item.info.drive": "\nKann Dateien enthalten die von Computern ausgef\u00fchrt bzw gelesen/geschrieben werden k\u00f6nnen.\nJede Festplatte hat einen Ordner im Weltordner.",
 "industria.item.info.name": "Laufwerkname: %1$s",
 "industria.item.info.fuseMax": "Max. Strom: %1$s A",

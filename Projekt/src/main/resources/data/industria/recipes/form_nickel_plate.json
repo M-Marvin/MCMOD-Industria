@@ -1,0 +1,12 @@
+{
+  "type": "industria:metal_form",
+  "ingredientItem": {
+    "item": "industria:nickel_ingot",
+    "count": 1
+  },
+  "resultItem": {
+    "item": "industria:nickel_plate",
+    "count": 1
+  },
+  "processTime": 40
+}

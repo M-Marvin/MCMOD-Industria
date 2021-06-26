@@ -62,7 +62,7 @@ public class BlockAdvancedMovingBlock extends ContainerBlock {
    public static TileEntity createTilePiston(BlockState state, CompoundNBT tileEntity, Direction direction, boolean p_196343_2_, boolean p_196343_3_) {
       return new TileEntityAdvancedMovingBlock(state, tileEntity, direction, p_196343_2_, p_196343_3_);
    }
-
+   
    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
       if (!state.isIn(newState.getBlock())) {
          TileEntity tileentity = worldIn.getTileEntity(pos);

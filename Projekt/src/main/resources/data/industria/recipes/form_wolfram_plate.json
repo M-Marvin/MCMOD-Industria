@@ -1,0 +1,12 @@
+{
+  "type": "industria:metal_form",
+  "ingredientItem": {
+    "item": "industria:wolfram_ingot",
+    "count": 1
+  },
+  "resultItem": {
+    "item": "industria:wolfram_plate",
+    "count": 1
+  },
+  "processTime": 40
+}

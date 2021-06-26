@@ -11,6 +11,7 @@ import de.industria.gui.ScreenMCoalHeater;
 import de.industria.gui.ScreenMElectricFurnace;
 import de.industria.gui.ScreenMFluidBath;
 import de.industria.gui.ScreenMGenerator;
+import de.industria.gui.ScreenMMetalFormer;
 import de.industria.gui.ScreenMRaffinery;
 import de.industria.gui.ScreenMSchredder;
 import de.industria.gui.ScreenMStoredCrafting;
@@ -34,6 +35,7 @@ import de.industria.renderer.TileEntityMBlastFurnaceRenderer;
 import de.industria.renderer.TileEntityMBlenderRenderer;
 import de.industria.renderer.TileEntityMCoalHeaterRenderer;
 import de.industria.renderer.TileEntityMFluidBathRenderer;
+import de.industria.renderer.TileEntityMMetalFormerRenderer;
 import de.industria.renderer.TileEntityMRaffineryRenderer;
 import de.industria.renderer.TileEntityMSchredderRenderer;
 import de.industria.renderer.TileEntityMSteamGeneratorRenderer;
@@ -146,6 +148,7 @@ public class ClientSetup {
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.STRUCTURE_SCAFFOLD, TileEntityStructureScaffoldRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.BLAST_FURNACE, TileEntityMBlastFurnaceRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.AIR_COMPRESSOR, TileEntityMAirCompressorRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.METAL_FORMER, TileEntityMMetalFormerRenderer::new);
 		
 		ScreenManager.registerFactory(ModContainerType.STORED_CRAFTING, ScreenMStoredCrafting::new);
 		ScreenManager.registerFactory(ModContainerType.PROCESSOR, ScreenRProcessor::new);
@@ -168,6 +171,7 @@ public class ClientSetup {
 		ScreenManager.registerFactory(ModContainerType.AIR_COMPRESSOR, ScreenMAirCompressor::new);
 		ScreenManager.registerFactory(ModContainerType.ITEM_DISTRIBUTOR, ScreenItemDistributor::new);
 		ScreenManager.registerFactory(ModContainerType.BLAST_FURNACE, ScreenMBlastFurnace::new);
+		ScreenManager.registerFactory(ModContainerType.METAL_FORMER, ScreenMMetalFormer::new);
 		
 		ModClientBindings.bindModelToitem(ModItems.schredder_crusher, new ResourceLocation(Industria.MODID, "textures/item/schredder_crusher.png"), new ItemSchredderToolCrusherModel());
 		ModClientBindings.bindModelToitem(ModItems.schredder_macerator, new ResourceLocation(Industria.MODID, "textures/item/schredder_macerator.png"), new ItemSchredderToolMaceratorModel());

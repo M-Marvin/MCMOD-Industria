@@ -7,11 +7,8 @@ import de.industria.Industria;
 import de.industria.blocks.BlockMultiPart;
 import de.industria.tileentity.TileEntityMMetalFormer;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -25,12 +22,10 @@ public class TileEntityMMetalFormerRenderer extends TileEntityRenderer<TileEntit
 	public static final ResourceLocation METAL_FORMER_TEXTURES = new ResourceLocation(Industria.MODID, "textures/block/metal_former.png");
 	
 	private TileEntityMMetalFormerModel metalFormerModel;
-	private ItemRenderer itemRenderDispatcher;
 	
 	public TileEntityMMetalFormerRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
 		super(rendererDispatcherIn);
 		this.metalFormerModel = new TileEntityMMetalFormerModel();
-		this.itemRenderDispatcher = Minecraft.getInstance().getItemRenderer();
 	}
 
 	@Override
@@ -59,21 +54,6 @@ public class TileEntityMMetalFormerRenderer extends TileEntityRenderer<TileEntit
 			
 			metalFormerModel.setRotation(tileEntityIn.rotation);
 			metalFormerModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
-			
-			if (!tileEntityIn.getStackInSlot(0).isEmpty()) {
-
-				float progress = tileEntityIn.processTime / (float) tileEntityIn.processTimeTotal;
-				
-				matrixStackIn.push();
-				
-				matrixStackIn.translate(-11 * 0.0625F, -7.8F * 0.0625F, (16 + progress * 30) * 0.0625F);
-				matrixStackIn.translate(4 * 0.0625F, 8 * 0.0625F, -15 * 0.0625F);
-				
-				itemRenderDispatcher.renderItem(tileEntityIn.getStackInSlot(0), TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
-				
-				matrixStackIn.pop();
-				
-			}
 			
 			matrixStackIn.pop();
 			

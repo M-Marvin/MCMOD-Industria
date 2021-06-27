@@ -630,30 +630,30 @@ public class ModItems {
 	public static final Block steam = new BlockSteam();
 	public static final Item steam_bucket = new ItemGasBucket(ModFluids.STEAM, "steam_bucket", Industria.MATERIALS);
 	public static final Block destilled_water = new BlockDestilledWater();
-	public static final Item destilled_water_bucket = new ItemFluidBucket(ModFluids.DESTILLED_WATER, "destilled_water_bucket", Industria.MATERIALS);
+	public static final Item destilled_water_bucket = new ItemFluidBucket(ModFluids.DESTILLED_WATER, "destilled_water_bucket", Industria.MATERIALS, false);
 	public static final Block sulfuric_acid = new BlockSulfuricAcid();
-	public static final Item sulfuric_acid_bucket = new ItemFluidBucket(ModFluids.SULFURIC_ACID, "sulfuric_acid_bucket", Industria.MATERIALS);
+	public static final Item sulfuric_acid_bucket = new ItemFluidBucket(ModFluids.SULFURIC_ACID, "sulfuric_acid_bucket", Industria.MATERIALS, true);
 	public static final Block natron_lye = new BlockNatronLye();
-	public static final Item natron_lye_bucket = new ItemFluidBucket(ModFluids.NATRON_LYE, "natron_lye_bucket", Industria.MATERIALS);
+	public static final Item natron_lye_bucket = new ItemFluidBucket(ModFluids.NATRON_LYE, "natron_lye_bucket", Industria.MATERIALS, true);
 	public static final Block chemical_water = new BlockChemicalWater();
-	public static final Item chemical_water_bucket = new ItemFluidBucket(ModFluids.CHEMICAL_WATER, "chemical_water_bucket", Industria.MATERIALS);
+	public static final Item chemical_water_bucket = new ItemFluidBucket(ModFluids.CHEMICAL_WATER, "chemical_water_bucket", Industria.MATERIALS, false);
 	public static final Block iron_solution = new BlockOreSolution("iron_solution", ModFluids.IRON_SOLUTION);
-	public static final Item iron_solution_bucket = new ItemFluidBucket(ModFluids.IRON_SOLUTION, "iron_solution_bucket", Industria.MATERIALS);
+	public static final Item iron_solution_bucket = new ItemFluidBucket(ModFluids.IRON_SOLUTION, "iron_solution_bucket", Industria.MATERIALS, false);
 	public static final Block copper_solution = new BlockOreSolution("copper_solution", ModFluids.COPPER_SOLUTION);
-	public static final Item copper_solution_bucket = new ItemFluidBucket(ModFluids.COPPER_SOLUTION, "copper_solution_bucket", Industria.MATERIALS);
+	public static final Item copper_solution_bucket = new ItemFluidBucket(ModFluids.COPPER_SOLUTION, "copper_solution_bucket", Industria.MATERIALS, false);
 	public static final Block aluminium_solution = new BlockOreSolution("aluminium_solution", ModFluids.ALUMINIUM_SOLUTION);
-	public static final Item aluminium_solution_bucket = new ItemFluidBucket(ModFluids.ALUMINIUM_SOLUTION, "aluminium_solution_bucket", Industria.MATERIALS);
+	public static final Item aluminium_solution_bucket = new ItemFluidBucket(ModFluids.ALUMINIUM_SOLUTION, "aluminium_solution_bucket", Industria.MATERIALS, false);
 	public static final Block wolfram_solution = new BlockOreSolution("wolfram_solution", ModFluids.WOLFRAM_SOLUTION);
-	public static final Item wolfram_solution_bucket = new ItemFluidBucket(ModFluids.WOLFRAM_SOLUTION, "wolfram_solution_bucket", Industria.MATERIALS);
+	public static final Item wolfram_solution_bucket = new ItemFluidBucket(ModFluids.WOLFRAM_SOLUTION, "wolfram_solution_bucket", Industria.MATERIALS, false);
 	public static final Block tin_solution = new BlockOreSolution("tin_solution", ModFluids.TIN_SOLUTION);
-	public static final Item tin_solution_bucket = new ItemFluidBucket(ModFluids.TIN_SOLUTION, "tin_solution_bucket", Industria.MATERIALS);
+	public static final Item tin_solution_bucket = new ItemFluidBucket(ModFluids.TIN_SOLUTION, "tin_solution_bucket", Industria.MATERIALS, false);
 	public static final Block raw_oil = new BlockRawOil();
-	public static final Item raw_oil_bucket = new ItemFluidBucket(ModFluids.RAW_OIL, "raw_oil_bucket", Industria.MATERIALS);
+	public static final Item raw_oil_bucket = new ItemFluidBucket(ModFluids.RAW_OIL, "raw_oil_bucket", Industria.MATERIALS, true);
 	public static final Block compressed_air = new BlockCompressedAir();
 	public static final Item compressed_air_bucket = new ItemGasBucket(ModFluids.COMPRESSED_AIR, "compressed_air_bucket", Industria.MATERIALS);
 	public static final Block liquid_concrete = new BlockLiquidConcrete();
-	public static final Item liquid_concrete_bucket = new ItemFluidBucket(ModFluids.LIQUID_CONCRETE, "liquid_concrete_bucket", Industria.MATERIALS);
-
+	public static final Item liquid_concrete_bucket = new ItemFluidBucket(ModFluids.LIQUID_CONCRETE, "liquid_concrete_bucket", Industria.MATERIALS, true);
+	
 	// Stairs
 	public static final Block gold_planks_stairs = new BlockStairsBase(() -> gold_planks.getDefaultState(), "gold_planks_stairs", Material.ROCK, 2.5F, 3F, SoundType.STONE);
 	public static final Block aluminium_planks_stairs = new BlockStairsBase(() -> aluminium_planks.getDefaultState(), "aluminium_planks_stairs", Material.ROCK, 2.5F, 3F, SoundType.STONE);

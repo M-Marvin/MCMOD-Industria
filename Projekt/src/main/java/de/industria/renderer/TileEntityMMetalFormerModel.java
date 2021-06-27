@@ -17,10 +17,10 @@ public class TileEntityMMetalFormerModel extends EntityModel<Entity> {
 	public TileEntityMMetalFormerModel() {
 		textureWidth = 128;
 		textureHeight = 128;
-
+		
 		root = new ModelRenderer(this);
 		root.setRotationPoint(0.0F, 24.0F, 16.0F);
-		root.setTextureOffset(0, 0).addBox(7.0F, -15.0F, -16.0F, 0.0F, 9.0F, 16.0F, 0.0F, false);
+		root.setTextureOffset(0, 0).addBox(7.5F, -15.0F, -16.0F, 0.0F, 9.0F, 16.0F, 0.0F, false);
 		root.setTextureOffset(68, 47).addBox(-7.0F, -6.0F, 0.0F, 14.0F, 6.0F, 8.0F, 0.0F, false);
 		root.setTextureOffset(34, 39).addBox(-7.0F, -15.0F, 7.0F, 14.0F, 9.0F, 1.0F, 0.0F, false);
 		root.setTextureOffset(0, 0).addBox(-7.0F, -15.0F, -24.0F, 14.0F, 9.0F, 1.0F, 0.0F, false);
@@ -33,7 +33,7 @@ public class TileEntityMMetalFormerModel extends EntityModel<Entity> {
 		root.setTextureOffset(0, 33).addBox(7.0F, -6.0F, -24.0F, 1.0F, 6.0F, 32.0F, 0.0F, false);
 		root.setTextureOffset(64, 0).addBox(-7.0F, -1.0F, -16.0F, 14.0F, 1.0F, 16.0F, 0.0F, false);
 		root.setTextureOffset(0, 0).addBox(-8.0F, -16.0F, -24.0F, 16.0F, 1.0F, 32.0F, 0.0F, false);
-		root.setTextureOffset(0, 17).addBox(-7.0F, -15.0F, -16.0F, 0.0F, 9.0F, 16.0F, 0.0F, false);
+		root.setTextureOffset(0, 17).addBox(-7.5F, -15.0F, -16.0F, 0.0F, 9.0F, 16.0F, 0.0F, false);
 
 		cube_r1 = new ModelRenderer(this);
 		cube_r1.setRotationPoint(-7.0F, -6.0F, -16.0F);
@@ -55,6 +55,7 @@ public class TileEntityMMetalFormerModel extends EntityModel<Entity> {
 		roll2.setRotationPoint(0.0F, -9.5F, -2.5F);
 		root.addChild(roll2);
 		roll2.setTextureOffset(34, 33).addBox(-7.0F, -1.5F, -1.5F, 14.0F, 3.0F, 3.0F, 0.0F, false);
+		
 	}
 
 	@Override
@@ -74,8 +75,8 @@ public class TileEntityMMetalFormerModel extends EntityModel<Entity> {
 	}
 	
 	public void setRotation(float rotation) {
-		float rot1 = (float) ((rotation / 360) * Math.PI * 2);
-		float rot2 = (float) ((rotation / 360) * Math.PI * 2);
+		float rot1 = (float) ((rotation / 360) * Math.PI * -2);
+		float rot2 = (float) ((rotation / 360) * Math.PI * -2);
 		setRotationAngle(this.roll1, -rot1, 0, 0);
 		setRotationAngle(this.roll2, rot2, 0, 0);
 		setRotationAngle(this.saw, rot2, 0, 0);

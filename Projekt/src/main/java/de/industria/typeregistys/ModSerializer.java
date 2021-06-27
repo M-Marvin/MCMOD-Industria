@@ -21,6 +21,8 @@ import de.industria.recipetypes.WashingRecipe;
 import de.industria.recipetypes.WashingRecipeSerializer;
 import de.industria.specialrecipes.ProzessorCopy;
 import de.industria.specialrecipes.RecipeDyeBrush;
+import de.industria.specialrecipes.RecipeFormCladding;
+import de.industria.specialrecipes.SpecialMetalFormRecipeSerializer;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.SpecialRecipeSerializer;
@@ -31,6 +33,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 public class ModSerializer {
 	
+	public static final SpecialMetalFormRecipeSerializer<RecipeFormCladding> FORM_CLADDING = register("form_special_cladding", new SpecialMetalFormRecipeSerializer<RecipeFormCladding>(RecipeFormCladding::new));
 	public static final SpecialRecipeSerializer<RecipeDyeBrush> DYE_BRUSH = register("crafting_special_dye_brush", new SpecialRecipeSerializer<>(RecipeDyeBrush::new));
 	public static final SpecialRecipeSerializer<ProzessorCopy> CRAFTING_PROCESSOR_COPY = register("crafting_special_processor_cloning", new SpecialRecipeSerializer<>(ProzessorCopy::new));
 	public static final SchredderRecipeSerializer<SchredderRecipe> SCHREDDER = register("schredder", new SchredderRecipeSerializer<SchredderRecipe>(SchredderRecipe::new));

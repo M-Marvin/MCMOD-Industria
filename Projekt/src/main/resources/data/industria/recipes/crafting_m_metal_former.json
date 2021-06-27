@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SGS",
+    "ECM",
+    "SMS"
+  ],
+  "key": {
+    "S": {
+      "item": "industria:steel_plate"
+    },
+    "C": {
+      "item": "industria:conveyor_belt"
+    },
+    "M": {
+      "item": "industria:motor"
+    },
+    "E": {
+      "item": "industria:iron_plate"
+    },
+    "G": {
+      "item": "industria:steel_plates"
+    }
+  },
+  "result": {
+    "item": "industria:metal_former"
+  }
+}

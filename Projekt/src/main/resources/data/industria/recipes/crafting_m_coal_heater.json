@@ -1,13 +1,22 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "CEC",
-    "C C",
-    "CCC"
+    "SES",
+    "WFW",
+    "GSG"
   ],
   "key": {
-    "C": {
-      "item": "minecraft:cobblestone"
+    "G": {
+      "item": "industria:structure_scaffold"
+    },
+    "S": {
+      "item": "industria:steel_plate"
+    },
+    "W": {
+      "item": "industria:wolfram_planks"
+    },
+    "F": {
+      "item": "minecraft:furnace"
     },
     "E": {
       "item": "industria:iron_plate"

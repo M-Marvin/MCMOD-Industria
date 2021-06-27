@@ -58,7 +58,7 @@ public class TileEntityMMetalFormer extends TileEntityInventoryBase implements I
 				if (recipe != null) {
 					
 					this.processTimeTotal = recipe.getProcessTime();
-					ItemStack result = recipe.getRecipeOutput();
+					ItemStack result = recipe.getCraftingResult(this);
 					
 					if (ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(1), result)) {
 						

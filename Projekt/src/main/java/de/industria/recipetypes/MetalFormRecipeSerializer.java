@@ -36,6 +36,7 @@ public class MetalFormRecipeSerializer<T extends MetalFormRecipe> extends ForgeR
 	public void write(PacketBuffer buffer, T recipe) {
 		buffer.writeItemStack(recipe.itemOut);
 		buffer.writeItemStack(recipe.itemIn);
+		buffer.writeInt(recipe.processTime);
 	}
 	
 	public interface IFactory<T extends MetalFormRecipe> {

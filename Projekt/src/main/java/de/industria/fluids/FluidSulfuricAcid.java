@@ -14,6 +14,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.state.StateContainer.Builder;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -106,7 +107,7 @@ public abstract class FluidSulfuricAcid extends FlowingFluid {
 			
 			if (random.nextInt(resistance * 2) == 0) {
 				
-				if (resistance < 35 && !state1.isAir() && !(state1.getBlock() instanceof FlowingFluidBlock)) {
+				if (resistance < 35 && !state1.isAir() && !(state1.getBlock() instanceof FlowingFluidBlock) && !state1.isIn(BlockTags.BASE_STONE_NETHER) && !state1.isIn(BlockTags.NYLIUM)) {
 					world.setBlockState(pos.offset(d), d == Direction.DOWN ? ModFluids.FLOWING_SULFURIC_ACID.getDefaultState().getBlockState() : Blocks.AIR.getDefaultState());
 					world.playSound(null, pos.offset(d), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1, 1);
 				}

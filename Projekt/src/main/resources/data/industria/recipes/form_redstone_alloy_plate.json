@@ -1,7 +1,7 @@
 {
   "type": "industria:metal_form",
   "ingredientItem": {
-    "item": "industria:redstone_alloy_ingot",
+    "item": "industria:redstone_ingot",
     "count": 1
   },
   "resultItem": {

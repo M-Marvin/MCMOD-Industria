@@ -27,6 +27,7 @@ import de.industria.tileentity.TileEntityMFuseBox;
 import de.industria.tileentity.TileEntityMGenerator;
 import de.industria.tileentity.TileEntityMMetalFormer;
 import de.industria.tileentity.TileEntityMMultimeter;
+import de.industria.tileentity.TileEntityMOreWashingPlant;
 import de.industria.tileentity.TileEntityMRaffinery;
 import de.industria.tileentity.TileEntityMSchredder;
 import de.industria.tileentity.TileEntityMSteamGenerator;
@@ -99,6 +100,7 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityItemDistributor> ITEM_DISTRIBUTOR = register("item_distributor", TileEntityType.Builder.create(TileEntityItemDistributor::new, ModItems.item_distributor));
 	public static final TileEntityType<TileEntityPreassurePipeItemTerminal> PREASSURE_PIPE_ITEM_TERMINAL = register("preassure_pipe_item_terminal", TileEntityType.Builder.create(TileEntityPreassurePipeItemTerminal::new, ModItems.preassure_pipe_item_terminal));
 	public static final TileEntityType<TileEntityMMetalFormer> METAL_FORMER = register("metal_former", TileEntityType.Builder.create(TileEntityMMetalFormer::new, ModItems.metal_former));
+	public static final TileEntityType<TileEntityMOreWashingPlant> ORE_WASHING_PLANT = register("ore_washing_plant", TileEntityType.Builder.create(TileEntityMOreWashingPlant::new, ModItems.ore_washing_plant));
 	
 	private static <T extends TileEntity> TileEntityType<T> register(String key, TileEntityType.Builder<T> builder) {
 		Type<?> type = Util.attemptDataFix(TypeReferences.BLOCK_ENTITY, key);

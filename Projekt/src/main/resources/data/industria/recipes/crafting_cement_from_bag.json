@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "industria:cement_bag"
+    }
+  ],
+  "result": {
+    "item": "industria:cement",
+    "count": 6
+  }
+}

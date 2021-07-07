@@ -57,6 +57,10 @@ public class WashingRecipe implements IRecipe<IInventory> {
 		return this.itemOut3.copy();
 	}
 	
+	public Ingredient getItemIn() {
+		return itemIn;
+	}
+	
 	public int getWashingTime() {
 		return this.washingTime;
 	}

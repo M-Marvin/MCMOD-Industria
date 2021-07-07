@@ -1,0 +1,71 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "industria:cement_bag",
+                  "properties": {
+                    "bags": "1"
+                  }
+                }
+              ],
+              "count": 1
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "industria:cement_bag",
+                  "properties": {
+                    "bags": "2"
+                  }
+                }
+              ],
+              "count": 2
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "industria:cement_bag",
+                  "properties": {
+                    "bags": "3"
+                  }
+                }
+              ],
+              "count": 3
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "industria:cement_bag",
+                  "properties": {
+                    "bags": "4"
+                  }
+                }
+              ],
+              "count": 4
+            },
+            {
+              "function": "minecraft:explosion_decay"
+            }
+          ],
+          "name": "industria:cement_bag"
+        }
+      ]
+    }
+  ]
+}

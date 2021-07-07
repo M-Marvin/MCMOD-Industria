@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "industria:paper_bag"
+    },
+    {
+      "item": "industria:cement"
+    },
+    {
+      "item": "industria:cement"
+    },
+    {
+      "item": "industria:cement"
+    },
+    {
+      "item": "industria:cement"
+    },
+    {
+      "item": "industria:cement"
+    },
+    {
+      "item": "industria:cement"
+    }
+  ],
+  "result": {
+    "item": "industria:cement_bag",
+    "count": 1
+  }
+}

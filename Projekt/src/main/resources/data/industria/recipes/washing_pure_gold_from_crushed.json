@@ -12,6 +12,10 @@
     {
       "item": "industria:crushed_stone",
       "count": 1
+    },
+    {
+      "item": "industria:tpo_silver_dust",
+      "count": 1
     }
   ],
   "washingTime": 100

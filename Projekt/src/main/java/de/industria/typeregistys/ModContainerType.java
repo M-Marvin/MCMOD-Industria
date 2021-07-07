@@ -15,6 +15,7 @@ import de.industria.gui.ContainerMElectricFurnace;
 import de.industria.gui.ContainerMFluidBath;
 import de.industria.gui.ContainerMGenerator;
 import de.industria.gui.ContainerMMetalFormer;
+import de.industria.gui.ContainerMOreWashingPlant;
 import de.industria.gui.ContainerMRaffinery;
 import de.industria.gui.ContainerMSchredder;
 import de.industria.gui.ContainerMThermalZentrifuge;
@@ -56,6 +57,7 @@ public class ModContainerType {
 	public static final ContainerType<ContainerItemDistributor> ITEM_DISTRIBUTOR = register(new ResourceLocation(Industria.MODID, "item_distributor"), ContainerItemDistributor::new);
 	public static final ContainerType<ContainerMBlastFurnace> BLAST_FURNACE = register (new ResourceLocation(Industria.MODID, "blast_furnace"), ContainerMBlastFurnace::new);
 	public static final ContainerType<ContainerMMetalFormer> METAL_FORMER = register (new ResourceLocation(Industria.MODID, "metal_former"), ContainerMMetalFormer::new);
+	public static final ContainerType<ContainerMOreWashingPlant> ORE_WASHING_PLANT = register (new ResourceLocation(Industria.MODID, "ore_washing_plant"), ContainerMOreWashingPlant::new);
 	
 	protected static <T extends Container> ContainerType<T> register(ResourceLocation key, IContainerFactory<T> factory) {
 		ContainerType<T> type = IForgeContainerType.create(factory);

@@ -193,9 +193,11 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.air_compressor, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.item_distributor, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.preassure_pipe_item_terminal, MACHINES);
+		ModGameRegistry.registerBlock(ModItems.ore_washing_plant, MACHINES);
 		
 		ModGameRegistry.registerBlock(ModItems.motor, MACHINES);
 		
+		ModGameRegistry.registerBlock(ModItems.cement_bag, DECORATIONS);
 		ModGameRegistry.registerBlock(ModItems.smooth_cobblestone, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.chiseled_smooth_stone, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.iron_rod, DECORATIONS);
@@ -863,6 +865,7 @@ public class Industria {
 		ModGameRegistry.registerItem(ModItems.liquid_concrete_bucket);
 		
 		// register Items
+		ModGameRegistry.registerItem(ModItems.paper_bag);
 		ModGameRegistry.registerItem(ModItems.crushed_blackstone);
 		ModGameRegistry.registerItem(ModItems.crushed_netherrack);
 		ModGameRegistry.registerItem(ModItems.crushed_bauxite);

@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ERR",
+    "FMK",
+    "GGG"
+  ],
+  "key": {
+    "G": {
+      "item": "industria:steel_plates"
+    },
+    "F": {
+      "item": "industria:conveyor_belt"
+    },
+    "M": {
+      "item": "industria:motor"
+    },
+    "K": {
+      "item": "industria:copper_plates"
+    },
+    "E": {
+      "item": "industria:iron_planks"
+    },
+    "R": {
+      "item": "industria:fluid_pipe"
+    }
+  },
+  "result": {
+    "item": "industria:ore_washing_plant"
+  }
+}

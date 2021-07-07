@@ -127,6 +127,7 @@ public class ModItems {
 	public static final Block air_compressor = new BlockMAirCompressor();
 	public static final Block item_distributor = new BlockItemDistributor();
 	public static final Block metal_former = new BlockMMetalFormer();
+	public static final Block ore_washing_plant = new BlockMOreWashingPlant();
 	
 	// Ore and Resource Blocks
 	public static final Block bauxite = new BlockBase("bauxite", Material.ROCK, 1.5F, SoundType.STONE);
@@ -152,6 +153,7 @@ public class ModItems {
 	public static final Block tin_block = new BlockBase("tin_block", Material.IRON, 5F, 6F, SoundType.METAL);
 	public static final Block cardboard_block = new BlockBurnable("cardboard_block", Material.WOOL, 0.2F, 2.5F, ModSoundEvents.CARDBOARD, 400, 30, 60, true);
 	public static final Block preassure_pipe_item_terminal = new BlockPreassurePipeItemTerminal();
+	public static final Block cement_bag = new BlockBagStack("cement_bag", 0.2F, 4F);
 	
 	// Deko Blocks
 	public static final Block clean_cladding_white = new BlockTileBlock("clean_cladding_white");
@@ -916,6 +918,7 @@ public class ModItems {
 	public static final Item raw_rubber_bottle = new ItemBase("raw_rubber_bottle", Industria.MATERIALS, 16);
 	public static final Item rubber_bottle = new ItemBase("rubber_bottle", Industria.MATERIALS, 16, Items.GLASS_BOTTLE);
 	public static final Item cardboard_sheet = new ItemBurneable("cardboard_sheet", Industria.MATERIALS, 64);
+	public static final Item paper_bag = new ItemBurneable("paper_bag", Industria.MATERIALS, 30);
 	
 	// Functional Items
 	public static final Item remote_control = new ItemRemoteControll();

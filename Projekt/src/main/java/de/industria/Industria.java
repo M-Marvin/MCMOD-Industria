@@ -212,6 +212,7 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.steam_generator, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.coal_heater, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.electric_heater, MACHINES);
+		ModGameRegistry.registerBlock(ModItems.gas_heater, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.transformator_coil, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.transformator_contact, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.fuse_box, MACHINES);
@@ -859,6 +860,8 @@ public class Industria {
 		ModGameRegistry.registerItem(ModItems.natron_lye_bucket);
 		ModGameRegistry.registerTechnicalBlock(ModItems.raw_oil);
 		ModGameRegistry.registerItem(ModItems.raw_oil_bucket);
+		ModGameRegistry.registerTechnicalBlock(ModItems.fuel_gas);
+		ModGameRegistry.registerItem(ModItems.fuel_gas_bucket);
 		
 		ModGameRegistry.registerTechnicalBlock(ModItems.iron_solution);
 		ModGameRegistry.registerItem(ModItems.iron_solution_bucket);
@@ -1023,6 +1026,9 @@ public class Industria {
 		ModGameRegistry.registerItem(ModItems.circuit_board);
 		ModGameRegistry.registerItem(ModItems.aluminium_disc);
 		ModGameRegistry.registerItem(ModItems.data_disc);
+		ModGameRegistry.registerItem(ModItems.ground_flesh);
+		ModGameRegistry.registerItem(ModItems.ground_plants);
+		ModGameRegistry.registerItem(ModItems.sulphurous_residue);
 		
 		// register Functional Items
 		ModGameRegistry.registerItem(ModItems.lever_element);

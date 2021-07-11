@@ -1,0 +1,15 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "tag": "industria:plant_items"
+  },
+  "results": [
+    {
+      "item": "industria:ground_plants",
+      "count": 4
+    }
+  ],
+  "schreddertime": 60,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 1
+}

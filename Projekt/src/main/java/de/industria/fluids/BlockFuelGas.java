@@ -21,10 +21,10 @@ import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockBiogas extends BlockGasFluid {
+public class BlockFuelGas extends BlockGasFluid {
 	
-	public BlockBiogas() {
-		super("biogas", ModFluids.BIOGAS, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
+	public BlockFuelGas() {
+		super("fuel_gas", ModFluids.FUEL_GAS, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
 	}
 	
 	@Override
@@ -67,10 +67,10 @@ public class BlockBiogas extends BlockGasFluid {
 	}
 	
 	public void detonate(World worldIn, BlockPos pos) {
-		float spreadForce = 0.2F;
-		int spreadAmountMin = 0;
+		float spreadForce = 1;
+		int spreadAmountMin = 1;
 		int spreadAmountRnd = 2;
-		float explosionForce = 1.2F;
+		float explosionForce = 3;
 		
 		worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, explosionForce, true, Mode.BREAK);
 		for (int i = worldIn.rand.nextInt(spreadAmountRnd) + spreadAmountMin; i >= 0; i--) {
@@ -95,7 +95,7 @@ public class BlockBiogas extends BlockGasFluid {
 			worldIn.addEntity(spreadFire);
 		}
 	}
-	
+
 	@Override
 	public boolean isFlammable(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
 		return true;

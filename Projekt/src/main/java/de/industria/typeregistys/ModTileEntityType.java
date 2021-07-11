@@ -25,6 +25,7 @@ import de.industria.tileentity.TileEntityMFluidBath;
 import de.industria.tileentity.TileEntityMFluidInput;
 import de.industria.tileentity.TileEntityMFluidOutput;
 import de.industria.tileentity.TileEntityMFuseBox;
+import de.industria.tileentity.TileEntityMGasHeater;
 import de.industria.tileentity.TileEntityMGenerator;
 import de.industria.tileentity.TileEntityMMetalFormer;
 import de.industria.tileentity.TileEntityMMultimeter;
@@ -59,7 +60,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 public class ModTileEntityType {
 	
-	public static final TileEntityType<TileEntitySimpleBlockTicking> SIMPLE_BLOCK_TICKING = register("simple_block_ticking", TileEntityType.Builder.create(TileEntitySimpleBlockTicking::new, ModItems.panel_lamp, ModItems.infinity_power_source, ModItems.transformator_contact, ModItems.steam, ModItems.compressed_air, ModItems.rail_adapter, ModItems.biogas));
+	public static final TileEntityType<TileEntitySimpleBlockTicking> SIMPLE_BLOCK_TICKING = register("simple_block_ticking", TileEntityType.Builder.create(TileEntitySimpleBlockTicking::new, ModItems.panel_lamp, ModItems.infinity_power_source, ModItems.transformator_contact, ModItems.steam, ModItems.compressed_air, ModItems.rail_adapter, ModItems.biogas, ModItems.fuel_gas));
 	public static final TileEntityType<TileEntityAdvancedMovingBlock> ADVANCED_PISTON = register("advanced_piston", TileEntityType.Builder.create(TileEntityAdvancedMovingBlock::new, ModItems.advanced_moving_block));
 	public static final TileEntityType<TileEntityRedstoneReciver> REMOTE_CONTROLER = register("remote_controler", TileEntityType.Builder.create(TileEntityRedstoneReciver::new, ModItems.advanced_moving_block));
 	public static final TileEntityType<TileEntityRSignalAntenna> SIGNAL_ANTENNA = register("signal_antenna", TileEntityType.Builder.create(TileEntityRSignalAntenna::new, ModItems.antenna_conector));
@@ -77,6 +78,7 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityMSteamGenerator> STEAM_GENERATOR = register("steam_generator", TileEntityType.Builder.create(TileEntityMSteamGenerator::new, ModItems.steam_generator));
 	public static final TileEntityType<TileEntityMCoalHeater> COAL_HEATER = register("coal_heater", TileEntityType.Builder.create(TileEntityMCoalHeater::new, ModItems.coal_heater));
 	public static final TileEntityType<TileEntityMElectricHeater> ELECTRIC_HEATER = register("electric_heater", TileEntityType.Builder.create(TileEntityMElectricHeater::new, ModItems.electric_heater));
+	public static final TileEntityType<TileEntityMGasHeater> GAS_HEATER = register("gas_heater", TileEntityType.Builder.create(TileEntityMGasHeater::new, ModItems.gas_heater));
 	public static final TileEntityType<TileEntityMFuseBox> FUSE_BOX = register("fuse_box", TileEntityType.Builder.create(TileEntityMFuseBox::new, ModItems.fuse_box));
 	public static final TileEntityType<TileEntityMMultimeter> MULTIMETER = register("block_multimeter", TileEntityType.Builder.create(TileEntityMMultimeter::new, ModItems.multimeter));
 	public static final TileEntityType<TileEntityFluidValve> FLUID_VALVE = register("fluid_valve", TileEntityType.Builder.create(TileEntityFluidValve::new, ModItems.fluid_valve));

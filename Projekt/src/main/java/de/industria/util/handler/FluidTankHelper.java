@@ -2,6 +2,7 @@ package de.industria.util.handler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import de.industria.typeregistys.ModFluids;
 import net.minecraft.block.BlockState;
@@ -109,7 +110,10 @@ public class FluidTankHelper {
 				
 				if (scannDepth <= MAX_SCANN_DEPTH && isInRange) {
 					
-					for (int i = 0; i < 4; i++) {
+					int[] il = new int[] {0, 1, 2, 3};
+					il = arrayMix(il);
+					
+					for (int i : il) {
 						
 						Direction d = Direction.byHorizontalIndex(i);
 						
@@ -153,5 +157,18 @@ public class FluidTankHelper {
 		}
 		
 	}
-	
+
+    private static int[] arrayMix(int[] zahlen) {
+        int tmp;
+        int rand;
+        Random r = new Random();
+        for (int i = 0; i < zahlen.length; i++) {
+            rand = r.nextInt(zahlen.length);
+            tmp = zahlen[i];
+            zahlen[i] = zahlen[rand];
+            zahlen[rand] = tmp;
+        }
+        return zahlen;
+    }
+    
 }

@@ -39,9 +39,9 @@ public class BlockMElectricHeater extends BlockMultiPart<TileEntityMElectricHeat
 	@Override
 	public IBlockToolType getBlockInfo() {
 		return (stack, info) -> {
-			info.add(new TranslationTextComponent("industria.block.info.needEnergy", (4F * Voltage.HightVoltage.getVoltage() / 1000F) + "k"));
+			info.add(new TranslationTextComponent("industria.block.info.needEnergy", (1F * Voltage.HightVoltage.getVoltage() / 1000F) + "k"));
 			info.add(new TranslationTextComponent("industria.block.info.needVoltage", Voltage.HightVoltage.getVoltage()));
-			info.add(new TranslationTextComponent("industria.block.info.needCurrent", 4F));
+			info.add(new TranslationTextComponent("industria.block.info.needCurrent", 1F));
 			info.add(new TranslationTextComponent("industria.block.info.electricHeater"));
 		};
 	}
@@ -74,7 +74,7 @@ public class BlockMElectricHeater extends BlockMultiPart<TileEntityMElectricHeat
 
 	@Override
 	public float getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
-		return getCenterTE(pos, state, world).canWork() ? 4 : 0;
+		return getCenterTE(pos, state, world).canWork() ? 1 : 0;
 	}
 
 	@Override

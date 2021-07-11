@@ -110,7 +110,7 @@ public class TileEntityMFluidInput extends TileEntity implements IFluidConnectiv
 			handler.updateNetwork(world, pos);
 			ElectricityNetwork network = handler.getNetwork(pos);
 			
-			if (network.canMachinesRun() == Voltage.NormalVoltage && canSourceFluid() && this.progress++ >= 10) {
+			if (network.canMachinesRun() == Voltage.NormalVoltage && canSourceFluid() && this.progress++ >= 5) {
 				
 				this.progress = 0;
 				

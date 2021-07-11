@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "industria:peat"
+  },
+  "result": "industria:dried_peat",
+  "experience": 0.3,
+  "cookingtime": 150
+}

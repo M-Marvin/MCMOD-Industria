@@ -7,11 +7,13 @@ import java.util.stream.Stream;
 import de.industria.ModItems;
 import de.industria.blocks.BlockFallingDust;
 import de.industria.blocks.BlockStairsBase;
+import de.industria.fluids.util.BlockGasFluid;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.DoorBlock;
 import net.minecraft.block.FenceBlock;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.StairsBlock;
@@ -34,11 +36,13 @@ public class BlockBurnManager {
 				return Stream.of(unburnedStates).map(new Function<BlockState, BlockState>() {
 					@Override
 					public BlockState apply(BlockState t) {
+						if (t.getBlock().isIn(BlockTags.FIRE) || t.getBlock() instanceof FlowingFluidBlock || t.getBlock() instanceof BlockGasFluid) return t;
 						return ModItems.ash.getDefaultState().with(BlockFallingDust.LAYERS, world.getRandom().nextInt(4) + 2);
 					}
 				}).toArray(BlockState[]::new);
 			}
 			return Stream.of(unburnedStates).map((state) -> {
+				if (state.getBlock().isIn(BlockTags.FIRE) || state.getBlock() instanceof FlowingFluidBlock || state.getBlock() instanceof BlockGasFluid) return state;
 				return blockToBurnedMap.getOrDefault(state.getBlock(), DefaultBurnedSuppliers.NO_BEHAVIOR.getSupplier()).getBurnedState(state, world, pos);
 			}).toArray(BlockState[]::new);
 		}

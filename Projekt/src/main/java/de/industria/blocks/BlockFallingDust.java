@@ -2,6 +2,7 @@ package de.industria.blocks;
 
 import java.util.Random;
 
+import de.industria.fluids.util.GasFluid;
 import de.industria.util.handler.UtilHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -73,7 +74,6 @@ public class BlockFallingDust extends BlockFallingBase {
 						
 					}
 					
-					//updateSideFlow(state, worldIn, pos);
 					worldIn.getPendingBlockTicks().scheduleTick(pos, this, 1);
 					
 					return ActionResultType.SUCCESS;
@@ -116,7 +116,6 @@ public class BlockFallingDust extends BlockFallingBase {
 				
 			}
 			
-			//this.updateSideFlow(state, worldIn, pos);
 			worldIn.getPendingBlockTicks().scheduleTick(pos, this, 1);
 			
 		}
@@ -170,8 +169,7 @@ public class BlockFallingDust extends BlockFallingBase {
 			}
 			
 		}
-
-		//this.updateSideFlow(state, worldIn, pos);
+		
 		worldIn.getPendingBlockTicks().scheduleTick(pos, this, 1);
 		
 		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
@@ -249,7 +247,7 @@ public class BlockFallingDust extends BlockFallingBase {
 	
 	@Override
 	public boolean isReplaceable(BlockState state, Fluid fluid) {
-		return state.get(LAYERS) < 14;
+		return state.get(LAYERS) < 14 && !(fluid.getFluid() instanceof GasFluid);
 	}
 	
 }

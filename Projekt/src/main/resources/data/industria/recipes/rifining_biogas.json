@@ -1,0 +1,18 @@
+{
+  "type": "industria:rifining",
+  "ingredientFluid": {
+    "fluid": "industria:biogas",
+    "amount": 3000
+  },
+  "resultFluid":  {
+    "fluid": "industria:fuel_gas",
+    "amount": 2500
+  },
+  "resultItems": [
+    {
+      "item": "industria:sulphurous_residue",
+      "count": 1
+    }
+  ],
+  "rifiningTime": 150
+}

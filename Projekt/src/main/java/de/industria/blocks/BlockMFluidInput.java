@@ -86,7 +86,7 @@ public class BlockMFluidInput extends BlockContainerBase implements IElectricCon
 			info.add(new TranslationTextComponent("industria.block.info.needEnergy", 1 * Voltage.NormalVoltage.getVoltage()));
 			info.add(new TranslationTextComponent("industria.block.info.needVoltage", Voltage.NormalVoltage.getVoltage()));
 			info.add(new TranslationTextComponent("industria.block.info.needCurrent", 1));
-			info.add(new TranslationTextComponent("industria.block.info.fluidInput.mb", 100));
+			info.add(new TranslationTextComponent("industria.block.info.fluidInput.mb", 200));
 			info.add(new TranslationTextComponent("industria.block.info.fluidInput"));
 		};
 	}

@@ -37,6 +37,7 @@ import de.industria.renderer.TileEntityMBlenderRenderer;
 import de.industria.renderer.TileEntityMCoalHeaterRenderer;
 import de.industria.renderer.TileEntityMElectricHeaterRenderer;
 import de.industria.renderer.TileEntityMFluidBathRenderer;
+import de.industria.renderer.TileEntityMGasHeaterRenderer;
 import de.industria.renderer.TileEntityMMetalFormerRenderer;
 import de.industria.renderer.TileEntityMOreWashingPlantRenderer;
 import de.industria.renderer.TileEntityMRaffineryRenderer;
@@ -134,6 +135,7 @@ public class ClientSetup {
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_RAW_OIL, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.COMPRESSED_AIR, RenderType.getTranslucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.BIOGAS, RenderType.getTranslucent());
+		RenderTypeLookup.setRenderLayer(ModFluids.FUEL_GAS, RenderType.getTranslucent());
 		
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ADVANCED_PISTON, TileEntityAdvancedMovingBlockRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SIGNAL_PROCESSOR, TileEntitySignalProcessorContactRenderer::new);
@@ -155,6 +157,7 @@ public class ClientSetup {
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.METAL_FORMER, TileEntityMMetalFormerRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ORE_WASHING_PLANT, TileEntityMOreWashingPlantRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ELECTRIC_HEATER, TileEntityMElectricHeaterRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.GAS_HEATER, TileEntityMGasHeaterRenderer::new);
 		
 		ScreenManager.registerFactory(ModContainerType.STORED_CRAFTING, ScreenMStoredCrafting::new);
 		ScreenManager.registerFactory(ModContainerType.PROCESSOR, ScreenRProcessor::new);

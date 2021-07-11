@@ -116,7 +116,8 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 					
 					if (ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(1), recipe.getRecipeOutput()) &&
 						ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(2), recipe.getRecipeOutput2()) &&
-						ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(3), recipe.getRecipeOutput3())) {
+						ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(3), recipe.getRecipeOutput3()) &&
+						(this.getStackInSlot(4).getMaxDamage() - this.getStackInSlot(4).getDamage()) >= recipe.getSchredderDamage()) {
 						
 						this.progressTotal = recipe.getSchredderTime();
 						this.progress++;

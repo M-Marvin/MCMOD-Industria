@@ -5,6 +5,7 @@ import de.industria.fluids.BlockBiogas;
 import de.industria.fluids.BlockChemicalWater;
 import de.industria.fluids.BlockCompressedAir;
 import de.industria.fluids.BlockDestilledWater;
+import de.industria.fluids.BlockFuelGas;
 import de.industria.fluids.BlockLiquidConcrete;
 import de.industria.fluids.BlockNatronLye;
 import de.industria.fluids.BlockOreSolution;
@@ -42,6 +43,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
 import net.minecraft.item.Rarity;
 import net.minecraft.util.ResourceLocation;
@@ -110,6 +112,7 @@ public class ModItems {
 	public static final Block steam_generator = new BlockMSteamGenerator();
 	public static final Block coal_heater = new BlockMCoalHeater();
 	public static final Block electric_heater = new BlockMElectricHeater();
+	public static final Block gas_heater = new BlockMGasHeater();
 	public static final Block transformator_contact = new BlockMTransformatorContact();
 	public static final Block transformator_coil = new BlockMTransformatorCoil();
 	public static final Block fuse_box = new BlockMFuseBox();
@@ -672,6 +675,8 @@ public class ModItems {
 	public static final Item liquid_concrete_bucket = new ItemFluidBucket(ModFluids.LIQUID_CONCRETE, "liquid_concrete_bucket", Industria.MATERIALS, true);
 	public static final Block biogas = new BlockBiogas();
 	public static final Item biogas_bucket = new ItemGasBucket(ModFluids.BIOGAS, "biogas_bucket", Industria.MATERIALS);
+	public static final Item fuel_gas_bucket = new ItemGasBucket(ModFluids.FUEL_GAS, "fuel_gas_bucket", Industria.MATERIALS);
+	public static final Block fuel_gas = new BlockFuelGas();
 	
 	// Stairs
 	public static final Block gold_planks_stairs = new BlockStairsBase(() -> gold_planks.getDefaultState(), "gold_planks_stairs", Material.ROCK, 2.5F, 3F, SoundType.STONE);
@@ -914,6 +919,9 @@ public class ModItems {
 	public static final Item circuit_board = new ItemBase("circuit_board", Industria.MATERIALS);
 	public static final Item aluminium_disc = new ItemBase("aluminium_disc", Industria.MATERIALS);
 	public static final Item data_disc = new ItemBase("data_disc", Industria.MATERIALS);
+	public static final Item ground_plants = new ItemBase("ground_plants", Industria.MATERIALS);
+	public static final Item ground_flesh = new ItemBase("ground_flesh", Industria.MATERIALS);
+	public static final Item sulphurous_residue = new ItemBase("sulphurous_residue", ItemGroup.MATERIALS);
 	
 	// Crafting items
 	public static final Item bearing = new ItemBase("bearing", Industria.MATERIALS);

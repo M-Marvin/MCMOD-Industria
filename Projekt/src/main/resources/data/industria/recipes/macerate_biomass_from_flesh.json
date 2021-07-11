@@ -1,0 +1,15 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "industria:ground_flesh"
+  },
+  "results": [
+    {
+      "item": "industria:biomass",
+      "count": 4
+    }
+  ],
+  "schreddertime": 80,
+  "schreddertool": "industria:schredder_macerator",
+  "schredderdamage": 8
+}

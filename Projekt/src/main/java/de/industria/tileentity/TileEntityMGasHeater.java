@@ -1,0 +1,107 @@
+package de.industria.tileentity;
+
+import de.industria.typeregistys.ModFluids;
+import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.blockfeatures.IFluidConnective;
+import net.minecraft.block.BlockState;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.Direction;
+import net.minecraftforge.fluids.FluidStack;
+
+public class TileEntityMGasHeater extends TileEntityMHeaterBase implements IFluidConnective {
+	
+	public FluidStack gasStorage;
+	public final int maxFluidStorage;
+	
+	public TileEntityMGasHeater() {
+		super(ModTileEntityType.GAS_HEATER, 0);
+		this.maxFluidStorage = 1000;
+		this.gasStorage = FluidStack.EMPTY;
+	}
+
+	@Override
+	public int[] getSlotsForFace(Direction side) {
+		return new int[] {};
+	}
+
+	@Override
+	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+		return false;
+	}
+
+	@Override
+	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+		return false;
+	}
+
+	@Override
+	public void updateWorkState() {
+		
+		if (this.gasStorage.getAmount() >= 10) {
+			this.gasStorage.shrink(10);
+			this.isWorking = true;
+		} else {
+			this.isWorking = false;
+		}
+		
+	}
+
+	@Override
+	public boolean canWork() {
+		return this.powered;
+	}
+
+	public FluidStack getFluid(int amount) {
+		return FluidStack.EMPTY;
+	}
+	
+	@Override
+	public FluidStack insertFluid(FluidStack fluid) {
+		if (this.gasStorage.getFluid().isEquivalentTo(fluid.getFluid()) || this.gasStorage.isEmpty()) {
+			int capcaity = this.maxFluidStorage - this.gasStorage.getAmount();
+			int transfer = Math.min(capcaity, fluid.getAmount());
+			if (transfer > 0) {
+				FluidStack fluidRest = fluid.copy();
+				fluidRest.shrink(transfer);
+				if (this.gasStorage.isEmpty()) {
+					this.gasStorage = new FluidStack(fluid.getFluid(), transfer);
+				} else {
+					this.gasStorage.grow(transfer);
+				}
+				return fluidRest;
+			}
+		}
+		return fluid;
+	}
+
+	@Override
+	public Fluid getFluidType() {
+		return ModFluids.FUEL_GAS;
+	}
+
+	@Override
+	public FluidStack getStorage() {
+		return this.gasStorage;
+	}
+	
+	@Override
+	public boolean canConnect(Direction side) {
+		return side == getBlockState().get(BlockStateProperties.HORIZONTAL_FACING);
+	}
+	
+	@Override
+	public CompoundNBT write(CompoundNBT compound) {
+		compound.put("Fuel", this.gasStorage.writeToNBT(new CompoundNBT()));
+		return super.write(compound);
+	}
+	
+	@Override
+	public void read(BlockState state, CompoundNBT compound) {
+		this.gasStorage = FluidStack.loadFluidStackFromNBT(compound.getCompound("Fuel"));
+		super.read(state, compound);
+	}
+	
+}

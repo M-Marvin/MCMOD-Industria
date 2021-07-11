@@ -44,7 +44,7 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 		this.part = TEPart.CENTER;
 		this.maxFluid = 2000;
 		this.maxEnergy = 5000; // Max Watt/tick
-		this.wattPerMB = 100;
+		this.wattPerMB = 200;
 		this.generatedVoltage = Voltage.NormalVoltage;
 		this.steamIn = FluidStack.EMPTY;
 		this.steamOut = FluidStack.EMPTY;

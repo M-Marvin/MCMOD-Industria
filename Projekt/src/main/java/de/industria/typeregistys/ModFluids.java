@@ -6,6 +6,7 @@ import de.industria.fluids.FluidBiogas;
 import de.industria.fluids.FluidChemicalWater;
 import de.industria.fluids.FluidCompressedAir;
 import de.industria.fluids.FluidDestilledWater;
+import de.industria.fluids.FluidFuelGas;
 import de.industria.fluids.FluidLiquidConcrete;
 import de.industria.fluids.FluidNatronLye;
 import de.industria.fluids.FluidOreAluminiumSolution;
@@ -19,7 +20,6 @@ import de.industria.fluids.FluidSulfuricAcid;
 import de.industria.fluids.util.BlockGasFluid;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.client.gui.screen.MemoryErrorScreen;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
@@ -27,8 +27,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 public class ModFluids {
-	
-	//  this.displayGuiScreen(new MemoryErrorScreen());
 	
 	public static final FluidDestilledWater FLOWING_DESTILLED_WATER = register("flowing_destilled_water", new FluidDestilledWater.Flow());
 	public static final FluidDestilledWater DESTILLED_WATER = register("destilled_water", new FluidDestilledWater.Still());
@@ -55,6 +53,7 @@ public class ModFluids {
 	public static final FluidLiquidConcrete FLOWING_LIQUID_CONCRETE = register("flowing_liquid_concrete", new FluidLiquidConcrete.Flow());
 	public static final FluidLiquidConcrete LIQUID_CONCRETE = register("liquid_concrete", new FluidLiquidConcrete.Still());
 	public static final FluidBiogas BIOGAS = register("biogas", new FluidBiogas());
+	public static final FluidFuelGas FUEL_GAS = register("fuel_gas", new FluidFuelGas());
 	
 	private static <T extends Fluid> T register(String key, T p_215710_1_) {
 		p_215710_1_.setRegistryName(new ResourceLocation(Industria.MODID, key));

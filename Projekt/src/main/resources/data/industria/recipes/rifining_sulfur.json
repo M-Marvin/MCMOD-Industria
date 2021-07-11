@@ -1,0 +1,18 @@
+{
+  "type": "industria:rifining",
+  "ingredientFluid": {
+    "fluid": "industria:sulfuric_acid",
+    "amount": 500
+  },
+  "resultFluid":  {
+    "fluid": "industria:chemical_water",
+    "amount": 200
+  },
+  "resultItems": [
+    {
+      "item": "industria:sulfur",
+      "count": 1
+    }
+  ],
+  "rifiningTime": 100
+}

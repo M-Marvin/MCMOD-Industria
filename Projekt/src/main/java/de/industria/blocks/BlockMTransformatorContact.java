@@ -66,7 +66,7 @@ public class BlockMTransformatorContact extends BlockContainerBase implements IE
 			int transferPower = getPower(world, pos);
 			float needCurrent = Math.min(transferPower, needEnergy) / state.get(VOLTAGE).getVoltage();
 			
-			return Math.max(0.001F, needCurrent);
+			return Math.max(0.0001F, needCurrent);
 			
 		} else {
 			

@@ -53,7 +53,7 @@ public class ItemFluidBucket extends BucketItem {
 				boolean flag1 = blockstate.isAir() || flag || block instanceof ILiquidContainer && ((ILiquidContainer)block).canContainFluid(worldIn, posIn, blockstate, containedBlock);
 				if (!flag1) {
 					return rayTrace != null && this.tryPlaceContainedLiquid(player, worldIn, rayTrace.getPos().offset(rayTrace.getFace()), (BlockRayTraceResult)null);
-				} else if (!canPlaceInNether) {
+				} else if (!canPlaceInNether && worldIn.getDimensionType().isUltrawarm()) {
 					int i = posIn.getX();
 					int j = posIn.getY();
 					int k = posIn.getZ();

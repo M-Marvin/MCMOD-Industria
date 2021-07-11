@@ -1,22 +1,33 @@
 package de.industria.blocks;
 
-import de.industria.Industria;
 import de.industria.util.blockfeatures.IBurnableBlock;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.Direction;
-import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
-public class BlockLogBase extends RotatedPillarBlock implements IBurnableBlock {
+public class BlockLogBase extends BlockPillarBase implements IBurnableBlock {
+	
+	public BlockLogBase(String name, Material material, float hardness, float resistance, SoundType sound) {
+		super(name, material, hardness, resistance, sound);
+	}
+	
+	public BlockLogBase(String name, Material material, float hardness, float resistance, SoundType sound, boolean dropsEver) {
+		super(name, material, hardness, resistance, sound, dropsEver);
+	}
 	
 	public BlockLogBase(String name, Material material, float hardnessAndResistance, SoundType sound) {
-		super(Properties.create(material).hardnessAndResistance(hardnessAndResistance).sound(sound).harvestTool(BlockBase.getDefaultToolType(material)));
-		this.setDefaultState(this.stateContainer.getBaseState().with(AXIS, Axis.Y));
-		this.setRegistryName(Industria.MODID, name);
+		super(name, material, hardnessAndResistance, sound);
+	}
+	
+	public BlockLogBase(String name, Material material, float hardnessAndResistance, SoundType sound, boolean dropsEver) {
+		super(name, material, hardnessAndResistance, sound, dropsEver);
+	}
+	
+	public BlockLogBase(String name, Properties properties) {
+		super(name, properties);
 	}
 	
 	@Override

@@ -34,7 +34,6 @@ public class BlockFallingBase extends FallingBlock {
 	}
 	
 	public static ToolType getDefaultToolType(Material material) {
-		System.out.println(material);
 		if (material == Material.ROCK || material == Material.IRON) return ToolType.PICKAXE;
 		if (material == Material.SAND || material == Material.EARTH) return ToolType.SHOVEL;
 		if (material == Material.WOOD) return ToolType.AXE;

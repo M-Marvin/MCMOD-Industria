@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GNG",
+    "LPL",
+    "GTG"
+  ],
+  "key": {
+    "G": {
+      "item": "industria:aluminium_plate"
+    },
+    "N": {
+      "item": "industria:network_cable"
+    },
+    "L": {
+      "item": "industria:circuit_board"
+    },
+    "P": {
+      "item": "industria:netherite_processor"
+    },
+    "T": {
+      "item": "industria:transformator_coil"
+    }
+  },
+  "result": {
+    "item": "industria:computer"
+  }
+}

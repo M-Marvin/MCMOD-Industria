@@ -96,8 +96,8 @@ public class BlockRLinearConector extends BlockBase implements IAdvancedStickyBl
 			
 			BlockState state1 = world.getBlockState(pos1);
 			BlockState state2 = world.getBlockState(pos2);
-			if (!BlockRAdvancedPiston.canPush(state1, world, pos1, pistonStructureHelper.getMoveDirection(), true, pistonStructureHelper.getMoveDirection())) return false; // Check if Block in Push DIrection is Moveable
-			if (!BlockRAdvancedPiston.canPush(state2, world, pos2, pistonStructureHelper.getMoveDirection(), true, pistonStructureHelper.getMoveDirection())) return false;
+			if (!BlockRAdvancedPiston.canPush(state1, world, pos1, pistonStructureHelper.getMoveDirection(), true, pistonStructureHelper.getMoveDirection())) flag12 = false; // Check if Block in Push DIrection is Moveable
+			if (!BlockRAdvancedPiston.canPush(state2, world, pos2, pistonStructureHelper.getMoveDirection(), true, pistonStructureHelper.getMoveDirection())) flag22 = false;
 			if (pos1.equals(pistonStructureHelper.getPistonPos()) || state1.isAir() || state1.getPushReaction() == PushReaction.DESTROY) flag12 = false;
 			if (pos2.equals(pistonStructureHelper.getPistonPos()) || state2.isAir() || state2.getPushReaction() == PushReaction.DESTROY) flag22 = false;
 			

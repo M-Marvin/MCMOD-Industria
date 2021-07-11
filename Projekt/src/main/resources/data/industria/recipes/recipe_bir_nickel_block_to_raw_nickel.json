@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "raw_%&1",
+  "ingredients": [
+    {
+      "item": "industria:raw_nickel_block"
+    }
+  ],
+  "result": {
+    "item": "industria:pure_nickel",
+    "count": 9
+  }
+}

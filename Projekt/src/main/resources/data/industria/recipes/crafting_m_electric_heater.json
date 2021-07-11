@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SES",
+    "WCW",
+    "GSG"
+  ],
+  "key": {
+    "G": {
+      "item": "industria:structure_scaffold"
+    },
+    "S": {
+      "item": "industria:steel_plate"
+    },
+    "W": {
+      "item": "industria:wolfram_planks"
+    },
+    "C": {
+      "item": "industria:transformator_coil"
+    },
+    "E": {
+      "item": "industria:iron_plate"
+    }
+  },
+  "result": {
+    "item": "industria:electric_heater"
+  }
+}

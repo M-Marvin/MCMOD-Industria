@@ -188,44 +188,48 @@ public class BlockFallingDust extends BlockFallingBase {
 		
 		int layers = state.get(LAYERS);
 		
-		for (Direction d : UtilHelper.sortRandom(Direction.class, Direction.values(), world.rand)) {
+		if (world.rand.nextBoolean()) {
 			
-			if (d.getAxis() != Axis.Y) {
-
-				BlockPos pos2 = pos.offset(d);
-				BlockState state2 = world.getBlockState(pos2);
+			for (Direction d : UtilHelper.sortRandom(Direction.class, Direction.values(), world.rand)) {
 				
-				if (state2.getBlock() == this) {
-					
-					int layers2 = state2.get(LAYERS);
-					int diff = layers2 - layers;
-					int transfer = (int) Math.floor(diff / 2);
-					if (transfer < 2) transfer = 0;
-					
-					if (transfer != 0) {
-						
-						world.setBlockState(pos2, state2.with(LAYERS, layers2 + -transfer), 18);
-						layers += transfer;
-						state = state.with(LAYERS, layers);
-						world.setBlockState(pos, state);
-						
-						world.notifyNeighborsOfStateChange(pos2, this);
-						
-					}
-					
-				} else if (state2.isAir()) {
-					
-					int diff = layers;
-					int transfer = (int) Math.floor(diff / 2);
-					if (transfer < 3) transfer = 0;
-					
-					if (transfer != 0) {
-						layers -= transfer;
-						state = state.with(LAYERS, layers);
-						world.setBlockState(pos, state);
-						world.setBlockState(pos2, this.getDefaultState().with(LAYERS, transfer));
+				if (d.getAxis() != Axis.Y) {
 
-						world.notifyNeighborsOfStateChange(pos2, this);
+					BlockPos pos2 = pos.offset(d);
+					BlockState state2 = world.getBlockState(pos2);
+					
+					if (state2.getBlock() == this) {
+						
+						int layers2 = state2.get(LAYERS);
+						int diff = layers2 - layers;
+						int transfer = (int) Math.floor(diff / 2);
+						if (transfer < 2) transfer = 0;
+						
+						if (transfer != 0) {
+							
+							world.setBlockState(pos2, state2.with(LAYERS, layers2 + -transfer), 18);
+							layers += transfer;
+							state = state.with(LAYERS, layers);
+							world.setBlockState(pos, state);
+							
+							world.notifyNeighborsOfStateChange(pos2, this);
+							
+						}
+						
+					} else if (state2.isAir()) {
+						
+						int diff = layers;
+						int transfer = (int) Math.floor(diff / 2);
+						if (transfer < 3) transfer = 0;
+						
+						if (transfer != 0) {
+							layers -= transfer;
+							state = state.with(LAYERS, layers);
+							world.setBlockState(pos, state);
+							world.setBlockState(pos2, this.getDefaultState().with(LAYERS, transfer));
+
+							world.notifyNeighborsOfStateChange(pos2, this);
+							
+						}
 						
 					}
 					

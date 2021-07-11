@@ -12,7 +12,6 @@ import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
@@ -23,13 +22,14 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
-public abstract class TileEntityMHeaterBase extends TileEntityInventoryBase implements INamedContainerProvider, ISidedInventory, ITickableTileEntity, ISimpleMachineSound {
+public abstract class TileEntityMHeaterBase extends TileEntityInventoryBase implements ISidedInventory, ITickableTileEntity, ISimpleMachineSound {
 	
 	public TileEntityMHeaterBase(TileEntityType<?> tileEntityTypeIn, int slots) {
 		super(tileEntityTypeIn, slots);
 	}
 
 	public boolean isWorking;
+	public boolean powered;
 	
 	abstract public void updateWorkState();
 	
@@ -43,7 +43,7 @@ public abstract class TileEntityMHeaterBase extends TileEntityInventoryBase impl
 			this.isWorking = false;
 			
 			Direction facing = getBlockState().get(BlockStateProperties.HORIZONTAL_FACING);
-			boolean powered = this.world.isBlockPowered(pos) || this.world.isBlockPowered(pos.add(facing.getOpposite().getDirectionVec())) || this.world.isBlockPowered(pos.add(facing.rotateY().getDirectionVec())) || this.world.isBlockPowered(pos.add(facing.rotateY().getDirectionVec()).add(facing.getOpposite().getDirectionVec()));
+			powered = this.world.isBlockPowered(pos) || this.world.isBlockPowered(pos.add(facing.getOpposite().getDirectionVec())) || this.world.isBlockPowered(pos.add(facing.rotateY().getDirectionVec())) || this.world.isBlockPowered(pos.add(facing.rotateY().getDirectionVec()).add(facing.getOpposite().getDirectionVec()));
 			
 			if (powered) {
 				

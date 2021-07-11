@@ -1,0 +1,20 @@
+{
+  "type": "industria:fluid_bath",
+  "ingredientFluid": {
+    "fluid": "industria:copper_solution",
+    "amount": 500
+  },
+  "wasteFluid":  {
+    "fluid": "industria:chemical_water",
+    "amount": 100
+  },
+  "ingredientItem": {
+    "item": "industria:plastic_plate",
+    "count": 1
+  },
+  "resultItem": {
+    "item": "industria:copper_coated_plate",
+    "count": 1
+  },
+  "processTime": 400
+}

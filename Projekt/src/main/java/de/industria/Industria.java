@@ -211,6 +211,7 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.fluid_output, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.steam_generator, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.coal_heater, MACHINES);
+		ModGameRegistry.registerBlock(ModItems.electric_heater, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.transformator_coil, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.transformator_contact, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.fuse_box, MACHINES);
@@ -674,6 +675,7 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.red_painted_planks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.black_painted_planks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.limestone, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.karstified_limestone, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.limestone_sheet, DECORATIONS);
 		ModGameRegistry.registerBlock(ModItems.item_detector, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(ModItems.computer, MACHINES);
@@ -686,15 +688,27 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.clean_cladding_white, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.structure_scaffold, ItemGroup.REDSTONE);
 		ModGameRegistry.registerBlock(ModItems.ash, DECORATIONS);
+		ModGameRegistry.registerBlock(ModItems.biomass, DECORATIONS);
 		ModGameRegistry.registerBlock(ModItems.burned_log, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.burned_planks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.burned_block, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.burned_stairs, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.burned_wood_stairs, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.burned_wood_slab, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.burned_trapdoor, DECORATIONS);
 		ModGameRegistry.registerBlock(ModItems.burned_door, DECORATIONS);
 		ModGameRegistry.registerBlock(ModItems.burned_fence, DECORATIONS);
 		ModGameRegistry.registerBlock(ModItems.burned_scrap, DECORATIONS);
+		ModGameRegistry.registerBlock(ModItems.bound_stick_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.bound_bamboo_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.bound_sugar_cane_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.raw_nickel_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.raw_palladium_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.raw_quartz_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.raw_silver_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.raw_tin_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.dried_peat, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.peat, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.humus, BUILDING_BLOCKS);
 		
 		ModGameRegistry.registerBlock(ModItems.gold_planks_stairs, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.aluminium_planks_stairs, BUILDING_BLOCKS);
@@ -802,7 +816,6 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.salt_brick_stairs, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.cracked_salt_brick_stairs, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.terracotta_stairs, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.burned_wood_stairs, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.polished_red_sandstone_stairs, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.polished_sandstone_stairs, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.polished_end_stone_stairs, BUILDING_BLOCKS);
@@ -863,6 +876,8 @@ public class Industria {
 		ModGameRegistry.registerItem(ModItems.compressed_air_bucket);
 		ModGameRegistry.registerTechnicalBlock(ModItems.liquid_concrete);
 		ModGameRegistry.registerItem(ModItems.liquid_concrete_bucket);
+		ModGameRegistry.registerTechnicalBlock(ModItems.biogas);
+		ModGameRegistry.registerItem(ModItems.biogas_bucket);
 		
 		// register Items
 		ModGameRegistry.registerItem(ModItems.paper_bag);
@@ -1003,6 +1018,11 @@ public class Industria {
 		ModGameRegistry.registerItem(ModItems.network_configurtor);
 		ModGameRegistry.registerItem(ModItems.structure_cladding_pane);
 		ModGameRegistry.registerItem(ModItems.cement);
+		ModGameRegistry.registerItem(ModItems.copper_coated_plate);
+		ModGameRegistry.registerItem(ModItems.tined_copper_coated_plate);
+		ModGameRegistry.registerItem(ModItems.circuit_board);
+		ModGameRegistry.registerItem(ModItems.aluminium_disc);
+		ModGameRegistry.registerItem(ModItems.data_disc);
 		
 		// register Functional Items
 		ModGameRegistry.registerItem(ModItems.lever_element);

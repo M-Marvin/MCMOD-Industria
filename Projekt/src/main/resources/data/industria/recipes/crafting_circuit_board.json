@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "industria:tined_copper_coated_plate"
+    },
+    {
+      "item": "industria:resistor"
+    },
+    {
+      "item": "industria:resistor"
+    },
+    {
+      "item": "industria:resistor"
+    },
+    {
+      "item": "industria:led"
+    },
+    {
+      "item": "industria:condensator"
+    },
+    {
+      "item": "industria:condensator"
+    }
+  ],
+  "result": {
+    "item": "industria:circuit_board"
+  }
+}

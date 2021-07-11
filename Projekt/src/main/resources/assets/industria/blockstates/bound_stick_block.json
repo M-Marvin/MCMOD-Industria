@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "industria:block/bound_stick_block",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "industria:block/bound_stick_block"
+    },
+    "axis=z": {
+      "model": "industria:block/bound_stick_block",
+      "x": 90
+    }
+  }
+}

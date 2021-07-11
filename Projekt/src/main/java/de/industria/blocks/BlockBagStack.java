@@ -68,7 +68,7 @@ public class BlockBagStack extends BlockFallingBase {
 	@Override
 	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 		
-		if (entityIn instanceof FallingBlockEntity && state.get(BAGS) < 4) {
+		if (entityIn instanceof FallingBlockEntity && state.get(BAGS) < 4 && entityIn.isAlive()) {
 			
 			BlockState fallingBags = ((FallingBlockEntity) entityIn).getBlockState();
 			

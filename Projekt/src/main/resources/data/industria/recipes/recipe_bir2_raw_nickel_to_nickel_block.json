@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:pure_nickel"
+    }
+  },
+  "result": {
+    "item": "industria:raw_nickel_block"
+  }
+}

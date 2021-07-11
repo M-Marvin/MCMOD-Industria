@@ -9,5 +9,6 @@ public class ModDamageSource {
 	public static final DamageSource HOT_STEAM = new DamageSource("hot_steam");
 	public static final DamageSource SCHREDDER = new DamageSource("schredder");
 	public static final DamageSource ACID = new DamageSource("acid");
+	public static final DamageSource GAS = new DamageSource("gas");
 	
 }

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "industria:raw_silver_block"
+    }
+  ],
+  "result": {
+    "item": "industria:pure_silver",
+    "count": 9
+  }
+}

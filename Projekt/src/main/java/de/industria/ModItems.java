@@ -1,6 +1,7 @@
 package de.industria;
 
 import de.industria.blocks.*;
+import de.industria.fluids.BlockBiogas;
 import de.industria.fluids.BlockChemicalWater;
 import de.industria.fluids.BlockCompressedAir;
 import de.industria.fluids.BlockDestilledWater;
@@ -108,6 +109,7 @@ public class ModItems {
 	public static final Block fluid_output = new BlockMFluidOutput();
 	public static final Block steam_generator = new BlockMSteamGenerator();
 	public static final Block coal_heater = new BlockMCoalHeater();
+	public static final Block electric_heater = new BlockMElectricHeater();
 	public static final Block transformator_contact = new BlockMTransformatorContact();
 	public static final Block transformator_coil = new BlockMTransformatorCoil();
 	public static final Block fuse_box = new BlockMFuseBox();
@@ -154,6 +156,18 @@ public class ModItems {
 	public static final Block cardboard_block = new BlockBurnable("cardboard_block", Material.WOOL, 0.2F, 2.5F, ModSoundEvents.CARDBOARD, 400, 30, 60, true);
 	public static final Block preassure_pipe_item_terminal = new BlockPreassurePipeItemTerminal();
 	public static final Block cement_bag = new BlockBagStack("cement_bag", 0.2F, 4F);
+	public static final Block raw_tin_block = new BlockBase("raw_tin_block", Material.ROCK, 5F, 6F, SoundType.STONE);
+	public static final Block raw_silver_block = new BlockBase("raw_silver_block", Material.ROCK, 5F, 6F, SoundType.STONE);
+	public static final Block raw_palladium_block = new BlockBase("raw_palladium_block", Material.ROCK, 5F, 6F, SoundType.STONE);
+	public static final Block raw_nickel_block = new BlockBase("raw_nickel_block", Material.ROCK, 5F, 6F, SoundType.STONE);
+	public static final Block raw_quartz_block = new BlockBase("raw_quartz_block", Material.ROCK, 1F, 3F, SoundType.STONE);
+	public static final Block bound_bamboo_block = new BlockPillarBase("bound_bamboo_block", Material.ORGANIC, 0.4F, SoundType.LADDER, true);
+	public static final Block bound_sugar_cane_block = new BlockPillarBase("bound_sugar_cane_block", Material.ORGANIC, 0.4F, SoundType.PLANT, true);
+	public static final Block bound_stick_block = new BlockLogBase("bound_stick_block", Material.ORGANIC, 0.4F, SoundType.LADDER, true);
+	public static final Block dried_peat = new BlockBase("dried_peat", Material.SAND, 0.4F, SoundType.GROUND, true);
+	public static final Block peat = new BlockBase("peat", Material.SAND, 0.4F, SoundType.GROUND, true);
+	public static final Block humus = new BlockBase("humus", Material.SAND, 0.4F, SoundType.GROUND, true);
+	public static final Block karstified_limestone = new BlockBase("karstified_limestone", Material.ROCK, 0.4F, SoundType.STONE);
 	
 	// Deko Blocks
 	public static final Block clean_cladding_white = new BlockTileBlock("clean_cladding_white");
@@ -619,10 +633,11 @@ public class ModItems {
 	public static final Block reinforced_casing = new BlockReinforcedCasing();
 	public static final Block ender_core = new BlockEnderCore();
 	public static final Block ash = new BlockFallingDust("ash");
+	public static final Block biomass = new BlockBiomass();
 	public static final BlockBurnedBlock burned_block = new BlockBurnedBlock("burned_block", 1.5F, 0.5F);
 	public static final BlockBurnedBlock burned_planks = new BlockBurnedBlock("burned_planks", 1.5F, 0.5F);
 	public static final BlockBurnedBlock burned_log = new BlockBurnedLog();
-	public static final BlockBurnedBlock burned_stairs = new BlockBurnedBlock("burned_stairs", 1.5F, 0.5F); // TODO
+	public static final BlockBurnedStairs burned_wood_stairs = new BlockBurnedStairs();
 	public static final BlockBurnedTrapdoor burned_trapdoor = new BlockBurnedTrapdoor();
 	public static final BlockBurnedDoor burned_door = new BlockBurnedDoor();
 	public static final BlockBurnedFence burned_fence = new BlockBurnedFence();
@@ -655,6 +670,8 @@ public class ModItems {
 	public static final Item compressed_air_bucket = new ItemGasBucket(ModFluids.COMPRESSED_AIR, "compressed_air_bucket", Industria.MATERIALS);
 	public static final Block liquid_concrete = new BlockLiquidConcrete();
 	public static final Item liquid_concrete_bucket = new ItemFluidBucket(ModFluids.LIQUID_CONCRETE, "liquid_concrete_bucket", Industria.MATERIALS, true);
+	public static final Block biogas = new BlockBiogas();
+	public static final Item biogas_bucket = new ItemGasBucket(ModFluids.BIOGAS, "biogas_bucket", Industria.MATERIALS);
 	
 	// Stairs
 	public static final Block gold_planks_stairs = new BlockStairsBase(() -> gold_planks.getDefaultState(), "gold_planks_stairs", Material.ROCK, 2.5F, 3F, SoundType.STONE);
@@ -763,7 +780,6 @@ public class ModItems {
 	public static final Block salt_brick_stairs = new BlockStairsBase(() -> salt_bricks.getDefaultState(), "salt_brick_stairs", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block cracked_salt_brick_stairs = new BlockStairsBase(() -> cracked_salt_bricks.getDefaultState(), "cracked_salt_brick_stairs", Material.ROCK, 1.5F, 6, SoundType.STONE);
 	public static final Block terracotta_stairs = new BlockStairsBase(() -> Blocks.TERRACOTTA.getDefaultState(), "terracotta_stairs", Material.ROCK, 1.25F, 4.2F, SoundType.STONE);
-	public static final BlockBurnedStairs burned_wood_stairs = new BlockBurnedStairs();
 	public static final Block polished_red_sandstone_stairs = new BlockStairsBase(() -> polished_red_sandstone.getDefaultState(), "polished_red_sandstone_stairs", Material.ROCK, 2, 6, SoundType.STONE);
 	public static final Block polished_sandstone_stairs = new BlockStairsBase(() -> polished_sandstone.getDefaultState(), "polished_sandstone_stairs", Material.ROCK, 2, 6, SoundType.STONE);
 	public static final Block polished_end_stone_stairs = new BlockStairsBase(() -> polished_end_stone.getDefaultState(), "polished_end_stone_stairs", Material.ROCK, 3, 9, SoundType.STONE);
@@ -893,6 +909,11 @@ public class ModItems {
 	public static final Item crude_steel = new ItemBase("crude_steel", Industria.MATERIALS);
 	public static final Item lime = new ItemBase("lime", Industria.MATERIALS);
 	public static final Item cement = new ItemBase("cement", Industria.MATERIALS);
+	public static final Item copper_coated_plate = new ItemBase("copper_coated_plate", Industria.MATERIALS);
+	public static final Item tined_copper_coated_plate = new ItemBase("tined_copper_coated_plate", Industria.MATERIALS);
+	public static final Item circuit_board = new ItemBase("circuit_board", Industria.MATERIALS);
+	public static final Item aluminium_disc = new ItemBase("aluminium_disc", Industria.MATERIALS);
+	public static final Item data_disc = new ItemBase("data_disc", Industria.MATERIALS);
 	
 	// Crafting items
 	public static final Item bearing = new ItemBase("bearing", Industria.MATERIALS);

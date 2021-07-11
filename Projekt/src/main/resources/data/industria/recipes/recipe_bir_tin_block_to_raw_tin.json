@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "industria:raw_tin_block"
+    }
+  ],
+  "result": {
+    "item": "industria:tin_oxid",
+    "count": 9
+  }
+}

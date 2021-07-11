@@ -41,28 +41,28 @@ public class TileEntityStructureScaffoldRenderer extends TileEntityRenderer<Tile
 			
 			switch(side) {
 			case UP: 
-				matrixStackIn.translate(0, 1.001F, 0);
-				matrixStackIn.scale(1, 0.001F, 1); 
+				matrixStackIn.translate(0, 1.002F, 0);
+				matrixStackIn.scale(1, 0.004F, 1); 
 				break;
 			case DOWN: 
-				matrixStackIn.translate(0, -0.001F, 0);
-				matrixStackIn.scale(1, 0.001F, 1); 
+				matrixStackIn.translate(0, -0.002F, 0);
+				matrixStackIn.scale(1, 0.004F, 1); 
 				break;
 			case NORTH: 
-				matrixStackIn.translate(0, 0, -0.001F);
-				matrixStackIn.scale(1, 1, 0.001F); 
+				matrixStackIn.translate(0, 0, -0.002F);
+				matrixStackIn.scale(1, 1, 0.004F); 
 				break;
 			case SOUTH: 
-				matrixStackIn.translate(0, 0, 1.001F);
-				matrixStackIn.scale(1, 1, 0.001F); 
+				matrixStackIn.translate(0, 0, 1.002F);
+				matrixStackIn.scale(1, 1, 0.004F); 
 				break;
 			case EAST: 
-				matrixStackIn.translate(1.001F, 0, 0);
-				matrixStackIn.scale(0.001F, 1, 1); 
+				matrixStackIn.translate(1.002F, 0, 0);
+				matrixStackIn.scale(0.004F, 1, 1); 
 				break;
 			case WEST: 
-				matrixStackIn.translate(-0.001F, 0, 0);
-				matrixStackIn.scale(0.001F, 1, 1); 
+				matrixStackIn.translate(-0.002F, 0, 0);
+				matrixStackIn.scale(0.004F, 1, 1); 
 				break;
 			}
 			

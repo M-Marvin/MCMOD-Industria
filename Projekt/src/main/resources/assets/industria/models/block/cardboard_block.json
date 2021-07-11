@@ -1,13 +1,13 @@
 {
     "parent": "block/block",
     "textures": {
-        "particle": "industria:block/cardboard_block_side",
-        "down": "industria:block/cardboard_block_bottom",
-        "up": "industria:block/cardboard_block_top",
-        "north": "industria:block/cardboard_block_side",
-        "east": "industria:block/cardboard_block_side",
-        "south": "industria:block/cardboard_block_side",
-        "west": "industria:block/cardboard_block_side"
+        "particle": "industria:block/cardbord_block_side",
+        "down": "industria:block/cardbord_block_bottom",
+        "up": "industria:block/cardbord_block_top",
+        "north": "industria:block/cardbord_block_side",
+        "east": "industria:block/cardbord_block_side",
+        "south": "industria:block/cardbord_block_side",
+        "west": "industria:block/cardbord_block_side"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],

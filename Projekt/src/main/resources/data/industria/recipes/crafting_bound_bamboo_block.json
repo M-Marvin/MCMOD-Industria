@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:bamboo"
+    }
+  },
+  "result": {
+    "item": "industria:bound_bamboo_block",
+    "count": 1
+  }
+}

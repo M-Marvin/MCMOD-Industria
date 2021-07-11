@@ -104,7 +104,7 @@ public class BlockStructureScaffold extends BlockContainerBase implements IAdvan
 						
 						Direction side = hit.getFace();
 						if (((TileEntityStructureScaffold) tileEntity).setCladding(side, stack)) {
-							stack.shrink(1);
+							if (!player.isCreative()) stack.shrink(1);
 							
 							SoundEvent placeSound = ItemStructureCladdingPane.getBlockState(stack).getSoundType().getPlaceSound();
 							worldIn.playSound(null, pos, placeSound, SoundCategory.BLOCKS, 1, 1);

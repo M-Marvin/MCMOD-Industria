@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " A ",
+    "A A",
+    " A "
+  ],
+  "key": {
+    "A": {
+      "item": "industria:aluminium_plate"
+    }
+  },
+  "result": {
+    "item": "industria:aluminium_disc",
+    "count": 4
+  }
+}

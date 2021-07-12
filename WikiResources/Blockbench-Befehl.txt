@@ -1,0 +1,1 @@
+main_preview.camOrtho.position.set(1, 6**.5/3, 1)

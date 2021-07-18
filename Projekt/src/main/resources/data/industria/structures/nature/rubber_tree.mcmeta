@@ -2,19 +2,7 @@
 	"structures": [
 		{
 			"chance": 1,
-			"file": "industria:nature/rubber_tree_01"
-		},
-		{
-			"chance": 1,
-			"file": "industria:nature/rubber_tree_02"
-		},
-		{
-			"chance": 1,
-			"file": "industria:nature/rubber_tree_03"
-		},
-		{
-			"chance": 1,
-			"file": "industria:nature/rubber_tree_04"
+			"file": "industria:nature/rubber_tree_1"
 		}
 	]
 }

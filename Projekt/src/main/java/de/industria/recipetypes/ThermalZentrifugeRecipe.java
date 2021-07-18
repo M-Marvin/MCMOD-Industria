@@ -44,11 +44,11 @@ public class ThermalZentrifugeRecipe implements IRecipe<IInventory> {
 		 return this.itemsOut[0].copy();
 	}
 	
-	public ItemStack getRecipeOutput2() {
+	public ItemStack getResultItem2() {
 		 return this.itemsOut[1].copy();
 	}
 	
-	public ItemStack getRecipeOutput3() {
+	public ItemStack getResultItem3() {
 		 return this.itemsOut[2].copy();
 	}
 	

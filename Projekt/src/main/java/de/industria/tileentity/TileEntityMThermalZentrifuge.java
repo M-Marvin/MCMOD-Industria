@@ -60,8 +60,8 @@ public class TileEntityMThermalZentrifuge extends TileEntityInventoryBase implem
 				if (recipe != null) {
 					
 					if (ItemStackHelper.canMergeRecipeStacks(this.getItem(1), recipe.getResultItem()) &&
-						ItemStackHelper.canMergeRecipeStacks(this.getItem(2), recipe.getRecipeOutput2()) &&
-						ItemStackHelper.canMergeRecipeStacks(this.getItem(3), recipe.getRecipeOutput3())) {
+						ItemStackHelper.canMergeRecipeStacks(this.getItem(2), recipe.getResultItem2()) &&
+						ItemStackHelper.canMergeRecipeStacks(this.getItem(3), recipe.getResultItem3())) {
 						
 						this.progressTotal = recipe.getRifiningTime();
 						
@@ -79,15 +79,15 @@ public class TileEntityMThermalZentrifuge extends TileEntityInventoryBase implem
 								}
 
 								if (this.getItem(2).isEmpty()) {
-									this.setItem(2, recipe.getRecipeOutput2());
+									this.setItem(2, recipe.getResultItem2());
 								} else {
-									this.getItem(2).grow(recipe.getRecipeOutput2().getCount());
+									this.getItem(2).grow(recipe.getResultItem2().getCount());
 								}
 
 								if (this.getItem(3).isEmpty()) {
-									this.setItem(3, recipe.getRecipeOutput3());
+									this.setItem(3, recipe.getResultItem3());
 								} else {
-									this.getItem(3).grow(recipe.getRecipeOutput3().getCount());
+									this.getItem(3).grow(recipe.getResultItem3().getCount());
 								}
 								
 								this.getItem(0).shrink(recipe.getIngredient().getCount());

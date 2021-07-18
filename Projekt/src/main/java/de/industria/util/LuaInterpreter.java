@@ -95,7 +95,7 @@ public class LuaInterpreter {
 			this.timeOutTimer++;
 			if (timeOutTimer >= timeOut) {
 				stopExecuting();
-				this.crashMessage = "RAM Overload (TimOut)!";
+				this.crashMessage = "RAM Overload (TimeOut)!";
 				return -1;
 			} else if (!this.violation.isViolating()) {
 				stopExecuting();

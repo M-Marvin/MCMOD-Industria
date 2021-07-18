@@ -1,8 +1,5 @@
 package de.industria;
 
-import java.util.Optional;
-
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,11 +19,7 @@ import net.minecraft.world.gen.GenerationStage.Decoration;
 import net.minecraft.world.gen.feature.Features;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.VersionChecker;
 import net.minecraftforge.fml.VersionChecker.CheckResult;
-import net.minecraftforge.fml.VersionChecker.Status;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -87,24 +80,24 @@ public class Industria {
 	public Industria() {
 		
 		// TODO
-		Optional<? extends ModContainer> modContainer = ModList.get().getModContainerById(MODID);
-		if (modContainer.isPresent()) {
-			MOD_STATUS = VersionChecker.getResult(modContainer.get().getModInfo());
-			
-			if (MOD_STATUS.status.equals(Status.PENDING)) {
-				try {
-					Thread.sleep(10000);
-					MOD_STATUS = VersionChecker.getResult(modContainer.get().getModInfo());
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-			}
-		}
-		
-		LOGGER.log(Level.INFO, "#####################################################################################");
-		LOGGER.log(Level.INFO, MOD_STATUS.status);
+//		Optional<? extends ModContainer> modContainer = ModList.get().getModContainerById(MODID);
+//		if (modContainer.isPresent()) {
+//			MOD_STATUS = VersionChecker.getResult(modContainer.get().getModInfo());
+//			
+//			if (MOD_STATUS.status.equals(Status.PENDING)) {
+//				try {
+//					Thread.sleep(10000);
+//					MOD_STATUS = VersionChecker.getResult(modContainer.get().getModInfo());
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				
+//			}
+//		}
+//		
+//		LOGGER.log(Level.INFO, "#####################################################################################");
+//		LOGGER.log(Level.INFO, MOD_STATUS.status);
 		
 		// register Blocks
 		ModGameRegistry.registerBlock(ModItems.tree_tap, TOOLS);

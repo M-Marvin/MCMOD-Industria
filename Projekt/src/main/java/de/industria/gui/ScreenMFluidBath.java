@@ -19,7 +19,14 @@ public class ScreenMFluidBath extends ContainerScreen<ContainerMFluidBath> {
 	public ScreenMFluidBath(ContainerMFluidBath screenContainer, PlayerInventory inv, ITextComponent titleIn) {
 		super(screenContainer, inv, titleIn);
 	}
-
+	
+	@Override
+	public void render(MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
+		this.renderBackground(p_230430_1_);
+		super.render(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_);
+		this.renderTooltip(p_230430_1_, p_230430_2_, p_230430_3_);
+	}
+	
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {

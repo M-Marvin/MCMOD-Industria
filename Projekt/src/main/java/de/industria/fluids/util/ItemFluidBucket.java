@@ -39,7 +39,7 @@ public class ItemFluidBucket extends BucketItem {
 		
 		try {
 			
-			Field containedBlockField = BucketItem.class.getDeclaredField("containedBlock");
+			Field containedBlockField = BucketItem.class.getDeclaredField("content");
 			containedBlockField.setAccessible(true);
 			Fluid containedBlock = (Fluid) containedBlockField.get(this);
 			

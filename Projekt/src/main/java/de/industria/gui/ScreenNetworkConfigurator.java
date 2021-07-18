@@ -63,6 +63,13 @@ public class ScreenNetworkConfigurator extends ContainerScreen<ContainerNetworkC
 	}
 	
 	@Override
+	public void render(MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
+		this.renderBackground(p_230430_1_);
+		super.render(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_);
+		this.renderTooltip(p_230430_1_, p_230430_2_, p_230430_3_);
+	}
+	
+	@Override
 	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
 		
 		drawString(matrixStack, this.font, new TranslationTextComponent("industria.network_configurator.ipField." + (ipValid ? "valid" : "fail"), ipValid), this.width / 2 - 61, 90, this.ipValid ? 10526880 : new Color(255, 0, 0).getRGB());

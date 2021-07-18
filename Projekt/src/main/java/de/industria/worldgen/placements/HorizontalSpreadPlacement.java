@@ -16,7 +16,7 @@ public class HorizontalSpreadPlacement extends SimplePlacement<HorizontalSpreadP
 	}
 
 	@Override
-	protected Stream<BlockPos> getPositions(Random random, HorizontalSpreadPlacementConfig config, BlockPos pos) {
+	protected Stream<BlockPos> place(Random random, HorizontalSpreadPlacementConfig config, BlockPos pos) {
 		
 		int randCount = config.countPerChunk == 1 ? 1 : random.nextInt(config.countPerChunk) + 1;
 		
@@ -24,7 +24,7 @@ public class HorizontalSpreadPlacement extends SimplePlacement<HorizontalSpreadP
 			
 			int x = random.nextInt(16);
 			int z = random.nextInt(16);
-			return pos.add(x, 0, z);
+			return pos.offset(x, 0, z);
 			
 		});
 		

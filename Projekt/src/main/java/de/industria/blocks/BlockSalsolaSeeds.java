@@ -26,31 +26,31 @@ import net.minecraft.world.World;
 public class BlockSalsolaSeeds extends SweetBerryBushBlock {
 	
 	public BlockSalsolaSeeds() {
-		super(Properties.create(Material.PLANTS).sound(SoundType.PLANT).hardnessAndResistance(0).notSolid());
+		super(Properties.of(Material.PLANT).sound(SoundType.GRASS).strength(0).noOcclusion());
 		this.setRegistryName(Industria.MODID, "salsola_seeds");
 	}
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
-		int i = state.get(AGE);
+		int i = state.getValue(AGE);
 		boolean flag = i == 3;
 		
-		if (!flag && player.getHeldItem(handIn).getItem() == Items.BONE_MEAL) {
+		if (!flag && player.getItemInHand(handIn).getItem() == Items.BONE_MEAL) {
 			return ActionResultType.PASS;
 		} else if (i > 1) {
 			
-			int j = 1 + worldIn.rand.nextInt(2);
-			spawnAsEntity(worldIn, pos, new ItemStack(ModItems.salsola, j + (flag ? 1 : 0)));
-			spawnAsEntity(worldIn, pos, new ItemStack(Item.getItemFromBlock(this)));
-			worldIn.playSound((PlayerEntity)null, pos, SoundEvents.ITEM_SWEET_BERRIES_PICK_FROM_BUSH, SoundCategory.BLOCKS, 1.0F, 0.8F + worldIn.rand.nextFloat() * 0.4F);
-			worldIn.setBlockState(pos, state.with(AGE, 1), 2);
-			return ActionResultType.func_233537_a_(worldIn.isRemote());
+			int j = 1 + worldIn.random.nextInt(2);
+			popResource(worldIn, pos, new ItemStack(ModItems.salsola, j + (flag ? 1 : 0)));
+			popResource(worldIn, pos, new ItemStack(Item.byBlock(this)));
+			worldIn.playSound((PlayerEntity)null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundCategory.BLOCKS, 1.0F, 0.8F + worldIn.random.nextFloat() * 0.4F);
+			worldIn.setBlock(pos, state.setValue(AGE, 1), 2);
+			return ActionResultType.sidedSuccess(worldIn.isClientSide());
 			
 		} else {
 			
-			return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
+			return super.use(state, worldIn, pos, player, handIn, hit);
 			
 		}
 		
@@ -63,17 +63,17 @@ public class BlockSalsolaSeeds extends SweetBerryBushBlock {
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		if (state.get(AGE) == 0) {
-			return Block.makeCuboidShape(3.0D, 0.0D, 3.0D, 13.0D, 5.0D, 13.0D);
+		if (state.getValue(AGE) == 0) {
+			return Block.box(3.0D, 0.0D, 3.0D, 13.0D, 5.0D, 13.0D);
 		} else {
-			return state.get(AGE) < 3 ? Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 10.0D, 14.0D) : Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
+			return state.getValue(AGE) < 3 ? Block.box(2.0D, 0.0D, 2.0D, 14.0D, 10.0D, 14.0D) : Block.box(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
 		}
 	}
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public ItemStack getItem(IBlockReader worldIn, BlockPos pos, BlockState state) {
-		return new ItemStack(Item.getItemFromBlock(this));
+	public ItemStack getCloneItemStack(IBlockReader worldIn, BlockPos pos, BlockState state) {
+		return new ItemStack(Item.byBlock(this));
 	}
 	
 }

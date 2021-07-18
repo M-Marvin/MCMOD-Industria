@@ -34,17 +34,17 @@ public class RifiningRecipe implements IRecipe<TileEntityMRaffinery> {
 	}
 	
 	@Override
-	public ItemStack getCraftingResult(TileEntityMRaffinery inv) {
+	public ItemStack assemble(TileEntityMRaffinery inv) {
 		return this.itemsOut[0].copy();
 	}
 
 	@Override
-	public boolean canFit(int width, int height) {
+	public boolean canCraftInDimensions(int width, int height) {
 		return width == 1 && height == 1;
 	}
 
 	@Override
-	public ItemStack getRecipeOutput() {
+	public ItemStack getResultItem() {
 		return this.itemsOut[0].copy();
 	}
 	

@@ -27,27 +27,27 @@ public class FluidSteam extends GasFluid implements IBucketPickupHandler {
 	public static final BooleanProperty PRESSURIZED = BooleanProperty.create("pressurized");
 	
 	public FluidSteam() {
-		this.setDefaultState(this.stateContainer.getBaseState().with(PRESSURIZED, false));
+		this.registerDefaultState(this.stateDefinition.any().setValue(PRESSURIZED, false));
 	}
 	
 	@Override
-	public Item getFilledBucket() {
+	public Item getBucket() {
 		return ModItems.steam_bucket;
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Fluid, FluidState> builder) {
+	protected void createFluidStateDefinition(Builder<Fluid, FluidState> builder) {
 		builder.add(PRESSURIZED);
-		super.fillStateContainer(builder);
+		super.createFluidStateDefinition(builder);
 	}
 	
 	@Override
-	protected BlockState getBlockState(FluidState state) {
-		return ModItems.steam.getDefaultState().with(BlockSteam.PRESSURIZED, state.get(PRESSURIZED));
+	protected BlockState createLegacyBlock(FluidState state) {
+		return ModItems.steam.defaultBlockState().setValue(BlockSteam.PRESSURIZED, state.getValue(PRESSURIZED));
 	}
 	
 	@Override
-	public Fluid pickupFluid(IWorld worldIn, BlockPos pos, BlockState state) {
+	public Fluid takeLiquid(IWorld worldIn, BlockPos pos, BlockState state) {
 		worldIn.removeBlock(pos, false);
 		return this;
 	}
@@ -66,13 +66,13 @@ public class FluidSteam extends GasFluid implements IBucketPickupHandler {
 		
 		if (random.nextInt(20) == 0 && world.canSeeSky(pos)) {
 					
-			if (world.getBlockState(pos.offset(moveDirection)).getFluidState().getFluid() == this) world.setBlockState(pos.offset(moveDirection), Blocks.AIR.getDefaultState());
+			if (world.getBlockState(pos.relative(moveDirection)).getFluidState().getType() == this) world.setBlockAndUpdate(pos.relative(moveDirection), Blocks.AIR.defaultBlockState());
 			
 			if (pos.getY() < 150) {
 
-				FallingBlockEntity condensetWater = new FallingBlockEntity(world, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, ModFluids.DESTILLED_WATER.getDefaultState().with(FluidDestilledWater.HOT, true).getBlockState());
-				condensetWater.fallTime = -1000;
-				world.addEntity(condensetWater);
+				FallingBlockEntity condensetWater = new FallingBlockEntity(world, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, ModFluids.DESTILLED_WATER.defaultFluidState().setValue(FluidDestilledWater.HOT, true).createLegacyBlock());
+				condensetWater.time = -1000;
+				world.addFreshEntity(condensetWater);
 				
 			}
 			
@@ -81,11 +81,11 @@ public class FluidSteam extends GasFluid implements IBucketPickupHandler {
 	}
 
 	public FluidState getPreasurized() {
-		return this.getDefaultState().with(PRESSURIZED, true);
+		return this.defaultFluidState().setValue(PRESSURIZED, true);
 	}
 	
 	public FluidState getNormal() {
-		return this.getDefaultState().with(PRESSURIZED, false);
+		return this.defaultFluidState().setValue(PRESSURIZED, false);
 	}
 	
 }

@@ -15,7 +15,7 @@ public class ModChancePlacement extends SimplePlacement<ModChancePlacementConfig
 	}
 	
 	@Override
-	protected Stream<BlockPos> getPositions(Random random, ModChancePlacementConfig config, BlockPos pos) {
+	protected Stream<BlockPos> place(Random random, ModChancePlacementConfig config, BlockPos pos) {
 		return random.nextFloat() <= config.chance / 100F ? Stream.of(pos) : Stream.empty();
 	}
 	

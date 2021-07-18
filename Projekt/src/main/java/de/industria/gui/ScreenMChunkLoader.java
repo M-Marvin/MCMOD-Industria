@@ -38,20 +38,20 @@ public class ScreenMChunkLoader extends ContainerScreen<ContainerMChunkLoader> {
 	protected void init() {
 		super.init();
 		
-		this.ySize = 180;
-		this.titleY -= 8;
+		this.imageHeight = 180;
+		this.titleLabelY -= 8;
 		
-		TileEntityMChunkLoader tileEntity = this.container.getTileEntity();
-		BlockPos loaderPosition = tileEntity.getPos();
+		TileEntityMChunkLoader tileEntity = this.menu.getTileEntity();
+		BlockPos loaderPosition = tileEntity.getBlockPos();
 		ChunkPos centerChunk = new ChunkPos(loaderPosition);
 		
 		for (int x = -TileEntityMChunkLoader.CHUNK_RANGE; x <= TileEntityMChunkLoader.CHUNK_RANGE; x++) {
 			for (int z = -TileEntityMChunkLoader.CHUNK_RANGE; z <= TileEntityMChunkLoader.CHUNK_RANGE; z++) {
 				ChunkPos chunkToMap = new ChunkPos(centerChunk.x + x, centerChunk.z + z);
-				this.mapChunk(chunkToMap, tileEntity.getWorld(), TileEntityMChunkLoader.CHUNK_RANGE + x, TileEntityMChunkLoader.CHUNK_RANGE + z);
+				this.mapChunk(chunkToMap, tileEntity.getLevel(), TileEntityMChunkLoader.CHUNK_RANGE + x, TileEntityMChunkLoader.CHUNK_RANGE + z);
 			}
 		}
-		this.mapScreen.updateDynamicTexture();
+		this.mapScreen.upload();
 		
 	}
 	
@@ -61,10 +61,10 @@ public class ScreenMChunkLoader extends ContainerScreen<ContainerMChunkLoader> {
 		
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
-				int y = chunk.getTopBlockY(Type.WORLD_SURFACE, (pos.x * 16) + x, (pos.z * 16) + z);
+				int y = chunk.getHeight(Type.WORLD_SURFACE, (pos.x * 16) + x, (pos.z * 16) + z);
 				BlockPos blockToMap = new BlockPos((pos.x * 16) + x, y, (pos.z * 16) + z);
 				BlockState stateToMap = world.getBlockState(blockToMap);
-				MaterialColor color = stateToMap.getMaterialColor(world, blockToMap);
+				MaterialColor color = stateToMap.getMapColor(world, blockToMap);
 				this.putColorOnMap(color, chunkX * 16 + x, chunkZ * 16 + z);
 			}
 		}
@@ -72,42 +72,42 @@ public class ScreenMChunkLoader extends ContainerScreen<ContainerMChunkLoader> {
 	}
 	
 	private void putColorOnMap(MaterialColor color, int x, int y) {
-		int pixelRGB = color.getMapColor(4);
-		this.mapScreen.getTextureData().setPixelRGBA(x, y, pixelRGB);
+		int pixelRGB = color.calculateRGBColor(4);
+		this.mapScreen.getPixels().setPixelRGBA(x, y, pixelRGB);
 	}
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
 		
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindTexture(CHUNK_LOADER_GUI_TEXTURES);
-		int i = this.guiLeft;
-		int j = (this.height - this.ySize) / 2;
-		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
+		this.minecraft.getTextureManager().bind(CHUNK_LOADER_GUI_TEXTURES);
+		int i = this.leftPos;
+		int j = (this.height - this.imageHeight) / 2;
+		this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
 		
-		TileEntityMChunkLoader te = this.container.getTileEntity();
+		TileEntityMChunkLoader te = this.menu.getTileEntity();
 		
-		matrixStack.push();
+		matrixStack.pushPose();
 		matrixStack.translate(i + 8, j + 15, 0);
 		
 		// Render Map
-		matrixStack.push();
-		float scale = 160F / (this.mapScreen.getTextureData().getWidth() - 16);
+		matrixStack.pushPose();
+		float scale = 160F / (this.mapScreen.getPixels().getWidth() - 16);
 		matrixStack.scale(scale, scale, scale);
-		this.mapScreen.bindTexture();
-		this.blit(matrixStack, 0, 0, 0, 0, this.mapScreen.getTextureData().getWidth() - 16, this.mapScreen.getTextureData().getHeight() - 16);
-		matrixStack.pop();
+		this.mapScreen.bind();
+		this.blit(matrixStack, 0, 0, 0, 0, this.mapScreen.getPixels().getWidth() - 16, this.mapScreen.getPixels().getHeight() - 16);
+		matrixStack.popPose();
 		
 		// Render Raster
-		scale = 160F / (this.mapScreen.getTextureData().getWidth());
+		scale = 160F / (this.mapScreen.getPixels().getWidth());
 		matrixStack.scale(scale, scale, scale);
 		int rasterSize = TileEntityMChunkLoader.CHUNK_RANGE * 2 + 1;
 		for (int rx = 1; rx < rasterSize; rx++) {
-			this.vLine(matrixStack, rx * 16, 0, this.mapScreen.getTextureData().getHeight(), new Color(0, 0, 0255, 100).getRGB());
+			this.vLine(matrixStack, rx * 16, 0, this.mapScreen.getPixels().getHeight(), new Color(0, 0, 0255, 100).getRGB());
 		}
 		for (int ry = 1; ry < rasterSize; ry++) {
-			this.hLine(matrixStack, 0, this.mapScreen.getTextureData().getWidth(), ry * 16, new Color(0, 0, 0, 100).getRGB());
+			this.hLine(matrixStack, 0, this.mapScreen.getPixels().getWidth(), ry * 16, new Color(0, 0, 0, 100).getRGB());
 		}
 		
 		// Render Selected Chunks
@@ -117,13 +117,13 @@ public class ScreenMChunkLoader extends ContainerScreen<ContainerMChunkLoader> {
 			fill(matrixStack, sx + 1, sy + 1, sx + 16, sy + 16, new Color(0, 255, 0, 100).getRGB());
 		}
 		
-		matrixStack.pop();
+		matrixStack.popPose();
 		
 	}
 	
 	@Override
-	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
-	      this.font.func_243248_b(matrixStack, this.title, (float)this.titleX, (float)this.titleY, 4210752);
+	protected void renderLabels(MatrixStack matrixStack, int x, int y) {
+	      this.font.draw(matrixStack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
 	}
 	
 	protected boolean mousePressed1 = false;
@@ -166,24 +166,24 @@ public class ScreenMChunkLoader extends ContainerScreen<ContainerMChunkLoader> {
 	}
 	
 	public boolean isInRaster(double mouseX, double mouseY) {
-		double screenX = (this.guiLeft - mouseX) + 8;
-		double screenY = ((this.height - this.ySize) / 2 - mouseY) + 15;
+		double screenX = (this.leftPos - mouseX) + 8;
+		double screenY = ((this.height - this.imageHeight) / 2 - mouseY) + 15;
 		int chunkX = (int) Math.floor(-screenX / (160F / ((TileEntityMChunkLoader.CHUNK_RANGE * 2) + 1))) - TileEntityMChunkLoader.CHUNK_RANGE;
 		int chunkY = (int) Math.floor(-screenY / (160F / ((TileEntityMChunkLoader.CHUNK_RANGE * 2) + 1))) - TileEntityMChunkLoader.CHUNK_RANGE;
 		return chunkX >= -TileEntityMChunkLoader.CHUNK_RANGE && chunkX <= TileEntityMChunkLoader.CHUNK_RANGE && chunkY >= -TileEntityMChunkLoader.CHUNK_RANGE && chunkY <= TileEntityMChunkLoader.CHUNK_RANGE;
 	}
 	
 	public void setSelected(double mouseX, double mouseY, boolean selected) {
-		double screenX = (this.guiLeft - mouseX) + 8;
-		double screenY = ((this.height - this.ySize) / 2 - mouseY) + 15;
+		double screenX = (this.leftPos - mouseX) + 8;
+		double screenY = ((this.height - this.imageHeight) / 2 - mouseY) + 15;
 		int chunkX = (int) Math.floor(-screenX / (160F / ((TileEntityMChunkLoader.CHUNK_RANGE * 2) + 1))) - TileEntityMChunkLoader.CHUNK_RANGE;
 		int chunkY = (int) Math.floor(-screenY / (160F / ((TileEntityMChunkLoader.CHUNK_RANGE * 2) + 1))) - TileEntityMChunkLoader.CHUNK_RANGE;
-		boolean flag = this.container.getTileEntity().setChunkCactive(new ChunkPos(chunkX, chunkY), selected);
+		boolean flag = this.menu.getTileEntity().setChunkCactive(new ChunkPos(chunkX, chunkY), selected);
 		if (flag) this.onSelctionChanged();
 	}
 	
 	public void onSelctionChanged() {
-		Industria.NETWORK.sendToServer(new CUpdateChunkLoader(this.container.getTileEntity().getPos(), this.container.getTileEntity().activeRelativeChunks));
+		Industria.NETWORK.sendToServer(new CUpdateChunkLoader(this.menu.getTileEntity().getBlockPos(), this.menu.getTileEntity().activeRelativeChunks));
 	}
 	
 }

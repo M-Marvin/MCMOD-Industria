@@ -27,7 +27,7 @@ public class CEditComputerCode {
 		this.pos = buf.readBlockPos();
 		this.code = new String[10];
 		for (int i = 0; i < 10; i++) {
-			this.code[i] = buf.readString();
+			this.code[i] = buf.readUtf();
 		}
 		this.saveClicked = buf.readBoolean();
 		this.runClicked = buf.readBoolean();
@@ -36,7 +36,7 @@ public class CEditComputerCode {
 	public static void encode(CEditComputerCode packet, PacketBuffer buf) {
 		buf.writeBlockPos(packet.pos);
 		for (String s : packet.code) {
-			buf.writeString(s);
+			buf.writeUtf(s);
 		}
 		buf.writeBoolean(packet.saveClicked);
 		buf.writeBoolean(packet.runClicked);
@@ -47,8 +47,8 @@ public class CEditComputerCode {
 		NetworkEvent.Context ctx = context.get();
 		ctx.enqueueWork(() -> {
 			
-			World world = ctx.getSender().world;
-			TileEntity contactTileEntity = world.getTileEntity(packet.pos);
+			World world = ctx.getSender().level;
+			TileEntity contactTileEntity = world.getBlockEntity(packet.pos);
 			
 			if (contactTileEntity instanceof TileEntityNComputer) {
 				

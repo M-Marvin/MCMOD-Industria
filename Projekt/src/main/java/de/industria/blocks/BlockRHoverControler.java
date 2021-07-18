@@ -44,36 +44,36 @@ public class BlockRHoverControler extends BlockContainerBase implements ISignalC
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	
 	public BlockRHoverControler() {
-		super("hover_controler", Material.IRON, 6, SoundType.ANVIL);
+		super("hover_controler", Material.METAL, 6, SoundType.ANVIL);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
+		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(FACING);
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityRHoverControler();
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		
 		if (tileEntity instanceof TileEntityRHoverControler) {
-			if (!worldIn.isRemote()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
+			if (!worldIn.isClientSide()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
 			return ActionResultType.CONSUME;
 		}
 		
@@ -86,7 +86,7 @@ public class BlockRHoverControler extends BlockContainerBase implements ISignalC
 		
 		ItemStack chanelItem = signal.getChanelItem();
 		boolean powered = signal.isPowered();
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		
 		if (tileEntity instanceof TileEntityRHoverControler) {
 			
@@ -108,21 +108,21 @@ public class BlockRHoverControler extends BlockContainerBase implements ISignalC
 	
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 	
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
-		TileEntity te = worldIn.getTileEntity(pos);
+	public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+		TileEntity te = worldIn.getBlockEntity(pos);
 		if (te instanceof IInventory) {
-			InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) te);
+			InventoryHelper.dropContents(worldIn, pos, (IInventory) te);
 		}
-		super.onBlockHarvested(worldIn, pos, state, player);
+		super.playerWillDestroy(worldIn, pos, state, player);
 	}
 
 	@Override
@@ -132,7 +132,7 @@ public class BlockRHoverControler extends BlockContainerBase implements ISignalC
 
 	@Override
 	public float getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
-		TileEntity tileEntity = world.getTileEntity(pos);
+		TileEntity tileEntity = world.getBlockEntity(pos);
 		if (tileEntity instanceof TileEntityRHoverControler) {
 			return ((TileEntityRHoverControler) tileEntity).needEnergy() ? 10 : 0;
 		}

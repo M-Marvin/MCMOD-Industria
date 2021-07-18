@@ -40,16 +40,16 @@ import net.minecraftforge.fml.network.NetworkHooks;
 public class BlockMAirCompressor extends BlockMultiPart<TileEntityMAirCompressor> implements IElectricConnectiveBlock, IAdvancedBlockInfo {
 	
 	public BlockMAirCompressor() {
-		super("air_compressor", Material.IRON, 2F, SoundType.METAL, 1, 1, 2);
+		super("air_compressor", Material.METAL, 2F, SoundType.METAL, 1, 1, 2);
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityMAirCompressor();
 	}
 	
@@ -61,24 +61,24 @@ public class BlockMAirCompressor extends BlockMultiPart<TileEntityMAirCompressor
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		VoxelShape shape = VoxelShapes.or(
-				Block.makeCuboidShape(0, 0, 0, 16, 5, 16),
-				Block.makeCuboidShape(3, 5, 2, 13, 16, 15),
-				Block.makeCuboidShape(6, 9, 0, 10, 13, 2),
-				Block.makeCuboidShape(0, 5, 15, 1, 15, 16),
-				Block.makeCuboidShape(15, 5, 15, 16, 15, 16),
-				Block.makeCuboidShape(15, 5, 0, 16, 15, 1),
-				Block.makeCuboidShape(0, 5, 0, 1, 15, 1),
-				Block.makeCuboidShape(0, 15, 0, 1, 16, 16),
-				Block.makeCuboidShape(15, 15, 0, 16, 16, 16),
-				Block.makeCuboidShape(1, 15, 0, 15, 16, 1),
-				Block.makeCuboidShape(1, 15, 15, 15, 16, 16));
-		return getInternPartPos(state).equals(BlockPos.ZERO) ? Block.makeCuboidShape(0, 0, 0, 16, 16, 16) : VoxelHelper.rotateShape(shape, state.get(BlockMultiPart.FACING));
+				Block.box(0, 0, 0, 16, 5, 16),
+				Block.box(3, 5, 2, 13, 16, 15),
+				Block.box(6, 9, 0, 10, 13, 2),
+				Block.box(0, 5, 15, 1, 15, 16),
+				Block.box(15, 5, 15, 16, 15, 16),
+				Block.box(15, 5, 0, 16, 15, 1),
+				Block.box(0, 5, 0, 1, 15, 1),
+				Block.box(0, 15, 0, 1, 16, 16),
+				Block.box(15, 15, 0, 16, 16, 16),
+				Block.box(1, 15, 0, 15, 16, 1),
+				Block.box(1, 15, 15, 15, 16, 16));
+		return getInternPartPos(state).equals(BlockPos.ZERO) ? Block.box(0, 0, 0, 16, 16, 16) : VoxelHelper.rotateShape(shape, state.getValue(BlockMultiPart.FACING));
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		TileEntityMAirCompressor tileEntity = getCenterTE(pos, state, worldIn);
-		if (!worldIn.isRemote()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
+		if (!worldIn.isClientSide()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getBlockPos());
 		return ActionResultType.SUCCESS;
 	}
 	
@@ -122,13 +122,13 @@ public class BlockMAirCompressor extends BlockMultiPart<TileEntityMAirCompressor
 	@Override
 	public List<BlockPos> getMultiBlockParts(World world, BlockPos pos, BlockState state) {
 		List<BlockPos> multiParts = new ArrayList<BlockPos>();
-		Direction facing = state.get(FACING);
+		Direction facing = state.getValue(FACING);
 		for (int x = 0; x < this.sizeX; x++) {
 			for (int y = 0; y < this.sizeY; y++) {
 				for (int z = 0; z < this.sizeZ; z++) {
 					BlockPos internPos = new BlockPos(x, y, z);
 					BlockPos offset = rotateOffset(internPos, facing);
-					BlockPos partPos = getCenterTE(pos, state, world).getPos().add(offset);
+					BlockPos partPos = getCenterTE(pos, state, world).getBlockPos().offset(offset);
 					multiParts.add(partPos);
 				}
 			}
@@ -141,8 +141,8 @@ public class BlockMAirCompressor extends BlockMultiPart<TileEntityMAirCompressor
 
 		if (network.getVoltage().getVoltage() > Voltage.NormalVoltage.getVoltage() && network.getCurrent() > 0) {
 
-			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+			worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
+			worldIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 			
 		}
 		

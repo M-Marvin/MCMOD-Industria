@@ -27,12 +27,12 @@ import net.minecraft.world.World;
 public class ItemStructureCladdingPane extends ItemBase {
 
 	public ItemStructureCladdingPane() {
-		super(new Properties().group(ItemGroup.REDSTONE).setISTER(() -> ItemStructureCladdingRenderer::new));
+		super(new Properties().tab(ItemGroup.TAB_REDSTONE).setISTER(() -> ItemStructureCladdingRenderer::new));
 		this.setRegistryName(Industria.MODID, "structure_cladding_pane");
 	}
 	
 	public static void setBlockState(ItemStack stack, BlockState blockState) {
-		stack.setTagInfo("BlockState", StringNBT.valueOf(ItemStackHelper.getBlockStateString(blockState)));
+		stack.addTagElement("BlockState", StringNBT.valueOf(ItemStackHelper.getBlockStateString(blockState)));
 	}
 	
 	public static ItemStack createBlockPane(BlockState blockState, int count) {
@@ -52,29 +52,29 @@ public class ItemStructureCladdingPane extends ItemBase {
 				e.printStackTrace();
 			}
 		}
-		return Blocks.OAK_PLANKS.getDefaultState();
+		return Blocks.OAK_PLANKS.defaultBlockState();
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(new StringTextComponent("\u00A77" + new TranslationTextComponent("industria.item.info.structureCladdingPane", getBlockState(stack).getBlock().getTranslatedName().getString()).getString()));
-		super.addInformation(stack, worldIn, tooltip, flagIn);
+	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		tooltip.add(new StringTextComponent("\u00A77" + new TranslationTextComponent("industria.item.info.structureCladdingPane", getBlockState(stack).getBlock().getName().getString()).getString()));
+		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 	}
 	
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context) {
+	public ActionResultType useOn(ItemUseContext context) {
 		
 		if (context.getPlayer().isCreative()) {
 			
-			BlockPos pos = context.getPos();
-			BlockState state = context.getWorld().getBlockState(pos);
-			setBlockState(context.getItem(), state);
+			BlockPos pos = context.getClickedPos();
+			BlockState state = context.getLevel().getBlockState(pos);
+			setBlockState(context.getItemInHand(), state);
 			
 			return ActionResultType.CONSUME;
 			
 		}
 		
-		return super.onItemUse(context);
+		return super.useOn(context);
 	}
 	
 }

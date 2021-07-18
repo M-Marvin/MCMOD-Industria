@@ -15,18 +15,18 @@ import net.minecraft.world.World;
 public class BlockChemicalWater extends BlockModFlowingFluid {
 	
 	public BlockChemicalWater() {
-		super("chemical_water", ModFluids.CHEMICAL_WATER, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
+		super("chemical_water", ModFluids.CHEMICAL_WATER, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops());
 	}
 	
 	@Override
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 		
 		if (entityIn instanceof LivingEntity) {
 
-			EffectInstance effect = ((LivingEntity) entityIn).getActivePotionEffect(Effects.POISON);
-			if (effect != null ? effect.getDuration() < 100 : true) ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, 200, 1));
-			effect = ((LivingEntity) entityIn).getActivePotionEffect(Effects.NAUSEA);
-			if (effect != null ? effect.getDuration() < 100 : true) ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.NAUSEA, 400, 2));
+			EffectInstance effect = ((LivingEntity) entityIn).getEffect(Effects.POISON);
+			if (effect != null ? effect.getDuration() < 100 : true) ((LivingEntity) entityIn).addEffect(new EffectInstance(Effects.POISON, 200, 1));
+			effect = ((LivingEntity) entityIn).getEffect(Effects.CONFUSION);
+			if (effect != null ? effect.getDuration() < 100 : true) ((LivingEntity) entityIn).addEffect(new EffectInstance(Effects.CONFUSION, 400, 2));
 			
 		}
 		

@@ -44,30 +44,30 @@ public class BlockMMultimeter extends BlockContainerBase implements IElectricCon
 	public static final EnumProperty<TileEntityMMultimeter.MessurementType> UNIT = EnumProperty.create("unit", TileEntityMMultimeter.MessurementType.class);
 	
 	public BlockMMultimeter() {
-		super("multimeter", Material.IRON, 2F, SoundType.METAL);
+		super("multimeter", Material.METAL, 2F, SoundType.METAL);
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(FACING, UNIT);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite()).with(UNIT, MessurementType.VOLT);
+		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(UNIT, MessurementType.VOLT);
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
-		if (player.isSneaking() && !worldIn.isRemote()) {
+		if (player.isShiftKeyDown() && !worldIn.isClientSide()) {
 			
-			MessurementType unit = state.get(UNIT);
+			MessurementType unit = state.getValue(UNIT);
 			if (unit == MessurementType.VOLT) {
 				unit = MessurementType.AMPERE;
 			} else if (unit == MessurementType.AMPERE) {
@@ -76,7 +76,7 @@ public class BlockMMultimeter extends BlockContainerBase implements IElectricCon
 				unit = MessurementType.VOLT;
 			}
 			
-			worldIn.setBlockState(pos, state.with(UNIT, unit));
+			worldIn.setBlockAndUpdate(pos, state.setValue(UNIT, unit));
 			return ActionResultType.SUCCESS;
 			
 		}
@@ -88,29 +88,29 @@ public class BlockMMultimeter extends BlockContainerBase implements IElectricCon
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		
-		VoxelShape shape = Block.makeCuboidShape(0, 0, 0, 16, 5, 16);
-		shape = VoxelShapes.or(shape, Block.makeCuboidShape(0, 14, 0, 16, 16, 16));
+		VoxelShape shape = Block.box(0, 0, 0, 16, 5, 16);
+		shape = VoxelShapes.or(shape, Block.box(0, 14, 0, 16, 16, 16));
 		
-		switch(state.get(FACING)) {
+		switch(state.getValue(FACING)) {
 		case NORTH:
-			shape = VoxelShapes.or(shape, Block.makeCuboidShape(0, 5, 2, 16, 16, 16));
-			shape = VoxelShapes.or(shape, Block.makeCuboidShape(0, 5, 0, 1, 16, 16));
-			shape = VoxelShapes.or(shape, Block.makeCuboidShape(15, 5, 0, 16, 16, 2));
+			shape = VoxelShapes.or(shape, Block.box(0, 5, 2, 16, 16, 16));
+			shape = VoxelShapes.or(shape, Block.box(0, 5, 0, 1, 16, 16));
+			shape = VoxelShapes.or(shape, Block.box(15, 5, 0, 16, 16, 2));
 			break;
 		case SOUTH:
-			shape = VoxelShapes.or(shape, Block.makeCuboidShape(0, 5, 0, 16, 16, 14));
-			shape = VoxelShapes.or(shape, Block.makeCuboidShape(0, 5, 0, 1, 16, 16));
-			shape = VoxelShapes.or(shape, Block.makeCuboidShape(15, 5, 14, 16, 16, 16));
+			shape = VoxelShapes.or(shape, Block.box(0, 5, 0, 16, 16, 14));
+			shape = VoxelShapes.or(shape, Block.box(0, 5, 0, 1, 16, 16));
+			shape = VoxelShapes.or(shape, Block.box(15, 5, 14, 16, 16, 16));
 			break;
 		case WEST:
-			shape = VoxelShapes.or(shape, Block.makeCuboidShape(2, 5, 0, 16, 16, 16));
-			shape = VoxelShapes.or(shape, Block.makeCuboidShape(0, 5, 0, 16, 16, 1));
-			shape = VoxelShapes.or(shape, Block.makeCuboidShape(0, 5, 15, 2, 16, 16));
+			shape = VoxelShapes.or(shape, Block.box(2, 5, 0, 16, 16, 16));
+			shape = VoxelShapes.or(shape, Block.box(0, 5, 0, 16, 16, 1));
+			shape = VoxelShapes.or(shape, Block.box(0, 5, 15, 2, 16, 16));
 			break;
 		case EAST:
-			shape = VoxelShapes.or(shape, Block.makeCuboidShape(0, 5, 0, 14, 16, 16));
-			shape = VoxelShapes.or(shape, Block.makeCuboidShape(0, 5, 0, 16, 16, 1));
-			shape = VoxelShapes.or(shape, Block.makeCuboidShape(14, 5, 15, 16, 16, 16));
+			shape = VoxelShapes.or(shape, Block.box(0, 5, 0, 14, 16, 16));
+			shape = VoxelShapes.or(shape, Block.box(0, 5, 0, 16, 16, 1));
+			shape = VoxelShapes.or(shape, Block.box(14, 5, 15, 16, 16, 16));
 			break;
 		default:
 			break;
@@ -133,7 +133,7 @@ public class BlockMMultimeter extends BlockContainerBase implements IElectricCon
 
 	@Override
 	public boolean canConnect(Direction side, World world, BlockPos pos, BlockState state) {
-		return side != state.get(FACING).getOpposite();
+		return side != state.getValue(FACING).getOpposite();
 	}
 
 	@Override
@@ -144,11 +144,11 @@ public class BlockMMultimeter extends BlockContainerBase implements IElectricCon
 	@Override
 	public boolean beforNetworkChanges(World world, BlockPos pos, BlockState state, ElectricityNetwork network, int lap) {
 		
-		TileEntity te = world.getTileEntity(pos);
+		TileEntity te = world.getBlockEntity(pos);
 		
 		if (te instanceof TileEntityMMultimeter) {
 			
-			float value = state.get(UNIT).getValue(world, pos, network);
+			float value = state.getValue(UNIT).getValue(world, pos, network);
 			
 			DecimalUnit unit = DecimalUnit.getUnitForValue(value);
 			value = value / unit.getValue();
@@ -164,7 +164,7 @@ public class BlockMMultimeter extends BlockContainerBase implements IElectricCon
 	@Override
 	public boolean isSwitchClosed(World worldIn, BlockPos pos, BlockState state) {
 		
-		return state.get(UNIT) != TileEntityMMultimeter.MessurementType.VOLT;
+		return state.getValue(UNIT) != TileEntityMMultimeter.MessurementType.VOLT;
 		
 	}
 
@@ -181,23 +181,23 @@ public class BlockMMultimeter extends BlockContainerBase implements IElectricCon
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityMMultimeter();
 	}
 	
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 	
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 	
 	@Override
-	public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos) {
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+	public int getAnalogOutputSignal(BlockState blockState, World worldIn, BlockPos pos) {
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		if (tileEntity instanceof TileEntityMMultimeter) {
 			switch (((TileEntityMMultimeter) tileEntity).decimalUnit) {
 			case MILLI: return 0;
@@ -210,13 +210,13 @@ public class BlockMMultimeter extends BlockContainerBase implements IElectricCon
 	}
 	
 	@Override
-	public boolean hasComparatorInputOverride(BlockState state) {
+	public boolean hasAnalogOutputSignal(BlockState state) {
 		return true;
 	}
 	
 	@Override
-	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-		TileEntity tileEntity = blockAccess.getTileEntity(pos);
+	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+		TileEntity tileEntity = blockAccess.getBlockEntity(pos);
 		if (tileEntity instanceof TileEntityMMultimeter) {
 			return (int) (((TileEntityMMultimeter) tileEntity).getValue() / 1000 * 15);
 		}

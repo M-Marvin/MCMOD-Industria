@@ -17,16 +17,16 @@ public interface ISignalConnectiveBlock {
 		
 		for (Direction direction : Direction.values()) {
 			
-			BlockState state2 = worldIn.getBlockState(pos.offset(direction));
+			BlockState state2 = worldIn.getBlockState(pos.relative(direction));
 			
 			if (state2.getBlock() instanceof ISignalConnectiveBlock && state.getBlock() instanceof ISignalConnectiveBlock) {
 				
 				boolean flag1 = ((ISignalConnectiveBlock) state.getBlock()).canConectSignalWire(worldIn, pos, direction);
-				boolean flag2 = ((ISignalConnectiveBlock) state2.getBlock()).canConectSignalWire(worldIn, pos.offset(direction), direction.getOpposite());
+				boolean flag2 = ((ISignalConnectiveBlock) state2.getBlock()).canConectSignalWire(worldIn, pos.relative(direction), direction.getOpposite());
 				
 				if (flag1 && flag2) {
 					
-					((ISignalConnectiveBlock) state2.getBlock()).onReciveSignal(worldIn, pos.offset(direction), signal, direction.getOpposite());
+					((ISignalConnectiveBlock) state2.getBlock()).onReciveSignal(worldIn, pos.relative(direction), signal, direction.getOpposite());
 					
 				}
 				

@@ -24,16 +24,16 @@ public class TileEntityRedstoneReciver extends TileEntity implements INamedConta
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
-		if (this.chanelItem != null) compound.put("ChanelItem", this.chanelItem.write(new CompoundNBT()));
-		return super.write(compound);
+	public CompoundNBT save(CompoundNBT compound) {
+		if (this.chanelItem != null) compound.put("ChanelItem", this.chanelItem.save(new CompoundNBT()));
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
-		this.chanelItem = ItemStack.read(compound.getCompound("ChanelItem"));
+	public void load(BlockState state, CompoundNBT compound) {
+		this.chanelItem = ItemStack.of(compound.getCompound("ChanelItem"));
 		if (this.chanelItem.isEmpty()) this.chanelItem = ItemStack.EMPTY;
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 //	
 //	public void setChanelItem(ItemStack chanelItem) {
@@ -55,12 +55,12 @@ public class TileEntityRedstoneReciver extends TileEntity implements INamedConta
 	}
 
 	@Override
-	public void clear() {
+	public void clearContent() {
 		this.chanelItem = ItemStack.EMPTY;
 	}
 
 	@Override
-	public int getSizeInventory() {
+	public int getContainerSize() {
 		return 1;
 	}
 
@@ -70,31 +70,31 @@ public class TileEntityRedstoneReciver extends TileEntity implements INamedConta
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int index) {
+	public ItemStack getItem(int index) {
 		return this.chanelItem;
 	}
 
 	@Override
-	public ItemStack decrStackSize(int index, int count) {
+	public ItemStack removeItem(int index, int count) {
 		ItemStack stack = this.chanelItem.copy();
 		this.chanelItem.shrink(count);
 		return stack;
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int index) {
+	public ItemStack removeItemNoUpdate(int index) {
 		ItemStack stack = this.chanelItem.copy();
 		this.chanelItem = ItemStack.EMPTY;
 		return stack;
 	}
 
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack) {
+	public void setItem(int index, ItemStack stack) {
 		this.chanelItem = stack;
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) {
+	public boolean stillValid(PlayerEntity player) {
 		return true;
 	}
 	

@@ -21,22 +21,22 @@ import net.minecraftforge.fluids.FluidAttributes;
 public abstract class FluidOreTinSolution extends FlowingFluid {
 	
 	@Override
-	public Fluid getFlowingFluid() {
+	public Fluid getFlowing() {
 		return ModFluids.FLOWING_TIN_SOLUTION;
 	}
 
 	@Override
-	public Fluid getStillFluid() {
+	public Fluid getSource() {
 		return ModFluids.TIN_SOLUTION;
 	}
 
 	@Override
-	protected boolean canSourcesMultiply() {
+	protected boolean canConvertToSource() {
 		return false;
 	}
 
 	@Override
-	protected void beforeReplacingBlock(IWorld worldIn, BlockPos pos, BlockState state) {}
+	protected void beforeDestroyingBlock(IWorld worldIn, BlockPos pos, BlockState state) {}
 
 	@Override
 	protected int getSlopeFindDistance(IWorldReader worldIn) {
@@ -44,22 +44,22 @@ public abstract class FluidOreTinSolution extends FlowingFluid {
 	}
 
 	@Override
-	protected int getLevelDecreasePerBlock(IWorldReader worldIn) {
+	protected int getDropOff(IWorldReader worldIn) {
 		return 2;
 	}
 
 	@Override
-	public Item getFilledBucket() {
+	public Item getBucket() {
 		return ModItems.tin_solution_bucket;
 	}
 
 	@Override
-	protected boolean canDisplace(FluidState p_215665_1_, IBlockReader p_215665_2_, BlockPos p_215665_3_, Fluid p_215665_4_, Direction p_215665_5_) {
-		return p_215665_5_ == Direction.DOWN && !p_215665_4_.isEquivalentTo(this);
+	protected boolean canBeReplacedWith(FluidState p_215665_1_, IBlockReader p_215665_2_, BlockPos p_215665_3_, Fluid p_215665_4_, Direction p_215665_5_) {
+		return p_215665_5_ == Direction.DOWN && !p_215665_4_.isSame(this);
 	}
 
 	@Override
-	public int getTickRate(IWorldReader p_205569_1_) {
+	public int getTickDelay(IWorldReader p_205569_1_) {
 		return 5;
 	}
 
@@ -69,8 +69,8 @@ public abstract class FluidOreTinSolution extends FlowingFluid {
 	}
 
 	@Override
-	protected BlockState getBlockState(FluidState state) {
-		return ModItems.tin_solution.getDefaultState().with(BlockModFlowingFluid.LEVEL, getLevelFromState(state));
+	protected BlockState createLegacyBlock(FluidState state) {
+		return ModItems.tin_solution.defaultBlockState().setValue(BlockModFlowingFluid.LEVEL, getLegacyLevel(state));
 	}
 	
 	@Override
@@ -83,12 +83,12 @@ public abstract class FluidOreTinSolution extends FlowingFluid {
 	}
 	
 	@Override
-	public boolean isEquivalentTo(Fluid fluidIn) {
+	public boolean isSame(Fluid fluidIn) {
 		return fluidIn == ModFluids.TIN_SOLUTION || fluidIn == ModFluids.FLOWING_TIN_SOLUTION;
 	}
 	
 	@Override
-	protected boolean ticksRandomly() {
+	protected boolean isRandomlyTicking() {
 		return true;
 	}
 	
@@ -100,7 +100,7 @@ public abstract class FluidOreTinSolution extends FlowingFluid {
 		}
 
 		@Override
-		public int getLevel(FluidState state) {
+		public int getAmount(FluidState state) {
 			return 8;
 		}
 		
@@ -114,14 +114,14 @@ public abstract class FluidOreTinSolution extends FlowingFluid {
 		}
 
 		@Override
-		public int getLevel(FluidState state) {
-			return state.get(LEVEL_1_8);
+		public int getAmount(FluidState state) {
+			return state.getValue(LEVEL);
 		}
 		
 		@Override
-		protected void fillStateContainer(Builder<Fluid, FluidState> builder) {
-			builder.add(LEVEL_1_8);
-			super.fillStateContainer(builder);
+		protected void createFluidStateDefinition(Builder<Fluid, FluidState> builder) {
+			builder.add(LEVEL);
+			super.createFluidStateDefinition(builder);
 		}
 		
 	}

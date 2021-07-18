@@ -42,11 +42,11 @@ public class CEditJigsawTileEntityPacket {
 		this.name = buf.readResourceLocation();
 		this.targetName = buf.readResourceLocation();
 		try {
-			BlockStateParser parser = new BlockStateParser(new StringReader(buf.readString()), true);
+			BlockStateParser parser = new BlockStateParser(new StringReader(buf.readUtf()), true);
 			parser.parse(false);
 			this.replaceState = parser.getState();
 		} catch (CommandSyntaxException e) {
-			this.replaceState = Blocks.AIR.getDefaultState();
+			this.replaceState = Blocks.AIR.defaultBlockState();
 			Industria.LOGGER.error("Cant parse BlockState!");
 			e.printStackTrace();
 		}
@@ -58,7 +58,7 @@ public class CEditJigsawTileEntityPacket {
 		buf.writeResourceLocation(packet.poolFile);
 		buf.writeResourceLocation(packet.name);
 		buf.writeResourceLocation(packet.targetName);
-		buf.writeString(ItemStackHelper.getBlockStateString(packet.replaceState));
+		buf.writeUtf(ItemStackHelper.getBlockStateString(packet.replaceState));
 		buf.writeBoolean(packet.lockOrientation);
 	}
 	
@@ -67,8 +67,8 @@ public class CEditJigsawTileEntityPacket {
 		NetworkEvent.Context ctx = context.get();
 		ctx.enqueueWork(() -> {
 			
-			World world = ctx.getSender().world;
-			TileEntity contactTileEntity = world.getTileEntity(packet.pos);
+			World world = ctx.getSender().level;
+			TileEntity contactTileEntity = world.getBlockEntity(packet.pos);
 			
 			if (contactTileEntity instanceof TileEntityJigsaw) {
 				

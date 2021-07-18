@@ -68,32 +68,32 @@ public class TileEntityMFuseBox extends TileEntity implements ITickableTileEntit
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
-		if (!this.fuse.isEmpty()) compound.put("Fuse", this.fuse.write(new CompoundNBT()));
-		return super.write(compound);
+	public CompoundNBT save(CompoundNBT compound) {
+		if (!this.fuse.isEmpty()) compound.put("Fuse", this.fuse.save(new CompoundNBT()));
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
-		this.fuse = ItemStack.read(compound.getCompound("Fuse"));
-		super.read(state, compound);
+	public void load(BlockState state, CompoundNBT compound) {
+		this.fuse = ItemStack.of(compound.getCompound("Fuse"));
+		super.load(state, compound);
 	}
 	
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(pos, 0, this.serializeNBT());
+		return new SUpdateTileEntityPacket(worldPosition, 0, this.serializeNBT());
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.deserializeNBT(pkt.getNbtCompound());
+		this.deserializeNBT(pkt.getTag());
 	}
 	
 	@Override
 	public void tick() {
-		if (!world.isRemote()) {
+		if (!level.isClientSide()) {
 			
-			world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
+			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			
 		}
 	}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "generator",
+  "pattern": [
+    " R ",
+    "SSS",
+    " R "
+  ],
+  "key": {
+    "R": {
+      "item": "industria:rubber"
+    },
+    "S": {
+      "item": "industria:electrolyt_copper_wire"
+    }
+  },
+  "result": {
+    "item": "industria:network_cable",
+    "count": 8
+  }
+}

@@ -56,11 +56,11 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(pos.add(-1, 0, -1), pos.add(2, 2, 2));
+		return new AxisAlignedBB(worldPosition.offset(-1, 0, -1), worldPosition.offset(2, 2, 2));
 	}
 	
 	public ItemSchredderTool getToolItem() {
-		ItemStack toolStack = this.getStackInSlot(4);
+		ItemStack toolStack = this.getItem(4);
 		if (toolStack.getItem() instanceof ItemSchredderTool) {
 			return (ItemSchredderTool) toolStack.getItem();
 		}
@@ -75,12 +75,12 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote() && BlockMultiPart.getInternPartPos(getBlockState()).equals(BlockPos.ZERO)) {
+		if (!this.level.isClientSide() && BlockMultiPart.getInternPartPos(getBlockState()).equals(BlockPos.ZERO)) {
 			
-			this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
-			ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos);
+			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
+			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
 			
-			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(world).getNetwork(pos);
+			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
 			this.hasPower = network.canMachinesRun() == Voltage.HightVoltage;
 			this.isWorking = this.hasPower ? this.canWork() : false;
 			
@@ -105,7 +105,7 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 						
 					} else {
 						
-						entity.attackEntityFrom(ModDamageSource.SCHREDDER, 1.5F);
+						entity.hurt(ModDamageSource.SCHREDDER, 1.5F);
 						
 					}
 					
@@ -114,39 +114,39 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 				SchredderRecipe recipe = this.findRecipe();
 				if (recipe != null) {
 					
-					if (ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(1), recipe.getRecipeOutput()) &&
-						ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(2), recipe.getRecipeOutput2()) &&
-						ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(3), recipe.getRecipeOutput3()) &&
-						(this.getStackInSlot(4).getMaxDamage() - this.getStackInSlot(4).getDamage()) >= recipe.getSchredderDamage()) {
+					if (ItemStackHelper.canMergeRecipeStacks(this.getItem(1), recipe.getResultItem()) &&
+						ItemStackHelper.canMergeRecipeStacks(this.getItem(2), recipe.getRecipeOutput2()) &&
+						ItemStackHelper.canMergeRecipeStacks(this.getItem(3), recipe.getRecipeOutput3()) &&
+						(this.getItem(4).getMaxDamage() - this.getItem(4).getDamageValue()) >= recipe.getSchredderDamage()) {
 						
 						this.progressTotal = recipe.getSchredderTime();
 						this.progress++;
 						
 						if (this.progress >= this.progressTotal) {
 							
-							ItemStack result1 = recipe.getRecipeOutput();
-							if (this.getStackInSlot(1).isEmpty()) {
-								this.setInventorySlotContents(1, result1);
+							ItemStack result1 = recipe.getResultItem();
+							if (this.getItem(1).isEmpty()) {
+								this.setItem(1, result1);
 							} else {
-								this.getStackInSlot(1).grow(result1.getCount());
+								this.getItem(1).grow(result1.getCount());
 							}
 							
 							ItemStack result2 = recipe.getRecipeOutput2();
-							if (this.getStackInSlot(2).isEmpty()) {
-								this.setInventorySlotContents(2, result2);
+							if (this.getItem(2).isEmpty()) {
+								this.setItem(2, result2);
 							} else {
-								this.getStackInSlot(2).grow(result2.getCount());
+								this.getItem(2).grow(result2.getCount());
 							}
 							
 							ItemStack result3 = recipe.getRecipeOutput3();
-							if (this.getStackInSlot(3).isEmpty()) {
-								this.setInventorySlotContents(3, result3);
+							if (this.getItem(3).isEmpty()) {
+								this.setItem(3, result3);
 							} else {
-								this.getStackInSlot(3).grow(result3.getCount());
+								this.getItem(3).grow(result3.getCount());
 							}
 							
-							this.getStackInSlot(0).shrink(1);
-							this.getStackInSlot(4).setDamage(this.getStackInSlot(4).getDamage() + recipe.getSchredderDamage());
+							this.getItem(0).shrink(1);
+							this.getItem(4).setDamageValue(this.getItem(4).getDamageValue() + recipe.getSchredderDamage());
 							this.progress = 0;
 							
 						}
@@ -161,9 +161,9 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 			
 			if (this.isWorking) {
 				
-				if (!this.getStackInSlot(0).isEmpty() && findRecipe() != null) {
+				if (!this.getItem(0).isEmpty() && findRecipe() != null) {
 					
-					Direction facing = this.getBlockState().get(BlockMultiPart.FACING);
+					Direction facing = this.getBlockState().getValue(BlockMultiPart.FACING);
 					Vector3f offset = null;
 					switch(facing) {
 						case NORTH: offset = new Vector3f(1, 1.8F, 1); break;
@@ -173,17 +173,17 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 						default: offset = new Vector3f(0, 0, 0);
 					}
 					
-					ItemParticleData particle = new ItemParticleData(ParticleTypes.ITEM, this.getStackInSlot(0));
+					ItemParticleData particle = new ItemParticleData(ParticleTypes.ITEM, this.getItem(0));
 
 					for (int i = 0; i < 10; i++) {
-						float fX = (this.world.rand.nextFloat() - 0.5F) * 1.6F;
-						float fY = (this.world.rand.nextFloat() - 0.5F) * 0.6F;
-						float fZ = (this.world.rand.nextFloat() - 0.5F) * 1.6F;
-						float fX2 = (this.world.rand.nextFloat() - 0.5F) * 0.2F;
-						float fY2 = (this.world.rand.nextFloat() - 0.5F) * 0.2F;
-						float fZ2 = (this.world.rand.nextFloat() - 0.5F) * 0.2F;
+						float fX = (this.level.random.nextFloat() - 0.5F) * 1.6F;
+						float fY = (this.level.random.nextFloat() - 0.5F) * 0.6F;
+						float fZ = (this.level.random.nextFloat() - 0.5F) * 1.6F;
+						float fX2 = (this.level.random.nextFloat() - 0.5F) * 0.2F;
+						float fY2 = (this.level.random.nextFloat() - 0.5F) * 0.2F;
+						float fZ2 = (this.level.random.nextFloat() - 0.5F) * 0.2F;
 						
-						this.world.addParticle(particle, this.pos.getX() + offset.getX() + fX, this.pos.getY() + offset.getY() + fY, this.pos.getZ() + offset.getZ() + fZ, fX2, fY2, fZ2);
+						this.level.addParticle(particle, this.worldPosition.getX() + offset.x() + fX, this.worldPosition.getY() + offset.y() + fY, this.worldPosition.getZ() + offset.z() + fZ, fX2, fY2, fZ2);
 						
 					}
 					
@@ -199,7 +199,7 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 	
 	private List<Entity> getEntitysInInput() {
 
-		Direction facing = this.getBlockState().get(BlockMSchredder.FACING);
+		Direction facing = this.getBlockState().getValue(BlockMSchredder.FACING);
 		Vector3i directionVec1 = null;
 		Vector3i directionVec2 = null;
 		switch(facing) {
@@ -223,31 +223,31 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 			directionVec1 = new Vector3i(0, 0.5F, 0);
 			directionVec2 = new Vector3i(0, 1.9F, 0);
 		}
-		AxisAlignedBB inputBounds = new AxisAlignedBB(this.pos.add(directionVec1), this.pos.add(directionVec2));
-		return this.world.getEntitiesInAABBexcluding(null, inputBounds, null);
+		AxisAlignedBB inputBounds = new AxisAlignedBB(this.worldPosition.offset(directionVec1), this.worldPosition.offset(directionVec2));
+		return this.level.getEntities(null, inputBounds);
 		
 	}
 	
 	public ItemStack insertItem(ItemStack stack) {
 		
-		if (findRecipe(stack) == null && ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(1), stack) && ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(1), stack)) {			
-			if (this.getStackInSlot(1).isEmpty()) {
-				this.setInventorySlotContents(1, stack);
+		if (findRecipe(stack) == null && ItemStackHelper.canMergeRecipeStacks(this.getItem(1), stack) && ItemStackHelper.canMergeRecipeStacks(this.getItem(1), stack)) {			
+			if (this.getItem(1).isEmpty()) {
+				this.setItem(1, stack);
 				return ItemStack.EMPTY;
 			} else {
-				int transfer = Math.min(stack.getCount(), stack.getMaxStackSize() - this.getStackInSlot(1).getCount());
-				this.getStackInSlot(1).grow(transfer);
+				int transfer = Math.min(stack.getCount(), stack.getMaxStackSize() - this.getItem(1).getCount());
+				this.getItem(1).grow(transfer);
 				ItemStack rest = stack.copy();
 				rest.shrink(transfer);
 				return rest;
 			}
-		} else if (findRecipe(stack) != null && ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(0), stack)) {
-			if (this.getStackInSlot(0).isEmpty()) {
-				this.setInventorySlotContents(0, stack);
+		} else if (findRecipe(stack) != null && ItemStackHelper.canMergeRecipeStacks(this.getItem(0), stack)) {
+			if (this.getItem(0).isEmpty()) {
+				this.setItem(0, stack);
 				return ItemStack.EMPTY;
 			} else {
-				int transfer = Math.min(stack.getCount(), stack.getMaxStackSize() - this.getStackInSlot(0).getCount());
-				this.getStackInSlot(0).grow(transfer);
+				int transfer = Math.min(stack.getCount(), stack.getMaxStackSize() - this.getItem(0).getCount());
+				this.getItem(0).grow(transfer);
 				ItemStack rest = stack.copy();
 				rest.shrink(transfer);
 				return rest;
@@ -260,36 +260,36 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 	
 	public SchredderRecipe findRecipe() {
 		if (this.getToolItem() == null) return null;
-		Optional<SchredderRecipe> recipe = this.world.getRecipeManager().getRecipe(ModRecipeTypes.SCHREDDER, this, this.world);
+		Optional<SchredderRecipe> recipe = this.level.getRecipeManager().getRecipeFor(ModRecipeTypes.SCHREDDER, this, this.level);
 		if (recipe.isPresent()) return recipe.get();
 		return null;
 	}
 	
 	public SchredderRecipe findRecipe(ItemStack stack) {
-		ItemStack oldStack = this.getStackInSlot(0);
-		this.setInventorySlotContents(0, stack);
-		Optional<SchredderRecipe> recipe = this.world.getRecipeManager().getRecipe(ModRecipeTypes.SCHREDDER, this, this.world);
-		this.setInventorySlotContents(0, oldStack);
+		ItemStack oldStack = this.getItem(0);
+		this.setItem(0, stack);
+		Optional<SchredderRecipe> recipe = this.level.getRecipeManager().getRecipeFor(ModRecipeTypes.SCHREDDER, this, this.level);
+		this.setItem(0, oldStack);
 		if (recipe.isPresent()) return recipe.get();
 		return null;
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		compound.putBoolean("isWorking", this.isWorking);
 		compound.putBoolean("hasPower", this.hasPower);
 		compound.putInt("progress", this.progress);
 		compound.putInt("progressTotal", this.progressTotal);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		this.isWorking = compound.getBoolean("isWorking");
 		this.hasPower = compound.getBoolean("hasPower");
 		this.progress = compound.getInt("progress");
 		this.progressTotal = compound.getInt("progressTotal");
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 	@Override
@@ -298,12 +298,12 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 	}
 	
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
 		return index == 0;
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return index > 0 && index <= 3;
 	}
 

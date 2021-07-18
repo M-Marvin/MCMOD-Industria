@@ -18,11 +18,11 @@ public class SSendENHandeler {
 	}
 	
 	public SSendENHandeler(PacketBuffer buf) {
-		this.enTag = buf.readCompoundTag();
+		this.enTag = buf.readNbt();
 	}
 	
 	public static void encode(SSendENHandeler packet, PacketBuffer buf) {
-		buf.writeCompoundTag(packet.enTag);
+		buf.writeNbt(packet.enTag);
 	}
 	
 	@SuppressWarnings("resource")
@@ -30,7 +30,7 @@ public class SSendENHandeler {
 		
 		NetworkEvent.Context ctx = context.get();
 
-		ClientWorld world = Minecraft.getInstance().world;
+		ClientWorld world = Minecraft.getInstance().level;
 		ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(world);
 		
 		if (!handler.isServerInstace()) handler.deserializeNBT(packet.enTag);

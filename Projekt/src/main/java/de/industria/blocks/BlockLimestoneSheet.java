@@ -20,23 +20,23 @@ public class BlockLimestoneSheet extends BlockBase implements IWaterLoggable {
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	
 	public BlockLimestoneSheet() {
-		super("limestone_sheet", Material.ROCK, 1F, 1F, SoundType.STONE);
-		this.setDefaultState(this.stateContainer.getBaseState().with(WATERLOGGED, false));
+		super("limestone_sheet", Material.STONE, 1F, 1F, SoundType.STONE);
+		this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(WATERLOGGED);
 	}
 
 	@Override
 	public FluidState getFluidState(BlockState state) {
-		return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluid().getDefaultState() : Fluids.EMPTY.getDefaultState();
+		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource().defaultFluidState() : Fluids.EMPTY.defaultFluidState();
 	}
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return Block.makeCuboidShape(0, 0, 0, 16, 3, 16);
+		return Block.box(0, 0, 0, 16, 3, 16);
 	}
 	
 }

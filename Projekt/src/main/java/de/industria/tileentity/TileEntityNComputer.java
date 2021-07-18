@@ -74,7 +74,7 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 					LuaTable args = argTable.checktable();
 					NetworkDeviceIP nip = new NetworkDeviceIP(Byte.valueOf(ipS[0]), Byte.valueOf(ipS[1]), Byte.valueOf(ipS[2]), Byte.valueOf(ipS[3]));
 					NetworkMessage msg = new NetworkMessage();
-					msg.setSendTime(TileEntityNComputer.this.world.getGameTime());
+					msg.setSendTime(TileEntityNComputer.this.level.getGameTime());
 					msg.setTargetIP(nip);
 					for (int i = 1; i <= args.length(); i++) {
 						LuaValue arg = args.get(i);
@@ -101,7 +101,7 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 					NetworkDeviceIP oldestIP = null;
 					long priority = 0L;
 					for (Entry<NetworkDeviceIP, NetworkMessage> entry : TileEntityNComputer.this.recivedMessages.entrySet()) {
-						long msgPri = TileEntityNComputer.this.world.getGameTime() - entry.getValue().getSendTime();
+						long msgPri = TileEntityNComputer.this.level.getGameTime() - entry.getValue().getSendTime();
 						if (msgPri > priority) {
 							priority = msgPri;
 							oldestIP = entry.getKey();
@@ -168,7 +168,7 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 			public LuaValue call(LuaValue path) {
 				String discPath = path.checkstring().toString();
 				if (DriveManager.containsDrive(discPath, TileEntityNComputer.this.getBootDrive(), TileEntityNComputer.this.getDriveSlot())) {
-					String script = DriveManager.loadDataFromDrive(discPath, (ServerWorld) world);
+					String script = DriveManager.loadDataFromDrive(discPath, (ServerWorld) level);
 					String name = discPath.split("/")[discPath.split("/").length - 1];
 					return TileEntityNComputer.this.luaInterpreter.loadScript(script, name);
 				}
@@ -181,7 +181,7 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 			public LuaValue call(LuaValue path) {
 				String discPath = path.checkstring().toString();
 				if (DriveManager.containsDrive(discPath, TileEntityNComputer.this.getBootDrive(), TileEntityNComputer.this.getDriveSlot())) {
-					String file = DriveManager.loadDataFromDrive(discPath, (ServerWorld) world);
+					String file = DriveManager.loadDataFromDrive(discPath, (ServerWorld) level);
 					return LuaValue.valueOf(new String(file));
 				}
 				return LuaValue.NIL;
@@ -194,7 +194,7 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 				String discPath = path.checkstring().toString();
 				if (DriveManager.containsDrive(discPath, TileEntityNComputer.this.getBootDrive(), TileEntityNComputer.this.getDriveSlot())) {
 					String file = content.checkstring().toString();
-					DriveManager.saveDataInDrive(discPath, file, (ServerWorld) world);
+					DriveManager.saveDataInDrive(discPath, file, (ServerWorld) level);
 				}
 				return LuaValue.NONE;
 			}
@@ -230,18 +230,18 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(pos.add(-2, -1, -2), pos.add(2, 2, 2));
+		return new AxisAlignedBB(worldPosition.offset(-2, -1, -2), worldPosition.offset(2, 2, 2));
 	}
 	
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote()) {
+		if (!this.level.isClientSide()) {
 			
-			ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos);
-			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(world).getNetwork(pos);
+			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
+			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
 			this.hasPower = network.canMachinesRun() == Voltage.LowVoltage;
-			this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
+			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			
 			this.driveValidationTime++;
 			if (this.driveValidationTime > 20) {
@@ -293,7 +293,7 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 				NetworkMessage message = null;
 				long priority = 0L;
 				for (NetworkMessage msg : this.sendMessages) {
-					long msgPri = this.world.getGameTime() - msg.getSendTime();
+					long msgPri = this.level.getGameTime() - msg.getSendTime();
 					if (msgPri > priority) {
 						priority = msgPri;
 						message = msg;
@@ -318,12 +318,12 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean isViolating() {
-		return this.world.isBlockLoaded(getPos()) && this.world.getServer().isServerRunning();
+		return this.level.hasChunkAt(getBlockPos()) && this.level.getServer().isRunning();
 	}
 	
 	@Override
-	public void remove() {
-		super.remove();
+	public void setRemoved() {
+		super.setRemoved();
 		this.luaInterpreter.stopExecuting();
 	}
 	
@@ -373,20 +373,20 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 	}
 	
 	public String getBootDrive() {
-		if (this.world.isRemote()) throw new IllegalStateException("Cant get DriveFolder on client!");
-		ItemStack stack = this.getStackInSlot(0);
-		return ItemHardDrive.getDriveName(stack, (ServerWorld) this.world);
+		if (this.level.isClientSide()) throw new IllegalStateException("Cant get DriveFolder on client!");
+		ItemStack stack = this.getItem(0);
+		return ItemHardDrive.getDriveName(stack, (ServerWorld) this.level);
 	}
 	
 	public String getDriveSlot() {
-		if (this.world.isRemote()) throw new IllegalStateException("Cant get DriveFolder on client!");
-		ItemStack stack = this.getStackInSlot(1);
-		return ItemHardDrive.getDriveName(stack, (ServerWorld) this.world);
+		if (this.level.isClientSide()) throw new IllegalStateException("Cant get DriveFolder on client!");
+		ItemStack stack = this.getItem(1);
+		return ItemHardDrive.getDriveName(stack, (ServerWorld) this.level);
 	}
 	
 	public void onClientUpdate(boolean runClicked, boolean saveClicked, String[] code) {
 		
-		if (this.world.isRemote()) throw new IllegalStateException("Cant access Drives on client!");
+		if (this.level.isClientSide()) throw new IllegalStateException("Cant access Drives on client!");
 		
 		if (saveClicked) {
 			String drive = getBootDrive();
@@ -395,7 +395,7 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 				for (String s : code) {
 					sb.append(s).append("\n");
 				}
-				DriveManager.saveDataInDrive(drive + BOOT_DRIVE_FILE, sb.toString(), (ServerWorld) this.world);
+				DriveManager.saveDataInDrive(drive + BOOT_DRIVE_FILE, sb.toString(), (ServerWorld) this.level);
 				
 			}
 		}
@@ -412,32 +412,32 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 	
 	public void loadCodeFromDisk() {
 		
-		if (this.world.isRemote()) throw new IllegalStateException("Cant access Drives on client!");
+		if (this.level.isClientSide()) throw new IllegalStateException("Cant access Drives on client!");
 		
 		this.cachedBootCode = "";
 		String bootDriveName = getBootDrive();
 		if (bootDriveName != null) {
-			this.cachedBootCode = DriveManager.loadDataFromDrive(bootDriveName + BOOT_DRIVE_FILE, (ServerWorld) this.world);
+			this.cachedBootCode = DriveManager.loadDataFromDrive(bootDriveName + BOOT_DRIVE_FILE, (ServerWorld) this.level);
 		}
 		
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		this.deviceIP = NetworkDeviceIP.read(compound.getCompound("DeviceIP"));
 		this.hasPower = compound.getBoolean("hasPower");
 		this.isRunning = compound.getBoolean("IsRunning");
 		this.consoleLine = compound.getString("Console");
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		compound.put("DeviceIP", this.deviceIP.writeNBT());
 		compound.putBoolean("hasPower", this.hasPower);
 		compound.putBoolean("IsRunning", this.isRunning);
 		if (this.consoleLine != null) compound.putString("Console", this.consoleLine);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
@@ -447,12 +447,12 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 		nbt.putBoolean("IsRunning", this.isRunning);
 		nbt.putBoolean("hasPower", this.hasPower);
 		if (this.consoleLine != null) nbt.putString("Console", this.consoleLine);
-		return new SUpdateTileEntityPacket(this.pos, 0, nbt);
+		return new SUpdateTileEntityPacket(this.worldPosition, 0, nbt);
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		CompoundNBT nbt = pkt.getNbtCompound();
+		CompoundNBT nbt = pkt.getTag();
 		if (nbt.contains("Code")) this.cachedBootCode = nbt.getString("Code");
 		this.isRunning = nbt.getBoolean("IsRunning");
 		this.hasPower = nbt.getBoolean("hasPower");
@@ -467,7 +467,7 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 		BlockState state = this.getBlockState();
 		INetworkDevice device = state.getBlock() instanceof INetworkDevice ? (INetworkDevice) state.getBlock() : null;
 		if (device != null) {
-			device.sendMessage(msg, world, pos, state);
+			device.sendMessage(msg, level, worldPosition, state);
 		}
 	}
 	

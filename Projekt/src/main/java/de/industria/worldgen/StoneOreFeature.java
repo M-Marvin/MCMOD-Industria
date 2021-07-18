@@ -89,10 +89,10 @@ public class StoneOreFeature extends Feature<StoneOreFeatureConfig> {
 										int l2 = i2 - p_207803_16_ + (j2 - p_207803_17_) * p_207803_19_ + (k2 - p_207803_18_) * p_207803_19_ * p_207803_20_;
 										if (!bitset.get(l2)) {
 											bitset.set(l2);
-											blockpos$mutable.setPos(i2, j2, k2);
+											blockpos$mutable.set(i2, j2, k2);
 											if (config.target.test(worldIn.getBlockState(blockpos$mutable), random)) {
 												
-												worldIn.setBlockState(blockpos$mutable, config.stoneState, 2);
+												worldIn.setBlock(blockpos$mutable, config.stoneState, 2);
 												generatedOres.add(new BlockPos(blockpos$mutable));
 												
 												++i;
@@ -112,10 +112,10 @@ public class StoneOreFeature extends Feature<StoneOreFeatureConfig> {
 			
 			for (Direction f : Direction.values()) {
 				
-				BlockPos sideBlock = ore.offset(f);
+				BlockPos sideBlock = ore.relative(f);
 				BlockState state = worldIn.getBlockState(sideBlock);
 				if (state.getBlock() != config.stoneState.getBlock() && state.getBlock() != config.oreState.getBlock() && config.target.test(state, random)) {
-					worldIn.setBlockState(ore, config.oreState, 2);
+					worldIn.setBlock(ore, config.oreState, 2);
 					break;
 				}
 				
@@ -127,7 +127,7 @@ public class StoneOreFeature extends Feature<StoneOreFeatureConfig> {
 	}
 
 	@Override
-	public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, StoneOreFeatureConfig config) {
+	public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, StoneOreFeatureConfig config) {
 
 		float f = rand.nextFloat() * (float)Math.PI;
 		float f1 = (float)config.size / 8.0F;

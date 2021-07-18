@@ -23,18 +23,18 @@ import net.minecraft.world.server.ServerWorld;
 
 public class BlockSaplingBase extends SaplingBlock {
 	
-	public static final IntegerProperty STAGE = BlockStateProperties.STAGE_0_1;
-	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
+	public static final IntegerProperty STAGE = BlockStateProperties.STAGE;
+	protected static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 	
 	private ResourceLocation jigsawPool;
 	private ResourceLocation jigsawConnectionName;
 	
 	public BlockSaplingBase(String name, ResourceLocation jigsawPool) {
-		super(null, Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.PLANT));
+		super(null, Properties.of(Material.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS));
 		this.setRegistryName(new ResourceLocation(Industria.MODID, name));
 		this.jigsawPool = jigsawPool;
 		this.jigsawConnectionName = new ResourceLocation(Industria.MODID, "tree_log");
-		this.setDefaultState(this.stateContainer.getBaseState().with(STAGE, Integer.valueOf(0)));
+		this.registerDefaultState(this.stateDefinition.any().setValue(STAGE, Integer.valueOf(0)));
 	}
 	
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
@@ -42,7 +42,7 @@ public class BlockSaplingBase extends SaplingBlock {
 	}
 	
 	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
-		if (worldIn.getLight(pos.up()) >= 9 && random.nextInt(7) == 0) {
+		if (worldIn.getMaxLocalRawBrightness(pos.above()) >= 9 && random.nextInt(7) == 0) {
 		if (!worldIn.isAreaLoaded(pos, 1)) return; // Forge: prevent loading unloaded chunks when checking neighbor's light
 			this.growTree(worldIn, pos, state, random);
 		}
@@ -50,21 +50,21 @@ public class BlockSaplingBase extends SaplingBlock {
 	}
 	
 	public void growTree(ServerWorld world, BlockPos pos, BlockState state, Random rand) {
-		if (state.get(STAGE) == 0) {
-			world.setBlockState(pos, state.func_235896_a_(STAGE), 4);
+		if (state.getValue(STAGE) == 0) {
+			world.setBlock(pos, state.cycle(STAGE), 4);
 		} else {
 			if (!net.minecraftforge.event.ForgeEventFactory.saplingGrowTree(world, rand, pos)) return;
 			
-			BlockState jigsawReplace = world.getBlockState(pos.down());
-			world.setBlockState(pos, Blocks.AIR.getDefaultState());
-			world.setBlockState(pos.down(), ModItems.jigsaw.getDefaultState().with(BlockJigsaw.TYPE, BlockJigsaw.JigsawType.VERTICAL_UP));
+			BlockState jigsawReplace = world.getBlockState(pos.below());
+			world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+			world.setBlockAndUpdate(pos.below(), ModItems.jigsaw.defaultBlockState().setValue(BlockJigsaw.TYPE, BlockJigsaw.JigsawType.VERTICAL_UP));
 				
-			TileEntity tileEntity = world.getTileEntity(pos.down());
+			TileEntity tileEntity = world.getBlockEntity(pos.below());
 			
 			if (tileEntity instanceof TileEntityJigsaw) {
 				
 				TileEntityJigsaw jigsaw = (TileEntityJigsaw) tileEntity;
-				jigsaw.replaceState = jigsawReplace.getBlock().getDefaultState();
+				jigsaw.replaceState = jigsawReplace.getBlock().defaultBlockState();
 				jigsaw.targetName = this.jigsawConnectionName;
 				jigsaw.poolFile = this.jigsawPool;
 				jigsaw.lockOrientation = false;
@@ -76,7 +76,7 @@ public class BlockSaplingBase extends SaplingBlock {
 
 	}
 	
-	public void grow(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
+	public void performBonemeal(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
 		this.growTree(worldIn, pos, state, rand);
 	}
 }

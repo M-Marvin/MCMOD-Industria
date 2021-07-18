@@ -35,7 +35,7 @@ public class CConfigureNetworkDevice {
 		NetworkEvent.Context ctx = context.get();
 		ctx.enqueueWork(() -> {
 			
-			World world = ctx.getSender().world;
+			World world = ctx.getSender().level;
 			BlockPos devicePos = packet.pos;
 			BlockState state = world.getBlockState(devicePos);
 			

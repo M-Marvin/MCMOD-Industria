@@ -49,17 +49,17 @@ public class TileEntityMAirCompressor extends TileEntity implements ITickableTil
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(pos.add(-1, -1, -1), pos.add(1, 1, 1));
+		return new AxisAlignedBB(worldPosition.offset(-1, -1, -1), worldPosition.offset(1, 1, 1));
 	}
 	
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote) {
+		if (!this.level.isClientSide) {
 			
-			this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
-			ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos);
-			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(world).getNetwork(pos);
+			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
+			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
+			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
 			
 			this.hasPower = network.canMachinesRun() == Voltage.NormalVoltage;
 			this.isWorking = canWork() && this.hasPower;
@@ -93,7 +93,7 @@ public class TileEntityMAirCompressor extends TileEntity implements ITickableTil
 				
 			}
 			
-			FluidStack rest = pushFluid(this.compressedAir, world, pos);
+			FluidStack rest = pushFluid(this.compressedAir, level, worldPosition);
 			if (rest != compressedAir) compressedAir = rest;
 			
 		} else {
@@ -102,10 +102,10 @@ public class TileEntityMAirCompressor extends TileEntity implements ITickableTil
 
 				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.COMPRESSOR_LOOP);
 				
-				if (this.world.rand.nextInt(10) == 0) {
+				if (this.level.random.nextInt(10) == 0) {
 
 					IParticleData paricle = ParticleTypes.POOF;
-					Direction facing = getBlockState().get(BlockMultiPart.FACING);
+					Direction facing = getBlockState().getValue(BlockMultiPart.FACING);
 					
 					float ox = 0;
 					float oz = 0;
@@ -134,10 +134,10 @@ public class TileEntityMAirCompressor extends TileEntity implements ITickableTil
 					float width = 1.0F;
 					float height = 1.0F;
 					
-					float x = this.pos.getX() + ox + (world.rand.nextFloat() - 0.5F) * width;
-					float y = this.pos.getY() + oy + (world.rand.nextFloat() - 0.5F) * height;
-					float z = this.pos.getZ() + oz + (world.rand.nextFloat() - 0.5F) * width;
-					this.world.addParticle(paricle, x, y, z, 0, 0, 0);
+					float x = this.worldPosition.getX() + ox + (level.random.nextFloat() - 0.5F) * width;
+					float y = this.worldPosition.getY() + oy + (level.random.nextFloat() - 0.5F) * height;
+					float z = this.worldPosition.getZ() + oz + (level.random.nextFloat() - 0.5F) * width;
+					this.level.addParticle(paricle, x, y, z, 0, 0, 0);
 					
 				}
 				
@@ -190,18 +190,18 @@ public class TileEntityMAirCompressor extends TileEntity implements ITickableTil
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		compound.putBoolean("hasPower", this.hasPower);
 		compound.putBoolean("isWorking", this.isWorking);
 		compound.putInt("Progress1", this.progress1);
 		compound.putInt("Progress2", this.progress2);
 		compound.putInt("TankProgress", this.tankProgress);
 		if (!this.compressedAir.isEmpty()) compound.put("CompressedAir", this.compressedAir.writeToNBT(new CompoundNBT()));
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT nbt) {
+	public void load(BlockState state, CompoundNBT nbt) {
 		this.hasPower = nbt.getBoolean("hasPower");
 		this.isWorking = nbt.getBoolean("isWorking");
 		this.progress1 = nbt.getInt("Progress1");
@@ -209,17 +209,17 @@ public class TileEntityMAirCompressor extends TileEntity implements ITickableTil
 		this.tankProgress = nbt.getInt("TankProgress");
 		this.compressedAir = FluidStack.EMPTY;
 		if (nbt.contains("CompressedAir")) this.compressedAir = FluidStack.loadFluidStackFromNBT(nbt.getCompound("CompressedAir"));
-		super.read(state, nbt);
+		super.load(state, nbt);
 	}
 	
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(pos, 0, this.serializeNBT());
+		return new SUpdateTileEntityPacket(worldPosition, 0, this.serializeNBT());
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.deserializeNBT(pkt.getNbtCompound());
+		this.deserializeNBT(pkt.getTag());
 	}
 
 	@Override

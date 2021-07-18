@@ -18,17 +18,17 @@ public class BlockTInductiveRail extends BlockRailStraightBase {
 	
 	@Override
 	public void onMinecartPass(BlockState state, World world, BlockPos pos, AbstractMinecartEntity cart) {
-		if (state.get(POWERED)) {
+		if (state.getValue(POWERED)) {
 			float mul = 1.1F;
-			Vector3d motion = cart.getMotion();
-			motion = motion.mul(mul, mul, mul);
-			cart.setMotion(motion);
+			Vector3d motion = cart.getDeltaMovement();
+			motion = motion.multiply(mul, mul, mul);
+			cart.setDeltaMovement(motion);
 			MinecartHandler.getHandlerForWorld(world).setBoosted(cart);
 		} else {
 			float mul = 0.9F;
-			Vector3d motion = cart.getMotion();
-			motion = motion.mul(mul, 1, mul);
-			cart.setMotion(motion);
+			Vector3d motion = cart.getDeltaMovement();
+			motion = motion.multiply(mul, 1, mul);
+			cart.setDeltaMovement(motion);
 			MinecartHandler.getHandlerForWorld(world).stopBoosted(cart);
 		}
 		
@@ -61,13 +61,13 @@ public class BlockTInductiveRail extends BlockRailStraightBase {
 	
 	@Override
 	protected void updateState(BlockState state, World worldIn, BlockPos pos, Block blockIn) {
-		boolean flag = state.get(POWERED);
+		boolean flag = state.getValue(POWERED);
 		boolean flag1 = isRailPowered(worldIn, pos, state) || this.findPoweredRailSignal(worldIn, pos, state, true, 0) || this.findPoweredRailSignal(worldIn, pos, state, false, 0);
 		if (flag1 != flag) {
-				worldIn.setBlockState(pos, state.with(POWERED, Boolean.valueOf(flag1)), 3);
-				worldIn.notifyNeighborsOfStateChange(pos.down(), this);
-			if (state.get(SHAPE).isAscending()) {
-				worldIn.notifyNeighborsOfStateChange(pos.up(), this);
+				worldIn.setBlock(pos, state.setValue(POWERED, Boolean.valueOf(flag1)), 3);
+				worldIn.updateNeighborsAt(pos.below(), this);
+			if (state.getValue(SHAPE).isAscending()) {
+				worldIn.updateNeighborsAt(pos.above(), this);
 			}
 		}
 	}
@@ -75,12 +75,12 @@ public class BlockTInductiveRail extends BlockRailStraightBase {
 	protected boolean isRailPowered(World world, BlockPos pos, BlockState state) {
 		
 		for (Direction d : Direction.values()) {
-			BlockPos checkPos = pos.offset(d);
+			BlockPos checkPos = pos.relative(d);
 			BlockState checkState = world.getBlockState(checkPos);
 			
 			if (checkState.getBlock() instanceof BlockTRailAdapter) {
 				
-				return checkState.get(BlockTRailAdapter.POWERED);
+				return checkState.getValue(BlockTRailAdapter.POWERED);
 				
 			}
 			

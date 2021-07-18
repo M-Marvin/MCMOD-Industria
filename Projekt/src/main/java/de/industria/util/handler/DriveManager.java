@@ -20,7 +20,7 @@ public class DriveManager {
 	
 	public static File getDriveFolder(ServerWorld world) {
 		try {
-			Path savePath = world.getServer().func_240776_a_(FolderName.GENERATED);
+			Path savePath = world.getServer().getWorldPath(FolderName.GENERATED_DIR);
 			File hardDriveFolder = new File(savePath.toFile().getCanonicalFile().getAbsolutePath() + "/" + Industria.MODID + "/drives/");
 			if (!hardDriveFolder.exists() || !hardDriveFolder.isDirectory()) {
 				hardDriveFolder.mkdirs();

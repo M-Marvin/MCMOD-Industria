@@ -22,17 +22,17 @@ import net.minecraftforge.fluids.FluidAttributes;
 public class FluidCompressedAir extends GasFluid implements IBucketPickupHandler {
 	
 	@Override
-	public Item getFilledBucket() {
+	public Item getBucket() {
 		return Items.BUCKET;
 	}
 	
 	@Override
-	protected BlockState getBlockState(FluidState state) {
-		return ModItems.compressed_air.getDefaultState();
+	protected BlockState createLegacyBlock(FluidState state) {
+		return ModItems.compressed_air.defaultBlockState();
 	}
 	
 	@Override
-	public Fluid pickupFluid(IWorld worldIn, BlockPos pos, BlockState state) {
+	public Fluid takeLiquid(IWorld worldIn, BlockPos pos, BlockState state) {
 		worldIn.removeBlock(pos, false);
 		return this;
 	}
@@ -49,9 +49,9 @@ public class FluidCompressedAir extends GasFluid implements IBucketPickupHandler
 	@Override
 	public void onMoved(World world, BlockPos pos, Direction moveDirection, FluidState state, Random random) {
 		
-		if (random.nextInt(3) == 0 && world.canSeeSky(pos.offset(moveDirection))) {
+		if (random.nextInt(3) == 0 && world.canSeeSky(pos.relative(moveDirection))) {
 
-			world.setBlockState(pos.offset(moveDirection), Blocks.AIR.getDefaultState());
+			world.setBlockAndUpdate(pos.relative(moveDirection), Blocks.AIR.defaultBlockState());
 			
 		}
 		

@@ -32,22 +32,22 @@ public class TileEntityFuseBoxRenderer extends TileEntityRenderer<TileEntityMFus
 			ItemStack fuseStack = tileEntityIn.getFuse();
 			BlockState state = tileEntityIn.getBlockState();
 						
-			matrixStackIn.push();
+			matrixStackIn.pushPose();
 				
-				Direction direction = state.get(BlockRSignalProcessorContact.FACING);
+				Direction direction = state.getValue(BlockRSignalProcessorContact.FACING);
 				matrixStackIn.translate(0.5F, 0.5F, 0.5F);
-				matrixStackIn.rotate(direction.getRotation());
-				matrixStackIn.rotate(Vector3f.XP.rotationDegrees(90));
+				matrixStackIn.mulPose(direction.getRotation());
+				matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(90));
 				matrixStackIn.scale(0.665F, 0.665F, 0.665F);
 				matrixStackIn.translate(6 * 0.0625F, 0, -5 * 0.0625F);
 				
 				if (!fuseStack.isEmpty()) {
 					
-					this.itemRenderer.renderItem(fuseStack, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
+					this.itemRenderer.renderStatic(fuseStack, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
 					
 				}
 				
-			matrixStackIn.pop();
+			matrixStackIn.popPose();
 			
 		}
 		

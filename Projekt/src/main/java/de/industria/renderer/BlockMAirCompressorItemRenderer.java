@@ -23,18 +23,18 @@ public class BlockMAirCompressorItemRenderer extends ItemStackTileEntityRenderer
 	}
 	
 	@Override
-	public void func_239207_a_(ItemStack stack, TransformType transform, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+	public void renderByItem(ItemStack stack, TransformType transform, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		
-		IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.getEntityTranslucent(AIR_COMPRESSOR_TEXTURES));
+		IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.entityTranslucent(AIR_COMPRESSOR_TEXTURES));
 		
-		matrixStackIn.push();
+		matrixStackIn.pushPose();
 		
-		matrixStackIn.rotate(Vector3f.ZN.rotationDegrees(180));
+		matrixStackIn.mulPose(Vector3f.ZN.rotationDegrees(180));
 		matrixStackIn.translate(-0.5F, -1.5F, 0.5F);
 		
-		airCompressorModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
+		airCompressorModel.renderToBuffer(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 		
-		matrixStackIn.pop();
+		matrixStackIn.popPose();
 		
 	}
 	

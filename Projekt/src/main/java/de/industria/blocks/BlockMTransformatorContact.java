@@ -43,34 +43,34 @@ public class BlockMTransformatorContact extends BlockContainerBase implements IE
 	public static final BooleanProperty INPUT = BooleanProperty.create("input");
 	
 	public BlockMTransformatorContact() {
-		super("transformator_contact", Material.IRON, 2F, SoundType.METAL);
+		super("transformator_contact", Material.METAL, 2F, SoundType.METAL);
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(VOLTAGE, INPUT);
 	}
 	
 	@Override
 	public Voltage getVoltage(World world, BlockPos pos, BlockState state, Direction side) {
-		return state.get(VOLTAGE);
+		return state.getValue(VOLTAGE);
 	}
 	
 	@Override
 	public float getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
 		
-		if (state.get(INPUT)) {
+		if (state.getValue(INPUT)) {
 			
 			float needEnergy = getNeedEnergy(world, pos);
 			
 			int transferPower = getPower(world, pos);
-			float needCurrent = Math.min(transferPower, needEnergy) / state.get(VOLTAGE).getVoltage();
+			float needCurrent = Math.min(transferPower, needEnergy) / state.getValue(VOLTAGE).getVoltage();
 			
 			return Math.max(0.0001F, needCurrent);
 			
 		} else {
 			
-			return -(getEnergy(world, pos) / (float) state.get(VOLTAGE).getVoltage());
+			return -(getEnergy(world, pos) / (float) state.getValue(VOLTAGE).getVoltage());
 			
 		}
 		
@@ -99,11 +99,11 @@ public class BlockMTransformatorContact extends BlockContainerBase implements IE
 			
 			if (state.getBlock() == ModItems.transformator_contact) {
 				
-				if (state.get(INPUT)) {
+				if (state.getValue(INPUT)) {
 
 					ElectricityNetwork network = handler.getNetwork(pos2);
 					
-					if (network.getVoltage() == state.get(VOLTAGE)) {
+					if (network.getVoltage() == state.getValue(VOLTAGE)) {
 						
 						float energy = network.getVoltage().getVoltage() * network.getCurrent();
 						recivedEnergy += energy;
@@ -136,7 +136,7 @@ public class BlockMTransformatorContact extends BlockContainerBase implements IE
 			
 			if (state.getBlock() == ModItems.transformator_contact) {
 				
-				if (!state.get(INPUT)) {
+				if (!state.getValue(INPUT)) {
 
 					ElectricityNetwork network = handler.getNetwork(pos2);
 					
@@ -181,7 +181,7 @@ public class BlockMTransformatorContact extends BlockContainerBase implements IE
 					
 					for (Direction d : Direction.values()) {
 						
-						BlockPos scannPos2 = scannPos.offset(d);
+						BlockPos scannPos2 = scannPos.relative(d);
 						
 						scannBlocks(blockList, scannPos2, world, scannDepth++);
 						
@@ -197,15 +197,15 @@ public class BlockMTransformatorContact extends BlockContainerBase implements IE
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return Block.makeCuboidShape(1, 0, 1, 15, 16, 15);
+		return Block.box(1, 0, 1, 15, 16, 15);
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-		if (player.isSneaking()) {
-			worldIn.setBlockState(pos, state.with(VOLTAGE, state.get(VOLTAGE).next()));
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+		if (player.isShiftKeyDown()) {
+			worldIn.setBlockAndUpdate(pos, state.setValue(VOLTAGE, state.getValue(VOLTAGE).next()));
 		} else {
-			worldIn.setBlockState(pos, state.with(INPUT, !state.get(INPUT)));
+			worldIn.setBlockAndUpdate(pos, state.setValue(INPUT, !state.getValue(INPUT)));
 		}
 		return ActionResultType.SUCCESS;
 	}
@@ -229,7 +229,7 @@ public class BlockMTransformatorContact extends BlockContainerBase implements IE
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntitySimpleBlockTicking();
 	}
 	
@@ -255,7 +255,7 @@ public class BlockMTransformatorContact extends BlockContainerBase implements IE
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		if (ElectricityNetworkHandler.getHandlerForWorld(worldIn).getNetwork(pos).getCurrent() > 0.5F) {
-			worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), ModSoundEvents.TRANSFORMATOR_LOOP, SoundCategory.BLOCKS, 1F, 1, false);
+			worldIn.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), ModSoundEvents.TRANSFORMATOR_LOOP, SoundCategory.BLOCKS, 1F, 1, false);
 		}
 		super.animateTick(stateIn, worldIn, pos, rand);
 	}

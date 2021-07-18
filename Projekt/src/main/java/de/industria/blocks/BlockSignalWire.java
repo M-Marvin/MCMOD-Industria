@@ -45,43 +45,43 @@ public class BlockSignalWire extends BlockBase implements ISignalConnectiveBlock
 	@SuppressWarnings("rawtypes")
 	public static final EnumProperty[] CONNECTIONS = new EnumProperty[] {DOWN, UP, NORTH, SOUTH, WEST, EAST};
 	
-	public static final VoxelShape S_NORTH = Block.makeCuboidShape(5, 5, 0, 11, 11, 8);
-	public static final VoxelShape S_SOUTH = Block.makeCuboidShape(5, 5, 8, 11, 11, 16);
-	public static final VoxelShape S_WEST = Block.makeCuboidShape(0, 5, 5, 8, 11, 11);
-	public static final VoxelShape S_EAST = Block.makeCuboidShape(8, 5, 5, 16, 11, 11);
-	public static final VoxelShape S_DOWN = Block.makeCuboidShape(5, 0, 5, 11, 8, 11);
-	public static final VoxelShape S_UP = Block.makeCuboidShape(5, 8, 5, 11, 16, 11);
+	public static final VoxelShape S_NORTH = Block.box(5, 5, 0, 11, 11, 8);
+	public static final VoxelShape S_SOUTH = Block.box(5, 5, 8, 11, 11, 16);
+	public static final VoxelShape S_WEST = Block.box(0, 5, 5, 8, 11, 11);
+	public static final VoxelShape S_EAST = Block.box(8, 5, 5, 16, 11, 11);
+	public static final VoxelShape S_DOWN = Block.box(5, 0, 5, 11, 8, 11);
+	public static final VoxelShape S_UP = Block.box(5, 8, 5, 11, 16, 11);
 	
 	public static final VoxelShape[] SHAPES = new VoxelShape[] {S_DOWN, S_UP, S_NORTH, S_SOUTH, S_WEST, S_EAST};
 	
 	public BlockSignalWire() {
-		super("signal_wire", Material.ROCK, 1F, 0.5F, SoundType.LANTERN, true);
-		this.setDefaultState(this.stateContainer.getBaseState().with(NORTH, AttachType.NONE).with(SOUTH, AttachType.NONE).with(EAST, AttachType.NONE).with(WEST, AttachType.NONE));
+		super("signal_wire", Material.STONE, 1F, 0.5F, SoundType.LANTERN, true);
+		this.registerDefaultState(this.stateDefinition.any().setValue(NORTH, AttachType.NONE).setValue(SOUTH, AttachType.NONE).setValue(EAST, AttachType.NONE).setValue(WEST, AttachType.NONE));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(NORTH, SOUTH, EAST, WEST, UP, DOWN, WATERLOGGED);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+	public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
 		
 		BlockState newState = stateIn;
 		for (Direction direction : Direction.values()) {
 			
-			BlockPos attachPos = currentPos.offset(direction);
+			BlockPos attachPos = currentPos.relative(direction);
 			BlockState attachState = worldIn.getBlockState(attachPos);
 			
 			AttachType attachment = AttachType.NONE;
 			if (attachState.getBlock() == this || isConective(attachState, direction, attachPos, worldIn)) {
 				attachment = AttachType.WIRE;
-			} else if (attachState.func_242698_a(worldIn, attachPos, direction.getOpposite(), BlockVoxelShape.RIGID)) {
+			} else if (attachState.isFaceSturdy(worldIn, attachPos, direction.getOpposite(), BlockVoxelShape.RIGID)) {
 				attachment = AttachType.SCAFFOLDING;
 			}
 			
-			newState = newState.with(CONNECTIONS[direction.getIndex()], attachment);
+			newState = newState.setValue(CONNECTIONS[direction.get3DDataValue()], attachment);
 			
 		}
 		
@@ -92,30 +92,30 @@ public class BlockSignalWire extends BlockBase implements ISignalConnectiveBlock
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 		
-		if (isValidPosition(state, worldIn, pos)) {
+		if (canSurvive(state, worldIn, pos)) {
 			
 			BlockState newState = state;
 			for (Direction direction : Direction.values()) {
 				
-				BlockPos attachPos = pos.offset(direction);
+				BlockPos attachPos = pos.relative(direction);
 				BlockState attachState = worldIn.getBlockState(attachPos);
 				
 				AttachType attachment = AttachType.NONE;
 				if (attachState.getBlock() == this || isConective(attachState, direction, attachPos, worldIn)) {
 					attachment = AttachType.WIRE;
-				} else if (attachState.func_242698_a(worldIn, attachPos, direction.getOpposite(), BlockVoxelShape.RIGID)) {
+				} else if (attachState.isFaceSturdy(worldIn, attachPos, direction.getOpposite(), BlockVoxelShape.RIGID)) {
 					attachment = AttachType.SCAFFOLDING;
 				}
 				
-				newState = newState.with(CONNECTIONS[direction.getIndex()], attachment);
+				newState = newState.setValue(CONNECTIONS[direction.get3DDataValue()], attachment);
 				
 			}
 			
-			worldIn.setBlockState(pos, newState);
+			worldIn.setBlockAndUpdate(pos, newState);
 						
 		} else {
 			
-			spawnDrops(state, worldIn, pos);
+			dropResources(state, worldIn, pos);
 			worldIn.removeBlock(pos, false);
 			
 		}
@@ -130,27 +130,27 @@ public class BlockSignalWire extends BlockBase implements ISignalConnectiveBlock
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
 		
-		World worldIn = context.getWorld();
-		BlockState state = this.getDefaultState();
+		World worldIn = context.getLevel();
+		BlockState state = this.defaultBlockState();
 		
 		for (Direction direction : Direction.values()) {
 			
-			BlockPos attachPos = context.getPos().offset(direction);
+			BlockPos attachPos = context.getClickedPos().relative(direction);
 			BlockState attachState = worldIn.getBlockState(attachPos);
 			
 			AttachType attachment = AttachType.NONE;
 			if (attachState.getBlock() == this || isConective(attachState, direction, attachPos, worldIn)) {
 				attachment = AttachType.WIRE;
-			} else if (attachState.func_242698_a(worldIn, attachPos, direction.getOpposite(), BlockVoxelShape.RIGID)) {
+			} else if (attachState.isFaceSturdy(worldIn, attachPos, direction.getOpposite(), BlockVoxelShape.RIGID)) {
 				attachment = AttachType.SCAFFOLDING;
 			}
 			
-			state = state.with(CONNECTIONS[direction.getIndex()], attachment);
+			state = state.setValue(CONNECTIONS[direction.get3DDataValue()], attachment);
 			
 		}
 		
-		BlockState replaceState = context.getWorld().getBlockState(context.getPos());
-		return state.with(WATERLOGGED, replaceState.getBlock() == Blocks.WATER);
+		BlockState replaceState = context.getLevel().getBlockState(context.getClickedPos());
+		return state.setValue(WATERLOGGED, replaceState.getBlock() == Blocks.WATER);
 		
 	}
 	
@@ -160,8 +160,8 @@ public class BlockSignalWire extends BlockBase implements ISignalConnectiveBlock
 		
 		VoxelShape shape = VoxelShapes.empty();
 		for (Direction direction : Direction.values()) {
-			if (state.get(CONNECTIONS[direction.getIndex()]) != AttachType.NONE) {
-				shape = VoxelShapes.or(shape, SHAPES[direction.getIndex()]);
+			if (state.getValue(CONNECTIONS[direction.get3DDataValue()]) != AttachType.NONE) {
+				shape = VoxelShapes.or(shape, SHAPES[direction.get3DDataValue()]);
 			}
 		}
 		
@@ -184,22 +184,22 @@ public class BlockSignalWire extends BlockBase implements ISignalConnectiveBlock
 		}
 		
 		@Override
-		public String getString() {
+		public String getSerializedName() {
 			return name;
 		}
 		
 	}
 	
 	@Override
-	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
+	public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos) {
 		
 		boolean attached = false;
 		for (Direction direction : Direction.values()) {
 
-			BlockPos attachPos = pos.offset(direction);
+			BlockPos attachPos = pos.relative(direction);
 			BlockState attachState = worldIn.getBlockState(attachPos);
 			
-			if (attachState.getBlock() == this || isConective(attachState, direction, attachPos, worldIn) || attachState.func_242698_a(worldIn, attachPos, direction.getOpposite(), BlockVoxelShape.RIGID)) {
+			if (attachState.getBlock() == this || isConective(attachState, direction, attachPos, worldIn) || attachState.isFaceSturdy(worldIn, attachPos, direction.getOpposite(), BlockVoxelShape.RIGID)) {
 				attached = true;
 			}
 			
@@ -224,7 +224,7 @@ public class BlockSignalWire extends BlockBase implements ISignalConnectiveBlock
 		for (Entry<BlockPos, Direction> entry : network.entrySet()) {
 			
 			BlockState state2 = worldIn.getBlockState(entry.getKey());
-			boolean isSender = entry.getKey().equals(pos.offset(side));
+			boolean isSender = entry.getKey().equals(pos.relative(side));
 			
 			if (state2.getBlock() != this && !isSender && state2.getBlock() instanceof ISignalConnectiveBlock) ((ISignalConnectiveBlock) state2.getBlock()).onReciveSignal(worldIn, entry.getKey(), signal, entry.getValue());
 			
@@ -236,13 +236,13 @@ public class BlockSignalWire extends BlockBase implements ISignalConnectiveBlock
 		
 		for (Direction direction : Direction.values()) {
 			
-			BlockState state = world.getBlockState(scannPos.offset(direction));
+			BlockState state = world.getBlockState(scannPos.relative(direction));
 			
-			if (state.getBlock() instanceof ISignalConnectiveBlock && !foundDevices.containsKey(scannPos.offset(direction)) && scannCount < 200 && ((ISignalConnectiveBlock) state.getBlock()).canConectSignalWire(world, scannPos.offset(direction), direction.getOpposite())) {
+			if (state.getBlock() instanceof ISignalConnectiveBlock && !foundDevices.containsKey(scannPos.relative(direction)) && scannCount < 200 && ((ISignalConnectiveBlock) state.getBlock()).canConectSignalWire(world, scannPos.relative(direction), direction.getOpposite())) {
 				
-				foundDevices.put(scannPos.offset(direction), direction.getOpposite());
+				foundDevices.put(scannPos.relative(direction), direction.getOpposite());
 				
-				scannAt(world, scannPos.offset(direction), foundDevices, scannCount++);
+				scannAt(world, scannPos.relative(direction), foundDevices, scannCount++);
 				
 			}
 			
@@ -252,7 +252,7 @@ public class BlockSignalWire extends BlockBase implements ISignalConnectiveBlock
 
 	@Override
 	public FluidState getFluidState(BlockState state) {
-		return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluid().getDefaultState() : Fluids.EMPTY.getDefaultState();
+		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource().defaultFluidState() : Fluids.EMPTY.defaultFluidState();
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -260,9 +260,9 @@ public class BlockSignalWire extends BlockBase implements ISignalConnectiveBlock
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
 	      switch(mirrorIn) {
 	      case LEFT_RIGHT:
-	         return state.with(NORTH, state.get(SOUTH)).with(SOUTH, state.get(NORTH));
+	         return state.setValue(NORTH, state.getValue(SOUTH)).setValue(SOUTH, state.getValue(NORTH));
 	      case FRONT_BACK:
-	         return state.with(EAST, state.get(WEST)).with(WEST, state.get(EAST));
+	         return state.setValue(EAST, state.getValue(WEST)).setValue(WEST, state.getValue(EAST));
 	      default:
 	         return super.mirror(state, mirrorIn);
 	      }
@@ -272,11 +272,11 @@ public class BlockSignalWire extends BlockBase implements ISignalConnectiveBlock
 	public BlockState rotate(BlockState state, Rotation rot) {
 	      switch(rot) {
 	      case CLOCKWISE_180:
-	         return state.with(NORTH, state.get(SOUTH)).with(EAST, state.get(WEST)).with(SOUTH, state.get(NORTH)).with(WEST, state.get(EAST));
+	         return state.setValue(NORTH, state.getValue(SOUTH)).setValue(EAST, state.getValue(WEST)).setValue(SOUTH, state.getValue(NORTH)).setValue(WEST, state.getValue(EAST));
 	      case COUNTERCLOCKWISE_90:
-	         return state.with(NORTH, state.get(EAST)).with(EAST, state.get(SOUTH)).with(SOUTH, state.get(WEST)).with(WEST, state.get(NORTH));
+	         return state.setValue(NORTH, state.getValue(EAST)).setValue(EAST, state.getValue(SOUTH)).setValue(SOUTH, state.getValue(WEST)).setValue(WEST, state.getValue(NORTH));
 	      case CLOCKWISE_90:
-	         return state.with(NORTH, state.get(WEST)).with(EAST, state.get(NORTH)).with(SOUTH, state.get(EAST)).with(WEST, state.get(SOUTH));
+	         return state.setValue(NORTH, state.getValue(WEST)).setValue(EAST, state.getValue(NORTH)).setValue(SOUTH, state.getValue(EAST)).setValue(WEST, state.getValue(SOUTH));
 	      default:
 	         return state;
 	      }

@@ -34,7 +34,7 @@ public class CUpdateChunkLoader {
 	public static void encode(CUpdateChunkLoader packet, PacketBuffer buf) {
 		buf.writeBlockPos(packet.pos);
 		buf.writeInt(packet.activeChunks.size());
-		packet.activeChunks.forEach((chunk) -> buf.writeLong(chunk.asLong()));
+		packet.activeChunks.forEach((chunk) -> buf.writeLong(chunk.toLong()));
 	}
 	
 	public static void handle(final CUpdateChunkLoader packet, Supplier<NetworkEvent.Context> context) {
@@ -42,9 +42,9 @@ public class CUpdateChunkLoader {
 		NetworkEvent.Context ctx = context.get();
 		ctx.enqueueWork(() -> {
 			
-			World world = ctx.getSender().world;
+			World world = ctx.getSender().level;
 			BlockPos devicePos = packet.pos;
-			TileEntity tileEntity = world.getTileEntity(devicePos);
+			TileEntity tileEntity = world.getBlockEntity(devicePos);
 			
 			if (tileEntity instanceof TileEntityMChunkLoader) {
 				

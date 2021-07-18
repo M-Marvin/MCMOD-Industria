@@ -33,22 +33,22 @@ public class TileEntitySignalProcessorContactRenderer extends TileEntityRenderer
 			BlockState state = tileEntityIn.getBlockState();
 			
 			
-			matrixStackIn.push();
+			matrixStackIn.pushPose();
 			
-				Direction direction = state.get(BlockRSignalProcessorContact.FACING);
+				Direction direction = state.getValue(BlockRSignalProcessorContact.FACING);
 				matrixStackIn.translate(0.5F, 0.5F, 0.5F);
-				matrixStackIn.rotate(direction.getRotation());
-				matrixStackIn.rotate(Vector3f.XP.rotationDegrees(90));
+				matrixStackIn.mulPose(direction.getRotation());
+				matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(90));
 				matrixStackIn.scale(0.625F, 0.625F, 0.625F);
 				matrixStackIn.translate(0, 0, 9 * 0.0625F);
 				
 				if (!processorStack.isEmpty()) {
 					
-					this.itemRenderer.renderItem(processorStack, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
+					this.itemRenderer.renderStatic(processorStack, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
 					
 				}
 				
-			matrixStackIn.pop();
+			matrixStackIn.popPose();
 			
 		}
 		

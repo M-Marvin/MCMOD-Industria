@@ -25,41 +25,41 @@ public class ItemGasBucket extends BucketItem {
 	
 	@SuppressWarnings("deprecation")
 	public ItemGasBucket(Fluid containedFluidIn, String name, ItemGroup group) {
-		super(containedFluidIn, new Properties().group(group).maxStackSize(1));
+		super(containedFluidIn, new Properties().tab(group).stacksTo(1));
 		this.setRegistryName(new ResourceLocation(Industria.MODID, name));
 	}
 	
 	@SuppressWarnings("deprecation")
-	public boolean tryPlaceContainedLiquid(@Nullable PlayerEntity player, World worldIn, BlockPos posIn, @Nullable BlockRayTraceResult p_180616_4_) {
+	public boolean emptyBucket(@Nullable PlayerEntity player, World worldIn, BlockPos posIn, @Nullable BlockRayTraceResult p_180616_4_) {
 		
 		BlockState blockstate = worldIn.getBlockState(posIn);
 		Block block = blockstate.getBlock();
 		Material material = blockstate.getMaterial();
-		boolean flag = blockstate.isReplaceable(this.getFluid());
-		boolean flag1 = blockstate.isAir() || flag || block instanceof ILiquidContainer && ((ILiquidContainer)block).canContainFluid(worldIn, posIn, blockstate, this.getFluid());
+		boolean flag = blockstate.canBeReplaced(this.getFluid());
+		boolean flag1 = blockstate.isAir() || flag || block instanceof ILiquidContainer && ((ILiquidContainer)block).canPlaceLiquid(worldIn, posIn, blockstate, this.getFluid());
 		if (!flag1) {
-			return p_180616_4_ != null && this.tryPlaceContainedLiquid(player, worldIn, p_180616_4_.getPos().offset(p_180616_4_.getFace()), (BlockRayTraceResult)null);
-		} else if (worldIn.getDimensionType().isUltrawarm() && this.getFluid().isIn(FluidTags.WATER)) {
+			return p_180616_4_ != null && this.emptyBucket(player, worldIn, p_180616_4_.getBlockPos().relative(p_180616_4_.getDirection()), (BlockRayTraceResult)null);
+		} else if (worldIn.dimensionType().ultraWarm() && this.getFluid().is(FluidTags.WATER)) {
 			int i = posIn.getX();
 			int j = posIn.getY();
 			int k = posIn.getZ();
-			worldIn.playSound(player, posIn, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.8F);
+			worldIn.playSound(player, posIn, SoundEvents.FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (worldIn.random.nextFloat() - worldIn.random.nextFloat()) * 0.8F);
 
 			for(int l = 0; l < 8; ++l) {
 				worldIn.addParticle(ParticleTypes.LARGE_SMOKE, (double)i + Math.random(), (double)j + Math.random(), (double)k + Math.random(), 0.0D, 0.0D, 0.0D);
 			}
 
 			return true;
-		} else if (block instanceof ILiquidContainer && ((ILiquidContainer)block).canContainFluid(worldIn,posIn,blockstate,getFluid())) {
-			((ILiquidContainer)block).receiveFluid(worldIn, posIn, blockstate, ((FlowingFluid)this.getFluid()).getStillFluidState(false));
+		} else if (block instanceof ILiquidContainer && ((ILiquidContainer)block).canPlaceLiquid(worldIn,posIn,blockstate,getFluid())) {
+			((ILiquidContainer)block).placeLiquid(worldIn, posIn, blockstate, ((FlowingFluid)this.getFluid()).getSource(false));
 			this.playEmptySound(player, worldIn, posIn);
 			return true;
 		} else {
-			if (!worldIn.isRemote && flag && !material.isLiquid()) {
+			if (!worldIn.isClientSide && flag && !material.isLiquid()) {
 				worldIn.destroyBlock(posIn, true);
 			}
 
-			if (!worldIn.setBlockState(posIn, this.getFluid().getDefaultState().getBlockState(), 11) && !blockstate.getFluidState().isSource()) {
+			if (!worldIn.setBlock(posIn, this.getFluid().defaultFluidState().createLegacyBlock(), 11) && !blockstate.getFluidState().isSource()) {
 				return false;
 			} else {
 				this.playEmptySound(player, worldIn, posIn);

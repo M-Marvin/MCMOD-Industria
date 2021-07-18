@@ -32,59 +32,59 @@ public class BlockBagStack extends BlockFallingBase {
 	public static final IntegerProperty BAGS = IntegerProperty.create("bags", 1, 4);
 	
 	public BlockBagStack(String name, float hardness, float resistance) {
-		super(name, Material.MISCELLANEOUS, hardness, resistance, SoundType.SAND, true);
-		this.setDefaultState(this.stateContainer.getBaseState().with(BAGS, 4));
+		super(name, Material.DECORATION, hardness, resistance, SoundType.SAND, true);
+		this.registerDefaultState(this.stateDefinition.any().setValue(BAGS, 4));
 	}
 	
 	@Override
-	public MaterialColor getMaterialColor() {
-		return MaterialColor.BROWN_TERRACOTTA;
+	public MaterialColor defaultMaterialColor() {
+		return MaterialColor.TERRACOTTA_BROWN;
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(FACING, BAGS);
-		super.fillStateContainer(builder);
+		super.createBlockStateDefinition(builder);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing()).with(BAGS, 1);
+		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection()).setValue(BAGS, 1);
 	}
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player,Hand handIn, BlockRayTraceResult hit) {
-		if (state.get(BAGS) < 4 && player.getHeldItem(handIn).getItem() == Item.getItemFromBlock(this)) {
-			worldIn.setBlockState(pos, state.with(BAGS, state.get(BAGS) + 1));
-			if (!player.isCreative()) player.getHeldItem(handIn).shrink(1);
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player,Hand handIn, BlockRayTraceResult hit) {
+		if (state.getValue(BAGS) < 4 && player.getItemInHand(handIn).getItem() == Item.byBlock(this)) {
+			worldIn.setBlockAndUpdate(pos, state.setValue(BAGS, state.getValue(BAGS) + 1));
+			if (!player.isCreative()) player.getItemInHand(handIn).shrink(1);
 			worldIn.playSound(null, pos, this.getSoundType(state).getPlaceSound(), SoundCategory.BLOCKS, 1F, 0.8F);
 			return ActionResultType.SUCCESS;
 		}
-		return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
+		return super.use(state, worldIn, pos, player, handIn, hit);
 	}
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 		
-		if (entityIn instanceof FallingBlockEntity && state.get(BAGS) < 4 && entityIn.isAlive()) {
+		if (entityIn instanceof FallingBlockEntity && state.getValue(BAGS) < 4 && entityIn.isAlive()) {
 			
 			BlockState fallingBags = ((FallingBlockEntity) entityIn).getBlockState();
 			
 			if (fallingBags.getBlock() == this) {
 				
-				int bagsToStack = Math.min(fallingBags.get(BAGS), 4 - state.get(BAGS));
-				worldIn.setBlockState(pos, state.with(BAGS, state.get(BAGS) + bagsToStack));
+				int bagsToStack = Math.min(fallingBags.getValue(BAGS), 4 - state.getValue(BAGS));
+				worldIn.setBlockAndUpdate(pos, state.setValue(BAGS, state.getValue(BAGS) + bagsToStack));
 				
-				if (fallingBags.get(BAGS) == bagsToStack) {
+				if (fallingBags.getValue(BAGS) == bagsToStack) {
 					entityIn.remove();
 				} else {
-					fallingBags = fallingBags.with(BAGS, fallingBags.get(BAGS) - bagsToStack);
+					fallingBags = fallingBags.setValue(BAGS, fallingBags.getValue(BAGS) - bagsToStack);
 					
-					if (worldIn.getBlockState(pos.up()).isAir()) {
-						worldIn.setBlockState(pos.up(), fallingBags);
-						((FallingBlockEntity) entityIn).shouldDropItem = false;
+					if (worldIn.getBlockState(pos.above()).isAir()) {
+						worldIn.setBlockAndUpdate(pos.above(), fallingBags);
+						((FallingBlockEntity) entityIn).dropItem = false;
 						entityIn.remove();
 					}
 					
@@ -98,27 +98,27 @@ public class BlockBagStack extends BlockFallingBase {
 	
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-		BlockState bagsOnTop = worldIn.getBlockState(pos.up());
-		if (bagsOnTop.getBlock() == this && state.get(BAGS) != 4) {
-			int bagsToStack = Math.min(bagsOnTop.get(BAGS), 4 - state.get(BAGS));
-			worldIn.setBlockState(pos, state.with(BAGS, state.get(BAGS) + bagsToStack));
+		BlockState bagsOnTop = worldIn.getBlockState(pos.above());
+		if (bagsOnTop.getBlock() == this && state.getValue(BAGS) != 4) {
+			int bagsToStack = Math.min(bagsOnTop.getValue(BAGS), 4 - state.getValue(BAGS));
+			worldIn.setBlockAndUpdate(pos, state.setValue(BAGS, state.getValue(BAGS) + bagsToStack));
 			
-			if (bagsOnTop.get(BAGS) == bagsToStack) {
+			if (bagsOnTop.getValue(BAGS) == bagsToStack) {
 				worldIn.removeBlock(fromPos, false);
 			} else {
-				worldIn.setBlockState(fromPos, bagsOnTop.with(BAGS, bagsOnTop.get(BAGS) - bagsToStack));
+				worldIn.setBlockAndUpdate(fromPos, bagsOnTop.setValue(BAGS, bagsOnTop.getValue(BAGS) - bagsToStack));
 			}
 		}
 	}
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		VoxelShape shape = Block.makeCuboidShape(2, 0, 0, 14, 4, 16);
-		int bags = state.get(BAGS);
-		if (bags > 1) shape = VoxelShapes.or(shape, Block.makeCuboidShape(0, 4, 3, 16, 8, 15));
-		if (bags > 2) shape = VoxelShapes.or(shape, Block.makeCuboidShape(1, 8, 0, 13, 12, 16));
-		if (bags > 3) shape = VoxelShapes.or(shape, Block.makeCuboidShape(0, 12, 2, 16, 16, 14));
-		return VoxelHelper.rotateShape(shape, state.get(FACING));
+		VoxelShape shape = Block.box(2, 0, 0, 14, 4, 16);
+		int bags = state.getValue(BAGS);
+		if (bags > 1) shape = VoxelShapes.or(shape, Block.box(0, 4, 3, 16, 8, 15));
+		if (bags > 2) shape = VoxelShapes.or(shape, Block.box(1, 8, 0, 13, 12, 16));
+		if (bags > 3) shape = VoxelShapes.or(shape, Block.box(0, 12, 2, 16, 16, 14));
+		return VoxelHelper.rotateShape(shape, state.getValue(FACING));
 	}
 	
 }

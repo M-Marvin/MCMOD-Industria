@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 public class BlockMSteamGenerator extends BlockMultiPart<TileEntityMSteamGenerator> implements IElectricConnectiveBlock, IAdvancedBlockInfo {
 	
 	public BlockMSteamGenerator() {
-		super("steam_generator", Material.IRON, 8F, SoundType.METAL, 3, 3, 2);
+		super("steam_generator", Material.METAL, 8F, SoundType.METAL, 3, 3, 2);
 	}
 	
 	@Override
@@ -36,7 +36,7 @@ public class BlockMSteamGenerator extends BlockMultiPart<TileEntityMSteamGenerat
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityMSteamGenerator();
 	}
 	
@@ -46,13 +46,13 @@ public class BlockMSteamGenerator extends BlockMultiPart<TileEntityMSteamGenerat
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 
 	@Override
 	public Voltage getVoltage(World world, BlockPos pos, BlockState state, Direction side) {
-		TileEntity te = world.getTileEntity(pos);
+		TileEntity te = world.getBlockEntity(pos);
 		if (te instanceof TileEntityMSteamGenerator) {
 			return ((TileEntityMSteamGenerator) te).getVoltage();
 		}
@@ -61,7 +61,7 @@ public class BlockMSteamGenerator extends BlockMultiPart<TileEntityMSteamGenerat
 
 	@Override
 	public float getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
-		TileEntity te = world.getTileEntity(pos);
+		TileEntity te = world.getBlockEntity(pos);
 		if (te instanceof TileEntityMSteamGenerator) {
 			return -((TileEntityMSteamGenerator) te).getGenerateCurrent();
 		}
@@ -70,7 +70,7 @@ public class BlockMSteamGenerator extends BlockMultiPart<TileEntityMSteamGenerat
 
 	@Override
 	public boolean canConnect(Direction side, World world, BlockPos pos, BlockState state) {
-		TileEntity te = world.getTileEntity(pos);
+		TileEntity te = world.getBlockEntity(pos);
 		if (te instanceof TileEntityMSteamGenerator) {
 			return ((TileEntityMSteamGenerator) te).getPart() == TEPart.ELECTRICITY && side == Direction.UP;
 		}
@@ -84,7 +84,7 @@ public class BlockMSteamGenerator extends BlockMultiPart<TileEntityMSteamGenerat
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return VoxelShapes.create(0.01F, 0.01F, 0.01F, 0.99F, 0.99F, 0.99F);
+		return VoxelShapes.box(0.01F, 0.01F, 0.01F, 0.99F, 0.99F, 0.99F);
 	}
 	
 	@Override

@@ -20,27 +20,27 @@ public class ItemBurneable extends ItemBase {
 	}
 	
 	public ItemBurneable(String name, ItemGroup itemGroup, int burnTime) {
-		super(name, new Properties().group(itemGroup));
+		super(name, new Properties().tab(itemGroup));
 		this.burnTime = burnTime;
 	}
 	
 	public ItemBurneable(String name, ItemGroup itemGroup, int maxStackSize, int burnTime) {
-		super(name, new Properties().group(itemGroup).maxStackSize(maxStackSize));
+		super(name, new Properties().tab(itemGroup).stacksTo(maxStackSize));
 		this.burnTime = burnTime;
 	}
 
 	public ItemBurneable(String name, ItemGroup itemGroup, int maxStackSize, Item containItem, int burnTime) {
-		super(name, new Properties().group(itemGroup).maxStackSize(maxStackSize).containerItem(containItem));
+		super(name, new Properties().tab(itemGroup).stacksTo(maxStackSize).craftRemainder(containItem));
 		this.burnTime = burnTime;
 	}
 	
 	public ItemBurneable(String name, ItemGroup itemGroup, Rarity rarity, int burnTime) {
-		super(name, new Properties().group(itemGroup).rarity(rarity));
+		super(name, new Properties().tab(itemGroup).rarity(rarity));
 		this.burnTime = burnTime;
 	}
 	
 	public ItemBurneable(String name, ItemGroup itemGroup, int maxStackSize, Rarity rarity, int burnTime) {
-		super(name, new Properties().group(itemGroup).maxStackSize(maxStackSize).rarity(rarity));
+		super(name, new Properties().tab(itemGroup).stacksTo(maxStackSize).rarity(rarity));
 		this.burnTime = burnTime;
 	}
 	

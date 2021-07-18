@@ -30,13 +30,13 @@ import net.minecraft.world.World;
 public class BlockFluidPipe extends BlockWiring implements ITileEntityProvider, IAdvancedBlockInfo {
 	
 	public BlockFluidPipe() {
-		super("fluid_pipe", Material.IRON, 2F, SoundType.METAL, 8);
+		super("fluid_pipe", Material.METAL, 2F, SoundType.METAL, 8);
 	}
 	
 	@Override
 	public boolean canConnectTo(BlockState wireState, World worldIn, BlockPos wirePos, BlockPos connectPos, Direction direction) {
 		
-		TileEntity te = worldIn.getTileEntity(connectPos);
+		TileEntity te = worldIn.getBlockEntity(connectPos);
 		if (te instanceof IFluidConnective) {
 			return ((IFluidConnective) te).canConnect(direction);
 		}
@@ -50,19 +50,19 @@ public class BlockFluidPipe extends BlockWiring implements ITileEntityProvider, 
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityFluidPipe();
 	}
 	
-	public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int id, int param) {
-		super.eventReceived(state, worldIn, pos, id, param);
-		TileEntity tileentity = worldIn.getTileEntity(pos);
-		return tileentity == null ? false : tileentity.receiveClientEvent(id, param);
+	public boolean triggerEvent(BlockState state, World worldIn, BlockPos pos, int id, int param) {
+		super.triggerEvent(state, worldIn, pos, id, param);
+		TileEntity tileentity = worldIn.getBlockEntity(pos);
+		return tileentity == null ? false : tileentity.triggerEvent(id, param);
 	}
 	
 	@Nullable
-	public INamedContainerProvider getContainer(BlockState state, World worldIn, BlockPos pos) {
-		TileEntity tileentity = worldIn.getTileEntity(pos);
+	public INamedContainerProvider getMenuProvider(BlockState state, World worldIn, BlockPos pos) {
+		TileEntity tileentity = worldIn.getBlockEntity(pos);
 		return tileentity instanceof INamedContainerProvider ? (INamedContainerProvider)tileentity : null;
 	}
 	
@@ -79,11 +79,11 @@ public class BlockFluidPipe extends BlockWiring implements ITileEntityProvider, 
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
-		if (player.isSneaking()) {
+		if (player.isShiftKeyDown()) {
 			
-			TileEntity te = worldIn.getTileEntity(pos);
+			TileEntity te = worldIn.getBlockEntity(pos);
 			
 			if (te instanceof TileEntityFluidPipe) {
 				((TileEntityFluidPipe) te).clear();
@@ -92,7 +92,7 @@ public class BlockFluidPipe extends BlockWiring implements ITileEntityProvider, 
 			
 		}
 		
-		return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
+		return super.use(state, worldIn, pos, player, handIn, hit);
 	}
 
 }

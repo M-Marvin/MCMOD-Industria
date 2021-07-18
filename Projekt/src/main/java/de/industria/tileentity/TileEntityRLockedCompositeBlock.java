@@ -28,14 +28,14 @@ public class TileEntityRLockedCompositeBlock extends TileEntity implements IPost
 		
 		List<BlockPos> positionsWithOffset = new ArrayList<BlockPos>();
 		for (BlockPos position : this.storedPositions) {
-			positionsWithOffset.add(position.add(offset));
+			positionsWithOffset.add(position.offset(offset));
 		}
 		this.storedPositions = positionsWithOffset;
 		
 	}
 	
 	public List<BlockPos> getConnectedBlocks() {
-		if (this.hasWorld() ? !this.world.isRemote() : false) this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 0);
+		if (this.hasLevel() ? !this.level.isClientSide() : false) this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 0);
 		return this.storedPositions;
 	}
 	
@@ -44,31 +44,31 @@ public class TileEntityRLockedCompositeBlock extends TileEntity implements IPost
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		ListNBT list = new ListNBT();
 		for (BlockPos pos : this.storedPositions) {
 			list.add(NBTUtil.writeBlockPos(pos));
 		}
 		compound.put("StoredPositions", list);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		ListNBT list = compound.getList("StoredPositions", 10);
 		this.storedPositions.clear();
 		for (int i = 0; i < list.size(); i++) {
 			CompoundNBT posTag = list.getCompound(i);
 			this.storedPositions.add(NBTUtil.readBlockPos(posTag));
 		}
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 
 	@Override
 	public void handlePostMove(BlockPos pos, BlockPos newPos, boolean multipleCall) {
 		
-		boolean hasMovedThisTick = lastMoved == this.world.getDayTime();
-		this.lastMoved = this.world.getDayTime();
+		boolean hasMovedThisTick = lastMoved == this.level.getDayTime();
+		this.lastMoved = this.level.getDayTime();
 		
 		if (!hasMovedThisTick || !multipleCall) {
 			
@@ -85,12 +85,12 @@ public class TileEntityRLockedCompositeBlock extends TileEntity implements IPost
 	
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(pos, 0, this.write(new CompoundNBT()));
+		return new SUpdateTileEntityPacket(worldPosition, 0, this.save(new CompoundNBT()));
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.read(null, pkt.getNbtCompound());
+		this.load(null, pkt.getTag());
 	}
 	
 }

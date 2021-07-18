@@ -23,19 +23,19 @@ public class TileEntityInventoryBase extends TileEntity implements IInventory {
 	}
 	
 	@Override
-	public double getMaxRenderDistanceSquared() {
+	public double getViewDistance() {
 		return 300F;
 	}
 	
 	@Override
-	public void clear() {
+	public void clearContent() {
 		for (int i = 0; i < this.slots; i++) {
 			this.itemstacks.set(i, ItemStack.EMPTY);
 		}
 	}
 
 	@Override
-	public int getSizeInventory() {
+	public int getContainerSize() {
 		return this.slots;
 	}
 
@@ -48,12 +48,12 @@ public class TileEntityInventoryBase extends TileEntity implements IInventory {
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int index) {
+	public ItemStack getItem(int index) {
 		return this.itemstacks.get(index);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int index, int count) {
+	public ItemStack removeItem(int index, int count) {
 		ItemStack stack = this.itemstacks.get(index).copy();
 		this.itemstacks.get(index).shrink(count);
 		stack.setCount(count);
@@ -61,44 +61,44 @@ public class TileEntityInventoryBase extends TileEntity implements IInventory {
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int index) {
+	public ItemStack removeItemNoUpdate(int index) {
 		ItemStack stack = this.itemstacks.get(index);
 		this.itemstacks.set(index, ItemStack.EMPTY);
 		return stack;
 	}
 
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack) {
+	public void setItem(int index, ItemStack stack) {
 		this.itemstacks.set(index, stack);
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) {
+	public boolean stillValid(PlayerEntity player) {
 		return true;
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		net.minecraft.inventory.ItemStackHelper.saveAllItems(compound, this.itemstacks);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		this.itemstacks.clear();
 		net.minecraft.inventory.ItemStackHelper.loadAllItems(compound, this.itemstacks);
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
 		CompoundNBT nbt = this.serializeNBT();
-		return new SUpdateTileEntityPacket(pos, 0, nbt);
+		return new SUpdateTileEntityPacket(worldPosition, 0, nbt);
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.deserializeNBT(pkt.getNbtCompound());
+		this.deserializeNBT(pkt.getTag());
 	}
 	
 }

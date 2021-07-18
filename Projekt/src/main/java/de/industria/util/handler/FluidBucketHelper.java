@@ -10,8 +10,8 @@ public class FluidBucketHelper {
 	
 	public static FluidStack transferBuckets(IInventory inventory, int soltOffset, FluidStack storage, int maxStorage) {
 		
-		ItemStack stackIn = inventory.getStackInSlot(soltOffset);
-		ItemStack stackOut = inventory.getStackInSlot(soltOffset + 1);
+		ItemStack stackIn = inventory.getItem(soltOffset);
+		ItemStack stackOut = inventory.getItem(soltOffset + 1);
 		
 		if (stackIn.getItem() instanceof BucketItem) {
 			
@@ -37,14 +37,14 @@ public class FluidBucketHelper {
 					
 					stackIn.shrink(1);
 					
-					inventory.setInventorySlotContents(soltOffset, stackIn);
-					inventory.setInventorySlotContents(soltOffset + 1, stackOut);
+					inventory.setItem(soltOffset, stackIn);
+					inventory.setItem(soltOffset + 1, stackOut);
 					
 				}
 				
 			} else if (fluid.isEmpty() && !storage.isEmpty()) {
 				
-				Item bucket = storage.getFluid().getFilledBucket();
+				Item bucket = storage.getFluid().getBucket();
 				ItemStack bucketStack = new ItemStack(bucket, 1);
 				
 				if (ItemStackHelper.canMergeRecipeStacks(stackOut, bucketStack)) {
@@ -60,8 +60,8 @@ public class FluidBucketHelper {
 					
 					stackIn.shrink(1);
 
-					inventory.setInventorySlotContents(soltOffset, stackIn);
-					inventory.setInventorySlotContents(soltOffset + 1, stackOut);
+					inventory.setItem(soltOffset, stackIn);
+					inventory.setItem(soltOffset + 1, stackOut);
 					
 				}
 				

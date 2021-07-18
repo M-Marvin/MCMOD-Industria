@@ -41,27 +41,27 @@ public class TileEntityPreassurePipeItemTerminal extends TileEntityPreassurePipe
 	}
 	
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
 		return index == 0 && isInput();
 	}
 	
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return index == 1 && !isInput();
 	}
 	
 	@Override
 	public VoxelShape getItemDetectBounds() {
-		Direction facing = this.getBlockState().get(BlockPipePreassurizer.FACING);
+		Direction facing = this.getBlockState().getValue(BlockPipePreassurizer.FACING);
 		int extraHeight = (int) (this.preassure * 16);
-		boolean flag1 = !((BlockPreassurePipe) ModItems.preassure_pipe).canConnect(getBlockState(), world, pos, getInputSide());
-		boolean flag2 = !((BlockPreassurePipe) ModItems.preassure_pipe).canConnect(getBlockState(), world, pos, getOutputSide());
+		boolean flag1 = !((BlockPreassurePipe) ModItems.preassure_pipe).canConnect(getBlockState(), level, worldPosition, getInputSide());
+		boolean flag2 = !((BlockPreassurePipe) ModItems.preassure_pipe).canConnect(getBlockState(), level, worldPosition, getOutputSide());
 		int extraHeight1 = flag1 ? extraHeight : 0;
 		int extraHeight2 = flag2 ? extraHeight : 0;
 		if (facing.getAxis().isVertical()) {
-			return Block.makeCuboidShape(2, -extraHeight1, 2, 14, 16 + extraHeight2, 14);
+			return Block.box(2, -extraHeight1, 2, 14, 16 + extraHeight2, 14);
 		} else {
-			return VoxelHelper.rotateShape(Block.makeCuboidShape(2, 2, -extraHeight1, 14, 14, 16 + extraHeight2), facing);
+			return VoxelHelper.rotateShape(Block.box(2, 2, -extraHeight1, 14, 14, 16 + extraHeight2), facing);
 		}
 	}
 	
@@ -76,33 +76,33 @@ public class TileEntityPreassurePipeItemTerminal extends TileEntityPreassurePipe
 	}
 	
 	public boolean isInput() {
-		return this.getBlockState().get(BlockPreassurePipeItemTerminal.INPUT);
+		return this.getBlockState().getValue(BlockPreassurePipeItemTerminal.INPUT);
 	}
 	
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote) {
+		if (!this.level.isClientSide) {
 			
 			if (this.isPreassurized()) {
 				
 				if (!isInput()) {
 					
-					List<AxisAlignedBB> itemBounds = getItemDetectBounds().toBoundingBoxList();
+					List<AxisAlignedBB> itemBounds = getItemDetectBounds().toAabbs();
 					itemBounds.forEach((boundBox) -> {
-						boundBox = boundBox.offset(this.pos);
-						this.world.getEntitiesInAABBexcluding(null, boundBox, null).forEach((entity) -> {
+						boundBox = boundBox.move(this.worldPosition);
+						this.level.getEntities(null, boundBox).forEach((entity) -> {
 							
 							if (entity instanceof ItemEntity) {
 								
 								ItemStack item = ((ItemEntity) entity).getItem();
 								
-								if (ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(1), item)) {
+								if (ItemStackHelper.canMergeRecipeStacks(this.getItem(1), item)) {
 
-									if (this.getStackInSlot(1).isEmpty()) {
-										this.setInventorySlotContents(1, item.copy());
+									if (this.getItem(1).isEmpty()) {
+										this.setItem(1, item.copy());
 									} else {
-										this.getStackInSlot(1).grow(item.getCount());
+										this.getItem(1).grow(item.getCount());
 									}
 									entity.remove();
 									
@@ -115,14 +115,14 @@ public class TileEntityPreassurePipeItemTerminal extends TileEntityPreassurePipe
 					
 				} else {
 
-					ItemStack itemOut = this.getStackInSlot(0);
+					ItemStack itemOut = this.getItem(0);
 					
 					if (!itemOut.isEmpty()) {
 						
-						ItemEntity itemEntity = new ItemEntity(this.world, this.pos.getX() + 0.5F, this.pos.getY() + 0.5F, this.pos.getZ() + 0.5F, itemOut);
-						itemEntity.setDefaultPickupDelay();
-						this.world.addEntity(itemEntity);
-						this.setInventorySlotContents(0, ItemStack.EMPTY);
+						ItemEntity itemEntity = new ItemEntity(this.level, this.worldPosition.getX() + 0.5F, this.worldPosition.getY() + 0.5F, this.worldPosition.getZ() + 0.5F, itemOut);
+						itemEntity.setDefaultPickUpDelay();
+						this.level.addFreshEntity(itemEntity);
+						this.setItem(0, ItemStack.EMPTY);
 						
 					}
 					
@@ -137,7 +137,7 @@ public class TileEntityPreassurePipeItemTerminal extends TileEntityPreassurePipe
 	}
 	
 	public boolean isBlocked() {
-		return !this.getStackInSlot(1).isEmpty();
+		return !this.getItem(1).isEmpty();
 	}
 	
 	@Override
@@ -156,7 +156,7 @@ public class TileEntityPreassurePipeItemTerminal extends TileEntityPreassurePipe
 			return false;
 		} else {
 			
-			if (!pipeStreamList.contains(this.pos)) {
+			if (!pipeStreamList.contains(this.worldPosition)) {
 				
 				Direction outletDirection = getOtherOutlet(inputDirection);
 				
@@ -165,10 +165,10 @@ public class TileEntityPreassurePipeItemTerminal extends TileEntityPreassurePipe
 					this.inputSide = inputDirection.getOpposite();
 					this.outputSide = outletDirection;
 					this.preassure = preassure;
-					this.lastPressurizing = this.world.getGameTime();
-					pipeStreamList.add(this.pos);
+					this.lastPressurizing = this.level.getGameTime();
+					pipeStreamList.add(this.worldPosition);
 
-					TileEntity nextPipe = this.world.getTileEntity(pos.offset(outletDirection));
+					TileEntity nextPipe = this.level.getBlockEntity(worldPosition.relative(outletDirection));
 					if (nextPipe instanceof TileEntityPreassurePipe) {
 						if (!((TileEntityPreassurePipe) nextPipe).preassurizePipe(outletDirection, preassure, pipeStreamList)) {
 							this.inputSide = null;
@@ -194,12 +194,12 @@ public class TileEntityPreassurePipeItemTerminal extends TileEntityPreassurePipe
 	}
 	
 	@Override
-	public void clear() {
+	public void clearContent() {
 		this.itemstacks.clear();
 	}
 	
 	@Override
-	public int getSizeInventory() {
+	public int getContainerSize() {
 		return 2;
 	}
 	
@@ -209,12 +209,12 @@ public class TileEntityPreassurePipeItemTerminal extends TileEntityPreassurePipe
 	}
 	
 	@Override
-	public ItemStack getStackInSlot(int index) {
+	public ItemStack getItem(int index) {
 		return this.itemstacks.get(index);
 	}
 	
 	@Override
-	public ItemStack decrStackSize(int index, int count) {
+	public ItemStack removeItem(int index, int count) {
 		ItemStack stack = this.itemstacks.get(index).copy();
 		this.itemstacks.get(index).shrink(count);
 		stack.setCount(count);
@@ -222,34 +222,34 @@ public class TileEntityPreassurePipeItemTerminal extends TileEntityPreassurePipe
 	}
 	
 	@Override
-	public ItemStack removeStackFromSlot(int index) {
+	public ItemStack removeItemNoUpdate(int index) {
 		ItemStack stack = this.itemstacks.get(index);
 		this.itemstacks.set(index, ItemStack.EMPTY);
 		return stack;
 	}
 	
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack) {
+	public void setItem(int index, ItemStack stack) {
 		this.itemstacks.set(index, stack);
 	}
 	
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) {
+	public boolean stillValid(PlayerEntity player) {
 		return false;
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		compound.putInt("InsertionTimer", this.insertionTimer);
 		compound.putInt("ExtractionTimer", this.extractionTimer);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT nbt) {
+	public void load(BlockState state, CompoundNBT nbt) {
 		this.extractionTimer = nbt.getInt("ExtractionTimer");
 		this.insertionTimer = nbt.getInt("InsertionTimer");
-		super.read(state, nbt);
+		super.load(state, nbt);
 	}
 	
 }

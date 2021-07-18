@@ -52,12 +52,12 @@ public class TileEntityMAlloyFurnace extends TileEntityInventoryBase implements 
 	}
 
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
 		return index >= 0 && index <= 2;
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return index == 3;
 	}
 
@@ -69,16 +69,16 @@ public class TileEntityMAlloyFurnace extends TileEntityInventoryBase implements 
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote()) {
+		if (!this.level.isClientSide()) {
 			
-			this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
+			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			
-			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(world).getNetwork(pos);
-			ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos);
+			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
+			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
 			this.hasPower = network.canMachinesRun() == Voltage.HightVoltage;
 			this.isWorking = this.hasPower && canWork();
 			
-			if (getBlockState().get(BlockStateProperties.LIT) != this.isWorking) this.world.setBlockState(pos, getBlockState().with(BlockStateProperties.LIT, this.isWorking));
+			if (getBlockState().getValue(BlockStateProperties.LIT) != this.isWorking) this.level.setBlockAndUpdate(worldPosition, getBlockState().setValue(BlockStateProperties.LIT, this.isWorking));
 			
 			if (this.isWorking) {
 				
@@ -88,7 +88,7 @@ public class TileEntityMAlloyFurnace extends TileEntityInventoryBase implements 
 					
 					this.progressTotal = recipe.getSmeltingTime();
 					
-					if (ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(3), recipe.getRecipeOutput())) {
+					if (ItemStackHelper.canMergeRecipeStacks(this.getItem(3), recipe.getResultItem())) {
 						
 						this.progress++;
 						
@@ -96,16 +96,16 @@ public class TileEntityMAlloyFurnace extends TileEntityInventoryBase implements 
 							
 							for (ItemStack item : recipe.getItemsIn()) {
 								for (int i = 0; i < 3; i++) {
-									if (this.getStackInSlot(i).getItem() == item.getItem() && this.getStackInSlot(i).getCount() >= item.getCount()) {
-										this.decrStackSize(i, item.getCount());
+									if (this.getItem(i).getItem() == item.getItem() && this.getItem(i).getCount() >= item.getCount()) {
+										this.removeItem(i, item.getCount());
 									}
 								}
 							}
 							
-							if (this.getStackInSlot(3).isEmpty()) {
-								this.setInventorySlotContents(3, recipe.getCraftingResult(this));
+							if (this.getItem(3).isEmpty()) {
+								this.setItem(3, recipe.assemble(this));
 							} else {
-								this.getStackInSlot(3).grow(recipe.getCraftingResult(this).getCount());
+								this.getItem(3).grow(recipe.assemble(this).getCount());
 							}
 							
 							this.progress = 0;
@@ -126,7 +126,7 @@ public class TileEntityMAlloyFurnace extends TileEntityInventoryBase implements 
 
 			if (this.isWorking && this.progress > 0) {
 				
-				MachineSoundHelper.startSoundIfNotRunning(this, SoundEvents.BLOCK_BLASTFURNACE_FIRE_CRACKLE);
+				MachineSoundHelper.startSoundIfNotRunning(this, SoundEvents.BLASTFURNACE_FIRE_CRACKLE);
 								
 			}
 			
@@ -139,26 +139,26 @@ public class TileEntityMAlloyFurnace extends TileEntityInventoryBase implements 
 	}
 	
 	public AlloyRecipe findRecipe() {
-		java.util.Optional<AlloyRecipe> recipe = this.world.getRecipeManager().getRecipe(ModRecipeTypes.ALLOY, this, this.world);
+		java.util.Optional<AlloyRecipe> recipe = this.level.getRecipeManager().getRecipeFor(ModRecipeTypes.ALLOY, this, this.level);
 		return recipe.isPresent() ? recipe.get() : null;
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		compound.putBoolean("isWorking", this.isWorking);
 		compound.putBoolean("hasPower", this.hasPower);
 		compound.putInt("progressTotal", this.progressTotal);
 		compound.putInt("progress", this.progress);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		this.isWorking = compound.getBoolean("isWorking");
 		this.hasPower = compound.getBoolean("hasPower");
 		this.progressTotal = compound.getInt("progressTotal");
 		this.progress = compound.getInt("progress");
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 }

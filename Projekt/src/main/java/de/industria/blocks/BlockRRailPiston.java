@@ -43,37 +43,37 @@ public class BlockRRailPiston extends BlockBase implements IAdvancedStickyBlock 
 	private int maxPushBlocks;
 	
 	public BlockRRailPiston() {
-		super("rail_piston", Material.ROCK, 1.5F, 0.5F, SoundType.STONE, true);
-		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, false));
+		super("rail_piston", Material.STONE, 1.5F, 0.5F, SoundType.STONE, true);
+		this.registerDefaultState(this.stateDefinition.any().setValue(POWERED, false));
 		this.maxPushBlocks = 1000;
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(FACING, POWERED);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		BlockState state = this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
-		return updateState(state, context.getWorld(), context.getPos(), false);
+		BlockState state = this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
+		return updateState(state, context.getLevel(), context.getClickedPos(), false);
 	}
 	
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 		
 		BlockState newState = updateState(state, worldIn, pos, true);
-		worldIn.setBlockState(pos, newState, 34);
+		worldIn.setBlock(pos, newState, 34);
 		
 	}
 	
 	public BlockState updateState(BlockState state, World world, BlockPos pos, boolean placed) {
 		
-		boolean power = world.isBlockPowered(pos);
-		boolean powered = state.get(POWERED);
+		boolean power = world.hasNeighborSignal(pos);
+		boolean powered = state.getValue(POWERED);
 		
 		if (power != powered) {
-			state = state.with(POWERED, power);
+			state = state.setValue(POWERED, power);
 			if (power && placed) this.onTrigger(state, world, pos);
 		}
 		
@@ -84,12 +84,12 @@ public class BlockRRailPiston extends BlockBase implements IAdvancedStickyBlock 
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		
-		if (state.get(FACING).getAxis() == Axis.X) {
-			VoxelShape shape = Block.makeCuboidShape(1, 1, 1, 15, 15, 15);
+		if (state.getValue(FACING).getAxis() == Axis.X) {
+			VoxelShape shape = Block.box(1, 1, 1, 15, 15, 15);
 			
 			return shape;
 		} else {
-			VoxelShape shape = Block.makeCuboidShape(1, 1, 1, 15, 15, 15);
+			VoxelShape shape = Block.box(1, 1, 1, 15, 15, 15);
 			
 			return shape;
 		}
@@ -98,21 +98,21 @@ public class BlockRRailPiston extends BlockBase implements IAdvancedStickyBlock 
 	
 	public void onTrigger(BlockState state, World world, BlockPos pos) {
 
-		world.addBlockEvent(pos, this, 0, 0);
+		world.blockEvent(pos, this, 0, 0);
 		
 	}
 	
 	@Override
-	public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int id, int param) {
+	public boolean triggerEvent(BlockState state, World worldIn, BlockPos pos, int id, int param) {
 		
 		for (Direction d : Direction.values()) {
 			
-			BlockPos moveablePos = pos.offset(d);
+			BlockPos moveablePos = pos.relative(d);
 			BlockState moveableState = worldIn.getBlockState(moveablePos);
 			
 			if (moveableState.getBlock() instanceof BlockRConectorBlock) {
 				
-				Direction moveDirection = getMoveDirectionForFace(d, state.get(FACING));
+				Direction moveDirection = getMoveDirectionForFace(d, state.getValue(FACING));
 				AdvancedPistonBlockStructureHelper struktureHelper = new AdvancedPistonBlockStructureHelper(worldIn, moveablePos, moveDirection, this.maxPushBlocks, pos);
 				
 				if (struktureHelper.canMove()) {
@@ -121,7 +121,7 @@ public class BlockRRailPiston extends BlockBase implements IAdvancedStickyBlock 
 					
 					if (flag) {
 						
-						worldIn.playSound((PlayerEntity)null, pos, SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.25F + 0.6F);
+						worldIn.playSound((PlayerEntity)null, pos, SoundEvents.PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, worldIn.random.nextFloat() * 0.25F + 0.6F);
 						return true;
 						
 					}
@@ -151,10 +151,10 @@ public class BlockRRailPiston extends BlockBase implements IAdvancedStickyBlock 
             BlockPos blockpos1 = list.get(i);
             BlockState blockstate = worldIn.getBlockState(blockpos1);
             list1.add(blockstate);
-            TileEntity tileEntity = worldIn.getTileEntity(blockpos1);
+            TileEntity tileEntity = worldIn.getBlockEntity(blockpos1);
             if (tileEntity != null && blockstate.getBlock() != ModItems.advanced_moving_block) {
-            	list12.add(tileEntity.write(new CompoundNBT()));
-                worldIn.removeTileEntity(blockpos1);
+            	list12.add(tileEntity.save(new CompoundNBT()));
+                worldIn.removeBlockEntity(blockpos1);
             } else {
             	list12.add(null);
             }
@@ -169,38 +169,38 @@ public class BlockRRailPiston extends BlockBase implements IAdvancedStickyBlock 
          for(int k = list2.size() - 1; k >= 0; --k) {
             BlockPos blockpos2 = list2.get(k);
             BlockState blockstate1 = worldIn.getBlockState(blockpos2);
-            TileEntity tileentity = blockstate1.hasTileEntity() ? worldIn.getTileEntity(blockpos2) : null;
-            spawnDrops(blockstate1, worldIn, blockpos2, tileentity);
-            worldIn.setBlockState(blockpos2, Blocks.AIR.getDefaultState(), 18 );
+            TileEntity tileentity = blockstate1.hasTileEntity() ? worldIn.getBlockEntity(blockpos2) : null;
+            dropResources(blockstate1, worldIn, blockpos2, tileentity);
+            worldIn.setBlock(blockpos2, Blocks.AIR.defaultBlockState(), 18 );
             ablockstate[j++] = blockstate1;
          }
          
          for(int l = list.size() - 1; l >= 0; --l) {
             BlockPos blockpos3 = list.get(l);
             BlockState blockstate5 = worldIn.getBlockState(blockpos3);
-            blockpos3 = blockpos3.offset(direction);
+            blockpos3 = blockpos3.relative(direction);
             map.remove(blockpos3);
-            if (worldIn.isBlockLoaded(blockpos3)) {
-            	worldIn.setBlockState(blockpos3, ModItems.advanced_moving_block.getDefaultState().with(BlockAdvancedMovingBlock.FACING, directionIn), 68 );
-            	worldIn.removeTileEntity(blockpos3);
-                worldIn.setTileEntity(blockpos3, BlockAdvancedMovingBlock.createTilePiston(list1.get(l), list12.get(l), directionIn, true, false));
+            if (worldIn.hasChunkAt(blockpos3)) {
+            	worldIn.setBlock(blockpos3, ModItems.advanced_moving_block.defaultBlockState().setValue(BlockAdvancedMovingBlock.FACING, directionIn), 68 );
+            	worldIn.removeBlockEntity(blockpos3);
+                worldIn.setBlockEntity(blockpos3, BlockAdvancedMovingBlock.createTilePiston(list1.get(l), list12.get(l), directionIn, true, false));
             }
             
             ablockstate[j++] = blockstate5;
          }
 
-         BlockState blockstate3 = Blocks.AIR.getDefaultState();
+         BlockState blockstate3 = Blocks.AIR.defaultBlockState();
          
          for(BlockPos blockpos4 : map.keySet()) {
-            worldIn.setBlockState(blockpos4, blockstate3, 82);
+            worldIn.setBlock(blockpos4, blockstate3, 82);
          }
 
          for(Entry<BlockPos, BlockState> entry : map.entrySet()) {
             BlockPos blockpos5 = entry.getKey();
             BlockState blockstate2 = entry.getValue();
-            blockstate2.updateDiagonalNeighbors(worldIn, blockpos5, 2);
-            blockstate3.updateNeighbours(worldIn, blockpos5, 2);
-            blockstate3.updateDiagonalNeighbors(worldIn, blockpos5, 2);
+            blockstate2.updateIndirectNeighbourShapes(worldIn, blockpos5, 2);
+            blockstate3.updateNeighbourShapes(worldIn, blockpos5, 2);
+            blockstate3.updateIndirectNeighbourShapes(worldIn, blockpos5, 2);
          }
 
          j = 0;
@@ -208,12 +208,12 @@ public class BlockRRailPiston extends BlockBase implements IAdvancedStickyBlock 
          for(int i1 = list2.size() - 1; i1 >= 0; --i1) {
             BlockState blockstate7 = ablockstate[j++];
             BlockPos blockpos6 = list2.get(i1);
-            blockstate7.updateDiagonalNeighbors(worldIn, blockpos6, 2);
-            worldIn.notifyNeighborsOfStateChange(blockpos6, blockstate7.getBlock());
+            blockstate7.updateIndirectNeighbourShapes(worldIn, blockpos6, 2);
+            worldIn.updateNeighborsAt(blockpos6, blockstate7.getBlock());
          }
 
          for(int j1 = list.size() - 1; j1 >= 0; --j1) {
-            worldIn.notifyNeighborsOfStateChange(list.get(j1), ablockstate[j++].getBlock());
+            worldIn.updateNeighborsAt(list.get(j1), ablockstate[j++].getBlock());
          }
          
          return true;
@@ -257,26 +257,26 @@ public class BlockRRailPiston extends BlockBase implements IAdvancedStickyBlock 
 	}
 	
 	@Override
-	public boolean canProvidePower(BlockState state) {
+	public boolean isSignalSource(BlockState state) {
 		return true;
 	}
 	
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 	
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 
 	@Override
 	public boolean addBlocksToMove(AdvancedPistonBlockStructureHelper pistonStructureHelper, BlockPos pos, BlockState state, World world) {
 		for (Direction d : Direction.values()) {
-			BlockPos pos2 = pos.offset(d);
+			BlockPos pos2 = pos.relative(d);
 			if (world.getBlockState(pos2).getBlock() == ModItems.conector_block) {
-				Direction moveDirection = getMoveDirectionForFace(d, state.get(FACING));
+				Direction moveDirection = getMoveDirectionForFace(d, state.getValue(FACING));
 				pistonStructureHelper.addBlockLine(pos2, moveDirection);
 			}
 		}

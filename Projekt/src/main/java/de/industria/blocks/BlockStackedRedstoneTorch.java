@@ -27,47 +27,47 @@ public class BlockStackedRedstoneTorch extends BlockBase {
 	public static final BooleanProperty LIT = BooleanProperty.create("lit");
 	
 	public BlockStackedRedstoneTorch() {
-		super("stacked_redstone_torch", Material.IRON, 1.5F, 0.5F, SoundType.LANTERN, true);
-		this.setDefaultState(this.stateContainer.getBaseState().with(LIT, false));
+		super("stacked_redstone_torch", Material.METAL, 1.5F, 0.5F, SoundType.LANTERN, true);
+		this.registerDefaultState(this.stateDefinition.any().setValue(LIT, false));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(LIT);
 	}
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return Block.makeCuboidShape(5, 0, 5, 11, 16, 11);
+		return Block.box(5, 0, 5, 11, 16, 11);
 	}
 	
 	@Override
-	public int getStrongPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-		return (blockState.get(LIT) && side == Direction.DOWN) ? 15 : 0;
+	public int getDirectSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+		return (blockState.getValue(LIT) && side == Direction.DOWN) ? 15 : 0;
 	}
 	
 	@Override
-	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-		return (blockState.get(LIT) && side == Direction.DOWN) ? 15 : 0;
+	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+		return (blockState.getValue(LIT) && side == Direction.DOWN) ? 15 : 0;
 	}
 	
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 		
-		if (isValidPosition(state, worldIn, pos)) {
+		if (canSurvive(state, worldIn, pos)) {
 			
-			boolean powered = state.get(LIT);
-			boolean power = worldIn.getRedstonePower(pos.down(), Direction.DOWN) > 0;
+			boolean powered = state.getValue(LIT);
+			boolean power = worldIn.getSignal(pos.below(), Direction.DOWN) > 0;
 			
 			if (powered != power) {
 				
-				worldIn.getPendingBlockTicks().scheduleTick(pos, this, 1);
+				worldIn.getBlockTicks().scheduleTick(pos, this, 1);
 				
 			}
 			
 		} else {
 			
-			spawnDrops(state, worldIn, pos);
+			dropResources(state, worldIn, pos);
 			worldIn.removeBlock(pos, false);
 			
 		}
@@ -77,9 +77,9 @@ public class BlockStackedRedstoneTorch extends BlockBase {
 	@Override
 	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
 		
-		boolean powered = worldIn.getRedstonePower(pos.down(), Direction.DOWN) > 0;
-		worldIn.setBlockState(pos, state.with(LIT, powered));
-		worldIn.notifyNeighborsOfStateChange(pos.up(), this);
+		boolean powered = worldIn.getSignal(pos.below(), Direction.DOWN) > 0;
+		worldIn.setBlockAndUpdate(pos, state.setValue(LIT, powered));
+		worldIn.updateNeighborsAt(pos.above(), this);
 		
 	}
 	
@@ -90,22 +90,22 @@ public class BlockStackedRedstoneTorch extends BlockBase {
 	
 	@OnlyIn(Dist.CLIENT)
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-	     if (stateIn.get(LIT)) {
+	     if (stateIn.getValue(LIT)) {
 	        double d0 = (double)pos.getX() + 0.5D + (rand.nextDouble() - 0.5D) * 0.2D;
 	        double d1 = (double)pos.getY() + 0.9D + (rand.nextDouble() - 0.5D) * 0.2D;
 	        double d2 = (double)pos.getZ() + 0.5D + (rand.nextDouble() - 0.5D) * 0.2D;
-	        worldIn.addParticle(RedstoneParticleData.REDSTONE_DUST, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+	        worldIn.addParticle(RedstoneParticleData.REDSTONE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
 	     } else {
 	        double d0 = (double)pos.getX() + 0.5D + (rand.nextDouble() - 0.5D) * 0.2D;
 	        double d1 = (double)pos.getY() + 0.4D + (rand.nextDouble() - 0.5D) * 0.2D;
 	        double d2 = (double)pos.getZ() + 0.5D + (rand.nextDouble() - 0.5D) * 0.2D;
-	        worldIn.addParticle(RedstoneParticleData.REDSTONE_DUST, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+	        worldIn.addParticle(RedstoneParticleData.REDSTONE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
 	     }
 	 }
 	
 	@Override
-	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
-		return !isAir(worldIn.getBlockState(pos.down()), worldIn, pos);
+	public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos) {
+		return !isAir(worldIn.getBlockState(pos.below()), worldIn, pos);
 	}
 	
 	@Override
@@ -115,8 +115,8 @@ public class BlockStackedRedstoneTorch extends BlockBase {
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		boolean powered = context.getWorld().getRedstonePower(context.getPos().down(), Direction.DOWN) > 0;
-		return this.getDefaultState().with(LIT, powered);
+		boolean powered = context.getLevel().getSignal(context.getClickedPos().below(), Direction.DOWN) > 0;
+		return this.defaultBlockState().setValue(LIT, powered);
 	}
 	
 }

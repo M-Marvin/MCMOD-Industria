@@ -15,15 +15,15 @@ import net.minecraft.world.World;
 public class BlockOreSolution extends BlockModFlowingFluid {
 	
 	public BlockOreSolution(String name, FlowingFluid fluid) {
-		super(name, fluid, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
+		super(name, fluid, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops());
 	}
 	
 	@Override
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 		if (entityIn instanceof LivingEntity) {
 			
-			EffectInstance effect = ((LivingEntity) entityIn).getActivePotionEffect(Effects.POISON);
-			if (effect != null ? effect.getDuration() < 100 : true) ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.POISON, 200, 0));
+			EffectInstance effect = ((LivingEntity) entityIn).getEffect(Effects.POISON);
+			if (effect != null ? effect.getDuration() < 100 : true) ((LivingEntity) entityIn).addEffect(new EffectInstance(Effects.POISON, 200, 0));
 			
 		}
 		

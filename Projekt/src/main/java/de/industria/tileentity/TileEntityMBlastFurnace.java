@@ -59,17 +59,17 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 		
 		if (BlockMultiPart.getInternPartPos(this.getBlockState()).equals(BlockPos.ZERO)) {
 			
-			if (!this.world.isRemote()) {
+			if (!this.level.isClientSide()) {
 				
-				this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
-				ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos);
+				this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
+				ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
 				
-				ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(world).getNetwork(pos);
+				ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
 				this.hasPower = network.canMachinesRun() == Voltage.NormalVoltage;
 				
-				BlockPos heaterPos = BlockMultiPart.rotateOffset(new BlockPos(1, 0, 1), getBlockState().get(BlockMultiPart.FACING)).add(this.pos).down();
-				BlockState heaterState = this.world.getBlockState(heaterPos);
-				TileEntity heaterTile = heaterState.getBlock() instanceof BlockMultiPart ? BlockMultiPart.getSCenterTE(heaterPos, heaterState, this.world) : this.world.getTileEntity(heaterPos);
+				BlockPos heaterPos = BlockMultiPart.rotateOffset(new BlockPos(1, 0, 1), getBlockState().getValue(BlockMultiPart.FACING)).offset(this.worldPosition).below();
+				BlockState heaterState = this.level.getBlockState(heaterPos);
+				TileEntity heaterTile = heaterState.getBlock() instanceof BlockMultiPart ? BlockMultiPart.getSCenterTE(heaterPos, heaterState, this.level) : this.level.getBlockEntity(heaterPos);
 				this.hasHeater = heaterTile instanceof TileEntityMHeaterBase;
 				this.hasHeat = this.hasHeater ? ((TileEntityMHeaterBase) heaterTile).isWorking : false;
 				this.isWorking = this.hasPower && this.hasHeat && this.canWork();
@@ -82,8 +82,8 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 						
 						this.progressTotal = recipe.getSmeltingTime();
 						
-						if (ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(3), recipe.getRecipeOutput()) &&
-							ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(4), recipe.getWasteOut())) {
+						if (ItemStackHelper.canMergeRecipeStacks(this.getItem(3), recipe.getResultItem()) &&
+							ItemStackHelper.canMergeRecipeStacks(this.getItem(4), recipe.getWasteOut())) {
 							
 							this.progress++;
 							
@@ -93,24 +93,24 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 								
 								for (ItemStack item : recipe.getItemsIn()) {
 									for (int i = 0; i < 3; i++) {
-										if (this.getStackInSlot(i).getItem() == item.getItem() && this.getStackInSlot(i).getCount() >= item.getCount()) {
-											this.decrStackSize(i, item.getCount());
+										if (this.getItem(i).getItem() == item.getItem() && this.getItem(i).getCount() >= item.getCount()) {
+											this.removeItem(i, item.getCount());
 										}
 									}
 								}
 								
 								this.oxygenStorage.shrink(recipe.getConsumtionFluid().getAmount());
 								
-								if (this.getStackInSlot(3).isEmpty()) {
-									this.setInventorySlotContents(3, recipe.getCraftingResult(this));
+								if (this.getItem(3).isEmpty()) {
+									this.setItem(3, recipe.assemble(this));
 								} else {
-									this.getStackInSlot(3).grow(recipe.getCraftingResult(this).getCount());
+									this.getItem(3).grow(recipe.assemble(this).getCount());
 								}
 
-								if (this.getStackInSlot(4).isEmpty()) {
-									this.setInventorySlotContents(4, recipe.getWasteOut());
+								if (this.getItem(4).isEmpty()) {
+									this.setItem(4, recipe.getWasteOut());
 								} else {
-									this.getStackInSlot(4).grow(recipe.getWasteOut().getCount());
+									this.getItem(4).grow(recipe.getWasteOut().getCount());
 								}
 								
 							}
@@ -140,7 +140,7 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 	}
 	
 	public BlastFurnaceRecipe findRecipe() {
-		Optional<BlastFurnaceRecipe> recipe = this.world.getRecipeManager().getRecipe(ModRecipeTypes.BLAST_FURNACE, this, this.world);
+		Optional<BlastFurnaceRecipe> recipe = this.level.getRecipeManager().getRecipeFor(ModRecipeTypes.BLAST_FURNACE, this, this.level);
 		return recipe.isPresent() ? recipe.get() : null;
 	}
 	
@@ -157,10 +157,10 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 	@Override
 	public FluidStack insertFluid(FluidStack fluid) {
 		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
-		TileEntity tileEntity = BlockMBlastFurnace.getSCenterTE(pos, this.getBlockState(), world);
+		TileEntity tileEntity = BlockMBlastFurnace.getSCenterTE(worldPosition, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMBlastFurnace) {
 			if (ipos.equals(new BlockPos(2, 0, 0))) {
-				if (((TileEntityMBlastFurnace) tileEntity).oxygenStorage.getFluid().isEquivalentTo(fluid.getFluid()) || ((TileEntityMBlastFurnace) tileEntity).oxygenStorage.isEmpty()) {
+				if (((TileEntityMBlastFurnace) tileEntity).oxygenStorage.getFluid().isSame(fluid.getFluid()) || ((TileEntityMBlastFurnace) tileEntity).oxygenStorage.isEmpty()) {
 					int capcaity = this.maxFluidStorage - ((TileEntityMBlastFurnace) tileEntity).oxygenStorage.getAmount();
 					int transfer = Math.min(capcaity, fluid.getAmount());
 					if (transfer > 0) {
@@ -187,7 +187,7 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 	@Override
 	public FluidStack getStorage() {
 		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
-		TileEntity tileEntity = BlockMBlastFurnace.getSCenterTE(ipos, this.getBlockState(), world);
+		TileEntity tileEntity = BlockMBlastFurnace.getSCenterTE(ipos, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMBlastFurnace) {
 			if (ipos.equals(new BlockPos(2, 2, 2))) {
 				return ((TileEntityMBlastFurnace) tileEntity).oxygenStorage;
@@ -199,7 +199,7 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 	@Override
 	public boolean canConnect(Direction side) {
 		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
-		Direction facing = this.getBlockState().get(BlockMultiPart.FACING);
+		Direction facing = this.getBlockState().getValue(BlockMultiPart.FACING);
 		return ipos.equals(new BlockPos(2, 0, 0)) && side == facing;
 	}
 
@@ -219,17 +219,17 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 	}
 
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
 		return index >= 0 && index <= 2;
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return index >= 3 && index <= 4;
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		compound.putBoolean("hasPower", this.hasPower);
 		compound.putBoolean("hasHeater", this.hasHeater);
 		compound.putBoolean("hasHeat", this.hasHeat);
@@ -237,11 +237,11 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 		compound.putInt("progressTotal", this.progressTotal);
 		compound.putInt("Progress", this.progress);
 		compound.put("Oxygen", this.oxygenStorage.writeToNBT(new CompoundNBT()));
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		this.hasPower = compound.getBoolean("hasPower");
 		this.hasHeater = compound.getBoolean("hasHeater");
 		this.hasHeat = compound.getBoolean("hasHeat");
@@ -249,22 +249,22 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 		this.progressTotal = compound.getInt("progressTotal");
 		this.progress = compound.getInt("Progress");
 		this.oxygenStorage = FluidStack.loadFluidStackFromNBT(compound.getCompound("Oxygen"));
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(pos, 0, this.serializeNBT());
+		return new SUpdateTileEntityPacket(worldPosition, 0, this.serializeNBT());
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.deserializeNBT(pkt.getNbtCompound());
+		this.deserializeNBT(pkt.getTag());
 	}
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(pos.add(-3, -1, -3), pos.add(4, 5, 4));
+		return new AxisAlignedBB(worldPosition.offset(-3, -1, -3), worldPosition.offset(4, 5, 4));
 	}
 	
 }

@@ -27,60 +27,60 @@ public abstract class BlockRedstoneDiode extends BlockBase {
 	public static final DirectionProperty FACING = DirectionProperty.create("facing", Direction.Plane.HORIZONTAL);
 	
 	protected BlockRedstoneDiode(String name) {
-		super(name, Material.MISCELLANEOUS, 0, SoundType.WOOD, true);
+		super(name, Material.DECORATION, 0, SoundType.WOOD, true);
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(FACING);
 	}
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return Block.makeCuboidShape(0, 0, 0, 16, 2, 16);
+		return Block.box(0, 0, 0, 16, 2, 16);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
+		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
 	}
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
 		boolean hasChanged = switchStates(state, worldIn, pos, player, handIn, hit);
 		
 		if (hasChanged) return ActionResultType.SUCCESS;
 		
-		return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
+		return super.use(state, worldIn, pos, player, handIn, hit);
 	}
 	
 	public abstract boolean switchStates(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit);
 
 	@Override
-	public boolean canProvidePower(BlockState state) {
+	public boolean isSignalSource(BlockState state) {
 		return true;
 	}
 	
 	@Override
-	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
-		return hasSolidSideOnTop(worldIn, pos.down());
+	public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos) {
+		return canSupportRigidBlock(worldIn, pos.below());
 	}
 	
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 	      
-		if (state.isValidPosition(worldIn, pos)) {
+		if (state.canSurvive(worldIn, pos)) {
 			this.updateState(state, worldIn, pos, blockIn, fromPos);
 		} else {
 			
-			TileEntity tileentity = state.hasTileEntity() ? worldIn.getTileEntity(pos) : null;
-			spawnDrops(state, worldIn, pos, tileentity);
+			TileEntity tileentity = state.hasTileEntity() ? worldIn.getBlockEntity(pos) : null;
+			dropResources(state, worldIn, pos, tileentity);
 			worldIn.removeBlock(pos, false);
 			
 			for (Direction direction : Direction.values()) {
-				worldIn.notifyNeighborsOfStateChange(pos.offset(direction), this);
+				worldIn.updateNeighborsAt(pos.relative(direction), this);
 			}
 			
 		}
@@ -91,12 +91,12 @@ public abstract class BlockRedstoneDiode extends BlockBase {
 	
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 	
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 	
 }

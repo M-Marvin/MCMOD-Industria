@@ -32,11 +32,11 @@ public class ItemLeverElement extends ItemPanelElement {
 			elementStack.setTag(tag);
 			
 			ItemStack chanelItem = new ItemStack(Items.REDSTONE_TORCH);
-			chanelItem.setDisplayName(elementStack.getDisplayName());
+			chanelItem.setHoverName(elementStack.getHoverName());
 			RedstoneControlSignal signal = new RedstoneControlSignal(chanelItem, powered);
 			panel.sendSignal(signal);
 			
-			panel.getWorld().playSound(null, panel.getPos(), SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 1, powered ? 0.6F : 0.5F);
+			panel.getLevel().playSound(null, panel.getBlockPos(), SoundEvents.LEVER_CLICK, SoundCategory.BLOCKS, 1, powered ? 0.6F : 0.5F);
 			
 		}
 		

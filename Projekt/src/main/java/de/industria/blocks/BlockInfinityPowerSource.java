@@ -18,7 +18,7 @@ import net.minecraft.world.server.ServerWorld;
 public class BlockInfinityPowerSource extends BlockContainerBase implements IElectricConnectiveBlock {
 
 	public BlockInfinityPowerSource() {
-		super("infinity_power_source", Properties.create(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(-1.0F, 3600000.0F).noDrops());
+		super("infinity_power_source", Properties.of(Material.STONE).sound(SoundType.STONE).strength(-1.0F, 3600000.0F).noDrops());
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class BlockInfinityPowerSource extends BlockContainerBase implements IEle
 	}
 
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
 	
@@ -47,7 +47,7 @@ public class BlockInfinityPowerSource extends BlockContainerBase implements IEle
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntitySimpleBlockTicking();
 	}
 

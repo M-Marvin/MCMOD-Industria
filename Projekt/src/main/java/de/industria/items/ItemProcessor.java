@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import de.industria.gui.ContainerRProcessor;
+import de.industria.gui.ContainerTileEntity;
 import de.industria.tileentity.TileEntityRSignalProcessorContact;
-import de.industria.util.blockfeatures.ContainerTileEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -20,13 +20,13 @@ public class ItemProcessor extends ItemBase {
 	private boolean canHandleInteger;
 	
 	public ItemProcessor(String name, int maxLineCount, boolean canHandleInteger, Rarity rarity) {
-		super(name, ItemGroup.REDSTONE, rarity);
+		super(name, ItemGroup.TAB_REDSTONE, rarity);
 		this.maxLineCount = maxLineCount;
 		this.canHandleInteger = canHandleInteger;
 	}
 
 	@Override
-	public boolean hasEffect(ItemStack stack) {
+	public boolean isFoil(ItemStack stack) {
 		
 		return canHandleInteger;
 		
@@ -40,7 +40,7 @@ public class ItemProcessor extends ItemBase {
 	}
 	
 	public ITextComponent getScreenTitle(ItemStack stack) {
-		return new TranslationTextComponent(this.getTranslationKey());
+		return new TranslationTextComponent(this.getDescriptionId());
 	}
 	
 	public void storeCodeLinesInProcessor(ItemStack stack, String[] codeLines) {

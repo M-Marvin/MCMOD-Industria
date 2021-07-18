@@ -37,33 +37,33 @@ public class BlockRHarvester extends BlockContainerBase {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	
 	public BlockRHarvester() {
-		super("harvester", Material.ROCK, 3.5F, SoundType.STONE);
-		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, false));
+		super("harvester", Material.STONE, 3.5F, SoundType.STONE);
+		this.registerDefaultState(this.stateDefinition.any().setValue(POWERED, false));
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(FACING, POWERED);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(FACING, context.getNearestLookingDirection().getOpposite()).with(POWERED, false);
+		return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite()).setValue(POWERED, false);
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		
 		if (tileEntity instanceof TileEntityRHarvester) {
 			
-			if (!worldIn.isRemote()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
+			if (!worldIn.isClientSide()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
 			return ActionResultType.CONSUME;
 			
 		}
@@ -75,30 +75,29 @@ public class BlockRHarvester extends BlockContainerBase {
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 		
-		boolean powered = state.get(POWERED);
-		boolean power = worldIn.getRedstonePowerFromNeighbors(fromPos) > 0 || worldIn.isBlockPowered(pos);
+		boolean powered = state.getValue(POWERED);
+		boolean power = worldIn.getBestNeighborSignal(fromPos) > 0 || worldIn.hasNeighborSignal(pos);
 		
 		if (powered != power) {
-			worldIn.addBlockEvent(pos, this, 1, power ? 1 : 0);
+			worldIn.blockEvent(pos, this, 1, power ? 1 : 0);
 		}
 		
 	}
 	
-	@SuppressWarnings({ "deprecation" })
 	@Override
-	public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int id, int param) {
+	public boolean triggerEvent(BlockState state, World worldIn, BlockPos pos, int id, int param) {
 		
 		if (id == 1) {
 
 			boolean power = param == 1;
 			
-			worldIn.setBlockState(pos, state.with(POWERED, power));
+			worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, power));
 			
-			TileEntity tileEntity = worldIn.getTileEntity(pos);
+			TileEntity tileEntity = worldIn.getBlockEntity(pos);
 			
 			if (power && tileEntity instanceof TileEntityRHarvester) {
 				
-				List<ItemStack> items = harvest(pos, pos.offset(state.get(FACING)), worldIn);
+				List<ItemStack> items = harvest(pos, pos.relative(state.getValue(FACING)), worldIn);
 				
 				if (items != null) {
 					
@@ -106,9 +105,9 @@ public class BlockRHarvester extends BlockContainerBase {
 					
 					for (ItemStack stack : drops) {
 						System.out.println(stack);
-						ItemEntity item = new ItemEntity(worldIn, pos.offset(state.get(FACING)).getX(), pos.offset(state.get(FACING)).getY(), pos.offset(state.get(FACING)).getZ(), stack);
-						item.setDefaultPickupDelay();
-						worldIn.addEntity(item);
+						ItemEntity item = new ItemEntity(worldIn, pos.relative(state.getValue(FACING)).getX(), pos.relative(state.getValue(FACING)).getY(), pos.relative(state.getValue(FACING)).getZ(), stack);
+						item.setDefaultPickUpDelay();
+						worldIn.addFreshEntity(item);
 					}
 					
 				}
@@ -117,7 +116,7 @@ public class BlockRHarvester extends BlockContainerBase {
 			
 		}
 		
-		return super.eventReceived(state, worldIn, pos, id, param);
+		return super.triggerEvent(state, worldIn, pos, id, param);
 	}
 	
 	@SuppressWarnings({ "static-access", "deprecation" })
@@ -131,7 +130,7 @@ public class BlockRHarvester extends BlockContainerBase {
 			return null;
 		} else {
 			
-			TileEntity tileEntity = world.getTileEntity(harvestPos);
+			TileEntity tileEntity = world.getBlockEntity(harvestPos);
 			List<ItemStack> drops = harvestState.getBlock().getDrops(harvestState, (ServerWorld) world, harvestPos, tileEntity);
 			
 			world.destroyBlock(harvestPos, false);
@@ -142,18 +141,18 @@ public class BlockRHarvester extends BlockContainerBase {
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityRHarvester();
 	}
 	
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 	
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 	
 }

@@ -50,45 +50,45 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 	@SuppressWarnings("rawtypes")
 	public static final EnumProperty[] CONNECTIONS = new EnumProperty[] {DOWN, UP, NORTH, SOUTH, WEST, EAST};
 	
-	public static final VoxelShape S_NORTH = Block.makeCuboidShape(5, 5, 0, 11, 11, 8);
-	public static final VoxelShape S_SOUTH = Block.makeCuboidShape(5, 5, 8, 11, 11, 16);
-	public static final VoxelShape S_WEST = Block.makeCuboidShape(0, 5, 5, 8, 11, 11);
-	public static final VoxelShape S_EAST = Block.makeCuboidShape(8, 5, 5, 16, 11, 11);
-	public static final VoxelShape S_DOWN = Block.makeCuboidShape(5, 0, 5, 11, 8, 11);
-	public static final VoxelShape S_UP = Block.makeCuboidShape(5, 8, 5, 11, 16, 11);
+	public static final VoxelShape S_NORTH = Block.box(5, 5, 0, 11, 11, 8);
+	public static final VoxelShape S_SOUTH = Block.box(5, 5, 8, 11, 11, 16);
+	public static final VoxelShape S_WEST = Block.box(0, 5, 5, 8, 11, 11);
+	public static final VoxelShape S_EAST = Block.box(8, 5, 5, 16, 11, 11);
+	public static final VoxelShape S_DOWN = Block.box(5, 0, 5, 11, 8, 11);
+	public static final VoxelShape S_UP = Block.box(5, 8, 5, 11, 16, 11);
 	
 	public static final VoxelShape[] SHAPES = new VoxelShape[] {S_DOWN, S_UP, S_NORTH, S_SOUTH, S_WEST, S_EAST};
 	
 	public BlockStackedRedstoneWire() {
-		super("stacked_redstone_wire", Material.IRON, 1.5F, 0.5F, SoundType.LANTERN, true);
-		this.setDefaultState(this.stateContainer.getBaseState().with(NORTH, AttachType.NONE).with(SOUTH, AttachType.NONE).with(EAST, AttachType.NONE).with(WEST, AttachType.NONE).with(POWERED, false));
+		super("stacked_redstone_wire", Material.METAL, 1.5F, 0.5F, SoundType.LANTERN, true);
+		this.registerDefaultState(this.stateDefinition.any().setValue(NORTH, AttachType.NONE).setValue(SOUTH, AttachType.NONE).setValue(EAST, AttachType.NONE).setValue(WEST, AttachType.NONE).setValue(POWERED, false));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(NORTH, SOUTH, EAST, WEST, UP, DOWN, POWERED, WATERLOGGED);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+	public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
 		
 		int connectedRedstone = 0;
 		BlockState newState = stateIn;
 		for (Direction direction : Direction.values()) {
 			
-			BlockPos attachPos = currentPos.offset(direction);
+			BlockPos attachPos = currentPos.relative(direction);
 			BlockState attachState = worldIn.getBlockState(attachPos);
 			
 			AttachType attachment = AttachType.NONE;
-			if (attachState.getBlock() == this || attachState.canProvidePower() || attachState.canConnectRedstone(worldIn, attachPos, direction.getOpposite()) || isRedstoneSource(attachState, direction)) {
+			if (attachState.getBlock() == this || attachState.isSignalSource() || attachState.canConnectRedstone(worldIn, attachPos, direction.getOpposite()) || isRedstoneSource(attachState, direction)) {
 				attachment = AttachType.REDSTONE;
 				connectedRedstone++;
-			} else if (attachState.func_242698_a(worldIn, attachPos, direction.getOpposite(), BlockVoxelShape.RIGID)) {
+			} else if (attachState.isFaceSturdy(worldIn, attachPos, direction.getOpposite(), BlockVoxelShape.RIGID)) {
 				attachment = AttachType.SCAFFOLDING;
 			}
 			
-			newState = newState.with(CONNECTIONS[direction.getIndex()], attachment);
+			newState = newState.setValue(CONNECTIONS[direction.get3DDataValue()], attachment);
 			
 		}
 		
@@ -96,8 +96,8 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 			
 			for (Direction direction : Direction.values()) {
 
-				AttachType attachment = (AttachType) newState.get(CONNECTIONS[direction.getIndex()]);
-				if (attachment == AttachType.SCAFFOLDING) newState = newState.with(CONNECTIONS[direction.getIndex()], AttachType.REDSTONE);
+				AttachType attachment = (AttachType) newState.getValue(CONNECTIONS[direction.get3DDataValue()]);
+				if (attachment == AttachType.SCAFFOLDING) newState = newState.setValue(CONNECTIONS[direction.get3DDataValue()], AttachType.REDSTONE);
 			}
 			
 		}
@@ -109,24 +109,24 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 		
-		if (isValidPosition(state, worldIn, pos)) {
+		if (canSurvive(state, worldIn, pos)) {
 			
 			int connectedRedstone = 0;
 			BlockState newState = state;
 			for (Direction direction : Direction.values()) {
 				
-				BlockPos attachPos = pos.offset(direction);
+				BlockPos attachPos = pos.relative(direction);
 				BlockState attachState = worldIn.getBlockState(attachPos);
 				
 				AttachType attachment = AttachType.NONE;
-				if (attachState.getBlock() == this || attachState.canProvidePower() || attachState.canConnectRedstone(worldIn, attachPos, direction.getOpposite()) || isRedstoneSource(attachState, direction)) {
+				if (attachState.getBlock() == this || attachState.isSignalSource() || attachState.canConnectRedstone(worldIn, attachPos, direction.getOpposite()) || isRedstoneSource(attachState, direction)) {
 					attachment = AttachType.REDSTONE;
 					connectedRedstone++;
-				} else if (attachState.func_242698_a(worldIn, attachPos, direction.getOpposite(), BlockVoxelShape.RIGID)) {
+				} else if (attachState.isFaceSturdy(worldIn, attachPos, direction.getOpposite(), BlockVoxelShape.RIGID)) {
 					attachment = AttachType.SCAFFOLDING;
 				}
 				
-				newState = newState.with(CONNECTIONS[direction.getIndex()], attachment);
+				newState = newState.setValue(CONNECTIONS[direction.get3DDataValue()], attachment);
 				
 			}
 			
@@ -134,19 +134,19 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 				
 				for (Direction direction : Direction.values()) {
 
-					AttachType attachment = (AttachType) newState.get(CONNECTIONS[direction.getIndex()]);
-					if (attachment == AttachType.SCAFFOLDING) newState = newState.with(CONNECTIONS[direction.getIndex()], AttachType.REDSTONE);
+					AttachType attachment = (AttachType) newState.getValue(CONNECTIONS[direction.get3DDataValue()]);
+					if (attachment == AttachType.SCAFFOLDING) newState = newState.setValue(CONNECTIONS[direction.get3DDataValue()], AttachType.REDSTONE);
 				}
 				
 			}
 			
-			worldIn.setBlockState(pos, newState);
+			worldIn.setBlockAndUpdate(pos, newState);
 			
 			if (blockIn != this) updatePoweredState(worldIn, pos);
 			
 		} else {
 			
-			spawnDrops(state, worldIn, pos);
+			dropResources(state, worldIn, pos);
 			worldIn.removeBlock(pos, false);
 			
 		}
@@ -162,50 +162,50 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
 		
-		World worldIn = context.getWorld();
-		BlockState state = this.getDefaultState();
+		World worldIn = context.getLevel();
+		BlockState state = this.defaultBlockState();
 		int connectedRedstone = 0;
 		for (Direction direction : Direction.values()) {
 			
-			BlockPos attachPos = context.getPos().offset(direction);
+			BlockPos attachPos = context.getClickedPos().relative(direction);
 			BlockState attachState = worldIn.getBlockState(attachPos);
 			
 			AttachType attachment = AttachType.NONE;
-			if (attachState.getBlock() == this || attachState.canProvidePower() || attachState.canConnectRedstone(worldIn, attachPos, direction.getOpposite())) {
+			if (attachState.getBlock() == this || attachState.isSignalSource() || attachState.canConnectRedstone(worldIn, attachPos, direction.getOpposite())) {
 				attachment = AttachType.REDSTONE;
 				connectedRedstone++;
-			} else if (attachState.func_242698_a(worldIn, attachPos, direction.getOpposite(), BlockVoxelShape.RIGID)) {
+			} else if (attachState.isFaceSturdy(worldIn, attachPos, direction.getOpposite(), BlockVoxelShape.RIGID)) {
 				attachment = AttachType.SCAFFOLDING;
 			}
 			
-			state = state.with(CONNECTIONS[direction.getIndex()], attachment);
+			state = state.setValue(CONNECTIONS[direction.get3DDataValue()], attachment);
 			
 		}
 		
 		if (connectedRedstone == 1) {
 			
 			for (Direction direction : Direction.values()) {
-				AttachType attachment = (AttachType) state.get(CONNECTIONS[direction.getIndex()]);
-				if (attachment == AttachType.SCAFFOLDING) state = state.with(CONNECTIONS[direction.getIndex()], AttachType.REDSTONE);
+				AttachType attachment = (AttachType) state.getValue(CONNECTIONS[direction.get3DDataValue()]);
+				if (attachment == AttachType.SCAFFOLDING) state = state.setValue(CONNECTIONS[direction.get3DDataValue()], AttachType.REDSTONE);
 			}
 			
 		}
 		
-		BlockState replaceState = context.getWorld().getBlockState(context.getPos());
-		return state.with(WATERLOGGED, replaceState.getBlock() == Blocks.WATER);
+		BlockState replaceState = context.getLevel().getBlockState(context.getClickedPos());
+		return state.setValue(WATERLOGGED, replaceState.getBlock() == Blocks.WATER);
 		
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-		boolean flag = blockAccess.getBlockState(pos.offset(side.getOpposite())).getBlock() != this;
-		return (flag && blockState.get(POWERED) && blockState.get(CONNECTIONS[side.getOpposite().getIndex()]) == AttachType.REDSTONE) ? 8 : 0;
+	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+		boolean flag = blockAccess.getBlockState(pos.relative(side.getOpposite())).getBlock() != this;
+		return (flag && blockState.getValue(POWERED) && blockState.getValue(CONNECTIONS[side.getOpposite().get3DDataValue()]) == AttachType.REDSTONE) ? 8 : 0;
 	}
 	
 	@Override
-	public int getStrongPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-		return this.getWeakPower(blockState, blockAccess, pos, side);
+	public int getDirectSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+		return this.getSignal(blockState, blockAccess, pos, side);
 	}
 	
 	@Override
@@ -219,8 +219,8 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 		
 		VoxelShape shape = VoxelShapes.empty();
 		for (Direction direction : Direction.values()) {
-			if (state.get(CONNECTIONS[direction.getIndex()]) != AttachType.NONE) {
-				shape = VoxelShapes.or(shape, SHAPES[direction.getIndex()]);
+			if (state.getValue(CONNECTIONS[direction.get3DDataValue()]) != AttachType.NONE) {
+				shape = VoxelShapes.or(shape, SHAPES[direction.get3DDataValue()]);
 			}
 		}
 		
@@ -230,11 +230,11 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 	
 	@OnlyIn(Dist.CLIENT)
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-	     if (stateIn.get(POWERED)) {
+	     if (stateIn.getValue(POWERED)) {
 	        double d0 = (double)pos.getX() + 0.5D + (rand.nextDouble() - 0.5D) * 0.2D;
 	        double d1 = (double)pos.getY() + 0.5D + (rand.nextDouble() - 0.5D) * 0.2D;
 	        double d2 = (double)pos.getZ() + 0.5D + (rand.nextDouble() - 0.5D) * 0.2D;
-	        worldIn.addParticle(RedstoneParticleData.REDSTONE_DUST, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+	        worldIn.addParticle(RedstoneParticleData.REDSTONE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
 	     }
 	}
 	
@@ -253,22 +253,22 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 		}
 		
 		@Override
-		public String getString() {
+		public String getSerializedName() {
 			return name;
 		}
 		
 	}
 	
 	@Override
-	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
+	public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos) {
 		
 		boolean attached = false;
 		for (Direction direction : Direction.values()) {
 
-			BlockPos attachPos = pos.offset(direction);
+			BlockPos attachPos = pos.relative(direction);
 			BlockState attachState = worldIn.getBlockState(attachPos);
 			
-			if (attachState.getBlock() == this || attachState.canProvidePower() || attachState.canConnectRedstone(worldIn, attachPos, direction.getOpposite()) || attachState.func_242698_a(worldIn, attachPos, direction.getOpposite(), BlockVoxelShape.RIGID)) {
+			if (attachState.getBlock() == this || attachState.isSignalSource() || attachState.canConnectRedstone(worldIn, attachPos, direction.getOpposite()) || attachState.isFaceSturdy(worldIn, attachPos, direction.getOpposite(), BlockVoxelShape.RIGID)) {
 				attached = true;
 			}
 			
@@ -285,14 +285,14 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 		
 		wires.forEach((wire) -> {
 			BlockState state = worldIn.getBlockState(wire);
-			boolean powered = state.get(POWERED);
-			worldIn.setBlockState(wire, state.with(POWERED, power));
+			boolean powered = state.getValue(POWERED);
+			worldIn.setBlockAndUpdate(wire, state.setValue(POWERED, power));
 			if (powered != power) {
 				for (Direction d : Direction.values()) {
-					BlockPos notifyPos = wire.offset(d);
+					BlockPos notifyPos = wire.relative(d);
 					BlockState notifyState = worldIn.getBlockState(notifyPos);
 					if (notifyState.getBlock() != ModItems.stacked_redstone_wire) {
-						worldIn.notifyNeighborsOfStateChange(notifyPos, ModItems.stacked_redstone_wire);
+						worldIn.updateNeighborsAt(notifyPos, ModItems.stacked_redstone_wire);
 					}
 				}
 			}
@@ -312,7 +312,7 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 			
 			for (Direction direction : Direction.values()) {
 				
-				boolean flag = listConnectedWires(worldIn, scannPos.offset(direction), wires, scannCount += 1);
+				boolean flag = listConnectedWires(worldIn, scannPos.relative(direction), wires, scannCount += 1);
 				if (flag) powered = true;
 				
 			}
@@ -327,7 +327,7 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 		
 		for (Direction direction : Direction.values()) {
 			
-			boolean powered = worldIn.getRedstonePower(pos.offset(direction), direction) > 8;
+			boolean powered = worldIn.getSignal(pos.relative(direction), direction) > 8;
 			if (powered) return true;
 			
 		}
@@ -338,7 +338,7 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 	
 	@Override
 	public FluidState getFluidState(BlockState state) {
-		return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluid().getDefaultState() : Fluids.EMPTY.getDefaultState();
+		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource().defaultFluidState() : Fluids.EMPTY.defaultFluidState();
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -346,9 +346,9 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
 	      switch(mirrorIn) {
 	      case LEFT_RIGHT:
-	         return state.with(NORTH, state.get(SOUTH)).with(SOUTH, state.get(NORTH));
+	         return state.setValue(NORTH, state.getValue(SOUTH)).setValue(SOUTH, state.getValue(NORTH));
 	      case FRONT_BACK:
-	         return state.with(EAST, state.get(WEST)).with(WEST, state.get(EAST));
+	         return state.setValue(EAST, state.getValue(WEST)).setValue(WEST, state.getValue(EAST));
 	      default:
 	         return super.mirror(state, mirrorIn);
 	      }
@@ -358,11 +358,11 @@ public class BlockStackedRedstoneWire extends BlockBase implements IWaterLoggabl
 	public BlockState rotate(BlockState state, Rotation rot) {
 	      switch(rot) {
 	      case CLOCKWISE_180:
-	         return state.with(NORTH, state.get(SOUTH)).with(EAST, state.get(WEST)).with(SOUTH, state.get(NORTH)).with(WEST, state.get(EAST));
+	         return state.setValue(NORTH, state.getValue(SOUTH)).setValue(EAST, state.getValue(WEST)).setValue(SOUTH, state.getValue(NORTH)).setValue(WEST, state.getValue(EAST));
 	      case COUNTERCLOCKWISE_90:
-	         return state.with(NORTH, state.get(EAST)).with(EAST, state.get(SOUTH)).with(SOUTH, state.get(WEST)).with(WEST, state.get(NORTH));
+	         return state.setValue(NORTH, state.getValue(EAST)).setValue(EAST, state.getValue(SOUTH)).setValue(SOUTH, state.getValue(WEST)).setValue(WEST, state.getValue(NORTH));
 	      case CLOCKWISE_90:
-	         return state.with(NORTH, state.get(WEST)).with(EAST, state.get(NORTH)).with(SOUTH, state.get(EAST)).with(WEST, state.get(SOUTH));
+	         return state.setValue(NORTH, state.getValue(WEST)).setValue(EAST, state.getValue(NORTH)).setValue(SOUTH, state.getValue(EAST)).setValue(WEST, state.getValue(SOUTH));
 	      default:
 	         return state;
 	      }

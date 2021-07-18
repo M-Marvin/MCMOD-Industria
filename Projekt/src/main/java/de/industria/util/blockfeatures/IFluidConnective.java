@@ -24,7 +24,7 @@ public interface IFluidConnective {
 			
 			if (this.canConnect(d)) {
 				
-				TileEntity te = world.getTileEntity(pos.offset(d));
+				TileEntity te = world.getBlockEntity(pos.relative(d));
 				
 				if (te instanceof IFluidConnective) {
 					
@@ -50,7 +50,7 @@ public interface IFluidConnective {
 			
 			if (this.canConnect(d)) {
 				
-				TileEntity te = world.getTileEntity(pos.offset(d));
+				TileEntity te = world.getBlockEntity(pos.relative(d));
 				
 				if (te instanceof IFluidConnective) {
 					

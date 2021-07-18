@@ -76,15 +76,15 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		if (!this.fluid.isEmpty()) compound.put("Fluid", this.fluid.writeToNBT(new CompoundNBT()));
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		this.fluid = FluidStack.loadFluidStackFromNBT(compound.getCompound("Fluid"));
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 	public FluidStack pushFluid(FluidStack fluidIn, Direction callDirection) {
@@ -99,7 +99,7 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 			
 			for (Direction d : Direction.values()) {
 				
-				TileEntity te = this.world.getTileEntity(pos.offset(d));
+				TileEntity te = this.level.getBlockEntity(worldPosition.relative(d));
 				
 				if (te instanceof TileEntityFluidPipe && (callDirection != null ? callDirection.getOpposite() != d : true)) {
 					
@@ -136,13 +136,13 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 				
 			}
 			
-			if (!scannList.contains(pos) && scannDepth <= MAX_PUSH_DEPTH) {
+			if (!scannList.contains(worldPosition) && scannDepth <= MAX_PUSH_DEPTH) {
 				
-				scannList.add(pos);
+				scannList.add(worldPosition);
 				
 				for (Direction d : Direction.values()) {
 					
-					TileEntity te = this.world.getTileEntity(pos.offset(d));
+					TileEntity te = this.level.getBlockEntity(worldPosition.relative(d));
 					
 					if (te instanceof TileEntityFluidPipe && (callDirection != null ? callDirection.getOpposite() != d : true)) {
 						
@@ -167,11 +167,11 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote && !this.fluid.isEmpty()) {
+		if (!this.level.isClientSide && !this.fluid.isEmpty()) {
 			
 			int inputs = 0;
 			for (Direction d : Direction.values()) {
-				TileEntity te = this.world.getTileEntity(pos.offset(d));
+				TileEntity te = this.level.getBlockEntity(worldPosition.relative(d));
 				if (te instanceof TileEntityFluidPipe) {
 					
 					TileEntityFluidPipe pipe = (TileEntityFluidPipe) te;
@@ -183,7 +183,7 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 			if (inputs > 0) {
 				
 				for (Direction d : Direction.values()) {
-					TileEntity te = this.world.getTileEntity(pos.offset(d));
+					TileEntity te = this.level.getBlockEntity(worldPosition.relative(d));
 					if (te instanceof TileEntityFluidPipe) {
 
 						TileEntityFluidPipe pipe = (TileEntityFluidPipe) te;
@@ -223,7 +223,7 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 				
 				for (Direction d : Direction.values()) {
 					
-					TileEntity te = this.world.getTileEntity(pos.offset(d));
+					TileEntity te = this.level.getBlockEntity(worldPosition.relative(d));
 					
 					if (te instanceof IFluidConnective && !(te instanceof TileEntityFluidPipe)) {
 						

@@ -63,25 +63,25 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote()) {
+		if (!this.level.isClientSide()) {
 			
 			if (BlockMultiPart.getInternPartPos(this.getBlockState()).equals(new BlockPos(0, 0, 0))) {
 				
-				TileEntityMOreWashingPlant tileEntity = (TileEntityMOreWashingPlant) BlockMultiPart.getSCenterTE(pos, getBlockState(), world);
+				TileEntityMOreWashingPlant tileEntity = (TileEntityMOreWashingPlant) BlockMultiPart.getSCenterTE(worldPosition, getBlockState(), level);
 				if (tileEntity != null) {
-					FluidStack rest = pushFluid(tileEntity.wasteFluid, world, pos);
+					FluidStack rest = pushFluid(tileEntity.wasteFluid, level, worldPosition);
 					if (rest != tileEntity.wasteFluid) tileEntity.wasteFluid = rest;
 				}
 
 				this.inputFluid = FluidBucketHelper.transferBuckets(this, 4, this.inputFluid, this.maxFluidStorage);
 				this.wasteFluid = FluidBucketHelper.transferBuckets(this, 6, this.wasteFluid, this.maxFluidStorage);
 				
-				ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos);
-				ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(world).getNetwork(pos);
+				ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
+				ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
 				this.hasPower = network.canMachinesRun() == Voltage.NormalVoltage;
 				this.isWorking = this.canWork() && this.hasPower;
 				
-				this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
+				this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 				
 				if (this.isWorking) {
 					
@@ -91,33 +91,33 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 						
 						this.progressTotal = recipe.getWashingTime();
 						
-						if (	ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(1), recipe.getRecipeOutput()) &&
-								ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(2), recipe.getRecipeOutput2()) &&
-								ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(3), recipe.getRecipeOutput3()) &&
+						if (	ItemStackHelper.canMergeRecipeStacks(this.getItem(1), recipe.getResultItem()) &&
+								ItemStackHelper.canMergeRecipeStacks(this.getItem(2), recipe.getRecipeOutput2()) &&
+								ItemStackHelper.canMergeRecipeStacks(this.getItem(3), recipe.getRecipeOutput3()) &&
 								this.maxFluidStorage - this.wasteFluid.getAmount() >= 500) {
 							
 							this.progress++;
 							
 							if (this.progress >= this.progressTotal) {
 								
-								this.getStackInSlot(0).shrink(1);
+								this.getItem(0).shrink(1);
 								
-								if (this.getStackInSlot(1).isEmpty()) {
-									this.setInventorySlotContents(1, recipe.getRecipeOutput().copy());
+								if (this.getItem(1).isEmpty()) {
+									this.setItem(1, recipe.getResultItem().copy());
 								} else {
-									this.getStackInSlot(1).grow(recipe.getRecipeOutput().getCount());
+									this.getItem(1).grow(recipe.getResultItem().getCount());
 								}
 								
-								if (this.getStackInSlot(2).isEmpty()) {
-									this.setInventorySlotContents(2, recipe.getRecipeOutput2().copy());
+								if (this.getItem(2).isEmpty()) {
+									this.setItem(2, recipe.getRecipeOutput2().copy());
 								} else {
-									this.getStackInSlot(2).grow(recipe.getRecipeOutput2().getCount());
+									this.getItem(2).grow(recipe.getRecipeOutput2().getCount());
 								}
 								
-								if (this.getStackInSlot(3).isEmpty()) {
-									this.setInventorySlotContents(3, recipe.getRecipeOutput3().copy());
+								if (this.getItem(3).isEmpty()) {
+									this.setItem(3, recipe.getRecipeOutput3().copy());
 								} else {
-									this.getStackInSlot(3).grow(recipe.getRecipeOutput3().getCount());
+									this.getItem(3).grow(recipe.getRecipeOutput3().getCount());
 								}
 								
 								this.inputFluid.shrink(500);
@@ -152,39 +152,39 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 
 					MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.SCHREDDER_LOOP);
 					
-					IParticleData rawItemParticle = new ItemParticleData(ParticleTypes.ITEM, this.getStackInSlot(0));
+					IParticleData rawItemParticle = new ItemParticleData(ParticleTypes.ITEM, this.getItem(0));
 					
 					for (int i = 0; i < 5; i++) {
-						float dx = (this.world.rand.nextFloat() - 0.5F) + 3.3F;
-						float dy = (this.world.rand.nextFloat() - 0.5F) + 2;
-						float dz = (this.world.rand.nextFloat() - 0.5F) + 0.8F;
+						float dx = (this.level.random.nextFloat() - 0.5F) + 3.3F;
+						float dy = (this.level.random.nextFloat() - 0.5F) + 2;
+						float dz = (this.level.random.nextFloat() - 0.5F) + 0.8F;
 						createParticle(rawItemParticle, dx, dy, dz, 0, 0.1F, 0);
 					}
 
 					for (int i = 0; i < 5; i++) {
-						float dx = (this.world.rand.nextFloat() - 0.5F) * 0.5F + 2.8F;
-						float dy = (this.world.rand.nextFloat() - 0.5F) + 2.1F;
-						float dz = (this.world.rand.nextFloat() - 0.5F) + 1F;
+						float dx = (this.level.random.nextFloat() - 0.5F) * 0.5F + 2.8F;
+						float dy = (this.level.random.nextFloat() - 0.5F) + 2.1F;
+						float dz = (this.level.random.nextFloat() - 0.5F) + 1F;
 						createParticle(rawItemParticle, dx, dy, dz, 0, 0.1F, 0);
 					}
 					
-					float dx = (this.world.rand.nextFloat() - 0.5F) * 0.5F + 2F;
-					float dy = (this.world.rand.nextFloat() - 0.5F) * 0.1F + 1.8F;
-					float dz = (this.world.rand.nextFloat() - 0.5F) * 0.5F + 2.5F;
+					float dx = (this.level.random.nextFloat() - 0.5F) * 0.5F + 2F;
+					float dy = (this.level.random.nextFloat() - 0.5F) * 0.1F + 1.8F;
+					float dz = (this.level.random.nextFloat() - 0.5F) * 0.5F + 2.5F;
 					createParticle(rawItemParticle, dx, dy, dz, 0, 0.1F, 0);
 
-					dx = (this.world.rand.nextFloat() - 0.5F) * 0.5F + 1.6F;
-					dy = (this.world.rand.nextFloat() - 0.5F) * 0.1F + 1.8F;
-					dz = (this.world.rand.nextFloat() - 0.5F) * 0.5F + 2.5F;
+					dx = (this.level.random.nextFloat() - 0.5F) * 0.5F + 1.6F;
+					dy = (this.level.random.nextFloat() - 0.5F) * 0.1F + 1.8F;
+					dz = (this.level.random.nextFloat() - 0.5F) * 0.5F + 2.5F;
 					createParticle(rawItemParticle, dx, dy, dz, 0, 0.1F, 0);
 					
-					IParticleData resultItemParticle = new ItemParticleData(ParticleTypes.ITEM, canWork() ? findRecipe().getRecipeOutput() : this.getStackInSlot(0));
+					IParticleData resultItemParticle = new ItemParticleData(ParticleTypes.ITEM, canWork() ? findRecipe().getResultItem() : this.getItem(0));
 					
 					for (int i = 0; i < 2; i++) {
 
-						dx = (this.world.rand.nextFloat() - 0.5F) + 1F;
-						dy = (this.world.rand.nextFloat() - 0.5F) * 0.1F + 1.8F;
-						dz = (this.world.rand.nextFloat() - 0.5F) + 2.3F;
+						dx = (this.level.random.nextFloat() - 0.5F) + 1F;
+						dy = (this.level.random.nextFloat() - 0.5F) * 0.1F + 1.8F;
+						dz = (this.level.random.nextFloat() - 0.5F) + 2.3F;
 						createParticle(resultItemParticle, dx, dy, dz, 0, 0.1F, -0.02F);
 						
 					}
@@ -193,9 +193,9 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 					
 					for (int i = 0; i < 4; i++) {
 
-						dx = (this.world.rand.nextFloat() - 0.5F) * 1.3F + 1.2F;
-						dy = (this.world.rand.nextFloat() - 0.5F) * 0.1F + 1.8F;
-						dz = (this.world.rand.nextFloat() - 0.5F) + 2.4F;
+						dx = (this.level.random.nextFloat() - 0.5F) * 1.3F + 1.2F;
+						dy = (this.level.random.nextFloat() - 0.5F) * 0.1F + 1.8F;
+						dz = (this.level.random.nextFloat() - 0.5F) + 2.4F;
 						createParticle(waterParticle, dx, dy, dz, 0, 0F, -0.02F);
 						
 					}
@@ -211,11 +211,11 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 	protected void createParticle(IParticleData particle, float x, float y, float z, float sx, float sy, float sz) {
 		Vector3f cord = rotateParticleCord(x, y, z);
 		Vector3f speed = rotateParticleSpeed(sx, sy, sz);
-		this.world.addParticle(particle, pos.getX() + cord.getX(), pos.getY() + cord.getY(), pos.getZ() + cord.getZ(), speed.getX(), speed.getY(), speed.getZ());
+		this.level.addParticle(particle, worldPosition.getX() + cord.x(), worldPosition.getY() + cord.y(), worldPosition.getZ() + cord.z(), speed.x(), speed.y(), speed.z());
 	}
 	
 	protected Vector3f rotateParticleCord(float x, float y, float z) {
-		Direction facing = getBlockState().get(BlockStateProperties.HORIZONTAL_FACING);
+		Direction facing = getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
 		switch (facing) {
 		case NORTH:
 			return new Vector3f(x, y, z);
@@ -231,7 +231,7 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 	}
 	
 	protected Vector3f rotateParticleSpeed(float x, float y, float z) {
-		Direction facing = getBlockState().get(BlockStateProperties.HORIZONTAL_FACING);
+		Direction facing = getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
 		switch (facing) {
 		case NORTH:
 			return new Vector3f(x, y, z);
@@ -251,7 +251,7 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 	}
 	
 	public WashingRecipe findRecipe() {
-		Optional<WashingRecipe> recipe = this.world.getRecipeManager().getRecipe(ModRecipeTypes.WASHING, this, this.world);
+		Optional<WashingRecipe> recipe = this.level.getRecipeManager().getRecipeFor(ModRecipeTypes.WASHING, this, this.level);
 		return recipe.isPresent() ? recipe.get() : null;
 	}
 	
@@ -263,7 +263,7 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 	@Override
 	public FluidStack getFluid(int amount) {
 		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
-		TileEntity tileEntity = BlockMultiPart.getSCenterTE(pos, getBlockState(), world);
+		TileEntity tileEntity = BlockMultiPart.getSCenterTE(worldPosition, getBlockState(), level);
 		if (tileEntity instanceof TileEntityMOreWashingPlant) {
 			if (ipos.equals(new BlockPos(2, 0, 0))) {
 				int transfer = Math.min(amount, ((TileEntityMOreWashingPlant) tileEntity).wasteFluid.getAmount());
@@ -280,10 +280,10 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 	@Override
 	public FluidStack insertFluid(FluidStack fluid) {
 		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
-		TileEntity tileEntity = BlockMultiPart.getSCenterTE(pos, getBlockState(), world);
+		TileEntity tileEntity = BlockMultiPart.getSCenterTE(worldPosition, getBlockState(), level);
 		if (tileEntity instanceof TileEntityMOreWashingPlant) {
 			if (ipos.equals(new BlockPos(2, 0, 0))) {
-				if (((TileEntityMOreWashingPlant) tileEntity).inputFluid.getFluid().isEquivalentTo(fluid.getFluid()) || ((TileEntityMOreWashingPlant) tileEntity).inputFluid.isEmpty()) {
+				if (((TileEntityMOreWashingPlant) tileEntity).inputFluid.getFluid().isSame(fluid.getFluid()) || ((TileEntityMOreWashingPlant) tileEntity).inputFluid.isEmpty()) {
 					int capcaity = this.maxFluidStorage - ((TileEntityMOreWashingPlant) tileEntity).inputFluid.getAmount();
 					int transfer = Math.min(capcaity, fluid.getAmount());
 					if (transfer > 0) {
@@ -325,7 +325,7 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 	@Override
 	public boolean canConnect(Direction side) {
 		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
-		Direction facing = this.getBlockState().get(BlockMultiPart.FACING);
+		Direction facing = this.getBlockState().getValue(BlockMultiPart.FACING);
 		return	(ipos.equals(new BlockPos(0, 0, 0)) && side == facing) ||
 				(ipos.equals(new BlockPos(2, 0, 0)) && side == facing);
 	}
@@ -346,33 +346,33 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 	}
 	
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
 		return index == 0;
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return index > 0;
 	}
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(pos.add(-6, -1, -6), pos.add(6, 6, 6));
+		return new AxisAlignedBB(worldPosition.offset(-6, -1, -6), worldPosition.offset(6, 6, 6));
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		if (!this.inputFluid.isEmpty()) compound.put("FluidIn", this.inputFluid.writeToNBT(new CompoundNBT()));
 		if (!this.wasteFluid.isEmpty()) compound.put("WasteFluid", this.wasteFluid.writeToNBT(new CompoundNBT()));
 		compound.putBoolean("hasPower", this.hasPower);
 		compound.putBoolean("isWorking", this.isWorking);
 		compound.putInt("progress", this.progress);
 		compound.putInt("progressTotal", this.progressTotal);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		this.inputFluid = FluidStack.EMPTY;
 		this.wasteFluid = FluidStack.EMPTY;
 		if (compound.contains("FluidIn")) this.inputFluid = FluidStack.loadFluidStackFromNBT(compound.getCompound("FluidIn"));
@@ -381,17 +381,17 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 		this.isWorking = compound.getBoolean("isWorking");
 		this.progress = compound.getInt("progress");
 		this.progressTotal = compound.getInt("progressTotal");
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(pos, 0, this.serializeNBT());
+		return new SUpdateTileEntityPacket(worldPosition, 0, this.serializeNBT());
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.deserializeNBT(pkt.getNbtCompound());
+		this.deserializeNBT(pkt.getTag());
 	}
 	
 }

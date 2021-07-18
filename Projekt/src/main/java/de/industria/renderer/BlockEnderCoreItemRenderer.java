@@ -27,25 +27,25 @@ public class BlockEnderCoreItemRenderer extends ItemStackTileEntityRenderer {
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public void func_239207_a_(ItemStack stack, TransformType type, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+	public void renderByItem(ItemStack stack, TransformType type, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 
-		Minecraft.getInstance().getBlockRendererDispatcher().renderBlock(ModItems.ender_core.getDefaultState(), matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+		Minecraft.getInstance().getBlockRenderer().renderSingleBlock(ModItems.ender_core.defaultBlockState(), matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
 		
-		IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.getEntityTranslucent(ENDER_CORE_TEXTURES));
+		IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.entityTranslucent(ENDER_CORE_TEXTURES));
 		
-		matrixStackIn.push();
+		matrixStackIn.pushPose();
 
 		rotationProgress += 0.1F;
 		if (rotationProgress > 360) rotationProgress -= 360;
 		float rotation = rotationProgress;
 		
-		matrixStackIn.rotate(Vector3f.ZN.rotationDegrees(180));
+		matrixStackIn.mulPose(Vector3f.ZN.rotationDegrees(180));
 		matrixStackIn.translate(-0.5F, -1.5F, 0.5F);
 		
 		coreModel.setRotation(rotation);
-		coreModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
+		coreModel.renderToBuffer(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 		
-		matrixStackIn.pop();
+		matrixStackIn.popPose();
 		
 	}
 	

@@ -16,7 +16,7 @@ public class SimpleOrePlacement extends SimplePlacement<SimpleOrePlacementConfig
 	}
 
 	@Override
-	protected Stream<BlockPos> getPositions(Random random, SimpleOrePlacementConfig config, BlockPos pos) {
+	protected Stream<BlockPos> place(Random random, SimpleOrePlacementConfig config, BlockPos pos) {
 		
 		return IntStream.range(0, config.countPerChunk).mapToObj((index) -> {
 

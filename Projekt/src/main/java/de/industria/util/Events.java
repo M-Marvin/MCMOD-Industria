@@ -73,30 +73,30 @@ public class Events {
 		PlayerEntity playerIn = event.getPlayer();
 		
 		RayTraceResult result = event.getTarget();
-		Vector3d vec1p = event.getPlayer().getLookVec();
-		int x = (int) (result.getHitVec().x % 1 == 0 ? result.getHitVec().x + (vec1p.x > 0 ? 0 : -1) : Math.floor(result.getHitVec().x));
-		int y = (int) (result.getHitVec().y % 1 == 0 ? result.getHitVec().y + (vec1p.y > 0 ? 0 : -1) : Math.floor(result.getHitVec().y));
-		int z = (int) (result.getHitVec().z % 1 == 0 ? result.getHitVec().z + (vec1p.z > 0 ? 0 : -1) : Math.floor(result.getHitVec().z));
+		Vector3d vec1p = event.getPlayer().getLookAngle();
+		int x = (int) (result.getLocation().x % 1 == 0 ? result.getLocation().x + (vec1p.x > 0 ? 0 : -1) : Math.floor(result.getLocation().x));
+		int y = (int) (result.getLocation().y % 1 == 0 ? result.getLocation().y + (vec1p.y > 0 ? 0 : -1) : Math.floor(result.getLocation().y));
+		int z = (int) (result.getLocation().z % 1 == 0 ? result.getLocation().z + (vec1p.z > 0 ? 0 : -1) : Math.floor(result.getLocation().z));
 		BlockPos fluidPos = new BlockPos(x, y, z);
 		FluidState fluidState = worldIn.getFluidState(fluidPos);
 		
-		if (fluidState.getBlockState().getBlock() instanceof BlockGasFluid) {
+		if (fluidState.createLegacyBlock().getBlock() instanceof BlockGasFluid) {
 			
-			ItemStack bucketItem = playerIn.getHeldItemMainhand();
+			ItemStack bucketItem = playerIn.getMainHandItem();
 						
-			if (fluidState.getBlockState().getBlock() instanceof IBucketPickupHandler) {
-				Fluid fluid = ((IBucketPickupHandler)fluidState.getBlockState().getBlock()).pickupFluid(worldIn, fluidPos, fluidState.getBlockState());
+			if (fluidState.createLegacyBlock().getBlock() instanceof IBucketPickupHandler) {
+				Fluid fluid = ((IBucketPickupHandler)fluidState.createLegacyBlock().getBlock()).takeLiquid(worldIn, fluidPos, fluidState.createLegacyBlock());
 				
 				if (fluid != Fluids.EMPTY) {
 					
-					playerIn.addStat(Stats.ITEM_USED.get(bucketItem.getItem()));
+					playerIn.awardStat(Stats.ITEM_USED.get(bucketItem.getItem()));
 					
-					SoundEvent soundevent = fluid.isIn(FluidTags.LAVA) ? SoundEvents.ITEM_BUCKET_FILL_LAVA : SoundEvents.ITEM_BUCKET_FILL;
+					SoundEvent soundevent = fluid.is(FluidTags.LAVA) ? SoundEvents.BUCKET_FILL_LAVA : SoundEvents.BUCKET_FILL;
 					playerIn.playSound(soundevent, 1.0F, 1.0F);
-					ItemStack itemstack1 = DrinkHelper.fill(bucketItem.copy(), playerIn, new ItemStack(fluid.getFilledBucket()));
-					if (!worldIn.isRemote) {
-						CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity)playerIn, new ItemStack(fluid.getFilledBucket()));
-						playerIn.setItemStackToSlot(EquipmentSlotType.MAINHAND, itemstack1);
+					ItemStack itemstack1 = DrinkHelper.createFilledResult(bucketItem.copy(), playerIn, new ItemStack(fluid.getBucket()));
+					if (!worldIn.isClientSide) {
+						CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity)playerIn, new ItemStack(fluid.getBucket()));
+						playerIn.setItemSlot(EquipmentSlotType.MAINHAND, itemstack1);
 					}
 					
 				}
@@ -109,12 +109,12 @@ public class Events {
 	protected static long lastServerWorldTick = 0L;
 	@SubscribeEvent
 	public static final void onWorldTick(net.minecraftforge.event.TickEvent.WorldTickEvent event) {
-		if (!event.world.isRemote() && event.phase == Phase.START && event.side == LogicalSide.SERVER) {
+		if (!event.world.isClientSide() && event.phase == Phase.START && event.side == LogicalSide.SERVER) {
 			if (lastServerWorldTick != event.world.getGameTime()) {
 				lastServerWorldTick = event.world.getGameTime();
 				MinecartHandler.getHandlerForWorld(event.world).updateMinecarts();
 			}
-			if (event.world.loadedTileEntityList.size() > 0) {
+			if (event.world.blockEntityList.size() > 0) {
 				ChunkLoadHandler.getHandlerForWorld(event.world).updateChunkForceLoads();
 			}
 		}
@@ -146,15 +146,15 @@ public class Events {
 	
 	public static boolean compareBiomes(ConfiguredFeature<?, ?> registredFeature, ConfiguredFeature<?, ?> feature) {
 		
-		Optional<JsonElement> registredJson = ConfiguredFeature.field_242763_a.encode(registredFeature, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).get().left();
+		Optional<JsonElement> registredJson = ConfiguredFeature.DIRECT_CODEC.encode(registredFeature, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).get().left();
 		if (!registredJson.isPresent()) return false;
 		JsonObject json1 = registredJson.get().getAsJsonObject();
 		
 		String jsonString = json1.toString();
-		String jsonString2 = ConfiguredFeature.field_242763_a.encode(feature, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).get().left().get().toString();
+		String jsonString2 = ConfiguredFeature.DIRECT_CODEC.encode(feature, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).get().left().get().toString();
 //		
 //		if (jsonString.contains("oak_leaves")) System.out.println(jsonString + "\n" + jsonString2);
-//		if (jsonString.contains(jsonString2)) System.out.println("TSET");//System.out.println(ConfiguredFeature.field_242763_a.encode(Features.OAK, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).get().left().get().toString() + " " + jsonString);
+//		if (jsonString.contains(jsonString2)) System.out.println("TSET");//System.out.println(ConfiguredFeature.DIRECT_CODEC.encode(Features.OAK, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).get().left().get().toString() + " " + jsonString);
 //		
 		return jsonString.contains(jsonString2);
 	}
@@ -225,26 +225,26 @@ public class Events {
 			BlockPos pos = event.getPos();
 			BooleanProperty[] fireStates = new BooleanProperty[] {null, FireBlock.UP, FireBlock.NORTH, FireBlock.SOUTH, FireBlock.WEST, FireBlock.EAST};
 			for (Direction d : Direction.values()) {
-				BooleanProperty fireProp = fireStates[d.getIndex()];
-				if (fireProp != null ? state.get(fireProp) : true) {
-					BlockPos fireCatchingBlockPos = pos.offset(d);
+				BooleanProperty fireProp = fireStates[d.get3DDataValue()];
+				if (fireProp != null ? state.getValue(fireProp) : true) {
+					BlockPos fireCatchingBlockPos = pos.relative(d);
 					BlockState fireCatchingBlockState = event.getWorld().getBlockState(fireCatchingBlockPos);
 					if (!fireCatchingBlockState.isFlammable(event.getWorld(), fireCatchingBlockPos, d.getOpposite())) return;
 					if (fireCatchingBlockState.getBlock() instanceof DoorBlock) {
-						boolean otherLower = fireCatchingBlockState.get(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.LOWER;
-						BlockPos otherHalf = otherLower ? fireCatchingBlockPos.up() : fireCatchingBlockPos.down();
+						boolean otherLower = fireCatchingBlockState.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.LOWER;
+						BlockPos otherHalf = otherLower ? fireCatchingBlockPos.above() : fireCatchingBlockPos.below();
 						BlockState otherState = event.getWorld().getBlockState(otherHalf);
 						BlockState[] burnedStates = BlockBurnManager.getBurnedVariants(new BlockState[] {fireCatchingBlockState, otherState}, event.getWorld(), fireCatchingBlockPos);
 						if (fireCatchingBlockState != burnedStates[0]) {
-							event.getWorld().setBlockState(!otherLower ? otherHalf : fireCatchingBlockPos, Blocks.AIR.getDefaultState(), 0);
-							event.getWorld().setBlockState(otherLower ? otherHalf : fireCatchingBlockPos, Blocks.AIR.getDefaultState(), 0);
-							event.getWorld().setBlockState(fireCatchingBlockPos, burnedStates[0], 2);
-							event.getWorld().setBlockState(otherHalf, burnedStates[1], 2);
+							event.getWorld().setBlock(!otherLower ? otherHalf : fireCatchingBlockPos, Blocks.AIR.defaultBlockState(), 0);
+							event.getWorld().setBlock(otherLower ? otherHalf : fireCatchingBlockPos, Blocks.AIR.defaultBlockState(), 0);
+							event.getWorld().setBlock(fireCatchingBlockPos, burnedStates[0], 2);
+							event.getWorld().setBlock(otherHalf, burnedStates[1], 2);
 						}
 					} else {
 						BlockState burnedBlockState = BlockBurnManager.getBurnedVariant(fireCatchingBlockState, event.getWorld(), fireCatchingBlockPos);
 						if (fireCatchingBlockState != burnedBlockState) {			
-							event.getWorld().setBlockState(fireCatchingBlockPos, burnedBlockState, 3);
+							event.getWorld().setBlock(fireCatchingBlockPos, burnedBlockState, 3);
 						}
 					}
 					

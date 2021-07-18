@@ -78,7 +78,7 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 	
 	public void setInput(ItemStack chanel, boolean powered) {
 		
-		String name = chanel.getDisplayName().getUnformattedComponentText();
+		String name = chanel.getHoverName().getContents();
 		if (name.length() > 0) {
 			
 			this.variables.put(name, new OperatorResult(powered, OperatorType.BOOL));
@@ -90,7 +90,7 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote) {
+		if (!this.level.isClientSide) {
 			
 			if (this.hasProcessor()) {
 				String[] codeLines = this.getCode();
@@ -109,13 +109,13 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 				if (value.getType() == OperatorType.BOOL) {
 					
 					ItemStack chanel = new ItemStack(Items.REDSTONE_TORCH);
-					chanel.setDisplayName(new StringTextComponent(name));
+					chanel.setHoverName(new StringTextComponent(name));
 					RedstoneControlSignal signal = new RedstoneControlSignal(chanel, value.getBValue());
 					
-					BlockState state = this.world.getBlockState(this.pos);
+					BlockState state = this.level.getBlockState(this.worldPosition);
 					if (state.getBlock() == ModItems.signal_processor_contact) {
 						
-						((BlockRSignalProcessorContact) state.getBlock()).sendSignal(this.world, this.pos, signal);
+						((BlockRSignalProcessorContact) state.getBlock()).sendSignal(this.level, this.worldPosition, signal);
 						
 					}
 					
@@ -123,7 +123,7 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 				
 			}
 			
-			this.world.notifyBlockUpdate(this.pos, getBlockState(), getBlockState(), 0);
+			this.level.sendBlockUpdated(this.worldPosition, getBlockState(), getBlockState(), 0);
 			
 		}
 		
@@ -132,18 +132,18 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
 		CompoundNBT compound = this.serializeNBT();
-		return new SUpdateTileEntityPacket(this.pos, 0, compound);
+		return new SUpdateTileEntityPacket(this.worldPosition, 0, compound);
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.deserializeNBT(pkt.getNbtCompound());
+		this.deserializeNBT(pkt.getTag());
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		if (hasProcessor()) {
-			CompoundNBT processorNbt = this.processorStack.write(new CompoundNBT());
+			CompoundNBT processorNbt = this.processorStack.save(new CompoundNBT());
 			compound.put("Processor", processorNbt);
 		}
 		compound.putBoolean("LastSuccessState", this.lastSuccessState);
@@ -162,20 +162,20 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 		}
 		compound.put("Memory", bufferNBT);
 		compound.put("DeviceIP", this.deviceIP.writeNBT());
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		this.processorStack = ItemStack.EMPTY;
 		if (compound.contains("Processor")) {
-			ItemStack processorStack = ItemStack.read(compound.getCompound("Processor"));
+			ItemStack processorStack = ItemStack.of(compound.getCompound("Processor"));
 			this.setProcessorStack(processorStack);
 		}
 		this.lastSuccessState = compound.getBoolean("LastSuccessState");
 		CompoundNBT bufferNBT = compound.getCompound("Memory");
 		this.variables.clear();
-		for (String variableName : bufferNBT.keySet()) {
+		for (String variableName : bufferNBT.getAllKeys()) {
 			CompoundNBT variableTag = bufferNBT.getCompound(variableName);
 			OperatorType type = variableTag.getString("Type").equals("Bool") ? OperatorType.BOOL : OperatorType.INT;
 			if (type == OperatorType.BOOL) {
@@ -187,7 +187,7 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 			}
 		}
 		this.deviceIP = NetworkDeviceIP.read(compound.getCompound("DeviceIP"));
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 	@Override
@@ -207,7 +207,7 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 		if (hasProcessor()) {
 			return ((ItemProcessor) this.getProcessorStack().getItem()).getScreenTitle(this.getProcessorStack());
 		} else {
-			return new TranslationTextComponent(ModItems.signal_processor_contact.getTranslationKey());
+			return new TranslationTextComponent(ModItems.signal_processor_contact.getDescriptionId());
 		}
 		
 	}
@@ -258,7 +258,7 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 					message.writeInt(variable.getIValue());
 				}
 			}
-			device.sendMessage(message, world, pos, state);
+			device.sendMessage(message, level, worldPosition, state);
 		}
 	}
 	

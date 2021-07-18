@@ -14,7 +14,7 @@ import net.minecraft.world.IBlockReader;
 public class BlockLeavesBase extends LeavesBlock {
 	
 	public BlockLeavesBase(String name, Material material, float hardness, float resistance, SoundType sound) {
-		super(Properties.create(material).hardnessAndResistance(hardness, resistance).sound(sound).tickRandomly().notSolid());
+		super(Properties.of(material).strength(hardness, resistance).sound(sound).randomTicks().noOcclusion());
 		this.setRegistryName(new ResourceLocation(Industria.MODID, name));
 	}
 
@@ -29,7 +29,7 @@ public class BlockLeavesBase extends LeavesBlock {
 	}
 	
 	@Override
-	public PushReaction getPushReaction(BlockState state) {
+	public PushReaction getPistonPushReaction(BlockState state) {
 		return PushReaction.DESTROY;
 	}
 	

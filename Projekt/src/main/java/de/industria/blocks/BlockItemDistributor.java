@@ -41,12 +41,12 @@ public class BlockItemDistributor extends BlockContainerBase implements IAdvance
 	public static final EnumProperty<DistributorType> TYPE = EnumProperty.create("type", DistributorType.class);
 	
 	public BlockItemDistributor() {
-		super("item_distributor", Material.IRON, 1.5F, 1F, SoundType.METAL);
-		this.setDefaultState(this.stateContainer.getBaseState().with(TYPE, DistributorType.CORE));
+		super("item_distributor", Material.METAL, 1.5F, 1F, SoundType.METAL);
+		this.registerDefaultState(this.stateDefinition.any().setValue(TYPE, DistributorType.CORE));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(TYPE);
 	}
 	
@@ -54,11 +54,11 @@ public class BlockItemDistributor extends BlockContainerBase implements IAdvance
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
 		List<BlockPos> distributors = new ArrayList<BlockPos>();
 		for (Direction d : Direction.values()) {
-			findConnectedDistributors(context.getWorld(), context.getPos().offset(d), distributors);
+			findConnectedDistributors(context.getLevel(), context.getClickedPos().relative(d), distributors);
 		}
-		if (distributors.size() >= 9) return context.getWorld().getBlockState(context.getPos());
-		if (distributors.size() > 0) return this.getDefaultState().with(TYPE, DistributorType.EXTENSION);
-		return this.getDefaultState();
+		if (distributors.size() >= 9) return context.getLevel().getBlockState(context.getClickedPos());
+		if (distributors.size() > 0) return this.defaultBlockState().setValue(TYPE, DistributorType.EXTENSION);
+		return this.defaultBlockState();
 	}
 	
 	@Override
@@ -67,15 +67,15 @@ public class BlockItemDistributor extends BlockContainerBase implements IAdvance
 		int cores = findConnectedDistributors(world, pos, distributors);
 		if (distributors.size() > 0 && cores != 1) {
 			BlockPos firstDistributor = distributors.get(0);
-			world.setBlockState(firstDistributor, world.getBlockState(firstDistributor).with(TYPE, DistributorType.CORE));
+			world.setBlockAndUpdate(firstDistributor, world.getBlockState(firstDistributor).setValue(TYPE, DistributorType.CORE));
 			for (int i = 1; i < distributors.size(); i++) {
 				BlockPos secondDistributor = distributors.get(i);
-				TileEntity tileEntity = world.getTileEntity(secondDistributor);
+				TileEntity tileEntity = world.getBlockEntity(secondDistributor);
 				if (tileEntity instanceof IInventory) {
-					InventoryHelper.dropInventoryItems(world, secondDistributor, (IInventory) tileEntity);
+					InventoryHelper.dropContents(world, secondDistributor, (IInventory) tileEntity);
 				}
-				world.setBlockState(secondDistributor, world.getBlockState(secondDistributor).with(TYPE, DistributorType.EXTENSION));
-				world.removeTileEntity(secondDistributor);
+				world.setBlockAndUpdate(secondDistributor, world.getBlockState(secondDistributor).setValue(TYPE, DistributorType.EXTENSION));
+				world.removeBlockEntity(secondDistributor);
 			}
 		}
 	}
@@ -87,9 +87,9 @@ public class BlockItemDistributor extends BlockContainerBase implements IAdvance
 		if (state.getBlock() == this && posList.size() < 9) {
 			posList.add(pos);
 			int coreCount = 0;
-			if (state.get(TYPE) == DistributorType.CORE) coreCount = 1;
+			if (state.getValue(TYPE) == DistributorType.CORE) coreCount = 1;
 			for (Direction d : Direction.values()) {
-				coreCount += findConnectedDistributors(world, pos.offset(d), posList);
+				coreCount += findConnectedDistributors(world, pos.relative(d), posList);
 			}
 			return coreCount;
 		}
@@ -99,26 +99,26 @@ public class BlockItemDistributor extends BlockContainerBase implements IAdvance
 	
 	@Override
 	public boolean hasTileEntity(BlockState state) {
-		return state.get(TYPE) == DistributorType.CORE;
+		return state.getValue(TYPE) == DistributorType.CORE;
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityItemDistributor();
 	}
 	
 	@Override
-	public ISidedInventory createInventory(BlockState state, IWorld world, BlockPos pos) {
-		if (state.get(TYPE) == DistributorType.CORE) {
-			return (ISidedInventory) world.getTileEntity(pos);
+	public ISidedInventory getContainer(BlockState state, IWorld world, BlockPos pos) {
+		if (state.getValue(TYPE) == DistributorType.CORE) {
+			return (ISidedInventory) world.getBlockEntity(pos);
 		} else {
 
 			List<BlockPos> distributors = new ArrayList<BlockPos>();
 			findConnectedDistributors(world, pos, distributors);
 			for (BlockPos distributor : distributors) {
 				BlockState distributorState = world.getBlockState(distributor);
-				if (distributorState.getBlock() == this ? distributorState.get(TYPE) == DistributorType.CORE : false) {
-					return (ISidedInventory) world.getTileEntity(distributor);
+				if (distributorState.getBlock() == this ? distributorState.getValue(TYPE) == DistributorType.CORE : false) {
+					return (ISidedInventory) world.getBlockEntity(distributor);
 				}
 			}
 			
@@ -127,11 +127,11 @@ public class BlockItemDistributor extends BlockContainerBase implements IAdvance
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-		if (state.get(TYPE) == DistributorType.CORE) {
-			TileEntity tileEntity = worldIn.getTileEntity(pos);
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+		if (state.getValue(TYPE) == DistributorType.CORE) {
+			TileEntity tileEntity = worldIn.getBlockEntity(pos);
 			if (tileEntity instanceof INamedContainerProvider) {
-				if (!worldIn.isRemote()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
+				if (!worldIn.isClientSide()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
 				return ActionResultType.SUCCESS;
 			}
 		}
@@ -165,7 +165,7 @@ public class BlockItemDistributor extends BlockContainerBase implements IAdvance
 		}
 
 		@Override
-		public String getString() {
+		public String getSerializedName() {
 			return name;
 		}
 		

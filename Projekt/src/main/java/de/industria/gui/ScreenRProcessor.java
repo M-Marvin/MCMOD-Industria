@@ -28,13 +28,13 @@ public class ScreenRProcessor extends ContainerScreen<ContainerRProcessor> {
 	public ScreenRProcessor(ContainerRProcessor screenContainer, PlayerInventory inv, ITextComponent titleIn) {
     	super(screenContainer, inv, titleIn);
     	this.processorItem = screenContainer.getTileEntity().getProcessorStack();
-    	this.contactPos = screenContainer.getTileEntity().getPos();
+    	this.contactPos = screenContainer.getTileEntity().getBlockPos();
 	}
 	
 	@Override
 	protected void init() {
 
-    	this.minecraft.keyboardListener.enableRepeatEvents(true);
+    	this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
     	int i = this.width / 2 - 100;
     	int j = this.height / 2 - 100;
     	
@@ -42,9 +42,9 @@ public class ScreenRProcessor extends ContainerScreen<ContainerRProcessor> {
     	this.codeFields = new TextFieldWidget[codeLines.length];
     	for (int i2 = 0; i2 < codeLines.length; i2++) {
     		this.codeFields[i2] = new TextFieldWidget(this.font, i + 21, j + 35 + (i2 * 10), 160, 10, new TranslationTextComponent("line" + i2));
-    		this.codeFields[i2].setEnableBackgroundDrawing(false);
-    		this.codeFields[i2].setMaxStringLength(128);
-    		this.codeFields[i2].setText(codeLines[i2]);
+    		this.codeFields[i2].setBordered(false);
+    		this.codeFields[i2].setMaxLength(128);
+    		this.codeFields[i2].setValue(codeLines[i2]);
     		this.codeFields[i2].setResponder(this::onCodeChanged);
     		this.children.add(this.codeFields[i2]);
     	}
@@ -60,7 +60,7 @@ public class ScreenRProcessor extends ContainerScreen<ContainerRProcessor> {
 		boolean flag = false;
 		for (TextFieldWidget field : this.codeFields) {
 			if (flag) {
-				field.setFocused2(false);
+				field.setFocus(false);
 			} else {
 				if (field.isFocused()) flag = true;
 			}
@@ -71,7 +71,7 @@ public class ScreenRProcessor extends ContainerScreen<ContainerRProcessor> {
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		for (TextFieldWidget field : this.codeFields) {
-			if (field.canWrite()) {
+			if (field.canConsumeInput()) {
 				return field.keyPressed(keyCode, scanCode, modifiers);
 			}
 		}
@@ -90,7 +90,7 @@ public class ScreenRProcessor extends ContainerScreen<ContainerRProcessor> {
 		
 		String[] codeLines = new String[this.codeFields.length];
 		for (int i = 0; i < this.codeFields.length; i++) {
-			codeLines[i] = this.codeFields[i].getText();
+			codeLines[i] = this.codeFields[i].getValue();
 		}
 		
 		ItemProcessor processor = (ItemProcessor) this.processorItem.getItem();
@@ -102,20 +102,20 @@ public class ScreenRProcessor extends ContainerScreen<ContainerRProcessor> {
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindTexture(PROCESSOR_GUI_TEXTURES);
-	    int i = this.guiLeft;
-	    int j = (this.height - this.ySize) / 2;
-	    this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
+		this.minecraft.getTextureManager().bind(PROCESSOR_GUI_TEXTURES);
+	    int i = this.leftPos;
+	    int j = (this.height - this.imageHeight) / 2;
+	    this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
 		for (TextFieldWidget field : this.codeFields) {
 			field.render(matrixStack, x, y, partialTicks);;
 		}
 	}
 	
 	@Override
-	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
-		this.font.func_243248_b(matrixStack, this.title, (float)this.titleX, (float)this.titleY, 4210752);
+	protected void renderLabels(MatrixStack matrixStack, int x, int y) {
+		this.font.draw(matrixStack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
 	}
 	
 }

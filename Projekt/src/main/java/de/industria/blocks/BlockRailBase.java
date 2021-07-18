@@ -11,7 +11,7 @@ import net.minecraftforge.common.ToolType;
 public class BlockRailBase extends RailBlock {
 	
 	public BlockRailBase(String name) {
-		super(AbstractBlock.Properties.create(Material.MISCELLANEOUS).doesNotBlockMovement().hardnessAndResistance(0.7F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE));
+		super(AbstractBlock.Properties.of(Material.DECORATION).noCollission().strength(0.7F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE));
 		this.setRegistryName(new ResourceLocation(Industria.MODID, name));
 	}
 	

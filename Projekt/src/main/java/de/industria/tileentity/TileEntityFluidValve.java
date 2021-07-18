@@ -44,8 +44,8 @@ public class TileEntityFluidValve extends TileEntityFluidPipe {
 	
 	public void updateFlowRate() {
 		
-		int power = world.getRedstonePowerFromNeighbors(pos);
-		boolean opened = this.getBlockState().get(BlockFluidValve.OPEN);
+		int power = level.getBestNeighborSignal(worldPosition);
+		boolean opened = this.getBlockState().getValue(BlockFluidValve.OPEN);
 		this.maxFlow = opened ? this.maxFluid : (int) ((float) (power / 15F) * this.maxFluid);
 		
 	}
@@ -62,15 +62,15 @@ public class TileEntityFluidValve extends TileEntityFluidPipe {
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		compound.putInt("flowRate", this.maxFlow);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		this.maxFlow = (int) compound.getFloat("flowRate");
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 }

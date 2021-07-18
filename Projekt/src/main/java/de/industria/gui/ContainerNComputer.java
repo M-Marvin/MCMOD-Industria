@@ -2,7 +2,6 @@ package de.industria.gui;
 
 import de.industria.tileentity.TileEntityNComputer;
 import de.industria.typeregistys.ModContainerType;
-import de.industria.util.blockfeatures.ContainerTileEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.network.PacketBuffer;

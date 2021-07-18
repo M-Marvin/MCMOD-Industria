@@ -21,12 +21,12 @@ public class RifiningRecipeSerializer<T extends RifiningRecipe> extends ForgeReg
 		this.factory = factory;
 	}
 	
-	public T read(ResourceLocation recipeId, JsonObject json) {
+	public T fromJson(ResourceLocation recipeId, JsonObject json) {
 		JsonArray resultItem = json.get("resultItems").getAsJsonArray();
 		ItemStack[] itemsOut = new ItemStack[3];
-		itemsOut[0] = ShapedRecipe.deserializeItem(resultItem.get(0).getAsJsonObject());
-		itemsOut[1] = resultItem.size() > 1 ? ShapedRecipe.deserializeItem(resultItem.get(1).getAsJsonObject()) : ItemStack.EMPTY;
-		itemsOut[2] = resultItem.size() > 2 ? ShapedRecipe.deserializeItem(resultItem.get(2).getAsJsonObject()) : ItemStack.EMPTY;
+		itemsOut[0] = ShapedRecipe.itemFromJson(resultItem.get(0).getAsJsonObject());
+		itemsOut[1] = resultItem.size() > 1 ? ShapedRecipe.itemFromJson(resultItem.get(1).getAsJsonObject()) : ItemStack.EMPTY;
+		itemsOut[2] = resultItem.size() > 2 ? ShapedRecipe.itemFromJson(resultItem.get(2).getAsJsonObject()) : ItemStack.EMPTY;
 		FluidStack fluidIn = RifiningRecipeSerializer.deserializeFluidStack(json.get("ingredientFluid").getAsJsonObject());
 		FluidStack fluidOut = RifiningRecipeSerializer.deserializeFluidStack(json.get("resultFluid").getAsJsonObject());
 		int rifiningTime = json.get("rifiningTime").getAsInt();
@@ -34,10 +34,10 @@ public class RifiningRecipeSerializer<T extends RifiningRecipe> extends ForgeReg
 		return this.factory.create(recipeId, itemsOut, fluidIn, fluidOut, rifiningTime);
 	}
 	
-	public T read(ResourceLocation recipeId, PacketBuffer buffer) {
+	public T fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
 		ItemStack[] itemsOut = new ItemStack[3];
 		for (int i = 0; i < 3; i++) {
-			itemsOut[i] = buffer.readItemStack();
+			itemsOut[i] = buffer.readItem();
 		}
 		FluidStack fluidIn = buffer.readFluidStack();
 		FluidStack fluidOut = buffer.readFluidStack();
@@ -46,9 +46,9 @@ public class RifiningRecipeSerializer<T extends RifiningRecipe> extends ForgeReg
 	}
 	
 	@Override
-	public void write(PacketBuffer buffer, T recipe) {
+	public void toNetwork(PacketBuffer buffer, T recipe) {
 		for (int i = 0; i < 3; i++) {
-			buffer.writeItemStack(recipe.itemsOut[i]);
+			buffer.writeItem(recipe.itemsOut[i]);
 		}
 		buffer.writeFluidStack(recipe.fluidIn);
 		buffer.writeFluidStack(recipe.fluidOut);
@@ -63,7 +63,7 @@ public class RifiningRecipeSerializer<T extends RifiningRecipe> extends ForgeReg
 	public static FluidStack deserializeFluidStack(JsonObject json) {
 		
 		ResourceLocation fluidName = new ResourceLocation(json.get("fluid").getAsString());
-		Fluid fluid = Registry.FLUID.getOrDefault(fluidName);
+		Fluid fluid = Registry.FLUID.get(fluidName);
 		int amount = json.has("amount") ? json.get("amount").getAsInt() : 1;
 		return new FluidStack(fluid, amount);
 		

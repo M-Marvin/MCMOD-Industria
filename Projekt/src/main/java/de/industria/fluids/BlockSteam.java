@@ -25,8 +25,8 @@ public class BlockSteam extends BlockGasFluid {
 	public static final BooleanProperty PRESSURIZED = BooleanProperty.create("pressurized");
 	
 	public BlockSteam() {
-		super("steam", ModFluids.STEAM, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
-		this.setDefaultState(this.stateContainer.getBaseState().with(PRESSURIZED, false));
+		super("steam", ModFluids.STEAM, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops());
+		this.registerDefaultState(this.stateDefinition.any().setValue(PRESSURIZED, false));
 	}
 	
 	@Override
@@ -35,24 +35,24 @@ public class BlockSteam extends BlockGasFluid {
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(PRESSURIZED);
-		super.fillStateContainer(builder);
+		super.createBlockStateDefinition(builder);
 	}
 	
 	@Override
 	public FluidState getFluidState(BlockState state) {
-		return super.getFluidState(state).with(FluidSteam.PRESSURIZED, state.get(PRESSURIZED));
+		return super.getFluidState(state).setValue(FluidSteam.PRESSURIZED, state.getValue(PRESSURIZED));
 	}
 	
 	@Override
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 		
-		if (entityIn.isLiving()) {
+		if (entityIn.showVehicleHealth()) {
 
-			if (((LivingEntity) entityIn).isPotionActive(Effects.FIRE_RESISTANCE)) return;
+			if (((LivingEntity) entityIn).hasEffect(Effects.FIRE_RESISTANCE)) return;
 			
-			entityIn.attackEntityFrom(ModDamageSource.HOT_STEAM, 1F);
+			entityIn.hurt(ModDamageSource.HOT_STEAM, 1F);
 			
 		}
 		

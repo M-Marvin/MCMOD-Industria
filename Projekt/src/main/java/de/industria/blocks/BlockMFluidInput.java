@@ -38,21 +38,21 @@ public class BlockMFluidInput extends BlockContainerBase implements IElectricCon
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	
 	public BlockMFluidInput() {
-		super("fluid_input", Material.IRON, 2F, SoundType.METAL);
+		super("fluid_input", Material.METAL, 2F, SoundType.METAL);
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(FACING);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(FACING, context.getNearestLookingDirection().getOpposite());
+		return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityMFluidInput();
 	}
 
@@ -63,7 +63,7 @@ public class BlockMFluidInput extends BlockContainerBase implements IElectricCon
 
 	@Override
 	public float getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
-		TileEntity te = world.getTileEntity(pos);
+		TileEntity te = world.getBlockEntity(pos);
 		if (te instanceof TileEntityMFluidInput) {
 			return ((TileEntityMFluidInput) te).canSourceFluid() ? 1 : 0;
 		}
@@ -72,7 +72,7 @@ public class BlockMFluidInput extends BlockContainerBase implements IElectricCon
 
 	@Override
 	public boolean canConnect(Direction side, World world, BlockPos pos, BlockState state) {
-		return side != state.get(FACING) && side != state.get(FACING).getOpposite();
+		return side != state.getValue(FACING) && side != state.getValue(FACING).getOpposite();
 	}
 
 	@Override
@@ -97,10 +97,10 @@ public class BlockMFluidInput extends BlockContainerBase implements IElectricCon
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
-		ItemStack heldStack = player.getHeldItemMainhand();
-		TileEntity te = worldIn.getTileEntity(pos);
+		ItemStack heldStack = player.getMainHandItem();
+		TileEntity te = worldIn.getBlockEntity(pos);
 		if (!heldStack.isEmpty() && te instanceof TileEntityMFluidInput) {
 			boolean success = ((TileEntityMFluidInput) te).setFilter(heldStack);
 			if (success) return ActionResultType.SUCCESS;
@@ -114,8 +114,8 @@ public class BlockMFluidInput extends BlockContainerBase implements IElectricCon
 
 		if (network.getVoltage().getVoltage() > Voltage.NormalVoltage.getVoltage() && network.getCurrent() > 0) {
 
-			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+			worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
+			worldIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 			
 		}
 		
@@ -123,12 +123,12 @@ public class BlockMFluidInput extends BlockContainerBase implements IElectricCon
 
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 	
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 	
 }

@@ -30,7 +30,7 @@ public class AlloyRecipe implements IRecipe<IInventory> {
 		// Check items
 		ItemStack[] neededItems = this.itemsIn.clone();
 		for (int i = 0; i < 3; i++) {
-			ItemStack itemIn = inv.getStackInSlot(i);
+			ItemStack itemIn = inv.getItem(i);
 			int i1;
 			for (i1 = 0; i1 < neededItems.length; i1++) {
 				if (neededItems[i1] == null) continue;
@@ -54,17 +54,17 @@ public class AlloyRecipe implements IRecipe<IInventory> {
 	}
 	
 	@Override
-	public ItemStack getCraftingResult(IInventory inv) {
+	public ItemStack assemble(IInventory inv) {
 		return itemOut.copy();
 	}
 	
 	@Override
-	public boolean canFit(int width, int height) {
+	public boolean canCraftInDimensions(int width, int height) {
 		return width == 1 && height == 3;
 	}
 
 	@Override
-	public ItemStack getRecipeOutput() {
+	public ItemStack getResultItem() {
 		 return this.itemOut.copy();
 	}
 		

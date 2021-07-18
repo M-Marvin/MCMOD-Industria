@@ -42,30 +42,30 @@ public class BlockMPanelLamp extends BlockContainerBase implements IElectricConn
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-	protected static final VoxelShape EAST_OPEN_AABB = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 2.0D, 16.0D, 16.0D);
-	protected static final VoxelShape WEST_OPEN_AABB = Block.makeCuboidShape(14.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-	protected static final VoxelShape SOUTH_OPEN_AABB = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 2.0D);
-	protected static final VoxelShape NORTH_OPEN_AABB = Block.makeCuboidShape(0.0D, 0.0D, 14.0D, 16.0D, 16.0D, 16.0D);
-	protected static final VoxelShape BOTTOM_AABB = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);
-	protected static final VoxelShape TOP_AABB = Block.makeCuboidShape(0.0D, 14.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+	protected static final VoxelShape EAST_OPEN_AABB = Block.box(0.0D, 0.0D, 0.0D, 2.0D, 16.0D, 16.0D);
+	protected static final VoxelShape WEST_OPEN_AABB = Block.box(14.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+	protected static final VoxelShape SOUTH_OPEN_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 2.0D);
+	protected static final VoxelShape NORTH_OPEN_AABB = Block.box(0.0D, 0.0D, 14.0D, 16.0D, 16.0D, 16.0D);
+	protected static final VoxelShape BOTTOM_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);
+	protected static final VoxelShape TOP_AABB = Block.box(0.0D, 14.0D, 0.0D, 16.0D, 16.0D, 16.0D);
 	
 	public BlockMPanelLamp() {
-		super("panel_lamp", Properties.create(Material.IRON).hardnessAndResistance(2.5F).sound(SoundType.METAL).harvestTool(getDefaultToolType(Material.IRON)).setLightLevel((state) -> {return state.get(LIT) ? 15 : 0;}));
-		this.setDefaultState(this.stateContainer.getBaseState().with(WATERLOGGED, false));
+		super("panel_lamp", Properties.of(Material.METAL).strength(2.5F).sound(SoundType.METAL).harvestTool(getDefaultToolType(Material.METAL)).lightLevel((state) -> {return state.getValue(LIT) ? 15 : 0;}));
+		this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(FACING, LIT, WATERLOGGED);
 	}
 
 	@Override
 	public FluidState getFluidState(BlockState state) {
-		return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluid().getDefaultState() : Fluids.EMPTY.getDefaultState();
+		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource().defaultFluidState() : Fluids.EMPTY.defaultFluidState();
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
 	
@@ -81,28 +81,28 @@ public class BlockMPanelLamp extends BlockContainerBase implements IElectricConn
 	
 	@Override
 	public boolean canConnect(Direction side, World world, BlockPos pos, BlockState state) {
-		return side == state.get(FACING).getOpposite();
+		return side == state.getValue(FACING).getOpposite();
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(FACING, context.getFace().getOpposite()).with(LIT, false);
+		return this.defaultBlockState().setValue(FACING, context.getClickedFace().getOpposite()).setValue(LIT, false);
 	}
 	
 	@Override
 	public void onNetworkChanges(World worldIn, BlockPos pos, BlockState state, ElectricityNetwork network) {
 		
-		boolean active = state.get(LIT);
+		boolean active = state.getValue(LIT);
 		boolean powered = network.canMachinesRun() == Voltage.LowVoltage;
 		
 		if (network.getVoltage().getVoltage() > Voltage.LowVoltage.getVoltage() && network.getCurrent() > 0) {
 
-			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+			worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
+			worldIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 			
 		}
 		
-		if (active != powered) worldIn.setBlockState(pos, state.with(LIT, powered));
+		if (active != powered) worldIn.setBlockAndUpdate(pos, state.setValue(LIT, powered));
 		
 	}
 	
@@ -112,14 +112,14 @@ public class BlockMPanelLamp extends BlockContainerBase implements IElectricConn
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntitySimpleBlockTicking();
 	}
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 
-		switch (state.get(FACING)) {
+		switch (state.getValue(FACING)) {
 		case SOUTH: return NORTH_OPEN_AABB;
 		case NORTH: return SOUTH_OPEN_AABB;
 		case WEST: return EAST_OPEN_AABB;
@@ -138,12 +138,12 @@ public class BlockMPanelLamp extends BlockContainerBase implements IElectricConn
 
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 	
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 	
 	@Override

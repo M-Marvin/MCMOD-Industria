@@ -16,7 +16,7 @@ import net.minecraft.world.gen.feature.template.RuleTest;
 public class JigsawFeatureConfig implements IFeatureConfig {
 
 	public static final Codec<JigsawFeatureConfig> CODEC = RecordCodecBuilder.create((codec) -> {
-		return codec.group(RuleTest.field_237127_c_.fieldOf("target").forGetter((config) -> {
+		return codec.group(RuleTest.CODEC.fieldOf("target").forGetter((config) -> {
 			return config.target;
 		}), BlockState.CODEC.fieldOf("jigsawState").forGetter((config) ->  {
 			return config.jigsawState;
@@ -50,7 +50,7 @@ public class JigsawFeatureConfig implements IFeatureConfig {
 		tileEntity.poolFile = structurePool;
 		tileEntity.targetName = connectionName;
 		this.jigsawData = tileEntity.serializeNBT();
-		this.jigsawState = ModItems.jigsaw.getDefaultState().with(BlockJigsaw.FACING, horizontalDirection).with(BlockJigsaw.TYPE, verticalDirection);
+		this.jigsawState = ModItems.jigsaw.defaultBlockState().setValue(BlockJigsaw.FACING, horizontalDirection).setValue(BlockJigsaw.TYPE, verticalDirection);
 		this.levelsMax = generationLevelsMax;
 		this.levelsMin = generationLevelsMin;
 		this.target = target;

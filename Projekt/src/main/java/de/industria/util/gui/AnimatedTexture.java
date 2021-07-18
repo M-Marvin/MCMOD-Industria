@@ -29,7 +29,7 @@ public class AnimatedTexture extends SimpleTexture implements ITickable {
 	
 	public static AnimatedTexture prepareTexture(ResourceLocation texture) {
 		if (!(Minecraft.getInstance().getTextureManager().getTexture(texture) instanceof AnimatedTexture)) {
-			Minecraft.getInstance().getTextureManager().loadTexture(texture, new AnimatedTexture(texture));
+			Minecraft.getInstance().getTextureManager().register(texture, new AnimatedTexture(texture));
 		}
 		return (AnimatedTexture) Minecraft.getInstance().getTextureManager().getTexture(texture);
 	}
@@ -46,22 +46,22 @@ public class AnimatedTexture extends SimpleTexture implements ITickable {
 		super(textureResourceLocation);
 	}
 	
-	public void loadTexture(IResourceManager manager) throws IOException {
+	public void load(IResourceManager manager) throws IOException {
 		
-	      SimpleTexture.TextureData simpletexture$texturedata = this.getTextureData(manager);
-	      simpletexture$texturedata.checkException();
-	      TextureMetadataSection texturemetadatasection = simpletexture$texturedata.getMetadata();
+	      SimpleTexture.TextureData simpletexture$texturedata = this.getTextureImage(manager);
+	      simpletexture$texturedata.throwIfError();
+	      TextureMetadataSection texturemetadatasection = simpletexture$texturedata.getTextureMetadata();
 	      boolean flag;
 	      boolean flag1;
 	      if (texturemetadatasection != null) {
-	         flag = texturemetadatasection.getTextureBlur();
-	         flag1 = texturemetadatasection.getTextureClamp();
+	         flag = texturemetadatasection.isBlur();
+	         flag1 = texturemetadatasection.isClamp();
 	      } else {
 	         flag = false;
 	         flag1 = false;
 	      }
 
-	      NativeImage nativeimage = simpletexture$texturedata.getNativeImage();
+	      NativeImage nativeimage = simpletexture$texturedata.getImage();
 	      if (!RenderSystem.isOnRenderThreadOrInit()) {
 	         RenderSystem.recordRenderCall(() -> {
 	            this.loadImage(nativeimage, flag, flag1);
@@ -70,9 +70,9 @@ public class AnimatedTexture extends SimpleTexture implements ITickable {
 	         this.loadImage(nativeimage, flag, flag1);
 	      }
 		
-		this.size = simpletexture$texturedata.getNativeImage().getWidth();
+		this.size = simpletexture$texturedata.getImage().getWidth();
 		
-		ResourceLocation metadataFile = new ResourceLocation(this.textureLocation.getNamespace(), this.textureLocation.getPath() + ".mcmeta");
+		ResourceLocation metadataFile = new ResourceLocation(this.location.getNamespace(), this.location.getPath() + ".mcmeta");
 		
 		
 		try {
@@ -86,7 +86,7 @@ public class AnimatedTexture extends SimpleTexture implements ITickable {
 				stringBuffer.append(string);
 			}
 
-			CompoundNBT metadataNBT = JsonToNBT.getTagFromJson(stringBuffer.toString());
+			CompoundNBT metadataNBT = JsonToNBT.parseTag(stringBuffer.toString());
 			
 			CompoundNBT animation = metadataNBT.getCompound("animation");
 			this.frameTime = animation.getInt("frametime");
@@ -98,7 +98,7 @@ public class AnimatedTexture extends SimpleTexture implements ITickable {
 					this.frames[i] = arr.getInt(i);
 				}
 			} else {
-				int height = simpletexture$texturedata.getNativeImage().getHeight();
+				int height = simpletexture$texturedata.getImage().getHeight();
 				int frameCount = height / size;
 				frames = new int[frameCount];
 				for (int i = 0; i < frameCount; i++) {
@@ -114,8 +114,8 @@ public class AnimatedTexture extends SimpleTexture implements ITickable {
 	}
 	
 	private void loadImage(NativeImage imageIn, boolean blurIn, boolean clampIn) {
-		TextureUtil.prepareImage(this.getGlTextureId(), 0, 2 * 256, 2 * 256);
-		imageIn.uploadTextureSub(0, 0, 0, 0, 0, imageIn.getWidth(), imageIn.getHeight(), blurIn, clampIn, true, true);
+		TextureUtil.prepareImage(this.getId(), 0, 2 * 256, 2 * 256);
+		imageIn.upload(0, 0, 0, 0, 0, imageIn.getWidth(), imageIn.getHeight(), blurIn, clampIn, true, true);
 	}
 	
 	@Override
@@ -139,7 +139,7 @@ public class AnimatedTexture extends SimpleTexture implements ITickable {
 			
 			int frameOffset = this.frames[this.frame] * 8;
 			
-			Minecraft.getInstance().getTextureManager().bindTexture(this.textureLocation);		
+			Minecraft.getInstance().getTextureManager().bind(this.location);		
 			screen.blit(matrixStack, x + 8, y, 0, frameOffset, width, height);
 			
 		}

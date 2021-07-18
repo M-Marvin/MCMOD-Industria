@@ -48,16 +48,16 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote()) {
+		if (!this.level.isClientSide()) {
 			
-			this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
+			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			
-			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(this.world).getNetwork(this.pos);
-			ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos);
+			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(this.level).getNetwork(this.worldPosition);
+			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
 			this.hasPower = network.canMachinesRun() == Voltage.NormalVoltage;
 			this.isWorking = canWork() && this.hasPower;
 			
-			if (isWorking != getBlockState().get(BlockMElectricFurnace.LIT)) this.world.setBlockState(pos, this.getBlockState().with(BlockMElectricFurnace.LIT, this.isWorking));
+			if (isWorking != getBlockState().getValue(BlockMElectricFurnace.LIT)) this.level.setBlockAndUpdate(worldPosition, this.getBlockState().setValue(BlockMElectricFurnace.LIT, this.isWorking));
 			
 			if (this.isWorking) {
 				
@@ -67,7 +67,7 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 					
 					if (this.cookTimeTotal == 0) {
 						
-						this.cookTimeTotal = recipe.getCookTime();
+						this.cookTimeTotal = recipe.getCookingTime();
 						this.cookTime = 0;
 						
 					} else if (this.cookTime <= this.cookTimeTotal) {
@@ -76,13 +76,13 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 							
 							if (this.cookTime >= this.cookTimeTotal) {
 								
-								this.decrStackSize(0, 1);
-								ItemStack result = recipe.getRecipeOutput();
+								this.removeItem(0, 1);
+								ItemStack result = recipe.getResultItem();
 								
-								if (this.getStackInSlot(1).isEmpty()) {
-									this.setInventorySlotContents(1, result.copy());
+								if (this.getItem(1).isEmpty()) {
+									this.setItem(1, result.copy());
 								} else {
-									this.getStackInSlot(1).grow(1);
+									this.getItem(1).grow(1);
 								}
 								
 								this.cookTime = 0;
@@ -122,10 +122,10 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 	}
 	
 	public FurnaceRecipe findRecipe() {
-		Collection<IRecipe<?>> recipes = this.world.getRecipeManager().getRecipes();
+		Collection<IRecipe<?>> recipes = this.level.getRecipeManager().getRecipes();
 		for (IRecipe<?> recipe : recipes) {
 			if (recipe.getType() == IRecipeType.SMELTING) {
-				if (recipe.getIngredients().get(0).test(this.getStackInSlot(0)) && ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(1), recipe.getRecipeOutput())) return (FurnaceRecipe) recipe;
+				if (recipe.getIngredients().get(0).test(this.getItem(0)) && ItemStackHelper.canMergeRecipeStacks(this.getItem(1), recipe.getResultItem())) return (FurnaceRecipe) recipe;
 			}
 		}
 		return null;
@@ -139,13 +139,13 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 	public void onPlayerCollect(PlayerEntity player) {
 		
 		for (ResourceLocation recipeId : this.usedRecipes.keySet()) {
-			Optional<? extends IRecipe<?>> recipe = this.world.getRecipeManager().getRecipe(recipeId);
+			Optional<? extends IRecipe<?>> recipe = this.level.getRecipeManager().byKey(recipeId);
 			if (recipe.get().getType() == IRecipeType.SMELTING) {
 				int xp = (int) (((FurnaceRecipe) recipe.get()).getExperience() * this.usedRecipes.getInt(recipeId));
 				player.giveExperiencePoints(xp);
 			}
 		}
-		player.unlockRecipes(this.usedRecipes.keySet().toArray(new ResourceLocation[] {}));
+		player.awardRecipesByKey(this.usedRecipes.keySet().toArray(new ResourceLocation[] {}));
 		this.usedRecipes.clear();
 		
 	}
@@ -156,12 +156,12 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 	}
 
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
 		return index == 0;
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return index == 1;
 	}
 
@@ -171,7 +171,7 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		compound.putInt("cookTime", this.cookTime);;
 		compound.putInt("cookTimeTotal", this.cookTimeTotal);
 		compound.putBoolean("hasPower", this.hasPower);
@@ -180,19 +180,19 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 			compoundnbt.putInt(p_235643_1_.toString(), p_235643_2_);
 		});
 		compound.put("RecipesUsed", compoundnbt);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		this.cookTime = compound.getInt("cookTime");
 		this.cookTimeTotal = compound.getInt("cookTimeTotal");
 		this.hasPower = compound.getBoolean("hasPower");
 		CompoundNBT compoundnbt = compound.getCompound("RecipesUsed");
-		for(String s : compoundnbt.keySet()) {
+		for(String s : compoundnbt.getAllKeys()) {
 			this.usedRecipes.put(new ResourceLocation(s), compoundnbt.getInt(s));
 		}
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 }

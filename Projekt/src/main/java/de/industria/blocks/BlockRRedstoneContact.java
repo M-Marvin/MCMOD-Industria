@@ -26,43 +26,43 @@ public class BlockRRedstoneContact extends BlockBase {
 	
 	public BlockRRedstoneContact() {
 		super("redstone_contact", Material.WOOD, 1.5F, SoundType.WOOD, true);
-		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, false));
+		this.registerDefaultState(this.stateDefinition.any().setValue(POWERED, false));
 	}
 		
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(POWERED, FACING);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(FACING, context.getNearestLookingDirection().getOpposite());
+		return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
 	}
 	
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 		
 		BlockState newState = updateState(state, worldIn, pos);
-		worldIn.setBlockState(pos, newState);
-		if (state.get(POWERED) != newState.get(POWERED)) {
-			worldIn.notifyNeighborsOfStateExcept(pos.offset(state.get(FACING).getOpposite()), this, state.get(FACING));
+		worldIn.setBlockAndUpdate(pos, newState);
+		if (state.getValue(POWERED) != newState.getValue(POWERED)) {
+			worldIn.updateNeighborsAtExceptFromFacing(pos.relative(state.getValue(FACING).getOpposite()), this, state.getValue(FACING));
 		}
 		
 	}
 	
 	public BlockState updateState(BlockState state, World world, BlockPos pos) {
 		
-		Direction facing = state.get(FACING);
-		BlockState otherBlock1 = world.getBlockState(pos.offset(state.get(FACING), 1));
-		BlockState otherBlock2 = world.getBlockState(pos.offset(state.get(FACING), 2));
-		boolean power =	(otherBlock1.getBlock() == this ? otherBlock1.get(FACING).getOpposite() == facing : false) ||
-						(otherBlock2.getBlock() == this ? otherBlock2.get(FACING).getOpposite() == facing : false);
-		boolean powered = state.get(POWERED);
+		Direction facing = state.getValue(FACING);
+		BlockState otherBlock1 = world.getBlockState(pos.relative(state.getValue(FACING), 1));
+		BlockState otherBlock2 = world.getBlockState(pos.relative(state.getValue(FACING), 2));
+		boolean power =	(otherBlock1.getBlock() == this ? otherBlock1.getValue(FACING).getOpposite() == facing : false) ||
+						(otherBlock2.getBlock() == this ? otherBlock2.getValue(FACING).getOpposite() == facing : false);
+		boolean powered = state.getValue(POWERED);
 		
 		if (power != powered) {
 			
-			state = state.with(POWERED, power);
-			world.getPendingBlockTicks().scheduleTick(pos.offset(state.get(FACING), 2), this, 1);
+			state = state.setValue(POWERED, power);
+			world.getBlockTicks().scheduleTick(pos.relative(state.getValue(FACING), 2), this, 1);
 			
 		}
 		
@@ -71,10 +71,10 @@ public class BlockRRedstoneContact extends BlockBase {
 	}
 	
 	@Override
-	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
+	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
 		
 		BlockState newState = updateState(state, worldIn, pos);
-		worldIn.setBlockState(pos, newState);
+		worldIn.setBlockAndUpdate(pos, newState);
 		
 	}
 	
@@ -82,48 +82,48 @@ public class BlockRRedstoneContact extends BlockBase {
 	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
 
 		BlockState newState = updateState(state, worldIn, pos);
-		worldIn.setBlockState(pos, newState);
-		if (state.get(POWERED) != newState.get(POWERED)) {
-			worldIn.notifyNeighborsOfStateExcept(pos.offset(state.get(FACING).getOpposite()), this, state.get(FACING));
+		worldIn.setBlockAndUpdate(pos, newState);
+		if (state.getValue(POWERED) != newState.getValue(POWERED)) {
+			worldIn.updateNeighborsAtExceptFromFacing(pos.relative(state.getValue(FACING).getOpposite()), this, state.getValue(FACING));
 		}
 		
 	}
 	
 	@Override
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
 		
 		if (newState.getBlock() != state.getBlock()) {
 			
-			worldIn.notifyNeighborsOfStateExcept(pos.offset(state.get(FACING).getOpposite()), this, state.get(FACING));
-			worldIn.getPendingBlockTicks().scheduleTick(pos.offset(state.get(FACING), 2), this, 1);
+			worldIn.updateNeighborsAtExceptFromFacing(pos.relative(state.getValue(FACING).getOpposite()), this, state.getValue(FACING));
+			worldIn.getBlockTicks().scheduleTick(pos.relative(state.getValue(FACING), 2), this, 1);
 			
 		}
 		
 	}
 	
 	@Override
-	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-		return side == blockState.get(FACING) && blockState.get(POWERED) ? 15 : 0;
+	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+		return side == blockState.getValue(FACING) && blockState.getValue(POWERED) ? 15 : 0;
 	}
 	
 	@Override
-	public int getStrongPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-		return side == blockState.get(FACING) && blockState.get(POWERED) ? 15 : 0;
+	public int getDirectSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+		return side == blockState.getValue(FACING) && blockState.getValue(POWERED) ? 15 : 0;
 	}
 	
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
-		return side == world.getBlockState(pos).get(FACING);
+		return side == world.getBlockState(pos).getValue(FACING);
 	}
 	
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 	
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 	
 }

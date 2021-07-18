@@ -34,33 +34,33 @@ import net.minecraft.world.World;
 
 public class BlockPreassurePipe extends BlockContainerBase implements IAdvancedBlockInfo {
 	
-	public static final VoxelShape SHAPE_CORNER_DOWN = VoxelShapes.combineAndSimplify(Block.makeCuboidShape(2, 0, 0, 14, 14, 14), VoxelShapes.combineAndSimplify(Block.makeCuboidShape(3, 3, 0, 13, 13, 13), Block.makeCuboidShape(3, 0, 3, 13, 3, 13), IBooleanFunction.OR), IBooleanFunction.ONLY_FIRST);
-	public static final VoxelShape SHAPE_CORNER_UP = VoxelShapes.combineAndSimplify(Block.makeCuboidShape(2, 2, 0, 14, 16, 14), VoxelShapes.combineAndSimplify(Block.makeCuboidShape(3, 3, 0, 13, 13, 13), Block.makeCuboidShape(3, 13, 3, 13, 16, 13), IBooleanFunction.OR), IBooleanFunction.ONLY_FIRST);
-	public static final VoxelShape SHAPE_CORNER_HORIZONTAL = VoxelShapes.combineAndSimplify(Block.makeCuboidShape(2, 2, 0, 16, 14, 14), VoxelShapes.combineAndSimplify(Block.makeCuboidShape(3, 3, 0, 13, 13, 13), Block.makeCuboidShape(13, 3, 3, 16, 13, 13), IBooleanFunction.OR), IBooleanFunction.ONLY_FIRST);
-	public static final VoxelShape SHAPE_STRIGHT = VoxelShapes.combineAndSimplify(Block.makeCuboidShape(2, 0, 2, 14, 16, 14), Block.makeCuboidShape(3, 0, 3, 13, 16, 13), IBooleanFunction.ONLY_FIRST);
-	public static final VoxelShape SHAPE_STRIGHT_HORIZONTAL = VoxelShapes.combineAndSimplify(Block.makeCuboidShape(2, 2, 0, 14, 14, 16), Block.makeCuboidShape(3, 3, 0, 13, 13, 16), IBooleanFunction.ONLY_FIRST);
+	public static final VoxelShape SHAPE_CORNER_DOWN = VoxelShapes.join(Block.box(2, 0, 0, 14, 14, 14), VoxelShapes.join(Block.box(3, 3, 0, 13, 13, 13), Block.box(3, 0, 3, 13, 3, 13), IBooleanFunction.OR), IBooleanFunction.ONLY_FIRST);
+	public static final VoxelShape SHAPE_CORNER_UP = VoxelShapes.join(Block.box(2, 2, 0, 14, 16, 14), VoxelShapes.join(Block.box(3, 3, 0, 13, 13, 13), Block.box(3, 13, 3, 13, 16, 13), IBooleanFunction.OR), IBooleanFunction.ONLY_FIRST);
+	public static final VoxelShape SHAPE_CORNER_HORIZONTAL = VoxelShapes.join(Block.box(2, 2, 0, 16, 14, 14), VoxelShapes.join(Block.box(3, 3, 0, 13, 13, 13), Block.box(13, 3, 3, 16, 13, 13), IBooleanFunction.OR), IBooleanFunction.ONLY_FIRST);
+	public static final VoxelShape SHAPE_STRIGHT = VoxelShapes.join(Block.box(2, 0, 2, 14, 16, 14), Block.box(3, 0, 3, 13, 16, 13), IBooleanFunction.ONLY_FIRST);
+	public static final VoxelShape SHAPE_STRIGHT_HORIZONTAL = VoxelShapes.join(Block.box(2, 2, 0, 14, 14, 16), Block.box(3, 3, 0, 13, 13, 16), IBooleanFunction.ONLY_FIRST);
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final DirectionProperty CONNECTION = DirectionProperty.create("connection", Direction.values());
 	
 	public BlockPreassurePipe() {
 		super("preassure_pipe", Material.GLASS, 1F, 2F, SoundType.GLASS);
-		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.DOWN).with(CONNECTION, Direction.UP));
+		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.DOWN).setValue(CONNECTION, Direction.UP));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(FACING, CONNECTION);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		Direction facing = context.getFace().getOpposite();
+		Direction facing = context.getClickedFace().getOpposite();
 		Direction connection = context.getNearestLookingDirection().getOpposite();
 		
-		BlockState state = this.getDefaultState().with(FACING, facing).with(CONNECTION, connection);
-		World world = context.getWorld();
-		BlockPos pos = context.getPos();
+		BlockState state = this.defaultBlockState().setValue(FACING, facing).setValue(CONNECTION, connection);
+		World world = context.getLevel();
+		BlockPos pos = context.getClickedPos();
 		
 		if (!canConnect(state, world, pos, facing.getOpposite())) {
 			for (Direction d : Direction.values()) {
@@ -73,9 +73,9 @@ public class BlockPreassurePipe extends BlockContainerBase implements IAdvancedB
 		}
 		
 		if (connection.getAxis().isVertical() && facing.getAxis().isHorizontal()) {
-			state = state.with(CONNECTION, state.get(FACING)).with(FACING, connection);
+			state = state.setValue(CONNECTION, state.getValue(FACING)).setValue(FACING, connection);
 		} else {
-			state = state.with(CONNECTION, connection);
+			state = state.setValue(CONNECTION, connection);
 		}
 		
 		return state;
@@ -86,11 +86,11 @@ public class BlockPreassurePipe extends BlockContainerBase implements IAdvancedB
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		
 		if (context.getEntity() instanceof PlayerEntity) {
-			if (((PlayerEntity) context.getEntity()).getHeldItemMainhand().getItem() == Item.getItemFromBlock(ModItems.preassure_pipe)) return Block.makeCuboidShape(0, 0, 0, 16, 16, 16);
+			if (((PlayerEntity) context.getEntity()).getMainHandItem().getItem() == Item.byBlock(ModItems.preassure_pipe)) return Block.box(0, 0, 0, 16, 16, 16);
 		}
 		
-		Direction facing = state.get(FACING);
-		Direction connection = state.get(CONNECTION);
+		Direction facing = state.getValue(FACING);
+		Direction connection = state.getValue(CONNECTION);
 		VoxelShape shape = SHAPE_STRIGHT;
 		if (isStright(state)) {
 			shape = facing.getAxis().isVertical() ? SHAPE_STRIGHT : VoxelHelper.rotateShape(SHAPE_STRIGHT_HORIZONTAL, facing);
@@ -99,7 +99,7 @@ public class BlockPreassurePipe extends BlockContainerBase implements IAdvancedB
 			if (facing == Direction.DOWN) shape = SHAPE_CORNER_DOWN;
 			if (facing.getAxis().isHorizontal()) {
 				shape = SHAPE_CORNER_HORIZONTAL;
-				if (facing == connection.rotateYCCW()) shape = VoxelHelper.rotateShape(shape, Direction.WEST);
+				if (facing == connection.getCounterClockWise()) shape = VoxelHelper.rotateShape(shape, Direction.WEST);
 			}
 			shape = VoxelHelper.rotateShape(shape, connection);
 		}
@@ -108,24 +108,24 @@ public class BlockPreassurePipe extends BlockContainerBase implements IAdvancedB
 	}
 	
 	public boolean isStright(BlockState state) {
-		return state.get(FACING).getAxis() == state.get(CONNECTION).getAxis() || state.get(CONNECTION).getAxis().isVertical();
+		return state.getValue(FACING).getAxis() == state.getValue(CONNECTION).getAxis() || state.getValue(CONNECTION).getAxis().isVertical();
 	}
 	
 	public boolean canConnect(BlockState state, World world, BlockPos pos, Direction direction) {
-		BlockPos connectPos = pos.offset(direction);
+		BlockPos connectPos = pos.relative(direction);
 		BlockState connectState = world.getBlockState(connectPos);
 		if (connectState.getBlock() == ModItems.preassure_pipe) {
-			return connectState.get(FACING) == direction.getOpposite() || connectState.get(CONNECTION) == direction.getOpposite();
+			return connectState.getValue(FACING) == direction.getOpposite() || connectState.getValue(CONNECTION) == direction.getOpposite();
 		} else if (connectState.getBlock() == ModItems.pipe_preassurizer) {
-			return direction.getAxis() == connectState.get(FACING).getAxis();
+			return direction.getAxis() == connectState.getValue(FACING).getAxis();
 		} else if (connectState.getBlock() == ModItems.preassure_pipe_item_terminal) {
-			return direction.getAxis() == connectState.get(FACING).getAxis();
+			return direction.getAxis() == connectState.getValue(FACING).getAxis();
 		}
 		return false;
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityPreassurePipe();
 	}
 	
@@ -143,12 +143,12 @@ public class BlockPreassurePipe extends BlockContainerBase implements IAdvancedB
 
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING))).with(CONNECTION, rot.rotate(state.get(CONNECTION)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING))).setValue(CONNECTION, rot.rotate(state.getValue(CONNECTION)));
 	}
 	
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING))).with(CONNECTION, mirrorIn.mirror(state.get(CONNECTION)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING))).setValue(CONNECTION, mirrorIn.mirror(state.getValue(CONNECTION)));
 	}
 	
 }

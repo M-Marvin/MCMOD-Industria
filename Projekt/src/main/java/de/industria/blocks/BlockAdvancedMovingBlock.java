@@ -43,19 +43,19 @@ public class BlockAdvancedMovingBlock extends ContainerBlock {
    public static final EnumProperty<PistonType> TYPE = PistonHeadBlock.TYPE;
 
    public BlockAdvancedMovingBlock(String name) {
-      super(Properties.create(Material.PISTON).doesNotBlockMovement());
+      super(Properties.of(Material.PISTON).noCollission());
       this.setRegistryName(Industria.MODID, name);
-      this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(TYPE, PistonType.DEFAULT));
+      this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(TYPE, PistonType.DEFAULT));
    }
    
    @Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(FACING, TYPE);
-		super.fillStateContainer(builder);
+		super.createBlockStateDefinition(builder);
 	}
    
    @Nullable
-   public TileEntity createNewTileEntity(IBlockReader worldIn) {
+   public TileEntity newBlockEntity(IBlockReader worldIn) {
       return null;
    }
 
@@ -63,9 +63,9 @@ public class BlockAdvancedMovingBlock extends ContainerBlock {
       return new TileEntityAdvancedMovingBlock(state, tileEntity, direction, p_196343_2_, p_196343_3_);
    }
    
-   public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-      if (!state.isIn(newState.getBlock())) {
-         TileEntity tileentity = worldIn.getTileEntity(pos);
+   public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+      if (!state.is(newState.getBlock())) {
+         TileEntity tileentity = worldIn.getBlockEntity(pos);
          if (tileentity instanceof TileEntityAdvancedMovingBlock) {
             ((TileEntityAdvancedMovingBlock)tileentity).clearPistonTileEntity();
          }
@@ -76,17 +76,17 @@ public class BlockAdvancedMovingBlock extends ContainerBlock {
    /**
     * Called after a player destroys this Block - the posiiton pos may no longer hold the state indicated.
     */
-   public void onPlayerDestroy(IWorld worldIn, BlockPos pos, BlockState state) {
-      BlockPos blockpos = pos.offset(state.get(FACING).getOpposite());
+   public void destroy(IWorld worldIn, BlockPos pos, BlockState state) {
+      BlockPos blockpos = pos.relative(state.getValue(FACING).getOpposite());
       BlockState blockstate = worldIn.getBlockState(blockpos);
-      if (blockstate.getBlock() instanceof BlockRAdvancedPiston && blockstate.get(BlockRAdvancedPiston.EXTENDED)) {
+      if (blockstate.getBlock() instanceof BlockRAdvancedPiston && blockstate.getValue(BlockRAdvancedPiston.EXTENDED)) {
          worldIn.removeBlock(blockpos, false);
       }
 
    }
    
-   public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-      if (!worldIn.isRemote && worldIn.getTileEntity(pos) == null) {
+   public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+      if (!worldIn.isClientSide && worldIn.getBlockEntity(pos) == null) {
          worldIn.removeBlock(pos, false);
          return ActionResultType.CONSUME;
       } else {
@@ -95,7 +95,7 @@ public class BlockAdvancedMovingBlock extends ContainerBlock {
    }
 
    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-      TileEntityAdvancedMovingBlock TileEntityAdvancedMovingBlock = this.getTileEntity(builder.getWorld(), new BlockPos(builder.assertPresent(LootParameters.field_237457_g_)));
+      TileEntityAdvancedMovingBlock TileEntityAdvancedMovingBlock = this.getTileEntity(builder.getLevel(), new BlockPos(builder.getParameter(LootParameters.ORIGIN)));
       return TileEntityAdvancedMovingBlock == null ? Collections.emptyList() : TileEntityAdvancedMovingBlock.getPistonState().getDrops(builder);
    }
 
@@ -110,11 +110,11 @@ public class BlockAdvancedMovingBlock extends ContainerBlock {
 
    @Nullable
    private TileEntityAdvancedMovingBlock getTileEntity(IBlockReader p_220170_1_, BlockPos p_220170_2_) {
-      TileEntity tileentity = p_220170_1_.getTileEntity(p_220170_2_);
+      TileEntity tileentity = p_220170_1_.getBlockEntity(p_220170_2_);
       return tileentity instanceof TileEntityAdvancedMovingBlock ? (TileEntityAdvancedMovingBlock)tileentity : null;
    }
 
-   public ItemStack getItem(IBlockReader worldIn, BlockPos pos, BlockState state) {
+   public ItemStack getCloneItemStack(IBlockReader worldIn, BlockPos pos, BlockState state) {
       return ItemStack.EMPTY;
    }
 
@@ -125,7 +125,7 @@ public class BlockAdvancedMovingBlock extends ContainerBlock {
     * fine.
     */
    public BlockState rotate(BlockState state, Rotation rot) {
-      return state.with(FACING, rot.rotate(state.get(FACING)));
+      return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
    }
 
    /**
@@ -134,10 +134,10 @@ public class BlockAdvancedMovingBlock extends ContainerBlock {
     * @deprecated call via {@link IBlockState#withMirror(Mirror)} whenever possible. Implementing/overriding is fine.
     */
    public BlockState mirror(BlockState state, Mirror mirrorIn) {
-      return state.rotate(mirrorIn.toRotation(state.get(FACING)));
+      return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
    }
    
-   public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
+   public boolean isPathfindable(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
       return false;
    }
    

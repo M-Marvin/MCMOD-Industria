@@ -27,22 +27,22 @@ public class BlockRButtonBlock extends BlockBase {
 	
 	public BlockRButtonBlock() {
 		super("button_block", Material.WOOD, 0.5F, SoundType.WOOD, true);
-		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, false));
+		this.registerDefaultState(this.stateDefinition.any().setValue(POWERED, false));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(POWERED);
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
-		if (!state.get(POWERED)) {
+		if (!state.getValue(POWERED)) {
 			
-			worldIn.setBlockState(pos, state.with(POWERED, true));
-			worldIn.playSound(null, pos, SoundEvents.BLOCK_WOODEN_BUTTON_CLICK_ON, SoundCategory.BLOCKS, 1, 0.5F);
-			worldIn.getPendingBlockTicks().scheduleTick(pos, this, 20);
+			worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, true));
+			worldIn.playSound(null, pos, SoundEvents.WOODEN_BUTTON_CLICK_ON, SoundCategory.BLOCKS, 1, 0.5F);
+			worldIn.getBlockTicks().scheduleTick(pos, this, 20);
 			this.updateNeighbors(worldIn, pos);
 			
 		}
@@ -52,11 +52,11 @@ public class BlockRButtonBlock extends BlockBase {
 	}
 	
 	@Override
-	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
+	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
 		
 		if (isMoving) {
 			
-			worldIn.setBlockState(pos, state.with(POWERED, false));
+			worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, false));
 			
 		}
 		
@@ -65,27 +65,27 @@ public class BlockRButtonBlock extends BlockBase {
 	@Override
 	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
 		
-		worldIn.setBlockState(pos, state.with(POWERED, false));
-		worldIn.playSound(null, pos, SoundEvents.BLOCK_WOODEN_BUTTON_CLICK_OFF, SoundCategory.BLOCKS, 1, 0.5F);
+		worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, false));
+		worldIn.playSound(null, pos, SoundEvents.WOODEN_BUTTON_CLICK_OFF, SoundCategory.BLOCKS, 1, 0.5F);
 		this.updateNeighbors(worldIn, pos);
 		
 	}
 	
 	@Override
-	public int getStrongPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-		return blockState.get(POWERED) ? 15 : 0;
+	public int getDirectSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+		return blockState.getValue(POWERED) ? 15 : 0;
 	}
 	
 	@Override
-	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-		return blockState.get(POWERED) ? 15 : 0;
+	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+		return blockState.getValue(POWERED) ? 15 : 0;
 	}
 	
 	public void updateNeighbors(World world, BlockPos pos) {
 		
 		for (Direction d : Direction.values()) {
 			
-			world.notifyNeighborsOfStateExcept(pos.offset(d), this, d.getOpposite());
+			world.updateNeighborsAtExceptFromFacing(pos.relative(d), this, d.getOpposite());
 			
 		}
 		

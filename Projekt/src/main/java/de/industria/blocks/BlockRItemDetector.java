@@ -30,32 +30,32 @@ public class BlockRItemDetector extends BlockContainerBase {
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	
 	public BlockRItemDetector() {
-		super("item_detector", AbstractBlock.Properties.create(Material.WOOD).hardnessAndResistance(1.5F).sound(SoundType.WOOD).harvestTool(getDefaultToolType(Material.WOOD)).setOpaque((state, world, pos) -> {return false;}));
-		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, false));
+		super("item_detector", AbstractBlock.Properties.of(Material.WOOD).strength(1.5F).sound(SoundType.WOOD).harvestTool(getDefaultToolType(Material.WOOD)).isRedstoneConductor((state, world, pos) -> {return false;}));
+		this.registerDefaultState(this.stateDefinition.any().setValue(POWERED, false));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(FACING, POWERED);
-		super.fillStateContainer(builder);
+		super.createBlockStateDefinition(builder);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(FACING, context.getNearestLookingDirection().getOpposite());
+		return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityRItemDetector();
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		if (tileEntity instanceof TileEntityRItemDetector) {
-			ItemStack heldStack = player.getHeldItemMainhand();
-			if (heldStack.isEmpty() && player.isSneaking()) {
+			ItemStack heldStack = player.getMainHandItem();
+			if (heldStack.isEmpty() && player.isShiftKeyDown()) {
 				((TileEntityRItemDetector) tileEntity).setItemFilter(ItemStack.EMPTY);
 			} else {
 				ItemStack filterStack = heldStack.copy();
@@ -69,27 +69,27 @@ public class BlockRItemDetector extends BlockContainerBase {
 	
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
-		return side == state.get(FACING).getOpposite();
+		return side == state.getValue(FACING).getOpposite();
 	}
 	
 	@Override
-	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-		return blockState.get(POWERED) && side == blockState.get(FACING) ? 15 : 0;
+	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+		return blockState.getValue(POWERED) && side == blockState.getValue(FACING) ? 15 : 0;
 	}
 	
 	@Override
-	public int getStrongPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-		return this.getWeakPower(blockState, blockAccess, pos, side);
+	public int getDirectSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+		return this.getSignal(blockState, blockAccess, pos, side);
 	}
 
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 	
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 	
 }

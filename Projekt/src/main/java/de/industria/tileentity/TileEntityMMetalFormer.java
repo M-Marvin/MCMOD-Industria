@@ -43,13 +43,13 @@ public class TileEntityMMetalFormer extends TileEntityInventoryBase implements I
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote()) {
+		if (!this.level.isClientSide()) {
 			
-			ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos);
-			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(world).getNetwork(pos);
+			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
+			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
 			this.hasPower = network.canMachinesRun() == Voltage.NormalVoltage;
 			this.isWorking = this.hasPower && canWork();
-			this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
+			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			
 			if (this.isWorking) {
 				
@@ -58,20 +58,20 @@ public class TileEntityMMetalFormer extends TileEntityInventoryBase implements I
 				if (recipe != null) {
 					
 					this.processTimeTotal = recipe.getProcessTime();
-					ItemStack result = recipe.getCraftingResult(this);
+					ItemStack result = recipe.assemble(this);
 					
-					if (ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(1), result)) {
+					if (ItemStackHelper.canMergeRecipeStacks(this.getItem(1), result)) {
 						
 						this.processTime++;
 						
 						if (this.processTime >= this.processTimeTotal) {
 							
-							if (this.getStackInSlot(1).isEmpty()) {
-								this.setInventorySlotContents(1, result.copy());
+							if (this.getItem(1).isEmpty()) {
+								this.setItem(1, result.copy());
 							} else {
-								this.getStackInSlot(1).grow(result.getCount());
+								this.getItem(1).grow(result.getCount());
 							}
-							this.getStackInSlot(0).shrink(recipe.getItemIn().getCount());
+							this.getItem(0).shrink(recipe.getItemIn().getCount());
 							
 							this.processTime = 0;
 							
@@ -108,12 +108,12 @@ public class TileEntityMMetalFormer extends TileEntityInventoryBase implements I
 	}
 
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
 		return index == 0;
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return index == 1;
 	}
 	
@@ -122,7 +122,7 @@ public class TileEntityMMetalFormer extends TileEntityInventoryBase implements I
 	}
 	
 	public MetalFormRecipe findRecipe() {
-		Optional<MetalFormRecipe> recipe = this.world.getRecipeManager().getRecipe(ModRecipeTypes.METAL_FORM, this, this.world);
+		Optional<MetalFormRecipe> recipe = this.level.getRecipeManager().getRecipeFor(ModRecipeTypes.METAL_FORM, this, this.level);
 		return recipe.isPresent() ? recipe.get() : null;
 	}
 
@@ -138,35 +138,35 @@ public class TileEntityMMetalFormer extends TileEntityInventoryBase implements I
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(pos.add(-1, -1, -1), pos.add(2, 2, 2));
+		return new AxisAlignedBB(worldPosition.offset(-1, -1, -1), worldPosition.offset(2, 2, 2));
 	}
 	
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(pos, 0, this.serializeNBT());
+		return new SUpdateTileEntityPacket(worldPosition, 0, this.serializeNBT());
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.deserializeNBT(pkt.getNbtCompound());
+		this.deserializeNBT(pkt.getTag());
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		compound.putBoolean("hasPower", hasPower);
 		compound.putBoolean("isWorking", isWorking);
 		compound.putInt("Progress", processTime);
 		compound.putInt("progressTotal", processTimeTotal);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		this.hasPower = compound.getBoolean("hasPower");
 		this.isWorking = compound.getBoolean("isWorking");
 		this.processTime = compound.getInt("Progress");
 		this.processTimeTotal = compound.getInt("progressTotal");
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 }

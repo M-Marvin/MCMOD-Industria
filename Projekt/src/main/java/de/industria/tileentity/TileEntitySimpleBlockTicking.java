@@ -14,8 +14,8 @@ public class TileEntitySimpleBlockTicking extends TileEntity implements ITickabl
 	@SuppressWarnings("deprecation")
 	@Override
 	public void tick() {
-		if (!this.world.isRemote) {
-			this.getBlockState().getBlock().tick(this.getBlockState(), (ServerWorld) this.world, this.pos, this.world.rand);
+		if (!this.level.isClientSide) {
+			this.getBlockState().getBlock().tick(this.getBlockState(), (ServerWorld) this.level, this.worldPosition, this.level.random);
 		}
 	}
 	

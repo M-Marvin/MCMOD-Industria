@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 public class BlockCompressedAir extends BlockGasFluid {
 	
 	public BlockCompressedAir() {
-		super("compressed_air", ModFluids.COMPRESSED_AIR, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
+		super("compressed_air", ModFluids.COMPRESSED_AIR, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops());
 	}
 	
 	@Override
@@ -23,9 +23,9 @@ public class BlockCompressedAir extends BlockGasFluid {
 	}
 
 	@Override
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 		
-		if (entityIn.isLiving() && worldIn.rand.nextInt(500) == 0) {
+		if (entityIn.showVehicleHealth() && worldIn.random.nextInt(500) == 0) {
 
 			((LivingEntity) entityIn).heal(0.5F);
 			

@@ -33,48 +33,48 @@ public class BlockJigsaw extends BlockContainerBase {
 	public static final EnumProperty<JigsawType> TYPE = EnumProperty.create("type", JigsawType.class);
 	
 	public BlockJigsaw() {
-		super("jigsaw", Properties.create(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(-1.0F, 3600000.0F).noDrops());
+		super("jigsaw", Properties.of(Material.STONE).sound(SoundType.STONE).strength(-1.0F, 3600000.0F).noDrops());
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(FACING, TYPE);
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityJigsaw();
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
 		
-		if (context.getFace() == Direction.DOWN) {
-			return this.getDefaultState().with(TYPE, JigsawType.VERTICAL_DOWN).with(FACING, context.getPlacementHorizontalFacing().getOpposite());
-		} else if (context.getFace() == Direction.UP) {
-			return this.getDefaultState().with(TYPE, JigsawType.VERTICAL_UP).with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+		if (context.getClickedFace() == Direction.DOWN) {
+			return this.defaultBlockState().setValue(TYPE, JigsawType.VERTICAL_DOWN).setValue(FACING, context.getHorizontalDirection().getOpposite());
+		} else if (context.getClickedFace() == Direction.UP) {
+			return this.defaultBlockState().setValue(TYPE, JigsawType.VERTICAL_UP).setValue(FACING, context.getHorizontalDirection().getOpposite());
 		} else {
-			return this.getDefaultState().with(TYPE, JigsawType.HORIZONTAL).with(FACING, context.getFace());
+			return this.defaultBlockState().setValue(TYPE, JigsawType.HORIZONTAL).setValue(FACING, context.getClickedFace());
 		}
 		
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		
 		if (tileEntity instanceof TileEntityJigsaw) {
 			
-			if (!worldIn.isRemote()) {
+			if (!worldIn.isClientSide()) {
 				NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, (buf) -> {
 					buf.writeBlockPos(pos);
-					buf.writeCompoundTag(tileEntity.serializeNBT());
+					buf.writeNbt(tileEntity.serializeNBT());
 				});
 			}
 			return ActionResultType.CONSUME;
@@ -88,7 +88,7 @@ public class BlockJigsaw extends BlockContainerBase {
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 		
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		
 		if (tileEntity instanceof TileEntityJigsaw) {
 			
@@ -110,7 +110,7 @@ public class BlockJigsaw extends BlockContainerBase {
 		}
 		
 		@Override
-		public String getString() {
+		public String getSerializedName() {
 			return name;
 		}
 		
@@ -128,12 +128,12 @@ public class BlockJigsaw extends BlockContainerBase {
 	
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 	
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 	
 }

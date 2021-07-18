@@ -31,15 +31,15 @@ public class TileEntityMFluidOutput extends TileEntity implements ITickableTileE
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		if (!this.fluid.isEmpty()) compound.put("Fluid", this.fluid.writeToNBT(new CompoundNBT()));
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compund) {
+	public void load(BlockState state, CompoundNBT compund) {
 		this.fluid = FluidStack.loadFluidStackFromNBT(compund.getCompound("Fluid"));
-		super.read(state, compund);
+		super.load(state, compund);
 	}
 	
 	@Override
@@ -79,41 +79,41 @@ public class TileEntityMFluidOutput extends TileEntity implements ITickableTileE
 	
 	@Override
 	public boolean canConnect(Direction side) {
-		return side == this.getBlockState().get(BlockMFluidInput.FACING).getOpposite();
+		return side == this.getBlockState().getValue(BlockMFluidInput.FACING).getOpposite();
 	}
 	
 	@SuppressWarnings("deprecation")
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote()) {
+		if (!this.level.isClientSide()) {
 			
 			if (this.fluid.getAmount() >= 1000) {
 				
-				BlockPos tankBeginPos = this.pos.offset(this.getBlockState().get(BlockMFluidInput.FACING));
-				BlockPos outputPos = new FluidTankHelper(this.world, tankBeginPos).insertFluidInTank(this.fluid.getFluid());
+				BlockPos tankBeginPos = this.worldPosition.relative(this.getBlockState().getValue(BlockMFluidInput.FACING));
+				BlockPos outputPos = new FluidTankHelper(this.level, tankBeginPos).insertFluidInTank(this.fluid.getFluid());
 				
 				if (outputPos != null) {
 					
 					FluidState fluidState = FluidStackStateTagHelper.makeStateFromStack(this.fluid);
 					
-					this.world.setBlockState(outputPos, fluidState.getBlockState());
+					this.level.setBlockAndUpdate(outputPos, fluidState.createLegacyBlock());
 					this.fluid.shrink(1000);
 					
 				} else {
 					
-					BlockState replaceState = this.world.getBlockState(tankBeginPos);
+					BlockState replaceState = this.level.getBlockState(tankBeginPos);
 					
 					if (replaceState.getBlock() instanceof BlockGasFluid) {
 						
-						((BlockGasFluid) replaceState.getBlock()).pushFluid(new ArrayList<BlockPos>(), replaceState, (ServerWorld) this.world, tankBeginPos, world.rand);
-						replaceState = this.world.getBlockState(tankBeginPos);
+						((BlockGasFluid) replaceState.getBlock()).pushFluid(new ArrayList<BlockPos>(), replaceState, (ServerWorld) this.level, tankBeginPos, level.random);
+						replaceState = this.level.getBlockState(tankBeginPos);
 						
 						if (replaceState.isAir()) {
 							
 							FluidState fluidState = FluidStackStateTagHelper.makeStateFromStack(this.fluid);
 							
-							this.world.setBlockState(tankBeginPos, fluidState.getBlockState());
+							this.level.setBlockAndUpdate(tankBeginPos, fluidState.createLegacyBlock());
 							this.fluid.shrink(1000);
 							
 						}

@@ -18,13 +18,13 @@ public class BlockRubberLog extends BlockLogBase {
 	
 	public BlockRubberLog(String name, Material material, float hardnessAndResistance, SoundType sound) {
 		super(name, material, hardnessAndResistance, sound);
-		this.setDefaultState(this.getDefaultState().with(RIPE_STATE, RipeState.CANT_BE_RIPE));
+		this.registerDefaultState(this.defaultBlockState().setValue(RIPE_STATE, RipeState.CANT_BE_RIPE));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(RIPE_STATE);
-		super.fillStateContainer(builder);
+		super.createBlockStateDefinition(builder);
 	}
 	
 	public static enum RipeState implements IStringSerializable {
@@ -34,28 +34,28 @@ public class BlockRubberLog extends BlockLogBase {
 			this.name = name;
 		}
 		@Override
-		public String getString() {
+		public String getSerializedName() {
 			return name;
 		}
 	}
 	
 	@Override
-	public boolean ticksRandomly(BlockState state) {
+	public boolean isRandomlyTicking(BlockState state) {
 		return true;
 	}
 	
 	@Override
 	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
 		
-		if (state.get(RIPE_STATE) == RipeState.CAN_BE_RIPE) {
+		if (state.getValue(RIPE_STATE) == RipeState.CAN_BE_RIPE) {
 			
 			if (random.nextInt(30) == 0) {
 				
-				worldIn.setBlockState(pos, state.with(RIPE_STATE, RipeState.IS_RIPE));
+				worldIn.setBlockAndUpdate(pos, state.setValue(RIPE_STATE, RipeState.IS_RIPE));
 				
 			} else if (random.nextInt(120) == 0) {
 				
-				worldIn.setBlockState(pos, state.with(RIPE_STATE, RipeState.CANT_BE_RIPE));
+				worldIn.setBlockAndUpdate(pos, state.setValue(RIPE_STATE, RipeState.CANT_BE_RIPE));
 				
 			}
 			

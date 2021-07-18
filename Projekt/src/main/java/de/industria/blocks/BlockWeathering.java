@@ -19,7 +19,7 @@ public class BlockWeathering extends BlockBase {
 	}
 	
 	@Override
-	public boolean ticksRandomly(BlockState state) {
+	public boolean isRandomlyTicking(BlockState state) {
 		return true;
 	}
 	
@@ -28,7 +28,7 @@ public class BlockWeathering extends BlockBase {
 		
 		if (random.nextInt(2400) == 0) {
 			
-			worldIn.setBlockState(pos, this.weatheredBlock.getDefaultState());
+			worldIn.setBlockAndUpdate(pos, this.weatheredBlock.defaultBlockState());
 			
 		}
 		

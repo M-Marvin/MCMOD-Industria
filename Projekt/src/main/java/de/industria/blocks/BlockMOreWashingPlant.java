@@ -45,35 +45,35 @@ import net.minecraftforge.fml.network.NetworkHooks;
 public class BlockMOreWashingPlant extends BlockMultiPart<TileEntityMOreWashingPlant> implements IElectricConnectiveBlock, ISidedInventoryProvider, IAdvancedBlockInfo {
 	
 	public BlockMOreWashingPlant() {
-		super("ore_washing_plant", Material.IRON, 4F, SoundType.METAL, 4, 3, 3);
+		super("ore_washing_plant", Material.METAL, 4F, SoundType.METAL, 4, 3, 3);
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		TileEntityMOreWashingPlant tileEntity = getCenterTE(pos, state, worldIn);
-		if (!worldIn.isRemote()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
+		if (!worldIn.isClientSide()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getBlockPos());
 		return ActionResultType.SUCCESS;
 	}
 	
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+	public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
 		TileEntityMOreWashingPlant tileEntity = getCenterTE(pos, state, worldIn);
-		if (tileEntity != null) InventoryHelper.dropInventoryItems(worldIn, tileEntity.getPos(), (IInventory) tileEntity);
-		super.onBlockHarvested(worldIn, pos, state, player);
+		if (tileEntity != null) InventoryHelper.dropContents(worldIn, tileEntity.getBlockPos(), (IInventory) tileEntity);
+		super.playerWillDestroy(worldIn, pos, state, player);
 	}
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 
 		BlockPos ipos = getInternPartPos(state);
-		Direction facing = state.get(FACING);
+		Direction facing = state.getValue(FACING);
 		
 		if (ipos.equals(new BlockPos(0, 1, 0))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(2, 0, 3, 11, 16, 12), Block.makeCuboidShape(5, 0, 12, 11, 11, 16)), facing);
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(2, 0, 3, 11, 16, 12), Block.box(5, 0, 12, 11, 11, 16)), facing);
 		} else if (ipos.equals(new BlockPos(0, 1, 1))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(2, 0, 3, 6, 15, 7), Block.makeCuboidShape(2, 11, 3, 16, 15, 7), Block.makeCuboidShape(5, 0, 0, 11, 11, 2), Block.makeCuboidShape(9, 0, 5, 16, 2, 16)), facing);
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(2, 0, 3, 6, 15, 7), Block.box(2, 11, 3, 16, 15, 7), Block.box(5, 0, 0, 11, 11, 2), Block.box(9, 0, 5, 16, 2, 16)), facing);
 		} else if (ipos.equals(new BlockPos(0, 1, 2))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 7, 10, 16), Block.makeCuboidShape(7, 2, 0, 16, 9, 16)), facing);
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 0, 7, 10, 16), Block.box(7, 2, 0, 16, 9, 16)), facing);
 		} else if (ipos.equals(new BlockPos(0, 2, 0))) {
 			return VoxelShapes.empty();
 		} else if (ipos.equals(new BlockPos(0, 2, 1))) {
@@ -83,51 +83,51 @@ public class BlockMOreWashingPlant extends BlockMultiPart<TileEntityMOreWashingP
 		} else if (ipos.equals(new BlockPos(1, 2, 2))) {
 			return VoxelShapes.empty();
 		} else if (ipos.equals(new BlockPos(1, 1, 2))) {
-			return VoxelHelper.rotateShape(Block.makeCuboidShape(0, 5, 2, 15, 13, 16), facing);
+			return VoxelHelper.rotateShape(Block.box(0, 5, 2, 15, 13, 16), facing);
 		} else if (ipos.equals(new BlockPos(1, 1, 1))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 11, 3, 7, 15, 7), Block.makeCuboidShape(3, 15, 3, 7, 16, 7), Block.makeCuboidShape(0, 0, 5, 7, 2, 16)), facing);
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 11, 3, 7, 15, 7), Block.box(3, 15, 3, 7, 16, 7), Block.box(0, 0, 5, 7, 2, 16)), facing);
 		} else if (ipos.equals(new BlockPos(1, 1, 0))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(3, 0, 4, 7, 16, 8), Block.makeCuboidShape(3, 0, 11, 7, 16, 15)), facing);
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(3, 0, 4, 7, 16, 8), Block.box(3, 0, 11, 7, 16, 15)), facing);
 		} else if (ipos.equals(new BlockPos(1, 2, 1))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(3, 0, 3, 7, 6, 7), Block.makeCuboidShape(7, 2, 3, 16, 6, 7)), facing);
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(3, 0, 3, 7, 6, 7), Block.box(7, 2, 3, 16, 6, 7)), facing);
 		} else if (ipos.equals(new BlockPos(1, 2, 0))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(3, 0, 4, 7, 6, 8), Block.makeCuboidShape(7, 2, 4, 16, 6, 8), Block.makeCuboidShape(3, 0, 11, 7, 6, 15), Block.makeCuboidShape(7, 2, 11, 16, 6, 15)), facing);
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(3, 0, 4, 7, 6, 8), Block.box(7, 2, 4, 16, 6, 8), Block.box(3, 0, 11, 7, 6, 15), Block.box(7, 2, 11, 16, 6, 15)), facing);
 		} else if (ipos.equals(new BlockPos(2, 2, 2))) {
-			return VoxelHelper.rotateShape(Block.makeCuboidShape(6, 0, 0, 16, 3, 16), facing);
+			return VoxelHelper.rotateShape(Block.box(6, 0, 0, 16, 3, 16), facing);
 		} else if (ipos.equals(new BlockPos(2, 2, 1))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(8, 0, 8, 16, 8, 16), Block.makeCuboidShape(0, 0, 0, 8, 8, 16), Block.makeCuboidShape(8, 2, 0, 16, 4, 8)), facing);
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(8, 0, 8, 16, 8, 16), Block.box(0, 0, 0, 8, 8, 16), Block.box(8, 2, 0, 16, 4, 8)), facing);
 		} else if (ipos.equals(new BlockPos(2, 2, 0))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 8, 8, 16), Block.makeCuboidShape(8, 2, 0, 16, 6, 16)), facing);
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 0, 8, 8, 16), Block.box(8, 2, 0, 16, 6, 16)), facing);
 		} else if (ipos.equals(new BlockPos(3, 2, 2))) {
-			return VoxelHelper.rotateShape(Block.makeCuboidShape(0, 0, 3, 4, 1, 8), facing);
+			return VoxelHelper.rotateShape(Block.box(0, 0, 3, 4, 1, 8), facing);
 		} else if (ipos.equals(new BlockPos(2, 1, 2))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(6, 0, 0, 16, 16, 16), Block.makeCuboidShape(0, 10, 0, 6, 16, 16)), facing);
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(6, 0, 0, 16, 16, 16), Block.box(0, 10, 0, 6, 16, 16)), facing);
 		} else if (ipos.equals(new BlockPos(3, 2, 1))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 0, 5, 10, 6, 6), Block.makeCuboidShape(0, 0, 0, 4, 5, 5)), facing);
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 5, 10, 6, 6), Block.box(0, 0, 0, 4, 5, 5)), facing);
 		} else if (ipos.equals(new BlockPos(3, 2, 0))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 0, 2, 10, 6, 3), Block.makeCuboidShape(0, 0, 3, 4, 5, 16)), facing);
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 2, 10, 6, 3), Block.box(0, 0, 3, 4, 5, 16)), facing);
 		} else if (ipos.equals(new BlockPos(2, 1, 0))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 8, 16, 16), Block.makeCuboidShape(8, 0, 0, 16, 6, 16)), facing);
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 0, 8, 16, 16), Block.box(8, 0, 0, 16, 6, 16)), facing);
 		} else if (ipos.equals(new BlockPos(2, 1, 1))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(8, 0, 8, 16, 16, 16), Block.makeCuboidShape(0, 0, 0, 8, 16, 16), Block.makeCuboidShape(8, 0, 0, 16, 6, 8)), facing);
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(8, 0, 8, 16, 16, 16), Block.box(0, 0, 0, 8, 16, 16), Block.box(8, 0, 0, 16, 6, 8)), facing);
 		} else if (ipos.equals(new BlockPos(3, 1, 0))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 16, 6, 16), Block.makeCuboidShape(1, 6, 2, 13, 16, 3), Block.makeCuboidShape(1, 6, 3, 9, 16, 16)), facing);
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 0, 16, 6, 16), Block.box(1, 6, 2, 13, 16, 3), Block.box(1, 6, 3, 9, 16, 16)), facing);
 		} else if (ipos.equals(new BlockPos(3, 1, 1))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 16, 6, 16), Block.makeCuboidShape(1, 6, 5, 13, 16, 6), Block.makeCuboidShape(1, 6, 0, 9, 16, 5)), facing);
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 0, 16, 6, 16), Block.box(1, 6, 5, 13, 16, 6), Block.box(1, 6, 0, 9, 16, 5)), facing);
 		}  else if (ipos.equals(new BlockPos(3, 1, 2))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 8, 11, 15), Block.makeCuboidShape(1, 11, 3, 4, 14, 8), Block.makeCuboidShape(0, 14, 3, 4, 16, 8)), facing);
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 0, 8, 11, 15), Block.box(1, 11, 3, 4, 14, 8), Block.box(0, 14, 3, 4, 16, 8)), facing);
 		}
-		return Block.makeCuboidShape(0, 0, 0, 16, 16, 16);
+		return Block.box(0, 0, 0, 16, 16, 16);
 		
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityMOreWashingPlant();
 	}
 	
@@ -154,7 +154,7 @@ public class BlockMOreWashingPlant extends BlockMultiPart<TileEntityMOreWashingP
 	}
 	
 	@Override
-	public ISidedInventory createInventory(BlockState state, IWorld world, BlockPos pos) {
+	public ISidedInventory getContainer(BlockState state, IWorld world, BlockPos pos) {
 		return (ISidedInventory) getCenterTE(pos, state, world);
 	}
 	
@@ -185,13 +185,13 @@ public class BlockMOreWashingPlant extends BlockMultiPart<TileEntityMOreWashingP
 	@Override
 	public List<BlockPos> getMultiBlockParts(World world, BlockPos pos, BlockState state) {
 		List<BlockPos> multiParts = new ArrayList<BlockPos>();
-		Direction facing = state.get(FACING);
+		Direction facing = state.getValue(FACING);
 		for (int x = 0; x < this.sizeX; x++) {
 			for (int y = 0; y < this.sizeY; y++) {
 				for (int z = 0; z < this.sizeZ; z++) {
 					BlockPos internPos = new BlockPos(x, y, z);
 					BlockPos offset = rotateOffset(internPos, facing);
-					BlockPos partPos = getCenterTE(pos, state, world).getPos().add(offset);
+					BlockPos partPos = getCenterTE(pos, state, world).getBlockPos().offset(offset);
 					multiParts.add(partPos);
 				}
 			}
@@ -204,8 +204,8 @@ public class BlockMOreWashingPlant extends BlockMultiPart<TileEntityMOreWashingP
 		
 		if (network.getVoltage().getVoltage() > Voltage.NormalVoltage.getVoltage() && network.getCurrent() > 0) {
 			
-			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+			worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
+			worldIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 			
 		}
 		

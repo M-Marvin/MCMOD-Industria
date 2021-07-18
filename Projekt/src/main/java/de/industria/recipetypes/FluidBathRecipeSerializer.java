@@ -18,19 +18,19 @@ public class FluidBathRecipeSerializer<T extends FluidBathRecipe> extends ForgeR
 		this.factory = factory;
 	}
 	
-	public T read(ResourceLocation recipeId, JsonObject json) {
-		ItemStack itemIn = ShapedRecipe.deserializeItem(json.get("ingredientItem").getAsJsonObject());
+	public T fromJson(ResourceLocation recipeId, JsonObject json) {
+		ItemStack itemIn = ShapedRecipe.itemFromJson(json.get("ingredientItem").getAsJsonObject());
 		FluidStack fluidIn = BlendingRecipeSerializer.deserializeFluidStack(json.get("ingredientFluid").getAsJsonObject());
-		ItemStack itemOut = ShapedRecipe.deserializeItem(json.get("resultItem").getAsJsonObject());
+		ItemStack itemOut = ShapedRecipe.itemFromJson(json.get("resultItem").getAsJsonObject());
 		FluidStack fluidOut = BlendingRecipeSerializer.deserializeFluidStack(json.get("wasteFluid").getAsJsonObject());
 		int processTime = json.get("processTime").getAsInt();
 		
 		return this.factory.create(recipeId, itemOut, itemIn, fluidOut, fluidIn, processTime);
 	}
 	
-	public T read(ResourceLocation recipeId, PacketBuffer buffer) {
-		ItemStack itemOut = buffer.readItemStack();
-		ItemStack itemIn = buffer.readItemStack();
+	public T fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+		ItemStack itemOut = buffer.readItem();
+		ItemStack itemIn = buffer.readItem();
 		FluidStack fluidOut = buffer.readFluidStack();
 		FluidStack fluidIn = buffer.readFluidStack();
 		int processTime = buffer.readInt();
@@ -38,9 +38,9 @@ public class FluidBathRecipeSerializer<T extends FluidBathRecipe> extends ForgeR
 	}
 	
 	@Override
-	public void write(PacketBuffer buffer, T recipe) {
-		buffer.writeItemStack(recipe.itemOut);
-		buffer.writeItemStack(recipe.itemIn);
+	public void toNetwork(PacketBuffer buffer, T recipe) {
+		buffer.writeItem(recipe.itemOut);
+		buffer.writeItem(recipe.itemIn);
 		buffer.writeFluidStack(recipe.fluidOut);
 		buffer.writeFluidStack(recipe.fluidIn);
 	}

@@ -22,15 +22,15 @@ public class ScreenMAirCompressor extends ContainerScreen<ContainerMAirCompresso
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
 
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindTexture(AIR_COMPRESSOR_GUI_TEXTURES);
-		int i = this.guiLeft;
-		int j = (this.height - this.ySize) / 2;
-		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
+		this.minecraft.getTextureManager().bind(AIR_COMPRESSOR_GUI_TEXTURES);
+		int i = this.leftPos;
+		int j = (this.height - this.imageHeight) / 2;
+		this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
 		
-		TileEntityMAirCompressor te = this.container.getTileEntity();
+		TileEntityMAirCompressor te = this.menu.getTileEntity();
 		float progress1 = (float) te.progress1 / (float) 10;
 		float progress2 = (float) te.progress2 / (float) 10;
 		float progressTank = (float) te.tankProgress / (float) 5;
@@ -41,9 +41,9 @@ public class ScreenMAirCompressor extends ContainerScreen<ContainerMAirCompresso
 		
 		if (te.hasPower) this.blit(matrixStack, i + 74, j + 56, 176, 0, 10, 14);
 		
-		FluidStack fluid = this.container.getTileEntity().compressedAir;
+		FluidStack fluid = this.menu.getTileEntity().compressedAir;
 		if (!fluid.isEmpty()) {
-			float fluidA = fluid.getAmount() / (float) this.container.getTileEntity().maxStorage;
+			float fluidA = fluid.getAmount() / (float) this.menu.getTileEntity().maxStorage;
 			FluidBarTexture.drawFluidTexture(matrixStack, this, fluid.getFluid(), i + 108, j + 71, 16, (int) (fluidA * 56));
 		}
 		

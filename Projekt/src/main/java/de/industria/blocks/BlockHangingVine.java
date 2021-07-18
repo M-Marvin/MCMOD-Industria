@@ -24,11 +24,11 @@ import net.minecraft.world.server.ServerWorld;
 public class BlockHangingVine extends BlockBase {
 	
 	public static final EnumProperty<Part> PART = EnumProperty.create("part", Part.class);
-	public static final IntegerProperty AGE = BlockStateProperties.AGE_0_25;
+	public static final IntegerProperty AGE = BlockStateProperties.AGE_25;
 	
 	public BlockHangingVine() {
-		super("hanging_vine", Properties.create(Material.PLANTS).hardnessAndResistance(0).sound(SoundType.VINE).doesNotBlockMovement().tickRandomly());
-		this.setDefaultState(stateContainer.getBaseState().with(PART, Part.END).with(AGE, 0));
+		super("hanging_vine", Properties.of(Material.PLANT).strength(0).sound(SoundType.VINE).noCollission().randomTicks());
+		this.registerDefaultState(stateDefinition.any().setValue(PART, Part.END).setValue(AGE, 0));
 	}
 	
 	@Override
@@ -37,42 +37,42 @@ public class BlockHangingVine extends BlockBase {
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(PART, AGE);
 	}
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return state.get(PART) == Part.END ? Block.makeCuboidShape(2, 8, 2, 14, 16, 14) : Block.makeCuboidShape(2, 0, 2, 14, 16, 14);
+		return state.getValue(PART) == Part.END ? Block.box(2, 8, 2, 14, 16, 14) : Block.box(2, 0, 2, 14, 16, 14);
 	}
 	
 	@Override
-	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
-		if (worldIn.getBlockState(pos.up()).getBlock() == this) {
+	public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos) {
+		if (worldIn.getBlockState(pos.above()).getBlock() == this) {
 			return true;
 		} else {
-			return isValidGround(worldIn.getBlockState(pos.up()), worldIn, pos.up());
+			return isValidGround(worldIn.getBlockState(pos.above()), worldIn, pos.above());
 		}
 	}
 	
 	public boolean isValidGround(BlockState state, IWorldReader worldIn, BlockPos pos) {
-		return state.isSolid() || state.getBlock() instanceof LeavesBlock;
+		return state.canOcclude() || state.getBlock() instanceof LeavesBlock;
 	}
 	
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-		if (fromPos.equals(pos.up())) {
-			if (!this.isValidPosition(state, worldIn, pos)) {
-				worldIn.getPendingBlockTicks().scheduleTick(pos, this, 1);
+		if (fromPos.equals(pos.above())) {
+			if (!this.canSurvive(state, worldIn, pos)) {
+				worldIn.getBlockTicks().scheduleTick(pos, this, 1);
 			}
-		} else if (fromPos.equals(pos.down())) {
-			worldIn.setBlockState(pos, state.with(PART, worldIn.getBlockState(fromPos).getBlock() == this ? Part.PLANT : Part.END).with(AGE, 0));
+		} else if (fromPos.equals(pos.below())) {
+			worldIn.setBlockAndUpdate(pos, state.setValue(PART, worldIn.getBlockState(fromPos).getBlock() == this ? Part.PLANT : Part.END).setValue(AGE, 0));
 		}
 	}
 	
 	@Override
 	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
-		if (!this.isValidPosition(state, worldIn, pos)) {
+		if (!this.canSurvive(state, worldIn, pos)) {
 			worldIn.destroyBlock(pos, true);
 		}
 	}
@@ -80,9 +80,9 @@ public class BlockHangingVine extends BlockBase {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
-		if (state.get(AGE) < 25 && random.nextInt(6) == 0 && worldIn.getBlockState(pos.down()).isAir()) {
-			int age = Math.min(state.get(AGE) + random.nextInt(5) + 1, 25);
-			worldIn.setBlockState(pos.down(), this.getDefaultState().with(PART, Part.END).with(AGE, age));
+		if (state.getValue(AGE) < 25 && random.nextInt(6) == 0 && worldIn.getBlockState(pos.below()).isAir()) {
+			int age = Math.min(state.getValue(AGE) + random.nextInt(5) + 1, 25);
+			worldIn.setBlockAndUpdate(pos.below(), this.defaultBlockState().setValue(PART, Part.END).setValue(AGE, age));
 		}
 	}
 	
@@ -101,7 +101,7 @@ public class BlockHangingVine extends BlockBase {
 		}
 
 		@Override
-		public String getString() {
+		public String getSerializedName() {
 			return this.name;
 		}
 				

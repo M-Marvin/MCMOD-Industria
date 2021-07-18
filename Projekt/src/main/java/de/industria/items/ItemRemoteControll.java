@@ -16,55 +16,55 @@ import net.minecraft.world.World;
 public class ItemRemoteControll extends ItemBase {
 
 	public ItemRemoteControll() {
-		super("remote_control", ItemGroup.REDSTONE, 1);
+		super("remote_control", ItemGroup.TAB_REDSTONE, 1);
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		
-		if (!worldIn.isRemote() && handIn == Hand.MAIN_HAND) {
+		if (!worldIn.isClientSide() && handIn == Hand.MAIN_HAND) {
 			
-			ItemStack setItem = playerIn.getHeldItemOffhand();
-			ItemStack stack = playerIn.getHeldItemMainhand();
+			ItemStack setItem = playerIn.getOffhandItem();
+			ItemStack stack = playerIn.getMainHandItem();
 			
 			if ((setItem != null ? !setItem.isEmpty() : false) && setItem.getCount() == 1) {
 				
 				CompoundNBT tag = stack.getTag();
 				if (tag == null) {
 					tag = new CompoundNBT();
-					tag.put("ChanelItem", setItem.write(new CompoundNBT()));
+					tag.put("ChanelItem", setItem.save(new CompoundNBT()));
 					setItem.shrink(1);
 				} else {
-					ItemStack oldItem = ItemStack.read(tag.getCompound("ChanelItem"));
-					tag.put("ChanelItem", setItem.write(new CompoundNBT()));
-					playerIn.setHeldItem(Hand.OFF_HAND, oldItem);
+					ItemStack oldItem = ItemStack.of(tag.getCompound("ChanelItem"));
+					tag.put("ChanelItem", setItem.save(new CompoundNBT()));
+					playerIn.setItemInHand(Hand.OFF_HAND, oldItem);
 				}
 
 				stack.setTag(tag);
 				
-				return ActionResult.resultSuccess(stack);
+				return ActionResult.success(stack);
 				
 			} else {
 				
 				CompoundNBT tag = stack.getTag();
 				CompoundNBT chanelItemTag = tag.getCompound("ChanelItem");
-				ItemStack chanelItem = chanelItemTag == null ? null : ItemStack.read(chanelItemTag);
+				ItemStack chanelItem = chanelItemTag == null ? null : ItemStack.of(chanelItemTag);
 				boolean toggle = !tag.getBoolean("Toggle");
 				tag.putBoolean("Toggle", toggle);
 				stack.setTag(tag);
 				
 				RedstoneControlSignal signal = new RedstoneControlSignal(chanelItem, toggle);
-				BlockPos pos = new BlockPos(playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ());
+				BlockPos pos = new BlockPos(playerIn.getX(), playerIn.getY(), playerIn.getZ());
 				
 				sendSignal(worldIn, pos, 25, signal);
 				
-				return ActionResult.resultSuccess(stack);
+				return ActionResult.success(stack);
 				
 			}
 			
 		}
 		
-		return ActionResult.resultSuccess(playerIn.getHeldItemMainhand());
+		return ActionResult.success(playerIn.getMainHandItem());
 		
 	}
 	
@@ -72,14 +72,14 @@ public class ItemRemoteControll extends ItemBase {
 		
 		ItemStack chanelItem = null;
 		
-		for (TileEntity te2 : worldIn.loadedTileEntityList) {
+		for (TileEntity te2 : worldIn.blockEntityList) {
 			
 			if (te2 instanceof TileEntityRSignalAntenna) {
 				
 				TileEntityRSignalAntenna antenna = (TileEntityRSignalAntenna) te2;
 				
 				int range2 = antenna.getRange();
-				int distance = BlockSignalAntennaConector.getDistance(pos, antenna.getPos());
+				int distance = BlockSignalAntennaConector.getDistance(pos, antenna.getBlockPos());
 				ItemStack chanelItem2 = antenna.getChanelItem();
 				boolean isInRange = distance <= range1 + range2;
 				boolean isSameChanel = chanelItem != null && chanelItem2 != null ? chanelItem.equals(chanelItem2, false) : chanelItem == null && chanelItem2 == null;

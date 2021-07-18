@@ -19,20 +19,20 @@ public class JigsawFeature extends Feature<JigsawFeatureConfig> {
 	}
 	
 	@Override
-	public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, JigsawFeatureConfig config) {
+	public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, JigsawFeatureConfig config) {
 		
 		BlockState state = reader.getBlockState(pos);
 		
 		if (config.target.test(state, rand)) {
 			
-			reader.setBlockState(pos, config.jigsawState, 2);
-			TileEntity tileEntity = reader.getTileEntity(pos);
+			reader.setBlock(pos, config.jigsawState, 2);
+			TileEntity tileEntity = reader.getBlockEntity(pos);
 			
 			if (tileEntity instanceof TileEntityJigsaw) {
 				
 				TileEntityJigsaw jigsaw = (TileEntityJigsaw) tileEntity;
 				jigsaw.deserializeNBT(config.jigsawData);
-				jigsaw.setWorldAndPos(reader.getWorld(), pos);
+				jigsaw.setLevelAndPosition(reader.getLevel(), pos);
 				
 				int generationLevels = config.levelsMin == config.levelsMax ? config.levelsMin : rand.nextInt(config.levelsMax - config.levelsMin) + config.levelsMin;
 				

@@ -34,7 +34,7 @@ public class BlockElektricWire extends BlockWiring implements IElectricWireBlock
 	protected final int maximumPower;
 	
 	public BlockElektricWire(String name, int maximumPower, int size) {
-		super(name, Material.WOOL, 0.2F, SoundType.CLOTH, size);
+		super(name, Material.WOOL, 0.2F, SoundType.WOOL, size);
 		this.maximumPower = maximumPower;
 	}
 	
@@ -96,7 +96,7 @@ public class BlockElektricWire extends BlockWiring implements IElectricWireBlock
 						
 					}
 					
-					worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), ModSoundEvents.SPARKING_CABLE, SoundCategory.BLOCKS, 0.5F, rand.nextFloat() * 0.2F + 0.8F, false);
+					worldIn.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), ModSoundEvents.SPARKING_CABLE, SoundCategory.BLOCKS, 0.5F, rand.nextFloat() * 0.2F + 0.8F, false);
 					
 				}
 				
@@ -107,7 +107,7 @@ public class BlockElektricWire extends BlockWiring implements IElectricWireBlock
 	}
 	
 	@Override
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 		
 		BlockState stateIn = worldIn.getBlockState(pos);
 		
@@ -119,7 +119,7 @@ public class BlockElektricWire extends BlockWiring implements IElectricWireBlock
 			
 			int dammge = voltage.getVoltage() / 100;
 
-			if (dammge > 0) entityIn.attackEntityFrom(ModDamageSource.ELCTRIC_SHOCK, dammge);
+			if (dammge > 0) entityIn.hurt(ModDamageSource.ELCTRIC_SHOCK, dammge);
 			
 		}
 		
@@ -144,7 +144,7 @@ public class BlockElektricWire extends BlockWiring implements IElectricWireBlock
 		
 		if (this.maximumPower < current) {
 			
-			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
+			worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
 			BlockBurnedCable.crateBurnedCable(state, pos, worldIn);
 			
 		}

@@ -14,13 +14,13 @@ public class SoundMachine extends TickableSound {
 	
 	public SoundMachine(TileEntity machine, SoundEvent soundIn) {
 		super(soundIn, SoundCategory.BLOCKS);
-		this.pos = machine.getPos();
-		this.world = machine.getWorld();
-		this.x = machine.getPos().getX();
-		this.y = machine.getPos().getY();
-		this.z = machine.getPos().getZ();
-		this.repeat = true;
-		this.repeatDelay = 0;
+		this.pos = machine.getBlockPos();
+		this.world = machine.getLevel();
+		this.x = machine.getBlockPos().getX();
+		this.y = machine.getBlockPos().getY();
+		this.z = machine.getBlockPos().getZ();
+		this.looping = true;
+		this.delay = 0;
 		this.volume = 1F;
 		this.pitch = 1F;
 	}
@@ -28,17 +28,17 @@ public class SoundMachine extends TickableSound {
 	@Override
 	public void tick() {
 		
-		TileEntity machine = this.world.getTileEntity(pos);
+		TileEntity machine = this.world.getBlockEntity(pos);
 		
 		if ((machine instanceof ISimpleMachineSound ? ((ISimpleMachineSound) machine).isSoundRunning() : false) && !machine.isRemoved()) {
 			
-			this.x = machine.getPos().getX();
-			this.y = machine.getPos().getY();
-			this.z = machine.getPos().getZ();
+			this.x = machine.getBlockPos().getX();
+			this.y = machine.getBlockPos().getY();
+			this.z = machine.getBlockPos().getZ();
 			
 		} else {
 			
-			this.finishPlaying();
+			this.stop();
 			
 		}
 		

@@ -13,7 +13,7 @@ public interface IPostMoveHandledTE {
 	 * @param multipleCall
 	 */
 	public default void handlePostMove2(BlockPos pos, Direction moveDirection, int moveDistance, boolean multipleCall) {
-		this.handlePostMove(pos.offset(moveDirection.getOpposite(), moveDistance), pos, multipleCall);
+		this.handlePostMove(pos.relative(moveDirection.getOpposite(), moveDistance), pos, multipleCall);
 	}
 	
 	/**
@@ -24,7 +24,7 @@ public interface IPostMoveHandledTE {
 	 * @param multipleCall
 	 */
 	public default void handlePostMove(BlockPos pos, Direction moveDirection, int moveDistance, boolean multipleCall) {
-		this.handlePostMove(pos, pos.offset(moveDirection, moveDistance), multipleCall);
+		this.handlePostMove(pos, pos.relative(moveDirection, moveDistance), multipleCall);
 	}
 	
 	public void handlePostMove(BlockPos pos, BlockPos newPos, boolean multipleCall);

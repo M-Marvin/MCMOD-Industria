@@ -17,7 +17,7 @@ public class BlockBurnedScrap extends BlockBurnedBlock {
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return Block.makeCuboidShape(2, 0, 2, 14, 4, 14);
+		return Block.box(2, 0, 2, 14, 4, 14);
 	}
 	
 	@Override
@@ -34,7 +34,7 @@ public class BlockBurnedScrap extends BlockBurnedBlock {
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
-		if (fromPos.equals(pos.down()) && (!worldIn.getBlockState(fromPos).isOpaqueCube(worldIn, fromPos) || worldIn.getBlockState(fromPos).isAir())) {
+		if (fromPos.equals(pos.below()) && (!worldIn.getBlockState(fromPos).isSolidRender(worldIn, fromPos) || worldIn.getBlockState(fromPos).isAir())) {
 			dropBlock(worldIn, pos, state);
 		}
 	}
@@ -42,7 +42,7 @@ public class BlockBurnedScrap extends BlockBurnedBlock {
 	@SuppressWarnings("deprecation")
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return (!context.getWorld().getBlockState(context.getPos().down()).isOpaqueCube(context.getWorld(), context.getPos().down()) || context.getWorld().getBlockState(context.getPos().down()).isAir()) ? context.getWorld().getBlockState(context.getPos()) : super.getStateForPlacement(context);
+		return (!context.getLevel().getBlockState(context.getClickedPos().below()).isSolidRender(context.getLevel(), context.getClickedPos().below()) || context.getLevel().getBlockState(context.getClickedPos().below()).isAir()) ? context.getLevel().getBlockState(context.getClickedPos()) : super.getStateForPlacement(context);
 	}
 	
 }

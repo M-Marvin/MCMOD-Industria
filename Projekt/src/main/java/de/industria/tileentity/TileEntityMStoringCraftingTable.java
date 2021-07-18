@@ -48,7 +48,7 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 	}
 	
 	@Override
-	public int getSizeInventory() {
+	public int getContainerSize() {
 		return 11;
 	}
 	
@@ -71,12 +71,12 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		ListNBT itemsNBT = new ListNBT();
 		for (int i = 0; i < 11; i++) {
 			ItemStack stack = this.inventory.get(i);
 			if (!stack.isEmpty()) {
-				CompoundNBT stackNBT = stack.write(new CompoundNBT());
+				CompoundNBT stackNBT = stack.save(new CompoundNBT());
 				stackNBT.putShort("Slot", (short) i);
 				itemsNBT.add(stackNBT);
 			}
@@ -86,7 +86,7 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 		for (int i = 0; i < 9; i++) {
 			ItemStack stack = this.remainingItems.get(i);
 			if (!stack.isEmpty()) {
-				CompoundNBT stackNBT = stack.write(new CompoundNBT());
+				CompoundNBT stackNBT = stack.save(new CompoundNBT());
 				stackNBT.putShort("Slot", (short) i);
 				remainingItemsNBT.add(stackNBT);
 			}
@@ -95,29 +95,29 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 		compound.putBoolean("hasPower", this.hasPower);
 		compound.putBoolean("isWorking", this.isWorking);
 		compound.putInt("Progress", this.progress);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		ListNBT itemsNBT = compound.getList("Items", 10);
 		for (int i = 0; i < itemsNBT.size(); i++) {
 			CompoundNBT stackNBT = itemsNBT.getCompound(i);
 			int index = stackNBT.getShort("Slot");
-			ItemStack stack = ItemStack.read(stackNBT);
+			ItemStack stack = ItemStack.of(stackNBT);
 			this.inventory.set(index, stack);
 		}
 		ListNBT remainingItemsNBT = compound.getList("RemainingItems", 10);
 		for (int i = 0; i < itemsNBT.size(); i++) {
 			CompoundNBT stackNBT = remainingItemsNBT.getCompound(i);
 			int index = stackNBT.getShort("Slot");
-			ItemStack stack = ItemStack.read(stackNBT);
+			ItemStack stack = ItemStack.of(stackNBT);
 			this.remainingItems.set(index, stack);
 		}
 		this.hasPower = compound.getBoolean("hasPower");
 		this.isWorking = compound.getBoolean("isWorking");
 		this.progress = compound.getInt("Progress");
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 	public CraftingInventory makeCraftMatrix() {
@@ -128,7 +128,7 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 			if (stack.isEmpty()) {
 				return null;
 			} else if (stack.getItem() != this.inventory.get(10).getItem()) {
-				craftMatrix.setInventorySlotContents(i, this.getStackInSlot(i));
+				craftMatrix.setItem(i, this.getItem(i));
 			}
 		}
 		return craftMatrix;
@@ -138,7 +138,7 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 	public ICraftingRecipe findRecipe(CraftingInventory craftMatrix) {
 		
 		if (craftMatrix == null) return null;
-		Optional<ICraftingRecipe> recipe = this.world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftMatrix, this.world);
+		Optional<ICraftingRecipe> recipe = this.level.getRecipeManager().getRecipeFor(IRecipeType.CRAFTING, craftMatrix, this.level);
 		return recipe.isPresent() ? recipe.get() : null;
 		
 	}
@@ -146,12 +146,12 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote()) {
+		if (!this.level.isClientSide()) {
 			
-			this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
+			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			
-			ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos);
-			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(world).getNetwork(pos);
+			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
+			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
 			
 			CraftingInventory craftMatrix = makeCraftMatrix();
 			ICraftingRecipe recipe = findRecipe(craftMatrix);
@@ -159,8 +159,8 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 			canWork = false;
 			if (recipe != null) {
 				
-				ItemStack result = recipe.getCraftingResult(craftMatrix);
-				ItemStack stack = this.getStackInSlot(9);
+				ItemStack result = recipe.assemble(craftMatrix);
+				ItemStack stack = this.getItem(9);
 				
 				if (stack.isEmpty()) {
 					canWork = true;
@@ -176,8 +176,8 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 				
 				if (this.progress >= 100) {
 
-					ItemStack result = recipe.getCraftingResult(craftMatrix);
-					ItemStack stack = this.getStackInSlot(9);
+					ItemStack result = recipe.assemble(craftMatrix);
+					ItemStack stack = this.getItem(9);
 					
 					this.remainingItems = recipe.getRemainingItems(craftMatrix);
 					
@@ -228,12 +228,12 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 	}
 	
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return index == 9 || isRemainingItem(index);
 	}
 	
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
 		return index != 9 && this.inventory.get(index).isEmpty();
 	}
 	
@@ -246,12 +246,12 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int index) {
+	public ItemStack getItem(int index) {
 		return this.inventory.get(index);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int index, int count) {
+	public ItemStack removeItem(int index, int count) {
 		ItemStack stack2 = this.inventory.get(index).copy();
 		if (!stack2.isEmpty()) {
 			ItemStack stack = this.inventory.get(index);
@@ -262,22 +262,22 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int index) {
+	public ItemStack removeItemNoUpdate(int index) {
 		return this.inventory.set(index, ItemStack.EMPTY);
 	}
 
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack) {
+	public void setItem(int index, ItemStack stack) {
 		this.inventory.set(index, stack);
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) {
+	public boolean stillValid(PlayerEntity player) {
 		return true;
 	}
 
 	@Override
-	public void clear() {
+	public void clearContent() {
 		for (int i = 0; i < 11; i++) {
 			this.inventory.set(i, ItemStack.EMPTY);
 		}
@@ -288,7 +288,7 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 	
 	@Override
 	public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
-		if (!this.removed && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+		if (!this.remove && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 		if (facing == Direction.DOWN)
 			return handlers[0].cast();
 		else
@@ -302,12 +302,12 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 		CompoundNBT nbt = this.serializeNBT();
 		nbt.remove("Items");
 		nbt.remove("RemainingItems");
-		return new SUpdateTileEntityPacket(pos, 0, nbt);
+		return new SUpdateTileEntityPacket(worldPosition, 0, nbt);
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.deserializeNBT(pkt.getNbtCompound());
+		this.deserializeNBT(pkt.getTag());
 	}
 	
 }

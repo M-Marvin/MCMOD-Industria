@@ -33,11 +33,11 @@ import net.minecraftforge.fml.network.NetworkHooks;
 public class BlockMCoalHeater extends BlockMultiPart<TileEntityMCoalHeater> implements ISidedInventoryProvider, IAdvancedBlockInfo {
 	
 	public BlockMCoalHeater() {
-		super("coal_heater", Material.IRON, 4F, SoundType.METAL, 2, 1, 2);
+		super("coal_heater", Material.METAL, 4F, SoundType.METAL, 2, 1, 2);
 	}
 		
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityMCoalHeater();
 	}
 	
@@ -54,26 +54,26 @@ public class BlockMCoalHeater extends BlockMultiPart<TileEntityMCoalHeater> impl
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		TileEntityMCoalHeater tileEntity = getCenterTE(pos, state, worldIn);
-		if (!worldIn.isRemote()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
+		if (!worldIn.isClientSide()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getBlockPos());
 		return ActionResultType.SUCCESS;
 	}
 	
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+	public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
 		TileEntityMCoalHeater tileEntity = getCenterTE(pos, state, worldIn);
-		if (tileEntity != null) InventoryHelper.dropInventoryItems(worldIn, tileEntity.getPos(), (IInventory) tileEntity);
-		super.onBlockHarvested(worldIn, pos, state, player);
+		if (tileEntity != null) InventoryHelper.dropContents(worldIn, tileEntity.getBlockPos(), (IInventory) tileEntity);
+		super.playerWillDestroy(worldIn, pos, state, player);
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 	
 	@Override
-	public ISidedInventory createInventory(BlockState state, IWorld world, BlockPos pos) {
+	public ISidedInventory getContainer(BlockState state, IWorld world, BlockPos pos) {
 		if (getInternPartPos(state).equals(new BlockPos(0, 0, 0)) || getInternPartPos(state).equals(new BlockPos(1, 0, 0))) {
 			TileEntityMCoalHeater tileEntity = getCenterTE(pos, state, world);
 			return tileEntity;

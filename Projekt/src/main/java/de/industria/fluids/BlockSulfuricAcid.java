@@ -22,22 +22,22 @@ import net.minecraft.world.World;
 public class BlockSulfuricAcid extends BlockModFlowingFluid {
 	
 	public BlockSulfuricAcid() {
-		super("sulfuric_acid", ModFluids.SULFURIC_ACID, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
+		super("sulfuric_acid", ModFluids.SULFURIC_ACID, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops());
 	}
 	
 	@Override
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 		
-		entityIn.attackEntityFrom(ModDamageSource.ACID, 4F);
+		entityIn.hurt(ModDamageSource.ACID, 4F);
 		if (entityIn instanceof ItemEntity) {
 			entityIn.remove();
-			worldIn.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1, 1);
+			worldIn.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1, 1);
 		}
 		
 		if (entityIn instanceof LivingEntity) {
 			
-			EffectInstance effect = ((LivingEntity) entityIn).getActivePotionEffect(Effects.WITHER);
-			if (effect != null ? effect.getDuration() < 100 : true) ((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.WITHER, 100, 1));
+			EffectInstance effect = ((LivingEntity) entityIn).getEffect(Effects.WITHER);
+			if (effect != null ? effect.getDuration() < 100 : true) ((LivingEntity) entityIn).addEffect(new EffectInstance(Effects.WITHER, 100, 1));
 			
 		}
 		
@@ -47,7 +47,7 @@ public class BlockSulfuricAcid extends BlockModFlowingFluid {
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 
-		if (worldIn.getBlockState(pos.up()).isAir()) {
+		if (worldIn.getBlockState(pos.above()).isAir()) {
 			float fx = rand.nextFloat() + pos.getX();
 			float fy = rand.nextFloat() + pos.getY();
 			float fz = rand.nextFloat() + pos.getZ();

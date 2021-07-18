@@ -29,29 +29,29 @@ public class BlockRLinearConector extends BlockBase implements IAdvancedStickyBl
 	private static final IntegerProperty RANGE = IntegerProperty.create("range", 1, 12);
 	
 	public BlockRLinearConector() {
-		super("linear_conector", Material.ROCK, 1.5F, 0.5F, SoundType.STONE, true);
+		super("linear_conector", Material.STONE, 1.5F, 0.5F, SoundType.STONE, true);
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(AXIS, RANGE);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
 		Axis axis = context.getNearestLookingDirection().getAxis();
-		return this.getDefaultState().with(AXIS, axis).with(RANGE, 1);
+		return this.defaultBlockState().setValue(AXIS, axis).setValue(RANGE, 1);
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
-		if (player.isSneaking()) {
+		if (player.isShiftKeyDown()) {
 
-			int range = state.get(RANGE);
+			int range = state.getValue(RANGE);
 			range++;
 			if (range > 12) range = 1;
-			worldIn.setBlockState(pos, state.with(RANGE, range));
+			worldIn.setBlockAndUpdate(pos, state.setValue(RANGE, range));
 			
 			return ActionResultType.SUCCESS;
 			
@@ -63,8 +63,8 @@ public class BlockRLinearConector extends BlockBase implements IAdvancedStickyBl
 	@SuppressWarnings("deprecation")
 	public boolean addBlocksToMove(AdvancedPistonBlockStructureHelper pistonStructureHelper, BlockPos pos, BlockState state, World world) {
 		
-		Axis axis = state.get(AXIS);
-		int range = state.get(RANGE);
+		Axis axis = state.getValue(AXIS);
+		int range = state.getValue(RANGE);
 		
 		boolean flag12 = true;
 		boolean flag22 = true;
@@ -76,21 +76,21 @@ public class BlockRLinearConector extends BlockBase implements IAdvancedStickyBl
 			switch (axis) {
 			case X:
 				if (pistonStructureHelper.getMoveDirection() == Direction.EAST) flag12 = false; // Stop Block Detecting in Push-Direction
-				pos1 = pos.offset(Direction.EAST, i);
+				pos1 = pos.relative(Direction.EAST, i);
 				if (pistonStructureHelper.getMoveDirection() == Direction.WEST) flag22 = false;
-				pos2 = pos.offset(Direction.WEST, i);
+				pos2 = pos.relative(Direction.WEST, i);
 				break;
 			case Y:
 				if (pistonStructureHelper.getMoveDirection() == Direction.UP) flag12 = false;
-				pos1 = pos.offset(Direction.UP, i);
+				pos1 = pos.relative(Direction.UP, i);
 				if (pistonStructureHelper.getMoveDirection() == Direction.DOWN) flag22 = false;
-				pos2 = pos.offset(Direction.DOWN, i);
+				pos2 = pos.relative(Direction.DOWN, i);
 				break;
 			case Z:
 				if (pistonStructureHelper.getMoveDirection() == Direction.SOUTH) flag12 = false;
-				pos1 = pos.offset(Direction.SOUTH, i);
+				pos1 = pos.relative(Direction.SOUTH, i);
 				if (pistonStructureHelper.getMoveDirection() == Direction.NORTH) flag22 = false;
-				pos2 = pos.offset(Direction.NORTH, i);
+				pos2 = pos.relative(Direction.NORTH, i);
 				break;
 			}
 			
@@ -98,8 +98,8 @@ public class BlockRLinearConector extends BlockBase implements IAdvancedStickyBl
 			BlockState state2 = world.getBlockState(pos2);
 			if (!BlockRAdvancedPiston.canPush(state1, world, pos1, pistonStructureHelper.getMoveDirection(), true, pistonStructureHelper.getMoveDirection())) flag12 = false; // Check if Block in Push DIrection is Moveable
 			if (!BlockRAdvancedPiston.canPush(state2, world, pos2, pistonStructureHelper.getMoveDirection(), true, pistonStructureHelper.getMoveDirection())) flag22 = false;
-			if (pos1.equals(pistonStructureHelper.getPistonPos()) || state1.isAir() || state1.getPushReaction() == PushReaction.DESTROY) flag12 = false;
-			if (pos2.equals(pistonStructureHelper.getPistonPos()) || state2.isAir() || state2.getPushReaction() == PushReaction.DESTROY) flag22 = false;
+			if (pos1.equals(pistonStructureHelper.getPistonPos()) || state1.isAir() || state1.getPistonPushReaction() == PushReaction.DESTROY) flag12 = false;
+			if (pos2.equals(pistonStructureHelper.getPistonPos()) || state2.isAir() || state2.getPistonPushReaction() == PushReaction.DESTROY) flag22 = false;
 			
 			boolean flag1 = !flag12 ? true : pistonStructureHelper.addBlockLine(pos1, pistonStructureHelper.getMoveDirection());
 			boolean flag2 = !flag22 ? true : pistonStructureHelper.addBlockLine(pos2, pistonStructureHelper.getMoveDirection());
@@ -120,11 +120,11 @@ public class BlockRLinearConector extends BlockBase implements IAdvancedStickyBl
 	      switch(rot) {
 	      case COUNTERCLOCKWISE_90:
 	      case CLOCKWISE_90:
-	         switch((Direction.Axis)state.get(AXIS)) {
+	         switch((Direction.Axis)state.getValue(AXIS)) {
 	         case X:
-	            return state.with(AXIS, Direction.Axis.Z);
+	            return state.setValue(AXIS, Direction.Axis.Z);
 	         case Z:
-	            return state.with(AXIS, Direction.Axis.X);
+	            return state.setValue(AXIS, Direction.Axis.X);
 	         default:
 	            return state;
 	         }

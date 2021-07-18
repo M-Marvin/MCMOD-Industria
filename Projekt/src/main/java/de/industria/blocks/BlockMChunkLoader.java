@@ -38,26 +38,26 @@ public class BlockMChunkLoader extends BlockContainerBase implements IElectricCo
 	public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 	
 	public BlockMChunkLoader() {
-		super("chunk_loader", Material.IRON, 2F, SoundType.METAL);
+		super("chunk_loader", Material.METAL, 2F, SoundType.METAL);
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(ACTIVE);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(ACTIVE, false);
+		return this.defaultBlockState().setValue(ACTIVE, false);
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityMChunkLoader();
 	}
 	
@@ -68,7 +68,7 @@ public class BlockMChunkLoader extends BlockContainerBase implements IElectricCo
 	
 	@Override
 	public float getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
-		TileEntity tileEntity = world.getTileEntity(pos);
+		TileEntity tileEntity = world.getBlockEntity(pos);
 		if (tileEntity instanceof TileEntityMChunkLoader) {
 			if (((TileEntityMChunkLoader) tileEntity).canWork()) return 0.2F;
 		}
@@ -81,10 +81,10 @@ public class BlockMChunkLoader extends BlockContainerBase implements IElectricCo
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		if (tileEntity instanceof INamedContainerProvider) {
-			if (!worldIn.isRemote()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
+			if (!worldIn.isClientSide()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
 			return ActionResultType.SUCCESS;
 		}
 		return ActionResultType.PASS;
@@ -115,8 +115,8 @@ public class BlockMChunkLoader extends BlockContainerBase implements IElectricCo
 
 		if (network.getVoltage().getVoltage() > Voltage.HightVoltage.getVoltage() && network.getCurrent() > 0) {
 
-			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+			worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
+			worldIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 			
 		}
 		

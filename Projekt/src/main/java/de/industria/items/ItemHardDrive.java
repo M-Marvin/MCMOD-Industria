@@ -36,7 +36,7 @@ public class ItemHardDrive extends ItemBase {
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		CompoundNBT tag = stack.getTag();
 		if (tag != null) {
 			if (tag.contains("DriveName")) tooltip.add(new StringTextComponent("\u00A77" + new TranslationTextComponent("industria.item.info.name", tag.getString("DriveName")).getString()));

@@ -12,12 +12,12 @@ import net.minecraft.world.IBlockReader;
 public class BlockConcreteSheet extends BlockBase {
 
 	public BlockConcreteSheet() {
-		super("concrete_sheet", Material.ROCK, 0.5F, 1F, SoundType.STONE);
+		super("concrete_sheet", Material.STONE, 0.5F, 1F, SoundType.STONE);
 	}
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return Block.makeCuboidShape(0, 0, 0, 16, 1, 16);
+		return Block.box(0, 0, 0, 16, 1, 16);
 	}
 	
 }

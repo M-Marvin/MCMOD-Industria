@@ -60,7 +60,7 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		compound.putString("Part", this.part.getName());
 		if (this.part == TEPart.CENTER) {
 			if (!this.steamIn.isEmpty()) compound.put("SteamIn", this.steamIn.writeToNBT(new CompoundNBT()));
@@ -69,11 +69,11 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 			compound.putFloat("Accerlation", this.accerlation);
 			compound.putFloat("TurbinRotation", this.turbinRotation);
 		}
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		this.part = TEPart.fromName(compound.getString("Part"));
 		if (this.part == TEPart.CENTER) {
 			this.steamIn = FluidStack.loadFluidStackFromNBT(compound.getCompound("SteamIn"));
@@ -82,12 +82,12 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 			this.accerlation = compound.getFloat("Accerlation");
 			this.turbinRotation = compound.getFloat("TurbinRotation");
 		}
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(this.pos.subtract(new BlockPos(3, 3, 3)), this.pos.add(new BlockPos(3, 3, 3)));
+		return new AxisAlignedBB(this.worldPosition.subtract(new BlockPos(3, 3, 3)), this.worldPosition.offset(new BlockPos(3, 3, 3)));
 	}
 	
 	public static enum TEPart {
@@ -147,9 +147,9 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote()) {
+		if (!this.level.isClientSide()) {
 			
-			this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
+			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			
 			if (this.part == TEPart.CENTER) {
 				
@@ -179,29 +179,29 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 				
 				if (!this.steamOut.isEmpty()) {
 					
-					Direction direction = this.getBlockState().get(BlockMSteamGenerator.FACING);
+					Direction direction = this.getBlockState().getValue(BlockMSteamGenerator.FACING);
 					
 					if (this.steamOut.getAmount() >= 1000) {
 						
-						BlockPos pos1 = this.pos.offset(direction, 2);
-						BlockPos pos2 = this.pos.offset(direction.getOpposite(), 1);
+						BlockPos pos1 = this.worldPosition.relative(direction, 2);
+						BlockPos pos2 = this.worldPosition.relative(direction.getOpposite(), 1);
 						
-						BlockPos exhaustPos = this.world.rand.nextBoolean() ? pos1 : pos2;
-						BlockState replaceState = this.world.getBlockState(exhaustPos);
+						BlockPos exhaustPos = this.level.random.nextBoolean() ? pos1 : pos2;
+						BlockState replaceState = this.level.getBlockState(exhaustPos);
 						
 						if (replaceState.isAir()) {
 							
-							this.world.setBlockState(exhaustPos, this.steamOut.getFluid().getDefaultState().getBlockState());
+							this.level.setBlockAndUpdate(exhaustPos, this.steamOut.getFluid().defaultFluidState().createLegacyBlock());
 							this.steamOut.shrink(1000);
 							
 						} else if (replaceState.getBlock() instanceof BlockGasFluid) {
 							
-							((BlockGasFluid) replaceState.getBlock()).pushFluid(new ArrayList<BlockPos>(), replaceState, (ServerWorld) this.world, exhaustPos, world.rand);
-							replaceState = this.world.getBlockState(exhaustPos);
+							((BlockGasFluid) replaceState.getBlock()).pushFluid(new ArrayList<BlockPos>(), replaceState, (ServerWorld) this.level, exhaustPos, level.random);
+							replaceState = this.level.getBlockState(exhaustPos);
 							
 							if (replaceState.isAir()) {
 								
-								this.world.setBlockState(exhaustPos, this.steamOut.getFluid().getDefaultState().getBlockState());
+								this.level.setBlockAndUpdate(exhaustPos, this.steamOut.getFluid().defaultFluidState().createLegacyBlock());
 								this.steamOut.shrink(1000);
 								
 							}
@@ -217,8 +217,8 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 				
 			} else if (this.part == TEPart.ELECTRICITY) {
 				
-				ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(this.world);
-				handler.updateNetwork(world, pos);
+				ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(this.level);
+				handler.updateNetwork(level, worldPosition);
 				
 			}
 			
@@ -235,19 +235,19 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 	}
 	
 	public BlockPos getCenterTE() {
-		if (this.part == TEPart.CENTER) return this.pos;
+		if (this.part == TEPart.CENTER) return this.worldPosition;
 		if (BlockMSteamGenerator.getInternPartPos(this.getBlockState()).getZ() == 1) {
-			return this.part == TEPart.ELECTRICITY ? this.pos.up() : this.pos.down();
+			return this.part == TEPart.ELECTRICITY ? this.worldPosition.above() : this.worldPosition.below();
 		} else {
-			Direction facing = this.getBlockState().get(BlockMSteamGenerator.FACING).getOpposite();
-			return this.part == TEPart.ELECTRICITY ? this.pos.up().offset(facing) : this.pos.down().offset(facing);
+			Direction facing = this.getBlockState().getValue(BlockMSteamGenerator.FACING).getOpposite();
+			return this.part == TEPart.ELECTRICITY ? this.worldPosition.above().relative(facing) : this.worldPosition.below().relative(facing);
 		}
 	}
 	
 	public Voltage getVoltage() {
 		
 		BlockPos centerPos = getCenterTE();
-		TileEntity tileEntity = this.world.getTileEntity(centerPos);
+		TileEntity tileEntity = this.level.getBlockEntity(centerPos);
 		
 		if (tileEntity instanceof TileEntityMSteamGenerator) {
 			TileEntityMSteamGenerator center = (TileEntityMSteamGenerator) tileEntity;
@@ -260,7 +260,7 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 	public float getGenerateCurrent() {
 		
 		BlockPos centerPos = getCenterTE();
-		TileEntity tileEntity = this.world.getTileEntity(centerPos);
+		TileEntity tileEntity = this.level.getBlockEntity(centerPos);
 		
 		if (tileEntity instanceof TileEntityMSteamGenerator) {
 			TileEntityMSteamGenerator center = (TileEntityMSteamGenerator) tileEntity;
@@ -280,14 +280,14 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 	public FluidStack insertFluid(FluidStack fluid) {
 		
 		BlockPos centerPos = getCenterTE();
-		TileEntity tileEntity = this.world.getTileEntity(centerPos);
+		TileEntity tileEntity = this.level.getBlockEntity(centerPos);
 		
 		if (tileEntity instanceof TileEntityMSteamGenerator) {
 			
 			TileEntityMSteamGenerator center = (TileEntityMSteamGenerator) tileEntity;
 			
 			if (fluid.getFluid() == this.getFluidType()) {
-				if (!FluidStackStateTagHelper.makeStateFromStack(fluid).get(FluidSteam.PRESSURIZED)) {
+				if (!FluidStackStateTagHelper.makeStateFromStack(fluid).getValue(FluidSteam.PRESSURIZED)) {
 
 					if (center.steamOut.isEmpty()) {
 						int transfer = Math.min(this.maxFluid, fluid.getAmount());
@@ -341,12 +341,12 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 	
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(pos, 0, this.serializeNBT());
+		return new SUpdateTileEntityPacket(worldPosition, 0, this.serializeNBT());
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.deserializeNBT(pkt.getNbtCompound());
+		this.deserializeNBT(pkt.getTag());
 	}
 
 	@Override

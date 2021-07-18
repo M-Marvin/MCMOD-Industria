@@ -36,21 +36,21 @@ public class SchredderRecipe implements IRecipe<IInventory> {
 	
 	@Override
 	public boolean matches(IInventory inv, World worldIn) {
-		return this.itemIn.test(inv.getStackInSlot(0)) && inv.getStackInSlot(4).getItem() == this.schredderTool;
+		return this.itemIn.test(inv.getItem(0)) && inv.getItem(4).getItem() == this.schredderTool;
 	}
 	
 	@Override
-	public ItemStack getCraftingResult(IInventory inv) {
+	public ItemStack assemble(IInventory inv) {
 		return this.itemOut1.copy();
 	}
 
 	@Override
-	public boolean canFit(int width, int height) {
+	public boolean canCraftInDimensions(int width, int height) {
 		return width == 1 && height == 1;
 	}
 
 	@Override
-	public ItemStack getRecipeOutput() {
+	public ItemStack getResultItem() {
 		return this.itemOut1.copy();
 	}
 	

@@ -25,7 +25,7 @@ public class ProzessorCopy extends SpecialRecipe {
 		
 		for (int i = 0; i < 9; i++) {
 			
-			ItemStack stack = inv.getStackInSlot(i);
+			ItemStack stack = inv.getItem(i);
 			
 			if (stack.getItem() instanceof ItemProcessor)  {
 				
@@ -46,14 +46,14 @@ public class ProzessorCopy extends SpecialRecipe {
 	}
 
 	@Override
-	public ItemStack getCraftingResult(CraftingInventory inv) {
+	public ItemStack assemble(CraftingInventory inv) {
 		
 		String[] codeToCopy = null;
 		int copyIndex = 0;
 		
 		for (int i = 0; i < 9; i++) {
 			
-			ItemStack stack = inv.getStackInSlot(i);
+			ItemStack stack = inv.getItem(i);
 			
 			if (stack.getItem() instanceof ItemProcessor)  {
 				
@@ -84,7 +84,7 @@ public class ProzessorCopy extends SpecialRecipe {
 	}
 
 	@Override
-	public boolean canFit(int width, int height) {
+	public boolean canCraftInDimensions(int width, int height) {
 		
 		return width * height > 1;
 		
@@ -92,10 +92,10 @@ public class ProzessorCopy extends SpecialRecipe {
 	
 	@Override
 	public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
-	      NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+	      NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
 
 	      for(int i = 0; i < nonnulllist.size(); ++i) {
-	         ItemStack itemstack = inv.getStackInSlot(i);
+	         ItemStack itemstack = inv.getItem(i);
 	         if (itemstack.hasTag()) {
 	            ItemStack itemstack1 = itemstack.copy();
 	            itemstack1.setCount(1);

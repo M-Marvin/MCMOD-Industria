@@ -57,26 +57,26 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 		this.poolFile = new ResourceLocation(Industria.MODID, "empty");
 		this.name = new ResourceLocation(Industria.MODID, "empty");
 		this.targetName = new ResourceLocation(Industria.MODID, "empty");
-		this.replaceState = Blocks.AIR.getDefaultState();
+		this.replaceState = Blocks.AIR.defaultBlockState();
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		compound.putString("poolFile", this.poolFile.toString());
 		compound.putString("name", this.name.toString());
 		compound.putString("targetName", this.targetName.toString());
 		compound.putString("replaceState", ItemStackHelper.getBlockStateString(this.replaceState));
 		compound.putBoolean("lockOrientation", this.lockOrientation);
 		compound.putBoolean("powered", this.powered);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
-		this.poolFile = ResourceLocation.tryCreate(compound.getString("poolFile"));
-		this.name = ResourceLocation.tryCreate(compound.getString("name"));
-		this.targetName = ResourceLocation.tryCreate(compound.getString("targetName"));
-		this.replaceState = Blocks.AIR.getDefaultState();
+	public void load(BlockState state, CompoundNBT compound) {
+		this.poolFile = ResourceLocation.tryParse(compound.getString("poolFile"));
+		this.name = ResourceLocation.tryParse(compound.getString("name"));
+		this.targetName = ResourceLocation.tryParse(compound.getString("targetName"));
+		this.replaceState = Blocks.AIR.defaultBlockState();
 		try {
 			BlockStateParser parser = new BlockStateParser(new StringReader(compound.contains("replaceState") ? compound.getString("replaceState") : "minecraft:air"), true);
 			parser.parse(false);
@@ -87,16 +87,16 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 		}
 		this.lockOrientation = compound.getBoolean("lockOrientation");
 		this.powered = compound.getBoolean("powered");
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 	public void onNeighborChange() {
 		
-		boolean power = this.getWorld().isBlockPowered(pos);
+		boolean power = this.getLevel().hasNeighborSignal(worldPosition);
 		
 		if (power != this.powered) {
 			
-			Random rand = this.world.rand;
+			Random rand = this.level.random;
 			this.powered = power;
 			if (this.powered) this.generateStructure(false, rand.nextInt(20), new Random(rand.nextLong()));
 			
@@ -108,9 +108,9 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 		
 		BlockState state = this.getBlockState();
 		
-		if (state.get(BlockJigsaw.TYPE) == JigsawType.HORIZONTAL) {
-			return state.get(BlockJigsaw.FACING);
-		} else if (state.get(BlockJigsaw.TYPE) == JigsawType.VERTICAL_UP) {
+		if (state.getValue(BlockJigsaw.TYPE) == JigsawType.HORIZONTAL) {
+			return state.getValue(BlockJigsaw.FACING);
+		} else if (state.getValue(BlockJigsaw.TYPE) == JigsawType.VERTICAL_UP) {
 			return Direction.UP;
 		} else {
 			return Direction.DOWN;
@@ -120,11 +120,11 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 	
 	public void generateStructure(boolean keepJigsaws, int levels, Random rand) {
 		
-		if (!this.world.isRemote()) {
+		if (!this.level.isClientSide()) {
 			
-			boolean hasAlreadyGenerated = this.world.getBlockState(pos.offset(this.getFacing())).getBlock() == ModItems.jigsaw;
+			boolean hasAlreadyGenerated = this.level.getBlockState(worldPosition.relative(this.getFacing())).getBlock() == ModItems.jigsaw;
 			
-			ServerWorld world = (ServerWorld) this.world;
+			ServerWorld world = (ServerWorld) this.level;
 			ListNBT list = JigsawFileManager.getPoolList(world, this.poolFile);
 			
 			if (list != null && levels > 0 && !hasAlreadyGenerated && !this.targetName.getPath().equals("empty")) {
@@ -144,7 +144,7 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 				int randomStructureId = structures.size() > 1 ? structures.get(rand.nextInt(index - 1)) : structures.get(0);
 				CompoundNBT structureNBT = list.getCompound(randomStructureId);
 				
-				ResourceLocation resourceStructure = ResourceLocation.tryCreate(structureNBT.getString("file"));
+				ResourceLocation resourceStructure = ResourceLocation.tryParse(structureNBT.getString("file"));
 				JigsawReplacement replaceMode = JigsawReplacement.fromName(structureNBT.getString("replaceBlocks"));
 				ListNBT blockList = structureNBT.contains("blocks") ? structureNBT.getList("blocks", 8) : new ListNBT();
 				
@@ -152,12 +152,12 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 				
 				for (int i = 0; i < blockList.size(); i++) {
 					StringNBT stringNBT = (StringNBT) blockList.get(i);
-					BlockStateParser parser = new BlockStateParser(new StringReader(stringNBT.getString()), true);
+					BlockStateParser parser = new BlockStateParser(new StringReader(stringNBT.getAsString()), true);
 					try {
 						parser.parse(false);
 						blocks.add(parser.getState());
 					} catch (CommandSyntaxException e) {
-						Industria.LOGGER.warn("Cant parse replace-list block " + stringNBT.getString() + " in jigsaw metafile " + resourceStructure + "!");
+						Industria.LOGGER.warn("Cant parse replace-list block " + stringNBT.getAsString() + " in jigsaw metafile " + resourceStructure + "!");
 					}
 				}
 				
@@ -165,14 +165,14 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 				
 				if (template != null) {
 					
-					JigsawType alowedType = this.getBlockState().get(BlockJigsaw.TYPE).getOppesite();
+					JigsawType alowedType = this.getBlockState().getValue(BlockJigsaw.TYPE).getOppesite();
 					
-					List<BlockInfo> jigsawBlocks = template.func_215381_a(BlockPos.ZERO, new PlacementSettings(), ModItems.jigsaw);
+					List<BlockInfo> jigsawBlocks = template.filterBlocks(BlockPos.ZERO, new PlacementSettings(), ModItems.jigsaw);
 					
 					List<BlockInfo> filteredJigsaws = new ArrayList<BlockInfo>();
 					for (BlockInfo block : jigsawBlocks) {
-						ResourceLocation jigsawName = ResourceLocation.tryCreate(block.nbt.getString("name"));
-						if (jigsawName.toString().equals(this.targetName.toString()) && block.state.get(BlockJigsaw.TYPE) == alowedType) filteredJigsaws.add(block);
+						ResourceLocation jigsawName = ResourceLocation.tryParse(block.nbt.getString("name"));
+						if (jigsawName.toString().equals(this.targetName.toString()) && block.state.getValue(BlockJigsaw.TYPE) == alowedType) filteredJigsaws.add(block);
 					}
 					
 					if (filteredJigsaws.size() != 0) {
@@ -183,20 +183,20 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 						
 						if (alowedType != JigsawType.HORIZONTAL && !this.lockOrientation) {
 							
-							rotation = Rotation.randomRotation(rand);
+							rotation = Rotation.getRandom(rand);
 							
 						} else {
 							
-							Direction compare1 = this.getBlockState().get(BlockJigsaw.FACING);
-							Direction compare2 = alowedType == JigsawType.HORIZONTAL ? randomJigsaw.state.get(BlockJigsaw.FACING).getOpposite() : randomJigsaw.state.get(BlockJigsaw.FACING);
+							Direction compare1 = this.getBlockState().getValue(BlockJigsaw.FACING);
+							Direction compare2 = alowedType == JigsawType.HORIZONTAL ? randomJigsaw.state.getValue(BlockJigsaw.FACING).getOpposite() : randomJigsaw.state.getValue(BlockJigsaw.FACING);
 							
 							if (compare1 == compare2) {
 								rotation = Rotation.NONE;
 							} else if (compare1 == compare2.getOpposite()) {
 								rotation = Rotation.CLOCKWISE_180;
-							} else if (compare1.rotateYCCW() == compare2) {
+							} else if (compare1.getCounterClockWise() == compare2) {
 								rotation = Rotation.CLOCKWISE_90;
-							} else if (compare1.rotateY() == compare2) {
+							} else if (compare1.getClockWise() == compare2) {
 								rotation = Rotation.COUNTERCLOCKWISE_90;
 							}
 							
@@ -206,23 +206,23 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 								.setMirror(Mirror.NONE)
 								.setRotation(rotation)
 								.setIgnoreEntities(false)
-								.setChunk((ChunkPos)null)
+								.setChunkPos((ChunkPos)null)
 								.addProcessor(new JigsawTemplateProcessor(replaceMode, blocks));
 						
 						BlockPos offset = randomJigsaw.pos;
-						offset = Template.getTransformedPos(offset, Mirror.NONE, rotation, BlockPos.ZERO);
-						offset = offset.offset(this.getFacing().getOpposite());
+						offset = Template.transform(offset, Mirror.NONE, rotation, BlockPos.ZERO);
+						offset = offset.relative(this.getFacing().getOpposite());
 						
-						BlockPos generationPos = this.pos.subtract(offset);
+						BlockPos generationPos = this.worldPosition.subtract(offset);
 						
-						template.func_237144_a_(world, generationPos, placement, rand);
+						template.placeInWorldChunk(world, generationPos, placement, rand);
 						
 						for (BlockInfo jigsaw : jigsawBlocks) {
 							
-							BlockPos transformedPos = Template.getTransformedPos(jigsaw.pos, Mirror.NONE, rotation, BlockPos.ZERO);
-							transformedPos = generationPos.add(transformedPos);
+							BlockPos transformedPos = Template.transform(jigsaw.pos, Mirror.NONE, rotation, BlockPos.ZERO);
+							transformedPos = generationPos.offset(transformedPos);
 							
-							TileEntity tileEntity = world.getTileEntity(transformedPos);
+							TileEntity tileEntity = world.getBlockEntity(transformedPos);
 							
 							if (tileEntity instanceof TileEntityJigsaw) {
 								
@@ -240,7 +240,7 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 			
 			if (!keepJigsaws) {
 				
-				world.setBlockState(pos, replaceState, 2);
+				world.setBlock(worldPosition, replaceState, 2);
 				
 			}
 			
@@ -255,7 +255,7 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 
 	@Override
 	public ITextComponent getDisplayName() {
-		return NarratorChatListener.EMPTY;
+		return NarratorChatListener.NO_TITLE;
 	}
 
 	// Called from worldgeneration (JigsawFeature)
@@ -268,7 +268,7 @@ public class TileEntityJigsaw extends TileEntity implements INamedContainerProvi
 	
 	@Override
 	public void tick() {
-		if (!this.world.isRemote() && this.waitForGenerateLevels > 0) {
+		if (!this.level.isClientSide() && this.waitForGenerateLevels > 0) {
 			this.generateStructure(false, this.waitForGenerateLevels, this.randForGeneration);
 			this.waitForGenerateLevels = -1;
 			this.randForGeneration = null;

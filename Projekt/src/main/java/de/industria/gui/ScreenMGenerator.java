@@ -25,24 +25,24 @@ public static final ResourceLocation GENERATOR_GUI_TEXTURES = new ResourceLocati
 
 	@SuppressWarnings("deprecation")
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
 
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindTexture(GENERATOR_GUI_TEXTURES);
-		int i = this.guiLeft;
-		int j = (this.height - this.ySize) / 2;
-		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
+		this.minecraft.getTextureManager().bind(GENERATOR_GUI_TEXTURES);
+		int i = this.leftPos;
+		int j = (this.height - this.imageHeight) / 2;
+		this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
 		
-		TileEntityMGenerator te = this.container.getTileEntity();
+		TileEntityMGenerator te = this.menu.getTileEntity();
 		int burnProgress = (int) (te.burnTime / te.fuelTime * 14);
-		int remainingFuel = (int) te.burnTime + (te.hasFuelItems() ? te.getStackInSlot(0).getCount() * ForgeHooks.getBurnTime(te.getStackInSlot(0)) : 0);
+		int remainingFuel = (int) te.burnTime + (te.hasFuelItems() ? te.getItem(0).getCount() * ForgeHooks.getBurnTime(te.getItem(0)) : 0);
 		
 		this.blit(matrixStack, i + 53, j + 54 + 14 - burnProgress, 176, 0 + 14 - burnProgress, 14, burnProgress);
 		
 		int red = new Color(255, 0, 0).getRGB();
 		int white = new Color(63, 63, 63).getRGB();
-		this.font.func_243248_b(matrixStack, new TranslationTextComponent("industria.generator.remainingFuel"), i + 90, j + 36, white);
-		this.font.func_243248_b(matrixStack, new StringTextComponent("" + remainingFuel), i + 90, j + 46, remainingFuel < 500 ? red : white);
+		this.font.draw(matrixStack, new TranslationTextComponent("industria.generator.remainingFuel"), i + 90, j + 36, white);
+		this.font.draw(matrixStack, new StringTextComponent("" + remainingFuel), i + 90, j + 46, remainingFuel < 500 ? red : white);
 		
 	}
 	

@@ -52,61 +52,61 @@ public class BlockConveyorBelt extends BlockContainerBase implements IAdvancedBl
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	
 	public BlockConveyorBelt(String name) {
-		super(name, Material.IRON, 1.5F, SoundType.LADDER);
+		super(name, Material.METAL, 1.5F, SoundType.LADDER);
 	}
 	
 	public BlockConveyorBelt() {
-		super("conveyor_belt", Material.IRON, 1.5F, SoundType.LADDER, true);
-		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(RIGHT, BeltState.CLOSE).with(LEFT, BeltState.CLOSE).with(WATERLOGGED, false));
+		super("conveyor_belt", Material.METAL, 1.5F, SoundType.LADDER, true);
+		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(RIGHT, BeltState.CLOSE).setValue(LEFT, BeltState.CLOSE).setValue(WATERLOGGED, false));
 	}
 
 	@Override
 	public FluidState getFluidState(BlockState state) {
-		return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluid().getDefaultState() : Fluids.EMPTY.getDefaultState();
+		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource().defaultFluidState() : Fluids.EMPTY.defaultFluidState();
 	}
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		Direction facing = state.get(FACING); 
+		Direction facing = state.getValue(FACING); 
 		if (facing.getAxis() == Axis.Z) {
-			boolean connectedWest = facing == Direction.NORTH ? (state.get(LEFT) == BeltState.OPEN) : (state.get(RIGHT) == BeltState.OPEN);
-			boolean connectedEast = facing == Direction.NORTH ? (state.get(RIGHT) == BeltState.OPEN) : (state.get(LEFT) == BeltState.OPEN);
-			VoxelShape shapeWest = connectedWest ? VoxelShapes.or(Block.makeCuboidShape(1, 0, 0, 2, 2, 16), Block.makeCuboidShape(1, 2, 0, 2, 3, 1), Block.makeCuboidShape(1, 2, 15, 2, 3, 16)) : Block.makeCuboidShape(1, 0, 0, 2, 3, 16);
-			VoxelShape shapeEast = connectedEast ? VoxelShapes.or(Block.makeCuboidShape(14, 0, 0, 15, 2, 16), Block.makeCuboidShape(14, 2, 0, 15, 3, 1), Block.makeCuboidShape(14, 2, 15, 15, 3, 16)) : Block.makeCuboidShape(14, 0, 0, 15, 3, 16);
-			return VoxelShapes.or(Block.makeCuboidShape(2, 1, 0, 14, 2, 16), shapeWest, shapeEast);
+			boolean connectedWest = facing == Direction.NORTH ? (state.getValue(LEFT) == BeltState.OPEN) : (state.getValue(RIGHT) == BeltState.OPEN);
+			boolean connectedEast = facing == Direction.NORTH ? (state.getValue(RIGHT) == BeltState.OPEN) : (state.getValue(LEFT) == BeltState.OPEN);
+			VoxelShape shapeWest = connectedWest ? VoxelShapes.or(Block.box(1, 0, 0, 2, 2, 16), Block.box(1, 2, 0, 2, 3, 1), Block.box(1, 2, 15, 2, 3, 16)) : Block.box(1, 0, 0, 2, 3, 16);
+			VoxelShape shapeEast = connectedEast ? VoxelShapes.or(Block.box(14, 0, 0, 15, 2, 16), Block.box(14, 2, 0, 15, 3, 1), Block.box(14, 2, 15, 15, 3, 16)) : Block.box(14, 0, 0, 15, 3, 16);
+			return VoxelShapes.or(Block.box(2, 1, 0, 14, 2, 16), shapeWest, shapeEast);
 		} else {
-			boolean connectedNorth = facing == Direction.EAST ? (state.get(LEFT) == BeltState.OPEN) : (state.get(RIGHT) == BeltState.OPEN);
-			boolean connectedSouth = facing == Direction.EAST ? (state.get(RIGHT) == BeltState.OPEN) : (state.get(LEFT) == BeltState.OPEN);
-			VoxelShape shapeNorth = connectedNorth ? VoxelShapes.or(Block.makeCuboidShape(0, 0, 1, 16, 2, 2), Block.makeCuboidShape(0, 2, 1, 1, 3, 2), Block.makeCuboidShape(15, 2, 1, 16, 3, 2)) : Block.makeCuboidShape(0, 0, 1, 16, 3, 2);
-			VoxelShape shapeSouth = connectedSouth ? VoxelShapes.or(Block.makeCuboidShape(0, 0, 14, 16, 2, 15), Block.makeCuboidShape(0, 2, 14, 1, 3, 15), Block.makeCuboidShape(15, 2, 14, 16, 3, 15)) : Block.makeCuboidShape(0, 0, 14, 16, 3, 15);
-			return VoxelShapes.or(Block.makeCuboidShape(0, 1, 2, 16, 2, 14), shapeNorth, shapeSouth);
+			boolean connectedNorth = facing == Direction.EAST ? (state.getValue(LEFT) == BeltState.OPEN) : (state.getValue(RIGHT) == BeltState.OPEN);
+			boolean connectedSouth = facing == Direction.EAST ? (state.getValue(RIGHT) == BeltState.OPEN) : (state.getValue(LEFT) == BeltState.OPEN);
+			VoxelShape shapeNorth = connectedNorth ? VoxelShapes.or(Block.box(0, 0, 1, 16, 2, 2), Block.box(0, 2, 1, 1, 3, 2), Block.box(15, 2, 1, 16, 3, 2)) : Block.box(0, 0, 1, 16, 3, 2);
+			VoxelShape shapeSouth = connectedSouth ? VoxelShapes.or(Block.box(0, 0, 14, 16, 2, 15), Block.box(0, 2, 14, 1, 3, 15), Block.box(15, 2, 14, 16, 3, 15)) : Block.box(0, 0, 14, 16, 3, 15);
+			return VoxelShapes.or(Block.box(0, 1, 2, 16, 2, 14), shapeNorth, shapeSouth);
 		}
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(FACING, RIGHT, LEFT, WATERLOGGED);
 	}
 	
 	public BlockState updateState(World world, BlockPos pos, BlockState state) {
-		Direction facing = state.get(FACING);
-		BlockState stateRight = world.getBlockState(pos.offset(facing.rotateY()));
-		BlockState stateLeft = world.getBlockState(pos.offset(facing.rotateYCCW()));
-		state = state.with(RIGHT, canConnectWithState(stateRight, facing.rotateY()) ? BeltState.OPEN : BeltState.CLOSE);
-		state = state.with(LEFT, canConnectWithState(stateLeft, facing.rotateYCCW()) ? BeltState.OPEN : BeltState.CLOSE);
+		Direction facing = state.getValue(FACING);
+		BlockState stateRight = world.getBlockState(pos.relative(facing.getClockWise()));
+		BlockState stateLeft = world.getBlockState(pos.relative(facing.getCounterClockWise()));
+		state = state.setValue(RIGHT, canConnectWithState(stateRight, facing.getClockWise()) ? BeltState.OPEN : BeltState.CLOSE);
+		state = state.setValue(LEFT, canConnectWithState(stateLeft, facing.getCounterClockWise()) ? BeltState.OPEN : BeltState.CLOSE);
 		return state;
 	}
 	
 	public boolean canConnectWithState(BlockState state, Direction side) {
 		if (state.getBlock() instanceof BlockConveyorSpliter) {
-			Direction facing = state.get(FACING);
-			if (state.get(RIGHT) == BeltState.OPEN) {
-				return side == facing.rotateYCCW() || side == facing.getOpposite();
-			} else if (state.get(LEFT) == BeltState.OPEN) {
-				return side == facing.rotateY() || side == facing.getOpposite();
+			Direction facing = state.getValue(FACING);
+			if (state.getValue(RIGHT) == BeltState.OPEN) {
+				return side == facing.getCounterClockWise() || side == facing.getOpposite();
+			} else if (state.getValue(LEFT) == BeltState.OPEN) {
+				return side == facing.getClockWise() || side == facing.getOpposite();
 			}
 		} else if (state.getBlock() instanceof BlockConveyorBelt || state.getBlock() instanceof BlockConveyorSwitch) {
-			return state.get(FACING) == side.getOpposite();
+			return state.getValue(FACING) == side.getOpposite();
 		}
 		return false;
 	}
@@ -115,33 +115,33 @@ public class BlockConveyorBelt extends BlockContainerBase implements IAdvancedBl
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 		BlockState state1 = updateState(worldIn, pos, state);
 		if (!state1.equals(state)) {
-			worldIn.setBlockState(pos, state1);
+			worldIn.setBlockAndUpdate(pos, state1);
 		}
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return updateState(context.getWorld(), context.getPos(), this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing()));
+		return updateState(context.getLevel(), context.getClickedPos(), this.defaultBlockState().setValue(FACING, context.getHorizontalDirection()));
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityConveyorBelt();
 	}
 	
 	@Override
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 		
-		if (entityIn instanceof ItemEntity && !worldIn.isRemote) {
+		if (entityIn instanceof ItemEntity && !worldIn.isClientSide) {
 			
-			TileEntity tileEntity = worldIn.getTileEntity(pos);
+			TileEntity tileEntity = worldIn.getBlockEntity(pos);
 			
 			if (tileEntity instanceof TileEntityConveyorBelt) {
 				
-				if (((TileEntityConveyorBelt) tileEntity).getStackInSlot(0).isEmpty() && !((ItemEntity) entityIn).cannotPickup()) {
+				if (((TileEntityConveyorBelt) tileEntity).getItem(0).isEmpty() && !((ItemEntity) entityIn).hasPickUpDelay()) {
 					ItemStack stack = ((ItemEntity) entityIn).getItem();
 					entityIn.remove();
-					((TileEntityConveyorBelt) tileEntity).setInventorySlotContents(0, stack);
+					((TileEntityConveyorBelt) tileEntity).setItem(0, stack);
 				}
 				
 			}
@@ -151,18 +151,18 @@ public class BlockConveyorBelt extends BlockContainerBase implements IAdvancedBl
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		if (tileEntity instanceof TileEntityConveyorBelt) {
-			if (((TileEntityConveyorBelt) tileEntity).isEmpty() && !player.getHeldItemMainhand().isEmpty()) {
-				((TileEntityConveyorBelt) tileEntity).setInventorySlotContents(0, player.getHeldItemMainhand());
-				player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+			if (((TileEntityConveyorBelt) tileEntity).isEmpty() && !player.getMainHandItem().isEmpty()) {
+				((TileEntityConveyorBelt) tileEntity).setItem(0, player.getMainHandItem());
+				player.setItemInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
 			} else {
-				for(int i = 0; i < ((TileEntityInventoryBase) tileEntity).getSizeInventory(); ++i) {
-					ItemStackHelper.spawnItemStackWithPickupDelay(worldIn, pos.getX(), pos.getY(), pos.getZ(), ((TileEntityInventoryBase) tileEntity).getStackInSlot(i));
+				for(int i = 0; i < ((TileEntityInventoryBase) tileEntity).getContainerSize(); ++i) {
+					ItemStackHelper.spawnItemStackWithPickupDelay(worldIn, pos.getX(), pos.getY(), pos.getZ(), ((TileEntityInventoryBase) tileEntity).getItem(i));
 				}
-				InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) tileEntity);
-				((TileEntityConveyorBelt) tileEntity).clear();
+				InventoryHelper.dropContents(worldIn, pos, (IInventory) tileEntity);
+				((TileEntityConveyorBelt) tileEntity).clearContent();
 			}
 			return ActionResultType.CONSUME;
 		}
@@ -184,7 +184,7 @@ public class BlockConveyorBelt extends BlockContainerBase implements IAdvancedBl
 		}
 		
 		@Override
-		public String getString() {
+		public String getSerializedName() {
 			return name;
 		}
 		
@@ -204,12 +204,12 @@ public class BlockConveyorBelt extends BlockContainerBase implements IAdvancedBl
 
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 	
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 	
 }

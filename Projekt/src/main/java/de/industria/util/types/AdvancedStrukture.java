@@ -59,29 +59,29 @@ public class AdvancedStrukture {
 		for (BlockPos block : this.blocks) {
 			
 			BlockState state = world.getBlockState(block);
-			TileEntity tileEntity = world.getTileEntity(block);
+			TileEntity tileEntity = world.getBlockEntity(block);
 			
 			if (!state.isAir()) {
 				
-				BlockState replaceState = world.getBlockState(block.offset(this.moveDirection, moveDistance));
+				BlockState replaceState = world.getBlockState(block.relative(this.moveDirection, moveDistance));
 				boolean flag = replaceState.isAir();
 				if (!flag) {
-					if (replaceState.getPushReaction() == PushReaction.DESTROY) flag = true;
-					if (state.getPushReaction() == PushReaction.DESTROY) flag = true;
+					if (replaceState.getPistonPushReaction() == PushReaction.DESTROY) flag = true;
+					if (state.getPistonPushReaction() == PushReaction.DESTROY) flag = true;
 				}
 				
-				if (!flag && !this.blocks.contains(block.offset(this.moveDirection, moveDistance)) && world.getBlockState(block.offset(this.moveDirection, moveDistance)).getBlock() != Blocks.WATER) {
+				if (!flag && !this.blocks.contains(block.relative(this.moveDirection, moveDistance)) && world.getBlockState(block.relative(this.moveDirection, moveDistance)).getBlock() != Blocks.WATER) {
 					return false;
 				}
 				
-				if (world.isOutsideBuildHeight(block.offset(this.moveDirection, moveDistance))) return false;
+				if (world.isOutsideBuildHeight(block.relative(this.moveDirection, moveDistance))) return false;
 				positions.add(block);
 				states.add(state);
 				
 				if (tileEntity != null) {
 					
 					CompoundNBT compound = new CompoundNBT();
-					tileEntity.write(compound);
+					tileEntity.save(compound);
 					nbt.add(compound);
 					
 				} else {
@@ -96,8 +96,8 @@ public class AdvancedStrukture {
 		
 		for (BlockPos block : this.blocks) {
 			
-			world.removeTileEntity(block);
-			world.setBlockState(block, Blocks.AIR.getDefaultState(), 114);
+			world.removeBlockEntity(block);
+			world.setBlock(block, Blocks.AIR.defaultBlockState(), 114);
 			if (block.getY() > maxY) maxY = block.getY();
 			if (block.getY() < minY) minY = block.getY();
 			
@@ -105,25 +105,25 @@ public class AdvancedStrukture {
 		
 		for (int index = 0; index < positions.size(); index++) {
 			
-			BlockPos pos = positions.get(index).offset(this.moveDirection, moveDistance);
+			BlockPos pos = positions.get(index).relative(this.moveDirection, moveDistance);
 			BlockState state = states.get(index);
 			
-			world.setBlockState(pos, state, 114);
+			world.setBlock(pos, state, 114);
 			
 			if (state.hasTileEntity()) {
 				
 				CompoundNBT compound = nbt.get(index);
-				TileEntity tileEntity = world.getTileEntity(pos);
+				TileEntity tileEntity = world.getBlockEntity(pos);
 				
 				if (tileEntity != null) {
 					
-					tileEntity.setPos(pos);
-					if (!(tileEntity instanceof BannerTileEntity)) tileEntity.read(state, compound);
-					tileEntity.setPos(pos);
+					tileEntity.setPosition(pos);
+					if (!(tileEntity instanceof BannerTileEntity)) tileEntity.load(state, compound);
+					tileEntity.setPosition(pos);
 					
 					if (tileEntity instanceof IPostMoveHandledTE) {
 						
-						((IPostMoveHandledTE) tileEntity).handlePostMove(tileEntity.getPos(), this.moveDirection, moveDistance, false);
+						((IPostMoveHandledTE) tileEntity).handlePostMove(tileEntity.getBlockPos(), this.moveDirection, moveDistance, false);
 						
 					}
 					
@@ -136,17 +136,17 @@ public class AdvancedStrukture {
 		for (int index = 0; index < positions.size(); index++) {
 			
 			BlockPos posOld = positions.get(index);
-			BlockPos posNew = posOld.offset(this.moveDirection, moveDistance);
+			BlockPos posNew = posOld.relative(this.moveDirection, moveDistance);
 			
-			int newStateIndex = positions.indexOf(posOld.offset(this.moveDirection.getOpposite(), moveDistance));
+			int newStateIndex = positions.indexOf(posOld.relative(this.moveDirection.getOpposite(), moveDistance));
 			
 			if (newStateIndex == -1) {
-				world.notifyNeighborsOfStateChange(posOld, Blocks.AIR);
+				world.updateNeighborsAt(posOld, Blocks.AIR);
 			} else {
-				world.notifyNeighborsOfStateChange(posOld, states.get(newStateIndex).getBlock());
+				world.updateNeighborsAt(posOld, states.get(newStateIndex).getBlock());
 			}
 			
-			world.notifyNeighborsOfStateChange(posNew, states.get(index).getBlock());
+			world.updateNeighborsAt(posNew, states.get(index).getBlock());
 			
 		}
 
@@ -154,7 +154,7 @@ public class AdvancedStrukture {
 		for (int i = minY; i <= maxY; i++) {
 			
 			AxisAlignedBB aabb = calculateBoundsAtY(i);
-			List<Entity> entitysToMove = world.getEntitiesWithinAABBExcludingEntity(null, aabb);
+			List<Entity> entitysToMove = world.getEntities(null, aabb);
 			
 			for (Entity entity : entitysToMove) {
 				
@@ -184,7 +184,7 @@ public class AdvancedStrukture {
 		for (BlockPos block : this.blocks) {
 			
 			BlockState state = world.getBlockState(block);
-			TileEntity tileEntity = world.getTileEntity(block);
+			TileEntity tileEntity = world.getBlockEntity(block);
 			
 			if (!state.isAir()) {
 				
@@ -198,7 +198,7 @@ public class AdvancedStrukture {
 				if (tileEntity != null) {
 					
 					CompoundNBT compound = new CompoundNBT();
-					tileEntity.write(compound);
+					tileEntity.save(compound);
 					nbt.add(compound);
 					
 				} else {
@@ -213,8 +213,8 @@ public class AdvancedStrukture {
 		
 		for (BlockPos block : this.blocks) {
 			
-			world.removeTileEntity(block);
-			world.setBlockState(block, Blocks.AIR.getDefaultState(), 114);
+			world.removeBlockEntity(block);
+			world.setBlock(block, Blocks.AIR.defaultBlockState(), 114);
 			if (block.getY() > maxY) maxY = block.getY();
 			if (block.getY() < minY) minY = block.getY();
 			
@@ -225,14 +225,14 @@ public class AdvancedStrukture {
 			BlockPos pos = calculateRotatedPosition(positions.get(index), center, right);
 			BlockState state = states.get(index).rotate(right ? Rotation.CLOCKWISE_90 : Rotation.COUNTERCLOCKWISE_90);
 			
-			world.setBlockState(pos, state, 114);
+			world.setBlock(pos, state, 114);
 			
 			if (state.hasTileEntity()) {
 				
 				CompoundNBT compound = nbt.get(index);
-				TileEntity tileEntity = world.getTileEntity(pos);
-				tileEntity.read(state, compound);
-				tileEntity.setPos(pos);
+				TileEntity tileEntity = world.getBlockEntity(pos);
+				tileEntity.load(state, compound);
+				tileEntity.setPosition(pos);
 				
 				if (tileEntity instanceof IPostMoveHandledTE) {
 					
@@ -252,12 +252,12 @@ public class AdvancedStrukture {
 			int newStateIndex = positions.indexOf(calculateRotatedPosition(posOld, center, !right));
 			
 			if (newStateIndex == -1) {
-				world.notifyNeighborsOfStateChange(posOld, Blocks.AIR);
+				world.updateNeighborsAt(posOld, Blocks.AIR);
 			} else {
-				world.notifyNeighborsOfStateChange(posOld, states.get(newStateIndex).getBlock());
+				world.updateNeighborsAt(posOld, states.get(newStateIndex).getBlock());
 			}
 			
-			world.notifyNeighborsOfStateChange(posNew, states.get(index).getBlock());
+			world.updateNeighborsAt(posNew, states.get(index).getBlock());
 			
 		}
 
@@ -265,7 +265,7 @@ public class AdvancedStrukture {
 		for (int i = minY; i <= maxY; i++) {
 			
 			AxisAlignedBB aabb = calculateBoundsAtY(i);
-			List<Entity> entitysToMove = world.getEntitiesWithinAABBExcludingEntity(null, aabb);
+			List<Entity> entitysToMove = world.getEntities(null, aabb);
 			
 			for (Entity entity : entitysToMove) {
 				
@@ -286,15 +286,15 @@ public class AdvancedStrukture {
 		
 		if (entity instanceof PlayerEntity) {
 			
-			Vector3d pos = entity.getPositionVec();
-			pos = pos.add(direction.getXOffset() * moveDistance, direction.getYOffset() * moveDistance, direction.getZOffset() * moveDistance);
-			((PlayerEntity) entity).teleportKeepLoaded(pos.x, pos.y, pos.z);
+			Vector3d pos = entity.position();
+			pos = pos.add(direction.getStepX() * moveDistance, direction.getStepY() * moveDistance, direction.getStepZ() * moveDistance);
+			((PlayerEntity) entity).teleportToWithTicket(pos.x, pos.y, pos.z);
 			
 		} else {
 			
-			Vector3d pos = entity.getPositionVec();
-			pos = pos.add(direction.getXOffset() * moveDistance, direction.getYOffset() * moveDistance, direction.getZOffset() * moveDistance);
-			entity.setPosition(pos.x, pos.y, pos.z);
+			Vector3d pos = entity.position();
+			pos = pos.add(direction.getStepX() * moveDistance, direction.getStepY() * moveDistance, direction.getStepZ() * moveDistance);
+			entity.setPos(pos.x, pos.y, pos.z);
 			
 		}
 		
@@ -302,23 +302,23 @@ public class AdvancedStrukture {
 	
 	private void rotateEntity(Entity entity, BlockPos center, boolean rotateRight) {
 		
-		Vector3d pos = entity.getPositionVec();
+		Vector3d pos = entity.position();
 
 		Vector3d offset = pos.subtract(center.getX() + 0.5F, center.getY(), center.getZ() + 0.5F);
 		
 		if (!rotateRight) {
 			
-			double i1 = offset.getX();
-			double i2 = offset.getZ();
+			double i1 = offset.x();
+			double i2 = offset.z();
 			
-			offset = new Vector3d(i2, offset.getY(), -i1);
+			offset = new Vector3d(i2, offset.y(), -i1);
 			
 		} else {
 
-			double i1 = offset.getZ();
-			double i2 = offset.getX();
+			double i1 = offset.z();
+			double i2 = offset.x();
 			
-			offset = new Vector3d(-i1, offset.getY(), i2);
+			offset = new Vector3d(-i1, offset.y(), i2);
 			
 		}
 		
@@ -326,12 +326,12 @@ public class AdvancedStrukture {
 
 		if (entity instanceof PlayerEntity) {
 
-			((ServerPlayerEntity) entity).teleport((ServerWorld) entity.world, pos.x, pos.y, pos.z, entity.rotationYaw + (rotateRight ? 90 : -90), entity.rotationPitch);
+			((ServerPlayerEntity) entity).teleportTo((ServerWorld) entity.level, pos.x, pos.y, pos.z, entity.yRot + (rotateRight ? 90 : -90), entity.xRot);
 			
 		} else {
 			
-			entity.setPosition(pos.x, pos.y, pos.z);
-			entity.rotationYaw += rotateRight ? 90 : -90;
+			entity.setPos(pos.x, pos.y, pos.z);
+			entity.yRot += rotateRight ? 90 : -90;
 			
 		}
 		
@@ -357,7 +357,7 @@ public class AdvancedStrukture {
 			
 		}
 		
-		return center.add(offset);
+		return center.offset(offset);
 		
 	}
 	

@@ -40,7 +40,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 public class BlockMMetalFormer extends BlockMultiPart<TileEntityMMetalFormer> implements IElectricConnectiveBlock, IAdvancedBlockInfo, ISidedInventoryProvider {
 	
 	public BlockMMetalFormer() {
-		super("metal_former", Material.IRON, 4F, SoundType.METAL, 1, 1, 2);
+		super("metal_former", Material.METAL, 4F, SoundType.METAL, 1, 1, 2);
 	}
 	
 	@Override
@@ -49,26 +49,26 @@ public class BlockMMetalFormer extends BlockMultiPart<TileEntityMMetalFormer> im
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityMMetalFormer();
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		TileEntityMMetalFormer tileEntity = getCenterTE(pos, state, worldIn);
-		if (!worldIn.isRemote()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
+		if (!worldIn.isClientSide()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getBlockPos());
 		return ActionResultType.SUCCESS;
 	}
 	
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+	public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
 		TileEntityMMetalFormer tileEntity = getCenterTE(pos, state, worldIn);
-		if (tileEntity != null) InventoryHelper.dropInventoryItems(worldIn, tileEntity.getPos(), (IInventory) tileEntity);
-		super.onBlockHarvested(worldIn, pos, state, player);
+		if (tileEntity != null) InventoryHelper.dropContents(worldIn, tileEntity.getBlockPos(), (IInventory) tileEntity);
+		super.playerWillDestroy(worldIn, pos, state, player);
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 	
@@ -95,13 +95,13 @@ public class BlockMMetalFormer extends BlockMultiPart<TileEntityMMetalFormer> im
 	@Override
 	public List<BlockPos> getMultiBlockParts(World world, BlockPos pos, BlockState state) {
 		List<BlockPos> multiParts = new ArrayList<BlockPos>();
-		Direction facing = state.get(FACING);
+		Direction facing = state.getValue(FACING);
 		for (int x = 0; x < this.sizeX; x++) {
 			for (int y = 0; y < this.sizeY; y++) {
 				for (int z = 0; z < this.sizeZ; z++) {
 					BlockPos internPos = new BlockPos(x, y, z);
 					BlockPos offset = rotateOffset(internPos, facing);
-					BlockPos partPos = getCenterTE(pos, state, world).getPos().add(offset);
+					BlockPos partPos = getCenterTE(pos, state, world).getBlockPos().offset(offset);
 					multiParts.add(partPos);
 				}
 			}
@@ -112,13 +112,13 @@ public class BlockMMetalFormer extends BlockMultiPart<TileEntityMMetalFormer> im
 	@Override
 	public void onNetworkChanges(World worldIn, BlockPos pos, BlockState state, ElectricityNetwork network) {
 		if (network.getVoltage().getVoltage() > Voltage.NormalVoltage.getVoltage() && network.getCurrent() > 0) {
-			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+			worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
+			worldIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 		}
 	}
 	
 	@Override
-	public ISidedInventory createInventory(BlockState state, IWorld world, BlockPos pos) {
+	public ISidedInventory getContainer(BlockState state, IWorld world, BlockPos pos) {
 		return getCenterTE(pos, state, world);
 	}
 	

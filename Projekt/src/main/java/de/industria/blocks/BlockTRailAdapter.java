@@ -33,12 +33,12 @@ public class BlockTRailAdapter extends BlockContainerBase implements IAdvancedBl
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	
 	public BlockTRailAdapter() {
-		super("rail_adapter", Material.IRON, 3F, 3F, SoundType.METAL);
-		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, false));
+		super("rail_adapter", Material.METAL, 3F, 3F, SoundType.METAL);
+		this.registerDefaultState(this.stateDefinition.any().setValue(POWERED, false));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(POWERED);
 	}
 	
@@ -78,22 +78,22 @@ public class BlockTRailAdapter extends BlockContainerBase implements IAdvancedBl
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntitySimpleBlockTicking();
 	}
 	
 	@Override
 	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
 		
-		if (!worldIn.isRemote()) {
+		if (!worldIn.isClientSide()) {
 			
 			ElectricityNetworkHandler.getHandlerForWorld(worldIn).updateNetwork(worldIn, pos);
 			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(worldIn).getNetwork(pos);
 			
 			boolean power = network.canMachinesRun() == Voltage.HightVoltage;
-			boolean powered = state.get(POWERED);
+			boolean powered = state.getValue(POWERED);
 			
-			if (power != powered) worldIn.setBlockState(pos, state.with(POWERED, power));
+			if (power != powered) worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, power));
 			
 		}
 		
@@ -104,8 +104,8 @@ public class BlockTRailAdapter extends BlockContainerBase implements IAdvancedBl
 
 		if (network.getVoltage().getVoltage() > Voltage.HightVoltage.getVoltage() && network.getCurrent() > 0) {
 
-			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+			worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
+			worldIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 			
 		}
 		

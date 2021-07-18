@@ -17,25 +17,25 @@ public class MetalFormRecipeSerializer<T extends MetalFormRecipe> extends ForgeR
 		this.factory = factory;
 	}
 	
-	public T read(ResourceLocation recipeId, JsonObject json) {
-		ItemStack itemIn = ShapedRecipe.deserializeItem(json.get("ingredientItem").getAsJsonObject());
-		ItemStack itemOut = ShapedRecipe.deserializeItem(json.get("resultItem").getAsJsonObject());
+	public T fromJson(ResourceLocation recipeId, JsonObject json) {
+		ItemStack itemIn = ShapedRecipe.itemFromJson(json.get("ingredientItem").getAsJsonObject());
+		ItemStack itemOut = ShapedRecipe.itemFromJson(json.get("resultItem").getAsJsonObject());
 		int processTime = json.get("processTime").getAsInt();
 		
 		return this.factory.create(recipeId, itemOut, itemIn, processTime);
 	}
 	
-	public T read(ResourceLocation recipeId, PacketBuffer buffer) {
-		ItemStack itemOut = buffer.readItemStack();
-		ItemStack itemIn = buffer.readItemStack();
+	public T fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+		ItemStack itemOut = buffer.readItem();
+		ItemStack itemIn = buffer.readItem();
 		int processTime = buffer.readInt();
 		return this.factory.create(recipeId, itemOut, itemIn, processTime);
 	}
 	
 	@Override
-	public void write(PacketBuffer buffer, T recipe) {
-		buffer.writeItemStack(recipe.itemOut);
-		buffer.writeItemStack(recipe.itemIn);
+	public void toNetwork(PacketBuffer buffer, T recipe) {
+		buffer.writeItem(recipe.itemOut);
+		buffer.writeItem(recipe.itemIn);
 		buffer.writeInt(recipe.processTime);
 	}
 	

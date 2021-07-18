@@ -17,7 +17,7 @@ public class BlockPowerEmiting extends BlockBase {
 	}
 	
 	@Override
-	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
 		return this.powerStrength;
 	}
 	

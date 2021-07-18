@@ -20,15 +20,15 @@ public static final ResourceLocation COAL_HEATER_GUI_TEXTURES = new ResourceLoca
 
 	@SuppressWarnings("deprecation")
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
 
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindTexture(COAL_HEATER_GUI_TEXTURES);
-		int i = this.guiLeft;
-		int j = (this.height - this.ySize) / 2;
-		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
+		this.minecraft.getTextureManager().bind(COAL_HEATER_GUI_TEXTURES);
+		int i = this.leftPos;
+		int j = (this.height - this.imageHeight) / 2;
+		this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
 		
-		TileEntityMMetalFormer te = this.container.getTileEntity();
+		TileEntityMMetalFormer te = this.menu.getTileEntity();
 		float progress = (float) te.processTime / (te.processTimeTotal - 1);
 		
 		this.blit(matrixStack, i + 79, j + 34, 176, 0, (int) (progress * 24), 16);

@@ -12,12 +12,12 @@ import net.minecraft.world.IBlockReader;
 public class BlockMTransformatorCoil extends BlockBase {
 	
 	public BlockMTransformatorCoil() {
-		super("transformator_coil", Material.IRON, 2F, SoundType.METAL);
+		super("transformator_coil", Material.METAL, 2F, SoundType.METAL);
 	}
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return Block.makeCuboidShape(1, 0, 1, 15, 16, 15);
+		return Block.box(1, 0, 1, 15, 16, 15);
 	}
 	
 }

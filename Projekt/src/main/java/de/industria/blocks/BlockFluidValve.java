@@ -39,20 +39,20 @@ public class BlockFluidValve extends BlockWiring implements ITileEntityProvider,
 	public static final BooleanProperty OPEN = BooleanProperty.create("open");
 	
 	public BlockFluidValve() {
-		super("fluid_valve", Material.IRON, 2F, SoundType.METAL, 8);
-		this.setDefaultState(this.stateContainer.getBaseState().with(OPEN, false));
+		super("fluid_valve", Material.METAL, 2F, SoundType.METAL, 8);
+		this.registerDefaultState(this.stateDefinition.any().setValue(OPEN, false));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(OPEN);
-		super.fillStateContainer(builder);
+		super.createBlockStateDefinition(builder);
 	}
 		
 	@Override
 	public boolean canConnectTo(BlockState wireState, World worldIn, BlockPos wirePos, BlockPos connectPos, Direction direction) {
 		
-		TileEntity te = worldIn.getTileEntity(connectPos);
+		TileEntity te = worldIn.getBlockEntity(connectPos);
 		if (te instanceof IFluidConnective) {
 			return ((IFluidConnective) te).canConnect(direction);
 		}
@@ -66,19 +66,19 @@ public class BlockFluidValve extends BlockWiring implements ITileEntityProvider,
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityFluidValve();
 	}
 	
-	public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int id, int param) {
-		super.eventReceived(state, worldIn, pos, id, param);
-		TileEntity tileentity = worldIn.getTileEntity(pos);
-		return tileentity == null ? false : tileentity.receiveClientEvent(id, param);
+	public boolean triggerEvent(BlockState state, World worldIn, BlockPos pos, int id, int param) {
+		super.triggerEvent(state, worldIn, pos, id, param);
+		TileEntity tileentity = worldIn.getBlockEntity(pos);
+		return tileentity == null ? false : tileentity.triggerEvent(id, param);
 	}
 	
 	@Nullable
-	public INamedContainerProvider getContainer(BlockState state, World worldIn, BlockPos pos) {
-		TileEntity tileentity = worldIn.getTileEntity(pos);
+	public INamedContainerProvider getMenuProvider(BlockState state, World worldIn, BlockPos pos) {
+		TileEntity tileentity = worldIn.getBlockEntity(pos);
 		return tileentity instanceof INamedContainerProvider ? (INamedContainerProvider)tileentity : null;
 	}
 
@@ -96,11 +96,11 @@ public class BlockFluidValve extends BlockWiring implements ITileEntityProvider,
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
-		if (player.isSneaking()) {
+		if (player.isShiftKeyDown()) {
 			
-			TileEntity te = worldIn.getTileEntity(pos);
+			TileEntity te = worldIn.getBlockEntity(pos);
 			
 			if (te instanceof TileEntityFluidPipe) {
 				((TileEntityFluidPipe) te).clear();
@@ -109,8 +109,8 @@ public class BlockFluidValve extends BlockWiring implements ITileEntityProvider,
 			
 		} else {
 			
-			worldIn.setBlockState(pos, state.with(OPEN, !state.get(OPEN)));
-			TileEntity tileEntity = worldIn.getTileEntity(pos);
+			worldIn.setBlockAndUpdate(pos, state.setValue(OPEN, !state.getValue(OPEN)));
+			TileEntity tileEntity = worldIn.getBlockEntity(pos);
 			if (tileEntity instanceof TileEntityFluidValve) {
 				((TileEntityFluidValve) tileEntity).updateFlowRate();
 			}
@@ -118,12 +118,12 @@ public class BlockFluidValve extends BlockWiring implements ITileEntityProvider,
 			
 		}
 		
-		return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
+		return super.use(state, worldIn, pos, player, handIn, hit);
 	}
 	
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		if (tileEntity instanceof TileEntityFluidValve) {
 			((TileEntityFluidValve) tileEntity).updateFlowRate();
 		}
@@ -138,7 +138,7 @@ public class BlockFluidValve extends BlockWiring implements ITileEntityProvider,
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		VoxelShape wireShape = super.getShape(state, worldIn, pos, context);
-		return VoxelShapes.or(wireShape, Block.makeCuboidShape(4, 0, 4, 12, 9, 12));
+		return VoxelShapes.or(wireShape, Block.box(4, 0, 4, 12, 9, 12));
 	}
 	
 }

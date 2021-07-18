@@ -36,7 +36,7 @@ public class TileEntityPipePreassurizer extends TileEntityPreassurePipe implemen
 	
 	@Override
 	public Direction getOtherOutlet(Direction inputDirection) {
-		if (inputDirection.getAxis() == this.getBlockState().get(BlockStateProperties.FACING).getAxis()) return inputDirection;
+		if (inputDirection.getAxis() == this.getBlockState().getValue(BlockStateProperties.FACING).getAxis()) return inputDirection;
 		return null;
 	}
 	
@@ -46,7 +46,7 @@ public class TileEntityPipePreassurizer extends TileEntityPreassurePipe implemen
 	}
 
 	public Direction getInputSide() {
-		return this.getBlockState().get(BlockStateProperties.FACING);
+		return this.getBlockState().getValue(BlockStateProperties.FACING);
 	}
 	
 	public Direction getOutputSide() {
@@ -55,23 +55,23 @@ public class TileEntityPipePreassurizer extends TileEntityPreassurePipe implemen
 	
 	@Override
 	public VoxelShape getItemDetectBounds() {
-		Direction facing = this.getBlockState().get(BlockPipePreassurizer.FACING);
+		Direction facing = this.getBlockState().getValue(BlockPipePreassurizer.FACING);
 		int extraHeight = (int) (this.preassure * 16);
-		boolean flag1 = !((BlockPreassurePipe) ModItems.preassure_pipe).canConnect(getBlockState(), world, pos, getInputSide());
-		boolean flag2 = !((BlockPreassurePipe) ModItems.preassure_pipe).canConnect(getBlockState(), world, pos, getOutputSide());
+		boolean flag1 = !((BlockPreassurePipe) ModItems.preassure_pipe).canConnect(getBlockState(), level, worldPosition, getInputSide());
+		boolean flag2 = !((BlockPreassurePipe) ModItems.preassure_pipe).canConnect(getBlockState(), level, worldPosition, getOutputSide());
 		int extraHeight1 = flag1 ? extraHeight : 0;
 		int extraHeight2 = flag2 ? extraHeight : 0;
 		if (facing.getAxis().isVertical()) {
-			return Block.makeCuboidShape(2, -extraHeight1, 2, 14, 16 + extraHeight2, 14);
+			return Block.box(2, -extraHeight1, 2, 14, 16 + extraHeight2, 14);
 		} else {
-			return VoxelHelper.rotateShape(Block.makeCuboidShape(2, 2, -extraHeight1, 14, 14, 16 + extraHeight2), facing);
+			return VoxelHelper.rotateShape(Block.box(2, 2, -extraHeight1, 14, 14, 16 + extraHeight2), facing);
 		}
 	}
 	
 	@Override
 	public void tick() {
 		
-		int power = this.world.getRedstonePowerFromNeighbors(pos);
+		int power = this.level.getBestNeighborSignal(worldPosition);
 		float preassure = power / 15F * 10;
 		int neededAir = (int) (preassure * 10);
 		if (this.compressedAir.getAmount() >= neededAir) {
@@ -81,14 +81,14 @@ public class TileEntityPipePreassurizer extends TileEntityPreassurePipe implemen
 			this.preassure = 0;
 		}
 		
-		if (!this.world.isRemote) {
+		if (!this.level.isClientSide) {
 			
-			if (this.isPreassurized() && this.world.getGameTime() % 20 == 0) {
+			if (this.isPreassurized() && this.level.getGameTime() % 20 == 0) {
 				
 				// Push
 				Direction outletDirection = getOutputSide();
-				BlockPos outletPos = this.pos.offset(outletDirection);
-				TileEntity nextPipe = this.world.getTileEntity(outletPos);
+				BlockPos outletPos = this.worldPosition.relative(outletDirection);
+				TileEntity nextPipe = this.level.getBlockEntity(outletPos);
 				
 				boolean flag = true;
 				
@@ -101,8 +101,8 @@ public class TileEntityPipePreassurizer extends TileEntityPreassurePipe implemen
 				
 				// Pull
 				Direction inputDirection = getInputSide();
-				BlockPos inputPos = this.pos.offset(inputDirection);
-				nextPipe = this.world.getTileEntity(inputPos);
+				BlockPos inputPos = this.worldPosition.relative(inputDirection);
+				nextPipe = this.level.getBlockEntity(inputPos);
 				
 				if (nextPipe instanceof TileEntityPreassurePipe && flag) {
 					
@@ -115,21 +115,21 @@ public class TileEntityPipePreassurizer extends TileEntityPreassurePipe implemen
 			
 		} else {
 
-			float posX = this.pos.getX() + 0.5F;
-			float posY = this.pos.getY() + 0.5F;
-			float posZ = this.pos.getZ() + 0.5F;
+			float posX = this.worldPosition.getX() + 0.5F;
+			float posY = this.worldPosition.getY() + 0.5F;
+			float posZ = this.worldPosition.getZ() + 0.5F;
 			
 			if (isPreassurized()) {
 				
 				IParticleData particle = ParticleTypes.CLOUD;
 				float speed = 0.1F;
 				
-				float xIn = getInputSide().getXOffset() * speed;
-				float yIn = getInputSide().getYOffset() * speed;
-				float zIn = getInputSide().getZOffset() * speed;		
+				float xIn = getInputSide().getStepX() * speed;
+				float yIn = getInputSide().getStepY() * speed;
+				float zIn = getInputSide().getStepZ() * speed;		
 				
-				if (this.world.rand.nextInt(14) == 0) {
-					this.world.addParticle(particle, posX + xIn * 10, posY + yIn * 10, posZ + zIn * 10, -xIn, -yIn, -zIn);
+				if (this.level.random.nextInt(14) == 0) {
+					this.level.addParticle(particle, posX + xIn * 10, posY + yIn * 10, posZ + zIn * 10, -xIn, -yIn, -zIn);
 				}
 							
 			}
@@ -143,15 +143,15 @@ public class TileEntityPipePreassurizer extends TileEntityPreassurePipe implemen
 	@Override
 	public boolean preassurizePipe(Direction inputDirection, float preassure, List<BlockPos> pipeStreamList) {
 
-		if (pipeStreamList.contains(this.pos)) return false;
+		if (pipeStreamList.contains(this.worldPosition)) return false;
 			
 		Direction outletDirection = getOtherOutlet(inputDirection);
 		
 		if (outletDirection == null) return false;
 				
-		if (isOpenPipe(this.pos.offset(outletDirection), outletDirection)) {
+		if (isOpenPipe(this.worldPosition.relative(outletDirection), outletDirection)) {
 			
-			pipeStreamList.add(this.pos);
+			pipeStreamList.add(this.worldPosition);
 			return true;
 			
 		}
@@ -161,17 +161,17 @@ public class TileEntityPipePreassurizer extends TileEntityPreassurePipe implemen
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		compound.put("CompressedAir", this.compressedAir.writeToNBT(new CompoundNBT()));
 		compound.putFloat("Preassure", this.preassure);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT nbt) {
+	public void load(BlockState state, CompoundNBT nbt) {
 		this.compressedAir = FluidStack.loadFluidStackFromNBT(nbt.getCompound("CompressedAir"));
 		this.preassure = nbt.getFloat("Preassure");
-		super.read(state, nbt);
+		super.load(state, nbt);
 	}
 
 	@Override
@@ -210,7 +210,7 @@ public class TileEntityPipePreassurizer extends TileEntityPreassurePipe implemen
 
 	@Override
 	public boolean canConnect(Direction side) {
-		return this.getBlockState().get(BlockStateProperties.FACING).getAxis() != side.getAxis();
+		return this.getBlockState().getValue(BlockStateProperties.FACING).getAxis() != side.getAxis();
 	}
 	
 }

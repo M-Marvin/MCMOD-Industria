@@ -92,481 +92,481 @@ public class TileEntityMSteamGeneratorModel extends EntityModel<Entity> {
 
 	public TileEntityMSteamGeneratorModel() {
 
-		textureWidth = 256;
-		textureHeight = 256;
+		texWidth = 256;
+		texHeight = 256;
 
 		root = new ModelRenderer(this);
-		root.setRotationPoint(0.0F, 24.0F, 0.0F);
-		root.setTextureOffset(167, 33).addBox(-19.0F, -27.0F, -7.0F, 27.0F, 6.0F, 4.0F, 0.0F, false);
-		root.setTextureOffset(0, 7).addBox(-40.0F, -48.0F, -8.0F, 48.0F, 48.0F, 32.0F, 0.0F, false);
+		root.setPos(0.0F, 24.0F, 0.0F);
+		root.texOffs(167, 33).addBox(-19.0F, -27.0F, -7.0F, 27.0F, 6.0F, 4.0F, 0.0F, false);
+		root.texOffs(0, 7).addBox(-40.0F, -48.0F, -8.0F, 48.0F, 48.0F, 32.0F, 0.0F, false);
 
 		shaft = new ModelRenderer(this);
-		shaft.setRotationPoint(-16.0F, -24.0F, -8.0F);
+		shaft.setPos(-16.0F, -24.0F, -8.0F);
 		root.addChild(shaft);
 		
 
 		turbin1 = new ModelRenderer(this);
-		turbin1.setRotationPoint(0.0F, 0.0F, 8.0F);
+		turbin1.setPos(0.0F, 0.0F, 8.0F);
 		shaft.addChild(turbin1);
-		turbin1.setTextureOffset(135, 0).addBox(-2.0F, -2.0F, -9.0F, 4.0F, 4.0F, 17.0F, 0.0F, false);
+		turbin1.texOffs(135, 0).addBox(-2.0F, -2.0F, -9.0F, 4.0F, 4.0F, 17.0F, 0.0F, false);
 
 		blade = new ModelRenderer(this);
-		blade.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade.setPos(0.0F, 0.0F, 0.0F);
 		turbin1.addChild(blade);
 		
 
 		part = new ModelRenderer(this);
-		part.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part.setPos(-12.0F, -0.5F, 0.5F);
 		blade.addChild(part);
 		setRotationAngle(part, -0.5236F, 0.0F, 0.0F);
-		part.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade2 = new ModelRenderer(this);
-		blade2.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade2.setPos(0.0F, 0.0F, 0.0F);
 		turbin1.addChild(blade2);
 		setRotationAngle(blade2, 0.0F, 0.0F, 0.3491F);
 		
 
 		part2 = new ModelRenderer(this);
-		part2.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part2.setPos(-12.0F, -0.5F, 0.5F);
 		blade2.addChild(part2);
 		setRotationAngle(part2, -0.5236F, 0.0F, 0.0F);
-		part2.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part2.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade3 = new ModelRenderer(this);
-		blade3.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade3.setPos(0.0F, 0.0F, 0.0F);
 		turbin1.addChild(blade3);
 		setRotationAngle(blade3, 0.0F, 0.0F, 0.6981F);
 		
 
 		part3 = new ModelRenderer(this);
-		part3.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part3.setPos(-12.0F, -0.5F, 0.5F);
 		blade3.addChild(part3);
 		setRotationAngle(part3, -0.5236F, 0.0F, 0.0F);
-		part3.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part3.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade4 = new ModelRenderer(this);
-		blade4.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade4.setPos(0.0F, 0.0F, 0.0F);
 		turbin1.addChild(blade4);
 		setRotationAngle(blade4, 0.0F, 0.0F, 1.0472F);
 		
 
 		part4 = new ModelRenderer(this);
-		part4.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part4.setPos(-12.0F, -0.5F, 0.5F);
 		blade4.addChild(part4);
 		setRotationAngle(part4, -0.5236F, 0.0F, 0.0F);
-		part4.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part4.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade5 = new ModelRenderer(this);
-		blade5.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade5.setPos(0.0F, 0.0F, 0.0F);
 		turbin1.addChild(blade5);
 		setRotationAngle(blade5, 0.0F, 0.0F, 1.3963F);
 		
 
 		part5 = new ModelRenderer(this);
-		part5.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part5.setPos(-12.0F, -0.5F, 0.5F);
 		blade5.addChild(part5);
 		setRotationAngle(part5, -0.5236F, 0.0F, 0.0F);
-		part5.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part5.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade6 = new ModelRenderer(this);
-		blade6.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade6.setPos(0.0F, 0.0F, 0.0F);
 		turbin1.addChild(blade6);
 		setRotationAngle(blade6, 0.0F, 0.0F, 1.7453F);
 		
 
 		part6 = new ModelRenderer(this);
-		part6.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part6.setPos(-12.0F, -0.5F, 0.5F);
 		blade6.addChild(part6);
 		setRotationAngle(part6, -0.5236F, 0.0F, 0.0F);
-		part6.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part6.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade7 = new ModelRenderer(this);
-		blade7.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade7.setPos(0.0F, 0.0F, 0.0F);
 		turbin1.addChild(blade7);
 		setRotationAngle(blade7, 0.0F, 0.0F, 2.0944F);
 		
 
 		part7 = new ModelRenderer(this);
-		part7.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part7.setPos(-12.0F, -0.5F, 0.5F);
 		blade7.addChild(part7);
 		setRotationAngle(part7, -0.5236F, 0.0F, 0.0F);
-		part7.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part7.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade8 = new ModelRenderer(this);
-		blade8.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade8.setPos(0.0F, 0.0F, 0.0F);
 		turbin1.addChild(blade8);
 		setRotationAngle(blade8, 0.0F, 0.0F, 2.4435F);
 		
 
 		part8 = new ModelRenderer(this);
-		part8.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part8.setPos(-12.0F, -0.5F, 0.5F);
 		blade8.addChild(part8);
 		setRotationAngle(part8, -0.5236F, 0.0F, 0.0F);
-		part8.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part8.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade9 = new ModelRenderer(this);
-		blade9.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade9.setPos(0.0F, 0.0F, 0.0F);
 		turbin1.addChild(blade9);
 		setRotationAngle(blade9, 0.0F, 0.0F, 2.7925F);
 		
 
 		part9 = new ModelRenderer(this);
-		part9.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part9.setPos(-12.0F, -0.5F, 0.5F);
 		blade9.addChild(part9);
 		setRotationAngle(part9, -0.5236F, 0.0F, 0.0F);
-		part9.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part9.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade10 = new ModelRenderer(this);
-		blade10.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade10.setPos(0.0F, 0.0F, 0.0F);
 		turbin1.addChild(blade10);
 		setRotationAngle(blade10, 0.0F, 0.0F, -3.1416F);
 		
 
 		part10 = new ModelRenderer(this);
-		part10.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part10.setPos(-12.0F, -0.5F, 0.5F);
 		blade10.addChild(part10);
 		setRotationAngle(part10, -0.5236F, 0.0F, 0.0F);
-		part10.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part10.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade11 = new ModelRenderer(this);
-		blade11.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade11.setPos(0.0F, 0.0F, 0.0F);
 		turbin1.addChild(blade11);
 		setRotationAngle(blade11, 0.0F, 0.0F, -2.7925F);
 		
 
 		part11 = new ModelRenderer(this);
-		part11.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part11.setPos(-12.0F, -0.5F, 0.5F);
 		blade11.addChild(part11);
 		setRotationAngle(part11, -0.5236F, 0.0F, 0.0F);
-		part11.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part11.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade12 = new ModelRenderer(this);
-		blade12.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade12.setPos(0.0F, 0.0F, 0.0F);
 		turbin1.addChild(blade12);
 		setRotationAngle(blade12, 0.0F, 0.0F, -2.4435F);
 		
 
 		part12 = new ModelRenderer(this);
-		part12.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part12.setPos(-12.0F, -0.5F, 0.5F);
 		blade12.addChild(part12);
 		setRotationAngle(part12, -0.5236F, 0.0F, 0.0F);
-		part12.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part12.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade13 = new ModelRenderer(this);
-		blade13.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade13.setPos(0.0F, 0.0F, 0.0F);
 		turbin1.addChild(blade13);
 		setRotationAngle(blade13, 0.0F, 0.0F, -2.0944F);
 		
 
 		part13 = new ModelRenderer(this);
-		part13.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part13.setPos(-12.0F, -0.5F, 0.5F);
 		blade13.addChild(part13);
 		setRotationAngle(part13, -0.5236F, 0.0F, 0.0F);
-		part13.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part13.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade14 = new ModelRenderer(this);
-		blade14.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade14.setPos(0.0F, 0.0F, 0.0F);
 		turbin1.addChild(blade14);
 		setRotationAngle(blade14, 0.0F, 0.0F, -1.7453F);
 		
 
 		part14 = new ModelRenderer(this);
-		part14.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part14.setPos(-12.0F, -0.5F, 0.5F);
 		blade14.addChild(part14);
 		setRotationAngle(part14, -0.5236F, 0.0F, 0.0F);
-		part14.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part14.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade15 = new ModelRenderer(this);
-		blade15.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade15.setPos(0.0F, 0.0F, 0.0F);
 		turbin1.addChild(blade15);
 		setRotationAngle(blade15, 0.0F, 0.0F, -1.3963F);
 		
 
 		part15 = new ModelRenderer(this);
-		part15.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part15.setPos(-12.0F, -0.5F, 0.5F);
 		blade15.addChild(part15);
 		setRotationAngle(part15, -0.5236F, 0.0F, 0.0F);
-		part15.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part15.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade16 = new ModelRenderer(this);
-		blade16.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade16.setPos(0.0F, 0.0F, 0.0F);
 		turbin1.addChild(blade16);
 		setRotationAngle(blade16, 0.0F, 0.0F, -1.0472F);
 		
 
 		part16 = new ModelRenderer(this);
-		part16.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part16.setPos(-12.0F, -0.5F, 0.5F);
 		blade16.addChild(part16);
 		setRotationAngle(part16, -0.5236F, 0.0F, 0.0F);
-		part16.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part16.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade17 = new ModelRenderer(this);
-		blade17.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade17.setPos(0.0F, 0.0F, 0.0F);
 		turbin1.addChild(blade17);
 		setRotationAngle(blade17, 0.0F, 0.0F, -0.6981F);
 		
 
 		part17 = new ModelRenderer(this);
-		part17.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part17.setPos(-12.0F, -0.5F, 0.5F);
 		blade17.addChild(part17);
 		setRotationAngle(part17, -0.5236F, 0.0F, 0.0F);
-		part17.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part17.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade18 = new ModelRenderer(this);
-		blade18.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade18.setPos(0.0F, 0.0F, 0.0F);
 		turbin1.addChild(blade18);
 		setRotationAngle(blade18, 0.0F, 0.0F, -0.3491F);
 		
 
 		part18 = new ModelRenderer(this);
-		part18.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part18.setPos(-12.0F, -0.5F, 0.5F);
 		blade18.addChild(part18);
 		setRotationAngle(part18, -0.5236F, 0.0F, 0.0F);
-		part18.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part18.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		turbin2 = new ModelRenderer(this);
-		turbin2.setRotationPoint(0.0F, 0.0F, 24.0F);
+		turbin2.setPos(0.0F, 0.0F, 24.0F);
 		shaft.addChild(turbin2);
 		setRotationAngle(turbin2, 0.0F, 0.0F, 0.1745F);
-		turbin2.setTextureOffset(135, 0).addBox(-2.0F, -2.0F, -8.0F, 4.0F, 4.0F, 17.0F, 0.0F, false);
+		turbin2.texOffs(135, 0).addBox(-2.0F, -2.0F, -8.0F, 4.0F, 4.0F, 17.0F, 0.0F, false);
 
 		blade19 = new ModelRenderer(this);
-		blade19.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade19.setPos(0.0F, 0.0F, 0.0F);
 		turbin2.addChild(blade19);
 		
 
 		part19 = new ModelRenderer(this);
-		part19.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part19.setPos(-12.0F, -0.5F, 0.5F);
 		blade19.addChild(part19);
 		setRotationAngle(part19, -0.5236F, 0.0F, 0.0F);
-		part19.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part19.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade20 = new ModelRenderer(this);
-		blade20.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade20.setPos(0.0F, 0.0F, 0.0F);
 		turbin2.addChild(blade20);
 		setRotationAngle(blade20, 0.0F, 0.0F, 0.3491F);
 		
 
 		part20 = new ModelRenderer(this);
-		part20.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part20.setPos(-12.0F, -0.5F, 0.5F);
 		blade20.addChild(part20);
 		setRotationAngle(part20, -0.5236F, 0.0F, 0.0F);
-		part20.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part20.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade21 = new ModelRenderer(this);
-		blade21.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade21.setPos(0.0F, 0.0F, 0.0F);
 		turbin2.addChild(blade21);
 		setRotationAngle(blade21, 0.0F, 0.0F, 0.6981F);
 		
 
 		part21 = new ModelRenderer(this);
-		part21.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part21.setPos(-12.0F, -0.5F, 0.5F);
 		blade21.addChild(part21);
 		setRotationAngle(part21, -0.5236F, 0.0F, 0.0F);
-		part21.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part21.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade22 = new ModelRenderer(this);
-		blade22.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade22.setPos(0.0F, 0.0F, 0.0F);
 		turbin2.addChild(blade22);
 		setRotationAngle(blade22, 0.0F, 0.0F, 1.0472F);
 		
 
 		part22 = new ModelRenderer(this);
-		part22.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part22.setPos(-12.0F, -0.5F, 0.5F);
 		blade22.addChild(part22);
 		setRotationAngle(part22, -0.5236F, 0.0F, 0.0F);
-		part22.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part22.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade23 = new ModelRenderer(this);
-		blade23.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade23.setPos(0.0F, 0.0F, 0.0F);
 		turbin2.addChild(blade23);
 		setRotationAngle(blade23, 0.0F, 0.0F, 1.3963F);
 		
 
 		part23 = new ModelRenderer(this);
-		part23.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part23.setPos(-12.0F, -0.5F, 0.5F);
 		blade23.addChild(part23);
 		setRotationAngle(part23, -0.5236F, 0.0F, 0.0F);
-		part23.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part23.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade24 = new ModelRenderer(this);
-		blade24.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade24.setPos(0.0F, 0.0F, 0.0F);
 		turbin2.addChild(blade24);
 		setRotationAngle(blade24, 0.0F, 0.0F, 1.7453F);
 		
 
 		part24 = new ModelRenderer(this);
-		part24.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part24.setPos(-12.0F, -0.5F, 0.5F);
 		blade24.addChild(part24);
 		setRotationAngle(part24, -0.5236F, 0.0F, 0.0F);
-		part24.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part24.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade25 = new ModelRenderer(this);
-		blade25.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade25.setPos(0.0F, 0.0F, 0.0F);
 		turbin2.addChild(blade25);
 		setRotationAngle(blade25, 0.0F, 0.0F, 2.0944F);
 		
 
 		part25 = new ModelRenderer(this);
-		part25.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part25.setPos(-12.0F, -0.5F, 0.5F);
 		blade25.addChild(part25);
 		setRotationAngle(part25, -0.5236F, 0.0F, 0.0F);
-		part25.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part25.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade26 = new ModelRenderer(this);
-		blade26.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade26.setPos(0.0F, 0.0F, 0.0F);
 		turbin2.addChild(blade26);
 		setRotationAngle(blade26, 0.0F, 0.0F, 2.4435F);
 		
 
 		part26 = new ModelRenderer(this);
-		part26.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part26.setPos(-12.0F, -0.5F, 0.5F);
 		blade26.addChild(part26);
 		setRotationAngle(part26, -0.5236F, 0.0F, 0.0F);
-		part26.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part26.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade27 = new ModelRenderer(this);
-		blade27.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade27.setPos(0.0F, 0.0F, 0.0F);
 		turbin2.addChild(blade27);
 		setRotationAngle(blade27, 0.0F, 0.0F, 2.7925F);
 		
 
 		part27 = new ModelRenderer(this);
-		part27.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part27.setPos(-12.0F, -0.5F, 0.5F);
 		blade27.addChild(part27);
 		setRotationAngle(part27, -0.5236F, 0.0F, 0.0F);
-		part27.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part27.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade28 = new ModelRenderer(this);
-		blade28.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade28.setPos(0.0F, 0.0F, 0.0F);
 		turbin2.addChild(blade28);
 		setRotationAngle(blade28, 0.0F, 0.0F, -3.1416F);
 		
 
 		part28 = new ModelRenderer(this);
-		part28.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part28.setPos(-12.0F, -0.5F, 0.5F);
 		blade28.addChild(part28);
 		setRotationAngle(part28, -0.5236F, 0.0F, 0.0F);
-		part28.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part28.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade29 = new ModelRenderer(this);
-		blade29.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade29.setPos(0.0F, 0.0F, 0.0F);
 		turbin2.addChild(blade29);
 		setRotationAngle(blade29, 0.0F, 0.0F, -2.7925F);
 		
 
 		part29 = new ModelRenderer(this);
-		part29.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part29.setPos(-12.0F, -0.5F, 0.5F);
 		blade29.addChild(part29);
 		setRotationAngle(part29, -0.5236F, 0.0F, 0.0F);
-		part29.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part29.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade30 = new ModelRenderer(this);
-		blade30.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade30.setPos(0.0F, 0.0F, 0.0F);
 		turbin2.addChild(blade30);
 		setRotationAngle(blade30, 0.0F, 0.0F, -2.4435F);
 		
 
 		part30 = new ModelRenderer(this);
-		part30.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part30.setPos(-12.0F, -0.5F, 0.5F);
 		blade30.addChild(part30);
 		setRotationAngle(part30, -0.5236F, 0.0F, 0.0F);
-		part30.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part30.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade31 = new ModelRenderer(this);
-		blade31.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade31.setPos(0.0F, 0.0F, 0.0F);
 		turbin2.addChild(blade31);
 		setRotationAngle(blade31, 0.0F, 0.0F, -2.0944F);
 		
 
 		part31 = new ModelRenderer(this);
-		part31.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part31.setPos(-12.0F, -0.5F, 0.5F);
 		blade31.addChild(part31);
 		setRotationAngle(part31, -0.5236F, 0.0F, 0.0F);
-		part31.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part31.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade32 = new ModelRenderer(this);
-		blade32.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade32.setPos(0.0F, 0.0F, 0.0F);
 		turbin2.addChild(blade32);
 		setRotationAngle(blade32, 0.0F, 0.0F, -1.7453F);
 		
 
 		part32 = new ModelRenderer(this);
-		part32.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part32.setPos(-12.0F, -0.5F, 0.5F);
 		blade32.addChild(part32);
 		setRotationAngle(part32, -0.5236F, 0.0F, 0.0F);
-		part32.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part32.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade33 = new ModelRenderer(this);
-		blade33.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade33.setPos(0.0F, 0.0F, 0.0F);
 		turbin2.addChild(blade33);
 		setRotationAngle(blade33, 0.0F, 0.0F, -1.3963F);
 		
 
 		part33 = new ModelRenderer(this);
-		part33.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part33.setPos(-12.0F, -0.5F, 0.5F);
 		blade33.addChild(part33);
 		setRotationAngle(part33, -0.5236F, 0.0F, 0.0F);
-		part33.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part33.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade34 = new ModelRenderer(this);
-		blade34.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade34.setPos(0.0F, 0.0F, 0.0F);
 		turbin2.addChild(blade34);
 		setRotationAngle(blade34, 0.0F, 0.0F, -1.0472F);
 		
 
 		part34 = new ModelRenderer(this);
-		part34.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part34.setPos(-12.0F, -0.5F, 0.5F);
 		blade34.addChild(part34);
 		setRotationAngle(part34, -0.5236F, 0.0F, 0.0F);
-		part34.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part34.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade35 = new ModelRenderer(this);
-		blade35.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade35.setPos(0.0F, 0.0F, 0.0F);
 		turbin2.addChild(blade35);
 		setRotationAngle(blade35, 0.0F, 0.0F, -0.6981F);
 		
 
 		part35 = new ModelRenderer(this);
-		part35.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part35.setPos(-12.0F, -0.5F, 0.5F);
 		blade35.addChild(part35);
 		setRotationAngle(part35, -0.5236F, 0.0F, 0.0F);
-		part35.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part35.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 
 		blade36 = new ModelRenderer(this);
-		blade36.setRotationPoint(0.0F, 0.0F, 0.0F);
+		blade36.setPos(0.0F, 0.0F, 0.0F);
 		turbin2.addChild(blade36);
 		setRotationAngle(blade36, 0.0F, 0.0F, -0.3491F);
 		
 
 		part36 = new ModelRenderer(this);
-		part36.setRotationPoint(-12.0F, -0.5F, 0.5F);
+		part36.setPos(-12.0F, -0.5F, 0.5F);
 		blade36.addChild(part36);
 		setRotationAngle(part36, -0.5236F, 0.0F, 0.0F);
-		part36.setTextureOffset(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
+		part36.texOffs(0, 0).addBox(-8.0F, -2.5F, -0.5F, 20.0F, 5.0F, 1.0F, 0.0F, false);
 		
 	}
 	
 	@Override
-	public void setRotationAngles(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
+	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
 		//previously the render function, render code was moved to a method below
 	}
 	
 	@Override
-	public void render(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
+	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
 		root.render(matrixStack, buffer, packedLight, packedOverlay);
 	}
 
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
+		modelRenderer.xRot = x;
+		modelRenderer.yRot = y;
+		modelRenderer.zRot = z;
 	}
 	
 	public void setTurbinRotation(float rotation) {
 		
-		this.shaft.rotateAngleZ = rotation;
+		this.shaft.zRot = rotation;
 		
 	}
 	

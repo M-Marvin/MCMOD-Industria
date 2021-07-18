@@ -15,18 +15,18 @@ public class BlockBurnedLog extends BlockBurnedBlock {
 
 	public BlockBurnedLog() {
 		super("burned_log", 2F, 1F);
-		this.setDefaultState(this.stateContainer.getBaseState().with(AXIS, Axis.Y));
+		this.registerDefaultState(this.stateDefinition.any().setValue(AXIS, Axis.Y));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder);
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
 		builder.add(AXIS);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return super.getStateForPlacement(context).with(AXIS, context.getFace().getAxis());
+		return super.getStateForPlacement(context).setValue(AXIS, context.getClickedFace().getAxis());
 	}
 	
 }

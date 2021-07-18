@@ -31,10 +31,10 @@ public class TileEntityMSteamGeneratorRenderer extends TileEntityRenderer<TileEn
 		
 		if (tileEntityIn.getPart() == TEPart.CENTER) {
 			
-			Direction facing = tileEntityIn.getBlockState().get(BlockMSteamGenerator.FACING);
-			IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.getEntityTranslucent(STEAM_GENERATOR_TEXTURES));
+			Direction facing = tileEntityIn.getBlockState().getValue(BlockMSteamGenerator.FACING);
+			IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.entityTranslucent(STEAM_GENERATOR_TEXTURES));
 			
-			matrixStackIn.push();
+			matrixStackIn.pushPose();
 			
 			matrixStackIn.translate(0F, -1F, 0F);
 			
@@ -43,15 +43,15 @@ public class TileEntityMSteamGeneratorRenderer extends TileEntityRenderer<TileEn
 				matrixStackIn.translate(1.5F, 1.5F, -0.5F);
 				break;
 			case WEST:
-				matrixStackIn.rotate(Vector3f.YP.rotationDegrees(90));
+				matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(90));
 				matrixStackIn.translate(0.5F, 1.5F, -0.5F);
 				break;
 			case EAST:
-				matrixStackIn.rotate(Vector3f.YP.rotationDegrees(270));
+				matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(270));
 				matrixStackIn.translate(1.5F, 1.5F, -1.5F);
 				break;
 			case SOUTH:
-				matrixStackIn.rotate(Vector3f.YP.rotationDegrees(180));
+				matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180));
 				matrixStackIn.translate(0.5F, 1.5F, -1.5F);
 				break;
 			default:
@@ -63,9 +63,9 @@ public class TileEntityMSteamGeneratorRenderer extends TileEntityRenderer<TileEn
 			float rotation = (tileEntityIn.turbinRotation + partialAccerlation) / 360F;
 			
 			steamGeneratorModel.setTurbinRotation((float) (rotation * Math.PI * 2));
-			steamGeneratorModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
+			steamGeneratorModel.renderToBuffer(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 			
-			matrixStackIn.pop();
+			matrixStackIn.popPose();
 			
 		}
 		

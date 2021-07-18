@@ -43,7 +43,7 @@ public class TileEntityMChunkLoader extends TileEntity implements IChunkForceLoa
 	public List<ChunkPos> getLoadHoldChunks() {
 		List<ChunkPos> chunks = new ArrayList<ChunkPos>();
 		if (this.isWorking) {
-			ChunkPos ownChunk = new ChunkPos(this.pos);
+			ChunkPos ownChunk = new ChunkPos(this.worldPosition);
 			this.activeRelativeChunks.forEach((chunk) -> {
 				chunks.add(new ChunkPos(chunk.x + ownChunk.x, + chunk.z + ownChunk.z));
 			});
@@ -69,17 +69,17 @@ public class TileEntityMChunkLoader extends TileEntity implements IChunkForceLoa
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote()) {
+		if (!this.level.isClientSide()) {
 			
-			ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos);
-			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(world).getNetwork(pos);
+			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
+			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
 			this.hasPower = network.canMachinesRun() == Voltage.HightVoltage;
 			this.isWorking = canWork() && this.hasPower;
 			
-			this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
+			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			
-			boolean active = this.getBlockState().get(BlockMChunkLoader.ACTIVE);
-			if (active != this.isWorking) world.setBlockState(pos, this.getBlockState().with(BlockMChunkLoader.ACTIVE, this.isWorking));
+			boolean active = this.getBlockState().getValue(BlockMChunkLoader.ACTIVE);
+			if (active != this.isWorking) level.setBlockAndUpdate(worldPosition, this.getBlockState().setValue(BlockMChunkLoader.ACTIVE, this.isWorking));
 			
 		} else {
 			
@@ -90,7 +90,7 @@ public class TileEntityMChunkLoader extends TileEntity implements IChunkForceLoa
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		ListNBT chunkList = new ListNBT();
 		this.activeRelativeChunks.forEach((chunk) -> {
 			ListNBT chunkNBT = new ListNBT();
@@ -101,20 +101,20 @@ public class TileEntityMChunkLoader extends TileEntity implements IChunkForceLoa
 		compound.put("ActiveChunks", chunkList);
 		compound.putBoolean("hasPower", this.hasPower);
 		compound.putBoolean("isWorking", this.isWorking);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT nbt) {
+	public void load(BlockState state, CompoundNBT nbt) {
 		this.activeRelativeChunks.clear();
 		ListNBT chunkList = nbt.getList("ActiveChunks", 9);
 		chunkList.forEach((chunkNBT) -> {
-			ChunkPos chunk = new ChunkPos(((IntNBT) ((ListNBT) chunkNBT).get(0)).getInt(), ((IntNBT) ((ListNBT) chunkNBT).get(1)).getInt());
+			ChunkPos chunk = new ChunkPos(((IntNBT) ((ListNBT) chunkNBT).get(0)).getAsInt(), ((IntNBT) ((ListNBT) chunkNBT).get(1)).getAsInt());
 			this.activeRelativeChunks.add(chunk);
 		});
 		this.hasPower = nbt.getBoolean("hasPower");
 		this.isWorking = nbt.getBoolean("isWorking");
-		super.read(state, nbt);
+		super.load(state, nbt);
 	}
 
 	@Override
@@ -129,12 +129,12 @@ public class TileEntityMChunkLoader extends TileEntity implements IChunkForceLoa
 	
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(pos, 0, this.serializeNBT());
+		return new SUpdateTileEntityPacket(worldPosition, 0, this.serializeNBT());
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.deserializeNBT(pkt.getNbtCompound());
+		this.deserializeNBT(pkt.getTag());
 	}
 	
 }

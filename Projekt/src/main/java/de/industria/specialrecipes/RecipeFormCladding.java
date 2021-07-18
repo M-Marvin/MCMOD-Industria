@@ -24,10 +24,10 @@ public class RecipeFormCladding extends MetalFormRecipe {
 	@Override
 	public boolean matches(TileEntityMMetalFormer inv, World worldIn) {
 		
-		ItemStack itemIn = inv.getStackInSlot(0);
+		ItemStack itemIn = inv.getItem(0);
 		if (itemIn.getItem() instanceof BlockItem) {
 			Block block = ((BlockItem) itemIn.getItem()).getBlock();
-			if (block.getDefaultState().isOpaqueCube(null, null)) {
+			if (block.defaultBlockState().isSolidRender(null, null)) {
 				return true;
 			}
 		}
@@ -36,26 +36,26 @@ public class RecipeFormCladding extends MetalFormRecipe {
 	}
 	
 	@Override
-	public ItemStack getRecipeOutput() {
+	public ItemStack getResultItem() {
 		return new ItemStack(ModItems.structure_cladding_pane);
 	}
 	
 	@Override
-	public ItemStack getCraftingResult(TileEntityMMetalFormer inv) {
-		ItemStack itemIn = inv.getStackInSlot(0);
+	public ItemStack assemble(TileEntityMMetalFormer inv) {
+		ItemStack itemIn = inv.getItem(0);
 		if (itemIn.getItem() instanceof BlockItem) {
 			Block block = ((BlockItem) itemIn.getItem()).getBlock();
-			if (block.getDefaultState().isOpaqueCube(null, null)) {
-				return ItemStructureCladdingPane.createBlockPane(block.getDefaultState(), 16);
+			if (block.defaultBlockState().isSolidRender(null, null)) {
+				return ItemStructureCladdingPane.createBlockPane(block.defaultBlockState(), 16);
 			}
 		}
-		return getRecipeOutput();
+		return getResultItem();
 	}
 	
 	@SuppressWarnings("deprecation")
 	@Override
 	public ItemStack getItemIn() {
-		return new ItemStack(Item.getItemFromBlock(Blocks.OAK_PLANKS), 1);
+		return new ItemStack(Item.byBlock(Blocks.OAK_PLANKS), 1);
 	}
 	
 	@Override

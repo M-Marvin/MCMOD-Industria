@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 public class BlockFuelGas extends BlockGasFluid {
 	
 	public BlockFuelGas() {
-		super("fuel_gas", ModFluids.FUEL_GAS, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
+		super("fuel_gas", ModFluids.FUEL_GAS, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops());
 	}
 	
 	@Override
@@ -33,19 +33,19 @@ public class BlockFuelGas extends BlockGasFluid {
 	}
 	
 	@Override
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 		
 		if (entityIn instanceof FallingBlockEntity) {
-			if (((FallingBlockEntity) entityIn).getBlockState().getBlock().isIn(BlockTags.FIRE)) {
+			if (((FallingBlockEntity) entityIn).getBlockState().getBlock().is(BlockTags.FIRE)) {
 				detonate(worldIn, pos);
 			}
 		}
 		
-		if (entityIn.isLiving()) {
+		if (entityIn.showVehicleHealth()) {
 			
-			if (((LivingEntity) entityIn).isEntityUndead()) return;
+			if (((LivingEntity) entityIn).isInvertedHealAndHarm()) return;
 			
-			entityIn.attackEntityFrom(ModDamageSource.GAS, 1F);
+			entityIn.hurt(ModDamageSource.GAS, 1F);
 			
 		}
 		
@@ -53,17 +53,17 @@ public class BlockFuelGas extends BlockGasFluid {
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
 		if (newState.getBlock() instanceof FireBlock) {
 			detonate(worldIn, pos);
 		}
-		super.onReplaced(state, worldIn, pos, newState, isMoving);
+		super.onRemove(state, worldIn, pos, newState, isMoving);
 	}
 	
 	@Override
-	public void onExplosionDestroy(World worldIn, BlockPos pos, Explosion explosionIn) {
+	public void wasExploded(World worldIn, BlockPos pos, Explosion explosionIn) {
 		detonate(worldIn, pos);
-		super.onExplosionDestroy(worldIn, pos, explosionIn);
+		super.wasExploded(worldIn, pos, explosionIn);
 	}
 	
 	public void detonate(World worldIn, BlockPos pos) {
@@ -72,14 +72,14 @@ public class BlockFuelGas extends BlockGasFluid {
 		int spreadAmountRnd = 2;
 		float explosionForce = 3;
 		
-		worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, explosionForce, true, Mode.BREAK);
-		for (int i = worldIn.rand.nextInt(spreadAmountRnd) + spreadAmountMin; i >= 0; i--) {
-			worldIn.setBlockState(pos, Blocks.FIRE.getDefaultState());
-			FallingBlockEntity spreadFire = new FallingBlockEntity(worldIn, pos.getX(), pos.getY(), pos.getZ(), Blocks.FIRE.getDefaultState());
-			float mX = (worldIn.rand.nextFloat() - 0.5F) * spreadForce;
-			float mY = (worldIn.rand.nextFloat() * 0.5F) * spreadForce;
-			float mZ = (worldIn.rand.nextFloat() - 0.5F) * spreadForce;
-			spreadFire.setMotion(mX, mY, mZ);
+		worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, explosionForce, true, Mode.BREAK);
+		for (int i = worldIn.random.nextInt(spreadAmountRnd) + spreadAmountMin; i >= 0; i--) {
+			worldIn.setBlockAndUpdate(pos, Blocks.FIRE.defaultBlockState());
+			FallingBlockEntity spreadFire = new FallingBlockEntity(worldIn, pos.getX(), pos.getY(), pos.getZ(), Blocks.FIRE.defaultBlockState());
+			float mX = (worldIn.random.nextFloat() - 0.5F) * spreadForce;
+			float mY = (worldIn.random.nextFloat() * 0.5F) * spreadForce;
+			float mZ = (worldIn.random.nextFloat() - 0.5F) * spreadForce;
+			spreadFire.setDeltaMovement(mX, mY, mZ);
 			Field timeField;
 			try {
 				timeField = FallingBlockEntity.class.getDeclaredField("fallTime");
@@ -92,7 +92,7 @@ public class BlockFuelGas extends BlockGasFluid {
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
-			worldIn.addEntity(spreadFire);
+			worldIn.addFreshEntity(spreadFire);
 		}
 	}
 

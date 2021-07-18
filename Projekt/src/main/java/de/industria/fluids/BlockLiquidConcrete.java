@@ -23,26 +23,26 @@ public class BlockLiquidConcrete extends BlockModFlowingFluid {
 	public static final BooleanProperty HARDENED = BooleanProperty.create("hardened");
 	
 	public BlockLiquidConcrete() {
-		super("liquid_concrete", ModFluids.LIQUID_CONCRETE, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops().tickRandomly());
-		this.setDefaultState(this.stateContainer.getBaseState().with(HARDENED, false));
+		super("liquid_concrete", ModFluids.LIQUID_CONCRETE, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops().randomTicks());
+		this.registerDefaultState(this.stateDefinition.any().setValue(HARDENED, false));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder);
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
 		builder.add(HARDENED);
 	}
 
 	@Override
 	public FluidState getFluidState(BlockState state) {
-		return super.getFluidState(state).with(FluidLiquidConcrete.HARDENED, state.get(HARDENED));
+		return super.getFluidState(state).setValue(FluidLiquidConcrete.HARDENED, state.getValue(HARDENED));
 	}
 	
 	@Override
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 
-		Vector3d motion = entityIn.getMotion().mul(new Vector3d(0.1F, 0.1F, 0.1F));
-		entityIn.setMotion(motion);
+		Vector3d motion = entityIn.getDeltaMovement().multiply(new Vector3d(0.1F, 0.1F, 0.1F));
+		entityIn.setDeltaMovement(motion);
 		
 	}
 	
@@ -51,18 +51,18 @@ public class BlockLiquidConcrete extends BlockModFlowingFluid {
 		
 		if (random.nextInt(20) == 0) {
 			
-			FluidState concreteDown = worldIn.getFluidState(pos.down());
-			FluidState concreteUp = worldIn.getFluidState(pos.up());
+			FluidState concreteDown = worldIn.getFluidState(pos.below());
+			FluidState concreteUp = worldIn.getFluidState(pos.above());
 			
-			if (!state.get(HARDENED) && (concreteDown.isEmpty() || (concreteDown.getFluid().isEquivalentTo(ModFluids.LIQUID_CONCRETE) ? concreteDown.get(HARDENED) : false))) {
-				worldIn.setBlockState(pos, state.with(HARDENED, true));
+			if (!state.getValue(HARDENED) && (concreteDown.isEmpty() || (concreteDown.getType().isSame(ModFluids.LIQUID_CONCRETE) ? concreteDown.getValue(HARDENED) : false))) {
+				worldIn.setBlockAndUpdate(pos, state.setValue(HARDENED, true));
 			}
 			
-			if (state.get(HARDENED) && concreteDown.isEmpty() && (concreteUp.isEmpty() || (concreteUp.getFluid().isEquivalentTo(ModFluids.LIQUID_CONCRETE) ? concreteUp.get(HARDENED) : false))) {
+			if (state.getValue(HARDENED) && concreteDown.isEmpty() && (concreteUp.isEmpty() || (concreteUp.getType().isSame(ModFluids.LIQUID_CONCRETE) ? concreteUp.getValue(HARDENED) : false))) {
 				
-				int height = state.getFluidState().getLevel();
-				BlockState concreteBlock = height >= 7 ? ModItems.concrete.getDefaultState() : (height >= 3 ? ModItems.concrete_slab.getDefaultState() : ModItems.concrete_sheet.getDefaultState());
-				worldIn.setBlockState(pos, concreteBlock);
+				int height = state.getFluidState().getAmount();
+				BlockState concreteBlock = height >= 7 ? ModItems.concrete.defaultBlockState() : (height >= 3 ? ModItems.concrete_slab.defaultBlockState() : ModItems.concrete_sheet.defaultBlockState());
+				worldIn.setBlockAndUpdate(pos, concreteBlock);
 				
 			}
 			
@@ -71,9 +71,9 @@ public class BlockLiquidConcrete extends BlockModFlowingFluid {
 	}
 	
 	@Override
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-		if ((newState.getBlock() == ModItems.liquid_concrete ? newState.get(HARDENED) == false && state.get(HARDENED) == true : false) && !(newState.getFluidState().isSource() && !state.getFluidState().isSource())) {
-			worldIn.setBlockState(pos, state);
+	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		if ((newState.getBlock() == ModItems.liquid_concrete ? newState.getValue(HARDENED) == false && state.getValue(HARDENED) == true : false) && !(newState.getFluidState().isSource() && !state.getFluidState().isSource())) {
+			worldIn.setBlockAndUpdate(pos, state);
 		}
 	}
 	

@@ -39,12 +39,12 @@ public class CGenerateJigsaw {
 		NetworkEvent.Context ctx = context.get();
 		ctx.enqueueWork(() -> {
 			
-			World world = ctx.getSender().world;
-			TileEntity contactTileEntity = world.getTileEntity(packet.pos);
+			World world = ctx.getSender().level;
+			TileEntity contactTileEntity = world.getBlockEntity(packet.pos);
 			
 			if (contactTileEntity instanceof TileEntityJigsaw) {
 				
-				((TileEntityJigsaw) contactTileEntity).generateStructure(packet.keepJigsaws, packet.levels, contactTileEntity.getWorld().rand);
+				((TileEntityJigsaw) contactTileEntity).generateStructure(packet.keepJigsaws, packet.levels, contactTileEntity.getLevel().random);
 				
 			}
 			

@@ -8,22 +8,22 @@ import net.minecraft.item.ItemTier;
 public class ItemHammer extends ItemToolBase {
 
 	public ItemHammer() {
-		super("hammer", 1.5F, 0.5F, ModToolType.HAMMER, ItemTier.IRON, new Properties().group(Industria.TOOLS).maxStackSize(1).defaultMaxDamage(320));
+		super("hammer", 1.5F, 0.5F, ModToolType.HAMMER, ItemTier.IRON, new Properties().tab(Industria.TOOLS).stacksTo(1).defaultDurability(320));
 	}
 	
 	@Override
-	public boolean hasContainerItem() {
+	public boolean hasCraftingRemainingItem() {
 		return true;
 	}
 	
 	@Override
 	public ItemStack getContainerItem(ItemStack itemStack) {
-		int dammage = itemStack.getDamage() + 1;
+		int dammage = itemStack.getDamageValue() + 1;
 		if (dammage > this.getMaxDamage(itemStack)) {
 			return ItemStack.EMPTY.copy();
 		} else {
 			ItemStack itemStack2 = itemStack.copy();
-			itemStack2.setDamage(dammage);
+			itemStack2.setDamageValue(dammage);
 			return itemStack2;
 		}
 	}

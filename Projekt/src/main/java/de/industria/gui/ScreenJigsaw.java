@@ -58,36 +58,36 @@ public class ScreenJigsaw extends ContainerScreen<ContainerJigsaw>{
 	private boolean isInputValid() {
 		boolean stateVliad = false;
 		try {
-			BlockStateParser parser = new BlockStateParser(new StringReader(this.replaceState.getText()), true);
+			BlockStateParser parser = new BlockStateParser(new StringReader(this.replaceState.getValue()), true);
 			parser.parse(false);
 			stateVliad = true;
 		} catch (CommandSyntaxException e) {}
-		return	ResourceLocation.isResouceNameValid(this.poolName.getText()) &&
-				ResourceLocation.isResouceNameValid(this.name.getText()) &&
-				ResourceLocation.isResouceNameValid(this.targetName.getText()) &&
+		return	ResourceLocation.isValidResourceLocation(this.poolName.getValue()) &&
+				ResourceLocation.isValidResourceLocation(this.name.getValue()) &&
+				ResourceLocation.isValidResourceLocation(this.targetName.getValue()) &&
 				stateVliad;
 		
 	}
 	
 	private void updateTileEntity() {
 		
-		ResourceLocation poolName = ResourceLocation.tryCreate(this.poolName.getText());
-		ResourceLocation name = ResourceLocation.tryCreate(this.name.getText());
-		ResourceLocation targetName = ResourceLocation.tryCreate(this.targetName.getText());
+		ResourceLocation poolName = ResourceLocation.tryParse(this.poolName.getValue());
+		ResourceLocation name = ResourceLocation.tryParse(this.name.getValue());
+		ResourceLocation targetName = ResourceLocation.tryParse(this.targetName.getValue());
 		boolean lock = this.lock;
 		
 		BlockState replaceState;
 		try {
-			BlockStateParser parser = new BlockStateParser(new StringReader(this.replaceState.getText()), true);
+			BlockStateParser parser = new BlockStateParser(new StringReader(this.replaceState.getValue()), true);
 			parser.parse(false);
 			replaceState = parser.getState();
 		} catch (CommandSyntaxException e) {
-			replaceState = Blocks.AIR.getDefaultState();
+			replaceState = Blocks.AIR.defaultBlockState();
 			Industria.LOGGER.error("Cant parse BlockState!");
 			e.printStackTrace();
 		}
 		
-		Industria.NETWORK.sendToServer(new CEditJigsawTileEntityPacket(this.container.getTileEntity().getPos(), poolName, name, targetName, replaceState, lock));
+		Industria.NETWORK.sendToServer(new CEditJigsawTileEntityPacket(this.menu.getTileEntity().getBlockPos(), poolName, name, targetName, replaceState, lock));
 		
 	}
 	
@@ -98,7 +98,7 @@ public class ScreenJigsaw extends ContainerScreen<ContainerJigsaw>{
 		int levels = this.levels;
 		boolean keepJigsaws = this.keepJigsaws;
 		
-		Industria.NETWORK.sendToServer(new CGenerateJigsaw(this.container.getTileEntity().getPos(), levels, keepJigsaws));
+		Industria.NETWORK.sendToServer(new CGenerateJigsaw(this.menu.getTileEntity().getBlockPos(), levels, keepJigsaws));
 		
 	}
 	
@@ -118,13 +118,13 @@ public class ScreenJigsaw extends ContainerScreen<ContainerJigsaw>{
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 
-		if (poolName.canWrite()) {
+		if (poolName.canConsumeInput()) {
 			return poolName.keyPressed(keyCode, scanCode, modifiers);
-		} else if (name.canWrite()) {
+		} else if (name.canConsumeInput()) {
 			return name.keyPressed(keyCode, scanCode, modifiers);
-		} else if (targetName.canWrite()) {
+		} else if (targetName.canConsumeInput()) {
 			return targetName.keyPressed(keyCode, scanCode, modifiers);
-		} else if (replaceState.canWrite()) {
+		} else if (replaceState.canConsumeInput()) {
 			return replaceState.keyPressed(keyCode, scanCode, modifiers);
 		}
 		
@@ -134,48 +134,48 @@ public class ScreenJigsaw extends ContainerScreen<ContainerJigsaw>{
 	@Override
 	protected void init() {
 
-		BlockState jigsawState = this.container.getTileEntity().getBlockState();
-		this.showLockOrientation = jigsawState.getBlock() == ModItems.jigsaw ? jigsawState.get(BlockJigsaw.TYPE) != JigsawType.HORIZONTAL : false;
+		BlockState jigsawState = this.menu.getTileEntity().getBlockState();
+		this.showLockOrientation = jigsawState.getBlock() == ModItems.jigsaw ? jigsawState.getValue(BlockJigsaw.TYPE) != JigsawType.HORIZONTAL : false;
 		
-		this.minecraft.keyboardListener.enableRepeatEvents(true);
+		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
 		
 		this.poolName = new TextFieldWidget(this.font, this.width / 2 - 152, 20, 300, 20, new TranslationTextComponent("jigsaw.pool"));
-		this.poolName.setMaxStringLength(128);
-		this.poolName.setText(this.container.getTileEntity().poolFile.toString());
+		this.poolName.setMaxLength(128);
+		this.poolName.setValue(this.menu.getTileEntity().poolFile.toString());
 		this.poolName.setResponder((string) -> {
 			this.onChangeField();
 		});
 		this.children.add(poolName);
-		this.minecraft.keyboardListener.enableRepeatEvents(true);
+		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
 		this.name = new TextFieldWidget(this.font, this.width / 2 - 152, 55, 300, 20, new TranslationTextComponent("jigsaw.name"));
-		this.name.setMaxStringLength(128);
-		this.name.setText(this.container.getTileEntity().name.toString());
+		this.name.setMaxLength(128);
+		this.name.setValue(this.menu.getTileEntity().name.toString());
 		this.name.setResponder((string) -> {
 			this.onChangeField();
 		});
 		this.children.add(name);
-		this.minecraft.keyboardListener.enableRepeatEvents(true);
+		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
 		this.targetName = new TextFieldWidget(this.font, this.width / 2 - 152, 90, 300, 20, new TranslationTextComponent("jigsaw.name"));
-		this.targetName.setMaxStringLength(128);
-		this.targetName.setText(this.container.getTileEntity().targetName.toString());
+		this.targetName.setMaxLength(128);
+		this.targetName.setValue(this.menu.getTileEntity().targetName.toString());
 		this.targetName.setResponder((string) -> {
 			this.onChangeField();
 		});
 		this.children.add(targetName);
-		this.minecraft.keyboardListener.enableRepeatEvents(true);
+		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
 		this.replaceState = new TextFieldWidget(this.font, this.width / 2 - 152, 125, 300, 20, new TranslationTextComponent("jigsaw.replaceState"));
-		this.replaceState.setMaxStringLength(128);
-		this.replaceState.setText(ItemStackHelper.getBlockStateString(this.container.getTileEntity().replaceState));
+		this.replaceState.setMaxLength(128);
+		this.replaceState.setValue(ItemStackHelper.getBlockStateString(this.menu.getTileEntity().replaceState));
 		this.replaceState.setResponder((string) -> {
 			this.onChangeField();
 		});
 		this.children.add(replaceState);
 		
-		this.lock = this.container.getTileEntity().lockOrientation;
+		this.lock = this.menu.getTileEntity().lockOrientation;
 		if (this.showLockOrientation) {
 			ITextComponent infoName = new TranslationTextComponent("industria.jigsaw_block.connection");
-			int i = this.font.getStringPropertyWidth(infoName) + 10;
-			this.buttonLockRotation = this.addButton(new Button(this.width / 2 - 152 + i, 150, 300 - i, 20, new TranslationTextComponent("industria.jigsaw_block.orientation." + (this.container.getTileEntity().lockOrientation ? "locked" : "rotateable")), (button) -> {
+			int i = this.font.width(infoName) + 10;
+			this.buttonLockRotation = this.addButton(new Button(this.width / 2 - 152 + i, 150, 300 - i, 20, new TranslationTextComponent("industria.jigsaw_block.orientation." + (this.menu.getTileEntity().lockOrientation ? "locked" : "rotateable")), (button) -> {
 				this.lock = !this.lock;
 				button.setMessage(new TranslationTextComponent("industria.jigsaw_block.orientation." + (this.lock ? "locked" : "rotateable")));
 			}));
@@ -188,46 +188,46 @@ public class ScreenJigsaw extends ContainerScreen<ContainerJigsaw>{
 		}));
 		this.buttonGenerate = this.addButton(new Button(this.width / 2 + 54, 180, 100, 20, new TranslationTextComponent("industria.jigsaw_block.generate"), (button) -> {
 			this.sendGenerate();
-			this.minecraft.displayGuiScreen((Screen)null);
+			this.minecraft.setScreen((Screen)null);
 		}));
 		
 		this.generationLevels = this.addButton(new AbstractSlider(this.width / 2 - 154, 180, 100, 20, StringTextComponent.EMPTY, 1.0D) {
 			
 			{
-				this.func_230979_b_();
+				this.updateMessage();
 			}
 			
 			@Override
-			protected void func_230979_b_() {
+			protected void updateMessage() {
 				this.setMessage(new TranslationTextComponent("industria.jigsaw_block.levels", ScreenJigsaw.this.levels));
 			}
 			
 			@Override
-			protected void func_230972_a_() {
-				ScreenJigsaw.this.levels = (int) (this.sliderValue * 20);
+			protected void applyValue() {
+				ScreenJigsaw.this.levels = (int) (this.value * 20);
 			}
 			
 		});
 		
 		this.buttonDone = this.addButton(new Button(this.width / 2 - 4 - 150, 210, 150, 20, DialogTexts.GUI_DONE, (button) -> {
 			this.updateTileEntity();
-			this.minecraft.displayGuiScreen((Screen)null);
+			this.minecraft.setScreen((Screen)null);
 		}));
 		this.buttonAbbort = this.addButton(new Button(this.width / 2 + 4, 210, 150, 20, DialogTexts.GUI_CANCEL, (button) -> {
-			this.minecraft.displayGuiScreen((Screen)null);
+			this.minecraft.setScreen((Screen)null);
 		}));
 		
 		super.init();
 	}
 	
 	@Override
-	public void closeScreen() {
-		this.minecraft.keyboardListener.enableRepeatEvents(false);
-		super.closeScreen();
+	public void onClose() {
+		this.minecraft.keyboardHandler.setSendRepeatsToGui(false);
+		super.onClose();
 	}
 	
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
 		
 		drawString(matrixStack, this.font, new TranslationTextComponent("industria.jigsaw_block.pool"), this.width  / 2 - 153, 10, 10526880);
 		this.poolName.render(matrixStack, x, y, partialTicks);
@@ -242,8 +242,8 @@ public class ScreenJigsaw extends ContainerScreen<ContainerJigsaw>{
 	}
 	
 	@Override
-	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
-		this.font.func_243248_b(matrixStack, this.title, (float)this.titleX, (float)this.titleY, 4210752);
+	protected void renderLabels(MatrixStack matrixStack, int x, int y) {
+		this.font.draw(matrixStack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
 	}
 	
 }

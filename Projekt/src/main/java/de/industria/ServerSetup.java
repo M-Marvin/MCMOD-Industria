@@ -41,10 +41,10 @@ public class ServerSetup {
 		IDispenseItemBehavior placeBlockBehavior = new IDispenseItemBehavior() {
 			@Override
 			public ItemStack dispense(IBlockSource source, ItemStack stack) {
-				BlockPos pos = source.getBlockPos().offset(source.getBlockState().get(BlockStateProperties.FACING));
-				Block block = Block.getBlockFromItem(stack.getItem());
-				if (block != null && (source.getWorld().getBlockState(pos).isAir() || source.getWorld().getBlockState(pos).getBlock() instanceof FlowingFluidBlock) && block.isValidPosition(block.getDefaultState(), source.getWorld(), pos)) {
-					source.getWorld().setBlockState(pos, block.getDefaultState());
+				BlockPos pos = source.getPos().relative(source.getBlockState().getValue(BlockStateProperties.FACING));
+				Block block = Block.byItem(stack.getItem());
+				if (block != null && (source.getLevel().getBlockState(pos).isAir() || source.getLevel().getBlockState(pos).getBlock() instanceof FlowingFluidBlock) && block.canSurvive(block.defaultBlockState(), source.getLevel(), pos)) {
+					source.getLevel().setBlockAndUpdate(pos, block.defaultBlockState());
 					stack.shrink(1);
 					return stack;
 				}
@@ -52,9 +52,9 @@ public class ServerSetup {
 			}
 		};
 		Registry.BLOCK.stream().forEach((block) -> {
-			Item item = Item.getItemFromBlock(block);
+			Item item = Item.byBlock(block);
 			if (item != null) {
-				if (item != Items.TNT) DispenserBlock.registerDispenseBehavior(item, placeBlockBehavior);
+				if (item != Items.TNT) DispenserBlock.registerBehavior(item, placeBlockBehavior);
 			}
 		});
 		

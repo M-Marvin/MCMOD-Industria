@@ -26,21 +26,21 @@ public class MetalFormRecipe implements IRecipe<TileEntityMMetalFormer> {
 	
 	@Override
 	public boolean matches(TileEntityMMetalFormer inv, World worldIn) {
-		return inv.getStackInSlot(0).getItem() == this.itemIn.getItem() && inv.getStackInSlot(0).getCount() >= this.itemIn.getCount();
+		return inv.getItem(0).getItem() == this.itemIn.getItem() && inv.getItem(0).getCount() >= this.itemIn.getCount();
 	}
 	
 	@Override
-	public ItemStack getCraftingResult(TileEntityMMetalFormer inv) {
+	public ItemStack assemble(TileEntityMMetalFormer inv) {
 		return itemOut.copy();
 	}
 	
 	@Override
-	public boolean canFit(int width, int height) {
+	public boolean canCraftInDimensions(int width, int height) {
 		return width == 1 && height == 1;
 	}
 	
 	@Override
-	public ItemStack getRecipeOutput() {
+	public ItemStack getResultItem() {
 		 return this.itemOut.copy();
 	}
 		

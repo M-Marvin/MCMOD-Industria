@@ -20,11 +20,11 @@ import net.minecraft.world.IBlockReader;
 public class BlockMGasHeater extends BlockMultiPart<TileEntityMGasHeater> implements IAdvancedBlockInfo {
 	
 	public BlockMGasHeater() {
-		super("gas_heater", Material.IRON, 4F, SoundType.METAL, 2, 1, 2);
+		super("gas_heater", Material.METAL, 4F, SoundType.METAL, 2, 1, 2);
 	}
 		
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityMGasHeater();
 	}
 	
@@ -42,7 +42,7 @@ public class BlockMGasHeater extends BlockMultiPart<TileEntityMGasHeater> implem
 	}
 		
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 	

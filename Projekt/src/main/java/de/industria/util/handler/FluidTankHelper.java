@@ -79,7 +79,7 @@ public class FluidTankHelper {
 				
 				FluidState fluidState = this.world.getFluidState(sourcePos);
 				
-				if (fluidState.isEmpty() ? false : fluidState.isSource() && fluidInTank.isEquivalentTo(fluidState.getFluid())) return sourcePos;
+				if (fluidState.isEmpty() ? false : fluidState.isSource() && fluidInTank.isSame(fluidState.getType())) return sourcePos;
 				
 			}
 			
@@ -96,7 +96,7 @@ public class FluidTankHelper {
 		if (checkAir) {
 			
 			BlockState blockState = this.world.getBlockState(scannPos);
-			BlockState groundState = this.world.getBlockState(scannPos.down());
+			BlockState groundState = this.world.getBlockState(scannPos.below());
 			FluidState groundFluid = groundState.getFluidState();
 			
 			if ((blockState.isAir() || ModFluids.isFluidBlock(blockState.getBlock())) && ((!groundState.isAir() && !ModFluids.isFluidBlock(groundState.getBlock())) || (groundFluid.isEmpty() ? false : groundFluid.isSource()) || fluid.getAttributes().isGaseous())) {
@@ -115,9 +115,9 @@ public class FluidTankHelper {
 					
 					for (int i : il) {
 						
-						Direction d = Direction.byHorizontalIndex(i);
+						Direction d = Direction.from2DDataValue(i);
 						
-						if (!scannList.contains(scannPos.offset(d))) scannForTankBlocks(scannList, scannPos.offset(d), checkAir, fluid);
+						if (!scannList.contains(scannPos.relative(d))) scannForTankBlocks(scannList, scannPos.relative(d), checkAir, fluid);
 						
 					}
 													
@@ -144,7 +144,7 @@ public class FluidTankHelper {
 						
 						if (d != Direction.DOWN) {
 							
-							if (!scannList.contains(scannPos.offset(d))) scannForTankBlocks(scannList, scannPos.offset(d), checkAir, fluid);
+							if (!scannList.contains(scannPos.relative(d))) scannForTankBlocks(scannList, scannPos.relative(d), checkAir, fluid);
 							
 						}
 						

@@ -39,11 +39,11 @@ import net.minecraftforge.fml.network.NetworkHooks;
 public class BlockNComputer extends BlockMultiPart<TileEntityNComputer> implements IElectricConnectiveBlock, IAdvancedBlockInfo, INetworkDevice {
 	
 	public BlockNComputer() {
-		super("computer", Material.IRON, 2F, SoundType.METAL, 1, 2, 2);
+		super("computer", Material.METAL, 2F, SoundType.METAL, 1, 2, 2);
 	}
 		
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 	
@@ -53,14 +53,14 @@ public class BlockNComputer extends BlockMultiPart<TileEntityNComputer> implemen
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityNComputer();
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		TileEntity tileEntity = getCenterTE(pos, state, worldIn);
-		if (tileEntity instanceof TileEntityNComputer && !worldIn.isRemote()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
+		if (tileEntity instanceof TileEntityNComputer && !worldIn.isClientSide()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getBlockPos());
 		return ActionResultType.SUCCESS;
 	}
 
@@ -88,13 +88,13 @@ public class BlockNComputer extends BlockMultiPart<TileEntityNComputer> implemen
 	@Override
 	public List<BlockPos> getMultiBlockParts(World world, BlockPos pos, BlockState state) {
 		List<BlockPos> multiParts = new ArrayList<BlockPos>();
-		Direction facing = state.get(FACING);
+		Direction facing = state.getValue(FACING);
 		for (int x = 0; x < this.sizeX; x++) {
 			for (int y = 0; y < this.sizeY; y++) {
 				for (int z = 0; z < this.sizeZ; z++) {
 					BlockPos internPos = new BlockPos(x, y, z);
 					BlockPos offset = rotateOffset(internPos, facing);
-					BlockPos partPos = getCenterTE(pos, state, world).getPos().add(offset);
+					BlockPos partPos = getCenterTE(pos, state, world).getBlockPos().offset(offset);
 					multiParts.add(partPos);
 				}
 			}
@@ -113,10 +113,10 @@ public class BlockNComputer extends BlockMultiPart<TileEntityNComputer> implemen
 	}
 	
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+	public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
 		TileEntityNComputer tileEntity = getCenterTE(pos, state, worldIn);
-		if (tileEntity != null) InventoryHelper.dropInventoryItems(worldIn, tileEntity.getPos(), (IInventory) tileEntity);
-		super.onBlockHarvested(worldIn, pos, state, player);
+		if (tileEntity != null) InventoryHelper.dropContents(worldIn, tileEntity.getBlockPos(), (IInventory) tileEntity);
+		super.playerWillDestroy(worldIn, pos, state, player);
 	}
 	
 	@Override
@@ -157,8 +157,8 @@ public class BlockNComputer extends BlockMultiPart<TileEntityNComputer> implemen
 
 		if (network.getVoltage().getVoltage() > Voltage.NormalVoltage.getVoltage() && network.getCurrent() > 0) {
 
-			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 2F, Mode.DESTROY);
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+			worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 2F, Mode.DESTROY);
+			worldIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 			
 		}
 		

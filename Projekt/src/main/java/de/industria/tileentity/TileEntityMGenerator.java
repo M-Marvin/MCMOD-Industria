@@ -35,19 +35,19 @@ public class TileEntityMGenerator extends TileEntityInventoryBase implements INa
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		compound.putFloat("burnTime", this.burnTime);
 		compound.putFloat("producingPower", this.producingPower);
 		compound.putInt("fuelTime", this.fuelTime);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		this.burnTime = compound.getFloat("burnTime");
 		this.producingPower = compound.getFloat("producingPower");
 		this.fuelTime = compound.getInt("fuelTime");
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class TileEntityMGenerator extends TileEntityInventoryBase implements INa
 	
 	@Override
 	public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
-		if (!this.removed && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+		if (!this.remove && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return handlers[0].cast();
 		}
 		return super.getCapability(capability, facing);
@@ -77,25 +77,26 @@ public class TileEntityMGenerator extends TileEntityInventoryBase implements INa
 	}
 	
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
 		return true;
 	}
 	
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote()) {
+		if (!this.level.isClientSide()) {
 			
-			this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
+			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			
-			ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(this.world);
-			handler.updateNetwork(world, pos);
-			ElectricityNetwork network = handler.getNetwork(pos);
+			ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(this.level);
+			handler.updateNetwork(level, worldPosition);
+			ElectricityNetwork network = handler.getNetwork(worldPosition);
 			float f = network.getCurrent() > 0 ? network.getCurrent() / (float) network.getCapacity() : 0;
 			
 			if (f > 0) {
@@ -116,8 +117,8 @@ public class TileEntityMGenerator extends TileEntityInventoryBase implements INa
 			}
 			
 			boolean active = this.producingPower > 0;
-			boolean activeState = this.getBlockState().get(BlockMGenerator.ACTIVE);
-			if (active != activeState) this.world.setBlockState(pos, this.getBlockState().with(BlockMGenerator.ACTIVE, active));
+			boolean activeState = this.getBlockState().getValue(BlockMGenerator.ACTIVE);
+			if (active != activeState) this.level.setBlockAndUpdate(worldPosition, this.getBlockState().setValue(BlockMGenerator.ACTIVE, active));
 			
 		} else {
 			
@@ -134,13 +135,14 @@ public class TileEntityMGenerator extends TileEntityInventoryBase implements INa
 	
 	@Override
 	public boolean isSoundRunning() {
-		return this.getBlockState().get(BlockMGenerator.ACTIVE);
+		return this.getBlockState().getValue(BlockMGenerator.ACTIVE);
 	}
 	
 	public boolean canWork() {
 		return this.burnTime > 0 || this.hasFuelItems();
 	}
 	
+	@SuppressWarnings("deprecation")
 	public boolean hasFuelItems() {
 		return this.itemstacks.get(0).isEmpty() ? false : ForgeHooks.getBurnTime(this.itemstacks.get(0)) > 0;
 	}

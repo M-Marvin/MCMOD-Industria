@@ -33,26 +33,26 @@ public class TileEntityMCoalHeaterRenderer extends TileEntityRenderer<TileEntity
 	public void render(TileEntityMCoalHeater tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 
 		BlockState blockState = tileEntityIn.getBlockState();
-		Direction facing = blockState.get(BlockStateProperties.HORIZONTAL_FACING);
+		Direction facing = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING);
 		BlockPos partPos = BlockMultiPart.getInternPartPos(blockState);
 		
 		if (partPos.equals(BlockPos.ZERO)) {
 			
 			boolean lit = tileEntityIn.isWorking;
-			IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.getEntityTranslucent(lit ? COAL_HEATER_TEXTURES_LIT : COAL_HEATER_TEXTURES));
+			IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.entityTranslucent(lit ? COAL_HEATER_TEXTURES_LIT : COAL_HEATER_TEXTURES));
 			
-			matrixStackIn.push();
+			matrixStackIn.pushPose();
 			
 			matrixStackIn.translate(0F, -1F, 0F);
 			
 			matrixStackIn.translate(0.5F, 1.5F, 0.5F);
-			matrixStackIn.rotate(facing.getRotation());
-			matrixStackIn.rotate(Vector3f.XP.rotationDegrees(90));
+			matrixStackIn.mulPose(facing.getRotation());
+			matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(90));
 			matrixStackIn.translate(0F, -1F, 0F);
 			
-			coalHeaterModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
+			coalHeaterModel.renderToBuffer(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 			
-			matrixStackIn.pop();
+			matrixStackIn.popPose();
 			
 		}
 		

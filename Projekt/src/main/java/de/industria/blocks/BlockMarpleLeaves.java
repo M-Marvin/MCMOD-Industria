@@ -13,11 +13,11 @@ import net.minecraft.world.server.ServerWorld;
 public class BlockMarpleLeaves extends BlockLeavesBase {
 
 	public BlockMarpleLeaves() {
-		super("marple_leaves", Material.LEAVES, 0.2F, 0.2F, SoundType.PLANT);
+		super("marple_leaves", Material.LEAVES, 0.2F, 0.2F, SoundType.GRASS);
 	}
 	
 	@Override
-	public boolean ticksRandomly(BlockState state) {
+	public boolean isRandomlyTicking(BlockState state) {
 		return true;
 	}
 		
@@ -26,12 +26,12 @@ public class BlockMarpleLeaves extends BlockLeavesBase {
 		
 		boolean hasRedNeighbor = false;
 		for (Direction d : Direction.values()) {
-			if (worldIn.getBlockState(pos.offset(d)).getBlock() == ModItems.marple_leaves_red) hasRedNeighbor = true;
+			if (worldIn.getBlockState(pos.relative(d)).getBlock() == ModItems.marple_leaves_red) hasRedNeighbor = true;
 		}
 		
-		if (random.nextInt(hasRedNeighbor ? 1000 : 2000) == 0 && !state.get(PERSISTENT)) {
+		if (random.nextInt(hasRedNeighbor ? 1000 : 2000) == 0 && !state.getValue(PERSISTENT)) {
 			
-			worldIn.setBlockState(pos, ModItems.marple_leaves_red.getDefaultState().with(DISTANCE, state.get(DISTANCE)).with(PERSISTENT, false));
+			worldIn.setBlockAndUpdate(pos, ModItems.marple_leaves_red.defaultBlockState().setValue(DISTANCE, state.getValue(DISTANCE)).setValue(PERSISTENT, false));
 			
 		} else {
 

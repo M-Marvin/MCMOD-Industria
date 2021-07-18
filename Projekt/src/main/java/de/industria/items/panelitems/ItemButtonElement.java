@@ -35,12 +35,12 @@ public class ItemButtonElement extends ItemPanelElement {
 				elementStack.setTag(tag);
 				
 				ItemStack chanelStack = new ItemStack(Items.REDSTONE_TORCH, 1);
-				chanelStack.setDisplayName(elementStack.getDisplayName());
+				chanelStack.setHoverName(elementStack.getHoverName());
 				RedstoneControlSignal signal = new RedstoneControlSignal(chanelStack, true);
 				panel.sendSignal(signal);
 				panel.addSheduleTick(elementStack, 20);
 				
-				panel.getWorld().playSound(null, panel.getPos(), SoundEvents.BLOCK_WOODEN_BUTTON_CLICK_ON, SoundCategory.BLOCKS, 1, 0.6F);
+				panel.getLevel().playSound(null, panel.getBlockPos(), SoundEvents.WOODEN_BUTTON_CLICK_ON, SoundCategory.BLOCKS, 1, 0.6F);
 				
 			}
 			
@@ -59,11 +59,11 @@ public class ItemButtonElement extends ItemPanelElement {
 			elementStack.setTag(tag);
 
 			ItemStack chanelStack = new ItemStack(Items.REDSTONE_TORCH, 1);
-			chanelStack.setDisplayName(elementStack.getDisplayName());
+			chanelStack.setHoverName(elementStack.getHoverName());
 			RedstoneControlSignal signal = new RedstoneControlSignal(chanelStack, false);
 			panel.sendSignal(signal);
 			
-			panel.getWorld().playSound(null, panel.getPos(), SoundEvents.BLOCK_WOODEN_BUTTON_CLICK_ON, SoundCategory.BLOCKS, 1, 0.5F);
+			panel.getLevel().playSound(null, panel.getBlockPos(), SoundEvents.WOODEN_BUTTON_CLICK_ON, SoundCategory.BLOCKS, 1, 0.5F);
 			
 		}
 		

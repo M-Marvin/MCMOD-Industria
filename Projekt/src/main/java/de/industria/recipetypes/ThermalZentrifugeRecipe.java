@@ -26,21 +26,21 @@ public class ThermalZentrifugeRecipe implements IRecipe<IInventory> {
 	
 	@Override
 	public boolean matches(IInventory inv, World worldIn) {
-		return itemIn.getItem() == inv.getStackInSlot(0).getItem() && itemIn.getCount() <= inv.getStackInSlot(0).getCount();
+		return itemIn.getItem() == inv.getItem(0).getItem() && itemIn.getCount() <= inv.getItem(0).getCount();
 	}
 	
 	@Override
-	public ItemStack getCraftingResult(IInventory inv) {
+	public ItemStack assemble(IInventory inv) {
 		return itemsOut[0].copy();
 	}
 
 	@Override
-	public boolean canFit(int width, int height) {
+	public boolean canCraftInDimensions(int width, int height) {
 		return width == 1 && height == 3;
 	}
 
 	@Override
-	public ItemStack getRecipeOutput() {
+	public ItemStack getResultItem() {
 		 return this.itemsOut[0].copy();
 	}
 	

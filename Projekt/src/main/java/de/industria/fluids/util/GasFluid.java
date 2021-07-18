@@ -22,14 +22,14 @@ public abstract class GasFluid extends Fluid implements IBucketPickupHandler {
 	public static final BooleanProperty FALLING_NOT_IN_USE = BlockStateProperties.FALLING;
 	
 	@Override
-	protected boolean canDisplace(FluidState p_215665_1_, IBlockReader p_215665_2_, BlockPos p_215665_3_, Fluid p_215665_4_, Direction p_215665_5_) {
+	protected boolean canBeReplacedWith(FluidState p_215665_1_, IBlockReader p_215665_2_, BlockPos p_215665_3_, Fluid p_215665_4_, Direction p_215665_5_) {
 		return false;
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Fluid, FluidState> builder) {
+	protected void createFluidStateDefinition(Builder<Fluid, FluidState> builder) {
 		builder.add(FALLING_NOT_IN_USE);
-		super.fillStateContainer(builder);
+		super.createFluidStateDefinition(builder);
 	}
 	
 	@Override
@@ -38,7 +38,7 @@ public abstract class GasFluid extends Fluid implements IBucketPickupHandler {
 	}
 
 	@Override
-	public int getTickRate(IWorldReader p_205569_1_) {
+	public int getTickDelay(IWorldReader p_205569_1_) {
 		return 1;
 	}
 
@@ -48,12 +48,12 @@ public abstract class GasFluid extends Fluid implements IBucketPickupHandler {
 	}
 
 	@Override
-	public float getActualHeight(FluidState p_215662_1_, IBlockReader p_215662_2_, BlockPos p_215662_3_) {
-		return getHeight(p_215662_1_);
+	public float getHeight(FluidState p_215662_1_, IBlockReader p_215662_2_, BlockPos p_215662_3_) {
+		return getOwnHeight(p_215662_1_);
 	}
 
 	@Override
-	public float getHeight(FluidState p_223407_1_) {
+	public float getOwnHeight(FluidState p_223407_1_) {
 		return 1F;
 	}
 	
@@ -63,17 +63,17 @@ public abstract class GasFluid extends Fluid implements IBucketPickupHandler {
 	}
 	
 	@Override
-	public VoxelShape func_215664_b(FluidState p_215664_1_, IBlockReader p_215664_2_, BlockPos p_215664_3_) {
-		return Block.makeCuboidShape(0, 0, 0, 16, 16, 16);
+	public VoxelShape getShape(FluidState p_215664_1_, IBlockReader p_215664_2_, BlockPos p_215664_3_) {
+		return Block.box(0, 0, 0, 16, 16, 16);
 	}
 	
 	@Override
-	public int getLevel(FluidState p_207192_1_) {
+	public int getAmount(FluidState p_207192_1_) {
 		return 8;
 	}
 	
 	@Override
-	protected boolean ticksRandomly() {
+	protected boolean isRandomlyTicking() {
 		return true;
 	}
 	

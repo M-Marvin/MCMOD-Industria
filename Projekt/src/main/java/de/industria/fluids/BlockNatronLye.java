@@ -19,16 +19,16 @@ import net.minecraft.world.World;
 public class BlockNatronLye extends BlockModFlowingFluid {
 	
 	public BlockNatronLye() {
-		super("natron_lye", ModFluids.NATRON_LYE, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
+		super("natron_lye", ModFluids.NATRON_LYE, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops());
 	}
 	
 	@Override
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 		
-		entityIn.attackEntityFrom(ModDamageSource.ACID, 0.5F);
+		entityIn.hurt(ModDamageSource.ACID, 0.5F);
 		if (entityIn instanceof ItemEntity) {
 			entityIn.remove();
-			worldIn.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1, 1);
+			worldIn.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1, 1);
 		}
 		
 	}
@@ -37,7 +37,7 @@ public class BlockNatronLye extends BlockModFlowingFluid {
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 
-		if (worldIn.getBlockState(pos.up()).isAir()) {
+		if (worldIn.getBlockState(pos.above()).isAir()) {
 			float fx = rand.nextFloat() + pos.getX();
 			float fy = rand.nextFloat() + pos.getY();
 			float fz = rand.nextFloat() + pos.getZ();

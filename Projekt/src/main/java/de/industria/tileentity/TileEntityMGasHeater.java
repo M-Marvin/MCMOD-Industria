@@ -28,12 +28,12 @@ public class TileEntityMGasHeater extends TileEntityMHeaterBase implements IFlui
 	}
 
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
 		return false;
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return false;
 	}
 
@@ -60,7 +60,7 @@ public class TileEntityMGasHeater extends TileEntityMHeaterBase implements IFlui
 	
 	@Override
 	public FluidStack insertFluid(FluidStack fluid) {
-		if (this.gasStorage.getFluid().isEquivalentTo(fluid.getFluid()) || this.gasStorage.isEmpty()) {
+		if (this.gasStorage.getFluid().isSame(fluid.getFluid()) || this.gasStorage.isEmpty()) {
 			int capcaity = this.maxFluidStorage - this.gasStorage.getAmount();
 			int transfer = Math.min(capcaity, fluid.getAmount());
 			if (transfer > 0) {
@@ -89,19 +89,19 @@ public class TileEntityMGasHeater extends TileEntityMHeaterBase implements IFlui
 	
 	@Override
 	public boolean canConnect(Direction side) {
-		return side == getBlockState().get(BlockStateProperties.HORIZONTAL_FACING);
+		return side == getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		compound.put("Fuel", this.gasStorage.writeToNBT(new CompoundNBT()));
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		this.gasStorage = FluidStack.loadFluidStackFromNBT(compound.getCompound("Fuel"));
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 }

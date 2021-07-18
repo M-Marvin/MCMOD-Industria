@@ -44,14 +44,14 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 public class BlockMSchredder extends BlockMultiPart<TileEntityMSchredder> implements IElectricConnectiveBlock, IAdvancedBlockInfo, ISidedInventoryProvider {
 	
-	public static final VoxelShape BASE = Block.makeCuboidShape(0, 0, 0, 16, 14, 16);
-	public static final VoxelShape CORNER_1 = VoxelShapes.or(Block.makeCuboidShape(0, -2, 0, 16, 14, 1), Block.makeCuboidShape(0, -2, 0, 2, 16, 16));
-	public static final VoxelShape CORNER_2 = VoxelShapes.or(Block.makeCuboidShape(0, -2, 0, 16, 14, 1), Block.makeCuboidShape(14, -2, 0, 16, 16, 16));
-	public static final VoxelShape CORNER_3 = VoxelShapes.or(Block.makeCuboidShape(0, -2, 15, 16, 14, 16), Block.makeCuboidShape(0, -2, 0, 2, 16, 16));
-	public static final VoxelShape CORNER_4 = VoxelShapes.or(Block.makeCuboidShape(0, -2, 15, 16, 14, 16), Block.makeCuboidShape(14, -2, 0, 16, 16, 16));
+	public static final VoxelShape BASE = Block.box(0, 0, 0, 16, 14, 16);
+	public static final VoxelShape CORNER_1 = VoxelShapes.or(Block.box(0, -2, 0, 16, 14, 1), Block.box(0, -2, 0, 2, 16, 16));
+	public static final VoxelShape CORNER_2 = VoxelShapes.or(Block.box(0, -2, 0, 16, 14, 1), Block.box(14, -2, 0, 16, 16, 16));
+	public static final VoxelShape CORNER_3 = VoxelShapes.or(Block.box(0, -2, 15, 16, 14, 16), Block.box(0, -2, 0, 2, 16, 16));
+	public static final VoxelShape CORNER_4 = VoxelShapes.or(Block.box(0, -2, 15, 16, 14, 16), Block.box(14, -2, 0, 16, 16, 16));
 	
 	public BlockMSchredder() {
-		super("schredder", Material.IRON, 3.5F, SoundType.METAL, 2, 2, 2);
+		super("schredder", Material.METAL, 3.5F, SoundType.METAL, 2, 2, 2);
 	}
 	
 	@Override
@@ -61,12 +61,12 @@ public class BlockMSchredder extends BlockMultiPart<TileEntityMSchredder> implem
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityMSchredder();
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 	
@@ -88,9 +88,9 @@ public class BlockMSchredder extends BlockMultiPart<TileEntityMSchredder> implem
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		BlockPos partPos = getInternPartPos(state);
-		Direction facing = state.get(FACING);
+		Direction facing = state.getValue(FACING);
 		if (partPos.getY() == 0) {
-			return Block.makeCuboidShape(0, 0, 0, 16, 14, 16);
+			return Block.box(0, 0, 0, 16, 14, 16);
 		} else if (partPos.getX() == 0 && partPos.getZ() == 0) {
 			return VoxelHelper.rotateShape(CORNER_1, facing);
 		} else if (partPos.getX() == 1 && partPos.getZ() == 0) {
@@ -108,10 +108,10 @@ public class BlockMSchredder extends BlockMultiPart<TileEntityMSchredder> implem
 	}
 	
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+	public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
 		TileEntityMSchredder tileEntity = getCenterTE(pos, state, worldIn);
-		if (tileEntity != null) InventoryHelper.dropInventoryItems(worldIn, tileEntity.getPos(), (IInventory) tileEntity);
-		super.onBlockHarvested(worldIn, pos, state, player);
+		if (tileEntity != null) InventoryHelper.dropContents(worldIn, tileEntity.getBlockPos(), (IInventory) tileEntity);
+		super.playerWillDestroy(worldIn, pos, state, player);
 	}
 	
 	@Override
@@ -137,13 +137,13 @@ public class BlockMSchredder extends BlockMultiPart<TileEntityMSchredder> implem
 	@Override
 	public List<BlockPos> getMultiBlockParts(World world, BlockPos pos, BlockState state) {
 		List<BlockPos> multiParts = new ArrayList<BlockPos>();
-		Direction facing = state.get(FACING);
+		Direction facing = state.getValue(FACING);
 		for (int x = 0; x < this.sizeX; x++) {
 			for (int y = 0; y < this.sizeY; y++) {
 				for (int z = 0; z < this.sizeZ; z++) {
 					BlockPos internPos = new BlockPos(x, y, z);
 					BlockPos offset = rotateOffset(internPos, facing);
-					BlockPos partPos = getCenterTE(pos, state, world).getPos().add(offset);
+					BlockPos partPos = getCenterTE(pos, state, world).getBlockPos().offset(offset);
 					multiParts.add(partPos);
 				}
 			}
@@ -152,14 +152,14 @@ public class BlockMSchredder extends BlockMultiPart<TileEntityMSchredder> implem
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		TileEntityMSchredder tileEntity = getCenterTE(pos, state, worldIn);
-		if (!worldIn.isRemote()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
+		if (!worldIn.isClientSide()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getBlockPos());
 		return ActionResultType.SUCCESS;
 	}
 	
 	@Override
-	public ISidedInventory createInventory(BlockState state, IWorld world, BlockPos pos) {
+	public ISidedInventory getContainer(BlockState state, IWorld world, BlockPos pos) {
 		TileEntityMSchredder centerTileEntity = getCenterTE(pos, state, world);
 		return centerTileEntity;
 	}
@@ -169,8 +169,8 @@ public class BlockMSchredder extends BlockMultiPart<TileEntityMSchredder> implem
 
 		if (network.getVoltage().getVoltage() > Voltage.HightVoltage.getVoltage() && network.getCurrent() > 0) {
 
-			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+			worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
+			worldIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 			
 		}
 		

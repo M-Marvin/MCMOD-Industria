@@ -23,18 +23,18 @@ public class BlockMRaffineryItemRenderer extends ItemStackTileEntityRenderer {
 	}
 	
 	@Override
-	public void func_239207_a_(ItemStack stack, TransformType type, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+	public void renderByItem(ItemStack stack, TransformType type, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		
-		IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.getEntityTranslucent(RAFFINERY_TEXTURES));
+		IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.entityTranslucent(RAFFINERY_TEXTURES));
 		
-		matrixStackIn.push();
+		matrixStackIn.pushPose();
 
-		matrixStackIn.rotate(Vector3f.ZN.rotationDegrees(180));
+		matrixStackIn.mulPose(Vector3f.ZN.rotationDegrees(180));
 		matrixStackIn.translate(-0.5F, -1.5F, 0.5F);
 		
-		raffineryModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
+		raffineryModel.renderToBuffer(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 		
-		matrixStackIn.pop();
+		matrixStackIn.popPose();
 		
 	}
 	

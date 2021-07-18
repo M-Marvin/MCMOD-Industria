@@ -20,7 +20,7 @@ public abstract class TileEntityGauge extends TileEntity {
 	@Override
 	public CompoundNBT serializeNBT() {
 		CompoundNBT nbt = super.serializeNBT();
-		if (this.world.isRemote()) nbt.putFloat("currentGaugeValue", this.currentGaugeValue);
+		if (this.level.isClientSide()) nbt.putFloat("currentGaugeValue", this.currentGaugeValue);
 		return nbt;
 	}
 	

@@ -20,16 +20,16 @@ public static final ResourceLocation SCHREDDER_GUI_TEXTURES = new ResourceLocati
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
 
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindTexture(SCHREDDER_GUI_TEXTURES);
-		int i = this.guiLeft;
-		int j = (this.height - this.ySize) / 2;
-		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
+		this.minecraft.getTextureManager().bind(SCHREDDER_GUI_TEXTURES);
+		int i = this.leftPos;
+		int j = (this.height - this.imageHeight) / 2;
+		this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
 		
-		TileEntityMSchredder te = this.container.getTileEntity();
-		float progress = (float) te.progress / this.container.getTileEntity().progressTotal;
+		TileEntityMSchredder te = this.menu.getTileEntity();
+		float progress = (float) te.progress / this.menu.getTileEntity().progressTotal;
 		
 		this.blit(matrixStack, i + 64, j + 32, 176, 0, (int) (progress * 48), 19);
 		if (te.hasPower) this.blit(matrixStack, i + 44, j + 53, 176, 19, 16, 16);

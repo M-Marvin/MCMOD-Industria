@@ -38,35 +38,35 @@ import net.minecraft.world.World;
 public class BlockStructureScaffold extends BlockContainerBase implements IAdvancedStickyBlock, IAdvancedBlockInfo {
 
 	public BlockStructureScaffold(String name) {
-		super(name, Material.IRON, 3F, 3F, SoundType.NETHERITE);
+		super(name, Material.METAL, 3F, 3F, SoundType.NETHERITE_BLOCK);
 	}
 	
 	@SuppressWarnings("deprecation")
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		VoxelShape shape = VoxelShapes.empty();
-		ItemStack heldStack = context.getEntity() instanceof PlayerEntity ? ((PlayerEntity) context.getEntity()).getHeldItemMainhand() : ItemStack.EMPTY;
-		if (heldStack.getItem() == ModItems.structure_scaffold.getItem(worldIn, pos, state).getItem() || heldStack.getItem() == ModItems.structure_cladding_pane) {
-			shape = Block.makeCuboidShape(0, 0, 0, 16, 16, 16);
+		ItemStack heldStack = context.getEntity() instanceof PlayerEntity ? ((PlayerEntity) context.getEntity()).getMainHandItem() : ItemStack.EMPTY;
+		if (heldStack.getItem() == ModItems.structure_scaffold.getCloneItemStack(worldIn, pos, state).getItem() || heldStack.getItem() == ModItems.structure_cladding_pane) {
+			shape = Block.box(0, 0, 0, 16, 16, 16);
 		} else {
-			shape = VoxelShapes.combine(shape, Block.makeCuboidShape(0, 0, 0, 16, 1, 1), IBooleanFunction.OR);
-			shape = VoxelShapes.combine(shape, Block.makeCuboidShape(0, 0, 0, 1, 1, 16), IBooleanFunction.OR);
-			shape = VoxelShapes.combine(shape, Block.makeCuboidShape(15, 0, 0, 16, 1, 16), IBooleanFunction.OR);
-			shape = VoxelShapes.combine(shape, Block.makeCuboidShape(0, 0, 15, 16, 1, 16), IBooleanFunction.OR);
-			shape = VoxelShapes.combine(shape, Block.makeCuboidShape(0, 15, 0, 16, 16, 1), IBooleanFunction.OR);
-			shape = VoxelShapes.combine(shape, Block.makeCuboidShape(0, 15, 0, 1, 16, 16), IBooleanFunction.OR);
-			shape = VoxelShapes.combine(shape, Block.makeCuboidShape(15, 15, 0, 16, 16, 16), IBooleanFunction.OR);
-			shape = VoxelShapes.combine(shape, Block.makeCuboidShape(0, 15, 15, 16, 16, 16), IBooleanFunction.OR);
-			shape = VoxelShapes.combine(shape, Block.makeCuboidShape(0, 1, 0, 1, 15, 1), IBooleanFunction.OR);
-			shape = VoxelShapes.combine(shape, Block.makeCuboidShape(15, 1, 0, 16, 15, 1), IBooleanFunction.OR);
-			shape = VoxelShapes.combine(shape, Block.makeCuboidShape(0, 1, 15, 1, 15, 16), IBooleanFunction.OR);
-			shape = VoxelShapes.combine(shape, Block.makeCuboidShape(15, 1, 15, 16, 15, 16), IBooleanFunction.OR);
+			shape = VoxelShapes.joinUnoptimized(shape, Block.box(0, 0, 0, 16, 1, 1), IBooleanFunction.OR);
+			shape = VoxelShapes.joinUnoptimized(shape, Block.box(0, 0, 0, 1, 1, 16), IBooleanFunction.OR);
+			shape = VoxelShapes.joinUnoptimized(shape, Block.box(15, 0, 0, 16, 1, 16), IBooleanFunction.OR);
+			shape = VoxelShapes.joinUnoptimized(shape, Block.box(0, 0, 15, 16, 1, 16), IBooleanFunction.OR);
+			shape = VoxelShapes.joinUnoptimized(shape, Block.box(0, 15, 0, 16, 16, 1), IBooleanFunction.OR);
+			shape = VoxelShapes.joinUnoptimized(shape, Block.box(0, 15, 0, 1, 16, 16), IBooleanFunction.OR);
+			shape = VoxelShapes.joinUnoptimized(shape, Block.box(15, 15, 0, 16, 16, 16), IBooleanFunction.OR);
+			shape = VoxelShapes.joinUnoptimized(shape, Block.box(0, 15, 15, 16, 16, 16), IBooleanFunction.OR);
+			shape = VoxelShapes.joinUnoptimized(shape, Block.box(0, 1, 0, 1, 15, 1), IBooleanFunction.OR);
+			shape = VoxelShapes.joinUnoptimized(shape, Block.box(15, 1, 0, 16, 15, 1), IBooleanFunction.OR);
+			shape = VoxelShapes.joinUnoptimized(shape, Block.box(0, 1, 15, 1, 15, 16), IBooleanFunction.OR);
+			shape = VoxelShapes.joinUnoptimized(shape, Block.box(15, 1, 15, 16, 15, 16), IBooleanFunction.OR);
 			
-			TileEntity tileEntity = worldIn.getTileEntity(pos);
+			TileEntity tileEntity = worldIn.getBlockEntity(pos);
 			if (tileEntity instanceof TileEntityStructureScaffold) {
 				for (Direction d : ((TileEntityStructureScaffold) tileEntity).getCladdingSides()) {
-					VoxelShape claddShape = (d == Direction.UP) ? Block.makeCuboidShape(0, 15, 0, 16, 16, 16) : ((d == Direction.DOWN) ? Block.makeCuboidShape(0, 0, 0, 16, 1, 16) : VoxelHelper.rotateShape(Block.makeCuboidShape(0, 0, 0, 16, 16, 1), d));
-					shape = VoxelShapes.combine(shape, claddShape, IBooleanFunction.OR);
+					VoxelShape claddShape = (d == Direction.UP) ? Block.box(0, 15, 0, 16, 16, 16) : ((d == Direction.DOWN) ? Block.box(0, 0, 0, 16, 1, 16) : VoxelHelper.rotateShape(Block.box(0, 0, 0, 16, 16, 1), d));
+					shape = VoxelShapes.joinUnoptimized(shape, claddShape, IBooleanFunction.OR);
 				}
 			}
 		}
@@ -74,7 +74,7 @@ public class BlockStructureScaffold extends BlockContainerBase implements IAdvan
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityStructureScaffold();
 	}
 
@@ -89,20 +89,20 @@ public class BlockStructureScaffold extends BlockContainerBase implements IAdvan
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
 		if (handIn == Hand.MAIN_HAND) {
 			
-			ItemStack stack = player.getHeldItemMainhand();
+			ItemStack stack = player.getMainHandItem();
 			
 			if (stack.getItem() == ModItems.structure_cladding_pane) {
 				
-				if (!worldIn.isRemote()) {
+				if (!worldIn.isClientSide()) {
 					
-					TileEntity tileEntity = worldIn.getTileEntity(pos);
+					TileEntity tileEntity = worldIn.getBlockEntity(pos);
 					if (tileEntity instanceof TileEntityStructureScaffold) {
 						
-						Direction side = hit.getFace();
+						Direction side = hit.getDirection();
 						if (((TileEntityStructureScaffold) tileEntity).setCladding(side, stack)) {
 							if (!player.isCreative()) stack.shrink(1);
 							
@@ -119,12 +119,12 @@ public class BlockStructureScaffold extends BlockContainerBase implements IAdvan
 				
 			} else if (stack.getItem() == ModItems.hammer) {
 
-				if (!worldIn.isRemote()) {
+				if (!worldIn.isClientSide()) {
 					
-					TileEntity tileEntity = worldIn.getTileEntity(pos);
+					TileEntity tileEntity = worldIn.getBlockEntity(pos);
 					if (tileEntity instanceof TileEntityStructureScaffold) {
 						
-						Direction side = hit.getFace();
+						Direction side = hit.getDirection();
 						ItemStack removedCladding = ((TileEntityStructureScaffold) tileEntity).removeCladding(side);
 						
 						if (!removedCladding.isEmpty()) {
@@ -132,7 +132,7 @@ public class BlockStructureScaffold extends BlockContainerBase implements IAdvan
 							SoundEvent breakSound = ItemStructureCladdingPane.getBlockState(removedCladding).getSoundType().getBreakSound();
 							worldIn.playSound(null, pos, breakSound, SoundCategory.BLOCKS, 1, 1);
 							
-							if (!removedCladding.isEmpty()) player.addItemStackToInventory(removedCladding);
+							if (!removedCladding.isEmpty()) player.addItem(removedCladding);
 							
 						}
 						
@@ -153,7 +153,7 @@ public class BlockStructureScaffold extends BlockContainerBase implements IAdvan
 	@Override
 	public SoundType getSoundType(BlockState state, IWorldReader world, BlockPos pos, Entity entity) {
 		Direction claddingSide = Direction.UP; // This function is only used for stepp sounds, an Entitys normaly walk on top of the Block.
-		TileEntity tileEntity = world.getTileEntity(pos);
+		TileEntity tileEntity = world.getBlockEntity(pos);
 		if (tileEntity instanceof TileEntityStructureScaffold) {
 			ItemStack claddingStack = ((TileEntityStructureScaffold) tileEntity).getCladding(claddingSide);
 			if (!claddingStack.isEmpty()) {
@@ -166,7 +166,7 @@ public class BlockStructureScaffold extends BlockContainerBase implements IAdvan
 	
 	@Override
 	public boolean addBlocksToMove(AdvancedPistonBlockStructureHelper pistonStructureHelper, BlockPos pos, BlockState state, World world) {
-		TileEntity tileEntity = world.getTileEntity(pos);
+		TileEntity tileEntity = world.getBlockEntity(pos);
 		if (tileEntity instanceof TileEntityStructureScaffold) {
 			Direction[] claddedSides = ((TileEntityStructureScaffold) tileEntity).getCladdingSides();
 			for (Direction d : Direction.values()) {
@@ -175,7 +175,7 @@ public class BlockStructureScaffold extends BlockContainerBase implements IAdvan
 					if (nd == d) flag = false;
 				}
 				if (flag) {
-					if (!pistonStructureHelper.addBlockLine(pos.offset(d), pistonStructureHelper.getMoveDirection())) return false;
+					if (!pistonStructureHelper.addBlockLine(pos.relative(d), pistonStructureHelper.getMoveDirection())) return false;
 				}
 			}
 		}

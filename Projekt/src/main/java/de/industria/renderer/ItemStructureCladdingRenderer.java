@@ -15,18 +15,18 @@ public class ItemStructureCladdingRenderer extends ItemStackTileEntityRenderer {
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public void func_239207_a_(ItemStack stack, TransformType transformer, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
+	public void renderByItem(ItemStack stack, TransformType transformer, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
 		
-		matrixStack.push();
+		matrixStack.pushPose();
 				
 		matrixStack.translate(0.5F, 0, 0);
 		matrixStack.scale(0.0625F, 1, 1);
 		
 		BlockState claddingState = ItemStructureCladdingPane.getBlockState(stack);
-		BlockRendererDispatcher renderDispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
-		renderDispatcher.renderBlock(claddingState, matrixStack, buffer, combinedLight, combinedOverlay);
+		BlockRendererDispatcher renderDispatcher = Minecraft.getInstance().getBlockRenderer();
+		renderDispatcher.renderSingleBlock(claddingState, matrixStack, buffer, combinedLight, combinedOverlay);
 		
-		matrixStack.pop();
+		matrixStack.popPose();
 		
 	}
 	

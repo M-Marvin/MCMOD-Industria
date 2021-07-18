@@ -49,37 +49,37 @@ public class BlockRControllPanel extends BlockContainerBase implements ISignalCo
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-	protected static final VoxelShape EAST_OPEN_AABB = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 3.0D, 16.0D, 16.0D);
-	protected static final VoxelShape WEST_OPEN_AABB = Block.makeCuboidShape(13.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-	protected static final VoxelShape SOUTH_OPEN_AABB = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 3.0D);
-	protected static final VoxelShape NORTH_OPEN_AABB = Block.makeCuboidShape(0.0D, 0.0D, 13.0D, 16.0D, 16.0D, 16.0D);
-	protected static final VoxelShape BOTTOM_AABB = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 3.0D, 16.0D);
-	protected static final VoxelShape TOP_AABB = Block.makeCuboidShape(0.0D, 13.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+	protected static final VoxelShape EAST_OPEN_AABB = Block.box(0.0D, 0.0D, 0.0D, 3.0D, 16.0D, 16.0D);
+	protected static final VoxelShape WEST_OPEN_AABB = Block.box(13.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+	protected static final VoxelShape SOUTH_OPEN_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 3.0D);
+	protected static final VoxelShape NORTH_OPEN_AABB = Block.box(0.0D, 0.0D, 13.0D, 16.0D, 16.0D, 16.0D);
+	protected static final VoxelShape BOTTOM_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 3.0D, 16.0D);
+	protected static final VoxelShape TOP_AABB = Block.box(0.0D, 13.0D, 0.0D, 16.0D, 16.0D, 16.0D);
 	
 	public BlockRControllPanel() {
-		super("controll_panel", Material.IRON, 2.2F, SoundType.STONE, true);
+		super("controll_panel", Material.METAL, 2.2F, SoundType.STONE, true);
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(FACING, WATERLOGGED);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		BlockState replaceState = context.getWorld().getBlockState(context.getPos());
-		return this.getDefaultState().with(FACING, context.getFace()).with(WATERLOGGED, replaceState.getBlock() == Blocks.WATER);
+		BlockState replaceState = context.getLevel().getBlockState(context.getClickedPos());
+		return this.defaultBlockState().setValue(FACING, context.getClickedFace()).setValue(WATERLOGGED, replaceState.getBlock() == Blocks.WATER);
 	}
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		
-		switch (state.get(FACING)) {
+		switch (state.getValue(FACING)) {
 		case NORTH: return NORTH_OPEN_AABB;
 		case SOUTH: return SOUTH_OPEN_AABB;
 		case EAST: return EAST_OPEN_AABB;
@@ -92,30 +92,30 @@ public class BlockRControllPanel extends BlockContainerBase implements ISignalCo
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityControllPanel();
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
-		Direction facing = state.get(FACING);
-		Direction face = hit.getFace();
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		Direction facing = state.getValue(FACING);
+		Direction face = hit.getDirection();
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		
-		if (face == facing && tileEntity instanceof TileEntityControllPanel && !worldIn.isRemote()) {
+		if (face == facing && tileEntity instanceof TileEntityControllPanel && !worldIn.isClientSide()) {
 			
-			int hitX = (int) ((hit.getHitVec().x - hit.getPos().getX()) * 16);
-			int hitY = (int) ((hit.getHitVec().y - hit.getPos().getY()) * 16);
-			int hitZ = (int) ((hit.getHitVec().z - hit.getPos().getZ()) * 16);
+			int hitX = (int) ((hit.getLocation().x - hit.getBlockPos().getX()) * 16);
+			int hitY = (int) ((hit.getLocation().y - hit.getBlockPos().getY()) * 16);
+			int hitZ = (int) ((hit.getLocation().z - hit.getBlockPos().getZ()) * 16);
 			
 			switch (face) {
-			case NORTH: return ((TileEntityControllPanel) tileEntity).onClickOnPanel(hitX, hitY, player.isSneaking(), player.getHeldItemMainhand());
-			case SOUTH: return ((TileEntityControllPanel) tileEntity).onClickOnPanel(16 - hitX - 1, hitY, player.isSneaking(), player.getHeldItemMainhand());
-			case EAST: return ((TileEntityControllPanel) tileEntity).onClickOnPanel(hitZ,  hitY, player.isSneaking(), player.getHeldItemMainhand());
-			case WEST: return ((TileEntityControllPanel) tileEntity).onClickOnPanel(16 - hitZ - 1, hitY, player.isSneaking(), player.getHeldItemMainhand());
-			case UP: return ((TileEntityControllPanel) tileEntity).onClickOnPanel(hitX,  hitZ, player.isSneaking(), player.getHeldItemMainhand());
-			case DOWN: return ((TileEntityControllPanel) tileEntity).onClickOnPanel(hitX, 16 - hitZ, player.isSneaking(), player.getHeldItemMainhand());
+			case NORTH: return ((TileEntityControllPanel) tileEntity).onClickOnPanel(hitX, hitY, player.isShiftKeyDown(), player.getMainHandItem());
+			case SOUTH: return ((TileEntityControllPanel) tileEntity).onClickOnPanel(16 - hitX - 1, hitY, player.isShiftKeyDown(), player.getMainHandItem());
+			case EAST: return ((TileEntityControllPanel) tileEntity).onClickOnPanel(hitZ,  hitY, player.isShiftKeyDown(), player.getMainHandItem());
+			case WEST: return ((TileEntityControllPanel) tileEntity).onClickOnPanel(16 - hitZ - 1, hitY, player.isShiftKeyDown(), player.getMainHandItem());
+			case UP: return ((TileEntityControllPanel) tileEntity).onClickOnPanel(hitX,  hitZ, player.isShiftKeyDown(), player.getMainHandItem());
+			case DOWN: return ((TileEntityControllPanel) tileEntity).onClickOnPanel(hitX, 16 - hitZ, player.isShiftKeyDown(), player.getMainHandItem());
 			}
 			
 		}
@@ -126,33 +126,33 @@ public class BlockRControllPanel extends BlockContainerBase implements ISignalCo
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+	public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
 		
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		
 		if (tileEntity instanceof TileEntityControllPanel) {
 
-			ItemStack stack = new ItemStack(Item.getItemFromBlock(this), 1);
+			ItemStack stack = new ItemStack(Item.byBlock(this), 1);
 			CompoundNBT compound = ((TileEntityControllPanel) tileEntity).saveToNBT(new CompoundNBT());
 			
 			if (!compound.isEmpty()) {
-				stack.setTagInfo("BlockEntityTag", compound);
+				stack.addTagElement("BlockEntityTag", compound);
 			}
 			
 			ItemEntity item = new ItemEntity(worldIn, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, stack);
-			item.setDefaultPickupDelay();
-			worldIn.addEntity(item);
+			item.setDefaultPickUpDelay();
+			worldIn.addFreshEntity(item);
 			
 		}
 		
-		super.onBlockHarvested(worldIn, pos, state, player);
+		super.playerWillDestroy(worldIn, pos, state, player);
 		
 	}
 	
 	@Override
 	public boolean canConectSignalWire(IWorldReader world, BlockPos pos, Direction side) {
 		BlockState state = world.getBlockState(pos);
-		return state.getBlock() == this ? state.get(FACING) == side.getOpposite() : false;
+		return state.getBlock() == this ? state.getValue(FACING) == side.getOpposite() : false;
 	}
 	
 	@Override
@@ -163,7 +163,7 @@ public class BlockRControllPanel extends BlockContainerBase implements ISignalCo
 	@Override
 	public void onReciveSignal(World worldIn, BlockPos pos, RedstoneControlSignal signal, Direction side) {
 		
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		
 		if (tileEntity instanceof TileEntityControllPanel) {
 			
@@ -175,17 +175,17 @@ public class BlockRControllPanel extends BlockContainerBase implements ISignalCo
 	
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 	
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 
 	@Override
 	public FluidState getFluidState(BlockState state) {
-		return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluid().getDefaultState() : Fluids.EMPTY.getDefaultState();
+		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource().defaultFluidState() : Fluids.EMPTY.defaultFluidState();
 	}
 	
 	@Override

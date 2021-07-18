@@ -37,52 +37,52 @@ public class TileEntityMFluidBathRenderer extends TileEntityRenderer<TileEntityM
 	public void render(TileEntityMFluidBath tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		
 		BlockState blockState = tileEntityIn.getBlockState();
-		Direction facing = blockState.get(BlockStateProperties.HORIZONTAL_FACING);
+		Direction facing = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING);
 		BlockPos partPos = BlockMultiPart.getInternPartPos(blockState);
 		
 		if (partPos.equals(BlockPos.ZERO)) {
 			
-			IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.getEntityTranslucent(FLUID_BATH_TEXTURES));
+			IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.entityTranslucent(FLUID_BATH_TEXTURES));
 			
-			matrixStackIn.push();
+			matrixStackIn.pushPose();
 			
 			matrixStackIn.translate(0F, -1F, 0F);
 			
 			matrixStackIn.translate(0.5F, 1.5F, 0.5F);
-			matrixStackIn.rotate(facing.getRotation());
-			matrixStackIn.rotate(Vector3f.XP.rotationDegrees(90));
+			matrixStackIn.mulPose(facing.getRotation());
+			matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(90));
 			matrixStackIn.translate(0F, -1F, 0F);
 			
-			fluidBathModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
+			fluidBathModel.renderToBuffer(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 			
 			if (tileEntityIn.fluidBufferState > 0) {
 				
-				matrixStackIn.push();
+				matrixStackIn.pushPose();
 				matrixStackIn.translate(-11 * 0.0625F, -(12 + tileEntityIn.fluidBufferState * 4) * 0.0625F, 1);
 				
 				fluidBathModel.renderFluidPlate(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 				
-				matrixStackIn.pop();
+				matrixStackIn.popPose();
 				
 			}
 
-			if (!tileEntityIn.getStackInSlot(0).isEmpty()) {
+			if (!tileEntityIn.getItem(0).isEmpty()) {
 
 				float progress = tileEntityIn.progress / (float) tileEntityIn.progressTotal;
 				
-				matrixStackIn.push();
+				matrixStackIn.pushPose();
 				
 				matrixStackIn.translate(-11 * 0.0625F, -7.8F * 0.0625F, (16 + progress * 30) * 0.0625F);
 				fluidBathModel.renderItemHolder(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 				
 				matrixStackIn.translate(4 * 0.0625F, 8 * 0.0625F, -15 * 0.0625F);
-				itemRenderDispatcher.renderItem(tileEntityIn.getStackInSlot(0), TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
+				itemRenderDispatcher.renderStatic(tileEntityIn.getItem(0), TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
 				
-				matrixStackIn.pop();
+				matrixStackIn.popPose();
 				
 			}
 			
-			matrixStackIn.pop();
+			matrixStackIn.popPose();
 			
 		}
 		

@@ -38,24 +38,24 @@ public abstract class BlockMultiPart<T extends TileEntity> extends BlockContaine
 	protected final int sizeZ;
 	
 	public BlockMultiPart(String name, Material material, float hardnessAndResistance, SoundType sound, int sizeX, int sizeY, int sizeZ) {
-		super(name, Properties.create(material).hardnessAndResistance(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)).notSolid());
+		super(name, Properties.of(material).strength(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)).noOcclusion());
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
 		this.sizeZ = sizeZ;
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(POS_X, POS_Y, POS_Z, FACING);
 	}
 	
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+	public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
 		
-		Direction facing = state.get(FACING);
+		Direction facing = state.getValue(FACING);
 		BlockPos internOffset = rotateOffset(getInternPartPos(state), facing);
 		BlockPos internCenter = rotateOffset(getCenter(), facing);
-		BlockPos centerPos = pos.subtract(internOffset).add(internCenter);
+		BlockPos centerPos = pos.subtract(internOffset).offset(internCenter);
 		BlockState centerState = pos.equals(centerPos) ? state : worldIn.getBlockState(centerPos);
 		
 		HashMap<BlockPos, BlockState> parts = makeParts(facing, centerPos);
@@ -70,7 +70,7 @@ public abstract class BlockMultiPart<T extends TileEntity> extends BlockContaine
 		
 		if (!isCenter(state)) worldIn.removeBlock(centerPos, false);
 		
-		super.onBlockHarvested(worldIn, centerPos, centerState, player);
+		super.playerWillDestroy(worldIn, centerPos, centerState, player);
 		
 	}
 	
@@ -78,14 +78,14 @@ public abstract class BlockMultiPart<T extends TileEntity> extends BlockContaine
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
 		
-		Direction facing = context.getPlacementHorizontalFacing().getOpposite();
+		Direction facing = context.getHorizontalDirection().getOpposite();
 		BlockPos center = getCenter();
-		BlockState centerState = this.getDefaultState().with(POS_X, center.getX()).with(POS_Y, center.getY()).with(POS_Z, center.getZ()).with(FACING, facing);
-		HashMap<BlockPos, BlockState> parts = makeParts(centerState.get(FACING), context.getPos());
+		BlockState centerState = this.defaultBlockState().setValue(POS_X, center.getX()).setValue(POS_Y, center.getY()).setValue(POS_Z, center.getZ()).setValue(FACING, facing);
+		HashMap<BlockPos, BlockState> parts = makeParts(centerState.getValue(FACING), context.getClickedPos());
 		
 		for (BlockPos pos : parts.keySet()) {
 			
-			if (!context.getWorld().getBlockState(pos).isAir()) return context.getWorld().getBlockState(context.getPos());
+			if (!context.getLevel().getBlockState(pos).isAir()) return context.getLevel().getBlockState(context.getClickedPos());
 			
 		}
 		
@@ -94,15 +94,15 @@ public abstract class BlockMultiPart<T extends TileEntity> extends BlockContaine
 	}
 	
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+	public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
 
 		if (isCenter(state)) {
 			
-			HashMap<BlockPos, BlockState> parts = makeParts(state.get(FACING), pos);
+			HashMap<BlockPos, BlockState> parts = makeParts(state.getValue(FACING), pos);
 			
 			for (BlockPos posPart : parts.keySet()) {
 				
-				worldIn.setBlockState(posPart, parts.get(posPart));
+				worldIn.setBlockAndUpdate(posPart, parts.get(posPart));
 				
 			}
 			
@@ -111,7 +111,7 @@ public abstract class BlockMultiPart<T extends TileEntity> extends BlockContaine
 	}
 	
 	public static BlockPos getInternPartPos(BlockState state) {
-		return new BlockPos(state.get(POS_X), state.get(POS_Y), state.get(POS_Z));
+		return new BlockPos(state.getValue(POS_X), state.getValue(POS_Y), state.getValue(POS_Z));
 	}
 	
 	public BlockPos getCenter() {
@@ -137,9 +137,9 @@ public abstract class BlockMultiPart<T extends TileEntity> extends BlockContaine
 						
 						BlockPos internCenterOffser = internPos.subtract(getCenter());
 						BlockPos offset = rotateOffset(internCenterOffser, facing);
-						BlockPos position = centerPos.add(offset);
+						BlockPos position = centerPos.offset(offset);
 						
-						BlockState partState = this.getDefaultState().with(POS_X, internPos.getX()).with(POS_Y, internPos.getY()).with(POS_Z, internPos.getZ()).with(FACING, facing);
+						BlockState partState = this.defaultBlockState().setValue(POS_X, internPos.getX()).setValue(POS_Y, internPos.getY()).setValue(POS_Z, internPos.getZ()).setValue(FACING, facing);
 						
 						parts.put(position, partState);
 						
@@ -168,9 +168,9 @@ public abstract class BlockMultiPart<T extends TileEntity> extends BlockContaine
 	@SuppressWarnings("unchecked")
 	public T getCenterTE(BlockPos pos, BlockState state, IBlockReader world) {
 		BlockPos partPos = BlockMultiPart.getInternPartPos(state);
-		BlockPos partOffset = BlockMultiPart.rotateOffset(partPos, state.get(BlockMultiPart.FACING));
+		BlockPos partOffset = BlockMultiPart.rotateOffset(partPos, state.getValue(BlockMultiPart.FACING));
 		BlockPos centerTEPos = pos.subtract(partOffset);
-		TileEntity tileEntity = world.getTileEntity(centerTEPos);
+		TileEntity tileEntity = world.getBlockEntity(centerTEPos);
 		try {
 			return (T) tileEntity;
 		} catch (ClassCastException e) {
@@ -181,30 +181,30 @@ public abstract class BlockMultiPart<T extends TileEntity> extends BlockContaine
 	
 	public static TileEntity getSCenterTE(BlockPos pos, BlockState state, IWorld world) {
 		BlockPos partPos = BlockMultiPart.getInternPartPos(state);
-		BlockPos partOffset = BlockMultiPart.rotateOffset(partPos, state.get(BlockMultiPart.FACING));
+		BlockPos partOffset = BlockMultiPart.rotateOffset(partPos, state.getValue(BlockMultiPart.FACING));
 		BlockPos centerTEPos = pos.subtract(partOffset);
-		TileEntity tileEntity = world.getTileEntity(centerTEPos);
+		TileEntity tileEntity = world.getBlockEntity(centerTEPos);
 		return tileEntity instanceof TileEntityAdvancedMovingBlock ? null : tileEntity; // Prevent crash when moving MultiBlocks
 	}
 
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 	
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 	
 	@Override
 	public boolean addBlocksToMove(AdvancedPistonBlockStructureHelper pistonStructureHelper, BlockPos pos, BlockState state, World world) {
 		BlockPos partPos = BlockMultiPart.getInternPartPos(state);
-		BlockPos partOffset = BlockMultiPart.rotateOffset(partPos, state.get(BlockMultiPart.FACING));
-		BlockPos centerOffset = BlockMultiPart.rotateOffset(this.getCenter(), state.get(BlockMultiPart.FACING));
-		BlockPos centerTEPos = pos.subtract(partOffset).add(centerOffset);
+		BlockPos partOffset = BlockMultiPart.rotateOffset(partPos, state.getValue(BlockMultiPart.FACING));
+		BlockPos centerOffset = BlockMultiPart.rotateOffset(this.getCenter(), state.getValue(BlockMultiPart.FACING));
+		BlockPos centerTEPos = pos.subtract(partOffset).offset(centerOffset);
 		
-		for (BlockPos pos2 : this.makeParts(state.get(FACING), centerTEPos).keySet()) {
+		for (BlockPos pos2 : this.makeParts(state.getValue(FACING), centerTEPos).keySet()) {
 			pistonStructureHelper.addBlockLine(pos2, pistonStructureHelper.getMoveDirection());
 		}
 		return true;

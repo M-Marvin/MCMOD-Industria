@@ -22,12 +22,12 @@ public class CEditProcessorCodePacket {
 	}
 	
 	public CEditProcessorCodePacket(PacketBuffer buf) {
-		this.processorStack = buf.readItemStack();
+		this.processorStack = buf.readItem();
 		this.pos = buf.readBlockPos();
 	}
 		
 	public static void encode(CEditProcessorCodePacket packet, PacketBuffer buf) {
-		buf.writeItemStack(packet.processorStack);
+		buf.writeItem(packet.processorStack);
 		buf.writeBlockPos(packet.pos);
 	}
 	
@@ -36,8 +36,8 @@ public class CEditProcessorCodePacket {
 		NetworkEvent.Context ctx = context.get();
 		ctx.enqueueWork(() -> {
 			
-			World world = ctx.getSender().world;
-			TileEntity contactTileEntity = world.getTileEntity(packet.pos);
+			World world = ctx.getSender().level;
+			TileEntity contactTileEntity = world.getBlockEntity(packet.pos);
 			
 			if (contactTileEntity instanceof TileEntityRSignalProcessorContact) {
 				

@@ -27,29 +27,29 @@ public class BlockMotor extends BlockContainerBase implements IElectricConnectiv
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	
 	public BlockMotor() {
-		super("motor", Material.IRON, 3F, SoundType.METAL);
+		super("motor", Material.METAL, 3F, SoundType.METAL);
 	}
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		VoxelShape shape = Block.makeCuboidShape(3, 3, 3, 13, 13, 16);
-		shape = VoxelShapes.or(Block.makeCuboidShape(5, 5, 1, 11, 11, 2), Block.makeCuboidShape(4, 4, 0, 12, 12, 1), shape);
-		return VoxelHelper.rotateShape(shape, state.get(FACING));
+		VoxelShape shape = Block.box(3, 3, 3, 13, 13, 16);
+		shape = VoxelShapes.or(Block.box(5, 5, 1, 11, 11, 2), Block.box(4, 4, 0, 12, 12, 1), shape);
+		return VoxelHelper.rotateShape(shape, state.getValue(FACING));
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(FACING, context.getNearestLookingDirection());
+		return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection());
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(FACING);
-		super.fillStateContainer(builder);
+		super.createBlockStateDefinition(builder);
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityMotor();
 	}
 
@@ -67,7 +67,7 @@ public class BlockMotor extends BlockContainerBase implements IElectricConnectiv
 
 	@Override
 	public boolean canConnect(Direction side, World world, BlockPos pos, BlockState state) {
-		return side != state.get(FACING);
+		return side != state.getValue(FACING);
 	}
 
 	@Override
@@ -77,12 +77,12 @@ public class BlockMotor extends BlockContainerBase implements IElectricConnectiv
 
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 	
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 
 }

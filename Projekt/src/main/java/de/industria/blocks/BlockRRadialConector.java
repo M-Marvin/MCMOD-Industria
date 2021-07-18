@@ -34,16 +34,16 @@ public class BlockRRadialConector extends BlockContainerBase implements IAdvance
 	
 	public BlockRRadialConector() {
 		super("radial_conector", Material.WOOD, 1.5F, 0.5F, SoundType.WOOD, true);
-		this.setDefaultState(this.stateContainer.getBaseState().with(LOCKED, false).with(MANUAL_LOCK, false));
+		this.registerDefaultState(this.stateDefinition.any().setValue(LOCKED, false).setValue(MANUAL_LOCK, false));
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(LOCKED, MANUAL_LOCK);
 	}
 	
@@ -62,7 +62,7 @@ public class BlockRRadialConector extends BlockContainerBase implements IAdvance
 		
 		if (state.isAir()) {
 			return false;
-		} else if (state.getBlock().getPushReaction(state) == PushReaction.BLOCK) {
+		} else if (state.getBlock().getPistonPushReaction(state) == PushReaction.BLOCK) {
 			return false;
 		} else if (state.getBlock() == Blocks.WATER || state.getBlock() == Blocks.LAVA) {
 			return false;
@@ -79,13 +79,13 @@ public class BlockRRadialConector extends BlockContainerBase implements IAdvance
 		
 		if (list.size() > this.maxAttachableBlocks) return false;
 		
-		if (isConectableBlock(scannState) && !list.contains(scannPos) && scanDepth <= this.maxScannDepth && world.isBlockLoaded(scannPos) && !scannPos.equals(pistonPos)) {
+		if (isConectableBlock(scannState) && !list.contains(scannPos) && scanDepth <= this.maxScannDepth && world.hasChunkAt(scannPos) && !scannPos.equals(pistonPos)) {
 			
 			list.add(scannPos);
 			
 			for (Direction d : Direction.values()) {
 				
-				if (!scannAt(list, world, scannPos.offset(d), scanDepth++, pistonPos)) return false;;
+				if (!scannAt(list, world, scannPos.relative(d), scanDepth++, pistonPos)) return false;;
 				
 			}
 			
@@ -98,10 +98,10 @@ public class BlockRRadialConector extends BlockContainerBase implements IAdvance
 	@Override
 	public boolean addBlocksToMove(AdvancedPistonBlockStructureHelper pistonStructureHelper, BlockPos pos, BlockState state, World world) {
 		
-		TileEntity tileEntity = world.getTileEntity(pos);
+		TileEntity tileEntity = world.getBlockEntity(pos);
 		List<BlockPos> connectedBlocks = null;
 		
-		if (state.get(LOCKED) && tileEntity instanceof TileEntityRLockedCompositeBlock) {
+		if (state.getValue(LOCKED) && tileEntity instanceof TileEntityRLockedCompositeBlock) {
 			connectedBlocks = ((TileEntityRLockedCompositeBlock) tileEntity).getConnectedBlocks();
 		} else {
 			connectedBlocks = getAttachedBlocks(world, pos, pistonStructureHelper.getPistonPos());
@@ -132,18 +132,18 @@ public class BlockRRadialConector extends BlockContainerBase implements IAdvance
 			
 			if (blocks.size() > 0) {
 				
-				world.setBlockState(pos, state.with(LOCKED, true));
+				world.setBlockAndUpdate(pos, state.setValue(LOCKED, true));
 				TileEntityRLockedCompositeBlock tileEntity = new TileEntityRLockedCompositeBlock();
-				world.setTileEntity(pos, tileEntity);
-				tileEntity.validate();
+				world.setBlockEntity(pos, tileEntity);
+				tileEntity.clearRemoved();
 				tileEntity.setPositions(blocks);
 				
 			}
 			
 		} else {
 			
-			world.removeTileEntity(pos);
-			world.setBlockState(pos, state.with(LOCKED, false));
+			world.removeBlockEntity(pos);
+			world.setBlockAndUpdate(pos, state.setValue(LOCKED, false));
 			
 		}
 		
@@ -152,14 +152,14 @@ public class BlockRRadialConector extends BlockContainerBase implements IAdvance
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 		
-		if (!state.get(MANUAL_LOCK)) {
+		if (!state.getValue(MANUAL_LOCK)) {
 			
-			boolean power = worldIn.getRedstonePowerFromNeighbors(pos) > 0 || worldIn.isBlockPowered(pos);
-			boolean powered = state.get(LOCKED);
+			boolean power = worldIn.getBestNeighborSignal(pos) > 0 || worldIn.hasNeighborSignal(pos);
+			boolean powered = state.getValue(LOCKED);
 			
 			if (power != powered) {
 				
-				worldIn.setBlockState(pos, state);
+				worldIn.setBlockAndUpdate(pos, state);
 				setLocked(power, worldIn, pos, state);
 				
 			}
@@ -169,12 +169,12 @@ public class BlockRRadialConector extends BlockContainerBase implements IAdvance
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
-		if (player.isSneaking()) {
+		if (player.isShiftKeyDown()) {
 			
-			state = state.with(MANUAL_LOCK, !state.get(MANUAL_LOCK));
-			this.setLocked(state.get(MANUAL_LOCK), worldIn, pos, state);
+			state = state.setValue(MANUAL_LOCK, !state.getValue(MANUAL_LOCK));
+			this.setLocked(state.getValue(MANUAL_LOCK), worldIn, pos, state);
 			return ActionResultType.CONSUME;
 			
 		}
@@ -185,11 +185,11 @@ public class BlockRRadialConector extends BlockContainerBase implements IAdvance
 	
 	@Override
 	public boolean hasTileEntity(BlockState state) {
-		return state.get(LOCKED);
+		return state.getValue(LOCKED);
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityRLockedCompositeBlock();
 	}
 	

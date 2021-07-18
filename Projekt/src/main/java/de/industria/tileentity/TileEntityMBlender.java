@@ -71,7 +71,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(pos.add(-3, -1, -3), pos.add(4, 4, 4));
+		return new AxisAlignedBB(worldPosition.offset(-3, -1, -3), worldPosition.offset(4, 4, 4));
 	}
 	
 	@Override
@@ -92,19 +92,19 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 	}
 
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
-		if (getStackInSlot(index).getItem() == itemStackIn.getItem()) {
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
+		if (getItem(index).getItem() == itemStackIn.getItem()) {
 			return true;
 		} else {
 			for (int i = 0; i < 3; i++) {
-				if (getStackInSlot(i).getItem() == itemStackIn.getItem()) return false;
+				if (getItem(i).getItem() == itemStackIn.getItem()) return false;
 			}
 			return true;
 		}
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return false;
 	}
 
@@ -118,16 +118,16 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 		
 		if (BlockMultiPart.getInternPartPos(this.getBlockState()).equals(BlockPos.ZERO)) {
 			
-			if (!this.world.isRemote()) {
+			if (!this.level.isClientSide()) {
 				
-				this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
-				ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos);
+				this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
+				ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
 				
 				this.fluidIn1 = FluidBucketHelper.transferBuckets(this, 3, this.fluidIn1, this.maxFluidStorage);
 				this.fluidIn2 = FluidBucketHelper.transferBuckets(this, 5, this.fluidIn2, this.maxFluidStorage);
 				this.fluidOut = FluidBucketHelper.transferBuckets(this, 7, this.fluidOut, this.maxFluidStorage);
 				
-				ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(world).getNetwork(pos);
+				ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
 				
 				this.hasPower = network.canMachinesRun() == Voltage.NormalVoltage;
 				this.isWorking = this.hasPower ? this.canWork() : false;
@@ -139,18 +139,18 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 						if (entity instanceof ItemEntity) {
 							ItemStack item = ((ItemEntity) entity).getItem();
 							for (int i = 0; i < 3; i++) {
-								if (ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(i), item)) {
-									if (this.getStackInSlot(i).isEmpty()) {
-										this.setInventorySlotContents(i, item.copy());
+								if (ItemStackHelper.canMergeRecipeStacks(this.getItem(i), item)) {
+									if (this.getItem(i).isEmpty()) {
+										this.setItem(i, item.copy());
 									} else {
-										this.getStackInSlot(i).grow(item.getCount());
+										this.getItem(i).grow(item.getCount());
 									}
 									entity.remove();
 									break;
 								}
 							}
 						} else if (entity instanceof LivingEntity) {
-							((LivingEntity) entity).attackEntityFrom(ModDamageSource.SCHREDDER, 0.5F);
+							((LivingEntity) entity).hurt(ModDamageSource.SCHREDDER, 0.5F);
 						}
 					}
 					
@@ -173,8 +173,8 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 									
 									for (ItemStack item : recipe.itemsIn) {
 										for (int i = 0; i < 3; i++) {
-											if (this.getStackInSlot(i).getItem() == item.getItem() && this.getStackInSlot(i).getCount() >= item.getCount()) {
-												this.decrStackSize(i, item.getCount());
+											if (this.getItem(i).getItem() == item.getItem() && this.getItem(i).getCount() >= item.getCount()) {
+												this.removeItem(i, item.getCount());
 											}
 										}
 									}
@@ -218,7 +218,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 					if (this.tankFillState > 0) {
 						
 						IParticleData paricle = ParticleTypes.POOF;
-						Direction facing = getBlockState().get(BlockMultiPart.FACING);
+						Direction facing = getBlockState().getValue(BlockMultiPart.FACING);
 						
 						int ox = 0;
 						int oz = 0;
@@ -247,10 +247,10 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 						float width = 1.5F;
 						float height = 0.4F;
 
-						float x = this.pos.getX() + ox + (world.rand.nextFloat() - 0.5F) * width;
-						float y = this.pos.getY() + oy + (world.rand.nextFloat() - 0.5F) * height;
-						float z = this.pos.getZ() + oz + (world.rand.nextFloat() - 0.5F) * width;
-						this.world.addParticle(paricle, x, y, z, 0, 0, 0);
+						float x = this.worldPosition.getX() + ox + (level.random.nextFloat() - 0.5F) * width;
+						float y = this.worldPosition.getY() + oy + (level.random.nextFloat() - 0.5F) * height;
+						float z = this.worldPosition.getZ() + oz + (level.random.nextFloat() - 0.5F) * width;
+						this.level.addParticle(paricle, x, y, z, 0, 0, 0);
 						
 					}
 					
@@ -261,9 +261,9 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 			}
 			
 		} else if (BlockMultiPart.getInternPartPos(this.getBlockState()).equals(new BlockPos(2, 1, 0))) {
-			TileEntityMBlender tileEntity = (TileEntityMBlender) BlockMultiPart.getSCenterTE(pos, getBlockState(), world);
+			TileEntityMBlender tileEntity = (TileEntityMBlender) BlockMultiPart.getSCenterTE(worldPosition, getBlockState(), level);
 			if (tileEntity != null) {
-				FluidStack rest = pushFluid(tileEntity.fluidOut, world, pos);
+				FluidStack rest = pushFluid(tileEntity.fluidOut, level, worldPosition);
 				if (rest != tileEntity.fluidOut) tileEntity.fluidOut = rest;
 			}
 		}
@@ -275,7 +275,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 	}
 	
 	public BlendingRecipe findRecipe() {
-		Optional<BlendingRecipe> recipe = this.world.getRecipeManager().getRecipe(ModRecipeTypes.BLENDING, this, this.world);
+		Optional<BlendingRecipe> recipe = this.level.getRecipeManager().getRecipeFor(ModRecipeTypes.BLENDING, this, this.level);
 		if (recipe.isPresent()) {
 			return recipe.get();
 		} else {
@@ -285,7 +285,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 	
 	private List<Entity> getEntitysInInput() {
 
-		Direction facing = this.getBlockState().get(BlockMSchredder.FACING);
+		Direction facing = this.getBlockState().getValue(BlockMSchredder.FACING);
 		Vector3i directionVec1 = null;
 		Vector3i directionVec2 = null;
 		switch(facing) {
@@ -309,15 +309,15 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 			directionVec1 = new Vector3i(0, 1F, 0);
 			directionVec2 = new Vector3i(0, 2F, 0);
 		}
-		AxisAlignedBB inputBounds = new AxisAlignedBB(this.pos.add(directionVec1), this.pos.add(directionVec2));
-		return this.world.getEntitiesInAABBexcluding(null, inputBounds, null);
+		AxisAlignedBB inputBounds = new AxisAlignedBB(this.worldPosition.offset(directionVec1), this.worldPosition.offset(directionVec2));
+		return this.level.getEntities(null, inputBounds);
 		
 	}
 	
 	@Override
 	public FluidStack getFluid(int amount) {
 		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
-		TileEntity tileEntity = BlockMBlender.getSCenterTE(ipos, this.getBlockState(), world);
+		TileEntity tileEntity = BlockMBlender.getSCenterTE(ipos, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMBlender) {
 			if (ipos.equals(new BlockPos(2, 1, 0))) {
 				int transfer = Math.min(amount, ((TileEntityMBlender) tileEntity).fluidOut.getAmount());
@@ -334,10 +334,10 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 	@Override
 	public FluidStack insertFluid(FluidStack fluid) {
 		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
-		TileEntity tileEntity = BlockMBlender.getSCenterTE(pos, this.getBlockState(), world);
+		TileEntity tileEntity = BlockMBlender.getSCenterTE(worldPosition, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMBlender) {
 			if (ipos.equals(new BlockPos(2, 2, 2))) {
-				if (((TileEntityMBlender) tileEntity).fluidIn1.getFluid().isEquivalentTo(fluid.getFluid()) || ((TileEntityMBlender) tileEntity).fluidIn1.isEmpty()) {
+				if (((TileEntityMBlender) tileEntity).fluidIn1.getFluid().isSame(fluid.getFluid()) || ((TileEntityMBlender) tileEntity).fluidIn1.isEmpty()) {
 					int capcaity = this.maxFluidStorage - ((TileEntityMBlender) tileEntity).fluidIn1.getAmount();
 					int transfer = Math.min(capcaity, fluid.getAmount());
 					if (transfer > 0) {
@@ -352,7 +352,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 					}
 				}
 			} else if (ipos.equals(new BlockPos(1, 1, 2))) {
-				if (((TileEntityMBlender) tileEntity).fluidIn2.getFluid().isEquivalentTo(fluid.getFluid()) || ((TileEntityMBlender) tileEntity).fluidIn2.isEmpty()) {
+				if (((TileEntityMBlender) tileEntity).fluidIn2.getFluid().isSame(fluid.getFluid()) || ((TileEntityMBlender) tileEntity).fluidIn2.isEmpty()) {
 					int capcaity = this.maxFluidStorage - ((TileEntityMBlender) tileEntity).fluidIn2.getAmount();
 					int transfer = Math.min(capcaity, fluid.getAmount());
 					if (transfer > 0) {
@@ -374,7 +374,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 	@Override
 	public Fluid getFluidType() {
 		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
-		TileEntity tileEntity = BlockMBlender.getSCenterTE(ipos, this.getBlockState(), world);
+		TileEntity tileEntity = BlockMBlender.getSCenterTE(ipos, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMBlender) {
 			if (ipos.equals(new BlockPos(2, 2, 2))) {
 				return ((TileEntityMBlender) tileEntity).fluidIn1.getFluid();
@@ -390,7 +390,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 	@Override
 	public FluidStack getStorage() {
 		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
-		TileEntity tileEntity = BlockMBlender.getSCenterTE(ipos, this.getBlockState(), world);
+		TileEntity tileEntity = BlockMBlender.getSCenterTE(ipos, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMBlender) {
 			if (ipos.equals(new BlockPos(2, 2, 2))) {
 				return ((TileEntityMBlender) tileEntity).fluidIn1;
@@ -406,13 +406,13 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 	@Override
 	public boolean canConnect(Direction side) {
 		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
-		Direction facing = this.getBlockState().get(BlockMultiPart.FACING);
+		Direction facing = this.getBlockState().getValue(BlockMultiPart.FACING);
 		return	((ipos.equals(new BlockPos(2, 2, 2)) || ipos.equals(new BlockPos(1, 1, 2))) && side == facing.getOpposite()) ||
 				((ipos.equals(new BlockPos(2, 1, 0))) && side == facing);
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		if (BlockMultiPart.getInternPartPos(this.getBlockState()).equals(BlockPos.ZERO)) {
 			if (!this.fluidIn1.isEmpty()) compound.put("FluidIn1", this.fluidIn1.writeToNBT(new CompoundNBT()));
 			if (!this.fluidIn2.isEmpty()) compound.put("FluidIn2", this.fluidIn2.writeToNBT(new CompoundNBT()));
@@ -423,11 +423,11 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 			compound.putBoolean("isWorking", this.isWorking);
 			compound.putFloat("tankFillState", this.tankFillState);
 		}
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		if (state == null ? true : BlockMultiPart.getInternPartPos(state).equals(BlockPos.ZERO)) {
 			this.fluidIn1 = FluidStack.EMPTY;
 			this.fluidIn2 = FluidStack.EMPTY;
@@ -441,7 +441,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 			this.isWorking = compound.getBoolean("isWorking");
 			this.tankFillState = compound.getFloat("tankFillState");
 		}
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 }

@@ -61,10 +61,10 @@ public class AdvancedPistonBlockStructureHelper {
       this.extending = extending;
       if (extending) {
          this.moveDirection = pistonFacing;
-         this.blockToMove = posIn.offset(pistonFacing);
+         this.blockToMove = posIn.relative(pistonFacing);
       } else {
          this.moveDirection = pistonFacing.getOpposite();
-         this.blockToMove = posIn.offset(pistonFacing, 2);
+         this.blockToMove = posIn.relative(pistonFacing, 2);
       }
       this.maxPushBlocks = maxPushBlocks;
       this.doIgnorPushBeahavior = false;
@@ -95,7 +95,7 @@ public class AdvancedPistonBlockStructureHelper {
       BlockState blockstate = this.world.getBlockState(this.blockToMove);
       
       if (!BlockRAdvancedPiston.canPush(blockstate, this.world, this.blockToMove, this.moveDirection, false, this.facing)) {
-         if (this.extending && blockstate.getPushReaction() == PushReaction.DESTROY) {
+         if (this.extending && blockstate.getPistonPushReaction() == PushReaction.DESTROY) {
             this.toDestroy.add(this.blockToMove);
             return true;
          } else {
@@ -118,7 +118,7 @@ public class AdvancedPistonBlockStructureHelper {
    @SuppressWarnings("deprecation")
    public boolean addBlockLine(BlockPos origin, Direction facingIn) {
       BlockState blockstate = this.world.getBlockState(origin);
-      if (world.isAirBlock(origin) || this.toMove.contains(origin)) {
+      if (world.isEmptyBlock(origin) || this.toMove.contains(origin)) {
          return true;
       } else if (!BlockRAdvancedPiston.canPush(blockstate, this.world, origin, this.moveDirection, false, facingIn) && !(this.doIgnorPushBeahavior && !blockstate.isAir())) {
     	  return true;
@@ -134,7 +134,7 @@ public class AdvancedPistonBlockStructureHelper {
         	
             BlockState oldState;
             while(blockstate.isStickyBlock()) {
-               BlockPos blockpos = origin.offset(this.moveDirection.getOpposite(), i);
+               BlockPos blockpos = origin.relative(this.moveDirection.getOpposite(), i);
                oldState = blockstate;
                blockstate = this.world.getBlockState(blockpos);
                if (blockstate.isAir(this.world, blockpos) || !oldState.canStickTo(blockstate) || !(BlockRAdvancedPiston.canPush(blockstate, this.world, blockpos, this.moveDirection, false, this.moveDirection.getOpposite()) || this.doIgnorPushBeahavior) || blockpos.equals(this.pistonPos)) {
@@ -151,14 +151,14 @@ public class AdvancedPistonBlockStructureHelper {
 
             for(int i1 = i - 1; i1 >= 0; --i1) {
                
-               BlockPos pos = origin.offset(this.moveDirection.getOpposite(), i1);
+               BlockPos pos = origin.relative(this.moveDirection.getOpposite(), i1);
                BlockState state = this.world.getBlockState(pos);
 
                /** Check If Piston is in moveDirection **/
                for (int i2 = 0; i2 < maxPushBlocks; i2++) {
-            	   BlockState checkState = this.world.getBlockState(pos.offset(moveDirection, i2));
-            	   if (checkState.isAir() || checkState.getPushReaction() == PushReaction.DESTROY) break;
-            	   if (pos.offset(moveDirection, i2).equals(pistonPos)) return false;
+            	   BlockState checkState = this.world.getBlockState(pos.relative(moveDirection, i2));
+            	   if (checkState.isAir() || checkState.getPistonPushReaction() == PushReaction.DESTROY) break;
+            	   if (pos.relative(moveDirection, i2).equals(pistonPos)) return false;
                }
                
                if (state.getBlock() instanceof IAdvancedStickyBlock && !this.toMove.contains(pos)) {
@@ -169,7 +169,7 @@ public class AdvancedPistonBlockStructureHelper {
                    
                } else {
             	   
-                   this.toMove.add(origin.offset(this.moveDirection.getOpposite(), i1));
+                   this.toMove.add(origin.relative(this.moveDirection.getOpposite(), i1));
                    
                }
                
@@ -179,7 +179,7 @@ public class AdvancedPistonBlockStructureHelper {
             int j1 = 1;
 
             while(true) {
-               BlockPos blockpos1 = origin.offset(this.moveDirection, j1);
+               BlockPos blockpos1 = origin.relative(this.moveDirection, j1);
                int j = this.toMove.indexOf(blockpos1);
                if (j > -1) {
                   this.reorderListAtCollision(l, j);
@@ -209,7 +209,7 @@ public class AdvancedPistonBlockStructureHelper {
             	   return false;
                }
 
-               if (blockstate.getPushReaction() == PushReaction.DESTROY) {
+               if (blockstate.getPistonPushReaction() == PushReaction.DESTROY) {
                   this.toDestroy.add(blockpos1);
                   return true;
                }
@@ -221,9 +221,9 @@ public class AdvancedPistonBlockStructureHelper {
 
                /** Check If Piston is in moveDirection **/
                for (int i2 = 0; i2 < maxPushBlocks; i2++) {
-            	   BlockState checkState = this.world.getBlockState(blockpos1.offset(moveDirection, i2));
-            	   if (checkState.isAir() || checkState.getPushReaction() == PushReaction.DESTROY) break;
-            	   if (blockpos1.offset(moveDirection, i2).equals(pistonPos)) return false;
+            	   BlockState checkState = this.world.getBlockState(blockpos1.relative(moveDirection, i2));
+            	   if (checkState.isAir() || checkState.getPistonPushReaction() == PushReaction.DESTROY) break;
+            	   if (blockpos1.relative(moveDirection, i2).equals(pistonPos)) return false;
                }
                
                BlockState state = world.getBlockState(blockpos1);
@@ -271,7 +271,7 @@ public class AdvancedPistonBlockStructureHelper {
 
       for(Direction direction : Direction.values()) {
          if (direction.getAxis() != this.moveDirection.getAxis()) {
-            BlockPos blockpos = fromPos.offset(direction);
+            BlockPos blockpos = fromPos.relative(direction);
             BlockState blockstate1 = this.world.getBlockState(blockpos);
             if (blockstate1.canStickTo(blockstate) && !this.addBlockLine(blockpos, direction)) {
                return false;

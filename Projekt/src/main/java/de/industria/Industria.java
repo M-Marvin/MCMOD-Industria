@@ -53,31 +53,31 @@ public class Industria {
 	
 	public static final ItemGroup MACHINES = new ItemGroup("machines") {
 		@Override
-		public ItemStack createIcon() {
+		public ItemStack makeIcon() {
 			return new ItemStack(ModItems.generator);
 		}
 	};
 	public static final ItemGroup BUILDING_BLOCKS = new ItemGroup("building_blocks") {
 		@Override
-		public ItemStack createIcon() {
+		public ItemStack makeIcon() {
 			return new ItemStack(ModItems.cracked_polished_granite_bricks);
 		}
 	};
 	public static final ItemGroup DECORATIONS = new ItemGroup("decorations") {
 		@Override
-		public ItemStack createIcon() {
+		public ItemStack makeIcon() {
 			return new ItemStack(ModItems.rubber_leaves);
 		}
 	};
 	public static final ItemGroup TOOLS = new ItemGroup("tools") {
 		@Override
-		public ItemStack createIcon() {
+		public ItemStack makeIcon() {
 			return new ItemStack(ModItems.hammer);
 		}
 	};
 	public static final ItemGroup MATERIALS = new ItemGroup("materials") {
 		@Override
-		public ItemStack createIcon() {
+		public ItemStack makeIcon() {
 			return new ItemStack(ModItems.rubber);
 		}
 	};
@@ -108,29 +108,29 @@ public class Industria {
 		
 		// register Blocks
 		ModGameRegistry.registerBlock(ModItems.tree_tap, TOOLS);
-		ModGameRegistry.registerBlock(ModItems.capacitor, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(ModItems.pulse_counter, ItemGroup.REDSTONE); 
-		ModGameRegistry.registerBlock(ModItems.stacked_redstone_torch, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(ModItems.stacked_redstone_wire, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(ModItems.advanced_piston, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(ModItems.advanced_sticky_piston, ItemGroup.REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.capacitor, ItemGroup.TAB_REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.pulse_counter, ItemGroup.TAB_REDSTONE); 
+		ModGameRegistry.registerBlock(ModItems.stacked_redstone_torch, ItemGroup.TAB_REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.stacked_redstone_wire, ItemGroup.TAB_REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.advanced_piston, ItemGroup.TAB_REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.advanced_sticky_piston, ItemGroup.TAB_REDSTONE);
 		ModGameRegistry.registerTechnicalBlock(ModItems.advanced_piston_head);
 		ModGameRegistry.registerTechnicalBlock(ModItems.advanced_moving_block);
-		ModGameRegistry.registerBlock(ModItems.redstone_reciver, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(ModItems.signal_wire, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(ModItems.antenna_conector, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(ModItems.linear_conector, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(ModItems.storing_crafting_table, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(ModItems.signal_processor_contact, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(ModItems.rail_piston, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(ModItems.conector_block, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(ModItems.redstone_contact, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(ModItems.button_block, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(ModItems.radial_conector, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(ModItems.hover_controler, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(ModItems.hover_extension, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(ModItems.controll_panel, ItemGroup.REDSTONE);
-		ModGameRegistry.registerBlock(ModItems.harvester, ItemGroup.REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.redstone_reciver, ItemGroup.TAB_REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.signal_wire, ItemGroup.TAB_REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.antenna_conector, ItemGroup.TAB_REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.linear_conector, ItemGroup.TAB_REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.storing_crafting_table, ItemGroup.TAB_REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.signal_processor_contact, ItemGroup.TAB_REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.rail_piston, ItemGroup.TAB_REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.conector_block, ItemGroup.TAB_REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.redstone_contact, ItemGroup.TAB_REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.button_block, ItemGroup.TAB_REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.radial_conector, ItemGroup.TAB_REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.hover_controler, ItemGroup.TAB_REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.hover_extension, ItemGroup.TAB_REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.controll_panel, ItemGroup.TAB_REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.harvester, ItemGroup.TAB_REDSTONE);
 		ModGameRegistry.registerBlock(ModItems.copper_cable, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.electrolyt_copper_cable, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.aluminium_cable, MACHINES);
@@ -678,16 +678,16 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.limestone, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.karstified_limestone, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.limestone_sheet, DECORATIONS);
-		ModGameRegistry.registerBlock(ModItems.item_detector, ItemGroup.REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.item_detector, ItemGroup.TAB_REDSTONE);
 		ModGameRegistry.registerBlock(ModItems.computer, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.network_cable, MACHINES);
-		ModGameRegistry.registerBlock(ModItems.steel_rail, ItemGroup.TRANSPORTATION);
-		ModGameRegistry.registerBlock(ModItems.inductive_rail, ItemGroup.TRANSPORTATION);
-		ModGameRegistry.registerBlock(ModItems.rail_adapter, ItemGroup.TRANSPORTATION);
+		ModGameRegistry.registerBlock(ModItems.steel_rail, ItemGroup.TAB_TRANSPORTATION);
+		ModGameRegistry.registerBlock(ModItems.inductive_rail, ItemGroup.TAB_TRANSPORTATION);
+		ModGameRegistry.registerBlock(ModItems.rail_adapter, ItemGroup.TAB_TRANSPORTATION);
 		ModGameRegistry.registerBlock(ModItems.chunk_loader, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.clean_cladding_black, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.clean_cladding_white, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.structure_scaffold, ItemGroup.REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.structure_scaffold, ItemGroup.TAB_REDSTONE);
 		ModGameRegistry.registerBlock(ModItems.ash, DECORATIONS);
 		ModGameRegistry.registerBlock(ModItems.biomass, DECORATIONS);
 		ModGameRegistry.registerBlock(ModItems.burned_log, BUILDING_BLOCKS);

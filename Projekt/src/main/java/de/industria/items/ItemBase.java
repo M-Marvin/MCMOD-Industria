@@ -17,27 +17,27 @@ public class ItemBase extends Item {
 	}
 	
 	public ItemBase(String name, ItemGroup itemGroup) {
-		super(new Properties().group(itemGroup));
+		super(new Properties().tab(itemGroup));
 		this.setRegistryName(Industria.MODID, name);
 	}
 	
 	public ItemBase(String name, ItemGroup itemGroup, int maxStackSize) {
-		super(new Properties().group(itemGroup).maxStackSize(maxStackSize));
+		super(new Properties().tab(itemGroup).stacksTo(maxStackSize));
 		this.setRegistryName(Industria.MODID, name);
 	}
 
 	public ItemBase(String name, ItemGroup itemGroup, int maxStackSize, Item containItem) {
-		super(new Properties().group(itemGroup).maxStackSize(maxStackSize).containerItem(containItem));
+		super(new Properties().tab(itemGroup).stacksTo(maxStackSize).craftRemainder(containItem));
 		this.setRegistryName(Industria.MODID, name);
 	}
 	
 	public ItemBase(String name, ItemGroup itemGroup, Rarity rarity) {
-		super(new Properties().group(itemGroup).rarity(rarity));
+		super(new Properties().tab(itemGroup).rarity(rarity));
 		this.setRegistryName(Industria.MODID, name);
 	}
 	
 	public ItemBase(String name, ItemGroup itemGroup, int maxStackSize, Rarity rarity) {
-		super(new Properties().group(itemGroup).maxStackSize(maxStackSize).rarity(rarity));
+		super(new Properties().tab(itemGroup).stacksTo(maxStackSize).rarity(rarity));
 		this.setRegistryName(Industria.MODID, name);
 	}
 	

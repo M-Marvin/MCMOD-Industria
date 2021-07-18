@@ -27,18 +27,18 @@ public class ItemToolBase extends ToolItem {
 	}
 	
 	public float getDestroySpeed(ItemStack stack, BlockState state) {
-	   if (getToolTypes(stack).stream().anyMatch(e -> state.isToolEffective(e))) return efficiency;
-	   return state.getBlock().getHarvestTool(state) == this.toolType ? this.efficiency : 1.0F;
+	   if (getToolTypes(stack).stream().anyMatch(e -> state.isToolEffective(e))) return speed;
+	   return state.getBlock().getHarvestTool(state) == this.toolType ? this.speed : 1.0F;
 	}
 	
 	@Override
-	public boolean canHarvestBlock(BlockState blockIn) {
-	      int i = this.getTier().getHarvestLevel();
+	public boolean isCorrectToolForDrops(BlockState blockIn) {
+	      int i = this.getTier().getLevel();
 	      if (blockIn.getHarvestTool() == this.toolType) {
 	         return i >= blockIn.getHarvestLevel();
 	      }
 	      Material material = blockIn.getMaterial();
-	      return material == Material.ROCK || material == Material.IRON || material == Material.ANVIL;
+	      return material == Material.STONE || material == Material.METAL || material == Material.HEAVY_METAL;
 	}
 	
 }

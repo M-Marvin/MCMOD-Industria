@@ -29,13 +29,13 @@ public class ItemFluidBucket extends BucketItem {
 	
 	@SuppressWarnings("deprecation")
 	public ItemFluidBucket(Fluid containedFluidIn, String name, ItemGroup group, boolean canPlaceInNether) {
-		super(containedFluidIn, new Properties().maxStackSize(1).group(group).containerItem(Items.BUCKET));
+		super(containedFluidIn, new Properties().stacksTo(1).tab(group).craftRemainder(Items.BUCKET));
 		this.setRegistryName(new ResourceLocation(Industria.MODID, name));
 		this.canPlaceInNether = canPlaceInNether;
 	}
 
 	@SuppressWarnings("deprecation")
-	public boolean tryPlaceContainedLiquid(@Nullable PlayerEntity player, World worldIn, BlockPos posIn, @Nullable BlockRayTraceResult rayTrace) {
+	public boolean emptyBucket(@Nullable PlayerEntity player, World worldIn, BlockPos posIn, @Nullable BlockRayTraceResult rayTrace) {
 		
 		try {
 			
@@ -49,31 +49,31 @@ public class ItemFluidBucket extends BucketItem {
 				BlockState blockstate = worldIn.getBlockState(posIn);
 				Block block = blockstate.getBlock();
 				Material material = blockstate.getMaterial();
-				boolean flag = blockstate.isReplaceable(containedBlock);
-				boolean flag1 = blockstate.isAir() || flag || block instanceof ILiquidContainer && ((ILiquidContainer)block).canContainFluid(worldIn, posIn, blockstate, containedBlock);
+				boolean flag = blockstate.canBeReplaced(containedBlock);
+				boolean flag1 = blockstate.isAir() || flag || block instanceof ILiquidContainer && ((ILiquidContainer)block).canPlaceLiquid(worldIn, posIn, blockstate, containedBlock);
 				if (!flag1) {
-					return rayTrace != null && this.tryPlaceContainedLiquid(player, worldIn, rayTrace.getPos().offset(rayTrace.getFace()), (BlockRayTraceResult)null);
-				} else if (!canPlaceInNether && worldIn.getDimensionType().isUltrawarm()) {
+					return rayTrace != null && this.emptyBucket(player, worldIn, rayTrace.getBlockPos().relative(rayTrace.getDirection()), (BlockRayTraceResult)null);
+				} else if (!canPlaceInNether && worldIn.dimensionType().ultraWarm()) {
 					int i = posIn.getX();
 					int j = posIn.getY();
 					int k = posIn.getZ();
-					worldIn.playSound(player, posIn, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.8F);
+					worldIn.playSound(player, posIn, SoundEvents.FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (worldIn.random.nextFloat() - worldIn.random.nextFloat()) * 0.8F);
 
 					for(int l = 0; l < 8; ++l) {
 						worldIn.addParticle(ParticleTypes.LARGE_SMOKE, (double)i + Math.random(), (double)j + Math.random(), (double)k + Math.random(), 0.0D, 0.0D, 0.0D);
 					}
 
 					return true;
-				} else if (block instanceof ILiquidContainer && ((ILiquidContainer)block).canContainFluid(worldIn,posIn,blockstate,containedBlock)) {
-					((ILiquidContainer)block).receiveFluid(worldIn, posIn, blockstate, ((FlowingFluid)containedBlock).getStillFluidState(false));
+				} else if (block instanceof ILiquidContainer && ((ILiquidContainer)block).canPlaceLiquid(worldIn,posIn,blockstate,containedBlock)) {
+					((ILiquidContainer)block).placeLiquid(worldIn, posIn, blockstate, ((FlowingFluid)containedBlock).getSource(false));
 					this.playEmptySound(player, worldIn, posIn);
 					return true;
 				} else {
-					if (!worldIn.isRemote && flag && !material.isLiquid()) {
+					if (!worldIn.isClientSide && flag && !material.isLiquid()) {
 						worldIn.destroyBlock(posIn, true);
 					}
 
-					if (!worldIn.setBlockState(posIn, containedBlock.getDefaultState().getBlockState(), 11) && !blockstate.getFluidState().isSource()) {
+					if (!worldIn.setBlock(posIn, containedBlock.defaultFluidState().createLegacyBlock(), 11) && !blockstate.getFluidState().isSource()) {
 						return false;
 					} else {
 						this.playEmptySound(player, worldIn, posIn);

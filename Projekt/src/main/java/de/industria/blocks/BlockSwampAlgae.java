@@ -35,34 +35,34 @@ public class BlockSwampAlgae extends BushBlock implements IGrowable {
 	public static final EnumProperty<Half> HALF = BlockStateProperties.HALF;
 	
 	public BlockSwampAlgae() {
-		super(Properties.create(Material.TALL_PLANTS).doesNotBlockMovement().zeroHardnessAndResistance().sound(SoundType.WET_GRASS));
+		super(Properties.of(Material.REPLACEABLE_PLANT).noCollission().instabreak().sound(SoundType.WET_GRASS));
 		this.setRegistryName(new ResourceLocation(Industria.MODID, "swamp_algae"));
 	}
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return state.get(HALF) == Half.BOTTOM ? Block.makeCuboidShape(2, 6, 2, 14, 16, 14) : Block.makeCuboidShape(2, 0, 2, 14, 16, 14);
+		return state.getValue(HALF) == Half.BOTTOM ? Block.box(2, 6, 2, 14, 16, 14) : Block.box(2, 0, 2, 14, 16, 14);
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(HALF);
 	}
 	
 	@Override
-	public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
+	public boolean isValidBonemealTarget(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient) {
 		return true;
 	}
 
 	@Override
-	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, BlockState state) {
+	public boolean isBonemealSuccess(World worldIn, Random rand, BlockPos pos, BlockState state) {
 		return true;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void grow(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
-		ItemStackHelper.spawnItemStack(worldIn, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, new ItemStack(Item.getItemFromBlock(ModItems.swamp_algae)));
+	public void performBonemeal(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state) {
+		ItemStackHelper.spawnItemStack(worldIn, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, new ItemStack(Item.byBlock(ModItems.swamp_algae)));
 	}
 	
 	@Override
@@ -76,13 +76,13 @@ public class BlockSwampAlgae extends BushBlock implements IGrowable {
 	}
 	
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
-		if (state.get(HALF) == Half.BOTTOM) {
-			worldIn.getPendingBlockTicks().scheduleTick(pos.up(), this, 1);
+	public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+		if (state.getValue(HALF) == Half.BOTTOM) {
+			worldIn.getBlockTicks().scheduleTick(pos.above(), this, 1);
 		} else {
-			worldIn.getPendingBlockTicks().scheduleTick(pos.down(), this, 1);
+			worldIn.getBlockTicks().scheduleTick(pos.below(), this, 1);
 		}
-		super.onBlockHarvested(worldIn, pos, state, player);
+		super.playerWillDestroy(worldIn, pos, state, player);
 	}
 	
 	@Override
@@ -92,25 +92,25 @@ public class BlockSwampAlgae extends BushBlock implements IGrowable {
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		BlockState state = this.getDefaultState().with(HALF, Half.TOP);
-		if (isValidPosition(state, context.getWorld(), context.getPos()) && context.getWorld().getBlockState(context.getPos().down()).isReplaceable(context)) {
-			context.getWorld().setBlockState(context.getPos().down(), this.getDefaultState().with(HALF, Half.BOTTOM));
+		BlockState state = this.defaultBlockState().setValue(HALF, Half.TOP);
+		if (canSurvive(state, context.getLevel(), context.getClickedPos()) && context.getLevel().getBlockState(context.getClickedPos().below()).canBeReplaced(context)) {
+			context.getLevel().setBlockAndUpdate(context.getClickedPos().below(), this.defaultBlockState().setValue(HALF, Half.BOTTOM));
 			return state;
 		}
-		return context.getWorld().getBlockState(context.getPos());
+		return context.getLevel().getBlockState(context.getClickedPos());
 	}
 	
 	@Override
-	protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
-		return state.isOpaqueCube(worldIn, pos) || state.getBlock() instanceof LeavesBlock;
+	protected boolean mayPlaceOn(BlockState state, IBlockReader worldIn, BlockPos pos) {
+		return state.isSolidRender(worldIn, pos) || state.getBlock() instanceof LeavesBlock;
 	}
 	
 	@Override
-	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
-		if (state.get(HALF) == Half.BOTTOM) {
-			return worldIn.getBlockState(pos.up()).getBlock() == this;
+	public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos) {
+		if (state.getValue(HALF) == Half.BOTTOM) {
+			return worldIn.getBlockState(pos.above()).getBlock() == this;
 		} else {
-			return isValidGround(worldIn.getBlockState(pos.up()), worldIn, pos.up());
+			return mayPlaceOn(worldIn.getBlockState(pos.above()), worldIn, pos.above());
 		}
 	}
 	

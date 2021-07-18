@@ -43,9 +43,9 @@ public class ChunkLoadHandler extends WorldSavedData {
 	
 	public static ChunkLoadHandler getHandlerForWorld(IWorld world) {
 		
-		if (!world.isRemote()) {
-			DimensionSavedDataManager storage = ((ServerWorld) world).getSavedData();
-			ChunkLoadHandler handler = storage.getOrCreate(ChunkLoadHandler::new, "chunkLoader");
+		if (!world.isClientSide()) {
+			DimensionSavedDataManager storage = ((ServerWorld) world).getDataStorage();
+			ChunkLoadHandler handler = storage.computeIfAbsent(ChunkLoadHandler::new, "chunkLoader");
 			handler.world = (World) world;
 			return handler;
 		} else {
@@ -62,9 +62,9 @@ public class ChunkLoadHandler extends WorldSavedData {
 		
 		if (this.world.getGameTime() % 40 == 0) {
 			
-			this.world.loadedTileEntityList.forEach((tileEntity) -> {
+			this.world.blockEntityList.forEach((tileEntity) -> {
 				if (tileEntity instanceof IChunkForceLoading) {
-					BlockPos loaderPos = tileEntity.getPos();
+					BlockPos loaderPos = tileEntity.getBlockPos();
 					ChunkPos chunkPos = new ChunkPos(loaderPos);
 					List<BlockPos> loaderMap = this.chunkLoaderMap.getOrDefault(chunkPos, new ArrayList<BlockPos>());
 					if (!loaderMap.contains(loaderPos)) {
@@ -78,7 +78,7 @@ public class ChunkLoadHandler extends WorldSavedData {
 			this.chunkLoaderMap.forEach((chunkPos, loaderMap) -> {
 				List<BlockPos> removeList = new ArrayList<BlockPos>();
 				loaderMap.forEach((loaderPos) -> {
-					TileEntity tileEntity = this.world.getTileEntity(loaderPos);
+					TileEntity tileEntity = this.world.getBlockEntity(loaderPos);
 					if (!(tileEntity instanceof IChunkForceLoading)) removeList.add(loaderPos);
 				});
 				loaderMap.removeAll(removeList);
@@ -88,7 +88,7 @@ public class ChunkLoadHandler extends WorldSavedData {
 			
 			this.chunkLoaderMap.forEach((chunkPos, loaderMap) -> {
 				loaderMap.forEach((loaderPos) -> {
-					TileEntity loader = this.world.getTileEntity(loaderPos);
+					TileEntity loader = this.world.getBlockEntity(loaderPos);
 					if (loader instanceof IChunkForceLoading) {
 						List<ChunkPos> forcedChunks = ((IChunkForceLoading) loader).getLoadHoldChunks();
 						forcedChunks.forEach((loadChunkPos) -> {
@@ -107,7 +107,7 @@ public class ChunkLoadHandler extends WorldSavedData {
 			});
 			removeList.forEach((chunkToRemove) -> this.loadHoldChunks.remove(chunkToRemove));
 			
-			this.markDirty();
+			this.setDirty();
 			
 		}
 		
@@ -116,11 +116,11 @@ public class ChunkLoadHandler extends WorldSavedData {
 	
 	protected void setForceLoadState(ChunkPos chunkPos, boolean forceLoad) {
 		if (forceLoad && !this.loadHoldChunks.containsKey(chunkPos)) {
-			this.loadHoldChunks.put(chunkPos, ((ServerWorld) world).getForcedChunks().contains(chunkPos.asLong()));
-			((ServerWorld) this.world).forceChunk(chunkPos.x, chunkPos.z, true);
+			this.loadHoldChunks.put(chunkPos, ((ServerWorld) world).getForcedChunks().contains(chunkPos.toLong()));
+			((ServerWorld) this.world).setChunkForced(chunkPos.x, chunkPos.z, true);
 		} else if (!forceLoad) {
 			boolean vanillaLoaded = this.loadHoldChunks.getOrDefault(chunkPos, false);
-			((ServerWorld) this.world).forceChunk(chunkPos.x, chunkPos.z, vanillaLoaded);
+			((ServerWorld) this.world).setChunkForced(chunkPos.x, chunkPos.z, vanillaLoaded);
 		}
 	}
 	
@@ -153,7 +153,7 @@ public class ChunkLoadHandler extends WorldSavedData {
 	public List<BlockPos> listLoadersForChunk(ChunkPos chunkPos) {
 		List<BlockPos> loaders = new ArrayList<BlockPos>();
 		this.chunkLoaderMap.values().forEach((map) -> map.forEach((loaderPos) -> {
-			TileEntity loader = this.world.getTileEntity(loaderPos);
+			TileEntity loader = this.world.getBlockEntity(loaderPos);
 			if (loader instanceof IChunkForceLoading) {
 				List<ChunkPos> forcingChunks = ((IChunkForceLoading) loader).getLoadHoldChunks();
 				if (forcingChunks.contains(chunkPos)) loaders.add(loaderPos);
@@ -163,7 +163,7 @@ public class ChunkLoadHandler extends WorldSavedData {
 	}
 	
 	@Override
-	public void read(CompoundNBT nbt) {
+	public void load(CompoundNBT nbt) {
 		
 		this.chunkLoaderMap.clear();
 		ListNBT nbtChunkLoaderMap = nbt.getList("ChunkLoaderMap", 10);
@@ -171,7 +171,7 @@ public class ChunkLoadHandler extends WorldSavedData {
 			ListNBT nbtLoaderMap = ((CompoundNBT) nbtEntry).getList("ChunkLoaders", 4);
 			List<BlockPos> loaderMap = new ArrayList<BlockPos>();
 			nbtLoaderMap.forEach((nbtLoader) -> {
-				loaderMap.add(BlockPos.fromLong(((LongNBT) nbtLoader).getLong()));
+				loaderMap.add(BlockPos.of(((LongNBT) nbtLoader).getAsLong()));
 			});
 			int[] nbtChunkPos = ((CompoundNBT) nbtEntry).getIntArray("ChunkPos");
 			ChunkPos chunkPos = new ChunkPos(nbtChunkPos[0], nbtChunkPos[1]);
@@ -190,13 +190,13 @@ public class ChunkLoadHandler extends WorldSavedData {
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		
 		ListNBT nbtChunkLoaderMap = new ListNBT();
 		this.chunkLoaderMap.forEach((chunkPos, loaderMap) -> {
 			CompoundNBT nbtEntry = new CompoundNBT();
 			ListNBT nbtLoaderMap = new ListNBT();
-			loaderMap.forEach((loader) -> nbtLoaderMap.add(LongNBT.valueOf(loader.toLong())));
+			loaderMap.forEach((loader) -> nbtLoaderMap.add(LongNBT.valueOf(loader.asLong())));
 			nbtEntry.put("ChunkLoaders", nbtLoaderMap);
 			nbtEntry.putIntArray("ChunkPos", new int[] {chunkPos.x, chunkPos.z});
 			nbtChunkLoaderMap.add(nbtEntry);

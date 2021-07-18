@@ -6,7 +6,7 @@ import net.minecraft.block.material.Material;
 public class BlockMetalPlanks extends BlockBase {
 	
 	public BlockMetalPlanks(String name) {
-		super(name, Material.IRON, 1.4F, SoundType.METAL);
+		super(name, Material.METAL, 1.4F, SoundType.METAL);
 	}
 	
 }

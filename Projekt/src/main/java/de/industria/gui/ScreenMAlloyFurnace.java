@@ -20,16 +20,16 @@ public static final ResourceLocation ALLOY_FURNACE_GUI_TEXTURES = new ResourceLo
 
 	@SuppressWarnings("deprecation")
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
 
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindTexture(ALLOY_FURNACE_GUI_TEXTURES);
-		int i = this.guiLeft;
-		int j = (this.height - this.ySize) / 2;
-		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
+		this.minecraft.getTextureManager().bind(ALLOY_FURNACE_GUI_TEXTURES);
+		int i = this.leftPos;
+		int j = (this.height - this.imageHeight) / 2;
+		this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
 		
-		TileEntityMAlloyFurnace te = this.container.getTileEntity();
-		float progress = (float) te.progress / this.container.getTileEntity().progressTotal;
+		TileEntityMAlloyFurnace te = this.menu.getTileEntity();
+		float progress = (float) te.progress / this.menu.getTileEntity().progressTotal;
 		
 		this.blit(matrixStack, i + 64, j + 19, 176, 0, (int) (progress * 49), 46);
 		if (te.hasPower) this.blit(matrixStack, i + 116, j + 53, 176, 46, 16, 16);

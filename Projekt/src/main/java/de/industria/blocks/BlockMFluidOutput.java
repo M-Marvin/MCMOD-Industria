@@ -26,21 +26,21 @@ public class BlockMFluidOutput extends BlockContainerBase implements IAdvancedBl
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	
 	public BlockMFluidOutput() {
-		super("fluid_output", Material.IRON, 2F, SoundType.METAL);
+		super("fluid_output", Material.METAL, 2F, SoundType.METAL);
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(FACING);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(FACING, context.getNearestLookingDirection().getOpposite());
+		return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityMFluidOutput();
 	}
 
@@ -58,12 +58,12 @@ public class BlockMFluidOutput extends BlockContainerBase implements IAdvancedBl
 
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 	
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 	
 }

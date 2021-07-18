@@ -17,19 +17,19 @@ import net.minecraft.world.World;
 public class BlockRawOil extends BlockModFlowingFluid {
 	
 	public BlockRawOil() {
-		super("raw_oil", ModFluids.RAW_OIL, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
+		super("raw_oil", ModFluids.RAW_OIL, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops());
 	}
 	
 	@Override
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 		
-		double d0 = entityIn.getPosYEye() - (double)0.11111111F;
-		BlockPos blockpos = new BlockPos(entityIn.getPosX(), d0, entityIn.getPosZ());
+		double d0 = entityIn.getEyeY() - (double)0.11111111F;
+		BlockPos blockpos = new BlockPos(entityIn.getX(), d0, entityIn.getZ());
 		FluidState fluidstate = worldIn.getFluidState(blockpos);
 		
-		if (ModTags.RAW_OIL.contains(fluidstate.getFluid()) && entityIn instanceof LivingEntity) {
+		if (ModTags.RAW_OIL.contains(fluidstate.getType()) && entityIn instanceof LivingEntity) {
 			// TODO
-			((LivingEntity) entityIn).addPotionEffect(new EffectInstance(Effects.BLINDNESS, 40, 1));
+			((LivingEntity) entityIn).addEffect(new EffectInstance(Effects.BLINDNESS, 40, 1));
 		}
 		
 	}

@@ -11,31 +11,31 @@ public class BlockPillarBase extends RotatedPillarBlock {
 	
 	public BlockPillarBase(String name, Properties properties) {
 		super(properties);
-		this.setDefaultState(this.stateContainer.getBaseState().with(AXIS, Axis.Y));
+		this.registerDefaultState(this.stateDefinition.any().setValue(AXIS, Axis.Y));
 		setRegistryName(new ResourceLocation(Industria.MODID, name));
 	}
 	
 	public BlockPillarBase(String name, Material material, float hardnessAndResistance, SoundType sound, boolean dropsEver) {
-		super(Properties.create(material).hardnessAndResistance(hardnessAndResistance).sound(sound).harvestTool(BlockBase.getDefaultToolType(material)));
-		this.setDefaultState(this.stateContainer.getBaseState().with(AXIS, Axis.Y));
+		super(Properties.of(material).strength(hardnessAndResistance).sound(sound).harvestTool(BlockBase.getDefaultToolType(material)));
+		this.registerDefaultState(this.stateDefinition.any().setValue(AXIS, Axis.Y));
 		setRegistryName(new ResourceLocation(Industria.MODID, name));
 	}
 	
 	public BlockPillarBase(String name, Material material, float hardness, float resistance, SoundType sound, boolean dropsEver) {
-		super(Properties.create(material).hardnessAndResistance(hardness, resistance).sound(sound).harvestTool(BlockBase.getDefaultToolType(material)));
-		this.setDefaultState(this.stateContainer.getBaseState().with(AXIS, Axis.Y));
+		super(Properties.of(material).strength(hardness, resistance).sound(sound).harvestTool(BlockBase.getDefaultToolType(material)));
+		this.registerDefaultState(this.stateDefinition.any().setValue(AXIS, Axis.Y));
 		setRegistryName(new ResourceLocation(Industria.MODID, name));
 	}
 
 	public BlockPillarBase(String name, Material material, float hardnessAndResistance, SoundType sound) {
-		super(Properties.create(material).hardnessAndResistance(hardnessAndResistance).sound(sound).harvestTool(BlockBase.getDefaultToolType(material)).setRequiresTool());
-		this.setDefaultState(this.stateContainer.getBaseState().with(AXIS, Axis.Y));
+		super(Properties.of(material).strength(hardnessAndResistance).sound(sound).harvestTool(BlockBase.getDefaultToolType(material)).requiresCorrectToolForDrops());
+		this.registerDefaultState(this.stateDefinition.any().setValue(AXIS, Axis.Y));
 		setRegistryName(new ResourceLocation(Industria.MODID, name));
 	}
 	
 	public BlockPillarBase(String name, Material material, float hardness, float resistance, SoundType sound) {
-		super(Properties.create(material).hardnessAndResistance(hardness, resistance).sound(sound).harvestTool(BlockBase.getDefaultToolType(material)).setRequiresTool());
-		this.setDefaultState(this.stateContainer.getBaseState().with(AXIS, Axis.Y));
+		super(Properties.of(material).strength(hardness, resistance).sound(sound).harvestTool(BlockBase.getDefaultToolType(material)).requiresCorrectToolForDrops());
+		this.registerDefaultState(this.stateDefinition.any().setValue(AXIS, Axis.Y));
 		setRegistryName(new ResourceLocation(Industria.MODID, name));
 	}
 	

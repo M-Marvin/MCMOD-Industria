@@ -15,8 +15,8 @@ public class VerticalOffsetPlacement extends SimplePlacement<VerticalOffsetPlace
 	}
 
 	@Override
-	protected Stream<BlockPos> getPositions(Random random, VerticalOffsetPlacementConfig config, BlockPos pos) {
-		return Stream.of(pos.add(0, config.offset, 0));
+	protected Stream<BlockPos> place(Random random, VerticalOffsetPlacementConfig config, BlockPos pos) {
+		return Stream.of(pos.offset(0, config.offset, 0));
 	}
 
 }

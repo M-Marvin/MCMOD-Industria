@@ -25,32 +25,32 @@ public abstract class FluidLiquidConcrete extends FlowingFluid {
 	public static final BooleanProperty HARDENED = BooleanProperty.create("hardened");
 	
 	public FluidLiquidConcrete() {
-		this.setDefaultState(this.stateContainer.getBaseState().with(HARDENED, false));
+		this.registerDefaultState(this.stateDefinition.any().setValue(HARDENED, false));
 	}
 	
 	@Override
-	public Fluid getFlowingFluid() {
+	public Fluid getFlowing() {
 		return ModFluids.FLOWING_LIQUID_CONCRETE;
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Fluid, FluidState> builder) {
+	protected void createFluidStateDefinition(Builder<Fluid, FluidState> builder) {
 		builder.add(HARDENED);
-		super.fillStateContainer(builder);
+		super.createFluidStateDefinition(builder);
 	}
 	
 	@Override
-	public Fluid getStillFluid() {
+	public Fluid getSource() {
 		return ModFluids.LIQUID_CONCRETE;
 	}
 	
 	@Override
-	protected boolean canSourcesMultiply() {
+	protected boolean canConvertToSource() {
 		return false;
 	}
 	
 	@Override
-	protected void beforeReplacingBlock(IWorld worldIn, BlockPos pos, BlockState state) {}
+	protected void beforeDestroyingBlock(IWorld worldIn, BlockPos pos, BlockState state) {}
 	
 	@Override
 	protected int getSlopeFindDistance(IWorldReader worldIn) {
@@ -58,28 +58,28 @@ public abstract class FluidLiquidConcrete extends FlowingFluid {
 	}
 	
 	@Override
-	protected int getLevelDecreasePerBlock(IWorldReader worldIn) {
+	protected int getDropOff(IWorldReader worldIn) {
 		return 2;
 	}
 	
 	@Override
-	public Item getFilledBucket() {
+	public Item getBucket() {
 		return ModItems.liquid_concrete_bucket;
 	}
 	
 	@Override
-	protected boolean canDisplace(FluidState p_215665_1_, IBlockReader p_215665_2_, BlockPos p_215665_3_, Fluid p_215665_4_, Direction p_215665_5_) {
-		return p_215665_5_ == Direction.DOWN && !p_215665_4_.isEquivalentTo(this);
+	protected boolean canBeReplacedWith(FluidState p_215665_1_, IBlockReader p_215665_2_, BlockPos p_215665_3_, Fluid p_215665_4_, Direction p_215665_5_) {
+		return p_215665_5_ == Direction.DOWN && !p_215665_4_.isSame(this);
 	}
 	
 	@Override
-	protected boolean canFlow(IBlockReader worldIn, BlockPos fromPos, BlockState fromBlockState, Direction direction, BlockPos toPos, BlockState toBlockState, FluidState toFluidState, Fluid fluidIn) {
+	protected boolean canSpreadTo(IBlockReader worldIn, BlockPos fromPos, BlockState fromBlockState, Direction direction, BlockPos toPos, BlockState toBlockState, FluidState toFluidState, Fluid fluidIn) {
 		FluidState fluid = worldIn.getBlockState(fromPos).getFluidState();
-		return(fluid.getFluid().isEquivalentTo(this) ? !fluid.get(HARDENED) : false) ? super.canFlow(worldIn, fromPos, fromBlockState, direction, toPos, toBlockState, toFluidState, fluidIn) : false;
+		return(fluid.getType().isSame(this) ? !fluid.getValue(HARDENED) : false) ? super.canSpreadTo(worldIn, fromPos, fromBlockState, direction, toPos, toBlockState, toFluidState, fluidIn) : false;
 	}
 	
 	@Override
-	public int getTickRate(IWorldReader p_205569_1_) {
+	public int getTickDelay(IWorldReader p_205569_1_) {
 		return 6;
 	}
 	
@@ -89,8 +89,8 @@ public abstract class FluidLiquidConcrete extends FlowingFluid {
 	}
 	
 	@Override
-	protected BlockState getBlockState(FluidState state) {
-		return ModItems.liquid_concrete.getDefaultState().with(BlockModFlowingFluid.LEVEL, getLevelFromState(state)).with(BlockLiquidConcrete.HARDENED, state.get(HARDENED));
+	protected BlockState createLegacyBlock(FluidState state) {
+		return ModItems.liquid_concrete.defaultBlockState().setValue(BlockModFlowingFluid.LEVEL, getLegacyLevel(state)).setValue(BlockLiquidConcrete.HARDENED, state.getValue(HARDENED));
 	}
 	
 	@Override
@@ -99,17 +99,17 @@ public abstract class FluidLiquidConcrete extends FlowingFluid {
 				new ResourceLocation(Industria.MODID, "block/liquid_concrete_still"), 
 				new ResourceLocation(Industria.MODID, "block/liquid_concrete_flow"))
 					.overlay(new ResourceLocation(Industria.MODID, "block/liquid_concrete_overlay"))
-					.sound(SoundEvents.ITEM_BUCKET_FILL_LAVA, SoundEvents.ITEM_BUCKET_EMPTY_LAVA)
+					.sound(SoundEvents.BUCKET_FILL_LAVA, SoundEvents.BUCKET_EMPTY_LAVA)
 					.build(this);
 	}
 	
 	@Override
-	public boolean isEquivalentTo(Fluid fluidIn) {
+	public boolean isSame(Fluid fluidIn) {
 		return fluidIn == ModFluids.LIQUID_CONCRETE || fluidIn == ModFluids.FLOWING_LIQUID_CONCRETE;
 	}
 	
 	@Override
-	protected boolean ticksRandomly() {
+	protected boolean isRandomlyTicking() {
 		return true;
 	}
 	
@@ -121,7 +121,7 @@ public abstract class FluidLiquidConcrete extends FlowingFluid {
 		}
 
 		@Override
-		public int getLevel(FluidState state) {
+		public int getAmount(FluidState state) {
 			return 8;
 		}
 		
@@ -135,14 +135,14 @@ public abstract class FluidLiquidConcrete extends FlowingFluid {
 		}
 
 		@Override
-		public int getLevel(FluidState state) {
-			return state.get(LEVEL_1_8);
+		public int getAmount(FluidState state) {
+			return state.getValue(LEVEL);
 		}
 		
 		@Override
-		protected void fillStateContainer(Builder<Fluid, FluidState> builder) {
-			builder.add(LEVEL_1_8);
-			super.fillStateContainer(builder);
+		protected void createFluidStateDefinition(Builder<Fluid, FluidState> builder) {
+			builder.add(LEVEL);
+			super.createFluidStateDefinition(builder);
 		}
 		
 	}

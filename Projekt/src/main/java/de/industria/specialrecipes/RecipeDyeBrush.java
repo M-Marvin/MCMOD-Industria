@@ -25,7 +25,7 @@ public class RecipeDyeBrush extends SpecialRecipe {
 		
 		for (int i = 0; i < 9; i++) {
 			
-			ItemStack stack = inv.getStackInSlot(i);
+			ItemStack stack = inv.getItem(i);
 			
 			if (!stack.isEmpty()) {
 				if (stack.getItem() == ModItems.brush) {
@@ -52,17 +52,17 @@ public class RecipeDyeBrush extends SpecialRecipe {
 	}
 
 	@Override
-	public ItemStack getCraftingResult(CraftingInventory inv) {
+	public ItemStack assemble(CraftingInventory inv) {
 		
 		Item dyeItem = null;
 		
 		for (int i = 0; i < 9; i++) {
-			ItemStack stack = inv.getStackInSlot(i);
+			ItemStack stack = inv.getItem(i);
 			if (stack.getItem() instanceof DyeItem) dyeItem = stack.getItem();
 		}
 		
 		if (dyeItem != null) {
-			String paintName = "dye." + ((DyeItem) dyeItem).getDyeColor().getString();
+			String paintName = "dye." + ((DyeItem) dyeItem).getDyeColor().getSerializedName();
 			ItemStack dyedBrush = new ItemStack(ModItems.brush);
 			ModItems.brush.setPaintName(paintName, dyedBrush);
 			return dyedBrush;
@@ -73,7 +73,7 @@ public class RecipeDyeBrush extends SpecialRecipe {
 	}
 
 	@Override
-	public boolean canFit(int width, int height) {
+	public boolean canCraftInDimensions(int width, int height) {
 		return width * height > 1;
 	}
 	

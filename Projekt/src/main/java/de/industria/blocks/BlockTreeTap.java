@@ -40,55 +40,55 @@ public class BlockTreeTap extends BlockBase {
 	public static final IntegerProperty STAGE = IntegerProperty.create("stage", 0, 3);
 	
 	public BlockTreeTap() {
-		super("tree_tap", Material.IRON, 1F, 0.5F, SoundType.METAL, true);
-		this.setDefaultState(this.stateContainer.getBaseState().with(STAGE, 0));
+		super("tree_tap", Material.METAL, 1F, 0.5F, SoundType.METAL, true);
+		this.registerDefaultState(this.stateDefinition.any().setValue(STAGE, 0));
 	}
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		
-		VoxelShape shape = Block.makeCuboidShape(5, 2, 2, 11, 6, 8);
-		shape = VoxelShapes.or(shape, Block.makeCuboidShape(7, 8, 4, 9, 10, 6));
-		shape = VoxelShapes.or(shape, Block.makeCuboidShape(7, 10, 4, 9, 12, 16));
-		shape = VoxelShapes.or(shape, Block.makeCuboidShape(6, 10, 8, 10, 13, 12));
-		shape = VoxelShapes.or(shape, Block.makeCuboidShape(7, 13, 9, 9, 15, 11));
-		shape = VoxelShapes.or(shape, Block.makeCuboidShape(5, 15, 9, 11, 16, 11));
-		return VoxelHelper.rotateShape(shape, state.get(FACING));
+		VoxelShape shape = Block.box(5, 2, 2, 11, 6, 8);
+		shape = VoxelShapes.or(shape, Block.box(7, 8, 4, 9, 10, 6));
+		shape = VoxelShapes.or(shape, Block.box(7, 10, 4, 9, 12, 16));
+		shape = VoxelShapes.or(shape, Block.box(6, 10, 8, 10, 13, 12));
+		shape = VoxelShapes.or(shape, Block.box(7, 13, 9, 9, 15, 11));
+		shape = VoxelShapes.or(shape, Block.box(5, 15, 9, 11, 16, 11));
+		return VoxelHelper.rotateShape(shape, state.getValue(FACING));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(FACING, STAGE);
 	}
 	
 	@Override
-	public boolean ticksRandomly(BlockState state) {
+	public boolean isRandomlyTicking(BlockState state) {
 		return true;
 	}
 	
 	@Override
 	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
 		
-		int stage = state.get(STAGE);
+		int stage = state.getValue(STAGE);
 		
 		if (stage < 3) {
 
-			Direction logSide = state.get(FACING).getOpposite();
-			BlockState logState = worldIn.getBlockState(pos.offset(logSide));
+			Direction logSide = state.getValue(FACING).getOpposite();
+			BlockState logState = worldIn.getBlockState(pos.relative(logSide));
 			
 			if (ModTags.RUBBER_LOGS.contains(logState.getBlock())) {
 				
-				List<BlockPos> logs = getLogs(pos.offset(logSide), worldIn);
+				List<BlockPos> logs = getLogs(pos.relative(logSide), worldIn);
 				
 				for (BlockPos logPos : logs) {
 					
 					logState = worldIn.getBlockState(logPos);
-					boolean isRipe = logState.get(BlockRubberLog.RIPE_STATE) == RipeState.IS_RIPE;
+					boolean isRipe = logState.getValue(BlockRubberLog.RIPE_STATE) == RipeState.IS_RIPE;
 					
 					if (isRipe && stage < 4) {
 						
-						worldIn.setBlockState(pos, state.with(STAGE, stage + 1));
-						worldIn.setBlockState(logPos, logState.with(BlockRubberLog.RIPE_STATE, RipeState.CAN_BE_RIPE));
+						worldIn.setBlockAndUpdate(pos, state.setValue(STAGE, stage + 1));
+						worldIn.setBlockAndUpdate(logPos, logState.setValue(BlockRubberLog.RIPE_STATE, RipeState.CAN_BE_RIPE));
 						break;
 						
 					}
@@ -103,28 +103,28 @@ public class BlockTreeTap extends BlockBase {
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
-		int stage = state.get(STAGE);
-		ItemStack itemstack = player.getHeldItemMainhand();
+		int stage = state.getValue(STAGE);
+		ItemStack itemstack = player.getMainHandItem();
 		
 		if (itemstack.getItem() == Items.GLASS_BOTTLE && stage > 0) {
 			
 			itemstack.shrink(1);
-			worldIn.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), ModSoundEvents.TREE_TAP_HARVEST, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+			worldIn.playSound(player, player.getX(), player.getY(), player.getZ(), ModSoundEvents.TREE_TAP_HARVEST, SoundCategory.NEUTRAL, 1.0F, 1.0F);
 			if (itemstack.isEmpty()) {
-			   player.setHeldItem(handIn, new ItemStack(ModItems.raw_rubber_bottle));
-			} else if (!player.inventory.addItemStackToInventory(new ItemStack(ModItems.raw_rubber_bottle))) {
-			   player.dropItem(new ItemStack(ModItems.raw_rubber_bottle), false);
+			   player.setItemInHand(handIn, new ItemStack(ModItems.raw_rubber_bottle));
+			} else if (!player.inventory.add(new ItemStack(ModItems.raw_rubber_bottle))) {
+			   player.drop(new ItemStack(ModItems.raw_rubber_bottle), false);
 			}
 			
-			worldIn.setBlockState(pos, state.with(STAGE, stage - 1));
+			worldIn.setBlockAndUpdate(pos, state.setValue(STAGE, stage - 1));
 			
 			return ActionResultType.CONSUME;
 			
 		}
 		
-		return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
+		return super.use(state, worldIn, pos, player, handIn, hit);
 	}
 	
 	public List<BlockPos> getLogs(BlockPos pos, World world) {
@@ -139,7 +139,7 @@ public class BlockTreeTap extends BlockBase {
 			if (ModTags.RUBBER_LOGS.contains(scannState.getBlock())) {
 				posList.add(scannPos);
 				for (Direction d : Direction.values()) {
-					this.scannAt(posList, world, scannPos.offset(d), scannDepth + 1);
+					this.scannAt(posList, world, scannPos.relative(d), scannDepth + 1);
 				}
 			}
 		}
@@ -147,21 +147,21 @@ public class BlockTreeTap extends BlockBase {
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		Direction side = context.getFace();
-		BlockState logState = context.getWorld().getBlockState(context.getPos().offset(side.getOpposite()));
+		Direction side = context.getClickedFace();
+		BlockState logState = context.getLevel().getBlockState(context.getClickedPos().relative(side.getOpposite()));
 		if (ModTags.RUBBER_LOGS.contains(logState.getBlock())) {
-			return this.getDefaultState().with(FACING, side);	
+			return this.defaultBlockState().setValue(FACING, side);	
 		}
-		return context.getWorld().getBlockState(context.getPos());
+		return context.getLevel().getBlockState(context.getClickedPos());
 	}
 	
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 		
-		Direction logSide = state.get(FACING).getOpposite();
-		BlockState logState = worldIn.getBlockState(pos.offset(logSide));
+		Direction logSide = state.getValue(FACING).getOpposite();
+		BlockState logState = worldIn.getBlockState(pos.relative(logSide));
 		
-		if (fromPos.equals(pos.offset(logSide)) && !ModTags.RUBBER_LOGS.contains(logState.getBlock())) {
+		if (fromPos.equals(pos.relative(logSide)) && !ModTags.RUBBER_LOGS.contains(logState.getBlock())) {
 			
 			worldIn.destroyBlock(pos, true);
 			

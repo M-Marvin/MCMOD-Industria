@@ -21,10 +21,10 @@ public class BlendingRecipeSerializer<T extends BlendingRecipe> extends ForgeReg
 		this.factory = factory;
 	}
 	
-	public T read(ResourceLocation recipeId, JsonObject json) {
+	public T fromJson(ResourceLocation recipeId, JsonObject json) {
 		JsonArray ingredientsItem = json.get("ingredientItems").getAsJsonArray();
 		ItemStack[] itemsIn = new ItemStack[ingredientsItem.size()];
-		for (int i = 0; i < itemsIn.length; i++) itemsIn[i] = ShapedRecipe.deserializeItem(ingredientsItem.get(i).getAsJsonObject());
+		for (int i = 0; i < itemsIn.length; i++) itemsIn[i] = ShapedRecipe.itemFromJson(ingredientsItem.get(i).getAsJsonObject());
 		JsonArray ingredientsFluid = json.get("ingredientFluids").getAsJsonArray();
 		FluidStack[] fluidsIn = new FluidStack[ingredientsFluid.size()];
 		for (int i = 0; i < fluidsIn.length; i++) fluidsIn[i] = BlendingRecipeSerializer.deserializeFluidStack(ingredientsFluid.get(i).getAsJsonObject());
@@ -34,10 +34,10 @@ public class BlendingRecipeSerializer<T extends BlendingRecipe> extends ForgeReg
 		return this.factory.create(recipeId, itemsIn, fluidsIn, fluidOut, mixingTime);
 	}
 	
-	public T read(ResourceLocation recipeId, PacketBuffer buffer) {
+	public T fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
 		ItemStack[] itemsIn = new ItemStack[buffer.readInt()];
 		for (int i = 0; i < itemsIn.length; i++) {
-			itemsIn[i] = buffer.readItemStack();
+			itemsIn[i] = buffer.readItem();
 		}
 		FluidStack[] fluidsIn = new FluidStack[buffer.readInt()];
 		for (int i = 0; i < fluidsIn.length; i++) {
@@ -49,10 +49,10 @@ public class BlendingRecipeSerializer<T extends BlendingRecipe> extends ForgeReg
 	}
 	
 	@Override
-	public void write(PacketBuffer buffer, T recipe) {
+	public void toNetwork(PacketBuffer buffer, T recipe) {
 		buffer.writeInt(recipe.itemsIn.length);
 		for (int i = 0; i < recipe.itemsIn.length; i++) {
-			buffer.writeItemStack(recipe.itemsIn[i]);
+			buffer.writeItem(recipe.itemsIn[i]);
 		}
 		buffer.writeInt(recipe.fluidsIn.length);
 		for (int i = 0; i < recipe.fluidsIn.length; i++) {
@@ -71,7 +71,7 @@ public class BlendingRecipeSerializer<T extends BlendingRecipe> extends ForgeReg
 		
 		if (json.has("fluid")) {
 			ResourceLocation fluidName = new ResourceLocation(json.get("fluid").getAsString());
-			Fluid fluid = Registry.FLUID.getOrDefault(fluidName);
+			Fluid fluid = Registry.FLUID.get(fluidName);
 			int amount = json.has("amount") ? json.get("amount").getAsInt() : 1;
 			return new FluidStack(fluid, amount);
 		} else {

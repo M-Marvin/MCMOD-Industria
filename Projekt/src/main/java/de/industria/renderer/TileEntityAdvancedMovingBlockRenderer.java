@@ -27,7 +27,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class TileEntityAdvancedMovingBlockRenderer extends TileEntityRenderer<TileEntityAdvancedMovingBlock> {
 	
-	private BlockRendererDispatcher blockRenderer = Minecraft.getInstance().getBlockRendererDispatcher();
+	private BlockRendererDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
 
 	public TileEntityAdvancedMovingBlockRenderer(TileEntityRendererDispatcher p_i226012_1_) {
 		super(p_i226012_1_);
@@ -36,47 +36,47 @@ public class TileEntityAdvancedMovingBlockRenderer extends TileEntityRenderer<Ti
 	@SuppressWarnings("deprecation")
 	public void render(TileEntityAdvancedMovingBlock tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		
-		World world = tileEntityIn.getWorld();
+		World world = tileEntityIn.getLevel();
 		if (world != null) {
-			BlockPos blockpos = tileEntityIn.getPos().offset(tileEntityIn.getMotionDirection().getOpposite());
+			BlockPos blockpos = tileEntityIn.getBlockPos().relative(tileEntityIn.getMotionDirection().getOpposite());
 			BlockState blockstate = tileEntityIn.getPistonState();
 			if (!blockstate.isAir()) {
-				BlockModelRenderer.enableCache();
-				matrixStackIn.push();
+				BlockModelRenderer.enableCaching();
+				matrixStackIn.pushPose();
 				matrixStackIn.translate((double)tileEntityIn.getOffsetX(partialTicks), (double)tileEntityIn.getOffsetY(partialTicks), (double)tileEntityIn.getOffsetZ(partialTicks));
-				if (blockstate.isIn(ModItems.advanced_piston_head) && tileEntityIn.getProgress(partialTicks) <= 4.0F) {
-					blockstate = blockstate.with(PistonHeadBlock.SHORT, Boolean.valueOf(tileEntityIn.getProgress(partialTicks) <= 0.5F));
-					this.func_228876_a_(blockpos, blockstate, tileEntityIn.getPistonTileEntity(), matrixStackIn, bufferIn, world, false, combinedOverlayIn);
+				if (blockstate.is(ModItems.advanced_piston_head) && tileEntityIn.getProgress(partialTicks) <= 4.0F) {
+					blockstate = blockstate.setValue(PistonHeadBlock.SHORT, Boolean.valueOf(tileEntityIn.getProgress(partialTicks) <= 0.5F));
+					this.renderBlock(blockpos, blockstate, tileEntityIn.getPistonTileEntity(), matrixStackIn, bufferIn, world, false, combinedOverlayIn);
 				} else if (tileEntityIn.shouldPistonHeadBeRendered() && !tileEntityIn.isExtending()) {
-					PistonType pistontype = blockstate.isIn(ModItems.advanced_sticky_piston) ? PistonType.STICKY : PistonType.DEFAULT;
-					BlockState blockstate1 = ModItems.advanced_piston_head.getDefaultState().with(PistonHeadBlock.TYPE, pistontype).with(PistonHeadBlock.FACING, blockstate.get(PistonBlock.FACING));
-					blockstate1 = blockstate1.with(PistonHeadBlock.SHORT, Boolean.valueOf(tileEntityIn.getProgress(partialTicks) >= 0.5F));
-					this.func_228876_a_(blockpos, blockstate1, tileEntityIn.getTileData(), matrixStackIn, bufferIn, world, false, combinedOverlayIn);
-					BlockPos blockpos1 = blockpos.offset(tileEntityIn.getMotionDirection());
-					matrixStackIn.pop();
-					matrixStackIn.push();
-					blockstate = blockstate.with(PistonBlock.EXTENDED, Boolean.valueOf(true));
-					this.func_228876_a_(blockpos1, blockstate, tileEntityIn.getPistonTileEntity(), matrixStackIn, bufferIn, world, true, combinedOverlayIn);
+					PistonType pistontype = blockstate.is(ModItems.advanced_sticky_piston) ? PistonType.STICKY : PistonType.DEFAULT;
+					BlockState blockstate1 = ModItems.advanced_piston_head.defaultBlockState().setValue(PistonHeadBlock.TYPE, pistontype).setValue(PistonHeadBlock.FACING, blockstate.getValue(PistonBlock.FACING));
+					blockstate1 = blockstate1.setValue(PistonHeadBlock.SHORT, Boolean.valueOf(tileEntityIn.getProgress(partialTicks) >= 0.5F));
+					this.renderBlock(blockpos, blockstate1, tileEntityIn.getTileData(), matrixStackIn, bufferIn, world, false, combinedOverlayIn);
+					BlockPos blockpos1 = blockpos.relative(tileEntityIn.getMotionDirection());
+					matrixStackIn.popPose();
+					matrixStackIn.pushPose();
+					blockstate = blockstate.setValue(PistonBlock.EXTENDED, Boolean.valueOf(true));
+					this.renderBlock(blockpos1, blockstate, tileEntityIn.getPistonTileEntity(), matrixStackIn, bufferIn, world, true, combinedOverlayIn);
 				} else {
-					this.func_228876_a_(blockpos, blockstate, tileEntityIn.getPistonTileEntity(), matrixStackIn, bufferIn, world, false, combinedOverlayIn);
+					this.renderBlock(blockpos, blockstate, tileEntityIn.getPistonTileEntity(), matrixStackIn, bufferIn, world, false, combinedOverlayIn);
 				}
 				
-				matrixStackIn.pop();
-				BlockModelRenderer.disableCache();
+				matrixStackIn.popPose();
+				BlockModelRenderer.clearCache();
 			}
 		}
 	}
 
 	@SuppressWarnings("deprecation")
-	private void func_228876_a_(BlockPos pos, BlockState state, CompoundNBT tileData, MatrixStack matrixStack, IRenderTypeBuffer buffer, World world, boolean p_228876_6_, int p_228876_7_) {
-		net.minecraft.client.renderer.RenderType.getBlockRenderTypes().stream().filter(t -> RenderTypeLookup.canRenderInLayer(state, t)).forEach(rendertype -> {
+	private void renderBlock(BlockPos pos, BlockState state, CompoundNBT tileData, MatrixStack matrixStack, IRenderTypeBuffer buffer, World world, boolean p_228876_6_, int p_228876_7_) {
+		net.minecraft.client.renderer.RenderType.chunkBufferLayers().stream().filter(t -> RenderTypeLookup.canRenderInLayer(state, t)).forEach(rendertype -> {
 		net.minecraftforge.client.ForgeHooksClient.setRenderLayer(rendertype);
 		IVertexBuilder ivertexbuilder = buffer.getBuffer(rendertype);
-		if (blockRenderer == null) blockRenderer = Minecraft.getInstance().getBlockRendererDispatcher();
-		this.blockRenderer.getBlockModelRenderer().renderModel(world, this.blockRenderer.getModelForState(state), state, pos, matrixStack, ivertexbuilder, p_228876_6_, new Random(), state.getPositionRandom(pos), p_228876_7_);
+		if (blockRenderer == null) blockRenderer = Minecraft.getInstance().getBlockRenderer();
+		this.blockRenderer.getModelRenderer().tesselateBlock(world, this.blockRenderer.getBlockModel(state), state, pos, matrixStack, ivertexbuilder, p_228876_6_, new Random(), state.getSeed(pos), p_228876_7_);
 		});
 		
-		// TODO: Bug seit letztem Forge Update, verusacht (warscheinlich) wilkürliche Abstürze ohne erkennbaren Grund.
+		// TODO: Bug seit letztem Forge Update, verusacht (warscheinlich) wilkï¿½rliche Abstï¿½rze ohne erkennbaren Grund.
 //		if (state.hasTileEntity()) {
 //	 		
 //	 		TileEntity tileEntity = state.getBlock().createTileEntity(state, world);
@@ -86,7 +86,7 @@ public class TileEntityAdvancedMovingBlockRenderer extends TileEntityRenderer<Ti
 // 			try {
 // 		 		Field[] fields = FieldUtils.getAllFields(tileEntity.getClass());
 // 				for (Field field : fields) {
-// 					if (field.getName().equals("field_195045_e") || field.getName().equals("cachedBlockState")) {
+// 					if (field.getName().equals("blockState") || field.getName().equals("cachedBlockState")) {
 // 						FieldUtils.writeField(tileEntity, field.getName(), state, true);
 // 					}
 // 				}

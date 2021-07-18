@@ -22,16 +22,16 @@ public class ScreenMFluidBath extends ContainerScreen<ContainerMFluidBath> {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
 
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindTexture(FLUID_BATH_GUI_TEXTURES);
-		int i = this.guiLeft;
-		int j = (this.height - this.ySize) / 2;
-		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
+		this.minecraft.getTextureManager().bind(FLUID_BATH_GUI_TEXTURES);
+		int i = this.leftPos;
+		int j = (this.height - this.imageHeight) / 2;
+		this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
 		
-		TileEntityMFluidBath te = this.container.getTileEntity();
-		float progress = (float) te.progress / (float) this.container.getTileEntity().progressTotal;
+		TileEntityMFluidBath te = this.menu.getTileEntity();
+		float progress = (float) te.progress / (float) this.menu.getTileEntity().progressTotal;
 		float fluidDurabillity = (float) te.fluidBufferState;
 		
 		this.blit(matrixStack, i + 53, j + 15, 176, 16, (int) (progress * 71), 16);
@@ -39,21 +39,21 @@ public class ScreenMFluidBath extends ContainerScreen<ContainerMFluidBath> {
 		
 		if (te.hasPower) this.blit(matrixStack, i + 25, j + 55, 176, 0, 16, 16);
 		
-		FluidStack fluid1 = this.container.getTileEntity().fluidIn;
+		FluidStack fluid1 = this.menu.getTileEntity().fluidIn;
 		if (!fluid1.isEmpty()) {
-			float fluidA1 = fluid1.getAmount() / (float) this.container.getTileEntity().maxFluidStorage;
+			float fluidA1 = fluid1.getAmount() / (float) this.menu.getTileEntity().maxFluidStorage;
 			FluidBarTexture.drawFluidTexture(matrixStack, this, fluid1.getFluid(), i + 0, j + 71, 16, (int) (fluidA1 * 56));
 		}
 		
-		FluidStack fluid3 = this.container.getTileEntity().fluidOut;
+		FluidStack fluid3 = this.menu.getTileEntity().fluidOut;
 		if (!fluid3.isEmpty()) {
-			float fluidA3 = fluid3.getAmount() / (float) this.container.getTileEntity().maxFluidStorage;
+			float fluidA3 = fluid3.getAmount() / (float) this.menu.getTileEntity().maxFluidStorage;
 			FluidBarTexture.drawFluidTexture(matrixStack, this, fluid3.getFluid(), i + 144, j + 71, 16, (int) (fluidA3 * 56));
 		}
 		
-		if (this.container.getTileEntity().fluidBufferState > 0 && this.container.getTileEntity().lastRecipe != null) {
-			FluidBarTexture.drawFluidTexture(matrixStack, this, this.container.getTileEntity().lastRecipe.getFluidIn().getFluid(), i + 50, j + 55, 52, 29, 40 + (int) (240F * this.container.getTileEntity().fluidBufferState));
-			FluidBarTexture.drawFluidTexture(matrixStack, this, this.container.getTileEntity().lastRecipe.getFluidIn().getFluid(), i + 50, j + 21, 52, 6, 40 + (int) (240F * this.container.getTileEntity().fluidBufferState));
+		if (this.menu.getTileEntity().fluidBufferState > 0 && this.menu.getTileEntity().lastRecipe != null) {
+			FluidBarTexture.drawFluidTexture(matrixStack, this, this.menu.getTileEntity().lastRecipe.getFluidIn().getFluid(), i + 50, j + 55, 52, 29, 40 + (int) (240F * this.menu.getTileEntity().fluidBufferState));
+			FluidBarTexture.drawFluidTexture(matrixStack, this, this.menu.getTileEntity().lastRecipe.getFluidIn().getFluid(), i + 50, j + 21, 52, 6, 40 + (int) (240F * this.menu.getTileEntity().fluidBufferState));
 		}
 		
 	}

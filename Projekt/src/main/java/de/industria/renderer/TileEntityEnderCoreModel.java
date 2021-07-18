@@ -17,53 +17,53 @@ public class TileEntityEnderCoreModel extends EntityModel<Entity> {
 	private final ModelRenderer cube_r3;
 
 	public TileEntityEnderCoreModel() {
-		textureWidth = 64;
-		textureHeight = 64;
+		texWidth = 64;
+		texHeight = 64;
 
 		core = new ModelRenderer(this);
-		core.setRotationPoint(0.0F, 16.0F, 0.0F);
+		core.setPos(0.0F, 16.0F, 0.0F);
 		
 
 		cube_r1 = new ModelRenderer(this);
-		cube_r1.setRotationPoint(0.0F, 0.0F, 0.0F);
+		cube_r1.setPos(0.0F, 0.0F, 0.0F);
 		core.addChild(cube_r1);
 		setRotationAngle(cube_r1, 0.7854F, -2.3562F, -0.7854F);
-		cube_r1.setTextureOffset(0, 0).addBox(-4.5F, -4.5F, -4.5F, 9.0F, 9.0F, 9.0F, 0.0F, false);
+		cube_r1.texOffs(0, 0).addBox(-4.5F, -4.5F, -4.5F, 9.0F, 9.0F, 9.0F, 0.0F, false);
 
 		cube_r2 = new ModelRenderer(this);
-		cube_r2.setRotationPoint(0.0F, 0.0F, 0.0F);
+		cube_r2.setPos(0.0F, 0.0F, 0.0F);
 		core.addChild(cube_r2);
 		setRotationAngle(cube_r2, 0.7854F, -0.7854F, -0.7854F);
-		cube_r2.setTextureOffset(0, 0).addBox(-4.5F, -4.5F, -4.5F, 9.0F, 9.0F, 9.0F, 0.0F, false);
+		cube_r2.texOffs(0, 0).addBox(-4.5F, -4.5F, -4.5F, 9.0F, 9.0F, 9.0F, 0.0F, false);
 
 		cube_r3 = new ModelRenderer(this);
-		cube_r3.setRotationPoint(0.0F, 0.0F, 0.0F);
+		cube_r3.setPos(0.0F, 0.0F, 0.0F);
 		core.addChild(cube_r3);
 		setRotationAngle(cube_r3, 0.7854F, 0.0F, -0.7854F);
-		cube_r3.setTextureOffset(0, 0).addBox(-4.5F, -4.5F, -4.5F, 9.0F, 9.0F, 9.0F, 0.0F, false);
+		cube_r3.texOffs(0, 0).addBox(-4.5F, -4.5F, -4.5F, 9.0F, 9.0F, 9.0F, 0.0F, false);
 	}
 
 	@Override
-	public void setRotationAngles(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
+	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
 		//previously the render function, render code was moved to a method below
 	}
 
 	@Override
-	public void render(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
+	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
 		core.render(matrixStack, buffer, packedLight, packedOverlay);
 	}
 
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
+		modelRenderer.xRot = x;
+		modelRenderer.yRot = y;
+		modelRenderer.zRot = z;
 	}
 	
 	public void setRotation(float rotation) {
-		cube_r1.rotateAngleY = rotation + 0;
-		cube_r2.rotateAngleX = rotation + 45;
-		cube_r2.rotateAngleY = rotation + 45;
-		cube_r3.rotateAngleZ = rotation + 90;
+		cube_r1.yRot = rotation + 0;
+		cube_r2.xRot = rotation + 45;
+		cube_r2.yRot = rotation + 45;
+		cube_r3.zRot = rotation + 90;
 	}
 	
 }

@@ -18,14 +18,14 @@ public class BlockTSteelRail extends BlockRailBase {
 	public void onMinecartPass(BlockState state, World world, BlockPos pos, AbstractMinecartEntity cart) {
 		
 		if (MinecartHandler.getHandlerForWorld(world).isBoosted(cart)) {
-			Vector3d motion = cart.getMotion();
+			Vector3d motion = cart.getDeltaMovement();
 			double speed = Math.max(Math.abs(motion.x), Math.abs(motion.z));
-			RailShape shape = state.get(SHAPE);
+			RailShape shape = state.getValue(SHAPE);
 			boolean flag = shape == RailShape.NORTH_EAST || shape == RailShape.NORTH_WEST || shape == RailShape.SOUTH_EAST || shape == RailShape.SOUTH_WEST;
 			if (speed > 0.1F && !flag) {
 				double boostMul = 0.9F / speed;
-				motion = motion.mul(boostMul, 1, boostMul);
-				cart.setMotion(motion);
+				motion = motion.multiply(boostMul, 1, boostMul);
+				cart.setDeltaMovement(motion);
 			}
 		}
 		

@@ -21,7 +21,7 @@ public class BlockConveyorSpliter extends BlockConveyorBelt {
 	
 	public BlockConveyorSpliter() {
 		super("conveyor_spliter");
-		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(RIGHT, BeltState.CLOSE).with(LEFT, BeltState.CLOSE).with(WATERLOGGED, false));
+		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(RIGHT, BeltState.CLOSE).setValue(LEFT, BeltState.CLOSE).setValue(WATERLOGGED, false));
 	}
 
 	@Override
@@ -33,25 +33,25 @@ public class BlockConveyorSpliter extends BlockConveyorBelt {
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(ACTIVE);
-		super.fillStateContainer(builder);
+		super.createBlockStateDefinition(builder);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		Direction facing = context.getPlacementHorizontalFacing();
-		return this.getDefaultState().with(FACING, facing).with(RIGHT, getHingeSide(context) ? BeltState.OPEN : BeltState.CLOSE).with(LEFT, !getHingeSide(context) ? BeltState.OPEN : BeltState.CLOSE).with(ACTIVE, false);
+		Direction facing = context.getHorizontalDirection();
+		return this.defaultBlockState().setValue(FACING, facing).setValue(RIGHT, getHingeSide(context) ? BeltState.OPEN : BeltState.CLOSE).setValue(LEFT, !getHingeSide(context) ? BeltState.OPEN : BeltState.CLOSE).setValue(ACTIVE, false);
 	}
 	
 	// Copied placement-code from vanilla DoorBlock
 	private boolean getHingeSide(BlockItemUseContext p_208073_1_) {
-		BlockPos blockpos = p_208073_1_.getPos();
-		Direction direction = p_208073_1_.getPlacementHorizontalFacing();
+		BlockPos blockpos = p_208073_1_.getClickedPos();
+		Direction direction = p_208073_1_.getHorizontalDirection();
 		
-		int j = direction.getXOffset();
-		int k = direction.getZOffset();
-		Vector3d vector3d = p_208073_1_.getHitVec();
+		int j = direction.getStepX();
+		int k = direction.getStepZ();
+		Vector3d vector3d = p_208073_1_.getClickLocation();
 		double d0 = vector3d.x - (double)blockpos.getX();
 		double d1 = vector3d.z - (double)blockpos.getZ();
 		return (j >= 0 || !(d1 < 0.5D)) && (j <= 0 || !(d1 > 0.5D)) && (k >= 0 || !(d0 > 0.5D)) && (k <= 0 || !(d0 < 0.5D)) ? false : true;
@@ -59,11 +59,11 @@ public class BlockConveyorSpliter extends BlockConveyorBelt {
 	
 	@Override
 	public BlockState updateState(World world, BlockPos pos, BlockState state) {
-		boolean powered = world.isBlockPowered(pos) || world.getRedstonePowerFromNeighbors(pos) > 0;
-		if (powered != state.get(ACTIVE)) {
-			world.playSound(null, pos, SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, 0.2F, 1F);
+		boolean powered = world.hasNeighborSignal(pos) || world.getBestNeighborSignal(pos) > 0;
+		if (powered != state.getValue(ACTIVE)) {
+			world.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundCategory.BLOCKS, 0.2F, 1F);
 		}
-		return state.with(ACTIVE, powered);
+		return state.setValue(ACTIVE, powered);
 	}
 	
 	@Override

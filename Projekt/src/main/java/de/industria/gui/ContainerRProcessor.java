@@ -2,7 +2,6 @@ package de.industria.gui;
 
 import de.industria.tileentity.TileEntityRSignalProcessorContact;
 import de.industria.typeregistys.ModContainerType;
-import de.industria.util.blockfeatures.ContainerTileEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketBuffer;
 

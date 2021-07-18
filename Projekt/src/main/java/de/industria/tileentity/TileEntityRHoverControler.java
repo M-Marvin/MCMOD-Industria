@@ -60,9 +60,9 @@ public class TileEntityRHoverControler extends TileEntity implements IInventory,
 	
 	public void onControll(ItemStack actionItem, boolean state) {
 		
-		ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(world);
-		handler.updateNetwork(world, pos);
-		ElectricityNetwork network = handler.getNetwork(pos);
+		ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(level);
+		handler.updateNetwork(level, worldPosition);
+		ElectricityNetwork network = handler.getNetwork(worldPosition);
 		boolean hasEnergy = network.canMachinesRun() == Voltage.NormalVoltage && this.energyTimer > 0;
 		
 		if (!wasLastTickPowered(actionItem) && state) {
@@ -88,11 +88,11 @@ public class TileEntityRHoverControler extends TileEntity implements IInventory,
 					} else {
 						
 						Direction direction = null;
-						Direction blockFacing = getBlockState().get(BlockRHoverControler.FACING);
+						Direction blockFacing = getBlockState().getValue(BlockRHoverControler.FACING);
 						if (ItemStackHelper.isItemStackItemEqual(actionItem, actionItemForward, false)) direction = blockFacing;
 						else if (ItemStackHelper.isItemStackItemEqual(actionItem, actionItemBackward, false)) direction = blockFacing.getOpposite();
-						else if (ItemStackHelper.isItemStackItemEqual(actionItem, actionItemLeft, false)) direction = blockFacing.rotateYCCW();
-						else if (ItemStackHelper.isItemStackItemEqual(actionItem, actionItemRight, false)) direction = blockFacing.rotateY();
+						else if (ItemStackHelper.isItemStackItemEqual(actionItem, actionItemLeft, false)) direction = blockFacing.getCounterClockWise();
+						else if (ItemStackHelper.isItemStackItemEqual(actionItem, actionItemRight, false)) direction = blockFacing.getClockWise();
 						else if (ItemStackHelper.isItemStackItemEqual(actionItem, actionItemUp, false)) direction = Direction.UP;
 						else if (ItemStackHelper.isItemStackItemEqual(actionItem, actionItemDown, false)) direction = Direction.DOWN;
 						
@@ -119,14 +119,14 @@ public class TileEntityRHoverControler extends TileEntity implements IInventory,
 	}
 	
 	public boolean wasLastTickPowered(ItemStack chanelItem) {
-		return this.chanelState.getOrDefault(chanelItem.getItem().getRegistryName() + "{" + chanelItem.getDisplayName().getUnformattedComponentText() + "}", false);
+		return this.chanelState.getOrDefault(chanelItem.getItem().getRegistryName() + "{" + chanelItem.getHoverName().getContents() + "}", false);
 	}
 	
 	public void setWasPowered(ItemStack chanelItem, boolean state) {
-		for (int i = 0; i < this.getSizeInventory(); i++) {
-			if (ItemStackHelper.isItemStackItemEqual(this.getStackInSlot(i), chanelItem, false)) {
+		for (int i = 0; i < this.getContainerSize(); i++) {
+			if (ItemStackHelper.isItemStackItemEqual(this.getItem(i), chanelItem, false)) {
 				
-				this.chanelState.put(chanelItem.getItem().getRegistryName() + "{" + chanelItem.getDisplayName().getUnformattedComponentText() + "}", state);
+				this.chanelState.put(chanelItem.getItem().getRegistryName() + "{" + chanelItem.getHoverName().getContents() + "}", state);
 				return;
 				
 			}
@@ -136,7 +136,7 @@ public class TileEntityRHoverControler extends TileEntity implements IInventory,
 	public boolean doMove(Direction direction) {
 		
 		int hoverForce = getHoverForce();
-		AdvancedPistonBlockStructureHelper pistonStrukture = new AdvancedPistonBlockStructureHelper(this.world, this.pos, direction, maxScannBlocks);
+		AdvancedPistonBlockStructureHelper pistonStrukture = new AdvancedPistonBlockStructureHelper(this.level, this.worldPosition, direction, maxScannBlocks);
 		
 		if (pistonStrukture.canMove()) {
 			
@@ -144,7 +144,7 @@ public class TileEntityRHoverControler extends TileEntity implements IInventory,
 			
 			if (strukture.getBlocks().size() <= hoverForce && strukture.getBlocks().size() > 0) {
 				
-				return strukture.doMove(this.world, this.getMoveDistance(strukture));
+				return strukture.doMove(this.level, this.getMoveDistance(strukture));
 				
 			}
 			
@@ -157,8 +157,8 @@ public class TileEntityRHoverControler extends TileEntity implements IInventory,
 	public boolean doRotate(boolean right) {
 		
 		int hoverForce = getHoverForce();
-		Direction blockFacing = getBlockState().get(BlockRHoverControler.FACING);
-		AdvancedPistonBlockStructureHelper pistonStrukture = new AdvancedPistonBlockStructureHelper(this.world, this.pos, blockFacing, maxScannBlocks);
+		Direction blockFacing = getBlockState().getValue(BlockRHoverControler.FACING);
+		AdvancedPistonBlockStructureHelper pistonStrukture = new AdvancedPistonBlockStructureHelper(this.level, this.worldPosition, blockFacing, maxScannBlocks);
 		
 		if (pistonStrukture.canMove()) {
 			
@@ -166,7 +166,7 @@ public class TileEntityRHoverControler extends TileEntity implements IInventory,
 			
 			if (strukture.getBlocks().size() <= hoverForce && strukture.getBlocks().size() > 0) {
 				
-				return strukture.doRotate(this.world, right);
+				return strukture.doRotate(this.level, right);
 				
 			}
 			
@@ -187,8 +187,8 @@ public class TileEntityRHoverControler extends TileEntity implements IInventory,
 		List<BlockPos> checkedBlocks = new ArrayList<BlockPos>();
 		for (BlockPos pos : structure.getBlocks()) {
 			
-			BlockState state = this.world.getBlockState(pos);
-			boolean speedBoost = state.getBlock() == ModItems.hover_extension ? state.get(BlockRHoverExtension.ACTIVATED) : false;
+			BlockState state = this.level.getBlockState(pos);
+			boolean speedBoost = state.getBlock() == ModItems.hover_extension ? state.getValue(BlockRHoverExtension.ACTIVATED) : false;
 			
 			if (speedBoost && !checkedBlocks.contains(pos)) moveDistance += 1;
 			checkedBlocks.add(pos);
@@ -202,14 +202,14 @@ public class TileEntityRHoverControler extends TileEntity implements IInventory,
 	
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
-		if (!this.actionItemForward.isEmpty()) compound.put("actionItemForward", this.actionItemForward.write(new CompoundNBT()));
-		if (!this.actionItemBackward.isEmpty()) compound.put("actionItemBackward", this.actionItemBackward.write(new CompoundNBT()));
-		if (!this.actionItemLeft.isEmpty()) compound.put("actionItemLeft", this.actionItemLeft.write(new CompoundNBT()));
-		if (!this.actionItemRight.isEmpty()) compound.put("actionItemRight", this.actionItemRight.write(new CompoundNBT()));
-		if (!this.actionItemUp.isEmpty()) compound.put("actionItemUp", this.actionItemUp.write(new CompoundNBT()));
-		if (!this.actionItemDown.isEmpty()) compound.put("actionItemDown", this.actionItemDown.write(new CompoundNBT()));
-		if (!this.actionItemRotate.isEmpty()) compound.put("actionItemRotate", this.actionItemRotate.write(new CompoundNBT()));
+	public CompoundNBT save(CompoundNBT compound) {
+		if (!this.actionItemForward.isEmpty()) compound.put("actionItemForward", this.actionItemForward.save(new CompoundNBT()));
+		if (!this.actionItemBackward.isEmpty()) compound.put("actionItemBackward", this.actionItemBackward.save(new CompoundNBT()));
+		if (!this.actionItemLeft.isEmpty()) compound.put("actionItemLeft", this.actionItemLeft.save(new CompoundNBT()));
+		if (!this.actionItemRight.isEmpty()) compound.put("actionItemRight", this.actionItemRight.save(new CompoundNBT()));
+		if (!this.actionItemUp.isEmpty()) compound.put("actionItemUp", this.actionItemUp.save(new CompoundNBT()));
+		if (!this.actionItemDown.isEmpty()) compound.put("actionItemDown", this.actionItemDown.save(new CompoundNBT()));
+		if (!this.actionItemRotate.isEmpty()) compound.put("actionItemRotate", this.actionItemRotate.save(new CompoundNBT()));
 		CompoundNBT chanelStates = new CompoundNBT();
 		for (Entry<String, Boolean> entry : this.chanelState.entrySet()) {
 			chanelStates.putBoolean(entry.getKey(), entry.getValue());
@@ -217,38 +217,38 @@ public class TileEntityRHoverControler extends TileEntity implements IInventory,
 		compound.put("chanelStates", chanelStates);
 		compound.putInt("energyTimer", this.energyTimer);
 		compound.putInt("moveTimer", this.moveTimer);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
-		this.actionItemForward = ItemStack.read(compound.getCompound("actionItemForward"));
-		this.actionItemBackward = ItemStack.read(compound.getCompound("actionItemBackward"));
-		this.actionItemLeft = ItemStack.read(compound.getCompound("actionItemLeft"));
-		this.actionItemRight = ItemStack.read(compound.getCompound("actionItemRight"));
-		this.actionItemUp = ItemStack.read(compound.getCompound("actionItemUp"));
-		this.actionItemDown = ItemStack.read(compound.getCompound("actionItemDown"));
-		this.actionItemRotate = ItemStack.read(compound.getCompound("actionItemRotate"));
+	public void load(BlockState state, CompoundNBT compound) {
+		this.actionItemForward = ItemStack.of(compound.getCompound("actionItemForward"));
+		this.actionItemBackward = ItemStack.of(compound.getCompound("actionItemBackward"));
+		this.actionItemLeft = ItemStack.of(compound.getCompound("actionItemLeft"));
+		this.actionItemRight = ItemStack.of(compound.getCompound("actionItemRight"));
+		this.actionItemUp = ItemStack.of(compound.getCompound("actionItemUp"));
+		this.actionItemDown = ItemStack.of(compound.getCompound("actionItemDown"));
+		this.actionItemRotate = ItemStack.of(compound.getCompound("actionItemRotate"));
 		CompoundNBT chanelStates = compound.getCompound("chanelStates");
 		this.chanelState.clear();
-		for (String chanel : chanelStates.keySet()) {
+		for (String chanel : chanelStates.getAllKeys()) {
 			this.chanelState.put(chanel, chanelStates.getBoolean(chanel));
 		}
 		this.energyTimer = compound.getInt("energyTimer");
 		this.moveTimer = compound.getInt("moveTimer");
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 	@Override
 	public boolean isEmpty() {
 		for (int i = 0; i < 7; i++) {
-			if (!this.getStackInSlot(i).isEmpty()) return false;
+			if (!this.getItem(i).isEmpty()) return false;
 		}
 		return true;
 	}
 	
 	@Override
-	public ItemStack getStackInSlot(int index) {
+	public ItemStack getItem(int index) {
 		switch (index) {
 		case 0: return actionItemForward;
 		case 1: return actionItemBackward;
@@ -262,25 +262,25 @@ public class TileEntityRHoverControler extends TileEntity implements IInventory,
 	}
 	
 	@Override
-	public ItemStack decrStackSize(int index, int count) {
-		ItemStack stack2 = this.getStackInSlot(index).copy();
+	public ItemStack removeItem(int index, int count) {
+		ItemStack stack2 = this.getItem(index).copy();
 		if (!stack2.isEmpty()) {
-			ItemStack stack = this.getStackInSlot(index);
+			ItemStack stack = this.getItem(index);
 			stack.shrink(count);
-			this.setInventorySlotContents(index, stack);
+			this.setItem(index, stack);
 		}
 		return stack2;
 	}
 	
 	@Override
-	public ItemStack removeStackFromSlot(int index) {
-		ItemStack stack = this.getStackInSlot(index);
-		this.setInventorySlotContents(index, ItemStack.EMPTY);
+	public ItemStack removeItemNoUpdate(int index) {
+		ItemStack stack = this.getItem(index);
+		this.setItem(index, ItemStack.EMPTY);
 		return stack;
 	}
 	
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack) {
+	public void setItem(int index, ItemStack stack) {
 		switch (index) {
 		case 0: this.actionItemForward = stack; break;
 		case 1: this.actionItemBackward = stack; break;
@@ -294,19 +294,19 @@ public class TileEntityRHoverControler extends TileEntity implements IInventory,
 	}
 	
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) {
+	public boolean stillValid(PlayerEntity player) {
 		return true;
 	}
 	
 	@Override
-	public void clear() {
+	public void clearContent() {
 		for (int i = 0; i < 7; i++) {
-			this.setInventorySlotContents(i, ItemStack.EMPTY);
+			this.setItem(i, ItemStack.EMPTY);
 		}
 	}
 
 	@Override
-	public int getSizeInventory() {
+	public int getContainerSize() {
 		return 7;
 	}
 	
@@ -322,7 +322,7 @@ public class TileEntityRHoverControler extends TileEntity implements IInventory,
 
 	@Override
 	public void tick() {
-		if (!this.world.isRemote()) {
+		if (!this.level.isClientSide()) {
 			if (this.energyTimer > 0) this.energyTimer--;
 			if (this.moveTimer > 0) this.moveTimer--;
 		}

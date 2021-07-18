@@ -43,25 +43,25 @@ public class TileEntityMThermalZentrifuge extends TileEntityInventoryBase implem
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote()) {
+		if (!this.level.isClientSide()) {
 			
-			this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
-			ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos);
+			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
+			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
 			
-			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(world).getNetwork(pos);
+			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
 			this.hasPower = network.canMachinesRun() == Voltage.HightVoltage;
 			this.isWorking = canWork() && this.hasPower;
 
-			if (getBlockState().get(BlockMThermalZentrifuge.ACTIVE) != this.isWorking) this.world.setBlockState(pos, getBlockState().with(BlockMThermalZentrifuge.ACTIVE, this.isWorking));
+			if (getBlockState().getValue(BlockMThermalZentrifuge.ACTIVE) != this.isWorking) this.level.setBlockAndUpdate(worldPosition, getBlockState().setValue(BlockMThermalZentrifuge.ACTIVE, this.isWorking));
 			
 			if (this.isWorking) {
 				
 				ThermalZentrifugeRecipe recipe = findRecipe();
 				if (recipe != null) {
 					
-					if (ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(1), recipe.getRecipeOutput()) &&
-						ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(2), recipe.getRecipeOutput2()) &&
-						ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(3), recipe.getRecipeOutput3())) {
+					if (ItemStackHelper.canMergeRecipeStacks(this.getItem(1), recipe.getResultItem()) &&
+						ItemStackHelper.canMergeRecipeStacks(this.getItem(2), recipe.getRecipeOutput2()) &&
+						ItemStackHelper.canMergeRecipeStacks(this.getItem(3), recipe.getRecipeOutput3())) {
 						
 						this.progressTotal = recipe.getRifiningTime();
 						
@@ -72,25 +72,25 @@ public class TileEntityMThermalZentrifuge extends TileEntityInventoryBase implem
 
 							if (this.progress >= this.progressTotal) {
 								
-								if (this.getStackInSlot(1).isEmpty()) {
-									this.setInventorySlotContents(1, recipe.getRecipeOutput());
+								if (this.getItem(1).isEmpty()) {
+									this.setItem(1, recipe.getResultItem());
 								} else {
-									this.getStackInSlot(1).grow(recipe.getRecipeOutput().getCount());
+									this.getItem(1).grow(recipe.getResultItem().getCount());
 								}
 
-								if (this.getStackInSlot(2).isEmpty()) {
-									this.setInventorySlotContents(2, recipe.getRecipeOutput2());
+								if (this.getItem(2).isEmpty()) {
+									this.setItem(2, recipe.getRecipeOutput2());
 								} else {
-									this.getStackInSlot(2).grow(recipe.getRecipeOutput2().getCount());
+									this.getItem(2).grow(recipe.getRecipeOutput2().getCount());
 								}
 
-								if (this.getStackInSlot(3).isEmpty()) {
-									this.setInventorySlotContents(3, recipe.getRecipeOutput3());
+								if (this.getItem(3).isEmpty()) {
+									this.setItem(3, recipe.getRecipeOutput3());
 								} else {
-									this.getStackInSlot(3).grow(recipe.getRecipeOutput3().getCount());
+									this.getItem(3).grow(recipe.getRecipeOutput3().getCount());
 								}
 								
-								this.getStackInSlot(0).shrink(recipe.getIngredient().getCount());
+								this.getItem(0).shrink(recipe.getIngredient().getCount());
 								
 								this.progress = 0;
 								
@@ -137,7 +137,7 @@ public class TileEntityMThermalZentrifuge extends TileEntityInventoryBase implem
 	}
 	
 	public ThermalZentrifugeRecipe findRecipe() {
-		Optional<ThermalZentrifugeRecipe> recipe = this.world.getRecipeManager().getRecipe(ModRecipeTypes.THERMAL_ZENTRIFUGE, this, this.world);
+		Optional<ThermalZentrifugeRecipe> recipe = this.level.getRecipeManager().getRecipeFor(ModRecipeTypes.THERMAL_ZENTRIFUGE, this, this.level);
 		if (recipe.isPresent()) {
 			return recipe.get();
 		} else {
@@ -146,12 +146,12 @@ public class TileEntityMThermalZentrifuge extends TileEntityInventoryBase implem
 	}
 	
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
 		return index == 0;
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return index > 0;
 	}
 
@@ -166,23 +166,23 @@ public class TileEntityMThermalZentrifuge extends TileEntityInventoryBase implem
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		compound.putInt("progress", this.progress);
 		compound.putInt("progressTotal", this.progressTotal);
 		compound.putBoolean("isWorking", this.isWorking);
 		compound.putBoolean("hasPower", this.hasPower);
 		compound.putFloat("temp", this.temp);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		this.progress = compound.getInt("progress");
 		this.progressTotal = compound.getInt("progressTotal");
 		this.hasPower = compound.getBoolean("hasPower");
 		this.isWorking = compound.getBoolean("isWorking");
 		this.temp = compound.getFloat("temp");
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 }

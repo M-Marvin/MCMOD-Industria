@@ -27,9 +27,9 @@ public class BlockRailStraightBase extends AbstractRailBlock {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	  
 	public BlockRailStraightBase(String name) {
-		super(true, AbstractBlock.Properties.create(Material.MISCELLANEOUS).doesNotBlockMovement().hardnessAndResistance(0.7F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE));
+		super(true, AbstractBlock.Properties.of(Material.DECORATION).noCollission().strength(0.7F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE));
 		this.setRegistryName(new ResourceLocation(Industria.MODID, name));
-		this.setDefaultState(this.stateContainer.getBaseState().with(POWERED, false));
+		this.registerDefaultState(this.stateDefinition.any().setValue(POWERED, false));
 	}
 
 	protected boolean findPoweredRailSignal(World worldIn, BlockPos pos, BlockState state, boolean searchForward, int recursionCount) {
@@ -40,7 +40,7 @@ public class BlockRailStraightBase extends AbstractRailBlock {
 		int j = pos.getY();
 		int k = pos.getZ();
 		boolean flag = true;
-		RailShape railshape = state.get(SHAPE);
+		RailShape railshape = state.getValue(SHAPE);
 		switch(railshape) {
 			case NORTH_SOUTH:
 			if (searchForward) {
@@ -128,7 +128,7 @@ public class BlockRailStraightBase extends AbstractRailBlock {
 			if (shape != RailShape.EAST_WEST || railshape != RailShape.NORTH_SOUTH && railshape != RailShape.ASCENDING_NORTH && railshape != RailShape.ASCENDING_SOUTH) {
 				if (shape != RailShape.NORTH_SOUTH || railshape != RailShape.EAST_WEST && railshape != RailShape.ASCENDING_EAST && railshape != RailShape.ASCENDING_WEST) {
 					
-					return world.isBlockPowered(state) ? true : this.findPoweredRailSignal(world, state, blockstate, searchForward, recursionCount + 1);
+					return world.hasNeighborSignal(state) ? true : this.findPoweredRailSignal(world, state, blockstate, searchForward, recursionCount + 1);
 					
 				} else {
 				return false;
@@ -140,13 +140,13 @@ public class BlockRailStraightBase extends AbstractRailBlock {
 	}
 
 	protected void updateState(BlockState state, World worldIn, BlockPos pos, Block blockIn) {
-		boolean flag = state.get(POWERED);
-		boolean flag1 = worldIn.isBlockPowered(pos) || this.findPoweredRailSignal(worldIn, pos, state, true, 0) || this.findPoweredRailSignal(worldIn, pos, state, false, 0);
+		boolean flag = state.getValue(POWERED);
+		boolean flag1 = worldIn.hasNeighborSignal(pos) || this.findPoweredRailSignal(worldIn, pos, state, true, 0) || this.findPoweredRailSignal(worldIn, pos, state, false, 0);
 		if (flag1 != flag) {
-			worldIn.setBlockState(pos, state.with(POWERED, Boolean.valueOf(flag1)), 3);
-			worldIn.notifyNeighborsOfStateChange(pos.down(), this);
-			if (state.get(SHAPE).isAscending()) {
-				worldIn.notifyNeighborsOfStateChange(pos.up(), this);
+			worldIn.setBlock(pos, state.setValue(POWERED, Boolean.valueOf(flag1)), 3);
+			worldIn.updateNeighborsAt(pos.below(), this);
+			if (state.getValue(SHAPE).isAscending()) {
+				worldIn.updateNeighborsAt(pos.above(), this);
 			}
 		}
 	}
@@ -164,72 +164,72 @@ public class BlockRailStraightBase extends AbstractRailBlock {
 	public BlockState rotate(BlockState state, Rotation rot) {
 		switch(rot) {
 			case CLOCKWISE_180:
-			switch((RailShape)state.get(SHAPE)) {
+			switch((RailShape)state.getValue(SHAPE)) {
 				case ASCENDING_EAST:
-				return state.with(SHAPE, RailShape.ASCENDING_WEST);
+				return state.setValue(SHAPE, RailShape.ASCENDING_WEST);
 				case ASCENDING_WEST:
-				return state.with(SHAPE, RailShape.ASCENDING_EAST);
+				return state.setValue(SHAPE, RailShape.ASCENDING_EAST);
 				case ASCENDING_NORTH:
-				return state.with(SHAPE, RailShape.ASCENDING_SOUTH);
+				return state.setValue(SHAPE, RailShape.ASCENDING_SOUTH);
 				case ASCENDING_SOUTH:
-				return state.with(SHAPE, RailShape.ASCENDING_NORTH);
+				return state.setValue(SHAPE, RailShape.ASCENDING_NORTH);
 				case SOUTH_EAST:
-				return state.with(SHAPE, RailShape.NORTH_WEST);
+				return state.setValue(SHAPE, RailShape.NORTH_WEST);
 				case SOUTH_WEST:
-				return state.with(SHAPE, RailShape.NORTH_EAST);
+				return state.setValue(SHAPE, RailShape.NORTH_EAST);
 				case NORTH_WEST:
-				return state.with(SHAPE, RailShape.SOUTH_EAST);
+				return state.setValue(SHAPE, RailShape.SOUTH_EAST);
 				case NORTH_EAST:
-				return state.with(SHAPE, RailShape.SOUTH_WEST);
+				return state.setValue(SHAPE, RailShape.SOUTH_WEST);
 				case NORTH_SOUTH: //Forge fix: MC-196102
 				case EAST_WEST:
 				return state;
 			}
 			case COUNTERCLOCKWISE_90:
-			switch((RailShape)state.get(SHAPE)) {
+			switch((RailShape)state.getValue(SHAPE)) {
 				case NORTH_SOUTH:
-				return state.with(SHAPE, RailShape.EAST_WEST);
+				return state.setValue(SHAPE, RailShape.EAST_WEST);
 				case EAST_WEST:
-				return state.with(SHAPE, RailShape.NORTH_SOUTH);
+				return state.setValue(SHAPE, RailShape.NORTH_SOUTH);
 				case ASCENDING_EAST:
-				return state.with(SHAPE, RailShape.ASCENDING_NORTH);
+				return state.setValue(SHAPE, RailShape.ASCENDING_NORTH);
 				case ASCENDING_WEST:
-				return state.with(SHAPE, RailShape.ASCENDING_SOUTH);
+				return state.setValue(SHAPE, RailShape.ASCENDING_SOUTH);
 				case ASCENDING_NORTH:
-				return state.with(SHAPE, RailShape.ASCENDING_WEST);
+				return state.setValue(SHAPE, RailShape.ASCENDING_WEST);
 				case ASCENDING_SOUTH:
-				return state.with(SHAPE, RailShape.ASCENDING_EAST);
+				return state.setValue(SHAPE, RailShape.ASCENDING_EAST);
 				case SOUTH_EAST:
-				return state.with(SHAPE, RailShape.NORTH_EAST);
+				return state.setValue(SHAPE, RailShape.NORTH_EAST);
 				case SOUTH_WEST:
-				return state.with(SHAPE, RailShape.SOUTH_EAST);
+				return state.setValue(SHAPE, RailShape.SOUTH_EAST);
 				case NORTH_WEST:
-				return state.with(SHAPE, RailShape.SOUTH_WEST);
+				return state.setValue(SHAPE, RailShape.SOUTH_WEST);
 				case NORTH_EAST:
-				return state.with(SHAPE, RailShape.NORTH_WEST);
+				return state.setValue(SHAPE, RailShape.NORTH_WEST);
 			}
 			case CLOCKWISE_90:
-			switch((RailShape)state.get(SHAPE)) {
+			switch((RailShape)state.getValue(SHAPE)) {
 				case NORTH_SOUTH:
-				return state.with(SHAPE, RailShape.EAST_WEST);
+				return state.setValue(SHAPE, RailShape.EAST_WEST);
 				case EAST_WEST:
-				return state.with(SHAPE, RailShape.NORTH_SOUTH);
+				return state.setValue(SHAPE, RailShape.NORTH_SOUTH);
 				case ASCENDING_EAST:
-				return state.with(SHAPE, RailShape.ASCENDING_SOUTH);
+				return state.setValue(SHAPE, RailShape.ASCENDING_SOUTH);
 				case ASCENDING_WEST:
-				return state.with(SHAPE, RailShape.ASCENDING_NORTH);
+				return state.setValue(SHAPE, RailShape.ASCENDING_NORTH);
 				case ASCENDING_NORTH:
-				return state.with(SHAPE, RailShape.ASCENDING_EAST);
+				return state.setValue(SHAPE, RailShape.ASCENDING_EAST);
 				case ASCENDING_SOUTH:
-				return state.with(SHAPE, RailShape.ASCENDING_WEST);
+				return state.setValue(SHAPE, RailShape.ASCENDING_WEST);
 				case SOUTH_EAST:
-				return state.with(SHAPE, RailShape.SOUTH_WEST);
+				return state.setValue(SHAPE, RailShape.SOUTH_WEST);
 				case SOUTH_WEST:
-				return state.with(SHAPE, RailShape.NORTH_WEST);
+				return state.setValue(SHAPE, RailShape.NORTH_WEST);
 				case NORTH_WEST:
-				return state.with(SHAPE, RailShape.NORTH_EAST);
+				return state.setValue(SHAPE, RailShape.NORTH_EAST);
 				case NORTH_EAST:
-				return state.with(SHAPE, RailShape.SOUTH_EAST);
+				return state.setValue(SHAPE, RailShape.SOUTH_EAST);
 			}
 			default:
 			return state;
@@ -242,43 +242,43 @@ public class BlockRailStraightBase extends AbstractRailBlock {
 	 * @deprecated call via {@link IBlockState#withMirror(Mirror)} whenever possible. Implementing/overriding is fine.
 	 */
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		RailShape railshape = state.get(SHAPE);
+		RailShape railshape = state.getValue(SHAPE);
 		switch(mirrorIn) {
 			case LEFT_RIGHT:
 			switch(railshape) {
 				case ASCENDING_NORTH:
-				return state.with(SHAPE, RailShape.ASCENDING_SOUTH);
+				return state.setValue(SHAPE, RailShape.ASCENDING_SOUTH);
 				case ASCENDING_SOUTH:
-				return state.with(SHAPE, RailShape.ASCENDING_NORTH);
+				return state.setValue(SHAPE, RailShape.ASCENDING_NORTH);
 				case SOUTH_EAST:
-				return state.with(SHAPE, RailShape.NORTH_EAST);
+				return state.setValue(SHAPE, RailShape.NORTH_EAST);
 				case SOUTH_WEST:
-				return state.with(SHAPE, RailShape.NORTH_WEST);
+				return state.setValue(SHAPE, RailShape.NORTH_WEST);
 				case NORTH_WEST:
-				return state.with(SHAPE, RailShape.SOUTH_WEST);
+				return state.setValue(SHAPE, RailShape.SOUTH_WEST);
 				case NORTH_EAST:
-				return state.with(SHAPE, RailShape.SOUTH_EAST);
+				return state.setValue(SHAPE, RailShape.SOUTH_EAST);
 				default:
 				return super.mirror(state, mirrorIn);
 			}
 			case FRONT_BACK:
 			switch(railshape) {
 				case ASCENDING_EAST:
-				return state.with(SHAPE, RailShape.ASCENDING_WEST);
+				return state.setValue(SHAPE, RailShape.ASCENDING_WEST);
 				case ASCENDING_WEST:
-				return state.with(SHAPE, RailShape.ASCENDING_EAST);
+				return state.setValue(SHAPE, RailShape.ASCENDING_EAST);
 				case ASCENDING_NORTH:
 				case ASCENDING_SOUTH:
 				default:
 				break;
 				case SOUTH_EAST:
-				return state.with(SHAPE, RailShape.SOUTH_WEST);
+				return state.setValue(SHAPE, RailShape.SOUTH_WEST);
 				case SOUTH_WEST:
-				return state.with(SHAPE, RailShape.SOUTH_EAST);
+				return state.setValue(SHAPE, RailShape.SOUTH_EAST);
 				case NORTH_WEST:
-				return state.with(SHAPE, RailShape.NORTH_EAST);
+				return state.setValue(SHAPE, RailShape.NORTH_EAST);
 				case NORTH_EAST:
-				return state.with(SHAPE, RailShape.NORTH_WEST);
+				return state.setValue(SHAPE, RailShape.NORTH_WEST);
 			}
 		case NONE:
 			break;
@@ -289,7 +289,7 @@ public class BlockRailStraightBase extends AbstractRailBlock {
 		return super.mirror(state, mirrorIn);
 	}
 
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(SHAPE, POWERED);
 	}
 

@@ -43,26 +43,26 @@ public class BlockMFuseBox extends BlockContainerBase implements IElectricConnec
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final BooleanProperty ON = BooleanProperty.create("on");
 	
-	protected static final VoxelShape EAST_OPEN_AABB = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 11.0D, 16.0D, 16.0D);
-	protected static final VoxelShape WEST_OPEN_AABB = Block.makeCuboidShape(5.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-	protected static final VoxelShape SOUTH_OPEN_AABB = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 11.0D);
-	protected static final VoxelShape NORTH_OPEN_AABB = Block.makeCuboidShape(0.0D, 0.0D, 5.0D, 16.0D, 16.0D, 16.0D);
-	protected static final VoxelShape BOTTOM_AABB = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 11.0D, 16.0D);
-	protected static final VoxelShape TOP_AABB = Block.makeCuboidShape(0.0D, 5.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+	protected static final VoxelShape EAST_OPEN_AABB = Block.box(0.0D, 0.0D, 0.0D, 11.0D, 16.0D, 16.0D);
+	protected static final VoxelShape WEST_OPEN_AABB = Block.box(5.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+	protected static final VoxelShape SOUTH_OPEN_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 11.0D);
+	protected static final VoxelShape NORTH_OPEN_AABB = Block.box(0.0D, 0.0D, 5.0D, 16.0D, 16.0D, 16.0D);
+	protected static final VoxelShape BOTTOM_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 11.0D, 16.0D);
+	protected static final VoxelShape TOP_AABB = Block.box(0.0D, 5.0D, 0.0D, 16.0D, 16.0D, 16.0D);
 	
 	public BlockMFuseBox() {
-		super("fuse_box", Material.ROCK, 1.5F, SoundType.METAL);
+		super("fuse_box", Material.STONE, 1.5F, SoundType.METAL);
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(FACING, ON);
 	}
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		
-		switch (state.get(FACING)) {
+		switch (state.getValue(FACING)) {
 		case NORTH: return NORTH_OPEN_AABB;
 		case SOUTH: return SOUTH_OPEN_AABB;
 		case EAST: return EAST_OPEN_AABB;
@@ -76,31 +76,31 @@ public class BlockMFuseBox extends BlockContainerBase implements IElectricConnec
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(FACING, context.getFace()).with(ON, false);
+		return this.defaultBlockState().setValue(FACING, context.getClickedFace()).setValue(ON, false);
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
-		TileEntity te = worldIn.getTileEntity(pos);
+		TileEntity te = worldIn.getBlockEntity(pos);
 		
 		if (te instanceof TileEntityMFuseBox && handIn == Hand.MAIN_HAND) {
 
-			ItemStack heldStack = player.getHeldItemMainhand();
+			ItemStack heldStack = player.getMainHandItem();
 			ItemStack fuseStack = ((TileEntityMFuseBox) te).getFuse();
 			
-			if ((heldStack.isEmpty() || !fuseStack.isEmpty()) && player.isSneaking()) {
+			if ((heldStack.isEmpty() || !fuseStack.isEmpty()) && player.isShiftKeyDown()) {
 				
-				if (!worldIn.isRemote()) {
+				if (!worldIn.isClientSide()) {
 					ItemStack removeStack = ((TileEntityMFuseBox) te).removeFuse();
-					BlockPos pos2 = pos.offset(hit.getFace());
-					worldIn.addEntity(new ItemEntity(worldIn, pos2.getX() + 0.5F, pos2.getY() + 0.5F, pos2.getZ() + 0.5F, removeStack));
+					BlockPos pos2 = pos.relative(hit.getDirection());
+					worldIn.addFreshEntity(new ItemEntity(worldIn, pos2.getX() + 0.5F, pos2.getY() + 0.5F, pos2.getZ() + 0.5F, removeStack));
 				}
 				return ActionResultType.SUCCESS;
 				
 			} else if (!heldStack.isEmpty() && fuseStack.isEmpty()) {
 				
-				if (!worldIn.isRemote()) {
+				if (!worldIn.isClientSide()) {
 					boolean success = ((TileEntityMFuseBox) te).insertFuse(heldStack);
 					if (success && !player.isCreative()) {
 						heldStack.shrink(1);
@@ -111,8 +111,8 @@ public class BlockMFuseBox extends BlockContainerBase implements IElectricConnec
 			} else {
 				
 				if (((TileEntityMFuseBox) te).canSwitch()) {
-					if (!worldIn.isRemote()) worldIn.setBlockState(pos, state.with(ON, !state.get(ON)));
-					worldIn.playSound(null, pos, SoundEvents.BLOCK_WOODEN_BUTTON_CLICK_ON, SoundCategory.BLOCKS, 1, 0.5F);
+					if (!worldIn.isClientSide()) worldIn.setBlockAndUpdate(pos, state.setValue(ON, !state.getValue(ON)));
+					worldIn.playSound(null, pos, SoundEvents.WOODEN_BUTTON_CLICK_ON, SoundCategory.BLOCKS, 1, 0.5F);
 					return ActionResultType.SUCCESS;
 				}
 				
@@ -125,7 +125,7 @@ public class BlockMFuseBox extends BlockContainerBase implements IElectricConnec
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityMFuseBox();
 	}
 
@@ -141,7 +141,7 @@ public class BlockMFuseBox extends BlockContainerBase implements IElectricConnec
 
 	@Override
 	public boolean canConnect(Direction side, World world, BlockPos pos, BlockState state) {
-		return side != state.get(FACING);
+		return side != state.getValue(FACING);
 	}
 
 	@Override
@@ -151,7 +151,7 @@ public class BlockMFuseBox extends BlockContainerBase implements IElectricConnec
 	
 	@Override
 	public boolean isSwitchClosed(World worldIn, BlockPos pos, BlockState state) {
-		return state.get(ON);
+		return state.getValue(ON);
 	}
 	
 	@Override
@@ -183,18 +183,18 @@ public class BlockMFuseBox extends BlockContainerBase implements IElectricConnec
 		}
 		
 		int maxCurrent = 0;
-		TileEntity te = world.getTileEntity(pos);
+		TileEntity te = world.getBlockEntity(pos);
 		if (te instanceof TileEntityMFuseBox) {
 			maxCurrent = ((TileEntityMFuseBox) te).getMaxCurrent();
 		}
 		
 		float transferingCurrent = Math.min(needCurrent, produsedCurrent);
 		boolean overload = transferingCurrent > maxCurrent;
-		boolean closed = state.get(ON);
+		boolean closed = state.getValue(ON);
 		
 		if (closed && overload) {
-			world.setBlockState(pos, state.with(ON, false));
-			world.playSound(null, pos, SoundEvents.BLOCK_WOODEN_BUTTON_CLICK_ON, SoundCategory.BLOCKS, 1, 0.5F);
+			world.setBlockAndUpdate(pos, state.setValue(ON, false));
+			world.playSound(null, pos, SoundEvents.WOODEN_BUTTON_CLICK_ON, SoundCategory.BLOCKS, 1, 0.5F);
 			return true;
 		}
 		
@@ -203,13 +203,13 @@ public class BlockMFuseBox extends BlockContainerBase implements IElectricConnec
 	}
 
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
-		TileEntity te = worldIn.getTileEntity(pos);
+	public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+		TileEntity te = worldIn.getBlockEntity(pos);
 		if (te instanceof TileEntityMFuseBox) {
 			ItemStack stack = ((TileEntityMFuseBox) te).getFuse();
-			if (stack != null ? !stack.isEmpty() : false) worldIn.addEntity(new ItemEntity(worldIn, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, stack));
+			if (stack != null ? !stack.isEmpty() : false) worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, stack));
 		}
-		super.onBlockHarvested(worldIn, pos, state, player);
+		super.playerWillDestroy(worldIn, pos, state, player);
 	}
 
 	@Override
@@ -226,12 +226,12 @@ public class BlockMFuseBox extends BlockContainerBase implements IElectricConnec
 
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 	
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 	
 }

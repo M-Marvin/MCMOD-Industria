@@ -25,38 +25,38 @@ public class ItemFluidMeter extends ItemBase {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		
-		ItemStack stack = playerIn.getHeldItem(handIn);
-		RayTraceResult result = rayTrace(worldIn, playerIn, FluidMode.NONE);
+		ItemStack stack = playerIn.getItemInHand(handIn);
+		RayTraceResult result = getPlayerPOVHitResult(worldIn, playerIn, FluidMode.NONE);
 		
 		if (result.getType() == RayTraceResult.Type.MISS) {
 
-			return super.onItemRightClick(worldIn, playerIn, handIn);
+			return super.use(worldIn, playerIn, handIn);
 			
 		} else {
 
-			BlockPos pos = new BlockPos(result.getHitVec().x, result.getHitVec().y, result.getHitVec().z);
+			BlockPos pos = new BlockPos(result.getLocation().x, result.getLocation().y, result.getLocation().z);
 			BlockState state = worldIn.getBlockState(pos);
 			Block block = state.getBlock();
-			TileEntity te = worldIn.getTileEntity(pos);
+			TileEntity te = worldIn.getBlockEntity(pos);
 			
 			if (te instanceof IFluidConnective) {
 				
 				FluidStack fluid = ((IFluidConnective) te).getStorage();
 				
-				ItemStack blockItem = block.getItem(worldIn, pos, state);
+				ItemStack blockItem = block.getCloneItemStack(worldIn, pos, state);
 				
-				ITextComponent line = new TranslationTextComponent("industria.item.fluid_meter.meassure", blockItem.getDisplayName(), fluid.getDisplayName(), fluid.getAmount());
-				playerIn.sendStatusMessage(line, true);
+				ITextComponent line = new TranslationTextComponent("industria.item.fluid_meter.meassure", blockItem.getHoverName(), fluid.getDisplayName(), fluid.getAmount());
+				playerIn.displayClientMessage(line, true);
 				
-				return ActionResult.resultSuccess(stack);
+				return ActionResult.success(stack);
 				
 			}
 						
 		}
 		
-		return super.onItemRightClick(worldIn, playerIn, handIn);
+		return super.use(worldIn, playerIn, handIn);
 		
 	}
 

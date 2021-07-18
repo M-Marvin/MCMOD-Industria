@@ -27,41 +27,41 @@ public class BlockDestilledWater extends BlockModFlowingFluid {
 	public static final BooleanProperty HOT = BooleanProperty.create("hot");
 	
 	public BlockDestilledWater() {
-		super("destilled_water", ModFluids.DESTILLED_WATER, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
-		this.setDefaultState(this.stateContainer.getBaseState().with(HOT, false));
+		super("destilled_water", ModFluids.DESTILLED_WATER, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops());
+		this.registerDefaultState(this.stateDefinition.any().setValue(HOT, false));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(HOT);
-		super.fillStateContainer(builder);
+		super.createBlockStateDefinition(builder);
 	}
 	
 	@Override
 	public FluidState getFluidState(BlockState state) {
-		return super.getFluidState(state).with(FluidDestilledWater.HOT, state.get(HOT));
+		return super.getFluidState(state).setValue(FluidDestilledWater.HOT, state.getValue(HOT));
 	}
 	
 	@Override
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 		
-		if (entityIn.isLiving() && state.get(HOT)) {
+		if (entityIn.showVehicleHealth() && state.getValue(HOT)) {
 			
-			if (((LivingEntity) entityIn).isPotionActive(Effects.FIRE_RESISTANCE)) return;
+			if (((LivingEntity) entityIn).hasEffect(Effects.FIRE_RESISTANCE)) return;
 			
 			boolean hasLeatherLeggings = false;
 			boolean hasLeatherBoots = false;
-			Iterable<ItemStack> armor = entityIn.getArmorInventoryList();
+			Iterable<ItemStack> armor = entityIn.getArmorSlots();
 			for (ItemStack item : armor) {
 				if (item.getItem() == Items.LEATHER_BOOTS) hasLeatherBoots = true;
 				if (item.getItem() == Items.LEATHER_LEGGINGS) hasLeatherLeggings = true;
 			}
-			boolean isHeadInFluid = entityIn.areEyesInFluid(ModTags.HOT_WATER);
+			boolean isHeadInFluid = entityIn.isEyeInFluid(ModTags.HOT_WATER);
 			
 			int dammage = hasLeatherBoots && hasLeatherLeggings ? 0 : 1;
 			if (isHeadInFluid) dammage += 1;
 			
-			if (dammage > 0 )entityIn.attackEntityFrom(ModDamageSource.HOT_FLUID, dammage);
+			if (dammage > 0 )entityIn.hurt(ModDamageSource.HOT_FLUID, dammage);
 			
 		}
 		
@@ -70,7 +70,7 @@ public class BlockDestilledWater extends BlockModFlowingFluid {
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		
-		if (stateIn.get(HOT)) {
+		if (stateIn.getValue(HOT)) {
 			
 			float fx = rand.nextFloat() + pos.getX();
 			float fy = rand.nextFloat() + pos.getY();

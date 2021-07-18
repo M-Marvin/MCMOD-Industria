@@ -8,7 +8,7 @@ public abstract class ItemSchredderTool extends ItemBase {
 	protected ItemSchredderToolModel toolModel;
 	
 	public ItemSchredderTool(String name, int durability) {
-		super(name, new Properties().group(Industria.MACHINES).maxStackSize(8).defaultMaxDamage(durability));
+		super(name, new Properties().tab(Industria.MACHINES).stacksTo(8).defaultDurability(durability));
 	}
 	
 }

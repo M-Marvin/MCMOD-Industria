@@ -24,7 +24,7 @@ public class FluidBarTexture {
 			
 			Color color = new Color(fluid.getAttributes().getColor());
 			
-			GlStateManager.color4f(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, alpha / 255F);
+			GlStateManager._color4f(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, alpha / 255F);
 			
 			y -= height;
 			for (int ox = 0; ox < width;) {

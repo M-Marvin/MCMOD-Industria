@@ -10,7 +10,7 @@ import net.minecraft.world.gen.feature.template.RuleTest;
 public class StoneOreFeatureConfig implements IFeatureConfig {
 	
 	public static final Codec<StoneOreFeatureConfig> CODEC = RecordCodecBuilder.create((codec) -> {
-		return codec.group(RuleTest.field_237127_c_.fieldOf("target").forGetter((config) -> {
+		return codec.group(RuleTest.CODEC.fieldOf("target").forGetter((config) -> {
 			return config.target;
 		}), BlockState.CODEC.fieldOf("stoneState").forGetter((config) -> {
 			return config.stoneState;

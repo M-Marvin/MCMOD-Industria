@@ -18,24 +18,24 @@ public class BlockRHoverExtension extends BlockBase {
 	public static final BooleanProperty ACTIVATED = BooleanProperty.create("activated");
 	
 	public BlockRHoverExtension() {
-		super("hover_extension", Material.IRON, 6, SoundType.ANVIL);
-		this.setDefaultState(this.stateContainer.getBaseState().with(ACTIVATED, false));
+		super("hover_extension", Material.METAL, 6, SoundType.ANVIL);
+		this.registerDefaultState(this.stateDefinition.any().setValue(ACTIVATED, false));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(ACTIVATED);
 	}
 	
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 		
-		boolean power = worldIn.isBlockPowered(pos) || worldIn.getRedstonePowerFromNeighbors(pos) > 0;
-		boolean powered = state.get(ACTIVATED);
+		boolean power = worldIn.hasNeighborSignal(pos) || worldIn.getBestNeighborSignal(pos) > 0;
+		boolean powered = state.getValue(ACTIVATED);
 		
 		if (power != powered) {
 			
-			worldIn.setBlockState(pos, state.with(ACTIVATED, power));
+			worldIn.setBlockAndUpdate(pos, state.setValue(ACTIVATED, power));
 			worldIn.playSound(null, pos, ModSoundEvents.BLOCK_HOVER_EXTENSION_ACTIVATED, SoundCategory.BLOCKS, 1, 1);
 			
 		}

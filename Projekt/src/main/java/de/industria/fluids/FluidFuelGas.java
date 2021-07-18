@@ -16,17 +16,17 @@ import net.minecraftforge.fluids.FluidAttributes;
 public class FluidFuelGas extends GasFluid implements IBucketPickupHandler {
 	
 	@Override
-	public Item getFilledBucket() {
+	public Item getBucket() {
 		return ModItems.fuel_gas_bucket;
 	}
 	
 	@Override
-	protected BlockState getBlockState(FluidState state) {
-		return ModItems.fuel_gas.getDefaultState();
+	protected BlockState createLegacyBlock(FluidState state) {
+		return ModItems.fuel_gas.defaultBlockState();
 	}
 	
 	@Override
-	public Fluid pickupFluid(IWorld worldIn, BlockPos pos, BlockState state) {
+	public Fluid takeLiquid(IWorld worldIn, BlockPos pos, BlockState state) {
 		worldIn.removeBlock(pos, false);
 		return this;
 	}

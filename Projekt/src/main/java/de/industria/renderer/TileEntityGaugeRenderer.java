@@ -30,23 +30,23 @@ public class TileEntityGaugeRenderer extends TileEntityRenderer<TileEntityGauge>
 	@SuppressWarnings("resource")
 	public TileEntityGaugeRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
 		super(rendererDispatcherIn);
-		this.fontRenderer = Minecraft.getInstance().fontRenderer;
+		this.fontRenderer = Minecraft.getInstance().font;
 		this.gaugeModel = new TileEntityGaugeModel();
 	}
 	
 	@Override
 	public void render(TileEntityGauge tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		
-		Direction facing = tileEntityIn.getBlockState().get(BlockStateProperties.HORIZONTAL_FACING);
-		IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.getEntityTranslucent(GAUGE_TEXTURES));
+		Direction facing = tileEntityIn.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
+		IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.entityTranslucent(GAUGE_TEXTURES));
 		
-		matrixStackIn.push();
+		matrixStackIn.pushPose();
 		
 		matrixStackIn.translate(0F, -1F, 0F);
 		
 		matrixStackIn.translate(0.5F, 1.5F, 0.5F);
-		matrixStackIn.rotate(facing.getRotation());
-		matrixStackIn.rotate(Vector3f.XP.rotationDegrees(90));
+		matrixStackIn.mulPose(facing.getRotation());
+		matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(90));
 		matrixStackIn.translate(0F, -1F, 0F);
 		
 		matrixStackIn.scale(0.999F, 0.999F, 0.999F);
@@ -63,19 +63,19 @@ public class TileEntityGaugeRenderer extends TileEntityRenderer<TileEntityGauge>
 		
 		tileEntityIn.currentGaugeValue = newValue;
 		gaugeModel.setGaugeState(newValue);
-		gaugeModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
+		gaugeModel.renderToBuffer(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 
 		String unitString = format.format(newValue) + " " + unitName;
-		int width = fontRenderer.getStringWidth(unitString);
+		int width = fontRenderer.width(unitString);
 		float f = 0.0356F * 0.5F;
 		
 		matrixStackIn.translate(-(width / 2) * f, 1F, -0.45F);
 		
 		matrixStackIn.scale(f, f, f);
 		
-		fontRenderer.renderString(unitString, 0, 0, new Color(0, 0, 0).getRGB(), false, matrixStackIn.getLast().getMatrix(), bufferIn, false, combinedOverlayIn, combinedLightIn);
+		fontRenderer.drawInBatch(unitString, 0, 0, new Color(0, 0, 0).getRGB(), false, matrixStackIn.last().pose(), bufferIn, false, combinedOverlayIn, combinedLightIn);
 		
-		matrixStackIn.pop();
+		matrixStackIn.popPose();
 		
 	}
 

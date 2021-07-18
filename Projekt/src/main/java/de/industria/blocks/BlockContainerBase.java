@@ -22,45 +22,45 @@ public abstract class BlockContainerBase extends ContainerBlock {
 	}
 	
 	public BlockContainerBase(String name, Material material, float hardnessAndResistance, SoundType sound) {
-		super(Properties.create(material).hardnessAndResistance(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)));
+		super(Properties.of(material).strength(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)));
 		this.setRegistryName(Industria.MODID, name);
 	}
 	
 	public BlockContainerBase(String name, Material material, float hardness, float resistance, SoundType sound) {
-		super(Properties.create(material).hardnessAndResistance(hardness, resistance).sound(sound).harvestTool(getDefaultToolType(material)));
+		super(Properties.of(material).strength(hardness, resistance).sound(sound).harvestTool(getDefaultToolType(material)));
 		this.setRegistryName(Industria.MODID, name);
 	}
 
 	public BlockContainerBase(String name, Material material, float hardnessAndResistance, SoundType sound, boolean dropsEver) {
-		super(Properties.create(material).hardnessAndResistance(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)));
+		super(Properties.of(material).strength(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)));
 		this.setRegistryName(Industria.MODID, name);
 	}
 	
 	public BlockContainerBase(String name, Material material, float hardness, float resistance, SoundType sound, boolean dropsEver) {
-		super(Properties.create(material).hardnessAndResistance(hardness, resistance).sound(sound).harvestTool(getDefaultToolType(material)));
+		super(Properties.of(material).strength(hardness, resistance).sound(sound).harvestTool(getDefaultToolType(material)));
 		this.setRegistryName(Industria.MODID, name);
 	}
 	
 	public static ToolType getDefaultToolType(Material material) {
-		if (material == Material.ROCK || material == Material.IRON) return ToolType.PICKAXE;
-		if (material == Material.SAND || material == Material.EARTH) return ToolType.SHOVEL;
+		if (material == Material.STONE || material == Material.METAL) return ToolType.PICKAXE;
+		if (material == Material.SAND || material == Material.DIRT) return ToolType.SHOVEL;
 		if (material == Material.WOOD) return ToolType.AXE;
-		if (material == Material.ORGANIC) return ToolType.HOE;
+		if (material == Material.GRASS) return ToolType.HOE;
 		return null;
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
 
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
-		TileEntity te = worldIn.getTileEntity(pos);
+	public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+		TileEntity te = worldIn.getBlockEntity(pos);
 		if (te instanceof IInventory) {
-			InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) te);
+			InventoryHelper.dropContents(worldIn, pos, (IInventory) te);
 		}
-		super.onBlockHarvested(worldIn, pos, state, player);
+		super.playerWillDestroy(worldIn, pos, state, player);
 	}
 	
 }

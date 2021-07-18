@@ -59,55 +59,55 @@ public class TileEntityPreassurePipe extends TileEntity implements ITickableTile
 	public VoxelShape getItemDetectBounds() {
 		Direction outlet = this.getOutputSide();
 		int extraHeight = (int) ((this.preassure < 0 ? -this.preassure : this.preassure) * 16);
-		if (!((BlockPreassurePipe) ModItems.preassure_pipe).canConnect(getBlockState(), world, pos, outlet)) {
+		if (!((BlockPreassurePipe) ModItems.preassure_pipe).canConnect(getBlockState(), level, worldPosition, outlet)) {
 			if (outlet.getAxis().isVertical()) {
-				return outlet == Direction.UP ? Block.makeCuboidShape(2, 2, 2, 14, 16 + extraHeight, 14) : Block.makeCuboidShape(2, -extraHeight, 2, 14, 14, 14);
+				return outlet == Direction.UP ? Block.box(2, 2, 2, 14, 16 + extraHeight, 14) : Block.box(2, -extraHeight, 2, 14, 14, 14);
 			} else {
-				return VoxelHelper.rotateShape(Block.makeCuboidShape(2, 2, -extraHeight, 14, 14, 14), outlet);
+				return VoxelHelper.rotateShape(Block.box(2, 2, -extraHeight, 14, 14, 14), outlet);
 			}
 		}
-		return Block.makeCuboidShape(2, 2, 2, 14, 14, 14);
+		return Block.box(2, 2, 2, 14, 14, 14);
 	}
 	
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote) {
+		if (!this.level.isClientSide) {
 			
-			if (this.world.getGameTime() - this.lastPressurizing > 10) {
+			if (this.level.getGameTime() - this.lastPressurizing > 10) {
 				this.inputSide = null;
 				this.outputSide = null;
 			}
 			
-			if (this.world.getGameTime() % 10 == 0) this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
+			if (this.level.getGameTime() % 10 == 0) this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			
 		} else {
 			
 			if (isPreassurized()) {
 				
-				if (!MachineSoundHelper.isPlayingMachineSound(ModSoundEvents.ITEM_PIPE_STRAM, 7, this.pos)) {
+				if (!MachineSoundHelper.isPlayingMachineSound(ModSoundEvents.ITEM_PIPE_STRAM, 7, this.worldPosition)) {
 					MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.ITEM_PIPE_STRAM);
 				}
 				
 				IParticleData particle = ParticleTypes.CLOUD;
 				float speed = 0.05F * (this.preassure < 0 ? -1 : 1);
 				
-				float posX = this.pos.getX() + 0.5F;
-				float posY = this.pos.getY() + 0.5F;
-				float posZ = this.pos.getZ() + 0.5F;
+				float posX = this.worldPosition.getX() + 0.5F;
+				float posY = this.worldPosition.getY() + 0.5F;
+				float posZ = this.worldPosition.getZ() + 0.5F;
 				
-				float xIn = getInputSide().getXOffset() * speed;
-				float yIn = getInputSide().getYOffset() * speed;
-				float zIn = getInputSide().getZOffset() * speed;
-				float xOut = getOutputSide().getXOffset() * speed;			
-				float yOut = getOutputSide().getYOffset() * speed;			
-				float zOut = getOutputSide().getZOffset() * speed;			
+				float xIn = getInputSide().getStepX() * speed;
+				float yIn = getInputSide().getStepY() * speed;
+				float zIn = getInputSide().getStepZ() * speed;
+				float xOut = getOutputSide().getStepX() * speed;			
+				float yOut = getOutputSide().getStepY() * speed;			
+				float zOut = getOutputSide().getStepZ() * speed;			
 				
-				if (this.world.rand.nextInt(14) == 0) {
-					this.world.addParticle(particle, posX, posY, posZ, xOut, yOut, zOut);
-					this.world.addParticle(particle, posX + xIn, posY + yIn, posZ + zIn, -xIn, -yIn, -zIn);
+				if (this.level.random.nextInt(14) == 0) {
+					this.level.addParticle(particle, posX, posY, posZ, xOut, yOut, zOut);
+					this.level.addParticle(particle, posX + xIn, posY + yIn, posZ + zIn, -xIn, -yIn, -zIn);
 					
-					if (!((BlockPreassurePipe) ModItems.preassure_pipe).canConnect(getBlockState(), world, pos, this.getOutputSide()) && this.world.rand.nextInt((int) (Math.max(4 / this.preassure, 1))) == 0) {
+					if (!((BlockPreassurePipe) ModItems.preassure_pipe).canConnect(getBlockState(), level, worldPosition, this.getOutputSide()) && this.level.random.nextInt((int) (Math.max(4 / this.preassure, 1))) == 0) {
 						if (this.preassure < 0) {
 //							TODO: Particles for negative preassure
 //							float xOut2 = (this.preassure < 0 ? getInputSide() : getOutputSide()).getXOffset() * speed * -this.preassure * 4;
@@ -119,7 +119,7 @@ public class TileEntityPreassurePipe extends TileEntity implements ITickableTile
 //							
 //							this.world.addParticle(particle, posX + xOut2 * 10 + rX, posY + yOut2 * 10 + rY, posZ + zOut2 * 10 + rZ, xOut * this.preassure * -4, yOut * this.preassure * -4, zOut * this.preassure * -4);
 						} else {
-							this.world.addParticle(particle, posX + xOut * 10, posY + yOut * 10, posZ + zOut * 10, xOut * this.preassure * 4, yOut * this.preassure * 4, zOut * this.preassure * 4);
+							this.level.addParticle(particle, posX + xOut * 10, posY + yOut * 10, posZ + zOut * 10, xOut * this.preassure * 4, yOut * this.preassure * 4, zOut * this.preassure * 4);
 						}
 					}
 				}
@@ -130,15 +130,15 @@ public class TileEntityPreassurePipe extends TileEntity implements ITickableTile
 
 		if (isPreassurized()) {
 			
-			List<AxisAlignedBB> itemBounds = getItemDetectBounds().toBoundingBoxList();
+			List<AxisAlignedBB> itemBounds = getItemDetectBounds().toAabbs();
 			
 			itemBounds.forEach((boundBox) -> {
-				boundBox = boundBox.offset(this.pos);
-				this.world.getEntitiesInAABBexcluding(null, boundBox, null).forEach((entity) -> {
+				boundBox = boundBox.move(this.worldPosition);
+				this.level.getEntities(null, boundBox).forEach((entity) -> {
 					
 					if (entity instanceof ItemEntity) {
-						((ItemEntity) entity).setDefaultPickupDelay();
-						((ItemEntity) entity).ticksExisted = 0;
+						((ItemEntity) entity).setDefaultPickUpDelay();
+						((ItemEntity) entity).tickCount = 0;
 					}
 					
 					boolean flag = true;
@@ -150,17 +150,17 @@ public class TileEntityPreassurePipe extends TileEntity implements ITickableTile
 
 						entity.fallDistance = 0;
 						
-						Vector3i motionVec1 = this.getInputSide().getOpposite().getDirectionVec();
-						Vector3i motionVec2 = this.getOutputSide().getDirectionVec();
+						Vector3i motionVec1 = this.getInputSide().getOpposite().getNormal();
+						Vector3i motionVec2 = this.getOutputSide().getNormal();
 						
 						float acceleration = 0.1F;
 						Vector3d force = new Vector3d(motionVec1.getX() == 0 ? motionVec2.getX() : motionVec1.getX(), motionVec1.getY() == 0 ? motionVec2.getY() : motionVec1.getY(), motionVec1.getZ() == 0 ? motionVec2.getZ() : motionVec1.getZ());
-						force = force.mul(preassure * acceleration, preassure * acceleration, preassure * acceleration);
+						force = force.multiply(preassure * acceleration, preassure * acceleration, preassure * acceleration);
 						
-						Vector3d motion = entity.getMotion();
+						Vector3d motion = entity.getDeltaMovement();
 						motion = motion.add(force);
 						motion = new Vector3d(MathHelper.castBounds(preassure, motion.x), MathHelper.castBounds(preassure, motion.y), MathHelper.castBounds(preassure, motion.z));
-						entity.setMotion(motion);
+						entity.setDeltaMovement(motion);
 						
 					}
 					
@@ -178,42 +178,42 @@ public class TileEntityPreassurePipe extends TileEntity implements ITickableTile
 	
 	@SuppressWarnings("deprecation")
 	public boolean isOpenPipe(BlockPos pos, Direction outletDirection) {
-		if (((BlockPreassurePipe) ModItems.preassure_pipe).canConnect(getBlockState(), this.world, this.pos, outletDirection)) {
+		if (((BlockPreassurePipe) ModItems.preassure_pipe).canConnect(getBlockState(), this.level, this.worldPosition, outletDirection)) {
 			return true;
 		} else {
-			BlockState endState = this.world.getBlockState(pos);
-			if (!endState.isOpaqueCube(this.world, pos) || endState.isAir()) return true;
+			BlockState endState = this.level.getBlockState(pos);
+			if (!endState.isSolidRender(this.level, pos) || endState.isAir()) return true;
 		}
 		return false;
 	}
 	
 	public Direction getOtherOutlet(Direction inputDirection) {
 		BlockState state = getBlockState();
-		if (inputDirection.equals(state.get(BlockPreassurePipe.FACING).getOpposite())) {
-			return state.get(BlockPreassurePipe.CONNECTION);
-		} else if (inputDirection.equals(state.get(BlockPreassurePipe.CONNECTION).getOpposite())) {
-			return state.get(BlockPreassurePipe.FACING);
+		if (inputDirection.equals(state.getValue(BlockPreassurePipe.FACING).getOpposite())) {
+			return state.getValue(BlockPreassurePipe.CONNECTION);
+		} else if (inputDirection.equals(state.getValue(BlockPreassurePipe.CONNECTION).getOpposite())) {
+			return state.getValue(BlockPreassurePipe.FACING);
 		}
 		return null;
 	}
 	
 	public boolean preassurizePipe(Direction inputDirection, float preassure, List<BlockPos> pipeStreamList) {
 		
-		if (!pipeStreamList.contains(this.pos)) {
+		if (!pipeStreamList.contains(this.worldPosition)) {
 			
 			Direction outletDirection = getOtherOutlet(inputDirection);
 			
 			if (outletDirection != null) {
 				
-				if (isOpenPipe(this.pos.offset(outletDirection), outletDirection)) {
+				if (isOpenPipe(this.worldPosition.relative(outletDirection), outletDirection)) {
 					
 					this.inputSide = inputDirection.getOpposite();
 					this.outputSide = outletDirection;
 					this.preassure = preassure;
-					this.lastPressurizing = this.world.getGameTime();
-					pipeStreamList.add(this.pos);
+					this.lastPressurizing = this.level.getGameTime();
+					pipeStreamList.add(this.worldPosition);
 					
-					TileEntity nextPipe = this.world.getTileEntity(pos.offset(outletDirection));
+					TileEntity nextPipe = this.level.getBlockEntity(worldPosition.relative(outletDirection));
 					if (nextPipe instanceof TileEntityPreassurePipe) {
 						if (!((TileEntityPreassurePipe) nextPipe).preassurizePipe(outletDirection, preassure, pipeStreamList)) {
 							this.inputSide = null;
@@ -239,17 +239,17 @@ public class TileEntityPreassurePipe extends TileEntity implements ITickableTile
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		if (this.inputSide != null && this.outputSide != null) {
-			 compound.putString("InputSide", this.inputSide.getName2());
-			compound.putString("OutputSide", this.outputSide.getName2());
+			 compound.putString("InputSide", this.inputSide.getName());
+			compound.putString("OutputSide", this.outputSide.getName());
 			compound.putFloat("Preassure", this.preassure);
 		}
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT nbt) {
+	public void load(BlockState state, CompoundNBT nbt) {
 		this.inputSide = null;
 		this.outputSide = null;
 		this.preassure = 0;
@@ -258,17 +258,17 @@ public class TileEntityPreassurePipe extends TileEntity implements ITickableTile
 			this.outputSide = Direction.byName(nbt.getString("OutputSide"));
 			this.preassure = nbt.getFloat("Preassure");
 		}
-		super.read(state, nbt);
+		super.load(state, nbt);
 	}
 	
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(pos, 0, this.serializeNBT());
+		return new SUpdateTileEntityPacket(worldPosition, 0, this.serializeNBT());
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.deserializeNBT(pkt.getNbtCompound());
+		this.deserializeNBT(pkt.getTag());
 	}
 	
 }

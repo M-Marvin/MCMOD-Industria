@@ -48,24 +48,24 @@ public class BlockBurnedCable extends BlockElektricWire {
 	}
 	
 	public static void crateBurnedCable(BlockState cableSate, BlockPos pos, World worldIn) {
-		BlockState burnedState = ModItems.burned_cable.getDefaultState()
-				.with(NORTH, cableSate.get(NORTH))
-				.with(SOUTH, cableSate.get(SOUTH))
-				.with(EAST, cableSate.get(EAST))
-				.with(WEST, cableSate.get(WEST))
-				.with(UP, cableSate.get(UP))
-				.with(DOWN, cableSate.get(DOWN))
-				.with(WATERLOGGED, cableSate.get(WATERLOGGED));
+		BlockState burnedState = ModItems.burned_cable.defaultBlockState()
+				.setValue(NORTH, cableSate.getValue(NORTH))
+				.setValue(SOUTH, cableSate.getValue(SOUTH))
+				.setValue(EAST, cableSate.getValue(EAST))
+				.setValue(WEST, cableSate.getValue(WEST))
+				.setValue(UP, cableSate.getValue(UP))
+				.setValue(DOWN, cableSate.getValue(DOWN))
+				.setValue(WATERLOGGED, cableSate.getValue(WATERLOGGED));
 		
-		worldIn.setBlockState(pos, burnedState);
-		TileEntityMBurnedCable tileEntity = (TileEntityMBurnedCable) worldIn.getTileEntity(pos);
+		worldIn.setBlockAndUpdate(pos, burnedState);
+		TileEntityMBurnedCable tileEntity = (TileEntityMBurnedCable) worldIn.getBlockEntity(pos);
 		tileEntity.setCableBlock(cableSate.getBlock());
 	}
 	
 	public static Block getBurnedCableFromStack(ItemStack burnedCableStack) {
 		Item item = burnedCableStack.getItem();
 		if (item instanceof BlockItem ? ((BlockItem) item).getBlock() == ModItems.burned_cable : false) {
-			CompoundNBT tag = burnedCableStack.getChildTag("BlockEntityTag");
+			CompoundNBT tag = burnedCableStack.getTagElement("BlockEntityTag");
 			if (tag != null ? tag.contains("CableBlock") : false) {
 				ResourceLocation cableName = new ResourceLocation(tag.getString("CableBlock"));
 				return ForgeRegistries.BLOCKS.getValue(cableName);
@@ -116,7 +116,7 @@ public class BlockBurnedCable extends BlockElektricWire {
 						
 					}
 					
-					if (rand.nextInt(6) == 0) worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), ModSoundEvents.SPARKING_CABLE, SoundCategory.BLOCKS, 0.5F, rand.nextFloat() * 0.2F + 0.8F, false);
+					if (rand.nextInt(6) == 0) worldIn.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), ModSoundEvents.SPARKING_CABLE, SoundCategory.BLOCKS, 0.5F, rand.nextFloat() * 0.2F + 0.8F, false);
 					
 				}
 				
@@ -127,7 +127,7 @@ public class BlockBurnedCable extends BlockElektricWire {
 	}
 
 	@Override
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 		
 		if (entityIn instanceof LivingEntity) {
 			
@@ -137,7 +137,7 @@ public class BlockBurnedCable extends BlockElektricWire {
 			
 			int dammge = voltage.getVoltage() / 100;
 
-			if (dammge > 0) entityIn.attackEntityFrom(ModDamageSource.ELCTRIC_SHOCK, dammge);
+			if (dammge > 0) entityIn.hurt(ModDamageSource.ELCTRIC_SHOCK, dammge);
 			
 		}
 		
@@ -148,7 +148,7 @@ public class BlockBurnedCable extends BlockElektricWire {
 		return (stack, info) -> {
 			Block cableType = getBurnedCableFromStack(stack);
 			info.add(new TranslationTextComponent("industria.block.info.maxCurrent", this.maximumPower));
-			if (cableType != null) info.add(new TranslationTextComponent("industria.block.info.burnedCableType", cableType.getTranslatedName()));
+			if (cableType != null) info.add(new TranslationTextComponent("industria.block.info.burnedCableType", cableType.getName()));
 			info.add(new TranslationTextComponent("industria.block.info.burnedCable", this.maximumPower));
 		};
 	}
@@ -159,25 +159,25 @@ public class BlockBurnedCable extends BlockElektricWire {
 		
 		float current = network.getCurrent();
 		
-		if (this.maximumPower < current && worldIn.rand.nextInt(300) == 0) {
+		if (this.maximumPower < current && worldIn.random.nextInt(300) == 0) {
 			
 			for (int x = -1; x < 2; x++) {
 				for (int y = -1; y < 2; y++) {
 					for (int z = -1; z < 2; z++) {
-						BlockPos firePos = pos.add(x, y, z);
+						BlockPos firePos = pos.offset(x, y, z);
 						BlockState fireState = worldIn.getBlockState(firePos);
 						
 						if (fireState.isAir()) {
 							
 							for (Direction d : Direction.values()) {
-								BlockPos burnBlockPos = firePos.offset(d);
+								BlockPos burnBlockPos = firePos.relative(d);
 								BlockState burnBlockState = worldIn.getBlockState(burnBlockPos);
 								int flammability = burnBlockState.getFlammability(worldIn, burnBlockPos, d.getOpposite());
-								if (d == Direction.DOWN && burnBlockState.isSolid() && flammability == 0) flammability = 100;
+								if (d == Direction.DOWN && burnBlockState.canOcclude() && flammability == 0) flammability = 100;
 								
-								if (flammability > 0 ? worldIn.rand.nextInt(299) < flammability : false) {
+								if (flammability > 0 ? worldIn.random.nextInt(299) < flammability : false) {
 									
-									worldIn.setBlockState(firePos, Blocks.FIRE.getDefaultState());
+									worldIn.setBlockAndUpdate(firePos, Blocks.FIRE.defaultBlockState());
 									
 								}
 							}
@@ -188,8 +188,8 @@ public class BlockBurnedCable extends BlockElektricWire {
 				}
 			}
 
-			if (worldIn.rand.nextInt(100) == 0) {
-				worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 1, Mode.BREAK);
+			if (worldIn.random.nextInt(100) == 0) {
+				worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 1, Mode.BREAK);
 			}
 			
 		}

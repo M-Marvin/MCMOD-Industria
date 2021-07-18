@@ -63,23 +63,23 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(pos.add(-5, -1, -5), pos.add(5, 6, 5));
+		return new AxisAlignedBB(worldPosition.offset(-5, -1, -5), worldPosition.offset(5, 6, 5));
 	}
 	
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote()) {
+		if (!this.level.isClientSide()) {
 			
 			if (BlockMultiPart.getInternPartPos(this.getBlockState()).equals(BlockPos.ZERO)) {
 				
-				this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
-				ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos);
+				this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
+				ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
 				
 				this.fluidIn = FluidBucketHelper.transferBuckets(this, 3, this.fluidIn, this.maxFluidStorage);
 				this.fluidOut = FluidBucketHelper.transferBuckets(this, 5, this.fluidOut, this.maxFluidStorage);
 				
-				ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(this.world).getNetwork(this.pos);
+				ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(this.level).getNetwork(this.worldPosition);
 				
 				this.hasPower = network.canMachinesRun() == Voltage.HightVoltage;
 				this.isWorking = canWork() && this.hasPower;
@@ -94,9 +94,9 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 					
 					if (this.currentRecipe != null) {
 						
-						if (	ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(0), currentRecipe.getRecipeOutput()) &&
-								ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(1), currentRecipe.getRecipeOutput2()) &&
-								ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(2), currentRecipe.getRecipeOutput3()) &&
+						if (	ItemStackHelper.canMergeRecipeStacks(this.getItem(0), currentRecipe.getResultItem()) &&
+								ItemStackHelper.canMergeRecipeStacks(this.getItem(1), currentRecipe.getRecipeOutput2()) &&
+								ItemStackHelper.canMergeRecipeStacks(this.getItem(2), currentRecipe.getRecipeOutput3()) &&
 								(this.fluidOut.getFluid() == currentRecipe.fluidOut.getFluid() || this.fluidOut.isEmpty()) ? this.fluidOut.getAmount() + currentRecipe.fluidOut.getAmount() < this.maxFluidStorage : false) {
 							
 							this.progressTotal = currentRecipe.getRifiningTime() / 3;
@@ -126,10 +126,10 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 									this.progress3 = 0;
 									if (!currentRecipe.getRecipeOutputFluid().isEmpty()) this.progress4 = 1;
 									
-									if (this.getStackInSlot(2).isEmpty()) {
-										this.setInventorySlotContents(2, currentRecipe.getRecipeOutput3());
+									if (this.getItem(2).isEmpty()) {
+										this.setItem(2, currentRecipe.getRecipeOutput3());
 									} else {
-										this.getStackInSlot(2).grow(currentRecipe.getRecipeOutput3().getCount());
+										this.getItem(2).grow(currentRecipe.getRecipeOutput3().getCount());
 									}
 									
 								}
@@ -147,10 +147,10 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 										this.progress4 = 1;
 									}
 									
-									if (this.getStackInSlot(1).isEmpty()) {
-										this.setInventorySlotContents(1, currentRecipe.getRecipeOutput2());
+									if (this.getItem(1).isEmpty()) {
+										this.setItem(1, currentRecipe.getRecipeOutput2());
 									} else {
-										this.getStackInSlot(1).grow(currentRecipe.getRecipeOutput2().getCount());
+										this.getItem(1).grow(currentRecipe.getRecipeOutput2().getCount());
 									}
 									
 								}
@@ -168,10 +168,10 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 										this.progress4 = 1;
 									}
 									
-									if (this.getStackInSlot(0).isEmpty()) {
-										this.setInventorySlotContents(0, currentRecipe.getRecipeOutput());
+									if (this.getItem(0).isEmpty()) {
+										this.setItem(0, currentRecipe.getResultItem());
 									} else {
-										this.getStackInSlot(0).grow(currentRecipe.getRecipeOutput().getCount());
+										this.getItem(0).grow(currentRecipe.getResultItem().getCount());
 									}
 									
 									this.fluidIn.shrink(currentRecipe.fluidIn.getAmount());
@@ -187,9 +187,9 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 				}
 				
 			} else if (BlockMultiPart.getInternPartPos(this.getBlockState()).equals(new BlockPos(1, 3, 0))) {
-				TileEntityMRaffinery tileEntity = (TileEntityMRaffinery) BlockMultiPart.getSCenterTE(pos, getBlockState(), world);
+				TileEntityMRaffinery tileEntity = (TileEntityMRaffinery) BlockMultiPart.getSCenterTE(worldPosition, getBlockState(), level);
 				if (tileEntity != null) {
-					FluidStack rest = pushFluid(tileEntity.fluidOut, world, pos);
+					FluidStack rest = pushFluid(tileEntity.fluidOut, level, worldPosition);
 					if (rest != tileEntity.fluidOut) tileEntity.fluidOut = rest;
 				}
 			}
@@ -199,7 +199,7 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 			if (this.isWorking) {
 				
 				IParticleData paricle = ParticleTypes.POOF;
-				Direction facing = getBlockState().get(BlockMultiPart.FACING);
+				Direction facing = getBlockState().getValue(BlockMultiPart.FACING);
 				
 				int ox = 0;
 				int oz = 0;
@@ -227,10 +227,10 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 				float width = 0.4F;
 				float height = 0.4F;
 
-				float x = this.pos.getX() + ox + (world.rand.nextFloat() + 3.0F) * width;
-				float y = this.pos.getY() + 2 + (world.rand.nextFloat() + 5.5F) * height;
-				float z = this.pos.getZ() + oz + (world.rand.nextFloat() + 1.0F) * width;
-				this.world.addParticle(paricle, x, y, z, 0, 0, 0);
+				float x = this.worldPosition.getX() + ox + (level.random.nextFloat() + 3.0F) * width;
+				float y = this.worldPosition.getY() + 2 + (level.random.nextFloat() + 5.5F) * height;
+				float z = this.worldPosition.getZ() + oz + (level.random.nextFloat() + 1.0F) * width;
+				this.level.addParticle(paricle, x, y, z, 0, 0, 0);
 				
 				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.RAFFINERY_LOOP);
 				
@@ -250,14 +250,14 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 	
 	public boolean isPostProcessing() {
 		if (this.currentRecipe == null) return false;
-		return this.progress2 > 0 || this.progress3 > 0 || this.progress4 > 0 && (ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(0), currentRecipe.getRecipeOutput()) &&
-				ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(1), currentRecipe.getRecipeOutput2()) &&
-				ItemStackHelper.canMergeRecipeStacks(this.getStackInSlot(2), currentRecipe.getRecipeOutput3())) && 
+		return this.progress2 > 0 || this.progress3 > 0 || this.progress4 > 0 && (ItemStackHelper.canMergeRecipeStacks(this.getItem(0), currentRecipe.getResultItem()) &&
+				ItemStackHelper.canMergeRecipeStacks(this.getItem(1), currentRecipe.getRecipeOutput2()) &&
+				ItemStackHelper.canMergeRecipeStacks(this.getItem(2), currentRecipe.getRecipeOutput3())) && 
 				(this.fluidOut.getFluid() == currentRecipe.fluidOut.getFluid() || this.fluidOut.isEmpty()) ? this.fluidOut.getAmount() + currentRecipe.fluidOut.getAmount() < this.maxFluidStorage : false;
 	}
 	
 	public RifiningRecipe findRecipe() {
-		Optional<RifiningRecipe> recipe = this.world.getRecipeManager().getRecipe(ModRecipeTypes.RIFINING, this, this.world);
+		Optional<RifiningRecipe> recipe = this.level.getRecipeManager().getRecipeFor(ModRecipeTypes.RIFINING, this, this.level);
 		return recipe.isPresent() ? recipe.get() : null;
 	}
 	
@@ -277,19 +277,19 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 	}
 
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
 		return false;
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return !this.isPostProcessing();
 	}
 	
 	@Override
 	public FluidStack getFluid(int amount) {
 		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
-		TileEntity tileEntity = BlockMultiPart.getSCenterTE(pos, getBlockState(), world);
+		TileEntity tileEntity = BlockMultiPart.getSCenterTE(worldPosition, getBlockState(), level);
 		if (tileEntity instanceof TileEntityMRaffinery) {
 			if (ipos.equals(new BlockPos(1, 3, 0))) {
 				int transfer = Math.min(amount, ((TileEntityMRaffinery) tileEntity).fluidOut.getAmount());
@@ -306,10 +306,10 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 	@Override
 	public FluidStack insertFluid(FluidStack fluid) {
 		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
-		TileEntity tileEntity = BlockMultiPart.getSCenterTE(pos, getBlockState(), world);
+		TileEntity tileEntity = BlockMultiPart.getSCenterTE(worldPosition, getBlockState(), level);
 		if (tileEntity instanceof TileEntityMRaffinery) {
 			if (ipos.equals(new BlockPos(1, 0, 1))) {
-				if (((TileEntityMRaffinery) tileEntity).fluidIn.getFluid().isEquivalentTo(fluid.getFluid()) || ((TileEntityMRaffinery) tileEntity).fluidIn.isEmpty()) {
+				if (((TileEntityMRaffinery) tileEntity).fluidIn.getFluid().isSame(fluid.getFluid()) || ((TileEntityMRaffinery) tileEntity).fluidIn.isEmpty()) {
 					int capcaity = this.maxFluidStorage - ((TileEntityMRaffinery) tileEntity).fluidIn.getAmount();
 					int transfer = Math.min(capcaity, fluid.getAmount());
 					if (transfer > 0) {
@@ -351,13 +351,13 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 	@Override
 	public boolean canConnect(Direction side) {
 		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
-		Direction facing = this.getBlockState().get(BlockMultiPart.FACING);
+		Direction facing = this.getBlockState().getValue(BlockMultiPart.FACING);
 		return	(ipos.equals(new BlockPos(1, 0, 1)) && side == facing.getOpposite()) ||
 				(ipos.equals(new BlockPos(1, 3, 0)) && side == facing);
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		if (!this.fluidIn.isEmpty()) compound.put("FluidIn", this.fluidIn.writeToNBT(new CompoundNBT()));
 		if (!this.fluidOut.isEmpty()) compound.put("FluidOut", this.fluidOut.writeToNBT(new CompoundNBT()));
 		compound.putBoolean("hasPower", this.hasPower);
@@ -368,11 +368,11 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 		compound.putInt("progress4", this.progress4);
 		compound.putInt("progressTotal", this.progressTotal);
 		if (this.currentRecipe != null) compound.putString("Recipe", this.currentRecipe.getId().toString());
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		this.fluidIn = FluidStack.EMPTY;
 		this.fluidOut = FluidStack.EMPTY;
 		this.currentRecipe = null;
@@ -385,11 +385,11 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 		this.progress3 = compound.getInt("progress3");
 		this.progress4 = compound.getInt("progress4");
 		this.progressTotal = compound.getInt("progressTotal");
-		if (compound.contains("Recipe") && this.world != null) {
-			Optional<? extends IRecipe<?>> recipe = this.world.getRecipeManager().getRecipe(new ResourceLocation(compound.getString("Recipe")));
+		if (compound.contains("Recipe") && this.level != null) {
+			Optional<? extends IRecipe<?>> recipe = this.level.getRecipeManager().byKey(new ResourceLocation(compound.getString("Recipe")));
 			if (recipe.isPresent()) this.currentRecipe = (RifiningRecipe) recipe.get();
 		}
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 }

@@ -1,4 +1,4 @@
-package de.industria.util.blockfeatures;
+package de.industria.gui;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
@@ -35,31 +35,31 @@ public abstract class ContainerTileEntity<T extends TileEntity> extends Containe
 	private static TileEntity getClientTileEntity(PacketBuffer data) {
 		
 		BlockPos pos = data.readBlockPos();
-		TileEntity te = Minecraft.getInstance().world.getTileEntity(pos);
+		TileEntity te = Minecraft.getInstance().level.getBlockEntity(pos);
 		return te;
 		
 	}
 	
 	public abstract int getSlots();
 	
-	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
 		ItemStack itemstack = ItemStack.EMPTY;
-		Slot slot = this.inventorySlots.get(index);
-		if (slot != null && slot.getHasStack()) {
-			ItemStack itemstack1 = slot.getStack();
+		Slot slot = this.slots.get(index);
+		if (slot != null && slot.hasItem()) {
+			ItemStack itemstack1 = slot.getItem();
 			itemstack = itemstack1.copy();
 			if (index < this.getSlots()) {
-				if (!this.mergeItemStack(itemstack1, this.getSlots(), this.inventorySlots.size(), true)) {
+				if (!this.moveItemStackTo(itemstack1, this.getSlots(), this.slots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(itemstack1, 0, this.getSlots(), false)) {
+			} else if (!this.moveItemStackTo(itemstack1, 0, this.getSlots(), false)) {
 				return ItemStack.EMPTY;
 			}
 			
 			if (itemstack1.isEmpty()) {
-				slot.putStack(ItemStack.EMPTY);
+				slot.set(ItemStack.EMPTY);
 			} else {
-				slot.onSlotChanged();
+				slot.setChanged();
 			}
 		}
 		
@@ -68,8 +68,8 @@ public abstract class ContainerTileEntity<T extends TileEntity> extends Containe
 	
 	public abstract void init();
 	
-	public boolean canInteractWith(PlayerEntity playerIn) {
-		return isWithinUsableDistance(IWorldPosCallable.DUMMY, playerIn, Blocks.CRAFTING_TABLE) && !this.tileEntity.isRemoved();
+	public boolean stillValid(PlayerEntity playerIn) {
+		return stillValid(IWorldPosCallable.NULL, playerIn, Blocks.CRAFTING_TABLE) && !this.tileEntity.isRemoved();
 	}
 	
 	public T getTileEntity() {
@@ -83,7 +83,7 @@ public abstract class ContainerTileEntity<T extends TileEntity> extends Containe
 		}
 			
 		@Override
-		public boolean isItemValid(ItemStack stack) {
+		public boolean mayPlace(ItemStack stack) {
 			return false;
 		}
 			

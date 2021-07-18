@@ -32,20 +32,20 @@ public class TileEntityMBlenderRenderer extends TileEntityRenderer<TileEntityMBl
 	public void render(TileEntityMBlender tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		
 		BlockState blockState = tileEntityIn.getBlockState();
-		Direction facing = blockState.get(BlockStateProperties.HORIZONTAL_FACING);
+		Direction facing = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING);
 		BlockPos partPos = BlockMultiPart.getInternPartPos(blockState);
 		
 		if (partPos.equals(BlockPos.ZERO)) {
 			
-			IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.getEntityTranslucent(BLENDER_TEXTURES));
+			IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.entityTranslucent(BLENDER_TEXTURES));
 			
-			matrixStackIn.push();
+			matrixStackIn.pushPose();
 			
 			matrixStackIn.translate(0F, -1F, 0F);
 			
 			matrixStackIn.translate(0.5F, 1.5F, 0.5F);
-			matrixStackIn.rotate(facing.getRotation());
-			matrixStackIn.rotate(Vector3f.XP.rotationDegrees(90));
+			matrixStackIn.mulPose(facing.getRotation());
+			matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(90));
 			matrixStackIn.translate(0F, -1F, 0F);
 
 			float motion = tileEntityIn.isWorking ? 10.0F : 0F;
@@ -53,7 +53,7 @@ public class TileEntityMBlenderRenderer extends TileEntityRenderer<TileEntityMBl
 			tileEntityIn.rotation += motion * partialToAdd;
 			
 			blenderModel.setRotation(tileEntityIn.rotation);
-			blenderModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
+			blenderModel.renderToBuffer(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 			
 			if ((!tileEntityIn.fluidIn1.isEmpty() || !tileEntityIn.fluidIn2.isEmpty()) && tileEntityIn.tankFillState > 0) {
 				
@@ -66,7 +66,7 @@ public class TileEntityMBlenderRenderer extends TileEntityRenderer<TileEntityMBl
 				
 			}
 			
-			matrixStackIn.pop();
+			matrixStackIn.popPose();
 			
 		}
 		

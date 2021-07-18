@@ -16,18 +16,18 @@ public class SpecialMetalFormRecipeSerializer<T extends RecipeFormCladding> exte
 		this.factory = factory;
 	}
 	
-	public T read(ResourceLocation recipeId, JsonObject json) {
+	public T fromJson(ResourceLocation recipeId, JsonObject json) {
 		int processTime = json.get("processTime").getAsInt();
 		return this.factory.create(recipeId, processTime);
 	}
 	
-	public T read(ResourceLocation recipeId, PacketBuffer buffer) {
+	public T fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
 		int processTime = buffer.readInt();
 		return this.factory.create(recipeId, processTime);
 	}
 	
 	@Override
-	public void write(PacketBuffer buffer, T recipe) {
+	public void toNetwork(PacketBuffer buffer, T recipe) {
 		buffer.writeInt(recipe.getProcessTime());
 	}
 	

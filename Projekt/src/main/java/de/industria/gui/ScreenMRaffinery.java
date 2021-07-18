@@ -22,19 +22,19 @@ public class ScreenMRaffinery extends ContainerScreen<ContainerMRaffinery> {
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
 
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindTexture(RAFFFINERY_GUI_TEXTURES);
-		int i = this.guiLeft;
-		int j = (this.height - this.ySize) / 2;
-		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
+		this.minecraft.getTextureManager().bind(RAFFFINERY_GUI_TEXTURES);
+		int i = this.leftPos;
+		int j = (this.height - this.imageHeight) / 2;
+		this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
 		
-		TileEntityMRaffinery te = this.container.getTileEntity();
-		float progress1 = (float) te.progress1 / (float) this.container.getTileEntity().progressTotal;
-		float progress2 = (float) te.progress2 / (float) this.container.getTileEntity().progressTotal;
-		float progress3 = (float) te.progress3 / (float) this.container.getTileEntity().progressTotal;
-		float progress4 = (float) te.progress4 / (float) this.container.getTileEntity().progressTotal;
+		TileEntityMRaffinery te = this.menu.getTileEntity();
+		float progress1 = (float) te.progress1 / (float) this.menu.getTileEntity().progressTotal;
+		float progress2 = (float) te.progress2 / (float) this.menu.getTileEntity().progressTotal;
+		float progress3 = (float) te.progress3 / (float) this.menu.getTileEntity().progressTotal;
+		float progress4 = (float) te.progress4 / (float) this.menu.getTileEntity().progressTotal;
 		
 		this.blit(matrixStack, i + 27, j + 31, 176, 16, (int) (progress1 * 36), 22);
 		this.blit(matrixStack, i + 53, j + 31, 176, 38, (int) (progress2 * 36), 22);
@@ -43,15 +43,15 @@ public class ScreenMRaffinery extends ContainerScreen<ContainerMRaffinery> {
 		
 		if (te.hasPower) this.blit(matrixStack, i + 25, j + 55, 176, 0, 16, 16);
 		
-		FluidStack fluid1 = this.container.getTileEntity().fluidIn;
+		FluidStack fluid1 = this.menu.getTileEntity().fluidIn;
 		if (!fluid1.isEmpty()) {
-			float fluidA1 = fluid1.getAmount() / (float) this.container.getTileEntity().maxFluidStorage;
+			float fluidA1 = fluid1.getAmount() / (float) this.menu.getTileEntity().maxFluidStorage;
 			FluidBarTexture.drawFluidTexture(matrixStack, this, fluid1.getFluid(), i + 0, j + 71, 16, (int) (fluidA1 * 56));
 		}
 		
-		FluidStack fluid3 = this.container.getTileEntity().fluidOut;
+		FluidStack fluid3 = this.menu.getTileEntity().fluidOut;
 		if (!fluid3.isEmpty()) {
-			float fluidA3 = fluid3.getAmount() / (float) this.container.getTileEntity().maxFluidStorage;
+			float fluidA3 = fluid3.getAmount() / (float) this.menu.getTileEntity().maxFluidStorage;
 			FluidBarTexture.drawFluidTexture(matrixStack, this, fluid3.getFluid(), i + 144, j + 71, 16, (int) (fluidA3 * 56));
 		}
 		

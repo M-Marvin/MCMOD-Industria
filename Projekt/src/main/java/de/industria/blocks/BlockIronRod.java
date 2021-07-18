@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 public class BlockIronRod extends EndRodBlock {
 
 	public BlockIronRod() {
-		super(Properties.create(Material.IRON).sound(SoundType.METAL).hardnessAndResistance(1));
+		super(Properties.of(Material.METAL).sound(SoundType.METAL).strength(1));
 		this.setRegistryName(Industria.MODID, "iron_rod");
 	}
 	
@@ -27,7 +27,7 @@ public class BlockIronRod extends EndRodBlock {
 	@Override
 	public List<ItemStack> getDrops(BlockState state, Builder builder) {
 		List<ItemStack> drops = new ArrayList<ItemStack>();
-		drops.add(new ItemStack(Item.getItemFromBlock(this), 1));
+		drops.add(new ItemStack(Item.byBlock(this), 1));
 		return drops;
 	}
 	

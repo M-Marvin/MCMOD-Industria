@@ -39,9 +39,9 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 	}
 	
 	@Override
-	public void clear() {
+	public void clearContent() {
 		this.beltMoveStateIn = this.beltMoveStateOut = 0;
-		super.clear();
+		super.clearContent();
 	}
 	
 	// Called from other belts, when inserting item, do set beltMoveStateIn and beltInsertSide
@@ -50,13 +50,13 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 		this.beltMoveStateIn = 0;
 		
 		BlockState state = this.getBlockState();
-		Direction facing = state.get(BlockConveyorBelt.FACING);
+		Direction facing = state.getValue(BlockConveyorBelt.FACING);
 		
 		if (facing == side.getOpposite()) {
 			this.beltInsertSide = 0;
-		} else if (facing.rotateY() == side.getOpposite()) {
+		} else if (facing.getClockWise() == side.getOpposite()) {
 			this.beltInsertSide = 1;
-		} else if (facing.rotateYCCW() == side.getOpposite()) {
+		} else if (facing.getCounterClockWise() == side.getOpposite()) {
 			this.beltInsertSide = -1;
 		}
 		
@@ -65,9 +65,9 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote()) {
+		if (!this.level.isClientSide()) {
 			
-			this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
+			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			
 			this.moveTimer++;
 			if (this.moveTimer > conveyorTime) this.moveTimer = 0;
@@ -81,26 +81,26 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 			if (canMoveOut() && beltMoveStateOut == 8) {
 				moveItemOut();
 			} else if (beltMoveStateOut == 4 && isNotConnected()){
-				if (!this.getStackInSlot(1).isEmpty()) dropItem();
+				if (!this.getItem(1).isEmpty()) dropItem();
 			}
 			
-			if (!this.getStackInSlot(2).isEmpty()) {
+			if (!this.getItem(2).isEmpty()) {
 				if (canMoveOutSecondary() && beltMoveStateOutSecondary == 8) {
 					moveItemOutSecondary();
 				}
 			}
 			
-			if (hasSwitchedSecondary() && this.beltMoveStateIn >= 8 && this.getStackInSlot(2).isEmpty()) {
-				this.setInventorySlotContents(2, this.getStackInSlot(0));
-				this.setInventorySlotContents(0, ItemStack.EMPTY);
+			if (hasSwitchedSecondary() && this.beltMoveStateIn >= 8 && this.getItem(2).isEmpty()) {
+				this.setItem(2, this.getItem(0));
+				this.setItem(0, ItemStack.EMPTY);
 				this.beltMoveStateOutSecondary = 0;
-			} else if (this.beltMoveStateIn >= 8 && this.getStackInSlot(1).isEmpty()) {
-				this.setInventorySlotContents(1, this.getStackInSlot(0));
-				this.setInventorySlotContents(0, ItemStack.EMPTY);
+			} else if (this.beltMoveStateIn >= 8 && this.getItem(1).isEmpty()) {
+				this.setItem(1, this.getItem(0));
+				this.setItem(0, ItemStack.EMPTY);
 				this.beltMoveStateOut = 0;
 			}
 			
-			if (this.beltMoveStateIn < (this.getStackInSlot(1).isEmpty() ? 8 : this.beltMoveStateOut) && isEnabled()) {
+			if (this.beltMoveStateIn < (this.getItem(1).isEmpty() ? 8 : this.beltMoveStateOut) && isEnabled()) {
 				if (this.moveTimer == 0) this.beltMoveStateIn++;
 			}
 			
@@ -108,7 +108,7 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 				if (this.moveTimer == 0) this.beltMoveStateOut++;
 			}
 			
-			if (!this.getStackInSlot(2).isEmpty()) {
+			if (!this.getItem(2).isEmpty()) {
 				if (this.beltMoveStateOutSecondary < (canMoveOutSecondary() ? 8 : 4)) {
 					if (this.moveTimer == 0) this.beltMoveStateOutSecondary++;
 				}
@@ -121,7 +121,7 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 	public boolean hasSwitchedSecondary() {
 		BlockState state = this.getBlockState();
 		if (state.getBlock() == ModItems.conveyor_spliter) {
-			return state.get(BlockConveyorSpliter.ACTIVE);
+			return state.getValue(BlockConveyorSpliter.ACTIVE);
 		}
 		return false;
 	}
@@ -129,7 +129,7 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 	public boolean isEnabled() {
 		BlockState state = this.getBlockState();
 		if (state.getBlock() == ModItems.conveyor_switch) {
-			return state.get(BlockConveyorSwitch.ENABLED);
+			return state.getValue(BlockConveyorSwitch.ENABLED);
 		}
 		return true;
 	}
@@ -138,9 +138,9 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 	public boolean isNotConnected() {
 		
 		BlockState state = getBlockState();
-		Direction facing = state.get(BlockConveyorBelt.FACING);
-		BlockPos connectPos = this.pos.offset(facing);
-		return this.world.getBlockState(connectPos).isAir();
+		Direction facing = state.getValue(BlockConveyorBelt.FACING);
+		BlockPos connectPos = this.worldPosition.relative(facing);
+		return this.level.getBlockState(connectPos).isAir();
 		
 	}
 
@@ -149,34 +149,34 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 		
 		BlockState state = getBlockState();
 		Direction facing = getSecondary(state);
-		BlockPos connectPos = this.pos.offset(facing);
-		return this.world.getBlockState(connectPos).isAir();
+		BlockPos connectPos = this.worldPosition.relative(facing);
+		return this.level.getBlockState(connectPos).isAir();
 		
 	}
 	
 	public void dropItem() {
-		Direction motion = getBlockState().get(BlockConveyorBelt.FACING);
-		Vector3f motionVec = new Vector3f(motion.getXOffset() * 0.2F, 0.0F, motion.getZOffset() * 0.2F);
-		ItemEntity drop = new ItemEntity(this.world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, this.getStackInSlot(1));
-		drop.setMotion(motionVec.getX(), motionVec.getY(), motionVec.getZ());
-		drop.setPickupDelay(60);
-		this.world.addEntity(drop);
-		this.setInventorySlotContents(1, ItemStack.EMPTY);
+		Direction motion = getBlockState().getValue(BlockConveyorBelt.FACING);
+		Vector3f motionVec = new Vector3f(motion.getStepX() * 0.2F, 0.0F, motion.getStepZ() * 0.2F);
+		ItemEntity drop = new ItemEntity(this.level, worldPosition.getX() + 0.5F, worldPosition.getY() + 0.5F, worldPosition.getZ() + 0.5F, this.getItem(1));
+		drop.setDeltaMovement(motionVec.x(), motionVec.y(), motionVec.z());
+		drop.setPickUpDelay(60);
+		this.level.addFreshEntity(drop);
+		this.setItem(1, ItemStack.EMPTY);
 	}
 	
 	public boolean moveItemIn() {
 		
-		if (getStackInSlot(0).isEmpty()) {
+		if (getItem(0).isEmpty()) {
 			
 			BlockState state = getBlockState();
-			Direction facing = state.get(BlockConveyorBelt.FACING);
-			BlockPos sourcePos = this.pos.offset(facing.getOpposite());
+			Direction facing = state.getValue(BlockConveyorBelt.FACING);
+			BlockPos sourcePos = this.worldPosition.relative(facing.getOpposite());
 			
-			IInventory inventory = HopperTileEntity.getInventoryAtPosition(this.world, sourcePos);
+			IInventory inventory = HopperTileEntity.getContainerAt(this.level, sourcePos);
 			Supplier<IntStream> slots = () -> getAviableInventorySlots(inventory, facing.getOpposite());
 			
 			boolean isEmpty = slots.get().allMatch((slot) -> {
-				ItemStack stack = inventory.getStackInSlot(slot);
+				ItemStack stack = inventory.getItem(slot);
 				return stack.isEmpty();
 			});
 			
@@ -185,7 +185,7 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 				for (int slot : slots.get().toArray()) {
 					ItemStack beltItem = tryExtractItem(inventory, slot);
 					if (!beltItem.isEmpty()) {
-						this.setInventorySlotContents(0, beltItem);
+						this.setItem(0, beltItem);
 						return true;
 					}
 				}
@@ -201,47 +201,47 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 	public boolean canMoveIn() {
 
 		BlockState state = getBlockState();
-		Direction facing = state.get(BlockConveyorBelt.FACING);
-		BlockPos sourcePos = this.pos.offset(facing.getOpposite());
+		Direction facing = state.getValue(BlockConveyorBelt.FACING);
+		BlockPos sourcePos = this.worldPosition.relative(facing.getOpposite());
 		
-		IInventory inventory = HopperTileEntity.getInventoryAtPosition(this.world, sourcePos);
+		IInventory inventory = HopperTileEntity.getContainerAt(this.level, sourcePos);
 		return inventory != null && !(inventory instanceof TileEntityConveyorBelt);
 		
 	}
 
 	public Direction getSecondary(BlockState state) {
-		Direction facing = state.get(BlockConveyorBelt.FACING);
-		if (state.get(BlockConveyorBelt.LEFT) == BeltState.OPEN) {
-			facing = facing.rotateYCCW();
-		} else if (state.get(BlockConveyorBelt.RIGHT) == BeltState.OPEN) {
-			facing = facing.rotateY();
+		Direction facing = state.getValue(BlockConveyorBelt.FACING);
+		if (state.getValue(BlockConveyorBelt.LEFT) == BeltState.OPEN) {
+			facing = facing.getCounterClockWise();
+		} else if (state.getValue(BlockConveyorBelt.RIGHT) == BeltState.OPEN) {
+			facing = facing.getClockWise();
 		}
 		return facing;
 	}
 	
 	public boolean moveItemOut() {
 		
-		if (!this.getStackInSlot(1).isEmpty()) {
+		if (!this.getItem(1).isEmpty()) {
 			
 			BlockState state = getBlockState();
-			Direction facing = state.get(BlockConveyorBelt.FACING);
-			BlockPos targetPos = this.pos.offset(facing);
+			Direction facing = state.getValue(BlockConveyorBelt.FACING);
+			BlockPos targetPos = this.worldPosition.relative(facing);
 			
-			IInventory inventory = HopperTileEntity.getInventoryAtPosition(this.world, targetPos);
+			IInventory inventory = HopperTileEntity.getContainerAt(this.level, targetPos);
 			Supplier<IntStream> slots = () -> getAviableInventorySlots(inventory, facing);
 			
 			boolean isFull = slots.get().allMatch((slot) -> {
-				ItemStack stack = inventory.getStackInSlot(slot);
+				ItemStack stack = inventory.getItem(slot);
 				return stack.isEmpty() ? false : stack.getCount() >= stack.getMaxStackSize();
 			});
 			
 			if (!isFull) {
 				
-				ItemStack beltItem = getStackInSlot(1);
+				ItemStack beltItem = getItem(1);
 				for (int slot : slots.get().toArray()) {
 					beltItem = tryInsertItem(inventory, slot, beltItem);
 					if (beltItem.isEmpty()) {
-						setInventorySlotContents(1, beltItem);
+						setItem(1, beltItem);
 						if (inventory instanceof TileEntityConveyorBelt) ((TileEntityConveyorBelt) inventory).onItemInserted(facing.getOpposite());
 						return true;
 					}
@@ -257,27 +257,27 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 	
 	public boolean moveItemOutSecondary() {
 		
-		if (!this.getStackInSlot(2).isEmpty()) {
+		if (!this.getItem(2).isEmpty()) {
 			
 			BlockState state = getBlockState();
 			Direction facing = getSecondary(state);
-			BlockPos targetPos = this.pos.offset(facing);
+			BlockPos targetPos = this.worldPosition.relative(facing);
 			
-			IInventory inventory = HopperTileEntity.getInventoryAtPosition(this.world, targetPos);
+			IInventory inventory = HopperTileEntity.getContainerAt(this.level, targetPos);
 			Supplier<IntStream> slots = () -> getAviableInventorySlots(inventory, facing);
 			
 			boolean isFull = slots.get().allMatch((slot) -> {
-				ItemStack stack = inventory.getStackInSlot(slot);
+				ItemStack stack = inventory.getItem(slot);
 				return stack.isEmpty() ? false : stack.getCount() >= stack.getMaxStackSize();
 			});
 			
 			if (!isFull) {
 				
-				ItemStack beltItem = getStackInSlot(2);
+				ItemStack beltItem = getItem(2);
 				for (int slot : slots.get().toArray()) {
 					beltItem = tryInsertItem(inventory, slot, beltItem);
 					if (beltItem.isEmpty()) {
-						setInventorySlotContents(2, beltItem);
+						setItem(2, beltItem);
 						if (inventory instanceof TileEntityConveyorBelt) ((TileEntityConveyorBelt) inventory).onItemInserted(facing.getOpposite());
 						return true;
 					}
@@ -294,17 +294,17 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 	public boolean canMoveOut() {
 		
 		BlockState state = getBlockState();
-		Direction facing = state.get(BlockConveyorBelt.FACING);
-		BlockPos targetPos = this.pos.offset(facing);
+		Direction facing = state.getValue(BlockConveyorBelt.FACING);
+		BlockPos targetPos = this.worldPosition.relative(facing);
 		
-		IInventory inventory = HopperTileEntity.getInventoryAtPosition(this.world, targetPos);
+		IInventory inventory = HopperTileEntity.getContainerAt(this.level, targetPos);
 		
 		if (inventory != null) {
 			
 			Supplier<IntStream> slots = () -> getAviableInventorySlots(inventory, facing);
 			
 			boolean isFull = slots.get().allMatch((slot) -> {
-				ItemStack stack = inventory.getStackInSlot(slot);
+				ItemStack stack = inventory.getItem(slot);
 				return stack.isEmpty() ? false : (inventory instanceof TileEntityConveyorBelt ? true : stack.getCount() >= stack.getMaxStackSize());
 			});
 			
@@ -320,16 +320,16 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 		
 		BlockState state = getBlockState();
 		Direction facing = getSecondary(state);
-		BlockPos targetPos = this.pos.offset(facing);
+		BlockPos targetPos = this.worldPosition.relative(facing);
 		
-		IInventory inventory = HopperTileEntity.getInventoryAtPosition(this.world, targetPos);
+		IInventory inventory = HopperTileEntity.getContainerAt(this.level, targetPos);
 		
 		if (inventory != null) {
 			
 			Supplier<IntStream> slots = () -> getAviableInventorySlots(inventory, facing);
 			
 			boolean isFull = slots.get().allMatch((slot) -> {
-				ItemStack stack = inventory.getStackInSlot(slot);
+				ItemStack stack = inventory.getItem(slot);
 				return stack.isEmpty() ? false : (inventory instanceof TileEntityConveyorBelt ? true : stack.getCount() >= stack.getMaxStackSize());
 			});
 			
@@ -343,14 +343,14 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 	
 	public ItemStack tryExtractItem(IInventory inventory, int slot) {
 		
-		boolean flag = inventory instanceof ISidedInventory ? ((ISidedInventory) inventory).canExtractItem(slot, inventory.getStackInSlot(slot), Direction.DOWN) : true;
+		boolean flag = inventory instanceof ISidedInventory ? ((ISidedInventory) inventory).canTakeItemThroughFace(slot, inventory.getItem(slot), Direction.DOWN) : true;
 				
 		if (flag) {
-			ItemStack item = inventory.getStackInSlot(slot);
+			ItemStack item = inventory.getItem(slot);
 			if (item.isEmpty()) {
 				return ItemStack.EMPTY;
 			} else {
-				inventory.setInventorySlotContents(slot, ItemStack.EMPTY);
+				inventory.setItem(slot, ItemStack.EMPTY);
 				return item;
 			}
 		}
@@ -360,12 +360,12 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 
 	public ItemStack tryInsertItem(IInventory inventory, int slot, ItemStack item) {
 		
-		boolean flag = inventory instanceof ISidedInventory ? ((ISidedInventory) inventory).canInsertItem(slot, item, Direction.NORTH) || ((ISidedInventory) inventory).canInsertItem(slot, item, Direction.UP) : true;
+		boolean flag = inventory instanceof ISidedInventory ? ((ISidedInventory) inventory).canPlaceItemThroughFace(slot, item, Direction.NORTH) || ((ISidedInventory) inventory).canPlaceItemThroughFace(slot, item, Direction.UP) : true;
 		
 		if (flag) {
-			ItemStack stack = inventory.getStackInSlot(slot);
+			ItemStack stack = inventory.getItem(slot);
 			if (stack.isEmpty()) {
-				inventory.setInventorySlotContents(slot, item);
+				inventory.setItem(slot, item);
 				return ItemStack.EMPTY;
 			} else if (stack.getItem() == item.getItem()) {
 				int it = Math.min(item.getCount(), stack.getMaxStackSize() - stack.getCount());
@@ -377,7 +377,7 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 	}
 	
 	public IntStream getAviableInventorySlots(IInventory inventory, Direction direction) {
-		return inventory instanceof ISidedInventory ? IntStream.of(((ISidedInventory) inventory).getSlotsForFace(direction.getOpposite())) : IntStream.range(0, inventory.getSizeInventory());
+		return inventory instanceof ISidedInventory ? IntStream.of(((ISidedInventory) inventory).getSlotsForFace(direction.getOpposite())) : IntStream.range(0, inventory.getContainerSize());
 	}
 	
 	@Override
@@ -386,43 +386,43 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 	}
 	
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
 		return index == 0;
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return index == 1;
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		compound.putInt("conveyorStateIn", this.beltMoveStateIn);
 		compound.putInt("conveyorStateOut", this.beltMoveStateOut);
 		compound.putInt("conveyorStateOutSecondary", this.beltMoveStateOutSecondary);
 		compound.putInt("conveyorInsertSide", this.beltInsertSide);
 		compound.putInt("moveTimer", this.moveTimer);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		this.beltMoveStateIn = compound.getInt("conveyorStateIn");
 		this.beltMoveStateOut = compound.getInt("conveyorStateOut");
 		this.beltMoveStateOutSecondary = compound.getInt("conveyorStateOutSecondary");
 		this.beltInsertSide = compound.getInt("conveyorInsertSide");
 		this.moveTimer = compound.getInt("moveTimer");
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(pos, 0, this.serializeNBT());
+		return new SUpdateTileEntityPacket(worldPosition, 0, this.serializeNBT());
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.deserializeNBT(pkt.getNbtCompound());
+		this.deserializeNBT(pkt.getTag());
 	}
 	
 }

@@ -31,21 +31,21 @@ import net.minecraftforge.fml.network.NetworkHooks;
 public class BlockMStoringCraftingTable extends BlockContainerBase implements IAdvancedBlockInfo, IElectricConnectiveBlock {
 	
 	public BlockMStoringCraftingTable() {
-		super("storing_crafting_table", Material.IRON, 2.5F, SoundType.METAL);
+		super("storing_crafting_table", Material.METAL, 2.5F, SoundType.METAL);
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityMStoringCraftingTable();
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		
 		if (tileEntity instanceof TileEntityMStoringCraftingTable) {
-			if (!worldIn.isRemote()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
+			if (!worldIn.isClientSide()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
 			return ActionResultType.SUCCESS;
 		}
 		
@@ -54,17 +54,17 @@ public class BlockMStoringCraftingTable extends BlockContainerBase implements IA
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
 	
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
-		TileEntity te = worldIn.getTileEntity(pos);
+	public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+		TileEntity te = worldIn.getBlockEntity(pos);
 		if (te instanceof IInventory) {
-			InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) te);
+			InventoryHelper.dropContents(worldIn, pos, (IInventory) te);
 		}
-		super.onBlockHarvested(worldIn, pos, state, player);
+		super.playerWillDestroy(worldIn, pos, state, player);
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class BlockMStoringCraftingTable extends BlockContainerBase implements IA
 
 	@Override
 	public float getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
-		TileEntity tileEntity = world.getTileEntity(pos);
+		TileEntity tileEntity = world.getBlockEntity(pos);
 		if (tileEntity instanceof TileEntityMStoringCraftingTable) {
 			return ((TileEntityMStoringCraftingTable) tileEntity).canWork ? 2 : 0;
 		}

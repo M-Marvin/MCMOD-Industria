@@ -42,27 +42,27 @@ public class BlockMPowerSwitch extends BlockBase implements IElectricConnectiveB
 	public static final BooleanProperty CLOSED = BooleanProperty.create("closed");
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	
-	protected static final VoxelShape EAST_OPEN_AABB = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 11.0D, 16.0D, 16.0D);
-	protected static final VoxelShape WEST_OPEN_AABB = Block.makeCuboidShape(5.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-	protected static final VoxelShape SOUTH_OPEN_AABB = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 11.0D);
-	protected static final VoxelShape NORTH_OPEN_AABB = Block.makeCuboidShape(0.0D, 0.0D, 5.0D, 16.0D, 16.0D, 16.0D);
-	protected static final VoxelShape BOTTOM_AABB = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 11.0D, 16.0D);
-	protected static final VoxelShape TOP_AABB = Block.makeCuboidShape(0.0D, 5.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+	protected static final VoxelShape EAST_OPEN_AABB = Block.box(0.0D, 0.0D, 0.0D, 11.0D, 16.0D, 16.0D);
+	protected static final VoxelShape WEST_OPEN_AABB = Block.box(5.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+	protected static final VoxelShape SOUTH_OPEN_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 11.0D);
+	protected static final VoxelShape NORTH_OPEN_AABB = Block.box(0.0D, 0.0D, 5.0D, 16.0D, 16.0D, 16.0D);
+	protected static final VoxelShape BOTTOM_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 11.0D, 16.0D);
+	protected static final VoxelShape TOP_AABB = Block.box(0.0D, 5.0D, 0.0D, 16.0D, 16.0D, 16.0D);
 	
 	public BlockMPowerSwitch() {
-		super("power_switch", Material.IRON, 1.5F, SoundType.METAL);
-		this.setDefaultState(this.stateContainer.getBaseState().with(CLOSED, false).with(POWERED, false));
+		super("power_switch", Material.METAL, 1.5F, SoundType.METAL);
+		this.registerDefaultState(this.stateDefinition.any().setValue(CLOSED, false).setValue(POWERED, false));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(POWERED, CLOSED, FACING);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		BlockState state = this.getDefaultState().with(FACING, context.getFace());
-		return updateState(state, context.getWorld(), context.getPos());
+		BlockState state = this.defaultBlockState().setValue(FACING, context.getClickedFace());
+		return updateState(state, context.getLevel(), context.getClickedPos());
 	}
 	
 	@Override
@@ -72,7 +72,7 @@ public class BlockMPowerSwitch extends BlockBase implements IElectricConnectiveB
 		
 		if (stateNew != state) {
 			
-			worldIn.setBlockState(pos, stateNew);
+			worldIn.setBlockAndUpdate(pos, stateNew);
 			
 		}
 		
@@ -80,13 +80,13 @@ public class BlockMPowerSwitch extends BlockBase implements IElectricConnectiveB
 	
 	public BlockState updateState(BlockState state, World world, BlockPos pos) {
 		
-		boolean powered = state.get(POWERED);
-		boolean power = world.isBlockPowered(pos);
+		boolean powered = state.getValue(POWERED);
+		boolean power = world.hasNeighborSignal(pos);
 		
 		if (powered != power) {
 			
-			state = state.with(POWERED, power).with(CLOSED, power);
-			world.playSound(null, pos, SoundEvents.BLOCK_WOODEN_BUTTON_CLICK_ON, SoundCategory.BLOCKS, 1, 0.5F);
+			state = state.setValue(POWERED, power).setValue(CLOSED, power);
+			world.playSound(null, pos, SoundEvents.WOODEN_BUTTON_CLICK_ON, SoundCategory.BLOCKS, 1, 0.5F);
 			
 		}
 		
@@ -97,7 +97,7 @@ public class BlockMPowerSwitch extends BlockBase implements IElectricConnectiveB
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		
-		switch (state.get(FACING)) {
+		switch (state.getValue(FACING)) {
 		case NORTH: return NORTH_OPEN_AABB;
 		case SOUTH: return SOUTH_OPEN_AABB;
 		case EAST: return EAST_OPEN_AABB;
@@ -111,24 +111,24 @@ public class BlockMPowerSwitch extends BlockBase implements IElectricConnectiveB
 	
 	@OnlyIn(Dist.CLIENT)
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-		if (stateIn.get(CLOSED)) {
-		Direction direction = stateIn.get(FACING).getOpposite();
+		if (stateIn.getValue(CLOSED)) {
+		Direction direction = stateIn.getValue(FACING).getOpposite();
 			double d0 = (double)pos.getX() + 0.5D + (rand.nextDouble() - 0.5D);
 			double d1 = (double)pos.getY() + 0.5D + (rand.nextDouble() - 0.5D);
 	        double d2 = (double)pos.getZ() + 0.5D + (rand.nextDouble() - 0.5D);
 	        float f = -5.0F;
 	        f = f / 16.0F;
-	        double d3 = (double)(f * (float)direction.getXOffset());
-	        double d4 = (double)(f * (float)direction.getZOffset());
-	        worldIn.addParticle(RedstoneParticleData.REDSTONE_DUST, d0 + d3, d1, d2 + d4, 0.0D, 0.0D, 0.0D);
+	        double d3 = (double)(f * (float)direction.getStepX());
+	        double d4 = (double)(f * (float)direction.getStepZ());
+	        worldIn.addParticle(RedstoneParticleData.REDSTONE, d0 + d3, d1, d2 + d4, 0.0D, 0.0D, 0.0D);
 		}	
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
-		worldIn.setBlockState(pos, state.with(CLOSED, !state.get(CLOSED)));
-		worldIn.playSound(null, pos, SoundEvents.BLOCK_WOODEN_BUTTON_CLICK_ON, SoundCategory.BLOCKS, 1, 0.5F);
+		worldIn.setBlockAndUpdate(pos, state.setValue(CLOSED, !state.getValue(CLOSED)));
+		worldIn.playSound(null, pos, SoundEvents.WOODEN_BUTTON_CLICK_ON, SoundCategory.BLOCKS, 1, 0.5F);
 		return ActionResultType.SUCCESS;
 		
 	}
@@ -145,7 +145,7 @@ public class BlockMPowerSwitch extends BlockBase implements IElectricConnectiveB
 
 	@Override
 	public boolean canConnect(Direction side, World world, BlockPos pos, BlockState state) {
-		return side != state.get(FACING).getOpposite();
+		return side != state.getValue(FACING).getOpposite();
 	}
 	
 	@Override
@@ -155,12 +155,12 @@ public class BlockMPowerSwitch extends BlockBase implements IElectricConnectiveB
 	
 	@Override
 	public boolean isSwitchClosed(World worldIn, BlockPos pos, BlockState state) {
-		return state.get(CLOSED);
+		return state.getValue(CLOSED);
 	}
 	
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
-		return side != state.get(FACING).getOpposite();
+		return side != state.getValue(FACING).getOpposite();
 	}
 	
 	@Override
@@ -177,12 +177,12 @@ public class BlockMPowerSwitch extends BlockBase implements IElectricConnectiveB
 	
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 	
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 	
 }

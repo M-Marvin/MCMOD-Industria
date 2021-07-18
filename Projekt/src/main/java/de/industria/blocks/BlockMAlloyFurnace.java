@@ -51,22 +51,22 @@ public class BlockMAlloyFurnace extends BlockContainerBase implements IElectricC
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
 	
 	public BlockMAlloyFurnace() {
-		super("alloy_furnace", Material.IRON, 4F, SoundType.METAL);
+		super("alloy_furnace", Material.METAL, 4F, SoundType.METAL);
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(FACING, LIT);
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityMAlloyFurnace();
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite()).with(LIT, false);
+		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(LIT, false);
 	}
 	
 	@Override
@@ -80,10 +80,10 @@ public class BlockMAlloyFurnace extends BlockContainerBase implements IElectricC
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		if (tileEntity instanceof INamedContainerProvider) {
-			if (!worldIn.isRemote()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
+			if (!worldIn.isClientSide()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
 			return ActionResultType.SUCCESS;
 		}
 		return ActionResultType.PASS;
@@ -101,7 +101,7 @@ public class BlockMAlloyFurnace extends BlockContainerBase implements IElectricC
 	
 	@Override
 	public float getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
-		TileEntity tileEntity = world.getTileEntity(pos);
+		TileEntity tileEntity = world.getBlockEntity(pos);
 		if (tileEntity instanceof TileEntityMAlloyFurnace) {
 			return ((TileEntityMAlloyFurnace) tileEntity).canWork() ? 1 : 0;
 		}
@@ -110,7 +110,7 @@ public class BlockMAlloyFurnace extends BlockContainerBase implements IElectricC
 	
 	@Override
 	public boolean canConnect(Direction side, World world, BlockPos pos, BlockState state) {
-		return state.get(FACING).getOpposite() != side;
+		return state.getValue(FACING).getOpposite() != side;
 	}
 	
 	@Override
@@ -119,26 +119,26 @@ public class BlockMAlloyFurnace extends BlockContainerBase implements IElectricC
 	}
 	
 	@Override
-	public ISidedInventory createInventory(BlockState p_219966_1_, IWorld p_219966_2_, BlockPos p_219966_3_) {
-		return (ISidedInventory) p_219966_2_.getTileEntity(p_219966_3_);
+	public ISidedInventory getContainer(BlockState p_219966_1_, IWorld p_219966_2_, BlockPos p_219966_3_) {
+		return (ISidedInventory) p_219966_2_.getBlockEntity(p_219966_3_);
 	}
 	
 	@OnlyIn(Dist.CLIENT)
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-		if (stateIn.get(LIT)) {
+		if (stateIn.getValue(LIT)) {
 			double d0 = (double)pos.getX() + 0.5D;
 			double d1 = (double)pos.getY();
 			double d2 = (double)pos.getZ() + 0.5D;
 			if (rand.nextDouble() < 0.1D) {
-				worldIn.playSound(d0, d1, d2, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+				worldIn.playLocalSound(d0, d1, d2, SoundEvents.FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
 			}
 			
-			Direction direction = stateIn.get(FACING);
+			Direction direction = stateIn.getValue(FACING);
 			Direction.Axis direction$axis = direction.getAxis();
 			double d4 = rand.nextDouble() * 0.6D - 0.3D;
-			double d5 = direction$axis == Direction.Axis.X ? (double)direction.getXOffset() * 0.52D : d4;
+			double d5 = direction$axis == Direction.Axis.X ? (double)direction.getStepX() * 0.52D : d4;
 			double d6 = rand.nextDouble() * 6.0D / 16.0D;
-			double d7 = direction$axis == Direction.Axis.Z ? (double)direction.getZOffset() * 0.52D : d4;
+			double d7 = direction$axis == Direction.Axis.Z ? (double)direction.getStepZ() * 0.52D : d4;
 			worldIn.addParticle(ParticleTypes.SMOKE, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
 			worldIn.addParticle(ParticleTypes.FLAME, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
 		}
@@ -149,8 +149,8 @@ public class BlockMAlloyFurnace extends BlockContainerBase implements IElectricC
 
 		if (network.getVoltage().getVoltage() > Voltage.HightVoltage.getVoltage() && network.getCurrent() > 0) {
 
-			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+			worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
+			worldIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 			
 		}
 		
@@ -158,12 +158,12 @@ public class BlockMAlloyFurnace extends BlockContainerBase implements IElectricC
 
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 	
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 	
 }

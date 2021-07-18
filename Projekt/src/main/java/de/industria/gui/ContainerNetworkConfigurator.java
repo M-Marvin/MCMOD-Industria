@@ -15,7 +15,7 @@ public class ContainerNetworkConfigurator extends Container {
 	protected NetworkDeviceIP ip;
 	
 	public ContainerNetworkConfigurator(int id, PlayerInventory playerInv, PacketBuffer data) {
-		this(id, playerInv, data.readBlockPos(), NetworkDeviceIP.ipFromString(data.readString()));
+		this(id, playerInv, data.readBlockPos(), NetworkDeviceIP.ipFromString(data.readUtf()));
 	}
 	
 	public ContainerNetworkConfigurator(int id, PlayerInventory playerInv, BlockPos pos, NetworkDeviceIP ip) {
@@ -26,7 +26,7 @@ public class ContainerNetworkConfigurator extends Container {
 	}
 	
 	@Override
-	public boolean canInteractWith(PlayerEntity playerIn) {
+	public boolean stillValid(PlayerEntity playerIn) {
 		return true;
 	}
 	

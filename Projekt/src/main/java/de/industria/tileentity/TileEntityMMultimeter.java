@@ -28,10 +28,10 @@ public class TileEntityMMultimeter extends TileEntityGauge implements ITickableT
 	@Override
 	public void tick() {
 		
-		if (!world.isRemote()) {
+		if (!level.isClientSide()) {
 			
-			this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
-			ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos);
+			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
+			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
 			
 		}
 		
@@ -41,13 +41,13 @@ public class TileEntityMMultimeter extends TileEntityGauge implements ITickableT
 		if (unit != this.decimalUnit || value != this.value) {
 			this.decimalUnit = unit;	
 			this.value = value;
-			this.world.notifyNeighborsOfStateChange(pos, ModItems.multimeter);
+			this.level.updateNeighborsAt(worldPosition, ModItems.multimeter);
 		}
 	}
 	
 	@Override
 	public String getUnit() {
-		return this.decimalUnit.getUnit() + this.getBlockState().get(BlockMMultimeter.UNIT).getUnit();
+		return this.decimalUnit.getUnit() + this.getBlockState().getValue(BlockMMultimeter.UNIT).getUnit();
 	}
 
 	@Override
@@ -56,27 +56,27 @@ public class TileEntityMMultimeter extends TileEntityGauge implements ITickableT
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		this.value = compound.getFloat("Value");
 		this.decimalUnit = DecimalUnit.byUnit(compound.getString("Unit"));
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		compound.putFloat("Value", this.value);
 		if (this.decimalUnit != DecimalUnit.NONE) compound.putString("Unit", this.decimalUnit.getUnit());
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(pos, 0, this.serializeNBT());
+		return new SUpdateTileEntityPacket(worldPosition, 0, this.serializeNBT());
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.deserializeNBT(pkt.getNbtCompound());
+		this.deserializeNBT(pkt.getTag());
 	}
 	
 	public static enum MessurementType implements IStringSerializable {
@@ -109,7 +109,7 @@ public class TileEntityMMultimeter extends TileEntityGauge implements ITickableT
 		}
 
 		@Override
-		public String getString() {
+		public String getSerializedName() {
 			return this.name;
 		}
 		

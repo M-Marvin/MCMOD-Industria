@@ -11,7 +11,7 @@ import net.minecraft.world.IBlockReader;
 public class BlockTileBlock extends BlockBase {
 	
 	public BlockTileBlock(String name) {
-		super(name, Material.IRON, 3F, 3F, SoundType.BONE);
+		super(name, Material.METAL, 3F, 3F, SoundType.BONE_BLOCK);
 	}
 	
 	@Override

@@ -28,7 +28,7 @@ public class FluidStackStateTagHelper {
 		CompoundNBT tag = new CompoundNBT();
 		tag.put("States", propList);
 		
-		FluidStack stack = new FluidStack(fluid.getFluid(), 1000);
+		FluidStack stack = new FluidStack(fluid.getType(), 1000);
 		stack.setTag(tag);
 		
 		return stack;
@@ -37,7 +37,7 @@ public class FluidStackStateTagHelper {
 	
 	public static FluidState makeStateFromStack(FluidStack fluid) {
 		
-		FluidState state = fluid.getFluid().getDefaultState();
+		FluidState state = fluid.getFluid().defaultFluidState();
 		ImmutableMap<Property<?>, Comparable<?>> propertys = state.getValues();
 		
 		CompoundNBT tag = fluid.getTag();
@@ -66,11 +66,11 @@ public class FluidStackStateTagHelper {
 	
 	protected static <T extends Comparable<T>> FluidState setPropertyInState(String valueName, Property<T> prop, FluidState state) {
 		
-		Collection<T> values = prop.getAllowedValues();
+		Collection<T> values = prop.getPossibleValues();
 		
 		for (T value : values) {
 			
-			if (prop.getName(value).equals(valueName)) return state.with(prop, value);
+			if (prop.getName(value).equals(valueName)) return state.setValue(prop, value);
 			
 		}
 		
@@ -92,7 +92,7 @@ public class FluidStackStateTagHelper {
 	
 	protected static <T extends Comparable<T>> CompoundNBT makeCompoundNBT(FluidState state, Property<T> prop) {
 		
-		T value = state.get(prop);
+		T value = state.getValue(prop);
 		String name = prop.getName();
 		String valueName = prop.getName(value);
 		

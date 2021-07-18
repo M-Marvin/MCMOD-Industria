@@ -34,8 +34,8 @@ public class ScreenNetworkConfigurator extends ContainerScreen<ContainerNetworkC
 		
 		int i = this.width / 2;
 		this.ipField = new TextFieldWidget(this.font, i + -60, 100, 120, 20, new TranslationTextComponent("networkConfigurator.ipField"));
-		this.ipField.setMaxStringLength(15);
-		this.ipField.setText(this.container.getIP().getString());
+		this.ipField.setMaxLength(15);
+		this.ipField.setValue(this.menu.getIP().getString());
 		this.ipField.setResponder(this::onChangeIP);
 		this.ipValid = true;
 		this.children.add(ipField);
@@ -47,15 +47,15 @@ public class ScreenNetworkConfigurator extends ContainerScreen<ContainerNetworkC
 	}
 	
 	public void onConfirm(Button button) {
-		NetworkDeviceIP ip = NetworkDeviceIP.ipFromString(this.ipField.getText());
+		NetworkDeviceIP ip = NetworkDeviceIP.ipFromString(this.ipField.getValue());
 		if (ip != null) {
-			Industria.NETWORK.sendToServer(new CConfigureNetworkDevice(this.container.getPos(), ip));
-			this.closeScreen();
+			Industria.NETWORK.sendToServer(new CConfigureNetworkDevice(this.menu.getPos(), ip));
+			this.onClose();
 		}
 	}
 	
 	public void onCancel(Button button) {
-		this.closeScreen();
+		this.onClose();
 	}
 	
 	public void onChangeIP(String ip) {
@@ -63,7 +63,7 @@ public class ScreenNetworkConfigurator extends ContainerScreen<ContainerNetworkC
 	}
 	
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
 		
 		drawString(matrixStack, this.font, new TranslationTextComponent("industria.network_configurator.ipField." + (ipValid ? "valid" : "fail"), ipValid), this.width / 2 - 61, 90, this.ipValid ? 10526880 : new Color(255, 0, 0).getRGB());
 		try {
@@ -76,7 +76,7 @@ public class ScreenNetworkConfigurator extends ContainerScreen<ContainerNetworkC
 	}
 	
 	@Override
-	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
+	protected void renderLabels(MatrixStack matrixStack, int x, int y) {
 	}
 	
 }

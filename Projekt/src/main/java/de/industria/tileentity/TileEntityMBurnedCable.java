@@ -27,15 +27,15 @@ public class TileEntityMBurnedCable extends TileEntity {
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		if (this.cableBlock != null) compound.putString("CableBlock", this.cableBlock.getRegistryName().toString());
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT nbt) {
+	public void load(BlockState state, CompoundNBT nbt) {
 		if (nbt.contains("CableBlock")) this.cableBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(nbt.getString("CableBlock")));
-		super.read(state, nbt);
+		super.load(state, nbt);
 	}
 
 }

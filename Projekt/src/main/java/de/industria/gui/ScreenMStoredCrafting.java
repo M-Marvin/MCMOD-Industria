@@ -23,15 +23,15 @@ public class ScreenMStoredCrafting extends ContainerScreen<ContainerMStoredCraft
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
 		
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindTexture(CRAFTING_TABLE_GUI_TEXTURES);
-		int i = this.guiLeft;
-		int j = (this.height - this.ySize) / 2;
-		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
+		this.minecraft.getTextureManager().bind(CRAFTING_TABLE_GUI_TEXTURES);
+		int i = this.leftPos;
+		int j = (this.height - this.imageHeight) / 2;
+		this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
 		
-		TileEntityMStoringCraftingTable te = this.container.getTileEntity();
+		TileEntityMStoringCraftingTable te = this.menu.getTileEntity();
 		float progress = te.progress / 100F;
 		this.blit(matrixStack, i + 90, j + 34, 176, 16, (int) (progress * 23), 22);
 		

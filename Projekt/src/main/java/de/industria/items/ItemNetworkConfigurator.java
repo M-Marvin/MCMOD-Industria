@@ -30,11 +30,11 @@ public class ItemNetworkConfigurator extends ItemBase implements INamedContainer
 	}
 	
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context) {
+	public ActionResultType useOn(ItemUseContext context) {
 		
-		World worldIn = context.getWorld();
+		World worldIn = context.getLevel();
 		PlayerEntity playerIn = context.getPlayer();
-		BlockPos pos = context.getPos();
+		BlockPos pos = context.getClickedPos();
 		BlockState state = worldIn.getBlockState(pos);
 		Block block = state.getBlock();
 		
@@ -42,24 +42,24 @@ public class ItemNetworkConfigurator extends ItemBase implements INamedContainer
 			
 			NetworkDeviceIP ip = ((INetworkDevice) state.getBlock()).getIP(pos, state, worldIn);
 			
-			if (!worldIn.isRemote() && ((INetworkDevice) block).getNetworkType() != NetworkDeviceType.WIRING) NetworkHooks.openGui((ServerPlayerEntity) playerIn, this, (buffer) -> {
+			if (!worldIn.isClientSide() && ((INetworkDevice) block).getNetworkType() != NetworkDeviceType.WIRING) NetworkHooks.openGui((ServerPlayerEntity) playerIn, this, (buffer) -> {
 				buffer.writeBlockPos(pos);
-				buffer.writeString(ip.getString());
+				buffer.writeUtf(ip.getString());
 			});
 			return ActionResultType.SUCCESS;
 			
 		}
 		
-		return super.onItemUse(context);
+		return super.useOn(context);
 		
 	}
 	
 	@Override
 	public Container createMenu(int id, PlayerInventory playerInv, PlayerEntity player) {
-		RayTraceResult result = rayTrace(player.world, player, FluidMode.NONE);
-		BlockPos pos = result.getType() != Type.MISS ? new BlockPos(result.getHitVec().x, result.getHitVec().y, result.getHitVec().z) : BlockPos.ZERO;
-		BlockState state = player.world.getBlockState(pos);
-		NetworkDeviceIP ip = state.getBlock() instanceof INetworkDevice ? ((INetworkDevice) state.getBlock()).getIP(pos, state, player.world) : NetworkDeviceIP.DEFAULT;
+		RayTraceResult result = getPlayerPOVHitResult(player.level, player, FluidMode.NONE);
+		BlockPos pos = result.getType() != Type.MISS ? new BlockPos(result.getLocation().x, result.getLocation().y, result.getLocation().z) : BlockPos.ZERO;
+		BlockState state = player.level.getBlockState(pos);
+		NetworkDeviceIP ip = state.getBlock() instanceof INetworkDevice ? ((INetworkDevice) state.getBlock()).getIP(pos, state, player.level) : NetworkDeviceIP.DEFAULT;
 		return new ContainerNetworkConfigurator(id, playerInv, pos, ip);
 	}
 

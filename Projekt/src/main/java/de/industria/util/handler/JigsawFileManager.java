@@ -101,7 +101,7 @@ public class JigsawFileManager {
 			InputStream inputStream = resource.getInputStream();
 			CompoundNBT fileNBT = CompressedStreamTools.readCompressed(inputStream);
 			Template template = new Template();
-			template.read(fileNBT);
+			template.load(fileNBT);
 			
 			return template;
 			

@@ -13,13 +13,13 @@ public class SoundMSteamGeneratorLoop extends SoundMachine {
 	
 	public SoundMSteamGeneratorLoop(TileEntityMSteamGenerator tileEntity) {
 		super(tileEntity, ModSoundEvents.TURBIN_LOOP);
-		this.pos = tileEntity.getPos();
-		this.world = tileEntity.getWorld();
-		this.x = tileEntity.getPos().getX();
-		this.y = tileEntity.getPos().getY();
-		this.z = tileEntity.getPos().getZ();
-		this.repeat = true;
-		this.repeatDelay = 0;
+		this.pos = tileEntity.getBlockPos();
+		this.world = tileEntity.getLevel();
+		this.x = tileEntity.getBlockPos().getX();
+		this.y = tileEntity.getBlockPos().getY();
+		this.z = tileEntity.getBlockPos().getZ();
+		this.looping = true;
+		this.delay = 0;
 		this.volume = 0.1F;
 		this.pitch = 0.1F;
 	}
@@ -27,7 +27,7 @@ public class SoundMSteamGeneratorLoop extends SoundMachine {
 	@Override
 	public void tick() {
 		
-		TileEntity te = this.world.getTileEntity(pos);
+		TileEntity te = this.world.getBlockEntity(pos);
 		
 		if (te instanceof TileEntityMSteamGenerator) {
 			TileEntityMSteamGenerator tileEntity = (TileEntityMSteamGenerator) te;
@@ -37,13 +37,13 @@ public class SoundMSteamGeneratorLoop extends SoundMachine {
 				this.pitch = tileEntity.accerlation / 20F * 2F;
 				this.volume = tileEntity.accerlation / 20F;
 				
-				this.x = tileEntity.getPos().getX();
-				this.y = tileEntity.getPos().getY();
-				this.z = tileEntity.getPos().getZ();
+				this.x = tileEntity.getBlockPos().getX();
+				this.y = tileEntity.getBlockPos().getY();
+				this.z = tileEntity.getBlockPos().getZ();
 				
 			} else {
 				
-				this.finishPlaying();
+				this.stop();
 				
 			}
 		}

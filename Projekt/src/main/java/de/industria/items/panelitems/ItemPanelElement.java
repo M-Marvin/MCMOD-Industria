@@ -14,7 +14,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 public abstract class ItemPanelElement extends ItemBase {
 	
 	public ItemPanelElement(String name) {
-		super(name, ItemGroup.REDSTONE);
+		super(name, ItemGroup.TAB_REDSTONE);
 	}
 	
 	public abstract AxisAlignedBB getCollisionBounds();
@@ -27,7 +27,7 @@ public abstract class ItemPanelElement extends ItemBase {
 		
 		matrixStackIn.translate(x * 0.0625F, 0, y * 0.0625F);
 		
-		Minecraft.getInstance().getItemRenderer().renderItem(stack, TransformType.HEAD, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
+		Minecraft.getInstance().getItemRenderer().renderStatic(stack, TransformType.HEAD, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
 		
 	}
 	

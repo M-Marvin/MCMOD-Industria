@@ -15,37 +15,37 @@ public class TileEntityMFluidBathModel extends EntityModel<Entity> {
 
 	public TileEntityMFluidBathModel() {
 		
-		textureWidth = 256;
-		textureHeight = 256;
+		texWidth = 256;
+		texHeight = 256;
 
 		root = new ModelRenderer(this);
-		root.setRotationPoint(-11.0F, -6.0F, 16.0F);
-		root.setTextureOffset(0, 0).addBox(-13.0F, 14.0F, -24.0F, 32.0F, 16.0F, 48.0F, 0.0F, false);
-		root.setTextureOffset(0, 104).addBox(-13.0F, -2.0F, -24.0F, 32.0F, 16.0F, 12.0F, 0.0F, false);
-		root.setTextureOffset(72, 76).addBox(-13.0F, -2.0F, 12.0F, 32.0F, 16.0F, 12.0F, 0.0F, false);
-		root.setTextureOffset(112, 0).addBox(18.0F, -2.0F, -12.0F, 1.0F, 16.0F, 24.0F, 0.0F, false);
-		root.setTextureOffset(88, 104).addBox(-13.0F, -2.0F, -12.0F, 1.0F, 16.0F, 24.0F, 0.0F, false);
-		root.setTextureOffset(0, 132).addBox(14.0F, -1.0F, -12.0F, 1.0F, 2.0F, 24.0F, 0.0F, false);
-		root.setTextureOffset(114, 120).addBox(-9.0F, -1.0F, -12.0F, 1.0F, 2.0F, 24.0F, 0.0F, false);
+		root.setPos(-11.0F, -6.0F, 16.0F);
+		root.texOffs(0, 0).addBox(-13.0F, 14.0F, -24.0F, 32.0F, 16.0F, 48.0F, 0.0F, false);
+		root.texOffs(0, 104).addBox(-13.0F, -2.0F, -24.0F, 32.0F, 16.0F, 12.0F, 0.0F, false);
+		root.texOffs(72, 76).addBox(-13.0F, -2.0F, 12.0F, 32.0F, 16.0F, 12.0F, 0.0F, false);
+		root.texOffs(112, 0).addBox(18.0F, -2.0F, -12.0F, 1.0F, 16.0F, 24.0F, 0.0F, false);
+		root.texOffs(88, 104).addBox(-13.0F, -2.0F, -12.0F, 1.0F, 16.0F, 24.0F, 0.0F, false);
+		root.texOffs(0, 132).addBox(14.0F, -1.0F, -12.0F, 1.0F, 2.0F, 24.0F, 0.0F, false);
+		root.texOffs(114, 120).addBox(-9.0F, -1.0F, -12.0F, 1.0F, 2.0F, 24.0F, 0.0F, false);
 
 		fluidPlate = new ModelRenderer(this);
-		fluidPlate.setRotationPoint(19.0F, 13.0F, -24.0F);
-		fluidPlate.setTextureOffset(0, 64).addBox(-31.0F, 0.0F, 12.0F, 30.0F, 0.0F, 24.0F, 0.0F, false);
+		fluidPlate.setPos(19.0F, 13.0F, -24.0F);
+		fluidPlate.texOffs(0, 64).addBox(-31.0F, 0.0F, 12.0F, 30.0F, 0.0F, 24.0F, 0.0F, false);
 
 		itemHolder = new ModelRenderer(this);
-		itemHolder.setRotationPoint(0.0F, 0.0F, 0.0F);
-		itemHolder.setTextureOffset(84, 64).addBox(-10.0F, 0.0F, -16.0F, 26.0F, 1.0F, 3.0F, 0.0F, false);
-		itemHolder.setTextureOffset(0, 0).addBox(1.0F, 1.0F, -16.0F, 4.0F, 7.0F, 1.0F, 0.0F, false);
+		itemHolder.setPos(0.0F, 0.0F, 0.0F);
+		itemHolder.texOffs(84, 64).addBox(-10.0F, 0.0F, -16.0F, 26.0F, 1.0F, 3.0F, 0.0F, false);
+		itemHolder.texOffs(0, 0).addBox(1.0F, 1.0F, -16.0F, 4.0F, 7.0F, 1.0F, 0.0F, false);
 		
 	}
 
 	@Override
-	public void setRotationAngles(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
+	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
 		//previously the render function, render code was moved to a method below
 	}
 
 	@Override
-	public void render(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
+	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
 		root.render(matrixStack, buffer, packedLight, packedOverlay);
 	}
 
@@ -58,9 +58,9 @@ public class TileEntityMFluidBathModel extends EntityModel<Entity> {
 	}
 	
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
+		modelRenderer.xRot = x;
+		modelRenderer.yRot = y;
+		modelRenderer.zRot = z;
 	}
 	
 }

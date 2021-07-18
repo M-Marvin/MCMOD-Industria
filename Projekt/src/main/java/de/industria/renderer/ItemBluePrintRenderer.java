@@ -19,7 +19,7 @@ public class ItemBluePrintRenderer extends ItemStackTileEntityRenderer {
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public void func_239207_a_(ItemStack stack, TransformType type, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+	public void renderByItem(ItemStack stack, TransformType type, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		
 		if (stack.hasTag()) {
 			
@@ -36,13 +36,13 @@ public class ItemBluePrintRenderer extends ItemStackTileEntityRenderer {
 					BlockState state = NBTUtil.readBlockState(blockData.getCompound("BlockState"));
 					//CompoundNBT tileData = blockData.getCompound("TileData");
 					
-					matrixStackIn.push();
+					matrixStackIn.pushPose();
 					
 					matrixStackIn.translate(position.getX(), position.getY(), position.getZ());
 					
-					blockRenderer.renderBlock(state, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+					blockRenderer.renderSingleBlock(state, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
 					
-					matrixStackIn.pop();
+					matrixStackIn.popPose();
 					
 				}
 				

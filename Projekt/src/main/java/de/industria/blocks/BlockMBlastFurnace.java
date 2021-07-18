@@ -43,63 +43,63 @@ import net.minecraftforge.fml.network.NetworkHooks;
 public class BlockMBlastFurnace extends BlockMultiPart<TileEntityMBlastFurnace> implements IAdvancedBlockInfo, IElectricConnectiveBlock, ISidedInventoryProvider {
 
 	public BlockMBlastFurnace() {
-		super("blast_furnace", Material.IRON, 2F, SoundType.METAL, 3, 5, 3);
+		super("blast_furnace", Material.METAL, 2F, SoundType.METAL, 3, 5, 3);
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityMBlastFurnace();
 	}
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		BlockPos internPart = getInternPartPos(state);
-		Direction facing = state.get(FACING);
+		Direction facing = state.getValue(FACING);
 		
-		if (internPart.equals(new BlockPos(0, 0, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 16, 8, 16), Block.makeCuboidShape(8, 8, 8, 16, 16, 16)), facing);
-		if (internPart.equals(new BlockPos(0, 0, 1))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 16, 8, 16), Block.makeCuboidShape(8, 8, 0, 16, 16, 16)), facing);
-		if (internPart.equals(new BlockPos(0, 0, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 16, 8, 16), Block.makeCuboidShape(8, 8, 0, 16, 16, 8)), facing);
-		if (internPart.equals(new BlockPos(1, 0, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 16, 8, 16), Block.makeCuboidShape(8, 8, 0, 16, 16, 8)), facing);
-		if (internPart.equals(new BlockPos(2, 0, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 16, 8, 16), Block.makeCuboidShape(0, 8, 0, 8, 16, 8)), facing);
-		if (internPart.equals(new BlockPos(2, 0, 1))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 16, 8, 16), Block.makeCuboidShape(0, 8, 0, 8, 16, 16)), facing);
+		if (internPart.equals(new BlockPos(0, 0, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 0, 16, 8, 16), Block.box(8, 8, 8, 16, 16, 16)), facing);
+		if (internPart.equals(new BlockPos(0, 0, 1))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 0, 16, 8, 16), Block.box(8, 8, 0, 16, 16, 16)), facing);
+		if (internPart.equals(new BlockPos(0, 0, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 0, 16, 8, 16), Block.box(8, 8, 0, 16, 16, 8)), facing);
+		if (internPart.equals(new BlockPos(1, 0, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 0, 16, 8, 16), Block.box(8, 8, 0, 16, 16, 8)), facing);
+		if (internPart.equals(new BlockPos(2, 0, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 0, 16, 8, 16), Block.box(0, 8, 0, 8, 16, 8)), facing);
+		if (internPart.equals(new BlockPos(2, 0, 1))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 0, 16, 8, 16), Block.box(0, 8, 0, 8, 16, 16)), facing);
 		
-		if (internPart.equals(new BlockPos(2, 1, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(3, 0, 3, 7, 16, 7), Block.makeCuboidShape(8, 0, 3, 12, 16, 7), Block.makeCuboidShape(0, 0, 8, 8, 16, 16)), facing);
-		if (internPart.equals(new BlockPos(1, 1, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 0, 8, 16, 16, 16)), facing);
-		if (internPart.equals(new BlockPos(0, 1, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(8, 0, 8, 16, 16, 16)), facing);
-		if (internPart.equals(new BlockPos(0, 1, 1))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(8, 0, 0, 16, 16, 16)), facing);
-		if (internPart.equals(new BlockPos(0, 1, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(8, 0, 0, 16, 16, 8)), facing);
-		if (internPart.equals(new BlockPos(1, 1, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 16, 16, 8)), facing);
-		if (internPart.equals(new BlockPos(2, 1, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(8, 6, 0, 11, 16, 6), Block.makeCuboidShape(0, 0, 0, 8, 16, 8)), facing);
-		if (internPart.equals(new BlockPos(2, 1, 1))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(8, 6, 6, 11, 16, 16), Block.makeCuboidShape(0, 0, 0, 8, 16, 16)), facing);
+		if (internPart.equals(new BlockPos(2, 1, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(3, 0, 3, 7, 16, 7), Block.box(8, 0, 3, 12, 16, 7), Block.box(0, 0, 8, 8, 16, 16)), facing);
+		if (internPart.equals(new BlockPos(1, 1, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 8, 16, 16, 16)), facing);
+		if (internPart.equals(new BlockPos(0, 1, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(8, 0, 8, 16, 16, 16)), facing);
+		if (internPart.equals(new BlockPos(0, 1, 1))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(8, 0, 0, 16, 16, 16)), facing);
+		if (internPart.equals(new BlockPos(0, 1, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(8, 0, 0, 16, 16, 8)), facing);
+		if (internPart.equals(new BlockPos(1, 1, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 0, 16, 16, 8)), facing);
+		if (internPart.equals(new BlockPos(2, 1, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(8, 6, 0, 11, 16, 6), Block.box(0, 0, 0, 8, 16, 8)), facing);
+		if (internPart.equals(new BlockPos(2, 1, 1))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(8, 6, 6, 11, 16, 16), Block.box(0, 0, 0, 8, 16, 16)), facing);
 		
-		if (internPart.equals(new BlockPos(2, 2, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(6, 8, 8, 8, 16, 10), Block.makeCuboidShape(0, 8, 14, 2, 16, 16), Block.makeCuboidShape(3, 0, 3, 7, 14, 7), Block.makeCuboidShape(8, 0, 3, 12, 16, 7), Block.makeCuboidShape(0, 0, 8, 8, 8, 16), Block.makeCuboidShape(0, 10, 3, 3, 14, 7)), facing);
-		if (internPart.equals(new BlockPos(1, 2, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 8, 14, 16, 16, 16), Block.makeCuboidShape(0, 0, 8, 16, 8, 16), Block.makeCuboidShape(4, 10, 7, 8, 14, 14), Block.makeCuboidShape(4, 10, 3, 16, 14, 7)), facing);
-		if (internPart.equals(new BlockPos(0, 2, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(8, 8, 8, 10, 16, 10), Block.makeCuboidShape(14, 8, 14, 16, 16, 16), Block.makeCuboidShape(8, 0, 8, 16, 8, 16)), facing);
-		if (internPart.equals(new BlockPos(0, 2, 1))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(16, 8, 0, 14, 16, 16), Block.makeCuboidShape(8, 0, 0, 16, 8, 16)), facing);
-		if (internPart.equals(new BlockPos(0, 2, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(8, 8, 6, 10, 16, 8), Block.makeCuboidShape(16, 8, 0, 14, 16, 2), Block.makeCuboidShape(8, 0, 0, 16, 8, 8)), facing);
-		if (internPart.equals(new BlockPos(1, 2, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 8, 0, 16, 16, 2), Block.makeCuboidShape(0, 0, 0, 16, 8, 8)), facing);
-		if (internPart.equals(new BlockPos(2, 2, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(6, 8, 6, 8, 16, 8), Block.makeCuboidShape(0, 8, 0, 2, 16, 2), Block.makeCuboidShape(8, 0, 0, 11, 6, 6), Block.makeCuboidShape(0, 0, 0, 8, 8, 8)), facing);
-		if (internPart.equals(new BlockPos(2, 2, 1))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 8, 0, 2, 16, 16), Block.makeCuboidShape(8, 0, 6, 11, 6, 16), Block.makeCuboidShape(0, 0, 0, 8, 8, 16)), facing);
+		if (internPart.equals(new BlockPos(2, 2, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(6, 8, 8, 8, 16, 10), Block.box(0, 8, 14, 2, 16, 16), Block.box(3, 0, 3, 7, 14, 7), Block.box(8, 0, 3, 12, 16, 7), Block.box(0, 0, 8, 8, 8, 16), Block.box(0, 10, 3, 3, 14, 7)), facing);
+		if (internPart.equals(new BlockPos(1, 2, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 8, 14, 16, 16, 16), Block.box(0, 0, 8, 16, 8, 16), Block.box(4, 10, 7, 8, 14, 14), Block.box(4, 10, 3, 16, 14, 7)), facing);
+		if (internPart.equals(new BlockPos(0, 2, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(8, 8, 8, 10, 16, 10), Block.box(14, 8, 14, 16, 16, 16), Block.box(8, 0, 8, 16, 8, 16)), facing);
+		if (internPart.equals(new BlockPos(0, 2, 1))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(16, 8, 0, 14, 16, 16), Block.box(8, 0, 0, 16, 8, 16)), facing);
+		if (internPart.equals(new BlockPos(0, 2, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(8, 8, 6, 10, 16, 8), Block.box(16, 8, 0, 14, 16, 2), Block.box(8, 0, 0, 16, 8, 8)), facing);
+		if (internPart.equals(new BlockPos(1, 2, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 8, 0, 16, 16, 2), Block.box(0, 0, 0, 16, 8, 8)), facing);
+		if (internPart.equals(new BlockPos(2, 2, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(6, 8, 6, 8, 16, 8), Block.box(0, 8, 0, 2, 16, 2), Block.box(8, 0, 0, 11, 6, 6), Block.box(0, 0, 0, 8, 8, 8)), facing);
+		if (internPart.equals(new BlockPos(2, 2, 1))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 8, 0, 2, 16, 16), Block.box(8, 0, 6, 11, 6, 16), Block.box(0, 0, 0, 8, 8, 16)), facing);
 		
-		if (internPart.equals(new BlockPos(2, 3, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(8, 8, 7, 12, 12, 16), Block.makeCuboidShape(6, 0, 8, 8, 16, 10), Block.makeCuboidShape(0, 0, 14, 2, 16, 16), Block.makeCuboidShape(8, 0, 3, 12, 12, 7)), facing);
-		if (internPart.equals(new BlockPos(1, 3, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 0, 14, 16, 16, 16)), facing);
-		if (internPart.equals(new BlockPos(0, 3, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(8, 0, 8, 10, 16, 10), Block.makeCuboidShape(14, 0, 14, 16, 16, 16)), facing);
-		if (internPart.equals(new BlockPos(0, 3, 1))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(14, 0, 0, 16, 16, 16)), facing);
-		if (internPart.equals(new BlockPos(0, 3, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(8, 0, 6, 10, 16, 8), Block.makeCuboidShape(14, 0, 0, 16, 16, 2)), facing);
-		if (internPart.equals(new BlockPos(1, 3, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(8, 8, 8, 16, 12, 12), Block.makeCuboidShape(8, 8, 0, 12, 12, 8), Block.makeCuboidShape(0, 0, 0, 16, 16, 2)), facing);
-		if (internPart.equals(new BlockPos(2, 3, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 8, 8, 12, 12, 12), Block.makeCuboidShape(8, 8, 0, 12, 12, 8), Block.makeCuboidShape(6, 0, 6, 8, 16, 8), Block.makeCuboidShape(0, 0, 0, 2, 16, 2)), facing);
-		if (internPart.equals(new BlockPos(2, 3, 1))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(8, 8, 0, 12, 12, 16), Block.makeCuboidShape(0, 0, 0, 2, 16, 16)), facing);
+		if (internPart.equals(new BlockPos(2, 3, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(8, 8, 7, 12, 12, 16), Block.box(6, 0, 8, 8, 16, 10), Block.box(0, 0, 14, 2, 16, 16), Block.box(8, 0, 3, 12, 12, 7)), facing);
+		if (internPart.equals(new BlockPos(1, 3, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 14, 16, 16, 16)), facing);
+		if (internPart.equals(new BlockPos(0, 3, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(8, 0, 8, 10, 16, 10), Block.box(14, 0, 14, 16, 16, 16)), facing);
+		if (internPart.equals(new BlockPos(0, 3, 1))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(14, 0, 0, 16, 16, 16)), facing);
+		if (internPart.equals(new BlockPos(0, 3, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(8, 0, 6, 10, 16, 8), Block.box(14, 0, 0, 16, 16, 2)), facing);
+		if (internPart.equals(new BlockPos(1, 3, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(8, 8, 8, 16, 12, 12), Block.box(8, 8, 0, 12, 12, 8), Block.box(0, 0, 0, 16, 16, 2)), facing);
+		if (internPart.equals(new BlockPos(2, 3, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 8, 8, 12, 12, 12), Block.box(8, 8, 0, 12, 12, 8), Block.box(6, 0, 6, 8, 16, 8), Block.box(0, 0, 0, 2, 16, 2)), facing);
+		if (internPart.equals(new BlockPos(2, 3, 1))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(8, 8, 0, 12, 12, 16), Block.box(0, 0, 0, 2, 16, 16)), facing);
 
-		if (internPart.equals(new BlockPos(2, 4, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 13, 8, 8, 15, 10), Block.makeCuboidShape(6, 13, 8, 8, 15, 16), Block.makeCuboidShape(6, 0, 8, 8, 15, 10), Block.makeCuboidShape(0, 0, 14, 2, 16, 16)), facing);
-		if (internPart.equals(new BlockPos(1, 4, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 0, 14, 16, 16, 16)), facing);
-		if (internPart.equals(new BlockPos(0, 4, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(16, 13, 8, 8, 15, 10), Block.makeCuboidShape(8, 13, 8, 10, 15, 16), Block.makeCuboidShape(8, 0, 8, 10, 15, 10), Block.makeCuboidShape(14, 0, 14, 16, 16, 16)), facing);
-		if (internPart.equals(new BlockPos(0, 4, 1))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(8, 13, 0, 10, 15, 16), Block.makeCuboidShape(14, 0, 0, 16, 16, 16)), facing);
-		if (internPart.equals(new BlockPos(0, 4, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(16, 13, 6, 8, 15, 8), Block.makeCuboidShape(8, 13, 0, 10, 15, 8), Block.makeCuboidShape(8, 0, 6, 10, 15, 8), Block.makeCuboidShape(14, 0, 0, 16, 16, 2)), facing);
-		if (internPart.equals(new BlockPos(1, 4, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 13, 6, 16, 15, 8), Block.makeCuboidShape(0, 0, 0, 16, 16, 2)), facing);
-		if (internPart.equals(new BlockPos(2, 4, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(0, 13, 6, 8, 15, 8), Block.makeCuboidShape(6, 13, 0, 8, 15, 8), Block.makeCuboidShape(6, 0, 6, 8, 15, 8), Block.makeCuboidShape(0, 0, 0, 2, 16, 2)), facing);
-		if (internPart.equals(new BlockPos(2, 4, 1))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.makeCuboidShape(6, 13, 0, 8, 15, 16), Block.makeCuboidShape(0, 0, 0, 2, 16, 16)), facing);
+		if (internPart.equals(new BlockPos(2, 4, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 13, 8, 8, 15, 10), Block.box(6, 13, 8, 8, 15, 16), Block.box(6, 0, 8, 8, 15, 10), Block.box(0, 0, 14, 2, 16, 16)), facing);
+		if (internPart.equals(new BlockPos(1, 4, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 14, 16, 16, 16)), facing);
+		if (internPart.equals(new BlockPos(0, 4, 0))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(16, 13, 8, 8, 15, 10), Block.box(8, 13, 8, 10, 15, 16), Block.box(8, 0, 8, 10, 15, 10), Block.box(14, 0, 14, 16, 16, 16)), facing);
+		if (internPart.equals(new BlockPos(0, 4, 1))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(8, 13, 0, 10, 15, 16), Block.box(14, 0, 0, 16, 16, 16)), facing);
+		if (internPart.equals(new BlockPos(0, 4, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(16, 13, 6, 8, 15, 8), Block.box(8, 13, 0, 10, 15, 8), Block.box(8, 0, 6, 10, 15, 8), Block.box(14, 0, 0, 16, 16, 2)), facing);
+		if (internPart.equals(new BlockPos(1, 4, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 13, 6, 16, 15, 8), Block.box(0, 0, 0, 16, 16, 2)), facing);
+		if (internPart.equals(new BlockPos(2, 4, 2))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 13, 6, 8, 15, 8), Block.box(6, 13, 0, 8, 15, 8), Block.box(6, 0, 6, 8, 15, 8), Block.box(0, 0, 0, 2, 16, 2)), facing);
+		if (internPart.equals(new BlockPos(2, 4, 1))) return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(6, 13, 0, 8, 15, 16), Block.box(0, 0, 0, 2, 16, 16)), facing);
 		
-		return Block.makeCuboidShape( 0, 0, 0, 16, 16, 16);
+		return Block.box( 0, 0, 0, 16, 16, 16);
 	}
 	
 	@Override
@@ -109,14 +109,14 @@ public class BlockMBlastFurnace extends BlockMultiPart<TileEntityMBlastFurnace> 
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		TileEntityMBlastFurnace tileEntity = getCenterTE(pos, state, worldIn);
-		if (!worldIn.isRemote()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getPos());
+		if (!worldIn.isClientSide()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, tileEntity.getBlockPos());
 		return ActionResultType.SUCCESS;
 	}
 	
 	@Override
-	public ISidedInventory createInventory(BlockState state, IWorld world, BlockPos pos) {
+	public ISidedInventory getContainer(BlockState state, IWorld world, BlockPos pos) {
 		BlockPos partPos = BlockMultiPart.getInternPartPos(state);
 		if (partPos.equals(new BlockPos(1, 4, 1)) || partPos.equals(new BlockPos(1, 0, 0))) {
 			return (ISidedInventory) getCenterTE(pos, state, world);
@@ -125,7 +125,7 @@ public class BlockMBlastFurnace extends BlockMultiPart<TileEntityMBlastFurnace> 
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 
@@ -163,13 +163,13 @@ public class BlockMBlastFurnace extends BlockMultiPart<TileEntityMBlastFurnace> 
 	@Override
 	public List<BlockPos> getMultiBlockParts(World world, BlockPos pos, BlockState state) {
 		List<BlockPos> multiParts = new ArrayList<BlockPos>();
-		Direction facing = state.get(FACING);
+		Direction facing = state.getValue(FACING);
 		for (int x = 0; x < this.sizeX; x++) {
 			for (int y = 0; y < this.sizeY; y++) {
 				for (int z = 0; z < this.sizeZ; z++) {
 					BlockPos internPos = new BlockPos(x, y, z);
 					BlockPos offset = rotateOffset(internPos, facing);
-					BlockPos partPos = getCenterTE(pos, state, world).getPos().add(offset);
+					BlockPos partPos = getCenterTE(pos, state, world).getBlockPos().offset(offset);
 					multiParts.add(partPos);
 				}
 			}
@@ -185,8 +185,8 @@ public class BlockMBlastFurnace extends BlockMultiPart<TileEntityMBlastFurnace> 
 	@Override
 	public void onNetworkChanges(World worldIn, BlockPos pos, BlockState state, ElectricityNetwork network) {
 		if (network.getVoltage().getVoltage() > Voltage.NormalVoltage.getVoltage() && network.getCurrent() > 0) {
-			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+			worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
+			worldIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 			
 		}
 	}

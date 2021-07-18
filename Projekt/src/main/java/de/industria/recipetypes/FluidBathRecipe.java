@@ -32,21 +32,21 @@ public class FluidBathRecipe implements IRecipe<TileEntityMFluidBath> {
 	@Override
 	public boolean matches(TileEntityMFluidBath inv, World worldIn) {
 		return	inv.fluidIn.getFluid() == this.fluidIn.getFluid() && inv.fluidIn.getAmount() >= this.fluidIn.getAmount() &&
-				inv.getStackInSlot(0).getItem() == this.itemIn.getItem() && inv.getStackInSlot(0).getCount() >= this.itemIn.getCount();
+				inv.getItem(0).getItem() == this.itemIn.getItem() && inv.getItem(0).getCount() >= this.itemIn.getCount();
 	}
 	
 	@Override
-	public ItemStack getCraftingResult(TileEntityMFluidBath inv) {
+	public ItemStack assemble(TileEntityMFluidBath inv) {
 		return itemOut.copy();
 	}
 	
 	@Override
-	public boolean canFit(int width, int height) {
+	public boolean canCraftInDimensions(int width, int height) {
 		return width == 1 && height == 1;
 	}
 	
 	@Override
-	public ItemStack getRecipeOutput() {
+	public ItemStack getResultItem() {
 		 return this.itemOut.copy();
 	}
 		

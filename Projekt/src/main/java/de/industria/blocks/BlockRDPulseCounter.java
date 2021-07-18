@@ -29,22 +29,22 @@ public class BlockRDPulseCounter extends BlockRedstoneDiode {
 	
 	public BlockRDPulseCounter() {
 		super("pulse_counter");
-		this.setDefaultState(this.stateContainer.getBaseState().with(ACTIVE, false).with(POWERED, false).with(FACING, Direction.NORTH).with(COUNT, 1));
+		this.registerDefaultState(this.stateDefinition.any().setValue(ACTIVE, false).setValue(POWERED, false).setValue(FACING, Direction.NORTH).setValue(COUNT, 1));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(COUNT, POWERED, ACTIVE, PULSES);
-		super.fillStateContainer(builder);
+		super.createBlockStateDefinition(builder);
 	}
 	
 	@Override
 	public boolean switchStates(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
-		int count = state.get(COUNT);
+		int count = state.getValue(COUNT);
 		count++;
 		if (count > 16) count = 1;
-		worldIn.setBlockState(pos, state.with(COUNT, count));
+		worldIn.setBlockAndUpdate(pos, state.setValue(COUNT, count));
 		
 		return true;
 		
@@ -53,24 +53,24 @@ public class BlockRDPulseCounter extends BlockRedstoneDiode {
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
 		
-		return side == state.get(FACING) || side == state.get(FACING).getOpposite();
+		return side == state.getValue(FACING) || side == state.getValue(FACING).getOpposite();
 		
 	}
 	
 	@Override
 	public void updateState(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		
-		BlockPos inputPos = pos.offset(state.get(FACING).getOpposite());
+		BlockPos inputPos = pos.relative(state.getValue(FACING).getOpposite());
 		
 		if (inputPos.equals(fromPos)) {
 			
-			boolean power = worldIn.getRedstonePower(inputPos, state.get(FACING).getOpposite()) > 0;
-			boolean powered = state.get(POWERED);
+			boolean power = worldIn.getSignal(inputPos, state.getValue(FACING).getOpposite()) > 0;
+			boolean powered = state.getValue(POWERED);
 			
 			if (powered != power) {
 				
-				worldIn.setBlockState(pos, state.with(POWERED, power));
-				worldIn.getPendingBlockTicks().scheduleTick(pos, this, 1);
+				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, power));
+				worldIn.getBlockTicks().scheduleTick(pos, this, 1);
 				
 			}
 			
@@ -81,57 +81,57 @@ public class BlockRDPulseCounter extends BlockRedstoneDiode {
 	@Override
 	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
 		
-		if (state.get(POWERED)) {
+		if (state.getValue(POWERED)) {
 			
-			if (state.get(ACTIVE)) {
+			if (state.getValue(ACTIVE)) {
 				
-				int pulses = state.get(PULSES);
+				int pulses = state.getValue(PULSES);
 				pulses++;
 
-				worldIn.setBlockState(pos, state.with(PULSES, pulses).with(ACTIVE, false));
-				worldIn.notifyNeighborsOfStateChange(pos.offset(state.get(FACING)), this);
+				worldIn.setBlockAndUpdate(pos, state.setValue(PULSES, pulses).setValue(ACTIVE, false));
+				worldIn.updateNeighborsAt(pos.relative(state.getValue(FACING)), this);
 				
-				if (pulses < state.get(COUNT)) {
+				if (pulses < state.getValue(COUNT)) {
 					
-					BlockPos inputPos = pos.offset(state.get(FACING).getOpposite());
-					int power = worldIn.getRedstonePower(inputPos, state.get(FACING).getOpposite());
+					BlockPos inputPos = pos.relative(state.getValue(FACING).getOpposite());
+					int power = worldIn.getSignal(inputPos, state.getValue(FACING).getOpposite());
 					
-					worldIn.getPendingBlockTicks().scheduleTick(pos, this, (15 - power) * 2);
+					worldIn.getBlockTicks().scheduleTick(pos, this, (15 - power) * 2);
 					
 				}
 				
 			} else {
 				
-				worldIn.setBlockState(pos, state.with(ACTIVE, true));
-				worldIn.notifyNeighborsOfStateChange(pos.offset(state.get(FACING)), this);
+				worldIn.setBlockAndUpdate(pos, state.setValue(ACTIVE, true));
+				worldIn.updateNeighborsAt(pos.relative(state.getValue(FACING)), this);
 				
-				BlockPos inputPos = pos.offset(state.get(FACING).getOpposite());
-				int power = worldIn.getRedstonePower(inputPos, state.get(FACING).getOpposite());
+				BlockPos inputPos = pos.relative(state.getValue(FACING).getOpposite());
+				int power = worldIn.getSignal(inputPos, state.getValue(FACING).getOpposite());
 				
-				worldIn.getPendingBlockTicks().scheduleTick(pos, this, (15 - power) * 2);
+				worldIn.getBlockTicks().scheduleTick(pos, this, (15 - power) * 2);
 				
 			}
 			
 		} else {
 			
-			worldIn.setBlockState(pos, state.with(PULSES, 0).with(ACTIVE, false));
+			worldIn.setBlockAndUpdate(pos, state.setValue(PULSES, 0).setValue(ACTIVE, false));
 			
 		}
 		
 	}
 	
 	@Override
-	public int getStrongPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-		if (side == blockState.get(FACING).getOpposite()) {
-			return blockState.get(ACTIVE) ? 15 : 0;
+	public int getDirectSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+		if (side == blockState.getValue(FACING).getOpposite()) {
+			return blockState.getValue(ACTIVE) ? 15 : 0;
 		}
 		return 0;
 	}
 	
 	@Override
-	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-		if (side == blockState.get(FACING).getOpposite()) {
-			return blockState.get(ACTIVE) ? 15 : 0;
+	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+		if (side == blockState.getValue(FACING).getOpposite()) {
+			return blockState.getValue(ACTIVE) ? 15 : 0;
 		}
 		return 0;
 	}
@@ -139,22 +139,22 @@ public class BlockRDPulseCounter extends BlockRedstoneDiode {
 	@OnlyIn(Dist.CLIENT)
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		
-		if (stateIn.get(POWERED)) {
+		if (stateIn.getValue(POWERED)) {
 			
-			Direction direction = stateIn.get(FACING).getOpposite();
+			Direction direction = stateIn.getValue(FACING).getOpposite();
 			double d0 = (double)pos.getX() + 0.5D + (rand.nextDouble() - 0.5D) * 0.2D;
 			double d1 = (double)pos.getY() + 0.4D + (rand.nextDouble() - 0.5D) * 0.2D;
 	        double d2 = (double)pos.getZ() + 0.5D + (rand.nextDouble() - 0.5D) * 0.2D;
 	        float f = -5.0F;
 	        f = f / 16.0F;
-	        double d3 = (double)(f * (float)direction.getXOffset());
-	        double d4 = (double)(f * (float)direction.getZOffset());
-	        worldIn.addParticle(RedstoneParticleData.REDSTONE_DUST, d0 + d3, d1, d2 + d4, 0.0D, 0.0D, 0.0D);
+	        double d3 = (double)(f * (float)direction.getStepX());
+	        double d4 = (double)(f * (float)direction.getStepZ());
+	        worldIn.addParticle(RedstoneParticleData.REDSTONE, d0 + d3, d1, d2 + d4, 0.0D, 0.0D, 0.0D);
 	        
-	        BlockPos inputPos = pos.offset(stateIn.get(FACING).getOpposite());
-			int power = worldIn.getRedstonePower(inputPos, stateIn.get(FACING).getOpposite());
+	        BlockPos inputPos = pos.relative(stateIn.getValue(FACING).getOpposite());
+			int power = worldIn.getSignal(inputPos, stateIn.getValue(FACING).getOpposite());
 			
-	        if (power == 15 && stateIn.get(PULSES) < stateIn.get(COUNT)) {
+	        if (power == 15 && stateIn.getValue(PULSES) < stateIn.getValue(COUNT)) {
 	        	
 				d0 = (double)pos.getX() + 0.5D + (rand.nextDouble() - 0.5D) * 0.2D;
 				d1 = (double)pos.getY() + 0.4D + (rand.nextDouble() - 0.5D) * 0.2D + 0.2D;

@@ -42,21 +42,21 @@ public class TileEntityMFluidInput extends TileEntity implements IFluidConnectiv
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		if (!this.fluid.isEmpty()) compound.put("Fluid", this.fluid.writeToNBT(new CompoundNBT()));
 		compound.putInt("progress", this.progress);
 		if (this.filterFluid != null) compound.putString("FluidFilter", this.filterFluid.getRegistryName().toString());
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public void read(BlockState state, CompoundNBT compund) {
+	public void load(BlockState state, CompoundNBT compund) {
 		this.fluid = FluidStack.loadFluidStackFromNBT(compund.getCompound("Fluid"));
 		this.progress = compund.getInt("progress");
-		if (compund.contains("FluidFilter")) this.filterFluid = Registry.FLUID.getOrDefault(new ResourceLocation(compund.getString("FluidFilter")));
+		if (compund.contains("FluidFilter")) this.filterFluid = Registry.FLUID.get(new ResourceLocation(compund.getString("FluidFilter")));
 		if (this.filterFluid == Fluids.EMPTY) this.filterFluid = null;
-		super.read(state, compund);
+		super.load(state, compund);
 	}
 	
 	@Override
@@ -104,22 +104,22 @@ public class TileEntityMFluidInput extends TileEntity implements IFluidConnectiv
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote) {
+		if (!this.level.isClientSide) {
 			
-			ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(world);
-			handler.updateNetwork(world, pos);
-			ElectricityNetwork network = handler.getNetwork(pos);
+			ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(level);
+			handler.updateNetwork(level, worldPosition);
+			ElectricityNetwork network = handler.getNetwork(worldPosition);
 			
 			if (network.canMachinesRun() == Voltage.NormalVoltage && canSourceFluid() && this.progress++ >= 5) {
 				
 				this.progress = 0;
 				
-				BlockPos tankBeginPos = this.pos.offset(this.getBlockState().get(BlockMFluidInput.FACING));
-				BlockPos sourcePos = new FluidTankHelper(this.world, tankBeginPos).extractFluidFromTank(this.filterFluid == null ? this.world.getFluidState(tankBeginPos).getFluid() : this.filterFluid);
-				FluidState sourceFluid = this.world.getFluidState(sourcePos);
+				BlockPos tankBeginPos = this.worldPosition.relative(this.getBlockState().getValue(BlockMFluidInput.FACING));
+				BlockPos sourcePos = new FluidTankHelper(this.level, tankBeginPos).extractFluidFromTank(this.filterFluid == null ? this.level.getFluidState(tankBeginPos).getType() : this.filterFluid);
+				FluidState sourceFluid = this.level.getFluidState(sourcePos);
 				FluidStack fluid = FluidStackStateTagHelper.makeStackFromState(sourceFluid);
 				
-				this.world.setBlockState(sourcePos, Blocks.AIR.getDefaultState());
+				this.level.setBlockAndUpdate(sourcePos, Blocks.AIR.defaultBlockState());
 				
 				if (this.fluid.isEmpty()) {
 					this.fluid = fluid;
@@ -133,7 +133,7 @@ public class TileEntityMFluidInput extends TileEntity implements IFluidConnectiv
 			
 			if (!this.fluid.isEmpty()) {
 				
-				this.fluid = this.pushFluid(this.fluid, world, pos);
+				this.fluid = this.pushFluid(this.fluid, level, worldPosition);
 				
 			}
 			
@@ -153,8 +153,8 @@ public class TileEntityMFluidInput extends TileEntity implements IFluidConnectiv
 	@Override
 	public boolean isSoundRunning() {
 
-		ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(world);
-		ElectricityNetwork network = handler.getNetwork(pos);
+		ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(level);
+		ElectricityNetwork network = handler.getNetwork(worldPosition);
 		
 		return network.canMachinesRun() == Voltage.NormalVoltage && canSourceFluid();
 		
@@ -162,15 +162,15 @@ public class TileEntityMFluidInput extends TileEntity implements IFluidConnectiv
 	
 	public boolean canSourceFluid() {
 		
-		BlockPos tankBeginPos = this.pos.offset(this.getBlockState().get(BlockMFluidInput.FACING));
-		BlockPos sourceBlock = new FluidTankHelper(this.world, tankBeginPos).extractFluidFromTank(this.filterFluid == null ? this.world.getFluidState(tankBeginPos).getFluid() : this.filterFluid);
+		BlockPos tankBeginPos = this.worldPosition.relative(this.getBlockState().getValue(BlockMFluidInput.FACING));
+		BlockPos sourceBlock = new FluidTankHelper(this.level, tankBeginPos).extractFluidFromTank(this.filterFluid == null ? this.level.getFluidState(tankBeginPos).getType() : this.filterFluid);
 		
 		if (sourceBlock != null) {
 			
-			FluidState sourceFluid = this.world.getFluidState(sourceBlock);
-			FluidStack fluid = new FluidStack(sourceFluid.getFluid(), 1000);
+			FluidState sourceFluid = this.level.getFluidState(sourceBlock);
+			FluidStack fluid = new FluidStack(sourceFluid.getType(), 1000);
 			
-			return this.fluid.isEmpty() || (this.maxFluid - this.fluid.getAmount() >= 1000 && this.fluid.getFluid().isEquivalentTo(fluid.getFluid()));
+			return this.fluid.isEmpty() || (this.maxFluid - this.fluid.getAmount() >= 1000 && this.fluid.getFluid().isSame(fluid.getFluid()));
 			
 		}
 		
@@ -180,7 +180,7 @@ public class TileEntityMFluidInput extends TileEntity implements IFluidConnectiv
 
 	@Override
 	public boolean canConnect(Direction side) {
-		return side == this.getBlockState().get(BlockMFluidInput.FACING).getOpposite();
+		return side == this.getBlockState().getValue(BlockMFluidInput.FACING).getOpposite();
 	}
 
 	@Override

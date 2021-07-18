@@ -19,31 +19,31 @@ public class WashingRecipeSerializer<T extends WashingRecipe> extends ForgeRegis
 		this.factory = factory;
 	}
 	
-	public T read(ResourceLocation recipeId, JsonObject json) {
-		Ingredient itemIn = Ingredient.deserialize(json.get("ingredient").getAsJsonObject());
+	public T fromJson(ResourceLocation recipeId, JsonObject json) {
+		Ingredient itemIn = Ingredient.fromJson(json.get("ingredient").getAsJsonObject());
 		JsonArray resultArray = json.get("resultItems").getAsJsonArray();
-		ItemStack itemOut1 = ShapedRecipe.deserializeItem(resultArray.get(0).getAsJsonObject());
-		ItemStack itemOut2 = resultArray.size() > 1 ? ShapedRecipe.deserializeItem(resultArray.get(1).getAsJsonObject()) : ItemStack.EMPTY;
-		ItemStack itemOut3 = resultArray.size() > 2 ? ShapedRecipe.deserializeItem(resultArray.get(2).getAsJsonObject()) : ItemStack.EMPTY;
+		ItemStack itemOut1 = ShapedRecipe.itemFromJson(resultArray.get(0).getAsJsonObject());
+		ItemStack itemOut2 = resultArray.size() > 1 ? ShapedRecipe.itemFromJson(resultArray.get(1).getAsJsonObject()) : ItemStack.EMPTY;
+		ItemStack itemOut3 = resultArray.size() > 2 ? ShapedRecipe.itemFromJson(resultArray.get(2).getAsJsonObject()) : ItemStack.EMPTY;
 		int washingTime = json.get("washingTime").getAsInt();
 		return this.factory.create(recipeId, itemOut1, itemIn, itemOut2, itemOut3, washingTime);
 	}
 	
-	public T read(ResourceLocation recipeId, PacketBuffer buffer) {
-		Ingredient itemIn = Ingredient.read(buffer);
-		ItemStack itemOut1 = buffer.readItemStack();
-		ItemStack itemOut2 = buffer.readItemStack();
-		ItemStack itemOut3 = buffer.readItemStack();
+	public T fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+		Ingredient itemIn = Ingredient.fromNetwork(buffer);
+		ItemStack itemOut1 = buffer.readItem();
+		ItemStack itemOut2 = buffer.readItem();
+		ItemStack itemOut3 = buffer.readItem();
 		int washingTime = buffer.readInt();
 		return factory.create(recipeId, itemOut1, itemIn, itemOut2, itemOut3, washingTime);
 	}
 	
 	@Override
-	public void write(PacketBuffer buffer, T recipe) {
-		recipe.itemIn.write(buffer);
-		buffer.writeItemStack(recipe.itemOut1);
-		buffer.writeItemStack(recipe.itemOut2);
-		buffer.writeItemStack(recipe.itemOut3);
+	public void toNetwork(PacketBuffer buffer, T recipe) {
+		recipe.itemIn.toNetwork(buffer);
+		buffer.writeItem(recipe.itemOut1);
+		buffer.writeItem(recipe.itemOut2);
+		buffer.writeItem(recipe.itemOut3);
 		buffer.writeInt(recipe.washingTime);
 	}
 	

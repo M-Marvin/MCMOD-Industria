@@ -29,7 +29,7 @@ public class TileEntityMCoalHeater extends TileEntityMHeaterBase implements INam
 	@Override
 	public void updateWorkState() {
 
-		boolean fullOfAsh = (this.getStackInSlot(1).getItem() != Item.getItemFromBlock(ModItems.ash) || this.getStackInSlot(1).getCount() >= 64) && !this.getStackInSlot(1).isEmpty();
+		boolean fullOfAsh = (this.getItem(1).getItem() != Item.byBlock(ModItems.ash) || this.getItem(1).getCount() >= 64) && !this.getItem(1).isEmpty();
 		
 		if (!fullOfAsh) {
 			
@@ -37,10 +37,10 @@ public class TileEntityMCoalHeater extends TileEntityMHeaterBase implements INam
 				this.burnTime -= 1;
 				isWorking = true;
 				if (this.burnTime % 60 == 0) {
-					ItemStack ashStack = this.getStackInSlot(1);
+					ItemStack ashStack = this.getItem(1);
 					if (ashStack.isEmpty()) {
-						this.setInventorySlotContents(1, new ItemStack(ModItems.ash, 1));
-					} else if (ashStack.getItem() == Item.getItemFromBlock(ModItems.ash) && ashStack.getCount() < 64) {
+						this.setItem(1, new ItemStack(ModItems.ash, 1));
+					} else if (ashStack.getItem() == Item.byBlock(ModItems.ash) && ashStack.getCount() < 64) {
 						ashStack.grow(1);
 					}
 				}
@@ -60,22 +60,23 @@ public class TileEntityMCoalHeater extends TileEntityMHeaterBase implements INam
 		return this.burnTime > 0 || this.hasFuelItems();
 	}
 	
+	@SuppressWarnings("deprecation")
 	public boolean hasFuelItems() {
 		return this.itemstacks.get(0).isEmpty() ? false : ForgeHooks.getBurnTime(this.itemstacks.get(0)) > 0;
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		compound.putFloat("burnTime", this.burnTime);
 		compound.putInt("fuelTime", this.fuelTime);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		this.burnTime = compound.getFloat("burnTime");
 		this.fuelTime = compound.getInt("fuelTime");
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 	@Override
@@ -88,13 +89,14 @@ public class TileEntityMCoalHeater extends TileEntityMHeaterBase implements INam
 		return new int[] {0, 1};
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
 		return index == 0 && ForgeHooks.getBurnTime(itemStackIn) > 0;
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return index == 1;
 	}
 	

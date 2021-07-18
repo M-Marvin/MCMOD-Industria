@@ -25,7 +25,7 @@ public class TileEntityEnderCoreRenderer extends TileEntityRenderer<TileEntityEn
 	@Override
 	public void render(TileEntityEnderCore tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		
-		matrixStackIn.push();
+		matrixStackIn.pushPose();
 		
 		matrixStackIn.translate(0.5F, -0.5F, 0.5F);
 		
@@ -33,11 +33,11 @@ public class TileEntityEnderCoreRenderer extends TileEntityRenderer<TileEntityEn
 		if (tileEntityIn.rotationProgress > 360) tileEntityIn.rotationProgress -= 360;
 		float rotation = tileEntityIn.rotationProgress;
 		
-		IVertexBuilder vertexBuilder = bufferIn.getBuffer(RenderType.getEntityTranslucent(ENDER_CORE_TEXTURES));
+		IVertexBuilder vertexBuilder = bufferIn.getBuffer(RenderType.entityTranslucent(ENDER_CORE_TEXTURES));
 		this.coreModel.setRotation(rotation);
-		this.coreModel.render(matrixStackIn, vertexBuilder, combinedLightIn, combinedOverlayIn, 1, 1, 1, 1);
+		this.coreModel.renderToBuffer(matrixStackIn, vertexBuilder, combinedLightIn, combinedOverlayIn, 1, 1, 1, 1);
 		
-		matrixStackIn.pop();
+		matrixStackIn.popPose();
 		
 	}
 	

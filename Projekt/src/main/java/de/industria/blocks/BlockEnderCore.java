@@ -24,11 +24,11 @@ import net.minecraft.world.IBlockReader;
 public class BlockEnderCore extends BlockContainerBase implements IAdvancedBlockInfo {
 	
 	public BlockEnderCore() {
-		super("ender_core", Material.IRON, 1F, 1F, SoundType.NETHERITE);
+		super("ender_core", Material.METAL, 1F, 1F, SoundType.NETHERITE_BLOCK);
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
 	
@@ -45,12 +45,12 @@ public class BlockEnderCore extends BlockContainerBase implements IAdvancedBlock
 	@SuppressWarnings("deprecation")
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		VoxelShape shape = Block.makeCuboidShape(5, 5, 5, 11, 11, 11);
+		VoxelShape shape = Block.box(5, 5, 5, 11, 11, 11);
 		return VoxelShapes.or(ModItems.reinforced_casing.getShape(null, null, null, null), shape);
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityEnderCore();
 	}
 	

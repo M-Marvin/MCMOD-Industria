@@ -39,9 +39,9 @@ public class NetworkWireHandler extends WorldSavedData {
 	
 	public static NetworkWireHandler getHandlerForWorld(IWorld world) {
 		
-		if (!world.isRemote()) {
-			DimensionSavedDataManager storage = ((ServerWorld) world).getSavedData();
-			NetworkWireHandler handler = storage.getOrCreate(NetworkWireHandler::new, "dataNetworks");
+		if (!world.isClientSide()) {
+			DimensionSavedDataManager storage = ((ServerWorld) world).getDataStorage();
+			NetworkWireHandler handler = storage.computeIfAbsent(NetworkWireHandler::new, "dataNetworks");
 			return handler;
 		} else {
 			if (clientInstance == null) clientInstance = new NetworkWireHandler(false);
@@ -88,7 +88,7 @@ public class NetworkWireHandler extends WorldSavedData {
 	protected boolean scann(World world, BlockPos scannPos, Direction direction, HashMap<BlockPos, List<Direction>> posList, int scannDepth, NetworkDeviceType lastDevice) {
 		
 		BlockState state = world.getBlockState(scannPos);
-		TileEntity tileEntity = world.getTileEntity(scannPos);
+		TileEntity tileEntity = world.getBlockEntity(scannPos);
 		INetworkDevice device = state.getBlock() instanceof INetworkDevice ? (INetworkDevice) state.getBlock() : tileEntity instanceof INetworkDevice ? (INetworkDevice) tileEntity : null;
 		
 		if (device != null && scannDepth < 50000) {
@@ -122,7 +122,7 @@ public class NetworkWireHandler extends WorldSavedData {
 						
 						if (device.canConectNetworkWire(world, scannPos, d.getOpposite()) && (direction != null ? d != direction.getOpposite() : true)) {
 							
-							BlockPos pos2 = scannPos.offset(d);
+							BlockPos pos2 = scannPos.relative(d);
 							boolean flag1 = this.scann(world, pos2, d, posList, scannDepth + 1, type);
 							
 							if (flag1) {
@@ -221,7 +221,7 @@ public class NetworkWireHandler extends WorldSavedData {
 				entryTag.put("Position", NBTUtil.writeBlockPos(entry.getKey()));
 				ListNBT sides = new ListNBT();
 				for (Direction d : entry.getValue()) {
-					sides.add(StringNBT.valueOf(d.getName2()));
+					sides.add(StringNBT.valueOf(d.getName()));
 				}
 				entryTag.put("AttachedSides", sides);
 				deviceList.add(entryTag);
@@ -258,11 +258,11 @@ public class NetworkWireHandler extends WorldSavedData {
 	}
 
 	@Override
-	public void read(CompoundNBT nbt) {
+	public void load(CompoundNBT nbt) {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		return new CompoundNBT();
 	}
 	

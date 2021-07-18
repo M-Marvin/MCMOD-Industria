@@ -35,50 +35,50 @@ public class BlockSignalAntennaConector extends BlockContainerBase implements IS
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	
 	public BlockSignalAntennaConector() {
-		super("antenna_conector", Material.IRON, 1.5F, 0.5F, SoundType.METAL);
+		super("antenna_conector", Material.METAL, 1.5F, 0.5F, SoundType.METAL);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(FACING, context.getNearestLookingDirection().getOpposite());
+		return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(FACING);
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityRSignalAntenna();
 	}
 	
 	@Override
 	public void onReciveSignal(World worldIn, BlockPos pos, RedstoneControlSignal signal, Direction side) {
 		
-		TileEntity te = worldIn.getTileEntity(pos);
+		TileEntity te = worldIn.getBlockEntity(pos);
 		
-		if (te instanceof TileEntityRSignalAntenna && !worldIn.isRemote()) {
+		if (te instanceof TileEntityRSignalAntenna && !worldIn.isClientSide()) {
 			
 			int range1 = ((TileEntityRSignalAntenna) te).getRange();
 			ItemStack chanelItem = ((TileEntityRSignalAntenna) te).getChanelItem();
 			
 			List<TileEntity> tileEntitys = new ArrayList<TileEntity>();
-			tileEntitys.addAll(worldIn.loadedTileEntityList);
+			tileEntitys.addAll(worldIn.blockEntityList);
 			
 			for (TileEntity te2 : tileEntitys) {
 				
-				if (te2 instanceof TileEntityRSignalAntenna && !te2.getPos().equals(te.getPos())) {
+				if (te2 instanceof TileEntityRSignalAntenna && !te2.getBlockPos().equals(te.getBlockPos())) {
 					
 					TileEntityRSignalAntenna antenna = (TileEntityRSignalAntenna) te2;
 					
 					int range2 = antenna.getRange();
-					int distance = getDistance(te.getPos(), antenna.getPos());
+					int distance = getDistance(te.getBlockPos(), antenna.getBlockPos());
 					ItemStack chanelItem2 = antenna.getChanelItem();
 					boolean isInRange = distance <= range1 + range2;
 					boolean isSameChanel = chanelItem != null && chanelItem2 != null ? chanelItem.equals(chanelItem2, false) : chanelItem == null && chanelItem2 == null;
@@ -98,12 +98,12 @@ public class BlockSignalAntennaConector extends BlockContainerBase implements IS
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 
-		TileEntity te = worldIn.getTileEntity(pos);
+		TileEntity te = worldIn.getBlockEntity(pos);
 		if (te instanceof TileEntityRSignalAntenna) {
 			
-			ItemStack heldItem = player.getHeldItemMainhand();
+			ItemStack heldItem = player.getMainHandItem();
 			
 			if (((TileEntityRSignalAntenna) te).getChanelItem() == null && !heldItem.isEmpty()) {
 				
@@ -112,12 +112,12 @@ public class BlockSignalAntennaConector extends BlockContainerBase implements IS
 				((TileEntityRSignalAntenna) te).setChanelItem(item);
 				heldItem.shrink(1);
 				
-			} else if (((TileEntityRSignalAntenna) te).getChanelItem() != null && player.isSneaking()) {
+			} else if (((TileEntityRSignalAntenna) te).getChanelItem() != null && player.isShiftKeyDown()) {
 				
 				ItemStack stack = ((TileEntityRSignalAntenna) te).getChanelItem();
 				((TileEntityRSignalAntenna) te).setChanelItem(null);
-				BlockPos pos2 = pos.offset(hit.getFace());
-				worldIn.addEntity(new ItemEntity(worldIn, pos2.getX() + 0.5F, pos2.getY() + 0.5F, pos2.getZ() + 0.5F, stack));
+				BlockPos pos2 = pos.relative(hit.getDirection());
+				worldIn.addFreshEntity(new ItemEntity(worldIn, pos2.getX() + 0.5F, pos2.getY() + 0.5F, pos2.getZ() + 0.5F, stack));
 				
 			}
 			
@@ -128,13 +128,13 @@ public class BlockSignalAntennaConector extends BlockContainerBase implements IS
 	}
 	
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
-		TileEntity te = worldIn.getTileEntity(pos);
+	public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+		TileEntity te = worldIn.getBlockEntity(pos);
 		if (te instanceof TileEntityRSignalAntenna) {
 			ItemStack stack = ((TileEntityRSignalAntenna) te).getChanelItem();
-			if (stack != null ? !stack.isEmpty() : false) worldIn.addEntity(new ItemEntity(worldIn, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, stack));
+			if (stack != null ? !stack.isEmpty() : false) worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, stack));
 		}
-		super.onBlockHarvested(worldIn, pos, state, player);
+		super.playerWillDestroy(worldIn, pos, state, player);
 	}
 	
 	public static int getDistance(BlockPos pos1, BlockPos pos2) {
@@ -147,7 +147,7 @@ public class BlockSignalAntennaConector extends BlockContainerBase implements IS
 	@Override
 	public boolean canConectSignalWire(IWorldReader world, BlockPos pos, Direction side) {
 		if (world.getBlockState(pos).getBlock() == this) {
-			return side != world.getBlockState(pos).get(FACING);
+			return side != world.getBlockState(pos).getValue(FACING);
 		} else {
 			return false;
 		}
@@ -155,12 +155,12 @@ public class BlockSignalAntennaConector extends BlockContainerBase implements IS
 	
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 	
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 	
 }

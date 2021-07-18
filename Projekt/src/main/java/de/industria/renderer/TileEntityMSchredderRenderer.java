@@ -34,23 +34,23 @@ public class TileEntityMSchredderRenderer extends TileEntityRenderer<TileEntityM
 	public void render(TileEntityMSchredder tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 
 		BlockState blockState = tileEntityIn.getBlockState();
-		Direction facing = blockState.get(BlockStateProperties.HORIZONTAL_FACING);
+		Direction facing = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING);
 		BlockPos partPos = BlockMultiPart.getInternPartPos(blockState);
 		
 		if (partPos.equals(BlockPos.ZERO)) {
 			
-			IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.getEntityTranslucent(SCHREDDER_TEXTURES));
+			IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.entityTranslucent(SCHREDDER_TEXTURES));
 			
-			matrixStackIn.push();
+			matrixStackIn.pushPose();
 			
 			matrixStackIn.translate(0F, -1F, 0F);
 			
 			matrixStackIn.translate(0.5F, 1.5F, 0.5F);
-			matrixStackIn.rotate(facing.getRotation());
-			matrixStackIn.rotate(Vector3f.XP.rotationDegrees(90));
+			matrixStackIn.mulPose(facing.getRotation());
+			matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(90));
 			matrixStackIn.translate(0F, -1F, 0F);
 			
-			schredderModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
+			schredderModel.renderToBuffer(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 			
 			ItemSchredderTool tool = tileEntityIn.getToolItem();
 
@@ -63,12 +63,12 @@ public class TileEntityMSchredderRenderer extends TileEntityRenderer<TileEntityM
 				ItemSchredderToolModel toolModel = (ItemSchredderToolModel) ModClientBindings.getBindedModel(tool).getModel();
 				toolModel.setRotationState(tileEntityIn.rotation);
 				
-				vertexBuffer = bufferIn.getBuffer(RenderType.getEntityTranslucent(ModClientBindings.getBindedModel(tool).getTextureLoc()));
-				toolModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
+				vertexBuffer = bufferIn.getBuffer(RenderType.entityTranslucent(ModClientBindings.getBindedModel(tool).getTextureLoc()));
+				toolModel.renderToBuffer(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 				
 			}
 			
-			matrixStackIn.pop();
+			matrixStackIn.popPose();
 			
 		}
 		

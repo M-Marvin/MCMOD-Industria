@@ -30,10 +30,10 @@ public class TileEntityNComputerRenderer extends TileEntityRenderer<TileEntityNC
 	@Override
 	public void render(TileEntityNComputer tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		
-		Direction facing = tileEntityIn.getBlockState().get(BlockNComputer.FACING);
-		IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.getEntityCutout(getTexture(tileEntityIn)));
+		Direction facing = tileEntityIn.getBlockState().getValue(BlockNComputer.FACING);
+		IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.entityCutout(getTexture(tileEntityIn)));
 		
-		matrixStackIn.push();
+		matrixStackIn.pushPose();
 		
 		matrixStackIn.translate(0F, -3F, 0F);
 		
@@ -42,26 +42,26 @@ public class TileEntityNComputerRenderer extends TileEntityRenderer<TileEntityNC
 			matrixStackIn.translate(1.5F, 1.5F, -0.5F);
 			break;
 		case WEST:
-			matrixStackIn.rotate(Vector3f.YP.rotationDegrees(90));
+			matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(90));
 			matrixStackIn.translate(0.5F, 1.5F, -0.5F);
 			break;
 		case EAST:
-			matrixStackIn.rotate(Vector3f.YP.rotationDegrees(270));
+			matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(270));
 			matrixStackIn.translate(1.5F, 1.5F, -1.5F);
 			break;
 		case SOUTH:
-			matrixStackIn.rotate(Vector3f.YP.rotationDegrees(180));
+			matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180));
 			matrixStackIn.translate(0.5F, 1.5F, -1.5F);
 			break;
 		default:
 		}
 
-		matrixStackIn.rotate(Vector3f.ZN.rotationDegrees(180));
+		matrixStackIn.mulPose(Vector3f.ZN.rotationDegrees(180));
 		matrixStackIn.translate(1F, -3F, 1F);
 		
-		computerModel.render(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
+		computerModel.renderToBuffer(matrixStackIn, vertexBuffer, combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 		
-		matrixStackIn.pop();
+		matrixStackIn.popPose();
 		
 	}
 	

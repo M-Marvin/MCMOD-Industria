@@ -28,7 +28,7 @@ public class VoxelHelper {
 			break;
 		}
 		
-		for (AxisAlignedBB box : shape.toBoundingBoxList()) {
+		for (AxisAlignedBB box : shape.toAabbs()) {
 			float[] rotMin = rotatePoint((float) (box.minX - 0.5F), (float) (box.minZ - 0.5F), rad);
 			float[] rotMax = rotatePoint((float) (box.maxX - 0.5F), (float) (box.maxZ - 0.5F), rad);
 			

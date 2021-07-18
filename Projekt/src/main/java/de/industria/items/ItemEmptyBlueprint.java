@@ -23,7 +23,7 @@ public class ItemEmptyBlueprint extends ItemBase {
 	@Override
 	public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
 		
-		ItemStack heldStack = context.getPlayer().getHeldItemMainhand();
+		ItemStack heldStack = context.getPlayer().getMainHandItem();
 		
 		if (heldStack.getItem() == this) {
 			
@@ -32,13 +32,13 @@ public class ItemEmptyBlueprint extends ItemBase {
 			if (tag.contains("BeginPos")) {
 				
 				BlockPos pos1 = NBTUtil.readBlockPos(tag.getCompound("BeginPos"));
-				BlockPos pos2 = context.getPos();
-				ItemStack newBlueprint = setupNewBlueprint(context.getWorld(), pos1, pos2);
+				BlockPos pos2 = context.getClickedPos();
+				ItemStack newBlueprint = setupNewBlueprint(context.getLevel(), pos1, pos2);
 				
 				if (newBlueprint != null) {
 					
-					if (!context.getPlayer().addItemStackToInventory(newBlueprint)) {
-						context.getPlayer().dropItem(newBlueprint, false);
+					if (!context.getPlayer().addItem(newBlueprint)) {
+						context.getPlayer().drop(newBlueprint, false);
 					}
 					
 					tag.remove("BeginPos");
@@ -53,7 +53,7 @@ public class ItemEmptyBlueprint extends ItemBase {
 				
 			} else {
 				
-				BlockPos beginPos = context.getPos();
+				BlockPos beginPos = context.getClickedPos();
 				tag.put("BeginPos", NBTUtil.writeBlockPos(beginPos));
 				heldStack.setTag(tag);
 				return ActionResultType.CONSUME;
@@ -87,7 +87,7 @@ public class ItemEmptyBlueprint extends ItemBase {
 					for (int z = 0; z <= size.getZ(); z++) {
 						
 						CompoundNBT block = new CompoundNBT();
-						BlockPos scannPos = new BlockPos(x, y, z).add(origin);
+						BlockPos scannPos = new BlockPos(x, y, z).offset(origin);
 						BlockState scannState = world.getBlockState(scannPos);
 						
 						if (!scannState.isAir()) {
@@ -97,9 +97,9 @@ public class ItemEmptyBlueprint extends ItemBase {
 							
 							if (scannState.hasTileEntity()) {
 								
-								TileEntity tileEntity = world.getTileEntity(scannPos);
+								TileEntity tileEntity = world.getBlockEntity(scannPos);
 								if (tileEntity != null) {
-									CompoundNBT tileData = tileEntity.write(new CompoundNBT());
+									CompoundNBT tileData = tileEntity.save(new CompoundNBT());
 									block.put("TileData", tileData);
 								}
 								
@@ -114,7 +114,7 @@ public class ItemEmptyBlueprint extends ItemBase {
 			}
 			
 			ItemStack blueprintItem = new ItemStack(ModItems.blueprint);
-			blueprintItem.setTagInfo("Blueprint", blueprint);
+			blueprintItem.addTagElement("Blueprint", blueprint);
 			return blueprintItem;
 			
 		}

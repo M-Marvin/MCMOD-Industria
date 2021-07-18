@@ -45,22 +45,22 @@ public class BlockMThermalZentrifuge extends BlockContainerBase implements IElec
 	public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 	
 	public BlockMThermalZentrifuge() {
-		super("thermal_zentrifuge", Material.IRON, 3F, SoundType.METAL);
-		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(ACTIVE, false));
+		super("thermal_zentrifuge", Material.METAL, 3F, SoundType.METAL);
+		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(ACTIVE, false));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(FACING, ACTIVE);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityMThermalZentrifuge();
 	}
 
@@ -71,7 +71,7 @@ public class BlockMThermalZentrifuge extends BlockContainerBase implements IElec
 
 	@Override
 	public float getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
-		TileEntity tileEntity = world.getTileEntity(pos);
+		TileEntity tileEntity = world.getBlockEntity(pos);
 		if (tileEntity instanceof TileEntityMThermalZentrifuge) {
 			return ((TileEntityMThermalZentrifuge) tileEntity).canWork() ? 1.5F : 0;
 		}
@@ -80,7 +80,7 @@ public class BlockMThermalZentrifuge extends BlockContainerBase implements IElec
 
 	@Override
 	public boolean canConnect(Direction side, World world, BlockPos pos, BlockState state) {
-		return side != state.get(FACING).getOpposite();
+		return side != state.getValue(FACING).getOpposite();
 	}
 
 	@Override
@@ -89,8 +89,8 @@ public class BlockMThermalZentrifuge extends BlockContainerBase implements IElec
 	}
 
 	@Override
-	public ISidedInventory createInventory(BlockState sate, IWorld world, BlockPos pos) {
-		return (ISidedInventory) world.getTileEntity(pos);
+	public ISidedInventory getContainer(BlockState sate, IWorld world, BlockPos pos) {
+		return (ISidedInventory) world.getBlockEntity(pos);
 	}
 	
 	@Override
@@ -98,18 +98,18 @@ public class BlockMThermalZentrifuge extends BlockContainerBase implements IElec
 
 		if (network.getVoltage().getVoltage() > Voltage.HightVoltage.getVoltage() && network.getCurrent() > 0) {
 
-			worldIn.createExplosion(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+			worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
+			worldIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 			
 		}
 		
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		if (tileEntity instanceof INamedContainerProvider) {
-			if (!worldIn.isRemote()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
+			if (!worldIn.isClientSide()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
 			return ActionResultType.SUCCESS;
 		}
 		return ActionResultType.PASS;
@@ -132,12 +132,12 @@ public class BlockMThermalZentrifuge extends BlockContainerBase implements IElec
 
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 	
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 
 }

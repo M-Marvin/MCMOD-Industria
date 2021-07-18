@@ -26,16 +26,16 @@ public class TileEntityRSignalAntenna extends TileEntity {
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
-		if (this.chanelItem != null) compound.put("ChanelItem", this.chanelItem.write(new CompoundNBT()));
-		return super.write(compound);
+	public CompoundNBT save(CompoundNBT compound) {
+		if (this.chanelItem != null) compound.put("ChanelItem", this.chanelItem.save(new CompoundNBT()));
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
-		this.chanelItem = ItemStack.read(compound.getCompound("ChanelItem"));
+	public void load(BlockState state, CompoundNBT compound) {
+		this.chanelItem = ItemStack.of(compound.getCompound("ChanelItem"));
 		if (this.chanelItem.isEmpty()) this.chanelItem = null;
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 	public void setChanelItem(ItemStack chanelItem) {
@@ -49,7 +49,7 @@ public class TileEntityRSignalAntenna extends TileEntity {
 	public int getRange() {
 		
 		List<BlockPos> blocks = new ArrayList<BlockPos>();
-		scannAt(this.pos.offset(getBlockState().get(BlockSignalAntennaConector.FACING)), blocks, 0);
+		scannAt(this.worldPosition.relative(getBlockState().getValue(BlockSignalAntennaConector.FACING)), blocks, 0);
 		int antennaSize = blocks.size();
 		
 		return (int) (antennaSize / 100F * 26 * 16);
@@ -66,23 +66,23 @@ public class TileEntityRSignalAntenna extends TileEntity {
 	
 	public void reciveSignal(RedstoneControlSignal signal) {
 		
-		BlockState state = world.getBlockState(pos);
+		BlockState state = level.getBlockState(worldPosition);
 		if (!sendedSignals.contains(signal) && state.getBlock() == ModItems.antenna_conector) {
 			sendedSignals.add(signal);
-			((BlockSignalAntennaConector) state.getBlock()).sendSignal(world, pos, signal);
+			((BlockSignalAntennaConector) state.getBlock()).sendSignal(level, worldPosition, signal);
 		}
 		
 	}
 	
 	private void scannAt(BlockPos scannPos, List<BlockPos> blocks, int scannCount) {
 		
-		if (isValidAntennaBlock(this.world.getBlockState(scannPos)) && !blocks.contains(scannPos) && scannCount < 24) {
+		if (isValidAntennaBlock(this.level.getBlockState(scannPos)) && !blocks.contains(scannPos) && scannCount < 24) {
 			
 			blocks.add(scannPos);
 			
 			for (Direction direction : Direction.values()) {
 				
-				scannAt(scannPos.offset(direction), blocks, scannCount++);
+				scannAt(scannPos.relative(direction), blocks, scannCount++);
 				
 			}
 			

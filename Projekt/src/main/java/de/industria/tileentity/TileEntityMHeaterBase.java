@@ -37,64 +37,64 @@ public abstract class TileEntityMHeaterBase extends TileEntityInventoryBase impl
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote()) {
+		if (!this.level.isClientSide()) {
 			
-			this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
+			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			this.isWorking = false;
 			
-			Direction facing = getBlockState().get(BlockStateProperties.HORIZONTAL_FACING);
-			powered = this.world.isBlockPowered(pos) || this.world.isBlockPowered(pos.add(facing.getOpposite().getDirectionVec())) || this.world.isBlockPowered(pos.add(facing.rotateY().getDirectionVec())) || this.world.isBlockPowered(pos.add(facing.rotateY().getDirectionVec()).add(facing.getOpposite().getDirectionVec()));
+			Direction facing = getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
+			powered = this.level.hasNeighborSignal(worldPosition) || this.level.hasNeighborSignal(worldPosition.offset(facing.getOpposite().getNormal())) || this.level.hasNeighborSignal(worldPosition.offset(facing.getClockWise().getNormal())) || this.level.hasNeighborSignal(worldPosition.offset(facing.getClockWise().getNormal()).offset(facing.getOpposite().getNormal()));
 			
 			if (powered) {
 				
 				updateWorkState();
 				
-				if (isWorking ? this.world.getGameTime() %10 == 0 : false) {
+				if (isWorking ? this.level.getGameTime() %10 == 0 : false) {
 					
-					int xMin = Math.min(this.pos.add(facing.getOpposite().getDirectionVec()).getX(), this.pos.getX()) - 2;
-					int xMax = Math.max(this.pos.add(facing.getOpposite().getDirectionVec()).getX(), this.pos.getX()) + 2;
-					int zMin = Math.min(this.pos.add(facing.rotateY().getDirectionVec()).getZ(), this.pos.getZ()) - 2;
-					int zMax = Math.max(this.pos.add(facing.rotateY().getDirectionVec()).getZ(), this.pos.getZ()) + 2;
+					int xMin = Math.min(this.worldPosition.offset(facing.getOpposite().getNormal()).getX(), this.worldPosition.getX()) - 2;
+					int xMax = Math.max(this.worldPosition.offset(facing.getOpposite().getNormal()).getX(), this.worldPosition.getX()) + 2;
+					int zMin = Math.min(this.worldPosition.offset(facing.getClockWise().getNormal()).getZ(), this.worldPosition.getZ()) - 2;
+					int zMax = Math.max(this.worldPosition.offset(facing.getClockWise().getNormal()).getZ(), this.worldPosition.getZ()) + 2;
 					
 					for (int y = 1; y <= 6; y++) {
 						for (int x = xMin; x <= xMax; x++) {
 							for (int z = zMin; z <= zMax; z++) {
 								
-								if (this.world.rand.nextInt(6) == 0) {
+								if (this.level.random.nextInt(6) == 0) {
 									
-									BlockPos pos2 = new BlockPos(x, this.getPos().getY() + y, z);
-									FluidState sourceFluid = this.world.getFluidState(pos2);
+									BlockPos pos2 = new BlockPos(x, this.getBlockPos().getY() + y, z);
+									FluidState sourceFluid = this.level.getFluidState(pos2);
 									
-									if (this.world.getBlockState(pos2).getBlock() instanceof FlowingFluidBlock) {
+									if (this.level.getBlockState(pos2).getBlock() instanceof FlowingFluidBlock) {
 										
-										if (sourceFluid.getFluid() == Fluids.WATER) {
+										if (sourceFluid.getType() == Fluids.WATER) {
 											
-											if (this.world.rand.nextInt(5) == 0) {
+											if (this.level.random.nextInt(5) == 0) {
 												
-												BlockState bottomState = this.world.getBlockState(pos2.down());
+												BlockState bottomState = this.level.getBlockState(pos2.below());
 												
 												if (bottomState.getBlock() == ModItems.limestone_sheet) {
-													this.world.setBlockState(pos2, ModItems.limestone_sheet.getDefaultState().with(BlockStateProperties.WATERLOGGED, true));
-													this.world.setBlockState(pos2.down(), ModItems.limestone.getDefaultState());
-												} else if (bottomState.getFluidState().getFluid() == Fluids.EMPTY && !bottomState.isAir()) {
-													this.world.setBlockState(pos2, ModItems.limestone_sheet.getDefaultState().with(BlockStateProperties.WATERLOGGED, true));
+													this.level.setBlockAndUpdate(pos2, ModItems.limestone_sheet.defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, true));
+													this.level.setBlockAndUpdate(pos2.below(), ModItems.limestone.defaultBlockState());
+												} else if (bottomState.getFluidState().getType() == Fluids.EMPTY && !bottomState.isAir()) {
+													this.level.setBlockAndUpdate(pos2, ModItems.limestone_sheet.defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, true));
 												}
 												
 											} else {
 												
-												this.world.setBlockState(pos2,ModFluids.STEAM.getPreasurized().getBlockState());
+												this.level.setBlockAndUpdate(pos2,ModFluids.STEAM.getPreasurized().createLegacyBlock());
 												
 											}
 											
-										} else if (sourceFluid.getFluid() == ModFluids.DESTILLED_WATER) {
+										} else if (sourceFluid.getType() == ModFluids.DESTILLED_WATER) {
 											
-											if (sourceFluid.get(FluidDestilledWater.HOT)) {
+											if (sourceFluid.getValue(FluidDestilledWater.HOT)) {
 												
-												this.world.setBlockState(pos2, ModFluids.STEAM.getPreasurized().getBlockState());
+												this.level.setBlockAndUpdate(pos2, ModFluids.STEAM.getPreasurized().createLegacyBlock());
 												
 											} else {
 												
-												this.world.setBlockState(pos2, ModFluids.DESTILLED_WATER.getHot().getBlockState());
+												this.level.setBlockAndUpdate(pos2, ModFluids.DESTILLED_WATER.getHot().createLegacyBlock());
 												
 											}
 											
@@ -117,7 +117,7 @@ public abstract class TileEntityMHeaterBase extends TileEntityInventoryBase impl
 			if (this.isWorking) {
 				
 				IParticleData paricle = ParticleTypes.FLAME;
-				Direction facing = getBlockState().get(BlockMultiPart.FACING);
+				Direction facing = getBlockState().getValue(BlockMultiPart.FACING);
 				
 				float ox = 0;
 				float oz = 0;
@@ -144,10 +144,10 @@ public abstract class TileEntityMHeaterBase extends TileEntityInventoryBase impl
 				;
 				float width = 0.9F;
 				
-				float x = this.pos.getX() + ox + (world.rand.nextFloat() - 0.5F) * width;
-				float y = this.pos.getY() + 1.1F;
-				float z = this.pos.getZ() + oz + (world.rand.nextFloat() - 0.5F) * width;
-				this.world.addParticle(paricle, x, y, z, 0, 0, 0);
+				float x = this.worldPosition.getX() + ox + (level.random.nextFloat() - 0.5F) * width;
+				float y = this.worldPosition.getY() + 1.1F;
+				float z = this.worldPosition.getZ() + oz + (level.random.nextFloat() - 0.5F) * width;
+				this.level.addParticle(paricle, x, y, z, 0, 0, 0);
 				
 				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.GENERATOR_LOOP);
 				
@@ -165,20 +165,20 @@ public abstract class TileEntityMHeaterBase extends TileEntityInventoryBase impl
 	abstract public boolean canWork();
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		compound.putBoolean("isWorking", this.isWorking);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		this.isWorking = compound.getBoolean("isWorking");
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 		
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(pos.add(-1, 0, -1), pos.add(2, 2, 2));
+		return new AxisAlignedBB(worldPosition.offset(-1, 0, -1), worldPosition.offset(2, 2, 2));
 	}
 	
 }

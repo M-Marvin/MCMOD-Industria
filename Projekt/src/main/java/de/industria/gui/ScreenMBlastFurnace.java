@@ -21,16 +21,16 @@ public static final ResourceLocation BLAST_FURNACE_GUI_TEXTURES = new ResourceLo
 
 	@SuppressWarnings("deprecation")
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
 
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindTexture(BLAST_FURNACE_GUI_TEXTURES);
-		int i = this.guiLeft;
-		int j = (this.height - this.ySize) / 2;
-		this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
+		this.minecraft.getTextureManager().bind(BLAST_FURNACE_GUI_TEXTURES);
+		int i = this.leftPos;
+		int j = (this.height - this.imageHeight) / 2;
+		this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
 		
-		TileEntityMBlastFurnace te = this.container.getTileEntity();
-		float progress = (float) te.progress / this.container.getTileEntity().progressTotal;
+		TileEntityMBlastFurnace te = this.menu.getTileEntity();
+		float progress = (float) te.progress / this.menu.getTileEntity().progressTotal;
 		
 		this.blit(matrixStack, i + 97, j + 62, 176, 26, (int) (progress * 21), 5);
 		if (te.hasPower) this.blit(matrixStack, i + 145, j + 59, 176, 0, 7, 13);
@@ -39,7 +39,7 @@ public static final ResourceLocation BLAST_FURNACE_GUI_TEXTURES = new ResourceLo
 		if (te.hasHeat && te.hasHeater) this.blit(matrixStack, i + 95, j + 69, 176, 31, 25, 9);
 		
 		if (!te.oxygenStorage.isEmpty()) {
-			float fluidA = te.oxygenStorage.getAmount() / (float) this.container.getTileEntity().maxFluidStorage;
+			float fluidA = te.oxygenStorage.getAmount() / (float) this.menu.getTileEntity().maxFluidStorage;
 			FluidBarTexture.drawFluidTexture(matrixStack, this, te.oxygenStorage.getFluid(), i + 15, j + 71, 16, (int) (fluidA * 56));
 		}
 		

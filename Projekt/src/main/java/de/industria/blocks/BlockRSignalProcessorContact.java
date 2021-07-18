@@ -59,23 +59,23 @@ public class BlockRSignalProcessorContact extends BlockContainerBase implements 
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	
 	public BlockRSignalProcessorContact() {
-		super("signal_processor_contact", Material.IRON, 1, SoundType.METAL);
-		this.setDefaultState(this.stateContainer.getBaseState().with(OPEN, false));
+		super("signal_processor_contact", Material.METAL, 1, SoundType.METAL);
+		this.registerDefaultState(this.stateDefinition.any().setValue(OPEN, false));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(OPEN, FACING, WATERLOGGED);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		BlockState replaceState = context.getWorld().getBlockState(context.getPos());
-		return this.getDefaultState().with(FACING, context.getNearestLookingDirection().getOpposite()).with(WATERLOGGED, replaceState.getBlock() == Blocks.WATER);
+		BlockState replaceState = context.getLevel().getBlockState(context.getClickedPos());
+		return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite()).setValue(WATERLOGGED, replaceState.getBlock() == Blocks.WATER);
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
 	
@@ -83,42 +83,42 @@ public class BlockRSignalProcessorContact extends BlockContainerBase implements 
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		
-		switch ((Direction) state.get(FACING)) {
-		case NORTH: return VoxelShapes.or(Block.makeCuboidShape(0, 0, 8, 16, 2, 16), VoxelShapes.or(Block.makeCuboidShape(0, 2, 8, 2, 14, 16)), VoxelShapes.or(Block.makeCuboidShape(14, 2, 8, 16, 14, 16)), VoxelShapes.or(Block.makeCuboidShape(0, 14, 8, 16, 16, 16)), VoxelShapes.or(Block.makeCuboidShape(0, 0, 15, 16, 16, 16)));
-		case SOUTH: return VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 16, 2, 8), VoxelShapes.or(Block.makeCuboidShape(0, 2, 0, 2, 14, 8)), VoxelShapes.or(Block.makeCuboidShape(14, 2, 0, 16, 14, 8)), VoxelShapes.or(Block.makeCuboidShape(0, 14, 0, 16, 16, 8)), VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 16, 16, 1)));
-		case EAST: return VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 8, 2, 16), VoxelShapes.or(Block.makeCuboidShape(0, 2, 0, 8, 14, 2)), VoxelShapes.or(Block.makeCuboidShape(0, 2, 14, 8, 14, 16)), VoxelShapes.or(Block.makeCuboidShape(0, 14, 0, 8, 16, 16)), VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 1, 16, 16)));
-		case WEST: return VoxelShapes.or(Block.makeCuboidShape(8, 0, 0, 16, 2, 16), VoxelShapes.or(Block.makeCuboidShape(8, 2, 0, 16, 14, 2)), VoxelShapes.or(Block.makeCuboidShape(8, 2, 14, 16, 14, 16)), VoxelShapes.or(Block.makeCuboidShape(8, 14, 0, 16, 16, 16)), VoxelShapes.or(Block.makeCuboidShape(15, 0, 0, 16, 16, 16)));
-		case DOWN: return VoxelShapes.or(Block.makeCuboidShape(0, 8, 0, 2, 16, 16), VoxelShapes.or(Block.makeCuboidShape(2, 8, 0, 14, 16, 2)), VoxelShapes.or(Block.makeCuboidShape(2, 8, 14, 14, 16, 16)), VoxelShapes.or(Block.makeCuboidShape(14, 8, 0, 16, 16, 16)), VoxelShapes.or(Block.makeCuboidShape(0, 15, 0, 16, 16, 16)));
-		case UP: return VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 2, 8, 16), VoxelShapes.or(Block.makeCuboidShape(2, 0, 0, 14, 8, 2)), VoxelShapes.or(Block.makeCuboidShape(2, 0, 14, 14, 8, 16)), VoxelShapes.or(Block.makeCuboidShape(14, 0, 0, 16, 8, 16)), VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 16, 1, 16)));
+		switch ((Direction) state.getValue(FACING)) {
+		case NORTH: return VoxelShapes.or(Block.box(0, 0, 8, 16, 2, 16), VoxelShapes.or(Block.box(0, 2, 8, 2, 14, 16)), VoxelShapes.or(Block.box(14, 2, 8, 16, 14, 16)), VoxelShapes.or(Block.box(0, 14, 8, 16, 16, 16)), VoxelShapes.or(Block.box(0, 0, 15, 16, 16, 16)));
+		case SOUTH: return VoxelShapes.or(Block.box(0, 0, 0, 16, 2, 8), VoxelShapes.or(Block.box(0, 2, 0, 2, 14, 8)), VoxelShapes.or(Block.box(14, 2, 0, 16, 14, 8)), VoxelShapes.or(Block.box(0, 14, 0, 16, 16, 8)), VoxelShapes.or(Block.box(0, 0, 0, 16, 16, 1)));
+		case EAST: return VoxelShapes.or(Block.box(0, 0, 0, 8, 2, 16), VoxelShapes.or(Block.box(0, 2, 0, 8, 14, 2)), VoxelShapes.or(Block.box(0, 2, 14, 8, 14, 16)), VoxelShapes.or(Block.box(0, 14, 0, 8, 16, 16)), VoxelShapes.or(Block.box(0, 0, 0, 1, 16, 16)));
+		case WEST: return VoxelShapes.or(Block.box(8, 0, 0, 16, 2, 16), VoxelShapes.or(Block.box(8, 2, 0, 16, 14, 2)), VoxelShapes.or(Block.box(8, 2, 14, 16, 14, 16)), VoxelShapes.or(Block.box(8, 14, 0, 16, 16, 16)), VoxelShapes.or(Block.box(15, 0, 0, 16, 16, 16)));
+		case DOWN: return VoxelShapes.or(Block.box(0, 8, 0, 2, 16, 16), VoxelShapes.or(Block.box(2, 8, 0, 14, 16, 2)), VoxelShapes.or(Block.box(2, 8, 14, 14, 16, 16)), VoxelShapes.or(Block.box(14, 8, 0, 16, 16, 16)), VoxelShapes.or(Block.box(0, 15, 0, 16, 16, 16)));
+		case UP: return VoxelShapes.or(Block.box(0, 0, 0, 2, 8, 16), VoxelShapes.or(Block.box(2, 0, 0, 14, 8, 2)), VoxelShapes.or(Block.box(2, 0, 14, 14, 8, 16)), VoxelShapes.or(Block.box(14, 0, 0, 16, 8, 16)), VoxelShapes.or(Block.box(0, 0, 0, 16, 1, 16)));
 		default: return super.getShape(state, worldIn, pos, context);
 		}
 		
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
 		if (handIn == Hand.MAIN_HAND) {
 			
-			if (player.isSneaking()) {
+			if (player.isShiftKeyDown()) {
 				
-				worldIn.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, state.get(OPEN) ? SoundEvents.BLOCK_WOODEN_TRAPDOOR_CLOSE : SoundEvents.BLOCK_WOODEN_TRAPDOOR_OPEN, SoundCategory.BLOCKS, 1, 1, false);
+				worldIn.playLocalSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, state.getValue(OPEN) ? SoundEvents.WOODEN_TRAPDOOR_CLOSE : SoundEvents.WOODEN_TRAPDOOR_OPEN, SoundCategory.BLOCKS, 1, 1, false);
 				
-				if (!worldIn.isRemote()) {
+				if (!worldIn.isClientSide()) {
 					
-					worldIn.setBlockState(pos, state.with(OPEN, !state.get(OPEN)));
+					worldIn.setBlockAndUpdate(pos, state.setValue(OPEN, !state.getValue(OPEN)));
 					
-					TileEntity tileEntity = worldIn.getTileEntity(pos);
+					TileEntity tileEntity = worldIn.getBlockEntity(pos);
 					if (tileEntity instanceof TileEntityRSignalProcessorContact) ((TileEntityRSignalProcessorContact) tileEntity).getVariables().clear();
 					
 				}
 				
 				return ActionResultType.CONSUME;
 				
-			} else if (state.get(OPEN) && !worldIn.isRemote()) {
+			} else if (state.getValue(OPEN) && !worldIn.isClientSide()) {
 				
-				TileEntity tileEntity = worldIn.getTileEntity(pos);
-				ItemStack heldStack = player.getHeldItemMainhand();
+				TileEntity tileEntity = worldIn.getBlockEntity(pos);
+				ItemStack heldStack = player.getMainHandItem();
 				boolean flag1 = false;
 				
 				if (tileEntity instanceof TileEntityRSignalProcessorContact) {
@@ -154,18 +154,18 @@ public class BlockRSignalProcessorContact extends BlockContainerBase implements 
 					
 				}
 				
-				player.inventory.mainInventory.set(player.inventory.currentItem, heldStack);
+				player.inventory.items.set(player.inventory.selected, heldStack);
 				return flag1 ? ActionResultType.CONSUME : ActionResultType.PASS;
 				
 			} else {
 				
-				TileEntity tileEntity = worldIn.getTileEntity(pos);
+				TileEntity tileEntity = worldIn.getBlockEntity(pos);
 				
 				if (tileEntity instanceof TileEntityRSignalProcessorContact) {
 					
 					if (((TileEntityRSignalProcessorContact) tileEntity).hasProcessor()) {
 						
-						if (!worldIn.isRemote()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
+						if (!worldIn.isClientSide()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tileEntity, pos);
 						return ActionResultType.CONSUME;
 						
 					}
@@ -181,9 +181,9 @@ public class BlockRSignalProcessorContact extends BlockContainerBase implements 
 	}
 	
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+	public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
 
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		
 		if (tileEntity instanceof TileEntityRSignalProcessorContact) {
 			
@@ -191,13 +191,13 @@ public class BlockRSignalProcessorContact extends BlockContainerBase implements 
 				
 				ItemStack drop = ((TileEntityRSignalProcessorContact) tileEntity).getProcessorStack();
 				
-				worldIn.addEntity(new ItemEntity(worldIn, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, drop.copy()));
+				worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, drop.copy()));
 				
 			}
 			
 		}
 		
-		super.onBlockHarvested(worldIn, pos, state, player);
+		super.playerWillDestroy(worldIn, pos, state, player);
 	}
 	
 	@Override
@@ -205,7 +205,7 @@ public class BlockRSignalProcessorContact extends BlockContainerBase implements 
 		
 		if (rand.nextInt(5) == 0) {
 			
-			TileEntity tileEntity = worldIn.getTileEntity(pos);
+			TileEntity tileEntity = worldIn.getBlockEntity(pos);
 			
 			if (tileEntity instanceof TileEntityRSignalProcessorContact ? ((TileEntityRSignalProcessorContact) tileEntity).hasProcessor() : false) {
 				
@@ -215,7 +215,7 @@ public class BlockRSignalProcessorContact extends BlockContainerBase implements 
 				float d2 = (rand.nextFloat() - 0.5F) * width;
 				Vector3f offVec = new Vector3f(0, 0, 0);
 				
-				switch (stateIn.get(FACING)) {
+				switch (stateIn.getValue(FACING)) {
 				case SOUTH: offVec = new Vector3f(d1, d2, -3.5F * f); break;
 				case NORTH: offVec = new Vector3f(d1, d2, 3.5F * f); break;
 				case EAST: offVec = new Vector3f(-3.5F * f, d1, d2); break;
@@ -225,7 +225,7 @@ public class BlockRSignalProcessorContact extends BlockContainerBase implements 
 				default: offVec = new Vector3f(0, 0, 0); break;
 				}
 				
-				worldIn.addParticle(ParticleTypes.DRIPPING_OBSIDIAN_TEAR, pos.getX() + 0.5F + offVec.getX(), pos.getY() + 0.4F + offVec.getY(), pos.getZ() + 0.5F + offVec.getZ(), 0, 0, 0);
+				worldIn.addParticle(ParticleTypes.DRIPPING_OBSIDIAN_TEAR, pos.getX() + 0.5F + offVec.x(), pos.getY() + 0.4F + offVec.y(), pos.getZ() + 0.5F + offVec.z(), 0, 0, 0);
 				
 			}
 			
@@ -234,14 +234,14 @@ public class BlockRSignalProcessorContact extends BlockContainerBase implements 
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileEntityRSignalProcessorContact();
 	}
 
 	@Override
 	public void onReciveSignal(World worldIn, BlockPos pos, RedstoneControlSignal signal, Direction side) {
 		
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		
 		if (tileEntity instanceof TileEntityRSignalProcessorContact) {
 			
@@ -254,22 +254,22 @@ public class BlockRSignalProcessorContact extends BlockContainerBase implements 
 	@Override
 	public boolean canConectSignalWire(IWorldReader world, BlockPos pos, Direction side) {
 		BlockState state = world.getBlockState(pos);
-		return state.getBlock() == this ? side != state.get(FACING) : false;
+		return state.getBlock() == this ? side != state.getValue(FACING) : false;
 	}
 	
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(FACING, rot.rotate(state.get(FACING)));
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
 	}
 	
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 
 	@Override
 	public FluidState getFluidState(BlockState state) {
-		return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluid().getDefaultState() : Fluids.EMPTY.getDefaultState();
+		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource().defaultFluidState() : Fluids.EMPTY.defaultFluidState();
 	}
 
 	@Override
@@ -279,7 +279,7 @@ public class BlockRSignalProcessorContact extends BlockContainerBase implements 
 
 	@Override
 	public NetworkDeviceIP getIP(BlockPos pos, BlockState state, World world) {
-		TileEntity tileEntity = world.getTileEntity(pos);
+		TileEntity tileEntity = world.getBlockEntity(pos);
 		if (tileEntity instanceof TileEntityRSignalProcessorContact) {
 			return ((TileEntityRSignalProcessorContact) tileEntity).deviceIP;
 		}
@@ -288,7 +288,7 @@ public class BlockRSignalProcessorContact extends BlockContainerBase implements 
 
 	@Override
 	public void setIP(NetworkDeviceIP ip, BlockPos pos, BlockState state, World world) {
-		TileEntity tileEntity = world.getTileEntity(pos);
+		TileEntity tileEntity = world.getBlockEntity(pos);
 		if (tileEntity instanceof TileEntityRSignalProcessorContact) {
 			((TileEntityRSignalProcessorContact) tileEntity).deviceIP = ip;
 		}
@@ -297,12 +297,12 @@ public class BlockRSignalProcessorContact extends BlockContainerBase implements 
 	@Override
 	public boolean canConectNetworkWire(IWorldReader world, BlockPos pos, Direction side) {
 		BlockState state = world.getBlockState(pos);
-		return state.getBlock() == this ? side != state.get(FACING) : false;
+		return state.getBlock() == this ? side != state.getValue(FACING) : false;
 	}
 	
 	@Override
 	public void onMessageRecived(NetworkMessage message, World world, BlockPos pos, BlockState state) {
-		TileEntity tileEntity = world.getTileEntity(pos);
+		TileEntity tileEntity = world.getBlockEntity(pos);
 		if (tileEntity instanceof TileEntityRSignalProcessorContact) {
 			((TileEntityRSignalProcessorContact) tileEntity).onMessageRecived(message);
 		}

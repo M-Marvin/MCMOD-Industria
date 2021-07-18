@@ -35,9 +35,9 @@ public class MinecartHandler extends WorldSavedData {
 	
 	public static MinecartHandler getHandlerForWorld(IWorld world) {
 		
-		if (!world.isRemote()) {
-			DimensionSavedDataManager storage = ((ServerWorld) world).getSavedData();
-			MinecartHandler handler = storage.getOrCreate(() -> new MinecartHandler(world), "minecartBoosts");
+		if (!world.isClientSide()) {
+			DimensionSavedDataManager storage = ((ServerWorld) world).getDataStorage();
+			MinecartHandler handler = storage.computeIfAbsent(() -> new MinecartHandler(world), "minecartBoosts");
 			return handler;
 		} else {
 			if (clientInstance == null) clientInstance = new MinecartHandler(false);
@@ -51,13 +51,13 @@ public class MinecartHandler extends WorldSavedData {
 	}
 	
 	public void setBoosted(AbstractMinecartEntity cart) {
-		this.boostedMinecarts.put(cart, cart.world.getGameTime());
-		this.markDirty();
+		this.boostedMinecarts.put(cart, cart.level.getGameTime());
+		this.setDirty();
 	}
 	
 	public void stopBoosted(AbstractMinecartEntity cart) {
 		this.boostedMinecarts.remove(cart);
-		this.markDirty();
+		this.setDirty();
 	}
 	
 	public boolean isBoosted(AbstractMinecartEntity cart) {
@@ -74,8 +74,8 @@ public class MinecartHandler extends WorldSavedData {
 				this.stopBoosted(entry.getKey());
 			}
 			
-			Block railBlock1 = world.getBlockState(entry.getKey().getPosition()).getBlock();
-			Block railBlock2 = world.getBlockState(entry.getKey().getPosition().down()).getBlock();
+			Block railBlock1 = world.getBlockState(entry.getKey().blockPosition()).getBlock();
+			Block railBlock2 = world.getBlockState(entry.getKey().blockPosition().below()).getBlock();
 			if (railBlock1 != ModItems.steel_rail && railBlock1 != ModItems.inductive_rail && railBlock2 != ModItems.steel_rail && railBlock2 != ModItems.inductive_rail && (railBlock1 instanceof AbstractRailBlock || railBlock2 instanceof AbstractRailBlock)) {
 				this.stopBoosted(entry.getKey());
 			}
@@ -85,7 +85,7 @@ public class MinecartHandler extends WorldSavedData {
 	}
 	
 	@Override
-	public void read(CompoundNBT nbt) {
+	public void load(CompoundNBT nbt) {
 //		ListNBT carts = nbt.getList("Minecarts", 10);
 //		for (int i = 0; i < carts.size(); i++) {
 //			CompoundNBT cart = carts.getCompound(i);
@@ -96,12 +96,12 @@ public class MinecartHandler extends WorldSavedData {
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		CompoundNBT nbt = new CompoundNBT();
 		ListNBT carts = new ListNBT();
 		for (Entry<AbstractMinecartEntity, Long> entry : this.boostedMinecarts.entrySet()) {
 			CompoundNBT cart = new CompoundNBT();
-			cart.putUniqueId("UUID", entry.getKey().getUniqueID());
+			cart.putUUID("UUID", entry.getKey().getUUID());
 			cart.putLong("BoostTime", entry.getValue());
 			carts.add(cart);
 		}

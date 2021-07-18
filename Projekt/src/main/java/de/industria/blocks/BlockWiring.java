@@ -47,62 +47,62 @@ public abstract class BlockWiring extends BlockBase implements IWaterLoggable {
 	public BlockWiring(String name, Material material, float hardnessAndResistance, SoundType sound, int size) {
 		super(name, material, hardnessAndResistance, sound, true);
 		int halfSize = size / 2;
-		this.S_NORTH = Block.makeCuboidShape(8 - halfSize, 0, 0, 8 + halfSize, halfSize * 2, 8 - halfSize);
-		this.S_SOUTH = Block.makeCuboidShape(8 - halfSize, 0, 8 + halfSize, 8 + halfSize, halfSize * 2, 16);
-		this.S_WEST = Block.makeCuboidShape(0, 0, 8 - halfSize, 8 - halfSize, halfSize * 2, 8 + halfSize);
-		this.S_EAST = Block.makeCuboidShape(8 + halfSize, 0, 8 - halfSize, 16, halfSize * 2, 8 + halfSize);
-		this.S_UP = Block.makeCuboidShape(8 - halfSize, size, 8 - halfSize, 8 + halfSize, 16, 8 + halfSize);
-		this.S_MIDDLE = Block.makeCuboidShape(8 - halfSize, 0, 8 - halfSize, 8 + halfSize, size, 8 + halfSize);
+		this.S_NORTH = Block.box(8 - halfSize, 0, 0, 8 + halfSize, halfSize * 2, 8 - halfSize);
+		this.S_SOUTH = Block.box(8 - halfSize, 0, 8 + halfSize, 8 + halfSize, halfSize * 2, 16);
+		this.S_WEST = Block.box(0, 0, 8 - halfSize, 8 - halfSize, halfSize * 2, 8 + halfSize);
+		this.S_EAST = Block.box(8 + halfSize, 0, 8 - halfSize, 16, halfSize * 2, 8 + halfSize);
+		this.S_UP = Block.box(8 - halfSize, size, 8 - halfSize, 8 + halfSize, 16, 8 + halfSize);
+		this.S_MIDDLE = Block.box(8 - halfSize, 0, 8 - halfSize, 8 + halfSize, size, 8 + halfSize);
 		this.SHAPES = new VoxelShape[] {VoxelShapes.empty(), S_UP, S_NORTH, S_SOUTH, S_WEST, S_EAST};
-		this.setDefaultState(this.stateContainer.getBaseState().with(WATERLOGGED, false).with(NORTH, false).with(SOUTH, false).with(EAST, false).with(WEST, false).with(UP, false).with(DOWN, false));
+		this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false).setValue(NORTH, false).setValue(SOUTH, false).setValue(EAST, false).setValue(WEST, false).setValue(UP, false).setValue(DOWN, false));
 	}
 	
 	@Override
 	public FluidState getFluidState(BlockState state) {
-		return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluid().getDefaultState() : Fluids.EMPTY.getDefaultState();
+		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource().defaultFluidState() : Fluids.EMPTY.defaultFluidState();
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(NORTH, SOUTH, EAST, WEST, UP, DOWN, MIDDLE, WATERLOGGED);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
 		
-		BlockState state = updateState(this.getDefaultState(), context.getWorld(), context.getPos());
+		BlockState state = updateState(this.defaultBlockState(), context.getLevel(), context.getClickedPos());
 
-		BlockState replaceState = context.getWorld().getBlockState(context.getPos());
-		return state.with(WATERLOGGED, replaceState.getBlock() == Blocks.WATER);
+		BlockState replaceState = context.getLevel().getBlockState(context.getClickedPos());
+		return state.setValue(WATERLOGGED, replaceState.getBlock() == Blocks.WATER);
 		
 	}
 	
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 		BlockState newState = updateState(state, worldIn, pos);
-		if (!newState.equals(state)) worldIn.setBlockState(pos, newState);
+		if (!newState.equals(state)) worldIn.setBlockAndUpdate(pos, newState);
 	}
 	
 	public BlockState updateState(BlockState state, World worldIn, BlockPos pos) {
 		
 		for (Direction side : Direction.values()) {
 			
-			BooleanProperty prop = CONNECTIONS[side.getIndex()];
-			boolean mustConnect = canConnectTo(state, worldIn, pos, pos.offset(side), side.getOpposite());
-			boolean isConnected = state.get(prop);
+			BooleanProperty prop = CONNECTIONS[side.get3DDataValue()];
+			boolean mustConnect = canConnectTo(state, worldIn, pos, pos.relative(side), side.getOpposite());
+			boolean isConnected = state.getValue(prop);
 			
-			if (mustConnect != isConnected) state = state.with(prop, mustConnect);
+			if (mustConnect != isConnected) state = state.setValue(prop, mustConnect);
 			
 		}
 		
 		int connections = countConnections(state);
 		MiddleState mState = MiddleState.CLOSED;
-		if (connections == 1 && !state.get(DOWN)) {
+		if (connections == 1 && !state.getValue(DOWN)) {
 			mState = MiddleState.NONE;
 		} else if (connections == 1 || connections == 0) {
 			mState = MiddleState.OPEN;
 		}
-		state = state.with(MIDDLE, mState);
+		state = state.setValue(MIDDLE, mState);
 		
 		return state;
 		
@@ -111,10 +111,10 @@ public abstract class BlockWiring extends BlockBase implements IWaterLoggable {
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		
-		VoxelShape shape = state.get(MIDDLE) != MiddleState.NONE ? S_MIDDLE : VoxelShapes.empty();
+		VoxelShape shape = state.getValue(MIDDLE) != MiddleState.NONE ? S_MIDDLE : VoxelShapes.empty();
 		for (Direction direction : Direction.values()) {
-			if (state.get(CONNECTIONS[direction.getIndex()])) {
-				shape = VoxelShapes.or(shape, SHAPES[direction.getIndex()]);
+			if (state.getValue(CONNECTIONS[direction.get3DDataValue()])) {
+				shape = VoxelShapes.or(shape, SHAPES[direction.get3DDataValue()]);
 			}
 		}
 		
@@ -123,7 +123,7 @@ public abstract class BlockWiring extends BlockBase implements IWaterLoggable {
 	}
 	
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
 	
@@ -134,7 +134,7 @@ public abstract class BlockWiring extends BlockBase implements IWaterLoggable {
 	public int countConnections(BlockState state) {
 		int connections = 0;
 		for (BooleanProperty side : CONNECTIONS) {
-			if (state.get(side)) connections++;
+			if (state.getValue(side)) connections++;
 		}
 		return connections;
 	}
@@ -156,7 +156,7 @@ public abstract class BlockWiring extends BlockBase implements IWaterLoggable {
 		}
 
 		@Override
-		public String getString() {
+		public String getSerializedName() {
 			return this.name;
 		}
 		

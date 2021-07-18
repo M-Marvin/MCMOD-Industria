@@ -19,7 +19,7 @@ public class BlockWeatheringSlab extends BlockSlabBase {
 	}
 	
 	@Override
-	public boolean ticksRandomly(BlockState state) {
+	public boolean isRandomlyTicking(BlockState state) {
 		return true;
 	}
 	
@@ -28,7 +28,7 @@ public class BlockWeatheringSlab extends BlockSlabBase {
 		
 		if (random.nextInt(2400) == 0) {
 			
-			worldIn.setBlockState(pos, this.weatheredBlock.getDefaultState().with(BlockSlabBase.TYPE, state.get(TYPE)));
+			worldIn.setBlockAndUpdate(pos, this.weatheredBlock.defaultBlockState().setValue(BlockSlabBase.TYPE, state.getValue(TYPE)));
 			
 		}
 		

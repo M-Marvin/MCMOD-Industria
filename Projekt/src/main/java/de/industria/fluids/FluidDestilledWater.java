@@ -29,32 +29,32 @@ public abstract class FluidDestilledWater extends FlowingFluid {
 	public static final BooleanProperty HOT = BooleanProperty.create("hot");
 	
 	public FluidDestilledWater() {
-		this.setDefaultState(this.stateContainer.getBaseState().with(HOT, false));
+		this.registerDefaultState(this.stateDefinition.any().setValue(HOT, false));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Fluid, FluidState> builder) {
+	protected void createFluidStateDefinition(Builder<Fluid, FluidState> builder) {
 		builder.add(HOT);
-		super.fillStateContainer(builder);
+		super.createFluidStateDefinition(builder);
 	}
 	
 	@Override
-	public Fluid getFlowingFluid() {
+	public Fluid getFlowing() {
 		return ModFluids.FLOWING_DESTILLED_WATER;
 	}
 
 	@Override
-	public Fluid getStillFluid() {
+	public Fluid getSource() {
 		return ModFluids.DESTILLED_WATER;
 	}
 
 	@Override
-	protected boolean canSourcesMultiply() {
+	protected boolean canConvertToSource() {
 		return false;
 	}
 
 	@Override
-	protected void beforeReplacingBlock(IWorld worldIn, BlockPos pos, BlockState state) {}
+	protected void beforeDestroyingBlock(IWorld worldIn, BlockPos pos, BlockState state) {}
 
 	@Override
 	protected int getSlopeFindDistance(IWorldReader worldIn) {
@@ -62,22 +62,22 @@ public abstract class FluidDestilledWater extends FlowingFluid {
 	}
 
 	@Override
-	protected int getLevelDecreasePerBlock(IWorldReader worldIn) {
+	protected int getDropOff(IWorldReader worldIn) {
 		return 1;
 	}
 
 	@Override
-	public Item getFilledBucket() {
+	public Item getBucket() {
 		return ModItems.destilled_water_bucket;
 	}
 
 	@Override
-	protected boolean canDisplace(FluidState p_215665_1_, IBlockReader p_215665_2_, BlockPos p_215665_3_, Fluid p_215665_4_, Direction p_215665_5_) {
-		return p_215665_5_ == Direction.DOWN && !p_215665_4_.isEquivalentTo(this);
+	protected boolean canBeReplacedWith(FluidState p_215665_1_, IBlockReader p_215665_2_, BlockPos p_215665_3_, Fluid p_215665_4_, Direction p_215665_5_) {
+		return p_215665_5_ == Direction.DOWN && !p_215665_4_.isSame(this);
 	}
 
 	@Override
-	public int getTickRate(IWorldReader p_205569_1_) {
+	public int getTickDelay(IWorldReader p_205569_1_) {
 		return 5;
 	}
 
@@ -87,8 +87,8 @@ public abstract class FluidDestilledWater extends FlowingFluid {
 	}
 
 	@Override
-	protected BlockState getBlockState(FluidState state) {
-		return ModItems.destilled_water.getDefaultState().with(BlockModFlowingFluid.LEVEL, getLevelFromState(state)).with(BlockDestilledWater.HOT, state.get(HOT));
+	protected BlockState createLegacyBlock(FluidState state) {
+		return ModItems.destilled_water.defaultBlockState().setValue(BlockModFlowingFluid.LEVEL, getLegacyLevel(state)).setValue(BlockDestilledWater.HOT, state.getValue(HOT));
 	}
 	
 	@Override
@@ -101,16 +101,16 @@ public abstract class FluidDestilledWater extends FlowingFluid {
 	}
 	
 	@Override
-	public boolean isEquivalentTo(Fluid fluidIn) {
+	public boolean isSame(Fluid fluidIn) {
 		return fluidIn == ModFluids.DESTILLED_WATER || fluidIn == ModFluids.FLOWING_DESTILLED_WATER;
 	}
 
 	@Override
 	protected void randomTick(World world, BlockPos pos, FluidState state, Random random) {
 
-		if (random.nextInt(80) == 0 && state.get(HOT)) {
+		if (random.nextInt(80) == 0 && state.getValue(HOT)) {
 			
-			world.setBlockState(pos, state.with(HOT, false).getBlockState());
+			world.setBlockAndUpdate(pos, state.setValue(HOT, false).createLegacyBlock());
 			
 		}
 		
@@ -124,7 +124,7 @@ public abstract class FluidDestilledWater extends FlowingFluid {
 		}
 
 		@Override
-		public int getLevel(FluidState state) {
+		public int getAmount(FluidState state) {
 			return 8;
 		}
 
@@ -135,17 +135,17 @@ public abstract class FluidDestilledWater extends FlowingFluid {
 				
 				for (Direction d : Direction.values()) {
 					
-					BlockState state2 = world.getBlockState(pos.offset(d));
+					BlockState state2 = world.getBlockState(pos.relative(d));
 					boolean isIce =
 							state2.getBlock() == Blocks.BLUE_ICE ||
 							state2.getBlock() == Blocks.ICE ||
 							state2.getBlock() == Blocks.PACKED_ICE ||
 							state2.getBlock() == Blocks.FROSTED_ICE;
-					boolean isWater = state2.getFluidState().getFluid().isEquivalentTo(Fluids.WATER);
+					boolean isWater = state2.getFluidState().getType().isSame(Fluids.WATER);
 					
 					if (isIce || isWater) {
 						
-						world.setBlockState(pos, Fluids.WATER.getDefaultState().getBlockState());
+						world.setBlockAndUpdate(pos, Fluids.WATER.defaultFluidState().createLegacyBlock());
 						
 					}
 					
@@ -158,7 +158,7 @@ public abstract class FluidDestilledWater extends FlowingFluid {
 		}
 		
 		@Override
-		protected boolean ticksRandomly() {
+		protected boolean isRandomlyTicking() {
 			return true;
 		}
 		
@@ -172,14 +172,14 @@ public abstract class FluidDestilledWater extends FlowingFluid {
 		}
 
 		@Override
-		public int getLevel(FluidState state) {
-			return state.get(LEVEL_1_8);
+		public int getAmount(FluidState state) {
+			return state.getValue(LEVEL);
 		}
 		
 		@Override
-		protected void fillStateContainer(Builder<Fluid, FluidState> builder) {
-			builder.add(LEVEL_1_8);
-			super.fillStateContainer(builder);
+		protected void createFluidStateDefinition(Builder<Fluid, FluidState> builder) {
+			builder.add(LEVEL);
+			super.createFluidStateDefinition(builder);
 		}
 		
 		@Override
@@ -187,23 +187,23 @@ public abstract class FluidDestilledWater extends FlowingFluid {
 
 			super.tick(worldIn, pos, state);
 			
-			if (state.get(FlowingFluid.FALLING)) {
-				FluidState source = worldIn.getFluidState(pos.up());
-				if (source.getFluid().isEquivalentTo(this)) worldIn.setBlockState(pos, state.with(HOT, source.get(HOT)).getBlockState());
+			if (state.getValue(FlowingFluid.FALLING)) {
+				FluidState source = worldIn.getFluidState(pos.above());
+				if (source.getType().isSame(this)) worldIn.setBlockAndUpdate(pos, state.setValue(HOT, source.getValue(HOT)).createLegacyBlock());
 			} else {
 
 				for (Direction d : Direction.Plane.HORIZONTAL) {
 					
-					BlockPos blockpos = pos.offset(d);
+					BlockPos blockpos = pos.relative(d);
 					FluidState fluid = worldIn.getFluidState(blockpos);
 					
-					if (fluid.getFluid().isEquivalentTo(this)) {
+					if (fluid.getType().isSame(this)) {
 						
-						int level1 = fluid.getLevel();
-						int level2 = state.getLevel();
+						int level1 = fluid.getAmount();
+						int level2 = state.getAmount();
 						
 						if (level1 > level2) {
-							worldIn.setBlockState(pos, state.with(HOT, fluid.get(HOT)).getBlockState());
+							worldIn.setBlockAndUpdate(pos, state.setValue(HOT, fluid.getValue(HOT)).createLegacyBlock());
 							break;
 						}
 						
@@ -218,11 +218,11 @@ public abstract class FluidDestilledWater extends FlowingFluid {
 	}
 
 	public FluidState getHot() {
-		return this.getDefaultState().with(HOT, true);
+		return this.defaultFluidState().setValue(HOT, true);
 	}
 	
 	public FluidState getCold() {
-		return this.getDefaultState().with(HOT, false);
+		return this.defaultFluidState().setValue(HOT, false);
 	}
 	
 }

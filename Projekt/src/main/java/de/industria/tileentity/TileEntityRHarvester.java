@@ -32,14 +32,14 @@ public class TileEntityRHarvester extends TileEntity implements IInventory, INam
 	}
 
 	@Override
-	public void clear() {
+	public void clearContent() {
 		for (int i = 0; i < 9; i++) {
 			this.itemstacks.set(i, ItemStack.EMPTY);
 		}
 	}
 
 	@Override
-	public int getSizeInventory() {
+	public int getContainerSize() {
 		return 9;
 	}
 
@@ -52,12 +52,12 @@ public class TileEntityRHarvester extends TileEntity implements IInventory, INam
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int index) {
+	public ItemStack getItem(int index) {
 		return this.itemstacks.get(index);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int index, int count) {
+	public ItemStack removeItem(int index, int count) {
 		ItemStack stack = this.itemstacks.get(index).copy();
 		this.itemstacks.get(index).shrink(count);
 		stack.setCount(count);
@@ -65,19 +65,19 @@ public class TileEntityRHarvester extends TileEntity implements IInventory, INam
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int index) {
+	public ItemStack removeItemNoUpdate(int index) {
 		ItemStack stack = this.itemstacks.get(index);
 		this.itemstacks.set(index, ItemStack.EMPTY);
 		return stack;
 	}
 
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack) {
+	public void setItem(int index, ItemStack stack) {
 		this.itemstacks.set(index, stack);
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) {
+	public boolean stillValid(PlayerEntity player) {
 		return true;
 	}
 	
@@ -130,15 +130,15 @@ public class TileEntityRHarvester extends TileEntity implements IInventory, INam
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		net.minecraft.inventory.ItemStackHelper.saveAllItems(compound, this.itemstacks);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		net.minecraft.inventory.ItemStackHelper.loadAllItems(compound, this.itemstacks);
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 	@Override
@@ -156,7 +156,7 @@ public class TileEntityRHarvester extends TileEntity implements IInventory, INam
 
 	@Override
 	public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
-		if (!this.removed && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+		if (!this.remove && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			if (facing == Direction.DOWN)
             return handlers[0].cast();
 			else
@@ -171,12 +171,12 @@ public class TileEntityRHarvester extends TileEntity implements IInventory, INam
 	}
 
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
 		return false;
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return true;
 	}
 	

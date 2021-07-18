@@ -38,30 +38,30 @@ import net.minecraft.world.World;
 public class BlockRAdvancedPistonHead extends DirectionalBlock {
    public static final EnumProperty<PistonType> TYPE = BlockStateProperties.PISTON_TYPE;
    public static final BooleanProperty SHORT = BlockStateProperties.SHORT;
-   protected static final VoxelShape PISTON_EXTENSION_EAST_AABB = Block.makeCuboidShape(12.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-   protected static final VoxelShape PISTON_EXTENSION_WEST_AABB = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 4.0D, 16.0D, 16.0D);
-   protected static final VoxelShape PISTON_EXTENSION_SOUTH_AABB = Block.makeCuboidShape(0.0D, 0.0D, 12.0D, 16.0D, 16.0D, 16.0D);
-   protected static final VoxelShape PISTON_EXTENSION_NORTH_AABB = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 4.0D);
-   protected static final VoxelShape PISTON_EXTENSION_UP_AABB = Block.makeCuboidShape(0.0D, 12.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-   protected static final VoxelShape PISTON_EXTENSION_DOWN_AABB = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D);
-   protected static final VoxelShape UP_ARM_AABB = Block.makeCuboidShape(6.0D, -4.0D, 6.0D, 10.0D, 12.0D, 10.0D);
-   protected static final VoxelShape DOWN_ARM_AABB = Block.makeCuboidShape(6.0D, 4.0D, 6.0D, 10.0D, 20.0D, 10.0D);
-   protected static final VoxelShape SOUTH_ARM_AABB = Block.makeCuboidShape(6.0D, 6.0D, -4.0D, 10.0D, 10.0D, 12.0D);
-   protected static final VoxelShape NORTH_ARM_AABB = Block.makeCuboidShape(6.0D, 6.0D, 4.0D, 10.0D, 10.0D, 20.0D);
-   protected static final VoxelShape EAST_ARM_AABB = Block.makeCuboidShape(-4.0D, 6.0D, 6.0D, 12.0D, 10.0D, 10.0D);
-   protected static final VoxelShape WEST_ARM_AABB = Block.makeCuboidShape(4.0D, 6.0D, 6.0D, 20.0D, 10.0D, 10.0D);
-   protected static final VoxelShape SHORT_UP_ARM_AABB = Block.makeCuboidShape(6.0D, 0.0D, 6.0D, 10.0D, 12.0D, 10.0D);
-   protected static final VoxelShape SHORT_DOWN_ARM_AABB = Block.makeCuboidShape(6.0D, 4.0D, 6.0D, 10.0D, 16.0D, 10.0D);
-   protected static final VoxelShape SHORT_SOUTH_ARM_AABB = Block.makeCuboidShape(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 12.0D);
-   protected static final VoxelShape SHORT_NORTH_ARM_AABB = Block.makeCuboidShape(6.0D, 6.0D, 4.0D, 10.0D, 10.0D, 16.0D);
-   protected static final VoxelShape SHORT_EAST_ARM_AABB = Block.makeCuboidShape(0.0D, 6.0D, 6.0D, 12.0D, 10.0D, 10.0D);
-   protected static final VoxelShape SHORT_WEST_ARM_AABB = Block.makeCuboidShape(4.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D);
-   private static final VoxelShape[] field_242691_y = func_242694_a(true);
-   private static final VoxelShape[] field_242692_z = func_242694_a(false);
+   protected static final VoxelShape PISTON_EXTENSION_EAST_AABB = Block.box(12.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+   protected static final VoxelShape PISTON_EXTENSION_WEST_AABB = Block.box(0.0D, 0.0D, 0.0D, 4.0D, 16.0D, 16.0D);
+   protected static final VoxelShape PISTON_EXTENSION_SOUTH_AABB = Block.box(0.0D, 0.0D, 12.0D, 16.0D, 16.0D, 16.0D);
+   protected static final VoxelShape PISTON_EXTENSION_NORTH_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 4.0D);
+   protected static final VoxelShape PISTON_EXTENSION_UP_AABB = Block.box(0.0D, 12.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+   protected static final VoxelShape PISTON_EXTENSION_DOWN_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D);
+   protected static final VoxelShape UP_ARM_AABB = Block.box(6.0D, -4.0D, 6.0D, 10.0D, 12.0D, 10.0D);
+   protected static final VoxelShape DOWN_ARM_AABB = Block.box(6.0D, 4.0D, 6.0D, 10.0D, 20.0D, 10.0D);
+   protected static final VoxelShape SOUTH_ARM_AABB = Block.box(6.0D, 6.0D, -4.0D, 10.0D, 10.0D, 12.0D);
+   protected static final VoxelShape NORTH_ARM_AABB = Block.box(6.0D, 6.0D, 4.0D, 10.0D, 10.0D, 20.0D);
+   protected static final VoxelShape EAST_ARM_AABB = Block.box(-4.0D, 6.0D, 6.0D, 12.0D, 10.0D, 10.0D);
+   protected static final VoxelShape WEST_ARM_AABB = Block.box(4.0D, 6.0D, 6.0D, 20.0D, 10.0D, 10.0D);
+   protected static final VoxelShape SHORT_UP_ARM_AABB = Block.box(6.0D, 0.0D, 6.0D, 10.0D, 12.0D, 10.0D);
+   protected static final VoxelShape SHORT_DOWN_ARM_AABB = Block.box(6.0D, 4.0D, 6.0D, 10.0D, 16.0D, 10.0D);
+   protected static final VoxelShape SHORT_SOUTH_ARM_AABB = Block.box(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 12.0D);
+   protected static final VoxelShape SHORT_NORTH_ARM_AABB = Block.box(6.0D, 6.0D, 4.0D, 10.0D, 10.0D, 16.0D);
+   protected static final VoxelShape SHORT_EAST_ARM_AABB = Block.box(0.0D, 6.0D, 6.0D, 12.0D, 10.0D, 10.0D);
+   protected static final VoxelShape SHORT_WEST_ARM_AABB = Block.box(4.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D);
+   private static final VoxelShape[] SHAPES_SHORT = makeShapes(true);
+   private static final VoxelShape[] SHAPES_LONG = makeShapes(false);
 
-   private static VoxelShape[] func_242694_a(boolean p_242694_0_) {
+   private static VoxelShape[] makeShapes(boolean p_242694_0_) {
       return Arrays.stream(Direction.values()).map((p_242695_1_) -> {
-         return func_242693_a(p_242695_1_, p_242694_0_);
+         return calculateShape(p_242695_1_, p_242694_0_);
       }).toArray((p_242696_0_) -> {
          return new VoxelShape[p_242696_0_];
       });
@@ -71,11 +71,11 @@ public class BlockRAdvancedPistonHead extends DirectionalBlock {
 	@Override
 	public List<ItemStack> getDrops(BlockState state, Builder builder) {
 		List<ItemStack> drops = new ArrayList<ItemStack>();
-		drops.add(new ItemStack(Item.getItemFromBlock(this), 1));
+		drops.add(new ItemStack(Item.byBlock(this), 1));
 		return drops;
 	}
 	
-   private static VoxelShape func_242693_a(Direction p_242693_0_, boolean p_242693_1_) {
+   private static VoxelShape calculateShape(Direction p_242693_0_, boolean p_242693_1_) {
       switch(p_242693_0_) {
       case DOWN:
       default:
@@ -94,50 +94,50 @@ public class BlockRAdvancedPistonHead extends DirectionalBlock {
    }
 
    public BlockRAdvancedPistonHead(String name) {
-      super(Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 0.5F).sound(SoundType.STONE).doesNotBlockMovement());
+      super(Properties.of(Material.STONE).strength(1.5F, 0.5F).sound(SoundType.STONE).noCollission());
       this.setRegistryName(Industria.MODID, name);
-      this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(TYPE, PistonType.DEFAULT).with(SHORT, Boolean.valueOf(false)));
+      this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(TYPE, PistonType.DEFAULT).setValue(SHORT, Boolean.valueOf(false)));
    }
    
    @Override
-	public PushReaction getPushReaction(BlockState state) {
+	public PushReaction getPistonPushReaction(BlockState state) {
 		return PushReaction.BLOCK;
 	}
 
-   public boolean isTransparent(BlockState state) {
+   public boolean useShapeForLightOcclusion(BlockState state) {
       return true;
    }
 
    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-      return (state.get(SHORT) ? field_242691_y : field_242692_z)[state.get(FACING).ordinal()];
+      return (state.getValue(SHORT) ? SHAPES_SHORT : SHAPES_LONG)[state.getValue(FACING).ordinal()];
    }
 
-   private boolean func_235682_a_(BlockState p_235682_1_, BlockState p_235682_2_) {
-      Block block = p_235682_1_.get(TYPE) == PistonType.DEFAULT ? ModItems.advanced_piston : ModItems.advanced_sticky_piston;
-      return p_235682_2_.isIn(block) && p_235682_2_.get(BlockRAdvancedPiston.EXTENDED) && p_235682_2_.get(FACING) == p_235682_1_.get(FACING);
+   private boolean isFittingBase(BlockState p_235682_1_, BlockState p_235682_2_) {
+      Block block = p_235682_1_.getValue(TYPE) == PistonType.DEFAULT ? ModItems.advanced_piston : ModItems.advanced_sticky_piston;
+      return p_235682_2_.is(block) && p_235682_2_.getValue(BlockRAdvancedPiston.EXTENDED) && p_235682_2_.getValue(FACING) == p_235682_1_.getValue(FACING);
    }
    
    /**
     * Called before the Block is set to air in the world. Called regardless of if the player's tool can actually collect
     * this block
     */
-   public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
-      if (!worldIn.isRemote && player.abilities.isCreativeMode) {
-         BlockPos blockpos = pos.offset(state.get(FACING).getOpposite());
-         if (this.func_235682_a_(state, worldIn.getBlockState(blockpos))) {
+   public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+      if (!worldIn.isClientSide && player.abilities.instabuild) {
+         BlockPos blockpos = pos.relative(state.getValue(FACING).getOpposite());
+         if (this.isFittingBase(state, worldIn.getBlockState(blockpos))) {
             worldIn.destroyBlock(blockpos, false);
          }
       }
 
-      super.onBlockHarvested(worldIn, pos, state, player);
+      super.playerWillDestroy(worldIn, pos, state, player);
    }
 
    @SuppressWarnings("deprecation")
-public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-      if (!state.isIn(newState.getBlock())) {
-         super.onReplaced(state, worldIn, pos, newState, isMoving);
-         BlockPos blockpos = pos.offset(state.get(FACING).getOpposite());
-         if (this.func_235682_a_(state, worldIn.getBlockState(blockpos))) {
+public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+      if (!state.is(newState.getBlock())) {
+         super.onRemove(state, worldIn, pos, newState, isMoving);
+         BlockPos blockpos = pos.relative(state.getValue(FACING).getOpposite());
+         if (this.isFittingBase(state, worldIn.getBlockState(blockpos))) {
             worldIn.destroyBlock(blockpos, true);
          }
 
@@ -151,25 +151,25 @@ public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState
     * Note that this method should ideally consider only the specific face passed in.
     */
    @SuppressWarnings("deprecation")
-   public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-      return facing.getOpposite() == stateIn.get(FACING) && !stateIn.isValidPosition(worldIn, currentPos) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+   public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+      return facing.getOpposite() == stateIn.getValue(FACING) && !stateIn.canSurvive(worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
    }
    
-   public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
-      BlockState blockstate = worldIn.getBlockState(pos.offset(state.get(FACING).getOpposite()));
-      return this.func_235682_a_(state, blockstate) || blockstate.isIn(ModItems.advanced_moving_block) && blockstate.get(FACING) == state.get(FACING);
+   public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos) {
+      BlockState blockstate = worldIn.getBlockState(pos.relative(state.getValue(FACING).getOpposite()));
+      return this.isFittingBase(state, blockstate) || blockstate.is(ModItems.advanced_moving_block) && blockstate.getValue(FACING) == state.getValue(FACING);
    }
    
    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-      if (state.isValidPosition(worldIn, pos)) {
-         BlockPos blockpos = pos.offset(state.get(FACING).getOpposite());
+      if (state.canSurvive(worldIn, pos)) {
+         BlockPos blockpos = pos.relative(state.getValue(FACING).getOpposite());
          worldIn.getBlockState(blockpos).neighborChanged(worldIn, blockpos, blockIn, fromPos, false);
       }
 
    }
 
-   public ItemStack getItem(IBlockReader worldIn, BlockPos pos, BlockState state) {
-      return new ItemStack(state.get(TYPE) == PistonType.STICKY ? ModItems.advanced_sticky_piston : ModItems.advanced_piston);
+   public ItemStack getCloneItemStack(IBlockReader worldIn, BlockPos pos, BlockState state) {
+      return new ItemStack(state.getValue(TYPE) == PistonType.STICKY ? ModItems.advanced_sticky_piston : ModItems.advanced_piston);
    }
 
    /**
@@ -179,7 +179,7 @@ public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState
     * fine.
     */
    public BlockState rotate(BlockState state, Rotation rot) {
-      return state.with(FACING, rot.rotate(state.get(FACING)));
+      return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
    }
 
    /**
@@ -188,14 +188,14 @@ public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState
     * @deprecated call via {@link IBlockState#withMirror(Mirror)} whenever possible. Implementing/overriding is fine.
     */
    public BlockState mirror(BlockState state, Mirror mirrorIn) {
-      return state.rotate(mirrorIn.toRotation(state.get(FACING)));
+      return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
    }
 
-   protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+   protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
       builder.add(FACING, TYPE, SHORT);
    }
 
-   public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
+   public boolean isPathfindable(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
       return false;
    }
 }

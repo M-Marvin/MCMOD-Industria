@@ -19,12 +19,12 @@ public class ThermalZentrifugeRecipeSerializer<T extends ThermalZentrifugeRecipe
 	}
 	
 	@Override
-	public T read(ResourceLocation recipeId, JsonObject json) {
-		ItemStack itemIn = ShapedRecipe.deserializeItem(json.get("ingredient").getAsJsonObject());
+	public T fromJson(ResourceLocation recipeId, JsonObject json) {
+		ItemStack itemIn = ShapedRecipe.itemFromJson(json.get("ingredient").getAsJsonObject());
 		JsonArray resultArr = json.getAsJsonArray("resultItems");
 		ItemStack[] itemsOut = new ItemStack[3];
 		for (int i = 0; i < 3; i++) {
-			itemsOut[i] = resultArr.size() > i ? ShapedRecipe.deserializeItem(resultArr.get(i).getAsJsonObject()) : ItemStack.EMPTY;
+			itemsOut[i] = resultArr.size() > i ? ShapedRecipe.itemFromJson(resultArr.get(i).getAsJsonObject()) : ItemStack.EMPTY;
 		}
 		int rifiningTime = json.get("rifiningTime").getAsInt();
 		
@@ -32,11 +32,11 @@ public class ThermalZentrifugeRecipeSerializer<T extends ThermalZentrifugeRecipe
 	}
 
 	@Override
-	public T read(ResourceLocation recipeId, PacketBuffer buffer) {
-		ItemStack itemIn = buffer.readItemStack();
+	public T fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+		ItemStack itemIn = buffer.readItem();
 		ItemStack[] itemsOut = new ItemStack[3];
 		for (int i = 0; i < 3; i++) {
-			itemsOut[i] = buffer.readItemStack();
+			itemsOut[i] = buffer.readItem();
 		}
 		int rifiningTime = buffer.readInt();
 		
@@ -44,10 +44,10 @@ public class ThermalZentrifugeRecipeSerializer<T extends ThermalZentrifugeRecipe
 	}
 
 	@Override
-	public void write(PacketBuffer buffer, T recipe) {
-		buffer.writeItemStack(recipe.itemIn);
+	public void toNetwork(PacketBuffer buffer, T recipe) {
+		buffer.writeItem(recipe.itemIn);
 		for (int i = 0; i < 3; i++) {
-			buffer.writeItemStack(recipe.itemsOut[0]);
+			buffer.writeItem(recipe.itemsOut[0]);
 		}
 		buffer.writeInt(recipe.rifiningTime);
 	}

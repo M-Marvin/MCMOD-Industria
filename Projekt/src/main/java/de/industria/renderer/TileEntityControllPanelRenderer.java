@@ -27,36 +27,36 @@ public class TileEntityControllPanelRenderer extends TileEntityRenderer<TileEnti
 	public void render(TileEntityControllPanel tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		
 		HashMap<Pos, ItemStack> elements = tileEntityIn.getPanelElements();
-		Direction facing = tileEntityIn.getBlockState().getBlock() == ModItems.controll_panel ? tileEntityIn.getBlockState().get(BlockRControllPanel.FACING) : Direction.NORTH;
+		Direction facing = tileEntityIn.getBlockState().getBlock() == ModItems.controll_panel ? tileEntityIn.getBlockState().getValue(BlockRControllPanel.FACING) : Direction.NORTH;
 		
-		matrixStackIn.push();
+		matrixStackIn.pushPose();
 		
 		switch (facing) {
 		case NORTH: 
 			matrixStackIn.translate(0.5F, 0.5F, 5 * 0.0625F);
-			matrixStackIn.rotate(Vector3f.XN.rotationDegrees(90));
+			matrixStackIn.mulPose(Vector3f.XN.rotationDegrees(90));
 			break;
 		case SOUTH: 
 			matrixStackIn.translate(0.5F, 0.5F, 11 * 0.0625F);
-			matrixStackIn.rotate(Vector3f.XN.rotationDegrees(-90));
-			matrixStackIn.rotate(Vector3f.YN.rotationDegrees(-180));
+			matrixStackIn.mulPose(Vector3f.XN.rotationDegrees(-90));
+			matrixStackIn.mulPose(Vector3f.YN.rotationDegrees(-180));
 			break;
 		case EAST: 
 			matrixStackIn.translate(11 * 0.0625F, 0.5F, 0.5F);
-			matrixStackIn.rotate(Vector3f.YN.rotationDegrees(90));
-			matrixStackIn.rotate(Vector3f.XN.rotationDegrees(90));
+			matrixStackIn.mulPose(Vector3f.YN.rotationDegrees(90));
+			matrixStackIn.mulPose(Vector3f.XN.rotationDegrees(90));
 			break;
 		case WEST: 
 			matrixStackIn.translate(5 * 0.0625F, 0.5F, 0.5F);
-			matrixStackIn.rotate(Vector3f.YN.rotationDegrees(-90));
-			matrixStackIn.rotate(Vector3f.XN.rotationDegrees(90));
+			matrixStackIn.mulPose(Vector3f.YN.rotationDegrees(-90));
+			matrixStackIn.mulPose(Vector3f.XN.rotationDegrees(90));
 			break;
 		case UP: 
 			matrixStackIn.translate(0.5F, 11 * 0.0625F, 0.5F);
 			break;
 		case DOWN: 
 			matrixStackIn.translate(0.5F, 5 * 0.0625F, 0.5F);
-			matrixStackIn.rotate(Vector3f.XN.rotationDegrees(180));
+			matrixStackIn.mulPose(Vector3f.XN.rotationDegrees(180));
 			break;
 		}
 		
@@ -64,15 +64,15 @@ public class TileEntityControllPanelRenderer extends TileEntityRenderer<TileEnti
 			
 			Pos position = element.getKey();
 
-			matrixStackIn.push();
+			matrixStackIn.pushPose();
 			
 			((ItemPanelElement) element.getValue().getItem()).draw(position.getX(), position.getY(), element.getValue(), combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
 
-			matrixStackIn.pop();
+			matrixStackIn.popPose();
 			
 		}
 		
-		matrixStackIn.pop();
+		matrixStackIn.popPose();
 		
 	}
 

@@ -45,7 +45,7 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 		for (Entry<Pos, ItemStack> element : this.panelElements.entrySet()) {
 			
 			ItemStack stack = element.getValue();
-			if (stack.getDisplayName().getUnformattedComponentText().equals(signal.getChanelItem().getDisplayName().getUnformattedComponentText()) && signal.getChanelItem().getItem() == Items.REDSTONE_TORCH) {
+			if (stack.getHoverName().getContents().equals(signal.getChanelItem().getHoverName().getContents()) && signal.getChanelItem().getItem() == Items.REDSTONE_TORCH) {
 				
 				((ItemPanelElement) stack.getItem()).onPowerStateChange(this, stack, signal.isPowered());
 				
@@ -60,7 +60,7 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 		BlockState state = getBlockState();
 		if (state.getBlock() == ModItems.controll_panel) {
 			
-			((BlockRControllPanel) state.getBlock()).sendSignal(this.world, this.pos, signal);
+			((BlockRControllPanel) state.getBlock()).sendSignal(this.level, this.worldPosition, signal);
 			
 		}
 		
@@ -74,13 +74,13 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 			
 			if (removedItem != null) {
 				
-				Direction facing = this.getBlockState().get(BlockRControllPanel.FACING);
+				Direction facing = this.getBlockState().getValue(BlockRControllPanel.FACING);
 				
-				this.world.addEntity(new ItemEntity(
-						this.world, 
-						this.pos.getX() + facing.getXOffset() * 0.5F + 0.5F, 
-						this.pos.getY() + facing.getYOffset() * 0.5F + 0.5F, 
-						this.pos.getZ() + facing.getZOffset() * 0.5F + 0.5F, 
+				this.level.addFreshEntity(new ItemEntity(
+						this.level, 
+						this.worldPosition.getX() + facing.getStepX() * 0.5F + 0.5F, 
+						this.worldPosition.getY() + facing.getStepY() * 0.5F + 0.5F, 
+						this.worldPosition.getZ() + facing.getStepZ() * 0.5F + 0.5F, 
 						removedItem));
 				return ActionResultType.CONSUME;
 				
@@ -95,7 +95,7 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 			if (flag) {
 				
 				editStack.shrink(1);
-				this.world.playSound(null, this.pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1, 1);
+				this.level.playSound(null, this.worldPosition, SoundEvents.STONE_PLACE, SoundCategory.BLOCKS, 1, 1);
 				return ActionResultType.CONSUME;
 				
 			}
@@ -104,7 +104,7 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 
 		Entry<Pos, ItemStack> element = getElementAt(x, y);
 		if (element != null) ((ItemPanelElement) element.getValue().getItem()).onActivated(this, element.getValue());
-		this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 0);
+		this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 0);
 		
 		return ActionResultType.CONSUME;
 				
@@ -116,7 +116,7 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 			
 			AxisAlignedBB bounds = ((ItemPanelElement) element.getValue().getItem()).getCollisionBounds();
 			Pos pos = element.getKey();
-			AxisAlignedBB collision = bounds.offset(pos.getX(), pos.getY(), 0);
+			AxisAlignedBB collision = bounds.move(pos.getX(), pos.getY(), 0);
 			
 			if (collision.contains(x, y, 0)) {
 				
@@ -134,12 +134,12 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 		
 		if (elementStack.getItem() instanceof ItemPanelElement) {
 			
-			ITextComponent name = elementStack.getDisplayName();
+			ITextComponent name = elementStack.getHoverName();
 			elementStack.setTag(new CompoundNBT());
-			elementStack.setDisplayName(name);
+			elementStack.setHoverName(name);
 			
 			AxisAlignedBB bounds = ((ItemPanelElement) elementStack.getItem()).getCollisionBounds();
-			AxisAlignedBB collision = bounds.offset(x, y, 0);
+			AxisAlignedBB collision = bounds.move(x, y, 0);
 			
 			if (collision.maxX > 16 || collision.maxY > 16 || collision.maxZ > 16) return false;
 			
@@ -147,7 +147,7 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 				
 				AxisAlignedBB bounds2 = ((ItemPanelElement) element.getValue().getItem()).getCollisionBounds();
 				Pos pos2 = element.getKey();
-				AxisAlignedBB collision2 = bounds2.offset(pos2.getX(), pos2.getY(), 0);
+				AxisAlignedBB collision2 = bounds2.move(pos2.getX(), pos2.getY(), 0);
 				
 				if (collision.intersects(collision2)) return false;
 				
@@ -170,7 +170,7 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 			
 			AxisAlignedBB bounds2 = ((ItemPanelElement) element.getValue().getItem()).getCollisionBounds();
 			Pos pos2 = element.getKey();
-			AxisAlignedBB collision2 = bounds2.offset(pos2.getX(), pos2.getY(), 0);
+			AxisAlignedBB collision2 = bounds2.move(pos2.getX(), pos2.getY(), 0);
 			
 			if (collision2.contains(x, y, 0)) {
 				
@@ -193,36 +193,36 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 	
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(this.pos, 0, this.write(new CompoundNBT()));
+		return new SUpdateTileEntityPacket(this.worldPosition, 0, this.save(new CompoundNBT()));
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.read(this.getBlockState(), pkt.getNbtCompound());
+		this.load(this.getBlockState(), pkt.getTag());
 	}
 	
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		saveToNBT(compound);
-		return super.write(compound);
+		return super.save(compound);
 	}
 	
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundNBT compound) {
 		ListNBT list = compound.getList("PanelElements", 10);
 		this.panelElements.clear();
 		for (int i = 0; i < list.size(); i++) {
 			CompoundNBT stackNBT = list.getCompound(i);
-			ItemStack stack = ItemStack.read(stackNBT);
+			ItemStack stack = ItemStack.of(stackNBT);
 			int[] posArr = stackNBT.getIntArray("Pos");
 			Pos pos = new Pos(posArr[0], posArr[1]);
-			if (stackNBT.contains("SheduleTick") && !this.world.isRemote()) {
+			if (stackNBT.contains("SheduleTick") && !this.level.isClientSide()) {
 				int tick = stackNBT.getInt("SheduleTick");
 				this.sheduleTicks.put(stack, tick);
 			}
 			this.panelElements.put(pos, stack);
 		}
-		super.read(state, compound);
+		super.load(state, compound);
 	}
 	
 	public static final class Pos {
@@ -249,7 +249,7 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 		ListNBT list = new ListNBT();
 		for (Entry<Pos, ItemStack> element : panelElements.entrySet()) {
 			if (element.getValue().getItem() instanceof ItemPanelElement) {
-				CompoundNBT stack = element.getValue().write(new CompoundNBT());
+				CompoundNBT stack = element.getValue().save(new CompoundNBT());
 				stack.putIntArray("Pos", new int[] {element.getKey().getX(), element.getKey().getY()});
 				if (this.sheduleTicks.get(element.getValue()) != null) {
 					stack.putInt("SheduleTick", this.sheduleTicks.get(element.getValue()));
@@ -265,7 +265,7 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 	@Override
 	public void tick() {
 		
-		if (!this.world.isRemote) {
+		if (!this.level.isClientSide) {
 			
 			for (Entry<ItemStack, Integer> entry : ((HashMap<ItemStack, Integer>) this.sheduleTicks.clone()).entrySet()) {
 				
@@ -289,7 +289,7 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 				
 			}
 			
-			this.world.notifyBlockUpdate(getPos(), getBlockState(), getBlockState(), 0);
+			this.level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 0);
 			
 		}
 		

@@ -16,8 +16,8 @@ public class TileEntityMElectricHeater extends TileEntityMHeaterBase {
 	@Override
 	public void updateWorkState() {
 		
-		ElectricityNetworkHandler.getHandlerForWorld(world).updateNetwork(world, pos);
-		ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(world).getNetwork(pos);
+		ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
+		ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
 		this.isWorking = network.canMachinesRun() == Voltage.HightVoltage;
 		
 	}
@@ -33,12 +33,12 @@ public class TileEntityMElectricHeater extends TileEntityMHeaterBase {
 	}
 
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
 		return false;
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return false;
 	}
 	

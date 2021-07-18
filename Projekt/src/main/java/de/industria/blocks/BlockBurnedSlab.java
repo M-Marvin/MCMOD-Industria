@@ -28,50 +28,50 @@ public class BlockBurnedSlab extends BlockSlabBase {
 	
 	public BlockBurnedSlab() {
 		super("burned_wood_slab", Material.WOOD, 1F, 3, SoundType.LADDER);
-		this.setDefaultState(this.getDefaultState().with(PERSISTANT, true).with(DISTANCE, 1));
+		this.registerDefaultState(this.defaultBlockState().setValue(PERSISTANT, true).setValue(DISTANCE, 1));
 	}
 	
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(PERSISTANT, DISTANCE);
-		super.fillStateContainer(builder);
+		super.createBlockStateDefinition(builder);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		BlockState state = super.getStateForPlacement(context).with(PERSISTANT, true);;
-		return updateState(context.getWorld(), context.getPos(), state);
+		BlockState state = super.getStateForPlacement(context).setValue(PERSISTANT, true);;
+		return updateState(context.getLevel(), context.getClickedPos(), state);
 	}
 	
 	public BlockState getNotPersistant() {
-		return this.getDefaultState().with(PERSISTANT, false);
+		return this.defaultBlockState().setValue(PERSISTANT, false);
 	}
 	
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 		BlockState newState = updateState(worldIn, pos, state);
 		if (newState != state) {
-			worldIn.setBlockState(pos, newState);
+			worldIn.setBlockAndUpdate(pos, newState);
 		}
-		if (newState.get(DISTANCE) == 8 && !newState.get(PERSISTANT)) {
+		if (newState.getValue(DISTANCE) == 8 && !newState.getValue(PERSISTANT)) {
 			dropBlock(worldIn, pos, newState);
 		}
 	}
 	
 	public int getDustDropAmount(World world, BlockPos pos, BlockState state) {
-		return world.rand.nextInt(state.get(BlockStateProperties.SLAB_TYPE) == SlabType.DOUBLE ? 8 : 2) + 1;
+		return world.random.nextInt(state.getValue(BlockStateProperties.SLAB_TYPE) == SlabType.DOUBLE ? 8 : 2) + 1;
 	}
 	
 	public void dropBlock(World world, BlockPos pos, BlockState state) {
 		world.destroyBlock(pos, false);
-		BlockState ashDrops = ModItems.ash.getDefaultState().with(BlockFallingDust.LAYERS, getDustDropAmount(world, pos, state));
-		world.setBlockState(pos, ashDrops);
+		BlockState ashDrops = ModItems.ash.defaultBlockState().setValue(BlockFallingDust.LAYERS, getDustDropAmount(world, pos, state));
+		world.setBlockAndUpdate(pos, ashDrops);
 	}
 	
 	public BlockState updateState(World world, BlockPos pos, BlockState state) {
 		int distance = scann(world, pos, new ArrayList<BlockPos>(), 0);
-		if (distance != state.get(DISTANCE)) {
-			state = state.with(DISTANCE, distance);
+		if (distance != state.getValue(DISTANCE)) {
+			state = state.setValue(DISTANCE, distance);
 		}
 		return state;
 	}
@@ -82,12 +82,12 @@ public class BlockBurnedSlab extends BlockSlabBase {
 			int dist = 8;
 			posList.add(pos);
 			for (Direction d : Direction.values()) {
-				BlockPos scanPos = pos.offset(d);
+				BlockPos scanPos = pos.relative(d);
 				BlockState scanState = world.getBlockState(scanPos);
 				
 				if (BlockBurnedBlock.canHoldBurnedBlocks(world, pos, scanState)) {
 					return depth + 1;
-				} else if ((scanState.isOpaqueCube(world, pos) || scanState.getBlock() instanceof FenceBlock || scanState.getBlock() instanceof TrapDoorBlock || scanState.getBlock() instanceof DoorBlock) && !scanState.isAir()) {
+				} else if ((scanState.isSolidRender(world, pos) || scanState.getBlock() instanceof FenceBlock || scanState.getBlock() instanceof TrapDoorBlock || scanState.getBlock() instanceof DoorBlock) && !scanState.isAir()) {
 					int i = scann(world, scanPos, posList, depth + 1);
 					if (i < dist) dist = i;
 				}

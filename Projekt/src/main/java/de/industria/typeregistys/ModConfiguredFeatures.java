@@ -28,169 +28,169 @@ public class ModConfiguredFeatures {
 	
 	// Ores
 	public static final ConfiguredFeature<?, ?> COPPER_ORE = registerConfiguredFeature("copper_ore", 
-			Feature.ORE.withConfiguration(
+			Feature.ORE.configured(
 					new OreFeatureConfig(
-							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
-							ModItems.copper_ore.getDefaultState(),
+							OreFeatureConfig.FillerBlockType.NATURAL_STONE, 
+							ModItems.copper_ore.defaultBlockState(),
 							14
 					)
-			).withPlacement(
-					ModPlacement.SIMPLE_ORE.configure(
+			).decorated(
+					ModPlacement.SIMPLE_ORE.configured(
 							new SimpleOrePlacementConfig(11, 45, 14)
 					)
 			)
 	);
 	public static final ConfiguredFeature<?, ?> NICKEL_ORE = registerConfiguredFeature("nickel_ore", 
-			Feature.ORE.withConfiguration(
+			Feature.ORE.configured(
 					new OreFeatureConfig(
-							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
-							ModItems.nickel_ore.getDefaultState(),
+							OreFeatureConfig.FillerBlockType.NATURAL_STONE, 
+							ModItems.nickel_ore.defaultBlockState(),
 							8
 					)
-			).withPlacement(
-					ModPlacement.SIMPLE_ORE.configure(
+			).decorated(
+					ModPlacement.SIMPLE_ORE.configured(
 							new SimpleOrePlacementConfig(0, 64, 6)
 					)
 			)
 	);
 	public static final ConfiguredFeature<?, ?> TIN_ORE = registerConfiguredFeature("tin_ore", 
-			Feature.ORE.withConfiguration(
+			Feature.ORE.configured(
 					new OreFeatureConfig(
-							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
-							ModItems.tin_ore.getDefaultState(),
+							OreFeatureConfig.FillerBlockType.NATURAL_STONE, 
+							ModItems.tin_ore.defaultBlockState(),
 							12
 					)
-			).withPlacement(
-					ModPlacement.SIMPLE_ORE.configure(
+			).decorated(
+					ModPlacement.SIMPLE_ORE.configured(
 							new SimpleOrePlacementConfig(0, 48, 6)
 					)
 			)
 	);
 	public static final ConfiguredFeature<?, ?> TIN_ORE_EXTRA = registerConfiguredFeature("tin_ore_extra", 
-			Feature.ORE.withConfiguration(
+			Feature.ORE.configured(
 					new OreFeatureConfig(
-							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
-							ModItems.tin_ore.getDefaultState(),
+							OreFeatureConfig.FillerBlockType.NATURAL_STONE, 
+							ModItems.tin_ore.defaultBlockState(),
 							12
 					)
-			).withPlacement(
-					ModPlacement.SIMPLE_ORE.configure(
+			).decorated(
+					ModPlacement.SIMPLE_ORE.configured(
 							new SimpleOrePlacementConfig(0, 48, 6)
 					)
 			)
 	);
 	public static final ConfiguredFeature<?, ?> SILVER_ORE = registerConfiguredFeature("silver_ore", 
-			Feature.ORE.withConfiguration(
+			Feature.ORE.configured(
 					new OreFeatureConfig(
-							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
-							ModItems.silver_ore.getDefaultState(),
+							OreFeatureConfig.FillerBlockType.NATURAL_STONE, 
+							ModItems.silver_ore.defaultBlockState(),
 							6
 					)
-			).withPlacement(
-					ModPlacement.SIMPLE_ORE.configure(
+			).decorated(
+					ModPlacement.SIMPLE_ORE.configured(
 							new SimpleOrePlacementConfig(16, 40, 1)
 					)
 			)
 	);
 	public static final ConfiguredFeature<?, ?> SILVER_ORE_EXTRA = registerConfiguredFeature("silver_ore_extra", 
-			Feature.ORE.withConfiguration(
+			Feature.ORE.configured(
 					new OreFeatureConfig(
-							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
-							ModItems.silver_ore.getDefaultState(),
+							OreFeatureConfig.FillerBlockType.NATURAL_STONE, 
+							ModItems.silver_ore.defaultBlockState(),
 							3
 					)
-			).withPlacement(
-					ModPlacement.SIMPLE_ORE.configure(
+			).decorated(
+					ModPlacement.SIMPLE_ORE.configured(
 							new SimpleOrePlacementConfig(16, 40, 1)
 					)
 			)
 	);
 	public static final ConfiguredFeature<?, ?> PALLADIUM_ORE = registerConfiguredFeature("palladium_ore", 
-			Feature.ORE.withConfiguration(
+			Feature.ORE.configured(
 					new OreFeatureConfig(
-							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
-							ModItems.palladium_ore.getDefaultState(),
+							OreFeatureConfig.FillerBlockType.NATURAL_STONE, 
+							ModItems.palladium_ore.defaultBlockState(),
 							2
 					)
-			).withPlacement(
-					ModPlacement.SIMPLE_ORE.configure(
+			).decorated(
+					ModPlacement.SIMPLE_ORE.configured(
 							new SimpleOrePlacementConfig(0, 16, 1)
 					)
 			)
 	);
 	public static final ConfiguredFeature<?, ?> PALLADIUM_ORE_EXTRA = registerConfiguredFeature("palladium_ore_extra", 
-			Feature.ORE.withConfiguration(
+			Feature.ORE.configured(
 					new OreFeatureConfig(
-							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 
-							ModItems.palladium_ore.getDefaultState(),
+							OreFeatureConfig.FillerBlockType.NATURAL_STONE, 
+							ModItems.palladium_ore.defaultBlockState(),
 							2
 					)
-			).withPlacement(
-					ModPlacement.SIMPLE_ORE.configure(
+			).decorated(
+					ModPlacement.SIMPLE_ORE.configured(
 							new SimpleOrePlacementConfig(0, 16, 1)
 					)
 			)
 	);
 	public static final ConfiguredFeature<?, ?> SULFUR_ORE = registerConfiguredFeature("sulfur_ore", 
-			Feature.ORE.withConfiguration(
+			Feature.ORE.configured(
 					new OreFeatureConfig(
-							OreFeatureConfig.FillerBlockType.BASE_STONE_NETHER, 
-							ModItems.sulfur_ore.getDefaultState(),
+							OreFeatureConfig.FillerBlockType.NETHER_ORE_REPLACEABLES, 
+							ModItems.sulfur_ore.defaultBlockState(),
 							10
 					)
-			).withPlacement(
-					ModPlacement.SIMPLE_ORE.configure(
+			).decorated(
+					ModPlacement.SIMPLE_ORE.configured(
 							new SimpleOrePlacementConfig(0, 64, 15)
 					)
 			)
 	);
 	
 	public static final ConfiguredFeature<?, ?> BAUXIT_STONE_ORE = registerConfiguredFeature("bauxite_stone_ore",
-			ModFeature.STONE_ORE.withConfiguration(
+			ModFeature.STONE_ORE.configured(
 					new StoneOreFeatureConfig(
-							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
-							ModItems.bauxite.getDefaultState(),
-							ModItems.bauxite_ore.getDefaultState(),
+							OreFeatureConfig.FillerBlockType.NATURAL_STONE,
+							ModItems.bauxite.defaultBlockState(),
+							ModItems.bauxite_ore.defaultBlockState(),
 							42
 					)
-			).withPlacement(
-					ModPlacement.SIMPLE_ORE.configure(
+			).decorated(
+					ModPlacement.SIMPLE_ORE.configured(
 							new SimpleOrePlacementConfig(20, 180, 5)
 					)
 			)
 	);
 	public static final ConfiguredFeature<?, ?> WOLFRAM_STONE_ORE = registerConfiguredFeature("wolfram_stone_ore",
-			ModFeature.STONE_ORE.withConfiguration(
+			ModFeature.STONE_ORE.configured(
 					new StoneOreFeatureConfig(
-							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
-							ModItems.wolframite.getDefaultState(),
-							ModItems.wolframite_ore.getDefaultState(),
+							OreFeatureConfig.FillerBlockType.NATURAL_STONE,
+							ModItems.wolframite.defaultBlockState(),
+							ModItems.wolframite_ore.defaultBlockState(),
 							42
 					)
-			).withPlacement(
-					ModPlacement.SIMPLE_ORE.configure(
+			).decorated(
+					ModPlacement.SIMPLE_ORE.configured(
 							new SimpleOrePlacementConfig(0, 32, 1)
 					)
-			).withPlacement(
-					Placement.CHANCE.configure(
+			).decorated(
+					Placement.CHANCE.configured(
 							new ChanceConfig(5)
 					)
 			)
 	);
 	
 	public static final ConfiguredFeature<?, ?> OIL_DEPOT = registerConfiguredFeature("oil_depot",
-			Feature.ORE.withConfiguration(
+			Feature.ORE.configured(
 					new OreFeatureConfig(
-							OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
-							ModFluids.RAW_OIL.getDefaultState().getBlockState(),
+							OreFeatureConfig.FillerBlockType.NATURAL_STONE,
+							ModFluids.RAW_OIL.defaultFluidState().createLegacyBlock(),
 							128
 					)
-			).withPlacement(
-					ModPlacement.SIMPLE_ORE.configure(
+			).decorated(
+					ModPlacement.SIMPLE_ORE.configured(
 							new SimpleOrePlacementConfig(0, 30, 6)
 					)
-			).withPlacement(
-					Placement.CHANCE.configure(
+			).decorated(
+					Placement.CHANCE.configured(
 							new ChanceConfig(180)
 					)
 			)
@@ -198,98 +198,98 @@ public class ModConfiguredFeatures {
 	
 	// Trees
 	public static final ConfiguredFeature<?, ?> RUBBER_TREE = registerConfiguredFeature("rubber_tree",
-			ModFeature.JIGSAW_FEATURE.withConfiguration(new JigsawFeatureConfig(
+			ModFeature.JIGSAW_FEATURE.configured(new JigsawFeatureConfig(
 					new TagMatchRuleTest(ModTags.DIRT), Direction.NORTH, JigsawType.VERTICAL_UP, 
 					new ResourceLocation(Industria.MODID, "nature/rubber_tree"), new ResourceLocation(Industria.MODID, "tree_log"),
-					Blocks.DIRT.getDefaultState(), false, 1, 1)
-			).withPlacement(
-					ModPlacement.VERTICAL_OFFSET.configure(
+					Blocks.DIRT.defaultBlockState(), false, 1, 1)
+			).decorated(
+					ModPlacement.VERTICAL_OFFSET.configured(
 							new VerticalOffsetPlacementConfig(-1)
 					)
-			).withPlacement(
-					ModPlacement.HORIZONTAL_SPREAD.configure(
+			).decorated(
+					ModPlacement.HORIZONTAL_SPREAD.configured(
 							new HorizontalSpreadPlacementConfig(2)
 					)
-			).withPlacement(
-					Placement.HEIGHTMAP_WORLD_SURFACE.configure(new NoPlacementConfig())
-			).withPlacement(
-					Placement.CHANCE.configure(new ChanceConfig(10))
+			).decorated(
+					Placement.HEIGHTMAP_WORLD_SURFACE.configured(new NoPlacementConfig())
+			).decorated(
+					Placement.CHANCE.configured(new ChanceConfig(10))
 			)
 	);
 	public static final ConfiguredFeature<?, ?> ACACIA_TREE = registerConfiguredFeature("acacia_tree",
-			ModFeature.JIGSAW_FEATURE.withConfiguration(new JigsawFeatureConfig(
+			ModFeature.JIGSAW_FEATURE.configured(new JigsawFeatureConfig(
 					new TagMatchRuleTest(ModTags.DIRT), Direction.NORTH, JigsawType.VERTICAL_UP, 
 					new ResourceLocation(Industria.MODID, "nature/acacia_normal"), new ResourceLocation(Industria.MODID, "tree_log"),
-					Blocks.DIRT.getDefaultState(), false, 1, 1)
-			).withPlacement(
-					ModPlacement.VERTICAL_OFFSET.configure(
+					Blocks.DIRT.defaultBlockState(), false, 1, 1)
+			).decorated(
+					ModPlacement.VERTICAL_OFFSET.configured(
 							new VerticalOffsetPlacementConfig(-2)
 					)
-			).withPlacement(
-					ModPlacement.HORIZONTAL_SPREAD.configure(
+			).decorated(
+					ModPlacement.HORIZONTAL_SPREAD.configured(
 							new HorizontalSpreadPlacementConfig(1)
 					)
-			).withPlacement(
-					Placement.HEIGHTMAP_WORLD_SURFACE.configure(new NoPlacementConfig())
-			).withPlacement(
-					Placement.CHANCE.configure(new ChanceConfig(10))
+			).decorated(
+					Placement.HEIGHTMAP_WORLD_SURFACE.configured(new NoPlacementConfig())
+			).decorated(
+					Placement.CHANCE.configured(new ChanceConfig(10))
 			)
 	);
 	public static final ConfiguredFeature<?, ?> OAK_TREE_RARE = registerConfiguredFeature("oak_tree",
-			ModFeature.JIGSAW_FEATURE.withConfiguration(new JigsawFeatureConfig(
+			ModFeature.JIGSAW_FEATURE.configured(new JigsawFeatureConfig(
 					new TagMatchRuleTest(ModTags.DIRT), Direction.NORTH, JigsawType.VERTICAL_UP, 
 					new ResourceLocation(Industria.MODID, "nature/oak_normal"), new ResourceLocation(Industria.MODID, "tree_log"),
-					Blocks.DIRT.getDefaultState(), false, 1, 1)
-			).withPlacement(
-					ModPlacement.VERTICAL_OFFSET.configure(
+					Blocks.DIRT.defaultBlockState(), false, 1, 1)
+			).decorated(
+					ModPlacement.VERTICAL_OFFSET.configured(
 							new VerticalOffsetPlacementConfig(-2)
 					)
-			).withPlacement(
-					Placement.HEIGHTMAP_WORLD_SURFACE.configure(new NoPlacementConfig())
-			).withPlacement(
-					ModPlacement.HORIZONTAL_SPREAD.configure(
+			).decorated(
+					Placement.HEIGHTMAP_WORLD_SURFACE.configured(new NoPlacementConfig())
+			).decorated(
+					ModPlacement.HORIZONTAL_SPREAD.configured(
 							new HorizontalSpreadPlacementConfig(2)
 					)
-			).withPlacement(
-					ModPlacement.CHANCE.configure(
+			).decorated(
+					ModPlacement.CHANCE.configured(
 						new ModChancePlacementConfig(20)
 					)
 			)
 	);
 	public static final ConfiguredFeature<?, ?> OAK_TREE_NORMAL = registerConfiguredFeature("oak_tree",
-			ModFeature.JIGSAW_FEATURE.withConfiguration(new JigsawFeatureConfig(
+			ModFeature.JIGSAW_FEATURE.configured(new JigsawFeatureConfig(
 					new TagMatchRuleTest(ModTags.DIRT), Direction.NORTH, JigsawType.VERTICAL_UP, 
 					new ResourceLocation(Industria.MODID, "nature/oak_normal"), new ResourceLocation(Industria.MODID, "tree_log"),
-					Blocks.DIRT.getDefaultState(), false, 1, 1)
-			).withPlacement(
-					ModPlacement.VERTICAL_OFFSET.configure(
+					Blocks.DIRT.defaultBlockState(), false, 1, 1)
+			).decorated(
+					ModPlacement.VERTICAL_OFFSET.configured(
 							new VerticalOffsetPlacementConfig(-2)
 					)
-			).withPlacement(
-					Placement.HEIGHTMAP_WORLD_SURFACE.configure(new NoPlacementConfig())
-			).withPlacement(
-					ModPlacement.HORIZONTAL_SPREAD.configure(
+			).decorated(
+					Placement.HEIGHTMAP_WORLD_SURFACE.configured(new NoPlacementConfig())
+			).decorated(
+					ModPlacement.HORIZONTAL_SPREAD.configured(
 							new HorizontalSpreadPlacementConfig(7)
 					)
-			).withPlacement(
-					ModPlacement.CHANCE.configure(
+			).decorated(
+					ModPlacement.CHANCE.configured(
 						new ModChancePlacementConfig(85)
 					)
 			)
 	);
 	public static final ConfiguredFeature<?, ?> OAK_TREE_EXTRA = registerConfiguredFeature("oak_tree",
-			ModFeature.JIGSAW_FEATURE.withConfiguration(new JigsawFeatureConfig(
+			ModFeature.JIGSAW_FEATURE.configured(new JigsawFeatureConfig(
 					new TagMatchRuleTest(ModTags.DIRT), Direction.NORTH, JigsawType.VERTICAL_UP, 
 					new ResourceLocation(Industria.MODID, "nature/oak_normal"), new ResourceLocation(Industria.MODID, "tree_log"),
-					Blocks.DIRT.getDefaultState(), false, 1, 1)
-			).withPlacement(
-					ModPlacement.VERTICAL_OFFSET.configure(
+					Blocks.DIRT.defaultBlockState(), false, 1, 1)
+			).decorated(
+					ModPlacement.VERTICAL_OFFSET.configured(
 							new VerticalOffsetPlacementConfig(-2)
 					)
-			).withPlacement(
-					Placement.HEIGHTMAP_WORLD_SURFACE.configure(new NoPlacementConfig())
-			).withPlacement(
-					ModPlacement.HORIZONTAL_SPREAD.configure(
+			).decorated(
+					Placement.HEIGHTMAP_WORLD_SURFACE.configured(new NoPlacementConfig())
+			).decorated(
+					ModPlacement.HORIZONTAL_SPREAD.configured(
 							new HorizontalSpreadPlacementConfig(10)
 					)
 			)

@@ -32,15 +32,15 @@ public class ContainerJigsaw extends Container {
 	private static TileEntity getClientTileEntity(PacketBuffer data) {
 		
 		BlockPos pos = data.readBlockPos();
-		TileEntity te = Minecraft.getInstance().world.getTileEntity(pos);
-		CompoundNBT nbt = data.readCompoundTag();
+		TileEntity te = Minecraft.getInstance().level.getBlockEntity(pos);
+		CompoundNBT nbt = data.readNbt();
 		te.deserializeNBT(nbt);
 		return te;
 		
 	}
 	
-	public boolean canInteractWith(PlayerEntity playerIn) {
-		return isWithinUsableDistance(IWorldPosCallable.DUMMY, playerIn, Blocks.CRAFTING_TABLE) && !this.tileEntity.isRemoved();
+	public boolean stillValid(PlayerEntity playerIn) {
+		return stillValid(IWorldPosCallable.NULL, playerIn, Blocks.CRAFTING_TABLE) && !this.tileEntity.isRemoved();
 	}
 	
 	public TileEntityJigsaw getTileEntity() {

@@ -16,26 +16,26 @@ public class BlockWoodenSlabBase extends BlockSlabBase implements IBurnableBlock
 	}
 	
 	public BlockWoodenSlabBase(String name, Material material, float hardnessAndResistance, SoundType sound, boolean dropsEver) {
-		super(name, Properties.create(material).hardnessAndResistance(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)));
+		super(name, Properties.of(material).strength(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)));
 	}
 	
 	public BlockWoodenSlabBase(String name, Material material, float hardness, float resistance, SoundType sound, boolean dropsEver) {
-		super(name, Properties.create(material).hardnessAndResistance(hardness, resistance).sound(sound).harvestTool(getDefaultToolType(material)));
+		super(name, Properties.of(material).strength(hardness, resistance).sound(sound).harvestTool(getDefaultToolType(material)));
 	}
 
 	public BlockWoodenSlabBase(String name, Material material, float hardnessAndResistance, SoundType sound) {
-		super(name, Properties.create(material).hardnessAndResistance(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)).setRequiresTool());
+		super(name, Properties.of(material).strength(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)).requiresCorrectToolForDrops());
 	}
 	
 	public BlockWoodenSlabBase(String name, Material material, float hardness, float resistance, SoundType sound) {
-		super(name, Properties.create(material).hardnessAndResistance(hardness, resistance).sound(sound).harvestTool(getDefaultToolType(material)).setRequiresTool());
+		super(name, Properties.of(material).strength(hardness, resistance).sound(sound).harvestTool(getDefaultToolType(material)).requiresCorrectToolForDrops());
 	}
 	
 	public static ToolType getDefaultToolType(Material material) {
-		if (material == Material.ROCK || material == Material.IRON) return ToolType.PICKAXE;
-		if (material == Material.SAND || material == Material.EARTH) return ToolType.SHOVEL;
+		if (material == Material.STONE || material == Material.METAL) return ToolType.PICKAXE;
+		if (material == Material.SAND || material == Material.DIRT) return ToolType.SHOVEL;
 		if (material == Material.WOOD) return ToolType.AXE;
-		if (material == Material.ORGANIC || material == Material.LEAVES) return ToolType.HOE;
+		if (material == Material.GRASS || material == Material.LEAVES) return ToolType.HOE;
 		return null;
 	}
 

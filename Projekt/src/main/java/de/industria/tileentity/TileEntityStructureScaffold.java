@@ -20,30 +20,30 @@ public class TileEntityStructureScaffold extends TileEntityInventoryBase impleme
 	}
 	
 	public boolean setCladding(Direction d, ItemStack cladding) {
-		this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
-		int slotId = d.getIndex();
-		if (this.getStackInSlot(slotId).isEmpty()) {
+		this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
+		int slotId = d.get3DDataValue();
+		if (this.getItem(slotId).isEmpty()) {
 			ItemStack stack = cladding.copy();
 			stack.setCount(1);
-			this.setInventorySlotContents(slotId, stack);
+			this.setItem(slotId, stack);
 			return true;
 		}
 		return false;
 	}
 	
 	public ItemStack removeCladding(Direction d) {
-		this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
-		int slotId = d.getIndex();
-		if (!this.getStackInSlot(slotId).isEmpty()) {
-			ItemStack cladding = this.getStackInSlot(slotId);
-			this.setInventorySlotContents(slotId, ItemStack.EMPTY);
+		this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
+		int slotId = d.get3DDataValue();
+		if (!this.getItem(slotId).isEmpty()) {
+			ItemStack cladding = this.getItem(slotId);
+			this.setItem(slotId, ItemStack.EMPTY);
 			return cladding;
 		}
 		return ItemStack.EMPTY;
 	}
 	
 	public ItemStack getCladding(Direction d) {
-		return this.getStackInSlot(d.getIndex());
+		return this.getItem(d.get3DDataValue());
 	}
 	
 	public Direction[] getCladdingSides() {
@@ -56,8 +56,8 @@ public class TileEntityStructureScaffold extends TileEntityInventoryBase impleme
 	
 	@Override
 	public void tick() {
-		if (!this.world.isRemote()) {
-			if (this.world.getGameTime() % 30 == 0) this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
+		if (!this.level.isClientSide()) {
+			if (this.level.getGameTime() % 30 == 0) this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 		}
 	}
 	
@@ -68,17 +68,17 @@ public class TileEntityStructureScaffold extends TileEntityInventoryBase impleme
 	
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(pos, 0, this.serializeNBT());
+		return new SUpdateTileEntityPacket(worldPosition, 0, this.serializeNBT());
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.deserializeNBT(pkt.getNbtCompound());
+		this.deserializeNBT(pkt.getTag());
 	}
 
 	@Override
 	public void handlePostMove(BlockPos pos, BlockPos newPos, boolean multipleCall) {
-		this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
+		this.level.sendBlockUpdated(pos, getBlockState(), getBlockState(), 2);
 	}
 	
 }

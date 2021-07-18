@@ -20,7 +20,7 @@ public class BlockBiomass extends BlockFallingDust {
 	
 	@Override
 	public SoundType getSoundType(BlockState state) {
-		return SoundType.GROUND;
+		return SoundType.GRAVEL;
 	}
 	
 	@Override
@@ -29,22 +29,22 @@ public class BlockBiomass extends BlockFallingDust {
 	}
 	
 	@Override
-	public boolean ticksRandomly(BlockState state) {
+	public boolean isRandomlyTicking(BlockState state) {
 		return true;
 	}
 	
 	@SuppressWarnings("deprecation")
 	public void compost(BlockState state, World world, BlockPos pos) {
 		if (isHeated(state, world, pos)) {
-			BlockPos gasPos = pos.up();
-			BlockState gasState = ModFluids.BIOGAS.getDefaultState().getBlockState();
+			BlockPos gasPos = pos.above();
+			BlockState gasState = ModFluids.BIOGAS.defaultFluidState().createLegacyBlock();
 			BlockState replaceState = world.getBlockState(gasPos);
-			int layers = state.get(LAYERS) - 1;
+			int layers = state.getValue(LAYERS) - 1;
 			if (layers > 0 && replaceState.isAir()) {
-				world.setBlockState(gasPos, gasState);
-				world.setBlockState(pos, this.getDefaultState().with(LAYERS, layers));
+				world.setBlockAndUpdate(gasPos, gasState);
+				world.setBlockAndUpdate(pos, this.defaultBlockState().setValue(LAYERS, layers));
 			} else if (layers == 0){
-				world.setBlockState(pos, gasState);
+				world.setBlockAndUpdate(pos, gasState);
 			}
 		}
 	}
@@ -52,19 +52,19 @@ public class BlockBiomass extends BlockFallingDust {
 	@SuppressWarnings("deprecation")
 	public boolean isIsolatedFromAir(BlockState state, World worldIn, BlockPos pos) {
 		for (Direction d : Direction.values()) {
-			BlockPos checkPos = pos.offset(d);
+			BlockPos checkPos = pos.relative(d);
 			BlockState checkState = worldIn.getBlockState(checkPos);
-			if (!checkState.isSolidSide(worldIn, checkPos, d) || state.isAir()) return false;
+			if (!checkState.isFaceSturdy(worldIn, checkPos, d) || state.isAir()) return false;
 		}
 		return true;
 	}
 	
 	public boolean isHeated(BlockState state, World worldIn, BlockPos pos) {
 		for (int i = 0; i <= 5; i++) {
-			BlockPos checkPos = pos.down(i);
+			BlockPos checkPos = pos.below(i);
 			for (int x = -2; x <= 2; x++) {
 				for (int z = -2; z <= 2; z++) {
-					BlockPos testPos = checkPos.add(x, 0, z);
+					BlockPos testPos = checkPos.offset(x, 0, z);
 					BlockState checkState = worldIn.getBlockState(testPos);
 					if (checkState.getBlock() == this) continue;
 					if (checkState.getBlock() instanceof BlockMultiPart) {

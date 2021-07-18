@@ -22,9 +22,9 @@ public class MachineSoundHelper {
 	public static boolean isPlayingMachineSound(SoundEvent sound, int maxDistance, BlockPos origin) {
 		
 		for (SoundMachine machineSound : soundMap) {
-			if (machineSound.getSoundLocation() == sound.getName()) {
-				double distance = origin.distanceSq(machineSound.getX(), machineSound.getY(), machineSound.getZ(), true);
-				if (distance <= maxDistance && !machineSound.isDonePlaying()) {
+			if (machineSound.getLocation() == sound.getLocation()) {
+				double distance = origin.distSqr(machineSound.getX(), machineSound.getY(), machineSound.getZ(), true);
+				if (distance <= maxDistance && !machineSound.isStopped()) {
 					return true;
 				}
 			}
@@ -35,11 +35,11 @@ public class MachineSoundHelper {
 	
 	public static void startSoundIfNotRunning(TileEntity tileEntity, SoundEvent soundEvent) {
 		
-		SoundHandler soundHandler = Minecraft.getInstance().getSoundHandler();
+		SoundHandler soundHandler = Minecraft.getInstance().getSoundManager();
 		
 		SoundMachine sound = getSoundForTileEntity(tileEntity);
 		
-		if (sound == null || sound.isDonePlaying() || !soundHandler.isPlaying(sound)) {
+		if (sound == null || sound.isStopped() || !soundHandler.isActive(sound)) {
 			
 			sound = new SoundMachine(tileEntity, soundEvent);
 			soundHandler.play(sound);
@@ -51,11 +51,11 @@ public class MachineSoundHelper {
 	
 	public static void startSoundTurbinIfNotRunning(TileEntityMSteamGenerator tileEntity) {
 		
-		SoundHandler soundHandler = Minecraft.getInstance().getSoundHandler();
+		SoundHandler soundHandler = Minecraft.getInstance().getSoundManager();
 		
 		SoundMachine turbinSound = getSoundForTileEntity(tileEntity);
 		
-		if (turbinSound == null || turbinSound.isDonePlaying()) {
+		if (turbinSound == null || turbinSound.isStopped()) {
 			
 			turbinSound = new SoundMSteamGeneratorLoop(tileEntity);
 			soundHandler.play(turbinSound);
@@ -66,12 +66,12 @@ public class MachineSoundHelper {
 	}
 	
 	public static SoundMachine getSoundForTileEntity(TileEntity tileEntity) {
-		BlockPos tilePos = tileEntity.getPos();
+		BlockPos tilePos = tileEntity.getBlockPos();
 		SoundMachine tileSound = null;
 		List<SoundMachine> soundsToRemove = new ArrayList<SoundMachine>();
 		for (SoundMachine sound : soundMap) {
 			if (new BlockPos(sound.getX(), sound.getY(), sound.getZ()).equals(tilePos)) {
-				if (sound.isDonePlaying()) {
+				if (sound.isStopped()) {
 					soundsToRemove.add(sound);
 				}
 				tileSound = sound;

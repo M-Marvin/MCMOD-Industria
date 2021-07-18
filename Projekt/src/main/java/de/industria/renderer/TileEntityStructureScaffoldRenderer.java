@@ -23,7 +23,7 @@ public class TileEntityStructureScaffoldRenderer extends TileEntityRenderer<Tile
 	
 	public TileEntityStructureScaffoldRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
 		super(rendererDispatcherIn);
-		this.blockRenderDispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
+		this.blockRenderDispatcher = Minecraft.getInstance().getBlockRenderer();
 	}
 
 	@SuppressWarnings("deprecation")
@@ -37,7 +37,7 @@ public class TileEntityStructureScaffoldRenderer extends TileEntityRenderer<Tile
 			ItemStack claddingStack = tileEntityIn.getCladding(side);
 			BlockState claddingState = ItemStructureCladdingPane.getBlockState(claddingStack);
 			
-			matrixStackIn.push();
+			matrixStackIn.pushPose();
 			
 			switch(side) {
 			case UP: 
@@ -66,16 +66,16 @@ public class TileEntityStructureScaffoldRenderer extends TileEntityRenderer<Tile
 				break;
 			}
 			
-			BlockRendererDispatcher blockrendererdispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
-            for (net.minecraft.client.renderer.RenderType type : net.minecraft.client.renderer.RenderType.getBlockRenderTypes()) {
+			BlockRendererDispatcher blockrendererdispatcher = Minecraft.getInstance().getBlockRenderer();
+            for (net.minecraft.client.renderer.RenderType type : net.minecraft.client.renderer.RenderType.chunkBufferLayers()) {
                if (RenderTypeLookup.canRenderInLayer(claddingState, type)) {
                   net.minecraftforge.client.ForgeHooksClient.setRenderLayer(type);
-                  blockrendererdispatcher.getBlockModelRenderer().renderModel(tileEntityIn.getWorld(), blockrendererdispatcher.getModelForState(claddingState), claddingState, tileEntityIn.getPos(), matrixStackIn, bufferIn.getBuffer(type), false, new Random(), claddingState.getPositionRandom(tileEntityIn.getPos()), OverlayTexture.NO_OVERLAY);
+                  blockrendererdispatcher.getModelRenderer().tesselateBlock(tileEntityIn.getLevel(), blockrendererdispatcher.getBlockModel(claddingState), claddingState, tileEntityIn.getBlockPos(), matrixStackIn, bufferIn.getBuffer(type), false, new Random(), claddingState.getSeed(tileEntityIn.getBlockPos()), OverlayTexture.NO_OVERLAY);
                }
             }
             net.minecraftforge.client.ForgeHooksClient.setRenderLayer(null);
             
-			matrixStackIn.pop();
+			matrixStackIn.popPose();
 			
 		}
 		

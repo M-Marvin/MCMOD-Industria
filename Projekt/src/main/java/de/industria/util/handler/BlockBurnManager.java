@@ -36,13 +36,13 @@ public class BlockBurnManager {
 				return Stream.of(unburnedStates).map(new Function<BlockState, BlockState>() {
 					@Override
 					public BlockState apply(BlockState t) {
-						if (t.getBlock().isIn(BlockTags.FIRE) || t.getBlock() instanceof FlowingFluidBlock || t.getBlock() instanceof BlockGasFluid) return t;
-						return ModItems.ash.getDefaultState().with(BlockFallingDust.LAYERS, world.getRandom().nextInt(4) + 2);
+						if (t.getBlock().is(BlockTags.FIRE) || t.getBlock() instanceof FlowingFluidBlock || t.getBlock() instanceof BlockGasFluid) return t;
+						return ModItems.ash.defaultBlockState().setValue(BlockFallingDust.LAYERS, world.getRandom().nextInt(4) + 2);
 					}
 				}).toArray(BlockState[]::new);
 			}
 			return Stream.of(unburnedStates).map((state) -> {
-				if (state.getBlock().isIn(BlockTags.FIRE) || state.getBlock() instanceof FlowingFluidBlock || state.getBlock() instanceof BlockGasFluid) return state;
+				if (state.getBlock().is(BlockTags.FIRE) || state.getBlock() instanceof FlowingFluidBlock || state.getBlock() instanceof BlockGasFluid) return state;
 				return blockToBurnedMap.getOrDefault(state.getBlock(), DefaultBurnedSuppliers.NO_BEHAVIOR.getSupplier()).getBurnedState(state, world, pos);
 			}).toArray(BlockState[]::new);
 		}
@@ -56,25 +56,25 @@ public class BlockBurnManager {
 	public static void reloadBurnBehaviors() {
 		blockToBurnedMap.clear();
 		ForgeRegistries.BLOCKS.forEach((registredBlock) -> {
-			if (registredBlock instanceof RotatedPillarBlock && registredBlock.isIn(BlockTags.LOGS_THAT_BURN)) {
+			if (registredBlock instanceof RotatedPillarBlock && registredBlock.is(BlockTags.LOGS_THAT_BURN)) {
 				setBurnBehavior(registredBlock.getBlock(), DefaultBurnedSuppliers.LOGS);
-			} else if (registredBlock.isIn(BlockTags.PLANKS) && !registredBlock.isIn(BlockTags.NON_FLAMMABLE_WOOD)) {
+			} else if (registredBlock.is(BlockTags.PLANKS) && !registredBlock.is(BlockTags.NON_FLAMMABLE_WOOD)) {
 				setBurnBehavior(registredBlock.getBlock(), DefaultBurnedSuppliers.PLANKS);
-			} else if (registredBlock instanceof StairsBlock && registredBlock.isIn(BlockTags.WOODEN_STAIRS)) {
+			} else if (registredBlock instanceof StairsBlock && registredBlock.is(BlockTags.WOODEN_STAIRS)) {
 				setBurnBehavior(registredBlock.getBlock(), DefaultBurnedSuppliers.STAIRS);
-			} else if (registredBlock instanceof SlabBlock && registredBlock.isIn(BlockTags.WOODEN_SLABS)) {
+			} else if (registredBlock instanceof SlabBlock && registredBlock.is(BlockTags.WOODEN_SLABS)) {
 				setBurnBehavior(registredBlock.getBlock(), DefaultBurnedSuppliers.SLABS);
-			} else if (registredBlock instanceof TrapDoorBlock && registredBlock.isIn(BlockTags.WOODEN_TRAPDOORS)) {
+			} else if (registredBlock instanceof TrapDoorBlock && registredBlock.is(BlockTags.WOODEN_TRAPDOORS)) {
 				setBurnBehavior(registredBlock.getBlock(), DefaultBurnedSuppliers.TRAPDOORS);
-			} else if (registredBlock instanceof DoorBlock && registredBlock.isIn(BlockTags.WOODEN_DOORS)) {
+			} else if (registredBlock instanceof DoorBlock && registredBlock.is(BlockTags.WOODEN_DOORS)) {
 				setBurnBehavior(registredBlock.getBlock(), DefaultBurnedSuppliers.DOORS);
-			} else if (registredBlock instanceof FenceBlock && registredBlock.isIn(BlockTags.WOODEN_FENCES)) {
+			} else if (registredBlock instanceof FenceBlock && registredBlock.is(BlockTags.WOODEN_FENCES)) {
 				setBurnBehavior(registredBlock.getBlock(), DefaultBurnedSuppliers.FENCES);
-			} else if (registredBlock.getDefaultState().getMaterial() == Material.WOOL) {
+			} else if (registredBlock.defaultBlockState().getMaterial() == Material.WOOL) {
 				setBurnBehavior(registredBlock, DefaultBurnedSuppliers.NO_BEHAVIOR);
-			} else if (registredBlock.getDefaultState().isOpaqueCube(null, null) && registredBlock.isFlammable(registredBlock.getDefaultState(), null, null, Direction.UP)) {
+			} else if (registredBlock.defaultBlockState().isSolidRender(null, null) && registredBlock.isFlammable(registredBlock.defaultBlockState(), null, null, Direction.UP)) {
 				setBurnBehavior(registredBlock.getBlock(), DefaultBurnedSuppliers.MISC_BLOCKS);
-			} else if (registredBlock.isFlammable(registredBlock.getDefaultState(), null, null, Direction.UP)) {
+			} else if (registredBlock.isFlammable(registredBlock.defaultBlockState(), null, null, Direction.UP)) {
 				setBurnBehavior(registredBlock.getBlock(), DefaultBurnedSuppliers.MISC_OBJECTS);
 			}
 		});
@@ -97,7 +97,7 @@ public class BlockBurnManager {
 	public static enum DefaultBurnedSuppliers {
 		
 		LOGS((state, world, pos) -> {
-			return ModItems.burned_log.getNotPersistant().with(BlockStateProperties.AXIS, state.get(BlockStateProperties.AXIS));
+			return ModItems.burned_log.getNotPersistant().setValue(BlockStateProperties.AXIS, state.getValue(BlockStateProperties.AXIS));
 		}),
 		PLANKS((state, world, pos) -> {
 			return ModItems.burned_planks.getNotPersistant();
@@ -106,27 +106,27 @@ public class BlockBurnManager {
 			return ModItems.burned_block.getNotPersistant();
 		}),
 		STAIRS((state, world, pos) -> {
-			return ModItems.burned_wood_stairs.getNotPersistant().with(BlockStairsBase.SHAPE, state.get(BlockStairsBase.SHAPE)).with(BlockStairsBase.HALF, state.get(BlockStairsBase.HALF)).with(BlockStairsBase.FACING, state.get(BlockStairsBase.FACING));
+			return ModItems.burned_wood_stairs.getNotPersistant().setValue(BlockStairsBase.SHAPE, state.getValue(BlockStairsBase.SHAPE)).setValue(BlockStairsBase.HALF, state.getValue(BlockStairsBase.HALF)).setValue(BlockStairsBase.FACING, state.getValue(BlockStairsBase.FACING));
 		}),
 		SLABS((state, world, pos) -> {
-			return ModItems.burned_wood_slab.getNotPersistant().with(BlockStateProperties.SLAB_TYPE, state.get(BlockStateProperties.SLAB_TYPE));
+			return ModItems.burned_wood_slab.getNotPersistant().setValue(BlockStateProperties.SLAB_TYPE, state.getValue(BlockStateProperties.SLAB_TYPE));
 		}),
 		FENCES((state, world, pos) -> {
-			return ModItems.burned_fence.getNotPersistant().with(BlockStateProperties.NORTH, state.get(BlockStateProperties.NORTH)).with(BlockStateProperties.SOUTH, state.get(BlockStateProperties.SOUTH)).with(BlockStateProperties.EAST, state.get(BlockStateProperties.EAST)).with(BlockStateProperties.WEST, state.get(BlockStateProperties.WEST)).with(BlockStateProperties.WATERLOGGED, state.get(BlockStateProperties.WATERLOGGED));
+			return ModItems.burned_fence.getNotPersistant().setValue(BlockStateProperties.NORTH, state.getValue(BlockStateProperties.NORTH)).setValue(BlockStateProperties.SOUTH, state.getValue(BlockStateProperties.SOUTH)).setValue(BlockStateProperties.EAST, state.getValue(BlockStateProperties.EAST)).setValue(BlockStateProperties.WEST, state.getValue(BlockStateProperties.WEST)).setValue(BlockStateProperties.WATERLOGGED, state.getValue(BlockStateProperties.WATERLOGGED));
 		}),
 		@SuppressWarnings("deprecation")
 		MISC_OBJECTS((state, world, pos) -> {
-			BlockState bottomState = world.getBlockState(pos.down());
-			if (bottomState.isOpaqueCube(world, pos.down()) && !bottomState.isAir()) {
+			BlockState bottomState = world.getBlockState(pos.below());
+			if (bottomState.isSolidRender(world, pos.below()) && !bottomState.isAir()) {
 				return ModItems.burned_scrap.getNotPersistant();
 			}
-			return ModItems.ash.getDefaultState();
+			return ModItems.ash.defaultBlockState();
 		}),
 		TRAPDOORS((state, world, pos) -> {
-			return ModItems.burned_trapdoor.getNotPersistant().with(BlockStateProperties.HORIZONTAL_FACING, state.get(BlockStateProperties.HORIZONTAL_FACING)).with(BlockStateProperties.HALF, state.get(BlockStateProperties.HALF)).with(BlockStateProperties.OPEN, state.get(BlockStateProperties.OPEN)).with(BlockStateProperties.POWERED, state.get(BlockStateProperties.POWERED));
+			return ModItems.burned_trapdoor.getNotPersistant().setValue(BlockStateProperties.HORIZONTAL_FACING, state.getValue(BlockStateProperties.HORIZONTAL_FACING)).setValue(BlockStateProperties.HALF, state.getValue(BlockStateProperties.HALF)).setValue(BlockStateProperties.OPEN, state.getValue(BlockStateProperties.OPEN)).setValue(BlockStateProperties.POWERED, state.getValue(BlockStateProperties.POWERED));
 		}),
 		DOORS((state, world, pos) -> {
-			return ModItems.burned_door.getNotPersistant().with(BlockStateProperties.HORIZONTAL_FACING, state.get(BlockStateProperties.HORIZONTAL_FACING)).with(BlockStateProperties.DOUBLE_BLOCK_HALF, state.get(BlockStateProperties.DOUBLE_BLOCK_HALF)).with(BlockStateProperties.OPEN, state.get(BlockStateProperties.OPEN)).with(BlockStateProperties.POWERED, state.get(BlockStateProperties.POWERED));
+			return ModItems.burned_door.getNotPersistant().setValue(BlockStateProperties.HORIZONTAL_FACING, state.getValue(BlockStateProperties.HORIZONTAL_FACING)).setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF)).setValue(BlockStateProperties.OPEN, state.getValue(BlockStateProperties.OPEN)).setValue(BlockStateProperties.POWERED, state.getValue(BlockStateProperties.POWERED));
 		}),
 		NO_BEHAVIOR((state, world, pos) -> {
 			return state;

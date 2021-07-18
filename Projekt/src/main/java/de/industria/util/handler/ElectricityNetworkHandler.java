@@ -44,7 +44,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 	}
 	
 	@Override
-	public void read(CompoundNBT compound) {
+	public void load(CompoundNBT compound) {
 		
 		this.networks.clear();
 		ListNBT networkTag = compound.getList("Networks", 10);
@@ -55,7 +55,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		
 		ListNBT networkTag = new ListNBT();
 		for (ElectricityNetwork net : this.networks) {
@@ -68,9 +68,9 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 	
 	public static ElectricityNetworkHandler getHandlerForWorld(IWorld world) {
 		
-		if (!world.isRemote()) {
-			DimensionSavedDataManager storage = ((ServerWorld) world).getSavedData();
-			ElectricityNetworkHandler handler = storage.getOrCreate(ElectricityNetworkHandler::new, "elctricNetworks");
+		if (!world.isClientSide()) {
+			DimensionSavedDataManager storage = ((ServerWorld) world).getDataStorage();
+			ElectricityNetworkHandler handler = storage.computeIfAbsent(ElectricityNetworkHandler::new, "elctricNetworks");
 			handler.world = world;
 			return handler;
 		} else {
@@ -98,7 +98,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 				List<Direction> attachList = new ArrayList<Direction>();
 				network.positions.put(position, attachList);
 				
-				if (!network.isUpdated((ServerWorld) world) && !world.isRemote()) {
+				if (!network.isUpdated((ServerWorld) world) && !world.isClientSide()) {
 					
 					int lap = 3;
 					while (lap <= 3) {
@@ -193,7 +193,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 							
 						}
 						
-						this.markDirty();
+						this.setDirty();
 						
 						break;
 						
@@ -247,7 +247,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 				List<Direction> sideList = new ArrayList<Direction>();
 				sideList.add(direction.getOpposite());
 				network.positions.put(position, sideList);
-				this.scann(world, position.offset(direction), direction, network.positions, 0, DeviceType.WIRE);
+				this.scann(world, position.relative(direction), direction, network.positions, 0, DeviceType.WIRE);
 				
 				network.needCurrent = 0;
 				network.voltage = Voltage.NoLimit;
@@ -353,7 +353,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 						
 						if (device.canConnect(d.getOpposite(), world, scannPos, state) && (direction != null ? d != direction.getOpposite() : true)) {
 							
-							BlockPos pos2 = scannPos.offset(d);
+							BlockPos pos2 = scannPos.relative(d);
 							boolean flag1 = this.scann(world, pos2, d, posList, scannDepth + 1, type);
 							
 							if (flag1) {
@@ -513,7 +513,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 				entryTag.put("Position", NBTUtil.writeBlockPos(entry.getKey()));
 				ListNBT sides = new ListNBT();
 				for (Direction d : entry.getValue()) {
-					sides.add(StringNBT.valueOf(d.getName2()));
+					sides.add(StringNBT.valueOf(d.getName()));
 				}
 				entryTag.put("AttachedSides", sides);
 				deviceList.add(entryTag);

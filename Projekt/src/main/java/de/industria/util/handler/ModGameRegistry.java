@@ -40,7 +40,7 @@ public class ModGameRegistry {
 		IBlockToolType info = null;
 		int burnTime = -1;
 		int stackSize = 64;
-		Item.Properties properties = new Item.Properties().group(group).rarity(rarity);
+		Item.Properties properties = new Item.Properties().tab(group).rarity(rarity);
 		
 		if (block instanceof IAdvancedBlockInfo) {
 			info = ((IAdvancedBlockInfo) block).getBlockInfo();
@@ -55,7 +55,7 @@ public class ModGameRegistry {
 		
 		Item blockItem;
 		if (burnTime != -1 || info != null || stackSize != 64) {
-			blockItem = new ItemBlockAdvancedInfo(block, properties.maxStackSize(stackSize), info, burnTime);
+			blockItem = new ItemBlockAdvancedInfo(block, properties.stacksTo(stackSize), info, burnTime);
 		} else {
 			blockItem = new BlockItem(block, properties);
 		}
@@ -70,7 +70,7 @@ public class ModGameRegistry {
 		IBlockToolType info = null;
 		int burnTime = 0;
 		int stackSize = 64;
-		Item.Properties properties = new Item.Properties().group(group);
+		Item.Properties properties = new Item.Properties().tab(group);
 		
 		if (block instanceof IAdvancedBlockInfo) {
 			info = ((IAdvancedBlockInfo) block).getBlockInfo();
@@ -85,7 +85,7 @@ public class ModGameRegistry {
 		
 		Item blockItem;
 		if (burnTime > 0 || info != null || stackSize != 64) {
-			blockItem = new ItemBlockAdvancedInfo(block, properties.maxStackSize(stackSize), info, burnTime);
+			blockItem = new ItemBlockAdvancedInfo(block, properties.stacksTo(stackSize), info, burnTime);
 		} else {
 			blockItem = new BlockItem(block, properties);
 		}
@@ -113,7 +113,7 @@ public class ModGameRegistry {
 	@SafeVarargs
 	public static void addFeatureToBiomes(GenerationStage.Decoration decoration, ConfiguredFeature<?, ?> feature, RegistryKey<Biome>... biomes) {
 		for (RegistryKey<Biome> biome : biomes) {
-			HashMap<Decoration, List<ConfiguredFeature<?, ?>>> featureMap = featuresToRegister.getOrDefault(biome.getLocation(), new HashMap<GenerationStage.Decoration, List<ConfiguredFeature<?, ?>>>());
+			HashMap<Decoration, List<ConfiguredFeature<?, ?>>> featureMap = featuresToRegister.getOrDefault(biome.location(), new HashMap<GenerationStage.Decoration, List<ConfiguredFeature<?, ?>>>());
 			List<ConfiguredFeature<?, ?>> features = featureMap.getOrDefault(decoration, new ArrayList<ConfiguredFeature<?, ?>>());
 			features.add(feature);
 			featureMap.put(decoration, features);
@@ -123,7 +123,7 @@ public class ModGameRegistry {
 	
 	public static void addFeatureToBiomes(GenerationStage.Decoration decoration, ConfiguredFeature<?, ?> feature, Biome.Category category) {
 		for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
-			if (biome.getCategory() == category) {
+			if (biome.getBiomeCategory() == category) {
 				HashMap<Decoration, List<ConfiguredFeature<?, ?>>> featureMap = featuresToRegister.getOrDefault(biome.getRegistryName(), new HashMap<GenerationStage.Decoration, List<ConfiguredFeature<?, ?>>>());
 				List<ConfiguredFeature<?, ?>> features = featureMap.getOrDefault(decoration, new ArrayList<ConfiguredFeature<?, ?>>());
 				features.add(feature);
@@ -135,7 +135,7 @@ public class ModGameRegistry {
 	
 	public static void addFeatureToOverworldBiomes(GenerationStage.Decoration decoration, ConfiguredFeature<?, ?> feature) {
 		for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
-			if (biome.getCategory() != Biome.Category.NETHER && biome.getCategory() != Biome.Category.THEEND) {
+			if (biome.getBiomeCategory() != Biome.Category.NETHER && biome.getBiomeCategory() != Biome.Category.THEEND) {
 				HashMap<Decoration, List<ConfiguredFeature<?, ?>>> featureMap = featuresToRegister.getOrDefault(biome.getRegistryName(), new HashMap<GenerationStage.Decoration, List<ConfiguredFeature<?, ?>>>());
 				List<ConfiguredFeature<?, ?>> features = featureMap.getOrDefault(decoration, new ArrayList<ConfiguredFeature<?, ?>>());
 				features.add(feature);
@@ -148,7 +148,7 @@ public class ModGameRegistry {
 	@SafeVarargs
 	public static void addFeatureToRemove(GenerationStage.Decoration decoration, ConfiguredFeature<?, ?> feature, RegistryKey<Biome>... biomes) {
 		for (RegistryKey<Biome> biome : biomes) {
-			HashMap<Decoration, List<ConfiguredFeature<?, ?>>> featureMap = featuresToDeactivate.getOrDefault(biome.getLocation(), new HashMap<GenerationStage.Decoration, List<ConfiguredFeature<?, ?>>>());
+			HashMap<Decoration, List<ConfiguredFeature<?, ?>>> featureMap = featuresToDeactivate.getOrDefault(biome.location(), new HashMap<GenerationStage.Decoration, List<ConfiguredFeature<?, ?>>>());
 			List<ConfiguredFeature<?, ?>> features = featureMap.getOrDefault(decoration, new ArrayList<ConfiguredFeature<?, ?>>());
 			features.add(feature);
 			featureMap.put(decoration, features);
@@ -158,7 +158,7 @@ public class ModGameRegistry {
 	
 	public static void addFeatureToRemove(GenerationStage.Decoration decoration, ConfiguredFeature<?, ?> feature, Biome.Category category) {
 		for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
-			if (biome.getCategory() == category) {
+			if (biome.getBiomeCategory() == category) {
 				HashMap<Decoration, List<ConfiguredFeature<?, ?>>> featureMap = featuresToDeactivate.getOrDefault(biome.getRegistryName(), new HashMap<GenerationStage.Decoration, List<ConfiguredFeature<?, ?>>>());
 				List<ConfiguredFeature<?, ?>> features = featureMap.getOrDefault(decoration, new ArrayList<ConfiguredFeature<?, ?>>());
 				features.add(feature);
@@ -170,7 +170,7 @@ public class ModGameRegistry {
 	
 	public static void addFeatureToRemoveInOverworld(GenerationStage.Decoration decoration, ConfiguredFeature<?, ?> feature) {
 		for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
-			if (biome.getCategory() != Biome.Category.NETHER && biome.getCategory() != Biome.Category.THEEND) {
+			if (biome.getBiomeCategory() != Biome.Category.NETHER && biome.getBiomeCategory() != Biome.Category.THEEND) {
 				HashMap<Decoration, List<ConfiguredFeature<?, ?>>> featureMap = featuresToDeactivate.getOrDefault(biome.getRegistryName(), new HashMap<GenerationStage.Decoration, List<ConfiguredFeature<?, ?>>>());
 				List<ConfiguredFeature<?, ?>> features = featureMap.getOrDefault(decoration, new ArrayList<ConfiguredFeature<?, ?>>());
 				features.add(feature);

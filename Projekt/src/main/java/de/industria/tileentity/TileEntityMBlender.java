@@ -60,13 +60,14 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 	
 	public boolean isWorking;
 	public boolean hasPower;
-	public final int maxFluidStorage = 3000;
+	public final int maxFluidStorage;
 	
 	public TileEntityMBlender() {
 		super(ModTileEntityType.BLENDER, 9);
 		this.fluidIn1 = FluidStack.EMPTY;
 		this.fluidIn2 = FluidStack.EMPTY;
 		this.fluidOut = FluidStack.EMPTY;
+		this.maxFluidStorage = 3000;
 	}
 	
 	@Override
@@ -162,7 +163,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 							this.tankFillState += 0.02F;
 						} else {
 								
-							if (ItemStackHelper.canMergeRecipeFluidStacks(this.fluidOut, recipe.getRecipeOutputFluid(), this.maxFluidStorage)) {
+							if (ItemStackHelper.canMergeRecipeFluidStacks(this.fluidOut, recipe.getResultItemFluid(), this.maxFluidStorage)) {
 								
 								this.progressTotal = recipe.getMixingTime();
 								this.progress++;
@@ -189,9 +190,9 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 									}
 									
 									if (this.fluidOut.isEmpty()) {
-										this.fluidOut = recipe.getRecipeOutputFluid();
+										this.fluidOut = recipe.getResultItemFluid();
 									} else {
-										this.fluidOut.grow(recipe.getRecipeOutputFluid().getAmount());
+										this.fluidOut.grow(recipe.getResultItemFluid().getAmount());
 									}
 									
 								}

@@ -34,6 +34,10 @@ public class SchredderRecipe implements IRecipe<IInventory> {
 		this.schredderDamage = schredderDamage;
 	}
 	
+	public Ingredient getIngredient() {
+		return this.itemIn;
+	}
+	
 	@Override
 	public boolean matches(IInventory inv, World worldIn) {
 		return this.itemIn.test(inv.getItem(0)) && inv.getItem(4).getItem() == this.schredderTool;
@@ -54,11 +58,11 @@ public class SchredderRecipe implements IRecipe<IInventory> {
 		return this.itemOut1.copy();
 	}
 	
-	public ItemStack getRecipeOutput2() {
+	public ItemStack getResultItem2() {
 		return this.itemOut2.copy();
 	}
 	
-	public ItemStack getRecipeOutput3() {
+	public ItemStack getResultItem3() {
 		return this.itemOut3.copy();
 	}
 	

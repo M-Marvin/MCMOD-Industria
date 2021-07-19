@@ -42,7 +42,7 @@ public class ScreenMFluidBath extends ContainerScreen<ContainerMFluidBath> {
 		float fluidDurabillity = (float) te.fluidBufferState;
 		
 		this.blit(matrixStack, i + 53, j + 15, 176, 16, (int) (progress * 71), 16);
-		this.blit(matrixStack, i + 58, j + 60, 176, 33, (int) (fluidDurabillity * 52), 6);
+		this.blit(matrixStack, i + 58, j + 60, 176, 32, (int) (fluidDurabillity * 52), 6);
 		
 		if (te.hasPower) this.blit(matrixStack, i + 25, j + 55, 176, 0, 16, 16);
 		

@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"": { "model": "industria:block/bourned_block" }
+		"": { "model": "industria:block/burned_block" }
 	}
 }

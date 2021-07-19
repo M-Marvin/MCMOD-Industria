@@ -11,12 +11,6 @@
 		],
 		"subtitle": "sound.industria.block.turbin.loop"
 	},
-	"block.macerator.loop": {
-		"sounds": [
-			"industria:macerator_loop"
-		],
-		"subtitle": "sound.industria.block.macerator.loop"
-	},
 	"block.compressor.loop": {
 		"sounds": [
 			"industria:compressor_loop"

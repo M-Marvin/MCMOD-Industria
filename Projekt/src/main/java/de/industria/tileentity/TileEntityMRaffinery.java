@@ -95,8 +95,8 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 					if (this.currentRecipe != null) {
 						
 						if (	ItemStackHelper.canMergeRecipeStacks(this.getItem(0), currentRecipe.getResultItem()) &&
-								ItemStackHelper.canMergeRecipeStacks(this.getItem(1), currentRecipe.getRecipeOutput2()) &&
-								ItemStackHelper.canMergeRecipeStacks(this.getItem(2), currentRecipe.getRecipeOutput3()) &&
+								ItemStackHelper.canMergeRecipeStacks(this.getItem(1), currentRecipe.getResultItem2()) &&
+								ItemStackHelper.canMergeRecipeStacks(this.getItem(2), currentRecipe.getResultItem3()) &&
 								(this.fluidOut.getFluid() == currentRecipe.fluidOut.getFluid() || this.fluidOut.isEmpty()) ? this.fluidOut.getAmount() + currentRecipe.fluidOut.getAmount() < this.maxFluidStorage : false) {
 							
 							this.progressTotal = currentRecipe.getRifiningTime() / 3;
@@ -110,9 +110,9 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 									this.progress4 = 0;
 									
 									if (this.fluidOut.isEmpty()) {
-										this.fluidOut = currentRecipe.getRecipeOutputFluid();
+										this.fluidOut = currentRecipe.getResultItemFluid();
 									} else {
-										this.fluidOut.grow(currentRecipe.getRecipeOutputFluid().getAmount());
+										this.fluidOut.grow(currentRecipe.getResultItemFluid().getAmount());
 									}
 									
 								}
@@ -124,12 +124,12 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 								if (this.progress3 >= this.progressTotal) {
 									
 									this.progress3 = 0;
-									if (!currentRecipe.getRecipeOutputFluid().isEmpty()) this.progress4 = 1;
+									if (!currentRecipe.getResultItemFluid().isEmpty()) this.progress4 = 1;
 									
 									if (this.getItem(2).isEmpty()) {
-										this.setItem(2, currentRecipe.getRecipeOutput3());
+										this.setItem(2, currentRecipe.getResultItem3());
 									} else {
-										this.getItem(2).grow(currentRecipe.getRecipeOutput3().getCount());
+										this.getItem(2).grow(currentRecipe.getResultItem3().getCount());
 									}
 									
 								}
@@ -141,16 +141,16 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 								if (this.progress2 >= this.progressTotal) {
 									
 									this.progress2 = 0;
-									if (!currentRecipe.getRecipeOutput3().isEmpty()) {
+									if (!currentRecipe.getResultItem3().isEmpty()) {
 										this.progress3 = 1;
 									} else {
 										this.progress4 = 1;
 									}
 									
 									if (this.getItem(1).isEmpty()) {
-										this.setItem(1, currentRecipe.getRecipeOutput2());
+										this.setItem(1, currentRecipe.getResultItem2());
 									} else {
-										this.getItem(1).grow(currentRecipe.getRecipeOutput2().getCount());
+										this.getItem(1).grow(currentRecipe.getResultItem2().getCount());
 									}
 									
 								}
@@ -162,7 +162,7 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 								if (this.progress1 >= this.progressTotal) {
 									
 									this.progress1 = 0;
-									if (!currentRecipe.getRecipeOutput2().isEmpty()) {
+									if (!currentRecipe.getResultItem2().isEmpty()) {
 										this.progress2 = 1;
 									} else {
 										this.progress4 = 1;
@@ -251,8 +251,8 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 	public boolean isPostProcessing() {
 		if (this.currentRecipe == null) return false;
 		return this.progress2 > 0 || this.progress3 > 0 || this.progress4 > 0 && (ItemStackHelper.canMergeRecipeStacks(this.getItem(0), currentRecipe.getResultItem()) &&
-				ItemStackHelper.canMergeRecipeStacks(this.getItem(1), currentRecipe.getRecipeOutput2()) &&
-				ItemStackHelper.canMergeRecipeStacks(this.getItem(2), currentRecipe.getRecipeOutput3())) && 
+				ItemStackHelper.canMergeRecipeStacks(this.getItem(1), currentRecipe.getResultItem2()) &&
+				ItemStackHelper.canMergeRecipeStacks(this.getItem(2), currentRecipe.getResultItem3())) && 
 				(this.fluidOut.getFluid() == currentRecipe.fluidOut.getFluid() || this.fluidOut.isEmpty()) ? this.fluidOut.getAmount() + currentRecipe.fluidOut.getAmount() < this.maxFluidStorage : false;
 	}
 	

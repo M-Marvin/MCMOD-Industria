@@ -92,8 +92,8 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 						this.progressTotal = recipe.getWashingTime();
 						
 						if (	ItemStackHelper.canMergeRecipeStacks(this.getItem(1), recipe.getResultItem()) &&
-								ItemStackHelper.canMergeRecipeStacks(this.getItem(2), recipe.getRecipeOutput2()) &&
-								ItemStackHelper.canMergeRecipeStacks(this.getItem(3), recipe.getRecipeOutput3()) &&
+								ItemStackHelper.canMergeRecipeStacks(this.getItem(2), recipe.getResultItem2()) &&
+								ItemStackHelper.canMergeRecipeStacks(this.getItem(3), recipe.getResultItem3()) &&
 								this.maxFluidStorage - this.wasteFluid.getAmount() >= 500) {
 							
 							this.progress++;
@@ -109,15 +109,15 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 								}
 								
 								if (this.getItem(2).isEmpty()) {
-									this.setItem(2, recipe.getRecipeOutput2().copy());
+									this.setItem(2, recipe.getResultItem2().copy());
 								} else {
-									this.getItem(2).grow(recipe.getRecipeOutput2().getCount());
+									this.getItem(2).grow(recipe.getResultItem2().getCount());
 								}
 								
 								if (this.getItem(3).isEmpty()) {
-									this.setItem(3, recipe.getRecipeOutput3().copy());
+									this.setItem(3, recipe.getResultItem3().copy());
 								} else {
-									this.getItem(3).grow(recipe.getRecipeOutput3().getCount());
+									this.getItem(3).grow(recipe.getResultItem3().getCount());
 								}
 								
 								this.inputFluid.shrink(500);

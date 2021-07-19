@@ -2,7 +2,8 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "industria:block/conveyor_belt",
-		"1": "industria:block/conveyor_belt_side"
+		"1": "industria:block/conveyor_belt_side",
+		"particle": "industria:block/conveyor_belt_side"
 	},
 	"elements": [
 		{
@@ -47,9 +48,7 @@
 			"to": [15, 2, 15],
 			"rotation": {"angle": 0, "axis": "y", "origin": [21, 8, 8]},
 			"faces": {
-				"north": {"uv": [0, 0, 3, 1], "rotation": 270, "texture": "#missing"},
 				"east": {"uv": [14, 1, 16, 15], "rotation": 90, "texture": "#1"},
-				"south": {"uv": [0, 15, 3, 16], "rotation": 270, "texture": "#missing"},
 				"west": {"uv": [14, 1, 16, 15], "rotation": 90, "texture": "#1"},
 				"up": {"uv": [1, 1, 15, 2], "rotation": 90, "texture": "#0"},
 				"down": {"uv": [15, 1, 16, 15], "texture": "#1"}

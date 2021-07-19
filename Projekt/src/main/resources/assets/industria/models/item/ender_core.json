@@ -1,7 +1,7 @@
 {
 	"parent": "builtin/entity",
     "textures": {
-        "particle": "block/reinforced_casing"
+        "particle": "industria:block/reinforced_casing"
     },
     "display": {
         "gui": {

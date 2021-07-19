@@ -1,7 +1,7 @@
 {
 	"parent": "builtin/entity",
     "textures": {
-        "particle": "industria:block/computer"
+        "particle": "industria:block/computer_off"
     },
 	"display": {
 		"thirdperson_righthand": {

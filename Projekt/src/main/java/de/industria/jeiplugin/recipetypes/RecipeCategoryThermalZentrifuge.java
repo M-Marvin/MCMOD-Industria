@@ -31,11 +31,10 @@ public class RecipeCategoryThermalZentrifuge implements IRecipeCategory<ThermalZ
 	protected final IGuiHelper helper;
 	
 	public RecipeCategoryThermalZentrifuge(IGuiHelper helper) {
-		System.out.println("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 		this.helper = helper;
-		this.arrow = helper.createDrawable(TEXTURES, 176, 0, 49, 46);
+		this.arrow = helper.createDrawable(TEXTURES, 178, 0, 49, 59);
 		this.progressArrow = helper.createAnimatedDrawable(arrow, 100, StartDirection.RIGHT, true);
-		this.powerSymbol = helper.createDrawable(TEXTURES, 176, 46, 16, 16);
+		this.powerSymbol = helper.createDrawable(TEXTURES, 176, 65, 16, 16);
 	}
 	
 	@Override
@@ -55,13 +54,13 @@ public class RecipeCategoryThermalZentrifuge implements IRecipeCategory<ThermalZ
 	
 	@Override
 	public IDrawable getBackground() {
-		return helper.createDrawable(TEXTURES, 41, 12, 94, 62);
+		return helper.createDrawable(TEXTURES, 41, 12, 94, 68);
 	}
 	
 	@Override
 	public void draw(ThermalZentrifugeRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
-		progressArrow.draw(matrixStack, 23, 7);
-		powerSymbol.draw(matrixStack, 76, 41);
+		progressArrow.draw(matrixStack, 23, 1);
+		powerSymbol.draw(matrixStack, 3, 41);
 	}
 	
 	@Override
@@ -72,18 +71,18 @@ public class RecipeCategoryThermalZentrifuge implements IRecipeCategory<ThermalZ
 	@Override
 	public void setIngredients(ThermalZentrifugeRecipe recipe, IIngredients ingredients) {
 		ingredients.setInput(VanillaTypes.ITEM, recipe.getIngredient());
-		ingredients.setInput(VanillaTypes.ITEM, recipe.getResultItem());
-		if (!recipe.getResultItem2().isEmpty()) ingredients.setInput(VanillaTypes.ITEM, recipe.getResultItem2());
-		if (!recipe.getResultItem3().isEmpty()) ingredients.setInput(VanillaTypes.ITEM, recipe.getResultItem3());
+		ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem());
+		if (!recipe.getResultItem2().isEmpty()) ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem2());
+		if (!recipe.getResultItem3().isEmpty()) ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem3());
 	}
 	
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, ThermalZentrifugeRecipe recipe, IIngredients ingredients) {
 		IGuiItemStackGroup stacks = recipeLayout.getItemStacks();
-		stacks.init(0, true, 2, 2);
-		stacks.init(1, false, 2, 22);
-		stacks.init(2, false, 2, 42);
-		stacks.init(3, false, 74, 21);
+		stacks.init(0, true, 2, 21);
+		stacks.init(1, false, 74, 2);
+		stacks.init(2, false, 74, 22);
+		stacks.init(3, false, 74, 41);
 		stacks.set(0, recipe.getIngredient());
 		stacks.set(1, recipe.getResultItem());
 		if (!recipe.getResultItem2().isEmpty()) stacks.set(2, recipe.getResultItem2());

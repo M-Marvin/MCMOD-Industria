@@ -37,7 +37,19 @@ public class RifiningRecipe implements IRecipe<TileEntityMRaffinery> {
 	public ItemStack assemble(TileEntityMRaffinery inv) {
 		return this.itemsOut[0].copy();
 	}
-
+	
+	public FluidStack getFluidIn() {
+		return fluidIn;
+	}
+	
+	public FluidStack getFluidOut() {
+		return fluidOut;
+	}
+	
+	public ItemStack[] getItemsOut() {
+		return itemsOut;
+	}
+	
 	@Override
 	public boolean canCraftInDimensions(int width, int height) {
 		return width == 1 && height == 1;
@@ -48,15 +60,15 @@ public class RifiningRecipe implements IRecipe<TileEntityMRaffinery> {
 		return this.itemsOut[0].copy();
 	}
 	
-	public ItemStack getRecipeOutput2() {
+	public ItemStack getResultItem2() {
 		return this.itemsOut[1].copy();
 	}
 	
-	public ItemStack getRecipeOutput3() {
+	public ItemStack getResultItem3() {
 		return this.itemsOut[2].copy();
 	}
 	
-	public FluidStack getRecipeOutputFluid() {
+	public FluidStack getResultItemFluid() {
 		return this.fluidOut.copy();
 	}
 	

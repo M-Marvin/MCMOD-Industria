@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/slab_top",
   "textures": {
-    "bottom": "minecraft:block/smooth_andesite",
+    "bottom": "industria:block/smooth_andesite",
     "top": "industria:block/smooth_andesite",
     "side": "industria:block/smooth_andesite_slab_side"
   }

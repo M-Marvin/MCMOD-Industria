@@ -115,8 +115,8 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 				if (recipe != null) {
 					
 					if (ItemStackHelper.canMergeRecipeStacks(this.getItem(1), recipe.getResultItem()) &&
-						ItemStackHelper.canMergeRecipeStacks(this.getItem(2), recipe.getRecipeOutput2()) &&
-						ItemStackHelper.canMergeRecipeStacks(this.getItem(3), recipe.getRecipeOutput3()) &&
+						ItemStackHelper.canMergeRecipeStacks(this.getItem(2), recipe.getResultItem2()) &&
+						ItemStackHelper.canMergeRecipeStacks(this.getItem(3), recipe.getResultItem3()) &&
 						(this.getItem(4).getMaxDamage() - this.getItem(4).getDamageValue()) >= recipe.getSchredderDamage()) {
 						
 						this.progressTotal = recipe.getSchredderTime();
@@ -131,14 +131,14 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 								this.getItem(1).grow(result1.getCount());
 							}
 							
-							ItemStack result2 = recipe.getRecipeOutput2();
+							ItemStack result2 = recipe.getResultItem2();
 							if (this.getItem(2).isEmpty()) {
 								this.setItem(2, result2);
 							} else {
 								this.getItem(2).grow(result2.getCount());
 							}
 							
-							ItemStack result3 = recipe.getRecipeOutput3();
+							ItemStack result3 = recipe.getResultItem3();
 							if (this.getItem(3).isEmpty()) {
 								this.setItem(3, result3);
 							} else {

@@ -1,7 +1,7 @@
 {
 	"parent": "builtin/entity",
     "textures": {
-        "particle": "industria:block/steel_platting"
+        "particle": "industria:block/aluminium_plates"
     },
 	"display": {
 		"thirdperson_righthand": {

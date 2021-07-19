@@ -418,6 +418,7 @@
 "fluid.industria.copper_solution": "Kupferl\u00f6sung",
 "fluid.industria.aluminium_solution": "Aluminiuml\u00f6sung",
 "fluid.industria.wolfram_solution": "Wolframl\u00f6sung",
+"fluid.industria.tin_solution": "Zinl\u00f6sung",
 "fluid.industria.chemical_water": "Abwasser",
 "fluid.industria.raw_oil": "Roh\u00f6l",
 "fluid.industria.compressed_air": "Komprimiere Luft",
@@ -426,6 +427,13 @@
 "fluid.industria.fuel_gas": "Erdgas",
 
 "jei.recipe.title.alloy": "Legieren",
+"jei.recipe.title.thermalZentrifuge": "Thermalzentrifuge",
+"jei.recipe.title.schredder": "Schredder",
+"jei.recipe.title.blending": "Mischanlage",
+"jei.recipe.title.raffinery": "Raffinerie",
+"jei.recipe.title.fluidBath": "Fl\u00fcssigkeitsproduktion",
+"jei.recipe.title.washingPlant": "Erzw\u00e4sche",
+"jei.recipe.title.airCompressor": "Druckluftkompressor",
 
 "sound.industria.block.hover_extension.activated": "Antrieb aktiviert",
 "sound.industria.block.turbin.loop": "Turbine dr\u00f6hnt",

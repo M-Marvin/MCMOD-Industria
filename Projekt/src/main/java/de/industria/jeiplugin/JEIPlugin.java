@@ -1,11 +1,21 @@
 package de.industria.jeiplugin;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import de.industria.Industria;
+import de.industria.jeiplugin.recipetypes.RecipeCategoryAirCompressor;
 import de.industria.jeiplugin.recipetypes.RecipeCategoryAlloy;
+import de.industria.jeiplugin.recipetypes.RecipeCategoryBlender;
+import de.industria.jeiplugin.recipetypes.RecipeCategoryFluidBath;
+import de.industria.jeiplugin.recipetypes.RecipeCategoryMetalFormer;
+import de.industria.jeiplugin.recipetypes.RecipeCategoryRifining;
+import de.industria.jeiplugin.recipetypes.RecipeCategorySchredder;
 import de.industria.jeiplugin.recipetypes.RecipeCategoryThermalZentrifuge;
+import de.industria.jeiplugin.recipetypes.RecipeCategoryWashingPlant;
+import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModRecipeTypes;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -16,8 +26,10 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.gui.GuiHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
 
 @JeiPlugin
 public class JEIPlugin implements IModPlugin {
@@ -38,6 +50,13 @@ public class JEIPlugin implements IModPlugin {
 		
 		registration.addRecipes(getRecipes(manager, ModRecipeTypes.ALLOY), JEIRecipeCategories.ALLOY_FURNACE);
 		registration.addRecipes(getRecipes(manager, ModRecipeTypes.THERMAL_ZENTRIFUGE), JEIRecipeCategories.THERMAL_ZENTRIFUGE);
+		registration.addRecipes(getRecipes(manager, ModRecipeTypes.SCHREDDER), JEIRecipeCategories.SCHREDDER);
+		registration.addRecipes(getRecipes(manager, ModRecipeTypes.BLENDING), JEIRecipeCategories.BLENDER);
+		registration.addRecipes(getRecipes(manager, ModRecipeTypes.RIFINING), JEIRecipeCategories.RIFINING);
+		registration.addRecipes(getRecipes(manager, ModRecipeTypes.FLUID_BATH), JEIRecipeCategories.FLUID_BATH);
+		registration.addRecipes(getRecipes(manager, ModRecipeTypes.WASHING), JEIRecipeCategories.WASHING_PLANT);
+		registration.addRecipes(getRecipes(manager, ModRecipeTypes.METAL_FORM), JEIRecipeCategories.METAL_FORMER);
+		registration.addRecipes(itemsToCollection(new FluidStack(ModFluids.COMPRESSED_AIR, 1500)), JEIRecipeCategories.AIR_COMPRESSOR);
 	}
 	
 	@Override
@@ -47,10 +66,30 @@ public class JEIPlugin implements IModPlugin {
 		
 		registration.addRecipeCategories(new RecipeCategoryAlloy(guiHelper));
 		registration.addRecipeCategories(new RecipeCategoryThermalZentrifuge(guiHelper));
+		registration.addRecipeCategories(new RecipeCategorySchredder(guiHelper));
+		registration.addRecipeCategories(new RecipeCategoryBlender(guiHelper));
+		registration.addRecipeCategories(new RecipeCategoryRifining(guiHelper));
+		registration.addRecipeCategories(new RecipeCategoryFluidBath(guiHelper));
+		registration.addRecipeCategories(new RecipeCategoryWashingPlant(guiHelper));
+		registration.addRecipeCategories(new RecipeCategoryMetalFormer(guiHelper));
+		registration.addRecipeCategories(new RecipeCategoryAirCompressor(guiHelper));
 	}
 	
 	private static Collection<?> getRecipes(RecipeManager manager, IRecipeType<?> type) {
 		return manager.getRecipes().parallelStream().filter(recipe -> recipe.getType() == type).collect(Collectors.toList());
+	}
+	
+	public static List<Ingredient> ingredientToList(Ingredient ingredient) {
+		List<Ingredient> list = new ArrayList<Ingredient>();
+		list.add(ingredient);
+		return list;
+	}
+	
+	@SafeVarargs
+	public static <T> List<T> itemsToCollection(T... items) {
+		List<T> list = new ArrayList<T>();
+		for (T item : items) list.add(item);
+		return list;
 	}
 	
 }

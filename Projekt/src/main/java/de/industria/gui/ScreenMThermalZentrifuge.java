@@ -6,8 +6,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import de.industria.Industria;
 import de.industria.tileentity.TileEntityMThermalZentrifuge;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.screen.inventory.DispenserScreen;
-import net.minecraft.client.gui.screen.inventory.FurnaceScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;

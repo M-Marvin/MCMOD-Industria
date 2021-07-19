@@ -27,7 +27,15 @@ public class BlendingRecipe implements IRecipe<TileEntityMBlender> {
 		this.fluidOut = fluidOut;
 		this.mixingTime = mixingTime;
 	}
-
+	
+	public FluidStack[] getFluidsIn() {
+		return fluidsIn;
+	}
+	
+	public FluidStack getFluidOut() {
+		return fluidOut;
+	}
+	
 	@Override
 	public boolean matches(TileEntityMBlender inv, World worldIn) {
 
@@ -97,7 +105,7 @@ public class BlendingRecipe implements IRecipe<TileEntityMBlender> {
 		return this.fluidOut.getFluid().getAttributes().getBucket(this.fluidOut);
 	}
 	
-	public FluidStack getRecipeOutputFluid() {
+	public FluidStack getResultItemFluid() {
 		return this.fluidOut.copy();
 	}
 	

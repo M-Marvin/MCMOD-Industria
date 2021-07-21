@@ -45,7 +45,6 @@ public abstract class BlockRedstoneDiode extends BlockBase {
 		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		

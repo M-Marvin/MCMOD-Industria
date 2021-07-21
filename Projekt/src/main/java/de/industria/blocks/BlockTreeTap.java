@@ -101,7 +101,6 @@ public class BlockTreeTap extends BlockBase {
 		
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		

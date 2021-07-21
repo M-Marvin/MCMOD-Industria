@@ -1,10 +1,11 @@
 {
-    "parent": "minecraft:block/block",
 	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
 	"textures": {
 		"0": "industria:block/redstone_reciver_side",
 		"1": "industria:block/redstone_reciver_top",
 		"2": "industria:block/redstone_reciver_input",
+		"3": "industria:block/redstone_reciver_frame",
 		"particle": "industria:block/redstone_reciver_side"
 	},
 	"elements": [
@@ -13,7 +14,7 @@
 			"to": [16, 16, 14],
 			"faces": {
 				"east": {"uv": [2, 0, 14, 2], "texture": "#0"},
-				"west": {"uv": [2, 14, 14, 16], "texture": "#1"},
+				"west": {"uv": [2, 14, 14, 16], "texture": "#3"},
 				"up": {"uv": [12, 2, 16, 14], "texture": "#1"}
 			}
 		},
@@ -23,7 +24,7 @@
 			"faces": {
 				"north": {"uv": [0, 0, 16, 2], "texture": "#0"},
 				"east": {"uv": [14, 0, 16, 2], "texture": "#0"},
-				"south": {"uv": [0, 14, 16, 16], "texture": "#1"},
+				"south": {"uv": [0, 14, 16, 16], "texture": "#3"},
 				"west": {"uv": [0, 0, 2, 2], "texture": "#0"},
 				"up": {"uv": [0, 0, 16, 2], "texture": "#1"}
 			}
@@ -32,7 +33,7 @@
 			"from": [0, 14, 14],
 			"to": [16, 16, 16],
 			"faces": {
-				"north": {"uv": [0, 14, 16, 16], "texture": "#1"},
+				"north": {"uv": [0, 14, 16, 16], "texture": "#3"},
 				"east": {"uv": [0, 0, 2, 2], "texture": "#0"},
 				"south": {"uv": [0, 0, 16, 2], "texture": "#2"},
 				"west": {"uv": [14, 0, 16, 2], "texture": "#0"},
@@ -43,7 +44,7 @@
 			"from": [0, 14, 2],
 			"to": [4, 16, 14],
 			"faces": {
-				"east": {"uv": [2, 14, 14, 16], "texture": "#1"},
+				"east": {"uv": [2, 14, 14, 16], "texture": "#3"},
 				"west": {"uv": [2, 0, 14, 2], "texture": "#0"},
 				"up": {"uv": [0, 2, 4, 14], "texture": "#1"}
 			}

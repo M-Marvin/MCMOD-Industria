@@ -1,6 +1,7 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_column",
   "textures": {
-    "all": "industria:block/burned_block"
+    "end": "industria:block/burned_block_top",
+    "side": "industria:block/burned_block_side"
   }
 }

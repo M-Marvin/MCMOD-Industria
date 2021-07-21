@@ -36,17 +36,21 @@ public class BlockBurnManager {
 				return Stream.of(unburnedStates).map(new Function<BlockState, BlockState>() {
 					@Override
 					public BlockState apply(BlockState t) {
-						if (t.getBlock().is(BlockTags.FIRE) || t.getBlock() instanceof FlowingFluidBlock || t.getBlock() instanceof BlockGasFluid) return t;
+						if (isNotBurneable(t)) return t;
 						return ModItems.ash.defaultBlockState().setValue(BlockFallingDust.LAYERS, world.getRandom().nextInt(4) + 2);
 					}
 				}).toArray(BlockState[]::new);
 			}
 			return Stream.of(unburnedStates).map((state) -> {
-				if (state.getBlock().is(BlockTags.FIRE) || state.getBlock() instanceof FlowingFluidBlock || state.getBlock() instanceof BlockGasFluid) return state;
+				if (isNotBurneable(state)) return state;
 				return blockToBurnedMap.getOrDefault(state.getBlock(), DefaultBurnedSuppliers.NO_BEHAVIOR.getSupplier()).getBurnedState(state, world, pos);
 			}).toArray(BlockState[]::new);
 		}
 		return unburnedStates;
+	}
+	
+	public static boolean isNotBurneable(BlockState state) {
+		return state.getBlock().is(BlockTags.FIRE) || state.getBlock() instanceof FlowingFluidBlock || state.getBlock() instanceof BlockGasFluid || state.getMaterial() == Material.PLANT || state.getMaterial() == Material.REPLACEABLE_PLANT || state.getMaterial() == Material.REPLACEABLE_WATER_PLANT || state.getMaterial() == Material.WATER_PLANT;
 	}
 	
 	public static BlockState getBurnedVariant(BlockState unburnedState, IWorld world, BlockPos pos) {

@@ -2,19 +2,25 @@ buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
         mavenCentral()
-    }
+    }    
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
     }
 }
+
+plugins {
+	id 'com.github.johnrengelman.shadow' version '6.0.0'
+	id 'java'
+}
+
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 version = '1.0'
-group = 'com.yourname.modid' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'modid'
+group = 'de.marvin.industria' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'industria'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8) // Mojang ships Java 8 to end users, so your mod should target Java 8.
 
@@ -99,7 +105,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'Industria', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
                 examplemod {
@@ -126,7 +132,13 @@ repositories {
   }
 }
 
+configurations {
+    shade
+    implementation.extendsFrom shade
+}
+
 dependencies {
+	
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
@@ -136,11 +148,15 @@ dependencies {
   	compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
  	// at runtime, use the full JEI jar
   	runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
-	
+  	
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
     // compile "some.group:artifact:version"
-
+	//compile 'org.luaj:luaj-jme:3.0.1'
+	//compile 'org.luaj:luaj-jse:3.0.1'
+	shade 'org.luaj:luaj-jme:3.0.1'
+	shade 'org.luaj:luaj-jse:3.0.1'
+	
     // Real examples
     // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
     // compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
@@ -157,16 +173,25 @@ dependencies {
 
 }
 
+shadowJar {
+    classifier ''
+    configurations = [ project.configurations.shade ]
+}
+
+reobf {
+    shadowJar {}
+}
+
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
     manifest {
         attributes([
-            "Specification-Title": "examplemod",
-            "Specification-Vendor": "examplemodsareus",
+            "Specification-Title": "Industria",
+            "Specification-Vendor": "M_Marvin",
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"examplemodsareus",
+            "Implementation-Vendor" :"M_Marvin",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }

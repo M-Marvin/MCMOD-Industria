@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.jeiplugin.recipetypes.RecipeCategoryAirCompressor;
 import de.industria.jeiplugin.recipetypes.RecipeCategoryAlloy;
 import de.industria.jeiplugin.recipetypes.RecipeCategoryBlender;
@@ -21,10 +22,12 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IJeiHelpers;
+import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import mezz.jei.gui.GuiHelper;
+import mezz.jei.api.registration.IRecipeTransferRegistration;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
@@ -36,7 +39,7 @@ public class JEIPlugin implements IModPlugin {
 	
 	private static final ResourceLocation PLUGIN_ID = new ResourceLocation(Industria.MODID, "jei_plugin");
 	
-	public GuiHelper guiHelper;
+	public IGuiHelper guiHelper;
 	
 	@Override
 	public ResourceLocation getPluginUid() {
@@ -73,6 +76,24 @@ public class JEIPlugin implements IModPlugin {
 		registration.addRecipeCategories(new RecipeCategoryWashingPlant(guiHelper));
 		registration.addRecipeCategories(new RecipeCategoryMetalFormer(guiHelper));
 		registration.addRecipeCategories(new RecipeCategoryAirCompressor(guiHelper));
+	}
+	
+	@Override
+	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+		registration.addRecipeCatalyst(new ItemStack(ModItems.alloy_furnace), JEIRecipeCategories.ALLOY_FURNACE);
+		registration.addRecipeCatalyst(new ItemStack(ModItems.thermal_zentrifuge), JEIRecipeCategories.THERMAL_ZENTRIFUGE);
+		registration.addRecipeCatalyst(new ItemStack(ModItems.schredder), JEIRecipeCategories.SCHREDDER);
+		registration.addRecipeCatalyst(new ItemStack(ModItems.blender), JEIRecipeCategories.BLENDER);
+		registration.addRecipeCatalyst(new ItemStack(ModItems.raffinery), JEIRecipeCategories.RIFINING);
+		registration.addRecipeCatalyst(new ItemStack(ModItems.fluid_bath), JEIRecipeCategories.FLUID_BATH);
+		registration.addRecipeCatalyst(new ItemStack(ModItems.ore_washing_plant), JEIRecipeCategories.WASHING_PLANT);
+		registration.addRecipeCatalyst(new ItemStack(ModItems.metal_former), JEIRecipeCategories.METAL_FORMER);
+		registration.addRecipeCatalyst(new ItemStack(ModItems.air_compressor), JEIRecipeCategories.AIR_COMPRESSOR);
+	}
+	
+	@Override
+	public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
+		//registration.addRecipeTransferHandler(recipeTransferHandler, recipeCategoryUid);
 	}
 	
 	private static Collection<?> getRecipes(RecipeManager manager, IRecipeType<?> type) {

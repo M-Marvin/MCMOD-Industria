@@ -160,8 +160,12 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 			public LuaValue call(LuaValue milis) {
 				int m = milis.checkint();
 				try {
-					TileEntityNComputer.this.luaInterpreter.validateTime();
-					Thread.sleep(m);
+					while (m > 0) {
+						int time = Math.min(m, 1000);
+						TileEntityNComputer.this.luaInterpreter.validateTime();
+						Thread.sleep(time);
+						m -= 1000;
+					}
 				} catch (InterruptedException e) {}
 				return LuaValue.NONE;
 			}

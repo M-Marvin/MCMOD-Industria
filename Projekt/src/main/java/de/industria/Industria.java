@@ -43,7 +43,6 @@ public class Industria {
 			PROTOCOL_VERSION::equals,
 			PROTOCOL_VERSION::equals);
 	
-	
 	public static final ItemGroup MACHINES = new ItemGroup("machines") {
 		@Override
 		public ItemStack makeIcon() {

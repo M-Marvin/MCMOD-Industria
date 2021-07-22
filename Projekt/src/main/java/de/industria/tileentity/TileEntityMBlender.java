@@ -72,7 +72,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(worldPosition.offset(-3, -1, -3), worldPosition.offset(4, 4, 4));
+		return new AxisAlignedBB(worldPosition.offset(-4, -1, -4), worldPosition.offset(4, 4, 4));
 	}
 	
 	@Override

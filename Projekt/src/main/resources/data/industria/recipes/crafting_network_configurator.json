@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "EEE",
+    "LPL",
+    "EKE"
+  ],
+  "key": {
+    "E": {
+      "item": "industria:aluminium_plate"
+    },
+    "L": {
+      "item": "industria:circuit_board"
+    },
+    "P": {
+      "item": "industria:emerald_processor"
+    },
+    "T": {
+      "item": "industria:electrolyt_copper_plate"
+    }
+  },
+  "result": {
+    "item": "industria:network_configurator"
+  }
+}

@@ -1,15 +1,7 @@
 {
   "replace": false,
   "values": [
-    "industria:copper_cable",
-    "industria:electrolyt_copper_cable",
-    "industria:aluminium_cable",
-    "industria:fluid_pipe",
-    "industria:signal_wire",
-    "industria:stacked_redstone_wire",
-    "industria:network_cable",
-    "minecraft:redstone_wire",
-    "industria:preassure_pipe",
+    "industria:structure_scaffold",
     "industria:encased_electric_copper_cable",
     "industria:encased_electric_electrolyt_copper_cable",
     "industria:encased_electric_aluminium_cable",

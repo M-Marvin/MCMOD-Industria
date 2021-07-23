@@ -842,6 +842,13 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.red_sandstone_brick_stairs, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.sandstone_brick_stairs, BUILDING_BLOCKS);
 		
+		ModGameRegistry.registerTechnicalBlock(ModItems.encased_electric_copper_cable);
+		ModGameRegistry.registerTechnicalBlock(ModItems.encased_electric_electrolyt_copper_cable);
+		ModGameRegistry.registerTechnicalBlock(ModItems.encased_electric_aluminium_cable);
+		ModGameRegistry.registerTechnicalBlock(ModItems.encased_electric_burned_cable);
+		ModGameRegistry.registerTechnicalBlock(ModItems.encased_network_cable);
+		ModGameRegistry.registerTechnicalBlock(ModItems.encased_fluid_pipe);
+		
 		ModGameRegistry.registerTechnicalBlock(ModItems.steam);
 		ModGameRegistry.registerItem(ModItems.steam_bucket);
 		ModGameRegistry.registerTechnicalBlock(ModItems.destilled_water);

@@ -13,10 +13,14 @@ import net.minecraftforge.common.ToolType;
 
 public class BlockNetworkCable extends BlockWiring implements INetworkDevice {
 	
-	public BlockNetworkCable() {
-		super("network_cable", Material.WOOL, 0.2F, SoundType.WOOL, 4);
+	public BlockNetworkCable(String name) {
+		super(name, Material.WOOL, 0.2F, SoundType.WOOL, 4);
 	}
-
+	
+	public BlockNetworkCable() {
+		this("network_cable");
+	}
+	
 	@Override
 	public ToolType getHarvestTool(BlockState state) {
 		return ModToolType.CUTTER;

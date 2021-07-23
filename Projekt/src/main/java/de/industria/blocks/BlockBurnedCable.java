@@ -31,7 +31,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class BlockBurnedCable extends BlockElektricWire {
+public class BlockBurnedCable extends BlockElectricWire {
 	
 	public BlockBurnedCable() {
 		super("burned_cable", 10, 4);

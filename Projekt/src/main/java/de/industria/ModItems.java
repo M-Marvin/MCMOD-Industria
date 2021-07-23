@@ -76,7 +76,7 @@ public class ModItems {
 	public static final Block harvester = new BlockRHarvester();
 	public static final Block jigsaw = new BlockJigsaw();
 	public static final Block item_detector = new BlockRItemDetector();
-	public static final Block structure_scaffold = new BlockStructureScaffold("structure_scaffold");
+	public static final BlockStructureScaffold structure_scaffold = new BlockStructureScaffold("structure_scaffold");
 	
 	// TODO
 	public static final Block storing_crafting_table = new BlockMStoringCraftingTable();	
@@ -100,12 +100,18 @@ public class ModItems {
 	public static final Block generator = new BlockMGenerator();
 	public static final Block infinity_power_source = new BlockInfinityPowerSource();
 	public static final Block panel_lamp = new BlockMPanelLamp();
-	public static final Block copper_cable = new BlockElektricWire("copper_cable", 16, 4);
-	public static final Block electrolyt_copper_cable = new BlockElektricWire("electrolyt_copper_cable", 32, 4);
-	public static final Block aluminium_cable = new BlockElektricWire("aluminium_cable", 64, 8);
+	public static final Block copper_cable = new BlockElectricWire("copper_cable", 16, 4);
+	public static final Block encased_electric_copper_cable = new BlockEncasedElectricWire("encased_electric_copper_cable", 16, 4, structure_scaffold);
+	public static final Block electrolyt_copper_cable = new BlockElectricWire("electrolyt_copper_cable", 32, 4);
+	public static final Block encased_electric_electrolyt_copper_cable = new BlockEncasedElectricWire("encased_electric_electrolyt_copper_cable", 16, 4, structure_scaffold);
+	public static final Block aluminium_cable = new BlockElectricWire("aluminium_cable", 64, 8);
+	public static final Block encased_electric_aluminium_cable = new BlockEncasedElectricWire("encased_electric_aluminium_cable", 16, 4, structure_scaffold);
 	public static final Block burned_cable = new BlockBurnedCable();
+	public static final Block encased_electric_burned_cable = new BlockEncasedElectricWire("encased_electric_burned_cable", 16, 4, structure_scaffold);
 	public static final Block network_cable = new BlockNetworkCable();
+	public static final Block encased_network_cable = new BlockEncasedNetworkCable("encased_network_cable", structure_scaffold);
 	public static final Block fluid_pipe = new BlockFluidPipe();
+	public static final Block encased_fluid_pipe = new BlockEncasedFluidPipe("encased_fluid_pipe", structure_scaffold);
 	public static final Block fluid_valve = new BlockFluidValve();
 	public static final Block fluid_input = new BlockMFluidInput();
 	public static final Block fluid_output = new BlockMFluidOutput();

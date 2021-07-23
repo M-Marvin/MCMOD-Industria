@@ -25,7 +25,7 @@ public class TileEntityStructureScaffoldRenderer extends TileEntityRenderer<Tile
 		super(rendererDispatcherIn);
 		this.blockRenderDispatcher = Minecraft.getInstance().getBlockRenderer();
 	}
-
+	
 	@SuppressWarnings("deprecation")
 	@Override
 	public void render(TileEntityStructureScaffold tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {

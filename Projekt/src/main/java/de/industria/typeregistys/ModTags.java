@@ -30,6 +30,7 @@ public class ModTags {
 	public static final ITag<Block> MARPLE_LOGS = tagBlock("marple_logs");
 	public static final ITag<Block> MANGROVE_LOGS = tagBlock("mangrove_logs");
 	public static final ITag<Block> BURNED_WOOD = tagBlock("burned_wood");
+	public static final ITag<Block> SCAFFOLDING = tagBlock("scaffolding");
 	
 	private static IOptionalNamedTag<Fluid> tagFluid(String name) {
 		return FluidTags.createOptional(new ResourceLocation(Industria.MODID, name));

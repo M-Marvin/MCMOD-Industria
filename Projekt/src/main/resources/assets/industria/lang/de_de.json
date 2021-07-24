@@ -540,6 +540,8 @@
 "death.attack.schredder": "%1$s wurde geschreddert.",
 "death.attack.schredder.player": "%1$s wurde geschreddert beim Kampf gegen %2$s.",
 "death.attack.acid": "%1$s wurde aufgel\u00f6st.",
-"death.attack.acid.player": "%1$s wurde aufgel\u00f6st beim Kampf gegen %2$s."
+"death.attack.acid.player": "%1$s wurde aufgel\u00f6st beim Kampf gegen %2$s.",
+"death.attack.gas": "%1$s ist in Gas erstickt.",
+"death.attack.gas.player": "%1$s ist beim Kampf gegen %2$s in Gas erstickt."
 
 }

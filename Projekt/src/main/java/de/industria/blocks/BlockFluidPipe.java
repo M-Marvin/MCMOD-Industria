@@ -29,8 +29,12 @@ import net.minecraft.world.World;
 @SuppressWarnings("deprecation")
 public class BlockFluidPipe extends BlockWiring implements ITileEntityProvider, IAdvancedBlockInfo {
 	
+	public BlockFluidPipe(String name) {
+		super(name, Material.METAL, 2F, SoundType.METAL, 8);
+	}
+	
 	public BlockFluidPipe() {
-		super("fluid_pipe", Material.METAL, 2F, SoundType.METAL, 8);
+		this("fluid_pipe");
 	}
 	
 	@Override

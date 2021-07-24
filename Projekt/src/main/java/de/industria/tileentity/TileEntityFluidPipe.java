@@ -23,14 +23,13 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 	protected FluidStack fluid;
 	
 	public TileEntityFluidPipe() {
-		super(ModTileEntityType.FLUID_PIPE);
-		this.fluid = FluidStack.EMPTY;
-		this.maxFluid = 100;
+		this(ModTileEntityType.FLUID_PIPE);
 	}
 	
 	public TileEntityFluidPipe(TileEntityType<?> type) {
 		super(type);
-		maxFluid = 100;
+		this.fluid = FluidStack.EMPTY;
+		this.maxFluid = 100;
 	}
 	
 	@Override

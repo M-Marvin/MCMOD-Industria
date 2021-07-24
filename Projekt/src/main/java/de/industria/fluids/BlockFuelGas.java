@@ -72,28 +72,31 @@ public class BlockFuelGas extends BlockGasFluid {
 		int spreadAmountRnd = 2;
 		float explosionForce = 3;
 		
-		worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, explosionForce, true, Mode.BREAK);
-		for (int i = worldIn.random.nextInt(spreadAmountRnd) + spreadAmountMin; i >= 0; i--) {
-			worldIn.setBlockAndUpdate(pos, Blocks.FIRE.defaultBlockState());
-			FallingBlockEntity spreadFire = new FallingBlockEntity(worldIn, pos.getX(), pos.getY(), pos.getZ(), Blocks.FIRE.defaultBlockState());
-			float mX = (worldIn.random.nextFloat() - 0.5F) * spreadForce;
-			float mY = (worldIn.random.nextFloat() * 0.5F) * spreadForce;
-			float mZ = (worldIn.random.nextFloat() - 0.5F) * spreadForce;
-			spreadFire.setDeltaMovement(mX, mY, mZ);
-			Field timeField;
-			try {
-				timeField = FallingBlockEntity.class.getDeclaredField("fallTime");
-				timeField.setAccessible(true);
-				timeField.set(spreadFire, 1);
-			} catch (NoSuchFieldException | SecurityException e) {
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
+		if (worldIn.random.nextInt(10) == 0) {
+			worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, explosionForce, true, Mode.BREAK);
+			for (int i = worldIn.random.nextInt(spreadAmountRnd) + spreadAmountMin; i >= 0; i--) {
+				worldIn.setBlockAndUpdate(pos, Blocks.FIRE.defaultBlockState());
+				FallingBlockEntity spreadFire = new FallingBlockEntity(worldIn, pos.getX(), pos.getY(), pos.getZ(), Blocks.FIRE.defaultBlockState());
+				float mX = (worldIn.random.nextFloat() - 0.5F) * spreadForce;
+				float mY = (worldIn.random.nextFloat() * 0.5F) * spreadForce;
+				float mZ = (worldIn.random.nextFloat() - 0.5F) * spreadForce;
+				spreadFire.setDeltaMovement(mX, mY, mZ);
+				Field timeField;
+				try {
+					timeField = FallingBlockEntity.class.getDeclaredField("time");
+					timeField.setAccessible(true);
+					timeField.set(spreadFire, 1);
+				} catch (NoSuchFieldException | SecurityException e) {
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
+				worldIn.addFreshEntity(spreadFire);
 			}
-			worldIn.addFreshEntity(spreadFire);
 		}
+		
 	}
 
 	@Override

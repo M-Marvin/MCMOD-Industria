@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "industria:structure_scaffold",
+    "industria:encased_electric_copper_cable",
+    "industria:encased_electric_electrolyt_copper_cable",
+    "industria:encased_electric_aluminium_cable",
+    "industria:encased_electric_burned_cable",
+    "industria:encased_network_cable",
+    "industria:encased_fluid_pipe"
+  ]
+}

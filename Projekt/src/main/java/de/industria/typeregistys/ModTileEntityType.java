@@ -96,7 +96,7 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityNComputer> COMPUTER = register("computer", TileEntityType.Builder.of(TileEntityNComputer::new, ModItems.computer));
 	public static final TileEntityType<TileEntityMChunkLoader> CHUNK_LOADER = register("chunk_loader", TileEntityType.Builder.of(TileEntityMChunkLoader::new, ModItems.chunk_loader));
 	public static final TileEntityType<TileEntityEnderCore> ENDER_CORE = register("ender_core", TileEntityType.Builder.of(TileEntityEnderCore::new, ModItems.ender_core));
-	public static final TileEntityType<TileEntityStructureScaffold> STRUCTURE_SCAFFOLD = register("structure_scaffold", TileEntityType.Builder.of(TileEntityStructureScaffold::new, ModItems.structure_scaffold));
+	public static final TileEntityType<TileEntityStructureScaffold> STRUCTURE_SCAFFOLD = register("structure_scaffold", TileEntityType.Builder.of(TileEntityStructureScaffold::new, ModItems.structure_scaffold, ModItems.encased_electric_copper_cable, ModItems.encased_electric_electrolyt_copper_cable, ModItems.encased_electric_aluminium_cable, ModItems.encased_electric_burned_cable, ModItems.encased_network_cable, ModItems.encased_fluid_pipe));
 	public static final TileEntityType<TileEntityMBlastFurnace> BLAST_FURNACE = register("blast_furnace", TileEntityType.Builder.of(TileEntityMBlastFurnace::new, ModItems.blast_furnace));
 	public static final TileEntityType<TileEntityMAirCompressor> AIR_COMPRESSOR = register("air_compressor", TileEntityType.Builder.of(TileEntityMAirCompressor::new, ModItems.air_compressor));
 	public static final TileEntityType<TileEntityPreassurePipe> PREASSURE_PIPE = register("preassure_pipe", TileEntityType.Builder.of(TileEntityPreassurePipe::new, ModItems.preassure_pipe));

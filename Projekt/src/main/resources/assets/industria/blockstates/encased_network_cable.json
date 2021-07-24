@@ -1,0 +1,31 @@
+{
+	"multipart": [
+		{ "when": {"middle": "closed"}, "apply": {
+			"model": "industria:block/network_cable_mid"
+		}},
+		{ "when": {"middle": "open"}, "apply": {
+			"model": "industria:block/network_cable_mid_uninsulated"
+		}},
+		{ "when": {"north": "true"}, "apply": {
+			"model": "industria:block/network_cable_side"
+		}},
+		{ "when": {"south": "true"}, "apply": {
+			"model": "industria:block/network_cable_side",
+			"y": 180
+		}},
+		{ "when": {"east": "true"}, "apply": {
+			"model": "industria:block/network_cable_side",
+			"y": 90
+		}},
+		{ "when": {"west": "true"}, "apply": {
+			"model": "industria:block/network_cable_side",
+			"y": 270
+		}},
+		{ "when": {"up": "true"}, "apply": {
+			"model": "industria:block/network_cable_up"
+		}},
+		{ "apply": {
+			"model": "industria:block/structure_scaffold" }
+		}
+	]
+}

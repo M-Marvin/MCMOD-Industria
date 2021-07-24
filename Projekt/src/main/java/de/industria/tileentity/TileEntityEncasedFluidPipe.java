@@ -3,33 +3,102 @@ package de.industria.tileentity;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.IFluidConnective;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 
-public class TileEntityFluidPipe extends TileEntity implements IFluidConnective, ITickableTileEntity {
-	
-	public static final int MAX_PUSH_DEPTH = 5000;
+public class TileEntityEncasedFluidPipe extends TileEntityStructureScaffold implements IFluidConnective {
 	
 	protected final int maxFluid;
 	protected FluidStack fluid;
 	
-	public TileEntityFluidPipe() {
-		this(ModTileEntityType.FLUID_PIPE);
+	public TileEntityEncasedFluidPipe() {
+		this.maxFluid = 100;
+		this.fluid = FluidStack.EMPTY;
 	}
 	
-	public TileEntityFluidPipe(TileEntityType<?> type) {
-		super(type);
-		this.fluid = FluidStack.EMPTY;
-		this.maxFluid = 100;
+	@Override
+	public void tick() {
+		super.tick();
+		
+		if (!this.level.isClientSide && !this.fluid.isEmpty()) {
+			
+			int inputs = 0;
+			for (Direction d : Direction.values()) {
+				TileEntity te = this.level.getBlockEntity(worldPosition.relative(d));
+				if (te instanceof TileEntityFluidPipe) {
+					
+					TileEntityFluidPipe pipe = (TileEntityFluidPipe) te;
+					if (pipe.getFluidType() == this.getFluidType() || pipe.fluid.isEmpty()) inputs++;
+					
+				}
+			}
+			
+			if (inputs > 0) {
+				
+				for (Direction d : Direction.values()) {
+					TileEntity te = this.level.getBlockEntity(worldPosition.relative(d));
+					if (te instanceof TileEntityFluidPipe) {
+
+						TileEntityFluidPipe pipe = (TileEntityFluidPipe) te;
+						
+						if (pipe.fluid.isEmpty() || this.getFluidType() == pipe.getFluidType()) {
+							
+							int differenz = this.fluid.getAmount() - pipe.fluid.getAmount();
+							
+							if (differenz > 0) {
+								
+								int transfer = differenz / 2;
+								
+								transfer = Math.min(this.fluid.getAmount() / inputs, transfer);
+								int maxFlow = pipe instanceof TileEntityFluidValve ? ((TileEntityFluidValve) pipe).maxFlow : pipe.maxFluid;
+								transfer = transfer < 0 ? Math.max(transfer, -maxFlow) : Math.min(transfer, maxFlow);
+								
+								this.fluid.shrink(transfer);
+								
+								if (pipe.fluid.isEmpty()) {
+									pipe.fluid = new FluidStack(this.getFluidType(), transfer);
+								} else {
+									pipe.fluid.grow(transfer);
+								}
+								pipe.fluid.setTag(this.fluid.getTag());
+								
+							}
+							
+						}
+						
+					}
+					
+				}
+				
+			}
+			
+			if (!this.fluid.isEmpty()) {
+				
+				for (Direction d : Direction.values()) {
+					
+					TileEntity te = this.level.getBlockEntity(worldPosition.relative(d));
+					
+					if (te instanceof IFluidConnective && !(te instanceof TileEntityFluidPipe)) {
+						
+						IFluidConnective device = (IFluidConnective) te;
+						FluidStack fluidRemaining = device.insertFluid(this.fluid);
+						if (fluidRemaining == this.fluid) continue;
+						this.fluid = fluidRemaining;
+						
+					}
+					
+				}
+				
+			}
+			
+		}
+		
 	}
 	
 	@Override
@@ -135,7 +204,7 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 				
 			}
 			
-			if (!scannList.contains(worldPosition) && scannDepth <= MAX_PUSH_DEPTH) {
+			if (!scannList.contains(worldPosition) && scannDepth <= TileEntityFluidPipe.MAX_PUSH_DEPTH) {
 				
 				scannList.add(worldPosition);
 				
@@ -164,86 +233,6 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 	}
 	
 	@Override
-	public void tick() {
-		
-		if (!this.level.isClientSide && !this.fluid.isEmpty()) {
-			
-			int inputs = 0;
-			for (Direction d : Direction.values()) {
-				TileEntity te = this.level.getBlockEntity(worldPosition.relative(d));
-				if (te instanceof TileEntityFluidPipe) {
-					
-					TileEntityFluidPipe pipe = (TileEntityFluidPipe) te;
-					if (pipe.getFluidType() == this.getFluidType() || pipe.fluid.isEmpty()) inputs++;
-					
-				}
-			}
-			
-			if (inputs > 0) {
-				
-				for (Direction d : Direction.values()) {
-					TileEntity te = this.level.getBlockEntity(worldPosition.relative(d));
-					if (te instanceof TileEntityFluidPipe) {
-
-						TileEntityFluidPipe pipe = (TileEntityFluidPipe) te;
-						
-						if (pipe.fluid.isEmpty() || this.getFluidType() == pipe.getFluidType()) {
-							
-							int differenz = this.fluid.getAmount() - pipe.fluid.getAmount();
-							
-							if (differenz > 0) {
-								
-								int transfer = differenz / 2;
-								
-								transfer = Math.min(this.fluid.getAmount() / inputs, transfer);
-								int maxFlow = pipe instanceof TileEntityFluidValve ? ((TileEntityFluidValve) pipe).maxFlow : pipe.maxFluid;
-								transfer = transfer < 0 ? Math.max(transfer, -maxFlow) : Math.min(transfer, maxFlow);
-								
-								this.fluid.shrink(transfer);
-								
-								if (pipe.fluid.isEmpty()) {
-									pipe.fluid = new FluidStack(this.getFluidType(), transfer);
-								} else {
-									pipe.fluid.grow(transfer);
-								}
-								pipe.fluid.setTag(this.fluid.getTag());
-								
-							}
-							
-						}
-						
-					}
-					
-				}
-				
-			}
-			
-			if (!this.fluid.isEmpty()) {
-				
-				for (Direction d : Direction.values()) {
-					
-					TileEntity te = this.level.getBlockEntity(worldPosition.relative(d));
-					
-					if (te instanceof IFluidConnective && !(te instanceof TileEntityFluidPipe)) {
-						
-						IFluidConnective device = (IFluidConnective) te;
-						FluidStack fluidRemaining = device.insertFluid(this.fluid);
-						if (fluidRemaining == this.fluid) continue;
-						this.fluid = fluidRemaining;
-						
-					}
-					
-				}
-				
-			}
-			
-		}
-		
-		
-		
-	}
-
-	@Override
 	public boolean canConnect(Direction side) {
 		return true;
 	}
@@ -256,5 +245,5 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidConnective,
 	public FluidStack getStorage() {
 		return this.fluid;
 	}
-
+	
 }

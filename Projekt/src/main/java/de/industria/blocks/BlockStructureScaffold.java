@@ -7,6 +7,7 @@ import de.industria.ModItems;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.items.ItemStructureCladdingPane;
 import de.industria.tileentity.TileEntityStructureScaffold;
+import de.industria.typeregistys.ModTags;
 import de.industria.util.blockfeatures.IAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IAdvancedStickyBlock;
 import de.industria.util.handler.VoxelHelper;
@@ -18,7 +19,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
@@ -36,17 +39,17 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 public class BlockStructureScaffold extends BlockContainerBase implements IAdvancedStickyBlock, IAdvancedBlockInfo {
-
+	
 	public BlockStructureScaffold(String name) {
 		super(name, Material.METAL, 3F, 3F, SoundType.NETHERITE_BLOCK);
 	}
-	
-	@SuppressWarnings("deprecation")
+		
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		VoxelShape shape = VoxelShapes.empty();
+		
 		ItemStack heldStack = context.getEntity() instanceof PlayerEntity ? ((PlayerEntity) context.getEntity()).getMainHandItem() : ItemStack.EMPTY;
-		if (heldStack.getItem() == ModItems.structure_scaffold.getCloneItemStack(worldIn, pos, state).getItem() || heldStack.getItem() == ModItems.structure_cladding_pane) {
+		if ((context.getEntity() != null ? Block.byItem(heldStack.getItem()).is(ModTags.SCAFFOLDING) : false) || heldStack.getItem() == ModItems.structure_cladding_pane) {
 			shape = Block.box(0, 0, 0, 16, 16, 16);
 		} else {
 			shape = VoxelShapes.joinUnoptimized(shape, Block.box(0, 0, 0, 16, 1, 1), IBooleanFunction.OR);
@@ -88,6 +91,7 @@ public class BlockStructureScaffold extends BlockContainerBase implements IAdvan
 		return null;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		
@@ -100,6 +104,7 @@ public class BlockStructureScaffold extends BlockContainerBase implements IAdvan
 				if (!worldIn.isClientSide()) {
 					
 					TileEntity tileEntity = worldIn.getBlockEntity(pos);
+					
 					if (tileEntity instanceof TileEntityStructureScaffold) {
 						
 						Direction side = hit.getDirection();
@@ -142,7 +147,31 @@ public class BlockStructureScaffold extends BlockContainerBase implements IAdvan
 				
 				return ActionResultType.CONSUME;
 				
+			} else if (!worldIn.getBlockState(pos).is(ModTags.WIRING)) {
+				BlockState state2 = null;
+				if (stack.getItem() == Item.byBlock(ModItems.copper_cable)) state2 = ModItems.encased_electric_copper_cable.defaultBlockState();
+				if (stack.getItem() == Item.byBlock(ModItems.electrolyt_copper_cable)) state2 = ModItems.encased_electric_electrolyt_copper_cable.defaultBlockState();
+				if (stack.getItem() == Item.byBlock(ModItems.aluminium_cable)) state2 = ModItems.encased_electric_aluminium_cable.defaultBlockState();
+				if (stack.getItem() == Item.byBlock(ModItems.burned_cable)) state2 = ModItems.encased_electric_burned_cable.defaultBlockState();
+				if (stack.getItem() == Item.byBlock(ModItems.network_cable)) state2 = ModItems.encased_network_cable.defaultBlockState();
+				if (stack.getItem() == Item.byBlock(ModItems.fluid_pipe)) state2 = ModItems.encased_fluid_pipe.defaultBlockState();
+				
+				if (state2 != null) {
+					
+					CompoundNBT nbt = worldIn.getBlockEntity(pos).serializeNBT();
+					worldIn.setBlockAndUpdate(pos, state2);
+					worldIn.getBlockEntity(pos).deserializeNBT(nbt);
+					if (!player.isCreative()) stack.shrink(1);
+					
+					SoundEvent placeSound = Block.byItem(stack.getItem()).defaultBlockState().getSoundType().getPlaceSound();
+					worldIn.playSound(null, pos, placeSound, SoundCategory.BLOCKS, 1, 1);
+					
+					return ActionResultType.CONSUME;
+					
+				}
+				
 			}
+			
 			
 		}
 		

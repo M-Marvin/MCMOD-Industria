@@ -114,6 +114,12 @@ public class ClientSetup {
 		RenderTypeLookup.setRenderLayer(ModItems.lime_stained_glass_slab, RenderType.translucent());
 		RenderTypeLookup.setRenderLayer(ModItems.brown_stained_glass_slab, RenderType.translucent());
 		RenderTypeLookup.setRenderLayer(ModItems.glass_slab, RenderType.cutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.encased_electric_copper_cable, RenderType.cutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.encased_electric_electrolyt_copper_cable, RenderType.cutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.encased_electric_aluminium_cable, RenderType.cutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.encased_electric_burned_cable, RenderType.cutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.encased_network_cable, RenderType.cutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.encased_fluid_pipe, RenderType.cutoutMipped());
 		
 		RenderTypeLookup.setRenderLayer(ModFluids.SULFURIC_ACID, RenderType.translucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_SULFURIC_ACID, RenderType.translucent());

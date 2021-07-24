@@ -29,11 +29,11 @@ import net.minecraft.world.Explosion.Mode;
 import net.minecraftforge.common.ToolType;
 import net.minecraft.world.World;
 
-public class BlockElektricWire extends BlockWiring implements IElectricWireBlock, IAdvancedBlockInfo {
+public class BlockElectricWire extends BlockWiring implements IElectricWireBlock, IAdvancedBlockInfo {
 	
 	protected final int maximumPower;
 	
-	public BlockElektricWire(String name, int maximumPower, int size) {
+	public BlockElectricWire(String name, int maximumPower, int size) {
 		super(name, Material.WOOL, 0.2F, SoundType.WOOL, size);
 		this.maximumPower = maximumPower;
 	}

@@ -35,7 +35,7 @@ public interface IFluidWiring extends IFluidConnective {
 					
 					if (pipe.getStorage().isEmpty() || (this.getFluidType() == pipe.getFluidType() && pipe.getStorage().getAmount() < pipe.maxFlow())) {
 						
-						int transfer = Math.min(Math.min(fluidIn.getAmount(), pipe.maxFlow() - pipe.getStorage().getAmount()), maxFlow);
+						int transfer = Math.min(Math.min(fluidIn.getAmount(), pipe.maxFlow() - pipe.getStorage().getAmount()), Math.min(maxFlow, pipe.maxFlow()));
 						
 						if (transfer > 0) {
 							if (pipe.getStorage().isEmpty()) {
@@ -72,7 +72,7 @@ public interface IFluidWiring extends IFluidConnective {
 						
 						IFluidWiring pipe = (IFluidWiring) te;
 						
-						fluidIn = pipe.pushFluidThrougPipes0(fluidIn, d, scannList, scannDepth++, maxFlow, level, pos.relative(d));
+						fluidIn = pipe.pushFluidThrougPipes0(fluidIn, d, scannList, scannDepth++, Math.min(pipe.maxFlow(), maxFlow), level, pos.relative(d));
 						
 						if (fluidIn.isEmpty()) return FluidStack.EMPTY;
 						

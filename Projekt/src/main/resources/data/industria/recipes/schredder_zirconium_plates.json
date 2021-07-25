@@ -1,0 +1,15 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "industria:zirconium_plates"
+  },
+  "results": [
+    {
+      "item": "minecraft:zirconium_nugget",
+      "count": 18
+    }
+  ],
+  "schreddertime": 60,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 60
+}

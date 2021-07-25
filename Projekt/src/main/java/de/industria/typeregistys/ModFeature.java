@@ -1,6 +1,8 @@
 package de.industria.typeregistys;
 
 import de.industria.Industria;
+import de.industria.worldgen.CrystalOreFeature;
+import de.industria.worldgen.CrystalOreFeatureConfig;
 import de.industria.worldgen.JigsawFeature;
 import de.industria.worldgen.JigsawFeatureConfig;
 import de.industria.worldgen.LakeFeature;
@@ -19,6 +21,7 @@ public class ModFeature {
 	public static final Feature<LakeFeatureConfig> LAKE_FEATUR = register("lake_feature", new LakeFeature(LakeFeatureConfig.CODEC));
 	public static final Feature<StoneOreFeatureConfig> STONE_ORE = register("stone_ore", new StoneOreFeature(StoneOreFeatureConfig.CODEC));
 	public static final Feature<JigsawFeatureConfig> JIGSAW_FEATURE = register("jigsaw_feature", new JigsawFeature(JigsawFeatureConfig.CODEC));
+	public static final Feature<CrystalOreFeatureConfig> CRYSTAL_ORE = register("crystal_ore", new CrystalOreFeature(CrystalOreFeatureConfig.CODEC));
 	
 	private static <C extends IFeatureConfig, F extends Feature<C>> F register(String key, F value) {
 		value.setRegistryName(new ResourceLocation(Industria.MODID, key));

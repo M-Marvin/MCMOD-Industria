@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:grass_block",
+    "minecraft:dirt",
+    "minecraft:stone",
+    "industria:fluid_input",
+    "industria:fluid_output"
+  ]
+}

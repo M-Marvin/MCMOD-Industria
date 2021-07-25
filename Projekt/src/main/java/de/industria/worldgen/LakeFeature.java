@@ -22,14 +22,16 @@ public class LakeFeature extends Feature<LakeFeatureConfig> {
 		super(codec);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, LakeFeatureConfig config) {
 		
 		Random random = new Random(rand.nextLong());
+		
+		// Make Lake Shape
+		int count = random.nextInt(config.maxIterationCount) + 1;
 		BlockPos genPos = new BlockPos(0, -1, 0);
 		List<BlockPos> positionList = new ArrayList<BlockPos>();
-
-		int count = random.nextInt(config.maxIterationCount);
 		
 		for (int x1 = 0; x1 < count; x1++) {
 			
@@ -39,7 +41,7 @@ public class LakeFeature extends Feature<LakeFeatureConfig> {
 			int r1 = random.nextInt((int) (maxWidth1 / 2F));
 			int r3 = random.nextInt((int) (maxWidth2 / 2F));
 			genPos = genPos.offset(r1, 0, r3);
-			int depth = random.nextInt(config.maxDepth) + 1;
+			int depth = random.nextInt(config.maxDepth) + 2;
 			
 			for (int i0 = 0; i0 < depth; i0++) {
 				
@@ -69,42 +71,41 @@ public class LakeFeature extends Feature<LakeFeatureConfig> {
 			
 		}
 		
+		// Make Border Shape
+		List<BlockPos> borderPositions = new ArrayList<BlockPos>();
 		for (BlockPos position : positionList) {
-			
+			for (Direction d : Direction.values()) {
+				BlockPos checkPos = position.relative(d);
+				if (!positionList.contains(checkPos)) borderPositions.add(checkPos);		
+			}
+		}
+		
+		// Check Valid Generation
+		if (positionList.size() == 0) return false;
+		for (BlockPos position : positionList) {
+			BlockState replaceState = reader.getBlockState(position.offset(pos));
+			if (!replaceState.getFluidState().isEmpty() || replaceState.isAir() || replaceState.getBlock() == Blocks.BEDROCK) return false;
+		}
+		
+		// Place Blocks
+		for (BlockPos position : positionList) {
 			BlockState genState = Blocks.CAVE_AIR.defaultBlockState();
 			if (position.getY() != -1) {
 				genState = config.fillerBlock;
 			}
-			
-			reader.setBlock(pos.offset(position), genState, 2);
-			
+			reader.setBlock(position.offset(pos), genState, 2);
 		}
-		
+
 		Predicate<Block> borderReplacePredicate = (block) -> block != config.crustBlock.getBlock() && block != config.fillerBlock.getBlock() && block.getBlock() != Blocks.CAVE_AIR;
 		
-		List<BlockPos> borderPositions = new ArrayList<BlockPos>();
-		for (BlockPos position : positionList) {
-			
-			for (Direction d : Direction.values()) {
-				
-				BlockPos checkPos = position.relative(d);
-				BlockState checkState = reader.getBlockState(checkPos.offset(pos));
-				
-				if (borderReplacePredicate.apply(checkState.getBlock()) && d != Direction.UP) borderPositions.add(checkPos);
-								
-			}
-			
-		}
-		
 		for (BlockPos position : borderPositions) {
-			
-			if (position.getY() == -2 && position.getY() != -1) {
+			if (position.getY() == -2) {
 				reader.setBlock(position.offset(pos), config.crustBlock, 2);
-			} else if (random.nextInt(5) == 0) {
+			} else if (random.nextInt(5) == 0 && position.getY() != 0) {
 				reader.setBlock(position.offset(pos), config.crustBlock, 2);
-			} else if (position.getY() != -1) {
+			} else if (position.getY() != -1 && position.getY() != 0) {
 				reader.setBlock(position.offset(pos), config.borderBlock, 2);
-			} else {
+			} else if (position.getY() == -1) {
 				for (int i = 0; i < 10; i++) {
 					BlockPos replacePos = position.offset(random.nextInt(6) - 3, random.nextInt(6) - 3, random.nextInt(6) - 3);
 					BlockState replaceState = reader.getBlockState(replacePos.offset(pos));
@@ -113,7 +114,6 @@ public class LakeFeature extends Feature<LakeFeatureConfig> {
 					}
 				}
 			}
-			
 		}
 		
 		return true;

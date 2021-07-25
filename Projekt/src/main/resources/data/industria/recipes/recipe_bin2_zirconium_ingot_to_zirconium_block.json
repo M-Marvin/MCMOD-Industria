@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "zirconium_block",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:zirconium_ingot"
+    }
+  },
+  "result": {
+    "item": "industria:zirconium_block"
+  }
+}

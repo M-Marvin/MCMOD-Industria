@@ -444,5 +444,20 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 		}
 		super.load(state, compound);
 	}
+
+	@Override
+	public void setStorage(FluidStack storage) {
+		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
+		TileEntity tileEntity = BlockMBlender.getSCenterTE(ipos, this.getBlockState(), level);
+		if (tileEntity instanceof TileEntityMBlender) {
+			if (ipos.equals(new BlockPos(2, 2, 2))) {
+				((TileEntityMBlender) tileEntity).fluidIn1 = storage;
+			} else if (ipos.equals(new BlockPos(1, 1, 2))) {
+				((TileEntityMBlender) tileEntity).fluidIn2 = storage;
+			} else if (ipos.equals(new BlockPos(2, 1, 0))) {
+				((TileEntityMBlender) tileEntity).fluidOut = storage;
+			}
+		}
+	}
 	
 }

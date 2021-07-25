@@ -231,5 +231,10 @@ public class TileEntityMAirCompressor extends TileEntity implements ITickableTil
 	public ITextComponent getDisplayName() {
 		return new TranslationTextComponent("block.industria.air_compressor");
 	}
+
+	@Override
+	public void setStorage(FluidStack storage) {
+		this.compressedAir = storage;
+	}
 	
 }

@@ -13,6 +13,7 @@ public interface IFluidConnective {
 	public FluidStack insertFluid(FluidStack fluid);
 	public Fluid getFluidType();
 	public FluidStack getStorage();
+	public void setStorage(FluidStack storage);
 	
 	public boolean canConnect(Direction side);
 	

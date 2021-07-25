@@ -59,6 +59,12 @@
 		],
 		"subtitle": "sound.industria.block.blender.loop"
 	},
+	"block.ore_washing_plant.loop": {
+		"sounds": [
+			"industria:blender_loop"
+		],
+		"subtitle": "sound.industria.block.ore_washing_plant.loop"
+	},
 	"block.raffinery.loop": {
 		"sounds": [
 			"industria:raffinery_loop"

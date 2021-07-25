@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "industria:zirconium_dust"
+  },
+  "result": "industria:zirconium_ingot",
+  "experience": 0.0,
+  "cookingtime": 200
+}

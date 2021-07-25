@@ -103,5 +103,10 @@ public class TileEntityMGasHeater extends TileEntityMHeaterBase implements IFlui
 		this.gasStorage = FluidStack.loadFluidStackFromNBT(compound.getCompound("Fuel"));
 		super.load(state, compound);
 	}
+
+	@Override
+	public void setStorage(FluidStack storage) {
+		this.gasStorage = storage;
+	}
 	
 }

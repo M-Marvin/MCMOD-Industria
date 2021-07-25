@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "H",
+    "#"
+  ],
+  "key": {
+    "H": {
+      "item": "industria:hammer"
+    },
+    "#": {
+      "item": "industria:fluorite_crystal"
+    }
+  },
+  "result": {
+    "item": "industria:fluorite_dust",
+    "count": 1
+  }
+}

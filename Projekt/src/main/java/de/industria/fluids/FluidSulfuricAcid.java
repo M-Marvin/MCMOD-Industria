@@ -6,6 +6,7 @@ import de.industria.Industria;
 import de.industria.ModItems;
 import de.industria.fluids.util.BlockModFlowingFluid;
 import de.industria.typeregistys.ModFluids;
+import de.industria.typeregistys.ModTags;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowingFluidBlock;
@@ -107,7 +108,7 @@ public abstract class FluidSulfuricAcid extends FlowingFluid {
 			
 			if (random.nextInt(resistance * 2) == 0) {
 				
-				if (resistance < 35 && !state1.isAir() && !(state1.getBlock() instanceof FlowingFluidBlock) && !state1.is(BlockTags.BASE_STONE_NETHER) && !state1.is(BlockTags.NYLIUM)) {
+				if (resistance < 35 && !state1.isAir() && !(state1.getBlock() instanceof FlowingFluidBlock) && !state1.is(BlockTags.BASE_STONE_NETHER) && !state1.is(BlockTags.NYLIUM) && !state1.is(ModItems.sulfur_block) && !state1.is(ModTags.ACID_RESISTANT)) {
 					world.setBlockAndUpdate(pos.relative(d), d == Direction.DOWN ? ModFluids.FLOWING_SULFURIC_ACID.defaultFluidState().createLegacyBlock() : Blocks.AIR.defaultBlockState());
 					world.playSound(null, pos.relative(d), SoundEvents.FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1, 1);
 				}

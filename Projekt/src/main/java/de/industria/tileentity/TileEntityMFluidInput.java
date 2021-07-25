@@ -188,4 +188,9 @@ public class TileEntityMFluidInput extends TileEntity implements IFluidConnectiv
 		return this.fluid;
 	}
 
+	@Override
+	public void setStorage(FluidStack storage) {
+		this.fluid = storage;
+	}
+
 }

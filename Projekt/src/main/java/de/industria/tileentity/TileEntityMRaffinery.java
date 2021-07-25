@@ -391,5 +391,15 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 		}
 		super.load(state, compound);
 	}
+
+	@Override
+	public void setStorage(FluidStack storage) {
+		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
+		if (ipos.equals(new BlockPos(1, 0, 1))) {
+			this.fluidIn = storage;
+		} else {
+			this.fluidOut = storage;
+		}
+	}
 	
 }

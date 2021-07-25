@@ -150,7 +150,7 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 
 				if (this.isWorking) {
 
-					MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.SCHREDDER_LOOP);
+					MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.ORE_WASHING_PLANT_LOOP);
 					
 					IParticleData rawItemParticle = new ItemParticleData(ParticleTypes.ITEM, this.getItem(0));
 					
@@ -392,6 +392,16 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 		this.deserializeNBT(pkt.getTag());
+	}
+
+	@Override
+	public void setStorage(FluidStack storage) {
+		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
+		if (ipos.equals(new BlockPos(0, 0, 0))) {
+			this.wasteFluid = storage;
+		} else {
+			this.inputFluid = storage;
+		}
 	}
 	
 }

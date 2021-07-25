@@ -3,6 +3,8 @@
   "values": [
     "industria:destilled_water",
     "industria:flowing_destilled_water",
+    "industria:hydrofluoric_acid",
+    "industria:flowing_hydrofluoric_acid",
     "industria:sulfuric_acid",
     "industria:flowing_sulfuric_acid",
     "industria:natron_lye",

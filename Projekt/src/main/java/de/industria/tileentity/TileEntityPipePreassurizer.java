@@ -212,5 +212,10 @@ public class TileEntityPipePreassurizer extends TileEntityPreassurePipe implemen
 	public boolean canConnect(Direction side) {
 		return this.getBlockState().getValue(BlockStateProperties.FACING).getAxis() != side.getAxis();
 	}
+
+	@Override
+	public void setStorage(FluidStack storage) {
+		this.compressedAir = storage;
+	}
 	
 }

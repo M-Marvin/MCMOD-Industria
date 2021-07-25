@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"facing=down": { "model": "industria:block/fluorite_crystal" },
+		"facing=up": { "model": "industria:block/fluorite_crystal", "x": 180 },
+		"facing=north": { "model": "industria:block/fluorite_crystal", "x": 90, "y": 180 },
+		"facing=south": { "model": "industria:block/fluorite_crystal", "x": 90 },
+		"facing=east": { "model": "industria:block/fluorite_crystal", "x": 90, "y": 270 },
+		"facing=west": { "model": "industria:block/fluorite_crystal", "x": 90, "y": 90 }
+	}
+}

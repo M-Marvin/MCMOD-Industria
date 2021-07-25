@@ -1,0 +1,20 @@
+{
+  "type": "industria:fluid_bath",
+  "ingredientFluid": {
+    "fluid": "industria:hydrofluoric_acid",
+    "amount": 300
+  },
+  "wasteFluid":  {
+    "fluid": "industria:chemical_water",
+    "amount": 300
+  },
+  "ingredientItem": {
+    "item": "industria:zircon_crystal",
+    "count": 1
+  },
+  "resultItem": {
+    "item": "industria:zirconium_nugget",
+    "count": 7
+  },
+  "processTime": 200
+}

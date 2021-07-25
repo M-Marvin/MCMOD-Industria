@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "industria:zirconium_ingot"
+    }
+  ],
+  "result": {
+    "item": "industria:zirconium_nugget",
+    "count": 9
+  }
+}

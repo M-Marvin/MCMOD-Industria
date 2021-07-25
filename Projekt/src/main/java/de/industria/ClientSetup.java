@@ -120,7 +120,11 @@ public class ClientSetup {
 		RenderTypeLookup.setRenderLayer(ModItems.encased_electric_burned_cable, RenderType.cutoutMipped());
 		RenderTypeLookup.setRenderLayer(ModItems.encased_network_cable, RenderType.cutoutMipped());
 		RenderTypeLookup.setRenderLayer(ModItems.encased_fluid_pipe, RenderType.cutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.fluorite_crystal, RenderType.translucent());
+		RenderTypeLookup.setRenderLayer(ModItems.zircon_crystal, RenderType.cutoutMipped());
 		
+		RenderTypeLookup.setRenderLayer(ModFluids.HYDROFLUORIC_ACID, RenderType.translucent());
+		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_HYDROFLUORIC_ACID, RenderType.translucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.SULFURIC_ACID, RenderType.translucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_SULFURIC_ACID, RenderType.translucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.IRON_SOLUTION, RenderType.translucent());

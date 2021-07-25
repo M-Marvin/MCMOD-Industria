@@ -266,5 +266,16 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 	public AxisAlignedBB getRenderBoundingBox() {
 		return new AxisAlignedBB(worldPosition.offset(-3, -1, -3), worldPosition.offset(4, 5, 4));
 	}
+
+	@Override
+	public void setStorage(FluidStack storage) {
+		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
+		TileEntity tileEntity = BlockMBlastFurnace.getSCenterTE(ipos, this.getBlockState(), level);
+		if (tileEntity instanceof TileEntityMBlastFurnace) {
+			if (ipos.equals(new BlockPos(2, 2, 2))) {
+				((TileEntityMBlastFurnace) tileEntity).oxygenStorage = storage;
+			}
+		}
+	}
 	
 }

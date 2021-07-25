@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "zirconium_dust",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:tpo_zirconium_dust"
+    }
+  },
+  "result": {
+    "item": "industria:zirconium_dust"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "wolfram_plates",
+  "pattern": [
+    "###",
+    "   ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:zirconium_plate"
+    }
+  },
+  "result": {
+    "item": "industria:zirconium_planks",
+    "count": 3
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "industria:blending",
+  "ingredientItems": [
+    {
+      "item": "industria:fluorite_dust"
+    }
+  ],
+  "ingredientFluids": [
+    {
+      "fluid": "industria:sulfuric_acid",
+      "amount": 1000
+    }
+  ],
+  "resultFluid":  {
+    "fluid": "industria:hydrofluoric_acid",
+    "amount": 1000
+  },
+  "mixingTime": 200
+}

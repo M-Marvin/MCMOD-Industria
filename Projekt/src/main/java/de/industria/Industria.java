@@ -140,6 +140,7 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.wolfram_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.nickel_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.monel_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.zirconium_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.tin_ore, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.silver_ore, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.palladium_ore, BUILDING_BLOCKS);
@@ -150,6 +151,7 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.wolframite, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.wolframite_ore, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.iron_plates, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.zirconium_plates, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.gold_plates, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.steel_plates, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.copper_plates, BUILDING_BLOCKS);
@@ -164,6 +166,7 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.monel_plates, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.netherite_plates, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.iron_planks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.zirconium_planks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.gold_planks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.steel_planks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.copper_planks, BUILDING_BLOCKS);
@@ -703,6 +706,8 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.peat, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.humus, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.sulfur_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.fluorite_crystal, DECORATIONS);
+		ModGameRegistry.registerBlock(ModItems.zircon_crystal, DECORATIONS);
 		
 		ModGameRegistry.registerBlock(ModItems.gold_planks_stairs, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.aluminium_planks_stairs, BUILDING_BLOCKS);
@@ -854,6 +859,8 @@ public class Industria {
 		ModGameRegistry.registerItem(ModItems.steam_bucket);
 		ModGameRegistry.registerTechnicalBlock(ModItems.destilled_water);
 		ModGameRegistry.registerItem(ModItems.destilled_water_bucket);
+		ModGameRegistry.registerTechnicalBlock(ModItems.hydrofluoric_acid);
+		ModGameRegistry.registerItem(ModItems.hydrofluoric_acid_bucket);
 		ModGameRegistry.registerTechnicalBlock(ModItems.sulfuric_acid);
 		ModGameRegistry.registerItem(ModItems.sulfuric_acid_bucket);
 		ModGameRegistry.registerTechnicalBlock(ModItems.natron_lye);
@@ -1031,6 +1038,12 @@ public class Industria {
 		ModGameRegistry.registerItem(ModItems.sulphurous_residue);
 		ModGameRegistry.registerItem(ModItems.lime_dust);
 		ModGameRegistry.registerItem(ModItems.slag);
+		ModGameRegistry.registerItem(ModItems.fluorite_dust);
+		ModGameRegistry.registerItem(ModItems.zirconium_dust);
+		ModGameRegistry.registerItem(ModItems.zirconium_ingot);
+		ModGameRegistry.registerItem(ModItems.zirconium_nugget);
+		ModGameRegistry.registerItem(ModItems.zirconium_plate);
+		ModGameRegistry.registerItem(ModItems.tpo_zirconium_dust);
 		
 		// register Functional Items
 		ModGameRegistry.registerItem(ModItems.lever_element);
@@ -1053,7 +1066,9 @@ public class Industria {
 		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.BAUXIT_STONE_ORE, Category.JUNGLE);
 		ModGameRegistry.addFeatureToOverworldBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.WOLFRAM_STONE_ORE);
 		ModGameRegistry.addFeatureToBiomes(Decoration.LAKES, ModConfiguredFeatures.SULFUR_LAKE, Category.NETHER);
-		//ModGameRegistry.addFeatureToBiomes(Decoration.LAKES, ModConfiguredFeatures.SULFUR_LAKE_VANILLATEST, Category.NETHER);
+		ModGameRegistry.addFeatureToBiomes(Decoration.LAKES, ModConfiguredFeatures.SULFUR_LAKE_LARGE, Category.NETHER);
+		ModGameRegistry.addFeatureToOverworldBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.FLUORITE_CRYSTALS);
+		ModGameRegistry.addFeatureToOverworldBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.ZIRCON_CRYSTALS);
 		
 		// TODO
 		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.OIL_DEPOT, Category.DESERT);

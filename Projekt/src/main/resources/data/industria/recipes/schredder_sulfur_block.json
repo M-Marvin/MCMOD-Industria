@@ -1,0 +1,17 @@
+{
+  "type": "industria:schredder",
+  "ingredient": [
+    {
+      "item": "industria:sulfur_block"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:sulfur",
+      "count": 9
+    }
+  ],
+  "schreddertime": 60,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 60
+}

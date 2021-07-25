@@ -354,4 +354,9 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 		return this.steamIn;
 	}
 
+	@Override
+	public void setStorage(FluidStack storage) {
+		this.steamIn = storage;
+	}
+
 }

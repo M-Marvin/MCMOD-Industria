@@ -1,13 +1,10 @@
 package de.industria.tileentity;
 
-import java.util.ArrayList;
-
 import de.industria.blocks.BlockFluidValve;
 import de.industria.typeregistys.ModTileEntityType;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 
 public class TileEntityFluidValve extends TileEntityFluidPipe {
@@ -27,7 +24,7 @@ public class TileEntityFluidValve extends TileEntityFluidPipe {
 			this.fluid.setTag(fluid.getTag());
 			FluidStack rest = fluid.copy();
 			rest.shrink(transfer);
-			if (this.fluid.getAmount() == this.maxFluid && !rest.isEmpty()) rest = pushFluid(rest, null);
+			if (this.fluid.getAmount() == this.maxFluid && !rest.isEmpty()) rest = pushFluidThrougPipes(rest, null, this.level, this.worldPosition);
 			return rest;
 		} else if (this.fluid.getFluid() == fluid.getFluid()) {
 			int capacity = this.maxFluid - this.fluid.getAmount();
@@ -36,7 +33,7 @@ public class TileEntityFluidValve extends TileEntityFluidPipe {
 			this.fluid.setTag(fluid.getTag());
 			FluidStack rest = fluid.copy();
 			rest.shrink(transfer);
-			if (this.fluid.getAmount() == this.maxFluid && !rest.isEmpty()) rest = pushFluid(rest, null);
+			if (this.fluid.getAmount() == this.maxFluid && !rest.isEmpty()) rest = pushFluidThrougPipes(rest, null, this.level, this.worldPosition);
 			return rest;
 		}
 		return fluid;
@@ -47,12 +44,6 @@ public class TileEntityFluidValve extends TileEntityFluidPipe {
 		int power = level.getBestNeighborSignal(worldPosition);
 		boolean opened = this.getBlockState().getValue(BlockFluidValve.OPEN);
 		this.maxFlow = opened ? this.maxFluid : (int) ((float) (power / 15F) * this.maxFluid);
-		
-	}
-	
-	public FluidStack pushFluid(FluidStack fluidIn, Direction callDirection) {
-		
-		return this.pushFluid0(fluidIn, callDirection, new ArrayList<BlockPos>(), 0, this.maxFlow);
 		
 	}
 	
@@ -71,6 +62,11 @@ public class TileEntityFluidValve extends TileEntityFluidPipe {
 	public void load(BlockState state, CompoundNBT compound) {
 		this.maxFlow = (int) compound.getFloat("flowRate");
 		super.load(state, compound);
+	}
+	
+	@Override
+	public int maxFlow() {
+		return this.maxFlow;
 	}
 	
 }

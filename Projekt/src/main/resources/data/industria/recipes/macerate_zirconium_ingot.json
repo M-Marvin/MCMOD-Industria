@@ -1,0 +1,15 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "industria:zirconium_ingot"
+  },
+  "results": [
+    {
+      "item": "industria:zirconium_dust",
+      "count": 1
+    }
+  ],
+  "schreddertime": 80,
+  "schreddertool": "industria:schredder_macerator",
+  "schredderdamage": 8
+}

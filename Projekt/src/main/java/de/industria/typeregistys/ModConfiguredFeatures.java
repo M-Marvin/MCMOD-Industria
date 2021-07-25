@@ -3,6 +3,7 @@ package de.industria.typeregistys;
 import de.industria.Industria;
 import de.industria.ModItems;
 import de.industria.blocks.BlockJigsaw.JigsawType;
+import de.industria.worldgen.CrystalOreFeatureConfig;
 import de.industria.worldgen.JigsawFeatureConfig;
 import de.industria.worldgen.LakeFeatureConfig;
 import de.industria.worldgen.StoneOreFeatureConfig;
@@ -10,6 +11,7 @@ import de.industria.worldgen.placements.HorizontalSpreadPlacementConfig;
 import de.industria.worldgen.placements.ModChancePlacementConfig;
 import de.industria.worldgen.placements.SimpleOrePlacementConfig;
 import de.industria.worldgen.placements.VerticalOffsetPlacementConfig;
+import de.industria.worldgen.placements.VerticalSpreadPlacementConfig;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -177,7 +179,42 @@ public class ModConfiguredFeatures {
 					)
 			)
 	);
-	
+	public static final ConfiguredFeature<?, ?> FLUORITE_CRYSTALS = registerConfiguredFeature("fluorite_crystals",
+			ModFeature.CRYSTAL_ORE.configured(
+					new CrystalOreFeatureConfig(
+							OreFeatureConfig.FillerBlockType.NATURAL_STONE,
+							ModItems.fluorite_crystal.defaultBlockState(),
+							10,
+							20
+					)
+			).decorated(
+					ModPlacement.SIMPLE_ORE.configured(
+							new SimpleOrePlacementConfig(0, 50, 1)
+					)
+			).decorated(
+					ModPlacement.CHANCE.configured(
+							new ModChancePlacementConfig(10)
+					)
+			)
+	);
+	public static final ConfiguredFeature<?, ?> ZIRCON_CRYSTALS = registerConfiguredFeature("zircon_crystals",
+			ModFeature.CRYSTAL_ORE.configured(
+					new CrystalOreFeatureConfig(
+							OreFeatureConfig.FillerBlockType.NATURAL_STONE,
+							ModItems.zircon_crystal.defaultBlockState(),
+							10,
+							20
+					)
+			).decorated(
+					ModPlacement.SIMPLE_ORE.configured(
+							new SimpleOrePlacementConfig(0, 50, 1)
+					)
+			).decorated(
+					ModPlacement.CHANCE.configured(
+							new ModChancePlacementConfig(10)
+					)
+			)
+	);
 	public static final ConfiguredFeature<?, ?> OIL_DEPOT = registerConfiguredFeature("oil_depot",
 			Feature.ORE.configured(
 					new OreFeatureConfig(
@@ -207,14 +244,18 @@ public class ModConfiguredFeatures {
 							Blocks.NETHERRACK.defaultBlockState()
 					)
 			).decorated(
+					ModPlacement.VERTICAL_OFFSET.configured(new VerticalOffsetPlacementConfig(1))
+			).decorated(
 					ModPlacement.NEXT_TOP_SURFACE.configured(new NoPlacementConfig())
+			).decorated(
+					ModPlacement.VERTICAL_SPREAD.configured(new VerticalSpreadPlacementConfig(2, 70))
 			).decorated(
 					ModPlacement.HORIZONTAL_SPREAD.configured(
 							new HorizontalSpreadPlacementConfig(1)
 					)
 			).decorated(
 					ModPlacement.CHANCE.configured(
-							new ModChancePlacementConfig(50)
+							new ModChancePlacementConfig(8)
 					)
 			)
 	);
@@ -230,32 +271,21 @@ public class ModConfiguredFeatures {
 							Blocks.NETHERRACK.defaultBlockState()
 					)
 			).decorated(
+					ModPlacement.VERTICAL_OFFSET.configured(new VerticalOffsetPlacementConfig(1))
+			).decorated(
 					ModPlacement.NEXT_TOP_SURFACE.configured(new NoPlacementConfig())
+			).decorated(
+					ModPlacement.VERTICAL_SPREAD.configured(new VerticalSpreadPlacementConfig(1, 70))
 			).decorated(
 					ModPlacement.HORIZONTAL_SPREAD.configured(
 							new HorizontalSpreadPlacementConfig(1)
 					)
 			).decorated(
 					ModPlacement.CHANCE.configured(
-							new ModChancePlacementConfig(50)
+							new ModChancePlacementConfig(2)
 					)
 			)
 	);
-//	public static final ConfiguredFeature<?, ?> SULFUR_LAKE_VANILLATEST = registerConfiguredFeature("sulfur_lake",
-//			Feature.LAKE.configured(
-//					new BlockStateFeatureConfig(ModItems.sulfur_block.defaultBlockState())
-//			).decorated(
-//					Placement.HEIGHTMAP_WORLD_SURFACE.configured(new NoPlacementConfig())
-//			).decorated(
-//					ModPlacement.HORIZONTAL_SPREAD.configured(
-//							new HorizontalSpreadPlacementConfig(1)
-//					)
-//			).decorated(
-//					ModPlacement.CHANCE.configured(
-//							new ModChancePlacementConfig(50)
-//					)
-//			)
-//	);
 	
 	// Trees
 	public static final ConfiguredFeature<?, ?> RUBBER_TREE = registerConfiguredFeature("rubber_tree",

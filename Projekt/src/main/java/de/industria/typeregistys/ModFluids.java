@@ -7,6 +7,7 @@ import de.industria.fluids.FluidChemicalWater;
 import de.industria.fluids.FluidCompressedAir;
 import de.industria.fluids.FluidDestilledWater;
 import de.industria.fluids.FluidFuelGas;
+import de.industria.fluids.FluidHydrofluoricAcid;
 import de.industria.fluids.FluidLiquidConcrete;
 import de.industria.fluids.FluidNatronLye;
 import de.industria.fluids.FluidOreAluminiumSolution;
@@ -31,6 +32,8 @@ public class ModFluids {
 	public static final FluidDestilledWater FLOWING_DESTILLED_WATER = register("flowing_destilled_water", new FluidDestilledWater.Flow());
 	public static final FluidDestilledWater DESTILLED_WATER = register("destilled_water", new FluidDestilledWater.Still());
 	public static final FluidSteam STEAM = register("steam", new FluidSteam());
+	public static final FluidHydrofluoricAcid HYDROFLUORIC_ACID = register("hydrofluoric_acid", new FluidHydrofluoricAcid.Still());
+	public static final FluidHydrofluoricAcid FLOWING_HYDROFLUORIC_ACID = register("flowing_hydrofluoric_acid", new FluidHydrofluoricAcid.Flow());
 	public static final FluidSulfuricAcid SULFURIC_ACID = register("sulfuric_acid", new FluidSulfuricAcid.Still());
 	public static final FluidSulfuricAcid FLOWING_SULFURIC_ACID = register("flowing_sulfuric_acid", new FluidSulfuricAcid.Flow());
 	public static final FluidNatronLye NATRON_LYE = register("natron_lye", new FluidNatronLye.Still());

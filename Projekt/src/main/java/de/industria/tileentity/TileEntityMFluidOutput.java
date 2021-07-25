@@ -133,4 +133,9 @@ public class TileEntityMFluidOutput extends TileEntity implements ITickableTileE
 		return this.fluid;
 	}
 
+	@Override
+	public void setStorage(FluidStack storage) {
+		this.fluid = storage;
+	}
+
 }

@@ -6,6 +6,7 @@ import de.industria.fluids.BlockChemicalWater;
 import de.industria.fluids.BlockCompressedAir;
 import de.industria.fluids.BlockDestilledWater;
 import de.industria.fluids.BlockFuelGas;
+import de.industria.fluids.BlockHydrofluoricAcid;
 import de.industria.fluids.BlockLiquidConcrete;
 import de.industria.fluids.BlockNatronLye;
 import de.industria.fluids.BlockOreSolution;
@@ -151,6 +152,7 @@ public class ModItems {
 	public static final Block nickel_ore = new BlockBase("nickel_ore", Material.STONE, 3F, SoundType.STONE);
 	public static final Block sulfur_ore = new BlockBase("sulfur_ore", Material.STONE, 3F, SoundType.NETHER_ORE);
 	public static final Block copper_block = new BlockBase("copper_block", Material.METAL, 5F, 6F, SoundType.METAL);
+	public static final Block zirconium_block = new BlockBase("zirconium_block", Material.METAL, 5F, 6F, SoundType.METAL);
 	public static final Block redstone_alloy_block = new BlockPowerEmiting("redstone_alloy_block", Material.METAL, 5F, 6F, SoundType.METAL, 8);
 	public static final Block aluminium_block = new BlockBase("aluminium_block", Material.METAL, 2F, 4F, SoundType.METAL);
 	public static final Block electrolyt_copper_block = new BlockBase("electrolyt_copper_block", Material.METAL, 5F, 6F, SoundType.METAL);
@@ -176,6 +178,8 @@ public class ModItems {
 	public static final Block peat = new BlockBase("peat", Material.SAND, 0.4F, SoundType.GRAVEL, true);
 	public static final Block humus = new BlockBase("humus", Material.SAND, 0.4F, SoundType.GRAVEL, true);
 	public static final Block karstified_limestone = new BlockBase("karstified_limestone", Material.STONE, 0.4F, SoundType.STONE);
+	public static final Block fluorite_crystal = new BlockFluoriteCrystal();
+	public static final Block zircon_crystal = new BlockZirconCrystal();
 	
 	// Deko Blocks
 	public static final Block clean_cladding_white = new BlockTileBlock("clean_cladding_white");
@@ -206,6 +210,7 @@ public class ModItems {
 	public static final Block exposed_steel_planks = new BlockWeathering("exposed_steel_planks", Material.METAL, 2.5F, 3F, SoundType.METAL, weathered_steel_planks);
 	public static final Block gold_plates = new BlockBase("gold_plates", Material.METAL, 1.5F, 2.2F, SoundType.METAL);
 	public static final Block iron_plates = new BlockWeathering("iron_plates", Material.METAL, 2.5F, 3F, SoundType.METAL, exposed_iron_plates);
+	public static final Block zirconium_plates = new BlockBase("zirconium_plates", Material.METAL, 2.5F, 3F, SoundType.METAL);
 	public static final Block netherite_plates = new BlockBase("netherite_plates", Material.METAL, 25F, 600F, SoundType.NETHERITE_BLOCK);
 	public static final Block copper_plates = new BlockWeathering("copper_plates", Material.METAL, 2.5F, 3F, SoundType.METAL, exposed_copper_plates);
 	public static final Block aluminium_plates = new BlockBase("aluminium_plates", Material.METAL, 1.5F, 2F, SoundType.METAL);
@@ -219,6 +224,7 @@ public class ModItems {
 	public static final Block nickel_plates = new BlockBase("nickel_plates", Material.METAL, 2.5F, 3F, SoundType.METAL);
 	public static final Block monel_plates = new BlockBase("monel_plates", Material.METAL, 2.5F, 3F, SoundType.METAL);
 	public static final Block gold_planks = new BlockBase("gold_planks", Material.METAL, 1.5F, 2F, SoundType.METAL);
+	public static final Block zirconium_planks = new BlockBase("zirconium_planks", Material.METAL, 1.5F, 2F, SoundType.METAL);
 	public static final Block iron_planks = new BlockWeathering("iron_planks", Material.METAL, 2.5F, 3F, SoundType.METAL, exposed_iron_planks);
 	public static final Block copper_planks = new BlockWeathering("copper_planks", Material.METAL, 2.5F, 3F, SoundType.METAL, exposed_copper_planks);
 	public static final Block aluminium_planks = new BlockBase("aluminium_planks", Material.METAL, 1.5F, 2F, SoundType.METAL);
@@ -658,6 +664,8 @@ public class ModItems {
 	public static final Item steam_bucket = new ItemGasBucket(ModFluids.STEAM, "steam_bucket", Industria.MATERIALS);
 	public static final Block destilled_water = new BlockDestilledWater();
 	public static final Item destilled_water_bucket = new ItemFluidBucket(ModFluids.DESTILLED_WATER, "destilled_water_bucket", Industria.MATERIALS, false);
+	public static final Block hydrofluoric_acid = new BlockHydrofluoricAcid();
+	public static final Item hydrofluoric_acid_bucket = new ItemFluidBucket(ModFluids.HYDROFLUORIC_ACID, "hydrofluoric_acid_bucket", Industria.MATERIALS, true);
 	public static final Block sulfuric_acid = new BlockSulfuricAcid();
 	public static final Item sulfuric_acid_bucket = new ItemFluidBucket(ModFluids.SULFURIC_ACID, "sulfuric_acid_bucket", Industria.MATERIALS, true);
 	public static final Block natron_lye = new BlockNatronLye();
@@ -888,6 +896,11 @@ public class ModItems {
 	public static final Item iron_plate = new ItemBase("iron_plate", Industria.MATERIALS);
 	public static final Item gold_plate = new ItemBase("gold_plate", Industria.MATERIALS);
 	public static final Item netherite_plate = new ItemBase("netherite_plate", Industria.MATERIALS);
+	public static final Item zirconium_nugget = new ItemBase("zirconium_nugget", Industria.MATERIALS);
+	public static final Item zirconium_ingot = new ItemBase("zirconium_ingot", Industria.MATERIALS);
+	public static final Item zirconium_plate = new ItemBase("zirconium_plate", Industria.MATERIALS);
+	public static final Item zirconium_dust = new ItemBase("zirconium_dust", Industria.MATERIALS);
+	public static final Item tpo_zirconium_dust = new ItemBase("tpo_zirconium_dust", Industria.MATERIALS);
 	
 	// Resource Items
 	public static final Item salsola = new ItemSalsola();
@@ -931,6 +944,7 @@ public class ModItems {
 	public static final Item ground_flesh = new ItemBase("ground_flesh", Industria.MATERIALS);
 	public static final Item sulphurous_residue = new ItemBase("sulphurous_residue", Industria.MATERIALS);
 	public static final Item slag = new ItemBase("slag", Industria.MATERIALS);
+	public static final Item fluorite_dust = new ItemBase("fluorite_dust", Industria.MATERIALS);
 	
 	// Crafting items
 	public static final Item bearing = new ItemBase("bearing", Industria.MATERIALS);

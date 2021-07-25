@@ -305,5 +305,18 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements IFl
 	public AxisAlignedBB getRenderBoundingBox() {
 		return new AxisAlignedBB(worldPosition.offset(-4, -1, -4), worldPosition.offset(4, 3, 4));
 	}
+
+	@Override
+	public void setStorage(FluidStack storage) {
+		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
+		TileEntity tileEntity = BlockMFluidBath.getSCenterTE(ipos, this.getBlockState(), level);
+		if (tileEntity instanceof TileEntityMFluidBath) {
+			if (ipos.equals(new BlockPos(1, 1, 2))) {
+				((TileEntityMFluidBath) tileEntity).fluidIn = storage;
+			} else if (ipos.equals(new BlockPos(0, 1, 0))) {
+				((TileEntityMFluidBath) tileEntity).fluidOut = storage;
+			}
+		}
+	}
 	
 }

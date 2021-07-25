@@ -26,6 +26,7 @@ public class ModSoundEvents {
 	public static final SoundEvent THERMAL_ZENTRIFUGE_LOOP = register("block.thermal_zentrifuge.loop");
 	public static final SoundEvent TREE_TAP_HARVEST = register("block.tree_tap.harvest");
 	public static final SoundEvent ITEM_PIPE_STRAM = register("block.item_pipe.stream");
+	public static final SoundEvent ORE_WASHING_PLANT_LOOP = register("block.ore_washing_plant.loop");
 	
 	public static final SoundEvent CARDBOARD_HIT = register("material.cardboard.hit");
 	public static final SoundEvent CARDBOARD_PLACE = register("material.cardboard.place");

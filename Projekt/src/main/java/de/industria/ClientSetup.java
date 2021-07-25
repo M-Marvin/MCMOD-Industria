@@ -158,6 +158,7 @@ public class ClientSetup {
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ENDER_CORE, TileEntityEnderCoreRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.COAL_HEATER, TileEntityMCoalHeaterRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.STRUCTURE_SCAFFOLD, TileEntityStructureScaffoldRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ENCASED_FLUID_PIPE, TileEntityStructureScaffoldRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.BLAST_FURNACE, TileEntityMBlastFurnaceRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.AIR_COMPRESSOR, TileEntityMAirCompressorRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.METAL_FORMER, TileEntityMMetalFormerRenderer::new);

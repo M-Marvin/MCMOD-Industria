@@ -2,8 +2,8 @@
   "type": "industria:blast_furnace",
   "ingredientItems": [
     {
-      "item": "minecraft:iron_ingot",
-      "count": 3
+      "item": "industria:iron_oxid",
+      "count": 1
     },
     {
       "item": "industria:coal_coke",
@@ -16,7 +16,7 @@
   ],
   "resultItem": {
     "item": "industria:crude_steel",
-    "count": 3
+    "count": 2
   },
   "wasteItem": {
     "item": "industria:slag"

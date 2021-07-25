@@ -4,6 +4,7 @@ import de.industria.Industria;
 import de.industria.ModItems;
 import de.industria.blocks.BlockJigsaw.JigsawType;
 import de.industria.worldgen.JigsawFeatureConfig;
+import de.industria.worldgen.LakeFeatureConfig;
 import de.industria.worldgen.StoneOreFeatureConfig;
 import de.industria.worldgen.placements.HorizontalSpreadPlacementConfig;
 import de.industria.worldgen.placements.ModChancePlacementConfig;
@@ -26,7 +27,6 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 public class ModConfiguredFeatures {
 	
-	// Ores
 	public static final ConfiguredFeature<?, ?> COPPER_ORE = registerConfiguredFeature("copper_ore", 
 			Feature.ORE.configured(
 					new OreFeatureConfig(
@@ -195,6 +195,67 @@ public class ModConfiguredFeatures {
 					)
 			)
 	);
+	public static final ConfiguredFeature<?, ?> SULFUR_LAKE = registerConfiguredFeature("sulfur_lake",
+			ModFeature.LAKE_FEATUR.configured(
+					new LakeFeatureConfig(
+							3,
+							10,
+							7,
+							3,
+							ModItems.sulfuric_acid.defaultBlockState(),
+							ModItems.sulfur_block.defaultBlockState(),
+							Blocks.NETHERRACK.defaultBlockState()
+					)
+			).decorated(
+					ModPlacement.NEXT_TOP_SURFACE.configured(new NoPlacementConfig())
+			).decorated(
+					ModPlacement.HORIZONTAL_SPREAD.configured(
+							new HorizontalSpreadPlacementConfig(1)
+					)
+			).decorated(
+					ModPlacement.CHANCE.configured(
+							new ModChancePlacementConfig(50)
+					)
+			)
+	);
+	public static final ConfiguredFeature<?, ?> SULFUR_LAKE_LARGE = registerConfiguredFeature("sulfur_lake_large",
+			ModFeature.LAKE_FEATUR.configured(
+					new LakeFeatureConfig(
+							6,
+							20,
+							7,
+							5,
+							ModItems.sulfuric_acid.defaultBlockState(),
+							ModItems.sulfur_block.defaultBlockState(),
+							Blocks.NETHERRACK.defaultBlockState()
+					)
+			).decorated(
+					ModPlacement.NEXT_TOP_SURFACE.configured(new NoPlacementConfig())
+			).decorated(
+					ModPlacement.HORIZONTAL_SPREAD.configured(
+							new HorizontalSpreadPlacementConfig(1)
+					)
+			).decorated(
+					ModPlacement.CHANCE.configured(
+							new ModChancePlacementConfig(50)
+					)
+			)
+	);
+//	public static final ConfiguredFeature<?, ?> SULFUR_LAKE_VANILLATEST = registerConfiguredFeature("sulfur_lake",
+//			Feature.LAKE.configured(
+//					new BlockStateFeatureConfig(ModItems.sulfur_block.defaultBlockState())
+//			).decorated(
+//					Placement.HEIGHTMAP_WORLD_SURFACE.configured(new NoPlacementConfig())
+//			).decorated(
+//					ModPlacement.HORIZONTAL_SPREAD.configured(
+//							new HorizontalSpreadPlacementConfig(1)
+//					)
+//			).decorated(
+//					ModPlacement.CHANCE.configured(
+//							new ModChancePlacementConfig(50)
+//					)
+//			)
+//	);
 	
 	// Trees
 	public static final ConfiguredFeature<?, ?> RUBBER_TREE = registerConfiguredFeature("rubber_tree",
@@ -207,11 +268,11 @@ public class ModConfiguredFeatures {
 							new VerticalOffsetPlacementConfig(-1)
 					)
 			).decorated(
+					Placement.HEIGHTMAP_WORLD_SURFACE.configured(new NoPlacementConfig())
+			).decorated(
 					ModPlacement.HORIZONTAL_SPREAD.configured(
 							new HorizontalSpreadPlacementConfig(2)
 					)
-			).decorated(
-					Placement.HEIGHTMAP_WORLD_SURFACE.configured(new NoPlacementConfig())
 			).decorated(
 					Placement.CHANCE.configured(new ChanceConfig(10))
 			)

@@ -13,6 +13,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.FallingBlockEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -76,14 +77,20 @@ public class BlockFuelGas extends BlockGasFluid {
 			worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, explosionForce, true, Mode.BREAK);
 			for (int i = worldIn.random.nextInt(spreadAmountRnd) + spreadAmountMin; i >= 0; i--) {
 				worldIn.setBlockAndUpdate(pos, Blocks.FIRE.defaultBlockState());
+				
+				
 				FallingBlockEntity spreadFire = new FallingBlockEntity(worldIn, pos.getX(), pos.getY(), pos.getZ(), Blocks.FIRE.defaultBlockState());
+				CompoundNBT timeNBT = new CompoundNBT();
+				timeNBT.putInt("Time", 1);
+				spreadFire.load(timeNBT);
 				float mX = (worldIn.random.nextFloat() - 0.5F) * spreadForce;
 				float mY = (worldIn.random.nextFloat() * 0.5F) * spreadForce;
 				float mZ = (worldIn.random.nextFloat() - 0.5F) * spreadForce;
 				spreadFire.setDeltaMovement(mX, mY, mZ);
+				
 				Field timeField;
 				try {
-					timeField = FallingBlockEntity.class.getDeclaredField("time");
+					timeField = FallingBlockEntity.class.getDeclaredField("field_145812_b");
 					timeField.setAccessible(true);
 					timeField.set(spreadFire, 1);
 				} catch (NoSuchFieldException | SecurityException e) {

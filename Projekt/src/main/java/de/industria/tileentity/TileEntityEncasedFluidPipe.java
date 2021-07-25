@@ -3,6 +3,7 @@ package de.industria.tileentity;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.IFluidConnective;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
@@ -18,6 +19,7 @@ public class TileEntityEncasedFluidPipe extends TileEntityStructureScaffold impl
 	protected FluidStack fluid;
 	
 	public TileEntityEncasedFluidPipe() {
+		super(ModTileEntityType.ENCASED_FLUID_PIPE);
 		this.maxFluid = 100;
 		this.fluid = FluidStack.EMPTY;
 	}

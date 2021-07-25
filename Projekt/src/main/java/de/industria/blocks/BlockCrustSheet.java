@@ -15,12 +15,12 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 
-public class BlockLimestoneSheet extends BlockBase implements IWaterLoggable {
+public class BlockCrustSheet extends BlockBase implements IWaterLoggable {
 	
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	
-	public BlockLimestoneSheet() {
-		super("limestone_sheet", Material.STONE, 1F, 1F, SoundType.STONE);
+	public BlockCrustSheet(String name) {
+		super(name, Material.STONE, 1F, 1F, SoundType.STONE);
 		this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false));
 	}
 	

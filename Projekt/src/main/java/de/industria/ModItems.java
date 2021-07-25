@@ -43,7 +43,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
 import net.minecraft.item.Rarity;
 import net.minecraft.util.ResourceLocation;
@@ -249,7 +248,7 @@ public class ModItems {
 	public static final Block cracked_polished_wolframite_bricks = new BlockBase("cracked_polished_wolframite_bricks", Material.STONE, 1.5F, 6F, SoundType.STONE);
 	public static final Block cracked_polished_bauxite_bricks = new BlockBase("cracked_polished_bauxite_bricks", Material.STONE, 1.5F, 6F, SoundType.STONE);
 	public static final Block limestone = new BlockBase("limestone", Material.STONE, 1.5F, 6F, SoundType.STONE);
-	public static final Block limestone_sheet = new BlockLimestoneSheet();
+	public static final Block limestone_sheet = new BlockCrustSheet("limestone_sheet");
 	public static final Block polished_wolframite = new BlockBase("polished_wolframite", Material.STONE, 1.5F, 6F, SoundType.STONE);
 	public static final Block polished_bauxite = new BlockBase("polished_bauxite", Material.STONE, 1.5F, 6F, SoundType.STONE);
 	public static final Block white_painted_planks = new BlockBurnable("white_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
@@ -269,6 +268,8 @@ public class ModItems {
 	public static final Block red_painted_planks = new BlockBurnable("red_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
 	public static final Block black_painted_planks = new BlockBurnable("black_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
 	public static final Block concrete = new BlockBase("concrete", Material.STONE, 1.8F, SoundType.STONE);
+	public static final Block sulfur_crust = new BlockCrustSheet("sulfur_crust");
+	public static final Block sulfur_block = new BlockBase("sulfur_block", Material.STONE, 1.5F, 6F, SoundType.STONE);
 	
 	public static final Block blue_nether_bricks = new BlockBase("blue_nether_bricks", Material.STONE, 2, 6, SoundType.NETHER_BRICKS);
 	public static final Block cracked_blue_nether_bricks = new BlockBase("cracked_blue_nether_bricks", Material.STONE, 2, 6, SoundType.NETHER_BRICKS);
@@ -919,6 +920,7 @@ public class ModItems {
 	public static final Item sulfur = new ItemBase("sulfur", Industria.MATERIALS);
 	public static final Item crude_steel = new ItemBase("crude_steel", Industria.MATERIALS);
 	public static final Item lime = new ItemBase("lime", Industria.MATERIALS);
+	public static final Item lime_dust = new ItemBase("lime_dust", Industria.MATERIALS);
 	public static final Item cement = new ItemBase("cement", Industria.MATERIALS);
 	public static final Item copper_coated_plate = new ItemBase("copper_coated_plate", Industria.MATERIALS);
 	public static final Item tined_copper_coated_plate = new ItemBase("tined_copper_coated_plate", Industria.MATERIALS);
@@ -927,7 +929,8 @@ public class ModItems {
 	public static final Item data_disc = new ItemBase("data_disc", Industria.MATERIALS);
 	public static final Item ground_plants = new ItemBase("ground_plants", Industria.MATERIALS);
 	public static final Item ground_flesh = new ItemBase("ground_flesh", Industria.MATERIALS);
-	public static final Item sulphurous_residue = new ItemBase("sulphurous_residue", ItemGroup.TAB_MATERIALS);
+	public static final Item sulphurous_residue = new ItemBase("sulphurous_residue", Industria.MATERIALS);
+	public static final Item slag = new ItemBase("slag", Industria.MATERIALS);
 	
 	// Crafting items
 	public static final Item bearing = new ItemBase("bearing", Industria.MATERIALS);

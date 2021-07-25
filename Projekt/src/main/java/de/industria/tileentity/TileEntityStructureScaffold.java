@@ -5,18 +5,24 @@ import java.util.List;
 
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.IPostMoveHandledTE;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityStructureScaffold extends TileEntityInventoryBase implements ITickableTileEntity, IPostMoveHandledTE {
+public class TileEntityStructureScaffold extends TileEntityInventoryBase implements ITickableTileEntity, IPostMoveHandledTE, ISidedInventory {
 	
 	public TileEntityStructureScaffold() {
 		super(ModTileEntityType.STRUCTURE_SCAFFOLD, 6);
+	}
+	
+	public TileEntityStructureScaffold(TileEntityType<?> type) {
+		super(type, 6);
 	}
 	
 	public boolean setCladding(Direction d, ItemStack cladding) {
@@ -79,6 +85,21 @@ public class TileEntityStructureScaffold extends TileEntityInventoryBase impleme
 	@Override
 	public void handlePostMove(BlockPos pos, BlockPos newPos, boolean multipleCall) {
 		this.level.sendBlockUpdated(pos, getBlockState(), getBlockState(), 2);
+	}
+
+	@Override
+	public int[] getSlotsForFace(Direction p_180463_1_) {
+		return new int[] {};
+	}
+
+	@Override
+	public boolean canPlaceItemThroughFace(int p_180462_1_, ItemStack p_180462_2_, Direction p_180462_3_) {
+		return false;
+	}
+	
+	@Override
+	public boolean canTakeItemThroughFace(int p_180461_1_, ItemStack p_180461_2_, Direction p_180461_3_) {
+		return false;
 	}
 	
 }

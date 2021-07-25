@@ -250,6 +250,7 @@
 "block.industria.red_concrete_stairs": "Rote Betontreppe",
 "block.industria.black_concrete_slab": "Schwarz Betonstufe",
 "block.industria.black_concrete_stairs": "Schwarz Betontreppe",
+"block.industria.sulfur_block": "Schwefelblock",
 
 "item.industria.structure_cladding_pane": "Verbundgestellverkleidung",
 "item.industria.compressed_air_bucket": "Eimer komprimierte Luft",
@@ -414,8 +415,10 @@
 "item.industria.data_disc": "Datentr\u00e4ger",
 "item.industria.paper_bag": "Papiersack",
 "item.industria.ground_plants": "Gemahlene Pflanzen",
-"item.industria.ground_felsh": "Gemahlenes Fleisch",
+"item.industria.ground_flesh": "Gemahlenes Fleisch",
 "item.industria.sulphurous_residue": "Schwefelhaltiger Schlamm",
+"item.industria.lime_dust": "Kalkstaub",
+"item.industria.slag": "Schlake",
 
 "fluid.industria.destilled_water": "Kondensiertes Wasser",
 "fluid.industria.steam": "Dampf",

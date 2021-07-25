@@ -73,7 +73,7 @@ public class BlockFluidPipe extends BlockWiring implements ITileEntityProvider, 
 	@Override
 	public IBlockToolType getBlockInfo() {
 		return (stack, info) -> {
-			info.add(new TranslationTextComponent("industria.block.info.maxMB", 2000));
+			info.add(new TranslationTextComponent("industria.block.info.maxMB", 100));
 		};
 	}
 	

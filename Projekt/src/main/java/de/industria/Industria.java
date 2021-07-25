@@ -702,6 +702,7 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.dried_peat, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.peat, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.humus, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.sulfur_block, BUILDING_BLOCKS);
 		
 		ModGameRegistry.registerBlock(ModItems.gold_planks_stairs, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.aluminium_planks_stairs, BUILDING_BLOCKS);
@@ -1028,6 +1029,8 @@ public class Industria {
 		ModGameRegistry.registerItem(ModItems.ground_flesh);
 		ModGameRegistry.registerItem(ModItems.ground_plants);
 		ModGameRegistry.registerItem(ModItems.sulphurous_residue);
+		ModGameRegistry.registerItem(ModItems.lime_dust);
+		ModGameRegistry.registerItem(ModItems.slag);
 		
 		// register Functional Items
 		ModGameRegistry.registerItem(ModItems.lever_element);
@@ -1049,11 +1052,13 @@ public class Industria {
 		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.SULFUR_ORE, Category.NETHER);
 		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.BAUXIT_STONE_ORE, Category.JUNGLE);
 		ModGameRegistry.addFeatureToOverworldBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.WOLFRAM_STONE_ORE);
+		ModGameRegistry.addFeatureToBiomes(Decoration.LAKES, ModConfiguredFeatures.SULFUR_LAKE, Category.NETHER);
+		//ModGameRegistry.addFeatureToBiomes(Decoration.LAKES, ModConfiguredFeatures.SULFUR_LAKE_VANILLATEST, Category.NETHER);
 		
 		// TODO
 		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.OIL_DEPOT, Category.DESERT);
 		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.OIL_DEPOT, Category.OCEAN);
-		
+				
 		// Trees TODO: Rubber Tree Models
 		ModGameRegistry.addFeatureToBiomes(Decoration.VEGETAL_DECORATION, ModConfiguredFeatures.RUBBER_TREE, Biomes.SWAMP_HILLS, Biomes.JUNGLE, Biomes.JUNGLE_EDGE, Biomes.JUNGLE_HILLS, Biomes.MODIFIED_JUNGLE, Biomes.MODIFIED_JUNGLE_EDGE);
 		ModGameRegistry.addFeatureToRemove(Decoration.VEGETAL_DECORATION, Features.ACACIA, Category.SAVANNA);

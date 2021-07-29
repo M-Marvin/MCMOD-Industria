@@ -3,7 +3,7 @@ package de.industria.blocks;
 import java.util.Random;
 
 import de.industria.tileentity.TileEntitySimpleBlockTicking;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -15,7 +15,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-public class BlockInfinityPowerSource extends BlockContainerBase implements IElectricConnectiveBlock {
+public class BlockInfinityPowerSource extends BlockContainerBase implements IBElectricConnectiveBlock {
 
 	public BlockInfinityPowerSource() {
 		super("infinity_power_source", Properties.of(Material.STONE).sound(SoundType.STONE).strength(-1.0F, 3600000.0F).noDrops());

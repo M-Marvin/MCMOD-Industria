@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.industria.typeregistys.ModTileEntityType;
-import de.industria.util.blockfeatures.IPostMoveHandledTE;
+import de.industria.util.blockfeatures.ITEPostMoveHandled;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -14,7 +14,7 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityRLockedCompositeBlock extends TileEntity implements IPostMoveHandledTE {
+public class TileEntityRLockedCompositeBlock extends TileEntity implements ITEPostMoveHandled {
 	
 	private long lastMoved;
 	private List<BlockPos> storedPositions;

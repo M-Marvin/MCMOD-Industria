@@ -1,0 +1,20 @@
+{
+  "type": "industria:blending",
+  "ingredientItems": [
+    {
+      "item": "industria:aluminium_oxid",
+      "count": 1
+    }
+  ],
+  "ingredientFluids": [
+    {
+      "fluid": "industria:sulfuric_acid",
+      "amount": 500
+    }
+  ],
+  "resultFluid":  {
+    "fluid": "industria:aluminium_solution",
+    "amount": 500
+  },
+  "mixingTime": 100
+}

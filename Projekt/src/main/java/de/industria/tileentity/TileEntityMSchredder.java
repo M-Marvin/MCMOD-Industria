@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import de.industria.blocks.BlockMSchredder;
 import de.industria.blocks.BlockMultiPart;
-import de.industria.dynamicsounds.ISimpleMachineSound;
 import de.industria.gui.ContainerMSchredder;
 import de.industria.items.ItemSchredderTool;
 import de.industria.recipetypes.SchredderRecipe;
@@ -13,7 +12,8 @@ import de.industria.typeregistys.ModDamageSource;
 import de.industria.typeregistys.ModRecipeTypes;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock.Voltage;
+import de.industria.util.blockfeatures.ITESimpleMachineSound;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import de.industria.util.handler.ItemStackHelper;
@@ -39,7 +39,7 @@ import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class TileEntityMSchredder extends TileEntityInventoryBase implements ITickableTileEntity, ISimpleMachineSound, ISidedInventory, INamedContainerProvider {
+public class TileEntityMSchredder extends TileEntityInventoryBase implements ITickableTileEntity, ITESimpleMachineSound, ISidedInventory, INamedContainerProvider {
 	
 	// Only Client Side
 	public float lastPartial;

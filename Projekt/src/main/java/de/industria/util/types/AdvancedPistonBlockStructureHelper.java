@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import de.industria.blocks.BlockRAdvancedPiston;
-import de.industria.util.blockfeatures.IAdvancedStickyBlock;
+import de.industria.util.blockfeatures.IBAdvancedStickyBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.util.Direction;
@@ -161,10 +161,10 @@ public class AdvancedPistonBlockStructureHelper {
             	   if (pos.relative(moveDirection, i2).equals(pistonPos)) return false;
                }
                
-               if (state.getBlock() instanceof IAdvancedStickyBlock && !this.toMove.contains(pos)) {
+               if (state.getBlock() instanceof IBAdvancedStickyBlock && !this.toMove.contains(pos)) {
             	   
                    this.toMove.add(pos);
-                   boolean flag = ((IAdvancedStickyBlock) state.getBlock()).addBlocksToMove(this, pos, state, this.world);
+                   boolean flag = ((IBAdvancedStickyBlock) state.getBlock()).addBlocksToMove(this, pos, state, this.world);
                    if (!flag) return false;
                    
                } else {
@@ -228,10 +228,10 @@ public class AdvancedPistonBlockStructureHelper {
                
                BlockState state = world.getBlockState(blockpos1);
                
-               if (state.getBlock() instanceof IAdvancedStickyBlock && !toMove.contains(blockpos1)) {
+               if (state.getBlock() instanceof IBAdvancedStickyBlock && !toMove.contains(blockpos1)) {
 
                    this.toMove.add(blockpos1);
-                   boolean flag =  ((IAdvancedStickyBlock) state.getBlock()).addBlocksToMove(this, blockpos1, state, this.world);
+                   boolean flag =  ((IBAdvancedStickyBlock) state.getBlock()).addBlocksToMove(this, blockpos1, state, this.world);
             	   if (!flag) return false;
                    
                } else {

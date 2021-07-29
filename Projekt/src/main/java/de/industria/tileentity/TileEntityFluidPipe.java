@@ -1,8 +1,8 @@
 package de.industria.tileentity;
 
 import de.industria.typeregistys.ModTileEntityType;
-import de.industria.util.blockfeatures.IFluidConnective;
-import de.industria.util.blockfeatures.IFluidWiring;
+import de.industria.util.blockfeatures.ITEFluidConnective;
+import de.industria.util.blockfeatures.ITEFluidWiring;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.CompoundNBT;
@@ -12,7 +12,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraftforge.fluids.FluidStack;
 
-public class TileEntityFluidPipe extends TileEntity implements IFluidWiring, ITickableTileEntity {
+public class TileEntityFluidPipe extends TileEntity implements ITEFluidWiring, ITickableTileEntity {
 	
 	protected final int maxFluid;
 	protected FluidStack fluid;
@@ -89,9 +89,9 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidWiring, ITi
 			int inputs = 0;
 			for (Direction d : Direction.values()) {
 				TileEntity te = this.level.getBlockEntity(worldPosition.relative(d));
-				if (te instanceof IFluidWiring) {
+				if (te instanceof ITEFluidWiring) {
 					
-					IFluidWiring pipe = (IFluidWiring) te;
+					ITEFluidWiring pipe = (ITEFluidWiring) te;
 					if (pipe.getFluidType() == this.getFluidType() || pipe.getStorage().isEmpty()) inputs++;
 					
 				}
@@ -101,9 +101,9 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidWiring, ITi
 				
 				for (Direction d : Direction.values()) {
 					TileEntity te = this.level.getBlockEntity(worldPosition.relative(d));
-					if (te instanceof IFluidWiring) {
+					if (te instanceof ITEFluidWiring) {
 
-						IFluidWiring pipe = (IFluidWiring) te;
+						ITEFluidWiring pipe = (ITEFluidWiring) te;
 						
 						if (pipe.getStorage().isEmpty() || this.getFluidType() == pipe.getFluidType()) {
 							
@@ -142,9 +142,9 @@ public class TileEntityFluidPipe extends TileEntity implements IFluidWiring, ITi
 					
 					TileEntity te = this.level.getBlockEntity(worldPosition.relative(d));
 					
-					if (te instanceof IFluidConnective && !(te instanceof TileEntityFluidPipe)) {
+					if (te instanceof ITEFluidConnective && !(te instanceof TileEntityFluidPipe)) {
 						
-						IFluidConnective device = (IFluidConnective) te;
+						ITEFluidConnective device = (ITEFluidConnective) te;
 						FluidStack fluidRemaining = device.insertFluid(this.fluid);
 						if (fluidRemaining == this.fluid) continue;
 						this.fluid = fluidRemaining;

@@ -1,7 +1,7 @@
 package de.industria.items;
 
 import de.industria.Industria;
-import de.industria.util.blockfeatures.IFluidConnective;
+import de.industria.util.blockfeatures.ITEFluidConnective;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -41,9 +41,9 @@ public class ItemFluidMeter extends ItemBase {
 			Block block = state.getBlock();
 			TileEntity te = worldIn.getBlockEntity(pos);
 			
-			if (te instanceof IFluidConnective) {
+			if (te instanceof ITEFluidConnective) {
 				
-				FluidStack fluid = ((IFluidConnective) te).getStorage();
+				FluidStack fluid = ((ITEFluidConnective) te).getStorage();
 				
 				ItemStack blockItem = block.getCloneItemStack(worldIn, pos, state);
 				

@@ -14,6 +14,7 @@ import de.industria.fluids.FluidOreAluminiumSolution;
 import de.industria.fluids.FluidOreCopperSolution;
 import de.industria.fluids.FluidOreIronSolution;
 import de.industria.fluids.FluidOreTinSolution;
+import de.industria.fluids.FluidOreVanadiumSolution;
 import de.industria.fluids.FluidOreWolframSolution;
 import de.industria.fluids.FluidRawOil;
 import de.industria.fluids.FluidSteam;
@@ -48,6 +49,8 @@ public class ModFluids {
 	public static final FluidOreWolframSolution WOLFRAM_SOLUTION = register("wolfram_solution", new FluidOreWolframSolution.Still());
 	public static final FluidOreTinSolution FLOWING_TIN_SOLUTION = register("flowing_tin_solution", new FluidOreTinSolution.Flow());
 	public static final FluidOreTinSolution TIN_SOLUTION = register("tin_solution", new FluidOreTinSolution.Still());
+	public static final FluidOreVanadiumSolution FLOWING_VANADIUM_SOLUTION = register("flowing_vanadium_solution", new FluidOreVanadiumSolution.Flow());
+	public static final FluidOreVanadiumSolution VANADIUM_SOLUTION = register("vanadium_solution", new FluidOreVanadiumSolution.Still());
 	public static final FluidChemicalWater FLOWING_CHEMICAL_WATER = register("flowing_chemical_water", new FluidChemicalWater.Flow());
 	public static final FluidChemicalWater CHEMICAL_WATER = register("chemical_water", new FluidChemicalWater.Still());
 	public static final FluidRawOil FLOWING_RAW_OIL = register("flowing_raw_oil", new FluidRawOil.Flow());

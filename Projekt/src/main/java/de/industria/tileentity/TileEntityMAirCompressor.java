@@ -1,13 +1,13 @@
 package de.industria.tileentity;
 
 import de.industria.blocks.BlockMultiPart;
-import de.industria.dynamicsounds.ISimpleMachineSound;
 import de.industria.gui.ContainerMAirCompressor;
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
-import de.industria.util.blockfeatures.IFluidConnective;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock.Voltage;
+import de.industria.util.blockfeatures.ITEFluidConnective;
+import de.industria.util.blockfeatures.ITESimpleMachineSound;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.MachineSoundHelper;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
@@ -31,7 +31,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fluids.FluidStack;
 
-public class TileEntityMAirCompressor extends TileEntity implements ITickableTileEntity, IFluidConnective, INamedContainerProvider, ISimpleMachineSound {
+public class TileEntityMAirCompressor extends TileEntity implements ITickableTileEntity, ITEFluidConnective, INamedContainerProvider, ITESimpleMachineSound {
 	
 	public boolean hasPower;
 	public boolean isWorking;

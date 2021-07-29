@@ -1,5 +1,6 @@
 package de.industria.dynamicsounds;
 
+import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import net.minecraft.client.audio.TickableSound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
@@ -30,7 +31,7 @@ public class SoundMachine extends TickableSound {
 		
 		TileEntity machine = this.world.getBlockEntity(pos);
 		
-		if ((machine instanceof ISimpleMachineSound ? ((ISimpleMachineSound) machine).isSoundRunning() : false) && !machine.isRemoved()) {
+		if ((machine instanceof ITESimpleMachineSound ? ((ITESimpleMachineSound) machine).isSoundRunning() : false) && !machine.isRemoved()) {
 			
 			this.x = machine.getBlockPos().getX();
 			this.y = machine.getBlockPos().getY();

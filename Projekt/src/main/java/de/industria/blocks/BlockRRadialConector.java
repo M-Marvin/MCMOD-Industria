@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.industria.tileentity.TileEntityRLockedCompositeBlock;
-import de.industria.util.blockfeatures.IAdvancedStickyBlock;
+import de.industria.util.blockfeatures.IBAdvancedStickyBlock;
 import de.industria.util.types.AdvancedPistonBlockStructureHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -25,7 +25,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockRRadialConector extends BlockContainerBase implements IAdvancedStickyBlock {
+public class BlockRRadialConector extends BlockContainerBase implements IBAdvancedStickyBlock {
 	
 	public static final BooleanProperty LOCKED = BooleanProperty.create("locked");
 	public static final BooleanProperty MANUAL_LOCK = BooleanProperty.create("manual_lock");

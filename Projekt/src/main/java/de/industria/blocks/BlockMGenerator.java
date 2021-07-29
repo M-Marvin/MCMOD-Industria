@@ -5,8 +5,8 @@ import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.tileentity.TileEntityMGenerator;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -36,7 +36,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMGenerator extends BlockContainerBase implements IElectricConnectiveBlock, IAdvancedBlockInfo {
+public class BlockMGenerator extends BlockContainerBase implements IBElectricConnectiveBlock, IBAdvancedBlockInfo {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	public static final BooleanProperty ACTIVE = BooleanProperty.create("active");

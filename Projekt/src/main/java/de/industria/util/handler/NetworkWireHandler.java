@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import de.industria.util.blockfeatures.INetworkDevice;
-import de.industria.util.blockfeatures.INetworkDevice.NetworkDeviceType;
-import de.industria.util.blockfeatures.INetworkDevice.NetworkMessage;
+import de.industria.util.blockfeatures.ITENetworkDevice;
+import de.industria.util.blockfeatures.ITENetworkDevice.NetworkDeviceType;
+import de.industria.util.blockfeatures.ITENetworkDevice.NetworkMessage;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -63,7 +63,7 @@ public class NetworkWireHandler extends WorldSavedData {
 			for (Entry<BlockPos, List<Direction>> deviceEntry : network.positions.entrySet()) {
 				BlockPos devicePos = deviceEntry.getKey();
 				BlockState deviceState = world.getBlockState(devicePos);
-				INetworkDevice device = deviceState.getBlock() instanceof INetworkDevice ? (INetworkDevice) deviceState.getBlock() : null;
+				ITENetworkDevice device = deviceState.getBlock() instanceof ITENetworkDevice ? (ITENetworkDevice) deviceState.getBlock() : null;
 				
 				if (device != null ? device.getNetworkType() != NetworkDeviceType.WIRING : false) {
 					
@@ -89,7 +89,7 @@ public class NetworkWireHandler extends WorldSavedData {
 		
 		BlockState state = world.getBlockState(scannPos);
 		TileEntity tileEntity = world.getBlockEntity(scannPos);
-		INetworkDevice device = state.getBlock() instanceof INetworkDevice ? (INetworkDevice) state.getBlock() : tileEntity instanceof INetworkDevice ? (INetworkDevice) tileEntity : null;
+		ITENetworkDevice device = state.getBlock() instanceof ITENetworkDevice ? (ITENetworkDevice) state.getBlock() : tileEntity instanceof ITENetworkDevice ? (ITENetworkDevice) tileEntity : null;
 		
 		if (device != null && scannDepth < 50000) {
 			
@@ -178,7 +178,7 @@ public class NetworkWireHandler extends WorldSavedData {
 		
 		if (this.isServerInstace) {
 			
-			if (world.getBlockState(position).getBlock() instanceof INetworkDevice) {
+			if (world.getBlockState(position).getBlock() instanceof ITENetworkDevice) {
 				
 				DataNetwork network = new DataNetwork();
 				List<Direction> sideList = new ArrayList<Direction>();

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "industria:vanadium_dust"
+  },
+  "result": "industria:vanadium_ingot",
+  "experience": 0.0,
+  "cookingtime": 200
+}

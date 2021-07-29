@@ -1,6 +1,6 @@
 package de.industria.blocks;
 
-import de.industria.util.blockfeatures.IBurnableBlock;
+import de.industria.util.blockfeatures.IBBurnableBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -9,7 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
 
-public class BlockWoodenSlabBase extends BlockSlabBase implements IBurnableBlock {
+public class BlockWoodenSlabBase extends BlockSlabBase implements IBBurnableBlock {
 
 	public BlockWoodenSlabBase(String name, Properties properties) {
 		super(name, properties);

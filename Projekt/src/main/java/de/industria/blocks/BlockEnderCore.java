@@ -7,7 +7,7 @@ import de.industria.ModItems;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.renderer.BlockEnderCoreItemRenderer;
 import de.industria.tileentity.TileEntityEnderCore;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -21,7 +21,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 
-public class BlockEnderCore extends BlockContainerBase implements IAdvancedBlockInfo {
+public class BlockEnderCore extends BlockContainerBase implements IBAdvancedBlockInfo {
 	
 	public BlockEnderCore() {
 		super("ender_core", Material.METAL, 1F, 1F, SoundType.NETHERITE_BLOCK);

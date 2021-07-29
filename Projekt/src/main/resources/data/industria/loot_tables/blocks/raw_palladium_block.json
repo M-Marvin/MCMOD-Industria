@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "industria:raw_palladium_block"
+          "name": "industria:raw_vanadium_block"
         }
       ],
       "conditions": [

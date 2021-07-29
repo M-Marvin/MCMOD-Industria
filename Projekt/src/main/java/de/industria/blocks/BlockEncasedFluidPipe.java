@@ -1,7 +1,7 @@
 package de.industria.blocks;
 
 import de.industria.tileentity.TileEntityEncasedFluidPipe;
-import de.industria.util.blockfeatures.IAdvancedStickyBlock;
+import de.industria.util.blockfeatures.IBAdvancedStickyBlock;
 import de.industria.util.types.AdvancedPistonBlockStructureHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -23,7 +23,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 @SuppressWarnings("deprecation")
-public class BlockEncasedFluidPipe extends BlockFluidPipe implements IAdvancedStickyBlock {
+public class BlockEncasedFluidPipe extends BlockFluidPipe implements IBAdvancedStickyBlock {
 	
 	protected BlockStructureScaffold scaffoldBlock;
 	

@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 import de.industria.blocks.BlockConveyorBelt.BeltState;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.tileentity.TileEntityConveyorBelt;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -40,7 +40,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockConveyorSwitch extends BlockContainerBase implements IAdvancedBlockInfo {
+public class BlockConveyorSwitch extends BlockContainerBase implements IBAdvancedBlockInfo {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final EnumProperty<BeltState> RIGHT = EnumProperty.create("right", BeltState.class);

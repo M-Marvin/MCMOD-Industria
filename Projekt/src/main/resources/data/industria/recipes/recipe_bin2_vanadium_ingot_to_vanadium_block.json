@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "vanadium_block",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:vanadium_ingot"
+    }
+  },
+  "result": {
+    "item": "industria:vanadium_block"
+  }
+}

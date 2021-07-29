@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "vanadium_dust",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:tpo_vanadium_dust"
+    }
+  },
+  "result": {
+    "item": "industria:vanadium_dust"
+  }
+}

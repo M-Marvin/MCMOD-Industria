@@ -1,7 +1,7 @@
 package de.industria.blocks;
 
 import de.industria.typeregistys.ModToolType;
-import de.industria.util.blockfeatures.INetworkDevice;
+import de.industria.util.blockfeatures.ITENetworkDevice;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -11,7 +11,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 
-public class BlockNetworkCable extends BlockWiring implements INetworkDevice {
+public class BlockNetworkCable extends BlockWiring implements ITENetworkDevice {
 	
 	public BlockNetworkCable(String name) {
 		super(name, Material.WOOL, 0.2F, SoundType.WOOL, 4);
@@ -44,8 +44,8 @@ public class BlockNetworkCable extends BlockWiring implements INetworkDevice {
 	@Override
 	public boolean canConnectTo(BlockState wireState, World worldIn, BlockPos wirePos, BlockPos connectPos, Direction direction) {
 		BlockState state = worldIn.getBlockState(connectPos);
-		if (state.getBlock() instanceof INetworkDevice) {
-			return ((INetworkDevice) state.getBlock()).getNetworkType().canConnectWith(this.getNetworkType());
+		if (state.getBlock() instanceof ITENetworkDevice) {
+			return ((ITENetworkDevice) state.getBlock()).getNetworkType().canConnectWith(this.getNetworkType());
 		}
 		return false;
 	}

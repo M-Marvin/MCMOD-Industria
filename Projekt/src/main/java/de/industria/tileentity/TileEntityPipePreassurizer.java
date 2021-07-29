@@ -8,7 +8,7 @@ import de.industria.blocks.BlockPipePreassurizer;
 import de.industria.blocks.BlockPreassurePipe;
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModTileEntityType;
-import de.industria.util.blockfeatures.IFluidConnective;
+import de.industria.util.blockfeatures.ITEFluidConnective;
 import de.industria.util.handler.VoxelHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -23,7 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraftforge.fluids.FluidStack;
 
-public class TileEntityPipePreassurizer extends TileEntityPreassurePipe implements IFluidConnective {
+public class TileEntityPipePreassurizer extends TileEntityPreassurePipe implements ITEFluidConnective {
 	
 	public final int maxStorage;
 	public FluidStack compressedAir;

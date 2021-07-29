@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "industria:block/vanadium_planks_slab"
+    },
+    "type=double": {
+      "model": "industria:block/vanadium_planks"
+    },
+    "type=top": {
+      "model": "industria:block/vanadium_planks_slab_top"
+    }
+  }
+}

@@ -7,8 +7,8 @@ import javax.annotation.Nullable;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.tileentity.TileEntityFluidPipe;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
-import de.industria.util.blockfeatures.IFluidConnective;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.ITEFluidConnective;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -27,7 +27,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 @SuppressWarnings("deprecation")
-public class BlockFluidPipe extends BlockWiring implements ITileEntityProvider, IAdvancedBlockInfo {
+public class BlockFluidPipe extends BlockWiring implements ITileEntityProvider, IBAdvancedBlockInfo {
 	
 	public BlockFluidPipe(String name) {
 		super(name, Material.METAL, 2F, SoundType.METAL, 8);
@@ -41,8 +41,8 @@ public class BlockFluidPipe extends BlockWiring implements ITileEntityProvider, 
 	public boolean canConnectTo(BlockState wireState, World worldIn, BlockPos wirePos, BlockPos connectPos, Direction direction) {
 		
 		TileEntity te = worldIn.getBlockEntity(connectPos);
-		if (te instanceof IFluidConnective) {
-			return ((IFluidConnective) te).canConnect(direction);
+		if (te instanceof ITEFluidConnective) {
+			return ((ITEFluidConnective) te).canConnect(direction);
 		}
 		return false;
 		

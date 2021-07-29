@@ -10,8 +10,8 @@ import de.industria.ModItems;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.tileentity.TileEntitySimpleBlockTicking;
 import de.industria.typeregistys.ModSoundEvents;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.Block;
@@ -37,7 +37,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-public class BlockMTransformatorContact extends BlockContainerBase implements IElectricConnectiveBlock, IAdvancedBlockInfo {
+public class BlockMTransformatorContact extends BlockContainerBase implements IBElectricConnectiveBlock, IBAdvancedBlockInfo {
 	
 	public static final EnumProperty<Voltage> VOLTAGE = EnumProperty.create("voltage", Voltage.class, Voltage.LowVoltage, Voltage.NormalVoltage, Voltage.HightVoltage, Voltage.ExtremVoltage);
 	public static final BooleanProperty INPUT = BooleanProperty.create("input");

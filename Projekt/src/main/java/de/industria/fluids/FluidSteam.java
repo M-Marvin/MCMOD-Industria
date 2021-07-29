@@ -4,12 +4,12 @@ import java.util.Random;
 
 import de.industria.Industria;
 import de.industria.ModItems;
+import de.industria.entity.EntityFallingFluid;
 import de.industria.fluids.util.GasFluid;
 import de.industria.typeregistys.ModFluids;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.IBucketPickupHandler;
-import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
@@ -64,14 +64,14 @@ public class FluidSteam extends GasFluid implements IBucketPickupHandler {
 	@Override
 	public void onMoved(World world, BlockPos pos, Direction moveDirection, FluidState state, Random random) {
 		
-		if (random.nextInt(20) == 0 && world.canSeeSky(pos)) {
+		if (random.nextInt(20) == 0 && canSeeSky(pos, world)) {
 					
 			if (world.getBlockState(pos.relative(moveDirection)).getFluidState().getType() == this) world.setBlockAndUpdate(pos.relative(moveDirection), Blocks.AIR.defaultBlockState());
 			
 			if (pos.getY() < 150) {
-
-				FallingBlockEntity condensetWater = new FallingBlockEntity(world, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, ModFluids.DESTILLED_WATER.defaultFluidState().setValue(FluidDestilledWater.HOT, true).createLegacyBlock());
-				condensetWater.time = -1000;
+				
+				EntityFallingFluid condensetWater = new EntityFallingFluid(world, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, ModFluids.DESTILLED_WATER.defaultFluidState().setValue(FluidDestilledWater.HOT, true));
+				condensetWater.setAirSpawned();
 				world.addFreshEntity(condensetWater);
 				
 			}
@@ -79,7 +79,18 @@ public class FluidSteam extends GasFluid implements IBucketPickupHandler {
 		}
 		
 	}
-
+	
+	@SuppressWarnings("deprecation")
+	protected boolean canSeeSky(BlockPos pos, World world) {
+		if (world.canSeeSky(pos)) return true;
+		for (int i = 0; i < 255; i++) {
+			if (pos.getY() + i >= 255) return true;
+			BlockState checkState = world.getBlockState(pos.above(i));
+			if (!checkState.isAir() && checkState.getFluidState().isEmpty()) return false;
+		}
+		return true;
+	}
+	
 	public FluidState getPreasurized() {
 		return this.defaultFluidState().setValue(PRESSURIZED, true);
 	}

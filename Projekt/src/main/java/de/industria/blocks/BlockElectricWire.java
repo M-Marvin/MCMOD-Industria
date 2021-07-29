@@ -8,9 +8,9 @@ import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.typeregistys.ModDamageSource;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModToolType;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock;
-import de.industria.util.blockfeatures.IElectricWireBlock;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
+import de.industria.util.blockfeatures.IBElectricWireBlock;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.BlockState;
@@ -29,7 +29,7 @@ import net.minecraft.world.Explosion.Mode;
 import net.minecraftforge.common.ToolType;
 import net.minecraft.world.World;
 
-public class BlockElectricWire extends BlockWiring implements IElectricWireBlock, IAdvancedBlockInfo {
+public class BlockElectricWire extends BlockWiring implements IBElectricWireBlock, IBAdvancedBlockInfo {
 	
 	protected final int maximumPower;
 	
@@ -52,10 +52,10 @@ public class BlockElectricWire extends BlockWiring implements IElectricWireBlock
 		
 		BlockState otherState = worldIn.getBlockState(connectPos);
 		
-		if (otherState.getBlock() instanceof IElectricWireBlock) {
+		if (otherState.getBlock() instanceof IBElectricWireBlock) {
 			return true;
-		} else if (otherState.getBlock() instanceof IElectricConnectiveBlock) {
-			return ((IElectricConnectiveBlock) otherState.getBlock()).canConnect(direction.getOpposite(), worldIn, connectPos, otherState);
+		} else if (otherState.getBlock() instanceof IBElectricConnectiveBlock) {
+			return ((IBElectricConnectiveBlock) otherState.getBlock()).canConnect(direction.getOpposite(), worldIn, connectPos, otherState);
 		}
 		
 		return false;

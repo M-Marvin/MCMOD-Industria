@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.industria.typeregistys.ModTileEntityType;
-import de.industria.util.blockfeatures.IPostMoveHandledTE;
+import de.industria.util.blockfeatures.ITEPostMoveHandled;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -15,7 +15,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityStructureScaffold extends TileEntityInventoryBase implements ITickableTileEntity, IPostMoveHandledTE, ISidedInventory {
+public class TileEntityStructureScaffold extends TileEntityInventoryBase implements ITickableTileEntity, ITEPostMoveHandled, ISidedInventory {
 	
 	public TileEntityStructureScaffold() {
 		super(ModTileEntityType.STRUCTURE_SCAFFOLD, 6);

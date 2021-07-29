@@ -18,10 +18,10 @@ import de.industria.items.ItemHardDrive;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.LuaInterpreter;
 import de.industria.util.LuaInterpreter.ILuaThreadViolating;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock.Voltage;
-import de.industria.util.blockfeatures.INetworkDevice;
-import de.industria.util.blockfeatures.INetworkDevice.NetworkDeviceIP;
-import de.industria.util.blockfeatures.INetworkDevice.NetworkMessage;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
+import de.industria.util.blockfeatures.ITENetworkDevice;
+import de.industria.util.blockfeatures.ITENetworkDevice.NetworkDeviceIP;
+import de.industria.util.blockfeatures.ITENetworkDevice.NetworkMessage;
 import de.industria.util.handler.DriveManager;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
@@ -230,8 +230,8 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 	public TileEntityNComputer() {
 		super(ModTileEntityType.COMPUTER, 2);
 		this.outputStream = new ByteArrayOutputStream();
-		this.recivedMessages = new ArrayList<INetworkDevice.NetworkMessage>();;
-		this.sendMessages = new ArrayList<INetworkDevice.NetworkMessage>();
+		this.recivedMessages = new ArrayList<ITENetworkDevice.NetworkMessage>();;
+		this.sendMessages = new ArrayList<ITENetworkDevice.NetworkMessage>();
 		this.luaInterpreter = new LuaInterpreter(this, this.outputStream, 500, new computer());
 		this.deviceIP = NetworkDeviceIP.DEFAULT;
 	}
@@ -485,7 +485,7 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 	
 	public void sendMessage(NetworkMessage msg) {
 		BlockState state = this.getBlockState();
-		INetworkDevice device = state.getBlock() instanceof INetworkDevice ? (INetworkDevice) state.getBlock() : null;
+		ITENetworkDevice device = state.getBlock() instanceof ITENetworkDevice ? (ITENetworkDevice) state.getBlock() : null;
 		if (device != null) {
 			device.sendMessage(msg, level, worldPosition, state);
 		}

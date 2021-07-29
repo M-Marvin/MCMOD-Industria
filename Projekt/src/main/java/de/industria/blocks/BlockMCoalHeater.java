@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.renderer.BlockMCoalHeaterItemRenderer;
 import de.industria.tileentity.TileEntityMCoalHeater;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -30,7 +30,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMCoalHeater extends BlockMultiPart<TileEntityMCoalHeater> implements ISidedInventoryProvider, IAdvancedBlockInfo {
+public class BlockMCoalHeater extends BlockMultiPart<TileEntityMCoalHeater> implements ISidedInventoryProvider, IBAdvancedBlockInfo {
 	
 	public BlockMCoalHeater() {
 		super("coal_heater", Material.METAL, 4F, SoundType.METAL, 2, 1, 2);

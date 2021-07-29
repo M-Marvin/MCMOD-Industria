@@ -1,7 +1,7 @@
 package de.industria.blocks;
 
 import de.industria.ModItems;
-import de.industria.util.blockfeatures.IAdvancedStickyBlock;
+import de.industria.util.blockfeatures.IBAdvancedStickyBlock;
 import de.industria.util.types.AdvancedPistonBlockStructureHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -23,7 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
 
-public class BlockRLinearConector extends BlockBase implements IAdvancedStickyBlock {
+public class BlockRLinearConector extends BlockBase implements IBAdvancedStickyBlock {
 	
 	private static final EnumProperty<Axis> AXIS = BlockStateProperties.AXIS;
 	private static final IntegerProperty RANGE = IntegerProperty.create("range", 1, 12);

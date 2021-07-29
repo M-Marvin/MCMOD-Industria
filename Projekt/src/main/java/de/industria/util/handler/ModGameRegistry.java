@@ -8,8 +8,8 @@ import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
-import de.industria.util.blockfeatures.IBurnableBlock;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBBurnableBlock;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.item.BlockItem;
@@ -42,15 +42,15 @@ public class ModGameRegistry {
 		int stackSize = 64;
 		Item.Properties properties = new Item.Properties().tab(group).rarity(rarity);
 		
-		if (block instanceof IAdvancedBlockInfo) {
-			info = ((IAdvancedBlockInfo) block).getBlockInfo();
-			Supplier<Callable<ItemStackTileEntityRenderer>> ister = ((IAdvancedBlockInfo) block).getISTER();
+		if (block instanceof IBAdvancedBlockInfo) {
+			info = ((IBAdvancedBlockInfo) block).getBlockInfo();
+			Supplier<Callable<ItemStackTileEntityRenderer>> ister = ((IBAdvancedBlockInfo) block).getISTER();
 			properties = properties.setISTER(ister);
-			stackSize = ((IAdvancedBlockInfo) block).getStackSize();
+			stackSize = ((IBAdvancedBlockInfo) block).getStackSize();
 		}
 		
-		if (block instanceof IBurnableBlock) {
-			burnTime = ((IBurnableBlock) block).getBurnTime();
+		if (block instanceof IBBurnableBlock) {
+			burnTime = ((IBBurnableBlock) block).getBurnTime();
 		}
 		
 		Item blockItem;
@@ -72,15 +72,15 @@ public class ModGameRegistry {
 		int stackSize = 64;
 		Item.Properties properties = new Item.Properties().tab(group);
 		
-		if (block instanceof IAdvancedBlockInfo) {
-			info = ((IAdvancedBlockInfo) block).getBlockInfo();
-			Supplier<Callable<ItemStackTileEntityRenderer>> ister = ((IAdvancedBlockInfo) block).getISTER();
+		if (block instanceof IBAdvancedBlockInfo) {
+			info = ((IBAdvancedBlockInfo) block).getBlockInfo();
+			Supplier<Callable<ItemStackTileEntityRenderer>> ister = ((IBAdvancedBlockInfo) block).getISTER();
 			properties = properties.setISTER(ister);
-			stackSize = ((IAdvancedBlockInfo) block).getStackSize();
+			stackSize = ((IBAdvancedBlockInfo) block).getStackSize();
 		}
 		
-		if (block instanceof IBurnableBlock) {
-			burnTime = ((IBurnableBlock) block).getBurnTime();
+		if (block instanceof IBBurnableBlock) {
+			burnTime = ((IBBurnableBlock) block).getBurnTime();
 		}
 		
 		Item blockItem;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.industria.ModItems;
-import de.industria.util.blockfeatures.IAdvancedStickyBlock;
+import de.industria.util.blockfeatures.IBAdvancedStickyBlock;
 import de.industria.util.types.AdvancedPistonBlockStructureHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -28,7 +28,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
 
-public class BlockRConectorBlock extends BlockBase implements IAdvancedStickyBlock {
+public class BlockRConectorBlock extends BlockBase implements IBAdvancedStickyBlock {
 	
 	public static final BooleanProperty NORTH = BooleanProperty.create("north");
 	public static final BooleanProperty SOUTH = BooleanProperty.create("south");

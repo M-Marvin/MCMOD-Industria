@@ -5,11 +5,10 @@
   },
   "results": [
     {
-      "item": "industria:biomass",
-      "count": 4
+      "item": "industria:biomass"
     }
   ],
-  "schreddertime": 80,
+  "schreddertime": 20,
   "schreddertool": "industria:schredder_macerator",
   "schredderdamage": 8
 }

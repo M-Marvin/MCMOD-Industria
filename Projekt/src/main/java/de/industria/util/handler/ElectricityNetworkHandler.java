@@ -7,10 +7,10 @@ import java.util.Map.Entry;
 
 import de.industria.Industria;
 import de.industria.packet.SSendENHandeler;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock;
-import de.industria.util.blockfeatures.IElectricWireBlock;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock.DeviceType;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock.Voltage;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
+import de.industria.util.blockfeatures.IBElectricWireBlock;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock.DeviceType;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -92,7 +92,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 				
 		if (this.isServerInstace) {
 			
-			if (world.getBlockState(position).getBlock() instanceof IElectricConnectiveBlock) {
+			if (world.getBlockState(position).getBlock() instanceof IBElectricConnectiveBlock) {
 				
 				ElectricityNetwork network = getNetwork(position);
 				List<Direction> attachList = new ArrayList<Direction>();
@@ -123,9 +123,9 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 							BlockState state = world.getBlockState(device.getKey());
 							List<Direction> attacheSides = device.getValue();
 							
-							if (state.getBlock() instanceof IElectricConnectiveBlock && !(state.getBlock() instanceof IElectricWireBlock)) {
+							if (state.getBlock() instanceof IBElectricConnectiveBlock && !(state.getBlock() instanceof IBElectricWireBlock)) {
 								
-								IElectricConnectiveBlock device1 = (IElectricConnectiveBlock) state.getBlock();
+								IBElectricConnectiveBlock device1 = (IBElectricConnectiveBlock) state.getBlock();
 								
 								boolean hasCurrentAdded = false;
 								for (Direction attachSide : attacheSides) {
@@ -169,9 +169,9 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 							BlockPos pos = device.getKey();
 							BlockState state = world.getBlockState(pos);
 							
-							if (state.getBlock() instanceof IElectricConnectiveBlock) {
+							if (state.getBlock() instanceof IBElectricConnectiveBlock) {
 								
-								boolean result = ((IElectricConnectiveBlock) state.getBlock()).beforNetworkChanges(world, pos, state, network, lap);
+								boolean result = ((IBElectricConnectiveBlock) state.getBlock()).beforNetworkChanges(world, pos, state, network, lap);
 								if (result) abbortUpdate = true;
 								
 							}
@@ -185,9 +185,9 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 							BlockPos pos = device.getKey();
 							BlockState state = world.getBlockState(pos);
 							
-							if (state.getBlock() instanceof IElectricConnectiveBlock) {
+							if (state.getBlock() instanceof IBElectricConnectiveBlock) {
 								
-								((IElectricConnectiveBlock) state.getBlock()).onNetworkChanges(world, pos, state, network);
+								((IBElectricConnectiveBlock) state.getBlock()).onNetworkChanges(world, pos, state, network);
 								
 							}
 							
@@ -241,7 +241,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 		
 		if (this.isServerInstace) {
 			
-			if (world.getBlockState(position).getBlock() instanceof IElectricConnectiveBlock) {
+			if (world.getBlockState(position).getBlock() instanceof IBElectricConnectiveBlock) {
 					
 				ElectricityNetwork network = new ElectricityNetwork();
 				List<Direction> sideList = new ArrayList<Direction>();
@@ -258,9 +258,9 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 					BlockState state = world.getBlockState(device.getKey());
 					List<Direction> attacheSides = device.getValue();
 					
-					if (state.getBlock() instanceof IElectricConnectiveBlock && !(state.getBlock() instanceof IElectricWireBlock)) {
+					if (state.getBlock() instanceof IBElectricConnectiveBlock && !(state.getBlock() instanceof IBElectricWireBlock)) {
 						
-						IElectricConnectiveBlock device1 = (IElectricConnectiveBlock) state.getBlock();
+						IBElectricConnectiveBlock device1 = (IBElectricConnectiveBlock) state.getBlock();
 						
 						boolean hasCurrentAdded = false;
 						for (Direction attachSide : attacheSides) {
@@ -321,9 +321,9 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 		
 		BlockState state = world.getBlockState(scannPos);
 		
-		if (state.getBlock() instanceof IElectricConnectiveBlock && scannDepth < 50000) {
+		if (state.getBlock() instanceof IBElectricConnectiveBlock && scannDepth < 50000) {
 			
-			IElectricConnectiveBlock device = (IElectricConnectiveBlock) state.getBlock();
+			IBElectricConnectiveBlock device = (IBElectricConnectiveBlock) state.getBlock();
 			DeviceType type = device.getDeviceType();
 			
 			if ((direction != null ? device.canConnect(direction, world, scannPos, state) : true) && lastDevice.canConnectWith(type)) {

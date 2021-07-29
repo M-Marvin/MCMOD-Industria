@@ -8,8 +8,8 @@ import java.util.function.Supplier;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.renderer.BlockMBlenderItemRenderer;
 import de.industria.tileentity.TileEntityMBlender;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import de.industria.util.handler.VoxelHelper;
 import net.minecraft.block.Block;
@@ -42,7 +42,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMBlender extends BlockMultiPart<TileEntityMBlender> implements IElectricConnectiveBlock, IAdvancedBlockInfo, ISidedInventoryProvider {
+public class BlockMBlender extends BlockMultiPart<TileEntityMBlender> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo, ISidedInventoryProvider {
 	
 	public BlockMBlender() {
 		super("blender", Material.METAL, 4F, SoundType.METAL, 3, 3, 3);

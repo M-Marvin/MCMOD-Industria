@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.industria.tileentity.TileEntityRSignalAntenna;
-import de.industria.util.blockfeatures.ISignalConnectiveBlock;
+import de.industria.util.blockfeatures.IBSignalConnectiveBlock;
 import de.industria.util.types.RedstoneControlSignal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -30,7 +30,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-public class BlockSignalAntennaConector extends BlockContainerBase implements ISignalConnectiveBlock {
+public class BlockSignalAntennaConector extends BlockContainerBase implements IBSignalConnectiveBlock {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	

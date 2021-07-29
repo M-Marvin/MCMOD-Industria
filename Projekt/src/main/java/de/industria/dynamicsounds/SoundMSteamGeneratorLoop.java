@@ -46,6 +46,11 @@ public class SoundMSteamGeneratorLoop extends SoundMachine {
 				this.stop();
 				
 			}
+			
+		} else {
+			
+			this.stop();
+			
 		}
  		
 	}

@@ -10,7 +10,7 @@ import de.industria.blocks.BlockRHoverControler;
 import de.industria.blocks.BlockRHoverExtension;
 import de.industria.gui.ContainerRHoverControler;
 import de.industria.typeregistys.ModTileEntityType;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock.Voltage;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ItemStackHelper;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;

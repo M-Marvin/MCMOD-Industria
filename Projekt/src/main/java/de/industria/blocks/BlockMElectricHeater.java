@@ -8,8 +8,8 @@ import java.util.function.Supplier;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.renderer.BlockMElectricHeaterItemRenderer;
 import de.industria.tileentity.TileEntityMElectricHeater;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -25,7 +25,7 @@ import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockMElectricHeater extends BlockMultiPart<TileEntityMElectricHeater> implements IAdvancedBlockInfo, IElectricConnectiveBlock {
+public class BlockMElectricHeater extends BlockMultiPart<TileEntityMElectricHeater> implements IBAdvancedBlockInfo, IBElectricConnectiveBlock {
 	
 	public BlockMElectricHeater() {
 		super("electric_heater", Material.METAL, 4F, SoundType.METAL, 2, 1, 2);

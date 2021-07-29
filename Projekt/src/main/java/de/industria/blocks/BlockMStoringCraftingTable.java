@@ -5,8 +5,8 @@ import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.tileentity.TileEntityMStoringCraftingTable;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -28,7 +28,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMStoringCraftingTable extends BlockContainerBase implements IAdvancedBlockInfo, IElectricConnectiveBlock {
+public class BlockMStoringCraftingTable extends BlockContainerBase implements IBAdvancedBlockInfo, IBElectricConnectiveBlock {
 	
 	public BlockMStoringCraftingTable() {
 		super("storing_crafting_table", Material.METAL, 2.5F, SoundType.METAL);

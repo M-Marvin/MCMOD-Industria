@@ -6,9 +6,9 @@ import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.tileentity.TileEntityRSignalProcessorContact;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
-import de.industria.util.blockfeatures.INetworkDevice;
-import de.industria.util.blockfeatures.ISignalConnectiveBlock;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.ITENetworkDevice;
+import de.industria.util.blockfeatures.IBSignalConnectiveBlock;
 import de.industria.util.handler.ItemStackHelper;
 import de.industria.util.types.RedstoneControlSignal;
 import net.minecraft.block.Block;
@@ -52,7 +52,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockRSignalProcessorContact extends BlockContainerBase implements ISignalConnectiveBlock, IWaterLoggable, INetworkDevice, IAdvancedBlockInfo {
+public class BlockRSignalProcessorContact extends BlockContainerBase implements IBSignalConnectiveBlock, IWaterLoggable, ITENetworkDevice, IBAdvancedBlockInfo {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final BooleanProperty OPEN = BooleanProperty.create("open");

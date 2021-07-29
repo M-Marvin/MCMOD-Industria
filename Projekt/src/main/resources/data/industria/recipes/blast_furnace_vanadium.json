@@ -1,0 +1,25 @@
+{
+  "type": "industria:blast_furnace",
+  "ingredientItems": [
+    {
+      "item": "industria:vanadium_oxid",
+      "count": 2
+    },
+    {
+      "item": "industria:aluminium_dust",
+      "count": 1
+    }
+  ],
+  "resultItem": {
+    "item": "industria:pure_vanadium",
+    "count": 2
+  },
+  "wasteItem": {
+    "item": "industria:aluminium_oxid"
+  },
+  "consumtionFluid": {
+    "fluid": "industria:fuel_gas",
+    "amount": 200
+  },
+  "smeltingTime": 100
+}

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import de.industria.util.blockfeatures.IChunkForceLoading;
+import de.industria.util.blockfeatures.ITEChunkForceLoading;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.LongNBT;
@@ -63,7 +63,7 @@ public class ChunkLoadHandler extends WorldSavedData {
 		if (this.world.getGameTime() % 40 == 0) {
 			
 			this.world.blockEntityList.forEach((tileEntity) -> {
-				if (tileEntity instanceof IChunkForceLoading) {
+				if (tileEntity instanceof ITEChunkForceLoading) {
 					BlockPos loaderPos = tileEntity.getBlockPos();
 					ChunkPos chunkPos = new ChunkPos(loaderPos);
 					List<BlockPos> loaderMap = this.chunkLoaderMap.getOrDefault(chunkPos, new ArrayList<BlockPos>());
@@ -79,7 +79,7 @@ public class ChunkLoadHandler extends WorldSavedData {
 				List<BlockPos> removeList = new ArrayList<BlockPos>();
 				loaderMap.forEach((loaderPos) -> {
 					TileEntity tileEntity = this.world.getBlockEntity(loaderPos);
-					if (!(tileEntity instanceof IChunkForceLoading)) removeList.add(loaderPos);
+					if (!(tileEntity instanceof ITEChunkForceLoading)) removeList.add(loaderPos);
 				});
 				loaderMap.removeAll(removeList);
 				if (loaderMap.size() == 0) removedChunks.add(chunkPos);
@@ -89,8 +89,8 @@ public class ChunkLoadHandler extends WorldSavedData {
 			this.chunkLoaderMap.forEach((chunkPos, loaderMap) -> {
 				loaderMap.forEach((loaderPos) -> {
 					TileEntity loader = this.world.getBlockEntity(loaderPos);
-					if (loader instanceof IChunkForceLoading) {
-						List<ChunkPos> forcedChunks = ((IChunkForceLoading) loader).getLoadHoldChunks();
+					if (loader instanceof ITEChunkForceLoading) {
+						List<ChunkPos> forcedChunks = ((ITEChunkForceLoading) loader).getLoadHoldChunks();
 						forcedChunks.forEach((loadChunkPos) -> {
 							this.setForceLoadState(loadChunkPos, true);
 						});
@@ -154,8 +154,8 @@ public class ChunkLoadHandler extends WorldSavedData {
 		List<BlockPos> loaders = new ArrayList<BlockPos>();
 		this.chunkLoaderMap.values().forEach((map) -> map.forEach((loaderPos) -> {
 			TileEntity loader = this.world.getBlockEntity(loaderPos);
-			if (loader instanceof IChunkForceLoading) {
-				List<ChunkPos> forcingChunks = ((IChunkForceLoading) loader).getLoadHoldChunks();
+			if (loader instanceof ITEChunkForceLoading) {
+				List<ChunkPos> forcingChunks = ((ITEChunkForceLoading) loader).getLoadHoldChunks();
 				if (forcingChunks.contains(chunkPos)) loaders.add(loaderPos);
 			}
 		}));

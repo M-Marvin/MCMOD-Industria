@@ -8,8 +8,8 @@ import java.util.function.Supplier;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.renderer.BlockMMetalFormerItemRenderer;
 import de.industria.tileentity.TileEntityMMetalFormer;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -37,7 +37,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMMetalFormer extends BlockMultiPart<TileEntityMMetalFormer> implements IElectricConnectiveBlock, IAdvancedBlockInfo, ISidedInventoryProvider {
+public class BlockMMetalFormer extends BlockMultiPart<TileEntityMMetalFormer> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo, ISidedInventoryProvider {
 	
 	public BlockMMetalFormer() {
 		super("metal_former", Material.METAL, 4F, SoundType.METAL, 1, 1, 2);

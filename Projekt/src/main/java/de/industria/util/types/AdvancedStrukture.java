@@ -3,7 +3,7 @@ package de.industria.util.types;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.industria.util.blockfeatures.IPostMoveHandledTE;
+import de.industria.util.blockfeatures.ITEPostMoveHandled;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.PushReaction;
@@ -121,9 +121,9 @@ public class AdvancedStrukture {
 					if (!(tileEntity instanceof BannerTileEntity)) tileEntity.load(state, compound);
 					tileEntity.setPosition(pos);
 					
-					if (tileEntity instanceof IPostMoveHandledTE) {
+					if (tileEntity instanceof ITEPostMoveHandled) {
 						
-						((IPostMoveHandledTE) tileEntity).handlePostMove(tileEntity.getBlockPos(), this.moveDirection, moveDistance, false);
+						((ITEPostMoveHandled) tileEntity).handlePostMove(tileEntity.getBlockPos(), this.moveDirection, moveDistance, false);
 						
 					}
 					
@@ -234,9 +234,9 @@ public class AdvancedStrukture {
 				tileEntity.load(state, compound);
 				tileEntity.setPosition(pos);
 				
-				if (tileEntity instanceof IPostMoveHandledTE) {
+				if (tileEntity instanceof ITEPostMoveHandled) {
 					
-					((IPostMoveHandledTE) tileEntity).handlePostMove(positions.get(index), pos, false);
+					((ITEPostMoveHandled) tileEntity).handlePostMove(positions.get(index), pos, false);
 					
 				}
 				

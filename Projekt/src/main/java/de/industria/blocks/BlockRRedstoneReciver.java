@@ -1,7 +1,7 @@
 package de.industria.blocks;
 
 import de.industria.tileentity.TileEntityRedstoneReciver;
-import de.industria.util.blockfeatures.ISignalConnectiveBlock;
+import de.industria.util.blockfeatures.IBSignalConnectiveBlock;
 import de.industria.util.handler.ItemStackHelper;
 import de.industria.util.types.RedstoneControlSignal;
 import net.minecraft.block.Block;
@@ -32,7 +32,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockRRedstoneReciver extends BlockContainerBase implements ISignalConnectiveBlock {
+public class BlockRRedstoneReciver extends BlockContainerBase implements IBSignalConnectiveBlock {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final BooleanProperty TRANSIVER_MODE = BooleanProperty.create("transiver_mode");

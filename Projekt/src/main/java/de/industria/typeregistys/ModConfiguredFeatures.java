@@ -107,32 +107,6 @@ public class ModConfiguredFeatures {
 					)
 			)
 	);
-	public static final ConfiguredFeature<?, ?> PALLADIUM_ORE = registerConfiguredFeature("palladium_ore", 
-			Feature.ORE.configured(
-					new OreFeatureConfig(
-							OreFeatureConfig.FillerBlockType.NATURAL_STONE, 
-							ModItems.palladium_ore.defaultBlockState(),
-							2
-					)
-			).decorated(
-					ModPlacement.SIMPLE_ORE.configured(
-							new SimpleOrePlacementConfig(0, 16, 1)
-					)
-			)
-	);
-	public static final ConfiguredFeature<?, ?> PALLADIUM_ORE_EXTRA = registerConfiguredFeature("palladium_ore_extra", 
-			Feature.ORE.configured(
-					new OreFeatureConfig(
-							OreFeatureConfig.FillerBlockType.NATURAL_STONE, 
-							ModItems.palladium_ore.defaultBlockState(),
-							2
-					)
-			).decorated(
-					ModPlacement.SIMPLE_ORE.configured(
-							new SimpleOrePlacementConfig(0, 16, 1)
-					)
-			)
-	);
 	public static final ConfiguredFeature<?, ?> SULFUR_ORE = registerConfiguredFeature("sulfur_ore", 
 			Feature.ORE.configured(
 					new OreFeatureConfig(

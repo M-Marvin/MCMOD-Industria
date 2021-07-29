@@ -8,8 +8,8 @@ import de.industria.renderer.BlockGaugeItemRenderer;
 import de.industria.tileentity.TileEntityMMultimeter;
 import de.industria.tileentity.TileEntityMMultimeter.DecimalUnit;
 import de.industria.tileentity.TileEntityMMultimeter.MessurementType;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -38,7 +38,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockMMultimeter extends BlockContainerBase implements IElectricConnectiveBlock, IAdvancedBlockInfo {
+public class BlockMMultimeter extends BlockContainerBase implements IBElectricConnectiveBlock, IBAdvancedBlockInfo {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	public static final EnumProperty<TileEntityMMultimeter.MessurementType> UNIT = EnumProperty.create("unit", TileEntityMMultimeter.MessurementType.class);

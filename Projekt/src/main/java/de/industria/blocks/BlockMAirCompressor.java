@@ -8,8 +8,8 @@ import java.util.function.Supplier;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.renderer.BlockMAirCompressorItemRenderer;
 import de.industria.tileentity.TileEntityMAirCompressor;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import de.industria.util.handler.VoxelHelper;
 import net.minecraft.block.Block;
@@ -37,7 +37,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMAirCompressor extends BlockMultiPart<TileEntityMAirCompressor> implements IElectricConnectiveBlock, IAdvancedBlockInfo {
+public class BlockMAirCompressor extends BlockMultiPart<TileEntityMAirCompressor> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo {
 	
 	public BlockMAirCompressor() {
 		super("air_compressor", Material.METAL, 2F, SoundType.METAL, 1, 1, 2);

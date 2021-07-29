@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.tileentity.TileEntityItemDistributor;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -36,7 +36,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockItemDistributor extends BlockContainerBase implements IAdvancedBlockInfo, ISidedInventoryProvider {
+public class BlockItemDistributor extends BlockContainerBase implements IBAdvancedBlockInfo, ISidedInventoryProvider {
 	
 	public static final EnumProperty<DistributorType> TYPE = EnumProperty.create("type", DistributorType.class);
 	

@@ -1,0 +1,24 @@
+{
+  "type": "industria:blending",
+  "ingredientItems": [
+    {
+      "item": "industria:natrium",
+      "count": 1
+    }
+  ],
+  "ingredientFluids": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 500
+    },
+    {
+      "fluid": "industria:raw_oil",
+      "amount": 500
+    }
+  ],
+  "resultFluid":  {
+    "fluid": "industria:vanadium_solution",
+    "amount": 1000
+  },
+  "mixingTime": 200
+}

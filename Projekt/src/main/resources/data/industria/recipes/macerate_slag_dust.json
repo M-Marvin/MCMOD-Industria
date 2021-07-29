@@ -1,0 +1,15 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "industria:slag"
+  },
+  "results": [
+    {
+      "item": "industria:slag_dust",
+      "count": 1
+    }
+  ],
+  "schreddertime": 40,
+  "schreddertool": "industria:schredder_macerator",
+  "schredderdamage": 1
+}

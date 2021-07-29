@@ -8,8 +8,8 @@ import java.util.function.Supplier;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.renderer.BlockMBlastFurnaceItemRenderer;
 import de.industria.tileentity.TileEntityMBlastFurnace;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import de.industria.util.handler.VoxelHelper;
 import net.minecraft.block.Block;
@@ -40,7 +40,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMBlastFurnace extends BlockMultiPart<TileEntityMBlastFurnace> implements IAdvancedBlockInfo, IElectricConnectiveBlock, ISidedInventoryProvider {
+public class BlockMBlastFurnace extends BlockMultiPart<TileEntityMBlastFurnace> implements IBAdvancedBlockInfo, IBElectricConnectiveBlock, ISidedInventoryProvider {
 
 	public BlockMBlastFurnace() {
 		super("blast_furnace", Material.METAL, 2F, SoundType.METAL, 3, 5, 3);

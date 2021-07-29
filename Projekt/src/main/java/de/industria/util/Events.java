@@ -14,6 +14,7 @@ import com.mojang.serialization.JsonOps;
 
 import de.industria.Industria;
 import de.industria.fluids.util.BlockGasFluid;
+import de.industria.typeregistys.ModFluids;
 import de.industria.util.handler.BlockBurnManager;
 import de.industria.util.handler.ChunkLoadHandler;
 import de.industria.util.handler.JigsawFileManager;
@@ -47,6 +48,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -64,6 +66,23 @@ public class Events {
 	@SubscribeEvent
 	public static void onWorldLoad(net.minecraftforge.event.world.WorldEvent.Load event) {
 		BlockBurnManager.reloadBurnBehaviors();
+	}
+	
+	@SubscribeEvent
+	public static void setupFogDensity(EntityViewRenderEvent.FogDensity event) {
+		if (event.getInfo().getFluidInCamera().getType().isSame(ModFluids.RAW_OIL)) {
+			event.setDensity(2F);
+			event.setCanceled(true);
+		}
+	}
+	
+	@SubscribeEvent
+	public static void setupFogColor(EntityViewRenderEvent.FogColors event) {
+		if (event.getInfo().getFluidInCamera().getType().isSame(ModFluids.RAW_OIL)) {
+			event.setRed(37 / 255F);
+			event.setGreen(37 / 255F);
+			event.setBlue(37 / 255F);
+		}
 	}
 	
 	@SubscribeEvent

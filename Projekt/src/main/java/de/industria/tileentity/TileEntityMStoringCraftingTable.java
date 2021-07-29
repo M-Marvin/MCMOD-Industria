@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 import de.industria.gui.ContainerMStoredCrafting;
 import de.industria.typeregistys.ModTileEntityType;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock.Voltage;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.gui.ContainerDummy;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;

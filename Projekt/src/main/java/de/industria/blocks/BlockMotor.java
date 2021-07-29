@@ -1,7 +1,7 @@
 package de.industria.blocks;
 
 import de.industria.tileentity.TileEntityMotor;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.VoxelHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -22,7 +22,7 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockMotor extends BlockContainerBase implements IElectricConnectiveBlock {
+public class BlockMotor extends BlockContainerBase implements IBElectricConnectiveBlock {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	

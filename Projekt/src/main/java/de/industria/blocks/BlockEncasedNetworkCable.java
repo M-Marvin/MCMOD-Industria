@@ -1,6 +1,6 @@
 package de.industria.blocks;
 
-import de.industria.util.blockfeatures.IAdvancedStickyBlock;
+import de.industria.util.blockfeatures.IBAdvancedStickyBlock;
 import de.industria.util.types.AdvancedPistonBlockStructureHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ITileEntityProvider;
@@ -23,7 +23,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 @SuppressWarnings("deprecation")
-public class BlockEncasedNetworkCable extends BlockNetworkCable implements IAdvancedStickyBlock, ITileEntityProvider {
+public class BlockEncasedNetworkCable extends BlockNetworkCable implements IBAdvancedStickyBlock, ITileEntityProvider {
 	
 	protected BlockStructureScaffold scaffoldBlock;
 	

@@ -6,8 +6,8 @@ import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.tileentity.TileEntitySimpleBlockTicking;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.Block;
@@ -28,7 +28,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-public class BlockTRailAdapter extends BlockContainerBase implements IAdvancedBlockInfo, IElectricConnectiveBlock {
+public class BlockTRailAdapter extends BlockContainerBase implements IBAdvancedBlockInfo, IBElectricConnectiveBlock {
 	
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 	

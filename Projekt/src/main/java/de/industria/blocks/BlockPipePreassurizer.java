@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.tileentity.TileEntityPipePreassurizer;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.handler.VoxelHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -27,7 +27,7 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 
-public class BlockPipePreassurizer extends BlockContainerBase implements IAdvancedBlockInfo {
+public class BlockPipePreassurizer extends BlockContainerBase implements IBAdvancedBlockInfo {
 	
 	public static final VoxelShape SHAPE_HORIZONTAL = VoxelShapes.or(
 			Block.box(0, 13, 0, 16, 16, 16),

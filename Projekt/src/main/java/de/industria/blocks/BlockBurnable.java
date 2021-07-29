@@ -1,6 +1,6 @@
 package de.industria.blocks;
 
-import de.industria.util.blockfeatures.IBurnableBlock;
+import de.industria.util.blockfeatures.IBBurnableBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -8,7 +8,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
-public class BlockBurnable extends BlockBase implements IBurnableBlock {
+public class BlockBurnable extends BlockBase implements IBBurnableBlock {
 	
 	private int flammability;
 	private int fireSpreadChance;

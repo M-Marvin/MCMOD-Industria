@@ -5,7 +5,7 @@ import java.util.List;
 
 import de.industria.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
-import de.industria.util.blockfeatures.IPostMoveHandledTE;
+import de.industria.util.blockfeatures.ITEPostMoveHandled;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -297,8 +297,8 @@ public class TileEntityAdvancedMovingBlock extends TileEntity implements ITickab
             	TileEntity te = this.level.getBlockEntity(this.worldPosition);
           	  	te.load(this.pistonState, this.pistonTileEntity);
           	  	te.setPosition(this.worldPosition);
-          	  	if (te instanceof IPostMoveHandledTE) {
-          	  		((IPostMoveHandledTE) te).handlePostMove2(this.worldPosition, this.extending ? this.pistonFacing : this.pistonFacing.getOpposite(), 1, false);
+          	  	if (te instanceof ITEPostMoveHandled) {
+          	  		((ITEPostMoveHandled) te).handlePostMove2(this.worldPosition, this.extending ? this.pistonFacing : this.pistonFacing.getOpposite(), 1, false);
           	  	}
             }
             this.level.neighborChanged(this.worldPosition, blockstate.getBlock(), this.worldPosition);
@@ -326,8 +326,8 @@ public class TileEntityAdvancedMovingBlock extends TileEntity implements ITickab
                   	TileEntity te = this.level.getBlockEntity(this.worldPosition);
               	  	te.load(this.pistonState, this.pistonTileEntity);
               	  	te.setPosition(this.worldPosition);
-              	  	if (te instanceof IPostMoveHandledTE) {
-            	  		((IPostMoveHandledTE) te).handlePostMove(this.worldPosition, this.extending ? this.pistonFacing : this.pistonFacing.getOpposite(), 1, false);
+              	  	if (te instanceof ITEPostMoveHandled) {
+            	  		((ITEPostMoveHandled) te).handlePostMove(this.worldPosition, this.extending ? this.pistonFacing : this.pistonFacing.getOpposite(), 1, false);
             	  	}
                   } else {
                 	  this.level.removeBlockEntity(this.worldPosition);
@@ -348,8 +348,8 @@ public class TileEntityAdvancedMovingBlock extends TileEntity implements ITickab
                     	te.setPosition(this.worldPosition);
                   	  	this.level.setBlockEntity(this.worldPosition, te);
                   	  	te.clearRemoved();
-                  	  	if (te instanceof IPostMoveHandledTE) {
-                	  		((IPostMoveHandledTE) te).handlePostMove(this.worldPosition, this.extending ? this.pistonFacing : this.pistonFacing.getOpposite(), 1, false);
+                  	  	if (te instanceof ITEPostMoveHandled) {
+                	  		((ITEPostMoveHandled) te).handlePostMove(this.worldPosition, this.extending ? this.pistonFacing : this.pistonFacing.getOpposite(), 1, false);
                 	  	}
                       } else {
                     	  this.level.removeBlockEntity(this.worldPosition);

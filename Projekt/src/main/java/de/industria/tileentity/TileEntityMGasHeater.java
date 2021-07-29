@@ -2,7 +2,7 @@ package de.industria.tileentity;
 
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModTileEntityType;
-import de.industria.util.blockfeatures.IFluidConnective;
+import de.industria.util.blockfeatures.ITEFluidConnective;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
@@ -11,7 +11,7 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraftforge.fluids.FluidStack;
 
-public class TileEntityMGasHeater extends TileEntityMHeaterBase implements IFluidConnective {
+public class TileEntityMGasHeater extends TileEntityMHeaterBase implements ITEFluidConnective {
 	
 	public FluidStack gasStorage;
 	public final int maxFluidStorage;

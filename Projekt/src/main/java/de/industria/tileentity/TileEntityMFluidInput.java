@@ -1,11 +1,11 @@
 package de.industria.tileentity;
 
 import de.industria.blocks.BlockMFluidInput;
-import de.industria.dynamicsounds.ISimpleMachineSound;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
-import de.industria.util.blockfeatures.IFluidConnective;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock.Voltage;
+import de.industria.util.blockfeatures.ITEFluidConnective;
+import de.industria.util.blockfeatures.ITESimpleMachineSound;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.FluidStackStateTagHelper;
 import de.industria.util.handler.FluidTankHelper;
@@ -28,7 +28,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.fluids.FluidStack;
 
-public class TileEntityMFluidInput extends TileEntity implements IFluidConnective, ITickableTileEntity, ISimpleMachineSound {
+public class TileEntityMFluidInput extends TileEntity implements ITEFluidConnective, ITickableTileEntity, ITESimpleMachineSound {
 	
 	private int progress;
 	private final int maxFluid;

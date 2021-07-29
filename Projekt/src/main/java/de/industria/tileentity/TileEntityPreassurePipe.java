@@ -4,9 +4,9 @@ import java.util.List;
 
 import de.industria.ModItems;
 import de.industria.blocks.BlockPreassurePipe;
-import de.industria.dynamicsounds.ISimpleMachineSound;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.handler.MachineSoundHelper;
 import de.industria.util.handler.MathHelper;
 import de.industria.util.handler.VoxelHelper;
@@ -29,7 +29,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
 
-public class TileEntityPreassurePipe extends TileEntity implements ITickableTileEntity, ISimpleMachineSound {
+public class TileEntityPreassurePipe extends TileEntity implements ITickableTileEntity, ITESimpleMachineSound {
 	
 	public float preassure;
 	public Direction inputSide;

@@ -8,8 +8,8 @@ import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.items.ItemStructureCladdingPane;
 import de.industria.tileentity.TileEntityStructureScaffold;
 import de.industria.typeregistys.ModTags;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
-import de.industria.util.blockfeatures.IAdvancedStickyBlock;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBAdvancedStickyBlock;
 import de.industria.util.handler.VoxelHelper;
 import de.industria.util.types.AdvancedPistonBlockStructureHelper;
 import net.minecraft.block.Block;
@@ -38,7 +38,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-public class BlockStructureScaffold extends BlockContainerBase implements IAdvancedStickyBlock, IAdvancedBlockInfo {
+public class BlockStructureScaffold extends BlockContainerBase implements IBAdvancedStickyBlock, IBAdvancedBlockInfo {
 	
 	public BlockStructureScaffold(String name) {
 		super(name, Material.METAL, 3F, 3F, SoundType.NETHERITE_BLOCK);

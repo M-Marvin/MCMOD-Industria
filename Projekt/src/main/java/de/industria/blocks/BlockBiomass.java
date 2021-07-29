@@ -1,7 +1,9 @@
 package de.industria.blocks;
 
+import java.util.ArrayList;
 import java.util.Random;
 
+import de.industria.fluids.util.BlockGasFluid;
 import de.industria.tileentity.TileEntityMHeaterBase;
 import de.industria.typeregistys.ModFluids;
 import net.minecraft.block.BlockState;
@@ -35,18 +37,40 @@ public class BlockBiomass extends BlockFallingDust {
 	
 	@SuppressWarnings("deprecation")
 	public void compost(BlockState state, World world, BlockPos pos) {
+		
 		if (isHeated(state, world, pos)) {
-			BlockPos gasPos = pos.above();
+			
+			BlockPos exhaustPos = pos.above();
 			BlockState gasState = ModFluids.BIOGAS.defaultFluidState().createLegacyBlock();
-			BlockState replaceState = world.getBlockState(gasPos);
+			BlockState replaceState = world.getBlockState(exhaustPos);
 			int layers = state.getValue(LAYERS) - 1;
-			if (layers > 0 && replaceState.isAir()) {
-				world.setBlockAndUpdate(gasPos, gasState);
-				world.setBlockAndUpdate(pos, this.defaultBlockState().setValue(LAYERS, layers));
-			} else if (layers == 0){
+			
+			if (layers == 0){
 				world.setBlockAndUpdate(pos, gasState);
+				return;
 			}
+			
+			if (replaceState.isAir()) {
+				world.setBlockAndUpdate(exhaustPos, gasState);
+				world.setBlockAndUpdate(pos, this.defaultBlockState().setValue(LAYERS, layers));
+				return;
+			} else if (replaceState.getBlock() instanceof BlockGasFluid) {
+				
+				((BlockGasFluid) replaceState.getBlock()).pushFluid(new ArrayList<BlockPos>(), replaceState, (ServerWorld) world, exhaustPos, world.random);
+				replaceState = world.getBlockState(exhaustPos);
+				
+				if (replaceState.isAir()) {
+					
+					world.setBlockAndUpdate(exhaustPos, gasState);
+					world.setBlockAndUpdate(pos, this.defaultBlockState().setValue(LAYERS, layers));
+					return;
+					
+				}
+				
+			}
+			
 		}
+		
 	}
 	
 	@SuppressWarnings("deprecation")

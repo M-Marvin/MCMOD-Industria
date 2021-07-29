@@ -8,8 +8,8 @@ import java.util.function.Supplier;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.renderer.BlockControllPanelItemRenderer;
 import de.industria.tileentity.TileEntityControllPanel;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
-import de.industria.util.blockfeatures.ISignalConnectiveBlock;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBSignalConnectiveBlock;
 import de.industria.util.types.RedstoneControlSignal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -45,7 +45,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-public class BlockRControllPanel extends BlockContainerBase implements ISignalConnectiveBlock, IWaterLoggable, IAdvancedBlockInfo {
+public class BlockRControllPanel extends BlockContainerBase implements IBSignalConnectiveBlock, IWaterLoggable, IBAdvancedBlockInfo {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;

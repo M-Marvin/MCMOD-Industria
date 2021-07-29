@@ -7,8 +7,8 @@ import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.renderer.BlockMSteamGeneratorItemRenderer;
 import de.industria.tileentity.TileEntityMSteamGenerator;
 import de.industria.tileentity.TileEntityMSteamGenerator.TEPart;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -24,7 +24,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockMSteamGenerator extends BlockMultiPart<TileEntityMSteamGenerator> implements IElectricConnectiveBlock, IAdvancedBlockInfo {
+public class BlockMSteamGenerator extends BlockMultiPart<TileEntityMSteamGenerator> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo {
 	
 	public BlockMSteamGenerator() {
 		super("steam_generator", Material.METAL, 8F, SoundType.METAL, 3, 3, 2);

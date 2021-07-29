@@ -23,6 +23,7 @@ import de.industria.gui.ScreenRHarvester;
 import de.industria.gui.ScreenRHoverControler;
 import de.industria.gui.ScreenRProcessor;
 import de.industria.gui.ScreenRReciver;
+import de.industria.renderer.EntityDummyRenderer;
 import de.industria.renderer.ItemSchredderToolCrusherModel;
 import de.industria.renderer.ItemSchredderToolMaceratorModel;
 import de.industria.renderer.TileEntityAdvancedMovingBlockRenderer;
@@ -48,6 +49,7 @@ import de.industria.renderer.TileEntitySignalProcessorContactRenderer;
 import de.industria.renderer.TileEntityStructureScaffoldRenderer;
 import de.industria.typeregistys.ModClientBindings;
 import de.industria.typeregistys.ModContainerType;
+import de.industria.typeregistys.ModEntityType;
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModTileEntityType;
 import net.minecraft.client.gui.ScreenManager;
@@ -63,6 +65,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class ClientSetup {
@@ -146,6 +149,7 @@ public class ClientSetup {
 		RenderTypeLookup.setRenderLayer(ModFluids.COMPRESSED_AIR, RenderType.translucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.BIOGAS, RenderType.translucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FUEL_GAS, RenderType.translucent());
+		RenderTypeLookup.setRenderLayer(ModFluids.VANADIUM_SOLUTION, RenderType.translucent());
 		
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ADVANCED_PISTON, TileEntityAdvancedMovingBlockRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SIGNAL_PROCESSOR, TileEntitySignalProcessorContactRenderer::new);
@@ -169,6 +173,8 @@ public class ClientSetup {
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ORE_WASHING_PLANT, TileEntityMOreWashingPlantRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ELECTRIC_HEATER, TileEntityMElectricHeaterRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.GAS_HEATER, TileEntityMGasHeaterRenderer::new);
+		
+		RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FALLING_FLUID, EntityDummyRenderer::new);
 		
 		ScreenManager.register(ModContainerType.STORED_CRAFTING, ScreenMStoredCrafting::new);
 		ScreenManager.register(ModContainerType.PROCESSOR, ScreenRProcessor::new);

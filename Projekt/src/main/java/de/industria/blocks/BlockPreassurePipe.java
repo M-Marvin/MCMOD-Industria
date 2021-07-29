@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 import de.industria.ModItems;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.tileentity.TileEntityPreassurePipe;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.handler.VoxelHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -32,7 +32,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockPreassurePipe extends BlockContainerBase implements IAdvancedBlockInfo {
+public class BlockPreassurePipe extends BlockContainerBase implements IBAdvancedBlockInfo {
 	
 	public static final VoxelShape SHAPE_CORNER_DOWN = VoxelShapes.join(Block.box(2, 0, 0, 14, 14, 14), VoxelShapes.join(Block.box(3, 3, 0, 13, 13, 13), Block.box(3, 0, 3, 13, 3, 13), IBooleanFunction.OR), IBooleanFunction.ONLY_FIRST);
 	public static final VoxelShape SHAPE_CORNER_UP = VoxelShapes.join(Block.box(2, 2, 0, 14, 16, 14), VoxelShapes.join(Block.box(3, 3, 0, 13, 13, 13), Block.box(3, 13, 3, 13, 16, 13), IBooleanFunction.OR), IBooleanFunction.ONLY_FIRST);

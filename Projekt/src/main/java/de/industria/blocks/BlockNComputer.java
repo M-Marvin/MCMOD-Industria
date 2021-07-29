@@ -8,9 +8,9 @@ import java.util.function.Supplier;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.renderer.BlockNComputerItemRenderer;
 import de.industria.tileentity.TileEntityNComputer;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock;
-import de.industria.util.blockfeatures.INetworkDevice;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
+import de.industria.util.blockfeatures.ITENetworkDevice;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -36,7 +36,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockNComputer extends BlockMultiPart<TileEntityNComputer> implements IElectricConnectiveBlock, IAdvancedBlockInfo, INetworkDevice {
+public class BlockNComputer extends BlockMultiPart<TileEntityNComputer> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo, ITENetworkDevice {
 	
 	public BlockNComputer() {
 		super("computer", Material.METAL, 2F, SoundType.METAL, 1, 2, 2);

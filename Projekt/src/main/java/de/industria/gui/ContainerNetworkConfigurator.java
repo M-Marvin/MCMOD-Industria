@@ -1,7 +1,7 @@
 package de.industria.gui;
 
 import de.industria.typeregistys.ModContainerType;
-import de.industria.util.blockfeatures.INetworkDevice.NetworkDeviceIP;
+import de.industria.util.blockfeatures.ITENetworkDevice.NetworkDeviceIP;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;

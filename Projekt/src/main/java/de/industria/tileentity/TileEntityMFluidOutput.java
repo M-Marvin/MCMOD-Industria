@@ -3,9 +3,10 @@ package de.industria.tileentity;
 import java.util.ArrayList;
 
 import de.industria.blocks.BlockMFluidInput;
+import de.industria.entity.EntityFallingFluid;
 import de.industria.fluids.util.BlockGasFluid;
 import de.industria.typeregistys.ModTileEntityType;
-import de.industria.util.blockfeatures.IFluidConnective;
+import de.industria.util.blockfeatures.ITEFluidConnective;
 import de.industria.util.handler.FluidStackStateTagHelper;
 import de.industria.util.handler.FluidTankHelper;
 import net.minecraft.block.BlockState;
@@ -19,7 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fluids.FluidStack;
 
-public class TileEntityMFluidOutput extends TileEntity implements ITickableTileEntity, IFluidConnective {
+public class TileEntityMFluidOutput extends TileEntity implements ITickableTileEntity, ITEFluidConnective {
 	
 	private final int maxFluid;
 	private FluidStack fluid;
@@ -93,28 +94,43 @@ public class TileEntityMFluidOutput extends TileEntity implements ITickableTileE
 				BlockPos tankBeginPos = this.worldPosition.relative(this.getBlockState().getValue(BlockMFluidInput.FACING));
 				BlockPos outputPos = new FluidTankHelper(this.level, tankBeginPos).insertFluidInTank(this.fluid.getFluid());
 				
-				if (outputPos != null) {
+				if (!this.fluid.getFluid().getAttributes().isGaseous()) {
 					
-					FluidState fluidState = FluidStackStateTagHelper.makeStateFromStack(this.fluid);
-					
-					this.level.setBlockAndUpdate(outputPos, fluidState.createLegacyBlock());
-					this.fluid.shrink(1000);
+					if (outputPos != null) {
+
+						EntityFallingFluid fallingFluid = new EntityFallingFluid(this.level, tankBeginPos.getX() + 0.5F, tankBeginPos.getY(), tankBeginPos.getZ() + 0.5F, FluidStackStateTagHelper.makeStateFromStack(this.fluid));
+						fallingFluid.setAirSpawned();
+						this.level.addFreshEntity(fallingFluid);
+						this.fluid.shrink(1000);
+						
+					}
 					
 				} else {
 					
-					BlockState replaceState = this.level.getBlockState(tankBeginPos);
-					
-					if (replaceState.getBlock() instanceof BlockGasFluid) {
+					if (outputPos != null) {
 						
-						((BlockGasFluid) replaceState.getBlock()).pushFluid(new ArrayList<BlockPos>(), replaceState, (ServerWorld) this.level, tankBeginPos, level.random);
-						replaceState = this.level.getBlockState(tankBeginPos);
+						FluidState fluidState = FluidStackStateTagHelper.makeStateFromStack(this.fluid);
 						
-						if (replaceState.isAir()) {
+						this.level.setBlockAndUpdate(outputPos, fluidState.createLegacyBlock());
+						this.fluid.shrink(1000);
+						
+					} else {
+						
+						BlockState replaceState = this.level.getBlockState(tankBeginPos);
+						
+						if (replaceState.getBlock() instanceof BlockGasFluid) {
 							
-							FluidState fluidState = FluidStackStateTagHelper.makeStateFromStack(this.fluid);
+							((BlockGasFluid) replaceState.getBlock()).pushFluid(new ArrayList<BlockPos>(), replaceState, (ServerWorld) this.level, tankBeginPos, level.random);
+							replaceState = this.level.getBlockState(tankBeginPos);
 							
-							this.level.setBlockAndUpdate(tankBeginPos, fluidState.createLegacyBlock());
-							this.fluid.shrink(1000);
+							if (replaceState.isAir()) {
+								
+								FluidState fluidState = FluidStackStateTagHelper.makeStateFromStack(this.fluid);
+								
+								this.level.setBlockAndUpdate(tankBeginPos, fluidState.createLegacyBlock());
+								this.fluid.shrink(1000);
+								
+							}
 							
 						}
 						
@@ -127,7 +143,7 @@ public class TileEntityMFluidOutput extends TileEntity implements ITickableTileE
 		}
 		
 	}
-
+	
 	@Override
 	public FluidStack getStorage() {
 		return this.fluid;

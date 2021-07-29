@@ -6,7 +6,7 @@ import java.util.Optional;
 import de.industria.blocks.BlockMElectricFurnace;
 import de.industria.gui.ContainerMElectricFurnace;
 import de.industria.typeregistys.ModTileEntityType;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock.Voltage;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import de.industria.util.handler.ItemStackHelper;

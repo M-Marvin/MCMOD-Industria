@@ -1,0 +1,18 @@
+{
+  "type": "industria:rifining",
+  "ingredientFluid": {
+    "fluid": "industria:vanadium_solution",
+    "amount": 500
+  },
+  "resultFluid":  {
+    "fluid": "industria:chemical_water",
+    "amount": 300
+  },
+  "resultItems": [
+    {
+      "item": "industria:vanadium_oxid",
+      "count": 1
+    }
+  ],
+  "rifiningTime": 200
+}

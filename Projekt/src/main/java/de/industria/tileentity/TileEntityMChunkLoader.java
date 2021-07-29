@@ -6,8 +6,8 @@ import java.util.List;
 import de.industria.blocks.BlockMChunkLoader;
 import de.industria.gui.ContainerMChunkLoader;
 import de.industria.typeregistys.ModTileEntityType;
-import de.industria.util.blockfeatures.IChunkForceLoading;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock.Voltage;
+import de.industria.util.blockfeatures.ITEChunkForceLoading;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.BlockState;
@@ -26,7 +26,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class TileEntityMChunkLoader extends TileEntity implements IChunkForceLoading, ITickableTileEntity, INamedContainerProvider {
+public class TileEntityMChunkLoader extends TileEntity implements ITEChunkForceLoading, ITickableTileEntity, INamedContainerProvider {
 	
 	public static final int CHUNK_RANGE = 8;
 	

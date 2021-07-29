@@ -2,10 +2,10 @@ package de.industria.tileentity;
 
 import de.industria.ModItems;
 import de.industria.blocks.BlockMultiPart;
-import de.industria.dynamicsounds.ISimpleMachineSound;
 import de.industria.fluids.FluidDestilledWater;
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModSoundEvents;
+import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.handler.MachineSoundHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
@@ -22,7 +22,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
-public abstract class TileEntityMHeaterBase extends TileEntityInventoryBase implements ISidedInventory, ITickableTileEntity, ISimpleMachineSound {
+public abstract class TileEntityMHeaterBase extends TileEntityInventoryBase implements ISidedInventory, ITickableTileEntity, ITESimpleMachineSound {
 	
 	public TileEntityMHeaterBase(TileEntityType<?> tileEntityTypeIn, int slots) {
 		super(tileEntityTypeIn, slots);

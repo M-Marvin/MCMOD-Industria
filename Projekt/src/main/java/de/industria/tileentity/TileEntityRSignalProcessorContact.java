@@ -9,9 +9,9 @@ import de.industria.items.ItemProcessor;
 import de.industria.items.ItemProcessor.OperatorResult;
 import de.industria.items.ItemProcessor.OperatorType;
 import de.industria.typeregistys.ModTileEntityType;
-import de.industria.util.blockfeatures.INetworkDevice;
-import de.industria.util.blockfeatures.INetworkDevice.NetworkDeviceIP;
-import de.industria.util.blockfeatures.INetworkDevice.NetworkMessage;
+import de.industria.util.blockfeatures.ITENetworkDevice;
+import de.industria.util.blockfeatures.ITENetworkDevice.NetworkDeviceIP;
+import de.industria.util.blockfeatures.ITENetworkDevice.NetworkMessage;
 import de.industria.util.types.RedstoneControlSignal;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -244,7 +244,7 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 	
 	protected void sendResponse(NetworkDeviceIP targetIP, String cmd, String variableName, OperatorResult variable) {
 		BlockState state = getBlockState();
-		INetworkDevice device = state.getBlock() instanceof INetworkDevice ? (INetworkDevice) state.getBlock() : null;
+		ITENetworkDevice device = state.getBlock() instanceof ITENetworkDevice ? (ITENetworkDevice) state.getBlock() : null;
 		if (device != null) {
 			NetworkMessage message = new NetworkMessage();
 			message.setTargetIP(targetIP);

@@ -8,8 +8,8 @@ import java.util.function.Supplier;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.renderer.BlockMFluidBathItemRenderer;
 import de.industria.tileentity.TileEntityMFluidBath;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.VoxelHelper;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.Block;
@@ -42,7 +42,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMFluidBath extends BlockMultiPart<TileEntityMFluidBath> implements IElectricConnectiveBlock, IAdvancedBlockInfo, ISidedInventoryProvider {
+public class BlockMFluidBath extends BlockMultiPart<TileEntityMFluidBath> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo, ISidedInventoryProvider {
 
 	public BlockMFluidBath() {
 		super("fluid_bath", Material.METAL, 3F, SoundType.METAL, 2, 2, 3);

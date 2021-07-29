@@ -135,7 +135,7 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.electrolyt_copper_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.redstone_alloy_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.tin_block, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.palladium_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.vanadium_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.silver_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.wolfram_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.nickel_block, BUILDING_BLOCKS);
@@ -143,7 +143,6 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.zirconium_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.tin_ore, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.silver_ore, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.palladium_ore, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.copper_ore, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.nickel_ore, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.bauxite, BUILDING_BLOCKS);
@@ -159,7 +158,7 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.electrolyt_copper_plates, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.redstone_alloy_plates, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.silver_plates, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.palladium_plates, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.vanadium_plates, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.tin_plates, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.wolfram_plates, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.nickel_plates, BUILDING_BLOCKS);
@@ -174,7 +173,7 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.electrolyt_copper_planks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.redstone_alloy_planks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.silver_planks, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.palladium_planks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.vanadium_planks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.tin_planks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.wolfram_planks, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.nickel_planks, BUILDING_BLOCKS);
@@ -391,7 +390,7 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.electrolyt_copper_planks_slab, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.redstone_alloy_planks_slab, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.silver_planks_slab, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.palladium_planks_slab, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.vanadium_planks_slab, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.tin_planks_slab, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.wolfram_planks_slab, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.nickel_planks_slab, BUILDING_BLOCKS);
@@ -698,7 +697,7 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.bound_bamboo_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.bound_sugar_cane_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.raw_nickel_block, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.raw_palladium_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.raw_vanadium_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.raw_quartz_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.raw_silver_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.raw_tin_block, BUILDING_BLOCKS);
@@ -714,7 +713,7 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.electrolyt_copper_planks_stairs, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.redstone_alloy_planks_stairs, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.silver_planks_stairs, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.palladium_planks_stairs, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.vanadium_planks_stairs, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.wolfram_planks_stairs, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.nickel_planks_stairs, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.monel_planks_stairs, BUILDING_BLOCKS);
@@ -880,6 +879,8 @@ public class Industria {
 		ModGameRegistry.registerItem(ModItems.wolfram_solution_bucket);
 		ModGameRegistry.registerTechnicalBlock(ModItems.tin_solution);
 		ModGameRegistry.registerItem(ModItems.tin_solution_bucket);
+		ModGameRegistry.registerTechnicalBlock(ModItems.vanadium_solution);
+		ModGameRegistry.registerItem(ModItems.vanadium_solution_bucket);
 		ModGameRegistry.registerTechnicalBlock(ModItems.chemical_water);
 		ModGameRegistry.registerItem(ModItems.chemical_water_bucket);
 		ModGameRegistry.registerTechnicalBlock(ModItems.compressed_air);
@@ -900,7 +901,7 @@ public class Industria {
 		ModGameRegistry.registerItem(ModItems.copper_oxid);
 		ModGameRegistry.registerItem(ModItems.pure_gold);
 		ModGameRegistry.registerItem(ModItems.pure_silver);
-		ModGameRegistry.registerItem(ModItems.pure_palladium);
+		ModGameRegistry.registerItem(ModItems.pure_vanadium);
 		ModGameRegistry.registerItem(ModItems.pure_nickel);
 		ModGameRegistry.registerItem(ModItems.crushed_tin_ore);
 		ModGameRegistry.registerItem(ModItems.crushed_iron_ore);
@@ -908,14 +909,12 @@ public class Industria {
 		ModGameRegistry.registerItem(ModItems.crushed_nickel_ore);
 		ModGameRegistry.registerItem(ModItems.crushed_gold_ore);
 		ModGameRegistry.registerItem(ModItems.crushed_silver_ore);
-		ModGameRegistry.registerItem(ModItems.crushed_palladium_ore);
 		ModGameRegistry.registerItem(ModItems.pure_tin_ore);
 		ModGameRegistry.registerItem(ModItems.pure_iron_ore);
 		ModGameRegistry.registerItem(ModItems.pure_copper_ore);
 		ModGameRegistry.registerItem(ModItems.pure_nickel_ore);
 		ModGameRegistry.registerItem(ModItems.pure_gold_ore);
 		ModGameRegistry.registerItem(ModItems.pure_silver_ore);
-		ModGameRegistry.registerItem(ModItems.pure_palladium_ore);
 		ModGameRegistry.registerItem(ModItems.crushed_stone);
 		ModGameRegistry.registerItem(ModItems.redstone_ingot);
 		ModGameRegistry.registerItem(ModItems.remote_control);
@@ -941,8 +940,8 @@ public class Industria {
 		ModGameRegistry.registerItem(ModItems.wolfram_nugget);
 		ModGameRegistry.registerItem(ModItems.silver_ingot);
 		ModGameRegistry.registerItem(ModItems.silver_nugget);
-		ModGameRegistry.registerItem(ModItems.palladium_ingot);
-		ModGameRegistry.registerItem(ModItems.palladium_nugget);
+		ModGameRegistry.registerItem(ModItems.vanadium_ingot);
+		ModGameRegistry.registerItem(ModItems.vanadium_nugget);
 		ModGameRegistry.registerItem(ModItems.nickel_ingot);
 		ModGameRegistry.registerItem(ModItems.nickel_nugget);
 		ModGameRegistry.registerItem(ModItems.monel_ingot);
@@ -963,8 +962,8 @@ public class Industria {
 		ModGameRegistry.registerItem(ModItems.tpo_wolfram_dust);
 		ModGameRegistry.registerItem(ModItems.silver_dust);
 		ModGameRegistry.registerItem(ModItems.tpo_silver_dust);
-		ModGameRegistry.registerItem(ModItems.palladium_dust);
-		ModGameRegistry.registerItem(ModItems.tpo_palladium_dust);
+		ModGameRegistry.registerItem(ModItems.vanadium_dust);
+		ModGameRegistry.registerItem(ModItems.tpo_vanadium_dust);
 		ModGameRegistry.registerItem(ModItems.nickel_dust);
 		ModGameRegistry.registerItem(ModItems.tpo_nickel_dust);
 		ModGameRegistry.registerItem(ModItems.monel_dust);
@@ -981,7 +980,7 @@ public class Industria {
 		ModGameRegistry.registerItem(ModItems.tin_plate);
 		ModGameRegistry.registerItem(ModItems.wolfram_plate);
 		ModGameRegistry.registerItem(ModItems.silver_plate);
-		ModGameRegistry.registerItem(ModItems.palladium_plate);
+		ModGameRegistry.registerItem(ModItems.vanadium_plate);
 		ModGameRegistry.registerItem(ModItems.nickel_plate);
 		ModGameRegistry.registerItem(ModItems.monel_plate);
 		ModGameRegistry.registerItem(ModItems.gold_plate);
@@ -1044,6 +1043,9 @@ public class Industria {
 		ModGameRegistry.registerItem(ModItems.zirconium_nugget);
 		ModGameRegistry.registerItem(ModItems.zirconium_plate);
 		ModGameRegistry.registerItem(ModItems.tpo_zirconium_dust);
+		ModGameRegistry.registerItem(ModItems.slag_dust);
+		ModGameRegistry.registerItem(ModItems.vanadium_oxid);
+		ModGameRegistry.registerItem(ModItems.aluminium_oxid);
 		
 		// register Functional Items
 		ModGameRegistry.registerItem(ModItems.lever_element);
@@ -1059,9 +1061,6 @@ public class Industria {
 		ModGameRegistry.addFeatureToOverworldBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.SILVER_ORE);
 		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.SILVER_ORE_EXTRA, Category.JUNGLE);
 		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.SILVER_ORE_EXTRA, Category.EXTREME_HILLS);
-		ModGameRegistry.addFeatureToOverworldBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.PALLADIUM_ORE);
-		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.PALLADIUM_ORE_EXTRA, Category.SWAMP);
-		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.PALLADIUM_ORE_EXTRA, Category.TAIGA);
 		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.SULFUR_ORE, Category.NETHER);
 		ModGameRegistry.addFeatureToBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.BAUXIT_STONE_ORE, Category.JUNGLE);
 		ModGameRegistry.addFeatureToOverworldBiomes(Decoration.UNDERGROUND_ORES, ModConfiguredFeatures.WOLFRAM_STONE_ORE);

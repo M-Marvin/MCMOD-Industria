@@ -3,10 +3,10 @@ package de.industria.tileentity;
 import javax.annotation.Nullable;
 
 import de.industria.blocks.BlockMGenerator;
-import de.industria.dynamicsounds.ISimpleMachineSound;
 import de.industria.gui.ContainerMGenerator;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.MachineSoundHelper;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
@@ -24,7 +24,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.ForgeHooks;
 
-public class TileEntityMGenerator extends TileEntityInventoryBase implements INamedContainerProvider, ISidedInventory, ITickableTileEntity, ISimpleMachineSound {
+public class TileEntityMGenerator extends TileEntityInventoryBase implements INamedContainerProvider, ISidedInventory, ITickableTileEntity, ITESimpleMachineSound {
 	
 	public int fuelTime;
 	public float burnTime;

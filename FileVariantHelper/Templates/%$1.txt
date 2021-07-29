@@ -3,7 +3,7 @@ aluminium_planks_stairs
 electrolyt_copper_planks_stairs
 redstone_alloy_planks_stairs
 silver_planks_stairs
-palladium_planks_stairs
+vanadium_planks_stairs
 wolfram_planks_stairs
 nickel_planks_stairs
 monel_planks_stairs
@@ -226,7 +226,7 @@ aluminium_planks_slab
 electrolyt_copper_planks_slab
 redstone_alloy_planks_slab
 silver_planks_slab
-palladium_planks_slab
+vanadium_planks_slab
 tin_planks_slab
 wolfram_planks_slab
 nickel_planks_slab

@@ -8,8 +8,8 @@ import java.util.function.Supplier;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.renderer.BlockMSchredderItemRenderer;
 import de.industria.tileentity.TileEntityMSchredder;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.VoxelHelper;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.Block;
@@ -42,7 +42,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMSchredder extends BlockMultiPart<TileEntityMSchredder> implements IElectricConnectiveBlock, IAdvancedBlockInfo, ISidedInventoryProvider {
+public class BlockMSchredder extends BlockMultiPart<TileEntityMSchredder> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo, ISidedInventoryProvider {
 	
 	public static final VoxelShape BASE = Block.box(0, 0, 0, 16, 14, 16);
 	public static final VoxelShape CORNER_1 = VoxelShapes.or(Block.box(0, -2, 0, 16, 14, 1), Block.box(0, -2, 0, 2, 16, 16));

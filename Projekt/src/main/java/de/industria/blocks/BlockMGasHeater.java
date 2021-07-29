@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.renderer.BlockMGasHeaterItemRenderer;
 import de.industria.tileentity.TileEntityMGasHeater;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -17,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 
-public class BlockMGasHeater extends BlockMultiPart<TileEntityMGasHeater> implements IAdvancedBlockInfo {
+public class BlockMGasHeater extends BlockMultiPart<TileEntityMGasHeater> implements IBAdvancedBlockInfo {
 	
 	public BlockMGasHeater() {
 		super("gas_heater", Material.METAL, 4F, SoundType.METAL, 2, 1, 2);

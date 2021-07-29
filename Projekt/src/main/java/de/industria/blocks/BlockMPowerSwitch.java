@@ -5,8 +5,8 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
-import de.industria.util.blockfeatures.IAdvancedBlockInfo;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -36,7 +36,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class BlockMPowerSwitch extends BlockBase implements IElectricConnectiveBlock, IAdvancedBlockInfo {
+public class BlockMPowerSwitch extends BlockBase implements IBElectricConnectiveBlock, IBAdvancedBlockInfo {
 	
 	public static final BooleanProperty POWERED = BooleanProperty.create("powered");
 	public static final BooleanProperty CLOSED = BooleanProperty.create("closed");

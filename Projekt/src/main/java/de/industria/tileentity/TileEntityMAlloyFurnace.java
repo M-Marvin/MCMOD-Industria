@@ -1,11 +1,11 @@
 package de.industria.tileentity;
 
-import de.industria.dynamicsounds.ISimpleMachineSound;
 import de.industria.gui.ContainerMAlloyFurnace;
 import de.industria.recipetypes.AlloyRecipe;
 import de.industria.typeregistys.ModRecipeTypes;
 import de.industria.typeregistys.ModTileEntityType;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock.Voltage;
+import de.industria.util.blockfeatures.ITESimpleMachineSound;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import de.industria.util.handler.ItemStackHelper;
@@ -25,7 +25,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class TileEntityMAlloyFurnace extends TileEntityInventoryBase implements ITickableTileEntity, ISimpleMachineSound, ISidedInventory, INamedContainerProvider {
+public class TileEntityMAlloyFurnace extends TileEntityInventoryBase implements ITickableTileEntity, ITESimpleMachineSound, ISidedInventory, INamedContainerProvider {
 	
 	public boolean hasPower;
 	public boolean isWorking;

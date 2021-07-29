@@ -6,7 +6,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 
 import de.industria.Industria;
 import de.industria.packet.CConfigureNetworkDevice;
-import de.industria.util.blockfeatures.INetworkDevice.NetworkDeviceIP;
+import de.industria.util.blockfeatures.ITENetworkDevice.NetworkDeviceIP;
 import net.minecraft.client.gui.DialogTexts;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;

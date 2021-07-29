@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "ingredient": {
-    "item": "industria:palladium_ore"
-  },
-  "result": "industria:palladium_ingot",
-  "experience": 0.7,
-  "cookingtime": 100
-}

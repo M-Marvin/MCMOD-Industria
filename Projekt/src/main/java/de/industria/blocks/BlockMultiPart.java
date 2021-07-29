@@ -3,7 +3,7 @@ package de.industria.blocks;
 import java.util.HashMap;
 
 import de.industria.tileentity.TileEntityAdvancedMovingBlock;
-import de.industria.util.blockfeatures.IAdvancedStickyBlock;
+import de.industria.util.blockfeatures.IBAdvancedStickyBlock;
 import de.industria.util.types.AdvancedPistonBlockStructureHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -26,7 +26,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
-public abstract class BlockMultiPart<T extends TileEntity> extends BlockContainerBase implements IAdvancedStickyBlock {
+public abstract class BlockMultiPart<T extends TileEntity> extends BlockContainerBase implements IBAdvancedStickyBlock {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	public static final IntegerProperty POS_X = IntegerProperty.create("pos_x", 0, 6);

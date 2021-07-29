@@ -7,8 +7,8 @@ import de.industria.fluids.FluidSteam;
 import de.industria.fluids.util.BlockGasFluid;
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModTileEntityType;
-import de.industria.util.blockfeatures.IFluidConnective;
-import de.industria.util.blockfeatures.IElectricConnectiveBlock.Voltage;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
+import de.industria.util.blockfeatures.ITEFluidConnective;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.FluidStackStateTagHelper;
 import de.industria.util.handler.MachineSoundHelper;
@@ -25,7 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fluids.FluidStack;
 
-public class TileEntityMSteamGenerator extends TileEntity implements IFluidConnective, ITickableTileEntity {
+public class TileEntityMSteamGenerator extends TileEntity implements ITEFluidConnective, ITickableTileEntity {
 	
 	protected TEPart part;
 	protected FluidStack steamIn;
@@ -358,5 +358,5 @@ public class TileEntityMSteamGenerator extends TileEntity implements IFluidConne
 	public void setStorage(FluidStack storage) {
 		this.steamIn = storage;
 	}
-
+	
 }

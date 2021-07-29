@@ -2,8 +2,8 @@ package de.industria.packet;
 
 import java.util.function.Supplier;
 
-import de.industria.util.blockfeatures.INetworkDevice;
-import de.industria.util.blockfeatures.INetworkDevice.NetworkDeviceIP;
+import de.industria.util.blockfeatures.ITENetworkDevice;
+import de.industria.util.blockfeatures.ITENetworkDevice.NetworkDeviceIP;
 import net.minecraft.block.BlockState;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
@@ -39,9 +39,9 @@ public class CConfigureNetworkDevice {
 			BlockPos devicePos = packet.pos;
 			BlockState state = world.getBlockState(devicePos);
 			
-			if (state.getBlock() instanceof INetworkDevice) {
+			if (state.getBlock() instanceof ITENetworkDevice) {
 				
-				((INetworkDevice) state.getBlock()).setIP(packet.deviceIp, devicePos, state, world);
+				((ITENetworkDevice) state.getBlock()).setIP(packet.deviceIp, devicePos, state, world);
 				
 			}
 			

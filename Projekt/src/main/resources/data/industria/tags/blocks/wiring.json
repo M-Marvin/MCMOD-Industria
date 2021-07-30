@@ -4,7 +4,8 @@
     "industria:copper_cable",
     "industria:electrolyt_copper_cable",
     "industria:aluminium_cable",
-    "industria:fluid_pipe",
+    "industria:steel_pipe",
+    "industria:copper_pipe",
     "industria:signal_wire",
     "industria:stacked_redstone_wire",
     "industria:network_cable",
@@ -15,6 +16,7 @@
     "industria:encased_electric_aluminium_cable",
     "industria:encased_electric_burned_cable",
     "industria:encased_network_cable",
-    "industria:encased_fluid_pipe"
+    "industria:encased_steel_pipe",
+    "industria:encased_copper_pipe"
   ]
 }

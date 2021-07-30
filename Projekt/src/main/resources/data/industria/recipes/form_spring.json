@@ -1,7 +1,7 @@
 {
   "type": "industria:metal_form",
   "ingredientItem": {
-    "item": "industria:fluid_pipe",
+    "item": "industria:steel_pipe",
     "count": 1
   },
   "resultItem": {

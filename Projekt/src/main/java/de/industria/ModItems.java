@@ -110,8 +110,10 @@ public class ModItems {
 	public static final Block encased_electric_burned_cable = new BlockEncasedElectricWire("encased_electric_burned_cable", 16, 4, structure_scaffold);
 	public static final Block network_cable = new BlockNetworkCable();
 	public static final Block encased_network_cable = new BlockEncasedNetworkCable("encased_network_cable", structure_scaffold);
-	public static final Block fluid_pipe = new BlockFluidPipe();
-	public static final Block encased_fluid_pipe = new BlockEncasedFluidPipe("encased_fluid_pipe", structure_scaffold);
+	public static final Block steel_pipe = new BlockFluidPipe("steel_pipe", 100);
+	public static final Block encased_steel_pipe = new BlockEncasedFluidPipe("encased_steel_pipe", structure_scaffold, 100);
+	public static final Block copper_pipe = new BlockFluidPipe("copper_pipe", 50);
+	public static final Block encased_copper_pipe = new BlockEncasedFluidPipe("encased_copper_pipe", structure_scaffold, 50);
 	public static final Block fluid_valve = new BlockFluidValve();
 	public static final Block fluid_input = new BlockMFluidInput();
 	public static final Block fluid_output = new BlockMFluidOutput();
@@ -154,6 +156,8 @@ public class ModItems {
 	public static final Block zirconium_block = new BlockBase("zirconium_block", Material.METAL, 5F, 6F, SoundType.METAL);
 	public static final Block redstone_alloy_block = new BlockPowerEmiting("redstone_alloy_block", Material.METAL, 5F, 6F, SoundType.METAL, 8);
 	public static final Block aluminium_block = new BlockBase("aluminium_block", Material.METAL, 2F, 4F, SoundType.METAL);
+	// TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+	public static final Block metallic_glass_block = new BlockBase("metallic_glass_block", Material.METAL, 8F, 12F, SoundType.METAL);
 	public static final Block electrolyt_copper_block = new BlockBase("electrolyt_copper_block", Material.METAL, 5F, 6F, SoundType.METAL);
 	public static final Block steel_block = new BlockBase("steel_block", Material.METAL, 5F, 6F, SoundType.METAL);
 	public static final Block monel_block = new BlockBase("monel_block", Material.METAL, 5F, 6F, SoundType.METAL);

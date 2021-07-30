@@ -29,12 +29,11 @@ import net.minecraft.world.World;
 @SuppressWarnings("deprecation")
 public class BlockFluidPipe extends BlockWiring implements ITileEntityProvider, IBAdvancedBlockInfo {
 	
-	public BlockFluidPipe(String name) {
-		super(name, Material.METAL, 2F, SoundType.METAL, 8);
-	}
+	private int maxFlow;
 	
-	public BlockFluidPipe() {
-		this("fluid_pipe");
+	public BlockFluidPipe(String name, int maxFlow) {
+		super(name, Material.METAL, 2F, SoundType.METAL, 8);
+		this.maxFlow = maxFlow;
 	}
 	
 	@Override
@@ -73,8 +72,12 @@ public class BlockFluidPipe extends BlockWiring implements ITileEntityProvider, 
 	@Override
 	public IBlockToolType getBlockInfo() {
 		return (stack, info) -> {
-			info.add(new TranslationTextComponent("industria.block.info.maxMB", 100));
+			info.add(new TranslationTextComponent("industria.block.info.maxMB", this.maxFlow));
 		};
+	}
+	
+	public int getMaxFlow() {
+		return maxFlow;
 	}
 	
 	@Override

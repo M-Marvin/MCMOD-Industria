@@ -109,7 +109,8 @@
 "block.industria.steam": "Dampf",
 "block.industria.steam_generator": "Dampfgenerator (WIP)",
 "block.industria.fluid_input": "Pumpe",
-"block.industria.fluid_pipe": "Rohr",
+"block.industria.steel_pipe": "Stahlrohr",
+"block.industria.copper_pipe": "Kupferrohr",
 "block.industria.fluid_output": "Fl\u00fcssigkeitsauslass",
 "block.industria.transformator_coil": "Spule",
 "block.industria.transformator_contact": "Transformatoranschluss",
@@ -469,6 +470,7 @@
 "jei.recipe.title.washingPlant": "Erzw\u00e4sche",
 "jei.recipe.title.airCompressor": "Druckluftkompressor",
 "jei.recipe.title.metalFormer": "Formen",
+"jei.recipe.title.blastFurnace": "Hochofen",
 
 "sound.industria.block.hover_extension.activated": "Antrieb aktiviert",
 "sound.industria.block.turbin.loop": "Turbine dr\u00f6hnt",
@@ -552,9 +554,6 @@
 "industria.jigsaw_block.generate": "Generieren",
 "industria.jigsaw_block.levels": "Levels: %s",
 "industria.generator.remainingFuel": "Treibstoff",
-"industria.computer.saveChanges": "Sav",
-"industria.computer.abbort": "Exit",
-"industria.computer.start": "Run",
 
 "itemGroup.machines": "Maschinen",
 "itemGroup.building_blocks": "Baumaterial",

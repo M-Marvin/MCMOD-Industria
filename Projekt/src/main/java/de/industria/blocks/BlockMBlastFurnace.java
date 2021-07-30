@@ -143,6 +143,11 @@ public class BlockMBlastFurnace extends BlockMultiPart<TileEntityMBlastFurnace> 
 	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
 		return () -> BlockMBlastFurnaceItemRenderer::new;
 	}
+	
+	@Override
+	public int getStackSize() {
+		return 1;
+	}
 
 	@Override
 	public Voltage getVoltage(World world, BlockPos pos, BlockState state, Direction side) {

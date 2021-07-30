@@ -122,7 +122,8 @@ public class ClientSetup {
 		RenderTypeLookup.setRenderLayer(ModItems.encased_electric_aluminium_cable, RenderType.cutoutMipped());
 		RenderTypeLookup.setRenderLayer(ModItems.encased_electric_burned_cable, RenderType.cutoutMipped());
 		RenderTypeLookup.setRenderLayer(ModItems.encased_network_cable, RenderType.cutoutMipped());
-		RenderTypeLookup.setRenderLayer(ModItems.encased_fluid_pipe, RenderType.cutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.encased_steel_pipe, RenderType.cutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.encased_copper_pipe, RenderType.cutoutMipped());
 		RenderTypeLookup.setRenderLayer(ModItems.fluorite_crystal, RenderType.translucent());
 		RenderTypeLookup.setRenderLayer(ModItems.zircon_crystal, RenderType.cutoutMipped());
 		

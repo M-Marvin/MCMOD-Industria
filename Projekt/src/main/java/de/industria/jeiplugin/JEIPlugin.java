@@ -9,6 +9,7 @@ import de.industria.Industria;
 import de.industria.ModItems;
 import de.industria.jeiplugin.recipetypes.RecipeCategoryAirCompressor;
 import de.industria.jeiplugin.recipetypes.RecipeCategoryAlloy;
+import de.industria.jeiplugin.recipetypes.RecipeCategoryBlastFurnace;
 import de.industria.jeiplugin.recipetypes.RecipeCategoryBlender;
 import de.industria.jeiplugin.recipetypes.RecipeCategoryFluidBath;
 import de.industria.jeiplugin.recipetypes.RecipeCategoryMetalFormer;
@@ -59,6 +60,7 @@ public class JEIPlugin implements IModPlugin {
 		registration.addRecipes(getRecipes(manager, ModRecipeTypes.FLUID_BATH), JEIRecipeCategories.FLUID_BATH);
 		registration.addRecipes(getRecipes(manager, ModRecipeTypes.WASHING), JEIRecipeCategories.WASHING_PLANT);
 		registration.addRecipes(getRecipes(manager, ModRecipeTypes.METAL_FORM), JEIRecipeCategories.METAL_FORMER);
+		registration.addRecipes(getRecipes(manager, ModRecipeTypes.BLAST_FURNACE), JEIRecipeCategories.BLAST_FURNACE);
 		registration.addRecipes(itemsToCollection(new FluidStack(ModFluids.COMPRESSED_AIR, 1500)), JEIRecipeCategories.AIR_COMPRESSOR);
 	}
 	
@@ -76,6 +78,7 @@ public class JEIPlugin implements IModPlugin {
 		registration.addRecipeCategories(new RecipeCategoryWashingPlant(guiHelper));
 		registration.addRecipeCategories(new RecipeCategoryMetalFormer(guiHelper));
 		registration.addRecipeCategories(new RecipeCategoryAirCompressor(guiHelper));
+		registration.addRecipeCategories(new RecipeCategoryBlastFurnace(guiHelper));
 	}
 	
 	@Override
@@ -89,6 +92,8 @@ public class JEIPlugin implements IModPlugin {
 		registration.addRecipeCatalyst(new ItemStack(ModItems.ore_washing_plant), JEIRecipeCategories.WASHING_PLANT);
 		registration.addRecipeCatalyst(new ItemStack(ModItems.metal_former), JEIRecipeCategories.METAL_FORMER);
 		registration.addRecipeCatalyst(new ItemStack(ModItems.air_compressor), JEIRecipeCategories.AIR_COMPRESSOR);
+		registration.addRecipeCatalyst(new ItemStack(ModItems.blast_furnace), JEIRecipeCategories.BLAST_FURNACE);
+		registration.addRecipeCatalyst(new ItemStack[] {new ItemStack(ModItems.coal_heater),new ItemStack(ModItems.gas_heater), new ItemStack(ModItems.electric_heater)}, JEIRecipeCategories.BLAST_FURNACE);
 	}
 	
 	@Override

@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "EWE",
+    "RFC",
+    "SAS"
+  ],
+  "key": {
+    "E": {
+      "item": "industria:iron_plate"
+    },
+    "W": {
+      "item": "industria:wolfram_plates"
+    },
+    "F": {
+      "item": "minecraft:blast_furnace"
+    },
+    "R": {
+      "item": "industria:steel_pipe"
+    },
+    "C": {
+      "item": "industria:transformator_coil"
+    },
+    "S": {
+      "item": "industria:steel_plates"
+    },
+    "A": {
+      "item": "industria:fluid_output"
+    }
+  },
+  "result": {
+    "item": "industria:blast_furnace"
+  }
+}

@@ -132,6 +132,7 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.steel_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.copper_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.aluminium_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.metallic_glass_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.electrolyt_copper_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.redstone_alloy_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.tin_block, BUILDING_BLOCKS);
@@ -199,7 +200,8 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.salsola_seeds, MATERIALS);
 		ModGameRegistry.registerBlock(ModItems.jigsaw, null, Rarity.EPIC);
 		ModGameRegistry.registerBlock(ModItems.generator, MACHINES);
-		ModGameRegistry.registerBlock(ModItems.fluid_pipe, MACHINES);
+		ModGameRegistry.registerBlock(ModItems.steel_pipe, MACHINES);
+		ModGameRegistry.registerBlock(ModItems.copper_pipe, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.fluid_valve, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.fluid_input, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.fluid_output, MACHINES);
@@ -852,7 +854,8 @@ public class Industria {
 		ModGameRegistry.registerTechnicalBlock(ModItems.encased_electric_aluminium_cable);
 		ModGameRegistry.registerTechnicalBlock(ModItems.encased_electric_burned_cable);
 		ModGameRegistry.registerTechnicalBlock(ModItems.encased_network_cable);
-		ModGameRegistry.registerTechnicalBlock(ModItems.encased_fluid_pipe);
+		ModGameRegistry.registerTechnicalBlock(ModItems.encased_steel_pipe);
+		ModGameRegistry.registerTechnicalBlock(ModItems.encased_copper_pipe);
 		
 		ModGameRegistry.registerTechnicalBlock(ModItems.steam);
 		ModGameRegistry.registerItem(ModItems.steam_bucket);

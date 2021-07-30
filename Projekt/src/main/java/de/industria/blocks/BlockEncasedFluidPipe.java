@@ -27,8 +27,8 @@ public class BlockEncasedFluidPipe extends BlockFluidPipe implements IBAdvancedS
 	
 	protected BlockStructureScaffold scaffoldBlock;
 	
-	public BlockEncasedFluidPipe(String name, BlockStructureScaffold scaffoldBlock) {
-		super(name);
+	public BlockEncasedFluidPipe(String name, BlockStructureScaffold scaffoldBlock, int maxFlow) {
+		super(name, maxFlow);
 		this.scaffoldBlock = scaffoldBlock;
 	}
 	

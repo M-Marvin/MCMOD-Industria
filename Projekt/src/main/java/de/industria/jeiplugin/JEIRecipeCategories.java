@@ -14,5 +14,6 @@ public class JEIRecipeCategories {
 	public static final ResourceLocation WASHING_PLANT = new ResourceLocation(Industria.MODID, "washing_plant");
 	public static final ResourceLocation METAL_FORMER = new ResourceLocation(Industria.MODID, "metal_former");
 	public static final ResourceLocation AIR_COMPRESSOR = new ResourceLocation(Industria.MODID, "air_compressor");
+	public static final ResourceLocation BLAST_FURNACE = new ResourceLocation(Industria.MODID, "blast_furnace");
 	
 }

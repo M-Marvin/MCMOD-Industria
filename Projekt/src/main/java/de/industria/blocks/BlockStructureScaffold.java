@@ -156,6 +156,7 @@ public class BlockStructureScaffold extends BlockContainerBase implements IBAdva
 				if (stack.getItem() == Item.byBlock(ModItems.network_cable)) state2 = ModItems.encased_network_cable.defaultBlockState();
 				if (stack.getItem() == Item.byBlock(ModItems.steel_pipe)) state2 = ModItems.encased_steel_pipe.defaultBlockState();
 				if (stack.getItem() == Item.byBlock(ModItems.copper_pipe)) state2 = ModItems.encased_copper_pipe.defaultBlockState();
+				if (stack.getItem() == Item.byBlock(ModItems.metallic_glass_pipe)) state2 = ModItems.encased_metallic_glass_pipe.defaultBlockState();
 				
 				if (state2 != null) {
 					

@@ -1,0 +1,22 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "industria:block/metallic_glass_pipe",
+		"particle": "industria:block/metallic_glass_pipe"
+	},
+	"elements": [
+		{
+			"from": [4, 0, 0],
+			"to": [12, 8, 4],
+			"rotation": {"angle": 0, "axis": "y", "origin": [12, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 8, 8, 16], "texture": "#0"},
+				"south": {"uv": [0, 8, 8, 16], "texture": "#0"},
+				"east": {"uv": [8, 12, 16, 16], "rotation": 90, "texture": "#0"},
+				"west": {"uv": [8, 12, 16, 16], "rotation": 90, "texture": "#0"},
+				"up": {"uv": [8, 12, 16, 16], "texture": "#0"},
+				"down": {"uv": [8, 12, 16, 16], "texture": "#0"}
+			}
+		}
+	]
+}

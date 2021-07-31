@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "E E",
+    "EEE",
+    "E E"
+  ],
+  "key": {
+    "E": {
+      "item": "industria:iron_plate"
+    }
+  },
+  "result": {
+    "item": "industria:iron_ladder",
+    "count": 7
+  }
+}

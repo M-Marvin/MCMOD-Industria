@@ -15,6 +15,8 @@ public interface ITEFluidWiring extends ITEFluidConnective {
 	
 	public int maxFlow();
 	
+	public void overwriteFlow(int flow);
+	
 	default public FluidStack pushFluidThrougPipes(FluidStack fluidIn, Direction callDirection, World level, BlockPos position) {
 		
 		return pushFluidThrougPipes0(fluidIn, callDirection, new ArrayList<BlockPos>(), 0, this.maxFlow(), level, position);

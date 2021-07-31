@@ -1,24 +1,48 @@
 {
 	"multipart": [
-		{ "when": {"open": "true"}, "apply": {
-			"model": "industria:block/fluid_valve_open"
+		{ "when": {"fully_opened": "true", "facing": "up" }, "apply": {
+			"model": "industria:block/fluid_valve_up_open"
 		}},
-		{ "when": {"open": "false"}, "apply": {
-			"model": "industria:block/fluid_valve_close"
+		{ "when": {"fully_opened": "true", "facing": "down" }, "apply": {
+			"model": "industria:block/fluid_valve_down_open"
 		}},
-		{ "when": {"north": "true"}, "apply": {
-			"model": "industria:block/steel_pipe_side"
+		{ "when": {"fully_opened": "true", "facing": "south" }, "apply": {
+			"model": "industria:block/fluid_valve_horizontal_open",
+			"y": 0
 		}},
-		{ "when": {"south": "true"}, "apply": {
-			"model": "industria:block/steel_pipe_side",
+		{ "when": {"fully_opened": "true", "facing": "north" }, "apply": {
+			"model": "industria:block/fluid_valve_horizontal_open",
 			"y": 180
 		}},
-		{ "when": {"east": "true"}, "apply": {
-			"model": "industria:block/steel_pipe_side",
+		{ "when": {"fully_opened": "true", "facing": "west" }, "apply": {
+			"model": "industria:block/fluid_valve_horizontal_open",
 			"y": 90
 		}},
-		{ "when": {"west": "true"}, "apply": {
-			"model": "industria:block/steel_pipe_side",
+		{ "when": {"fully_opened": "true", "facing": "east" }, "apply": {
+			"model": "industria:block/fluid_valve_horizontal_open",
+			"y": 270
+		}},
+		
+		{ "when": {"fully_opened": "false", "facing": "up" }, "apply": {
+			"model": "industria:block/fluid_valve_up_close"
+		}},
+		{ "when": {"fully_opened": "false", "facing": "down" }, "apply": {
+			"model": "industria:block/fluid_valve_down_close"
+		}},
+		{ "when": {"fully_opened": "false", "facing": "south" }, "apply": {
+			"model": "industria:block/fluid_valve_horizontal_close",
+			"y": 0
+		}},
+		{ "when": {"fully_opened": "false", "facing": "north" }, "apply": {
+			"model": "industria:block/fluid_valve_horizontal_close",
+			"y": 180
+		}},
+		{ "when": {"fully_opened": "false", "facing": "west" }, "apply": {
+			"model": "industria:block/fluid_valve_horizontal_close",
+			"y": 90
+		}},
+		{ "when": {"fully_opened": "false", "facing": "east" }, "apply": {
+			"model": "industria:block/fluid_valve_horizontal_close",
 			"y": 270
 		}}
 	]

@@ -25,7 +25,7 @@ public class TileEntityFluidPipe extends TileEntity implements ITEFluidWiring, I
 	public TileEntityFluidPipe(TileEntityType<?> type) {
 		super(type);
 		this.fluid = FluidStack.EMPTY;
-		this.maxFluid = 100;
+		this.maxFluid = -1;
 	}
 	
 	@Override
@@ -80,13 +80,16 @@ public class TileEntityFluidPipe extends TileEntity implements ITEFluidWiring, I
 	@Override
 	public void load(BlockState state, CompoundNBT compound) {
 		this.fluid = FluidStack.loadFluidStackFromNBT(compound.getCompound("Fluid"));
-		this.maxFluid = compound.getInt("MaxFlow");
-		if (this.maxFluid == 0) this.maxFluid = state.getBlock() instanceof BlockFluidPipe ? ((BlockFluidPipe) state.getBlock()).getMaxFlow() : 0;
+		if (compound.contains("MaxFlow")) this.maxFluid = compound.getInt("MaxFlow");
 		super.load(state, compound);
 	}
 	
 	@Override
 	public void tick() {
+		
+		if (!this.level.isClientSide && this.maxFluid == -1) {
+			this.maxFluid = getBlockState().getBlock() instanceof BlockFluidPipe ? ((BlockFluidPipe) getBlockState().getBlock()).getMaxFlow() : 0;
+		}
 		
 		if (!this.level.isClientSide && !this.fluid.isEmpty()) {
 			
@@ -185,6 +188,11 @@ public class TileEntityFluidPipe extends TileEntity implements ITEFluidWiring, I
 	@Override
 	public int maxFlow() {
 		return this.maxFluid;
+	}
+
+	@Override
+	public void overwriteFlow(int flow) {
+		this.maxFluid = flow;
 	}
 	
 }

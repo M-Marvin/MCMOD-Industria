@@ -1,14 +1,15 @@
 {
 	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
 	"textures": {
-		"0": "industria:block/fluid_valve_wheel_close",
+		"0": "industria:block/fluid_valve_wheel_open",
 		"1": "industria:block/fluid_valve",
-		"particle": "industria:block/fluid_valve_wheel_close"
+		"particle": "industria:block/fluid_valve_wheel_open"
 	},
 	"elements": [
 		{
-			"from": [4, 0, 4],
-			"to": [12, 9, 12],
+			"from": [4, -8, 4],
+			"to": [12, 1, 12],
 			"rotation": {"angle": 0, "axis": "y", "origin": [12, 8, 12]},
 			"faces": {
 				"north": {"uv": [0, 7, 8, 16], "texture": "#1"},
@@ -20,8 +21,8 @@
 			}
 		},
 		{
-			"from": [2, 12, 2],
-			"to": [14, 12, 14],
+			"from": [2, 4, 2],
+			"to": [14, 4, 14],
 			"rotation": {"angle": 0, "axis": "y", "origin": [15, 17, 16]},
 			"faces": {
 				"up": {"uv": [2, 2, 14, 14], "texture": "#0"},
@@ -29,8 +30,8 @@
 			}
 		},
 		{
-			"from": [7, 9, 7],
-			"to": [9, 12, 9],
+			"from": [7, 1, 7],
+			"to": [9, 4, 9],
 			"rotation": {"angle": 0, "axis": "y", "origin": [15, 17, 16]},
 			"faces": {
 				"north": {"uv": [0, 4, 2, 7], "texture": "#1"},

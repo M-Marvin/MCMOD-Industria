@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "industria:metallic_glass_ingot"
+    }
+  ],
+  "result": {
+    "item": "industria:metallic_glass_nugget",
+    "count": 9
+  }
+}

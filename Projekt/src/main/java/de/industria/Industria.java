@@ -132,7 +132,6 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.steel_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.copper_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.aluminium_block, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.metallic_glass_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.electrolyt_copper_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.redstone_alloy_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.tin_block, BUILDING_BLOCKS);
@@ -184,11 +183,19 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.reinforced_casing, DECORATIONS);
 		ModGameRegistry.registerBlock(ModItems.ender_core, DECORATIONS);
 		ModGameRegistry.registerBlock(ModItems.preassure_pipe, MACHINES);
-		ModGameRegistry.registerBlock(ModItems.pipe_preassurizer, MACHINES);
-		ModGameRegistry.registerBlock(ModItems.air_compressor, MACHINES);
-		ModGameRegistry.registerBlock(ModItems.item_distributor, MACHINES);
-		ModGameRegistry.registerBlock(ModItems.preassure_pipe_item_terminal, MACHINES);
-		ModGameRegistry.registerBlock(ModItems.ore_washing_plant, MACHINES);
+		ModGameRegistry.registerBlock(ModItems.rubber_log, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.rubber_wood, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.rubber_leaves, DECORATIONS);
+		ModGameRegistry.registerBlock(ModItems.rubber_sapling, DECORATIONS);
+		ModGameRegistry.registerBlock(ModItems.marple_log, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.marple_wood, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.marple_leaves, DECORATIONS);
+		ModGameRegistry.registerBlock(ModItems.marple_leaves_red, DECORATIONS);
+		ModGameRegistry.registerBlock(ModItems.swamp_algae, DECORATIONS);
+		ModGameRegistry.registerBlock(ModItems.hanging_vine, DECORATIONS);
+		ModGameRegistry.registerBlock(ModItems.metallic_glass_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.metallic_glass_planks, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.metallic_glass_plates, BUILDING_BLOCKS);
 		
 		ModGameRegistry.registerBlock(ModItems.motor, MACHINES);
 		
@@ -202,6 +209,7 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.generator, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.steel_pipe, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.copper_pipe, MACHINES);
+		ModGameRegistry.registerBlock(ModItems.metallic_glass_pipe, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.fluid_valve, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.fluid_input, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.fluid_output, MACHINES);
@@ -226,16 +234,11 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.fluid_bath, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.blast_furnace, MACHINES);
 		ModGameRegistry.registerBlock(ModItems.metal_former, MACHINES);
-		ModGameRegistry.registerBlock(ModItems.rubber_log, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.rubber_wood, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.rubber_leaves, DECORATIONS);
-		ModGameRegistry.registerBlock(ModItems.rubber_sapling, DECORATIONS);
-		ModGameRegistry.registerBlock(ModItems.marple_log, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.marple_wood, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.marple_leaves, DECORATIONS);
-		ModGameRegistry.registerBlock(ModItems.marple_leaves_red, DECORATIONS);
-		ModGameRegistry.registerBlock(ModItems.swamp_algae, DECORATIONS);
-		ModGameRegistry.registerBlock(ModItems.hanging_vine, DECORATIONS);
+		ModGameRegistry.registerBlock(ModItems.pipe_preassurizer, MACHINES);
+		ModGameRegistry.registerBlock(ModItems.air_compressor, MACHINES);
+		ModGameRegistry.registerBlock(ModItems.item_distributor, MACHINES);
+		ModGameRegistry.registerBlock(ModItems.preassure_pipe_item_terminal, MACHINES);
+		ModGameRegistry.registerBlock(ModItems.ore_washing_plant, MACHINES);
 		
 		ModGameRegistry.registerBlock(ModItems.mangrove_log, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.mangrove_wood, BUILDING_BLOCKS);
@@ -709,6 +712,7 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.sulfur_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.fluorite_crystal, DECORATIONS);
 		ModGameRegistry.registerBlock(ModItems.zircon_crystal, DECORATIONS);
+		ModGameRegistry.registerBlock(ModItems.iron_ladder, DECORATIONS);
 		
 		ModGameRegistry.registerBlock(ModItems.gold_planks_stairs, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.aluminium_planks_stairs, BUILDING_BLOCKS);
@@ -856,6 +860,7 @@ public class Industria {
 		ModGameRegistry.registerTechnicalBlock(ModItems.encased_network_cable);
 		ModGameRegistry.registerTechnicalBlock(ModItems.encased_steel_pipe);
 		ModGameRegistry.registerTechnicalBlock(ModItems.encased_copper_pipe);
+		ModGameRegistry.registerTechnicalBlock(ModItems.encased_metallic_glass_pipe);
 		
 		ModGameRegistry.registerTechnicalBlock(ModItems.steam);
 		ModGameRegistry.registerItem(ModItems.steam_bucket);
@@ -1049,6 +1054,9 @@ public class Industria {
 		ModGameRegistry.registerItem(ModItems.slag_dust);
 		ModGameRegistry.registerItem(ModItems.vanadium_oxid);
 		ModGameRegistry.registerItem(ModItems.aluminium_oxid);
+		ModGameRegistry.registerItem(ModItems.metallic_glass_ingot);
+		ModGameRegistry.registerItem(ModItems.metallic_glass_nugget);
+		ModGameRegistry.registerItem(ModItems.metallic_glass_plate);
 		
 		// register Functional Items
 		ModGameRegistry.registerItem(ModItems.lever_element);

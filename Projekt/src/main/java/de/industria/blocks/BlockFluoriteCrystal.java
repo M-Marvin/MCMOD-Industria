@@ -15,6 +15,8 @@ import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -91,6 +93,16 @@ public class BlockFluoriteCrystal extends BlockBase implements IWaterLoggable {
 			shape = Block.box(3, 8, 3, 13, 16, 13);
 		}
 		return VoxelHelper.rotateShape(shape, state.getValue(FACING));
+	}
+
+	@Override
+	public BlockState rotate(BlockState state, Rotation rot) {
+		return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
+	}
+	
+	@Override
+	public BlockState mirror(BlockState state, Mirror mirrorIn) {
+		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
 	}
 	
 }

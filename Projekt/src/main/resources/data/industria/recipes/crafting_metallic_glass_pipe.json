@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "EEE"
+  ],
+  "key": {
+    "E": {
+      "item": "industria:metallic_glass_plate"
+    }
+  },
+  "result": {
+    "item": "industria:metallic_glass_pipe",
+    "count": 8
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "industria:metal_form",
+  "ingredientItem": {
+    "item": "industria:metallic_glass_ingot",
+    "count": 1
+  },
+  "resultItem": {
+    "item": "industria:metallic_glass_plate",
+    "count": 1
+  },
+  "processTime": 40
+}

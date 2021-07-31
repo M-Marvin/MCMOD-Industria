@@ -1,0 +1,44 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"0": "industria:block/fluid_valve_wheel_open",
+		"1": "industria:block/fluid_valve",
+		"particle": "industria:block/fluid_valve_wheel_open"
+	},
+	"elements": [
+		{
+			"from": [7, 3, 9],
+			"to": [9, 5, 11],
+			"rotation": {"angle": 0, "axis": "x", "origin": [15, 17, 16]},
+			"faces": {
+				"east": {"uv": [0, 4, 2, 7], "rotation": 90, "texture": "#1"},
+				"west": {"uv": [0, 4, 2, 7], "rotation": 270, "texture": "#1"},
+				"up": {"uv": [0, 4, 2, 7], "texture": "#1"},
+				"down": {"uv": [0, 4, 2, 7], "rotation": 180, "texture": "#1"}
+			}
+		},
+		{
+			"from": [4, 0, 11],
+			"to": [12, 8, 20],
+			"rotation": {"angle": 0, "axis": "x", "origin": [12, 8, 12]},
+			"faces": {
+				"north": {"uv": [8, 8, 16, 16], "rotation": 180, "texture": "#1"},
+				"east": {"uv": [0, 7, 8, 16], "rotation": 90, "texture": "#1"},
+				"south": {"uv": [8, 8, 16, 16], "texture": "#1"},
+				"west": {"uv": [0, 7, 8, 16], "rotation": 270, "texture": "#1"},
+				"up": {"uv": [0, 7, 8, 16], "texture": "#1"},
+				"down": {"uv": [0, 7, 8, 16], "rotation": 180, "texture": "#1"}
+			}
+		},
+		{
+			"from": [2, -2, 9],
+			"to": [14, 10, 9],
+			"rotation": {"angle": 0, "axis": "x", "origin": [15, 17, 16]},
+			"faces": {
+				"north": {"uv": [2, 2, 14, 14], "rotation": 180, "texture": "#0"},
+				"south": {"uv": [2, 14, 14, 2], "texture": "#0"}
+			}
+		}
+	]
+}

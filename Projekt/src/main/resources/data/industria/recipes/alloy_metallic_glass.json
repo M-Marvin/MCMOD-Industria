@@ -1,0 +1,22 @@
+{
+  "type": "industria:alloy",
+  "ingredientItems": [
+    {
+      "item": "industria:vanadium_ingot",
+      "count": 3
+    },
+    {
+      "item": "industria:zirconium_ingot",
+      "count": 2
+    },
+    {
+      "item": "industria:nickel_ingot",
+      "count": 1
+    }
+  ],
+  "resultItem":  {
+    "item": "industria:metallic_glass_ingot",
+    "count": 6
+  },
+  "smeltingTime": 150
+}

@@ -1,5 +1,6 @@
 package de.industria.tileentity;
 
+import de.industria.blocks.BlockFluidPipe;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.ITEFluidConnective;
 import de.industria.util.blockfeatures.ITEFluidWiring;
@@ -12,19 +13,22 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class TileEntityEncasedFluidPipe extends TileEntityStructureScaffold implements ITEFluidWiring {
 	
-	protected final int maxFluid;
+	protected int maxFluid;
 	protected FluidStack fluid;
 	
 	public TileEntityEncasedFluidPipe() {
 		super(ModTileEntityType.ENCASED_FLUID_PIPE);
-		this.maxFluid = 100;
 		this.fluid = FluidStack.EMPTY;
 	}
 	
 	@Override
 	public void tick() {
 		super.tick();
-				
+		
+		if (!this.level.isClientSide && this.maxFluid == -1) {
+			this.maxFluid = getBlockState().getBlock() instanceof BlockFluidPipe ? ((BlockFluidPipe) getBlockState().getBlock()).getMaxFlow() : 0;
+		}
+		
 		if (!this.level.isClientSide && !this.fluid.isEmpty()) {
 			
 			int inputs = 0;
@@ -145,12 +149,14 @@ public class TileEntityEncasedFluidPipe extends TileEntityStructureScaffold impl
 	@Override
 	public CompoundNBT save(CompoundNBT compound) {
 		if (!this.fluid.isEmpty()) compound.put("Fluid", this.fluid.writeToNBT(new CompoundNBT()));
+		compound.putInt("MaxFlow", this.maxFluid);
 		return super.save(compound);
 	}
 	
 	@Override
 	public void load(BlockState state, CompoundNBT compound) {
 		this.fluid = FluidStack.loadFluidStackFromNBT(compound.getCompound("Fluid"));
+		if (compound.contains("MaxFlow")) this.maxFluid = compound.getInt("MaxFlow");
 		super.load(state, compound);
 	}
 	
@@ -176,6 +182,11 @@ public class TileEntityEncasedFluidPipe extends TileEntityStructureScaffold impl
 	@Override
 	public int maxFlow() {
 		return this.maxFluid;
+	}
+
+	@Override
+	public void overwriteFlow(int flow) {
+		this.maxFluid = flow;
 	}
 	
 }

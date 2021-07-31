@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "industria:silver_block",
-    "industria:vanadium_block"
+    "industria:vanadium_block",
+    "industria:metallic_glass_block"
   ]
 }

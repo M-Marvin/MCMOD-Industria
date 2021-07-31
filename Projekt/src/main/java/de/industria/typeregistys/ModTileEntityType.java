@@ -10,7 +10,6 @@ import de.industria.tileentity.TileEntityConveyorBelt;
 import de.industria.tileentity.TileEntityEncasedFluidPipe;
 import de.industria.tileentity.TileEntityEnderCore;
 import de.industria.tileentity.TileEntityFluidPipe;
-import de.industria.tileentity.TileEntityFluidValve;
 import de.industria.tileentity.TileEntityItemDistributor;
 import de.industria.tileentity.TileEntityJigsaw;
 import de.industria.tileentity.TileEntityMAirCompressor;
@@ -73,7 +72,7 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityRHarvester> HARVESTER = register("harvester", TileEntityType.Builder.of(TileEntityRHarvester::new, ModItems.harvester));
 	public static final TileEntityType<TileEntityJigsaw> JIGSAW = register("jigsaw", TileEntityType.Builder.of(TileEntityJigsaw::new, ModItems.jigsaw));
 	public static final TileEntityType<TileEntityMGenerator> GENERATOR = register("generator", TileEntityType.Builder.of(TileEntityMGenerator::new, ModItems.generator));
-	public static final TileEntityType<TileEntityFluidPipe> FLUID_PIPE = register("fluid_pipe", TileEntityType.Builder.of(TileEntityFluidPipe::new, ModItems.steel_pipe, ModItems.copper_pipe));
+	public static final TileEntityType<TileEntityFluidPipe> FLUID_PIPE = register("fluid_pipe", TileEntityType.Builder.of(TileEntityFluidPipe::new, ModItems.steel_pipe, ModItems.copper_pipe, ModItems.metallic_glass_pipe));
 	public static final TileEntityType<TileEntityMFluidInput> FLUID_INPUT = register("fluid_input", TileEntityType.Builder.of(TileEntityMFluidInput::new, ModItems.fluid_input));
 	public static final TileEntityType<TileEntityMFluidOutput> FLUID_OUTPUT = register("fluid_output", TileEntityType.Builder.of(TileEntityMFluidOutput::new, ModItems.fluid_output));
 	public static final TileEntityType<TileEntityMSteamGenerator> STEAM_GENERATOR = register("steam_generator", TileEntityType.Builder.of(TileEntityMSteamGenerator::new, ModItems.steam_generator));
@@ -82,7 +81,6 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityMGasHeater> GAS_HEATER = register("gas_heater", TileEntityType.Builder.of(TileEntityMGasHeater::new, ModItems.gas_heater));
 	public static final TileEntityType<TileEntityMFuseBox> FUSE_BOX = register("fuse_box", TileEntityType.Builder.of(TileEntityMFuseBox::new, ModItems.fuse_box));
 	public static final TileEntityType<TileEntityMMultimeter> MULTIMETER = register("block_multimeter", TileEntityType.Builder.of(TileEntityMMultimeter::new, ModItems.multimeter));
-	public static final TileEntityType<TileEntityFluidValve> FLUID_VALVE = register("fluid_valve", TileEntityType.Builder.of(TileEntityFluidValve::new, ModItems.fluid_valve));
 	public static final TileEntityType<TileEntityMElectricFurnace> ELECTRIC_FURNACE = register("electric_furnace", TileEntityType.Builder.of(TileEntityMElectricFurnace::new, ModItems.electric_furnace));
 	public static final TileEntityType<TileEntityMSchredder> SCHREDDER = register("schredder", TileEntityType.Builder.of(TileEntityMSchredder::new, ModItems.schredder));
 	public static final TileEntityType<TileEntityMBlender> BLENDER = register("blender", TileEntityType.Builder.of(TileEntityMBlender::new, ModItems.blender));
@@ -98,7 +96,7 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityMChunkLoader> CHUNK_LOADER = register("chunk_loader", TileEntityType.Builder.of(TileEntityMChunkLoader::new, ModItems.chunk_loader));
 	public static final TileEntityType<TileEntityEnderCore> ENDER_CORE = register("ender_core", TileEntityType.Builder.of(TileEntityEnderCore::new, ModItems.ender_core));
 	public static final TileEntityType<TileEntityStructureScaffold> STRUCTURE_SCAFFOLD = register("structure_scaffold", TileEntityType.Builder.of(TileEntityStructureScaffold::new, ModItems.structure_scaffold, ModItems.encased_electric_copper_cable, ModItems.encased_electric_electrolyt_copper_cable, ModItems.encased_electric_aluminium_cable, ModItems.encased_electric_burned_cable, ModItems.encased_network_cable));
-	public static final TileEntityType<TileEntityStructureScaffold> ENCASED_FLUID_PIPE = register("encased_steel_pipe", TileEntityType.Builder.of(TileEntityEncasedFluidPipe::new, ModItems.encased_steel_pipe));
+	public static final TileEntityType<TileEntityEncasedFluidPipe> ENCASED_FLUID_PIPE = register("encased_steel_pipe", TileEntityType.Builder.of(TileEntityEncasedFluidPipe::new, ModItems.encased_steel_pipe, ModItems.encased_copper_pipe, ModItems.encased_metallic_glass_pipe));
 	public static final TileEntityType<TileEntityMBlastFurnace> BLAST_FURNACE = register("blast_furnace", TileEntityType.Builder.of(TileEntityMBlastFurnace::new, ModItems.blast_furnace));
 	public static final TileEntityType<TileEntityMAirCompressor> AIR_COMPRESSOR = register("air_compressor", TileEntityType.Builder.of(TileEntityMAirCompressor::new, ModItems.air_compressor));
 	public static final TileEntityType<TileEntityPreassurePipe> PREASSURE_PIPE = register("preassure_pipe", TileEntityType.Builder.of(TileEntityPreassurePipe::new, ModItems.preassure_pipe));

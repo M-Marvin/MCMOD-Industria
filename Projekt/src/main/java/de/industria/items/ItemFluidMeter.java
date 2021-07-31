@@ -6,12 +6,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceContext.FluidMode;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -22,42 +20,34 @@ public class ItemFluidMeter extends ItemBase {
 	public ItemFluidMeter() {
 		super("fluid_meter", Industria.TOOLS, 1);
 	}
-
-	@SuppressWarnings("deprecation")
+	
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public ActionResultType useOn(ItemUseContext context) {
 		
-		ItemStack stack = playerIn.getItemInHand(handIn);
-		RayTraceResult result = getPlayerPOVHitResult(worldIn, playerIn, FluidMode.NONE);
+		World worldIn = context.getLevel();
+		PlayerEntity playerIn = context.getPlayer();
+		BlockPos pos = context.getClickedPos();
 		
-		if (result.getType() == RayTraceResult.Type.MISS) {
-
-			return super.use(worldIn, playerIn, handIn);
+		BlockState state = worldIn.getBlockState(pos);
+		Block block = state.getBlock();
+		TileEntity te = worldIn.getBlockEntity(pos);
+		
+		if (te instanceof ITEFluidConnective) {
 			
-		} else {
-
-			BlockPos pos = new BlockPos(result.getLocation().x, result.getLocation().y, result.getLocation().z);
-			BlockState state = worldIn.getBlockState(pos);
-			Block block = state.getBlock();
-			TileEntity te = worldIn.getBlockEntity(pos);
+			FluidStack fluid = ((ITEFluidConnective) te).getStorage();
 			
-			if (te instanceof ITEFluidConnective) {
-				
-				FluidStack fluid = ((ITEFluidConnective) te).getStorage();
-				
-				ItemStack blockItem = block.getCloneItemStack(worldIn, pos, state);
-				
-				ITextComponent line = new TranslationTextComponent("industria.item.fluid_meter.meassure", blockItem.getHoverName(), fluid.getDisplayName(), fluid.getAmount());
-				playerIn.displayClientMessage(line, true);
-				
-				return ActionResult.success(stack);
-				
-			}
-						
+			@SuppressWarnings("deprecation")
+			ItemStack blockItem = block.getCloneItemStack(worldIn, pos, state);
+			
+			ITextComponent line = new TranslationTextComponent("industria.item.fluid_meter.meassure", blockItem.getHoverName(), fluid.getDisplayName(), fluid.getAmount());
+			playerIn.displayClientMessage(line, true);
+			
+			return ActionResultType.SUCCESS;
+			
 		}
 		
-		return super.use(worldIn, playerIn, handIn);
+		return super.useOn(context);
 		
 	}
-
+	
 }

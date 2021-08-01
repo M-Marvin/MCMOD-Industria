@@ -9,6 +9,7 @@ import de.industria.tileentity.TileEntityControllPanel;
 import de.industria.tileentity.TileEntityConveyorBelt;
 import de.industria.tileentity.TileEntityEncasedFluidPipe;
 import de.industria.tileentity.TileEntityEnderCore;
+import de.industria.tileentity.TileEntityFluidCannister;
 import de.industria.tileentity.TileEntityFluidPipe;
 import de.industria.tileentity.TileEntityItemDistributor;
 import de.industria.tileentity.TileEntityJigsaw;
@@ -105,6 +106,7 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityPreassurePipeItemTerminal> PREASSURE_PIPE_ITEM_TERMINAL = register("preassure_pipe_item_terminal", TileEntityType.Builder.of(TileEntityPreassurePipeItemTerminal::new, ModItems.preassure_pipe_item_terminal));
 	public static final TileEntityType<TileEntityMMetalFormer> METAL_FORMER = register("metal_former", TileEntityType.Builder.of(TileEntityMMetalFormer::new, ModItems.metal_former));
 	public static final TileEntityType<TileEntityMOreWashingPlant> ORE_WASHING_PLANT = register("ore_washing_plant", TileEntityType.Builder.of(TileEntityMOreWashingPlant::new, ModItems.ore_washing_plant));
+	public static final TileEntityType<TileEntityFluidCannister> FLUID_CANISTER = register("fluid_cannister", TileEntityType.Builder.of(TileEntityFluidCannister::new, ModItems.fluid_cannister.getBlock()));
 	
 	private static <T extends TileEntity> TileEntityType<T> register(String key, TileEntityType.Builder<T> builder) {
 		Type<?> type = Util.fetchChoiceType(TypeReferences.BLOCK_ENTITY, key);

@@ -709,10 +709,13 @@ public class Industria {
 		ModGameRegistry.registerBlock(ModItems.dried_peat, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.peat, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.humus, BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.sulfur_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.sulfur_crust_block, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.fluorite_crystal, DECORATIONS);
 		ModGameRegistry.registerBlock(ModItems.zircon_crystal, DECORATIONS);
 		ModGameRegistry.registerBlock(ModItems.iron_ladder, DECORATIONS);
+		ModGameRegistry.registerBlock(ModItems.sulfur_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.charcoal_block, BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.crude_steel_block, BUILDING_BLOCKS);
 		
 		ModGameRegistry.registerBlock(ModItems.gold_planks_stairs, BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.aluminium_planks_stairs, BUILDING_BLOCKS);
@@ -897,6 +900,9 @@ public class Industria {
 		ModGameRegistry.registerItem(ModItems.liquid_concrete_bucket);
 		ModGameRegistry.registerTechnicalBlock(ModItems.biogas);
 		ModGameRegistry.registerItem(ModItems.biogas_bucket);
+		
+		ModGameRegistry.registerTechnicalBlock(ModItems.fluid_cannister.getBlock());
+		ModGameRegistry.registerItem(ModItems.fluid_cannister);
 		
 		// register Items
 		ModGameRegistry.registerItem(ModItems.paper_bag);

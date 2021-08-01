@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "aluminium_block",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:crude_steel"
+    }
+  },
+  "result": {
+    "item": "industria:crude_steel_block"
+  }
+}

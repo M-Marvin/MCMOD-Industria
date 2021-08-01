@@ -2,7 +2,7 @@
   "type": "industria:schredder",
   "ingredient": [
     {
-      "item": "industria:sulfur_block"
+      "item": "industria:sulfur_crust_block"
     }
   ],
   "results": [

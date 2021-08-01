@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=north": { "model": "industria:block/cannister" },
+		"facing=south": { "model": "industria:block/cannister", "y": 180 },
+		"facing=east": { "model": "industria:block/cannister", "y": 90 },
+		"facing=west": { "model": "industria:block/cannister", "y": -90 }
+	}
+}

@@ -167,6 +167,11 @@ public class BlockFluidValve extends BlockBase implements IBAdvancedBlockInfo {
 	}
 	
 	@Override
+	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
+		return true;
+	}
+	
+	@Override
 	public IBlockToolType getBlockInfo() {
 		return (stack, info) -> {
 			info.add(new TranslationTextComponent("industria.block.info.fluidValve"));

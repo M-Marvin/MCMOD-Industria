@@ -214,7 +214,7 @@ public class ModConfiguredFeatures {
 							7,
 							3,
 							ModItems.sulfuric_acid.defaultBlockState(),
-							ModItems.sulfur_block.defaultBlockState(),
+							ModItems.sulfur_crust_block.defaultBlockState(),
 							Blocks.NETHERRACK.defaultBlockState()
 					)
 			).decorated(
@@ -241,7 +241,7 @@ public class ModConfiguredFeatures {
 							7,
 							5,
 							ModItems.sulfuric_acid.defaultBlockState(),
-							ModItems.sulfur_block.defaultBlockState(),
+							ModItems.sulfur_crust_block.defaultBlockState(),
 							Blocks.NETHERRACK.defaultBlockState()
 					)
 			).decorated(

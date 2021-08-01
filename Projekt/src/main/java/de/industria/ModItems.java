@@ -22,6 +22,7 @@ import de.industria.items.ItemBurneable;
 import de.industria.items.ItemCutter;
 import de.industria.items.ItemEmptyBlueprint;
 import de.industria.items.ItemEnergyMeter;
+import de.industria.items.ItemFluidCannister;
 import de.industria.items.ItemFluidMeter;
 import de.industria.items.ItemFuse;
 import de.industria.items.ItemHammer;
@@ -43,6 +44,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.Rarity;
@@ -282,8 +284,10 @@ public class ModItems {
 	public static final Block red_painted_planks = new BlockBurnable("red_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
 	public static final Block black_painted_planks = new BlockBurnable("black_painted_planks", Material.WOOD, 2, 3, SoundType.WOOD, 5, 20, 300 , true);
 	public static final Block concrete = new BlockBase("concrete", Material.STONE, 1.8F, SoundType.STONE);
-	public static final Block sulfur_crust = new BlockCrustSheet("sulfur_crust");
+	public static final Block sulfur_crust_block = new BlockBase("sulfur_crust_block", Material.STONE, 1.5F, 6F, SoundType.STONE);
 	public static final Block sulfur_block = new BlockBase("sulfur_block", Material.STONE, 1.5F, 6F, SoundType.STONE);
+	public static final Block charcoal_block = new BlockBurnable("charcoal_block", Material.STONE, 5F, 6F, SoundType.STONE, 5, 5, 40000);
+	public static final Block crude_steel_block = new BlockBase("crude_steel_block", Material.METAL, 5, 6F, SoundType.METAL);
 	
 	public static final Block blue_nether_bricks = new BlockBase("blue_nether_bricks", Material.STONE, 2, 6, SoundType.NETHER_BRICKS);
 	public static final Block cracked_blue_nether_bricks = new BlockBase("cracked_blue_nether_bricks", Material.STONE, 2, 6, SoundType.NETHER_BRICKS);
@@ -702,6 +706,8 @@ public class ModItems {
 	public static final Item biogas_bucket = new ItemGasBucket(ModFluids.BIOGAS, "biogas_bucket", Industria.MATERIALS);
 	public static final Item fuel_gas_bucket = new ItemGasBucket(ModFluids.FUEL_GAS, "fuel_gas_bucket", Industria.MATERIALS);
 	public static final Block fuel_gas = new BlockFuelGas();
+	
+	public static final BlockItem fluid_cannister = new ItemFluidCannister(new BlockFluidCannister());
 	
 	// Stairs
 	public static final Block gold_planks_stairs = new BlockStairsBase(() -> gold_planks.defaultBlockState(), "gold_planks_stairs", Material.STONE, 2.5F, 3F, SoundType.STONE);

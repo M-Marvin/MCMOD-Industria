@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "aluminium_ingot",
+  "ingredients": [
+    {
+      "item": "industria:crude_steel_block"
+    }
+  ],
+  "result": {
+    "item": "industria:crude_steel",
+    "count": 9
+  }
+}

@@ -24,7 +24,7 @@
                   }
                 }
               ],
-              "name": "industria:sulfur_block"
+              "name": "industria:sulfur_crust_block"
             },
             {
               "type": "minecraft:item",

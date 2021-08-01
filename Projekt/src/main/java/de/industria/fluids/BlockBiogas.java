@@ -82,7 +82,7 @@ public class BlockBiogas extends BlockGasFluid {
 			spreadFire.setDeltaMovement(mX, mY, mZ);
 			Field timeField;
 			try {
-				timeField = FallingBlockEntity.class.getDeclaredField("fallTime");
+				timeField = FallingBlockEntity.class.getDeclaredField("field_145812_b");
 				timeField.setAccessible(true);
 				timeField.set(spreadFire, 1);
 			} catch (NoSuchFieldException | SecurityException e) {

@@ -170,6 +170,9 @@
 "block.industria.burned_trapdoor": "Verbrannte Fallt\u00fcr",
 "block.industria.burned_door": "Verbrannte T\u00fcr",
 "block.industria.burned_scrap": "Verbrannter Schutt",
+"block.industria.charcoal_block": "Holzkohleblock",
+"block.industria.crude_steel_block": "Rohstahlblock",
+"block.industria.sulfur_block": "Schwefelblock",
 
 "block.industria.cement_bag": "Zementsack",
 "block.industria.tree_tap": "Zapfhahn",
@@ -257,7 +260,7 @@
 "block.industria.red_concrete_stairs": "Rote Betontreppe",
 "block.industria.black_concrete_slab": "Schwarz Betonstufe",
 "block.industria.black_concrete_stairs": "Schwarz Betontreppe",
-"block.industria.sulfur_block": "Schwefelblock",
+"block.industria.sulfur_crust_block": "Schwefelblock",
 "block.industria.fluorite_crystal": "Fluoritkristall",
 "block.industria.zircon_crystal": "Zirconkristall",
 "block.industria.raw_vanadium_block": "Rohvanadiumblock",

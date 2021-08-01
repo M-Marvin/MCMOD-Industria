@@ -1,10 +1,5 @@
 {
 	"variants": {
-		"": [
-			{ "model": "industria:block/sulfur_block" },
-			{ "model": "industria:block/sulfur_block", "y": 90 },
-			{ "model": "industria:block/sulfur_block", "y": 180 },
-			{ "model": "industria:block/sulfur_block", "y": 270 }
-		]
+		"": { "model": "industria:block/sulfur_block" }
 	}
 }

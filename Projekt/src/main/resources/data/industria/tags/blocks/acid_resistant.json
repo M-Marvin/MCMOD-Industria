@@ -5,6 +5,8 @@
     "minecraft:dirt",
     "minecraft:stone",
     "industria:fluid_input",
-    "industria:fluid_output"
+    "industria:fluid_output",
+    "industria:sulfur_crust_block",
+    "industria:sulfur_block"
   ]
 }

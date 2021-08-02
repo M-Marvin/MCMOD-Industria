@@ -1,3 +1,43 @@
 {
-	"parent": "industria:block/cannister"
+	"parent": "builtin/entity",
+    "textures": {
+        "particle": "block/oak_planks"
+    },
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [75, -180, 0],
+			"translation": [0, -1.5, -4],
+			"scale": [0.69, 0.69, 0.69]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [75, -180, 0],
+			"translation": [0, -1.5, -4],
+			"scale": [0.69, 0.69, 0.69]
+		},
+		"firstperson_righthand": {
+			"rotation": [19.25, -180, 0],
+			"translation": [0, -0.5, 0],
+			"scale": [0.53, 0.53, 0.53]
+		},
+		"firstperson_lefthand": {
+			"rotation": [19.25, -180, 0],
+			"translation": [0, -0.5, 0],
+			"scale": [0.53, 0.53, 0.53]
+		},
+		"ground": {
+			"translation": [0, 3, 0],
+			"scale": [0.46, 0.46, 0.46]
+		},
+		"gui": {
+			"rotation": [30, 225, 0],
+			"scale": [0.625, 0.625, 0.625]
+		},
+		"head": {
+			"translation": [0, 2.25, 0]
+		},
+		"fixed": {
+			"rotation": [0, 90, 0],
+			"scale": [0.94922, 0.94922, 0.94922]
+		}
+	}
 }

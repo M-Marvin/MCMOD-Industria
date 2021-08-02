@@ -11,7 +11,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class TileEntityFluidCannister extends TileEntity implements ITickableTileEntity {
 	
-	public static final int MAX_CONTENT = 10000;
+	public static final int MAX_CONTENT = 32000;
 	protected FluidStack content;
 	
 	public TileEntityFluidCannister() {

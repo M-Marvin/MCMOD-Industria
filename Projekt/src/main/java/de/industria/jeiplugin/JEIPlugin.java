@@ -93,7 +93,7 @@ public class JEIPlugin implements IModPlugin {
 		registration.addRecipeCatalyst(new ItemStack(ModItems.metal_former), JEIRecipeCategories.METAL_FORMER);
 		registration.addRecipeCatalyst(new ItemStack(ModItems.air_compressor), JEIRecipeCategories.AIR_COMPRESSOR);
 		registration.addRecipeCatalyst(new ItemStack(ModItems.blast_furnace), JEIRecipeCategories.BLAST_FURNACE);
-		registration.addRecipeCatalyst(new ItemStack[] {new ItemStack(ModItems.coal_heater),new ItemStack(ModItems.gas_heater), new ItemStack(ModItems.electric_heater)}, JEIRecipeCategories.BLAST_FURNACE);
+		registration.addRecipeCatalyst(new ItemStack(ModItems.electric_heater), JEIRecipeCategories.BLAST_FURNACE);
 	}
 	
 	@Override

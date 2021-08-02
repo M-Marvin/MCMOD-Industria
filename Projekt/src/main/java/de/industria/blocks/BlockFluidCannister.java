@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer.Builder;
@@ -69,6 +70,16 @@ public class BlockFluidCannister extends BlockContainerBase {
 	@Override
 	public TileEntity newBlockEntity(IBlockReader world) {
 		return new TileEntityFluidCannister();
+	}
+	
+	@Override
+	public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
+		TileEntity tileEntity = world.getBlockEntity(pos);
+		if (tileEntity instanceof TileEntityFluidCannister) {
+			Fluid fluid = ((TileEntityFluidCannister) tileEntity).getContent().getFluid();
+			return fluid.getAttributes().getLuminosity();
+		}
+		return 0;
 	}
 	
 }

@@ -22,17 +22,20 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector4f;
+import net.minecraft.util.math.vector.Vector2f;
 
 public class AnimatedTexture extends SimpleTexture implements ITickable {
 	
-	// TextureManager loading (Called from Screens)
+	// TextureManager loading (Called from renderer)
 	
 	public static AnimatedTexture prepareTexture(ResourceLocation texture) {
 		if (!(Minecraft.getInstance().getTextureManager().getTexture(texture) instanceof AnimatedTexture)) {
-			Minecraft.getInstance().getTextureManager().register(texture, new AnimatedTexture(texture));
+			AnimatedTexture animatedTexture = new AnimatedTexture(texture);
+			Minecraft.getInstance().getTextureManager().register(texture, animatedTexture);
+			return animatedTexture;
+		} else {
+			return (AnimatedTexture) Minecraft.getInstance().getTextureManager().getTexture(texture);
 		}
-		return (AnimatedTexture) Minecraft.getInstance().getTextureManager().getTexture(texture);
 	}
 	
 	// Animated Texture
@@ -42,6 +45,7 @@ public class AnimatedTexture extends SimpleTexture implements ITickable {
 	protected int frameTime;
 	protected int[] frames;
 	protected int size;
+	protected int textureHeight;
 	
 	protected AnimatedTexture(ResourceLocation textureResourceLocation) {
 		super(textureResourceLocation);
@@ -72,6 +76,7 @@ public class AnimatedTexture extends SimpleTexture implements ITickable {
 	      }
 		
 		this.size = simpletexture$texturedata.getImage().getWidth();
+		this.textureHeight = simpletexture$texturedata.getImage().getHeight();
 		
 		ResourceLocation metadataFile = new ResourceLocation(this.location.getNamespace(), this.location.getPath() + ".mcmeta");
 		
@@ -134,6 +139,18 @@ public class AnimatedTexture extends SimpleTexture implements ITickable {
 		
 	}
 	
+	/**
+	 * Convert the texture to an AnimatedTexture first with prepareTexture()!
+	 * Draw method for Screens.
+	 * Draws the texture like an normal texture but animated.
+	 * 
+	 * @param matrixStack
+	 * @param screen
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 */
 	public void draw(MatrixStack matrixStack, AbstractGui screen, int x, int y, int width, int height) {
 		
 		if (this.frames.length > 0) {
@@ -147,17 +164,24 @@ public class AnimatedTexture extends SimpleTexture implements ITickable {
 		
 	}
 	
-	public Vector4f getFrameUV(int width, int height) {
+	/**
+	 * Convert the texture to an AnimatedTexture first with prepareTexture()!
+	 * Method to get the UV values for rendering the texture with the MatrixStack.
+	 * 
+	 * @param uvx The X coordinate from the uv to transform to animated.
+	 * @param uvy The Y coordinate from the uv to transform to animated.
+	 * @return the transformed uv coordinates as a Vector2f.
+	 */
+	public Vector2f getFrameUV(float uvx, float uvy) {
 		
 		if (this.frames.length > 0) {
 			
-			int frameOffset = this.frames[this.frame] * 8;
-
-			return new Vector4f(0, frameOffset, width, height);
+			float frameOffset = this.frames[this.frame];
+			return new Vector2f(uvx / 32F, (uvy + frameOffset) / 32F);
 			
 		}
 		
-		return new Vector4f(0, 0, width, height);
+		return new Vector2f(uvx / 32F, uvy / 32F);
 		
 	}
 	

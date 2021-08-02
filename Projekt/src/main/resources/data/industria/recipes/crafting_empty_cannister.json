@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "cannister",
+  "ingredients": [
+    {
+      "item": "industria:cannister"
+    }
+  ],
+  "result": {
+    "item": "industria:cannister"
+  }
+}

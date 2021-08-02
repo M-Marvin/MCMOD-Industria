@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "cannister",
+  "pattern": [
+    "###",
+    "#W#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:plastic_plate"
+    },
+    "W": {
+      "item": "minecraft:glass_pane"
+    }
+  },
+  "result": {
+    "item": "industria:cannister",
+    "count": 1
+  }
+}

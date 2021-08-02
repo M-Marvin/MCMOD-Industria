@@ -1,5 +1,8 @@
 package de.industria.util.handler;
 
+import de.industria.items.ItemFluidCannister;
+import de.industria.tileentity.TileEntityFluidCannister;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
@@ -59,6 +62,63 @@ public class FluidBucketHelper {
 					}
 					
 					stackIn.shrink(1);
+
+					inventory.setItem(soltOffset, stackIn);
+					inventory.setItem(soltOffset + 1, stackOut);
+					
+				}
+				
+			}
+			
+		}
+		
+		if (stackIn.getItem() instanceof ItemFluidCannister) {
+			
+			ItemFluidCannister cannisterItem = (ItemFluidCannister) stackIn.getItem();
+			FluidStack content = cannisterItem.getContent(stackIn);
+			
+			if (!content.isEmpty() && storage.getAmount() < maxStorage) {
+				
+				if ((storage.isEmpty() || storage.getFluid() == content.getFluid()) && stackOut.isEmpty()) {
+					
+					int transfer = Math.min(content.getAmount(), maxStorage - storage.getAmount());
+					Fluid fluid = content.getFluid();
+					
+					content.shrink(transfer);
+					if (storage.isEmpty()) {
+						storage = new FluidStack(fluid, transfer);
+					} else {
+						storage.grow(transfer);
+					}
+					
+					cannisterItem.setContent(stackIn, content);
+					
+					stackOut = stackIn.copy();
+					stackIn = ItemStack.EMPTY;
+					
+					inventory.setItem(soltOffset, stackIn);
+					inventory.setItem(soltOffset + 1, stackOut);
+					
+				}
+				
+			} else if (content.getAmount() < TileEntityFluidCannister.MAX_CONTENT && !storage.isEmpty()) {
+				
+				if ((content.getFluid() == storage.getFluid() || content.isEmpty()) && stackOut.isEmpty()) {
+
+					int transfer = Math.min(TileEntityFluidCannister.MAX_CONTENT - content.getAmount(), storage.getAmount());
+					Fluid fluid = storage.getFluid();
+					
+					storage.shrink(transfer);
+					if (content.isEmpty()) {
+						content = new FluidStack(fluid, transfer);
+					} else {
+						content.grow(transfer);
+					}
+					
+					cannisterItem.setContent(stackIn, content);
+					
+					stackOut = stackIn.copy();
+					stackIn = ItemStack.EMPTY;
 
 					inventory.setItem(soltOffset, stackIn);
 					inventory.setItem(soltOffset + 1, stackOut);

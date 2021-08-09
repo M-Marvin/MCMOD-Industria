@@ -18,6 +18,13 @@ public class ScreenItemDistributor extends ContainerScreen<ContainerItemDistribu
 		this.imageHeight = 188;
 		this.inventoryLabelY = 95;
 	}
+
+	@Override
+	public void render(MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
+		this.renderBackground(p_230430_1_);
+		super.render(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_);
+		this.renderTooltip(p_230430_1_, p_230430_2_, p_230430_3_);
+	}
 	
 	@SuppressWarnings("deprecation")
 	@Override

@@ -13,6 +13,7 @@ import de.industria.fluids.BlockOreSolution;
 import de.industria.fluids.BlockRawOil;
 import de.industria.fluids.BlockSteam;
 import de.industria.fluids.BlockSulfuricAcid;
+import de.industria.fluids.BlockTar;
 import de.industria.fluids.util.ItemFluidBucket;
 import de.industria.fluids.util.ItemGasBucket;
 import de.industria.items.ItemBase;
@@ -39,6 +40,7 @@ import de.industria.items.panelitems.ItemLampElement;
 import de.industria.items.panelitems.ItemLeverElement;
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModSoundEvents;
+import de.industria.typeregistys.ModTabs;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -80,13 +82,6 @@ public class ModItems {
 	public static final Block item_detector = new BlockRItemDetector();
 	public static final BlockStructureScaffold structure_scaffold = new BlockStructureScaffold("structure_scaffold");
 	
-	// TODO
-	public static final Block storing_crafting_table = new BlockMStoringCraftingTable();	
-	// Mechanic
-	public static final Block motor = new BlockMotor();
-	// Items
-	//public static final Item sulfur_dioxid = new ItemBase("sulfur_dioxid", Industria.MATERIALS);
-	
 	// Networks
 	public static final Block computer = new BlockNComputer();
 	
@@ -96,6 +91,8 @@ public class ModItems {
 	public static final Block rail_adapter = new BlockTRailAdapter();
 	
 	// Machinery
+	public static final Block storing_crafting_table = new BlockMStoringCraftingTable();	
+	public static final Block motor = new BlockMotor();
 	public static final Block conveyor_switch = new BlockConveyorSwitch();
 	public static final Block conveyor_spliter = new BlockConveyorSpliter();
 	public static final Block conveyor_belt = new BlockConveyorBelt();
@@ -146,8 +143,49 @@ public class ModItems {
 	public static final Block metal_former = new BlockMMetalFormer();
 	public static final Block ore_washing_plant = new BlockMOreWashingPlant();
 	public static final Block iron_ladder = new BlockIronLadder("iron_ladder");
+
+	// Fluids and Buckets
+	public static final Block steam = new BlockSteam();
+	public static final Item steam_bucket = new ItemGasBucket(ModFluids.STEAM, "steam_bucket", ModTabs.MATERIALS);
+	public static final Block destilled_water = new BlockDestilledWater();
+	public static final Item destilled_water_bucket = new ItemFluidBucket(ModFluids.DESTILLED_WATER, "destilled_water_bucket", ModTabs.MATERIALS, false);
+	public static final Block hydrofluoric_acid = new BlockHydrofluoricAcid();
+	public static final Item hydrofluoric_acid_bucket = new ItemFluidBucket(ModFluids.HYDROFLUORIC_ACID, "hydrofluoric_acid_bucket", ModTabs.MATERIALS, true);
+	public static final Block sulfuric_acid = new BlockSulfuricAcid();
+	public static final Item sulfuric_acid_bucket = new ItemFluidBucket(ModFluids.SULFURIC_ACID, "sulfuric_acid_bucket", ModTabs.MATERIALS, true);
+	public static final Block natron_lye = new BlockNatronLye();
+	public static final Item natron_lye_bucket = new ItemFluidBucket(ModFluids.NATRON_LYE, "natron_lye_bucket", ModTabs.MATERIALS, true);
+	public static final Block chemical_water = new BlockChemicalWater();
+	public static final Item chemical_water_bucket = new ItemFluidBucket(ModFluids.CHEMICAL_WATER, "chemical_water_bucket", ModTabs.MATERIALS, false);
+	public static final Block iron_solution = new BlockOreSolution("iron_solution", ModFluids.IRON_SOLUTION);
+	public static final Item iron_solution_bucket = new ItemFluidBucket(ModFluids.IRON_SOLUTION, "iron_solution_bucket", ModTabs.MATERIALS, false);
+	public static final Block copper_solution = new BlockOreSolution("copper_solution", ModFluids.COPPER_SOLUTION);
+	public static final Item copper_solution_bucket = new ItemFluidBucket(ModFluids.COPPER_SOLUTION, "copper_solution_bucket", ModTabs.MATERIALS, false);
+	public static final Block aluminium_solution = new BlockOreSolution("aluminium_solution", ModFluids.ALUMINIUM_SOLUTION);
+	public static final Item aluminium_solution_bucket = new ItemFluidBucket(ModFluids.ALUMINIUM_SOLUTION, "aluminium_solution_bucket", ModTabs.MATERIALS, false);
+	public static final Block wolfram_solution = new BlockOreSolution("wolfram_solution", ModFluids.WOLFRAM_SOLUTION);
+	public static final Item wolfram_solution_bucket = new ItemFluidBucket(ModFluids.WOLFRAM_SOLUTION, "wolfram_solution_bucket", ModTabs.MATERIALS, false);
+	public static final Block tin_solution = new BlockOreSolution("tin_solution", ModFluids.TIN_SOLUTION);
+	public static final Item tin_solution_bucket = new ItemFluidBucket(ModFluids.TIN_SOLUTION, "tin_solution_bucket", ModTabs.MATERIALS, false);
+	public static final Block vanadium_solution = new BlockOreSolution("vanadium_solution", ModFluids.VANADIUM_SOLUTION);
+	public static final Item vanadium_solution_bucket = new ItemFluidBucket(ModFluids.VANADIUM_SOLUTION, "vanadium_solution_bucket", ModTabs.MATERIALS, false);
+	public static final Block raw_oil = new BlockRawOil();
+	public static final Item raw_oil_bucket = new ItemFluidBucket(ModFluids.RAW_OIL, "raw_oil_bucket", ModTabs.MATERIALS, true);
+	public static final Block compressed_air = new BlockCompressedAir();
+	public static final Item compressed_air_bucket = new ItemGasBucket(ModFluids.COMPRESSED_AIR, "compressed_air_bucket", ModTabs.MATERIALS);
+	public static final Block liquid_concrete = new BlockLiquidConcrete();
+	public static final Item liquid_concrete_bucket = new ItemFluidBucket(ModFluids.LIQUID_CONCRETE, "liquid_concrete_bucket", ModTabs.MATERIALS, true);
+	public static final Block biogas = new BlockBiogas();
+	public static final Item biogas_bucket = new ItemGasBucket(ModFluids.BIOGAS, "biogas_bucket", ModTabs.MATERIALS);
+	public static final Block fuel_gas = new BlockFuelGas();
+	public static final Item fuel_gas_bucket = new ItemGasBucket(ModFluids.FUEL_GAS, "fuel_gas_bucket", ModTabs.MATERIALS);
+	public static final Block tar = new BlockTar();
+	public static final Item tar_bucket = new ItemFluidBucket(ModFluids.TAR, "tar_bucket", ModTabs.MATERIALS, true);
 	
-	// Ore and Resource Blocks
+	public static final BlockItem fluid_cannister = new ItemFluidCannister(new BlockFluidCannister());
+	
+	// Other Blocks
+	public static final Block tar_crust = new BlockTarCrust();
 	public static final Block bauxite = new BlockBase("bauxite", Material.STONE, 1.5F, SoundType.STONE);
 	public static final Block bauxite_ore = new BlockBase("bauxite_ore", Material.STONE, 1.5F, SoundType.STONE);
 	public static final Block wolframite = new BlockBase("wolframite", Material.STONE, 1.5F, SoundType.STONE);
@@ -161,7 +199,6 @@ public class ModItems {
 	public static final Block zirconium_block = new BlockBase("zirconium_block", Material.METAL, 5F, 6F, SoundType.METAL);
 	public static final Block redstone_alloy_block = new BlockPowerEmiting("redstone_alloy_block", Material.METAL, 5F, 6F, SoundType.METAL, 8);
 	public static final Block aluminium_block = new BlockBase("aluminium_block", Material.METAL, 2F, 4F, SoundType.METAL);
-	// TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 	public static final Block metallic_glass_block = new BlockBase("metallic_glass_block", Material.METAL, 8F, 12F, SoundType.METAL);
 	public static final Block electrolyt_copper_block = new BlockBase("electrolyt_copper_block", Material.METAL, 5F, 6F, SoundType.METAL);
 	public static final Block steel_block = new BlockBase("steel_block", Material.METAL, 5F, 6F, SoundType.METAL);
@@ -188,8 +225,6 @@ public class ModItems {
 	public static final Block karstified_limestone = new BlockBase("karstified_limestone", Material.STONE, 0.4F, SoundType.STONE);
 	public static final Block fluorite_crystal = new BlockFluoriteCrystal();
 	public static final Block zircon_crystal = new BlockZirconCrystal();
-	
-	// Deko Blocks
 	public static final Block clean_cladding_white = new BlockTileBlock("clean_cladding_white");
 	public static final Block clean_cladding_black = new BlockTileBlock("clean_cladding_black");
 	public static final Block oxidized_copper_planks = new BlockBase("oxidized_copper_planks", Material.METAL, 2.5F, 3F, SoundType.METAL);
@@ -289,6 +324,7 @@ public class ModItems {
 	public static final Block charcoal_block = new BlockBurnable("charcoal_block", Material.STONE, 5F, 6F, SoundType.STONE, 5, 5, 40000);
 	public static final Block crude_steel_block = new BlockBase("crude_steel_block", Material.METAL, 5, 6F, SoundType.METAL);
 	
+	// Bricks
 	public static final Block blue_nether_bricks = new BlockBase("blue_nether_bricks", Material.STONE, 2, 6, SoundType.NETHER_BRICKS);
 	public static final Block cracked_blue_nether_bricks = new BlockBase("cracked_blue_nether_bricks", Material.STONE, 2, 6, SoundType.NETHER_BRICKS);
 	public static final Block cracked_red_nether_bricks = new BlockBase("cracked_red_nether_bricks", Material.STONE, 2, 6, SoundType.NETHER_BRICKS);
@@ -332,6 +368,7 @@ public class ModItems {
 	public static final Block bauxite_tiles = new BlockBase("bauxite_tiles", Material.STONE, 1.5F, 6, SoundType.STONE);
 	public static final Block wolframite_tiles = new BlockBase("wolframite_tiles", Material.STONE, 1.5F, 6, SoundType.STONE);
 	
+	// Slabs
 	public static final Block gold_planks_slab = new BlockSlabBase("gold_planks_slab", Material.STONE, 2.5F, 3F, SoundType.STONE);
 	public static final Block aluminium_planks_slab = new BlockSlabBase("aluminium_planks_slab", Material.STONE, 2.5F, 3F, SoundType.STONE);
 	public static final Block electrolyt_copper_planks_slab = new BlockSlabBase("electrolyt_copper_planks_slab", Material.STONE, 2.5F, 3F, SoundType.STONE);
@@ -490,6 +527,7 @@ public class ModItems {
 	public static final Block lime_stained_glass_slab = new BlockGlassSlab("lime_stained_glass_slab");
 	public static final Block red_stained_glass_slab = new BlockGlassSlab("red_stained_glass_slab");
 	
+	// Corners
 	public static final Block stone_corner = new BlockCornerBlockBase("stone_corner", () -> Blocks.STONE.defaultBlockState(), AbstractBlock.Properties.of(Material.STONE).sound(SoundType.STONE));
 	
 //	public void test() {
@@ -637,7 +675,6 @@ public class ModItems {
 //	
 //	}
 	
-	// Nature Blocks
 	public static final Block salsola_seeds = new BlockSalsolaSeeds();
 	public static final Block rubber_log = new BlockRubberLog("rubber_log", Material.WOOD, 2F, SoundType.WOOD);
 	public static final Block rubber_wood = new BlockRubberLog("rubber_wood", Material.WOOD, 2F, SoundType.WOOD);
@@ -655,9 +692,8 @@ public class ModItems {
 	public static final Block beech_leaves = new BlockLeavesBase("beech_leaves", Material.LEAVES, 0.2F, 0.2F, SoundType.GRASS);
 	public static final Block swamp_algae = new BlockSwampAlgae();
 	public static final Block hanging_vine = new BlockHangingVine();
+	public static final Block flax_crop = new BlockFlax();
 	public static final Block concrete_sheet = new BlockConcreteSheet();
-	
-	// Util Blocks
 	public static final Block reinforced_casing = new BlockReinforcedCasing();
 	public static final Block ender_core = new BlockEnderCore();
 	public static final Block ash = new BlockFallingDust("ash");
@@ -670,44 +706,6 @@ public class ModItems {
 	public static final BlockBurnedDoor burned_door = new BlockBurnedDoor();
 	public static final BlockBurnedFence burned_fence = new BlockBurnedFence();
 	public static final BlockBurnedBlock burned_scrap = new BlockBurnedScrap();
-	
-	// Fluids and Buckets
-	public static final Block steam = new BlockSteam();
-	public static final Item steam_bucket = new ItemGasBucket(ModFluids.STEAM, "steam_bucket", Industria.MATERIALS);
-	public static final Block destilled_water = new BlockDestilledWater();
-	public static final Item destilled_water_bucket = new ItemFluidBucket(ModFluids.DESTILLED_WATER, "destilled_water_bucket", Industria.MATERIALS, false);
-	public static final Block hydrofluoric_acid = new BlockHydrofluoricAcid();
-	public static final Item hydrofluoric_acid_bucket = new ItemFluidBucket(ModFluids.HYDROFLUORIC_ACID, "hydrofluoric_acid_bucket", Industria.MATERIALS, true);
-	public static final Block sulfuric_acid = new BlockSulfuricAcid();
-	public static final Item sulfuric_acid_bucket = new ItemFluidBucket(ModFluids.SULFURIC_ACID, "sulfuric_acid_bucket", Industria.MATERIALS, true);
-	public static final Block natron_lye = new BlockNatronLye();
-	public static final Item natron_lye_bucket = new ItemFluidBucket(ModFluids.NATRON_LYE, "natron_lye_bucket", Industria.MATERIALS, true);
-	public static final Block chemical_water = new BlockChemicalWater();
-	public static final Item chemical_water_bucket = new ItemFluidBucket(ModFluids.CHEMICAL_WATER, "chemical_water_bucket", Industria.MATERIALS, false);
-	public static final Block iron_solution = new BlockOreSolution("iron_solution", ModFluids.IRON_SOLUTION);
-	public static final Item iron_solution_bucket = new ItemFluidBucket(ModFluids.IRON_SOLUTION, "iron_solution_bucket", Industria.MATERIALS, false);
-	public static final Block copper_solution = new BlockOreSolution("copper_solution", ModFluids.COPPER_SOLUTION);
-	public static final Item copper_solution_bucket = new ItemFluidBucket(ModFluids.COPPER_SOLUTION, "copper_solution_bucket", Industria.MATERIALS, false);
-	public static final Block aluminium_solution = new BlockOreSolution("aluminium_solution", ModFluids.ALUMINIUM_SOLUTION);
-	public static final Item aluminium_solution_bucket = new ItemFluidBucket(ModFluids.ALUMINIUM_SOLUTION, "aluminium_solution_bucket", Industria.MATERIALS, false);
-	public static final Block wolfram_solution = new BlockOreSolution("wolfram_solution", ModFluids.WOLFRAM_SOLUTION);
-	public static final Item wolfram_solution_bucket = new ItemFluidBucket(ModFluids.WOLFRAM_SOLUTION, "wolfram_solution_bucket", Industria.MATERIALS, false);
-	public static final Block tin_solution = new BlockOreSolution("tin_solution", ModFluids.TIN_SOLUTION);
-	public static final Item tin_solution_bucket = new ItemFluidBucket(ModFluids.TIN_SOLUTION, "tin_solution_bucket", Industria.MATERIALS, false);
-	public static final Block vanadium_solution = new BlockOreSolution("vanadium_solution", ModFluids.VANADIUM_SOLUTION);
-	public static final Item vanadium_solution_bucket = new ItemFluidBucket(ModFluids.VANADIUM_SOLUTION, "vanadium_solution_bucket", Industria.MATERIALS, false);
-	public static final Block raw_oil = new BlockRawOil();
-	public static final Item raw_oil_bucket = new ItemFluidBucket(ModFluids.RAW_OIL, "raw_oil_bucket", Industria.MATERIALS, true);
-	public static final Block compressed_air = new BlockCompressedAir();
-	public static final Item compressed_air_bucket = new ItemGasBucket(ModFluids.COMPRESSED_AIR, "compressed_air_bucket", Industria.MATERIALS);
-	public static final Block liquid_concrete = new BlockLiquidConcrete();
-	public static final Item liquid_concrete_bucket = new ItemFluidBucket(ModFluids.LIQUID_CONCRETE, "liquid_concrete_bucket", Industria.MATERIALS, true);
-	public static final Block biogas = new BlockBiogas();
-	public static final Item biogas_bucket = new ItemGasBucket(ModFluids.BIOGAS, "biogas_bucket", Industria.MATERIALS);
-	public static final Item fuel_gas_bucket = new ItemGasBucket(ModFluids.FUEL_GAS, "fuel_gas_bucket", Industria.MATERIALS);
-	public static final Block fuel_gas = new BlockFuelGas();
-	
-	public static final BlockItem fluid_cannister = new ItemFluidCannister(new BlockFluidCannister());
 	
 	// Stairs
 	public static final Block gold_planks_stairs = new BlockStairsBase(() -> gold_planks.defaultBlockState(), "gold_planks_stairs", Material.STONE, 2.5F, 3F, SoundType.STONE);
@@ -850,147 +848,157 @@ public class ModItems {
 	public static final Block sandstone_brick_stairs = new BlockStairsBase(() -> gold_planks.defaultBlockState(), "sandstone_brick_stairs", Material.STONE, 2F, 6, SoundType.STONE);
 	
 	// Ingots and Nuggets
-	public static final Item metallic_glass_ingot = new ItemBase("metallic_glass_ingot", Industria.MATERIALS);
-	public static final Item monel_ingot = new ItemBase("monel_ingot", Industria.MATERIALS);
-	public static final Item tin_ingot = new ItemBase("tin_ingot", Industria.MATERIALS);
-	public static final Item silver_ingot = new ItemBase("silver_ingot", Industria.MATERIALS);
-	public static final Item vanadium_ingot = new ItemBase("vanadium_ingot", Industria.MATERIALS);
-	public static final Item wolfram_ingot = new ItemBase("wolfram_ingot", Industria.MATERIALS);
-	public static final Item nickel_ingot = new ItemBase("nickel_ingot", Industria.MATERIALS);
-	public static final Item copper_ingot = new ItemBase("copper_ingot", Industria.MATERIALS);
-	public static final Item electrolyt_copper_ingot = new ItemBase("electrolyt_copper_ingot", Industria.MATERIALS);
-	public static final Item aluminium_ingot = new ItemBase("aluminium_ingot", Industria.MATERIALS);
-	public static final Item steel_ingot = new ItemBase("steel_ingot", Industria.MATERIALS);
-	public static final Item redstone_ingot = new ItemBase("redstone_ingot", Industria.MATERIALS);
-	public static final Item metallic_glass_nugget = new ItemBase("metallic_glass_nugget", Industria.MATERIALS);
-	public static final Item monel_nugget = new ItemBase("monel_nugget", Industria.MATERIALS);
-	public static final Item tin_nugget = new ItemBase("tin_nugget", Industria.MATERIALS);
-	public static final Item silver_nugget = new ItemBase("silver_nugget", Industria.MATERIALS);
-	public static final Item vanadium_nugget = new ItemBase("vanadium_nugget", Industria.MATERIALS);
-	public static final Item wolfram_nugget = new ItemBase("wolfram_nugget", Industria.MATERIALS);
-	public static final Item nickel_nugget = new ItemBase("nickel_nugget", Industria.MATERIALS);
-	public static final Item copper_nugget = new ItemBase("copper_nugget", Industria.MATERIALS);
-	public static final Item electrolyt_copper_nugget = new ItemBase("electrolyt_copper_nugget", Industria.MATERIALS);
-	public static final Item aluminium_nugget = new ItemBase("aluminium_nugget", Industria.MATERIALS);
-	public static final Item steel_nugget = new ItemBase("steel_nugget", Industria.MATERIALS);
-	public static final Item redstone_nugget = new ItemBase("redstone_nugget", Industria.MATERIALS);
-	public static final Item monel_dust = new ItemBase("monel_dust", Industria.MATERIALS);
-	public static final Item tin_dust = new ItemBase("tin_dust", Industria.MATERIALS);
-	public static final Item silver_dust = new ItemBase("silver_dust", Industria.MATERIALS);
-	public static final Item vanadium_dust = new ItemBase("vanadium_dust", Industria.MATERIALS);
-	public static final Item wolfram_dust = new ItemBase("wolfram_dust", Industria.MATERIALS);
-	public static final Item nickel_dust = new ItemBase("nickel_dust", Industria.MATERIALS);
-	public static final Item copper_dust = new ItemBase("copper_dust", Industria.MATERIALS);
-	public static final Item electrolyt_copper_dust = new ItemBase("electrolyt_copper_dust", Industria.MATERIALS);
-	public static final Item aluminium_dust = new ItemBase("aluminium_dust", Industria.MATERIALS);
-	public static final Item steel_dust = new ItemBase("steel_dust", Industria.MATERIALS);
-	public static final Item redstone_alloy_dust = new ItemBase("redstone_alloy_dust", Industria.MATERIALS);
-	public static final Item iron_dust = new ItemBase("iron_dust", Industria.MATERIALS);
-	public static final Item gold_dust = new ItemBase("gold_dust", Industria.MATERIALS);
-	public static final Item tpo_iron_dust = new ItemBase("tpo_iron_dust", Industria.MATERIALS);
-	public static final Item tpo_gold_dust = new ItemBase("tpo_gold_dust", Industria.MATERIALS);
-	public static final Item tpo_monel_dust = new ItemBase("tpo_monel_dust", Industria.MATERIALS);
-	public static final Item tpo_tin_dust = new ItemBase("tpo_tin_dust", Industria.MATERIALS);
-	public static final Item tpo_silver_dust = new ItemBase("tpo_silver_dust", Industria.MATERIALS);
-	public static final Item tpo_vanadium_dust = new ItemBase("tpo_vanadium_dust", Industria.MATERIALS);
-	public static final Item tpo_wolfram_dust = new ItemBase("tpo_wolfram_dust", Industria.MATERIALS);
-	public static final Item tpo_nickel_dust = new ItemBase("tpo_nickel_dust", Industria.MATERIALS);
-	public static final Item tpo_copper_dust = new ItemBase("tpo_copper_dust", Industria.MATERIALS);
-	public static final Item tpo_electrolyt_copper_dust = new ItemBase("tpo_electrolyt_copper_dust", Industria.MATERIALS);
-	public static final Item tpo_aluminium_dust = new ItemBase("tpo_aluminium_dust", Industria.MATERIALS);
-	public static final Item tpo_steel_dust = new ItemBase("tpo_steel_dust", Industria.MATERIALS);
-	public static final Item tpo_redstone_alloy_dust = new ItemBase("tpo_redstone_alloy_dust", Industria.MATERIALS);
-	public static final Item monel_plate = new ItemBase("monel_plate", Industria.MATERIALS);
-	public static final Item metallic_glass_plate = new ItemBase("metallic_glass_plate", Industria.MATERIALS);
-	public static final Item tin_plate = new ItemBase("tin_plate", Industria.MATERIALS);
-	public static final Item silver_plate = new ItemBase("silver_plate", Industria.MATERIALS);
-	public static final Item vanadium_plate = new ItemBase("vanadium_plate", Industria.MATERIALS);
-	public static final Item wolfram_plate = new ItemBase("wolfram_plate", Industria.MATERIALS);
-	public static final Item nickel_plate = new ItemBase("nickel_plate", Industria.MATERIALS);
-	public static final Item copper_plate = new ItemBase("copper_plate", Industria.MATERIALS);
-	public static final Item electrolyt_copper_plate = new ItemBase("electrolyt_copper_plate", Industria.MATERIALS);
-	public static final Item aluminium_plate = new ItemBase("aluminium_plate", Industria.MATERIALS);
-	public static final Item steel_plate = new ItemBase("steel_plate", Industria.MATERIALS);
-	public static final Item redstone_alloy_plate = new ItemBase("redstone_alloy_plate", Industria.MATERIALS);
-	public static final Item iron_plate = new ItemBase("iron_plate", Industria.MATERIALS);
-	public static final Item gold_plate = new ItemBase("gold_plate", Industria.MATERIALS);
-	public static final Item netherite_plate = new ItemBase("netherite_plate", Industria.MATERIALS);
-	public static final Item zirconium_nugget = new ItemBase("zirconium_nugget", Industria.MATERIALS);
-	public static final Item zirconium_ingot = new ItemBase("zirconium_ingot", Industria.MATERIALS);
-	public static final Item zirconium_plate = new ItemBase("zirconium_plate", Industria.MATERIALS);
-	public static final Item zirconium_dust = new ItemBase("zirconium_dust", Industria.MATERIALS);
-	public static final Item tpo_zirconium_dust = new ItemBase("tpo_zirconium_dust", Industria.MATERIALS);
+	public static final Item metallic_glass_ingot = new ItemBase("metallic_glass_ingot", ModTabs.MATERIALS);
+	public static final Item monel_ingot = new ItemBase("monel_ingot", ModTabs.MATERIALS);
+	public static final Item tin_ingot = new ItemBase("tin_ingot", ModTabs.MATERIALS);
+	public static final Item silver_ingot = new ItemBase("silver_ingot", ModTabs.MATERIALS);
+	public static final Item vanadium_ingot = new ItemBase("vanadium_ingot", ModTabs.MATERIALS);
+	public static final Item wolfram_ingot = new ItemBase("wolfram_ingot", ModTabs.MATERIALS);
+	public static final Item nickel_ingot = new ItemBase("nickel_ingot", ModTabs.MATERIALS);
+	public static final Item copper_ingot = new ItemBase("copper_ingot", ModTabs.MATERIALS);
+	public static final Item electrolyt_copper_ingot = new ItemBase("electrolyt_copper_ingot", ModTabs.MATERIALS);
+	public static final Item aluminium_ingot = new ItemBase("aluminium_ingot", ModTabs.MATERIALS);
+	public static final Item steel_ingot = new ItemBase("steel_ingot", ModTabs.MATERIALS);
+	public static final Item redstone_ingot = new ItemBase("redstone_ingot", ModTabs.MATERIALS);
+	public static final Item metallic_glass_nugget = new ItemBase("metallic_glass_nugget", ModTabs.MATERIALS);
+	public static final Item monel_nugget = new ItemBase("monel_nugget", ModTabs.MATERIALS);
+	public static final Item tin_nugget = new ItemBase("tin_nugget", ModTabs.MATERIALS);
+	public static final Item silver_nugget = new ItemBase("silver_nugget", ModTabs.MATERIALS);
+	public static final Item vanadium_nugget = new ItemBase("vanadium_nugget", ModTabs.MATERIALS);
+	public static final Item wolfram_nugget = new ItemBase("wolfram_nugget", ModTabs.MATERIALS);
+	public static final Item nickel_nugget = new ItemBase("nickel_nugget", ModTabs.MATERIALS);
+	public static final Item copper_nugget = new ItemBase("copper_nugget", ModTabs.MATERIALS);
+	public static final Item electrolyt_copper_nugget = new ItemBase("electrolyt_copper_nugget", ModTabs.MATERIALS);
+	public static final Item aluminium_nugget = new ItemBase("aluminium_nugget", ModTabs.MATERIALS);
+	public static final Item steel_nugget = new ItemBase("steel_nugget", ModTabs.MATERIALS);
+	public static final Item redstone_nugget = new ItemBase("redstone_nugget", ModTabs.MATERIALS);
+	public static final Item monel_dust = new ItemBase("monel_dust", ModTabs.MATERIALS);
+	public static final Item tin_dust = new ItemBase("tin_dust", ModTabs.MATERIALS);
+	public static final Item silver_dust = new ItemBase("silver_dust", ModTabs.MATERIALS);
+	public static final Item vanadium_dust = new ItemBase("vanadium_dust", ModTabs.MATERIALS);
+	public static final Item wolfram_dust = new ItemBase("wolfram_dust", ModTabs.MATERIALS);
+	public static final Item nickel_dust = new ItemBase("nickel_dust", ModTabs.MATERIALS);
+	public static final Item copper_dust = new ItemBase("copper_dust", ModTabs.MATERIALS);
+	public static final Item electrolyt_copper_dust = new ItemBase("electrolyt_copper_dust", ModTabs.MATERIALS);
+	public static final Item aluminium_dust = new ItemBase("aluminium_dust", ModTabs.MATERIALS);
+	public static final Item steel_dust = new ItemBase("steel_dust", ModTabs.MATERIALS);
+	public static final Item redstone_alloy_dust = new ItemBase("redstone_alloy_dust", ModTabs.MATERIALS);
+	public static final Item iron_dust = new ItemBase("iron_dust", ModTabs.MATERIALS);
+	public static final Item gold_dust = new ItemBase("gold_dust", ModTabs.MATERIALS);
+	public static final Item tpo_iron_dust = new ItemBase("tpo_iron_dust", ModTabs.MATERIALS);
+	public static final Item tpo_gold_dust = new ItemBase("tpo_gold_dust", ModTabs.MATERIALS);
+	public static final Item tpo_monel_dust = new ItemBase("tpo_monel_dust", ModTabs.MATERIALS);
+	public static final Item tpo_tin_dust = new ItemBase("tpo_tin_dust", ModTabs.MATERIALS);
+	public static final Item tpo_silver_dust = new ItemBase("tpo_silver_dust", ModTabs.MATERIALS);
+	public static final Item tpo_vanadium_dust = new ItemBase("tpo_vanadium_dust", ModTabs.MATERIALS);
+	public static final Item tpo_wolfram_dust = new ItemBase("tpo_wolfram_dust", ModTabs.MATERIALS);
+	public static final Item tpo_nickel_dust = new ItemBase("tpo_nickel_dust", ModTabs.MATERIALS);
+	public static final Item tpo_copper_dust = new ItemBase("tpo_copper_dust", ModTabs.MATERIALS);
+	public static final Item tpo_electrolyt_copper_dust = new ItemBase("tpo_electrolyt_copper_dust", ModTabs.MATERIALS);
+	public static final Item tpo_aluminium_dust = new ItemBase("tpo_aluminium_dust", ModTabs.MATERIALS);
+	public static final Item tpo_steel_dust = new ItemBase("tpo_steel_dust", ModTabs.MATERIALS);
+	public static final Item tpo_redstone_alloy_dust = new ItemBase("tpo_redstone_alloy_dust", ModTabs.MATERIALS);
+	public static final Item monel_plate = new ItemBase("monel_plate", ModTabs.MATERIALS);
+	public static final Item metallic_glass_plate = new ItemBase("metallic_glass_plate", ModTabs.MATERIALS);
+	public static final Item tin_plate = new ItemBase("tin_plate", ModTabs.MATERIALS);
+	public static final Item silver_plate = new ItemBase("silver_plate", ModTabs.MATERIALS);
+	public static final Item vanadium_plate = new ItemBase("vanadium_plate", ModTabs.MATERIALS);
+	public static final Item wolfram_plate = new ItemBase("wolfram_plate", ModTabs.MATERIALS);
+	public static final Item nickel_plate = new ItemBase("nickel_plate", ModTabs.MATERIALS);
+	public static final Item copper_plate = new ItemBase("copper_plate", ModTabs.MATERIALS);
+	public static final Item electrolyt_copper_plate = new ItemBase("electrolyt_copper_plate", ModTabs.MATERIALS);
+	public static final Item aluminium_plate = new ItemBase("aluminium_plate", ModTabs.MATERIALS);
+	public static final Item steel_plate = new ItemBase("steel_plate", ModTabs.MATERIALS);
+	public static final Item redstone_alloy_plate = new ItemBase("redstone_alloy_plate", ModTabs.MATERIALS);
+	public static final Item iron_plate = new ItemBase("iron_plate", ModTabs.MATERIALS);
+	public static final Item gold_plate = new ItemBase("gold_plate", ModTabs.MATERIALS);
+	public static final Item netherite_plate = new ItemBase("netherite_plate", ModTabs.MATERIALS);
+	public static final Item zirconium_nugget = new ItemBase("zirconium_nugget", ModTabs.MATERIALS);
+	public static final Item zirconium_ingot = new ItemBase("zirconium_ingot", ModTabs.MATERIALS);
+	public static final Item zirconium_plate = new ItemBase("zirconium_plate", ModTabs.MATERIALS);
+	public static final Item zirconium_dust = new ItemBase("zirconium_dust", ModTabs.MATERIALS);
+	public static final Item tpo_zirconium_dust = new ItemBase("tpo_zirconium_dust", ModTabs.MATERIALS);
 	
 	// Resource Items
 	public static final Item salsola = new ItemSalsola();
-	public static final Item crushed_stone = new ItemBase("crushed_stone", Industria.MATERIALS);
-	public static final Item crushed_blackstone = new ItemBase("crushed_blackstone", Industria.MATERIALS);
-	public static final Item crushed_netherrack = new ItemBase("crushed_netherrack", Industria.MATERIALS);
-	public static final Item crushed_bauxite = new ItemBase("crushed_bauxite", Industria.MATERIALS);
-	public static final Item crushed_wolframite = new ItemBase("crushed_wolframite", Industria.MATERIALS);
-	public static final Item crushed_iron_ore = new ItemBase("crushed_iron_ore", Industria.MATERIALS);
-	public static final Item crushed_copper_ore = new ItemBase("crushed_copper_ore", Industria.MATERIALS);
-	public static final Item crushed_gold_ore = new ItemBase("crushed_gold_ore", Industria.MATERIALS);
-	public static final Item crushed_tin_ore = new ItemBase("crushed_tin_ore", Industria.MATERIALS);
-	public static final Item crushed_silver_ore = new ItemBase("crushed_silver_ore", Industria.MATERIALS);
-	public static final Item crushed_nickel_ore = new ItemBase("crushed_nickel_ore", Industria.MATERIALS);
-	public static final Item iron_oxid = new ItemBase("iron_oxid", Industria.MATERIALS);
-	public static final Item copper_oxid = new ItemBase("copper_oxid", Industria.MATERIALS);
-	public static final Item tin_oxid = new ItemBase("tin_oxid", Industria.MATERIALS);
-	public static final Item pure_gold = new ItemBase("pure_gold", Industria.MATERIALS);
-	public static final Item pure_silver = new ItemBase("pure_silver", Industria.MATERIALS);
-	public static final Item pure_vanadium = new ItemBase("pure_vanadium", Industria.MATERIALS);
-	public static final Item pure_nickel = new ItemBase("pure_nickel", Industria.MATERIALS);
-	public static final Item pure_tin_ore = new ItemBase("pure_tin_ore", Industria.MATERIALS);
-	public static final Item pure_iron_ore = new ItemBase("pure_iron_ore", Industria.MATERIALS);
-	public static final Item pure_copper_ore = new ItemBase("pure_copper_ore", Industria.MATERIALS);
-	public static final Item pure_gold_ore = new ItemBase("pure_gold_ore", Industria.MATERIALS);
-	public static final Item pure_silver_ore = new ItemBase("pure_silver_ore", Industria.MATERIALS);
-	public static final Item pure_nickel_ore = new ItemBase("pure_nickel_ore", Industria.MATERIALS);
-	public static final Item sulfur = new ItemBase("sulfur", Industria.MATERIALS);
-	public static final Item crude_steel = new ItemBase("crude_steel", Industria.MATERIALS);
-	public static final Item lime = new ItemBase("lime", Industria.MATERIALS);
-	public static final Item lime_dust = new ItemBase("lime_dust", Industria.MATERIALS);
-	public static final Item cement = new ItemBase("cement", Industria.MATERIALS);
-	public static final Item copper_coated_plate = new ItemBase("copper_coated_plate", Industria.MATERIALS);
-	public static final Item tined_copper_coated_plate = new ItemBase("tined_copper_coated_plate", Industria.MATERIALS);
-	public static final Item circuit_board = new ItemBase("circuit_board", Industria.MATERIALS);
-	public static final Item aluminium_disc = new ItemBase("aluminium_disc", Industria.MATERIALS);
-	public static final Item data_disc = new ItemBase("data_disc", Industria.MATERIALS);
-	public static final Item ground_plants = new ItemBase("ground_plants", Industria.MATERIALS);
-	public static final Item ground_flesh = new ItemBase("ground_flesh", Industria.MATERIALS);
-	public static final Item sulphurous_residue = new ItemBase("sulphurous_residue", Industria.MATERIALS);
-	public static final Item slag = new ItemBase("slag", Industria.MATERIALS);
-	public static final Item fluorite_dust = new ItemBase("fluorite_dust", Industria.MATERIALS);
-	public static final Item slag_dust = new ItemBase("slag_dust", Industria.MATERIALS);
-	public static final Item vanadium_oxid = new ItemBase("vanadium_oxid", Industria.MATERIALS);
-	public static final Item aluminium_oxid = new ItemBase("aluminium_oxid", Industria.MATERIALS);
+	public static final Item crushed_stone = new ItemBase("crushed_stone", ModTabs.MATERIALS);
+	public static final Item crushed_blackstone = new ItemBase("crushed_blackstone", ModTabs.MATERIALS);
+	public static final Item crushed_netherrack = new ItemBase("crushed_netherrack", ModTabs.MATERIALS);
+	public static final Item crushed_bauxite = new ItemBase("crushed_bauxite", ModTabs.MATERIALS);
+	public static final Item crushed_wolframite = new ItemBase("crushed_wolframite", ModTabs.MATERIALS);
+	public static final Item crushed_iron_ore = new ItemBase("crushed_iron_ore", ModTabs.MATERIALS);
+	public static final Item crushed_copper_ore = new ItemBase("crushed_copper_ore", ModTabs.MATERIALS);
+	public static final Item crushed_gold_ore = new ItemBase("crushed_gold_ore", ModTabs.MATERIALS);
+	public static final Item crushed_tin_ore = new ItemBase("crushed_tin_ore", ModTabs.MATERIALS);
+	public static final Item crushed_silver_ore = new ItemBase("crushed_silver_ore", ModTabs.MATERIALS);
+	public static final Item crushed_nickel_ore = new ItemBase("crushed_nickel_ore", ModTabs.MATERIALS);
+	public static final Item iron_oxid = new ItemBase("iron_oxid", ModTabs.MATERIALS);
+	public static final Item copper_oxid = new ItemBase("copper_oxid", ModTabs.MATERIALS);
+	public static final Item tin_oxid = new ItemBase("tin_oxid", ModTabs.MATERIALS);
+	public static final Item pure_gold = new ItemBase("pure_gold", ModTabs.MATERIALS);
+	public static final Item pure_silver = new ItemBase("pure_silver", ModTabs.MATERIALS);
+	public static final Item pure_vanadium = new ItemBase("pure_vanadium", ModTabs.MATERIALS);
+	public static final Item pure_nickel = new ItemBase("pure_nickel", ModTabs.MATERIALS);
+	public static final Item pure_tin_ore = new ItemBase("pure_tin_ore", ModTabs.MATERIALS);
+	public static final Item pure_iron_ore = new ItemBase("pure_iron_ore", ModTabs.MATERIALS);
+	public static final Item pure_copper_ore = new ItemBase("pure_copper_ore", ModTabs.MATERIALS);
+	public static final Item pure_gold_ore = new ItemBase("pure_gold_ore", ModTabs.MATERIALS);
+	public static final Item pure_silver_ore = new ItemBase("pure_silver_ore", ModTabs.MATERIALS);
+	public static final Item pure_nickel_ore = new ItemBase("pure_nickel_ore", ModTabs.MATERIALS);
+	public static final Item sulfur = new ItemBase("sulfur", ModTabs.MATERIALS);
+	public static final Item crude_steel = new ItemBase("crude_steel", ModTabs.MATERIALS);
+	public static final Item lime = new ItemBase("lime", ModTabs.MATERIALS);
+	public static final Item lime_dust = new ItemBase("lime_dust", ModTabs.MATERIALS);
+	public static final Item cement = new ItemBase("cement", ModTabs.MATERIALS);
+	public static final Item copper_coated_plate = new ItemBase("copper_coated_plate", ModTabs.MATERIALS);
+	public static final Item tined_copper_coated_plate = new ItemBase("tined_copper_coated_plate", ModTabs.MATERIALS);
+	public static final Item circuit_board = new ItemBase("circuit_board", ModTabs.MATERIALS);
+	public static final Item aluminium_disc = new ItemBase("aluminium_disc", ModTabs.MATERIALS);
+	public static final Item data_disc = new ItemBase("data_disc", ModTabs.MATERIALS);
+	public static final Item ground_plants = new ItemBase("ground_plants", ModTabs.MATERIALS);
+	public static final Item ground_flesh = new ItemBase("ground_flesh", ModTabs.MATERIALS);
+	public static final Item sulphurous_residue = new ItemBase("sulphurous_residue", ModTabs.MATERIALS);
+	public static final Item slag = new ItemBase("slag", ModTabs.MATERIALS);
+	public static final Item fluorite_dust = new ItemBase("fluorite_dust", ModTabs.MATERIALS);
+	public static final Item slag_dust = new ItemBase("slag_dust", ModTabs.MATERIALS);
+	public static final Item vanadium_oxid = new ItemBase("vanadium_oxid", ModTabs.MATERIALS);
+	public static final Item aluminium_oxid = new ItemBase("aluminium_oxid", ModTabs.MATERIALS);
+	public static final Item cut_dried_peat = new ItemBase("cut_dried_peat", ModTabs.MATERIALS);
+	public static final Item dried_peat_pellets = new ItemBase("dried_peat_pellets", ModTabs.MATERIALS, 64, 300);
+	public static final Item rayon_fibers = new ItemBase("rayon_fibers", ModTabs.MATERIALS, 64, 300);
+	public static final Item carbon_fibers = new ItemBase("carbon_fibers", ModTabs.MATERIALS, 64, 300);
+	public static final Item carbon_fabric = new ItemBase("carbon_fabric", ModTabs.MATERIALS, 64, 300);
+	public static final Item tar_lump = new ItemBase("tar_lump", ModTabs.MATERIALS);
+	public static final Item flax_straw = new ItemBase("flax_straw", ModTabs.MATERIALS, 64, 50);
+	public static final Item scrutched_flax = new ItemBase("scrutched_flax", ModTabs.MATERIALS, 64, 50);
+	public static final Item flax_fibers = new ItemBase("flax_fibers", ModTabs.MATERIALS, 64, 50);
 	
 	// Crafting items
-	public static final Item bearing = new ItemBase("bearing", Industria.MATERIALS);
-	public static final Item spring = new ItemBase("spring", Industria.MATERIALS);
-	public static final Item led = new ItemBase("led", Industria.MATERIALS);
-	public static final Item turbin = new ItemBase("turbin", Industria.MATERIALS);
-	public static final Item condensator = new ItemBase("condensator", Industria.MATERIALS);
-	public static final Item resistor = new ItemBase("resistor", Industria.MATERIALS);
-	public static final Item rotor = new ItemBase("rotor", Industria.MATERIALS);
-	public static final Item motor_coil = new ItemBase("motor_coil", Industria.MATERIALS);
-	public static final Item copper_wire = new ItemBase("copper_wire", Industria.MATERIALS);
-	public static final Item electrolyt_copper_wire = new ItemBase("electrolyt_copper_wire", Industria.MATERIALS);
-	public static final Item aluminium_wire = new ItemBase("aluminium_wire", Industria.MATERIALS);
-	public static final Item rubber = new ItemBase("rubber", Industria.MATERIALS);
-	public static final Item plastic_pellets = new ItemBase("plastic_pellets", Industria.MATERIALS);
-	public static final Item plastic_plate = new ItemBase("plastic_plate", Industria.MATERIALS);
-	public static final Item polymer_resin = new ItemBase("polymer_resin", Industria.MATERIALS);
-	public static final Item coal_coke = new ItemBase("coal_coke", Industria.MATERIALS);
-	public static final Item silicon = new ItemBase("silicon", Industria.MATERIALS);
-	public static final Item electrolyt_paper = new ItemBase("electrolyt_paper", Industria.MATERIALS);
-	public static final Item salt = new ItemBase("salt", Industria.MATERIALS);
-	public static final Item natrium = new ItemBase("natrium", Industria.MATERIALS);
-	public static final Item raw_rubber_bottle = new ItemBase("raw_rubber_bottle", Industria.MATERIALS, 16);
-	public static final Item rubber_bottle = new ItemBase("rubber_bottle", Industria.MATERIALS, 16, Items.GLASS_BOTTLE);
-	public static final Item cardboard_sheet = new ItemBurneable("cardboard_sheet", Industria.MATERIALS, 64);
-	public static final Item paper_bag = new ItemBurneable("paper_bag", Industria.MATERIALS, 30);
+	public static final Item bearing = new ItemBase("bearing", ModTabs.MATERIALS);
+	public static final Item spring = new ItemBase("spring", ModTabs.MATERIALS);
+	public static final Item led = new ItemBase("led", ModTabs.MATERIALS);
+	public static final Item turbin = new ItemBase("turbin", ModTabs.MATERIALS);
+	public static final Item condensator = new ItemBase("condensator", ModTabs.MATERIALS);
+	public static final Item resistor = new ItemBase("resistor", ModTabs.MATERIALS);
+	public static final Item rotor = new ItemBase("rotor", ModTabs.MATERIALS);
+	public static final Item motor_coil = new ItemBase("motor_coil", ModTabs.MATERIALS);
+	public static final Item copper_wire = new ItemBase("copper_wire", ModTabs.MATERIALS);
+	public static final Item electrolyt_copper_wire = new ItemBase("electrolyt_copper_wire", ModTabs.MATERIALS);
+	public static final Item aluminium_wire = new ItemBase("aluminium_wire", ModTabs.MATERIALS);
+	public static final Item rubber = new ItemBase("rubber", ModTabs.MATERIALS);
+	public static final Item plastic_pellets = new ItemBase("plastic_pellets", ModTabs.MATERIALS);
+	public static final Item plastic_plate = new ItemBase("plastic_plate", ModTabs.MATERIALS);
+	public static final Item polymer_resin = new ItemBase("polymer_resin", ModTabs.MATERIALS);
+	public static final Item coal_coke = new ItemBase("coal_coke", ModTabs.MATERIALS);
+	public static final Item silicon = new ItemBase("silicon", ModTabs.MATERIALS);
+	public static final Item electrolyt_paper = new ItemBase("electrolyt_paper", ModTabs.MATERIALS);
+	public static final Item salt = new ItemBase("salt", ModTabs.MATERIALS);
+	public static final Item natrium = new ItemBase("natrium", ModTabs.MATERIALS);
+	public static final Item raw_rubber_bottle = new ItemBase("raw_rubber_bottle", ModTabs.MATERIALS, 16);
+	public static final Item rubber_bottle = new ItemBase("rubber_bottle", ModTabs.MATERIALS, 16, Items.GLASS_BOTTLE);
+	public static final Item cardboard_sheet = new ItemBurneable("cardboard_sheet", ModTabs.MATERIALS, 64);
+	public static final Item paper_bag = new ItemBurneable("paper_bag", ModTabs.MATERIALS, 30);
+	public static final Item carbon_plate = new ItemBurneable("carbon_plate", ModTabs.MATERIALS, 30);
 	
 	// Functional Items
 	public static final Item remote_control = new ItemRemoteControll();

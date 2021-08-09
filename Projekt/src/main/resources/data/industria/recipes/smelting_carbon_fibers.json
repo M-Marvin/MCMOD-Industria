@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "industria:rayon_fibers"
+  },
+  "result": "industria:carbon_fibers",
+  "experience": 0.3,
+  "cookingtime": 100
+}

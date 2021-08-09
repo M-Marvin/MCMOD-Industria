@@ -3,6 +3,7 @@ package de.industria.items;
 import de.industria.Industria;
 import de.industria.ModItems;
 import de.industria.blocks.BlockStairsBase;
+import de.industria.typeregistys.ModTabs;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -23,7 +24,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ItemBrush extends ItemBase {
 	
 	public ItemBrush() {
-		super("brush", Industria.TOOLS, 1);
+		super("brush", ModTabs.TOOLS, 1);
 	}
 	
 	@Override

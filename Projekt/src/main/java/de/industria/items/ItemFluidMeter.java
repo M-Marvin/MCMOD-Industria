@@ -1,6 +1,6 @@
 package de.industria.items;
 
-import de.industria.Industria;
+import de.industria.typeregistys.ModTabs;
 import de.industria.util.blockfeatures.ITEFluidConnective;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -18,7 +18,7 @@ import net.minecraftforge.fluids.FluidStack;
 public class ItemFluidMeter extends ItemBase {
 
 	public ItemFluidMeter() {
-		super("fluid_meter", Industria.TOOLS, 1);
+		super("fluid_meter", ModTabs.TOOLS, 1);
 	}
 	
 	@Override

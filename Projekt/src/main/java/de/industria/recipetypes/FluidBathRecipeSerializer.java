@@ -43,6 +43,7 @@ public class FluidBathRecipeSerializer<T extends FluidBathRecipe> extends ForgeR
 		buffer.writeItem(recipe.itemIn);
 		buffer.writeFluidStack(recipe.fluidOut);
 		buffer.writeFluidStack(recipe.fluidIn);
+		buffer.writeInt(recipe.processTime);
 	}
 	
 	public interface IFactory<T extends FluidBathRecipe> {

@@ -13,7 +13,7 @@ public class MethodHelper {
 	public static void addFireSetting(Block block, int encouragement, int flammability) {
 		try {
 			FireBlock fireBlock = (FireBlock) Blocks.FIRE;
-			Method fireInfoMethod = FireBlock.class.getDeclaredMethod("setFlammable", Block.class, int.class, int.class);
+			Method fireInfoMethod = FireBlock.class.getDeclaredMethod("m_53444_", Block.class, int.class, int.class);
 			fireInfoMethod.setAccessible(true);
 			fireInfoMethod.invoke(fireBlock, block, encouragement, flammability);
 		} catch (NoSuchMethodException | SecurityException e) {

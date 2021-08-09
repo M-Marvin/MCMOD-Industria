@@ -1,9 +1,9 @@
 package de.industria.items;
 
-import com.ibm.icu.text.DecimalFormat;
-import com.ibm.icu.text.NumberFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
-import de.industria.Industria;
+import de.industria.typeregistys.ModTabs;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 public class ItemEnergyMeter extends ItemBase {
 
 	public ItemEnergyMeter() {
-		super("energy_meter", Industria.TOOLS, 1);
+		super("energy_meter", ModTabs.TOOLS, 1);
 	}
 	
 	@SuppressWarnings("deprecation")

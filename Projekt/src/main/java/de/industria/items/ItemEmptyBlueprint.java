@@ -1,7 +1,7 @@
 package de.industria.items;
 
-import de.industria.Industria;
 import de.industria.ModItems;
+import de.industria.typeregistys.ModTabs;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 public class ItemEmptyBlueprint extends ItemBase {
 	
 	public ItemEmptyBlueprint() {
-		super("empty_blueprint", Industria.TOOLS);
+		super("empty_blueprint", ModTabs.TOOLS);
 	}
 	
 	@Override

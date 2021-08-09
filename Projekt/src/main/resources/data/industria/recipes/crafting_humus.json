@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DP",
+    "PD"
+  ],
+  "key": {
+    "P": {
+      "item": "industria:peat"
+    },
+    "D": {
+      "item": "minecraft:dirt"
+    }
+  },
+  "result": {
+    "item": "industria:humus",
+    "count": 4
+  }
+}

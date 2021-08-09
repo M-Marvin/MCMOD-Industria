@@ -2,7 +2,7 @@ package de.industria.items;
 
 import java.util.List;
 
-import de.industria.Industria;
+import de.industria.typeregistys.ModTabs;
 import de.industria.util.handler.DriveManager;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
@@ -16,7 +16,7 @@ import net.minecraft.world.server.ServerWorld;
 public class ItemHardDrive extends ItemBase {
 	
 	public ItemHardDrive() {
-		super("hard_drive", Industria.MACHINES, 1);
+		super("hard_drive", ModTabs.MACHINES, 1);
 	}
 	
 	public static String getDriveName(ItemStack stack, ServerWorld world) {

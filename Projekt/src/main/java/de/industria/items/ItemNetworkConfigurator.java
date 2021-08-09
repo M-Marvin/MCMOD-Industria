@@ -1,7 +1,7 @@
 package de.industria.items;
 
-import de.industria.Industria;
 import de.industria.gui.ContainerNetworkConfigurator;
+import de.industria.typeregistys.ModTabs;
 import de.industria.util.blockfeatures.ITENetworkDevice;
 import de.industria.util.blockfeatures.ITENetworkDevice.NetworkDeviceIP;
 import de.industria.util.blockfeatures.ITENetworkDevice.NetworkDeviceType;
@@ -26,7 +26,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 public class ItemNetworkConfigurator extends ItemBase implements INamedContainerProvider {
 	
 	public ItemNetworkConfigurator() {
-		super("network_configurator", Industria.TOOLS, 1);
+		super("network_configurator", ModTabs.TOOLS, 1);
 	}
 	
 	@Override

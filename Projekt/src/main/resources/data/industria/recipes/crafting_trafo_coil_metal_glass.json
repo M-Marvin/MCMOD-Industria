@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "KEK",
+    "KEK",
+    "KEK"
+  ],
+  "key": {
+    "K": {
+      "item": "industria:electrolyt_copper_cable"
+    },
+    "E": {
+      "item": "industria:metallic_glass_ingot"
+    }
+  },
+  "result": {
+    "item": "industria:transformator_coil",
+    "count": 6
+  }
+}

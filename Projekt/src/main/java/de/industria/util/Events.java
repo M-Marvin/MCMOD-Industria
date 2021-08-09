@@ -13,6 +13,7 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 
 import de.industria.Industria;
+import de.industria.ModItems;
 import de.industria.fluids.util.BlockGasFluid;
 import de.industria.typeregistys.ModFluids;
 import de.industria.util.handler.BlockBurnManager;
@@ -48,6 +49,8 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
@@ -68,17 +71,26 @@ public class Events {
 		BlockBurnManager.reloadBurnBehaviors();
 	}
 	
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void setupFogDensity(EntityViewRenderEvent.FogDensity event) {
 		if (event.getInfo().getFluidInCamera().getType().isSame(ModFluids.RAW_OIL)) {
 			event.setDensity(2F);
 			event.setCanceled(true);
+		} else if (event.getInfo().getFluidInCamera().getType().isSame(ModFluids.TAR) || event.getInfo().getBlockAtCamera().getBlock() == ModItems.tar_crust) {
+			event.setDensity(4F);
+			event.setCanceled(true);
 		}
 	}
 	
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void setupFogColor(EntityViewRenderEvent.FogColors event) {
 		if (event.getInfo().getFluidInCamera().getType().isSame(ModFluids.RAW_OIL)) {
+			event.setRed(37 / 255F);
+			event.setGreen(37 / 255F);
+			event.setBlue(37 / 255F);
+		} else if (event.getInfo().getFluidInCamera().getType().isSame(ModFluids.TAR) || event.getInfo().getBlockAtCamera().getBlock() == ModItems.tar_crust) {
 			event.setRed(37 / 255F);
 			event.setGreen(37 / 255F);
 			event.setBlue(37 / 255F);

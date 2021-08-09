@@ -1,0 +1,12 @@
+{
+  "type": "industria:metal_form",
+  "ingredientItem": {
+    "item": "industria:flax_straw",
+    "count": 1
+  },
+  "resultItem": {
+    "item": "industria:scrutched_flax",
+    "count": 1
+  },
+  "processTime": 40
+}

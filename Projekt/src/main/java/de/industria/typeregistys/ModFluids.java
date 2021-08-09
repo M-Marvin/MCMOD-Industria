@@ -19,6 +19,7 @@ import de.industria.fluids.FluidOreWolframSolution;
 import de.industria.fluids.FluidRawOil;
 import de.industria.fluids.FluidSteam;
 import de.industria.fluids.FluidSulfuricAcid;
+import de.industria.fluids.FluidTar;
 import de.industria.fluids.util.BlockGasFluid;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowingFluidBlock;
@@ -60,6 +61,8 @@ public class ModFluids {
 	public static final FluidLiquidConcrete LIQUID_CONCRETE = register("liquid_concrete", new FluidLiquidConcrete.Still());
 	public static final FluidBiogas BIOGAS = register("biogas", new FluidBiogas());
 	public static final FluidFuelGas FUEL_GAS = register("fuel_gas", new FluidFuelGas());
+	public static final FluidTar FLOWING_TAR = register("flowing_tar", new FluidTar.Flow());
+	public static final FluidTar TAR = register("tar", new FluidTar.Still());
 	
 	private static <T extends Fluid> T register(String key, T p_215710_1_) {
 		p_215710_1_.setRegistryName(new ResourceLocation(Industria.MODID, key));

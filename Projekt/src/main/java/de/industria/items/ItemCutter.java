@@ -1,6 +1,6 @@
 package de.industria.items;
 
-import de.industria.Industria;
+import de.industria.typeregistys.ModTabs;
 import de.industria.typeregistys.ModToolType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTier;
@@ -8,7 +8,7 @@ import net.minecraft.item.ItemTier;
 public class ItemCutter extends ItemToolBase {
 	
 	public ItemCutter() {
-		super("cutter", 0.5F, 0.4F, ModToolType.CUTTER, ItemTier.IRON, new Properties().tab(Industria.TOOLS).stacksTo(1).defaultDurability(240));
+		super("cutter", 0.5F, 0.4F, ModToolType.CUTTER, ItemTier.IRON, new Properties().tab(ModTabs.TOOLS).stacksTo(1).defaultDurability(240));
 	}
 	
 	@Override

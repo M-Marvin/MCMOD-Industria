@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "cannister",
+  "ingredients": [
+    {
+      "item": "industria:cut_dried_peat"
+    }
+  ],
+  "result": {
+    "item": "industria:dried_peat_pellets",
+    "count": 2
+  }
+}

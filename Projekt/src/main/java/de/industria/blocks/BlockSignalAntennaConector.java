@@ -2,8 +2,12 @@ package de.industria.blocks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.function.Supplier;
 
+import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.tileentity.TileEntityRSignalAntenna;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBSignalConnectiveBlock;
 import de.industria.util.types.RedstoneControlSignal;
 import net.minecraft.block.Block;
@@ -11,6 +15,7 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
@@ -26,11 +31,12 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-public class BlockSignalAntennaConector extends BlockContainerBase implements IBSignalConnectiveBlock {
+public class BlockSignalAntennaConector extends BlockContainerBase implements IBSignalConnectiveBlock, IBAdvancedBlockInfo {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	
@@ -161,6 +167,18 @@ public class BlockSignalAntennaConector extends BlockContainerBase implements IB
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
 		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
+	}
+	
+	@Override
+	public IBlockToolType getBlockInfo() {
+		return (stack, info) -> {
+			info.add(new TranslationTextComponent("industria.block.info.antenna"));
+		};
+	}
+	
+	@Override
+	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
+		return null;
 	}
 	
 }

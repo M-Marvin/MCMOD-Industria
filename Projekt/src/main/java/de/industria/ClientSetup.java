@@ -62,16 +62,18 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.FoliageColors;
 import net.minecraft.world.biome.BiomeColors;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
+@EventBusSubscriber(modid=Industria.MODID, bus=Mod.EventBusSubscriber.Bus.MOD, value=Dist.CLIENT)
 public class ClientSetup {
 	
-	@OnlyIn(Dist.CLIENT)
+	@SubscribeEvent
 	public static void setup(final FMLClientSetupEvent event) {
 		
 		RenderTypeLookup.setRenderLayer(ModItems.capacitor, RenderType.cutoutMipped());
@@ -130,6 +132,7 @@ public class ClientSetup {
 		RenderTypeLookup.setRenderLayer(ModItems.zircon_crystal, RenderType.cutoutMipped());
 		RenderTypeLookup.setRenderLayer(ModItems.iron_ladder, RenderType.cutoutMipped());
 		RenderTypeLookup.setRenderLayer(ModItems.fluid_cannister.getBlock(), RenderType.cutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.flax_crop, RenderType.cutoutMipped());
 		
 		RenderTypeLookup.setRenderLayer(ModFluids.HYDROFLUORIC_ACID, RenderType.translucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_HYDROFLUORIC_ACID, RenderType.translucent());
@@ -232,7 +235,5 @@ public class ClientSetup {
 		colors.register((stack, tint) -> FoliageColors.getDefaultColor(), ModItems.swamp_algae);
 		colors.register((stack, tint) -> FoliageColors.getDefaultColor(), ModItems.hanging_vine);
 	}
-	
-	
 	
 }

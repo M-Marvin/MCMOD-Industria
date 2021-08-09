@@ -1,8 +1,11 @@
 package de.industria.items;
 
+import java.util.List;
+
 import de.industria.blocks.BlockSignalAntennaConector;
 import de.industria.tileentity.TileEntityRSignalAntenna;
 import de.industria.util.types.RedstoneControlSignal;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -11,6 +14,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 public class ItemRemoteControll extends ItemBase {
@@ -33,13 +39,10 @@ public class ItemRemoteControll extends ItemBase {
 				if (tag == null) {
 					tag = new CompoundNBT();
 					tag.put("ChanelItem", setItem.save(new CompoundNBT()));
-					setItem.shrink(1);
 				} else {
-					ItemStack oldItem = ItemStack.of(tag.getCompound("ChanelItem"));
 					tag.put("ChanelItem", setItem.save(new CompoundNBT()));
-					playerIn.setItemInHand(Hand.OFF_HAND, oldItem);
 				}
-
+				
 				stack.setTag(tag);
 				
 				return ActionResult.success(stack);
@@ -94,6 +97,11 @@ public class ItemRemoteControll extends ItemBase {
 			
 		}
 		
+	}
+
+	@Override
+	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		tooltip.add(new StringTextComponent("\u00A77" + new TranslationTextComponent("industria.item.info.remoteControl").getString()));
 	}
 	
 }

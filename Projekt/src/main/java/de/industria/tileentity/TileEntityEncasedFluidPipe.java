@@ -19,6 +19,7 @@ public class TileEntityEncasedFluidPipe extends TileEntityStructureScaffold impl
 	public TileEntityEncasedFluidPipe() {
 		super(ModTileEntityType.ENCASED_FLUID_PIPE);
 		this.fluid = FluidStack.EMPTY;
+		this.maxFluid = -1;
 	}
 	
 	@Override

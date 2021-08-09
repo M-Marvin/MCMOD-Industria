@@ -19,6 +19,7 @@ public class ModTags {
 	public static final ITag<Fluid> CHEMICAL_WATER = tagFluid("chemical_water");
 	public static final ITag<Fluid> SULFURIC_ACID = tagFluid("sulfuric_acid");
 	public static final ITag<Fluid> NATRON_LYE = tagFluid("natron_lye");
+	public static final ITag<Fluid> TAR = tagFluid("tar");
 	
 	public static final ITag<Block> CONVEYOR_BELT = tagBlock("conveyor_belt");
 	public static final ITag<Block> MACHINERY = tagBlock("machinery");
@@ -32,6 +33,7 @@ public class ModTags {
 	public static final ITag<Block> BURNED_WOOD = tagBlock("burned_wood");
 	public static final ITag<Block> SCAFFOLDING = tagBlock("scaffolding");
 	public static final ITag<Block> ACID_RESISTANT = tagBlock("acid_resistant");
+	public static final ITag<Block> ANTENNA_BLOCK = tagBlock("antenna_block");
 	
 	private static IOptionalNamedTag<Fluid> tagFluid(String name) {
 		return FluidTags.createOptional(new ResourceLocation(Industria.MODID, name));

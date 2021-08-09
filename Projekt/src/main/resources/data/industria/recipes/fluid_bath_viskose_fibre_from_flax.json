@@ -1,0 +1,20 @@
+{
+  "type": "industria:fluid_bath",
+  "ingredientFluid": {
+    "fluid": "industria:natron_lye",
+    "amount": 60
+  },
+  "wasteFluid":  {
+    "fluid": "industria:chemical_water",
+    "amount": 400
+  },
+  "ingredientItem": {
+    "item": "industria:flax_fibers",
+    "count": 1
+  },
+  "resultItem": {
+    "item": "industria:rayon_fibers",
+    "count": 1
+  },
+  "processTime": 150
+}

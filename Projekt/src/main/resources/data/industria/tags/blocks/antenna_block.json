@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:iron_block",
+    "minecraft:iron_trapdoor",
+    "minecraft:iron_door",
+    "minecraft:chain",
+    "minecraft:iron_bars",
+    "industria:iron_rod",
+	"industria:iron_plates",
+	"industria:weathered_iron_plates",
+	"industria:exposed_iron_plates",
+	"industria:oxidized_iron_plates",
+	"industria:iron_planks",
+	"industria:weathered_iron_planks",
+	"industria:exposed_iron_planks",
+	"industria:oxidized_iron_planks",
+	"industria:iron_ladder"    
+  ]
+}

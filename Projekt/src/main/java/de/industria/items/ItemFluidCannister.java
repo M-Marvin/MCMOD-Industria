@@ -7,6 +7,7 @@ import de.industria.fluids.util.ItemFluidBucket;
 import de.industria.fluids.util.ItemGasBucket;
 import de.industria.renderer.BlockFluidCannisterItemRenderer;
 import de.industria.tileentity.TileEntityFluidCannister;
+import de.industria.typeregistys.ModTabs;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.IBucketPickupHandler;
@@ -42,7 +43,7 @@ import net.minecraftforge.fluids.FluidStack;
 public class ItemFluidCannister extends BlockItem {
 	
 	public ItemFluidCannister(Block block) {
-		super(block, new Properties().stacksTo(1).tab(Industria.TOOLS).setISTER(() -> BlockFluidCannisterItemRenderer::new));
+		super(block, new Properties().stacksTo(1).tab(ModTabs.TOOLS).setISTER(() -> BlockFluidCannisterItemRenderer::new));
 		this.setRegistryName(new ResourceLocation(Industria.MODID, "cannister"));
 	}
 	

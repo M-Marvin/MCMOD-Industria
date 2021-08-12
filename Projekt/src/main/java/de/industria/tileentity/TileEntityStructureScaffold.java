@@ -13,6 +13,8 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 
 public class TileEntityStructureScaffold extends TileEntityInventoryBase implements ITickableTileEntity, ITEPostMoveHandled, ISidedInventory {
@@ -100,6 +102,22 @@ public class TileEntityStructureScaffold extends TileEntityInventoryBase impleme
 	@Override
 	public boolean canTakeItemThroughFace(int p_180461_1_, ItemStack p_180461_2_, Direction p_180461_3_) {
 		return false;
+	}
+	
+	@Override
+	public void rotate(Rotation rotation) {
+		ItemStack[] claddings = this.itemstacks.toArray(new ItemStack[this.slots]);
+		for (Direction d : Direction.values()) {
+			this.setItem(rotation.rotate(d).get3DDataValue(), claddings[d.get3DDataValue()]);
+		}
+	}
+	
+	@Override
+	public void mirror(Mirror mirror) {
+		ItemStack[] claddings = this.itemstacks.toArray(new ItemStack[this.slots]);
+		for (Direction d : Direction.values()) {
+			this.setItem(mirror.mirror(d).get3DDataValue(), claddings[d.get3DDataValue()]);
+		}
 	}
 	
 }

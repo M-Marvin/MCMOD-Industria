@@ -4,10 +4,10 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 
 import de.industria.Industria;
 import de.industria.ModItems;
-import de.industria.jeiplugin.JEIPlugin;
 import de.industria.jeiplugin.JEIRecipeCategories;
 import de.industria.recipetypes.WashingRecipe;
 import de.industria.typeregistys.ModFluids;
+import de.industria.util.handler.UtilHelper;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -75,12 +75,10 @@ public class RecipeCategoryWashingPlant implements IRecipeCategory<WashingRecipe
 	
 	@Override
 	public void setIngredients(WashingRecipe recipe, IIngredients ingredients) {
-		ingredients.setInput(VanillaTypes.FLUID, new FluidStack(Fluids.WATER, 500));
-		ingredients.setOutput(VanillaTypes.FLUID,new FluidStack(ModFluids.CHEMICAL_WATER, 500));
-		ingredients.setInputIngredients(JEIPlugin.ingredientToList(recipe.getItemIn()));
-		ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem());
-		if (!recipe.getResultItem2().isEmpty()) ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem2());
-		if (!recipe.getResultItem3().isEmpty()) ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem3());
+		ingredients.setInputs(VanillaTypes.ITEM, UtilHelper.toCollection(recipe.getItemIn().getItems()));
+		ingredients.setInputs(VanillaTypes.FLUID, UtilHelper.toCollection(new FluidStack(Fluids.WATER, 500)));
+		ingredients.setOutputs(VanillaTypes.ITEM, UtilHelper.toCollection(recipe.getResultItem(), recipe.getResultItem2(), recipe.getResultItem3()));
+		ingredients.setOutputs(VanillaTypes.FLUID, UtilHelper.toCollection(new FluidStack(ModFluids.CHEMICAL_WATER, 500)));
 	}
 	
 	@Override
@@ -95,7 +93,7 @@ public class RecipeCategoryWashingPlant implements IRecipeCategory<WashingRecipe
 		itemStacks.init(3, true, 115, 42);
 		fluidStacks.set(0, new FluidStack(Fluids.WATER, 500));
 		fluidStacks.set(1, new FluidStack(ModFluids.CHEMICAL_WATER, 500));
-		itemStacks.set(0, JEIPlugin.itemsToCollection(recipe.getItemIn().getItems()));
+		itemStacks.set(0, UtilHelper.toCollection(recipe.getItemIn().getItems()));
 		itemStacks.set(1, recipe.getResultItem());
 		if (!recipe.getResultItem2().isEmpty()) itemStacks.set(2, recipe.getResultItem2());
 		if (!recipe.getResultItem3().isEmpty()) itemStacks.set(3, recipe.getResultItem3());

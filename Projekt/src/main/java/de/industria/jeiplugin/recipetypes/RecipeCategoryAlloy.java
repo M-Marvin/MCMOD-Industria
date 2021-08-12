@@ -6,6 +6,7 @@ import de.industria.Industria;
 import de.industria.ModItems;
 import de.industria.jeiplugin.JEIRecipeCategories;
 import de.industria.recipetypes.AlloyRecipe;
+import de.industria.util.handler.UtilHelper;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -70,10 +71,8 @@ public class RecipeCategoryAlloy implements IRecipeCategory<AlloyRecipe> {
 	
 	@Override
 	public void setIngredients(AlloyRecipe recipe, IIngredients ingredients) {
-		ingredients.setInput(VanillaTypes.ITEM, recipe.getItemsIn()[0]);
-		if (recipe.getItemsIn().length >= 2) ingredients.setInput(VanillaTypes.ITEM, recipe.getItemsIn()[1]);
-		if (recipe.getItemsIn().length >= 3) ingredients.setInput(VanillaTypes.ITEM, recipe.getItemsIn()[2]);
-		ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem());
+		ingredients.setInputs(VanillaTypes.ITEM, UtilHelper.toCollection(recipe.getItemsIn()));
+		ingredients.setOutputs(VanillaTypes.ITEM, UtilHelper.toCollection(recipe.getResultItem()));
 	}
 	
 	@Override

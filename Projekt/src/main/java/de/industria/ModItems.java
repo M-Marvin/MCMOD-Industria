@@ -35,6 +35,7 @@ import de.industria.items.ItemSalsola;
 import de.industria.items.ItemSchredderToolCrusher;
 import de.industria.items.ItemSchredderToolMacerator;
 import de.industria.items.ItemStructureCladdingPane;
+import de.industria.items.ItemWrench;
 import de.industria.items.panelitems.ItemButtonElement;
 import de.industria.items.panelitems.ItemLampElement;
 import de.industria.items.panelitems.ItemLeverElement;
@@ -1024,9 +1025,10 @@ public class ModItems {
 	public static final Item fluid_meter = new ItemFluidMeter();
 	public static final Item energy_meter = new ItemEnergyMeter();
 	public static final Item hammer = new ItemHammer();
+	public static final Item wrench = new ItemWrench();
 	public static final Item cutter = new ItemCutter();
 	public static final Block tree_tap = new BlockTreeTap();
 	public static final Item network_configurtor = new ItemNetworkConfigurator();
 	public static final ItemBrush brush = new ItemBrush();
-		
+	
 }

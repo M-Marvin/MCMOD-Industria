@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.tileentity.TileEntityRSignalAntenna;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBSignalConnectiveBlock;
+import de.industria.util.handler.VoxelHelper;
 import de.industria.util.types.RedstoneControlSignal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -31,6 +33,10 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.IBooleanFunction;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
@@ -42,6 +48,34 @@ public class BlockSignalAntennaConector extends BlockContainerBase implements IB
 	
 	public BlockSignalAntennaConector() {
 		super("antenna_conector", Material.METAL, 1.5F, 0.5F, SoundType.METAL);
+	}
+	
+	@Override
+	public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+		if (state.getValue(FACING).getAxis().isVertical()) {
+			return state.getValue(FACING) == Direction.UP ? Stream.of(
+					Block.box(4, 10, 4, 12, 15, 12),
+					Block.box(0, 0, 0, 16, 10, 16),
+					Block.box(0, 11, 0, 16, 12, 16),
+					Block.box(0, 15, 0, 16, 16, 16),
+					Block.box(0, 13, 0, 16, 14, 16)
+					).reduce((v1, v2) -> {return VoxelShapes.join(v1, v2, IBooleanFunction.OR);}).get() : 
+					Stream.of(
+					Block.box(4, 1, 4, 12, 6, 12),
+					Block.box(0, 6, 0, 16, 16, 16),
+					Block.box(0, 4, 0, 16, 5, 16),
+					Block.box(0, 0, 0, 16, 1, 16),
+					Block.box(0, 2, 0, 16, 3, 16)
+					).reduce((v1, v2) -> {return VoxelShapes.join(v1, v2, IBooleanFunction.OR);}).get();
+		} else {
+			return VoxelHelper.rotateShape(Stream.of(
+					Block.box(4, 4, 1, 12, 12, 6),
+					Block.box(0, 0, 6, 16, 16, 16),
+					Block.box(0, 0, 4, 16, 16, 5),
+					Block.box(0, 0, 0, 16, 16, 1),
+					Block.box(0, 0, 2, 16, 16, 3)
+					).reduce((v1, v2) -> {return VoxelShapes.join(v1, v2, IBooleanFunction.OR);}).get(), state.getValue(FACING));
+		}
 	}
 	
 	@Override

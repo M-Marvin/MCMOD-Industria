@@ -6,6 +6,7 @@ import de.industria.Industria;
 import de.industria.ModItems;
 import de.industria.jeiplugin.JEIRecipeCategories;
 import de.industria.recipetypes.BlastFurnaceRecipe;
+import de.industria.util.handler.UtilHelper;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -71,12 +72,9 @@ public class RecipeCategoryBlastFurnace implements IRecipeCategory<BlastFurnaceR
 	
 	@Override
 	public void setIngredients(BlastFurnaceRecipe recipe, IIngredients ingredients) {
-		if (recipe.getItemsIn().length >= 1) ingredients.setInput(VanillaTypes.ITEM, recipe.getItemsIn()[0]);
-		if (recipe.getItemsIn().length >= 2) ingredients.setInput(VanillaTypes.ITEM, recipe.getItemsIn()[1]);
-		if (recipe.getItemsIn().length >= 3) ingredients.setInput(VanillaTypes.ITEM, recipe.getItemsIn()[2]);
-		ingredients.setInput(VanillaTypes.FLUID, recipe.getConsumtionFluid());
-		ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem());
-		ingredients.setOutput(VanillaTypes.ITEM, recipe.getWasteOut());
+		ingredients.setInputs(VanillaTypes.ITEM, UtilHelper.toCollection(recipe.getItemsIn()));
+		ingredients.setInputs(VanillaTypes.FLUID, UtilHelper.toCollection(recipe.getConsumtionFluid()));
+		ingredients.setOutputs(VanillaTypes.ITEM, UtilHelper.toCollection(recipe.getResultItem(), recipe.getWasteOut()));
 	}
 	
 	@Override

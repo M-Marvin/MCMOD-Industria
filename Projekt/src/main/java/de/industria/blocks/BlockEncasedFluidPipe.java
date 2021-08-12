@@ -21,6 +21,7 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 
 @SuppressWarnings("deprecation")
 public class BlockEncasedFluidPipe extends BlockFluidPipe implements IBAdvancedStickyBlock {
@@ -55,13 +56,17 @@ public class BlockEncasedFluidPipe extends BlockFluidPipe implements IBAdvancedS
 	
 	@Override
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-		
 		return this.scaffoldBlock.use(state, worldIn, pos, player, handIn, hit);
 	}
 	
 	@Override
 	public SoundType getSoundType(BlockState state, IWorldReader world, BlockPos pos, Entity entity) {
 		return this.scaffoldBlock.getSoundType(state);
+	}
+
+	@Override
+	public ToolType getHarvestTool(BlockState state) {
+		return this.scaffoldBlock.getHarvestTool(scaffoldBlock.defaultBlockState());
 	}
 	
 	@Override

@@ -6,6 +6,7 @@ import de.industria.Industria;
 import de.industria.ModItems;
 import de.industria.jeiplugin.JEIRecipeCategories;
 import de.industria.recipetypes.RifiningRecipe;
+import de.industria.util.handler.UtilHelper;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -71,11 +72,9 @@ public class RecipeCategoryRifining implements IRecipeCategory<RifiningRecipe> {
 	
 	@Override
 	public void setIngredients(RifiningRecipe recipe, IIngredients ingredients) {
-		ingredients.setInput(VanillaTypes.FLUID, recipe.getFluidIn());
-		ingredients.setOutput(VanillaTypes.FLUID, recipe.getFluidIn());
-		ingredients.setOutput(VanillaTypes.ITEM, recipe.getItemsOut()[0]);
-		if (!recipe.getItemsOut()[1].isEmpty()) ingredients.setOutput(VanillaTypes.ITEM, recipe.getItemsOut()[1]);
-		if (!recipe.getItemsOut()[2].isEmpty()) ingredients.setOutput(VanillaTypes.ITEM, recipe.getItemsOut()[2]);
+		ingredients.setInputs(VanillaTypes.FLUID, UtilHelper.toCollection(recipe.getFluidIn()));
+		ingredients.setOutputs(VanillaTypes.ITEM, UtilHelper.toCollection(recipe.getResultItem()));
+		ingredients.setOutputs(VanillaTypes.FLUID, UtilHelper.toCollection(recipe.getFluidOut()));
 	}
 	
 	@Override

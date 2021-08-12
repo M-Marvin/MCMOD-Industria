@@ -4,9 +4,9 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 
 import de.industria.Industria;
 import de.industria.ModItems;
-import de.industria.jeiplugin.JEIPlugin;
 import de.industria.jeiplugin.JEIRecipeCategories;
 import de.industria.recipetypes.SchredderRecipe;
+import de.industria.util.handler.UtilHelper;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -74,11 +74,8 @@ public class RecipeCategorySchredder implements IRecipeCategory<SchredderRecipe>
 	
 	@Override
 	public void setIngredients(SchredderRecipe recipe, IIngredients ingredients) {
-		ingredients.setInputIngredients(JEIPlugin.ingredientToList(recipe.getIngredient()));
-		ingredients.setInput(VanillaTypes.ITEM, new ItemStack(recipe.getSchredderTool()));
-		ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem());
-		if (!recipe.getResultItem2().isEmpty()) ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem2());
-		if (!recipe.getResultItem3().isEmpty()) ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem3());
+		ingredients.setInputs(VanillaTypes.ITEM, UtilHelper.toCollection(recipe.getIngredient().getItems(), new ItemStack(recipe.getSchredderTool())));
+		ingredients.setOutputs(VanillaTypes.ITEM, UtilHelper.toCollection(recipe.getResultItem(), recipe.getResultItem2(), recipe.getResultItem3()));
 	}
 	
 	@Override
@@ -89,7 +86,7 @@ public class RecipeCategorySchredder implements IRecipeCategory<SchredderRecipe>
 		stacks.init(2, false, 74, 2);
 		stacks.init(3, false, 74, 22);
 		stacks.init(4, false, 74, 41);
-		stacks.set(0, JEIPlugin.itemsToCollection(recipe.getIngredient().getItems()));
+		stacks.set(0, UtilHelper.toCollection(recipe.getIngredient().getItems()));
 		stacks.set(1, new ItemStack(recipe.getSchredderTool()));
 		stacks.set(2, recipe.getResultItem());
 		if (!recipe.getResultItem2().isEmpty()) stacks.set(3, recipe.getResultItem2());

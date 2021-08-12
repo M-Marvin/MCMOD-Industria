@@ -6,6 +6,7 @@ import de.industria.Industria;
 import de.industria.ModItems;
 import de.industria.jeiplugin.JEIRecipeCategories;
 import de.industria.recipetypes.FluidBathRecipe;
+import de.industria.util.handler.UtilHelper;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -74,10 +75,10 @@ public class RecipeCategoryFluidBath implements IRecipeCategory<FluidBathRecipe>
 	
 	@Override
 	public void setIngredients(FluidBathRecipe recipe, IIngredients ingredients) {
-		ingredients.setInput(VanillaTypes.FLUID, recipe.getFluidIn());
-		if (!recipe.getItemIn().isEmpty()) ingredients.setInput(VanillaTypes.ITEM, recipe.getItemIn());
-		if (!recipe.getFluidOut().isEmpty()) ingredients.setOutput(VanillaTypes.FLUID, recipe.getFluidOut());
-		if (!recipe.getResultItem().isEmpty()) ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem());
+		ingredients.setInputs(VanillaTypes.ITEM, UtilHelper.toCollection(recipe.getItemIn()));
+		ingredients.setInputs(VanillaTypes.FLUID, UtilHelper.toCollection(recipe.getFluidIn()));
+		ingredients.setOutputs(VanillaTypes.ITEM, UtilHelper.toCollection(recipe.getResultItem()));
+		ingredients.setOutputs(VanillaTypes.FLUID, UtilHelper.toCollection(recipe.getFluidOut()));
 	}
 	
 	@Override

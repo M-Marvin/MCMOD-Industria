@@ -1010,6 +1010,7 @@ public class ServerSetup {
 		ModGameRegistry.registerItem(ModItems.netherite_plate);
 		ModGameRegistry.registerItem(ModItems.hammer);
 		ModGameRegistry.registerItem(ModItems.cutter);
+		ModGameRegistry.registerItem(ModItems.wrench);
 		ModGameRegistry.registerItem(ModItems.brush);
 		ModGameRegistry.registerItem(ModItems.aluminium_wire);
 		ModGameRegistry.registerItem(ModItems.copper_wire);

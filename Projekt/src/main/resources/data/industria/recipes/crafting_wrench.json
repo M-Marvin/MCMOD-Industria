@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    " ##",
+    "G  "
+  ],
+  "key": {
+    "#": {
+      "item": "industria:steel_ingot"
+    },
+    "G": {
+      "item": "industria:rubber"
+    }
+  },
+  "result": {
+    "item": "industria:wrench",
+    "count": 1
+  }
+}

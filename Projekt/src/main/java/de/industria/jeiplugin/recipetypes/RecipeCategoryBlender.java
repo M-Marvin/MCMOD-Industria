@@ -6,6 +6,7 @@ import de.industria.Industria;
 import de.industria.ModItems;
 import de.industria.jeiplugin.JEIRecipeCategories;
 import de.industria.recipetypes.BlendingRecipe;
+import de.industria.util.handler.UtilHelper;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -74,12 +75,9 @@ public class RecipeCategoryBlender implements IRecipeCategory<BlendingRecipe> {
 	
 	@Override
 	public void setIngredients(BlendingRecipe recipe, IIngredients ingredients) {
-		if (recipe.getItemsIn().length >= 1) ingredients.setInput(VanillaTypes.ITEM, recipe.getItemsIn()[0]);
-		if (recipe.getItemsIn().length >= 2) ingredients.setInput(VanillaTypes.ITEM, recipe.getItemsIn()[1]);
-		if (recipe.getItemsIn().length >= 3) ingredients.setInput(VanillaTypes.ITEM, recipe.getItemsIn()[2]);
-		if (recipe.getFluidsIn().length >= 1) ingredients.setInput(VanillaTypes.FLUID, recipe.getFluidsIn()[0]);
-		if (recipe.getFluidsIn().length >= 2) ingredients.setInput(VanillaTypes.FLUID, recipe.getFluidsIn()[1]);
-		ingredients.setOutput(VanillaTypes.FLUID, recipe.getFluidOut());
+		ingredients.setInputs(VanillaTypes.ITEM, UtilHelper.toCollection(recipe.getItemsIn()));
+		ingredients.setInputs(VanillaTypes.FLUID, UtilHelper.toCollection(recipe.getFluidsIn()));
+		ingredients.setOutputs(VanillaTypes.FLUID, UtilHelper.toCollection(recipe.getFluidOut()));
 	}
 	
 	@Override

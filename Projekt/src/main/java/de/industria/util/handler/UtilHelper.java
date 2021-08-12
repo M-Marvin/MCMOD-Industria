@@ -1,6 +1,8 @@
 package de.industria.util.handler;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class UtilHelper {
@@ -26,6 +28,20 @@ public class UtilHelper {
 		}
 		
 		return randArr;
+	}
+
+	@SafeVarargs
+	public static <T> List<T> toCollection(T... items) {
+		List<T> list = new ArrayList<T>();
+		for (T item : items) list.add(item);
+		return list;
+	}
+	
+	public static <T> List<T> toCollection(T[] items, T item) {
+		List<T> list = new ArrayList<T>();
+		for (T item1 : items) list.add(item1);
+		list.add(item);
+		return list;
 	}
 	
 }

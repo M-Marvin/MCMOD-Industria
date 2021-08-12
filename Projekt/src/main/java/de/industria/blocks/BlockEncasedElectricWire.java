@@ -21,6 +21,7 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 
 @SuppressWarnings("deprecation")
 public class BlockEncasedElectricWire extends BlockElectricWire implements IBAdvancedStickyBlock, ITileEntityProvider {
@@ -56,6 +57,11 @@ public class BlockEncasedElectricWire extends BlockElectricWire implements IBAdv
 	@Override
 	public SoundType getSoundType(BlockState state, IWorldReader world, BlockPos pos, Entity entity) {
 		return this.scaffoldBlock.getSoundType(state);
+	}
+	
+	@Override
+	public ToolType getHarvestTool(BlockState state) {
+		return this.scaffoldBlock.getHarvestTool(scaffoldBlock.defaultBlockState());
 	}
 	
 	@Override

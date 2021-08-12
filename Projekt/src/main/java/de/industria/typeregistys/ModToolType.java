@@ -6,5 +6,6 @@ public class ModToolType {
 	
 	public static final ToolType CUTTER = ToolType.get("cutter");
 	public static final ToolType HAMMER = ToolType.get("hammer");
+	public static final ToolType WRENCH = ToolType.get("wrench");
 	
 }

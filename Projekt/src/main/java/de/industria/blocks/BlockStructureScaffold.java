@@ -8,6 +8,7 @@ import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.items.ItemStructureCladdingPane;
 import de.industria.tileentity.TileEntityStructureScaffold;
 import de.industria.typeregistys.ModTags;
+import de.industria.typeregistys.ModToolType;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBAdvancedStickyBlock;
 import de.industria.util.handler.VoxelHelper;
@@ -122,7 +123,7 @@ public class BlockStructureScaffold extends BlockContainerBase implements IBAdva
 				
 				return ActionResultType.CONSUME;
 				
-			} else if (stack.getItem() == ModItems.hammer) {
+			} else if (stack.getItem().getToolTypes(stack).contains(ModToolType.WRENCH)) {
 
 				if (!worldIn.isClientSide()) {
 					
@@ -138,6 +139,15 @@ public class BlockStructureScaffold extends BlockContainerBase implements IBAdva
 							worldIn.playSound(null, pos, breakSound, SoundCategory.BLOCKS, 1, 1);
 							
 							if (!removedCladding.isEmpty()) player.addItem(removedCladding);
+							
+							if (!player.isCreative()) {
+								
+								stack.setDamageValue(stack.getDamageValue() + 1);
+								if (stack.getDamageValue() > stack.getDamageValue()) {
+									player.setItemInHand(handIn, ItemStack.EMPTY);
+								}
+								
+							}
 							
 						}
 						

@@ -6,6 +6,7 @@ import de.industria.Industria;
 import de.industria.ModItems;
 import de.industria.jeiplugin.JEIRecipeCategories;
 import de.industria.recipetypes.MetalFormRecipe;
+import de.industria.util.handler.UtilHelper;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -70,8 +71,8 @@ public class RecipeCategoryMetalFormer implements IRecipeCategory<MetalFormRecip
 	
 	@Override
 	public void setIngredients(MetalFormRecipe recipe, IIngredients ingredients) {
-		ingredients.setInput(VanillaTypes.ITEM, recipe.getItemIn());
-		ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem());
+		ingredients.setInputs(VanillaTypes.ITEM, UtilHelper.toCollection(recipe.getItemIn()));
+		ingredients.setOutputs(VanillaTypes.ITEM, UtilHelper.toCollection(recipe.getResultItem()));
 	}
 	
 	@Override

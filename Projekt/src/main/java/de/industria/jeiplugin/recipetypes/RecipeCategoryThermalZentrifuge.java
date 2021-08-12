@@ -6,6 +6,7 @@ import de.industria.Industria;
 import de.industria.ModItems;
 import de.industria.jeiplugin.JEIRecipeCategories;
 import de.industria.recipetypes.ThermalZentrifugeRecipe;
+import de.industria.util.handler.UtilHelper;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -70,10 +71,8 @@ public class RecipeCategoryThermalZentrifuge implements IRecipeCategory<ThermalZ
 	
 	@Override
 	public void setIngredients(ThermalZentrifugeRecipe recipe, IIngredients ingredients) {
-		ingredients.setInput(VanillaTypes.ITEM, recipe.getIngredient());
-		ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem());
-		if (!recipe.getResultItem2().isEmpty()) ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem2());
-		if (!recipe.getResultItem3().isEmpty()) ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem3());
+		ingredients.setInputs(VanillaTypes.ITEM, UtilHelper.toCollection(recipe.getIngredient()));
+		ingredients.setOutputs(VanillaTypes.ITEM, UtilHelper.toCollection(recipe.getResultItem(), recipe.getResultItem2(), recipe.getResultItem3()));
 	}
 	
 	@Override

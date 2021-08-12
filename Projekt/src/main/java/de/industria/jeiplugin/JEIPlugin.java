@@ -1,8 +1,6 @@
 package de.industria.jeiplugin;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import de.industria.Industria;
@@ -19,6 +17,7 @@ import de.industria.jeiplugin.recipetypes.RecipeCategoryThermalZentrifuge;
 import de.industria.jeiplugin.recipetypes.RecipeCategoryWashingPlant;
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModRecipeTypes;
+import de.industria.util.handler.UtilHelper;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -30,7 +29,6 @@ import mezz.jei.api.registration.IRecipeTransferRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
@@ -61,7 +59,7 @@ public class JEIPlugin implements IModPlugin {
 		registration.addRecipes(getRecipes(manager, ModRecipeTypes.WASHING), JEIRecipeCategories.WASHING_PLANT);
 		registration.addRecipes(getRecipes(manager, ModRecipeTypes.METAL_FORM), JEIRecipeCategories.METAL_FORMER);
 		registration.addRecipes(getRecipes(manager, ModRecipeTypes.BLAST_FURNACE), JEIRecipeCategories.BLAST_FURNACE);
-		registration.addRecipes(itemsToCollection(new FluidStack(ModFluids.COMPRESSED_AIR, 1500)), JEIRecipeCategories.AIR_COMPRESSOR);
+		registration.addRecipes(UtilHelper.toCollection(new FluidStack(ModFluids.COMPRESSED_AIR, 1500)), JEIRecipeCategories.AIR_COMPRESSOR);
 	}
 	
 	@Override
@@ -103,19 +101,6 @@ public class JEIPlugin implements IModPlugin {
 	
 	private static Collection<?> getRecipes(RecipeManager manager, IRecipeType<?> type) {
 		return manager.getRecipes().parallelStream().filter(recipe -> recipe.getType() == type).collect(Collectors.toList());
-	}
-	
-	public static List<Ingredient> ingredientToList(Ingredient ingredient) {
-		List<Ingredient> list = new ArrayList<Ingredient>();
-		list.add(ingredient);
-		return list;
-	}
-	
-	@SafeVarargs
-	public static <T> List<T> itemsToCollection(T... items) {
-		List<T> list = new ArrayList<T>();
-		for (T item : items) list.add(item);
-		return list;
 	}
 	
 }

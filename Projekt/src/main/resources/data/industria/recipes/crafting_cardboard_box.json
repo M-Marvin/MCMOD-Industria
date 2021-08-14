@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "# #",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:cardboard_sheet"
+    }
+  },
+  "result": {
+    "item": "industria:cardboard_box",
+    "count": 2
+  }
+}

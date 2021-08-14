@@ -3,9 +3,9 @@ package de.industria.fluids;
 import java.util.Random;
 
 import de.industria.Industria;
-import de.industria.ModItems;
 import de.industria.fluids.util.BlockModFlowingFluid;
 import de.industria.typeregistys.ModFluids;
+import de.industria.typeregistys.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.FlowingFluid;

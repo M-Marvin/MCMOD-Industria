@@ -1,6 +1,6 @@
 package de.industria.items;
 
-import de.industria.ModItems;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTabs;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;

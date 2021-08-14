@@ -3,8 +3,8 @@ package de.industria.blocks;
 import java.util.Random;
 
 import de.industria.Industria;
-import de.industria.ModItems;
 import de.industria.tileentity.TileEntityJigsaw;
+import de.industria.typeregistys.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

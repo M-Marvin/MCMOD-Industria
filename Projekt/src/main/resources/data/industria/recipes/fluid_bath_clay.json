@@ -1,0 +1,20 @@
+{
+  "type": "industria:fluid_bath",
+  "ingredientFluid": {
+    "fluid": "minecraft:water",
+    "amount": 100
+  },
+  "wasteFluid":  {
+    "fluid": "industria:empty",
+    "amount": 0
+  },
+  "ingredientItem": {
+    "item": "industria:clay_powder",
+    "count": 1
+  },
+  "resultItem": {
+    "item": "minecraft:clay_ball",
+    "count": 1
+  },
+  "processTime": 60
+}

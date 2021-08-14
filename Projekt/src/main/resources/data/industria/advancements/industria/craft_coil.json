@@ -1,0 +1,35 @@
+{
+  "parent": "industria:industria/craft_cables",
+  "display": {
+    "icon": {
+      "item": "industria:transformator_coil"
+    },
+    "title": {
+      "translate": "advancements.industria.craft_coil.title"
+    },
+    "description": {
+      "translate": "advancements.industria.craft_coil.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "coil": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "industria:transformator_coil"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "coil"
+    ]
+  ]
+}

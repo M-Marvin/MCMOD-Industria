@@ -3,7 +3,7 @@ package de.industria.blocks;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.industria.ModItems;
+import de.industria.typeregistys.ModItems;
 import de.industria.util.blockfeatures.IBAdvancedStickyBlock;
 import de.industria.util.types.AdvancedPistonBlockStructureHelper;
 import net.minecraft.block.Block;

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "industria:stone_dust"
+    },
+    {
+      "item": "industria:stone_dust"
+    },
+    {
+      "item": "industria:aluminium_dust"
+    },
+    {
+      "item": "minecraft:dirt"
+    }
+  ],
+  "result": {
+    "item": "industria:clay_powder",
+    "count": 6
+  }
+}

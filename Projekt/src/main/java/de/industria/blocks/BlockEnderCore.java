@@ -3,10 +3,10 @@ package de.industria.blocks;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
-import de.industria.ModItems;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.renderer.BlockEnderCoreItemRenderer;
 import de.industria.tileentity.TileEntityEnderCore;
+import de.industria.typeregistys.ModItems;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;

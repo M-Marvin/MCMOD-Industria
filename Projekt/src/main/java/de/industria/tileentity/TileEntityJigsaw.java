@@ -9,12 +9,12 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import de.industria.Industria;
-import de.industria.ModItems;
 import de.industria.blocks.BlockJigsaw;
 import de.industria.blocks.BlockJigsaw.JigsawType;
 import de.industria.gui.ContainerJigsaw;
 import de.industria.structureprocessor.JigsawTemplateProcessor;
 import de.industria.structureprocessor.JigsawTemplateProcessor.JigsawReplacement;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.handler.ItemStackHelper;
 import de.industria.util.handler.JigsawFileManager;

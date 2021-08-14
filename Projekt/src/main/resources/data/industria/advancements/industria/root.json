@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "item": "industria:steel_block"
+    },
+    "title": {
+      "translate": "advancements.industria.root.title"
+    },
+    "description": {
+      "translate": "advancements.industria.root.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "industria:textures/gui/advancements/backgrounds/oxidized_copper_plates.png"
+  },
+  "criteria": {
+    "copper": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "industria:copper_ingot"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "copper"
+    ]
+  ]
+}

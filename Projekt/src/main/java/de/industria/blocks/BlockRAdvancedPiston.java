@@ -9,8 +9,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import de.industria.Industria;
-import de.industria.ModItems;
 import de.industria.tileentity.TileEntityAdvancedMovingBlock;
+import de.industria.typeregistys.ModItems;
 import de.industria.util.types.AdvancedPistonBlockStructureHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

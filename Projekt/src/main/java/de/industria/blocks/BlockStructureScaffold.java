@@ -3,10 +3,10 @@ package de.industria.blocks;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
-import de.industria.ModItems;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.items.ItemStructureCladdingPane;
 import de.industria.tileentity.TileEntityStructureScaffold;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTags;
 import de.industria.typeregistys.ModToolType;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;

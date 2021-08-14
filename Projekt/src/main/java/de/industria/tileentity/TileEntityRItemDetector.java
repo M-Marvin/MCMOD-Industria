@@ -3,8 +3,8 @@ package de.industria.tileentity;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.industria.ModItems;
 import de.industria.blocks.BlockRItemDetector;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;

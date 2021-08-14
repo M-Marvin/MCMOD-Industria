@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import de.industria.ModItems;
 import de.industria.blocks.BlockFallingDust;
 import de.industria.blocks.BlockStairsBase;
 import de.industria.fluids.util.BlockGasFluid;
+import de.industria.typeregistys.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

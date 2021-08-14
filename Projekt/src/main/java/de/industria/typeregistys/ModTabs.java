@@ -1,6 +1,5 @@
 package de.industria.typeregistys;
 
-import de.industria.ModItems;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 

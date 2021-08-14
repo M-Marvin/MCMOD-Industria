@@ -2,9 +2,9 @@ package de.industria.renderer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
-import de.industria.ModItems;
 import de.industria.items.ItemFluidCannister;
 import de.industria.tileentity.TileEntityFluidCannister;
+import de.industria.typeregistys.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;

@@ -1,7 +1,7 @@
 package de.industria.tileentity;
 
-import de.industria.ModItems;
 import de.industria.gui.ContainerMCoalHeater;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;

@@ -1,0 +1,35 @@
+{
+  "parent": "industria:industria/root",
+  "display": {
+    "icon": {
+      "item": "industria:rubber_sapling"
+    },
+    "title": {
+      "translate": "advancements.industria.find_rubber.title"
+    },
+    "description": {
+      "translate": "advancements.industria.find_rubber.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "rubber_tree": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "industria:rubber_sapling"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "rubber_tree"
+    ]
+  ]
+}

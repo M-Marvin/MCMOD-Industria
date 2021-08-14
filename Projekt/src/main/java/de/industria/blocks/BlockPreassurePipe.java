@@ -3,9 +3,9 @@ package de.industria.blocks;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
-import de.industria.ModItems;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.tileentity.TileEntityPreassurePipe;
+import de.industria.typeregistys.ModItems;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.handler.VoxelHelper;
 import net.minecraft.block.Block;

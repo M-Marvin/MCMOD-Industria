@@ -3,6 +3,7 @@ package de.industria.typeregistys;
 import de.industria.Industria;
 import de.industria.gui.ContainerRHarvester;
 import de.industria.gui.ContainerRHoverControler;
+import de.industria.gui.ContainerCardboardBox;
 import de.industria.gui.ContainerItemDistributor;
 import de.industria.gui.ContainerJigsaw;
 import de.industria.gui.ContainerMAirCompressor;
@@ -22,6 +23,7 @@ import de.industria.gui.ContainerMThermalZentrifuge;
 import de.industria.gui.ContainerNComputer;
 import de.industria.gui.ContainerNetworkConfigurator;
 import de.industria.gui.ContainerRProcessor;
+import de.industria.gui.ContainerRecipeCreator;
 import de.industria.gui.ContainerReciver;
 import de.industria.gui.ContainerMStoredCrafting;
 import net.minecraft.inventory.container.Container;
@@ -55,9 +57,11 @@ public class ModContainerType {
 	public static final ContainerType<ContainerMChunkLoader> CHUNK_LAODER = register(new ResourceLocation(Industria.MODID, "chunk_loader"), ContainerMChunkLoader::new);
 	public static final ContainerType<ContainerMAirCompressor> AIR_COMPRESSOR = register(new ResourceLocation(Industria.MODID, "air_compressor"), ContainerMAirCompressor::new);
 	public static final ContainerType<ContainerItemDistributor> ITEM_DISTRIBUTOR = register(new ResourceLocation(Industria.MODID, "item_distributor"), ContainerItemDistributor::new);
-	public static final ContainerType<ContainerMBlastFurnace> BLAST_FURNACE = register (new ResourceLocation(Industria.MODID, "blast_furnace"), ContainerMBlastFurnace::new);
-	public static final ContainerType<ContainerMMetalFormer> METAL_FORMER = register (new ResourceLocation(Industria.MODID, "metal_former"), ContainerMMetalFormer::new);
-	public static final ContainerType<ContainerMOreWashingPlant> ORE_WASHING_PLANT = register (new ResourceLocation(Industria.MODID, "ore_washing_plant"), ContainerMOreWashingPlant::new);
+	public static final ContainerType<ContainerMBlastFurnace> BLAST_FURNACE = register(new ResourceLocation(Industria.MODID, "blast_furnace"), ContainerMBlastFurnace::new);
+	public static final ContainerType<ContainerMMetalFormer> METAL_FORMER = register(new ResourceLocation(Industria.MODID, "metal_former"), ContainerMMetalFormer::new);
+	public static final ContainerType<ContainerMOreWashingPlant> ORE_WASHING_PLANT = register(new ResourceLocation(Industria.MODID, "ore_washing_plant"), ContainerMOreWashingPlant::new);
+	public static final ContainerType<ContainerCardboardBox> CARDBOARD_BOX = register(new ResourceLocation(Industria.MODID, "cardboard_box"), ContainerCardboardBox::new);
+	public static final ContainerType<ContainerRecipeCreator> RECIPE_CREATOR = register(new ResourceLocation(Industria.MODID, "recipe_creator"), ContainerRecipeCreator::new);
 	
 	protected static <T extends Container> ContainerType<T> register(ResourceLocation key, IContainerFactory<T> factory) {
 		ContainerType<T> type = IForgeContainerType.create(factory);

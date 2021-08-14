@@ -3,7 +3,7 @@ package de.industria.blocks;
 import java.util.ArrayList;
 
 import de.industria.Industria;
-import de.industria.ModItems;
+import de.industria.typeregistys.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DoorBlock;

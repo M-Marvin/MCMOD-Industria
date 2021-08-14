@@ -16,6 +16,8 @@ public class Industria {
 	// - Heater
 	// - BlastFurance
 	// - MetalFormer
+	// RC Drops
+	// Burned Encased Cable
 	
 	public static final Logger LOGGER = LogManager.getLogger();
 	public static final String MODID = "industria";

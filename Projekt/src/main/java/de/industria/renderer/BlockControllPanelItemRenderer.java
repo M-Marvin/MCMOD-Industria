@@ -5,10 +5,10 @@ import java.util.Map.Entry;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
-import de.industria.ModItems;
 import de.industria.blocks.BlockRControllPanel;
 import de.industria.items.panelitems.ItemPanelElement;
 import de.industria.tileentity.TileEntityControllPanel.Pos;
+import de.industria.typeregistys.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;

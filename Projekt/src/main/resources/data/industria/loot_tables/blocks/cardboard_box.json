@@ -1,0 +1,47 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_name",
+              "source": "block_entity"
+            },
+            {
+              "function": "minecraft:copy_nbt",
+              "source": "block_entity",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "industria:cardboard_box",
+                  "properties": {
+                    "packed": "true"
+                  }
+                }
+              ],
+              "ops": [
+                {
+                  "source": "Items",
+                  "target": "BlockEntityTag.Items",
+                  "op": "replace"
+                }
+              ]
+            },
+            {
+              "function": "minecraft:copy_state",
+              "block": "industria:cardboard_box",
+              "properties": [
+                "packed"
+              ]
+            }
+          ],
+          "name": "industria:cardboard_box"
+        }
+      ]
+    }
+  ]
+}

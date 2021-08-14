@@ -1,9 +1,9 @@
 package de.industria.fluids;
 
 import de.industria.Industria;
-import de.industria.ModItems;
 import de.industria.fluids.util.BlockModFlowingFluid;
 import de.industria.typeregistys.ModFluids;
+import de.industria.typeregistys.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;

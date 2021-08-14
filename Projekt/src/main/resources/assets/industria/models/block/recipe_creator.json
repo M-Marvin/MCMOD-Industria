@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "industria:block/recipe_creator_front",
+    "north": "industria:block/recipe_creator_front",
+    "south": "industria:block/recipe_creator_side",
+    "east": "industria:block/recipe_creator_side",
+    "west": "industria:block/recipe_creator_front",
+    "up": "industria:block/recipe_creator_top",
+    "down": "industria:block/recipe_creator_bottom"
+  }
+}

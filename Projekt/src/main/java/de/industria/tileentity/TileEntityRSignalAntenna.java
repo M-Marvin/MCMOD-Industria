@@ -3,8 +3,8 @@ package de.industria.tileentity;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.industria.ModItems;
 import de.industria.blocks.BlockSignalAntennaConector;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTags;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.types.RedstoneControlSignal;

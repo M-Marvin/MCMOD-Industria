@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.industria.Industria;
-import de.industria.ModItems;
+import de.industria.typeregistys.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

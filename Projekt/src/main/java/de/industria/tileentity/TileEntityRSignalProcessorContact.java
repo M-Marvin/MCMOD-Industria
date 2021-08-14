@@ -3,11 +3,11 @@ package de.industria.tileentity;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import de.industria.ModItems;
 import de.industria.blocks.BlockRSignalProcessorContact;
 import de.industria.items.ItemProcessor;
 import de.industria.items.ItemProcessor.OperatorResult;
 import de.industria.items.ItemProcessor.OperatorType;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.ITENetworkDevice;
 import de.industria.util.blockfeatures.ITENetworkDevice.NetworkDeviceIP;

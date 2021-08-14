@@ -1,6 +1,7 @@
 package de.industria.blocks;
 
 import de.industria.util.blockfeatures.IBAdvancedStickyBlock;
+import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import de.industria.util.types.AdvancedPistonBlockStructureHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ITileEntityProvider;
@@ -80,6 +81,12 @@ public class BlockEncasedElectricWire extends BlockElectricWire implements IBAdv
 	@Override
 	public ItemStack getCloneItemStack(IBlockReader p_185473_1_, BlockPos p_185473_2_, BlockState p_185473_3_) {
 		return new ItemStack(Item.byBlock(this.scaffoldBlock));
+	}
+	
+	@Override
+	public void onNetworkChanges(World worldIn, BlockPos pos, BlockState state, ElectricityNetwork network) {
+		// TODO Auto-generated method stub
+		super.onNetworkChanges(worldIn, pos, state, network);
 	}
 	
 }

@@ -3,9 +3,9 @@ package de.industria.tileentity;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import de.industria.ModItems;
 import de.industria.blocks.BlockRControllPanel;
 import de.industria.items.panelitems.ItemPanelElement;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.types.RedstoneControlSignal;
 import net.minecraft.block.BlockState;

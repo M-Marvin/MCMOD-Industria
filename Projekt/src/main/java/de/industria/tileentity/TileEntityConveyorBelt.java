@@ -3,11 +3,11 @@ package de.industria.tileentity;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
-import de.industria.ModItems;
 import de.industria.blocks.BlockConveyorBelt;
 import de.industria.blocks.BlockConveyorSpliter;
 import de.industria.blocks.BlockConveyorSwitch;
 import de.industria.blocks.BlockConveyorBelt.BeltState;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;

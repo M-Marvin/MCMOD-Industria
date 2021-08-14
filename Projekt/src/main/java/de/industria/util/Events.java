@@ -13,9 +13,9 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 
 import de.industria.Industria;
-import de.industria.ModItems;
 import de.industria.fluids.util.BlockGasFluid;
 import de.industria.typeregistys.ModFluids;
+import de.industria.typeregistys.ModItems;
 import de.industria.util.handler.BlockBurnManager;
 import de.industria.util.handler.ChunkLoadHandler;
 import de.industria.util.handler.JigsawFileManager;

@@ -3,8 +3,8 @@ package de.industria.typeregistys;
 import com.mojang.datafixers.types.Type;
 
 import de.industria.Industria;
-import de.industria.ModItems;
 import de.industria.tileentity.TileEntityAdvancedMovingBlock;
+import de.industria.tileentity.TileEntityCardboardBox;
 import de.industria.tileentity.TileEntityControllPanel;
 import de.industria.tileentity.TileEntityConveyorBelt;
 import de.industria.tileentity.TileEntityEncasedFluidPipe;
@@ -107,6 +107,7 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityMMetalFormer> METAL_FORMER = register("metal_former", TileEntityType.Builder.of(TileEntityMMetalFormer::new, ModItems.metal_former));
 	public static final TileEntityType<TileEntityMOreWashingPlant> ORE_WASHING_PLANT = register("ore_washing_plant", TileEntityType.Builder.of(TileEntityMOreWashingPlant::new, ModItems.ore_washing_plant));
 	public static final TileEntityType<TileEntityFluidCannister> FLUID_CANISTER = register("fluid_cannister", TileEntityType.Builder.of(TileEntityFluidCannister::new, ModItems.fluid_cannister.getBlock()));
+	public static final TileEntityType<TileEntityCardboardBox> CARDBOARD_BOX = register("cardboard_box", TileEntityType.Builder.of(TileEntityCardboardBox::new, ModItems.cardboard_box));
 	
 	private static <T extends TileEntity> TileEntityType<T> register(String key, TileEntityType.Builder<T> builder) {
 		Type<?> type = Util.fetchChoiceType(TypeReferences.BLOCK_ENTITY, key);

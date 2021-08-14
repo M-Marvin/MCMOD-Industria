@@ -6,9 +6,9 @@ import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
-import de.industria.ModItems;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.tileentity.TileEntitySimpleBlockTicking;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;

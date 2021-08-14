@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import de.industria.Industria;
-import de.industria.ModItems;
 import de.industria.jeiplugin.recipetypes.RecipeCategoryAirCompressor;
 import de.industria.jeiplugin.recipetypes.RecipeCategoryAlloy;
 import de.industria.jeiplugin.recipetypes.RecipeCategoryBlastFurnace;
@@ -16,6 +15,7 @@ import de.industria.jeiplugin.recipetypes.RecipeCategorySchredder;
 import de.industria.jeiplugin.recipetypes.RecipeCategoryThermalZentrifuge;
 import de.industria.jeiplugin.recipetypes.RecipeCategoryWashingPlant;
 import de.industria.typeregistys.ModFluids;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModRecipeTypes;
 import de.industria.util.handler.UtilHelper;
 import mezz.jei.api.IModPlugin;

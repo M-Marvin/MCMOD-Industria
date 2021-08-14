@@ -2,6 +2,7 @@ package de.industria;
 
 import java.util.Optional;
 
+import de.industria.packet.CCRecipeCreator;
 import de.industria.packet.CConfigureNetworkDevice;
 import de.industria.packet.CEditComputerCode;
 import de.industria.packet.CEditJigsawTileEntityPacket;
@@ -10,11 +11,10 @@ import de.industria.packet.CGenerateJigsaw;
 import de.industria.packet.CUpdateChunkLoader;
 import de.industria.packet.SSendENHandeler;
 import de.industria.typeregistys.ModConfiguredFeatures;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTabs;
-import de.industria.util.handler.MethodHelper;
 import de.industria.util.handler.ModGameRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.dispenser.IBlockSource;
@@ -27,8 +27,8 @@ import net.minecraft.item.Rarity;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.biome.Biome.Category;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.GenerationStage.Decoration;
 import net.minecraft.world.gen.feature.Features;
 import net.minecraftforge.event.RegistryEvent;
@@ -68,28 +68,28 @@ public class ServerSetup {
 		});
 
 		// Vanilla FireInfo Overrides
-		MethodHelper.addFireSetting(Blocks.ACACIA_DOOR, 5, 20);
-		MethodHelper.addFireSetting(Blocks.OAK_DOOR, 5, 20);
-		MethodHelper.addFireSetting(Blocks.BIRCH_DOOR, 5, 20);
-		MethodHelper.addFireSetting(Blocks.DARK_OAK_DOOR, 5, 20);
-		MethodHelper.addFireSetting(Blocks.SPRUCE_DOOR, 5, 20);
-		MethodHelper.addFireSetting(Blocks.CHEST, 5, 20);
-		MethodHelper.addFireSetting(Blocks.TRAPPED_CHEST, 5, 20);
-		MethodHelper.addFireSetting(Blocks.OAK_TRAPDOOR, 5, 20);
-		MethodHelper.addFireSetting(Blocks.BIRCH_TRAPDOOR, 5, 20);
-		MethodHelper.addFireSetting(Blocks.ACACIA_TRAPDOOR, 5, 20);
-		MethodHelper.addFireSetting(Blocks.DARK_OAK_TRAPDOOR, 5, 20);
-		MethodHelper.addFireSetting(Blocks.SPRUCE_TRAPDOOR, 5, 20);
-		MethodHelper.addFireSetting(Blocks.OAK_SIGN, 10, 30);
-		MethodHelper.addFireSetting(Blocks.BIRCH_SIGN, 10, 30);
-		MethodHelper.addFireSetting(Blocks.ACACIA_SIGN, 10, 30);
-		MethodHelper.addFireSetting(Blocks.DARK_OAK_SIGN, 10, 30);
-		MethodHelper.addFireSetting(Blocks.SPRUCE_SIGN, 10, 30);
-		MethodHelper.addFireSetting(Blocks.OAK_PRESSURE_PLATE, 10, 30);
-		MethodHelper.addFireSetting(Blocks.BIRCH_PRESSURE_PLATE, 10, 30);
-		MethodHelper.addFireSetting(Blocks.ACACIA_PRESSURE_PLATE, 10, 30);
-		MethodHelper.addFireSetting(Blocks.DARK_OAK_PRESSURE_PLATE, 10, 30);
-		MethodHelper.addFireSetting(Blocks.SPRUCE_PRESSURE_PLATE, 10, 30);
+//		MethodHelper.addFireSetting(Blocks.ACACIA_DOOR, 5, 20);
+//		MethodHelper.addFireSetting(Blocks.OAK_DOOR, 5, 20);
+//		MethodHelper.addFireSetting(Blocks.BIRCH_DOOR, 5, 20);
+//		MethodHelper.addFireSetting(Blocks.DARK_OAK_DOOR, 5, 20);
+//		MethodHelper.addFireSetting(Blocks.SPRUCE_DOOR, 5, 20);
+//		MethodHelper.addFireSetting(Blocks.CHEST, 5, 20);
+//		MethodHelper.addFireSetting(Blocks.TRAPPED_CHEST, 5, 20);
+//		MethodHelper.addFireSetting(Blocks.OAK_TRAPDOOR, 5, 20);
+//		MethodHelper.addFireSetting(Blocks.BIRCH_TRAPDOOR, 5, 20);
+//		MethodHelper.addFireSetting(Blocks.ACACIA_TRAPDOOR, 5, 20);
+//		MethodHelper.addFireSetting(Blocks.DARK_OAK_TRAPDOOR, 5, 20);
+//		MethodHelper.addFireSetting(Blocks.SPRUCE_TRAPDOOR, 5, 20);
+//		MethodHelper.addFireSetting(Blocks.OAK_SIGN, 10, 30);
+//		MethodHelper.addFireSetting(Blocks.BIRCH_SIGN, 10, 30);
+//		MethodHelper.addFireSetting(Blocks.ACACIA_SIGN, 10, 30);
+//		MethodHelper.addFireSetting(Blocks.DARK_OAK_SIGN, 10, 30);
+//		MethodHelper.addFireSetting(Blocks.SPRUCE_SIGN, 10, 30);
+//		MethodHelper.addFireSetting(Blocks.OAK_PRESSURE_PLATE, 10, 30);
+//		MethodHelper.addFireSetting(Blocks.BIRCH_PRESSURE_PLATE, 10, 30);
+//		MethodHelper.addFireSetting(Blocks.ACACIA_PRESSURE_PLATE, 10, 30);
+//		MethodHelper.addFireSetting(Blocks.DARK_OAK_PRESSURE_PLATE, 10, 30);
+//		MethodHelper.addFireSetting(Blocks.SPRUCE_PRESSURE_PLATE, 10, 30);
 				
 	}
 
@@ -103,6 +103,10 @@ public class ServerSetup {
 		Industria.NETWORK.registerMessage(4, CEditComputerCode.class, CEditComputerCode::encode, CEditComputerCode::new, CEditComputerCode::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		Industria.NETWORK.registerMessage(5, CConfigureNetworkDevice.class, CConfigureNetworkDevice::encode, CConfigureNetworkDevice::new, CConfigureNetworkDevice::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		Industria.NETWORK.registerMessage(6, CUpdateChunkLoader.class, CUpdateChunkLoader::encode, CUpdateChunkLoader::new, CUpdateChunkLoader::handle);
+		Industria.NETWORK.registerMessage(7, CCRecipeCreator.class, CCRecipeCreator::encode, CCRecipeCreator::new, CCRecipeCreator::handle);
+		
+		// Devstuff
+		ModGameRegistry.registerBlock(ModItems.recipe_creator, ModTabs.TOOLS);
 		
 		// register Blocks
 		ModGameRegistry.registerBlock(ModItems.tree_tap, ModTabs.TOOLS);
@@ -244,6 +248,7 @@ public class ServerSetup {
 		ModGameRegistry.registerBlock(ModItems.item_distributor, ModTabs.MACHINES);
 		ModGameRegistry.registerBlock(ModItems.preassure_pipe_item_terminal, ModTabs.MACHINES);
 		ModGameRegistry.registerBlock(ModItems.ore_washing_plant, ModTabs.MACHINES);
+		ModGameRegistry.registerBlock(ModItems.cardboard_box, ModTabs.DECORATIONS);
 		
 		ModGameRegistry.registerBlock(ModItems.mangrove_log, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.mangrove_wood, ModTabs.BUILDING_BLOCKS);
@@ -1082,6 +1087,8 @@ public class ServerSetup {
 		ModGameRegistry.registerItem(ModItems.flax_straw);
 		ModGameRegistry.registerItem(ModItems.scrutched_flax);
 		ModGameRegistry.registerItem(ModItems.flax_fibers);
+		ModGameRegistry.registerItem(ModItems.stone_dust);
+		ModGameRegistry.registerItem(ModItems.clay_powder);
 		
 		// register Functional Items
 		ModGameRegistry.registerItem(ModItems.lever_element);

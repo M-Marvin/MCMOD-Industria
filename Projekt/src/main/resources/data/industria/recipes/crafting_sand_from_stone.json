@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "industria:stone_dust"
+    }
+  },
+  "result": {
+    "item": "minecraft:sand"
+  }
+}

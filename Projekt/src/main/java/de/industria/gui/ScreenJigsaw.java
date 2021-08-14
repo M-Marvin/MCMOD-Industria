@@ -5,11 +5,11 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import de.industria.Industria;
-import de.industria.ModItems;
 import de.industria.blocks.BlockJigsaw;
 import de.industria.blocks.BlockJigsaw.JigsawType;
 import de.industria.packet.CEditJigsawTileEntityPacket;
 import de.industria.packet.CGenerateJigsaw;
+import de.industria.typeregistys.ModItems;
 import de.industria.util.handler.ItemStackHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

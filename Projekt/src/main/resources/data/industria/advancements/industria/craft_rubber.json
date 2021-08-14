@@ -1,0 +1,35 @@
+{
+  "parent": "industria:industria/find_rubber",
+  "display": {
+    "icon": {
+      "item": "industria:rubber"
+    },
+    "title": {
+      "translate": "advancements.industria.craft_rubber.title"
+    },
+    "description": {
+      "translate": "advancements.industria.craft_rubber.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "rubber": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "industria:rubber"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "rubber"
+    ]
+  ]
+}

@@ -1,6 +1,6 @@
 package de.industria.specialrecipes;
 
-import de.industria.ModItems;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModSerializer;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.DyeItem;

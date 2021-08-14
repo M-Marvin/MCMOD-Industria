@@ -1,0 +1,35 @@
+{
+  "parent": "industria:industria/craft_coil",
+  "display": {
+    "icon": {
+      "item": "industria:generator"
+    },
+    "title": {
+      "translate": "advancements.industria.craft_generator.title"
+    },
+    "description": {
+      "translate": "advancements.industria.craft_generator.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "generator": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "industria:generator"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "generator"
+    ]
+  ]
+}

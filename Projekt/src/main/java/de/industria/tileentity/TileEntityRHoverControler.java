@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import de.industria.ModItems;
 import de.industria.blocks.BlockRHoverControler;
 import de.industria.blocks.BlockRHoverExtension;
 import de.industria.gui.ContainerRHoverControler;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.handler.ElectricityNetworkHandler;

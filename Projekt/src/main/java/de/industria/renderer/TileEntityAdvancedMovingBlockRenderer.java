@@ -5,8 +5,8 @@ import java.util.Random;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
-import de.industria.ModItems;
 import de.industria.tileentity.TileEntityAdvancedMovingBlock;
+import de.industria.typeregistys.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.PistonBlock;
 import net.minecraft.block.PistonHeadBlock;

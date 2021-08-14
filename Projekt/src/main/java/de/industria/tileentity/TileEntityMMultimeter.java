@@ -1,7 +1,7 @@
 package de.industria.tileentity;
 
-import de.industria.ModItems;
 import de.industria.blocks.BlockMMultimeter;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;

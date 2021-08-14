@@ -8,8 +8,8 @@ import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.handler.ElectricityNetworkHandler;
-import de.industria.util.handler.MachineSoundHelper;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
+import de.industria.util.handler.MachineSoundHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -89,7 +89,7 @@ public class TileEntityMGenerator extends TileEntityInventoryBase implements INa
 	@SuppressWarnings("deprecation")
 	@Override
 	public void tick() {
-		
+				
 		if (!this.level.isClientSide()) {
 			
 			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);

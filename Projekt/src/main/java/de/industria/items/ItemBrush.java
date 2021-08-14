@@ -1,8 +1,8 @@
 package de.industria.items;
 
 import de.industria.Industria;
-import de.industria.ModItems;
 import de.industria.blocks.BlockStairsBase;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTabs;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -133,7 +133,6 @@ public class ItemBrush extends ItemBase {
 		}
 		
 		if (flag) {
-			// TODO Sound
 			world.playSound(null, clickedBlockPos, SoundEvents.WEEPING_VINES_STEP, SoundCategory.BLOCKS, 1, 1);
 			return ActionResultType.SUCCESS;
 		}

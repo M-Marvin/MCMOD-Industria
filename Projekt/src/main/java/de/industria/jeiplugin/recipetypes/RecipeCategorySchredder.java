@@ -3,9 +3,9 @@ package de.industria.jeiplugin.recipetypes;
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import de.industria.Industria;
-import de.industria.ModItems;
 import de.industria.jeiplugin.JEIRecipeCategories;
 import de.industria.recipetypes.SchredderRecipe;
+import de.industria.typeregistys.ModItems;
 import de.industria.util.handler.UtilHelper;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;

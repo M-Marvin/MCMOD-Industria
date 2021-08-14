@@ -5,8 +5,8 @@ import java.awt.Color;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
-import de.industria.ModItems;
 import de.industria.tileentity.TileEntityFluidCannister;
+import de.industria.typeregistys.ModItems;
 import de.industria.util.gui.AnimatedTexture;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.IRenderTypeBuffer;

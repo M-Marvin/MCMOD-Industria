@@ -1,0 +1,35 @@
+{
+  "parent": "industria:industria/craft_rubber",
+  "display": {
+    "icon": {
+      "item": "industria:copper_cable"
+    },
+    "title": {
+      "translate": "advancements.industria.craft_cable.title"
+    },
+    "description": {
+      "translate": "advancements.industria.craft_cable.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "cable": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "industria:copper_cable"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "cable"
+    ]
+  ]
+}

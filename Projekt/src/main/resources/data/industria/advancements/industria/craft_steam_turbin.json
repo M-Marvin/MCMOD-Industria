@@ -1,0 +1,35 @@
+{
+  "parent": "industria:industria/craft_generator",
+  "display": {
+    "icon": {
+      "item": "industria:steel_ingot"
+    },
+    "title": {
+      "translate": "advancements.industria.craft_steel.title"
+    },
+    "description": {
+      "translate": "advancements.industria.craft_steel.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "steel": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "industria:steel_ingot"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "steel"
+    ]
+  ]
+}

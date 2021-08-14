@@ -3,7 +3,7 @@ package de.industria.tileentity;
 import java.util.Iterator;
 import java.util.List;
 
-import de.industria.ModItems;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.ITEPostMoveHandled;
 import net.minecraft.block.Block;

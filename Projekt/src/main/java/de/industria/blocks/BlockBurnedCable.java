@@ -2,10 +2,10 @@ package de.industria.blocks;
 
 import java.util.Random;
 
-import de.industria.ModItems;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.tileentity.TileEntityMBurnedCable;
 import de.industria.typeregistys.ModDamageSource;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
@@ -47,19 +47,24 @@ public class BlockBurnedCable extends BlockElectricWire {
 		return new TileEntityMBurnedCable();
 	}
 	
-	public static void crateBurnedCable(BlockState cableSate, BlockPos pos, World worldIn) {
-		BlockState burnedState = ModItems.burned_cable.defaultBlockState()
-				.setValue(NORTH, cableSate.getValue(NORTH))
-				.setValue(SOUTH, cableSate.getValue(SOUTH))
-				.setValue(EAST, cableSate.getValue(EAST))
-				.setValue(WEST, cableSate.getValue(WEST))
-				.setValue(UP, cableSate.getValue(UP))
-				.setValue(DOWN, cableSate.getValue(DOWN))
-				.setValue(WATERLOGGED, cableSate.getValue(WATERLOGGED));
+	public static void crateBurnedCable(BlockState cableState, BlockPos pos, World worldIn) {
+		
+		BlockState burnedState = (cableState.getBlock() instanceof BlockEncasedElectricWire ? ModItems.encased_electric_burned_cable : ModItems.burned_cable).defaultBlockState()
+				.setValue(NORTH, cableState.getValue(NORTH))
+				.setValue(SOUTH, cableState.getValue(SOUTH))
+				.setValue(EAST, cableState.getValue(EAST))
+				.setValue(WEST, cableState.getValue(WEST))
+				.setValue(UP, cableState.getValue(UP))
+				.setValue(DOWN, cableState.getValue(DOWN))
+				.setValue(WATERLOGGED, cableState.getValue(WATERLOGGED));
 		
 		worldIn.setBlockAndUpdate(pos, burnedState);
-		TileEntityMBurnedCable tileEntity = (TileEntityMBurnedCable) worldIn.getBlockEntity(pos);
-		tileEntity.setCableBlock(cableSate.getBlock());
+		
+		if (burnedState.getBlock() == ModItems.burned_cable) {
+			TileEntityMBurnedCable tileEntity = (TileEntityMBurnedCable) worldIn.getBlockEntity(pos);
+			tileEntity.setCableBlock(cableState.getBlock());
+		}
+		
 	}
 	
 	public static Block getBurnedCableFromStack(ItemStack burnedCableStack) {

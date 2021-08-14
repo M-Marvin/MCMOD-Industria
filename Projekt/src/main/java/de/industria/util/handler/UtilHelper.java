@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
 public class UtilHelper {
 	
 	@SuppressWarnings("unchecked")
@@ -33,7 +36,12 @@ public class UtilHelper {
 	@SafeVarargs
 	public static <T> List<T> toCollection(T... items) {
 		List<T> list = new ArrayList<T>();
-		for (T item : items) list.add(item);
+		for (T item : items) {
+			if (item instanceof ItemStack && ((ItemStack) item).isEmpty()) continue;
+			if (item instanceof FluidStack && ((FluidStack) item).isEmpty()) continue;
+			if (item == null) continue;
+			list.add(item);
+		}
 		return list;
 	}
 	

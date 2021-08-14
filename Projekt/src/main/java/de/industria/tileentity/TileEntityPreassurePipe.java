@@ -2,8 +2,8 @@ package de.industria.tileentity;
 
 import java.util.List;
 
-import de.industria.ModItems;
 import de.industria.blocks.BlockPreassurePipe;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.ITESimpleMachineSound;

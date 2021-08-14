@@ -3,7 +3,7 @@ package de.industria.util.handler;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import de.industria.ModItems;
+import de.industria.typeregistys.ModItems;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.minecart.AbstractMinecartEntity;

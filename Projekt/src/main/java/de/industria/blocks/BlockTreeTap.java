@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import de.industria.ModItems;
 import de.industria.blocks.BlockRubberLog.RipeState;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTags;
 import de.industria.util.handler.VoxelHelper;
@@ -149,6 +149,7 @@ public class BlockTreeTap extends BlockBase {
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
 		Direction side = context.getClickedFace();
+		if (side == Direction.UP || side == Direction.DOWN) return null;
 		BlockState logState = context.getLevel().getBlockState(context.getClickedPos().relative(side.getOpposite()));
 		if (ModTags.RUBBER_LOGS.contains(logState.getBlock())) {
 			return this.defaultBlockState().setValue(FACING, side);	

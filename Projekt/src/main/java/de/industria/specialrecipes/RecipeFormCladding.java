@@ -1,10 +1,10 @@
 
 package de.industria.specialrecipes;
 
-import de.industria.ModItems;
 import de.industria.items.ItemStructureCladdingPane;
 import de.industria.recipetypes.MetalFormRecipe;
 import de.industria.tileentity.TileEntityMMetalFormer;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModSerializer;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;

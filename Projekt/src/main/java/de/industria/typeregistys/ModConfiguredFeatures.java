@@ -1,7 +1,6 @@
 package de.industria.typeregistys;
 
 import de.industria.Industria;
-import de.industria.ModItems;
 import de.industria.blocks.BlockJigsaw.JigsawType;
 import de.industria.worldgen.CrystalOreFeatureConfig;
 import de.industria.worldgen.JigsawFeatureConfig;

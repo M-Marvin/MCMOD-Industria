@@ -1,5 +1,6 @@
 package de.industria;
 
+import de.industria.gui.ScreenCardboardBox;
 import de.industria.gui.ScreenItemDistributor;
 import de.industria.gui.ScreenJigsaw;
 import de.industria.gui.ScreenMAirCompressor;
@@ -23,6 +24,7 @@ import de.industria.gui.ScreenRHarvester;
 import de.industria.gui.ScreenRHoverControler;
 import de.industria.gui.ScreenRProcessor;
 import de.industria.gui.ScreenRReciver;
+import de.industria.gui.ScreenRecipeCreator;
 import de.industria.renderer.EntityDummyRenderer;
 import de.industria.renderer.ItemSchredderToolCrusherModel;
 import de.industria.renderer.ItemSchredderToolMaceratorModel;
@@ -52,6 +54,7 @@ import de.industria.typeregistys.ModClientBindings;
 import de.industria.typeregistys.ModContainerType;
 import de.industria.typeregistys.ModEntityType;
 import de.industria.typeregistys.ModFluids;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
@@ -208,6 +211,8 @@ public class ClientSetup {
 		ScreenManager.register(ModContainerType.BLAST_FURNACE, ScreenMBlastFurnace::new);
 		ScreenManager.register(ModContainerType.METAL_FORMER, ScreenMMetalFormer::new);
 		ScreenManager.register(ModContainerType.ORE_WASHING_PLANT, ScreenMOreWashingPlant::new);
+		ScreenManager.register(ModContainerType.CARDBOARD_BOX, ScreenCardboardBox::new);
+		ScreenManager.register(ModContainerType.RECIPE_CREATOR, ScreenRecipeCreator::new);
 		
 		ModClientBindings.bindModelToitem(ModItems.schredder_crusher, new ResourceLocation(Industria.MODID, "textures/item/schredder_crusher.png"), new ItemSchredderToolCrusherModel());
 		ModClientBindings.bindModelToitem(ModItems.schredder_macerator, new ResourceLocation(Industria.MODID, "textures/item/schredder_macerator.png"), new ItemSchredderToolMaceratorModel());

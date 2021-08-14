@@ -6,7 +6,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.tileentity.TileEntity;
@@ -53,14 +52,16 @@ public abstract class BlockContainerBase extends ContainerBlock {
 	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
-
+	
 	@Override
-	public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
-		TileEntity te = worldIn.getBlockEntity(pos);
-		if (te instanceof IInventory) {
-			InventoryHelper.dropContents(worldIn, pos, (IInventory) te);
+	public void onRemove(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+		if (!state.is(newState.getBlock())) {
+			TileEntity te = world.getBlockEntity(pos);
+			if (te instanceof IInventory) {
+				InventoryHelper.dropContents(world, pos, (IInventory) te);
+			}
+			world.removeBlockEntity(pos);
 		}
-		super.playerWillDestroy(worldIn, pos, state, player);
 	}
 	
 }

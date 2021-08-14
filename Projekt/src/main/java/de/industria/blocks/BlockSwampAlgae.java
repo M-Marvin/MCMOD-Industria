@@ -3,7 +3,7 @@ package de.industria.blocks;
 import java.util.Random;
 
 import de.industria.Industria;
-import de.industria.ModItems;
+import de.industria.typeregistys.ModItems;
 import de.industria.util.handler.ItemStackHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

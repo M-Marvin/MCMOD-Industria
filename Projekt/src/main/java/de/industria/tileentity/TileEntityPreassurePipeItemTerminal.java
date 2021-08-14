@@ -2,10 +2,10 @@ package de.industria.tileentity;
 
 import java.util.List;
 
-import de.industria.ModItems;
 import de.industria.blocks.BlockPipePreassurizer;
 import de.industria.blocks.BlockPreassurePipe;
 import de.industria.blocks.BlockPreassurePipeItemTerminal;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.handler.ItemStackHelper;
 import de.industria.util.handler.VoxelHelper;

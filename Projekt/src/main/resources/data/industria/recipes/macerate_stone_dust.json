@@ -1,0 +1,15 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "industria:crushed_stone"
+  },
+  "results": [
+    {
+      "item": "industria:stone_dust",
+      "count": 1
+    }
+  ],
+  "schreddertime": 200,
+  "schreddertool": "industria:schredder_macerator",
+  "schredderdamage": 12
+}

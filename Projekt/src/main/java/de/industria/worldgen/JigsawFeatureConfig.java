@@ -3,9 +3,9 @@ package de.industria.worldgen;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import de.industria.ModItems;
 import de.industria.blocks.BlockJigsaw;
 import de.industria.tileentity.TileEntityJigsaw;
+import de.industria.typeregistys.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;

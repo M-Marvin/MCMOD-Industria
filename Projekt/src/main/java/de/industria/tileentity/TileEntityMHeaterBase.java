@@ -1,9 +1,9 @@
 package de.industria.tileentity;
 
-import de.industria.ModItems;
 import de.industria.blocks.BlockMultiPart;
 import de.industria.fluids.FluidDestilledWater;
 import de.industria.typeregistys.ModFluids;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.handler.MachineSoundHelper;

@@ -1,5 +1,6 @@
 package de.industria.blocks;
 
+import de.industria.typeregistys.ModItems;
 import de.industria.util.blockfeatures.IBAdvancedStickyBlock;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import de.industria.util.types.AdvancedPistonBlockStructureHelper;
@@ -85,8 +86,7 @@ public class BlockEncasedElectricWire extends BlockElectricWire implements IBAdv
 	
 	@Override
 	public void onNetworkChanges(World worldIn, BlockPos pos, BlockState state, ElectricityNetwork network) {
-		// TODO Auto-generated method stub
-		super.onNetworkChanges(worldIn, pos, state, network);
+		if (state.getBlock() != ModItems.encased_electric_burned_cable) super.onNetworkChanges(worldIn, pos, state, network);
 	}
 	
 }

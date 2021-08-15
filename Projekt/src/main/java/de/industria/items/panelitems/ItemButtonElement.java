@@ -36,7 +36,7 @@ public class ItemButtonElement extends ItemPanelElement {
 				
 				ItemStack chanelStack = new ItemStack(Items.REDSTONE_TORCH, 1);
 				chanelStack.setHoverName(elementStack.getHoverName());
-				RedstoneControlSignal signal = new RedstoneControlSignal(chanelStack, true);
+				RedstoneControlSignal signal = new RedstoneControlSignal(chanelStack, 15);
 				panel.sendSignal(signal);
 				panel.addSheduleTick(elementStack, 20);
 				
@@ -60,7 +60,7 @@ public class ItemButtonElement extends ItemPanelElement {
 
 			ItemStack chanelStack = new ItemStack(Items.REDSTONE_TORCH, 1);
 			chanelStack.setHoverName(elementStack.getHoverName());
-			RedstoneControlSignal signal = new RedstoneControlSignal(chanelStack, false);
+			RedstoneControlSignal signal = new RedstoneControlSignal(chanelStack, 0);
 			panel.sendSignal(signal);
 			
 			panel.getLevel().playSound(null, panel.getBlockPos(), SoundEvents.WOODEN_BUTTON_CLICK_ON, SoundCategory.BLOCKS, 1, 0.5F);

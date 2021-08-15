@@ -33,7 +33,7 @@ public class ItemLeverElement extends ItemPanelElement {
 			
 			ItemStack chanelItem = new ItemStack(Items.REDSTONE_TORCH);
 			chanelItem.setHoverName(elementStack.getHoverName());
-			RedstoneControlSignal signal = new RedstoneControlSignal(chanelItem, powered);
+			RedstoneControlSignal signal = new RedstoneControlSignal(chanelItem, powered ? 15 : 0);
 			panel.sendSignal(signal);
 			
 			panel.getLevel().playSound(null, panel.getBlockPos(), SoundEvents.LEVER_CLICK, SoundCategory.BLOCKS, 1, powered ? 0.6F : 0.5F);

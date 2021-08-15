@@ -8,12 +8,14 @@ import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
@@ -107,6 +109,9 @@ public class TileEntityRItemDetector extends TileEntity implements ITickableTile
 					ItemStack stack = ((IInventory) itemEntity).getItem(i);
 					if (!stack.isEmpty()) items.add(stack);
 				}
+			} else if (itemEntity instanceof LivingEntity) {
+				items.add(((LivingEntity) itemEntity).getItemInHand(Hand.MAIN_HAND));
+				items.add(((LivingEntity) itemEntity).getItemInHand(Hand.OFF_HAND));
 			}
 		});
 		

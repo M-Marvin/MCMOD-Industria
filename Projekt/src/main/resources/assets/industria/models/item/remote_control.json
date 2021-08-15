@@ -1,6 +1,11 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "industria:item/remote_control"
-  }
+	"parent": "industria:item/remote_control_inactive",
+    "overrides": [
+        {
+            "predicate": {
+                "custom_model_data": 1
+            },
+            "model": "industria:item/remote_control_active"
+        }
+    ]
 }

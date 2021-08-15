@@ -69,7 +69,7 @@ public class BlockRItemDetector extends BlockContainerBase {
 	
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
-		return side == state.getValue(FACING).getOpposite();
+		return side == world.getBlockState(pos).getValue(FACING);
 	}
 	
 	@Override

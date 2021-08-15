@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PEP",
+    "PQP",
+    "PRP"
+  ],
+  "key": {
+    "E": {
+      "item": "industria:fluorite_crystal"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "Q": {
+      "item": "industria:lightbarrier"
+    },
+    "P": {
+      "item": "minecraft:spruce_planks"
+    }
+  },
+  "result": {
+    "item": "industria:movement_detector"
+  }
+}

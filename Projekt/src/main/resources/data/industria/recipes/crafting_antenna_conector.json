@@ -2,18 +2,21 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "CEC",
-    "CGC",
-    "CGC"
+    "CKC",
+    "CRC"
   ],
   "key": {
     "E": {
-      "item": "minecraft:iron_ingot"
+      "item": "industria:electrolyt_copper_plate"
     },
     "C": {
-      "item": "minecraft:cobblestone"
+      "item": "minecraft:stone"
     },
-    "G": {
-      "item": "minecraft:gold_ingot"
+    "K": {
+      "item": "minecraft:comparator"
+    },
+    "R": {
+      "item": "industria:redstone_alloy_plate"
     }
   },
   "result": {

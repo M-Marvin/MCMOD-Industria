@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PEP",
+    "PQP",
+    "PRP"
+  ],
+  "key": {
+    "E": {
+      "item": "industria:vanadium_plate"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "Q": {
+      "item": "industria:led"
+    },
+    "P": {
+      "item": "minecraft:spruce_planks"
+    }
+  },
+  "result": {
+    "item": "industria:lightbarrier"
+  }
+}

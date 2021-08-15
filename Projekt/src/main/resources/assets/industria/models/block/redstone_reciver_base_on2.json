@@ -1,0 +1,7 @@
+{
+	"parent": "industria:block/redstone_reciver_base_off",
+	"textures": {
+		"1": "industria:block/redstone_reciver_side_on2",
+		"particle": "industria:block/redstone_reciver_side_on14"
+	}
+}

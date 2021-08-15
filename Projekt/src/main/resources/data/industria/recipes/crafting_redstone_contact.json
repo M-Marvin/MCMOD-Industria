@@ -2,21 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "PEP",
-    "LQL",
+    "PRP",
     "PRP"
   ],
   "key": {
     "E": {
-      "item": "minecraft:iron_ingot"
+      "item": "industria:copper_plate"
     },
     "R": {
       "item": "minecraft:redstone"
-    },
-    "Q": {
-      "item": "minecraft:quartz"
-    },
-    "L": {
-      "item": "minecraft:spruce_log"
     },
     "P": {
       "item": "minecraft:spruce_planks"

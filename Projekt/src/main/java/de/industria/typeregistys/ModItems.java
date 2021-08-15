@@ -82,6 +82,8 @@ public class ModItems {
 	public static final Block harvester = new BlockRHarvester();
 	public static final Block jigsaw = new BlockJigsaw();
 	public static final Block item_detector = new BlockRItemDetector();
+	public static final Block lightbarrier = new BlockRLightbarrier();
+	public static final Block movement_detector = new BlockRMovementDetector();
 	public static final BlockStructureScaffold structure_scaffold = new BlockStructureScaffold("structure_scaffold");
 	
 	// Networks

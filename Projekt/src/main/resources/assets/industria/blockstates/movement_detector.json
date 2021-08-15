@@ -1,0 +1,43 @@
+{
+	"multipart": [
+		
+		{	"when": {"facing": "north", "power": 0 }, 
+			"apply": { "model": "industria:block/movement_detector" }
+		},
+		{	"when": {"facing": "south", "power": 0 }, 
+			"apply": { "model": "industria:block/movement_detector", "y": 180 }
+		},
+		{	"when": {"facing": "east", "power": 0 }, 
+			"apply": { "model": "industria:block/movement_detector", "y": 90 }
+		},
+		{	"when": {"facing": "west", "power": 0 }, 
+			"apply": { "model": "industria:block/movement_detector", "y": -90 }
+		},
+		{	"when": {"facing": "up", "power": 0 }, 
+			"apply": { "model": "industria:block/movement_detector", "x": -90, "y": -90 }
+		},
+		{	"when": {"facing": "down", "power": 0 }, 
+			"apply": { "model": "industria:block/movement_detector", "x": 90, "y": 90}
+		},
+		
+		{	"when": {"facing": "north", "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15" }, 
+			"apply": { "model": "industria:block/movement_detector_active" }
+		},
+		{	"when": {"facing": "south", "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15" }, 
+			"apply": { "model": "industria:block/movement_detector_active", "y": 180 }
+		},
+		{	"when": {"facing": "east", "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15" }, 
+			"apply": { "model": "industria:block/movement_detector_active", "y": 90 }
+		},
+		{	"when": {"facing": "west", "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15" }, 
+			"apply": { "model": "industria:block/movement_detector_active", "y": -90 }
+		},
+		{	"when": {"facing": "up", "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15" }, 
+			"apply": { "model": "industria:block/movement_detector_active", "x": -90, "y": -90 }
+		},
+		{	"when": {"facing": "down", "power": "1|2|3|4|5|6|7|8|9|10|11|12|13|14|15" }, 
+			"apply": { "model": "industria:block/movement_detector_active", "x": 90, "y": 90}
+		}
+		
+	]
+}

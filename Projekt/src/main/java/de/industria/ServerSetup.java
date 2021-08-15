@@ -689,6 +689,8 @@ public class ServerSetup {
 		ModGameRegistry.registerBlock(ModItems.karstified_limestone, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.limestone_sheet, ModTabs.DECORATIONS);
 		ModGameRegistry.registerBlock(ModItems.item_detector, ItemGroup.TAB_REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.lightbarrier, ItemGroup.TAB_REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.movement_detector, ItemGroup.TAB_REDSTONE);
 		ModGameRegistry.registerBlock(ModItems.computer, ModTabs.MACHINES);
 		ModGameRegistry.registerBlock(ModItems.network_cable, ModTabs.MACHINES);
 		ModGameRegistry.registerBlock(ModItems.steel_rail, ItemGroup.TAB_TRANSPORTATION);

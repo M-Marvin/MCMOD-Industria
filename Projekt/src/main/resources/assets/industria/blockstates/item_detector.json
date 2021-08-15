@@ -7,11 +7,11 @@
 		"facing=up,powered=false": { "model": "industria:block/item_detector", "x": -90},
 		"facing=down,powered=false": { "model": "industria:block/item_detector", "x": 90 },
 		
-		"facing=north,powered=true": { "model": "industria:block/item_detector_lit"},
-		"facing=south,powered=true": { "model": "industria:block/item_detector_lit", "y": 180 },
-		"facing=east,powered=true": { "model": "industria:block/item_detector_lit", "y": 90 },
-		"facing=west,powered=true": { "model": "industria:block/item_detector_lit", "y": -90 },
-		"facing=up,powered=true": { "model": "industria:block/item_detector_lit", "x": -90},
-		"facing=down,powered=true": { "model": "industria:block/item_detector_lit", "x": 90 }
+		"facing=north,powered=true": { "model": "industria:block/item_detector_active"},
+		"facing=south,powered=true": { "model": "industria:block/item_detector_active", "y": 180 },
+		"facing=east,powered=true": { "model": "industria:block/item_detector_active", "y": 90 },
+		"facing=west,powered=true": { "model": "industria:block/item_detector_active", "y": -90 },
+		"facing=up,powered=true": { "model": "industria:block/item_detector_active", "x": -90},
+		"facing=down,powered=true": { "model": "industria:block/item_detector_active", "x": 90 }
 	}
 }

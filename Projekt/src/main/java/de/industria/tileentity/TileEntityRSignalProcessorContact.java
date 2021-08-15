@@ -76,13 +76,12 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 		
 	}
 	
-	public void setInput(ItemStack chanel, boolean powered) {
+	public void setInput(ItemStack chanel, int power) {
 		
 		String name = chanel.getHoverName().getContents();
 		if (name.length() > 0) {
-			
-			this.variables.put(name, new OperatorResult(powered, OperatorType.BOOL));
-			
+			boolean canInt = ((ItemProcessor) this.getProcessorStack().getItem()).canHandleInteger();
+			this.variables.put(name, canInt ? new OperatorResult(power, OperatorType.INT) : new OperatorResult(power > 0, OperatorType.BOOL));
 		}
 		
 	}
@@ -97,7 +96,7 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 				if (codeLines != null) {
 					
 					ItemProcessor processorItem = (ItemProcessor) this.getProcessorStack().getItem();
-					this.lastSuccessState = processorItem.prozess(this.getProcessorStack(), this.variables);
+					this.lastSuccessState = processorItem.process(this.getProcessorStack(), this.variables);
 									
 				}
 			}
@@ -110,7 +109,20 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 					
 					ItemStack chanel = new ItemStack(Items.REDSTONE_TORCH);
 					chanel.setHoverName(new StringTextComponent(name));
-					RedstoneControlSignal signal = new RedstoneControlSignal(chanel, value.getBValue());
+					RedstoneControlSignal signal = new RedstoneControlSignal(chanel, value.getBValue() ? 15 : 0);
+					
+					BlockState state = this.level.getBlockState(this.worldPosition);
+					if (state.getBlock() == ModItems.signal_processor_contact) {
+						
+						((BlockRSignalProcessorContact) state.getBlock()).sendSignal(this.level, this.worldPosition, signal);
+						
+					}
+					
+				} else if (value.getType() == OperatorType.INT) {
+					
+					ItemStack chanel = new ItemStack(Items.REDSTONE_TORCH);
+					chanel.setHoverName(new StringTextComponent(name));
+					RedstoneControlSignal signal = new RedstoneControlSignal(chanel, value.getIValue());
 					
 					BlockState state = this.level.getBlockState(this.worldPosition);
 					if (state.getBlock() == ModItems.signal_processor_contact) {

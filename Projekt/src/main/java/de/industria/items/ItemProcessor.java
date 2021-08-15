@@ -24,17 +24,20 @@ public class ItemProcessor extends ItemBase {
 		this.maxLineCount = maxLineCount;
 		this.canHandleInteger = canHandleInteger;
 	}
-
+	
+	public boolean canHandleInteger() {
+		return this.canHandleInteger;
+	}
+	
 	@Override
 	public boolean isFoil(ItemStack stack) {
-		
-		return canHandleInteger;
-		
+		return this.canHandleInteger();
 	}
+	
 	public int getMaxLineCount() {
 		return this.maxLineCount;
 	}
-	
+		
 	public ContainerTileEntity<TileEntityRSignalProcessorContact> createContainer(int id, PlayerInventory playerInv, TileEntityRSignalProcessorContact tileEntity) {
 		return new ContainerRProcessor(id, playerInv, tileEntity);
 	}
@@ -69,7 +72,7 @@ public class ItemProcessor extends ItemBase {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public boolean prozess(ItemStack stack, HashMap<String, OperatorResult> variables) {
+	public boolean process(ItemStack stack, HashMap<String, OperatorResult> variables) {
 		
 		boolean success = true;
 		for (String line : this.getCodeLinesFromProcessor(stack)) {

@@ -1,19 +1,22 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "CCC",
-    "CRC",
-    "CGC"
+    "SGS",
+    "SKS",
+    "SRS"
   ],
   "key": {
-    "R": {
-      "item": "industria:redstone_ingot"
-    },
-    "C": {
-      "item": "minecraft:cobblestone"
+    "S": {
+      "item": "minecraft:stone"
     },
     "G": {
-      "item": "minecraft:gold_ingot"
+      "item": "industria:gold_plate"
+    },
+    "R": {
+      "item": "industria:redstone_alloy_plate"
+    },
+    "K": {
+      "item": "minecraft:comparator"
     }
   },
   "result": {

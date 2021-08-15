@@ -54,27 +54,39 @@ public class BlockSignalAntennaConector extends BlockContainerBase implements IB
 	public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
 		if (state.getValue(FACING).getAxis().isVertical()) {
 			return state.getValue(FACING) == Direction.UP ? Stream.of(
+					Block.box(15, 0, 0, 16, 16, 1),
+					Block.box(1, 0, 1, 15, 10, 15),
+					Block.box(1, 11, 1, 15, 12, 15),
+					Block.box(1, 15, 1, 15, 16, 15),
+					Block.box(1, 13, 1, 15, 14, 15),
 					Block.box(4, 10, 4, 12, 15, 12),
-					Block.box(0, 0, 0, 16, 10, 16),
-					Block.box(0, 11, 0, 16, 12, 16),
-					Block.box(0, 15, 0, 16, 16, 16),
-					Block.box(0, 13, 0, 16, 14, 16)
-					).reduce((v1, v2) -> {return VoxelShapes.join(v1, v2, IBooleanFunction.OR);}).get() : 
+					Block.box(15, 0, 15, 16, 16, 16),
+					Block.box(0, 0, 0, 1, 16, 1),
+					Block.box(0, 0, 15, 1, 16, 16)
+					).reduce((v1, v2) -> VoxelShapes.join(v1, v2, IBooleanFunction.OR)).get() : 
 					Stream.of(
+					Block.box(15, 0, 15, 16, 16, 16),
+					Block.box(1, 6, 1, 15, 16, 15),
+					Block.box(1, 4, 1, 15, 5, 15),
+					Block.box(1, 0, 1, 15, 1, 15),
+					Block.box(1, 2, 1, 15, 3, 15),
 					Block.box(4, 1, 4, 12, 6, 12),
-					Block.box(0, 6, 0, 16, 16, 16),
-					Block.box(0, 4, 0, 16, 5, 16),
-					Block.box(0, 0, 0, 16, 1, 16),
-					Block.box(0, 2, 0, 16, 3, 16)
-					).reduce((v1, v2) -> {return VoxelShapes.join(v1, v2, IBooleanFunction.OR);}).get();
+					Block.box(15, 0, 0, 16, 16, 1),
+					Block.box(0, 0, 15, 1, 16, 16),
+					Block.box(0, 0, 0, 1, 16, 1)
+					).reduce((v1, v2) -> VoxelShapes.join(v1, v2, IBooleanFunction.OR)).get();
 		} else {
 			return VoxelHelper.rotateShape(Stream.of(
+					Block.box(0, 15, 0, 1, 16, 16),
+					Block.box(1, 1, 6, 15, 15, 16),
+					Block.box(1, 1, 4, 15, 15, 5),
+					Block.box(1, 1, 0, 15, 15, 1),
+					Block.box(1, 1, 2, 15, 15, 3),
 					Block.box(4, 4, 1, 12, 12, 6),
-					Block.box(0, 0, 6, 16, 16, 16),
-					Block.box(0, 0, 4, 16, 16, 5),
-					Block.box(0, 0, 0, 16, 16, 1),
-					Block.box(0, 0, 2, 16, 16, 3)
-					).reduce((v1, v2) -> {return VoxelShapes.join(v1, v2, IBooleanFunction.OR);}).get(), state.getValue(FACING));
+					Block.box(0, 0, 0, 1, 1, 16),
+					Block.box(15, 15, 0, 16, 16, 16),
+					Block.box(15, 0, 0, 16, 1, 16)
+					).reduce((v1, v2) -> VoxelShapes.join(v1, v2, IBooleanFunction.OR)).get(), state.getValue(FACING));
 		}
 	}
 	

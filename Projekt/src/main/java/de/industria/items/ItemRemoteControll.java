@@ -54,9 +54,10 @@ public class ItemRemoteControll extends ItemBase {
 				ItemStack chanelItem = chanelItemTag == null ? null : ItemStack.of(chanelItemTag);
 				boolean toggle = !tag.getBoolean("Toggle");
 				tag.putBoolean("Toggle", toggle);
+				tag.putInt("CustomModelData", toggle ? 1 : 0);;
 				stack.setTag(tag);
 				
-				RedstoneControlSignal signal = new RedstoneControlSignal(chanelItem, toggle);
+				RedstoneControlSignal signal = new RedstoneControlSignal(chanelItem, toggle ? 15 : 0);
 				BlockPos pos = new BlockPos(playerIn.getX(), playerIn.getY(), playerIn.getZ());
 				
 				sendSignal(worldIn, pos, 25, signal);

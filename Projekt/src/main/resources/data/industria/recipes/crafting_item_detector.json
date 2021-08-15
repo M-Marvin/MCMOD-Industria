@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "PEP",
-    "LQL",
+    "PRP",
     "PRP"
   ],
   "key": {
@@ -11,12 +11,6 @@
     },
     "R": {
       "item": "minecraft:redstone"
-    },
-    "Q": {
-      "item": "minecraft:quartz"
-    },
-    "L": {
-      "item": "minecraft:spruce_log"
     },
     "P": {
       "item": "minecraft:spruce_planks"

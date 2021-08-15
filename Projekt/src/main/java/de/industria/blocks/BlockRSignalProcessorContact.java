@@ -245,7 +245,7 @@ public class BlockRSignalProcessorContact extends BlockContainerBase implements 
 		
 		if (tileEntity instanceof TileEntityRSignalProcessorContact) {
 			
-			((TileEntityRSignalProcessorContact) tileEntity).setInput(signal.getChanelItem(), signal.isPowered());
+			((TileEntityRSignalProcessorContact) tileEntity).setInput(signal.getChanelItem(), signal.getPower());
 			
 		}
 		

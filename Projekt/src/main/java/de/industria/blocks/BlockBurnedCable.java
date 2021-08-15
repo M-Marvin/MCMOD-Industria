@@ -58,9 +58,13 @@ public class BlockBurnedCable extends BlockElectricWire {
 				.setValue(DOWN, cableState.getValue(DOWN))
 				.setValue(WATERLOGGED, cableState.getValue(WATERLOGGED));
 		
-		worldIn.setBlockAndUpdate(pos, burnedState);
-		
-		if (burnedState.getBlock() == ModItems.burned_cable) {
+
+		if (burnedState.getBlock() != ModItems.burned_cable) {
+			CompoundNBT nbt = worldIn.getBlockEntity(pos).serializeNBT();
+			worldIn.setBlockAndUpdate(pos, burnedState);
+			worldIn.getBlockEntity(pos).deserializeNBT(nbt);
+		} else {
+			worldIn.setBlockAndUpdate(pos, burnedState);
 			TileEntityMBurnedCable tileEntity = (TileEntityMBurnedCable) worldIn.getBlockEntity(pos);
 			tileEntity.setCableBlock(cableState.getBlock());
 		}

@@ -1,6 +1,11 @@
 package de.industria.blocks;
 
+import java.util.concurrent.Callable;
+import java.util.function.Supplier;
+
+import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.tileentity.TileEntityRedstoneReciver;
+import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBSignalConnectiveBlock;
 import de.industria.util.handler.ItemStackHelper;
 import de.industria.util.types.RedstoneControlSignal;
@@ -9,6 +14,7 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -17,6 +23,7 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
@@ -27,25 +34,26 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockRRedstoneReciver extends BlockContainerBase implements IBSignalConnectiveBlock {
+public class BlockRRedstoneReciver extends BlockContainerBase implements IBSignalConnectiveBlock, IBAdvancedBlockInfo {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final BooleanProperty TRANSIVER_MODE = BooleanProperty.create("transiver_mode");
-	public static final BooleanProperty POWERED = BooleanProperty.create("powered");
+	public static final IntegerProperty POWER = BlockStateProperties.POWER;
 	
 	public BlockRRedstoneReciver() {
 		super("redstone_reciver", Material.STONE, 2.5F, 1.5F, SoundType.STONE);
-		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(TRANSIVER_MODE, false).setValue(POWERED, false));
+		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(TRANSIVER_MODE, false).setValue(POWER, 0));
 	}
 	
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
-		builder.add(FACING, TRANSIVER_MODE, POWERED);
+		builder.add(FACING, TRANSIVER_MODE, POWER);
 	}
 	
 	@Override
@@ -62,19 +70,17 @@ public class BlockRRedstoneReciver extends BlockContainerBase implements IBSigna
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 		
 		if (state.getValue(TRANSIVER_MODE)) {
-			
-			boolean power = worldIn.hasNeighborSignal(pos);
-			boolean powered = state.getValue(POWERED);
+			int powerIn = worldIn.getDirectSignalTo(pos);
+			int power = state.getValue(POWER);
 			
 			TileEntity te = worldIn.getBlockEntity(pos);
 			
-			if (te instanceof TileEntityRedstoneReciver && power != powered) {
+			if (te instanceof TileEntityRedstoneReciver && power != powerIn) {
 				
-				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, power));
+				worldIn.setBlockAndUpdate(pos, state.setValue(POWER, powerIn));
 				
 				if (((TileEntityRedstoneReciver) te).getChanelItem() != null) {
-					
-					RedstoneControlSignal signal = new RedstoneControlSignal(((TileEntityRedstoneReciver) te).getChanelItem(), power);
+					RedstoneControlSignal signal = new RedstoneControlSignal(((TileEntityRedstoneReciver) te).getChanelItem(), powerIn);
 					this.sendSignal(worldIn, pos, signal);
 					
 				}
@@ -108,7 +114,7 @@ public class BlockRRedstoneReciver extends BlockContainerBase implements IBSigna
 				
 				if (state.getBlock() instanceof BlockRRedstoneReciver) {
 					
-					((BlockRRedstoneReciver) state.getBlock()).triggerRemote(worldIn, pos, signal.isPowered());
+					((BlockRRedstoneReciver) state.getBlock()).triggerRemote(worldIn, pos, signal.getPower());
 					
 				}
 				
@@ -118,13 +124,13 @@ public class BlockRRedstoneReciver extends BlockContainerBase implements IBSigna
 		
 	}
 	
-	public void triggerRemote(World world, BlockPos pos, boolean powered) {
+	public void triggerRemote(World world, BlockPos pos, int power) {
 		
 		BlockState state = world.getBlockState(pos);
 		
 		if (state.getBlock() == this ? !state.getValue(TRANSIVER_MODE) : false) {
 			
-			world.setBlockAndUpdate(pos, state.setValue(POWERED, powered));
+			world.setBlockAndUpdate(pos, state.setValue(POWER, power));
 			world.updateNeighborsAtExceptFromFacing(pos, this, state.getValue(FACING).getOpposite());
 						
 		}
@@ -168,7 +174,7 @@ public class BlockRRedstoneReciver extends BlockContainerBase implements IBSigna
 	
 	@Override
 	public int getSignal(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
-		return blockState.getValue(POWERED) && !blockState.getValue(TRANSIVER_MODE) ? 15 : 0;
+		return !blockState.getValue(TRANSIVER_MODE) ? blockState.getValue(POWER) : 0;
 	}
 	
 	@Override
@@ -190,6 +196,18 @@ public class BlockRRedstoneReciver extends BlockContainerBase implements IBSigna
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
 		return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
+	}
+
+	@Override
+	public IBlockToolType getBlockInfo() {
+		return (stack, info) -> {
+			info.add(new TranslationTextComponent("industria.block.info.redstoneReciver"));
+		};
+	}
+
+	@Override
+	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
+		return null;
 	}
 	
 }

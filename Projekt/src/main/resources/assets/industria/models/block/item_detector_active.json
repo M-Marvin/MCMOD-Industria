@@ -1,0 +1,74 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"1": "industria:block/redstone_contact_side",
+		"3": "industria:block/redstone_contact_bottom_active",
+		"particle": "industria:block/item_detector_active",
+		"front": "industria:block/item_detector_active"
+	},
+	"elements": [
+		{
+			"from": [1, 15, 0],
+			"to": [15, 16, 16],
+			"faces": {
+				"north": {"uv": [1, 0, 15, 1], "texture": "#front"},
+				"south": {"uv": [1, 0, 15, 1], "texture": "#3"},
+				"up": {"uv": [1, 0, 15, 16], "texture": "#1"},
+				"down": {"uv": [1, 0, 15, 16], "texture": "#1"}
+			}
+		},
+		{
+			"from": [0, 0, 0],
+			"to": [1, 16, 16],
+			"faces": {
+				"north": {"uv": [15, 0, 16, 16], "texture": "#front"},
+				"east": {"uv": [0, 0, 16, 16], "rotation": 270, "texture": "#1"},
+				"south": {"uv": [0, 0, 1, 16], "texture": "#3"},
+				"west": {"uv": [0, 0, 16, 16], "rotation": 270, "texture": "#1"},
+				"up": {"uv": [0, 0, 1, 16], "texture": "#1"},
+				"down": {"uv": [15, 0, 16, 16], "texture": "#1"}
+			}
+		},
+		{
+			"from": [1, 0, 0],
+			"to": [15, 1, 16],
+			"faces": {
+				"north": {"uv": [1, 15, 15, 16], "texture": "#front"},
+				"south": {"uv": [1, 15, 15, 16], "texture": "#3"},
+				"up": {"uv": [1, 0, 15, 16], "texture": "#1"},
+				"down": {"uv": [1, 0, 15, 16], "texture": "#1"}
+			}
+		},
+		{
+			"from": [15, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 1, 16], "texture": "#front"},
+				"east": {"uv": [0, 0, 16, 16], "rotation": 270, "texture": "#1"},
+				"south": {"uv": [15, 0, 16, 16], "texture": "#3"},
+				"west": {"uv": [0, 0, 16, 16], "rotation": 270, "texture": "#1"},
+				"up": {"uv": [15, 0, 16, 16], "texture": "#1"},
+				"down": {"uv": [0, 0, 1, 16], "texture": "#1"}
+			}
+		},
+		{
+			"from": [1, 1, 2],
+			"to": [15, 15, 14],
+			"faces": {
+				"north": {"uv": [1, 1, 15, 15], "texture": "#front"},
+				"south": {"uv": [1, 1, 15, 15], "texture": "#3"}
+			}
+		},
+		{
+			"from": [4, 4, 1],
+			"to": [12, 12, 2],
+			"faces": {
+				"north": {"uv": [4, 4, 12, 12], "texture": "#front"},
+				"east": {"uv": [4, 4, 5, 12], "texture": "#front"},
+				"west": {"uv": [11, 4, 12, 12], "texture": "#front"},
+				"up": {"uv": [4, 4, 12, 5], "texture": "#front"},
+				"down": {"uv": [4, 11, 12, 12], "texture": "#front"}
+			}
+		}
+	]
+}

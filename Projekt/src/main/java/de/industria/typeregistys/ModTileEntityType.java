@@ -61,7 +61,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 public class ModTileEntityType {
 	
-	public static final TileEntityType<TileEntitySimpleBlockTicking> SIMPLE_BLOCK_TICKING = register("simple_block_ticking", TileEntityType.Builder.of(TileEntitySimpleBlockTicking::new, ModItems.panel_lamp, ModItems.infinity_power_source, ModItems.transformator_contact, ModItems.steam, ModItems.compressed_air, ModItems.rail_adapter, ModItems.biogas, ModItems.fuel_gas));
+	public static final TileEntityType<TileEntitySimpleBlockTicking> SIMPLE_BLOCK_TICKING = register("simple_block_ticking", TileEntityType.Builder.of(TileEntitySimpleBlockTicking::new, ModItems.panel_lamp, ModItems.infinity_power_source, ModItems.transformator_contact, ModItems.steam, ModItems.compressed_air, ModItems.rail_adapter, ModItems.biogas, ModItems.fuel_gas, ModItems.lightbarrier, ModItems.movement_detector));
 	public static final TileEntityType<TileEntityAdvancedMovingBlock> ADVANCED_PISTON = register("advanced_piston", TileEntityType.Builder.of(TileEntityAdvancedMovingBlock::new, ModItems.advanced_moving_block));
 	public static final TileEntityType<TileEntityRedstoneReciver> REMOTE_CONTROLER = register("remote_controler", TileEntityType.Builder.of(TileEntityRedstoneReciver::new, ModItems.advanced_moving_block));
 	public static final TileEntityType<TileEntityRSignalAntenna> SIGNAL_ANTENNA = register("signal_antenna", TileEntityType.Builder.of(TileEntityRSignalAntenna::new, ModItems.antenna_conector));

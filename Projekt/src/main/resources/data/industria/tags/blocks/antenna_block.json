@@ -15,6 +15,8 @@
 	"industria:weathered_iron_planks",
 	"industria:exposed_iron_planks",
 	"industria:oxidized_iron_planks",
-	"industria:iron_ladder"    
+	"industria:stacked_redstone_torch",
+	"industria:stacked_redstone_wire",
+	"industria:signal_wire"
   ]
 }

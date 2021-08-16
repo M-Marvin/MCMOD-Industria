@@ -85,7 +85,7 @@ public class BlockMThermalZentrifuge extends BlockContainerBase implements IBEle
 
 	@Override
 	public DeviceType getDeviceType() {
-		return DeviceType.MASCHINE;
+		return DeviceType.MACHINE;
 	}
 
 	@Override

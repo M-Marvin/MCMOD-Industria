@@ -82,7 +82,7 @@ public class BlockNComputer extends BlockMultiPart<TileEntityNComputer> implemen
 
 	@Override
 	public DeviceType getDeviceType() {
-		return DeviceType.MASCHINE;
+		return DeviceType.MACHINE;
 	}
 	
 	@Override

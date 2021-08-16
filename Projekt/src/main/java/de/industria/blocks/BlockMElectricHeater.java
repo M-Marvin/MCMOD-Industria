@@ -84,7 +84,7 @@ public class BlockMElectricHeater extends BlockMultiPart<TileEntityMElectricHeat
 
 	@Override
 	public DeviceType getDeviceType() {
-		return DeviceType.MASCHINE;
+		return DeviceType.MACHINE;
 	}
 
 	@Override

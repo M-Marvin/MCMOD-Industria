@@ -215,6 +215,7 @@ public class ServerSetup {
 		ModGameRegistry.registerBlock(ModItems.stone_corner, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.salsola_seeds, ModTabs.MATERIALS);
 		ModGameRegistry.registerBlock(ModItems.jigsaw, null, Rarity.EPIC);
+		ModGameRegistry.registerBlock(ModItems.battery, ModTabs.MACHINES);
 		ModGameRegistry.registerBlock(ModItems.generator, ModTabs.MACHINES);
 		ModGameRegistry.registerBlock(ModItems.steel_pipe, ModTabs.MACHINES);
 		ModGameRegistry.registerBlock(ModItems.copper_pipe, ModTabs.MACHINES);

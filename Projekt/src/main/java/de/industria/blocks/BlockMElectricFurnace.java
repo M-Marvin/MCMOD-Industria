@@ -111,7 +111,7 @@ public class BlockMElectricFurnace extends BlockContainerBase implements IBElect
 
 	@Override
 	public DeviceType getDeviceType() {
-		return DeviceType.MASCHINE;
+		return DeviceType.MACHINE;
 	}
 	
 	@Override

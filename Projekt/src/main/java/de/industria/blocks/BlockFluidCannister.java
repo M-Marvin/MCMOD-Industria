@@ -10,6 +10,8 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -23,6 +25,7 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 
 public class BlockFluidCannister extends BlockContainerBase {
 	
@@ -80,6 +83,27 @@ public class BlockFluidCannister extends BlockContainerBase {
 			return fluid.getAttributes().getLuminosity();
 		}
 		return 0;
+	}
+	
+	public ItemStack getFilledCannister(Fluid fluid) {
+		ItemStack cannister = new ItemStack(this);
+		CompoundNBT teTag = new CompoundNBT();
+		CompoundNBT fluidTag = new CompoundNBT();
+		fluidTag.put("Fluid", new FluidStack(fluid, TileEntityFluidCannister.MAX_CONTENT).writeToNBT(new CompoundNBT()));
+		teTag.put("BlockEntityTag", fluidTag);
+		cannister.setTag(teTag);
+		return cannister;
+	}
+	
+	public FluidStack getContent(ItemStack cannister) {
+		if (cannister.hasTag()) {
+			if (cannister.getTag().contains("BlockEntityTag")) {
+				if (cannister.getTag().getCompound("BlockEntityTag").contains("Fluid")) {
+					return FluidStack.loadFluidStackFromNBT(cannister.getTag().getCompound("BlockEntityTag").getCompound("Fluid"));
+				}
+			}
+		}
+		return FluidStack.EMPTY;
 	}
 	
 }

@@ -182,7 +182,7 @@ public class BlockMBlender extends BlockMultiPart<TileEntityMBlender> implements
 
 	@Override
 	public DeviceType getDeviceType() {
-		return DeviceType.MASCHINE;
+		return DeviceType.MACHINE;
 	}
 	
 	@Override

@@ -1,24 +1,31 @@
 package de.industria.items;
 
+import java.util.Collection;
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import de.industria.Industria;
+import de.industria.blocks.BlockFluidCannister;
 import de.industria.fluids.util.ItemFluidBucket;
 import de.industria.fluids.util.ItemGasBucket;
 import de.industria.renderer.BlockFluidCannisterItemRenderer;
 import de.industria.tileentity.TileEntityFluidCannister;
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTabs;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.IBucketPickupHandler;
 import net.minecraft.block.ILiquidContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
@@ -28,6 +35,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -37,8 +45,12 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemFluidCannister extends BlockItem {
 	
@@ -219,5 +231,29 @@ public class ItemFluidCannister extends BlockItem {
 			cannisterStack.setTag(tag);
 		}
 	}
+
+	@Override
+	public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> list) {
+		if (this.allowdedIn(group)) {
+			Collection<Fluid> fluids = ForgeRegistries.FLUIDS.getValues();
+			for (Fluid fluid : fluids) {
+				if (fluid.isSource(fluid.defaultFluidState()) && fluid != Fluids.EMPTY) {
+					ItemStack filledCannister = ((BlockFluidCannister) ModItems.fluid_cannister.getBlock()).getFilledCannister(fluid);
+					list.add(filledCannister);
+				}
+			}
+		}
+		super.fillItemCategory(group, list);
 		
+	}
+	
+	@Override
+	public void appendHoverText(ItemStack stack, World world, List<ITextComponent> info, ITooltipFlag flag) {
+		FluidStack content = getContent(stack);
+		if (!content.isEmpty()) {
+			info.add(new StringTextComponent("\u00A77" + new TranslationTextComponent("industria.block.info.fluidCannister.content", content.getAmount(), content.getDisplayName()).getString()));
+		}
+		super.appendHoverText(stack, world, info, flag);
+	}
+	
 }

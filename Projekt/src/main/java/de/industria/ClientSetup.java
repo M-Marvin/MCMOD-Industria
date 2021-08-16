@@ -36,6 +36,7 @@ import de.industria.renderer.TileEntityFluidCannisterRenderer;
 import de.industria.renderer.TileEntityFuseBoxRenderer;
 import de.industria.renderer.TileEntityGaugeRenderer;
 import de.industria.renderer.TileEntityMAirCompressorRenderer;
+import de.industria.renderer.TileEntityMBatteryRenderer;
 import de.industria.renderer.TileEntityMBlastFurnaceRenderer;
 import de.industria.renderer.TileEntityMBlenderRenderer;
 import de.industria.renderer.TileEntityMCoalHeaterRenderer;
@@ -136,6 +137,7 @@ public class ClientSetup {
 		RenderTypeLookup.setRenderLayer(ModItems.iron_ladder, RenderType.cutoutMipped());
 		RenderTypeLookup.setRenderLayer(ModItems.fluid_cannister.getBlock(), RenderType.cutoutMipped());
 		RenderTypeLookup.setRenderLayer(ModItems.flax_crop, RenderType.cutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.battery, RenderType.cutoutMipped());
 		
 		RenderTypeLookup.setRenderLayer(ModFluids.HYDROFLUORIC_ACID, RenderType.translucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_HYDROFLUORIC_ACID, RenderType.translucent());
@@ -185,6 +187,7 @@ public class ClientSetup {
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ELECTRIC_HEATER, TileEntityMElectricHeaterRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.GAS_HEATER, TileEntityMGasHeaterRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.FLUID_CANISTER, TileEntityFluidCannisterRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.BATTERY, TileEntityMBatteryRenderer::new);
 		
 		RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FALLING_FLUID, EntityDummyRenderer::new);
 		

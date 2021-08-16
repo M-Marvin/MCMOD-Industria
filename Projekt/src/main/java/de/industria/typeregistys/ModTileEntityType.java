@@ -15,6 +15,7 @@ import de.industria.tileentity.TileEntityItemDistributor;
 import de.industria.tileentity.TileEntityJigsaw;
 import de.industria.tileentity.TileEntityMAirCompressor;
 import de.industria.tileentity.TileEntityMAlloyFurnace;
+import de.industria.tileentity.TileEntityMBattery;
 import de.industria.tileentity.TileEntityMBlastFurnace;
 import de.industria.tileentity.TileEntityMBlender;
 import de.industria.tileentity.TileEntityMBurnedCable;
@@ -108,6 +109,7 @@ public class ModTileEntityType {
 	public static final TileEntityType<TileEntityMOreWashingPlant> ORE_WASHING_PLANT = register("ore_washing_plant", TileEntityType.Builder.of(TileEntityMOreWashingPlant::new, ModItems.ore_washing_plant));
 	public static final TileEntityType<TileEntityFluidCannister> FLUID_CANISTER = register("fluid_cannister", TileEntityType.Builder.of(TileEntityFluidCannister::new, ModItems.fluid_cannister.getBlock()));
 	public static final TileEntityType<TileEntityCardboardBox> CARDBOARD_BOX = register("cardboard_box", TileEntityType.Builder.of(TileEntityCardboardBox::new, ModItems.cardboard_box));
+	public static final TileEntityType<TileEntityMBattery> BATTERY = register("battery", TileEntityType.Builder.of(TileEntityMBattery::new, ModItems.battery));
 	
 	private static <T extends TileEntity> TileEntityType<T> register(String key, TileEntityType.Builder<T> builder) {
 		Type<?> type = Util.fetchChoiceType(TypeReferences.BLOCK_ENTITY, key);

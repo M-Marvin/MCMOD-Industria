@@ -1,5 +1,6 @@
 package de.industria.util.blockfeatures;
 
+import java.awt.Color;
 import java.util.List;
 
 import de.industria.util.handler.ElectricityNetworkHandler;
@@ -65,10 +66,10 @@ public interface IBElectricConnectiveBlock {
 		}
 		
 		public static Voltage byName(String name) {
-			if (name == LowVoltage.name()) return LowVoltage;
-			if (name == NormalVoltage.name()) return NormalVoltage;
-			if (name == HightVoltage.name()) return HightVoltage;
-			if (name == ExtremVoltage.name()) return ExtremVoltage;
+			if (name.equals(LowVoltage.getSerializedName())) return LowVoltage;
+			if (name.equals(NormalVoltage.getSerializedName())) return NormalVoltage;
+			if (name.equals(HightVoltage.getSerializedName())) return HightVoltage;
+			if (name.equals(ExtremVoltage.getSerializedName())) return ExtremVoltage;
 			return NoLimit;
 		}
 
@@ -89,15 +90,25 @@ public interface IBElectricConnectiveBlock {
 			return LowVoltage;
 			
 		}
+
+		public Color getRenderColor() {
+			switch (this) {
+			case LowVoltage: return new Color(0, 255, 255);
+			case NormalVoltage: return new Color(0, 255, 0);
+			case HightVoltage: return new Color(255, 255, 0);
+			case ExtremVoltage: return new Color(255, 0, 0);
+			default: return new Color(255, 255, 255);
+			}
+		}
 		
 	}
 	
 	public static enum DeviceType {
 		
-		MASCHINE(),WIRE(),SWITCH();
+		MACHINE(),WIRE(),SWITCH();
 		
 		public boolean canConnectWith(DeviceType type) {
-			if (this == MASCHINE) return type == WIRE;
+			if (this == MACHINE) return type == WIRE;
 			if (this == SWITCH) return type == WIRE;
 			return true;
 		}

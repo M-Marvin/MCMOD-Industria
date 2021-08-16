@@ -105,7 +105,7 @@ public class BlockMGenerator extends BlockContainerBase implements IBElectricCon
 
 	@Override
 	public DeviceType getDeviceType() {
-		return DeviceType.MASCHINE;
+		return DeviceType.MACHINE;
 	}
 	
 	@Override

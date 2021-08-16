@@ -59,7 +59,7 @@ public class BlockTRailAdapter extends BlockContainerBase implements IBAdvancedB
 	
 	@Override
 	public DeviceType getDeviceType() {
-		return DeviceType.MASCHINE;
+		return DeviceType.MACHINE;
 	}
 	
 	@Override

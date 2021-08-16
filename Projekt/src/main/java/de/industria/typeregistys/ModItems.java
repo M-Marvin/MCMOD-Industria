@@ -100,6 +100,7 @@ public class ModItems {
 	public static final Block conveyor_switch = new BlockConveyorSwitch();
 	public static final Block conveyor_spliter = new BlockConveyorSpliter();
 	public static final Block conveyor_belt = new BlockConveyorBelt();
+	public static final BlockMBattery battery = new BlockMBattery();
 	public static final Block generator = new BlockMGenerator();
 	public static final Block infinity_power_source = new BlockInfinityPowerSource();
 	public static final Block panel_lamp = new BlockMPanelLamp();

@@ -62,15 +62,18 @@ public class BlockMTransformatorContact extends BlockContainerBase implements IB
 		if (state.getValue(INPUT)) {
 			
 			float needEnergy = getNeedEnergy(world, pos);
-			
 			int transferPower = getPower(world, pos);
+			
 			float needCurrent = Math.min(transferPower, needEnergy) / state.getValue(VOLTAGE).getVoltage();
 			
 			return Math.max(0.0001F, needCurrent);
 			
 		} else {
 			
-			return -(getEnergy(world, pos) / (float) state.getValue(VOLTAGE).getVoltage());
+			float outputEnergy = getEnergy(world, pos);
+			int transferPower = getPower(world, pos);
+			
+			return -(Math.min(transferPower, outputEnergy) / (float) state.getValue(VOLTAGE).getVoltage());
 			
 		}
 		
@@ -103,9 +106,9 @@ public class BlockMTransformatorContact extends BlockContainerBase implements IB
 
 					ElectricityNetwork network = handler.getNetwork(pos2);
 					
-					if (network.getVoltage() == state.getValue(VOLTAGE)) {
+					if (network.canMachinesRun() == state.getValue(VOLTAGE)) {
 						
-						float energy = network.getVoltage().getVoltage() * network.getCurrent();
+						float energy = network.getCapacity() * network.getVoltage().getVoltage();
 						recivedEnergy += energy;
 						
 					}

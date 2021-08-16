@@ -88,7 +88,7 @@ public class BlockMStoringCraftingTable extends BlockContainerBase implements IB
 
 	@Override
 	public DeviceType getDeviceType() {
-		return DeviceType.MASCHINE;
+		return DeviceType.MACHINE;
 	}
 
 	@Override

@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import de.industria.Industria;
 import de.industria.packet.SSendENHandeler;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
-import de.industria.util.blockfeatures.IBElectricWireBlock;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.DeviceType;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
+import de.industria.util.blockfeatures.IBElectricWireBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -84,12 +85,8 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 		return isServerInstace;
 	}
 		
-	public void updateNetwork(World world, BlockPos pos) {
-		this.calculateNetwork(world, pos);
-	}
-	
-	public void calculateNetwork(World world, BlockPos position) {
-				
+	public void updateNetwork(World world, BlockPos position) {
+		
 		if (this.isServerInstace) {
 			
 			if (world.getBlockState(position).getBlock() instanceof IBElectricConnectiveBlock) {
@@ -114,6 +111,9 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 						}
 						
 						if (network.positions.size() <= 1) network.lastUpdated = 0;
+						if (network.powercutTimer > 0) {
+							network.powercutTimer--;
+						}
 						network.needCurrent = 0;
 						network.voltage = Voltage.NoLimit;
 						network.capacity = 0;
@@ -442,6 +442,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 		public float capacity;
 		public float needCurrent;
 		public long lastUpdated;
+		public int powercutTimer;
 		
 		public ElectricityNetwork() {
 			this.positions = new HashMap<BlockPos, List<Direction>>();
@@ -475,12 +476,15 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 		}
 		
 		public float getGeneratorProductivity() {
-			return Math.max(1F, (float) this.needCurrent / this.current);
+			return Math.max(1F, this.current > 0 ? (float) this.needCurrent / this.current : 0);
 		}
 		
 		public Voltage canMachinesRun() {
 			boolean hasPower = this.needCurrent - this.current <= 0.001 && this.current > 0;
-			return hasPower ? this.voltage : Voltage.NoLimit;
+			if (!hasPower && powercutTimer <= 0 && needCurrent > 0) {
+				powercutTimer = new Random().nextInt(50);
+			}
+			return hasPower && powercutTimer <= 0 ? this.voltage : Voltage.NoLimit;
 		}
 		
 		public Voltage getVoltage() {

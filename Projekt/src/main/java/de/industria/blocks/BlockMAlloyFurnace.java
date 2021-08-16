@@ -115,7 +115,7 @@ public class BlockMAlloyFurnace extends BlockContainerBase implements IBElectric
 	
 	@Override
 	public DeviceType getDeviceType() {
-		return DeviceType.MASCHINE;
+		return DeviceType.MACHINE;
 	}
 	
 	@Override

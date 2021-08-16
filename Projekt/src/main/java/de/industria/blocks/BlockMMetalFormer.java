@@ -89,7 +89,7 @@ public class BlockMMetalFormer extends BlockMultiPart<TileEntityMMetalFormer> im
 	
 	@Override
 	public DeviceType getDeviceType() {
-		return DeviceType.MASCHINE;
+		return DeviceType.MACHINE;
 	}
 	
 	@Override

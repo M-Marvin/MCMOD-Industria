@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ECE",
+    "KLK",
+    "KLK"
+  ],
+  "key": {
+    "E": {
+      "item": "minecraft:iron_ingot"
+    },
+    "C": {
+      "item": "industria:condensator"
+    },
+    "K": {
+      "item": "industria:plastic_plate"
+    },
+    "L": {
+      "item": "industria:electrolyt_paper"
+    }
+  },
+  "result": {
+    "item": "industria:battery"
+  }
+}

@@ -72,7 +72,7 @@ public class BlockMotor extends BlockContainerBase implements IBElectricConnecti
 
 	@Override
 	public DeviceType getDeviceType() {
-		return DeviceType.MASCHINE;
+		return DeviceType.MACHINE;
 	}
 
 	@Override

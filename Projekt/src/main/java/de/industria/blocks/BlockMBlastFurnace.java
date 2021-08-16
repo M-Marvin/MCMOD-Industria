@@ -184,7 +184,7 @@ public class BlockMBlastFurnace extends BlockMultiPart<TileEntityMBlastFurnace> 
 	
 	@Override
 	public DeviceType getDeviceType() {
-		return DeviceType.MASCHINE;
+		return DeviceType.MACHINE;
 	}
 	
 	@Override

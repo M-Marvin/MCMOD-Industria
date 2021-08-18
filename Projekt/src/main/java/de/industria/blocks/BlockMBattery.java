@@ -12,7 +12,6 @@ import de.industria.tileentity.TileEntityMBattery;
 import de.industria.typeregistys.ModTabs;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
-import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import de.industria.util.handler.VoxelHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -94,7 +93,7 @@ public class BlockMBattery extends BlockContainerBase implements IBElectricConne
 		}
 		return Voltage.NoLimit;
 	}
-
+	
 	@Override
 	public float getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
 		TileEntity tileEntity = world.getBlockEntity(pos);
@@ -113,20 +112,12 @@ public class BlockMBattery extends BlockContainerBase implements IBElectricConne
 
 	@Override
 	public boolean canConnect(Direction side, World world, BlockPos pos, BlockState state) {
-		return true;
+		return side.getAxis() == state.getValue(FACING).getCounterClockWise().getAxis();
 	}
 
 	@Override
 	public DeviceType getDeviceType() {
 		return DeviceType.MACHINE;
-	}
-	
-	@Override
-	public void onNetworkChanges(World worldIn, BlockPos pos, BlockState state, ElectricityNetwork network) {
-		TileEntity tileEntity = worldIn.getBlockEntity(pos);
-		if (tileEntity instanceof TileEntityMBattery) {
-			// TODO
-		}
 	}
 	
 	@Override

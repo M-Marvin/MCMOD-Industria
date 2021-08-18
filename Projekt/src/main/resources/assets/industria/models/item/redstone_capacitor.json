@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "industria:item/capacitor"
+    "layer0": "industria:itemblock/capacitor"
   }
 }

@@ -55,19 +55,20 @@ public class BlockMFluidBath extends BlockMultiPart<TileEntityMFluidBath> implem
 	
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+		
 		BlockPos ipos = BlockMultiPart.getInternPartPos(state);
 		if (ipos.equals(new BlockPos(1, 1, 1))) {
-			return VoxelHelper.rotateShape(Block.box(15, 0, 0, 16, 16, 16), state.getValue(BlockMultiPart.FACING));
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(13, 14, 0, 15, 16, 16), Block.box(0, 0, 0, 16, 8, 12)), state.getValue(BlockMultiPart.FACING));
 		} else if (ipos.equals(new BlockPos(0, 1, 1))) {
-			return VoxelHelper.rotateShape(Block.box(0, 0, 0, 1, 16, 16), state.getValue(BlockMultiPart.FACING));
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(1, 14, 0, 3, 16, 16), Block.box(0, 0, 0, 16, 8, 12)), state.getValue(BlockMultiPart.FACING));
 		} else if (ipos.equals(new BlockPos(0, 1, 0))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 0, 16, 16, 12), Block.box(0, 0, 12, 1, 16, 16)), state.getValue(BlockMultiPart.FACING));
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(1, 0, 1, 3, 14, 3), Block.box(1, 14, 1, 3, 16, 16), Block.box(0, 0, 8, 16, 8, 16)), state.getValue(BlockMultiPart.FACING));
 		} else if (ipos.equals(new BlockPos(1, 1, 0))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 0, 16, 16, 12), Block.box(15, 0, 12, 16, 16, 16)), state.getValue(BlockMultiPart.FACING));
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(13, 0, 1, 15, 14, 3), Block.box(13, 14, 1, 15, 16, 16), Block.box(0, 0, 8, 16, 8, 16)), state.getValue(BlockMultiPart.FACING));
 		} else if (ipos.equals(new BlockPos(0, 1, 2))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 4, 16, 16, 16), Block.box(0, 0, 0, 1, 16, 4)), state.getValue(BlockMultiPart.FACING));
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(1, 0, 13, 3, 14, 15), Block.box(1, 14, 0, 3, 16, 15)), state.getValue(BlockMultiPart.FACING));
 		} else if (ipos.equals(new BlockPos(1, 1, 2))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(0, 0, 4, 16, 16, 16), Block.box(15, 0, 0, 16, 16, 4)), state.getValue(BlockMultiPart.FACING));
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(13, 0, 13, 15, 14, 15), Block.box(13, 14, 0, 15, 16, 15)), state.getValue(BlockMultiPart.FACING));
 		}
 
 		return Block.box(0, 0, 0, 16, 16, 16);
@@ -160,7 +161,7 @@ public class BlockMFluidBath extends BlockMultiPart<TileEntityMFluidBath> implem
 		if (pos.equals(BlockPos.ZERO)) {
 			return true;
 		} else {
-			return pos.equals(new BlockPos(0, 1, 0)) || pos.equals(new BlockPos(1, 1, 2));
+			return pos.equals(new BlockPos(0, 0, 2));
 		}
 	}
 	
@@ -178,8 +179,11 @@ public class BlockMFluidBath extends BlockMultiPart<TileEntityMFluidBath> implem
 
 	@Override
 	public ISidedInventory getContainer(BlockState state, IWorld world, BlockPos pos) {
-		TileEntityMFluidBath tileEntity = getCenterTE(pos, state, world);
-		return tileEntity;
+		if (getInternPartPos(state).getY() == 0) {
+			TileEntityMFluidBath tileEntity = getCenterTE(pos, state, world);
+			return tileEntity;
+		}
+		return null;
 	}
 	
 }

@@ -80,7 +80,7 @@ public class ClientSetup {
 	@SubscribeEvent
 	public static void setup(final FMLClientSetupEvent event) {
 		
-		RenderTypeLookup.setRenderLayer(ModItems.capacitor, RenderType.cutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.redstone_capacitor, RenderType.cutoutMipped());
 		RenderTypeLookup.setRenderLayer(ModItems.pulse_counter, RenderType.cutoutMipped());
 		RenderTypeLookup.setRenderLayer(ModItems.stacked_redstone_torch, RenderType.cutoutMipped());
 		RenderTypeLookup.setRenderLayer(ModItems.stacked_redstone_wire, RenderType.cutoutMipped());
@@ -138,6 +138,7 @@ public class ClientSetup {
 		RenderTypeLookup.setRenderLayer(ModItems.fluid_cannister.getBlock(), RenderType.cutoutMipped());
 		RenderTypeLookup.setRenderLayer(ModItems.flax_crop, RenderType.cutoutMipped());
 		RenderTypeLookup.setRenderLayer(ModItems.battery, RenderType.cutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.diode, RenderType.cutoutMipped());
 		
 		RenderTypeLookup.setRenderLayer(ModFluids.HYDROFLUORIC_ACID, RenderType.translucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_HYDROFLUORIC_ACID, RenderType.translucent());

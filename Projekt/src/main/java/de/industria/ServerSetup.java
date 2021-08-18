@@ -110,7 +110,7 @@ public class ServerSetup {
 		
 		// register Blocks
 		ModGameRegistry.registerBlock(ModItems.tree_tap, ModTabs.TOOLS);
-		ModGameRegistry.registerBlock(ModItems.capacitor, ItemGroup.TAB_REDSTONE);
+		ModGameRegistry.registerBlock(ModItems.redstone_capacitor, ItemGroup.TAB_REDSTONE);
 		ModGameRegistry.registerBlock(ModItems.pulse_counter, ItemGroup.TAB_REDSTONE); 
 		ModGameRegistry.registerBlock(ModItems.stacked_redstone_torch, ItemGroup.TAB_REDSTONE);
 		ModGameRegistry.registerBlock(ModItems.stacked_redstone_wire, ItemGroup.TAB_REDSTONE);
@@ -217,6 +217,8 @@ public class ServerSetup {
 		ModGameRegistry.registerBlock(ModItems.jigsaw, null, Rarity.EPIC);
 		ModGameRegistry.registerBlock(ModItems.battery, ModTabs.MACHINES);
 		ModGameRegistry.registerBlock(ModItems.generator, ModTabs.MACHINES);
+		ModGameRegistry.registerBlock(ModItems.diode, ModTabs.MACHINES);
+		ModGameRegistry.registerBlock(ModItems.capacitor_bank, ModTabs.MACHINES);
 		ModGameRegistry.registerBlock(ModItems.steel_pipe, ModTabs.MACHINES);
 		ModGameRegistry.registerBlock(ModItems.copper_pipe, ModTabs.MACHINES);
 		ModGameRegistry.registerBlock(ModItems.metallic_glass_pipe, ModTabs.MACHINES);
@@ -1029,7 +1031,7 @@ public class ServerSetup {
 		ModGameRegistry.registerItem(ModItems.polymer_resin);
 		ModGameRegistry.registerItem(ModItems.rubber);
 		ModGameRegistry.registerItem(ModItems.resistor);
-		ModGameRegistry.registerItem(ModItems.condensator);
+		ModGameRegistry.registerItem(ModItems.capacitor);
 		ModGameRegistry.registerItem(ModItems.turbin);
 		ModGameRegistry.registerItem(ModItems.led);
 		ModGameRegistry.registerItem(ModItems.spring);
@@ -1092,6 +1094,7 @@ public class ServerSetup {
 		ModGameRegistry.registerItem(ModItems.flax_fibers);
 		ModGameRegistry.registerItem(ModItems.stone_dust);
 		ModGameRegistry.registerItem(ModItems.clay_powder);
+		ModGameRegistry.registerItem(ModItems.dried_meat);
 		
 		// register Functional Items
 		ModGameRegistry.registerItem(ModItems.lever_element);

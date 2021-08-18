@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "industria:item/condensator"
+    "layer0": "industria:item/dried_meat"
   }
 }

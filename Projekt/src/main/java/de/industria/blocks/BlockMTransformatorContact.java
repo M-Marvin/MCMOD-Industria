@@ -207,6 +207,7 @@ public class BlockMTransformatorContact extends BlockContainerBase implements IB
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		if (player.isShiftKeyDown()) {
 			worldIn.setBlockAndUpdate(pos, state.setValue(VOLTAGE, state.getValue(VOLTAGE).next()));
+			player.displayClientMessage(new TranslationTextComponent("industria.block.info.transformator.currentVoltage", state.getValue(VOLTAGE).next().getVoltage()), true);
 		} else {
 			worldIn.setBlockAndUpdate(pos, state.setValue(INPUT, !state.getValue(INPUT)));
 		}
@@ -237,7 +238,7 @@ public class BlockMTransformatorContact extends BlockContainerBase implements IB
 	}
 	
 	@Override
-	public boolean beforNetworkChanges(World world, BlockPos pos, BlockState state, ElectricityNetwork network, int lap) {
+	public NetworkChangeResult beforNetworkChanges(World world, BlockPos pos, BlockState state, ElectricityNetwork network, int lap) {
 		
 		if (network.canMachinesRun() == Voltage.NoLimit && lap < 3) {
 			
@@ -251,7 +252,7 @@ public class BlockMTransformatorContact extends BlockContainerBase implements IB
 			
 		}
 		
-		return false;
+		return NetworkChangeResult.CONTINUE;
 		
 	}
 	

@@ -28,6 +28,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -133,12 +134,12 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements ITE
 				
 				if (this.progress > 0) this.progress--;
 				
-			} else if (BlockMultiPart.getInternPartPos(this.getBlockState()).equals(new BlockPos(0, 1, 0))) {
 				TileEntityMFluidBath tileEntity = (TileEntityMFluidBath) BlockMultiPart.getSCenterTE(worldPosition, getBlockState(), level);
 				if (tileEntity != null) {
 					FluidStack rest = pushFluid(tileEntity.fluidOut, level, worldPosition);
 					if (rest != tileEntity.fluidOut) tileEntity.fluidOut = rest;
 				}
+				
 			}
 			
 		} else {
@@ -211,7 +212,7 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements ITE
 		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
 		TileEntity tileEntity = BlockMFluidBath.getSCenterTE(ipos, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMFluidBath) {
-			if (ipos.equals(new BlockPos(0, 1, 0))) {
+			if (ipos.equals(new BlockPos(0, 0, 0))) {
 				int transfer = Math.min(amount, ((TileEntityMFluidBath) tileEntity).fluidOut.getAmount());
 				if (transfer > 0) {
 					FluidStack fluidOut = new FluidStack(((TileEntityMFluidBath) tileEntity).fluidOut.getFluid(), transfer);
@@ -228,7 +229,7 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements ITE
 		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
 		TileEntity tileEntity = BlockMFluidBath.getSCenterTE(worldPosition, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMFluidBath) {
-			if (ipos.equals(new BlockPos(1, 1, 2))) {
+			if (ipos.equals(new BlockPos(0, 0, 2))) {
 				if (((TileEntityMFluidBath) tileEntity).fluidIn.getFluid().isSame(fluid.getFluid()) || ((TileEntityMFluidBath) tileEntity).fluidIn.isEmpty()) {
 					int capcaity = this.maxFluidStorage - ((TileEntityMFluidBath) tileEntity).fluidIn.getAmount();
 					int transfer = Math.min(capcaity, fluid.getAmount());
@@ -253,9 +254,9 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements ITE
 		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
 		TileEntity tileEntity = BlockMFluidBath.getSCenterTE(ipos, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMFluidBath) {
-			if (ipos.equals(new BlockPos(1, 1, 2))) {
+			if (ipos.equals(new BlockPos(0, 0, 2))) {
 				return ((TileEntityMFluidBath) tileEntity).fluidIn.getFluid();
-			} else if (ipos.equals(new BlockPos(0, 1, 0))) {
+			} else if (ipos.equals(new BlockPos(0, 0, 0))) {
 				return ((TileEntityMFluidBath) tileEntity).fluidOut.getFluid();
 			}
 		}
@@ -267,9 +268,9 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements ITE
 		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
 		TileEntity tileEntity = BlockMFluidBath.getSCenterTE(ipos, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMFluidBath) {
-			if (ipos.equals(new BlockPos(1, 1, 2))) {
+			if (ipos.equals(new BlockPos(0, 0, 2))) {
 				return ((TileEntityMFluidBath) tileEntity).fluidIn;
-			} else if (ipos.equals(new BlockPos(0, 1, 0))) {
+			} else if (ipos.equals(new BlockPos(0, 0, 0))) {
 				return ((TileEntityMFluidBath) tileEntity).fluidOut;
 			}
 		}
@@ -281,7 +282,7 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements ITE
 		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
 		TileEntity tileEntity = BlockMFluidBath.getSCenterTE(worldPosition, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMFluidBath) {
-			return (ipos.equals(new BlockPos(1, 1, 2)) || ipos.equals(new BlockPos(0, 1, 0))) && side == Direction.UP;
+			return (ipos.equals(new BlockPos(0, 0, 2)) || ipos.equals(new BlockPos(0, 0, 0))) && getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING).getAxis() == side.getAxis();
 		}
 		return false;
 	}

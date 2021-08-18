@@ -10,8 +10,10 @@ import de.industria.Industria;
 import de.industria.packet.SSendENHandeler;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.DeviceType;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock.NetworkChangeResult;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.blockfeatures.IBElectricWireBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -97,6 +99,8 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 				
 				if (!network.isUpdated((ServerWorld) world) && !world.isClientSide()) {
 					
+					ElectricityNetwork oldStates = network.copy();
+					
 					int lap = 3;
 					while (lap <= 3) {
 						
@@ -171,8 +175,13 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 							
 							if (state.getBlock() instanceof IBElectricConnectiveBlock) {
 								
-								boolean result = ((IBElectricConnectiveBlock) state.getBlock()).beforNetworkChanges(world, pos, state, network, lap);
-								if (result) abbortUpdate = true;
+								NetworkChangeResult result = ((IBElectricConnectiveBlock) state.getBlock()).beforNetworkChanges(world, pos, state, network, lap);
+								if (result == NetworkChangeResult.RETRY) abbortUpdate = true;
+								if (result == NetworkChangeResult.SKIPTICK) {
+									network.loadDataFrom(oldStates);
+									network.lastUpdated = world.getGameTime();
+									return;
+								}
 								
 							}
 							
@@ -237,12 +246,12 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 		
 	}
 	
-	public ElectricityNetwork getNetworkState(World world, BlockPos position, Direction direction) {
+	public ElectricityNetwork getNetworkState(World world, BlockPos position, Direction direction, Block exceptBlock) {
 		
 		if (this.isServerInstace) {
 			
 			if (world.getBlockState(position).getBlock() instanceof IBElectricConnectiveBlock) {
-					
+				
 				ElectricityNetwork network = new ElectricityNetwork();
 				List<Direction> sideList = new ArrayList<Direction>();
 				sideList.add(direction.getOpposite());
@@ -258,7 +267,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 					BlockState state = world.getBlockState(device.getKey());
 					List<Direction> attacheSides = device.getValue();
 					
-					if (state.getBlock() instanceof IBElectricConnectiveBlock && !(state.getBlock() instanceof IBElectricWireBlock)) {
+					if (state.getBlock() instanceof IBElectricConnectiveBlock && !(state.getBlock() instanceof IBElectricWireBlock) && !device.getKey().equals(position) && (exceptBlock != null ? state.getBlock() != exceptBlock : true)) {
 						
 						IBElectricConnectiveBlock device1 = (IBElectricConnectiveBlock) state.getBlock();
 						
@@ -270,6 +279,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 							
 							if (needCurrent >= 0) {
 								
+								if (network.voltage == Voltage.NoLimit) network.voltage = voltage;
 								if (!hasCurrentAdded) {
 									network.needCurrent += needCurrent;
 									hasCurrentAdded = true;
@@ -299,14 +309,6 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 					network.current = network.capacity;
 				}
 				
-//					System.out.println("Network Voltage: " + network.voltage);
-//					System.out.println("Network Current Needed:  " + network.needCurrent);
-//					System.out.println("Network Capacity: " + network.capacity);
-//					System.out.println("Network Current: " + network.current);
-//					
-//					System.out.println(this.networks.size());
-//					System.out.println(getNetwork(position).current);
-				
 				return network;
 				
 			}
@@ -315,6 +317,10 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 		
 		return new ElectricityNetwork();
 		
+	}
+	
+	public ElectricityNetwork getNetworkState(World world, BlockPos position, Direction direction) {
+		return this.getNetworkState(world, position, direction, null);
 	}
 	
 	protected boolean scann(World world, BlockPos scannPos, Direction direction, HashMap<BlockPos, List<Direction>> posList, int scannDepth, DeviceType lastDevice) {
@@ -552,6 +558,28 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 				return other.getConnectedBlocks().equals(this.getConnectedBlocks());
 			}
 			return false;
+		}
+		
+		public ElectricityNetwork copy() {
+			ElectricityNetwork network2 = new ElectricityNetwork();
+			network2.voltage = this.voltage;
+			network2.current = this.current;
+			network2.needCurrent = this.needCurrent;
+			network2.capacity = this.capacity;
+			network2.lastUpdated = this.lastUpdated;
+			network2.powercutTimer = this.powercutTimer;
+			network2.positions = this.positions;
+			return network2;
+		}
+		
+		public void loadDataFrom(ElectricityNetwork network) {
+			this.voltage = network.voltage;
+			this.current = network.current;
+			this.needCurrent = network.needCurrent;
+			this.capacity = network.capacity;
+			this.lastUpdated = network.lastUpdated;
+			this.powercutTimer = network.powercutTimer;
+			this.positions = network.positions;
 		}
 		
 	}

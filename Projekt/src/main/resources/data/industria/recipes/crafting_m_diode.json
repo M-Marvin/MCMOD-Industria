@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DSD",
+    "KAK"
+  ],
+  "key": {
+    "D": {
+      "item": "industria:led"
+    },
+    "S": {
+      "item": "industria:silicon"
+    },
+    "A": {
+      "item": "industria:aluminium_plates"
+    },
+    "K": {
+      "item": "industria:copper_plate"
+    }
+  },
+  "result": {
+    "item": "industria:diode"
+  }
+}

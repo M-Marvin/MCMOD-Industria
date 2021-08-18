@@ -22,6 +22,7 @@ import de.industria.items.ItemBlueprint;
 import de.industria.items.ItemBrush;
 import de.industria.items.ItemBurneable;
 import de.industria.items.ItemCutter;
+import de.industria.items.ItemDriedMeat;
 import de.industria.items.ItemEmptyBlueprint;
 import de.industria.items.ItemEnergyMeter;
 import de.industria.items.ItemFluidCannister;
@@ -58,7 +59,7 @@ public class ModItems {
 	
 	// Redstone
 	public static final Block pulse_counter = new BlockRDPulseCounter();
-	public static final Block capacitor = new BlockRDCapacitor();
+	public static final Block redstone_capacitor = new BlockRDCapacitor();
 	public static final Block stacked_redstone_torch = new BlockStackedRedstoneTorch();
 	public static final Block stacked_redstone_wire = new BlockStackedRedstoneWire();
 	public static final Block advanced_piston = new BlockRAdvancedPiston(false, "advanced_piston");
@@ -102,6 +103,8 @@ public class ModItems {
 	public static final Block conveyor_belt = new BlockConveyorBelt();
 	public static final BlockMBattery battery = new BlockMBattery();
 	public static final Block generator = new BlockMGenerator();
+	public static final Block capacitor_bank = new BlockMCapacitorBank();
+	public static final Block diode = new BlockMDiode();
 	public static final Block infinity_power_source = new BlockInfinityPowerSource();
 	public static final Block panel_lamp = new BlockMPanelLamp();
 	public static final Block copper_cable = new BlockElectricWire("copper_cable", 16, 4);
@@ -926,6 +929,7 @@ public class ModItems {
 	public static final Item tpo_zirconium_dust = new ItemBase("tpo_zirconium_dust", ModTabs.MATERIALS);
 	
 	// Resource Items
+	public static final Item dried_meat = new ItemDriedMeat();
 	public static final Item salsola = new ItemSalsola();
 	public static final Item crushed_stone = new ItemBase("crushed_stone", ModTabs.MATERIALS);
 	public static final Item crushed_blackstone = new ItemBase("crushed_blackstone", ModTabs.MATERIALS);
@@ -984,7 +988,7 @@ public class ModItems {
 	public static final Item spring = new ItemBase("spring", ModTabs.MATERIALS);
 	public static final Item led = new ItemBase("led", ModTabs.MATERIALS);
 	public static final Item turbin = new ItemBase("turbin", ModTabs.MATERIALS);
-	public static final Item condensator = new ItemBase("condensator", ModTabs.MATERIALS);
+	public static final Item capacitor = new ItemBase("capacitor", ModTabs.MATERIALS);
 	public static final Item resistor = new ItemBase("resistor", ModTabs.MATERIALS);
 	public static final Item rotor = new ItemBase("rotor", ModTabs.MATERIALS);
 	public static final Item motor_coil = new ItemBase("motor_coil", ModTabs.MATERIALS);

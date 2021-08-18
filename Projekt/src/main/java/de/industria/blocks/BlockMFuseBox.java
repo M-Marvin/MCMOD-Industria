@@ -155,7 +155,7 @@ public class BlockMFuseBox extends BlockContainerBase implements IBElectricConne
 	}
 	
 	@Override
-	public boolean beforNetworkChanges(World world, BlockPos pos, BlockState state, ElectricityNetwork network, int lap) {
+	public NetworkChangeResult beforNetworkChanges(World world, BlockPos pos, BlockState state, ElectricityNetwork network, int lap) {
 		
 		ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(world);
 		
@@ -195,10 +195,10 @@ public class BlockMFuseBox extends BlockContainerBase implements IBElectricConne
 		if (closed && overload) {
 			world.setBlockAndUpdate(pos, state.setValue(ON, false));
 			world.playSound(null, pos, SoundEvents.WOODEN_BUTTON_CLICK_ON, SoundCategory.BLOCKS, 1, 0.5F);
-			return true;
+			return NetworkChangeResult.RETRY;
 		}
 		
-		return false;
+		return NetworkChangeResult.CONTINUE;
 		
 	}
 

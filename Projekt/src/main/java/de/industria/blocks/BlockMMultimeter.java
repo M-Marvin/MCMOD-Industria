@@ -142,7 +142,7 @@ public class BlockMMultimeter extends BlockContainerBase implements IBElectricCo
 	}
 	
 	@Override
-	public boolean beforNetworkChanges(World world, BlockPos pos, BlockState state, ElectricityNetwork network, int lap) {
+	public NetworkChangeResult beforNetworkChanges(World world, BlockPos pos, BlockState state, ElectricityNetwork network, int lap) {
 		
 		TileEntity te = world.getBlockEntity(pos);
 		
@@ -157,7 +157,7 @@ public class BlockMMultimeter extends BlockContainerBase implements IBElectricCo
 			
 		}
 		
-		return false;
+		return NetworkChangeResult.CONTINUE;
 		
 	}
 	

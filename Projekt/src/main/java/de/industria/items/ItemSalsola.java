@@ -6,7 +6,7 @@ import net.minecraft.item.Food;
 
 public class ItemSalsola extends ItemBase {
 	
-	public static final Food SALSOLA = (new Food.Builder()).nutrition(1).saturationMod(0.1F).build();
+	public static final Food SALSOLA = (new Food.Builder()).nutrition(1).saturationMod(1.5F).build();
 	
 	public ItemSalsola() {
 		super(new Properties().tab(ModTabs.MATERIALS).food(SALSOLA));

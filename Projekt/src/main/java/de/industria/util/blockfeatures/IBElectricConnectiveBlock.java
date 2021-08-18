@@ -21,8 +21,8 @@ public interface IBElectricConnectiveBlock {
 	public default boolean isSwitchClosed(World worldIn, BlockPos pos, BlockState state) {
 		return true;
 	}
-	public default boolean beforNetworkChanges(World world, BlockPos pos, BlockState state, ElectricityNetwork network, int lap) {
-		return false;
+	public default NetworkChangeResult beforNetworkChanges(World world, BlockPos pos, BlockState state, ElectricityNetwork network, int lap) {
+		return NetworkChangeResult.CONTINUE;
 	}
 	public default List<BlockPos> getMultiBlockParts(World world, BlockPos pos, BlockState state) {
 		return null;
@@ -39,6 +39,10 @@ public interface IBElectricConnectiveBlock {
 	
 	public default void updateNetwork(World worldIn, BlockPos pos) {
 		ElectricityNetworkHandler.getHandlerForWorld(worldIn).updateNetwork(worldIn, pos);
+	}
+	
+	public static enum NetworkChangeResult {
+		CONTINUE,RETRY,SKIPTICK;
 	}
 	
 	public static enum Voltage implements IStringSerializable {

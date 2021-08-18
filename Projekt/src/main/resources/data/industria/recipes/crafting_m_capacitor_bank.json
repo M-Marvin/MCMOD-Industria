@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "CCC",
+    "KAK"
+  ],
+  "key": {
+    "C": {
+      "item": "industria:capacitor"
+    },
+    "K": {
+      "item": "industria:copper_plate"
+    },
+    "A": {
+      "item": "industria:aluminium_plates"
+    }
+  },
+  "result": {
+    "item": "industria:capacitor_bank"
+  }
+}

@@ -26,7 +26,7 @@ public class BlockRDCapacitor extends BlockRedstoneDiode {
 	public static final IntegerProperty DELAY = IntegerProperty.create("delay", 1, 4);
 	
 	public BlockRDCapacitor() {
-		super("capacitor");
+		super("redstone_capacitor");
 		this.registerDefaultState(this.stateDefinition.any().setValue(POWERED, false).setValue(INVERTED, false).setValue(FACING, Direction.NORTH).setValue(DELAY, 1));
 	}
 	

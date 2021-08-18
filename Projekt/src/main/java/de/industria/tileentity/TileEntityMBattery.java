@@ -101,11 +101,11 @@ public class TileEntityMBattery extends TileEntity implements ITickableTileEntit
 	
 	public float getChargeCurrent() {
 		float capacity = (MAX_STORAGE - storage) / (float) voltage.getVoltage();
-		return Math.min(maxCurrent, capacity);
+		return Math.min(Math.min(maxCurrent, capacity), 1000);
 	}
 	
 	public float getDischargeCurrent() {
-		return Math.min(maxCurrent, storage / (float) voltage.getVoltage());
+		return Math.min(Math.min(maxCurrent, storage / (float) voltage.getVoltage()), 1000);
 	}
 	
 	@Override

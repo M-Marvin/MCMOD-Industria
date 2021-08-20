@@ -73,7 +73,7 @@ public class RecipeCategoryRifining implements IRecipeCategory<RifiningRecipe> {
 	@Override
 	public void setIngredients(RifiningRecipe recipe, IIngredients ingredients) {
 		ingredients.setInputs(VanillaTypes.FLUID, UtilHelper.toCollection(recipe.getFluidIn()));
-		ingredients.setOutputs(VanillaTypes.ITEM, UtilHelper.toCollection(recipe.getResultItem()));
+		ingredients.setOutputs(VanillaTypes.ITEM, UtilHelper.toCollection(recipe.getResultItem(), recipe.getResultItem2(), recipe.getResultItem3()));
 		ingredients.setOutputs(VanillaTypes.FLUID, UtilHelper.toCollection(recipe.getFluidOut()));
 	}
 	

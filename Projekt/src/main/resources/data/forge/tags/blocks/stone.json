@@ -4,6 +4,8 @@
     "industria:bauxite",
     "industria:bauxite_ore",
     "industria:wolframite",
-    "industria:wolframite_ore"
+    "industria:wolframite_ore",
+    "industria:limestone",
+    "industria:karstified_limestone"
   ]
 }

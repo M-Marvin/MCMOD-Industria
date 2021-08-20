@@ -302,6 +302,7 @@
 "block.industria.bound_stick_block": "Stockblock",
 "block.industria.iron_ladder": "Eisenleiter",
 "block.industria.tar_crust": "Teerkruste",
+"block.industria.salt_sand": "Salzsand",
 
 "item.industria.structure_cladding_pane": "Verbundgestellverkleidung",
 "item.industria.compressed_air_bucket": "Eimer komprimierte Luft",
@@ -528,6 +529,7 @@
 "jei.recipe.title.metalFormer": "Formen",
 "jei.recipe.title.blastFurnace": "Hochofen",
 
+"sound.industria.block.tree_tap.harvest": "Zapfhahn geleert",
 "sound.industria.block.hover_extension.activated": "Antrieb aktiviert",
 "sound.industria.block.turbin.loop": "Turbine dr\u00f6hnt",
 "sound.industria.block.compressor.loop": "Kompressor arbeitet",

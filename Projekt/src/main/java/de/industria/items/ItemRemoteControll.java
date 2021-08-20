@@ -33,7 +33,7 @@ public class ItemRemoteControll extends ItemBase {
 			ItemStack setItem = playerIn.getOffhandItem();
 			ItemStack stack = playerIn.getMainHandItem();
 			
-			if ((setItem != null ? !setItem.isEmpty() : false) && setItem.getCount() == 1) {
+			if ((setItem != null ? !setItem.isEmpty() : false) && setItem.getCount() == 1 && playerIn.isShiftKeyDown()) {
 				
 				CompoundNBT tag = stack.getTag();
 				if (tag == null) {

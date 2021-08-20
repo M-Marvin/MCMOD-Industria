@@ -34,6 +34,7 @@ public class ModTags {
 	public static final ITag<Block> SCAFFOLDING = tagBlock("scaffolding");
 	public static final ITag<Block> ACID_RESISTANT = tagBlock("acid_resistant");
 	public static final ITag<Block> ANTENNA_BLOCK = tagBlock("antenna_block");
+	public static final ITag<Block> UNDERGROUND_BLOCKS = tagBlock("underground_blocks");
 	
 	private static IOptionalNamedTag<Fluid> tagFluid(String name) {
 		return FluidTags.createOptional(new ResourceLocation(Industria.MODID, name));

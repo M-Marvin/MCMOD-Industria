@@ -103,7 +103,7 @@ public class BlockRControllPanel extends BlockContainerBase implements IBSignalC
 		Direction face = hit.getDirection();
 		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		
-		if (face == facing && tileEntity instanceof TileEntityControllPanel && !worldIn.isClientSide()) {
+		if (face == facing && tileEntity instanceof TileEntityControllPanel) {
 			
 			int hitX = (int) ((hit.getLocation().x - hit.getBlockPos().getX()) * 16);
 			int hitY = (int) ((hit.getLocation().y - hit.getBlockPos().getY()) * 16);
@@ -120,32 +120,7 @@ public class BlockRControllPanel extends BlockContainerBase implements IBSignalC
 			
 		}
 		
-		return ActionResultType.CONSUME;
-		
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
-		
-		TileEntity tileEntity = worldIn.getBlockEntity(pos);
-		
-		if (tileEntity instanceof TileEntityControllPanel) {
-
-			ItemStack stack = new ItemStack(Item.byBlock(this), 1);
-			CompoundNBT compound = ((TileEntityControllPanel) tileEntity).saveToNBT(new CompoundNBT());
-			
-			if (!compound.isEmpty()) {
-				stack.addTagElement("BlockEntityTag", compound);
-			}
-			
-			ItemEntity item = new ItemEntity(worldIn, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, stack);
-			item.setDefaultPickUpDelay();
-			worldIn.addFreshEntity(item);
-			
-		}
-		
-		super.playerWillDestroy(worldIn, pos, state, player);
+		return ActionResultType.PASS;
 		
 	}
 	
@@ -155,11 +130,6 @@ public class BlockRControllPanel extends BlockContainerBase implements IBSignalC
 		return state.getBlock() == this ? state.getValue(FACING) == side.getOpposite() : false;
 	}
 	
-	@Override
-	public List<ItemStack> getDrops(BlockState state, net.minecraft.loot.LootContext.Builder builder) {
-		return new ArrayList<ItemStack>();
-	}
-
 	@Override
 	public void onReciveSignal(World worldIn, BlockPos pos, RedstoneControlSignal signal, Direction side) {
 		

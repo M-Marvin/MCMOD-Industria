@@ -42,7 +42,7 @@ public class BlockMDiode extends BlockBase implements IBElectricConnectiveBlock,
 	public static final EnumProperty<MaxCurrent> MAX_CURRENT = EnumProperty.create("max_current", MaxCurrent.class);	
 	
 	public BlockMDiode() {
-		super("diode", Material.METAL, 1.5F, 1.5F, SoundType.METAL);
+		super("diode", Material.METAL, 2F, SoundType.METAL);
 		this.registerDefaultState(this.stateDefinition.any().setValue(MAX_CURRENT, MaxCurrent.NO_LIMIT));
 	}
 	

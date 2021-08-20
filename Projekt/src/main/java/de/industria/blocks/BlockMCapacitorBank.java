@@ -34,7 +34,7 @@ public class BlockMCapacitorBank extends BlockBase implements IBAdvancedBlockInf
 	public static final BooleanProperty DISCHRAGE = BooleanProperty.create("discharge");
 	
 	public BlockMCapacitorBank() {
-		super("capacitor_bank", Material.METAL, 1.5F, 1.5F, SoundType.METAL);
+		super("capacitor_bank", Material.METAL, 2F, SoundType.METAL);
 		this.registerDefaultState(this.stateDefinition.any().setValue(VOLTAGE, Voltage.NoLimit).setValue(CHARGE, 0).setValue(DISCHRAGE, false));
 	}
 	

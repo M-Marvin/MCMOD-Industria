@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "gray_painted_planks",
+  "ingredients": [
+    {
+      "item": "industria:salt_sand"
+    }
+  ],
+  "result": {
+    "item": "industria:salt",
+    "count": 9
+  }
+}

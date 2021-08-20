@@ -1,0 +1,14 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "industria:stone_dust"
+  },
+  "results": [
+    {
+      "item": "minecraft:sand"
+    }
+  ],
+  "schreddertime": 100,
+  "schreddertool": "industria:schredder_macerator",
+  "schredderdamage": 2
+}

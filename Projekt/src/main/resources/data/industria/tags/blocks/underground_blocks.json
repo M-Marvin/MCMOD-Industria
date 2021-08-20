@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+  	"#forge:stone",
+  	"#forge:ores",
+  	"minecraft:water",
+  	"minecraft:lava",
+  	"minecraft:dirt",
+  	"minecraft:gravel",
+  	"industria:salt_sand"
+  ]
+}

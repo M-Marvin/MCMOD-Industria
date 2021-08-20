@@ -152,6 +152,41 @@ public class ModConfiguredFeatures {
 					)
 			)
 	);
+	public static final ConfiguredFeature<?, ?> LIMESTONE_ORE = registerConfiguredFeature("limestone_ore",
+			ModFeature.STONE_ORE.configured(
+					new StoneOreFeatureConfig(
+							OreFeatureConfig.FillerBlockType.NATURAL_STONE,
+							ModItems.limestone.defaultBlockState(),
+							ModItems.karstified_limestone.defaultBlockState(),
+							40
+					)
+			).decorated(
+					ModPlacement.SIMPLE_ORE.configured(
+							new SimpleOrePlacementConfig(0, 190, 5)
+					)
+			).decorated(
+					Placement.CHANCE.configured(
+							new ChanceConfig(5)
+					)
+			)
+	);
+	public static final ConfiguredFeature<?, ?> SALT_SAND_ORE = registerConfiguredFeature("salt_sand_ore",
+			Feature.ORE.configured(
+					new OreFeatureConfig(
+							OreFeatureConfig.FillerBlockType.NATURAL_STONE, 
+							ModItems.salt_sand.defaultBlockState(),
+							12
+					)
+			).decorated(
+					ModPlacement.SIMPLE_ORE.configured(
+							new SimpleOrePlacementConfig(16, 60, 6)
+					)
+			).decorated(
+					ModPlacement.CHANCE.configured(
+							new ModChancePlacementConfig(20)
+					)
+			)
+	);
 	public static final ConfiguredFeature<?, ?> FLUORITE_CRYSTALS = registerConfiguredFeature("fluorite_crystals",
 			ModFeature.CRYSTAL_ORE.configured(
 					new CrystalOreFeatureConfig(
@@ -191,7 +226,7 @@ public class ModConfiguredFeatures {
 	public static final ConfiguredFeature<?, ?> OIL_DEPOT = registerConfiguredFeature("oil_depot",
 			Feature.ORE.configured(
 					new OreFeatureConfig(
-							OreFeatureConfig.FillerBlockType.NATURAL_STONE,
+							ModFillerBlockType.UNDERGROUND_BLOCKS,
 							ModFluids.RAW_OIL.defaultFluidState().createLegacyBlock(),
 							128
 					)

@@ -82,7 +82,7 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 						this.worldPosition.getY() + facing.getStepY() * 0.5F + 0.5F, 
 						this.worldPosition.getZ() + facing.getStepZ() * 0.5F + 0.5F, 
 						removedItem));
-				return ActionResultType.CONSUME;
+				return ActionResultType.SUCCESS;
 				
 			}
 			
@@ -96,7 +96,7 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 				
 				editStack.shrink(1);
 				this.level.playSound(null, this.worldPosition, SoundEvents.STONE_PLACE, SoundCategory.BLOCKS, 1, 1);
-				return ActionResultType.CONSUME;
+				return ActionResultType.SUCCESS;
 				
 			}
 			
@@ -106,7 +106,7 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 		if (element != null) ((ItemPanelElement) element.getValue().getItem()).onActivated(this, element.getValue());
 		this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 0);
 		
-		return ActionResultType.CONSUME;
+		return ActionResultType.PASS;
 				
 	}
 	

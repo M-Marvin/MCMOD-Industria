@@ -1,5 +1,12 @@
 {
 
+"industria.updatecheck.failed.info": "Industria: Updatepr\u00fcfung fehlgeschlagen!",
+"industria.updatecheck.beta_outdated.info": "Industria: Veraltete BETA-Version, dringend aktuallisieren!",
+"industria.updatecheck.outdated.info": "Industria: Veraltete Version!",
+"industria.updatecheck.up_to_date.info": "Industria: Aktuellste Version",
+"industria.updatecheck.ahead.info": "Industria: Neuste Version",
+"industria.updatecheck.beta.info": "Industria: BETA-Version, kann vieel Bugs und unfertige Features enthalten!",
+
 "block.industria.recipe_creator": "Rezeptersteller",
 
 "advancements.industria.root.title": "Industria",

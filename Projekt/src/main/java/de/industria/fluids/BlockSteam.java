@@ -48,7 +48,7 @@ public class BlockSteam extends BlockGasFluid {
 	@Override
 	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 		
-		if (entityIn.showVehicleHealth()) {
+		if (entityIn instanceof LivingEntity) {
 
 			if (((LivingEntity) entityIn).hasEffect(Effects.FIRE_RESISTANCE)) return;
 			

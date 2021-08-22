@@ -41,7 +41,7 @@ public class BlockBiogas extends BlockGasFluid {
 			}
 		}
 		
-		if (entityIn.showVehicleHealth()) {
+		if (entityIn instanceof LivingEntity) {
 			
 			if (((LivingEntity) entityIn).isInvertedHealAndHarm()) return;
 			

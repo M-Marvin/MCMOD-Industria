@@ -45,7 +45,7 @@ public class BlockDestilledWater extends BlockModFlowingFluid {
 	@Override
 	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 		
-		if (entityIn.showVehicleHealth() && state.getValue(HOT)) {
+		if (entityIn instanceof LivingEntity && state.getValue(HOT)) {
 			
 			if (((LivingEntity) entityIn).hasEffect(Effects.FIRE_RESISTANCE)) return;
 			

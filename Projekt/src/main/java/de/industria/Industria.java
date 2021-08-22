@@ -1,10 +1,20 @@
 package de.industria;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Optional;
+
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.industria.util.UpdateChecker;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.VersionChecker;
 import net.minecraftforge.fml.VersionChecker.CheckResult;
+import net.minecraftforge.fml.VersionChecker.Status;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -28,32 +38,18 @@ public class Industria {
 			PROTOCOL_VERSION::equals,
 			PROTOCOL_VERSION::equals);
 	
-	public static CheckResult MOD_STATUS = null;
+	protected static UpdateChecker updateChecker;
 	
 	public Industria() {
 		
-		// TODO
-//		Optional<? extends ModContainer> modContainer = ModList.get().getModContainerById(MODID);
-//		if (modContainer.isPresent()) {
-//			MOD_STATUS = VersionChecker.getResult(modContainer.get().getModInfo());
-//			
-//			if (MOD_STATUS.status.equals(Status.PENDING)) {
-//				try {
-//					Thread.sleep(10000);
-//					MOD_STATUS = VersionChecker.getResult(modContainer.get().getModInfo());
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//				
-//			}
-//		}
-//		
-//		LOGGER.log(Level.INFO, "#####################################################################################");
-//		LOGGER.log(Level.INFO, MOD_STATUS.status);
+		updateChecker = new UpdateChecker();
 		
 		ServerSetup.constructMod();
 		
+	}
+	
+	public static UpdateChecker getUpdateChecker() {
+		return updateChecker;
 	}
 	
 }

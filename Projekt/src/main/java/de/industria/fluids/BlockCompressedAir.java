@@ -25,7 +25,7 @@ public class BlockCompressedAir extends BlockGasFluid {
 	@Override
 	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 		
-		if (entityIn.showVehicleHealth() && worldIn.random.nextInt(500) == 0) {
+		if (entityIn instanceof LivingEntity && worldIn.random.nextInt(500) == 0) {
 
 			((LivingEntity) entityIn).heal(0.5F);
 			

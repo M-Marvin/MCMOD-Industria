@@ -1,11 +1,11 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "industria:block/aluminium_plates",
-		"2": "industria:block/fuse_box_side",
-		"5": "industria:block/fuse_box_front2_on",
-		"particle": "industria:block/aluminium_plates",
-		"6": "industria:block/aluminium_plates"
+		"1": "industria:block/aluminium_machine_base_bottom",
+		"2": "industria:block/machine_half_side",
+		"5": "industria:block/fuse_box_front_on",
+		"6": "industria:block/aluminium_machine_base_bottom",
+		"particle": "industria:block/fuse_box_front_on"
 	},
 	"elements": [
 		{
@@ -103,12 +103,5 @@
 			"translation": [0, 0, -2.25],
 			"scale": [0.5, 0.5, 0.5]
 		}
-	},
-	"groups": [
-		{
-			"name": "fuse_box",
-			"origin": [8, 8, 8],
-			"children": [0, 1, 2, 3, 4]
-		}
-	]
+	}
 }

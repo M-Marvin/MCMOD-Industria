@@ -16,16 +16,16 @@
       "item": "minecraft:blast_furnace"
     },
     "R": {
-      "item": "industria:steel_pipe"
+      "item": "industria:copper_pipe"
     },
     "C": {
       "item": "industria:transformator_coil"
     },
     "S": {
-      "item": "industria:steel_plates"
+      "item": "industria:copper_machine_casing"
     },
     "A": {
-      "item": "industria:fluid_output"
+      "item": "industria:copper_planks"
     }
   },
   "result": {

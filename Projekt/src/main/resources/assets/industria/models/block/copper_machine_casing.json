@@ -1,0 +1,9 @@
+{
+  "parent": "industria:block/machine_base_horizontal",
+  "textures": {
+    "top": "industria:block/copper_plates",
+    "front": "industria:block/copper_machine_casing_side",
+    "side": "industria:block/copper_machine_casing_side",
+    "bottom": "industria:block/copper_machine_casing_bottom"
+  }
+}

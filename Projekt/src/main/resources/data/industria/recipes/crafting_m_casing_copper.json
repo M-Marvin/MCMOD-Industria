@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GSG",
+    "SES",
+    "GSG"
+  ],
+  "key": {
+    "S": {
+      "item": "industria:copper_plate"
+    },
+    "E": {
+      "item": "industria:iron_machine_casing"
+    },
+    "G": {
+      "item": "industria:limestone"
+    }
+  },
+  "result": {
+    "item": "industria:copper_machine_casing",
+    "count": 4
+  }
+}

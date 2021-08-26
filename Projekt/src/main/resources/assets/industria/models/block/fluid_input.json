@@ -1,8 +1,9 @@
 {
-  "parent": "minecraft:block/cube_bottom_top",
+  "parent": "industria:block/machine_base_vertical",
   "textures": {
-    "top": "industria:block/fluid_input_top",
-    "bottom": "industria:block/fluid_input_bottom",
-    "side": "industria:block/steel_plates"
+    "front": "industria:block/fluid_input_front",
+    "bottom": "industria:block/steel_machine_casing_bottom",
+    "side1": "industria:block/fluid_input_side",
+    "side2": "industria:block/fluid_input_side"
   }
 }

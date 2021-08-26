@@ -147,12 +147,12 @@ public class BlockRRedstoneReciver extends BlockContainerBase implements IBSigna
 				
 				worldIn.setBlockAndUpdate(pos, state.setValue(TRANSIVER_MODE, !state.getValue(TRANSIVER_MODE)));
 				
-				return ActionResultType.CONSUME;
+				return ActionResultType.SUCCESS;
 				
 			} else {
 				
 				if (!worldIn.isClientSide()) NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) te, pos);
-				return ActionResultType.CONSUME;
+				return ActionResultType.SUCCESS;
 				
 			}
 			

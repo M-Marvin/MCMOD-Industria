@@ -96,6 +96,11 @@ public class ModItems {
 	public static final Block rail_adapter = new BlockTRailAdapter();
 	
 	// Machinery and Functional
+	public static final Block iron_machine_casing = new BlockBase("iron_machine_casing", Material.METAL, 4F, SoundType.METAL);
+	public static final Block steel_machine_casing = new BlockBase("steel_machine_casing", Material.METAL, 4F, SoundType.METAL);
+	public static final Block aluminium_machine_casing = new BlockBase("aluminium_machine_casing", Material.METAL, 4F, SoundType.METAL);
+	public static final Block copper_machine_casing = new BlockBase("copper_machine_casing", Material.METAL, 4F, SoundType.METAL);
+	public static final Block metal_glass_machine_casing = new BlockBase("metal_glass_machine_casing", Material.METAL, 4F, SoundType.METAL);
 	public static final Block storing_crafting_table = new BlockMStoringCraftingTable();	
 	public static final Block motor = new BlockMotor();
 	public static final Block conveyor_switch = new BlockConveyorSwitch();

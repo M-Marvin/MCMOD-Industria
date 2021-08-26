@@ -5,7 +5,7 @@
 "industria.updatecheck.outdated.info": "Industria: Veraltete Version!",
 "industria.updatecheck.up_to_date.info": "Industria: Aktuellste Version",
 "industria.updatecheck.ahead.info": "Industria: Neuste Version",
-"industria.updatecheck.beta.info": "Industria: BETA-Version, kann vieel Bugs und unfertige Features enthalten!",
+"industria.updatecheck.beta.info": "Industria: BETA-Version, kann viel Bugs und unfertige Features enthalten!",
 
 "block.industria.recipe_creator": "Rezeptersteller",
 
@@ -159,6 +159,11 @@
 "block.industria.blast_furnace": "Hochofen",
 "block.industria.metal_former": "Walzmaschiene",
 "block.industria.ore_washing_plant": "Erzw\u00e4sche",
+"block.industria.iron_machine_casing": "Eisen Maschienengeh\u00e4use",
+"block.industria.steel_machine_casing": "Stahl Maschienengeh\u00e4use",
+"block.industria.aluminium_machine_casing": "Aluminium Maschienengeh\u00e4use",
+"block.industria.copper_machine_casing": "Kupfer Maschienengeh\u00e4use",
+"block.industria.metal_glass_machine_casing": "Metallglass Maschienengeh\u00e4use",
 
 "block.industria.conveyor_belt": "F\u00f6rderband",
 "block.industria.conveyor_switch": "Schaltbares F\u00f6rderband",

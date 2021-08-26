@@ -7,10 +7,10 @@
   ],
   "key": {
     "S": {
-      "item": "industria:aluminium_plate"
+      "item": "industria:metallic_glass_plate"
     },
     "G": {
-      "item": "industria:aluminium_plates"
+      "item": "industria:metal_glass_machine_casing"
     },
     "W": {
       "item": "industria:wolfram_plate"

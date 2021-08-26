@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GSG",
+    "SES",
+    "GSG"
+  ],
+  "key": {
+    "S": {
+      "item": "industria:metallic_glass_plate"
+    },
+    "E": {
+      "item": "industria:aluminium_machine_casing"
+    },
+    "G": {
+      "item": "industria:structure_scaffold"
+    }
+  },
+  "result": {
+    "item": "industria:metal_glass_machine_casing",
+    "count": 4
+  }
+}

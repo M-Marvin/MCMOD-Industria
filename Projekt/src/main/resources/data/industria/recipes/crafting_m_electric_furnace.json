@@ -7,13 +7,13 @@
   ],
   "key": {
     "S": {
-      "item": "industria:steel_plate"
+      "item": "industria:iron_plate"
     },
     "C": {
       "item": "industria:transformator_coil"
     },
     "G": {
-      "item": "industria:steel_plates"
+      "item": "industria:iron_machine_casing"
     },
     "F": {
       "item": "minecraft:furnace"

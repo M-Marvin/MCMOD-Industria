@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " S ",
+    "SES",
+    " S "
+  ],
+  "key": {
+    "S": {
+      "item": "industria:aluminium_plate"
+    },
+    "E": {
+      "item": "industria:aluminium_plates"
+    }
+  },
+  "result": {
+    "item": "industria:aluminium_machine_casing",
+    "count": 4
+  }
+}

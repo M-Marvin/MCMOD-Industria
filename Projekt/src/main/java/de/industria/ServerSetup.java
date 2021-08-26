@@ -109,6 +109,11 @@ public class ServerSetup {
 		ModGameRegistry.registerBlock(ModItems.recipe_creator, ModTabs.TOOLS);
 		
 		// register Blocks
+		ModGameRegistry.registerBlock(ModItems.iron_machine_casing, ModTabs.BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.steel_machine_casing, ModTabs.BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.copper_machine_casing, ModTabs.BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.metal_glass_machine_casing, ModTabs.BUILDING_BLOCKS);
+		ModGameRegistry.registerBlock(ModItems.aluminium_machine_casing, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.tree_tap, ModTabs.TOOLS);
 		ModGameRegistry.registerBlock(ModItems.redstone_capacitor, ItemGroup.TAB_REDSTONE);
 		ModGameRegistry.registerBlock(ModItems.pulse_counter, ItemGroup.TAB_REDSTONE); 

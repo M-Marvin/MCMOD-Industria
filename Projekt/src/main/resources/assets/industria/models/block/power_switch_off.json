@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"1": "industria:block/aluminium_plates",
-		"2": "industria:block/fuse_box_side",
+		"2": "industria:block/machine_half_side",
 		"3": "industria:block/electric_switch",
 		"5": "industria:block/electric_switch_off",
 		"particle": "industria:block/aluminium_plates"

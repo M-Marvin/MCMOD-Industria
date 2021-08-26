@@ -1,8 +1,9 @@
 {
-  "parent": "minecraft:block/orientable",
+  "parent": "industria:block/machine_base_horizontal",
   "textures": {
-    "top": "industria:block/generator_top",
+    "top": "industria:block/iron_plates",
     "front": "industria:block/generator_front",
-    "side": "industria:block/steel_machine_side"
+    "side": "industria:block/iron_machine_casing_side",
+    "bottom": "industria:block/iron_machine_casing_bottom"
   }
 }

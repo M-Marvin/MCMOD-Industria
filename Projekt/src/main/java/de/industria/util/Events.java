@@ -27,7 +27,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.DoorBlock;
 import net.minecraft.block.FireBlock;
 import net.minecraft.block.IBucketPickupHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.Fluid;
@@ -286,13 +285,13 @@ public class Events {
 		}
 	}
 	
-	@SuppressWarnings("resource")
-	@SubscribeEvent
-	public void onWorldJoined(net.minecraftforge.event.world.WorldEvent.Load event) {
-		if (event.getWorld().isClientSide()) {
-			PlayerEntity player = Minecraft.getInstance().player;
-			player.sendMessage(Industria.getUpdateChecker().getCheckResultText(), player.getUUID());
-		}
-	}
+//	@SuppressWarnings("resource")
+//	@SubscribeEvent
+//	public void onWorldJoined(net.minecraftforge.event.world.WorldEvent.Load event) {
+//		if (event.getWorld().isClientSide()) {
+//			PlayerEntity player = Minecraft.getInstance().player;
+//			player.sendMessage(Industria.getUpdateChecker().getCheckResultText(), player.getUUID());
+//		}
+//	}
 	
 }

@@ -2,4 +2,16 @@ Kleine Details, die man noch ergänzen könnte:
 
 1. Kleine Flammen-/Rauch-Partikel beim Generator vor dem unteren Gitter, wenn er an ist, wie beim normalen Ofen.
 
-2. Meh... Vanadium als ganz normales Erz... Es ist so eigenartig, dass man jetzt so viele verschiedene Verfahren zur Gewinnung von Metallen hat (Erz direkt, Ausquetschen, Ausquetschen bei Oxiden, Legieren im Ofen, Hochofen, Lösungen von Alu und Wolfram und dieses seltsame Schlacke-Aussaugen...). Kann man das nicht weglassen? Das brächte mehr Kontinuität und außerdem ist das viel zu genau für ein Spiel, das kann mana uf weniger Details runterredizieren und das ersparte auch das komische Aluoxid... Außerdem vermisse ich das erz und das Rohvanadiumitem und den Block. D:
+2. Meh... Vanadium als ganz normales Erz... Es ist so eigenartig, dass man jetzt so viele verschiedene Verfahren zur Gewinnung von Metallen hat (Erz direkt, Ausquetschen, Ausquetschen bei Oxiden, Legieren im Ofen, Hochofen, Lösungen von Alu und Wolfram und dieses seltsame Schlacke-Aussaugen...). Kann man das nicht weglassen? Das brächte mehr Kontinuität und außerdem ist das viel zu genau für ein Spiel, das kann man auf weniger Details runterredizieren und das ersparte auch das komische Aluoxid... Außerdem vermisse ich das erz und das Rohvanadiumitem und den Block. D:
+
+3. Anpassung Natrium
+
+4. Nebenprodukte der Metallausquetschung
+
+5. weitere Metallgitter (Silber usw...?)
+
+6. Düngerbeutel/-sack
+
+7. Eiszapfen
+
+8. Geringere Chance auf Natrium beim termalen Zentrifugieren von Salz, außerdem kleineres Natriumstück beim th Z, Geringere Chance auf Salz und Kalk beim Wasserdestillieren -> Chance von 50% auf Kalkpulver beim Destillieren, 30% auf Salz, 50% auf 3x kleines Salz beim Destillieren, Chance von 50% auf 3x kleines Natrium beim th Z

@@ -17,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 
-public class BlockMGasHeater extends BlockMultiPart<TileEntityMGasHeater> implements IBAdvancedBlockInfo {
+public class BlockMGasHeater extends BlockMultipart<TileEntityMGasHeater> implements IBAdvancedBlockInfo {
 	
 	public BlockMGasHeater() {
 		super("gas_heater", Material.METAL, 4F, SoundType.METAL, 2, 1, 2);

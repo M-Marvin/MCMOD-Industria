@@ -11,6 +11,7 @@ import de.industria.tileentity.TileEntityMElectricHeater;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
+import de.industria.util.handler.UtilHelper;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -25,7 +26,7 @@ import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockMElectricHeater extends BlockMultiPart<TileEntityMElectricHeater> implements IBAdvancedBlockInfo, IBElectricConnectiveBlock {
+public class BlockMElectricHeater extends BlockMultipart<TileEntityMElectricHeater> implements IBAdvancedBlockInfo, IBElectricConnectiveBlock {
 	
 	public BlockMElectricHeater() {
 		super("electric_heater", Material.METAL, 4F, SoundType.METAL, 2, 1, 2);
@@ -107,7 +108,7 @@ public class BlockMElectricHeater extends BlockMultiPart<TileEntityMElectricHeat
 			for (int y = 0; y < this.sizeY; y++) {
 				for (int z = 0; z < this.sizeZ; z++) {
 					BlockPos internPos = new BlockPos(x, y, z);
-					BlockPos offset = rotateOffset(internPos, facing);
+					BlockPos offset = UtilHelper.rotateBlockPos(internPos, facing);
 					BlockPos partPos = getCenterTE(pos, state, world).getBlockPos().offset(offset);
 					multiParts.add(partPos);
 				}

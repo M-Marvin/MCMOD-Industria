@@ -1,6 +1,6 @@
 package de.industria.tileentity;
 
-import de.industria.blocks.BlockMultiPart;
+import de.industria.blocks.BlockMultipart;
 import de.industria.fluids.FluidDestilledWater;
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModItems;
@@ -117,7 +117,7 @@ public abstract class TileEntityMHeaterBase extends TileEntityInventoryBase impl
 			if (this.isWorking) {
 				
 				IParticleData paricle = ParticleTypes.FLAME;
-				Direction facing = getBlockState().getValue(BlockMultiPart.FACING);
+				Direction facing = getBlockState().getValue(BlockMultipart.FACING);
 				
 				float ox = 0;
 				float oz = 0;

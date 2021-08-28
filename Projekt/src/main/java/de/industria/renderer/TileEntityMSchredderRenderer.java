@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import de.industria.Industria;
-import de.industria.blocks.BlockMultiPart;
+import de.industria.blocks.BlockMultipart;
 import de.industria.items.ItemSchredderTool;
 import de.industria.tileentity.TileEntityMSchredder;
 import de.industria.typeregistys.ModClientBindings;
@@ -35,7 +35,7 @@ public class TileEntityMSchredderRenderer extends TileEntityRenderer<TileEntityM
 
 		BlockState blockState = tileEntityIn.getBlockState();
 		Direction facing = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING);
-		BlockPos partPos = BlockMultiPart.getInternPartPos(blockState);
+		BlockPos partPos = BlockMultipart.getInternPartPos(blockState);
 		
 		if (partPos.equals(BlockPos.ZERO)) {
 			

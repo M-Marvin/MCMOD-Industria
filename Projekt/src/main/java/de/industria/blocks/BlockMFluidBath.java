@@ -10,6 +10,7 @@ import de.industria.renderer.BlockMFluidBathItemRenderer;
 import de.industria.tileentity.TileEntityMFluidBath;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
+import de.industria.util.handler.UtilHelper;
 import de.industria.util.handler.VoxelHelper;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.Block;
@@ -42,7 +43,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMFluidBath extends BlockMultiPart<TileEntityMFluidBath> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo, ISidedInventoryProvider {
+public class BlockMFluidBath extends BlockMultipart<TileEntityMFluidBath> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo, ISidedInventoryProvider {
 
 	public BlockMFluidBath() {
 		super("fluid_bath", Material.METAL, 3F, SoundType.METAL, 2, 2, 3);
@@ -56,19 +57,19 @@ public class BlockMFluidBath extends BlockMultiPart<TileEntityMFluidBath> implem
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		
-		BlockPos ipos = BlockMultiPart.getInternPartPos(state);
+		BlockPos ipos = BlockMultipart.getInternPartPos(state);
 		if (ipos.equals(new BlockPos(1, 1, 1))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(13, 14, 0, 15, 16, 16), Block.box(0, 0, 0, 16, 8, 12)), state.getValue(BlockMultiPart.FACING));
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(13, 14, 0, 15, 16, 16), Block.box(0, 0, 0, 16, 8, 12)), state.getValue(BlockMultipart.FACING));
 		} else if (ipos.equals(new BlockPos(0, 1, 1))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(1, 14, 0, 3, 16, 16), Block.box(0, 0, 0, 16, 8, 12)), state.getValue(BlockMultiPart.FACING));
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(1, 14, 0, 3, 16, 16), Block.box(0, 0, 0, 16, 8, 12)), state.getValue(BlockMultipart.FACING));
 		} else if (ipos.equals(new BlockPos(0, 1, 0))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(1, 0, 1, 3, 14, 3), Block.box(1, 14, 1, 3, 16, 16), Block.box(0, 0, 8, 16, 8, 16)), state.getValue(BlockMultiPart.FACING));
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(1, 0, 1, 3, 14, 3), Block.box(1, 14, 1, 3, 16, 16), Block.box(0, 0, 8, 16, 8, 16)), state.getValue(BlockMultipart.FACING));
 		} else if (ipos.equals(new BlockPos(1, 1, 0))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(13, 0, 1, 15, 14, 3), Block.box(13, 14, 1, 15, 16, 16), Block.box(0, 0, 8, 16, 8, 16)), state.getValue(BlockMultiPart.FACING));
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(13, 0, 1, 15, 14, 3), Block.box(13, 14, 1, 15, 16, 16), Block.box(0, 0, 8, 16, 8, 16)), state.getValue(BlockMultipart.FACING));
 		} else if (ipos.equals(new BlockPos(0, 1, 2))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(1, 0, 13, 3, 14, 15), Block.box(1, 14, 0, 3, 16, 15)), state.getValue(BlockMultiPart.FACING));
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(1, 0, 13, 3, 14, 15), Block.box(1, 14, 0, 3, 16, 15)), state.getValue(BlockMultipart.FACING));
 		} else if (ipos.equals(new BlockPos(1, 1, 2))) {
-			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(13, 0, 13, 15, 14, 15), Block.box(13, 14, 0, 15, 16, 15)), state.getValue(BlockMultiPart.FACING));
+			return VoxelHelper.rotateShape(VoxelShapes.or(Block.box(13, 0, 13, 15, 14, 15), Block.box(13, 14, 0, 15, 16, 15)), state.getValue(BlockMultipart.FACING));
 		}
 
 		return Block.box(0, 0, 0, 16, 16, 16);
@@ -130,7 +131,7 @@ public class BlockMFluidBath extends BlockMultiPart<TileEntityMFluidBath> implem
 
 	@Override
 	public boolean canConnect(Direction side, World world, BlockPos pos, BlockState state) {
-		return BlockMultiPart.getInternPartPos(state).getY() == 0;
+		return BlockMultipart.getInternPartPos(state).getY() == 0;
 	}
 
 	@Override
@@ -146,7 +147,7 @@ public class BlockMFluidBath extends BlockMultiPart<TileEntityMFluidBath> implem
 			for (int y = 0; y < this.sizeY; y++) {
 				for (int z = 0; z < this.sizeZ; z++) {
 					BlockPos internPos = new BlockPos(x, y, z);
-					BlockPos offset = rotateOffset(internPos, facing);
+					BlockPos offset = UtilHelper.rotateBlockPos(internPos, facing);
 					BlockPos partPos = getCenterTE(pos, state, world).getBlockPos().offset(offset);
 					multiParts.add(partPos);
 				}

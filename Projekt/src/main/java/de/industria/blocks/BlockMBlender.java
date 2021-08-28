@@ -6,11 +6,14 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
+import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.renderer.BlockMBlenderItemRenderer;
 import de.industria.tileentity.TileEntityMBlender;
+import de.industria.typeregistys.MultipartBuildRecipes;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
+import de.industria.util.handler.UtilHelper;
 import de.industria.util.handler.VoxelHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -42,10 +45,10 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMBlender extends BlockMultiPart<TileEntityMBlender> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo, ISidedInventoryProvider {
+public class BlockMBlender extends BlockMultipartBuilded<TileEntityMBlender> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo, ISidedInventoryProvider {
 	
 	public BlockMBlender() {
-		super("blender", Material.METAL, 4F, SoundType.METAL, 3, 3, 3);
+		super("blender", Material.METAL, 4F, SoundType.METAL, 3, 3, 3, () -> MultipartBuildRecipes.BLENDER);
 	}
 	
 	@Override
@@ -171,7 +174,7 @@ public class BlockMBlender extends BlockMultiPart<TileEntityMBlender> implements
 			for (int y = 0; y < this.sizeY; y++) {
 				for (int z = 0; z < this.sizeZ; z++) {
 					BlockPos internPos = new BlockPos(x, y, z);
-					BlockPos offset = rotateOffset(internPos, facing);
+					BlockPos offset = UtilHelper.rotateBlockPos(internPos, facing);
 					BlockPos partPos = getCenterTE(pos, state, world).getBlockPos().offset(offset);
 					multiParts.add(partPos);
 				}
@@ -191,6 +194,12 @@ public class BlockMBlender extends BlockMultiPart<TileEntityMBlender> implements
 			worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
 			worldIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 		}
+	}
+	
+	@Override
+	public void storeBuildData(World world, BlockPos pos, BlockState state, MultipartBuildLocation buildData) {
+		TileEntityMBlender tileEntity = getCenterTE(pos, state, world);
+		tileEntity.storeBuildData(buildData);
 	}
 	
 }

@@ -2,7 +2,7 @@ package de.industria.tileentity;
 
 import java.util.Optional;
 
-import de.industria.blocks.BlockMultiPart;
+import de.industria.blocks.BlockMultipart;
 import de.industria.gui.ContainerMRaffinery;
 import de.industria.recipetypes.RifiningRecipe;
 import de.industria.typeregistys.ModRecipeTypes;
@@ -71,7 +71,7 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 		
 		if (!this.level.isClientSide()) {
 			
-			if (BlockMultiPart.getInternPartPos(this.getBlockState()).equals(BlockPos.ZERO)) {
+			if (BlockMultipart.getInternPartPos(this.getBlockState()).equals(BlockPos.ZERO)) {
 				
 				this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 				ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
@@ -186,8 +186,8 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 					
 				}
 				
-			} else if (BlockMultiPart.getInternPartPos(this.getBlockState()).equals(new BlockPos(1, 3, 0))) {
-				TileEntityMRaffinery tileEntity = (TileEntityMRaffinery) BlockMultiPart.getSCenterTE(worldPosition, getBlockState(), level);
+			} else if (BlockMultipart.getInternPartPos(this.getBlockState()).equals(new BlockPos(1, 3, 0))) {
+				TileEntityMRaffinery tileEntity = (TileEntityMRaffinery) BlockMultipart.getSCenterTE(worldPosition, getBlockState(), level);
 				if (tileEntity != null) {
 					FluidStack rest = pushFluid(tileEntity.fluidOut, level, worldPosition);
 					if (rest != tileEntity.fluidOut) tileEntity.fluidOut = rest;
@@ -199,7 +199,7 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 			if (this.isWorking) {
 				
 				IParticleData paricle = ParticleTypes.POOF;
-				Direction facing = getBlockState().getValue(BlockMultiPart.FACING);
+				Direction facing = getBlockState().getValue(BlockMultipart.FACING);
 				
 				int ox = 0;
 				int oz = 0;
@@ -288,8 +288,8 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 	
 	@Override
 	public FluidStack getFluid(int amount) {
-		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
-		TileEntity tileEntity = BlockMultiPart.getSCenterTE(worldPosition, getBlockState(), level);
+		BlockPos ipos =  BlockMultipart.getInternPartPos(this.getBlockState());
+		TileEntity tileEntity = BlockMultipart.getSCenterTE(worldPosition, getBlockState(), level);
 		if (tileEntity instanceof TileEntityMRaffinery) {
 			if (ipos.equals(new BlockPos(1, 3, 0))) {
 				int transfer = Math.min(amount, ((TileEntityMRaffinery) tileEntity).fluidOut.getAmount());
@@ -305,8 +305,8 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 
 	@Override
 	public FluidStack insertFluid(FluidStack fluid) {
-		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
-		TileEntity tileEntity = BlockMultiPart.getSCenterTE(worldPosition, getBlockState(), level);
+		BlockPos ipos =  BlockMultipart.getInternPartPos(this.getBlockState());
+		TileEntity tileEntity = BlockMultipart.getSCenterTE(worldPosition, getBlockState(), level);
 		if (tileEntity instanceof TileEntityMRaffinery) {
 			if (ipos.equals(new BlockPos(1, 0, 1))) {
 				if (((TileEntityMRaffinery) tileEntity).fluidIn.getFluid().isSame(fluid.getFluid()) || ((TileEntityMRaffinery) tileEntity).fluidIn.isEmpty()) {
@@ -330,7 +330,7 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 
 	@Override
 	public Fluid getFluidType() {
-		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
+		BlockPos ipos =  BlockMultipart.getInternPartPos(this.getBlockState());
 		if (ipos.equals(new BlockPos(1, 0, 1))) {
 			return this.fluidIn.getFluid();
 		} else {
@@ -340,7 +340,7 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 
 	@Override
 	public FluidStack getStorage() {
-		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
+		BlockPos ipos =  BlockMultipart.getInternPartPos(this.getBlockState());
 		if (ipos.equals(new BlockPos(1, 0, 1))) {
 			return this.fluidIn;
 		} else {
@@ -350,8 +350,8 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 	
 	@Override
 	public boolean canConnect(Direction side) {
-		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
-		Direction facing = this.getBlockState().getValue(BlockMultiPart.FACING);
+		BlockPos ipos =  BlockMultipart.getInternPartPos(this.getBlockState());
+		Direction facing = this.getBlockState().getValue(BlockMultipart.FACING);
 		return	(ipos.equals(new BlockPos(1, 0, 1)) && side == facing.getOpposite()) ||
 				(ipos.equals(new BlockPos(1, 3, 0)) && side == facing);
 	}
@@ -394,7 +394,7 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 
 	@Override
 	public void setStorage(FluidStack storage) {
-		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
+		BlockPos ipos =  BlockMultipart.getInternPartPos(this.getBlockState());
 		if (ipos.equals(new BlockPos(1, 0, 1))) {
 			this.fluidIn = storage;
 		} else {

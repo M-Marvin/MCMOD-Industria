@@ -24,7 +24,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockMSteamGenerator extends BlockMultiPart<TileEntityMSteamGenerator> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo {
+public class BlockMSteamGenerator extends BlockMultipart<TileEntityMSteamGenerator> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo {
 	
 	public BlockMSteamGenerator() {
 		super("steam_generator", Material.METAL, 8F, SoundType.METAL, 3, 3, 2);

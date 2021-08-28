@@ -11,6 +11,7 @@ import de.industria.tileentity.TileEntityMOreWashingPlant;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
+import de.industria.util.handler.UtilHelper;
 import de.industria.util.handler.VoxelHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -42,7 +43,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMOreWashingPlant extends BlockMultiPart<TileEntityMOreWashingPlant> implements IBElectricConnectiveBlock, ISidedInventoryProvider, IBAdvancedBlockInfo {
+public class BlockMOreWashingPlant extends BlockMultipart<TileEntityMOreWashingPlant> implements IBElectricConnectiveBlock, ISidedInventoryProvider, IBAdvancedBlockInfo {
 	
 	public BlockMOreWashingPlant() {
 		super("ore_washing_plant", Material.METAL, 4F, SoundType.METAL, 4, 3, 3);
@@ -190,7 +191,7 @@ public class BlockMOreWashingPlant extends BlockMultiPart<TileEntityMOreWashingP
 			for (int y = 0; y < this.sizeY; y++) {
 				for (int z = 0; z < this.sizeZ; z++) {
 					BlockPos internPos = new BlockPos(x, y, z);
-					BlockPos offset = rotateOffset(internPos, facing);
+					BlockPos offset = UtilHelper.rotateBlockPos(internPos, facing);
 					BlockPos partPos = getCenterTE(pos, state, world).getBlockPos().offset(offset);
 					multiParts.add(partPos);
 				}

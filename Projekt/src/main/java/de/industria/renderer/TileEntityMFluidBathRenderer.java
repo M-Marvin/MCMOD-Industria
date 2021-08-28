@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import de.industria.Industria;
-import de.industria.blocks.BlockMultiPart;
+import de.industria.blocks.BlockMultipart;
 import de.industria.tileentity.TileEntityMFluidBath;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -37,7 +37,7 @@ public class TileEntityMFluidBathRenderer extends TileEntityRenderer<TileEntityM
 		
 		BlockState blockState = tileEntityIn.getBlockState();
 		Direction facing = blockState.getValue(BlockStateProperties.HORIZONTAL_FACING);
-		BlockPos partPos = BlockMultiPart.getInternPartPos(blockState);
+		BlockPos partPos = BlockMultipart.getInternPartPos(blockState);
 		
 		if (partPos.equals(BlockPos.ZERO)) {
 

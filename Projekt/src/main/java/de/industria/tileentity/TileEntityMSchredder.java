@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import de.industria.blocks.BlockMSchredder;
-import de.industria.blocks.BlockMultiPart;
+import de.industria.blocks.BlockMultipart;
 import de.industria.gui.ContainerMSchredder;
 import de.industria.items.ItemSchredderTool;
 import de.industria.recipetypes.SchredderRecipe;
@@ -75,7 +75,7 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 	@Override
 	public void tick() {
 		
-		if (!this.level.isClientSide() && BlockMultiPart.getInternPartPos(getBlockState()).equals(BlockPos.ZERO)) {
+		if (!this.level.isClientSide() && BlockMultipart.getInternPartPos(getBlockState()).equals(BlockPos.ZERO)) {
 			
 			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
@@ -163,7 +163,7 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 				
 				if (!this.getItem(0).isEmpty() && findRecipe() != null) {
 					
-					Direction facing = this.getBlockState().getValue(BlockMultiPart.FACING);
+					Direction facing = this.getBlockState().getValue(BlockMultipart.FACING);
 					Vector3f offset = null;
 					switch(facing) {
 						case NORTH: offset = new Vector3f(1, 1.8F, 1); break;

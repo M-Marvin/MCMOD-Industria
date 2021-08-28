@@ -54,7 +54,7 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 			
 			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(this.level).getNetwork(this.worldPosition);
 			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
-			this.hasPower = network.canMachinesRun() == Voltage.NormalVoltage;
+			this.hasPower = network.canMachinesRun() == Voltage.HightVoltage;
 			this.isWorking = canWork() && this.hasPower;
 			
 			if (isWorking != getBlockState().getValue(BlockMElectricFurnace.LIT)) this.level.setBlockAndUpdate(worldPosition, this.getBlockState().setValue(BlockMElectricFurnace.LIT, this.isWorking));
@@ -103,7 +103,7 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 				
 			} 
 			
-			if (this.cookTime > 0 && (findRecipe() == null || network.canMachinesRun() != Voltage.NormalVoltage)) {
+			if (this.cookTime > 0 && (findRecipe() == null || network.canMachinesRun() != Voltage.HightVoltage)) {
 				
 				this.cookTime -= 2;
 				if (this.cookTime < 0) {

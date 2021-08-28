@@ -2,7 +2,7 @@ package de.industria.tileentity;
 
 import java.util.Optional;
 
-import de.industria.blocks.BlockMultiPart;
+import de.industria.blocks.BlockMultipart;
 import de.industria.gui.ContainerMOreWashingPlant;
 import de.industria.recipetypes.WashingRecipe;
 import de.industria.typeregistys.ModFluids;
@@ -65,9 +65,9 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 		
 		if (!this.level.isClientSide()) {
 			
-			if (BlockMultiPart.getInternPartPos(this.getBlockState()).equals(new BlockPos(0, 0, 0))) {
+			if (BlockMultipart.getInternPartPos(this.getBlockState()).equals(new BlockPos(0, 0, 0))) {
 				
-				TileEntityMOreWashingPlant tileEntity = (TileEntityMOreWashingPlant) BlockMultiPart.getSCenterTE(worldPosition, getBlockState(), level);
+				TileEntityMOreWashingPlant tileEntity = (TileEntityMOreWashingPlant) BlockMultipart.getSCenterTE(worldPosition, getBlockState(), level);
 				if (tileEntity != null) {
 					FluidStack rest = pushFluid(tileEntity.wasteFluid, level, worldPosition);
 					if (rest != tileEntity.wasteFluid) tileEntity.wasteFluid = rest;
@@ -146,7 +146,7 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 			
 		} else {
 			
-			if (BlockMultiPart.getInternPartPos(this.getBlockState()).equals(new BlockPos(0, 0, 0))) {
+			if (BlockMultipart.getInternPartPos(this.getBlockState()).equals(new BlockPos(0, 0, 0))) {
 
 				if (this.isWorking) {
 
@@ -262,8 +262,8 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 	
 	@Override
 	public FluidStack getFluid(int amount) {
-		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
-		TileEntity tileEntity = BlockMultiPart.getSCenterTE(worldPosition, getBlockState(), level);
+		BlockPos ipos =  BlockMultipart.getInternPartPos(this.getBlockState());
+		TileEntity tileEntity = BlockMultipart.getSCenterTE(worldPosition, getBlockState(), level);
 		if (tileEntity instanceof TileEntityMOreWashingPlant) {
 			if (ipos.equals(new BlockPos(2, 0, 0))) {
 				int transfer = Math.min(amount, ((TileEntityMOreWashingPlant) tileEntity).wasteFluid.getAmount());
@@ -279,8 +279,8 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 
 	@Override
 	public FluidStack insertFluid(FluidStack fluid) {
-		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
-		TileEntity tileEntity = BlockMultiPart.getSCenterTE(worldPosition, getBlockState(), level);
+		BlockPos ipos =  BlockMultipart.getInternPartPos(this.getBlockState());
+		TileEntity tileEntity = BlockMultipart.getSCenterTE(worldPosition, getBlockState(), level);
 		if (tileEntity instanceof TileEntityMOreWashingPlant) {
 			if (ipos.equals(new BlockPos(2, 0, 0))) {
 				if (((TileEntityMOreWashingPlant) tileEntity).inputFluid.getFluid().isSame(fluid.getFluid()) || ((TileEntityMOreWashingPlant) tileEntity).inputFluid.isEmpty()) {
@@ -304,7 +304,7 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 	
 	@Override
 	public Fluid getFluidType() {
-		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
+		BlockPos ipos =  BlockMultipart.getInternPartPos(this.getBlockState());
 		if (ipos.equals(new BlockPos(0, 0, 0))) {
 			return this.wasteFluid.getFluid();
 		} else {
@@ -314,7 +314,7 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 	
 	@Override
 	public FluidStack getStorage() {
-		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
+		BlockPos ipos =  BlockMultipart.getInternPartPos(this.getBlockState());
 		if (ipos.equals(new BlockPos(0, 0, 0))) {
 			return this.wasteFluid;
 		} else {
@@ -324,8 +324,8 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 	
 	@Override
 	public boolean canConnect(Direction side) {
-		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
-		Direction facing = this.getBlockState().getValue(BlockMultiPart.FACING);
+		BlockPos ipos =  BlockMultipart.getInternPartPos(this.getBlockState());
+		Direction facing = this.getBlockState().getValue(BlockMultipart.FACING);
 		return	(ipos.equals(new BlockPos(0, 0, 0)) && side == facing) ||
 				(ipos.equals(new BlockPos(2, 0, 0)) && side == facing);
 	}
@@ -396,7 +396,7 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 
 	@Override
 	public void setStorage(FluidStack storage) {
-		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
+		BlockPos ipos =  BlockMultipart.getInternPartPos(this.getBlockState());
 		if (ipos.equals(new BlockPos(0, 0, 0))) {
 			this.wasteFluid = storage;
 		} else {

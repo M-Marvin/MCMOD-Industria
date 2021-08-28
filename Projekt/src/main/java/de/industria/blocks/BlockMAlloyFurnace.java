@@ -52,6 +52,7 @@ public class BlockMAlloyFurnace extends BlockContainerBase implements IBElectric
 	
 	public BlockMAlloyFurnace() {
 		super("alloy_furnace", Material.METAL, 4F, SoundType.METAL);
+		this.registerDefaultState(this.stateDefinition.any().setValue(LIT, false));
 	}
 	
 	@Override

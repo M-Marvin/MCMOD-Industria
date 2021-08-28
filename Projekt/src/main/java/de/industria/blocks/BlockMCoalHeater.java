@@ -30,7 +30,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMCoalHeater extends BlockMultiPart<TileEntityMCoalHeater> implements ISidedInventoryProvider, IBAdvancedBlockInfo {
+public class BlockMCoalHeater extends BlockMultipart<TileEntityMCoalHeater> implements ISidedInventoryProvider, IBAdvancedBlockInfo {
 	
 	public BlockMCoalHeater() {
 		super("coal_heater", Material.METAL, 4F, SoundType.METAL, 2, 1, 2);

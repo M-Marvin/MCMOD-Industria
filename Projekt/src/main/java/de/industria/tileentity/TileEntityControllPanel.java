@@ -103,7 +103,10 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 		}
 
 		Entry<Pos, ItemStack> element = getElementAt(x, y);
-		if (element != null) ((ItemPanelElement) element.getValue().getItem()).onActivated(this, element.getValue());
+		if (element != null) {
+			((ItemPanelElement) element.getValue().getItem()).onActivated(this, element.getValue());
+			return ActionResultType.SUCCESS;
+		}
 		this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 0);
 		
 		return ActionResultType.PASS;

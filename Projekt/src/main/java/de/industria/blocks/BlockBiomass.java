@@ -91,8 +91,8 @@ public class BlockBiomass extends BlockFallingDust {
 					BlockPos testPos = checkPos.offset(x, 0, z);
 					BlockState checkState = worldIn.getBlockState(testPos);
 					if (checkState.getBlock() == this) continue;
-					if (checkState.getBlock() instanceof BlockMultiPart) {
-						TileEntity heaterEntity = BlockMultiPart.getSCenterTE(testPos, checkState, worldIn);
+					if (checkState.getBlock() instanceof BlockMultipart) {
+						TileEntity heaterEntity = BlockMultipart.getSCenterTE(testPos, checkState, worldIn);
 						if (heaterEntity instanceof TileEntityMHeaterBase) {
 							return ((TileEntityMHeaterBase) heaterEntity).isWorking;
 						}

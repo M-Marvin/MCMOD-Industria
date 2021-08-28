@@ -5,8 +5,9 @@ import java.util.Optional;
 
 import de.industria.blocks.BlockMBlender;
 import de.industria.blocks.BlockMSchredder;
-import de.industria.blocks.BlockMultiPart;
+import de.industria.blocks.BlockMultipart;
 import de.industria.gui.ContainerMBlender;
+import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.recipetypes.BlendingRecipe;
 import de.industria.typeregistys.ModDamageSource;
 import de.industria.typeregistys.ModRecipeTypes;
@@ -87,7 +88,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 
 	@Override
 	public int[] getSlotsForFace(Direction side) {
-		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
+		BlockPos ipos = BlockMultipart.getInternPartPos(this.getBlockState());
 		if (ipos.getY() == 0) return new int[] {0, 1, 2};
 		return new int[] {};
 	}
@@ -117,7 +118,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 	@Override
 	public void tick() {
 		
-		if (BlockMultiPart.getInternPartPos(this.getBlockState()).equals(BlockPos.ZERO)) {
+		if (BlockMultipart.getInternPartPos(this.getBlockState()).equals(BlockPos.ZERO)) {
 			
 			if (!this.level.isClientSide()) {
 				
@@ -219,7 +220,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 					if (this.tankFillState > 0) {
 						
 						IParticleData paricle = ParticleTypes.POOF;
-						Direction facing = getBlockState().getValue(BlockMultiPart.FACING);
+						Direction facing = getBlockState().getValue(BlockMultipart.FACING);
 						
 						int ox = 0;
 						int oz = 0;
@@ -261,8 +262,8 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 				
 			}
 			
-		} else if (BlockMultiPart.getInternPartPos(this.getBlockState()).equals(new BlockPos(2, 1, 0))) {
-			TileEntityMBlender tileEntity = (TileEntityMBlender) BlockMultiPart.getSCenterTE(worldPosition, getBlockState(), level);
+		} else if (BlockMultipart.getInternPartPos(this.getBlockState()).equals(new BlockPos(2, 1, 0))) {
+			TileEntityMBlender tileEntity = (TileEntityMBlender) BlockMultipart.getSCenterTE(worldPosition, getBlockState(), level);
 			if (tileEntity != null) {
 				FluidStack rest = pushFluid(tileEntity.fluidOut, level, worldPosition);
 				if (rest != tileEntity.fluidOut) tileEntity.fluidOut = rest;
@@ -317,7 +318,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 	
 	@Override
 	public FluidStack getFluid(int amount) {
-		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
+		BlockPos ipos = BlockMultipart.getInternPartPos(this.getBlockState());
 		TileEntity tileEntity = BlockMBlender.getSCenterTE(ipos, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMBlender) {
 			if (ipos.equals(new BlockPos(2, 1, 0))) {
@@ -334,7 +335,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 
 	@Override
 	public FluidStack insertFluid(FluidStack fluid) {
-		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
+		BlockPos ipos = BlockMultipart.getInternPartPos(this.getBlockState());
 		TileEntity tileEntity = BlockMBlender.getSCenterTE(worldPosition, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMBlender) {
 			if (ipos.equals(new BlockPos(2, 2, 2))) {
@@ -374,7 +375,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 
 	@Override
 	public Fluid getFluidType() {
-		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
+		BlockPos ipos = BlockMultipart.getInternPartPos(this.getBlockState());
 		TileEntity tileEntity = BlockMBlender.getSCenterTE(ipos, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMBlender) {
 			if (ipos.equals(new BlockPos(2, 2, 2))) {
@@ -390,7 +391,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 
 	@Override
 	public FluidStack getStorage() {
-		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
+		BlockPos ipos = BlockMultipart.getInternPartPos(this.getBlockState());
 		TileEntity tileEntity = BlockMBlender.getSCenterTE(ipos, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMBlender) {
 			if (ipos.equals(new BlockPos(2, 2, 2))) {
@@ -406,15 +407,15 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 	
 	@Override
 	public boolean canConnect(Direction side) {
-		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
-		Direction facing = this.getBlockState().getValue(BlockMultiPart.FACING);
+		BlockPos ipos =  BlockMultipart.getInternPartPos(this.getBlockState());
+		Direction facing = this.getBlockState().getValue(BlockMultipart.FACING);
 		return	((ipos.equals(new BlockPos(2, 2, 2)) || ipos.equals(new BlockPos(1, 1, 2))) && side == facing.getOpposite()) ||
 				((ipos.equals(new BlockPos(2, 1, 0))) && side == facing);
 	}
 	
 	@Override
 	public CompoundNBT save(CompoundNBT compound) {
-		if (BlockMultiPart.getInternPartPos(this.getBlockState()).equals(BlockPos.ZERO)) {
+		if (BlockMultipart.getInternPartPos(this.getBlockState()).equals(BlockPos.ZERO)) {
 			if (!this.fluidIn1.isEmpty()) compound.put("FluidIn1", this.fluidIn1.writeToNBT(new CompoundNBT()));
 			if (!this.fluidIn2.isEmpty()) compound.put("FluidIn2", this.fluidIn2.writeToNBT(new CompoundNBT()));
 			if (!this.fluidOut.isEmpty()) compound.put("FluidOut", this.fluidOut.writeToNBT(new CompoundNBT()));
@@ -429,7 +430,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 	
 	@Override
 	public void load(BlockState state, CompoundNBT compound) {
-		if (state == null ? true : BlockMultiPart.getInternPartPos(state).equals(BlockPos.ZERO)) {
+		if (state == null ? true : BlockMultipart.getInternPartPos(state).equals(BlockPos.ZERO)) {
 			this.fluidIn1 = FluidStack.EMPTY;
 			this.fluidIn2 = FluidStack.EMPTY;
 			this.fluidOut = FluidStack.EMPTY;
@@ -447,7 +448,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 
 	@Override
 	public void setStorage(FluidStack storage) {
-		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
+		BlockPos ipos = BlockMultipart.getInternPartPos(this.getBlockState());
 		TileEntity tileEntity = BlockMBlender.getSCenterTE(ipos, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMBlender) {
 			if (ipos.equals(new BlockPos(2, 2, 2))) {
@@ -458,6 +459,11 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 				((TileEntityMBlender) tileEntity).fluidOut = storage;
 			}
 		}
+	}
+	
+	public MultipartBuildLocation buildData = MultipartBuildLocation.EMPTY;
+	public void storeBuildData(MultipartBuildLocation buildData) {
+		this.buildData = buildData;
 	}
 	
 }

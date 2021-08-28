@@ -3,7 +3,7 @@ package de.industria.tileentity;
 import java.util.Optional;
 
 import de.industria.blocks.BlockMBlastFurnace;
-import de.industria.blocks.BlockMultiPart;
+import de.industria.blocks.BlockMultipart;
 import de.industria.gui.ContainerMBlastFurnace;
 import de.industria.recipetypes.BlastFurnaceRecipe;
 import de.industria.typeregistys.ModRecipeTypes;
@@ -16,6 +16,7 @@ import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import de.industria.util.handler.ItemStackHelper;
 import de.industria.util.handler.MachineSoundHelper;
+import de.industria.util.handler.UtilHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -57,7 +58,7 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 	@Override
 	public void tick() {
 		
-		if (BlockMultiPart.getInternPartPos(this.getBlockState()).equals(BlockPos.ZERO)) {
+		if (BlockMultipart.getInternPartPos(this.getBlockState()).equals(BlockPos.ZERO)) {
 			
 			if (!this.level.isClientSide()) {
 				
@@ -67,9 +68,9 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 				ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
 				this.hasPower = network.canMachinesRun() == Voltage.NormalVoltage;
 				
-				BlockPos heaterPos = BlockMultiPart.rotateOffset(new BlockPos(1, 0, 1), getBlockState().getValue(BlockMultiPart.FACING)).offset(this.worldPosition).below();
+				BlockPos heaterPos = UtilHelper.rotateBlockPos(new BlockPos(1, 0, 1), getBlockState().getValue(BlockMultipart.FACING)).offset(this.worldPosition).below();
 				BlockState heaterState = this.level.getBlockState(heaterPos);
-				TileEntity heaterTile = heaterState.getBlock() instanceof BlockMultiPart ? BlockMultiPart.getSCenterTE(heaterPos, heaterState, this.level) : this.level.getBlockEntity(heaterPos);
+				TileEntity heaterTile = heaterState.getBlock() instanceof BlockMultipart ? BlockMultipart.getSCenterTE(heaterPos, heaterState, this.level) : this.level.getBlockEntity(heaterPos);
 				this.hasHeater = heaterTile instanceof TileEntityMHeaterBase;
 				this.hasHeat = this.hasHeater ? ((TileEntityMHeaterBase) heaterTile).isWorking : false;
 				this.isWorking = this.hasPower && this.hasHeat && this.canWork();
@@ -156,7 +157,7 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 
 	@Override
 	public FluidStack insertFluid(FluidStack fluid) {
-		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
+		BlockPos ipos = BlockMultipart.getInternPartPos(this.getBlockState());
 		TileEntity tileEntity = BlockMBlastFurnace.getSCenterTE(worldPosition, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMBlastFurnace) {
 			if (ipos.equals(new BlockPos(2, 0, 0))) {
@@ -186,7 +187,7 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 	
 	@Override
 	public FluidStack getStorage() {
-		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
+		BlockPos ipos = BlockMultipart.getInternPartPos(this.getBlockState());
 		TileEntity tileEntity = BlockMBlastFurnace.getSCenterTE(ipos, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMBlastFurnace) {
 			if (ipos.equals(new BlockPos(2, 2, 2))) {
@@ -198,8 +199,8 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 	
 	@Override
 	public boolean canConnect(Direction side) {
-		BlockPos ipos =  BlockMultiPart.getInternPartPos(this.getBlockState());
-		Direction facing = this.getBlockState().getValue(BlockMultiPart.FACING);
+		BlockPos ipos =  BlockMultipart.getInternPartPos(this.getBlockState());
+		Direction facing = this.getBlockState().getValue(BlockMultipart.FACING);
 		return ipos.equals(new BlockPos(2, 0, 0)) && side == facing;
 	}
 
@@ -269,7 +270,7 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 
 	@Override
 	public void setStorage(FluidStack storage) {
-		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
+		BlockPos ipos = BlockMultipart.getInternPartPos(this.getBlockState());
 		TileEntity tileEntity = BlockMBlastFurnace.getSCenterTE(ipos, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMBlastFurnace) {
 			if (ipos.equals(new BlockPos(2, 2, 2))) {

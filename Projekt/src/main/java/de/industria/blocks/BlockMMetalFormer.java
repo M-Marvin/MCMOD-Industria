@@ -10,6 +10,7 @@ import de.industria.renderer.BlockMMetalFormerItemRenderer;
 import de.industria.tileentity.TileEntityMMetalFormer;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
+import de.industria.util.handler.UtilHelper;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -37,7 +38,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMMetalFormer extends BlockMultiPart<TileEntityMMetalFormer> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo, ISidedInventoryProvider {
+public class BlockMMetalFormer extends BlockMultipart<TileEntityMMetalFormer> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo, ISidedInventoryProvider {
 	
 	public BlockMMetalFormer() {
 		super("metal_former", Material.METAL, 4F, SoundType.METAL, 1, 1, 2);
@@ -100,7 +101,7 @@ public class BlockMMetalFormer extends BlockMultiPart<TileEntityMMetalFormer> im
 			for (int y = 0; y < this.sizeY; y++) {
 				for (int z = 0; z < this.sizeZ; z++) {
 					BlockPos internPos = new BlockPos(x, y, z);
-					BlockPos offset = rotateOffset(internPos, facing);
+					BlockPos offset = UtilHelper.rotateBlockPos(internPos, facing);
 					BlockPos partPos = getCenterTE(pos, state, world).getBlockPos().offset(offset);
 					multiParts.add(partPos);
 				}

@@ -11,6 +11,7 @@ import de.industria.tileentity.TileEntityNComputer;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.blockfeatures.ITENetworkDevice;
+import de.industria.util.handler.UtilHelper;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -36,7 +37,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockNComputer extends BlockMultiPart<TileEntityNComputer> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo, ITENetworkDevice {
+public class BlockNComputer extends BlockMultipart<TileEntityNComputer> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo, ITENetworkDevice {
 	
 	public BlockNComputer() {
 		super("computer", Material.METAL, 2F, SoundType.METAL, 1, 2, 2);
@@ -93,7 +94,7 @@ public class BlockNComputer extends BlockMultiPart<TileEntityNComputer> implemen
 			for (int y = 0; y < this.sizeY; y++) {
 				for (int z = 0; z < this.sizeZ; z++) {
 					BlockPos internPos = new BlockPos(x, y, z);
-					BlockPos offset = rotateOffset(internPos, facing);
+					BlockPos offset = UtilHelper.rotateBlockPos(internPos, facing);
 					BlockPos partPos = getCenterTE(pos, state, world).getBlockPos().offset(offset);
 					multiParts.add(partPos);
 				}

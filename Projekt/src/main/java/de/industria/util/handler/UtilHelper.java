@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 
 public class UtilHelper {
@@ -32,7 +35,7 @@ public class UtilHelper {
 		
 		return randArr;
 	}
-
+	
 	@SafeVarargs
 	public static <T> List<T> toCollection(T... items) {
 		List<T> list = new ArrayList<T>();
@@ -50,6 +53,26 @@ public class UtilHelper {
 		for (T item1 : items) list.add(item1);
 		list.add(item);
 		return list;
+	}
+	
+	public static BlockPos rotateBlockPos(BlockPos pos, Direction facing) {
+		switch (facing) {
+		case NORTH: return pos;
+		case SOUTH: return new BlockPos(-pos.getX(), pos.getY(), -pos.getZ());
+		case EAST: return new BlockPos(-pos.getZ(), pos.getY(), pos.getX());
+		case WEST: return new BlockPos(pos.getZ(), pos.getY(), -pos.getX());
+		default: return pos;
+		}
+	}
+	
+	public static Rotation directionToRotation(Direction facing) {
+		switch (facing) {
+		case NORTH: return Rotation.NONE;
+		case SOUTH: return Rotation.CLOCKWISE_180;
+		case EAST: return Rotation.CLOCKWISE_90;
+		case WEST: return Rotation.COUNTERCLOCKWISE_90;
+		default: return Rotation.NONE;
+		}
 	}
 	
 }

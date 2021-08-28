@@ -3,7 +3,7 @@ package de.industria.tileentity;
 import java.util.Optional;
 
 import de.industria.blocks.BlockMFluidBath;
-import de.industria.blocks.BlockMultiPart;
+import de.industria.blocks.BlockMultipart;
 import de.industria.gui.ContainerMFluidBath;
 import de.industria.recipetypes.FluidBathRecipe;
 import de.industria.typeregistys.ModRecipeTypes;
@@ -64,7 +64,7 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements ITE
 		
 		if (!this.level.isClientSide()) {
 			
-			if (BlockMultiPart.getInternPartPos(getBlockState()).equals(BlockPos.ZERO)) {
+			if (BlockMultipart.getInternPartPos(getBlockState()).equals(BlockPos.ZERO)) {
 
 				ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
 				ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
@@ -134,7 +134,7 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements ITE
 				
 				if (this.progress > 0) this.progress--;
 				
-				TileEntityMFluidBath tileEntity = (TileEntityMFluidBath) BlockMultiPart.getSCenterTE(worldPosition, getBlockState(), level);
+				TileEntityMFluidBath tileEntity = (TileEntityMFluidBath) BlockMultipart.getSCenterTE(worldPosition, getBlockState(), level);
 				if (tileEntity != null) {
 					FluidStack rest = pushFluid(tileEntity.fluidOut, level, worldPosition);
 					if (rest != tileEntity.fluidOut) tileEntity.fluidOut = rest;
@@ -209,7 +209,7 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements ITE
 	
 	@Override
 	public FluidStack getFluid(int amount) {
-		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
+		BlockPos ipos = BlockMultipart.getInternPartPos(this.getBlockState());
 		TileEntity tileEntity = BlockMFluidBath.getSCenterTE(ipos, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMFluidBath) {
 			if (ipos.equals(new BlockPos(0, 0, 0))) {
@@ -226,7 +226,7 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements ITE
 	
 	@Override
 	public FluidStack insertFluid(FluidStack fluid) {
-		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
+		BlockPos ipos = BlockMultipart.getInternPartPos(this.getBlockState());
 		TileEntity tileEntity = BlockMFluidBath.getSCenterTE(worldPosition, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMFluidBath) {
 			if (ipos.equals(new BlockPos(0, 0, 2))) {
@@ -251,7 +251,7 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements ITE
 	
 	@Override
 	public Fluid getFluidType() {
-		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
+		BlockPos ipos = BlockMultipart.getInternPartPos(this.getBlockState());
 		TileEntity tileEntity = BlockMFluidBath.getSCenterTE(ipos, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMFluidBath) {
 			if (ipos.equals(new BlockPos(0, 0, 2))) {
@@ -265,7 +265,7 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements ITE
 
 	@Override
 	public FluidStack getStorage() {
-		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
+		BlockPos ipos = BlockMultipart.getInternPartPos(this.getBlockState());
 		TileEntity tileEntity = BlockMFluidBath.getSCenterTE(ipos, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMFluidBath) {
 			if (ipos.equals(new BlockPos(0, 0, 2))) {
@@ -279,7 +279,7 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements ITE
 
 	@Override
 	public boolean canConnect(Direction side) {
-		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
+		BlockPos ipos = BlockMultipart.getInternPartPos(this.getBlockState());
 		TileEntity tileEntity = BlockMFluidBath.getSCenterTE(worldPosition, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMFluidBath) {
 			return (ipos.equals(new BlockPos(0, 0, 2)) || ipos.equals(new BlockPos(0, 0, 0))) && getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING).getAxis() == side.getAxis();
@@ -309,7 +309,7 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements ITE
 
 	@Override
 	public void setStorage(FluidStack storage) {
-		BlockPos ipos = BlockMultiPart.getInternPartPos(this.getBlockState());
+		BlockPos ipos = BlockMultipart.getInternPartPos(this.getBlockState());
 		TileEntity tileEntity = BlockMFluidBath.getSCenterTE(ipos, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMFluidBath) {
 			if (ipos.equals(new BlockPos(1, 1, 2))) {

@@ -78,9 +78,9 @@ public class BlockMElectricFurnace extends BlockContainerBase implements IBElect
 	@Override
 	public IBlockToolType getBlockInfo() {
 		return (stack, info) -> {
-			info.add(new TranslationTextComponent("industria.block.info.needEnergy", (2 * Voltage.HightVoltage.getVoltage() / 1000F) + "k"));
+			info.add(new TranslationTextComponent("industria.block.info.needEnergy", 0.6 * Voltage.HightVoltage.getVoltage()));
 			info.add(new TranslationTextComponent("industria.block.info.needVoltage", Voltage.HightVoltage.getVoltage()));
-			info.add(new TranslationTextComponent("industria.block.info.needCurrent", 2));
+			info.add(new TranslationTextComponent("industria.block.info.needCurrent", 0.6F));
 			info.add(new TranslationTextComponent("industria.block.info.electricFurnace"));
 		};
 	}
@@ -99,7 +99,7 @@ public class BlockMElectricFurnace extends BlockContainerBase implements IBElect
 	public float getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
 		TileEntity tileEntity = world.getBlockEntity(pos);
 		if (tileEntity instanceof TileEntityMElectricFurnace) {
-			if (((TileEntityMElectricFurnace) tileEntity).findRecipe() != null) return 2;
+			if (((TileEntityMElectricFurnace) tileEntity).findRecipe() != null) return 0.6F;
 		}
 		return 0;
 	}
@@ -117,7 +117,7 @@ public class BlockMElectricFurnace extends BlockContainerBase implements IBElect
 	@Override
 	public void onNetworkChanges(World worldIn, BlockPos pos, BlockState state, ElectricityNetwork network) {
 
-		if (network.getVoltage().getVoltage() > Voltage.NormalVoltage.getVoltage() && network.getCurrent() > 0) {
+		if (network.getVoltage().getVoltage() > Voltage.HightVoltage.getVoltage() && network.getCurrent() > 0) {
 
 			worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
 			worldIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());

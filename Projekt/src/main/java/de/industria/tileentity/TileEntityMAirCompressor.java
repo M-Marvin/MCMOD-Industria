@@ -1,6 +1,6 @@
 package de.industria.tileentity;
 
-import de.industria.blocks.BlockMultiPart;
+import de.industria.blocks.BlockMultipart;
 import de.industria.gui.ContainerMAirCompressor;
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModSoundEvents;
@@ -105,7 +105,7 @@ public class TileEntityMAirCompressor extends TileEntity implements ITickableTil
 				if (this.level.random.nextInt(10) == 0) {
 
 					IParticleData paricle = ParticleTypes.POOF;
-					Direction facing = getBlockState().getValue(BlockMultiPart.FACING);
+					Direction facing = getBlockState().getValue(BlockMultipart.FACING);
 					
 					float ox = 0;
 					float oz = 0;
@@ -186,7 +186,7 @@ public class TileEntityMAirCompressor extends TileEntity implements ITickableTil
 	
 	@Override
 	public boolean canConnect(Direction side) {
-		return BlockMultiPart.getInternPartPos(getBlockState()).equals(new BlockPos(0, 0, 0));
+		return BlockMultipart.getInternPartPos(getBlockState()).equals(new BlockPos(0, 0, 0));
 	}
 	
 	@Override

@@ -11,6 +11,7 @@ import de.industria.tileentity.TileEntityMAirCompressor;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
+import de.industria.util.handler.UtilHelper;
 import de.industria.util.handler.VoxelHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -37,7 +38,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMAirCompressor extends BlockMultiPart<TileEntityMAirCompressor> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo {
+public class BlockMAirCompressor extends BlockMultipart<TileEntityMAirCompressor> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo {
 	
 	public BlockMAirCompressor() {
 		super("air_compressor", Material.METAL, 2F, SoundType.METAL, 1, 1, 2);
@@ -72,7 +73,7 @@ public class BlockMAirCompressor extends BlockMultiPart<TileEntityMAirCompressor
 				Block.box(15, 15, 0, 16, 16, 16),
 				Block.box(1, 15, 0, 15, 16, 1),
 				Block.box(1, 15, 15, 15, 16, 16));
-		return getInternPartPos(state).equals(BlockPos.ZERO) ? Block.box(0, 0, 0, 16, 16, 16) : VoxelHelper.rotateShape(shape, state.getValue(BlockMultiPart.FACING));
+		return getInternPartPos(state).equals(BlockPos.ZERO) ? Block.box(0, 0, 0, 16, 16, 16) : VoxelHelper.rotateShape(shape, state.getValue(BlockMultipart.FACING));
 	}
 	
 	@Override
@@ -127,7 +128,7 @@ public class BlockMAirCompressor extends BlockMultiPart<TileEntityMAirCompressor
 			for (int y = 0; y < this.sizeY; y++) {
 				for (int z = 0; z < this.sizeZ; z++) {
 					BlockPos internPos = new BlockPos(x, y, z);
-					BlockPos offset = rotateOffset(internPos, facing);
+					BlockPos offset = UtilHelper.rotateBlockPos(internPos, facing);
 					BlockPos partPos = getCenterTE(pos, state, world).getBlockPos().offset(offset);
 					multiParts.add(partPos);
 				}

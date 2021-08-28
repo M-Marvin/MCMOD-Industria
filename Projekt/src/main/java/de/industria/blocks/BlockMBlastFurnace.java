@@ -11,6 +11,7 @@ import de.industria.tileentity.TileEntityMBlastFurnace;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
+import de.industria.util.handler.UtilHelper;
 import de.industria.util.handler.VoxelHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -40,7 +41,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMBlastFurnace extends BlockMultiPart<TileEntityMBlastFurnace> implements IBAdvancedBlockInfo, IBElectricConnectiveBlock, ISidedInventoryProvider {
+public class BlockMBlastFurnace extends BlockMultipart<TileEntityMBlastFurnace> implements IBAdvancedBlockInfo, IBElectricConnectiveBlock, ISidedInventoryProvider {
 
 	public BlockMBlastFurnace() {
 		super("blast_furnace", Material.METAL, 2F, SoundType.METAL, 3, 5, 3);
@@ -117,7 +118,7 @@ public class BlockMBlastFurnace extends BlockMultiPart<TileEntityMBlastFurnace> 
 	
 	@Override
 	public ISidedInventory getContainer(BlockState state, IWorld world, BlockPos pos) {
-		BlockPos partPos = BlockMultiPart.getInternPartPos(state);
+		BlockPos partPos = BlockMultipart.getInternPartPos(state);
 		if (partPos.equals(new BlockPos(1, 4, 1)) || partPos.equals(new BlockPos(1, 0, 0))) {
 			return (ISidedInventory) getCenterTE(pos, state, world);
 		}
@@ -162,7 +163,7 @@ public class BlockMBlastFurnace extends BlockMultiPart<TileEntityMBlastFurnace> 
 
 	@Override
 	public boolean canConnect(Direction side, World world, BlockPos pos, BlockState state) {
-		return BlockMultiPart.getInternPartPos(state).getY() == 0;
+		return BlockMultipart.getInternPartPos(state).getY() == 0;
 	}
 	
 	@Override
@@ -173,7 +174,7 @@ public class BlockMBlastFurnace extends BlockMultiPart<TileEntityMBlastFurnace> 
 			for (int y = 0; y < this.sizeY; y++) {
 				for (int z = 0; z < this.sizeZ; z++) {
 					BlockPos internPos = new BlockPos(x, y, z);
-					BlockPos offset = rotateOffset(internPos, facing);
+					BlockPos offset = UtilHelper.rotateBlockPos(internPos, facing);
 					BlockPos partPos = getCenterTE(pos, state, world).getBlockPos().offset(offset);
 					multiParts.add(partPos);
 				}

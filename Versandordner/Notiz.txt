@@ -15,3 +15,5 @@ Kleine Details, die man noch ergänzen könnte:
 7. Eiszapfen
 
 8. Geringere Chance auf Natrium beim termalen Zentrifugieren von Salz, außerdem kleineres Natriumstück beim th Z, Geringere Chance auf Salz und Kalk beim Wasserdestillieren -> Chance von 50% auf Kalkpulver beim Destillieren, 30% auf Salz, 50% auf 3x kleines Salz beim Destillieren, Chance von 50% auf 3x kleines Natrium beim th Z
+
+9. Fluoritemodell -> X, Item anpassen (Glanz)

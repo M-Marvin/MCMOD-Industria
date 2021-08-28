@@ -56,4 +56,9 @@ public class TileEntityMBlastFurnaceRenderer extends TileEntityRenderer<TileEnti
 		
 	}
 	
+	@Override
+	public boolean shouldRenderOffScreen(TileEntityMBlastFurnace p_188185_1_) {
+		return true;
+	}
+	
 }

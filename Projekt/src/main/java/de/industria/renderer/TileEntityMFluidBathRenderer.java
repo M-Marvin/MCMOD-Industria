@@ -74,4 +74,9 @@ public class TileEntityMFluidBathRenderer extends TileEntityRenderer<TileEntityM
 		
 	}
 	
+	@Override
+	public boolean shouldRenderOffScreen(TileEntityMFluidBath p_188185_1_) {
+		return true;
+	}	
+	
 }

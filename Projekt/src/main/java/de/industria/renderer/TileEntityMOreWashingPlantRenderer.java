@@ -56,4 +56,9 @@ public class TileEntityMOreWashingPlantRenderer extends TileEntityRenderer<TileE
 		
 	}
 	
+	@Override
+	public boolean shouldRenderOffScreen(TileEntityMOreWashingPlant p_188185_1_) {
+		return true;
+	}
+	
 }

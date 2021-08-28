@@ -1,24 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "SGS",
-    "WEW",
-    "SCS"
+    "MGM",
+    "EKE",
+    "MSM"
   ],
   "key": {
-    "S": {
+    "M": {
       "item": "industria:metallic_glass_plate"
     },
     "G": {
       "item": "industria:metal_glass_machine_casing"
     },
-    "W": {
-      "item": "industria:wolfram_plate"
-    },
-    "C": {
-      "item": "industria:transformator_coil"
+    "S": {
+      "item": "industria:silver_plate"
     },
     "E": {
+      "item": "industria:circuit_board"
+    },
+    "K": {
       "item": "industria:ender_core"
     }
   },

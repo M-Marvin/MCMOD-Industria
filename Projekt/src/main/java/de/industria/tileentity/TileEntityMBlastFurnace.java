@@ -264,7 +264,7 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(worldPosition.offset(-3, -1, -3), worldPosition.offset(4, 5, 4));
+		return new AxisAlignedBB(worldPosition.offset(-3, -1, -3), worldPosition.offset(4, 6, 4));
 	}
 
 	@Override

@@ -1,8 +1,9 @@
 {
-  "parent": "minecraft:block/orientable",
+  "parent": "industria:block/machine_base_horizontal",
   "textures": {
-    "top": "industria:block/aluminium_machine_top",
+    "top": "industria:block/metallic_glass_plates",
+    "side": "industria:block/chunk_loader",
     "front": "industria:block/chunk_loader",
-    "side": "industria:block/chunk_loader"
+    "bottom": "industria:block/metallic_glass_machine_casing_bottom"
   }
 }

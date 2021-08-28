@@ -56,4 +56,9 @@ public class TileEntityMRaffineryRenderer extends TileEntityRenderer<TileEntityM
 		
 	}
 	
+	@Override
+	public boolean shouldRenderOffScreen(TileEntityMRaffinery p_188185_1_) {
+		return true;
+	}
+	
 }

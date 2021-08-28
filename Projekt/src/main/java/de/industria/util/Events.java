@@ -285,6 +285,7 @@ public class Events {
 		}
 	}
 	
+//	@OnlyIn(Dist.CLIENT)
 //	@SuppressWarnings("resource")
 //	@SubscribeEvent
 //	public void onWorldJoined(net.minecraftforge.event.world.WorldEvent.Load event) {

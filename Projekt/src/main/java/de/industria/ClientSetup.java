@@ -33,7 +33,7 @@ import de.industria.renderer.TileEntityControllPanelRenderer;
 import de.industria.renderer.TileEntityConveyorBeltRenderer;
 import de.industria.renderer.TileEntityEnderCoreRenderer;
 import de.industria.renderer.TileEntityFluidCannisterRenderer;
-import de.industria.renderer.TileEntityFuseBoxRenderer;
+import de.industria.renderer.TileEntityMFuseBoxRenderer;
 import de.industria.renderer.TileEntityGaugeRenderer;
 import de.industria.renderer.TileEntityMAirCompressorRenderer;
 import de.industria.renderer.TileEntityMBatteryRenderer;
@@ -169,7 +169,7 @@ public class ClientSetup {
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SIGNAL_PROCESSOR, TileEntitySignalProcessorContactRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CONTROLL_PANEL, TileEntityControllPanelRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.STEAM_GENERATOR, TileEntityMSteamGeneratorRenderer::new);
-		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.FUSE_BOX, TileEntityFuseBoxRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.FUSE_BOX, TileEntityMFuseBoxRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.MULTIMETER, TileEntityGaugeRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SCHREDDER, TileEntityMSchredderRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.BLENDER, TileEntityMBlenderRenderer::new);

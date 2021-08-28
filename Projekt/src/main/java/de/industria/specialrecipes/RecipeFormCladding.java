@@ -37,7 +37,7 @@ public class RecipeFormCladding extends MetalFormRecipe {
 	
 	@Override
 	public ItemStack getResultItem() {
-		return new ItemStack(ModItems.structure_cladding_pane);
+		return new ItemStack(ModItems.structure_cladding_pane, 16);
 	}
 	
 	@Override

@@ -71,5 +71,10 @@ public class TileEntityNComputerRenderer extends TileEntityRenderer<TileEntityNC
 		}
 		return COMPUTER_TEXTURES_OFF;
 	}
-
+	
+	@Override
+	public boolean shouldRenderOffScreen(TileEntityNComputer p_188185_1_) {
+		return true;
+	}
+	
 }

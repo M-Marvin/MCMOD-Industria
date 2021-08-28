@@ -72,4 +72,9 @@ public class TileEntityMBlenderRenderer extends TileEntityRenderer<TileEntityMBl
 		
 	}
 	
+	@Override
+	public boolean shouldRenderOffScreen(TileEntityMBlender p_188185_1_) {
+		return true;
+	}
+	
 }

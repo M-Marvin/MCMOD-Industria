@@ -56,4 +56,9 @@ public class TileEntityMAirCompressorRenderer extends TileEntityRenderer<TileEnt
 		
 	}
 	
+	@Override
+	public boolean shouldRenderOffScreen(TileEntityMAirCompressor p_188185_1_) {
+		return true;
+	}
+	
 }

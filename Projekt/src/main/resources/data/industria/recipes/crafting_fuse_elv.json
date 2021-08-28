@@ -1,9 +1,9 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "ECE",
-    "GCG",
-    "ECE"
+    "EGE",
+    "CSC",
+    "EDE"
   ],
   "key": {
     "E": {
@@ -14,10 +14,15 @@
     },
     "C": {
       "item": "industria:copper_wire"
+    },
+    "S": {
+      "item": "industria:spring"
+    },
+    "D": {
+      "item": "minecraft:light_gray_dye"
     }
   },
   "result": {
-    "item": "industria:fuse_elv",
-    "count": 2
+    "item": "industria:fuse_elv"
   }
 }

@@ -61,4 +61,9 @@ public class TileEntityMMetalFormerRenderer extends TileEntityRenderer<TileEntit
 		
 	}
 	
+	@Override
+	public boolean shouldRenderOffScreen(TileEntityMMetalFormer p_188185_1_) {
+		return true;
+	}
+	
 }

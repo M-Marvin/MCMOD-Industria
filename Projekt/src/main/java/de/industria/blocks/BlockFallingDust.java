@@ -36,7 +36,7 @@ public class BlockFallingDust extends BlockFallingBase {
 	public static final IntegerProperty LAYERS = IntegerProperty.create("layers", 1, 16);
 	
 	public BlockFallingDust(String name) {
-		super(name, Material.DIRT, 0.8F, 0.4F, SoundType.SAND);
+		super(name, Material.DIRT, 0.2F, 0.4F, SoundType.SAND, true);
 	}
 	
 	@Override

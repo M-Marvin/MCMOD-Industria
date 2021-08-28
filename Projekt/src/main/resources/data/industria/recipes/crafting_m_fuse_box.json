@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "AKA",
-    "A A",
+    "AFA",
     "AKA"
   ],
   "key": {
@@ -11,6 +11,9 @@
     },
     "K": {
       "item": "industria:copper_plate"
+    },
+    "F": {
+      "item": "industria:spring"
     }
   },
   "result": {

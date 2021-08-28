@@ -74,4 +74,9 @@ public class TileEntityMSchredderRenderer extends TileEntityRenderer<TileEntityM
 		
 	}
 	
+	@Override
+	public boolean shouldRenderOffScreen(TileEntityMSchredder p_188185_1_) {
+		return true;
+	}
+	
 }

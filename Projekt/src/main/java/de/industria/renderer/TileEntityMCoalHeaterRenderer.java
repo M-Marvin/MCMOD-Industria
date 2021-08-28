@@ -57,5 +57,10 @@ public class TileEntityMCoalHeaterRenderer extends TileEntityRenderer<TileEntity
 		}
 		
 	}
-
+	
+	@Override
+	public boolean shouldRenderOffScreen(TileEntityMCoalHeater p_188185_1_) {
+		return true;
+	}
+	
 }

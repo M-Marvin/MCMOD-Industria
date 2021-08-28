@@ -70,5 +70,10 @@ public class TileEntityMSteamGeneratorRenderer extends TileEntityRenderer<TileEn
 		}
 		
 	}
-
+	
+	@Override
+	public boolean shouldRenderOffScreen(TileEntityMSteamGenerator p_188185_1_) {
+		return true;
+	}
+	
 }

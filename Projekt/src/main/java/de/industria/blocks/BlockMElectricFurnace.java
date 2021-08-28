@@ -78,9 +78,9 @@ public class BlockMElectricFurnace extends BlockContainerBase implements IBElect
 	@Override
 	public IBlockToolType getBlockInfo() {
 		return (stack, info) -> {
-			info.add(new TranslationTextComponent("industria.block.info.needEnergy", (8 * Voltage.NormalVoltage.getVoltage() / 1000F) + "k"));
-			info.add(new TranslationTextComponent("industria.block.info.needVoltage", Voltage.NormalVoltage.getVoltage()));
-			info.add(new TranslationTextComponent("industria.block.info.needCurrent", 8));
+			info.add(new TranslationTextComponent("industria.block.info.needEnergy", (2 * Voltage.HightVoltage.getVoltage() / 1000F) + "k"));
+			info.add(new TranslationTextComponent("industria.block.info.needVoltage", Voltage.HightVoltage.getVoltage()));
+			info.add(new TranslationTextComponent("industria.block.info.needCurrent", 2));
 			info.add(new TranslationTextComponent("industria.block.info.electricFurnace"));
 		};
 	}
@@ -92,14 +92,14 @@ public class BlockMElectricFurnace extends BlockContainerBase implements IBElect
 
 	@Override
 	public Voltage getVoltage(World world, BlockPos pos, BlockState state, Direction side) {
-		return Voltage.NormalVoltage;
+		return Voltage.HightVoltage;
 	}
 
 	@Override
 	public float getNeededCurrent(World world, BlockPos pos, BlockState state, Direction side) {
 		TileEntity tileEntity = world.getBlockEntity(pos);
 		if (tileEntity instanceof TileEntityMElectricFurnace) {
-			if (((TileEntityMElectricFurnace) tileEntity).findRecipe() != null) return 8;
+			if (((TileEntityMElectricFurnace) tileEntity).findRecipe() != null) return 2;
 		}
 		return 0;
 	}

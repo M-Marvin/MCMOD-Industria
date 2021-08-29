@@ -16,10 +16,10 @@ import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityMBattery extends TileEntity implements ITickableTileEntity {
 	
-	public static final int MAX_STORAGE = 16000000;
+	public static final long MAX_STORAGE = 3000000000L;
 	
 	public float maxCurrent;
-	public int storage;
+	public long storage;
 	public Voltage voltage;
 	
 	public TileEntityMBattery() {
@@ -29,7 +29,7 @@ public class TileEntityMBattery extends TileEntity implements ITickableTileEntit
 	
 	@Override
 	public CompoundNBT save(CompoundNBT nbt) {
-		nbt.putInt("Storage", this.storage);
+		nbt.putLong("Storage", this.storage);
 		nbt.putString("Voltage", this.voltage.getSerializedName());
 		return super.save(nbt);
 	}
@@ -37,7 +37,7 @@ public class TileEntityMBattery extends TileEntity implements ITickableTileEntit
 	@Override
 	public void load(BlockState state, CompoundNBT nbt) {
 		super.load(state, nbt);
-		this.storage = nbt.getInt("Storage");
+		this.storage = nbt.getLong("Storage");
 		this.voltage = Voltage.byName(nbt.getString("Voltage"));
 	}
 
@@ -87,7 +87,7 @@ public class TileEntityMBattery extends TileEntity implements ITickableTileEntit
 		}
 	}
 	
-	public int getStorage() {
+	public long getStorage() {
 		return storage;
 	}
 	

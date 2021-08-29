@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import de.industria.blocks.BlockMultipart;
 import de.industria.gui.ContainerMOreWashingPlant;
+import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.recipetypes.WashingRecipe;
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModRecipeTypes;
@@ -368,6 +369,7 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 		compound.putBoolean("isWorking", this.isWorking);
 		compound.putInt("progress", this.progress);
 		compound.putInt("progressTotal", this.progressTotal);
+		compound.put("BuildData", this.buildData.writeNBT(new CompoundNBT()));
 		return super.save(compound);
 	}
 	
@@ -381,6 +383,7 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 		this.isWorking = compound.getBoolean("isWorking");
 		this.progress = compound.getInt("progress");
 		this.progressTotal = compound.getInt("progressTotal");
+		this.buildData = MultipartBuildLocation.loadNBT(compound.getCompound("BuildData"));
 		super.load(state, compound);
 	}
 	
@@ -402,6 +405,11 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 		} else {
 			this.inputFluid = storage;
 		}
+	}
+
+	public MultipartBuildLocation buildData = MultipartBuildLocation.EMPTY;
+	public void storeBuildData(MultipartBuildLocation buildData) {
+		this.buildData = buildData;
 	}
 	
 }

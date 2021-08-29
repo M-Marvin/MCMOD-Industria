@@ -3,6 +3,7 @@ package de.industria.multipartbuilds;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.annotation.Nullable;
 
@@ -15,6 +16,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -58,7 +61,7 @@ public class MultipartBuild {
 		if (	this.resultingState.getMultipartSizeX() != this.getSizeX() || 
 				this.resultingState.getMultipartSizeY() != this.getSizeY() || 
 				this.resultingState.getMultipartSizeZ() != this.getSizeZ()) {
-			new IllegalStateException("MultipartBlock size is not identical with MultipartBuild size, this can not be build!").printStackTrace();
+			new IllegalStateException("MultipartBlock " + this.resultingState + " size is not identical with MultipartBuild size, this can not be build!").printStackTrace();
 			return false;
 		}
 		
@@ -87,7 +90,7 @@ public class MultipartBuild {
 						
 						world.setBlock(buildPos, newState, 2);
 						
-						if (x == 0 && y == 0 && z == 0) {
+						if (this.resultingState.canStoreBuildData(world, buildPos, newState)) {
 							this.resultingState.storeBuildData(world, buildPos, newState, buildLocation);
 						}
 						
@@ -137,18 +140,25 @@ public class MultipartBuild {
 	 */
 	public boolean matchesStructureAt(World world, BlockPos pos, MultipartBuildLocation location) {
 		HashMap<BlockPos, BlockState> blockStates = new HashMap<BlockPos, BlockState>();
-		for (int y = 0; y < 2; y++) {
-			for (int z = 0; z < getSizeZ(); z++) {
-				for (int x = 0; x < getSizeX(); x++) {
-					BlockPos offset = UtilHelper.rotateBlockPos(new BlockPos(x, y, z), location.orientation).offset(location.offset).offset(pos);
-					BlockState state = world.getBlockState(offset);
-					blockStates.put(new BlockPos(x, y, z), state);
-					
-					char key = this.pattern.get(y)[z].charAt((getSizeX() - 1) - x);
-					Block[] possibleBlocks = this.keys.get("" + key);
-					if (!matchesStates(possibleBlocks, state)) return false;
+		try {
+			for (int y = 0; y < getSizeY(); y++) {
+				for (int z = 0; z < getSizeZ(); z++) {
+					for (int x = 0; x < getSizeX(); x++) {
+						BlockPos offset = UtilHelper.rotateBlockPos(new BlockPos(x, y, z), location.orientation).offset(location.offset).offset(pos);
+						BlockState state = world.getBlockState(offset);
+						blockStates.put(new BlockPos(x, y, z), state);
+						
+						char key = this.pattern.get(y)[z].charAt((getSizeX() - 1) - x);
+						Block[] possibleBlocks = this.keys.getOrDefault("" + key, new Block[] {});
+						if (possibleBlocks.length == 0) System.err.println("Key " + key + " in multipart recipe for block " + this.resultingState + " empty, this can not be build!");
+						if (!matchesStates(possibleBlocks, state)) return false;
+					}
 				}
 			}
+		} catch (IndexOutOfBoundsException e) {
+			System.err.println("Maleformed multiblock recipe (" + this.resultingState + ")!");
+			e.printStackTrace();
+			return false;
 		}
 		location.blockStates = blockStates;
 		return true;
@@ -168,26 +178,40 @@ public class MultipartBuild {
 		}
 		
 		// Offset to the 0 0 0 position of the structure relative to the wrench-clicked-position
-		public BlockPos offset;
+		public BlockPos offset = BlockPos.ZERO;
 		// Orientation of the structure
-		public Direction orientation;
+		public Direction orientation = Direction.NORTH;
 		// Map of the replaced BlockStates, positions relative to 0 0 0 of the structure and with facing north.
-		public HashMap<BlockPos, BlockState> blockStates;
+		public HashMap<BlockPos, BlockState> blockStates = new HashMap<BlockPos, BlockState>();
 		
 		public static final MultipartBuildLocation EMPTY = new MultipartBuildLocation();
-		private MultipartBuildLocation() {
-			this.orientation = Direction.NORTH;
-			this.offset = BlockPos.ZERO;
-			this.blockStates = new HashMap<BlockPos, BlockState>();
-		}
+		private MultipartBuildLocation() {}
 		
-		public void writeNBT(CompoundNBT nbt) {
-			// TODO
+		public CompoundNBT writeNBT(CompoundNBT nbt) {
+			nbt.putString("Orientation", this.orientation.getSerializedName());
+			nbt.put("PlaceOffset", NBTUtil.writeBlockPos(this.offset));
+			ListNBT blockStatesNBT = new ListNBT();
+			for (Entry<BlockPos, BlockState> entry : this.blockStates.entrySet()) {
+				CompoundNBT entryNBT = new CompoundNBT();
+				entryNBT.put("Position", NBTUtil.writeBlockPos(entry.getKey()));
+				entryNBT.put("State", NBTUtil.writeBlockState(entry.getValue()));
+				blockStatesNBT.add(entryNBT);
+			}
+			nbt.put("BuildBlocks", blockStatesNBT);
+			return nbt;
 		}
 		
 		public static MultipartBuildLocation loadNBT(CompoundNBT nbt) {
-			// TODO
-			return MultipartBuildLocation.EMPTY;
+			MultipartBuildLocation data = new MultipartBuildLocation(
+					Direction.byName(nbt.getString("Orientation")),
+					NBTUtil.readBlockPos(nbt.getCompound("PlaceOffset"))
+			);
+			ListNBT blockStateNBT = nbt.getList("BuildBlocks", 10);
+			for (int i = 0; i < blockStateNBT.size(); i++) {
+				CompoundNBT entry = blockStateNBT.getCompound(i);
+				data.blockStates.put(NBTUtil.readBlockPos(entry.getCompound("Position")), NBTUtil.readBlockState(entry.getCompound("State")));
+			}
+			return data;
 		}
 		
 	}

@@ -1,5 +1,6 @@
 package de.industria.tileentity;
 
+import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.ITEFluidConnective;
@@ -95,18 +96,25 @@ public class TileEntityMGasHeater extends TileEntityMHeaterBase implements ITEFl
 	@Override
 	public CompoundNBT save(CompoundNBT compound) {
 		compound.put("Fuel", this.gasStorage.writeToNBT(new CompoundNBT()));
+		compound.put("BuildData", this.buildData.writeNBT(new CompoundNBT()));
 		return super.save(compound);
 	}
 	
 	@Override
 	public void load(BlockState state, CompoundNBT compound) {
 		this.gasStorage = FluidStack.loadFluidStackFromNBT(compound.getCompound("Fuel"));
+		this.buildData = MultipartBuildLocation.loadNBT(compound.getCompound("BuildData"));
 		super.load(state, compound);
 	}
 
 	@Override
 	public void setStorage(FluidStack storage) {
 		this.gasStorage = storage;
+	}
+	
+	public MultipartBuildLocation buildData = MultipartBuildLocation.EMPTY;
+	public void storeBuildData(MultipartBuildLocation buildData) {
+		this.buildData = buildData;
 	}
 	
 }

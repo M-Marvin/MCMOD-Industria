@@ -30,6 +30,9 @@ public abstract class BlockMultipartBuilded<T extends TileEntity> extends BlockM
 		
 	}
 	
+	public boolean canStoreBuildData(World world, BlockPos pos, BlockState state) {
+		return getInternPartPos(state).equals(BlockPos.ZERO);
+	}
 	public abstract void storeBuildData(World world, BlockPos pos, BlockState state, MultipartBuildLocation buildData);
 	
 }

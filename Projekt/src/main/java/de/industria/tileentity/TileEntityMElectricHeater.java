@@ -1,10 +1,13 @@
 package de.industria.tileentity;
 
+import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 
 public class TileEntityMElectricHeater extends TileEntityMHeaterBase {
@@ -40,6 +43,23 @@ public class TileEntityMElectricHeater extends TileEntityMHeaterBase {
 	@Override
 	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return false;
+	}
+	
+	@Override
+	public CompoundNBT save(CompoundNBT compound) {
+		compound.put("BuildData", this.buildData.writeNBT(new CompoundNBT()));
+		return super.save(compound);
+	}
+	
+	@Override
+	public void load(BlockState state, CompoundNBT compound) {
+		this.buildData = MultipartBuildLocation.loadNBT(compound.getCompound("BuildData"));
+		super.load(state, compound);
+	}
+
+	public MultipartBuildLocation buildData = MultipartBuildLocation.EMPTY;
+	public void storeBuildData(MultipartBuildLocation buildData) {
+		this.buildData = buildData;
 	}
 	
 }

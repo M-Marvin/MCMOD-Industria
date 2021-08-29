@@ -45,9 +45,9 @@ public static final ResourceLocation BLAST_FURNACE_GUI_TEXTURES = new ResourceLo
 		if (!te.hasHeat && te.hasHeater) this.blit(matrixStack, i + 95, j + 69, 176, 40, 25, 9);
 		if (te.hasHeat && te.hasHeater) this.blit(matrixStack, i + 95, j + 69, 176, 31, 25, 9);
 		
-		if (!te.oxygenStorage.isEmpty()) {
-			float fluidA = te.oxygenStorage.getAmount() / (float) this.menu.getTileEntity().maxFluidStorage;
-			FluidBarTexture.drawFluidTexture(matrixStack, this, te.oxygenStorage.getFluid(), i + 15, j + 71, 16, (int) (fluidA * 56));
+		if (!te.gasStorage.isEmpty()) {
+			float fluidA = te.gasStorage.getAmount() / (float) this.menu.getTileEntity().maxFluidStorage;
+			FluidBarTexture.drawFluidTexture(matrixStack, this, te.gasStorage.getFluid(), i + 15, j + 71, 16, (int) (fluidA * 56));
 		}
 		
 	}

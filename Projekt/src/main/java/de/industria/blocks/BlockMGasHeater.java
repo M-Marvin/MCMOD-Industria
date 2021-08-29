@@ -4,8 +4,10 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
+import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.renderer.BlockMGasHeaterItemRenderer;
 import de.industria.tileentity.TileEntityMGasHeater;
+import de.industria.typeregistys.MultipartBuildRecipes;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -16,11 +18,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 
-public class BlockMGasHeater extends BlockMultipart<TileEntityMGasHeater> implements IBAdvancedBlockInfo {
+public class BlockMGasHeater extends BlockMultipartBuilded<TileEntityMGasHeater> implements IBAdvancedBlockInfo {
 	
 	public BlockMGasHeater() {
-		super("gas_heater", Material.METAL, 4F, SoundType.METAL, 2, 1, 2);
+		super("gas_heater", Material.METAL, 4F, SoundType.METAL, 2, 1, 2, () -> MultipartBuildRecipes.GAS_HEATER);
 	}
 		
 	@Override
@@ -55,6 +58,12 @@ public class BlockMGasHeater extends BlockMultipart<TileEntityMGasHeater> implem
 	@Override
 	public int getStackSize() {
 		return 1;
+	}
+
+	@Override
+	public void storeBuildData(World world, BlockPos pos, BlockState state, MultipartBuildLocation buildData) {
+		TileEntityMGasHeater tileEntity = getCenterTE(pos, state, world);
+		tileEntity.storeBuildData(buildData);
 	}
 	
 }

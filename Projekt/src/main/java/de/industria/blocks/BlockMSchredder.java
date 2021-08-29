@@ -6,8 +6,10 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
+import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.renderer.BlockMSchredderItemRenderer;
 import de.industria.tileentity.TileEntityMSchredder;
+import de.industria.typeregistys.MultipartBuildRecipes;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.UtilHelper;
@@ -43,7 +45,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMSchredder extends BlockMultipart<TileEntityMSchredder> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo, ISidedInventoryProvider {
+public class BlockMSchredder extends BlockMultipartBuilded<TileEntityMSchredder> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo, ISidedInventoryProvider {
 	
 	public static final VoxelShape BASE = Block.box(0, 0, 0, 16, 14, 16);
 	public static final VoxelShape CORNER_1 = VoxelShapes.or(Block.box(0, -2, 0, 16, 14, 1), Block.box(0, -2, 0, 2, 16, 16));
@@ -52,7 +54,7 @@ public class BlockMSchredder extends BlockMultipart<TileEntityMSchredder> implem
 	public static final VoxelShape CORNER_4 = VoxelShapes.or(Block.box(0, -2, 15, 16, 14, 16), Block.box(14, -2, 0, 16, 16, 16));
 	
 	public BlockMSchredder() {
-		super("schredder", Material.METAL, 3.5F, SoundType.METAL, 2, 2, 2);
+		super("schredder", Material.METAL, 3.5F, SoundType.METAL, 2, 2, 2, () -> MultipartBuildRecipes.SCHREDDER);
 	}
 	
 	@Override
@@ -175,6 +177,12 @@ public class BlockMSchredder extends BlockMultipart<TileEntityMSchredder> implem
 			
 		}
 		
+	}
+
+	@Override
+	public void storeBuildData(World world, BlockPos pos, BlockState state, MultipartBuildLocation buildData) {
+		TileEntityMSchredder tileEntity = getCenterTE(pos, state, world);
+		tileEntity.storeBuildData(buildData);
 	}
 	
 }

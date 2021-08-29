@@ -6,8 +6,10 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
+import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.renderer.BlockMRaffineryItemRenderer;
 import de.industria.tileentity.TileEntityMRaffinery;
+import de.industria.typeregistys.MultipartBuildRecipes;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.UtilHelper;
@@ -43,10 +45,10 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMRaffinery extends BlockMultipart<TileEntityMRaffinery> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo, ISidedInventoryProvider {
+public class BlockMRaffinery extends BlockMultipartBuilded<TileEntityMRaffinery> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo, ISidedInventoryProvider {
 
 	public BlockMRaffinery() {
-		super("raffinery", Material.METAL, 4F, SoundType.METAL, 3, 4, 2);
+		super("raffinery", Material.METAL, 4F, SoundType.METAL, 3, 4, 2, () -> MultipartBuildRecipes.RAFFINERY);
 	}
 	
 	@Override
@@ -181,6 +183,12 @@ public class BlockMRaffinery extends BlockMultipart<TileEntityMRaffinery> implem
 			
 		}
 		
+	}
+
+	@Override
+	public void storeBuildData(World world, BlockPos pos, BlockState state, MultipartBuildLocation buildData) {
+		TileEntityMRaffinery tileEntity = getCenterTE(pos, state, world);
+		tileEntity.storeBuildData(buildData);
 	}
 	
 }

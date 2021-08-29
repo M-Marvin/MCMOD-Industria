@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import de.industria.blocks.BlockMultipart;
 import de.industria.gui.ContainerMRaffinery;
+import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.recipetypes.RifiningRecipe;
 import de.industria.typeregistys.ModRecipeTypes;
 import de.industria.typeregistys.ModSoundEvents;
@@ -368,6 +369,7 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 		compound.putInt("progress4", this.progress4);
 		compound.putInt("progressTotal", this.progressTotal);
 		if (this.currentRecipe != null) compound.putString("Recipe", this.currentRecipe.getId().toString());
+		compound.put("BuildData", this.buildData.writeNBT(new CompoundNBT()));
 		return super.save(compound);
 	}
 	
@@ -389,6 +391,7 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 			Optional<? extends IRecipe<?>> recipe = this.level.getRecipeManager().byKey(new ResourceLocation(compound.getString("Recipe")));
 			if (recipe.isPresent()) this.currentRecipe = (RifiningRecipe) recipe.get();
 		}
+		this.buildData = MultipartBuildLocation.loadNBT(compound.getCompound("BuildData"));
 		super.load(state, compound);
 	}
 
@@ -400,6 +403,11 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 		} else {
 			this.fluidOut = storage;
 		}
+	}
+
+	public MultipartBuildLocation buildData = MultipartBuildLocation.EMPTY;
+	public void storeBuildData(MultipartBuildLocation buildData) {
+		this.buildData = buildData;
 	}
 	
 }

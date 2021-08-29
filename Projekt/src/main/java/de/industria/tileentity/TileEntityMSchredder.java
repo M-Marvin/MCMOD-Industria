@@ -7,6 +7,7 @@ import de.industria.blocks.BlockMSchredder;
 import de.industria.blocks.BlockMultipart;
 import de.industria.gui.ContainerMSchredder;
 import de.industria.items.ItemSchredderTool;
+import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.recipetypes.SchredderRecipe;
 import de.industria.typeregistys.ModDamageSource;
 import de.industria.typeregistys.ModRecipeTypes;
@@ -280,6 +281,7 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 		compound.putBoolean("hasPower", this.hasPower);
 		compound.putInt("progress", this.progress);
 		compound.putInt("progressTotal", this.progressTotal);
+		compound.put("BuildData", this.buildData.writeNBT(new CompoundNBT()));
 		return super.save(compound);
 	}
 	
@@ -289,6 +291,7 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 		this.hasPower = compound.getBoolean("hasPower");
 		this.progress = compound.getInt("progress");
 		this.progressTotal = compound.getInt("progressTotal");
+		this.buildData = MultipartBuildLocation.loadNBT(compound.getCompound("BuildData"));
 		super.load(state, compound);
 	}
 	
@@ -319,6 +322,11 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 	@Override
 	public ITextComponent getDisplayName() {
 		return new TranslationTextComponent("block.industria.schredder");
+	}
+
+	public MultipartBuildLocation buildData = MultipartBuildLocation.EMPTY;
+	public void storeBuildData(MultipartBuildLocation buildData) {
+		this.buildData = buildData;
 	}
 	
 }

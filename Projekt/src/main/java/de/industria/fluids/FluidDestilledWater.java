@@ -130,24 +130,20 @@ public abstract class FluidDestilledWater extends FlowingFluid {
 
 		@Override
 		protected void randomTick(World world, BlockPos pos, FluidState state, Random random) {
-
-			if (random.nextInt(20) == 0) {
+			
+			for (Direction d : Direction.values()) {
 				
-				for (Direction d : Direction.values()) {
+				BlockState state2 = world.getBlockState(pos.relative(d));
+				boolean isIce =
+						state2.getBlock() == Blocks.BLUE_ICE ||
+						state2.getBlock() == Blocks.ICE ||
+						state2.getBlock() == Blocks.PACKED_ICE ||
+						state2.getBlock() == Blocks.FROSTED_ICE;
+				boolean isWater = state2.getFluidState().getType().isSame(Fluids.WATER);
+				
+				if (isIce || isWater) {
 					
-					BlockState state2 = world.getBlockState(pos.relative(d));
-					boolean isIce =
-							state2.getBlock() == Blocks.BLUE_ICE ||
-							state2.getBlock() == Blocks.ICE ||
-							state2.getBlock() == Blocks.PACKED_ICE ||
-							state2.getBlock() == Blocks.FROSTED_ICE;
-					boolean isWater = state2.getFluidState().getType().isSame(Fluids.WATER);
-					
-					if (isIce || isWater) {
-						
-						world.setBlockAndUpdate(pos, Fluids.WATER.defaultFluidState().createLegacyBlock());
-						
-					}
+					world.setBlockAndUpdate(pos, Fluids.WATER.defaultFluidState().createLegacyBlock());
 					
 				}
 				

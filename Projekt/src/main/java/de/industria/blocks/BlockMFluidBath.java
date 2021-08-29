@@ -6,8 +6,10 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
+import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.renderer.BlockMFluidBathItemRenderer;
 import de.industria.tileentity.TileEntityMFluidBath;
+import de.industria.typeregistys.MultipartBuildRecipes;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.UtilHelper;
@@ -43,10 +45,10 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMFluidBath extends BlockMultipart<TileEntityMFluidBath> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo, ISidedInventoryProvider {
+public class BlockMFluidBath extends BlockMultipartBuilded<TileEntityMFluidBath> implements IBElectricConnectiveBlock, IBAdvancedBlockInfo, ISidedInventoryProvider {
 
 	public BlockMFluidBath() {
-		super("fluid_bath", Material.METAL, 3F, SoundType.METAL, 2, 2, 3);
+		super("fluid_bath", Material.METAL, 3F, SoundType.METAL, 2, 2, 3, () -> MultipartBuildRecipes.FLUID_BATH);
 	}
 	
 	@Override
@@ -185,6 +187,12 @@ public class BlockMFluidBath extends BlockMultipart<TileEntityMFluidBath> implem
 			return tileEntity;
 		}
 		return null;
+	}
+
+	@Override
+	public void storeBuildData(World world, BlockPos pos, BlockState state, MultipartBuildLocation buildData) {
+		TileEntityMFluidBath tileEntity = getCenterTE(pos, state, world);
+		tileEntity.storeBuildData(buildData);
 	}
 	
 }

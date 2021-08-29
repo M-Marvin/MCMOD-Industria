@@ -54,7 +54,7 @@ public class BlastFurnaceRecipe implements IRecipe<TileEntityMBlastFurnace> {
 			if (item != null) return false;
 		}
 		
-		return inv.oxygenStorage.getFluid() == this.consumtionFluid.getFluid() && this.consumtionFluid.getAmount() <= inv.oxygenStorage.getAmount();
+		return inv.gasStorage.getFluid() == this.consumtionFluid.getFluid() && this.consumtionFluid.getAmount() <= inv.gasStorage.getAmount();
 		
 	}
 	

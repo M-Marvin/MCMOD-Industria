@@ -425,6 +425,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 			compound.putBoolean("isWorking", this.isWorking);
 			compound.putFloat("tankFillState", this.tankFillState);
 		}
+		compound.put("BuildData", this.buildData.writeNBT(new CompoundNBT()));
 		return super.save(compound);
 	}
 	
@@ -443,6 +444,7 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 			this.isWorking = compound.getBoolean("isWorking");
 			this.tankFillState = compound.getFloat("tankFillState");
 		}
+		this.buildData = MultipartBuildLocation.loadNBT(compound.getCompound("BuildData"));
 		super.load(state, compound);
 	}
 

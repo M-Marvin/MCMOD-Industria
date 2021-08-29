@@ -1,6 +1,7 @@
 package de.industria.tileentity;
 
 import de.industria.gui.ContainerMCoalHeater;
+import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
 import net.minecraft.block.BlockState;
@@ -69,6 +70,7 @@ public class TileEntityMCoalHeater extends TileEntityMHeaterBase implements INam
 	public CompoundNBT save(CompoundNBT compound) {
 		compound.putFloat("burnTime", this.burnTime);
 		compound.putInt("fuelTime", this.fuelTime);
+		compound.put("BuildData", this.buildData.writeNBT(new CompoundNBT()));
 		return super.save(compound);
 	}
 	
@@ -76,6 +78,7 @@ public class TileEntityMCoalHeater extends TileEntityMHeaterBase implements INam
 	public void load(BlockState state, CompoundNBT compound) {
 		this.burnTime = compound.getFloat("burnTime");
 		this.fuelTime = compound.getInt("fuelTime");
+		this.buildData = MultipartBuildLocation.loadNBT(compound.getCompound("BuildData"));
 		super.load(state, compound);
 	}
 	
@@ -103,6 +106,11 @@ public class TileEntityMCoalHeater extends TileEntityMHeaterBase implements INam
 	@Override
 	public ITextComponent getDisplayName() {
 		return new TranslationTextComponent("block.industria.coal_heater");
+	}
+
+	public MultipartBuildLocation buildData = MultipartBuildLocation.EMPTY;
+	public void storeBuildData(MultipartBuildLocation buildData) {
+		this.buildData = buildData;
 	}
 	
 }

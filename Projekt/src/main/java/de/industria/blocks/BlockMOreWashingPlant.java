@@ -6,8 +6,10 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
+import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.renderer.BlockMOreWashingPlantItemRenderer;
 import de.industria.tileentity.TileEntityMOreWashingPlant;
+import de.industria.typeregistys.MultipartBuildRecipes;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
@@ -43,10 +45,10 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMOreWashingPlant extends BlockMultipart<TileEntityMOreWashingPlant> implements IBElectricConnectiveBlock, ISidedInventoryProvider, IBAdvancedBlockInfo {
+public class BlockMOreWashingPlant extends BlockMultipartBuilded<TileEntityMOreWashingPlant> implements IBElectricConnectiveBlock, ISidedInventoryProvider, IBAdvancedBlockInfo {
 	
 	public BlockMOreWashingPlant() {
-		super("ore_washing_plant", Material.METAL, 4F, SoundType.METAL, 4, 3, 3);
+		super("ore_washing_plant", Material.METAL, 4F, SoundType.METAL, 4, 3, 3, () -> MultipartBuildRecipes.ORE_WASHING_PLANT);
 	}
 	
 	@Override
@@ -210,6 +212,12 @@ public class BlockMOreWashingPlant extends BlockMultipart<TileEntityMOreWashingP
 			
 		}
 		
+	}
+
+	@Override
+	public void storeBuildData(World world, BlockPos pos, BlockState state, MultipartBuildLocation buildData) {
+		TileEntityMOreWashingPlant tileEntity = getCenterTE(pos, state, world);
+		tileEntity.storeBuildData(buildData);
 	}
 	
 }

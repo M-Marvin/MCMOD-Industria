@@ -138,10 +138,10 @@ public class BlockMBattery extends BlockContainerBase implements IBElectricConne
 		return (stack, info) -> {
 			
 			NumberFormat format = new DecimalFormat("0.00");
-			String storage = format.format(getStorage(stack) / 50F / 60F / 1000F);
-			String capacity = format.format(getCapacity() / 50F / 60F / 1000F);
+			String storage = format.format(getStorage(stack) / 50F / 60F / 1000000F);
+			String capacity = format.format(getCapacity() / 50F / 60F / 1000000F);
 			
-			info.add(new TranslationTextComponent("industria.block.info.energy", (storage + "/" + capacity + "k"), (int) (getStorage(stack) / (float) getCapacity() * 100) + "%"));
+			info.add(new TranslationTextComponent("industria.block.info.energy", (storage + "/" + capacity + "M"), (int) (getStorage(stack) / (float) getCapacity() * 100) + "%"));
 			info.add(new TranslationTextComponent("industria.block.info.needVoltage", Math.max(0, getVoltage(stack).getVoltage())));
 			info.add(new TranslationTextComponent("industria.block.info.battery"));
 		};
@@ -152,21 +152,21 @@ public class BlockMBattery extends BlockContainerBase implements IBElectricConne
 		return () -> BlockMBatteryItemRenderer::new;
 	}
 	
-	public int getStorage(ItemStack batteryStack) {
+	public long getStorage(ItemStack batteryStack) {
 		if (batteryStack.hasTag()) {
 			if (batteryStack.getTag().contains("BlockEntityTag")) {
 				if (batteryStack.getTag().getCompound("BlockEntityTag").contains("Storage")) {
-					return batteryStack.getTag().getCompound("BlockEntityTag").getInt("Storage");
+					return batteryStack.getTag().getCompound("BlockEntityTag").getLong("Storage");
 				}
 			}
 		}
 		return 0;
 	}
 
-	public int getCapacity() {
-		return 16000000;
+	public long getCapacity() {
+		return TileEntityMBattery.MAX_STORAGE;
 	}
-		
+	
 	public Voltage getVoltage(ItemStack batteryStack) {
 		if (batteryStack.hasTag()) {
 			if (batteryStack.getTag().contains("BlockEntityTag")) {
@@ -182,7 +182,8 @@ public class BlockMBattery extends BlockContainerBase implements IBElectricConne
 		CompoundNBT stackTag = new CompoundNBT();
 		CompoundNBT teTag = new CompoundNBT();
 		teTag.putString("Voltage", voltage.getSerializedName());
-		teTag.putInt("Storage", TileEntityMBattery.MAX_STORAGE);
+		teTag.putLong("Storage", TileEntityMBattery.MAX_STORAGE);
+		System.out.println(teTag.getLong("Storage"));
 		stackTag.put("BlockEntityTag", teTag);
 		CompoundNBT stateTag = new CompoundNBT();
 		stateTag.putString("mode", BatteryMode.DISCHARGING.getSerializedName());
@@ -201,6 +202,11 @@ public class BlockMBattery extends BlockContainerBase implements IBElectricConne
 			list.add(getChargedBattery(Voltage.ExtremVoltage));
 		}
 		super.fillItemCategory(group, list);
+	}
+
+	@Override
+	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
+		return true;
 	}
 	
 }

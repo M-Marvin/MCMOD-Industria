@@ -6,8 +6,10 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
+import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.renderer.BlockMBlastFurnaceItemRenderer;
 import de.industria.tileentity.TileEntityMBlastFurnace;
+import de.industria.typeregistys.MultipartBuildRecipes;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
@@ -41,10 +43,10 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMBlastFurnace extends BlockMultipart<TileEntityMBlastFurnace> implements IBAdvancedBlockInfo, IBElectricConnectiveBlock, ISidedInventoryProvider {
+public class BlockMBlastFurnace extends BlockMultipartBuilded<TileEntityMBlastFurnace> implements IBAdvancedBlockInfo, IBElectricConnectiveBlock, ISidedInventoryProvider {
 
 	public BlockMBlastFurnace() {
-		super("blast_furnace", Material.METAL, 2F, SoundType.METAL, 3, 5, 3);
+		super("blast_furnace", Material.METAL, 2F, SoundType.METAL, 3, 5, 3, () -> MultipartBuildRecipes.BLAST_FURNACE);
 	}
 
 	@Override
@@ -195,6 +197,12 @@ public class BlockMBlastFurnace extends BlockMultipart<TileEntityMBlastFurnace> 
 			worldIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 			
 		}
+	}
+
+	@Override
+	public void storeBuildData(World world, BlockPos pos, BlockState state, MultipartBuildLocation buildData) {
+		TileEntityMBlastFurnace tileEntity = getCenterTE(pos, state, world);
+		tileEntity.storeBuildData(buildData);
 	}
 	
 }

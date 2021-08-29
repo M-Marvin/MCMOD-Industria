@@ -5,6 +5,7 @@ import java.util.Optional;
 import de.industria.blocks.BlockMFluidBath;
 import de.industria.blocks.BlockMultipart;
 import de.industria.gui.ContainerMFluidBath;
+import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.recipetypes.FluidBathRecipe;
 import de.industria.typeregistys.ModRecipeTypes;
 import de.industria.typeregistys.ModSoundEvents;
@@ -164,6 +165,7 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements ITE
 		compound.putBoolean("hasPower", this.hasPower);
 		compound.putBoolean("isWorking", this.isWorking);
 		if (this.lastRecipe != null) compound.putString("Recipe", this.lastRecipe.getId().toString());
+		compound.put("BuildData", this.buildData.writeNBT(new CompoundNBT()));
 		return super.save(compound);
 	}
 	
@@ -180,6 +182,7 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements ITE
 			Optional<? extends IRecipe<?>> recipe = this.level.getRecipeManager().byKey(new ResourceLocation(compound.getString("Recipe")));
 			if (recipe.isPresent()) this.lastRecipe = (FluidBathRecipe) recipe.get();
 		}
+		this.buildData = MultipartBuildLocation.loadNBT(compound.getCompound("BuildData"));
 		super.load(state, compound);
 	}
 	
@@ -318,6 +321,11 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements ITE
 				((TileEntityMFluidBath) tileEntity).fluidOut = storage;
 			}
 		}
+	}
+
+	public MultipartBuildLocation buildData = MultipartBuildLocation.EMPTY;
+	public void storeBuildData(MultipartBuildLocation buildData) {
+		this.buildData = buildData;
 	}
 	
 }

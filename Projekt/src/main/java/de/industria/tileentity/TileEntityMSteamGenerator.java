@@ -3,8 +3,10 @@ package de.industria.tileentity;
 import java.util.ArrayList;
 
 import de.industria.blocks.BlockMSteamGenerator;
+import de.industria.blocks.BlockMultipart;
 import de.industria.fluids.FluidSteam;
 import de.industria.fluids.util.BlockGasFluid;
+import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
@@ -27,7 +29,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class TileEntityMSteamGenerator extends TileEntity implements ITEFluidConnective, ITickableTileEntity {
 	
-	protected TEPart part;
 	protected FluidStack steamIn;
 	protected FluidStack steamOut;
 	protected float generatedAmperes;
@@ -41,7 +42,6 @@ public class TileEntityMSteamGenerator extends TileEntity implements ITEFluidCon
 	
 	public TileEntityMSteamGenerator() {
 		super(ModTileEntityType.STEAM_GENERATOR);
-		this.part = TEPart.CENTER;
 		this.maxFluid = 2000;
 		this.maxEnergy = 5000; // Max Watt/tick
 		this.wattPerMB = 200;
@@ -50,97 +50,31 @@ public class TileEntityMSteamGenerator extends TileEntity implements ITEFluidCon
 		this.steamOut = FluidStack.EMPTY;
 	}
 	
-	public TileEntityMSteamGenerator(TEPart part) {
-		this();
-		this.part = part;
-	}
-	
-	public TEPart getPart() {
-		return part;
-	}
-	
 	@Override
 	public CompoundNBT save(CompoundNBT compound) {
-		compound.putString("Part", this.part.getName());
-		if (this.part == TEPart.CENTER) {
-			if (!this.steamIn.isEmpty()) compound.put("SteamIn", this.steamIn.writeToNBT(new CompoundNBT()));
-			if (!this.steamOut.isEmpty()) compound.put("SteamOut", this.steamOut.writeToNBT(new CompoundNBT()));
-			compound.putFloat("GeneratedAmperes", this.generatedAmperes);
-			compound.putFloat("Accerlation", this.accerlation);
-			compound.putFloat("TurbinRotation", this.turbinRotation);
-		}
+		if (!this.steamIn.isEmpty()) compound.put("SteamIn", this.steamIn.writeToNBT(new CompoundNBT()));
+		if (!this.steamOut.isEmpty()) compound.put("SteamOut", this.steamOut.writeToNBT(new CompoundNBT()));
+		compound.putFloat("GeneratedAmperes", this.generatedAmperes);
+		compound.putFloat("Accerlation", this.accerlation);
+		compound.putFloat("TurbinRotation", this.turbinRotation);
+		compound.put("BuildData", this.buildData.writeNBT(new CompoundNBT()));
 		return super.save(compound);
 	}
 	
 	@Override
 	public void load(BlockState state, CompoundNBT compound) {
-		this.part = TEPart.fromName(compound.getString("Part"));
-		if (this.part == TEPart.CENTER) {
-			this.steamIn = FluidStack.loadFluidStackFromNBT(compound.getCompound("SteamIn"));
-			this.steamOut = FluidStack.loadFluidStackFromNBT(compound.getCompound("SteamOut"));
-			this.generatedAmperes = compound.getFloat("GeneratedAmperes");
-			this.accerlation = compound.getFloat("Accerlation");
-			this.turbinRotation = compound.getFloat("TurbinRotation");
-		}
+		this.steamIn = FluidStack.loadFluidStackFromNBT(compound.getCompound("SteamIn"));
+		this.steamOut = FluidStack.loadFluidStackFromNBT(compound.getCompound("SteamOut"));
+		this.generatedAmperes = compound.getFloat("GeneratedAmperes");
+		this.accerlation = compound.getFloat("Accerlation");
+		this.turbinRotation = compound.getFloat("TurbinRotation");
+		this.buildData = MultipartBuildLocation.loadNBT(compound.getCompound("BuildData"));
 		super.load(state, compound);
 	}
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return new AxisAlignedBB(this.worldPosition.subtract(new BlockPos(3, 3, 3)), this.worldPosition.offset(new BlockPos(3, 3, 3)));
-	}
-	
-	public static enum TEPart {
-		
-		STEAM_IN("steam_in", new BlockPos(1, 2, 0), new BlockPos(1, 2, 1)),
-		CENTER("center", new BlockPos(1, 1, 1)),
-		ELECTRICITY("electricity", new BlockPos(1, 0, 0), new BlockPos(1, 0, 1));
-		
-		private String name;
-		private BlockPos[] innerPos;
-		
-		TEPart(String name, BlockPos... innerPos) {
-			this.name = name;
-			this.innerPos = innerPos;
-		}
-		
-		public String getName() {
-			return name;
-		}
-		
-		public BlockPos[] getInnerPos() {
-			return innerPos;
-		}
-		
-		public static TEPart fromName(String name) {
-			switch (name) {
-			case "steam_in": return STEAM_IN;
-			case "center": return CENTER;
-			case "electricity": return ELECTRICITY;
-			default: return CENTER;
-			}
-		}
-		
-		public boolean isValidPosition(BlockPos innerPos) {
-			for (BlockPos pos : this.innerPos) {
-				if (pos.equals(innerPos)) return true;
-			}
-			return false;
-		}
-		
-		public static boolean hasTileEntity(BlockPos innerPos) {
-			return	STEAM_IN.isValidPosition(innerPos) ||
-					CENTER.isValidPosition(innerPos) ||
-					ELECTRICITY.isValidPosition(innerPos);
-		}
-		
-		public static TEPart fromPosition(BlockPos innerPos) {
-			if (STEAM_IN.isValidPosition(innerPos)) return STEAM_IN;
-			if (CENTER.isValidPosition(innerPos)) return CENTER;
-			if (ELECTRICITY.isValidPosition(innerPos)) return ELECTRICITY;
-			return CENTER;
-		}
-		
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -151,7 +85,7 @@ public class TileEntityMSteamGenerator extends TileEntity implements ITEFluidCon
 			
 			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			
-			if (this.part == TEPart.CENTER) {
+			if (BlockMultipart.getInternPartPos(this.getBlockState()).equals(new BlockPos(0, 0, 0))) {
 				
 				int capacity = Math.min(this.maxFluid - this.steamOut.getAmount(), this.maxEnergy / wattPerMB);
 				int transfer = Math.max(0, Math.min(steamIn.getAmount(), capacity));
@@ -183,8 +117,8 @@ public class TileEntityMSteamGenerator extends TileEntity implements ITEFluidCon
 					
 					if (this.steamOut.getAmount() >= 1000) {
 						
-						BlockPos pos1 = this.worldPosition.relative(direction, 2);
-						BlockPos pos2 = this.worldPosition.relative(direction.getOpposite(), 1);
+						BlockPos pos1 = this.worldPosition.relative(direction.getClockWise()).relative(direction, 1).above();
+						BlockPos pos2 = this.worldPosition.relative(direction.getClockWise()).relative(direction.getOpposite(), 2).above();
 						
 						BlockPos exhaustPos = this.level.random.nextBoolean() ? pos1 : pos2;
 						BlockState replaceState = this.level.getBlockState(exhaustPos);
@@ -215,14 +149,14 @@ public class TileEntityMSteamGenerator extends TileEntity implements ITEFluidCon
 				this.turbinRotation += this.accerlation;
 				if (this.turbinRotation >= 360) this.turbinRotation -= 360;
 				
-			} else if (this.part == TEPart.ELECTRICITY) {
+			} else if (BlockMultipart.getInternPartPos(this.getBlockState()).equals(new BlockPos(1, 0, 0)) || BlockMultipart.getInternPartPos(this.getBlockState()).equals(new BlockPos(1, 0, 1))) {
 				
 				ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(this.level);
 				handler.updateNetwork(level, worldPosition);
 				
 			}
 			
-		} else if (this.part == TEPart.CENTER) {
+		} else if (BlockMultipart.getInternPartPos(this.getBlockState()).equals(new BlockPos(0, 0, 0))) {
 			
 			if (this.accerlation > 0) {
 				
@@ -234,20 +168,9 @@ public class TileEntityMSteamGenerator extends TileEntity implements ITEFluidCon
 		
 	}
 	
-	public BlockPos getCenterTE() {
-		if (this.part == TEPart.CENTER) return this.worldPosition;
-		if (BlockMSteamGenerator.getInternPartPos(this.getBlockState()).getZ() == 1) {
-			return this.part == TEPart.ELECTRICITY ? this.worldPosition.above() : this.worldPosition.below();
-		} else {
-			Direction facing = this.getBlockState().getValue(BlockMSteamGenerator.FACING).getOpposite();
-			return this.part == TEPart.ELECTRICITY ? this.worldPosition.above().relative(facing) : this.worldPosition.below().relative(facing);
-		}
-	}
-	
 	public Voltage getVoltage() {
 		
-		BlockPos centerPos = getCenterTE();
-		TileEntity tileEntity = this.level.getBlockEntity(centerPos);
+		TileEntity tileEntity = BlockMultipart.getSCenterTE(this.worldPosition, getBlockState(), level);
 		
 		if (tileEntity instanceof TileEntityMSteamGenerator) {
 			TileEntityMSteamGenerator center = (TileEntityMSteamGenerator) tileEntity;
@@ -259,8 +182,7 @@ public class TileEntityMSteamGenerator extends TileEntity implements ITEFluidCon
 	}
 	public float getGenerateCurrent() {
 		
-		BlockPos centerPos = getCenterTE();
-		TileEntity tileEntity = this.level.getBlockEntity(centerPos);
+		TileEntity tileEntity = BlockMultipart.getSCenterTE(this.worldPosition, getBlockState(), level);
 		
 		if (tileEntity instanceof TileEntityMSteamGenerator) {
 			TileEntityMSteamGenerator center = (TileEntityMSteamGenerator) tileEntity;
@@ -278,9 +200,8 @@ public class TileEntityMSteamGenerator extends TileEntity implements ITEFluidCon
 	
 	@Override
 	public FluidStack insertFluid(FluidStack fluid) {
-		
-		BlockPos centerPos = getCenterTE();
-		TileEntity tileEntity = this.level.getBlockEntity(centerPos);
+
+		TileEntity tileEntity = BlockMultipart.getSCenterTE(this.worldPosition, getBlockState(), level);
 		
 		if (tileEntity instanceof TileEntityMSteamGenerator) {
 			
@@ -336,7 +257,7 @@ public class TileEntityMSteamGenerator extends TileEntity implements ITEFluidCon
 	
 	@Override
 	public boolean canConnect(Direction side) {
-		return this.part == TEPart.STEAM_IN;
+		return BlockMultipart.getInternPartPos(this.getBlockState()).equals(new BlockPos(1, 2, 1)) || BlockMultipart.getInternPartPos(this.getBlockState()).equals(new BlockPos(1, 2, 0));
 	}
 	
 	@Override
@@ -357,6 +278,11 @@ public class TileEntityMSteamGenerator extends TileEntity implements ITEFluidCon
 	@Override
 	public void setStorage(FluidStack storage) {
 		this.steamIn = storage;
+	}
+
+	public MultipartBuildLocation buildData = MultipartBuildLocation.EMPTY;
+	public void storeBuildData(MultipartBuildLocation buildData) {
+		this.buildData = buildData;
 	}
 	
 }

@@ -2,14 +2,14 @@ package de.industria.tileentity;
 
 import java.util.Optional;
 
-import de.industria.blocks.BlockMThermalZentrifuge;
 import de.industria.gui.ContainerMThermalZentrifuge;
+import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.recipetypes.ThermalZentrifugeRecipe;
 import de.industria.typeregistys.ModRecipeTypes;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
-import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
+import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import de.industria.util.handler.ItemStackHelper;
@@ -49,10 +49,8 @@ public class TileEntityMThermalZentrifuge extends TileEntityInventoryBase implem
 			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
 			
 			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
-			this.hasPower = network.canMachinesRun() == Voltage.HightVoltage;
+			this.hasPower = network.canMachinesRun() == Voltage.NormalVoltage;
 			this.isWorking = canWork() && this.hasPower;
-
-			if (getBlockState().getValue(BlockMThermalZentrifuge.ACTIVE) != this.isWorking) this.level.setBlockAndUpdate(worldPosition, getBlockState().setValue(BlockMThermalZentrifuge.ACTIVE, this.isWorking));
 			
 			if (this.isWorking) {
 				
@@ -172,6 +170,7 @@ public class TileEntityMThermalZentrifuge extends TileEntityInventoryBase implem
 		compound.putBoolean("isWorking", this.isWorking);
 		compound.putBoolean("hasPower", this.hasPower);
 		compound.putFloat("temp", this.temp);
+		compound.put("BuildData", this.buildData.writeNBT(new CompoundNBT()));
 		return super.save(compound);
 	}
 	
@@ -182,7 +181,13 @@ public class TileEntityMThermalZentrifuge extends TileEntityInventoryBase implem
 		this.hasPower = compound.getBoolean("hasPower");
 		this.isWorking = compound.getBoolean("isWorking");
 		this.temp = compound.getFloat("temp");
+		this.buildData = MultipartBuildLocation.loadNBT(compound.getCompound("BuildData"));
 		super.load(state, compound);
+	}
+
+	public MultipartBuildLocation buildData = MultipartBuildLocation.EMPTY;
+	public void storeBuildData(MultipartBuildLocation buildData) {
+		this.buildData = buildData;
 	}
 	
 }

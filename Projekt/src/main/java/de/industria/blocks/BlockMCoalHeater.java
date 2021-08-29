@@ -4,8 +4,10 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
+import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.renderer.BlockMCoalHeaterItemRenderer;
 import de.industria.tileentity.TileEntityMCoalHeater;
+import de.industria.typeregistys.MultipartBuildRecipes;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -30,10 +32,10 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class BlockMCoalHeater extends BlockMultipart<TileEntityMCoalHeater> implements ISidedInventoryProvider, IBAdvancedBlockInfo {
+public class BlockMCoalHeater extends BlockMultipartBuilded<TileEntityMCoalHeater> implements ISidedInventoryProvider, IBAdvancedBlockInfo {
 	
 	public BlockMCoalHeater() {
-		super("coal_heater", Material.METAL, 4F, SoundType.METAL, 2, 1, 2);
+		super("coal_heater", Material.METAL, 4F, SoundType.METAL, 2, 1, 2, () -> MultipartBuildRecipes.COAL_HEATER);
 	}
 		
 	@Override
@@ -90,6 +92,12 @@ public class BlockMCoalHeater extends BlockMultipart<TileEntityMCoalHeater> impl
 	@Override
 	public int getStackSize() {
 		return 1;
+	}
+
+	@Override
+	public void storeBuildData(World world, BlockPos pos, BlockState state, MultipartBuildLocation buildData) {
+		TileEntityMCoalHeater tileEntity = getCenterTE(pos, state, world);
+		tileEntity.storeBuildData(buildData);
 	}
 	
 }

@@ -43,7 +43,7 @@ public class BlockBiomass extends BlockFallingDust {
 			BlockPos exhaustPos = pos.above();
 			BlockState gasState = ModFluids.BIOGAS.defaultFluidState().createLegacyBlock();
 			BlockState replaceState = world.getBlockState(exhaustPos);
-			int layers = state.getValue(LAYERS) - 1;
+			int layers = world.random.nextInt(5) == 0? state.getValue(LAYERS) - 1 : state.getValue(LAYERS);
 			
 			if (layers == 0){
 				world.setBlockAndUpdate(pos, gasState);

@@ -73,7 +73,7 @@ public class BlockFuelGas extends BlockGasFluid {
 		int spreadAmountRnd = 2;
 		float explosionForce = 3;
 		
-		if (worldIn.random.nextInt(10) == 0) {
+		if (worldIn.random.nextInt(10) == 0 && !worldIn.isClientSide) {
 			worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, explosionForce, true, Mode.BREAK);
 			for (int i = worldIn.random.nextInt(spreadAmountRnd) + spreadAmountMin; i >= 0; i--) {
 				worldIn.setBlockAndUpdate(pos, Blocks.FIRE.defaultBlockState());

@@ -5,14 +5,16 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import de.industria.Industria;
 import de.industria.blocks.BlockMSteamGenerator;
+import de.industria.blocks.BlockMultipart;
 import de.industria.tileentity.TileEntityMSteamGenerator;
-import de.industria.tileentity.TileEntityMSteamGenerator.TEPart;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3f;
 
 public class TileEntityMSteamGeneratorRenderer extends TileEntityRenderer<TileEntityMSteamGenerator> {
@@ -29,33 +31,22 @@ public class TileEntityMSteamGeneratorRenderer extends TileEntityRenderer<TileEn
 	@Override
 	public void render(TileEntityMSteamGenerator tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
 		
-		if (tileEntityIn.getPart() == TEPart.CENTER) {
+		BlockState blockState = tileEntityIn.getBlockState();
+		BlockPos partPos = BlockMultipart.getInternPartPos(blockState);
+		
+		if (partPos.equals(BlockPos.ZERO)) {
 			
 			Direction facing = tileEntityIn.getBlockState().getValue(BlockMSteamGenerator.FACING);
 			IVertexBuilder vertexBuffer = bufferIn.getBuffer(RenderType.entityTranslucent(STEAM_GENERATOR_TEXTURES));
 			
 			matrixStackIn.pushPose();
-			
+
 			matrixStackIn.translate(0F, -1F, 0F);
 			
-			switch (facing) {
-			case NORTH:
-				matrixStackIn.translate(1.5F, 1.5F, -0.5F);
-				break;
-			case WEST:
-				matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(90));
-				matrixStackIn.translate(0.5F, 1.5F, -0.5F);
-				break;
-			case EAST:
-				matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(270));
-				matrixStackIn.translate(1.5F, 1.5F, -1.5F);
-				break;
-			case SOUTH:
-				matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180));
-				matrixStackIn.translate(0.5F, 1.5F, -1.5F);
-				break;
-			default:
-			}
+			matrixStackIn.translate(0.5F, 1.5F, 0.5F);
+			matrixStackIn.mulPose(facing.getRotation());
+			matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(90));
+			matrixStackIn.translate(0F, -1F, 0F);
 			
 			matrixStackIn.scale(0.999F, 0.999F, 0.999F);
 			

@@ -5,6 +5,7 @@ import java.util.Optional;
 import de.industria.blocks.BlockMBlastFurnace;
 import de.industria.blocks.BlockMultipart;
 import de.industria.gui.ContainerMBlastFurnace;
+import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.recipetypes.BlastFurnaceRecipe;
 import de.industria.typeregistys.ModRecipeTypes;
 import de.industria.typeregistys.ModSoundEvents;
@@ -40,7 +41,7 @@ import net.minecraftforge.fluids.FluidStack;
 public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements ITickableTileEntity, ITESimpleMachineSound, INamedContainerProvider, ITEFluidConnective, ISidedInventory {
 	
 	public int maxFluidStorage;
-	public FluidStack oxygenStorage;
+	public FluidStack gasStorage;
 	
 	public boolean hasPower;
 	public boolean hasHeater;
@@ -52,7 +53,7 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 	public TileEntityMBlastFurnace() {
 		super(ModTileEntityType.BLAST_FURNACE, 5);
 		this.maxFluidStorage = 3000;
-		this.oxygenStorage = FluidStack.EMPTY;
+		this.gasStorage = FluidStack.EMPTY;
 	}
 	
 	@Override
@@ -100,7 +101,7 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 									}
 								}
 								
-								this.oxygenStorage.shrink(recipe.getConsumtionFluid().getAmount());
+								this.gasStorage.shrink(recipe.getConsumtionFluid().getAmount());
 								
 								if (this.getItem(3).isEmpty()) {
 									this.setItem(3, recipe.assemble(this));
@@ -161,16 +162,16 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 		TileEntity tileEntity = BlockMBlastFurnace.getSCenterTE(worldPosition, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMBlastFurnace) {
 			if (ipos.equals(new BlockPos(2, 0, 0))) {
-				if (((TileEntityMBlastFurnace) tileEntity).oxygenStorage.getFluid().isSame(fluid.getFluid()) || ((TileEntityMBlastFurnace) tileEntity).oxygenStorage.isEmpty()) {
-					int capcaity = this.maxFluidStorage - ((TileEntityMBlastFurnace) tileEntity).oxygenStorage.getAmount();
+				if (((TileEntityMBlastFurnace) tileEntity).gasStorage.getFluid().isSame(fluid.getFluid()) || ((TileEntityMBlastFurnace) tileEntity).gasStorage.isEmpty()) {
+					int capcaity = this.maxFluidStorage - ((TileEntityMBlastFurnace) tileEntity).gasStorage.getAmount();
 					int transfer = Math.min(capcaity, fluid.getAmount());
 					if (transfer > 0) {
 						FluidStack fluidRest = fluid.copy();
 						fluidRest.shrink(transfer);
-						if (((TileEntityMBlastFurnace) tileEntity).oxygenStorage.isEmpty()) {
-							((TileEntityMBlastFurnace) tileEntity).oxygenStorage = new FluidStack(fluid.getFluid(), transfer);
+						if (((TileEntityMBlastFurnace) tileEntity).gasStorage.isEmpty()) {
+							((TileEntityMBlastFurnace) tileEntity).gasStorage = new FluidStack(fluid.getFluid(), transfer);
 						} else {
-							((TileEntityMBlastFurnace) tileEntity).oxygenStorage.grow(transfer);
+							((TileEntityMBlastFurnace) tileEntity).gasStorage.grow(transfer);
 						}
 						return fluidRest;
 					}
@@ -182,7 +183,7 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 	
 	@Override
 	public Fluid getFluidType() {
-		return this.oxygenStorage.getFluid();
+		return this.gasStorage.getFluid();
 	}
 	
 	@Override
@@ -191,7 +192,7 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 		TileEntity tileEntity = BlockMBlastFurnace.getSCenterTE(ipos, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMBlastFurnace) {
 			if (ipos.equals(new BlockPos(2, 2, 2))) {
-				return ((TileEntityMBlastFurnace) tileEntity).oxygenStorage;
+				return ((TileEntityMBlastFurnace) tileEntity).gasStorage;
 			}
 		}
 		return FluidStack.EMPTY;
@@ -237,7 +238,8 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 		compound.putBoolean("isWorking", this.isWorking);
 		compound.putInt("progressTotal", this.progressTotal);
 		compound.putInt("Progress", this.progress);
-		compound.put("Oxygen", this.oxygenStorage.writeToNBT(new CompoundNBT()));
+		compound.put("Gas", this.gasStorage.writeToNBT(new CompoundNBT()));
+		compound.put("BuildData", this.buildData.writeNBT(new CompoundNBT()));
 		return super.save(compound);
 	}
 	
@@ -249,7 +251,8 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 		this.isWorking = compound.getBoolean("isWorking");
 		this.progressTotal = compound.getInt("progressTotal");
 		this.progress = compound.getInt("Progress");
-		this.oxygenStorage = FluidStack.loadFluidStackFromNBT(compound.getCompound("Oxygen"));
+		this.gasStorage = FluidStack.loadFluidStackFromNBT(compound.getCompound("Gas"));
+		this.buildData = MultipartBuildLocation.loadNBT(compound.getCompound("BuildData"));
 		super.load(state, compound);
 	}
 	
@@ -274,9 +277,14 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 		TileEntity tileEntity = BlockMBlastFurnace.getSCenterTE(ipos, this.getBlockState(), level);
 		if (tileEntity instanceof TileEntityMBlastFurnace) {
 			if (ipos.equals(new BlockPos(2, 2, 2))) {
-				((TileEntityMBlastFurnace) tileEntity).oxygenStorage = storage;
+				((TileEntityMBlastFurnace) tileEntity).gasStorage = storage;
 			}
 		}
+	}
+
+	public MultipartBuildLocation buildData = MultipartBuildLocation.EMPTY;
+	public void storeBuildData(MultipartBuildLocation buildData) {
+		this.buildData = buildData;
 	}
 	
 }

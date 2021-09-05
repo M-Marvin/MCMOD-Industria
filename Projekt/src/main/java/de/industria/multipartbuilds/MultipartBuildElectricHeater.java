@@ -2,6 +2,7 @@ package de.industria.multipartbuilds;
 
 import de.industria.blocks.BlockMultipartBuilded;
 import de.industria.typeregistys.ModItems;
+import de.industria.util.types.MultipartBuild;
 
 public class MultipartBuildElectricHeater extends MultipartBuild {
 	

@@ -1,7 +1,7 @@
 {
 	"parent": "builtin/entity",
     "textures": {
-        "particle": "block/cannister"
+        "particle": "industria:block/cannister_side"
     },
 	"display": {
 		"thirdperson_righthand": {

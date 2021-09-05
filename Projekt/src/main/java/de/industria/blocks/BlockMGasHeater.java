@@ -4,11 +4,11 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
-import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.renderer.BlockMGasHeaterItemRenderer;
 import de.industria.tileentity.TileEntityMGasHeater;
 import de.industria.typeregistys.MultipartBuildRecipes;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.types.MultipartBuild.MultipartBuildLocation;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -64,6 +64,12 @@ public class BlockMGasHeater extends BlockMultipartBuilded<TileEntityMGasHeater>
 	public void storeBuildData(World world, BlockPos pos, BlockState state, MultipartBuildLocation buildData) {
 		TileEntityMGasHeater tileEntity = getCenterTE(pos, state, world);
 		tileEntity.storeBuildData(buildData);
+	}
+
+	@Override
+	public MultipartBuildLocation getBuildData(World world, BlockPos pos, BlockState state) {
+		TileEntityMGasHeater tileEntity = getCenterTE(pos, state, world);
+		return tileEntity.getBuildData();
 	}
 	
 }

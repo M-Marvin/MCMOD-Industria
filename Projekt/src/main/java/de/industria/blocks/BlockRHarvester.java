@@ -104,7 +104,6 @@ public class BlockRHarvester extends BlockContainerBase {
 					List<ItemStack> drops = ((TileEntityRHarvester) tileEntity).tryToInser(items);
 					
 					for (ItemStack stack : drops) {
-						System.out.println(stack);
 						ItemEntity item = new ItemEntity(worldIn, pos.relative(state.getValue(FACING)).getX(), pos.relative(state.getValue(FACING)).getY(), pos.relative(state.getValue(FACING)).getZ(), stack);
 						item.setDefaultPickUpDelay();
 						worldIn.addFreshEntity(item);

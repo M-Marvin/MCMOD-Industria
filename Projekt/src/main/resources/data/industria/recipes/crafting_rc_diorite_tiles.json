@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AA",
+    "AA"
+  ],
+  "key": {
+    "A": {
+      "item": "industria:polished_diorite_bricks"
+    }
+  },
+  "result": {
+    "item": "industria:diorite_tiles",
+    "count": 1
+  }
+}

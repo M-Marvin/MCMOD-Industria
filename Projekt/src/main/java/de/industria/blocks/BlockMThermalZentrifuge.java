@@ -6,13 +6,15 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
-import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
+import de.industria.renderer.BlockMThermalZentrifugeItemRenderer;
 import de.industria.tileentity.TileEntityMThermalZentrifuge;
 import de.industria.typeregistys.MultipartBuildRecipes;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
+import de.industria.util.types.MultipartBuild.MultipartBuildLocation;
 import de.industria.util.handler.UtilHelper;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -32,6 +34,8 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.IBlockReader;
@@ -63,7 +67,14 @@ public class BlockMThermalZentrifuge extends BlockMultipartBuilded<TileEntityMTh
 	public TileEntity newBlockEntity(IBlockReader p_196283_1_) {
 		return new TileEntityMThermalZentrifuge();
 	}
-
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+		if (getInternPartPos(state).getY() == 2) return Block.box(0, 0, 0, 16, 8, 16);
+		return super.getShape(state, world, pos, context);
+	}
+	
 	@Override
 	public IBlockToolType getBlockInfo() {
 		return (stack, info) -> {
@@ -92,7 +103,7 @@ public class BlockMThermalZentrifuge extends BlockMultipartBuilded<TileEntityMTh
 	
 	@Override
 	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
-		return null; // TODO
+		return () -> BlockMThermalZentrifugeItemRenderer::new;
 	}
 
 	@Override
@@ -155,6 +166,12 @@ public class BlockMThermalZentrifuge extends BlockMultipartBuilded<TileEntityMTh
 	public void storeBuildData(World world, BlockPos pos, BlockState state, MultipartBuildLocation buildData) {
 		TileEntityMThermalZentrifuge tileEntity = getCenterTE(pos, state, world);
 		tileEntity.storeBuildData(buildData);
+	}
+
+	@Override
+	public MultipartBuildLocation getBuildData(World world, BlockPos pos, BlockState state) {
+		TileEntityMThermalZentrifuge tileEntity = getCenterTE(pos, state, world);
+		return tileEntity.getBuildData();
 	}
 	
 }

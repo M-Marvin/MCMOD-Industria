@@ -115,7 +115,7 @@ public class BlockRecipeCreator extends BlockBase implements INamedContainerProv
 				for (int x = 0; x < sizeX; x++) {
 					rb.append(pattern.charAt(i * 3 + x));
 				}
-				rb.append("\"" + (i != sizeX - 1 ? "," : "") + "\r\n");
+				rb.append("\"" + (i != sizeY - 1 ? "," : "") + "\r\n");
 			}
 			
 			rb.append("  ],\r\n" + 

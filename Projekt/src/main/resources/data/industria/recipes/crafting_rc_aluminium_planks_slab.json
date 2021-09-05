@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "item": "industria:aluminium_planks"
+    }
+  },
+  "result": {
+    "item": "industria:aluminium_planks_slab",
+    "count": 6
+  }
+}

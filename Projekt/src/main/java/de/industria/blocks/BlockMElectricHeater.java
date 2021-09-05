@@ -6,13 +6,13 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
-import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.renderer.BlockMElectricHeaterItemRenderer;
 import de.industria.tileentity.TileEntityMElectricHeater;
 import de.industria.typeregistys.MultipartBuildRecipes;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
+import de.industria.util.types.MultipartBuild.MultipartBuildLocation;
 import de.industria.util.handler.UtilHelper;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -123,6 +123,12 @@ public class BlockMElectricHeater extends BlockMultipartBuilded<TileEntityMElect
 	public void storeBuildData(World world, BlockPos pos, BlockState state, MultipartBuildLocation buildData) {
 		TileEntityMElectricHeater tileEntity = getCenterTE(pos, state, world);
 		tileEntity.storeBuildData(buildData);
+	}
+
+	@Override
+	public MultipartBuildLocation getBuildData(World world, BlockPos pos, BlockState state) {
+		TileEntityMElectricHeater tileEntity = getCenterTE(pos, state, world);
+		return tileEntity.getBuildData();
 	}
 	
 }

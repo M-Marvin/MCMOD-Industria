@@ -1,9 +1,9 @@
 package de.industria.tileentity;
 
 import de.industria.gui.ContainerMCoalHeater;
-import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.types.MultipartBuild.MultipartBuildLocation;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -111,6 +111,10 @@ public class TileEntityMCoalHeater extends TileEntityMHeaterBase implements INam
 	public MultipartBuildLocation buildData = MultipartBuildLocation.EMPTY;
 	public void storeBuildData(MultipartBuildLocation buildData) {
 		this.buildData = buildData;
+	}
+
+	public MultipartBuildLocation getBuildData() {
+		return this.buildData;
 	}
 	
 }

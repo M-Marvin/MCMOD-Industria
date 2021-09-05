@@ -9,6 +9,7 @@ import de.industria.typeregistys.ModToolType;
 import de.industria.typeregistys.MultipartBuildRecipes;
 import de.industria.typeregistys.MultipartBuildRecipes.MultipartBuildRecipe;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTier;
 import net.minecraft.item.ItemUseContext;
@@ -19,6 +20,9 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 public class ItemWrench extends ItemToolBase {
@@ -139,6 +143,12 @@ public class ItemWrench extends ItemToolBase {
 	@Override
 	public boolean isRepairable(ItemStack stack) {
 		return true;
+	}
+	
+	@Override
+	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		tooltip.add(new StringTextComponent("\u00A77" + new TranslationTextComponent("industria.item.info.wrench").getString()));
+		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 	}
 	
 }

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.industria.Industria;
-import de.industria.multipartbuilds.MultipartBuild;
 import de.industria.multipartbuilds.MultipartBuildBlastFurnace;
 import de.industria.multipartbuilds.MultipartBuildBlender;
 import de.industria.multipartbuilds.MultipartBuildCoalHeater;
@@ -16,6 +15,7 @@ import de.industria.multipartbuilds.MultipartBuildRaffinery;
 import de.industria.multipartbuilds.MultipartBuildSchredder;
 import de.industria.multipartbuilds.MultipartBuildSteamGenerator;
 import de.industria.multipartbuilds.MultipartBuildThermalZentrifuge;
+import de.industria.util.types.MultipartBuild;
 import net.minecraft.util.ResourceLocation;
 
 public class MultipartBuildRecipes {

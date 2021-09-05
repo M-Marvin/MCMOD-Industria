@@ -3,7 +3,6 @@ package de.industria.tileentity;
 import java.util.Optional;
 
 import de.industria.gui.ContainerMThermalZentrifuge;
-import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.recipetypes.ThermalZentrifugeRecipe;
 import de.industria.typeregistys.ModRecipeTypes;
 import de.industria.typeregistys.ModSoundEvents;
@@ -12,6 +11,7 @@ import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
+import de.industria.util.types.MultipartBuild.MultipartBuildLocation;
 import de.industria.util.handler.ItemStackHelper;
 import de.industria.util.handler.MachineSoundHelper;
 import net.minecraft.block.BlockState;
@@ -188,6 +188,10 @@ public class TileEntityMThermalZentrifuge extends TileEntityInventoryBase implem
 	public MultipartBuildLocation buildData = MultipartBuildLocation.EMPTY;
 	public void storeBuildData(MultipartBuildLocation buildData) {
 		this.buildData = buildData;
+	}
+
+	public MultipartBuildLocation getBuildData() {
+		return this.buildData;
 	}
 	
 }

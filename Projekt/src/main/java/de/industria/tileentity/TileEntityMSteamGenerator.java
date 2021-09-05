@@ -6,7 +6,6 @@ import de.industria.blocks.BlockMSteamGenerator;
 import de.industria.blocks.BlockMultipart;
 import de.industria.fluids.FluidSteam;
 import de.industria.fluids.util.BlockGasFluid;
-import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
@@ -14,6 +13,7 @@ import de.industria.util.blockfeatures.ITEFluidConnective;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.FluidStackStateTagHelper;
 import de.industria.util.handler.MachineSoundHelper;
+import de.industria.util.types.MultipartBuild.MultipartBuildLocation;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.CompoundNBT;
@@ -283,6 +283,10 @@ public class TileEntityMSteamGenerator extends TileEntity implements ITEFluidCon
 	public MultipartBuildLocation buildData = MultipartBuildLocation.EMPTY;
 	public void storeBuildData(MultipartBuildLocation buildData) {
 		this.buildData = buildData;
+	}
+
+	public MultipartBuildLocation getBuildData() {
+		return this.buildData;
 	}
 	
 }

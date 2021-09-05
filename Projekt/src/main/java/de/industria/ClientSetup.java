@@ -48,6 +48,7 @@ import de.industria.renderer.TileEntityMOreWashingPlantRenderer;
 import de.industria.renderer.TileEntityMRaffineryRenderer;
 import de.industria.renderer.TileEntityMSchredderRenderer;
 import de.industria.renderer.TileEntityMSteamGeneratorRenderer;
+import de.industria.renderer.TileEntityMThermalZentrifugeRenderer;
 import de.industria.renderer.TileEntityNComputerRenderer;
 import de.industria.renderer.TileEntitySignalProcessorContactRenderer;
 import de.industria.renderer.TileEntityStructureScaffoldRenderer;
@@ -189,6 +190,7 @@ public class ClientSetup {
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.GAS_HEATER, TileEntityMGasHeaterRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.FLUID_CANISTER, TileEntityFluidCannisterRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.BATTERY, TileEntityMBatteryRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(ModTileEntityType.THERMAL_ZENTRIFUGE, TileEntityMThermalZentrifugeRenderer::new);
 		
 		RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FALLING_FLUID, EntityDummyRenderer::new);
 		

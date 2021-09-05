@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  C",
+    " CC",
+    "CCC"
+  ],
+  "key": {
+    "C": {
+      "item": "industria:stone_tiles"
+    }
+  },
+  "result": {
+    "item": "industria:stone_tiles_stairs",
+    "count": 4
+  }
+}

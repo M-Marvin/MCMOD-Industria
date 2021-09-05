@@ -168,16 +168,19 @@ public abstract class BlockMultipart<T extends TileEntity> extends BlockContaine
 	
 	@SuppressWarnings("unchecked")
 	public T getCenterTE(BlockPos pos, BlockState state, IBlockReader world) {
-		BlockPos partPos = BlockMultipart.getInternPartPos(state);
-		BlockPos partOffset = UtilHelper.rotateBlockPos(partPos, state.getValue(BlockMultipart.FACING));
-		BlockPos centerTEPos = pos.subtract(partOffset);
-		TileEntity tileEntity = world.getBlockEntity(centerTEPos);
 		try {
-			return (T) tileEntity;
-		} catch (ClassCastException e) {
+			BlockPos partPos = BlockMultipart.getInternPartPos(state);
+			BlockPos partOffset = UtilHelper.rotateBlockPos(partPos, state.getValue(BlockMultipart.FACING));
+			BlockPos centerTEPos = pos.subtract(partOffset);
+			TileEntity tileEntity = world.getBlockEntity(centerTEPos);
+			try {
+				return (T) tileEntity;
+			} catch (ClassCastException e) {
+				return null;
+			}
+		} catch (Exception e) {
 			return null;
 		}
-		
 	}
 	
 	public static TileEntity getSCenterTE(BlockPos pos, BlockState state, IWorld world) {

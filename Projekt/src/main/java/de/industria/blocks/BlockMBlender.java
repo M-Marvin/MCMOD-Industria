@@ -6,13 +6,13 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
-import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.renderer.BlockMBlenderItemRenderer;
 import de.industria.tileentity.TileEntityMBlender;
 import de.industria.typeregistys.MultipartBuildRecipes;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
+import de.industria.util.types.MultipartBuild.MultipartBuildLocation;
 import de.industria.util.handler.UtilHelper;
 import de.industria.util.handler.VoxelHelper;
 import net.minecraft.block.Block;
@@ -200,6 +200,12 @@ public class BlockMBlender extends BlockMultipartBuilded<TileEntityMBlender> imp
 	public void storeBuildData(World world, BlockPos pos, BlockState state, MultipartBuildLocation buildData) {
 		TileEntityMBlender tileEntity = getCenterTE(pos, state, world);
 		tileEntity.storeBuildData(buildData);
+	}
+
+	@Override
+	public MultipartBuildLocation getBuildData(World world, BlockPos pos, BlockState state) {
+		TileEntityMBlender tileEntity = getCenterTE(pos, state, world);
+		return tileEntity.getBuildData();
 	}
 	
 }

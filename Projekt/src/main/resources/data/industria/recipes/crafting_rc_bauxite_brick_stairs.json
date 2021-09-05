@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  C",
+    " CC",
+    "CCC"
+  ],
+  "key": {
+    "C": {
+      "item": "industria:polished_bauxite_bricks"
+    }
+  },
+  "result": {
+    "item": "industria:bauxite_brick_stairs",
+    "count": 4
+  }
+}

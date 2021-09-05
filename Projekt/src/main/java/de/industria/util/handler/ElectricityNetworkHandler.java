@@ -382,7 +382,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 					try {
 						multiParts = device.getMultiBlockParts(world, scannPos, state);
 					} catch (NullPointerException e) {
-						System.err.println("Failure by updatign MultiBlock Device!");
+						System.err.println("Failure by updatign MultiBlock Device at " + scannPos + "!");
 					}
 					
 					if (multiParts != null) {

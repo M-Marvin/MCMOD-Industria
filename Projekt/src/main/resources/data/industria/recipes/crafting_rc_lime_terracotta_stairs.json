@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  C",
+    " CC",
+    "CCC"
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:lime_terracotta"
+    }
+  },
+  "result": {
+    "item": "industria:lime_terracotta_stairs",
+    "count": 4
+  }
+}

@@ -83,6 +83,16 @@ public class BlockBurnedCable extends BlockElectricWire {
 		return null;
 	}
 	
+	public static ItemStack getBurnedCable(Block cable) {
+		ItemStack stack = new ItemStack(ModItems.burned_cable);
+		CompoundNBT tag = new CompoundNBT();
+		CompoundNBT betag = new CompoundNBT();
+		betag.putString("CableBlock", cable.getRegistryName().toString());
+		tag.put("BlockEntityTag", betag);
+		stack.setTag(tag);
+		return stack;
+	}
+	
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		

@@ -2,6 +2,7 @@ package de.industria.multipartbuilds;
 
 import de.industria.blocks.BlockMultipartBuilded;
 import de.industria.typeregistys.ModItems;
+import de.industria.util.types.MultipartBuild;
 import net.minecraft.block.Blocks;
 
 public class MultipartBuildSteamGenerator extends MultipartBuild {

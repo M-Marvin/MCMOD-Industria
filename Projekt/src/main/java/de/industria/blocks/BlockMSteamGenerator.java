@@ -6,13 +6,13 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
-import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.renderer.BlockMSteamGeneratorItemRenderer;
 import de.industria.tileentity.TileEntityMSteamGenerator;
 import de.industria.typeregistys.MultipartBuildRecipes;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.UtilHelper;
+import de.industria.util.types.MultipartBuild.MultipartBuildLocation;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -118,9 +118,13 @@ public class BlockMSteamGenerator extends BlockMultipartBuilded<TileEntityMSteam
 	@Override
 	public void storeBuildData(World world, BlockPos pos, BlockState state, MultipartBuildLocation buildData) {
 		TileEntityMSteamGenerator tileEntity = getCenterTE(pos, state, world);
-		System.out.println(getInternPartPos(state));
-		System.out.println(tileEntity);
 		if (tileEntity != null) tileEntity.storeBuildData(buildData);
+	}
+
+	@Override
+	public MultipartBuildLocation getBuildData(World world, BlockPos pos, BlockState state) {
+		TileEntityMSteamGenerator tileEntity = getCenterTE(pos, state, world);
+		return tileEntity.getBuildData();
 	}
 	
 }

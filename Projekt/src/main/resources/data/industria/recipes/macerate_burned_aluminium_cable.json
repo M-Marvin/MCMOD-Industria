@@ -1,0 +1,10 @@
+{
+  "type": "industria:macerate_burned_cable",
+  "burnedCable": {
+    "item": "industria:aluminium_cable"
+  },
+  "material": {
+    "item": "industria:tpo_aluminium_dust",
+    "count": 1
+  }
+}

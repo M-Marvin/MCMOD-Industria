@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -73,6 +74,10 @@ public class UtilHelper {
 		case WEST: return Rotation.COUNTERCLOCKWISE_90;
 		default: return Rotation.NONE;
 		}
+	}
+
+	public static Ingredient toIngredient(ItemStack... stack) {
+		return Ingredient.of(stack);
 	}
 	
 }

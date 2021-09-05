@@ -7,7 +7,6 @@ import de.industria.blocks.BlockMBlender;
 import de.industria.blocks.BlockMSchredder;
 import de.industria.blocks.BlockMultipart;
 import de.industria.gui.ContainerMBlender;
-import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.recipetypes.BlendingRecipe;
 import de.industria.typeregistys.ModDamageSource;
 import de.industria.typeregistys.ModRecipeTypes;
@@ -18,6 +17,7 @@ import de.industria.util.blockfeatures.ITEFluidConnective;
 import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
+import de.industria.util.types.MultipartBuild.MultipartBuildLocation;
 import de.industria.util.handler.FluidBucketHelper;
 import de.industria.util.handler.ItemStackHelper;
 import de.industria.util.handler.MachineSoundHelper;
@@ -466,6 +466,10 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 	public MultipartBuildLocation buildData = MultipartBuildLocation.EMPTY;
 	public void storeBuildData(MultipartBuildLocation buildData) {
 		this.buildData = buildData;
+	}
+
+	public MultipartBuildLocation getBuildData() {
+		return this.buildData;
 	}
 	
 }

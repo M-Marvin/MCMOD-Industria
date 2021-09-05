@@ -10,6 +10,7 @@ import de.industria.jeiplugin.recipetypes.RecipeCategoryBlastFurnace;
 import de.industria.jeiplugin.recipetypes.RecipeCategoryBlender;
 import de.industria.jeiplugin.recipetypes.RecipeCategoryFluidBath;
 import de.industria.jeiplugin.recipetypes.RecipeCategoryMetalFormer;
+import de.industria.jeiplugin.recipetypes.RecipeCategoryMultipartBuild;
 import de.industria.jeiplugin.recipetypes.RecipeCategoryRifining;
 import de.industria.jeiplugin.recipetypes.RecipeCategorySchredder;
 import de.industria.jeiplugin.recipetypes.RecipeCategoryThermalZentrifuge;
@@ -17,6 +18,7 @@ import de.industria.jeiplugin.recipetypes.RecipeCategoryWashingPlant;
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModRecipeTypes;
+import de.industria.typeregistys.MultipartBuildRecipes;
 import de.industria.util.handler.UtilHelper;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -27,6 +29,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.IRecipeTransferRegistration;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
@@ -60,12 +63,14 @@ public class JEIPlugin implements IModPlugin {
 		registration.addRecipes(getRecipes(manager, ModRecipeTypes.METAL_FORM), JEIRecipeCategories.METAL_FORMER);
 		registration.addRecipes(getRecipes(manager, ModRecipeTypes.BLAST_FURNACE), JEIRecipeCategories.BLAST_FURNACE);
 		registration.addRecipes(UtilHelper.toCollection(new FluidStack(ModFluids.COMPRESSED_AIR, 1500)), JEIRecipeCategories.AIR_COMPRESSOR);
+		registration.addRecipes(MultipartBuildRecipes.getRecipes(), JEIRecipeCategories.MULTIPART_BUILD);
 	}
 	
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registration) {
 		final IJeiHelpers helpers = registration.getJeiHelpers();
 		final IGuiHelper guiHelper = helpers.getGuiHelper();
+		BlockRendererDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
 		
 		registration.addRecipeCategories(new RecipeCategoryAlloy(guiHelper));
 		registration.addRecipeCategories(new RecipeCategoryThermalZentrifuge(guiHelper));
@@ -77,6 +82,7 @@ public class JEIPlugin implements IModPlugin {
 		registration.addRecipeCategories(new RecipeCategoryMetalFormer(guiHelper));
 		registration.addRecipeCategories(new RecipeCategoryAirCompressor(guiHelper));
 		registration.addRecipeCategories(new RecipeCategoryBlastFurnace(guiHelper));
+		registration.addRecipeCategories(new RecipeCategoryMultipartBuild(guiHelper, blockRenderer));
 	}
 	
 	@Override
@@ -92,6 +98,7 @@ public class JEIPlugin implements IModPlugin {
 		registration.addRecipeCatalyst(new ItemStack(ModItems.air_compressor), JEIRecipeCategories.AIR_COMPRESSOR);
 		registration.addRecipeCatalyst(new ItemStack(ModItems.blast_furnace), JEIRecipeCategories.BLAST_FURNACE);
 		registration.addRecipeCatalyst(new ItemStack(ModItems.electric_heater), JEIRecipeCategories.BLAST_FURNACE);
+		registration.addRecipeCatalyst(new ItemStack(ModItems.wrench), JEIRecipeCategories.MULTIPART_BUILD);
 	}
 	
 	@Override

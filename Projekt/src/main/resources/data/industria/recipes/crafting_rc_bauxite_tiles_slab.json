@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "   ",
+    "   ",
+    "GGG"
+  ],
+  "key": {
+    "G": {
+      "item": "industria:bauxite_tiles"
+    }
+  },
+  "result": {
+    "item": "industria:bauxite_tiles_slab",
+    "count": 6
+  }
+}

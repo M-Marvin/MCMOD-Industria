@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DD",
+    "DD"
+  ],
+  "key": {
+    "D": {
+      "item": "industria:polished_andesite_bricks"
+    }
+  },
+  "result": {
+    "item": "industria:andesite_tiles",
+    "count": 1
+  }
+}

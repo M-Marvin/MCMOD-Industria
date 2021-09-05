@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  C",
+    " CC",
+    "CCC"
+  ],
+  "key": {
+    "C": {
+      "item": "industria:red_painted_planks"
+    }
+  },
+  "result": {
+    "item": "industria:red_painted_planks_stairs",
+    "count": 4
+  }
+}

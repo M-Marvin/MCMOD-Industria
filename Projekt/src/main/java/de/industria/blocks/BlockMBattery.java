@@ -183,7 +183,6 @@ public class BlockMBattery extends BlockContainerBase implements IBElectricConne
 		CompoundNBT teTag = new CompoundNBT();
 		teTag.putString("Voltage", voltage.getSerializedName());
 		teTag.putLong("Storage", TileEntityMBattery.MAX_STORAGE);
-		System.out.println(teTag.getLong("Storage"));
 		stackTag.put("BlockEntityTag", teTag);
 		CompoundNBT stateTag = new CompoundNBT();
 		stateTag.putString("mode", BatteryMode.DISCHARGING.getSerializedName());

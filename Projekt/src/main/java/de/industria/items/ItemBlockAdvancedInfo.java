@@ -30,7 +30,6 @@ public class ItemBlockAdvancedInfo extends BlockItem {
 			tooltip.add(new StringTextComponent("\u00A77" + line.getString()));
 		}
 		super.appendHoverText(stack, worldIn, tooltip, flagIn);
-		
 	}
 	
 	@Override

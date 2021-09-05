@@ -18,7 +18,7 @@ public class Industria {
 	// - MetalFormer
 	// RC Drops
 	// Burned Encased Cable
-	
+		
 	public static final Logger LOGGER = LogManager.getLogger();
 	public static final String MODID = "industria";
 	private static final String PROTOCOL_VERSION = "1";
@@ -28,17 +28,17 @@ public class Industria {
 			PROTOCOL_VERSION::equals,
 			PROTOCOL_VERSION::equals);
 	
-	protected static UpdateChecker updateChecker;
+	protected UpdateChecker updateChecker;
 	
 	public Industria() {
 		
-		updateChecker = new UpdateChecker();
+		this.updateChecker = new UpdateChecker();
 		
 		ServerSetup.constructMod();
 		
 	}
 	
-	public static UpdateChecker getUpdateChecker() {
+	public UpdateChecker getUpdateChecker() {
 		return updateChecker;
 	}
 	

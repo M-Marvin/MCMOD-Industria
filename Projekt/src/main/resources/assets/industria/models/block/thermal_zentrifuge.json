@@ -1,8 +1,5 @@
 {
-  "parent": "minecraft:block/orientable",
-  "textures": {
-    "top": "industria:block/steel_machine_top",
-    "front": "industria:block/thermal_zentrifuge_front",
-    "side": "industria:block/steel_machine_side"
-  }
+	"textures": {
+		"particle": "industria:block/steel_plates"
+	}
 }

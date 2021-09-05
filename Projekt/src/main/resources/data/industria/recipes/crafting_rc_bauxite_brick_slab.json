@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "   ",
+    "   ",
+    "GGG"
+  ],
+  "key": {
+    "G": {
+      "item": "industria:polished_bauxite_bricks"
+    }
+  },
+  "result": {
+    "item": "industria:bauxite_brick_slab",
+    "count": 6
+  }
+}

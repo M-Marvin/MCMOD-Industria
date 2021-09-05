@@ -1,9 +1,9 @@
 package de.industria.tileentity;
 
-import de.industria.multipartbuilds.MultipartBuild.MultipartBuildLocation;
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.ITEFluidConnective;
+import de.industria.util.types.MultipartBuild.MultipartBuildLocation;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
@@ -115,6 +115,10 @@ public class TileEntityMGasHeater extends TileEntityMHeaterBase implements ITEFl
 	public MultipartBuildLocation buildData = MultipartBuildLocation.EMPTY;
 	public void storeBuildData(MultipartBuildLocation buildData) {
 		this.buildData = buildData;
+	}
+
+	public MultipartBuildLocation getBuildData() {
+		return this.buildData;
 	}
 	
 }

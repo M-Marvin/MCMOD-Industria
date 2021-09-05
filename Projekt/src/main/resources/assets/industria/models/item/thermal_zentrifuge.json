@@ -1,3 +1,41 @@
 {
-	"parent": "industria:block/thermal_zentrifuge"
+	"parent": "builtin/entity",
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [75, 45, 0],
+			"translation": [-2.25, 3.75, 0],
+			"scale": [0.2, 0.2, 0.2]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 5.75, 0],
+			"scale": [0.2, 0.2, 0.2]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 45, 0],
+			"translation": [1.25, 0, 0],
+			"scale": [0.23, 0.23, 0.23]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 45, 0],
+			"translation": [1.25, 0, 0],
+			"scale": [0.23, 0.23, 0.23]
+		},
+		"ground": {
+			"translation": [-2, 2, -2],
+			"scale": [0.25, 0.25, 0.25]
+		},
+		"gui": {
+			"rotation": [30, 225, 0],
+			"translation": [2.75, -2.75, 0],
+			"scale": [0.25, 0.25, 0.25]
+		},
+		"head": {
+			"translation": [-8, 0, 0]
+		},
+		"fixed": {
+			"translation": [-2.5, -3.75, 0],
+			"scale": [0.3, 0.3, 0.3]
+		}
+	}
 }

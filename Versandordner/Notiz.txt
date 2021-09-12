@@ -1,6 +1,6 @@
 Kleine Details, die man noch ergänzen könnte:
 
-1. Kleine Flammen-/Rauch-Partikel beim Generator vor dem unteren Gitter, wenn er an ist, wie beim normalen Ofen.
+1. Kleine Flammen-/Rauch-Partikel beim Generator vor dem unteren Gitter, wenn er an ist, wie beim normalen Ofen. Bei den elektrische betriebenen Öfen evtl etwas ähnliches, aber keine Flammen.
 
 2. Meh... Vanadium als ganz normales Erz... Es ist so eigenartig, dass man jetzt so viele verschiedene Verfahren zur Gewinnung von Metallen hat (Erz direkt, Ausquetschen, Ausquetschen bei Oxiden, Legieren im Ofen, Hochofen, Lösungen von Alu und Wolfram und dieses seltsame Schlacke-Aussaugen...). Kann man das nicht weglassen? Das brächte mehr Kontinuität und außerdem ist das viel zu genau für ein Spiel, das kann man auf weniger Details runterredizieren und das ersparte auch das komische Aluoxid... Außerdem vermisse ich das Erz und das Rohvanadiumitem und den Block. D:
 

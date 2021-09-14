@@ -16,6 +16,6 @@ Kleine Details, die man noch ergänzen könnte:
 
 8. Geringere Chance auf Natrium beim termalen Zentrifugieren von Salz, außerdem kleineres Natriumstück beim th Z, Geringere Chance auf Salz und Kalk beim Wasserdestillieren -> Chance von 50% auf Kalkpulver beim Destillieren, 30% auf Salz, 50% auf 3x kleines Salz beim Destillieren, Chance von 50% auf 3x kleines Natrium beim _th Z je Slot_
 
-9. Fluoritemodell -> X, Item anpassen (Glanz)
+9. Fluoritmodell -> X, Item anpassen (Glanz)
 
 10. Bauxit und Wolframit sollten nur durch die Schredder, nicht durch den Hammer, mahlbar sein, da man weder Alu noch Wolfram für Stahl braucht.

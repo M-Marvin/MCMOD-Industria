@@ -48,8 +48,6 @@ public class ItemWrench extends ItemToolBase {
 					
 					if (success) {
 						
-						// TODO
-						
 						if (!context.getPlayer().isCreative()) {
 							stack.setDamageValue(stack.getDamageValue() + 1);
 							if (stack.getDamageValue() >= stack.getMaxDamage()) stack = ItemStack.EMPTY;
@@ -64,35 +62,33 @@ public class ItemWrench extends ItemToolBase {
 					
 				}
 				
-			} else {
-				
-				World world = context.getLevel();
-				BlockPos pos = context.getClickedPos();
-				BlockState state = world.getBlockState(pos);
-				BlockState stateOld = state;
-				
-				Collection<Property<?>> props = state.getProperties();
-				for (Property<?> prop : props) {
-					if (prop instanceof DirectionProperty) {
-						boolean horizontal = !((DirectionProperty) prop).getPossibleValues().contains(Direction.UP);
-						state = state.setValue((DirectionProperty) prop, rotate(state.getValue((DirectionProperty) prop), context.getPlayer().isShiftKeyDown(), horizontal));
-					}
-				}
-				
-				if (state.canSurvive(world, pos) && !(state.getBlock() instanceof BlockMultipart)) {
+			}
 
-					world.setBlock(pos, state, 2);
-					
-					if (!stateOld.equals(state) && !context.getPlayer().isCreative()) {
-						stack.setDamageValue(stack.getDamageValue() + 1);
-						if (stack.getDamageValue() > stack.getMaxDamage()) {
-							context.getPlayer().setItemInHand(context.getHand(), ItemStack.EMPTY);
-						}
-					}
-					
-					return !stateOld.equals(state) ? ActionResultType.SUCCESS : ActionResultType.PASS;
-					
+			World world = context.getLevel();
+			BlockPos pos = context.getClickedPos();
+			BlockState state = world.getBlockState(pos);
+			BlockState stateOld = state;
+			
+			Collection<Property<?>> props = state.getProperties();
+			for (Property<?> prop : props) {
+				if (prop instanceof DirectionProperty) {
+					boolean horizontal = !((DirectionProperty) prop).getPossibleValues().contains(Direction.UP);
+					state = state.setValue((DirectionProperty) prop, rotate(state.getValue((DirectionProperty) prop), context.getPlayer().isShiftKeyDown(), horizontal));
 				}
+			}
+			
+			if (state.canSurvive(world, pos) && !(state.getBlock() instanceof BlockMultipart)) {
+
+				world.setBlock(pos, state, 2);
+				
+				if (!stateOld.equals(state) && !context.getPlayer().isCreative()) {
+					stack.setDamageValue(stack.getDamageValue() + 1);
+					if (stack.getDamageValue() > stack.getMaxDamage()) {
+						context.getPlayer().setItemInHand(context.getHand(), ItemStack.EMPTY);
+					}
+				}
+				
+				return !stateOld.equals(state) ? ActionResultType.SUCCESS : ActionResultType.PASS;
 				
 			}
 			

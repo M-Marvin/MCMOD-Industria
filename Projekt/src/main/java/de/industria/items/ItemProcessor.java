@@ -114,6 +114,8 @@ public class ItemProcessor extends ItemBase {
 		public boolean getBValue() {
 			if (value instanceof Boolean) {
 				return (Boolean) value;
+			} else if (value instanceof Integer) {
+				return (Integer) value > 0;
 			} else {
 				return false;
 			}
@@ -127,12 +129,12 @@ public class ItemProcessor extends ItemBase {
 			}
 		}
 		
-		public OperatorType getType() {
+		public OperatorType getInitType() {
 			return type;
 		}
 		
 		public boolean isBool() {
-			return this.type == OperatorType.BOOL || this == EMPTY;	
+			return this.type == OperatorType.INT || this.type == OperatorType.BOOL || this == EMPTY;	
 		}
 		
 		public boolean isInt() {

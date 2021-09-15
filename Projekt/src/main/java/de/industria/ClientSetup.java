@@ -140,6 +140,8 @@ public class ClientSetup {
 		RenderTypeLookup.setRenderLayer(ModItems.flax_crop, RenderType.cutoutMipped());
 		RenderTypeLookup.setRenderLayer(ModItems.battery, RenderType.cutoutMipped());
 		RenderTypeLookup.setRenderLayer(ModItems.diode, RenderType.cutoutMipped());
+		RenderTypeLookup.setRenderLayer(ModItems.energy_barrier, RenderType.translucent());
+		RenderTypeLookup.setRenderLayer(ModItems.floodlight, RenderType.cutoutMipped());
 		
 		RenderTypeLookup.setRenderLayer(ModFluids.HYDROFLUORIC_ACID, RenderType.translucent());
 		RenderTypeLookup.setRenderLayer(ModFluids.FLOWING_HYDROFLUORIC_ACID, RenderType.translucent());
@@ -234,8 +236,9 @@ public class ClientSetup {
 		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getAverageFoliageColor(world, pos) : FoliageColors.getDefaultColor(), ModItems.rubber_leaves);
 		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getAverageFoliageColor(world, pos) : FoliageColors.getDefaultColor(), ModItems.swamp_algae);
 		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getAverageFoliageColor(world, pos) : FoliageColors.getDefaultColor(), ModItems.hanging_vine);
+		colors.register((state, world, pos, tint) -> world != null && pos != null ? ModItems.energy_barrier.getColor(world, pos, state, tint) : FoliageColors.getDefaultColor(), ModItems.energy_barrier);
 	}
-    
+	
 	@SubscribeEvent
 	public static void setupItemColors(ColorHandlerEvent.Item event) {
 		ItemColors colors = event.getItemColors();

@@ -1,0 +1,18 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "industria:block/energy_barrier",
+		"particle": "industria:block/energy_barrier"
+	},
+	"elements": [
+		{
+			"from": [8, 8, 8],
+			"to": [8, 16, 16],
+			"faces": {
+				"east": {"uv": [0, 0, 8, 8], "texture": "#0", "tintindex": 5 },
+				"west": {"uv": [8, 0, 0, 8], "texture": "#0", "tintindex": 5 }
+			}
+		}
+	],
+	"display": {}
+}

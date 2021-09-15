@@ -3,8 +3,10 @@ package de.industria.tileentity;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.ITEPostMoveHandled;
+import de.industria.util.handler.ElectricityNetworkHandler;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -66,6 +68,7 @@ public class TileEntityStructureScaffold extends TileEntityInventoryBase impleme
 	public void tick() {
 		if (!this.level.isClientSide()) {
 			if (this.level.getGameTime() % 30 == 0) this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
+			if (getBlockState().getBlock() == ModItems.energy_barrier_generator) ModItems.energy_barrier_generator.onNetworkChanges(this.level, this.worldPosition, getBlockState(), ElectricityNetworkHandler.getHandlerForWorld(this.level).getNetwork(this.worldPosition));
 		}
 	}
 	

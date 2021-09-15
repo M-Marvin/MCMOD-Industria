@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CEC",
+    "SLS",
+    "CMC"
+  ],
+  "key": {
+    "E": {
+      "item": "industria:capacitor_bank"
+    },
+    "C": {
+      "item": "industria:carbon_plate"
+    },
+    "S": {
+      "item": "industria:circuit_board"
+    },
+    "L": {
+      "item": "industria:energy_barrier_border"
+    },
+    "M": {
+      "item": "industria:transformator_contact"
+    }
+  },
+  "result": {
+    "item": "industria:energy_barrier_generator"
+  }
+}

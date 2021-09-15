@@ -12,6 +12,7 @@ import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.DeviceType;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.NetworkChangeResult;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
+import de.industria.util.types.ScannCounter;
 import de.industria.util.blockfeatures.IBElectricWireBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -107,7 +108,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 						lap++;
 						
 						network.positions.clear();
-						boolean flag = this.scann(world, position, null, network.positions, 0, DeviceType.WIRE);
+						boolean flag = this.scann(world, position, null, network.positions, new ScannCounter(50000), DeviceType.WIRE);
 						
 						// If no Device Found, add it self, to prevent endless new Networks;
 						if (!flag) {
@@ -256,7 +257,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 				List<Direction> sideList = new ArrayList<Direction>();
 				sideList.add(direction.getOpposite());
 				network.positions.put(position, sideList);
-				this.scann(world, position.relative(direction), direction, network.positions, 0, DeviceType.WIRE);
+				this.scann(world, position.relative(direction), direction, network.positions, new ScannCounter(50000), DeviceType.WIRE);
 				
 				network.needCurrent = 0;
 				network.voltage = Voltage.NoLimit;
@@ -323,11 +324,11 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 		return this.getNetworkState(world, position, direction, null);
 	}
 	
-	protected boolean scann(World world, BlockPos scannPos, Direction direction, HashMap<BlockPos, List<Direction>> posList, int scannDepth, DeviceType lastDevice) {
+	protected boolean scann(World world, BlockPos scannPos, Direction direction, HashMap<BlockPos, List<Direction>> posList, ScannCounter scannDepth, DeviceType lastDevice) {
 		
 		BlockState state = world.getBlockState(scannPos);
 		
-		if (state.getBlock() instanceof IBElectricConnectiveBlock && scannDepth < 50000) {
+		if (state.getBlock() instanceof IBElectricConnectiveBlock && scannDepth.canRun()) {
 			
 			IBElectricConnectiveBlock device = (IBElectricConnectiveBlock) state.getBlock();
 			DeviceType type = device.getDeviceType();
@@ -360,7 +361,8 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 						if (device.canConnect(d.getOpposite(), world, scannPos, state) && (direction != null ? d != direction.getOpposite() : true)) {
 							
 							BlockPos pos2 = scannPos.relative(d);
-							boolean flag1 = this.scann(world, pos2, d, posList, scannDepth + 1, type);
+							scannDepth.count();
+							boolean flag1 = this.scann(world, pos2, d, posList, scannDepth, type);
 							
 							if (flag1) {
 								
@@ -390,7 +392,8 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 						for (BlockPos multiPart : multiParts) {
 							
 							if (!posList.containsKey(multiPart)) {
-								scann(world, multiPart, null, posList, scannDepth++, lastDevice);
+								scannDepth.count();
+								scann(world, multiPart, null, posList, scannDepth, lastDevice);
 							} else {
 								continue;
 							}

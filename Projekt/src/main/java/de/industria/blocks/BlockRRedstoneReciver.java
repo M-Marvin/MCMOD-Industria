@@ -70,7 +70,7 @@ public class BlockRRedstoneReciver extends BlockContainerBase implements IBSigna
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 		
 		if (state.getValue(TRANSIVER_MODE)) {
-			int powerIn = worldIn.getDirectSignalTo(pos);
+			int powerIn = worldIn.getBestNeighborSignal(pos);
 			int power = state.getValue(POWER);
 			
 			TileEntity te = worldIn.getBlockEntity(pos);

@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CEC",
+    "SLS",
+    "CMC"
+  ],
+  "key": {
+    "E": {
+      "item": "industria:ender_core"
+    },
+    "C": {
+      "item": "industria:carbon_plate"
+    },
+    "S": {
+      "item": "industria:silver_plate"
+    },
+    "L": {
+      "item": "industria:circuit_board"
+    },
+    "M": {
+      "item": "industria:metal_glass_machine_casing"
+    }
+  },
+  "result": {
+    "item": "industria:energy_barrier_border",
+    "count": 8
+  }
+}

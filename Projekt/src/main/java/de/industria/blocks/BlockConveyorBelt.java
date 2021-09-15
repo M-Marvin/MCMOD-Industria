@@ -46,7 +46,7 @@ import net.minecraft.world.World;
 
 public class BlockConveyorBelt extends BlockContainerBase implements IBAdvancedBlockInfo {
 	
-	public static final DirectionProperty FACING = BlockStateProperties.FACING;
+	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	public static final EnumProperty<BeltState> RIGHT = EnumProperty.create("right", BeltState.class);
 	public static final EnumProperty<BeltState> LEFT = EnumProperty.create("left", BeltState.class);
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;

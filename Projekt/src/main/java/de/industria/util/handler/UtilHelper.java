@@ -8,8 +8,11 @@ import java.util.Random;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.fluids.FluidStack;
 
 public class UtilHelper {
@@ -78,6 +81,28 @@ public class UtilHelper {
 
 	public static Ingredient toIngredient(ItemStack... stack) {
 		return Ingredient.of(stack);
+	}
+	
+	public static boolean containsArray(Object[] array, Object object) {
+		for (Object o : array) if (o.equals(object)) return true;
+		return false;
+	}
+	
+	public static List<Direction> getDirectionsOutOfAxis(Axis axis) {
+		List<Direction> directions = new ArrayList<Direction>();
+		for (Direction d : Direction.values()) if (d.getAxis() != axis) directions.add(d);
+		return directions;
+	}
+
+	public static Direction getDirectionOutOfAxis(Axis axis) {
+		for (Direction d : Direction.values()) if (d.getAxis() != axis) return d;
+		return Direction.NORTH;
+	}
+	
+	public static Direction rotateOnAxis(Direction d1, int i, Axis axis) {
+		Vector3f vec = axis == Axis.X ? Vector3f.XP : axis == Axis.Y ? Vector3f.YP : Vector3f.ZP;
+		Matrix4f matrix = new Matrix4f(vec.rotationDegrees(i));
+		return Direction.rotate(matrix, d1);
 	}
 	
 }

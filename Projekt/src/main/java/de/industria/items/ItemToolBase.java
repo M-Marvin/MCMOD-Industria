@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableSet;
 
 import de.industria.Industria;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
@@ -13,12 +12,9 @@ import net.minecraftforge.common.ToolType;
 
 public class ItemToolBase extends ToolItem {
 	
-	protected ToolType toolType;
-	
 	public ItemToolBase(String name, float attackDamageIn, float attackSpeedIn, ToolType toolType, IItemTier tier, Properties builderIn) {
-		super(attackDamageIn, attackSpeedIn, tier, ImmutableSet.of(), builderIn);
+		super(attackDamageIn, attackSpeedIn, tier, ImmutableSet.of(), builderIn.addToolType(toolType, 1));
 		this.setRegistryName(new ResourceLocation(Industria.MODID, name));
-		this.toolType = toolType;
 	}
 	
 	@Override
@@ -28,17 +24,16 @@ public class ItemToolBase extends ToolItem {
 	
 	public float getDestroySpeed(ItemStack stack, BlockState state) {
 	   if (getToolTypes(stack).stream().anyMatch(e -> state.isToolEffective(e))) return speed;
-	   return state.getBlock().getHarvestTool(state) == this.toolType ? this.speed : 1.0F;
+	   return isCorrectToolForDrops(state) ? this.speed : 1.0F;
 	}
 	
 	@Override
 	public boolean isCorrectToolForDrops(BlockState blockIn) {
 	      int i = this.getTier().getLevel();
-	      if (blockIn.getHarvestTool() == this.toolType) {
+	      if (this.getToolTypes(new ItemStack(this, 1)).contains(blockIn.getHarvestTool())) {
 	         return i >= blockIn.getHarvestLevel();
 	      }
-	      Material material = blockIn.getMaterial();
-	      return material == Material.STONE || material == Material.METAL || material == Material.HEAVY_METAL;
+	      return false;
 	}
 	
 }

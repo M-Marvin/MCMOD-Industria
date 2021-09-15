@@ -80,7 +80,7 @@ public class TileEntityMFluidOutput extends TileEntity implements ITickableTileE
 	
 	@Override
 	public boolean canConnect(Direction side) {
-		return side == this.getBlockState().getValue(BlockMFluidInput.FACING).getOpposite();
+		return side != this.getBlockState().getValue(BlockMFluidInput.FACING);
 	}
 	
 	@SuppressWarnings("deprecation")

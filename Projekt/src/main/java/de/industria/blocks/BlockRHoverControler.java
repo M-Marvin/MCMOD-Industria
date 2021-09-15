@@ -155,6 +155,7 @@ public class BlockRHoverControler extends BlockContainerBase implements IBSignal
 			info.add(new TranslationTextComponent("industria.block.info.needEnergy", (10 * Voltage.NormalVoltage.getVoltage() / 1000F) + "k"));
 			info.add(new TranslationTextComponent("industria.block.info.needVoltage", Voltage.NormalVoltage.getVoltage()));
 			info.add(new TranslationTextComponent("industria.block.info.needCurrent", 10));
+			info.add(new TranslationTextComponent("industria.block.info.hoverControler"));
 		};
 	}
 	

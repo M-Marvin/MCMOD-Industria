@@ -144,6 +144,7 @@ public class ServerSetup {
 		ModGameRegistry.registerBlock(ModItems.burned_cable, ModTabs.MACHINES);
 		ModGameRegistry.registerBlock(ModItems.infinity_power_source, null);
 		ModGameRegistry.registerBlock(ModItems.panel_lamp, ModTabs.MACHINES);
+		ModGameRegistry.registerBlock(ModItems.floodlight, ModTabs.MACHINES);
 		ModGameRegistry.registerBlock(ModItems.steel_block, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.copper_block, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.aluminium_block, ModTabs.BUILDING_BLOCKS);
@@ -260,6 +261,9 @@ public class ServerSetup {
 		ModGameRegistry.registerBlock(ModItems.preassure_pipe_item_terminal, ModTabs.MACHINES);
 		ModGameRegistry.registerBlock(ModItems.ore_washing_plant, ModTabs.MACHINES);
 		ModGameRegistry.registerBlock(ModItems.cardboard_box, ModTabs.DECORATIONS);
+		ModGameRegistry.registerTechnicalBlock(ModItems.energy_barrier);
+		ModGameRegistry.registerBlock(ModItems.energy_barrier_border, ModTabs.MACHINES);
+		ModGameRegistry.registerBlock(ModItems.energy_barrier_generator, ModTabs.MACHINES);
 		
 		ModGameRegistry.registerBlock(ModItems.mangrove_log, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.mangrove_wood, ModTabs.BUILDING_BLOCKS);
@@ -891,6 +895,7 @@ public class ServerSetup {
 		ModGameRegistry.registerTechnicalBlock(ModItems.encased_steel_pipe);
 		ModGameRegistry.registerTechnicalBlock(ModItems.encased_copper_pipe);
 		ModGameRegistry.registerTechnicalBlock(ModItems.encased_metallic_glass_pipe);
+		ModGameRegistry.registerTechnicalBlock(ModItems.luminous_air);
 		
 		ModGameRegistry.registerTechnicalBlock(ModItems.steam);
 		ModGameRegistry.registerItem(ModItems.steam_bucket);

@@ -1,0 +1,44 @@
+{
+	"multipart": [
+		
+		{ "when": { "OR": [  {"north": "vertical"}, {"up": "vertical"} ] }, "apply": {
+			"model": "industria:block/energy_barrier_up_north"
+		}},
+		{ "when": { "OR": [  {"south": "vertical"}, {"up": "vertical"} ] }, "apply": {
+			"model": "industria:block/energy_barrier_up_south"
+		}},
+		{ "when": { "OR": [  {"north": "vertical"}, {"down": "vertical"} ] }, "apply": {
+			"model": "industria:block/energy_barrier_down_north"
+		}},
+		{ "when": { "OR": [  {"south": "vertical"}, {"down": "vertical"} ] }, "apply": {
+			"model": "industria:block/energy_barrier_down_south"
+		}},
+		
+		{ "when": { "OR": [  {"east": "vertical"}, {"up": "horizontal"} ] }, "apply": {
+			"model": "industria:block/energy_barrier_up_north", "y": 90
+		}},
+		{ "when": { "OR": [  {"west": "vertical"}, {"up": "horizontal"} ] }, "apply": {
+			"model": "industria:block/energy_barrier_up_south", "y": 90
+		}},
+		{ "when": { "OR": [  {"east": "vertical"}, {"down": "horizontal"} ] }, "apply": {
+			"model": "industria:block/energy_barrier_down_north", "y": 90
+		}},
+		{ "when": { "OR": [  {"west": "vertical"}, {"down": "horizontal"} ] }, "apply": {
+			"model": "industria:block/energy_barrier_down_south", "y": 90
+		}},
+		
+		{ "when": { "OR": [  {"north": "horizontal"}, {"east": "horizontal"} ] }, "apply": {
+			"model": "industria:block/energy_barrier_north_east"
+		}},
+		{ "when": { "OR": [  {"north": "horizontal"}, {"west": "horizontal"} ] }, "apply": {
+			"model": "industria:block/energy_barrier_north_west"
+		}},
+		{ "when": { "OR": [  {"south": "horizontal"}, {"east": "horizontal"} ] }, "apply": {
+			"model": "industria:block/energy_barrier_south_east"
+		}},
+		{ "when": { "OR": [  {"south": "horizontal"}, {"west": "horizontal"} ] }, "apply": {
+			"model": "industria:block/energy_barrier_south_west"
+		}}
+				
+	]
+}

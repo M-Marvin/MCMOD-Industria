@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "KCK",
+    "DLD",
+    "KAK"
+  ],
+  "key": {
+    "A": {
+      "item": "industria:aluminium_planks_slab"
+    },
+    "L": {
+      "item": "industria:panel_lamp"
+    },
+    "C": {
+      "item": "industria:capacitor"
+    },
+    "D": {
+      "item": "industria:electrolyt_copper_wire"
+    },
+    "K": {
+      "item": "industria:plastic_plate"
+    }
+  },
+  "result": {
+    "item": "industria:floodlight",
+    "count": 2
+  }
+}

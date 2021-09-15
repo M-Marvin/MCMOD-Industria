@@ -180,7 +180,7 @@ public class TileEntityMFluidInput extends TileEntity implements ITEFluidConnect
 
 	@Override
 	public boolean canConnect(Direction side) {
-		return side == this.getBlockState().getValue(BlockMFluidInput.FACING).getOpposite();
+		return side != this.getBlockState().getValue(BlockMFluidInput.FACING);
 	}
 
 	@Override

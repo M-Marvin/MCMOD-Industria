@@ -112,12 +112,13 @@ public class ModItems {
 	public static final Block diode = new BlockMDiode();
 	public static final Block infinity_power_source = new BlockInfinityPowerSource();
 	public static final Block panel_lamp = new BlockMPanelLamp();
+	public static final Block floodlight = new BlockMFloodlight();
 	public static final Block copper_cable = new BlockElectricWire("copper_cable", 16, 4);
 	public static final Block encased_electric_copper_cable = new BlockEncasedElectricWire("encased_electric_copper_cable", 16, 4, structure_scaffold);
 	public static final Block electrolyt_copper_cable = new BlockElectricWire("electrolyt_copper_cable", 32, 4);
-	public static final Block encased_electric_electrolyt_copper_cable = new BlockEncasedElectricWire("encased_electric_electrolyt_copper_cable", 16, 4, structure_scaffold);
+	public static final Block encased_electric_electrolyt_copper_cable = new BlockEncasedElectricWire("encased_electric_electrolyt_copper_cable", 32, 4, structure_scaffold);
 	public static final Block aluminium_cable = new BlockElectricWire("aluminium_cable", 64, 8);
-	public static final Block encased_electric_aluminium_cable = new BlockEncasedElectricWire("encased_electric_aluminium_cable", 16, 4, structure_scaffold);
+	public static final Block encased_electric_aluminium_cable = new BlockEncasedElectricWire("encased_electric_aluminium_cable", 64, 4, structure_scaffold);
 	public static final Block burned_cable = new BlockBurnedCable();
 	public static final Block encased_electric_burned_cable = new BlockEncasedElectricWire("encased_electric_burned_cable", 16, 4, structure_scaffold);
 	public static final Block network_cable = new BlockNetworkCable();
@@ -157,6 +158,10 @@ public class ModItems {
 	public static final Block ore_washing_plant = new BlockMOreWashingPlant();
 	public static final Block iron_ladder = new BlockIronLadder("iron_ladder");
 	public static final Block cardboard_box = new BlockCardboardBox();
+	public static final BlockEnergyBarrier energy_barrier = new BlockEnergyBarrier();
+	public static final Block energy_barrier_border = new BlockEnergyBarrierBorder();
+	public static final BlockEnergyBarrierGenerator energy_barrier_generator = new BlockEnergyBarrierGenerator();
+	public static final BlockLuminousAir luminous_air = new BlockLuminousAir();
 	
 	// Fluids and Buckets
 	public static final Block steam = new BlockSteam();

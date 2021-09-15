@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"active=false": { "model": "industria:block/energy_barrier_generator" },
+		"active=true": { "model": "industria:block/energy_barrier_generator_active" }
+	}
+}

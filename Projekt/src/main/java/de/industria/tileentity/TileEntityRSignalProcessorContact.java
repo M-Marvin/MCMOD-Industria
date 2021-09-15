@@ -79,7 +79,7 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 	public void setInput(ItemStack chanel, int power) {
 		
 		String name = chanel.getHoverName().getContents();
-		if (name.length() > 0) {
+		if (name.length() > 0 && !this.getProcessorStack().isEmpty() && this.getProcessorStack().getItem() instanceof ItemProcessor) {
 			boolean canInt = ((ItemProcessor) this.getProcessorStack().getItem()).canHandleInteger();
 			this.variables.put(name, canInt ? new OperatorResult(power, OperatorType.INT) : new OperatorResult(power > 0, OperatorType.BOOL));
 		}
@@ -105,7 +105,7 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 				String name = variable.getKey();
 				OperatorResult value = variable.getValue();
 				
-				if (value.getType() == OperatorType.BOOL) {
+				if (value.getInitType() == OperatorType.BOOL) {
 					
 					ItemStack chanel = new ItemStack(Items.REDSTONE_TORCH);
 					chanel.setHoverName(new StringTextComponent(name));
@@ -118,7 +118,7 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 						
 					}
 					
-				} else if (value.getType() == OperatorType.INT) {
+				} else if (value.getInitType() == OperatorType.INT) {
 					
 					ItemStack chanel = new ItemStack(Items.REDSTONE_TORCH);
 					chanel.setHoverName(new StringTextComponent(name));
@@ -163,7 +163,7 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 		for (Entry<String, OperatorResult> variable : this.variables.entrySet()) {
 			if (variable.getValue() != OperatorResult.EMPTY && variable.getValue() != OperatorResult.FAIL) {
 				CompoundNBT variableTag = new CompoundNBT();
-				variableTag.putString("Type", variable.getValue().getType() == OperatorType.BOOL ? "Bool" : "Int");
+				variableTag.putString("Type", variable.getValue().getInitType() == OperatorType.BOOL ? "Bool" : "Int");
 				if (variable.getValue().isBool()) {
 					variableTag.putBoolean("Value", variable.getValue().getBValue());
 				} else {
@@ -242,13 +242,13 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 		} else if (cmdName.equals("getBVariable") && message.getArgCount() == 1) {
 			String variableName = message.readString();
 			OperatorResult value = this.variables.getOrDefault(variableName, new OperatorResult(false, OperatorType.BOOL));
-			if (value.getType() == OperatorType.BOOL) {
+			if (value.getInitType() == OperatorType.BOOL) {
 				sendResponse(message.getSenderIP(), "respGetB", variableName, value);
 			}
 		} else if (cmdName.equals("getIVariable") && message.getArgCount() == 1) {
 			String variableName = message.readString();
 			OperatorResult value = this.variables.getOrDefault(variableName, new OperatorResult(false, OperatorType.INT));
-			if (value.getType() == OperatorType.INT) {
+			if (value.getInitType() == OperatorType.INT) {
 				sendResponse(message.getSenderIP(), "respGetI", variableName, value);
 			}
 		}
@@ -262,7 +262,7 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 			message.setTargetIP(targetIP);
 			message.writeString(cmd);
 			if (variable != null) {
-				if (variable.getType() == OperatorType.BOOL) {
+				if (variable.getInitType() == OperatorType.BOOL) {
 					message.writeString(variableName);
 					message.writeBoolean(variable.getBValue());
 				} else {

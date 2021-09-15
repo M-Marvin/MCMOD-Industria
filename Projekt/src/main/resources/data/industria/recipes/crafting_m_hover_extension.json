@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GSG",
+    "CEC",
+    "GMG"
+  ],
+  "key": {
+    "E": {
+      "item": "industria:motor"
+    },
+    "C": {
+      "item": "industria:carbon_plate"
+    },
+    "S": {
+      "item": "industria:circuit_board"
+    },
+    "G": {
+      "item": "industria:metallic_glass_plate"
+    },
+    "M": {
+      "item": "industria:metal_glass_machine_casing"
+    }
+  },
+  "result": {
+    "item": "industria:hover_extension",
+    "count": 2
+  }
+}

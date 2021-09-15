@@ -1,5 +1,6 @@
 package de.industria.blocks;
 
+import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
@@ -7,6 +8,7 @@ import java.util.function.Supplier;
 import de.industria.items.ItemBlockAdvancedInfo.IBlockToolType;
 import de.industria.tileentity.TileEntitySimpleBlockTicking;
 import de.industria.util.blockfeatures.IBAdvancedBlockInfo;
+import de.industria.util.blockfeatures.IBAreaLamp;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.Block;
@@ -34,10 +36,11 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-public class BlockMPanelLamp extends BlockContainerBase implements IBElectricConnectiveBlock, IBAdvancedBlockInfo, IWaterLoggable {
+public class BlockMPanelLamp extends BlockContainerBase implements IBElectricConnectiveBlock, IBAdvancedBlockInfo, IWaterLoggable, IBAreaLamp {
 	
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -48,6 +51,21 @@ public class BlockMPanelLamp extends BlockContainerBase implements IBElectricCon
 	protected static final VoxelShape NORTH_OPEN_AABB = Block.box(0.0D, 0.0D, 14.0D, 16.0D, 16.0D, 16.0D);
 	protected static final VoxelShape BOTTOM_AABB = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);
 	protected static final VoxelShape TOP_AABB = Block.box(0.0D, 14.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+	
+	public static final IAreaLightSupplier LIGHT_PLACEMENT = (lampState) -> {
+		Direction facing = lampState.getValue(FACING);
+		
+		HashMap<BlockPos, Direction> lights = new HashMap<BlockPos, Direction>();
+		for (Direction d : Direction.values()) {
+			if (d != facing) {
+				for (int i = 0; i < 9; i++) {
+					lights.put(BlockPos.ZERO.relative(d, i), d);
+				}
+			}
+		}
+		
+		return lights;
+	};
 	
 	public BlockMPanelLamp() {
 		super("panel_lamp", Properties.of(Material.METAL).strength(2.5F).sound(SoundType.METAL).harvestTool(getDefaultToolType(Material.METAL)).lightLevel((state) -> {return state.getValue(LIT) ? 15 : 0;}));
@@ -152,12 +170,25 @@ public class BlockMPanelLamp extends BlockContainerBase implements IBElectricCon
 			info.add(new TranslationTextComponent("industria.block.info.needEnergy", 0.1F * Voltage.LowVoltage.getVoltage()));
 			info.add(new TranslationTextComponent("industria.block.info.needVoltage", Voltage.LowVoltage.getVoltage()));
 			info.add(new TranslationTextComponent("industria.block.info.needCurrent", 0.1F));
+			info.add(new TranslationTextComponent("industria.block.info.panelLamp"));
 		};
 	}
 	
 	@Override
 	public Supplier<Callable<ItemStackTileEntityRenderer>> getISTER() {
 		return null;
+	}
+	
+	@Override
+	public boolean isLit(BlockState state, IWorldReader world, BlockPos pos) {
+		return state.getBlock() == this ? state.getValue(LIT) : false;
+	}
+	
+	@Override
+	public void onPlace(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+		if ((state.getBlock() != this || newState.getBlock() != this) ? true : state.getValue(LIT) != newState.getValue(LIT)) {
+			updateLight(state, world, pos, LIGHT_PLACEMENT);
+		}
 	}
 	
 }

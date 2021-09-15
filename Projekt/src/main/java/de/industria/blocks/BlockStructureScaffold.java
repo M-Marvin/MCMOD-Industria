@@ -124,7 +124,7 @@ public class BlockStructureScaffold extends BlockContainerBase implements IBAdva
 				return ActionResultType.CONSUME;
 				
 			} else if (stack.getItem().getToolTypes(stack).contains(ModToolType.WRENCH)) {
-
+				
 				if (!worldIn.isClientSide()) {
 					
 					TileEntity tileEntity = worldIn.getBlockEntity(pos);
@@ -193,7 +193,7 @@ public class BlockStructureScaffold extends BlockContainerBase implements IBAdva
 	
 	@Override
 	public SoundType getSoundType(BlockState state, IWorldReader world, BlockPos pos, Entity entity) {
-		Direction claddingSide = Direction.UP; // This function is only used for stepp sounds, an Entitys normaly walk on top of the Block.
+		Direction claddingSide = Direction.UP; // This function is only used for step sounds and entity's normal walk on top of the block.
 		TileEntity tileEntity = world.getBlockEntity(pos);
 		if (tileEntity instanceof TileEntityStructureScaffold) {
 			ItemStack claddingStack = ((TileEntityStructureScaffold) tileEntity).getCladding(claddingSide);

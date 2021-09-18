@@ -88,9 +88,9 @@ public class RecipeCategorySchredder implements IRecipeCategory<SchredderRecipe>
 		stacks.init(4, false, 74, 41);
 		stacks.set(0, UtilHelper.toCollection(recipe.getIngredient().getItems()));
 		stacks.set(1, new ItemStack(recipe.getSchredderTool()));
-		stacks.set(2, recipe.getResultItem());
-		if (!recipe.getResultItem2().isEmpty()) stacks.set(3, recipe.getResultItem2());
-		if (!recipe.getResultItem3().isEmpty()) stacks.set(4, recipe.getResultItem3());
+		stacks.set(2, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
+		if (!recipe.getResultItem2().isEmpty()) stacks.set(3, ingredients.getOutputs(VanillaTypes.ITEM).get(1));
+		if (!recipe.getResultItem3().isEmpty()) stacks.set(4, ingredients.getOutputs(VanillaTypes.ITEM).get(2));
 		
 		this.progressArrow = helper.createAnimatedDrawable(arrow, recipe.getSchredderTime(), StartDirection.LEFT, false);
 		this.schredderDammage = recipe.getSchredderDamage();

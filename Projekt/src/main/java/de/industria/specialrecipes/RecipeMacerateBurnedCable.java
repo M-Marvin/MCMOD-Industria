@@ -7,6 +7,7 @@ import de.industria.typeregistys.ModSerializer;
 import de.industria.util.handler.UtilHelper;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
@@ -18,18 +19,16 @@ public class RecipeMacerateBurnedCable extends SchredderRecipe {
 		super(id, UtilHelper.toIngredient(burnedCableItem), new ItemStack(ModItems.polymer_resin), resultMaterial, ItemStack.EMPTY, 70, ModItems.schredder_macerator, 8);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean matches(IInventory inv, World worldIn) {
 		
 		ItemStack burnedCable = inv.getItem(0);
 		if (burnedCable.isEmpty()) return false;
+		if (burnedCable.getItem() != Item.byBlock(ModItems.burned_cable)) return false;
 		Block burnedBlock = BlockBurnedCable.getBurnedCableFromStack(burnedCable);
 		if (burnedBlock == null) burnedBlock = ModItems.copper_cable;
 		Block burnedBlockRecipe = BlockBurnedCable.getBurnedCableFromStack(this.itemIn.getItems()[0]);
-		
-		
-
-		System.out.println(burnedBlockRecipe);
 		
 		return burnedBlockRecipe == burnedBlock;
 		

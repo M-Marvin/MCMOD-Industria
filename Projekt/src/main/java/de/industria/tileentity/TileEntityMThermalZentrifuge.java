@@ -24,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -49,7 +50,7 @@ public class TileEntityMThermalZentrifuge extends TileEntityInventoryBase implem
 			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
 			
 			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
-			this.hasPower = network.canMachinesRun() == Voltage.NormalVoltage;
+			this.hasPower = network.canMachinesRun() == Voltage.HightVoltage;
 			this.isWorking = canWork() && this.hasPower;
 			
 			if (this.isWorking) {
@@ -67,7 +68,7 @@ public class TileEntityMThermalZentrifuge extends TileEntityInventoryBase implem
 							
 							this.progress++;
 							this.temp = this.progress / (float) this.progressTotal;
-
+							
 							if (this.progress >= this.progressTotal) {
 								
 								if (this.getItem(1).isEmpty()) {
@@ -105,7 +106,7 @@ public class TileEntityMThermalZentrifuge extends TileEntityInventoryBase implem
 			}
 			
 			this.progress = 0;
-			if (this.temp > 0) this.temp -= 0.004F;
+			if (this.temp > 0) this.temp -= 0.02F;
 			if (this.temp < 0) this.temp = 0F;
 			
 		} else {
@@ -165,22 +166,22 @@ public class TileEntityMThermalZentrifuge extends TileEntityInventoryBase implem
 	
 	@Override
 	public CompoundNBT save(CompoundNBT compound) {
-		compound.putInt("progress", this.progress);
+		compound.putInt("Progress", this.progress);
 		compound.putInt("progressTotal", this.progressTotal);
 		compound.putBoolean("isWorking", this.isWorking);
 		compound.putBoolean("hasPower", this.hasPower);
-		compound.putFloat("temp", this.temp);
+		compound.putFloat("Temp", this.temp);
 		compound.put("BuildData", this.buildData.writeNBT(new CompoundNBT()));
 		return super.save(compound);
 	}
 	
 	@Override
 	public void load(BlockState state, CompoundNBT compound) {
-		this.progress = compound.getInt("progress");
+		this.progress = compound.getInt("Progress");
 		this.progressTotal = compound.getInt("progressTotal");
 		this.hasPower = compound.getBoolean("hasPower");
 		this.isWorking = compound.getBoolean("isWorking");
-		this.temp = compound.getFloat("temp");
+		this.temp = compound.getFloat("Temp");
 		this.buildData = MultipartBuildLocation.loadNBT(compound.getCompound("BuildData"));
 		super.load(state, compound);
 	}
@@ -192,6 +193,11 @@ public class TileEntityMThermalZentrifuge extends TileEntityInventoryBase implem
 
 	public MultipartBuildLocation getBuildData() {
 		return this.buildData;
+	}
+	
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		return new AxisAlignedBB(worldPosition.offset(-2, -1, -2), worldPosition.offset(2, 3, 2));
 	}
 	
 }

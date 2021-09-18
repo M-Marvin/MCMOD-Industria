@@ -70,10 +70,34 @@ public abstract class BlockWiring extends BlockBase implements IWaterLoggable {
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
 		
-		BlockState state = updateState(this.defaultBlockState(), context.getLevel(), context.getClickedPos());
-
+		BlockPos pos = context.getClickedPos();
+		BlockState state = this.defaultBlockState();
+		World world = context.getLevel();
+		
 		BlockState replaceState = context.getLevel().getBlockState(context.getClickedPos());
-		return state.setValue(WATERLOGGED, replaceState.getBlock() == Blocks.WATER);
+		state =  state.setValue(WATERLOGGED, replaceState.getBlock() == Blocks.WATER);
+		
+		for (Direction side : Direction.values()) {
+			BooleanProperty prop = CONNECTIONS[side.get3DDataValue()];
+			boolean mustConnect = canConnectTo(state, world, pos, pos.relative(side), side.getOpposite());
+			boolean isConnected = state.getValue(prop);
+			if (mustConnect != isConnected) {
+				state = state.setValue(prop, mustConnect);
+				BlockState otherWire = world.getBlockState(pos.relative(side));
+				if (otherWire.getBlock() instanceof BlockWiring) world.setBlockAndUpdate(pos.relative(side), otherWire.setValue(CONNECTIONS[side.getOpposite().get3DDataValue()], true));
+			}
+		}
+
+		int connections = countConnections(state);
+		MiddleState mState = MiddleState.CLOSED;
+		if (connections == 1 && !state.getValue(DOWN)) {
+			mState = MiddleState.NONE;
+		} else if (connections == 1 || connections == 0) {
+			mState = MiddleState.OPEN;
+		}
+		state = state.setValue(MIDDLE, mState);
+		
+		return state;
 		
 	}
 	

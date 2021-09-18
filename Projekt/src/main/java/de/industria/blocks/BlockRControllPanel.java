@@ -97,7 +97,7 @@ public class BlockRControllPanel extends BlockContainerBase implements IBSignalC
 		Direction face = hit.getDirection();
 		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		
-		if (face == facing && tileEntity instanceof TileEntityControllPanel) {
+		if (face == facing && tileEntity instanceof TileEntityControllPanel && !worldIn.isClientSide()) { // TODO Test
 			
 			int hitX = (int) ((hit.getLocation().x - hit.getBlockPos().getX()) * 16);
 			int hitY = (int) ((hit.getLocation().y - hit.getBlockPos().getY()) * 16);

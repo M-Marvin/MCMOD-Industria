@@ -202,9 +202,9 @@ public class BlockMFloodlight extends BlockContainerBase implements IBAdvancedBl
 	@Override
 	public IBlockToolType getBlockInfo() {
 		return (stack, info) -> {
-			info.add(new TranslationTextComponent("industria.block.info.needEnergy", 1F * Voltage.NormalVoltage.getVoltage()));
+			info.add(new TranslationTextComponent("industria.block.info.needEnergy", 0.5F * Voltage.NormalVoltage.getVoltage()));
 			info.add(new TranslationTextComponent("industria.block.info.needVoltage", Voltage.NormalVoltage.getVoltage()));
-			info.add(new TranslationTextComponent("industria.block.info.needCurrent", 1F));
+			info.add(new TranslationTextComponent("industria.block.info.needCurrent", 0.5F));
 			info.add(new TranslationTextComponent("industria.block.info.floodlight"));
 		};
 	}

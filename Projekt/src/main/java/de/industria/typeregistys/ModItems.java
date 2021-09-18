@@ -242,7 +242,7 @@ public class ModItems {
 	public static final Block bound_stick_block = new BlockLogBase("bound_stick_block", Material.GRASS, 0.4F, SoundType.LADDER, true);
 	public static final Block dried_peat = new BlockBase("dried_peat", Material.SAND, 0.4F, SoundType.GRAVEL, true);
 	public static final Block peat = new BlockBase("peat", Material.SAND, 0.4F, SoundType.GRAVEL, true);
-	public static final Block humus = new BlockBase("humus", Material.SAND, 0.4F, SoundType.GRAVEL, true);
+	public static final Block humus = new BlockHumus();
 	public static final Block karstified_limestone = new BlockBase("karstified_limestone", Material.STONE, 0.4F, SoundType.STONE);
 	public static final Block fluorite_crystal = new BlockFluoriteCrystal();
 	public static final Block zircon_crystal = new BlockZirconCrystal();

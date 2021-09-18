@@ -78,8 +78,8 @@ public class BlockMThermalZentrifuge extends BlockMultipartBuilded<TileEntityMTh
 	@Override
 	public IBlockToolType getBlockInfo() {
 		return (stack, info) -> {
-			info.add(new TranslationTextComponent("industria.block.info.needEnergy", 1F * Voltage.NormalVoltage.getVoltage()));
-			info.add(new TranslationTextComponent("industria.block.info.needVoltage", Voltage.NormalVoltage.getVoltage()));
+			info.add(new TranslationTextComponent("industria.block.info.needEnergy", 1F * Voltage.HightVoltage.getVoltage()));
+			info.add(new TranslationTextComponent("industria.block.info.needVoltage", Voltage.HightVoltage.getVoltage()));
 			info.add(new TranslationTextComponent("industria.block.info.needCurrent", 1F));
 			info.add(new TranslationTextComponent("industria.block.info.thermalZentrifuge"));
 		};
@@ -108,7 +108,7 @@ public class BlockMThermalZentrifuge extends BlockMultipartBuilded<TileEntityMTh
 
 	@Override
 	public Voltage getVoltage(World world, BlockPos pos, BlockState state, Direction side) {
-		return Voltage.NormalVoltage;
+		return Voltage.HightVoltage;
 	}
 
 	@Override
@@ -142,7 +142,7 @@ public class BlockMThermalZentrifuge extends BlockMultipartBuilded<TileEntityMTh
 	@Override
 	public void onNetworkChanges(World worldIn, BlockPos pos, BlockState state, ElectricityNetwork network) {
 
-		if (network.getVoltage().getVoltage() > Voltage.NormalVoltage.getVoltage() && network.getCurrent() > 0) {
+		if (network.getVoltage().getVoltage() > Voltage.HightVoltage.getVoltage() && network.getCurrent() > 0) {
 
 			worldIn.explode(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 0F, Mode.DESTROY);
 			worldIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());

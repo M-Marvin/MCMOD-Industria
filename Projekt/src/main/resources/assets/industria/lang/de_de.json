@@ -24,7 +24,7 @@
 "advancements.industria.craft_steel.title": "Stahl, die letzte Grundresource",
 "advancements.industria.craft_steel.description": "Legiere Stahl im Legierngsofen.",
 
-"block.industria.capacitor": "Redstone-Kondensator",
+"block.industria.redstone_capacitor": "Redstone-Kondensator",
 "block.industria.pulse_counter": "Redstone-Impulsgeber",
 "block.industria.stacked_redstone_torch": "Stapelbare Redstone-Fackeln",
 "block.industria.stacked_redstone_wire": "Redstone-Leitung",
@@ -169,6 +169,7 @@
 "block.industria.energy_barrier_generator": "Energiebarrierengenerator",
 "block.industria.energy_barrier_border": "Energiebarrierenbegrenzer",
 "block.industria.energy_barrier": "Energiebarriere",
+"block.industria.humus": "Humus",
 
 "block.industria.conveyor_belt": "F\u00f6rderband",
 "block.industria.conveyor_switch": "Schaltbares F\u00f6rderband",
@@ -617,7 +618,7 @@
 "industria.block.info.cardboardBox.unpacked": "Dient dem Transportieren von Items. Wird mit Shift + Rechtsklick versiegelt und kann dann abgebaut werden. Nur einmal verwendbar.",
 "industria.block.info.redstoneReciver": "Konvertiert Redstone in Signale, die \u00fcber eine Signalleitung an andere Empf\u00e4nger oder Prozessoren weitergeleitet werden k\u00f6nnen.\nKanal wird durch ein Item bestimmt.",
 "industria.block.info.fluidCannister.content": "Inhalt: %1$s mb %2$s",
-"industria.block.info.battery": "\nSpeichert Elektrische Energie.\nZum Aufladen an ein Stromnetz anschliesﬂen und mit Redstone aktivierern.\nACHTUNG! Zieht so viel Strom, wie zur Verf\u00fcgung steht, kann zur ‹berlastung f\u00fchren!",
+"industria.block.info.battery": "\nSpeichert Elektrische Energie.\nZum Aufladen an ein Stromnetz anschliesﬂen und mit Redstone aktivierern.\nACHTUNG! Zieht so viel Strom, wie zur Verf\u00fcgung steht, kann zur \u00fcberlastung f\u00fchren!",
 "industria.block.info.capacitorBank": "\nSpeichert kurzzeitig elektrische Energie.\nKann kurzzeitig Spannungsausf\u00e4lle ausgleichen, muss sich danach jedoch erst wieder neu aufladen.",
 "industria.block.info.capacitorBank.chargeCurrent": "Lade-/Entladestrom: %1$s A",
 "industria.block.info.diode": "L\u00e4sst den Strom nur in eine Richtung durch, kann auﬂerdem den Strom begrenzen.",

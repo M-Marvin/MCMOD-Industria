@@ -19,6 +19,12 @@
     "industria:blast_furnace",
     "industria:air_compressor",
     "industria:item_distributor",
-    "industria:metal_former"
+    "industria:metal_former",
+    "industria:panel_lamp",
+    "industria:floodlight",
+    "industria:energy_barrier_border",
+    "industria:energy_barrier_generator",
+    "industria:diode",
+    "industria:capacitor_bank"
   ]
 }

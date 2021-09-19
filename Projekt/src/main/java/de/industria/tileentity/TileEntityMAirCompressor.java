@@ -49,7 +49,7 @@ public class TileEntityMAirCompressor extends TileEntity implements ITickableTil
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(worldPosition.offset(-1, -1, -1), worldPosition.offset(1, 1, 1));
+		return new AxisAlignedBB(worldPosition.offset(-2, -2, -2), worldPosition.offset(2, 1, 2));
 	}
 	
 	@Override

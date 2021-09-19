@@ -208,15 +208,7 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 						break;
 						
 					}
-					
-//					System.out.println("Network Voltage: " + network.voltage);
-//					System.out.println("Network Current Needed:  " + network.needCurrent);
-//					System.out.println("Network Capacity: " + network.capacity);
-//					System.out.println("Network Current: " + network.current);
-//					
-//					System.out.println(this.networks.size());
-//					System.out.println(getNetwork(position).current);
-					
+										
 				}
 				
 			}
@@ -234,11 +226,9 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 			networks = newList;
 			
 			if (world.getGameTime() % 100 == 0 && !hasUpdated) {
-				
 				hasUpdated = true;
 				SSendENHandeler packet = new SSendENHandeler(this);
 				Industria.NETWORK.send(PacketDistributor.ALL.noArg(), packet);
-				
 			} else if (world.getGameTime() % 100 > 0) {
 				hasUpdated = false;
 			}
@@ -427,17 +417,24 @@ public class ElectricityNetworkHandler extends WorldSavedData {
 		return network;
 		
 	}
-
+	
+	protected int lastSendNetworks;
+	
 	public CompoundNBT makeUpdateTag() {
 		
 		CompoundNBT compound = new CompoundNBT();
 		ListNBT networkTag = new ListNBT();
-		for (ElectricityNetwork net : this.networks) {
+		
+		if (this.lastSendNetworks >= this.networks.size()) this.lastSendNetworks = 0;
+		int endOfSend = Math.min(this.networks.size(), lastSendNetworks + 32);
+		for (int i = lastSendNetworks; i < endOfSend; i++) {
+			ElectricityNetwork net = this.networks.get(i);
 			if (((World) world).getGameTime() - net.lastUpdated < 500) {
-				
 				networkTag.add(net.write(new CompoundNBT()));
 			}
 		}
+		this.lastSendNetworks = endOfSend;
+		
 		compound.put("Networks", networkTag);
 		return compound;
 		

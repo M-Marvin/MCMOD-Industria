@@ -55,7 +55,6 @@ import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid=Industria.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
@@ -111,10 +110,10 @@ public class Events {
 		BlockPos fluidPos = new BlockPos(x, y, z);
 		FluidState fluidState = worldIn.getFluidState(fluidPos);
 		
-		if (fluidState.createLegacyBlock().getBlock() instanceof BlockGasFluid) {
+		if (fluidState.createLegacyBlock().getBlock() instanceof BlockGasFluid && event.getEmptyBucket().getItem() != ModItems.fluid_cannister) {
 			
-			ItemStack bucketItem = playerIn.getMainHandItem();
-						
+			ItemStack bucketItem = event.getEmptyBucket();
+			
 			if (fluidState.createLegacyBlock().getBlock() instanceof IBucketPickupHandler) {
 				Fluid fluid = ((IBucketPickupHandler)fluidState.createLegacyBlock().getBlock()).takeLiquid(worldIn, fluidPos, fluidState.createLegacyBlock());
 				
@@ -127,6 +126,7 @@ public class Events {
 					ItemStack itemstack1 = DrinkHelper.createFilledResult(bucketItem.copy(), playerIn, new ItemStack(fluid.getBucket()));
 					if (!worldIn.isClientSide) {
 						CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity)playerIn, new ItemStack(fluid.getBucket()));
+						event.setFilledBucket(itemstack1);
 						playerIn.setItemSlot(EquipmentSlotType.MAINHAND, itemstack1);
 					}
 					
@@ -140,14 +140,25 @@ public class Events {
 	protected static long lastServerWorldTick = 0L;
 	@SubscribeEvent
 	public static final void onWorldTick(net.minecraftforge.event.TickEvent.WorldTickEvent event) {
-		if (!event.world.isClientSide() && event.phase == Phase.START && event.side == LogicalSide.SERVER) {
-			if (lastServerWorldTick != event.world.getGameTime()) {
-				lastServerWorldTick = event.world.getGameTime();
-				MinecartHandler.getHandlerForWorld(event.world).updateMinecarts();
+		
+		if (event.phase == Phase.START) {
+			if (!event.world.isClientSide()) {
+				if (lastServerWorldTick != event.world.getGameTime()) {
+					lastServerWorldTick = event.world.getGameTime();
+					MinecartHandler.getHandlerForWorld(event.world).updateMinecarts();
+				}
+				if (event.world.blockEntityList.size() > 0) {
+					ChunkLoadHandler.getHandlerForWorld(event.world).updateChunkForceLoads();
+				}
+				DataWatcher.updateBlockEntitys(false);
 			}
-			if (event.world.blockEntityList.size() > 0) {
-				ChunkLoadHandler.getHandlerForWorld(event.world).updateChunkForceLoads();
-			}
+		}
+	}
+	
+	@SubscribeEvent
+	public static final void onWorldTick(net.minecraftforge.event.TickEvent.ClientTickEvent event) {
+		if (event.phase == Phase.START) {
+			DataWatcher.updateBlockEntitys(true);
 		}
 	}
 	

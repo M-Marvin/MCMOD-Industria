@@ -9,6 +9,7 @@ import de.industria.items.ItemProcessor.OperatorResult;
 import de.industria.items.ItemProcessor.OperatorType;
 import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.ITENetworkDevice;
 import de.industria.util.blockfeatures.ITENetworkDevice.NetworkDeviceIP;
 import de.industria.util.blockfeatures.ITENetworkDevice.NetworkMessage;
@@ -41,6 +42,10 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 		super(ModTileEntityType.SIGNAL_PROCESSOR);
 		this.deviceIP = NetworkDeviceIP.DEFAULT;
 		this.processorStack = ItemStack.EMPTY;
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityRSignalProcessorContact) tileEntity).deviceIP = (NetworkDeviceIP) data[0];
+			if (data[1] != null) ((TileEntityRSignalProcessorContact) tileEntity).processorStack = (ItemStack) data[1];
+		}, () -> deviceIP, () -> processorStack);
 	}
 	
 	public ItemStack getProcessorStack() {

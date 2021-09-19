@@ -6,6 +6,7 @@ import de.industria.blocks.BlockPreassurePipe;
 import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.handler.MachineSoundHelper;
 import de.industria.util.handler.MathHelper;
@@ -38,6 +39,11 @@ public class TileEntityPreassurePipe extends TileEntity implements ITickableTile
 	
 	public TileEntityPreassurePipe() {
 		this(ModTileEntityType.PREASSURE_PIPE);
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityPreassurePipe) tileEntity).preassure = (Float) data[0];
+			if (data[1] != null) ((TileEntityPreassurePipe) tileEntity).inputSide = (Direction) data[1];
+			if (data[2] != null) ((TileEntityPreassurePipe) tileEntity).outputSide = (Direction) data[2];
+		}, () -> preassure, () -> inputSide, () -> outputSide);
 	}
 	
 	public TileEntityPreassurePipe(TileEntityType<?> tileEntityTypeIn) {

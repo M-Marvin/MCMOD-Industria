@@ -82,32 +82,4 @@ public abstract class GasFluid extends Fluid implements IBucketPickupHandler {
 	
 	public void onMoved(World worldIn, BlockPos pos, Direction moveDirection, FluidState state, Random random) {};
 	
-//	@Override
-//	public Fluid getFlowingFluid() {
-//		return this;
-//	}
-//
-//	@Override
-//	public Fluid getStillFluid() {
-//		return this;
-//	}
-//
-//	@Override
-//	protected boolean canSourcesMultiply() {
-//		return false;
-//	}
-//
-//	@Override
-//	public void beforeReplacingBlock(IWorld worldIn, BlockPos pos, BlockState state) {}
-//	
-//	@Override
-//	protected int getSlopeFindDistance(IWorldReader worldIn) {
-//		return 0;
-//	}
-//
-//	@Override
-//	protected int getLevelDecreasePerBlock(IWorldReader worldIn) {
-//		return 0;
-//	}
-	
 }

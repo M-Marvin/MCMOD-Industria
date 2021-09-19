@@ -63,8 +63,10 @@ public class ItemFluidCannister extends BlockItem {
 	public ActionResultType useOn(ItemUseContext context) {
 		if (context.getPlayer().isShiftKeyDown()) {
 			return super.useOn(context);
+			
 		} else {
-			return this.use(context.getLevel(), context.getPlayer(), context.getHand()).getResult();
+			ActionResultType stack = this.use(context.getLevel(), context.getPlayer(), context.getHand()).getResult();
+			return stack;
 		}
 	}
 	
@@ -124,11 +126,11 @@ public class ItemFluidCannister extends BlockItem {
 		// Try to empty cannister
 		// Check if the raytrace has blocked or missed and the cannister contains fluid
 		if (raytraceResultEmpty.getType() == Type.MISS) {
-			return ActionResult.pass(cannisterStack);
+			return ActionResult.consume(cannisterStack);
 		} else if (raytraceResultEmpty.getType() != Type.BLOCK) {
-			return ActionResult.pass(cannisterStack);
+			return ActionResult.consume(cannisterStack);
 		} else if (content.getAmount() >= 1000) {
-
+			
 			BlockRayTraceResult blockRaytraceResult = (BlockRayTraceResult) raytraceResultEmpty;
 			BlockPos blockpos = blockRaytraceResult.getBlockPos();
 			Direction direction = blockRaytraceResult.getDirection();

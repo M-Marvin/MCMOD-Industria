@@ -28,17 +28,17 @@ public class Industria {
 			PROTOCOL_VERSION::equals,
 			PROTOCOL_VERSION::equals);
 	
-	protected UpdateChecker updateChecker;
+	protected static UpdateChecker updateChecker;
 	
 	public Industria() {
 		
-		this.updateChecker = new UpdateChecker();
+		updateChecker = new UpdateChecker();
 		
 		ServerSetup.constructMod();
 		
 	}
 	
-	public UpdateChecker getUpdateChecker() {
+	public static UpdateChecker getUpdateChecker() {
 		return updateChecker;
 	}
 	

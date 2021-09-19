@@ -10,6 +10,7 @@ import de.industria.packet.CEditProcessorCodePacket;
 import de.industria.packet.CGenerateJigsaw;
 import de.industria.packet.CUpdateChunkLoader;
 import de.industria.packet.SSendENHandeler;
+import de.industria.packet.SUpdateBlockEntitys;
 import de.industria.typeregistys.ModConfiguredFeatures;
 import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTabs;
@@ -104,6 +105,7 @@ public class ServerSetup {
 		Industria.NETWORK.registerMessage(5, CConfigureNetworkDevice.class, CConfigureNetworkDevice::encode, CConfigureNetworkDevice::new, CConfigureNetworkDevice::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		Industria.NETWORK.registerMessage(6, CUpdateChunkLoader.class, CUpdateChunkLoader::encode, CUpdateChunkLoader::new, CUpdateChunkLoader::handle);
 		Industria.NETWORK.registerMessage(7, CCRecipeCreator.class, CCRecipeCreator::encode, CCRecipeCreator::new, CCRecipeCreator::handle);
+		Industria.NETWORK.registerMessage(8, SUpdateBlockEntitys.class, SUpdateBlockEntitys::encode, SUpdateBlockEntitys::new, SUpdateBlockEntitys::handle);
 		
 		// Devstuff
 		ModGameRegistry.registerBlock(ModItems.recipe_creator, ModTabs.TOOLS);

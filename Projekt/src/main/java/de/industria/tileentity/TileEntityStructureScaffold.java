@@ -5,6 +5,7 @@ import java.util.List;
 
 import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.ITEPostMoveHandled;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import net.minecraft.inventory.ISidedInventory;
@@ -23,6 +24,11 @@ public class TileEntityStructureScaffold extends TileEntityInventoryBase impleme
 	
 	public TileEntityStructureScaffold() {
 		super(ModTileEntityType.STRUCTURE_SCAFFOLD, 6);
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMThermalZentrifuge) tileEntity).progress = (int) data[0];
+			if (data[1] != null) ((TileEntityMThermalZentrifuge) tileEntity).progressTotal = (int) data[1];
+			if (data[2] != null) ((TileEntityMThermalZentrifuge) tileEntity).temp = (float) data[2];
+		}, () -> progress, () -> progressTotal, () -> temp);
 	}
 	
 	public TileEntityStructureScaffold(TileEntityType<?> type) {

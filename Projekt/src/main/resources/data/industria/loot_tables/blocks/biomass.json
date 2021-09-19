@@ -1,0 +1,227 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "industria:biomass",
+                  "properties": {
+                    "layers": "1"
+                  }
+                }
+              ],
+              "count": 1
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "industria:biomass",
+                  "properties": {
+                    "layers": "2"
+                  }
+                }
+              ],
+              "count": 2
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "industria:biomass",
+                  "properties": {
+                    "layers": "3"
+                  }
+                }
+              ],
+              "count": 3
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "industria:biomass",
+                  "properties": {
+                    "layers": "4"
+                  }
+                }
+              ],
+              "count": 4
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "industria:biomass",
+                  "properties": {
+                    "layers": "5"
+                  }
+                }
+              ],
+              "count": 5
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "industria:biomass",
+                  "properties": {
+                    "layers": "6"
+                  }
+                }
+              ],
+              "count": 6
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "industria:biomass",
+                  "properties": {
+                    "layers": "7"
+                  }
+                }
+              ],
+              "count": 7
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "industria:biomass",
+                  "properties": {
+                    "layers": "8"
+                  }
+                }
+              ],
+              "count": 8
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "industria:biomass",
+                  "properties": {
+                    "layers": "9"
+                  }
+                }
+              ],
+              "count": 9
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "industria:biomass",
+                  "properties": {
+                    "layers": "10"
+                  }
+                }
+              ],
+              "count": 10
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "industria:biomass",
+                  "properties": {
+                    "layers": "11"
+                  }
+                }
+              ],
+              "count": 11
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "industria:biomass",
+                  "properties": {
+                    "layers": "12"
+                  }
+                }
+              ],
+              "count": 12
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "industria:biomass",
+                  "properties": {
+                    "layers": "13"
+                  }
+                }
+              ],
+              "count": 13
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "industria:biomass",
+                  "properties": {
+                    "layers": "14"
+                  }
+                }
+              ],
+              "count": 14
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "industria:biomass",
+                  "properties": {
+                    "layers": "15"
+                  }
+                }
+              ],
+              "count": 15
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "industria:biomass",
+                  "properties": {
+                    "layers": "16"
+                  }
+                }
+              ],
+              "count": 16
+            },
+            {
+              "function": "minecraft:explosion_decay"
+            }
+          ],
+          "name": "industria:biomass"
+        }
+      ]
+    }
+  ]
+}

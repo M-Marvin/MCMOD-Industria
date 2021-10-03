@@ -1,0 +1,51 @@
+Möglicherweise wird es noch einen Sonderfall geben, wenn bei einem langen Zapfen die untere Spitze bricht, damit dann kein Block entsteht, der nie wieder verschwindet.
+
+BLÖCKE
+
+short_icicle_tip_down                  1-Block-Eiszapfen Stufe 1
+medium_icicle_tip_down                 1-Block-Eiszapfen Stufe 2
+long_icicle_tip_down                   1-Block-Eiszapfen Stufe 3
+very_long_icicle_tip_down              1-Block-Eiszapfen Stufe 4
+
+unstable_icicle_tip_down               1-Block-Eiszapfen Brüchig, Erzeugt beim Brechen kleine Eiszapfen-Entity
+broken_icicle_tip_down                 1-Block-Eiszapfen Gebrochen, verschwindet nach einiger Zeit
+
+small_long_icicle_base_down            2-Block-Eiszapfen Stufe 1
+medium_long_icicle_base_down           2-Block-Eiszapfen Stufe 2
+large_long_icicle_base_down            2-Block-Eiszapfen Stufe 3
+very_large_long_icicle_base_down       2-Block-Eiszapfen Stufe 4
+
+unstable_long_icicle_base_down         2-Block-Eiszapfen Brüchig, Erzeugt beim Brechen große Eiszapfen-Entity, wenn Spitze vorhanden, Erzeugt beim Brechen Eisklumpen-Entity, wenn Spitze nicht vorhanden
+broken_long_icicle_base_down           2-Block-Eiszapfen Gebrochen, verschwindet nach einiger Zeit
+
+
+ITEMS
+
+Es gibt eine einheitliche Art von 8 Items, die, je nach Blockseite, an die sie platziert werden, einen anderen Block erzeugen. Aktuell gibt es jedoch nur nach unten hängende Eiszapfen.
+
+Kurzer Kleiner Eiszapfen               Itembild: Spitze
+Mittlerer Kleiner Eiszapfen            Itembild: Spitze
+Langer Kleiner Eiszapfen               Itembild: Spitze
+Sehr Langer Kleiner Eiszapfen          Itembild: Spitze
+
+- (Bricht auch mit Behutsamkeit)       -
+- (Bricht auch mit Behutsamkeit)       -
+
+Kurzer Großer Eiszapfen                Itembild: Basis
+Mittlerer Großer Eiszapfen             Itembild: Basis
+Langer Großer Eiszapfen                Itembild: Basis
+Sehr Langer Großer Eiszapfen           Itembild: Basis
+
+- (Bricht auch mit Behutsamkeit)       -
+- (Bricht auch mit Behutsamkeit)       -
+
+
+EIGENSCHAFTEN:
+
+"natural" (true/false) -> false, wenn vom Spieler platziert, wird dann nie wachsen oder abbrechen.
+
+"long" (true/false) -> Nur für die kleinen Spitzen, ist true, wenn an einem Basis-Zapfen hängt, wird dann beim Wachsen nur abbrechen können, nie aber eine neue Basis erzeugen (um Eiszapfen über 2 Block Länge zu verhindern)
+
+"stage" -> Damit man, wie beim Amethyst, jede Stufe des Eiszapfens mit Behutsamkeit abbauen kann, muss jede Stufe ein eigener Block sein, daher keine stage-Eigenschaft. Die 2-Block-Eiszapfen setzen sich aus einem Basisblock und den jeweiligen 1-Block-Eiszapfen zusammen.
+
+"can_break" (true/false) -> true, wenn nicht schon der jeweils andere Block bricht. Bricht bereits die Spitze, kann die Basis nie brechen. Bricht die Basis, kann die Spitze nie brechen. Ausnahme: Ist die Spitze bereits gebrochen und nur als Stummel übrig, kann die Basis brechen, kommt umgekehrt nie vor.

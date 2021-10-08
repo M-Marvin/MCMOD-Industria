@@ -7,6 +7,7 @@ import de.industria.recipetypes.MetalFormRecipe;
 import de.industria.typeregistys.ModRecipeTypes;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.handler.ElectricityNetworkHandler;
@@ -39,6 +40,16 @@ public class TileEntityMMetalFormer extends TileEntityInventoryBase implements I
 	public int processTime;
 	public boolean hasPower;
 	public boolean isWorking;
+
+	public TileEntityMMetalFormer() {
+		super(ModTileEntityType.METAL_FORMER, 2);
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMMetalFormer) tileEntity).processTime = (int) data[0];
+			if (data[1] != null) ((TileEntityMMetalFormer) tileEntity).processTimeTotal = (int) data[1];
+			if (data[2] != null) ((TileEntityMMetalFormer) tileEntity).hasPower = (boolean) data[2];
+			if (data[3] != null) ((TileEntityMMetalFormer) tileEntity).isWorking = (boolean) data[3];
+		}, () -> processTime, () -> processTimeTotal, () -> hasPower, () -> isWorking);
+	}
 	
 	@Override
 	public void tick() {
@@ -49,7 +60,6 @@ public class TileEntityMMetalFormer extends TileEntityInventoryBase implements I
 			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
 			this.hasPower = network.canMachinesRun() == Voltage.NormalVoltage;
 			this.isWorking = this.hasPower && canWork();
-			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			
 			if (this.isWorking) {
 				
@@ -98,10 +108,6 @@ public class TileEntityMMetalFormer extends TileEntityInventoryBase implements I
 		return this.isWorking;
 	}
 	
-	public TileEntityMMetalFormer() {
-		super(ModTileEntityType.METAL_FORMER, 2);
-	}
-
 	@Override
 	public int[] getSlotsForFace(Direction side) {
 		return new int[] {0, 1};

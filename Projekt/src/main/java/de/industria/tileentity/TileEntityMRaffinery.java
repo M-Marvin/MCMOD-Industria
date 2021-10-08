@@ -9,6 +9,7 @@ import de.industria.typeregistys.ModRecipeTypes;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.ITEFluidConnective;
 import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.handler.ElectricityNetworkHandler;
@@ -45,7 +46,6 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 	
 	public FluidStack fluidIn;
 	public FluidStack fluidOut;
-	
 	public int progress1;
 	public int progress2;
 	public int progress3;
@@ -60,6 +60,17 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 		this.maxFluidStorage = 3000;
 		this.fluidIn = FluidStack.EMPTY;
 		this.fluidOut = FluidStack.EMPTY;
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMRaffinery) tileEntity).fluidIn = (FluidStack) data[0];
+			if (data[1] != null) ((TileEntityMRaffinery) tileEntity).fluidOut = (FluidStack) data[1];
+			if (data[2] != null) ((TileEntityMRaffinery) tileEntity).progress1 = (int) data[2];
+			if (data[3] != null) ((TileEntityMRaffinery) tileEntity).progress2 = (int) data[3];
+			if (data[4] != null) ((TileEntityMRaffinery) tileEntity).progress3 = (int) data[4];
+			if (data[5] != null) ((TileEntityMRaffinery) tileEntity).progress4 = (int) data[5];
+			if (data[6] != null) ((TileEntityMRaffinery) tileEntity).progressTotal = (int) data[6];
+			if (data[7] != null) ((TileEntityMRaffinery) tileEntity).isWorking = (boolean) data[7];
+			if (data[8] != null) ((TileEntityMRaffinery) tileEntity).hasPower = (boolean) data[8];
+		}, () -> fluidIn, () -> fluidOut, () -> progress1, () -> progress2, () -> progress3, () -> progress4, () -> progressTotal, () -> isWorking, () -> hasPower);
 	}
 	
 	@Override
@@ -74,16 +85,13 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 			
 			if (BlockMultipart.getInternPartPos(this.getBlockState()).equals(BlockPos.ZERO)) {
 				
-				this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 				ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
+				ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(this.level).getNetwork(this.worldPosition);
+				this.hasPower = network.canMachinesRun() == Voltage.HightVoltage;
+				this.isWorking = canWork() && this.hasPower;
 				
 				this.fluidIn = FluidBucketHelper.transferBuckets(this, 3, this.fluidIn, this.maxFluidStorage);
 				this.fluidOut = FluidBucketHelper.transferBuckets(this, 5, this.fluidOut, this.maxFluidStorage);
-				
-				ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(this.level).getNetwork(this.worldPosition);
-				
-				this.hasPower = network.canMachinesRun() == Voltage.HightVoltage;
-				this.isWorking = canWork() && this.hasPower;
 				
 				if (this.isWorking) {
 					

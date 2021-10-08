@@ -9,6 +9,7 @@ import de.industria.blocks.BlockConveyorSwitch;
 import de.industria.blocks.BlockConveyorBelt.BeltState;
 import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.inventory.IInventory;
@@ -36,6 +37,12 @@ public class TileEntityConveyorBelt extends TileEntityInventoryBase implements I
 	public TileEntityConveyorBelt() {
 		super(ModTileEntityType.CONVEYOR_BELT, 3);
 		this.conveyorTime = 2;
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityConveyorBelt) tileEntity).beltMoveStateIn = (int) data[0];
+			if (data[1] != null) ((TileEntityConveyorBelt) tileEntity).beltMoveStateOut = (int) data[1];
+			if (data[2] != null) ((TileEntityConveyorBelt) tileEntity).beltMoveStateOutSecondary = (int) data[2];
+			if (data[3] != null) ((TileEntityConveyorBelt) tileEntity).beltInsertSide = (int) data[3];
+		}, () -> this.beltMoveStateIn, () -> this.beltMoveStateOut, () -> this.beltMoveStateOutSecondary, () -> this.beltInsertSide);
 	}
 	
 	@Override

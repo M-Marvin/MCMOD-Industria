@@ -3,9 +3,9 @@ package de.industria.tileentity;
 import java.util.Collection;
 import java.util.Optional;
 
-import de.industria.blocks.BlockMElectricFurnace;
 import de.industria.gui.ContainerMElectricFurnace;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
@@ -38,6 +38,12 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 	
 	public TileEntityMElectricFurnace() {
 		super(ModTileEntityType.ELECTRIC_FURNACE, 2);
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMElectricFurnace) tileEntity).cookTime = (Integer) data[0];
+			if (data[1] != null) ((TileEntityMElectricFurnace) tileEntity).cookTimeTotal = (Integer) data[1];
+			if (data[2] != null) ((TileEntityMElectricFurnace) tileEntity).hasPower = (Boolean) data[2];
+			if (data[3] != null) ((TileEntityMElectricFurnace) tileEntity).isWorking = (Boolean) data[3];
+		}, () -> cookTime, () -> cookTimeTotal, () -> hasPower, () -> isWorking);
 	}
 	
 	@Override
@@ -56,8 +62,6 @@ public class TileEntityMElectricFurnace extends TileEntityInventoryBase implemen
 			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
 			this.hasPower = network.canMachinesRun() == Voltage.HightVoltage;
 			this.isWorking = canWork() && this.hasPower;
-			
-			if (isWorking != getBlockState().getValue(BlockMElectricFurnace.LIT)) this.level.setBlockAndUpdate(worldPosition, this.getBlockState().setValue(BlockMElectricFurnace.LIT, this.isWorking));
 			
 			if (this.isWorking) {
 				

@@ -13,14 +13,15 @@ import de.industria.typeregistys.ModRecipeTypes;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.ITEFluidConnective;
 import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
-import de.industria.util.types.MultipartBuild.MultipartBuildLocation;
 import de.industria.util.handler.FluidBucketHelper;
 import de.industria.util.handler.ItemStackHelper;
 import de.industria.util.handler.MachineSoundHelper;
+import de.industria.util.types.MultipartBuild.MultipartBuildLocation;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -69,6 +70,16 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 		this.fluidIn2 = FluidStack.EMPTY;
 		this.fluidOut = FluidStack.EMPTY;
 		this.maxFluidStorage = 3000;
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMBlender) tileEntity).fluidIn1 = (FluidStack) data[0];
+			if (data[1] != null) ((TileEntityMBlender) tileEntity).fluidIn2 = (FluidStack) data[1];
+			if (data[2] != null) ((TileEntityMBlender) tileEntity).fluidOut = (FluidStack) data[2];
+			if (data[3] != null) ((TileEntityMBlender) tileEntity).progress = (Integer) data[3];
+			if (data[4] != null) ((TileEntityMBlender) tileEntity).progressTotal = (Integer) data[4];
+			if (data[5] != null) ((TileEntityMBlender) tileEntity).tankFillState = (Float) data[5];
+			if (data[6] != null) ((TileEntityMBlender) tileEntity).isWorking = (Boolean) data[6];
+			if (data[7] != null) ((TileEntityMBlender) tileEntity).hasPower = (Boolean) data[7];
+		}, () -> fluidIn1, () -> fluidIn2, () -> fluidOut, () -> progress, () -> progressTotal, () -> tankFillState, () -> isWorking, () -> hasPower);
 	}
 	
 	@Override
@@ -109,12 +120,12 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return false;
 	}
-
+	
 	@Override
 	public boolean isSoundRunning() {
 		return this.isWorking;
 	}
-
+	
 	@Override
 	public void tick() {
 		
@@ -122,7 +133,6 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 			
 			if (!this.level.isClientSide()) {
 				
-				this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 				ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
 				
 				this.fluidIn1 = FluidBucketHelper.transferBuckets(this, 3, this.fluidIn1, this.maxFluidStorage);

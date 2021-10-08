@@ -1,19 +1,28 @@
 package de.industria.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
+import org.apache.commons.lang3.ArrayUtils;
+
+import com.rits.cloning.Cloner;
+
 import de.industria.Industria;
 import de.industria.packet.SUpdateBlockEntitys;
+import de.industria.util.handler.UtilHelper;
+import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -22,18 +31,26 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 public class DataWatcher {
 	
 	protected static BlockEntityDataSerializer dataSerealizer = new BlockEntityDataSerializer();
+	protected static Cloner dataCloner = new Cloner();
 	protected static HashMap<TileEntityType<?>, BiConsumer<TileEntity, Object[]>> blockEntityUpdateHandlerMap = new HashMap<TileEntityType<?>, BiConsumer<TileEntity, Object[]>>();
 	protected static List<ObservedBlockEntity> observedBlockEntitys = new ArrayList<DataWatcher.ObservedBlockEntity>();
 	protected static List<ObservedBlockEntity> blockEntitysToUpdate = new ArrayList<DataWatcher.ObservedBlockEntity>();
 	protected static List<ObservedBlockEntity> blockEntitysToRemove = new ArrayList<DataWatcher.ObservedBlockEntity>();
+	protected static List<ChunkPos> requestUpdates = new ArrayList<ChunkPos>();
 	
 	public static BlockEntityDataSerializer getDataSerealizer() {
 		return dataSerealizer;
 	}
 	
+	public static Cloner getDataCloner() {
+		return dataCloner;
+	}
+	
 	public static boolean observe() {
 		observedBlockEntitys.forEach((observedBlockEntity) -> {
+			boolean requested = requestUpdates.contains(new ChunkPos(observedBlockEntity.getBlockEntity().getBlockPos()));
 			ObserverResult result = observedBlockEntity.observe();
+			if (result == ObserverResult.CLEAN && requested) result = ObserverResult.DIRTY;
 			switch(result) {
 			case CLEAN:
 				return;
@@ -54,14 +71,12 @@ public class DataWatcher {
 		});
 		blockEntitysToRemove.clear();
 		
-		List<SendeableBlockEntityData> sendeableData = new ArrayList<DataWatcher.SendeableBlockEntityData>();
-		for (ObservedBlockEntity blockEntity : blockEntitysToUpdate) {
-			TileEntity tileEntity = blockEntity.getBlockEntity();
-			Supplier<Object>[] updateDataSup = blockEntity.getDataToSend();
-			sendeableData.add(new SendeableBlockEntityData(tileEntity, updateDataSup));
-		}
+		if (!blockEntitysToUpdate.isEmpty()) network.send(PacketDistributor.ALL.noArg(), new SUpdateBlockEntitys(blockEntitysToUpdate));	// TODO	
 		blockEntitysToUpdate.clear();
-		if (!sendeableData.isEmpty()) network.send(PacketDistributor.ALL.noArg(), new SUpdateBlockEntitys(sendeableData));		
+	}
+	
+	public static void requestChunkUpdate(ChunkPos chunk) {
+		requestUpdates.add(chunk);
 	}
 	
 	//########################################-^Server Update Handling^-##########################################//
@@ -118,31 +133,16 @@ public class DataWatcher {
 	
 	//##################################################################################//
 	
+	/**
+	 * Represents the Client side data of an BlockEntity.
+	 */
 	public static class SendeableBlockEntityData {
-		public SendeableBlockEntityData(TileEntity tileEntity, Supplier<Object>[] updateDataSup) {
-			this.updateData = new Object[updateDataSup.length];
-			for (int i = 0; i < this.updateData.length; i++) this.updateData[i] = updateDataSup[i] != null ? updateDataSup[i].get() : null;
-			this.targetPosition = tileEntity.getBlockPos();
-			this.targetBlockEntity = tileEntity.getType();
-		}
 		public SendeableBlockEntityData() {}
 		public BlockPos targetPosition;
 		public DimensionType targetDimension;
 		public TileEntityType<?> targetBlockEntity;
 		public Object[] updateData;
-		public void writeBuf(PacketBuffer buf) {
-			buf.writeBlockPos(this.targetPosition);
-			buf.writeResourceLocation(this.targetBlockEntity.getRegistryName());
-			buf.writeInt(this.updateData.length);
-			for (int i = 0; i < this.updateData.length; i++) {
-				if (this.updateData[i] != null) {
-					buf.writeBoolean(true);
-					getDataSerealizer().serealizeData(buf, this.updateData[i]);
-				} else {
-					buf.writeBoolean(false);
-				}
-			}
-		}
+		
 		@SuppressWarnings("deprecation")
 		public SendeableBlockEntityData readBuf(PacketBuffer buf) {
 			this.targetPosition = buf.readBlockPos();
@@ -150,30 +150,33 @@ public class DataWatcher {
 			int dataCount = buf.readInt();
 			this.updateData = new Object[dataCount];
 			for (int i = 0; i < dataCount; i++) {
-				if (buf.readBoolean()) {
-					this.updateData[i] = getDataSerealizer().deserealizeData(buf);
-				} else {
-					this.updateData[i] = null;
-				}
+				int dataIndex = buf.readInt();
+				if (dataIndex < 0) continue;
+				this.updateData[dataIndex] = getDataSerealizer().deserealizeData(buf);
 			}
 			return this;
 		}
 	}
 	
+	/**
+	 * Represents the Server side data of an BlockEntity.
+	 * It contains the code that determines if date needs to be send and serializes them.
+	 */
 	public static class ObservedBlockEntity {
 		protected TileEntity blockEntity;
 		protected Supplier<Object>[] observedData;
-		protected Object[] lastData;
-		protected Supplier<Object>[] dataToSend;
+		protected HashMap<Integer, Byte[]> lastData;
+		protected boolean[] dataToSend;
 		
 		public ObservedBlockEntity(TileEntity tileEntity) {
 			this.blockEntity = tileEntity;
 		}
+		
 		@SuppressWarnings("unchecked")
 		public void registerData(Supplier<Object>... observedData) {
 			this.observedData = observedData;
-			this.lastData = new Object[this.observedData.length];
-			this.dataToSend = new Supplier[this.observedData.length];
+			this.lastData = new HashMap<Integer, Byte[]>();
+			this.dataToSend = new boolean[this.observedData.length];
 		}
 		public TileEntity getBlockEntity() {
 			return blockEntity;
@@ -181,31 +184,49 @@ public class DataWatcher {
 		public Object[] getObservedData() {
 			return observedData;
 		}
-		
 		public ObserverResult observe() {
 			if (this.blockEntity.isRemoved() || !this.blockEntity.hasLevel() || !this.blockEntity.getLevel().blockEntityList.contains(this.blockEntity) || this.blockEntity.getLevel().isClientSide()) {
 				return ObserverResult.REMOVED;
 			} else {
 				boolean dataToSend = false;
 				for (int i = 0; i < this.observedData.length; i++) {
-					Object currentValue = this.observedData[i].get();
-					Object lastValue = this.lastData[i];
-					if ((lastValue == null ? currentValue != null : !lastValue.equals(currentValue))) {
-						this.dataToSend[i] = this.observedData[i];
-						this.lastData[i] = currentValue;
+					byte[] currentValue = null;
+					if (this.observedData[i].get() != null) {
+						PacketBuffer buf = new PacketBuffer(Unpooled.buffer());
+						if (!getDataSerealizer().serealizeData(buf, this.observedData[i].get())) {
+							System.err.println("Failure on serealizing " + this.blockEntity.getType().getRegistryName() + " at " + this.blockEntity.getBlockPos() + "!");
+						}
+						currentValue = UtilHelper.makeArrayFromBuffer(buf);
+					}
+					byte[] lastValue = ArrayUtils.toPrimitive(this.lastData.getOrDefault(i, null));
+					
+					if ((lastValue == null ? currentValue != null : !Arrays.equals(lastValue, currentValue))) {
+						this.lastData.put(i, ArrayUtils.toObject(currentValue));
+						this.dataToSend[i] = true;
 						dataToSend = true;
 					} else {
-						this.dataToSend[i] = null;
+						this.dataToSend[i] = false;
 					}
 				}
 				return !dataToSend ? ObserverResult.CLEAN : ObserverResult.DIRTY;
 			}
 		}
-		public Supplier<Object>[] getDataToSend() {
-			return dataToSend;
+		public void writeBuf(PacketBuffer buf) {
+			buf.writeBlockPos(this.blockEntity.getBlockPos());
+			buf.writeResourceLocation(this.blockEntity.getType().getRegistryName());
+			buf.writeInt(this.dataToSend.length);
+			for (Entry<Integer, Byte[]> entry : this.lastData.entrySet()) {
+				int index = entry.getKey();
+				if (this.dataToSend[index]) {
+					buf.writeInt(index);
+					buf.writeBytes(ArrayUtils.toPrimitive(entry.getValue()));
+				} else {
+					buf.writeInt(-1);
+				}
+			}
 		}
 	}
-
+	
 	public static enum ObserverResult {
 		CLEAN,DIRTY,REMOVED;
 	}

@@ -1,15 +1,15 @@
 package de.industria.tileentity;
 
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidStack;
 
-public class TileEntityFluidCannister extends TileEntity implements ITickableTileEntity {
+public class TileEntityFluidCannister extends TileEntity {
 	
 	public static final int MAX_CONTENT = 32000;
 	protected FluidStack content;
@@ -17,6 +17,9 @@ public class TileEntityFluidCannister extends TileEntity implements ITickableTil
 	public TileEntityFluidCannister() {
 		super(ModTileEntityType.FLUID_CANISTER);
 		this.content = FluidStack.EMPTY;
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityFluidCannister) tileEntity).content = (FluidStack) data[0];
+		}, () -> this.content);
 	}
 	
 	public FluidStack getContent() {
@@ -43,11 +46,6 @@ public class TileEntityFluidCannister extends TileEntity implements ITickableTil
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 		this.deserializeNBT(pkt.getTag());
-	}
-	
-	@Override
-	public void tick() {
-		if (this.level.getGameTime() % 30 == 0) this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 	}
 	
 }

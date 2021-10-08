@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import de.industria.gui.ContainerMStoredCrafting;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.gui.ContainerDummy;
 import de.industria.util.handler.ElectricityNetworkHandler;
@@ -45,6 +46,12 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 		super(ModTileEntityType.STORING_CRAFTING_TABLE);
 		this.inventory = NonNullList.withSize(11, ItemStack.EMPTY);
 		this.remainingItems = NonNullList.withSize(9, ItemStack.EMPTY);
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMStoringCraftingTable) tileEntity).progress = (int) data[0];
+			if (data[1] != null) ((TileEntityMStoringCraftingTable) tileEntity).canWork = (boolean) data[1];
+			if (data[2] != null) ((TileEntityMStoringCraftingTable) tileEntity).hasPower = (boolean) data[2];
+			if (data[3] != null) ((TileEntityMStoringCraftingTable) tileEntity).isWorking = (boolean) data[3];
+		}, () -> progress, () -> canWork, () -> hasPower, () -> isWorking);
 	}
 	
 	@Override
@@ -147,8 +154,6 @@ public class TileEntityMStoringCraftingTable extends LockableTileEntity implemen
 	public void tick() {
 		
 		if (!this.level.isClientSide()) {
-			
-			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			
 			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
 			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);

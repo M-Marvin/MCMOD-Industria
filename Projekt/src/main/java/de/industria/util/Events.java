@@ -14,6 +14,7 @@ import com.mojang.serialization.JsonOps;
 
 import de.industria.Industria;
 import de.industria.fluids.util.BlockGasFluid;
+import de.industria.packet.CRequestBlockEntityUpdates;
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModItems;
 import de.industria.util.handler.BlockBurnManager;
@@ -140,7 +141,6 @@ public class Events {
 	protected static long lastServerWorldTick = 0L;
 	@SubscribeEvent
 	public static final void onWorldTick(net.minecraftforge.event.TickEvent.WorldTickEvent event) {
-		
 		if (event.phase == Phase.START) {
 			if (!event.world.isClientSide()) {
 				if (lastServerWorldTick != event.world.getGameTime()) {
@@ -152,6 +152,13 @@ public class Events {
 				}
 				DataWatcher.updateBlockEntitys(false);
 			}
+		}
+	}
+	
+	@SubscribeEvent
+	public static final void onChunkLoad(net.minecraftforge.event.world.ChunkEvent.Load event) {
+		if (event.getWorld().isClientSide()) {
+			Industria.NETWORK.sendToServer(new CRequestBlockEntityUpdates(event.getChunk().getPos())); // PERFORMANCE TODO: Only send request if the chunk contains TileEntitys
 		}
 	}
 	

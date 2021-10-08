@@ -10,6 +10,7 @@ import de.industria.typeregistys.ModRecipeTypes;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.ITEFluidConnective;
 import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.handler.ElectricityNetworkHandler;
@@ -59,6 +60,14 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 		this.wasteFluid = FluidStack.EMPTY;
 		this.inputFluid = FluidStack.EMPTY;
 		this.maxFluidStorage = 2000;
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMOreWashingPlant) tileEntity).hasPower = (boolean) data[0];
+			if (data[1] != null) ((TileEntityMOreWashingPlant) tileEntity).isWorking = (boolean) data[1];
+			if (data[2] != null) ((TileEntityMOreWashingPlant) tileEntity).progress = (int) data[2];
+			if (data[3] != null) ((TileEntityMOreWashingPlant) tileEntity).progressTotal = (int) data[3];
+			if (data[4] != null) ((TileEntityMOreWashingPlant) tileEntity).wasteFluid = (FluidStack) data[4];
+			if (data[5] != null) ((TileEntityMOreWashingPlant) tileEntity).inputFluid = (FluidStack) data[5];
+		}, () -> hasPower, () -> isWorking, () -> progress, () -> progressTotal, () -> wasteFluid, () -> inputFluid);
 	}
 	
 	@Override
@@ -81,8 +90,6 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 				ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
 				this.hasPower = network.canMachinesRun() == Voltage.NormalVoltage;
 				this.isWorking = this.canWork() && this.hasPower;
-				
-				this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 				
 				if (this.isWorking) {
 					

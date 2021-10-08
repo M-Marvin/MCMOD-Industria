@@ -17,18 +17,18 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Mirror;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 
 public class TileEntityStructureScaffold extends TileEntityInventoryBase implements ITickableTileEntity, ITEPostMoveHandled, ISidedInventory {
 	
+	@SuppressWarnings("unchecked")
 	public TileEntityStructureScaffold() {
 		super(ModTileEntityType.STRUCTURE_SCAFFOLD, 6);
 		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
-			if (data[0] != null) ((TileEntityMThermalZentrifuge) tileEntity).progress = (int) data[0];
-			if (data[1] != null) ((TileEntityMThermalZentrifuge) tileEntity).progressTotal = (int) data[1];
-			if (data[2] != null) ((TileEntityMThermalZentrifuge) tileEntity).temp = (float) data[2];
-		}, () -> progress, () -> progressTotal, () -> temp);
+			if (data[0] != null) ((TileEntityStructureScaffold) tileEntity).itemstacks = (NonNullList<ItemStack>) data[0];
+		}, () -> this.itemstacks);
 	}
 	
 	public TileEntityStructureScaffold(TileEntityType<?> type) {
@@ -36,7 +36,6 @@ public class TileEntityStructureScaffold extends TileEntityInventoryBase impleme
 	}
 	
 	public boolean setCladding(Direction d, ItemStack cladding) {
-		this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 		int slotId = d.get3DDataValue();
 		if (this.getItem(slotId).isEmpty()) {
 			ItemStack stack = cladding.copy();
@@ -48,7 +47,6 @@ public class TileEntityStructureScaffold extends TileEntityInventoryBase impleme
 	}
 	
 	public ItemStack removeCladding(Direction d) {
-		this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 		int slotId = d.get3DDataValue();
 		if (!this.getItem(slotId).isEmpty()) {
 			ItemStack cladding = this.getItem(slotId);
@@ -73,7 +71,7 @@ public class TileEntityStructureScaffold extends TileEntityInventoryBase impleme
 	@Override
 	public void tick() {
 		if (!this.level.isClientSide()) {
-			if (this.level.getGameTime() % 30 == 0) this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
+			// The Energybarrier Generator blocks use this BlockEntity too!
 			if (getBlockState().getBlock() == ModItems.energy_barrier_generator) ModItems.energy_barrier_generator.onNetworkChanges(this.level, this.worldPosition, getBlockState(), ElectricityNetworkHandler.getHandlerForWorld(this.level).getNetwork(this.worldPosition));
 		}
 	}

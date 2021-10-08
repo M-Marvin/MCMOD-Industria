@@ -2,23 +2,26 @@ package de.industria.tileentity;
 
 import de.industria.items.ItemFuse;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityMFuseBox extends TileEntity implements ITickableTileEntity {
+public class TileEntityMFuseBox extends TileEntity {
 	
 	public ItemStack fuse;
 	
 	public TileEntityMFuseBox() {
 		super(ModTileEntityType.FUSE_BOX);
 		this.fuse = ItemStack.EMPTY;
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMFuseBox) tileEntity).fuse = (ItemStack) data[0];
+		}, () -> fuse);
 	}
-
+	
 	public boolean canSwitch() {
 		return true;
 	}
@@ -89,13 +92,4 @@ public class TileEntityMFuseBox extends TileEntity implements ITickableTileEntit
 		this.deserializeNBT(pkt.getTag());
 	}
 	
-	@Override
-	public void tick() {
-		if (!level.isClientSide()) {
-			
-			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
-			
-		}
-	}
-
 }

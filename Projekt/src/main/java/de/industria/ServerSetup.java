@@ -8,6 +8,7 @@ import de.industria.packet.CEditComputerCode;
 import de.industria.packet.CEditJigsawTileEntityPacket;
 import de.industria.packet.CEditProcessorCodePacket;
 import de.industria.packet.CGenerateJigsaw;
+import de.industria.packet.CRequestBlockEntityUpdates;
 import de.industria.packet.CUpdateChunkLoader;
 import de.industria.packet.SSendENHandeler;
 import de.industria.packet.SUpdateBlockEntitys;
@@ -106,6 +107,7 @@ public class ServerSetup {
 		Industria.NETWORK.registerMessage(6, CUpdateChunkLoader.class, CUpdateChunkLoader::encode, CUpdateChunkLoader::new, CUpdateChunkLoader::handle);
 		Industria.NETWORK.registerMessage(7, CCRecipeCreator.class, CCRecipeCreator::encode, CCRecipeCreator::new, CCRecipeCreator::handle);
 		Industria.NETWORK.registerMessage(8, SUpdateBlockEntitys.class, SUpdateBlockEntitys::encode, SUpdateBlockEntitys::new, SUpdateBlockEntitys::handle);
+		Industria.NETWORK.registerMessage(9, CRequestBlockEntityUpdates.class, CRequestBlockEntityUpdates::encode, CRequestBlockEntityUpdates::new, CRequestBlockEntityUpdates::handle);
 		
 		// Devstuff
 		ModGameRegistry.registerBlock(ModItems.recipe_creator, ModTabs.TOOLS);

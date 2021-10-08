@@ -7,6 +7,7 @@ import de.industria.blocks.BlockRControllPanel;
 import de.industria.items.panelitems.ItemPanelElement;
 import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import de.industria.util.types.RedstoneControlSignal;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
@@ -30,10 +31,14 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 	private HashMap<Pos, ItemStack> panelElements;
 	private HashMap<ItemStack, Integer> sheduleTicks;
 	
+	@SuppressWarnings("unchecked")
 	public TileEntityControllPanel() {
 		super(ModTileEntityType.CONTROLL_PANEL);
 		this.panelElements = new HashMap<TileEntityControllPanel.Pos, ItemStack>();
 		this.sheduleTicks = new HashMap<ItemStack, Integer>();
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityControllPanel) tileEntity).panelElements = (HashMap<Pos, ItemStack>) data[0];
+		}, () -> this.panelElements);
 	}
 	
 	public HashMap<Pos, ItemStack> getPanelElements() {
@@ -246,6 +251,14 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 			return y;
 		}
 		
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof Pos) {
+				return ((Pos) obj).x == x && ((Pos) obj).y == y;
+			}
+			return false;
+		}
+		
 	}
 
 	public CompoundNBT saveToNBT(CompoundNBT compound) {
@@ -291,8 +304,6 @@ public class TileEntityControllPanel extends TileEntity implements ITickableTile
 				}
 				
 			}
-			
-			this.level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 0);
 			
 		}
 		

@@ -2,11 +2,13 @@ package de.industria.util.handler;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.Rotation;
@@ -103,6 +105,11 @@ public class UtilHelper {
 		Vector3f vec = axis == Axis.X ? Vector3f.XP : axis == Axis.Y ? Vector3f.YP : Vector3f.ZP;
 		Matrix4f matrix = new Matrix4f(vec.rotationDegrees(i));
 		return Direction.rotate(matrix, d1);
+	}
+	
+	public static byte[] makeArrayFromBuffer(PacketBuffer buf) {
+		int arrayLength = buf.writerIndex();
+		return Arrays.copyOf(buf.array(), arrayLength);
 	}
 	
 }

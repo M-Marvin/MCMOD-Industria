@@ -9,6 +9,7 @@ import de.industria.fluids.util.BlockGasFluid;
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.ITEFluidConnective;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.FluidStackStateTagHelper;
@@ -48,6 +49,11 @@ public class TileEntityMSteamGenerator extends TileEntity implements ITEFluidCon
 		this.generatedVoltage = Voltage.NormalVoltage;
 		this.steamIn = FluidStack.EMPTY;
 		this.steamOut = FluidStack.EMPTY;
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMSteamGenerator) tileEntity).steamIn = (FluidStack) data[0];
+			if (data[1] != null) ((TileEntityMSteamGenerator) tileEntity).steamOut = (FluidStack) data[1];
+			if (data[2] != null) ((TileEntityMSteamGenerator) tileEntity).generatedAmperes = (float) data[2];
+		}, () -> steamIn, () -> steamOut, () -> generatedAmperes);
 	}
 	
 	@Override
@@ -82,8 +88,6 @@ public class TileEntityMSteamGenerator extends TileEntity implements ITEFluidCon
 	public void tick() {
 		
 		if (!this.level.isClientSide()) {
-			
-			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			
 			if (BlockMultipart.getInternPartPos(this.getBlockState()).equals(new BlockPos(0, 0, 0))) {
 				

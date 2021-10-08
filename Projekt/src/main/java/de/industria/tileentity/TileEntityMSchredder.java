@@ -12,6 +12,7 @@ import de.industria.typeregistys.ModDamageSource;
 import de.industria.typeregistys.ModRecipeTypes;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.handler.ElectricityNetworkHandler;
@@ -53,6 +54,12 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 	
 	public TileEntityMSchredder() {
 		super(ModTileEntityType.SCHREDDER, 5);
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMSchredder) tileEntity).progress = (int) data[0];
+			if (data[1] != null) ((TileEntityMSchredder) tileEntity).progressTotal = (int) data[1];
+			if (data[2] != null) ((TileEntityMSchredder) tileEntity).isWorking = (boolean) data[2];
+			if (data[3] != null) ((TileEntityMSchredder) tileEntity).hasPower = (boolean) data[3];
+		}, () -> progress, () -> progressTotal, () -> isWorking, () -> hasPower);
 	}
 	
 	@Override
@@ -78,9 +85,7 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 		
 		if (!this.level.isClientSide() && BlockMultipart.getInternPartPos(getBlockState()).equals(BlockPos.ZERO)) {
 			
-			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
-			
 			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
 			this.hasPower = network.canMachinesRun() == Voltage.HightVoltage;
 			this.isWorking = this.hasPower ? this.canWork() : false;

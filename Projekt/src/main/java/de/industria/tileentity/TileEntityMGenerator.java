@@ -6,6 +6,7 @@ import de.industria.blocks.BlockMGenerator;
 import de.industria.gui.ContainerMGenerator;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
@@ -32,6 +33,11 @@ public class TileEntityMGenerator extends TileEntityInventoryBase implements INa
 	
 	public TileEntityMGenerator() {
 		super(ModTileEntityType.GENERATOR, 1);
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMGenerator) tileEntity).fuelTime = (int) data[0];
+			if (data[1] != null) ((TileEntityMGenerator) tileEntity).burnTime = (float) data[1];
+			if (data[2] != null) ((TileEntityMGenerator) tileEntity).producingPower = (float) data[2];
+		}, () -> fuelTime, () -> burnTime, () -> producingPower);
 	}
 	
 	@Override
@@ -91,8 +97,6 @@ public class TileEntityMGenerator extends TileEntityInventoryBase implements INa
 	public void tick() {
 				
 		if (!this.level.isClientSide()) {
-			
-			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			
 			ElectricityNetworkHandler handler = ElectricityNetworkHandler.getHandlerForWorld(this.level);
 			handler.updateNetwork(level, worldPosition);

@@ -4,6 +4,7 @@ import de.industria.blocks.BlockMBattery;
 import de.industria.blocks.BlockMBattery.BatteryMode;
 import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
@@ -25,6 +26,11 @@ public class TileEntityMBattery extends TileEntity implements ITickableTileEntit
 	public TileEntityMBattery() {
 		super(ModTileEntityType.BATTERY);
 		this.voltage = Voltage.LowVoltage;
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMBattery) tileEntity).voltage = Voltage.valueOf((String) data[0]);
+			if (data[1] != null) ((TileEntityMBattery) tileEntity).storage = (long) data[1];
+			if (data[2] != null) ((TileEntityMBattery) tileEntity).maxCurrent = (float) data[2];
+		}, () -> this.voltage.name(), () -> this.storage, () -> this.maxCurrent);
 	}
 	
 	@Override
@@ -47,7 +53,6 @@ public class TileEntityMBattery extends TileEntity implements ITickableTileEntit
 			
 			ElectricityNetworkHandler.getHandlerForWorld(this.level).updateNetwork(this.level, this.worldPosition);
 			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(this.level).getNetwork(worldPosition);
-			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			
 			BlockState state = getBlockState();
 			

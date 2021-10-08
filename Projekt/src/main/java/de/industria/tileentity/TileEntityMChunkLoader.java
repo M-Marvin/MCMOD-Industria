@@ -6,6 +6,7 @@ import java.util.List;
 import de.industria.blocks.BlockMChunkLoader;
 import de.industria.gui.ContainerMChunkLoader;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.ITEChunkForceLoading;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.handler.ElectricityNetworkHandler;
@@ -34,11 +35,17 @@ public class TileEntityMChunkLoader extends TileEntity implements ITEChunkForceL
 	public boolean isWorking;
 	public List<ChunkPos> activeRelativeChunks;
 	
+	@SuppressWarnings("unchecked")
 	public TileEntityMChunkLoader() {
 		super(ModTileEntityType.CHUNK_LOADER);
 		this.activeRelativeChunks = new ArrayList<ChunkPos>();
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMChunkLoader) tileEntity).hasPower = (Boolean) data[0];
+			if (data[1] != null) ((TileEntityMChunkLoader) tileEntity).isWorking = (Boolean) data[1];
+			if (data[2] != null) ((TileEntityMChunkLoader) tileEntity).activeRelativeChunks = (List<ChunkPos>) data[2];
+		}, () -> hasPower, () -> isWorking, () -> activeRelativeChunks);
 	}
-
+	
 	@Override
 	public List<ChunkPos> getLoadHoldChunks() {
 		List<ChunkPos> chunks = new ArrayList<ChunkPos>();
@@ -76,14 +83,8 @@ public class TileEntityMChunkLoader extends TileEntity implements ITEChunkForceL
 			this.hasPower = network.canMachinesRun() == Voltage.HightVoltage;
 			this.isWorking = canWork() && this.hasPower;
 			
-			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
-			
 			boolean active = this.getBlockState().getValue(BlockMChunkLoader.ACTIVE);
 			if (active != this.isWorking) level.setBlockAndUpdate(worldPosition, this.getBlockState().setValue(BlockMChunkLoader.ACTIVE, this.isWorking));
-			
-		} else {
-			
-			
 			
 		}
 		

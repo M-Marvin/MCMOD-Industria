@@ -7,14 +7,14 @@ import de.industria.recipetypes.ThermalZentrifugeRecipe;
 import de.industria.typeregistys.ModRecipeTypes;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
-import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.DataWatcher;
+import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
-import de.industria.util.types.MultipartBuild.MultipartBuildLocation;
 import de.industria.util.handler.ItemStackHelper;
 import de.industria.util.handler.MachineSoundHelper;
+import de.industria.util.types.MultipartBuild.MultipartBuildLocation;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -26,17 +26,14 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
 
 public class TileEntityMThermalZentrifuge extends TileEntityInventoryBase implements ITickableTileEntity, ISidedInventory, ITESimpleMachineSound, INamedContainerProvider {
 	
 	public int progress;
 	public int progressTotal;
 	public float temp;
-	
 	public boolean isWorking;
 	public boolean hasPower;
 	
@@ -46,7 +43,9 @@ public class TileEntityMThermalZentrifuge extends TileEntityInventoryBase implem
 			if (data[0] != null) ((TileEntityMThermalZentrifuge) tileEntity).progress = (int) data[0];
 			if (data[1] != null) ((TileEntityMThermalZentrifuge) tileEntity).progressTotal = (int) data[1];
 			if (data[2] != null) ((TileEntityMThermalZentrifuge) tileEntity).temp = (float) data[2];
-		}, () -> progress, () -> progressTotal, () -> temp);
+			if (data[3] != null) ((TileEntityMThermalZentrifuge) tileEntity).isWorking = (boolean) data[3];
+			if (data[4] != null) ((TileEntityMThermalZentrifuge) tileEntity).hasPower = (boolean) data[4];
+		}, () -> progress, () -> progressTotal, () -> temp, () -> isWorking, () -> hasPower);
 	}
 	
 	@Override
@@ -54,9 +53,7 @@ public class TileEntityMThermalZentrifuge extends TileEntityInventoryBase implem
 		
 		if (!this.level.isClientSide()) {
 			
-			//this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
-			
 			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
 			this.hasPower = network.canMachinesRun() == Voltage.HightVoltage;
 			this.isWorking = canWork() && this.hasPower;

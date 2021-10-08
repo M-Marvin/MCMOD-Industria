@@ -4,6 +4,7 @@ import de.industria.gui.ContainerMAlloyFurnace;
 import de.industria.recipetypes.AlloyRecipe;
 import de.industria.typeregistys.ModRecipeTypes;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.handler.ElectricityNetworkHandler;
@@ -34,8 +35,14 @@ public class TileEntityMAlloyFurnace extends TileEntityInventoryBase implements 
 	
 	public TileEntityMAlloyFurnace() {
 		super(ModTileEntityType.ALLOY_FURNACE, 4);
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMAlloyFurnace) tileEntity).hasPower = (boolean) data[0];
+			if (data[1] != null) ((TileEntityMAlloyFurnace) tileEntity).isWorking = (boolean) data[1];
+			if (data[2] != null) ((TileEntityMAlloyFurnace) tileEntity).progressTotal = (int) data[2];
+			if (data[3] != null) ((TileEntityMAlloyFurnace) tileEntity).progress = (int) data[3];
+		}, () -> this.hasPower, () -> this.isWorking, () -> this.progressTotal, () -> this.progress);
 	}
-
+	
 	@Override
 	public Container createMenu(int id, PlayerInventory playerInv, PlayerEntity player) {
 		return new ContainerMAlloyFurnace(id, playerInv, this);
@@ -70,8 +77,6 @@ public class TileEntityMAlloyFurnace extends TileEntityInventoryBase implements 
 	public void tick() {
 		
 		if (!this.level.isClientSide()) {
-			
-			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			
 			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
 			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);

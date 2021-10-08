@@ -10,6 +10,7 @@ import de.industria.typeregistys.ModRecipeTypes;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.ITEFluidConnective;
 import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.handler.ElectricityNetworkHandler;
@@ -54,6 +55,14 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 		super(ModTileEntityType.BLAST_FURNACE, 5);
 		this.maxFluidStorage = 3000;
 		this.gasStorage = FluidStack.EMPTY;
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMBlastFurnace) tileEntity).hasPower = (boolean) data[0];
+			if (data[1] != null) ((TileEntityMBlastFurnace) tileEntity).isWorking = (boolean) data[1];
+			if (data[2] != null) ((TileEntityMBlastFurnace) tileEntity).hasHeater = (boolean) data[2];
+			if (data[3] != null) ((TileEntityMBlastFurnace) tileEntity).hasHeat = (boolean) data[3];
+			if (data[4] != null) ((TileEntityMBlastFurnace) tileEntity).progress = (int) data[4];
+			if (data[5] != null) ((TileEntityMBlastFurnace) tileEntity).progressTotal = (int) data[5];
+		}, () -> this.hasPower, () -> this.isWorking, () -> this.hasHeater, () -> this.hasHeat, () -> this.progress, () -> this.progressTotal);
 	}
 	
 	@Override
@@ -63,9 +72,7 @@ public class TileEntityMBlastFurnace extends TileEntityInventoryBase implements 
 			
 			if (!this.level.isClientSide()) {
 				
-				this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 				ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
-				
 				ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
 				this.hasPower = network.canMachinesRun() == Voltage.NormalVoltage;
 				

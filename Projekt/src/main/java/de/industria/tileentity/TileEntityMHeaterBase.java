@@ -5,6 +5,7 @@ import de.industria.fluids.FluidDestilledWater;
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModSoundEvents;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.handler.MachineSoundHelper;
 import net.minecraft.block.BlockState;
@@ -24,12 +25,16 @@ import net.minecraft.util.math.BlockPos;
 
 public abstract class TileEntityMHeaterBase extends TileEntityInventoryBase implements ISidedInventory, ITickableTileEntity, ITESimpleMachineSound {
 	
-	public TileEntityMHeaterBase(TileEntityType<?> tileEntityTypeIn, int slots) {
-		super(tileEntityTypeIn, slots);
-	}
-
 	public boolean isWorking;
 	public boolean powered;
+
+	public TileEntityMHeaterBase(TileEntityType<?> tileEntityTypeIn, int slots) {
+		super(tileEntityTypeIn, slots);
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMHeaterBase) tileEntity).isWorking = (boolean) data[0];
+			if (data[1] != null) ((TileEntityMHeaterBase) tileEntity).powered = (boolean) data[1];
+		}, () -> isWorking, () -> powered);
+	}
 	
 	abstract public void updateWorkState();
 	
@@ -39,7 +44,6 @@ public abstract class TileEntityMHeaterBase extends TileEntityInventoryBase impl
 		
 		if (!this.level.isClientSide()) {
 			
-			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			this.isWorking = false;
 			
 			Direction facing = getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);

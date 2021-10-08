@@ -3,6 +3,7 @@ package de.industria.tileentity;
 import de.industria.blocks.BlockMMultimeter;
 import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
 import net.minecraft.block.BlockState;
@@ -23,18 +24,15 @@ public class TileEntityMMultimeter extends TileEntityGauge implements ITickableT
 		super(ModTileEntityType.MULTIMETER);
 		this.decimalUnit = DecimalUnit.NONE;
 		this.value = 0;
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMMultimeter) tileEntity).value = (float) data[0];
+			if (data[1] != null) ((TileEntityMMultimeter) tileEntity).decimalUnit = DecimalUnit.byUnit((String) data[1]);
+		}, () -> value, () -> decimalUnit.name());
 	}
-
+	
 	@Override
 	public void tick() {
-		
-		if (!level.isClientSide()) {
-			
-			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
-			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
-			
-		}
-		
+		if (!level.isClientSide()) ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
 	}
 	
 	public void updateValue(float value, DecimalUnit unit) {

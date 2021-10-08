@@ -10,6 +10,7 @@ import de.industria.typeregistys.ModRecipeTypes;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.ITEFluidConnective;
 import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.handler.ElectricityNetworkHandler;
@@ -58,8 +59,24 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements ITE
 		this.fluidIn = FluidStack.EMPTY;
 		this.fluidOut = FluidStack.EMPTY;
 		this.maxFluidStorage = 3000;
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMFluidBath) tileEntity).fluidIn = (FluidStack) data[0];
+			if (data[1] != null) ((TileEntityMFluidBath) tileEntity).fluidOut = (FluidStack) data[1];
+			if (data[2] != null) ((TileEntityMFluidBath) tileEntity).fluidBufferState = (float) data[2];
+			if (data[3] != null) ((TileEntityMFluidBath) tileEntity).progress = (int) data[3];
+			if (data[4] != null) ((TileEntityMFluidBath) tileEntity).progressTotal = (int) data[4];
+			if (data[5] != null) ((TileEntityMFluidBath) tileEntity).hasPower = (boolean) data[5];
+			if (data[6] != null) ((TileEntityMFluidBath) tileEntity).isWorking = (boolean) data[6];
+			if (data[7] != null) {
+				Optional<? extends IRecipe<?>> recipe = tileEntity.getLevel().getRecipeManager().byKey((ResourceLocation) data[7]);
+				if (recipe.isPresent()) {
+					if (recipe.get().getType() != ModRecipeTypes.FLUID_BATH) return;
+					((TileEntityMFluidBath) tileEntity).lastRecipe = (FluidBathRecipe) recipe.get();
+				}
+			}
+		}, () -> fluidIn, () -> fluidOut, () -> fluidBufferState, () -> progress, () -> progressTotal, () -> hasPower, () -> isWorking, () -> lastRecipe != null ? lastRecipe.getId() : null);
 	}
-
+	
 	@Override
 	public void tick() {
 		
@@ -74,8 +91,6 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements ITE
 
 				this.fluidIn = FluidBucketHelper.transferBuckets(this, 2, this.fluidIn, this.maxFluidStorage);
 				this.fluidOut = FluidBucketHelper.transferBuckets(this, 4, this.fluidOut, this.maxFluidStorage);
-				
-				this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 				
 				if (this.isWorking) {
 					

@@ -5,6 +5,7 @@ import de.industria.gui.ContainerMAirCompressor;
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.ITEFluidConnective;
 import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
@@ -45,6 +46,14 @@ public class TileEntityMAirCompressor extends TileEntity implements ITickableTil
 		super(ModTileEntityType.AIR_COMPRESSOR);
 		this.maxStorage = 4000;
 		this.compressedAir = FluidStack.EMPTY;
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMAirCompressor) tileEntity).hasPower = (boolean) data[0];
+			if (data[1] != null) ((TileEntityMAirCompressor) tileEntity).isWorking = (boolean) data[1];
+			if (data[2] != null) ((TileEntityMAirCompressor) tileEntity).tankProgress = (int) data[2];
+			if (data[3] != null) ((TileEntityMAirCompressor) tileEntity).progress1 = (int) data[3];
+			if (data[4] != null) ((TileEntityMAirCompressor) tileEntity).progress2 = (int) data[4];
+			if (data[5] != null) ((TileEntityMAirCompressor) tileEntity).compressedAir = (FluidStack) data[5];
+		}, () -> this.hasPower, () -> this.isWorking, () -> this.tankProgress, () -> this.progress1, () -> this.progress2, () -> this.compressedAir);
 	}
 	
 	@Override
@@ -57,7 +66,6 @@ public class TileEntityMAirCompressor extends TileEntity implements ITickableTil
 		
 		if (!this.level.isClientSide) {
 			
-			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
 			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
 			

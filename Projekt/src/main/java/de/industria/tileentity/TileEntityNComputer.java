@@ -16,6 +16,7 @@ import org.luaj.vm2.lib.ZeroArgFunction;
 import de.industria.gui.ContainerNComputer;
 import de.industria.items.ItemHardDrive;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import de.industria.util.LuaInterpreter;
 import de.industria.util.LuaInterpreter.ILuaThreadViolating;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
@@ -59,6 +60,21 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 	public boolean hasPower;
 	public String consoleLine;
 	public NetworkDeviceIP deviceIP;
+
+	public TileEntityNComputer() {
+		super(ModTileEntityType.COMPUTER, 2);
+		this.outputStream = new ByteArrayOutputStream();
+		this.recivedMessages = new ArrayList<ITENetworkDevice.NetworkMessage>();;
+		this.sendMessages = new ArrayList<ITENetworkDevice.NetworkMessage>();
+		this.luaInterpreter = new LuaInterpreter(this, this.outputStream, 500, new computer());
+		this.deviceIP = NetworkDeviceIP.DEFAULT;
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityNComputer) tileEntity).isRunning = (boolean) data[0];
+			if (data[1] != null) ((TileEntityNComputer) tileEntity).hasPower = (boolean) data[1];
+			if (data[2] != null) ((TileEntityNComputer) tileEntity).consoleLine = (String) data[2];
+			if (data[3] != null) ((TileEntityNComputer) tileEntity).deviceIP = (NetworkDeviceIP) data[3];
+		}, () -> this.isRunning, () -> this.hasPower, () -> this.consoleLine, () -> this.deviceIP);
+	}
 	
 	// "computer" LUA API
 	protected class computer extends TwoArgFunction {
@@ -227,15 +243,6 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 		
 	}
 	
-	public TileEntityNComputer() {
-		super(ModTileEntityType.COMPUTER, 2);
-		this.outputStream = new ByteArrayOutputStream();
-		this.recivedMessages = new ArrayList<ITENetworkDevice.NetworkMessage>();;
-		this.sendMessages = new ArrayList<ITENetworkDevice.NetworkMessage>();
-		this.luaInterpreter = new LuaInterpreter(this, this.outputStream, 500, new computer());
-		this.deviceIP = NetworkDeviceIP.DEFAULT;
-	}
-	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return new AxisAlignedBB(worldPosition.offset(-2, -1, -2), worldPosition.offset(2, 2, 2));
@@ -249,7 +256,6 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 			ElectricityNetworkHandler.getHandlerForWorld(level).updateNetwork(level, worldPosition);
 			ElectricityNetwork network = ElectricityNetworkHandler.getHandlerForWorld(level).getNetwork(worldPosition);
 			this.hasPower = network.canMachinesRun() == Voltage.LowVoltage;
-			this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			
 			this.driveValidationTime++;
 			if (this.driveValidationTime > 20) {

@@ -40,10 +40,10 @@ public class TileEntityPreassurePipe extends TileEntity implements ITickableTile
 	public TileEntityPreassurePipe() {
 		this(ModTileEntityType.PREASSURE_PIPE);
 		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
-			if (data[0] != null) ((TileEntityPreassurePipe) tileEntity).preassure = (Float) data[0];
-			if (data[1] != null) ((TileEntityPreassurePipe) tileEntity).inputSide = (Direction) data[1];
-			if (data[2] != null) ((TileEntityPreassurePipe) tileEntity).outputSide = (Direction) data[2];
-		}, () -> preassure, () -> inputSide, () -> outputSide);
+			//if (data[0] != null) ((TileEntityPreassurePipe) tileEntity).preassure = (Float) data[0];
+			//if (data[1] != null) ((TileEntityPreassurePipe) tileEntity).inputSide = ((int) data[1]) >= 0 ? Direction.from3DDataValue((int) data[1]) : null;
+			//if (data[2] != null) ((TileEntityPreassurePipe) tileEntity).outputSide = ((int) data[2]) >= 0 ? Direction.from3DDataValue((int) data[2]) : null;
+		}, () -> preassure, () -> inputSide != null ? inputSide.get3DDataValue() : -1, () -> outputSide != null ? outputSide.get3DDataValue() : -1);
 	}
 	
 	public TileEntityPreassurePipe(TileEntityType<?> tileEntityTypeIn) {

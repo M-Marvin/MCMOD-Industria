@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "industria:block/lime_painted_planks_slab"
+    },
+    "type=double": {
+      "model": "minecraft:block/lime_painted_planks"
+    },
+    "type=top": {
+      "model": "industria:block/lime_painted_planks_slab_top"
+    }
+  }
+}

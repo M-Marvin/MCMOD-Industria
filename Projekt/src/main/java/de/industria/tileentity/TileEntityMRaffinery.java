@@ -204,6 +204,8 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 			}
 			
 		} else {
+
+			MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.RAFFINERY_LOOP);
 			
 			if (this.isWorking) {
 				
@@ -240,8 +242,6 @@ public class TileEntityMRaffinery extends TileEntityInventoryBase implements ITi
 				float y = this.worldPosition.getY() + 2 + (level.random.nextFloat() + 5.5F) * height;
 				float z = this.worldPosition.getZ() + oz + (level.random.nextFloat() + 1.0F) * width;
 				this.level.addParticle(paricle, x, y, z, 0, 0, 0);
-				
-				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.RAFFINERY_LOOP);
 				
 			}
 		}

@@ -115,12 +115,8 @@ public class TileEntityMThermalZentrifuge extends TileEntityInventoryBase implem
 			if (this.temp < 0) this.temp = 0F;
 			
 		} else {
-			
-			if (this.isWorking && this.progress > 0) {
-				
-				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.THERMAL_ZENTRIFUGE_LOOP);
-				
-			}
+
+			MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.THERMAL_ZENTRIFUGE_LOOP);
 			
 		}
 		

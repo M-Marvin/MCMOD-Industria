@@ -2,15 +2,13 @@ package de.industria.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 import org.apache.commons.lang3.ArrayUtils;
-
-import com.rits.cloning.Cloner;
 
 import de.industria.Industria;
 import de.industria.packet.SUpdateBlockEntitys;
@@ -31,41 +29,58 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 public class DataWatcher {
 	
 	protected static BlockEntityDataSerializer dataSerealizer = new BlockEntityDataSerializer();
-	protected static Cloner dataCloner = new Cloner();
 	protected static HashMap<TileEntityType<?>, BiConsumer<TileEntity, Object[]>> blockEntityUpdateHandlerMap = new HashMap<TileEntityType<?>, BiConsumer<TileEntity, Object[]>>();
+	protected static List<ChunkPos> requestUpdates = new ArrayList<ChunkPos>();
 	protected static List<ObservedBlockEntity> observedBlockEntitys = new ArrayList<DataWatcher.ObservedBlockEntity>();
 	protected static List<ObservedBlockEntity> blockEntitysToUpdate = new ArrayList<DataWatcher.ObservedBlockEntity>();
 	protected static List<ObservedBlockEntity> blockEntitysToRemove = new ArrayList<DataWatcher.ObservedBlockEntity>();
-	protected static List<ChunkPos> requestUpdates = new ArrayList<ChunkPos>();
 	
+	/**
+	 * Returns the BlockEntityDataSerealizer instance, that is used to serialize the data of the BlockEntitys.
+	 * @return
+	 */
 	public static BlockEntityDataSerializer getDataSerealizer() {
 		return dataSerealizer;
 	}
 	
-	public static Cloner getDataCloner() {
-		return dataCloner;
-	}
-	
-	public static boolean observe() {
-		observedBlockEntitys.forEach((observedBlockEntity) -> {
-			boolean requested = requestUpdates.contains(new ChunkPos(observedBlockEntity.getBlockEntity().getBlockPos()));
-			ObserverResult result = observedBlockEntity.observe();
-			if (result == ObserverResult.CLEAN && requested) result = ObserverResult.DIRTY;
-			switch(result) {
-			case CLEAN:
-				return;
-			case DIRTY:
-				blockEntitysToUpdate.add(observedBlockEntity);
-				return;
-			case REMOVED:
-				blockEntitysToRemove.add(observedBlockEntity);
-				return;
-			}
-		});
+	/**
+	 * Checks every BlockEntitys to detect changes, and marks them to be updated or get removed.
+	 * Also detects requested updates from the client side, when a chunk has loaded.
+	 * @return true if one or more BlockEntitys needs to be updated or removed
+	 */
+	protected static boolean observe() {
+		try {
+			observedBlockEntitys.forEach((observedBlockEntity) -> {
+				boolean requested = requestUpdates.contains(new ChunkPos(observedBlockEntity.getBlockEntity().getBlockPos()));
+				if (requested) {
+					observedBlockEntity.markDirty();
+					blockEntitysToUpdate.add(observedBlockEntity);
+					return;
+				}
+				ObserverResult result = observedBlockEntity.observe();
+				switch(result) {
+				case CLEAN:
+					return;
+				case DIRTY:
+					blockEntitysToUpdate.add(observedBlockEntity);
+					return;
+				case REMOVED:
+					blockEntitysToRemove.add(observedBlockEntity);
+					return;
+				}
+			});
+			requestUpdates.clear();
+		} catch (ConcurrentModificationException e) {
+			System.err.println("ConcurrentModificationException on accessing observed BlockEntity list, i dont know why ...");
+		}
 		return !blockEntitysToUpdate.isEmpty() || !blockEntitysToRemove.isEmpty();
 	}
 	
-	public static void updateObserved(SimpleChannel network) {
+	/**
+	 * Update all BlockEnitys that are marked from the observer() method.
+	 * @param network The NetowrkConnection to send the updates
+	 */
+	protected static void updateObserved(SimpleChannel network) {
 		blockEntitysToRemove.forEach((blockEntity) -> {
 			observedBlockEntitys.remove(blockEntity);
 		});
@@ -75,12 +90,12 @@ public class DataWatcher {
 		blockEntitysToUpdate.clear();
 	}
 	
-	public static void requestChunkUpdate(ChunkPos chunk) {
-		requestUpdates.add(chunk);
-	}
-	
 	//########################################-^Server Update Handling^-##########################################//
 	
+	/**
+	 * Method needs to be called every WorldTick at client and server side (and with the correct clientSide parameter);
+	 * @param clientSide needs to be true when and only when the method is called on the client world tick event, false otherwise.
+	 */
 	public static void updateBlockEntitys(boolean clientSide) {
 		if (clientSide) {
 			handleUpdates();
@@ -91,37 +106,32 @@ public class DataWatcher {
 		}
 	}
 	
+	/**
+	 * Adds the given Chunk to the requested update list, which is used to detect updates of BlockEntitys requested from the client chunkloading.
+	 * @param chunk The chunk to add to the list
+	 */
+	public static void requestChunkUpdate(ChunkPos chunk) {
+		if (requestUpdates.size() > 90) requestUpdates.clear();
+		requestUpdates.add(chunk);
+	}
+	public static void requestChunkUpdate() {
+		observedBlockEntitys.forEach((observed) -> observed.markDirty());
+	}
+	
+	/**
+	 * Adds a update on the client side to the pending updates list
+	 * @param data
+	 */
 	public static void handleUpdate(List<SendeableBlockEntityData> data) {
 		pendingUpdates.addAll(data);
 	}
-	
-	//########################################-vClient Update Handlingv-##########################################//
-	
-	protected static List<SendeableBlockEntityData> pendingUpdates = new ArrayList<DataWatcher.SendeableBlockEntityData>();
-	
-	@SuppressWarnings("resource")
-	public static void handleUpdates() {
-		ClientWorld world = Minecraft.getInstance().level;
-		List<SendeableBlockEntityData> completedPackages = new ArrayList<DataWatcher.SendeableBlockEntityData>();
-		pendingUpdates.forEach((updateData) -> {
-			if (world.isLoaded(updateData.targetPosition)) {
-				TileEntity tileEntity = world.getBlockEntity(updateData.targetPosition);
-				if (tileEntity != null ? tileEntity.getType() == updateData.targetBlockEntity : false) {
-					BiConsumer<TileEntity, Object[]> updater = blockEntityUpdateHandlerMap.get(updateData.targetBlockEntity);
-					if (updater == null) {
-						System.err.println("Recived update for unregistred TileEntityType: " + updateData.targetBlockEntity.getRegistryName());
-						return;
-					}
-					updater.accept(tileEntity, updateData.updateData);
-				}
-				completedPackages.add(updateData);
-			}
-		});
-		pendingUpdates.removeAll(completedPackages);
-	}
-	
-	//########################################-Util-##########################################//
-	
+
+	/**
+	 * Adds the given TileEntity to the DataWatcher, and also registers its de-/serealizers.
+	 * @param tileEntity The tileentity to add to the DataWatcher.
+	 * @param updateHandler The deserealizer to register, if not already registred.
+	 * @param observedData The serealizer to register, if not already registred.
+	 */
 	@SafeVarargs
 	public static void registerBlockEntity(TileEntity tileEntity, BiConsumer<TileEntity, Object[]> updateHandler, Supplier<Object>... observedData) {
 		TileEntityType<?> type = tileEntity.getType();
@@ -131,7 +141,33 @@ public class DataWatcher {
 		observedBlockEntitys.add(observeable);
 	}
 	
-	//##################################################################################//
+	//########################################-vClient Update Handlingv-##########################################//
+	
+	protected static List<SendeableBlockEntityData> pendingUpdates = new ArrayList<DataWatcher.SendeableBlockEntityData>();
+	
+	/**
+	 * Handles all received updates.
+	 */
+	@SuppressWarnings("resource")
+	protected static void handleUpdates() {
+		ClientWorld world = Minecraft.getInstance().level;
+		pendingUpdates.forEach((updateData) -> {
+			if (world.isLoaded(updateData.targetPosition)) {
+				TileEntity tileEntity = world.getBlockEntity(updateData.targetPosition);
+				if (tileEntity != null ? tileEntity.getType() == updateData.targetBlockEntity : false) {
+					BiConsumer<TileEntity, Object[]> updater = blockEntityUpdateHandlerMap.get(updateData.targetBlockEntity);
+					if (updater == null) {
+						System.err.println("Recived update for unregistred TileEntityType: " + updateData.targetBlockEntity.getRegistryName());
+					} else {
+						updater.accept(tileEntity, updateData.updateData);
+					}
+				}
+			}
+		});
+		pendingUpdates.clear();
+	}
+	
+	//########################################-Util-##########################################//
 	
 	/**
 	 * Represents the Client side data of an BlockEntity.
@@ -171,7 +207,9 @@ public class DataWatcher {
 		public ObservedBlockEntity(TileEntity tileEntity) {
 			this.blockEntity = tileEntity;
 		}
-		
+		public void markDirty() {
+			for (int i = 0; i < this.dataToSend.length; i++) this.dataToSend[i] = true;
+		}
 		@SuppressWarnings("unchecked")
 		public void registerData(Supplier<Object>... observedData) {
 			this.observedData = observedData;
@@ -184,24 +222,27 @@ public class DataWatcher {
 		public Object[] getObservedData() {
 			return observedData;
 		}
+		
+		/**
+		 * Checks if some of the registred data has changed, and marks them as "needs to be updated"
+		 * @return DIRTY if the data needs to be updated, CLEAN if nothing has changed and REMOVED if the BlockEntity has been removed, or if the chunk has unloaded.
+		 */
 		public ObserverResult observe() {
 			if (this.blockEntity.isRemoved() || !this.blockEntity.hasLevel() || !this.blockEntity.getLevel().blockEntityList.contains(this.blockEntity) || this.blockEntity.getLevel().isClientSide()) {
 				return ObserverResult.REMOVED;
 			} else {
 				boolean dataToSend = false;
 				for (int i = 0; i < this.observedData.length; i++) {
-					byte[] currentValue = null;
-					if (this.observedData[i].get() != null) {
-						PacketBuffer buf = new PacketBuffer(Unpooled.buffer());
-						if (!getDataSerealizer().serealizeData(buf, this.observedData[i].get())) {
-							System.err.println("Failure on serealizing " + this.blockEntity.getType().getRegistryName() + " at " + this.blockEntity.getBlockPos() + "!");
-						}
-						currentValue = UtilHelper.makeArrayFromBuffer(buf);
+					PacketBuffer buf = new PacketBuffer(Unpooled.buffer());
+					if (!getDataSerealizer().serealizeData(buf, this.observedData[i].get())) {
+						System.err.println("Failure on serealizing " + this.blockEntity.getType().getRegistryName() + " at " + this.blockEntity.getBlockPos() + "!");
+						continue;
 					}
-					byte[] lastValue = ArrayUtils.toPrimitive(this.lastData.getOrDefault(i, null));
+					Byte[] currentValue = ArrayUtils.toObject(UtilHelper.makeArrayFromBuffer(buf));
+					Byte[] lastValue = this.lastData.getOrDefault(i, null);
 					
-					if ((lastValue == null ? currentValue != null : !Arrays.equals(lastValue, currentValue))) {
-						this.lastData.put(i, ArrayUtils.toObject(currentValue));
+					if ((lastValue == null ? true : !Arrays.equals(lastValue, currentValue))) {
+						this.lastData.put(i, currentValue);
 						this.dataToSend[i] = true;
 						dataToSend = true;
 					} else {
@@ -211,15 +252,16 @@ public class DataWatcher {
 				return !dataToSend ? ObserverResult.CLEAN : ObserverResult.DIRTY;
 			}
 		}
+		
 		public void writeBuf(PacketBuffer buf) {
 			buf.writeBlockPos(this.blockEntity.getBlockPos());
 			buf.writeResourceLocation(this.blockEntity.getType().getRegistryName());
 			buf.writeInt(this.dataToSend.length);
-			for (Entry<Integer, Byte[]> entry : this.lastData.entrySet()) {
-				int index = entry.getKey();
-				if (this.dataToSend[index]) {
+			for (int index = 0; index < this.dataToSend.length; index++) {
+				Byte[] lastValue = this.lastData.get(index);
+				if (this.dataToSend[index] && lastValue != null) {
 					buf.writeInt(index);
-					buf.writeBytes(ArrayUtils.toPrimitive(entry.getValue()));
+					buf.writeBytes(ArrayUtils.toPrimitive(lastValue));
 				} else {
 					buf.writeInt(-1);
 				}

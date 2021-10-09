@@ -91,6 +91,12 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements ITE
 
 				this.fluidIn = FluidBucketHelper.transferBuckets(this, 2, this.fluidIn, this.maxFluidStorage);
 				this.fluidOut = FluidBucketHelper.transferBuckets(this, 4, this.fluidOut, this.maxFluidStorage);
+
+				TileEntityMFluidBath tileEntity = (TileEntityMFluidBath) BlockMultipart.getSCenterTE(worldPosition, getBlockState(), level);
+				if (tileEntity != null) {
+					FluidStack rest = pushFluid(tileEntity.fluidOut, level, worldPosition);
+					if (rest != tileEntity.fluidOut) tileEntity.fluidOut = rest;
+				}
 				
 				if (this.isWorking) {
 					
@@ -150,21 +156,11 @@ public class TileEntityMFluidBath extends TileEntityInventoryBase implements ITE
 				
 				if (this.progress > 0) this.progress--;
 				
-				TileEntityMFluidBath tileEntity = (TileEntityMFluidBath) BlockMultipart.getSCenterTE(worldPosition, getBlockState(), level);
-				if (tileEntity != null) {
-					FluidStack rest = pushFluid(tileEntity.fluidOut, level, worldPosition);
-					if (rest != tileEntity.fluidOut) tileEntity.fluidOut = rest;
-				}
-				
 			}
 			
 		} else {
-			
-			if (this.isWorking) {
-				
-				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.RAFFINERY_LOOP);
-				
-			}
+
+			MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.RAFFINERY_LOOP);
 			
 		}
 		

@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraftforge.fluids.FluidStack;
@@ -95,6 +96,7 @@ public class BlockEntityDataSerializer {
 			int y = buffer.readInt();
 			return new TileEntityControllPanel.Pos(x, y);
 		});
+		registerDataType(18, ResourceLocation.class, (buffer, value) -> buffer.writeUtf(((ResourceLocation) value).toString()), (buffer) -> new ResourceLocation(buffer.readUtf()));
 	}
 	
 	public void registerDataType(int index, Class<?> classType, BiConsumer<PacketBuffer, Object> serealizer, Function<PacketBuffer, Object> deserealizer) {
@@ -109,6 +111,10 @@ public class BlockEntityDataSerializer {
 	}
 	
 	public boolean serealizeData(PacketBuffer buffer, Object data) {
+		if (data == null) {
+			buffer.writeInt(-1);
+			return true;
+		}
 		int serealizerId = getSerealizer(data);
 		if (serealizerId < 0) {
 			System.err.println("Recived unregistred Object on BlockEntityDataSerealizer to serealize: " + data.getClass().getName());
@@ -122,6 +128,7 @@ public class BlockEntityDataSerializer {
 	
 	public Object deserealizeData(PacketBuffer buffer) {
 		int serealizerId = buffer.readInt();
+		if (serealizerId < 0) return null;
 		DataSerializer serealizer = this.serealizers.get(serealizerId);
 		if (serealizer == null) {
 			System.err.println("Recived unregistred SerealizerId on BlockEntityDataSerealizer to deserealize: " + serealizerId);

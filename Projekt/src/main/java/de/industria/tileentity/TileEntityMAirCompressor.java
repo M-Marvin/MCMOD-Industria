@@ -106,9 +106,9 @@ public class TileEntityMAirCompressor extends TileEntity implements ITickableTil
 			
 		} else {
 			
+			MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.COMPRESSOR_LOOP);
+			
 			if (this.isWorking) {
-
-				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.COMPRESSOR_LOOP);
 				
 				if (this.level.random.nextInt(10) == 0) {
 

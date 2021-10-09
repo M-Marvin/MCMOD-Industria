@@ -117,6 +117,8 @@ public abstract class TileEntityMHeaterBase extends TileEntityInventoryBase impl
 			}
 			
 		} else {
+
+			MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.GENERATOR_LOOP);
 			
 			if (this.isWorking) {
 				
@@ -152,8 +154,6 @@ public abstract class TileEntityMHeaterBase extends TileEntityInventoryBase impl
 				float y = this.worldPosition.getY() + 1.1F;
 				float z = this.worldPosition.getZ() + oz + (level.random.nextFloat() - 0.5F) * width;
 				this.level.addParticle(paricle, x, y, z, 0, 0, 0);
-				
-				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.GENERATOR_LOOP);
 				
 			}
 			

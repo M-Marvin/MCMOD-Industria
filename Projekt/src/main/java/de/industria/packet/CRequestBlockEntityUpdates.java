@@ -8,23 +8,34 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 public class CRequestBlockEntityUpdates {
-
+	
+	public boolean updateAll;
 	public ChunkPos chunk;
 	
 	public CRequestBlockEntityUpdates(ChunkPos chunk) {
 		this.chunk = chunk;
 	}
+
+	public CRequestBlockEntityUpdates() {
+		this.updateAll = true;
+	}
 	
 	public CRequestBlockEntityUpdates(PacketBuffer buf) {
-		this.chunk = new ChunkPos(buf.readLong());
+		this.updateAll = buf.readBoolean();
+		if (!this.updateAll) this.chunk = new ChunkPos(buf.readLong());
 	}
 	
 	public static void encode(CRequestBlockEntityUpdates packet, PacketBuffer buf) {
-		buf.writeLong(packet.chunk.toLong());
+		buf.writeBoolean(packet.updateAll);
+		if (!packet.updateAll) buf.writeLong(packet.chunk.toLong());
 	}
 	
 	public static void handle(final CRequestBlockEntityUpdates packet, Supplier<NetworkEvent.Context> context) {
-		DataWatcher.requestChunkUpdate(packet.chunk);
+		if (packet.updateAll) {
+			DataWatcher.requestChunkUpdate();
+		} else {
+			DataWatcher.requestChunkUpdate(packet.chunk);
+		}
 	}
 	
 }

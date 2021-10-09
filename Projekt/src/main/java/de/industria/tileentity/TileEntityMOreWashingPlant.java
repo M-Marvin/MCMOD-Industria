@@ -155,10 +155,10 @@ public class TileEntityMOreWashingPlant extends TileEntityInventoryBase implemen
 		} else {
 			
 			if (BlockMultipart.getInternPartPos(this.getBlockState()).equals(new BlockPos(0, 0, 0))) {
-
+				
+				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.ORE_WASHING_PLANT_LOOP);
+				
 				if (this.isWorking) {
-
-					MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.ORE_WASHING_PLANT_LOOP);
 					
 					IParticleData rawItemParticle = new ItemParticleData(ParticleTypes.ITEM, this.getItem(0));
 					

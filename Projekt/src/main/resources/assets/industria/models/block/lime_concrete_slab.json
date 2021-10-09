@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/slab",
   "textures": {
-    "bottom": "minecraft:block/lime_concrete",
+    "bottom": "minecraft:block/lime_te",
     "top": "minecraft:block/lime_concrete",
     "side": "minecraft:block/lime_concrete"
   }

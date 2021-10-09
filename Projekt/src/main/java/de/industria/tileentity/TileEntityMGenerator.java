@@ -126,20 +126,14 @@ public class TileEntityMGenerator extends TileEntityInventoryBase implements INa
 			
 		} else {
 			
-			if (this.isSoundRunning()) {
-				
-				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.GENERATOR_LOOP);
-								
-			}
-			
+			MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.GENERATOR_LOOP);
 			
 		}
-		
 	}
 	
 	@Override
 	public boolean isSoundRunning() {
-		return this.getBlockState().getValue(BlockMGenerator.ACTIVE);
+		return this.producingPower > 0;
 	}
 	
 	public boolean canWork() {

@@ -6,6 +6,7 @@ import java.util.List;
 import de.industria.dynamicsounds.SoundMSteamGeneratorLoop;
 import de.industria.dynamicsounds.SoundMachine;
 import de.industria.tileentity.TileEntityMSteamGenerator;
+import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.tileentity.TileEntity;
@@ -33,17 +34,42 @@ public class MachineSoundHelper {
 		
 	}
 	
+	public static void resetSoundCache() {
+		SoundHandler soundHandler = Minecraft.getInstance().getSoundManager();
+		soundMap.forEach((sound) -> soundHandler.stop(sound));
+		soundMap.clear();
+	}
+	
 	public static void startSoundIfNotRunning(TileEntity tileEntity, SoundEvent soundEvent) {
 		
-		SoundHandler soundHandler = Minecraft.getInstance().getSoundManager();
-		
-		SoundMachine sound = getSoundForTileEntity(tileEntity);
-		
-		if (sound == null || sound.isStopped() || !soundHandler.isActive(sound)) {
+		if (tileEntity instanceof ITESimpleMachineSound) {
 			
-			sound = new SoundMachine(tileEntity, soundEvent);
-			soundHandler.play(sound);
-			soundMap.add(sound);
+			if (soundMap.size() > 2000) {
+				System.err.println("SoundMap overloading! " + soundMap.size() + " sounds cached, reset cache!");
+				resetSoundCache();
+			}
+			
+			SoundMachine sound = getSoundForTileEntity(tileEntity);
+			
+			if (((ITESimpleMachineSound) tileEntity).isSoundRunning()) {
+				
+				SoundHandler soundHandler = Minecraft.getInstance().getSoundManager();
+				
+				if (sound == null || sound.isStopped() || !soundHandler.isActive(sound)) {
+					
+					if (sound == null) {
+						sound = new SoundMachine(tileEntity, soundEvent);
+						soundMap.add(sound);
+					}
+					soundHandler.play(sound);
+					
+				}
+				
+			} else {
+				
+				soundMap.remove(sound);
+				
+			}
 			
 		}
 		
@@ -67,18 +93,12 @@ public class MachineSoundHelper {
 	
 	public static SoundMachine getSoundForTileEntity(TileEntity tileEntity) {
 		BlockPos tilePos = tileEntity.getBlockPos();
-		SoundMachine tileSound = null;
-		List<SoundMachine> soundsToRemove = new ArrayList<SoundMachine>();
 		for (SoundMachine sound : soundMap) {
 			if (new BlockPos(sound.getX(), sound.getY(), sound.getZ()).equals(tilePos)) {
-				if (sound.isStopped()) {
-					soundsToRemove.add(sound);
-				}
-				tileSound = sound;
+				return sound;
 			}
 		}
-		soundMap.removeAll(soundsToRemove);
-		return tileSound;
+		return null;
 	}
 	
 }

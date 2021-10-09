@@ -138,14 +138,9 @@ public class TileEntityMFluidInput extends TileEntity implements ITEFluidConnect
 			}
 			
 		} else {
-			
-			if (this.isSoundRunning()) {
-				
-				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.PUMP_LOOP);
-				
-			}
-			
-			
+
+			MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.PUMP_LOOP);
+						
 		}
 		
 	}

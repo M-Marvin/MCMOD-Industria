@@ -234,7 +234,6 @@ public class ClientSetup {
 		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getAverageFoliageColor(world, pos) : FoliageColors.getDefaultColor(), ModItems.marple_leaves);
 		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getAverageFoliageColor(world, pos) : FoliageColors.getDefaultColor(), ModItems.mangrove_leaves);
 		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getAverageFoliageColor(world, pos) : FoliageColors.getDefaultColor(), ModItems.rubber_leaves);
-		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getAverageFoliageColor(world, pos) : FoliageColors.getDefaultColor(), ModItems.swamp_algae);
 		colors.register((state, world, pos, tint) -> world != null && pos != null ? BiomeColors.getAverageFoliageColor(world, pos) : FoliageColors.getDefaultColor(), ModItems.hanging_vine);
 		colors.register((state, world, pos, tint) -> world != null && pos != null ? ModItems.energy_barrier.getColor(world, pos, state, tint) : FoliageColors.getDefaultColor(), ModItems.energy_barrier);
 	}
@@ -246,7 +245,6 @@ public class ClientSetup {
 		colors.register((stack, tint) -> FoliageColors.getDefaultColor(), ModItems.marple_leaves);
 		colors.register((stack, tint) -> FoliageColors.getDefaultColor(), ModItems.mangrove_leaves);
 		colors.register((stack, tint) -> FoliageColors.getDefaultColor(), ModItems.rubber_leaves);
-		colors.register((stack, tint) -> FoliageColors.getDefaultColor(), ModItems.swamp_algae);
 		colors.register((stack, tint) -> FoliageColors.getDefaultColor(), ModItems.hanging_vine);
 	}
 	

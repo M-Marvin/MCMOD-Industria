@@ -164,6 +164,8 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 			}
 			
 		} else {
+
+			MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.SCHREDDER_LOOP);
 			
 			if (this.isWorking) {
 				
@@ -194,8 +196,6 @@ public class TileEntityMSchredder extends TileEntityInventoryBase implements ITi
 					}
 					
 				}
-				
-				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.SCHREDDER_LOOP);
 				
 			}
 			

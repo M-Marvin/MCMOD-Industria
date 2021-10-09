@@ -88,12 +88,12 @@ public class TileEntityPreassurePipe extends TileEntity implements ITickableTile
 			if (this.level.getGameTime() % 10 == 0) this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
 			
 		} else {
+
+			if (!MachineSoundHelper.isPlayingMachineSound(ModSoundEvents.ITEM_PIPE_STRAM, 7, this.worldPosition)) {
+				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.ITEM_PIPE_STRAM);
+			}
 			
 			if (isPreassurized()) {
-				
-				if (!MachineSoundHelper.isPlayingMachineSound(ModSoundEvents.ITEM_PIPE_STRAM, 7, this.worldPosition)) {
-					MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.ITEM_PIPE_STRAM);
-				}
 				
 				IParticleData particle = ParticleTypes.CLOUD;
 				float speed = 0.05F * (this.preassure < 0 ? -1 : 1);

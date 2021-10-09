@@ -128,12 +128,8 @@ public class TileEntityMAlloyFurnace extends TileEntityInventoryBase implements 
 			if (this.progress > 0) this.progress--;
 			
 		} else {
-
-			if (this.isWorking && this.progress > 0) {
-				
-				MachineSoundHelper.startSoundIfNotRunning(this, SoundEvents.BLASTFURNACE_FIRE_CRACKLE);
-								
-			}
+			
+			MachineSoundHelper.startSoundIfNotRunning(this, SoundEvents.BLASTFURNACE_FIRE_CRACKLE);
 			
 		}
 		

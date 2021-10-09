@@ -162,6 +162,14 @@ public class Events {
 		}
 	}
 	
+	@OnlyIn(Dist.CLIENT)
+	@SubscribeEvent
+	public void onWorldJoined(net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent event) {
+		if (event.getPlayer().level.isClientSide()) {
+			Industria.NETWORK.sendToServer(new CRequestBlockEntityUpdates());
+		}
+	}
+	
 	@SubscribeEvent
 	public static final void onWorldTick(net.minecraftforge.event.TickEvent.ClientTickEvent event) {
 		if (event.phase == Phase.START) {
@@ -302,15 +310,5 @@ public class Events {
 			
 		}
 	}
-	
-//	@OnlyIn(Dist.CLIENT)
-//	@SuppressWarnings("resource")
-//	@SubscribeEvent
-//	public void onWorldJoined(net.minecraftforge.event.world.WorldEvent.Load event) {
-//		if (event.getWorld().isClientSide()) {
-//			PlayerEntity player = Minecraft.getInstance().player;
-//			player.sendMessage(Industria.getUpdateChecker().getCheckResultText(), player.getUUID());
-//		}
-//	}
 	
 }

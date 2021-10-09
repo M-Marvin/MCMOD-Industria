@@ -1,3 +1,4 @@
+Compile CMD: .\gradlew reobfShadowJar
 
 Source installation information for modders
 -------------------------------------------

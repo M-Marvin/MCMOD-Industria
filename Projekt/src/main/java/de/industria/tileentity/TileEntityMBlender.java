@@ -224,6 +224,8 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 				}
 				
 			} else {
+
+				MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.BLENDER_LOOP);
 				
 				if (this.isWorking) {
 					
@@ -265,8 +267,6 @@ public class TileEntityMBlender extends TileEntityInventoryBase implements ITick
 						this.level.addParticle(paricle, x, y, z, 0, 0, 0);
 						
 					}
-					
-					MachineSoundHelper.startSoundIfNotRunning(this, ModSoundEvents.BLENDER_LOOP);
 					
 				}
 				

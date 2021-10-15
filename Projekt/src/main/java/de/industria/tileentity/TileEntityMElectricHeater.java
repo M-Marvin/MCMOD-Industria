@@ -1,6 +1,7 @@
 package de.industria.tileentity;
 
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
 import de.industria.util.handler.ElectricityNetworkHandler;
 import de.industria.util.handler.ElectricityNetworkHandler.ElectricityNetwork;
@@ -14,6 +15,10 @@ public class TileEntityMElectricHeater extends TileEntityMHeaterBase {
 	
 	public TileEntityMElectricHeater() {
 		super(ModTileEntityType.ELECTRIC_HEATER, 0);
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMHeaterBase) tileEntity).isWorking = (boolean) data[0];
+			if (data[1] != null) ((TileEntityMHeaterBase) tileEntity).powered = (boolean) data[1];
+		}, () -> isWorking, () -> powered);
 	}
 	
 	@Override

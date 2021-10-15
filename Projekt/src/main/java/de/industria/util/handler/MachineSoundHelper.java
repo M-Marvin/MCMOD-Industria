@@ -77,15 +77,30 @@ public class MachineSoundHelper {
 	
 	public static void startSoundTurbinIfNotRunning(TileEntityMSteamGenerator tileEntity) {
 		
-		SoundHandler soundHandler = Minecraft.getInstance().getSoundManager();
+		if (soundMap.size() > 2000) {
+			System.err.println("SoundMap overloading! " + soundMap.size() + " sounds cached, reset cache!");
+			resetSoundCache();
+		}
 		
-		SoundMachine turbinSound = getSoundForTileEntity(tileEntity);
+		SoundMachine sound = getSoundForTileEntity(tileEntity);
 		
-		if (turbinSound == null || turbinSound.isStopped()) {
+		if (tileEntity.accerlation > 0) {
 			
-			turbinSound = new SoundMSteamGeneratorLoop(tileEntity);
-			soundHandler.play(turbinSound);
-			soundMap.add(turbinSound);
+			SoundHandler soundHandler = Minecraft.getInstance().getSoundManager();
+			
+			if (sound == null || sound.isStopped() || !soundHandler.isActive(sound)) {
+				
+				if (sound == null) {
+					sound = new SoundMSteamGeneratorLoop(tileEntity);
+					soundMap.add(sound);
+				}
+				soundHandler.play(sound);
+				
+			}
+			
+		} else {
+			
+			soundMap.remove(sound);
 			
 		}
 		

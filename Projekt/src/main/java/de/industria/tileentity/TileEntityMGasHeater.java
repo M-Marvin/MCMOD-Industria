@@ -2,6 +2,7 @@ package de.industria.tileentity;
 
 import de.industria.typeregistys.ModFluids;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.ITEFluidConnective;
 import de.industria.util.types.MultipartBuild.MultipartBuildLocation;
 import net.minecraft.block.BlockState;
@@ -21,6 +22,11 @@ public class TileEntityMGasHeater extends TileEntityMHeaterBase implements ITEFl
 		super(ModTileEntityType.GAS_HEATER, 0);
 		this.maxFluidStorage = 1000;
 		this.gasStorage = FluidStack.EMPTY;
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMGasHeater) tileEntity).isWorking = (boolean) data[0];
+			if (data[1] != null) ((TileEntityMGasHeater) tileEntity).powered = (boolean) data[1];
+			if (data[2] != null) ((TileEntityMGasHeater) tileEntity).gasStorage = (FluidStack) data[2];
+		}, () -> isWorking, () -> powered, () -> gasStorage);
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package de.industria.tileentity;
 import de.industria.gui.ContainerMCoalHeater;
 import de.industria.typeregistys.ModItems;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import de.industria.util.types.MultipartBuild.MultipartBuildLocation;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,6 +25,12 @@ public class TileEntityMCoalHeater extends TileEntityMHeaterBase implements INam
 	
 	public TileEntityMCoalHeater() {
 		super(ModTileEntityType.COAL_HEATER, 2);
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMCoalHeater) tileEntity).isWorking = (boolean) data[0];
+			if (data[1] != null) ((TileEntityMCoalHeater) tileEntity).powered = (boolean) data[1];
+			if (data[2] != null) ((TileEntityMCoalHeater) tileEntity).fuelTime = (int) data[2];
+			if (data[3] != null) ((TileEntityMCoalHeater) tileEntity).burnTime = (float) data[3];
+		}, () -> isWorking, () -> powered, () -> fuelTime, () -> burnTime);
 	}
 	
 	@SuppressWarnings("deprecation")

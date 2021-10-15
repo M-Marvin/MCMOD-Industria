@@ -53,7 +53,9 @@ public class TileEntityMSteamGenerator extends TileEntity implements ITEFluidCon
 			if (data[0] != null) ((TileEntityMSteamGenerator) tileEntity).steamIn = (FluidStack) data[0];
 			if (data[1] != null) ((TileEntityMSteamGenerator) tileEntity).steamOut = (FluidStack) data[1];
 			if (data[2] != null) ((TileEntityMSteamGenerator) tileEntity).generatedAmperes = (float) data[2];
-		}, () -> steamIn, () -> steamOut, () -> generatedAmperes);
+			if (data[3] != null) ((TileEntityMSteamGenerator) tileEntity).accerlation = (float) data[3];
+			if (data[4] != null) ((TileEntityMSteamGenerator) tileEntity).turbinRotation = (float) data[4];
+		}, () -> steamIn, () -> steamOut, () -> generatedAmperes, () -> accerlation, () -> turbinRotation);
 	}
 	
 	@Override
@@ -161,13 +163,9 @@ public class TileEntityMSteamGenerator extends TileEntity implements ITEFluidCon
 			}
 			
 		} else if (BlockMultipart.getInternPartPos(this.getBlockState()).equals(new BlockPos(0, 0, 0))) {
-			
-			if (this.accerlation > 0) {
-				
-				MachineSoundHelper.startSoundTurbinIfNotRunning(this);
-								
-			}
-			
+
+			MachineSoundHelper.startSoundTurbinIfNotRunning(this);
+						
 		}
 		
 	}

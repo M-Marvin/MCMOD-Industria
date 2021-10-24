@@ -1,0 +1,3 @@
+- Rohsilbertextur ingame fehlerhaft
+- Kupferblech durch glänzende Version aus 1.17 ersetzen
+- Gold- uns Eisennugget anpassen

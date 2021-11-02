@@ -1,0 +1,6 @@
+cyan  -> swamp, jungle
+red   -> swamp, jungle
+brown-green stripes -> swamp
+black -> swamp
+
+larvae -> swamp

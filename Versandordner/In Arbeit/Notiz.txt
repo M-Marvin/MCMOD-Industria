@@ -20,4 +20,4 @@ Kleine Details, die man noch ergänzen könnte:
 
 10. Bauxit und Wolframit sollten nur durch die Schredder, nicht durch den Hammer, mahlbar sein, da man weder Alu noch Wolfram für Stahl braucht.
 
-11. Bronze druch Messsing ersetzen für mehr Nutzen?
+11. Bronze durch Messsing ersetzen für mehr Nutzen? -> erledigt

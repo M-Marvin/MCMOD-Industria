@@ -3,23 +3,24 @@
 |Material      |Block         |Blechbl.      |Latten        |Gitter        |
 |--------------|--------------|--------------|--------------|--------------|
 |Aluminium     |2             |Block*0,75 ger|Block*0,75 ger|wie Block     |
-|Bronze        |2             |Block*0,75 ger|Block*0,75 ger|exist mglw spt|
+|Messing       |3             |Block*0,75 ger|Block*0,75 ger|wie Block     |
 |Kupfer        |3             |Block*0,75 ger|Block*0,75 ger|wie Block     |
-|Elektrolytkpf.|3             |Block*0,75 ger|Block*0,75 ger|nicht geplant |
-|Gold          |3             |Block*0,75 ger|Block*0,75 ger|wie Block     |
+|Elektrolytkpf.|3             |nicht geplant |nicht geplant |nicht geplant |
+|Gold          |3             |nicht geplant |nicht geplant |wie Block     |
 |Eisen         |5             |Block*0,75 ger|Block*0,75 ger|wie Block     |
 |Blei          |1             |Block*0,75 ger|Block*0,75 ger|nicht geplant |
-|Metallglas    |Berech aus Zut|Block*0,75 ger|Block*0,75 ger|nicht geplant |
+|Metallglas    |Berech aus Zut|nicht geplant |nicht geplant |nicht geplant |
 |Monel         |4             |Block*0,75 ger|Block*0,75 ger|nicht geplant |
-|Netherit      |50            |Block*0,75 ger|Block*0,75 ger|nicht geplant |
+|Netherit      |50            |nicht geplant |nicht geplant |nicht geplant |
 |Nickel        |5             |Block*0,75 ger|Block*0,75 ger|exist mglw spt|
-|Vanadium/Plld.|8             |Block*0,75 ger|Block*0,75 ger|nicht geplant |
-|Redstone-Alloy|3             |Block*0,75 ger|Block*0,75 ger|nicht geplant |
-|Silber        |3             |Block*0,75 ger|Block*0,75 ger|wie Block     |
+|Vanadium/Plld.|8             |nicht geplant |nicht geplant |nicht geplant |
+|Redstone-Alloy|3             |nicht geplant |nicht geplant |nicht geplant |
+|Silber        |3             |nicht geplant |nicht geplant |wie Block     |
 |Stahl         |6             |Block*0,75 ger|Block*0,75 ger|wie Block     |
 |Zinn          |1             |Block*0,75 ger|Block*0,75 ger|exist mglw spt|
-|Wolfram       |10            |Block*0,75 ger|Block*0,75 ger|exist mglw spt|
-|Zirkonium     |6             |Block*0,75 ger|Block*0,75 ger|nicht geplant |
+|Wolfram       |10            |nicht geplant |nicht geplant |exist mglw spt|
+|Zirkonium     |6             |nicht geplant |nicht geplant |nicht geplant |
+|Zink          |3             |Block*0,75 ger|Block*0,75 ger|wie Block     |
 
 
 ===EXPLOSIONSWIDERSTAND===

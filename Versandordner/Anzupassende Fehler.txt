@@ -4,3 +4,5 @@
 - Spule, Kristalle usw -> Umschaltbare Detail(un)qualität
 - Metalltexturen ingame mit denen in der Metallansammlungs-PNG abgleichen, einige scheinen noch fehlerhaft (veraltet) zu sein.
 - Möglicherweise sind einige Texturen im Versandordner mal wieder gedoppelt... sollte man beachten beim Einfügen. Und evtl verstecken sich alte in Sub-Foldern, neue aber im VO generell.
+
+-ANZUPASSENDE STEINARTEN (POLIERT): Salz, (Endstein?), (Tropfstein?)

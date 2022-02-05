@@ -96,7 +96,7 @@ public class BlockRMovementDetector extends BlockContainerBase {
 				
 				Vector3d motion = entity.getDeltaMovement();
 				if (entity instanceof PlayerEntity) {
-					Vector3d position = entity.getPosition(0);
+					Vector3d position = entity.position();
 					Vector3d lastTickPosition = playerMovements.put(((PlayerEntity) entity).getUUID(), position);
 					if (lastTickPosition != null) motion = lastTickPosition.subtract(position);
 				}

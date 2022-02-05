@@ -2,13 +2,16 @@ package de.industria.tileentity;
 
 import de.industria.blocks.BlockFluidPipe;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.ITEFluidConnective;
 import de.industria.util.blockfeatures.ITEFluidWiring;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 
 public class TileEntityEncasedFluidPipe extends TileEntityStructureScaffold implements ITEFluidWiring {
@@ -16,10 +19,14 @@ public class TileEntityEncasedFluidPipe extends TileEntityStructureScaffold impl
 	protected int maxFluid;
 	protected FluidStack fluid;
 	
+	@SuppressWarnings("unchecked")
 	public TileEntityEncasedFluidPipe() {
 		super(ModTileEntityType.ENCASED_FLUID_PIPE);
 		this.fluid = FluidStack.EMPTY;
 		this.maxFluid = -1;
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityStructureScaffold) tileEntity).itemstacks = (NonNullList<ItemStack>) data[0];
+		}, () -> this.itemstacks);
 	}
 	
 	@Override

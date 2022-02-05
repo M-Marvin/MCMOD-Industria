@@ -62,7 +62,7 @@ public class JigsawFileManager {
 		poolLists.clear();
 	}
 	
-	private static IResourceManager getResourceManager(ServerWorld world) {
+	public static IResourceManager getResourceManager(ServerWorld world) {
 		return world.getServer().getDataPackRegistries().getResourceManager();
 	}
 	

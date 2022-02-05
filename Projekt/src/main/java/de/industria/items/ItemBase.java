@@ -14,6 +14,11 @@ public class ItemBase extends Item {
 		super(properties);
 	}
 	
+	public ItemBase(String name) {
+		super(new Properties());
+		this.setRegistryName(Industria.MODID, name);
+	}
+	
 	public ItemBase(String name, Item.Properties properties) {
 		super(properties);
 		this.setRegistryName(Industria.MODID, name);

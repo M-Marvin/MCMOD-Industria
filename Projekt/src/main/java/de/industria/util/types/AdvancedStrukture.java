@@ -223,8 +223,9 @@ public class AdvancedStrukture {
 		for (int index = 0; index < positions.size(); index++) {
 			
 			BlockPos pos = calculateRotatedPosition(positions.get(index), center, right);
-			BlockState state = states.get(index).rotate(right ? Rotation.CLOCKWISE_90 : Rotation.COUNTERCLOCKWISE_90);
-			
+			Rotation rotation = right ? Rotation.CLOCKWISE_90 : Rotation.COUNTERCLOCKWISE_90;
+			BlockState state = states.get(index).rotate(rotation);
+						
 			world.setBlock(pos, state, 114);
 			
 			if (state.hasTileEntity()) {
@@ -233,6 +234,7 @@ public class AdvancedStrukture {
 				TileEntity tileEntity = world.getBlockEntity(pos);
 				tileEntity.load(state, compound);
 				tileEntity.setPosition(pos);
+				tileEntity.rotate(rotation);
 				
 				if (tileEntity instanceof ITEPostMoveHandled) {
 					

@@ -120,7 +120,7 @@ public class BlockEntityDataSerializer {
 			System.err.println("Recived unregistred Object on BlockEntityDataSerealizer to serealize: " + data.getClass().getName());
 			return false;
 		}
-		DataSerializer serealizer = this.serealizers.get(new Integer(serealizerId));
+		DataSerializer serealizer = this.serealizers.get(serealizerId);
 		buffer.writeInt(serealizerId);
 		serealizer.serealize(buffer, data);
 		return true;

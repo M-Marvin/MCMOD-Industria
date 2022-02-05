@@ -81,9 +81,9 @@ public class ScreenNetworkConfigurator extends ContainerScreen<ContainerNetworkC
 		}
 		 
 	}
-	
+
 	@Override
-	protected void renderLabels(MatrixStack matrixStack, int x, int y) {
+	protected void renderLabels(MatrixStack p_230451_1_, int p_230451_2_, int p_230451_3_) {
 	}
 	
 }

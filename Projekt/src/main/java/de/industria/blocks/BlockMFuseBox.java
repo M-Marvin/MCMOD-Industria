@@ -141,7 +141,7 @@ public class BlockMFuseBox extends BlockContainerBase implements IBElectricConne
 
 	@Override
 	public boolean canConnect(Direction side, World world, BlockPos pos, BlockState state) {
-		return side != state.getValue(FACING);
+		return side != state.getValue(FACING).getOpposite();
 	}
 
 	@Override

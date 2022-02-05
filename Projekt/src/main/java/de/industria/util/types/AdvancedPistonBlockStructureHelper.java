@@ -257,7 +257,8 @@ public class AdvancedPistonBlockStructureHelper {
     	  list1.addAll(this.toMove.subList(this.toMove.size() - p_177255_1_, this.toMove.size()));
           list2.addAll(this.toMove.subList(p_177255_2_, this.toMove.size() - p_177255_1_));
       } catch (IllegalArgumentException e) {
-    	  System.err.println("Error on move Block-Strukture at " + this.pistonPos + "!");
+    	  // TODO wird sowiso neu gemacht
+    	  //System.err.println("Error on move Block-Strukture at " + this.pistonPos + "!");
       };
       
       this.toMove.clear();

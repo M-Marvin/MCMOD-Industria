@@ -9,7 +9,10 @@ import de.industria.packet.CEditJigsawTileEntityPacket;
 import de.industria.packet.CEditProcessorCodePacket;
 import de.industria.packet.CGenerateJigsaw;
 import de.industria.packet.CRequestBlockEntityUpdates;
+import de.industria.packet.CRequestSavedBlueprints;
+import de.industria.packet.CSaveBlueprint;
 import de.industria.packet.CUpdateChunkLoader;
+import de.industria.packet.SReturnSavedBlueprints;
 import de.industria.packet.SSendENHandeler;
 import de.industria.packet.SUpdateBlockEntitys;
 import de.industria.typeregistys.ModConfiguredFeatures;
@@ -96,7 +99,7 @@ public class ServerSetup {
 	}
 
 	public static void constructMod() {
-
+		
 		// Register Packets
 		Industria.NETWORK.registerMessage(0, CEditProcessorCodePacket.class, CEditProcessorCodePacket::encode, CEditProcessorCodePacket::new, CEditProcessorCodePacket::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		Industria.NETWORK.registerMessage(1, CEditJigsawTileEntityPacket.class, CEditJigsawTileEntityPacket::encode, CEditJigsawTileEntityPacket::new, CEditJigsawTileEntityPacket::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
@@ -108,6 +111,9 @@ public class ServerSetup {
 		Industria.NETWORK.registerMessage(7, CCRecipeCreator.class, CCRecipeCreator::encode, CCRecipeCreator::new, CCRecipeCreator::handle);
 		Industria.NETWORK.registerMessage(8, SUpdateBlockEntitys.class, SUpdateBlockEntitys::encode, SUpdateBlockEntitys::new, SUpdateBlockEntitys::handle);
 		Industria.NETWORK.registerMessage(9, CRequestBlockEntityUpdates.class, CRequestBlockEntityUpdates::encode, CRequestBlockEntityUpdates::new, CRequestBlockEntityUpdates::handle);
+		Industria.NETWORK.registerMessage(10, CSaveBlueprint.class, CSaveBlueprint::encode, CSaveBlueprint::new, CSaveBlueprint::handle);
+		Industria.NETWORK.registerMessage(11, CRequestSavedBlueprints.class, CRequestSavedBlueprints::encode, CRequestSavedBlueprints::new, CRequestSavedBlueprints::handle);
+		Industria.NETWORK.registerMessage(12, SReturnSavedBlueprints.class, SReturnSavedBlueprints::encode, SReturnSavedBlueprints::new, SReturnSavedBlueprints::handle);
 		
 		// Devstuff
 		ModGameRegistry.registerBlock(ModItems.recipe_creator, ModTabs.TOOLS);
@@ -977,6 +983,7 @@ public class ServerSetup {
 		ModGameRegistry.registerItem(ModItems.salsola);
 		ModGameRegistry.registerItem(ModItems.empty_blueprint);
 		ModGameRegistry.registerItem(ModItems.blueprint);
+		ModGameRegistry.registerItem(ModItems.writable_blueprint);
 		ModGameRegistry.registerItem(ModItems.copper_ingot);
 		ModGameRegistry.registerItem(ModItems.copper_nugget);
 		ModGameRegistry.registerItem(ModItems.electrolyt_copper_ingot);

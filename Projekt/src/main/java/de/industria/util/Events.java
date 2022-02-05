@@ -99,7 +99,6 @@ public class Events {
 	
 	@SubscribeEvent
 	public static void onRightClickBlock(net.minecraftforge.event.entity.player.FillBucketEvent event) {
-		
 		World worldIn = event.getWorld();
 		PlayerEntity playerIn = event.getPlayer();
 		
@@ -112,9 +111,7 @@ public class Events {
 		FluidState fluidState = worldIn.getFluidState(fluidPos);
 		
 		if (fluidState.createLegacyBlock().getBlock() instanceof BlockGasFluid && event.getEmptyBucket().getItem() != ModItems.fluid_cannister) {
-			
 			ItemStack bucketItem = event.getEmptyBucket();
-			
 			if (fluidState.createLegacyBlock().getBlock() instanceof IBucketPickupHandler) {
 				Fluid fluid = ((IBucketPickupHandler)fluidState.createLegacyBlock().getBlock()).takeLiquid(worldIn, fluidPos, fluidState.createLegacyBlock());
 				
@@ -133,9 +130,7 @@ public class Events {
 					
 				}
 			}
-			
 		}
-		
 	}
 	
 	protected static long lastServerWorldTick = 0L;
@@ -196,9 +191,7 @@ public class Events {
 			
 			event.getGeneration().getFeatures(decoration).removeAll(featuresToRemove);
 			if (featuresToRemove.size() > 0) Industria.LOGGER.log(Level.INFO, featuresToRemove.size() + " Features deaktivated in " + event.getName());
-			
 		}
-		
 	}
 	
 	public static boolean compareBiomes(ConfiguredFeature<?, ?> registredFeature, ConfiguredFeature<?, ?> feature) {
@@ -215,65 +208,6 @@ public class Events {
 //		
 		return jsonString.contains(jsonString2);
 	}
-	
-//	@SubscribeEvent
-//	public static void onEntityAttacked(net.minecraftforge.event.entity.living.LivingAttackEvent event) {
-//
-//		try {
-//			
-//			DamageSource source = event.getSource();
-//			
-//			if (source instanceof EntityDamageSource) {
-//				
-//				Entity bullet = ((EntityDamageSource) source).getImmediateSource();
-//				LivingEntity target = event.getEntityLiving();
-//				
-//				if (bullet.getType() == EntityType.SHULKER_BULLET && target.getType() == EntityType.SHULKER) {
-//					
-//					BlockPos position = target.getPosition();
-//					World world = target.world;
-//					
-//					BlockPos shulkerRange = new BlockPos(8, 8, 8);
-//					List<ShulkerEntity> soroundingShulkers = world.getEntitiesWithinAABB(ShulkerEntity.class, new AxisAlignedBB(position.subtract(shulkerRange), position.add(shulkerRange)));
-//					float chanceToSpawn = 1;
-//					for (@SuppressWarnings("unused") ShulkerEntity shulkerInRange : soroundingShulkers) chanceToSpawn *= 0.8F;
-//					if (soroundingShulkers.size() > 5) chanceToSpawn = 0;
-//					
-//					System.out.println(chanceToSpawn);
-//					
-//					if (target.world.rand.nextFloat() <= chanceToSpawn) {
-//						
-//						Method teleportFunc = ShulkerEntity.class.getDeclaredMethod("tryTeleportToNewPosition");
-//						teleportFunc.setAccessible(true);
-//						boolean succes = (boolean) teleportFunc.invoke(target);
-//						
-//						if (succes) {
-//
-//							ShulkerEntity shulker = EntityType.SHULKER.create(world);
-//							shulker.setPosition(position.getX() + 0.5F, position.getY() + 0.5F, position.getZ() + 0.5F);
-//							world.addEntity(shulker);
-//							
-//							System.out.println("Spawn Shulker at " + position);
-//							
-//						}
-//						
-//					}
-//					
-//				}
-//				
-//			}
-//			
-//		} catch (NoSuchMethodException | SecurityException e) {
-//			e.printStackTrace();
-//		} catch (IllegalAccessException e) {
-//			e.printStackTrace();
-//		} catch (IllegalArgumentException e) {
-//			e.printStackTrace();
-//		} catch (InvocationTargetException e) {
-//			e.printStackTrace();
-//		}
-//		
-//	}
 	
 	@SubscribeEvent
 	public static void onBlockBurn(net.minecraftforge.event.world.BlockEvent.NeighborNotifyEvent event) {
@@ -307,8 +241,66 @@ public class Events {
 					
 				}
 			}
-			
 		}
 	}
+	
+//	@SuppressWarnings("resource")
+//	@SubscribeEvent
+//	@OnlyIn(Dist.CLIENT)
+//	public static void onWorldRender(RenderWorldLastEvent event) {
+//		
+//		MatrixStack matrixStack = event.getMatrixStack();
+//		IRenderTypeBuffer buffer = Minecraft.getInstance().renderBuffers().bufferSource();
+//		
+//		matrixStack.pushPose();
+//		{
+//			
+//			ClientPlayerEntity player = Minecraft.getInstance().player;
+//			ItemStack heldItem = player.getItemInHand(Hand.MAIN_HAND);
+//			
+//			if (heldItem.getItem() == ModItems.empty_blueprint) {
+//				
+//				BlockPos cornerA = ItemEmptyBlueprint.getPositionA(heldItem);
+//				if (cornerA != null) {
+//					
+//					BlockPos cornerB = ItemEmptyBlueprint.getPositionB(heldItem);
+//					if (cornerB == null) cornerB = player.blockPosition();
+//					Vector3d camera = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+//					
+//					matrixStack.translate(-camera.x(), -camera.y(), -camera.z());
+//					
+//					IVertexBuilder builder = buffer.getBuffer(RenderType.lines());
+//					WorldRenderer.renderLineBox(matrixStack, builder, cornerA.getX(), cornerA.getY(), cornerA.getZ(), cornerB.getX(), cornerB.getY(), cornerB.getZ(), 1F, 1F, 1F, 1F);
+//
+////					
+////					Matrix4f matrix = matrixStack.last().pose();
+////					
+////					builder.vertex(matrix, 0, 0, 0).color(color.x(), color.y(), color.z(), color.w()).uv(0, 0).overlayCoords(0).uv2(0).normal(1, 1, 1).endVertex();
+////					builder.vertex(matrix, size.getX(), 0, 0).color(color.x(), color.y(), color.z(), color.w()).uv(0, 0).overlayCoords(0).uv2(0).normal(1, 1, 1).endVertex();
+////					builder.vertex(matrix, size.getX(), size.getY(), 0).color(color.x(), color.y(), color.z(), color.w()).uv(0, 0).overlayCoords(0).uv2(0).normal(1, 1, 1).endVertex();
+////					builder.vertex(matrix, 0, size.getY(), 0).color(color.x(), color.y(), color.z(), color.w()).uv(0, 0).overlayCoords(0).uv2(0).normal(1, 1, 1).endVertex();
+////					
+////					builder.vertex(matrix, 0, 0, size.getZ()).color(color.x(), color.y(), color.z(), color.w()).uv(0, 0).overlayCoords(0).uv2(0).normal(1, 1, 1).endVertex();
+////					builder.vertex(matrix, size.getX(), 0, size.getZ()).color(color.x(), color.y(), color.z(), color.w()).uv(0, 0).overlayCoords(0).uv2(0).normal(1, 1, 1).endVertex();
+////					builder.vertex(matrix, size.getX(), size.getY(), size.getZ()).color(color.x(), color.y(), color.z(), color.w()).uv(0, 0).overlayCoords(0).uv2(0).normal(1, 1, 1).endVertex();
+////					builder.vertex(matrix, 0, size.getY(), size.getZ()).color(color.x(), color.y(), color.z(), color.w()).uv(0, 0).overlayCoords(0).uv2(0).normal(1, 1, 1).endVertex();
+////					
+////					builder.vertex(matrix, 0, 0, 0).color(color.x(), color.y(), color.z(), color.w()).uv(0, 0).overlayCoords(0).uv2(0).normal(1, 1, 1).endVertex();
+////					builder.vertex(matrix, 0, 0, size.getZ()).color(color.x(), color.y(), color.z(), color.w()).uv(0, 0).overlayCoords(0).uv2(0).normal(1, 1, 1).endVertex();
+////					builder.vertex(matrix, 0, size.getY(), size.getZ()).color(color.x(), color.y(), color.z(), color.w()).uv(0, 0).overlayCoords(0).uv2(0).normal(1, 1, 1).endVertex();
+////					builder.vertex(matrix, 0, size.getY(), 0).color(color.x(), color.y(), color.z(), color.w()).uv(0, 0).overlayCoords(0).uv2(0).normal(1, 1, 1).endVertex();
+////
+////					builder.vertex(matrix, size.getX(), 0, 0).color(color.x(), color.y(), color.z(), color.w()).uv(0, 0).overlayCoords(0).uv2(0).normal(1, 1, 1).endVertex();
+////					builder.vertex(matrix, size.getX(), 0, size.getZ()).color(color.x(), color.y(), color.z(), color.w()).uv(0, 0).overlayCoords(0).uv2(0).normal(1, 1, 1).endVertex();
+////					builder.vertex(matrix, size.getX(), size.getY(), size.getZ()).color(color.x(), color.y(), color.z(), color.w()).uv(0, 0).overlayCoords(0).uv2(0).normal(1, 1, 1).endVertex();
+////					builder.vertex(matrix, size.getX(), size.getY(), 0).color(color.x(), color.y(), color.z(), color.w()).uv(0, 0).overlayCoords(0).uv2(0).normal(1, 1, 1).endVertex();
+////					
+//				}
+//				
+//			}
+//			
+//		}
+//		matrixStack.popPose();
+//	}
 	
 }

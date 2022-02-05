@@ -47,6 +47,7 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 	
 	// Temp variables
 	protected short powerStartupTime;
+	protected int powerOutageTimer;
 	protected String cachedBootCode;
 	protected short driveValidationTime;
 	protected LuaInterpreter luaInterpreter;
@@ -272,13 +273,21 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 				}
 				
 				if (!this.hasPower && this.powerStartupTime >= 4) {
-					this.stopComputer();
-					if (!this.hasPower) this.consoleLine = "Power outage!";
+					this.powerOutageTimer++;
+					if (this.powerOutageTimer >= 10000) {
+						this.stopComputer();
+						this.powerOutageTimer = 0;
+						this.consoleLine = "Power outage!";
+					} else {
+						this.consoleLine = "Power outage in " + (10 - (this.powerOutageTimer / 1000)) + "!";
+					}
 					return;
 				} else if (this.getBootDrive() == null) {
 					this.stopComputer();
 					if (!this.hasPower) this.consoleLine = "No Boot Drive!";
 					return;
+				} else {
+					this.powerOutageTimer = 0;
 				}
 				
 				if (!this.luaInterpreter.isCodeRunning() && this.cachedBootCode != null) {
@@ -304,9 +313,9 @@ public class TileEntityNComputer extends TileEntityInventoryBase implements INam
 										
 				}
 				
-				if (!codeIsPulling) {
-
-					synchronized (this.recivedMessages) {
+				synchronized (this.recivedMessages) {
+					
+					if (!codeIsPulling) {
 						
 						NetworkMessage message = null;
 						long priority = 0L;

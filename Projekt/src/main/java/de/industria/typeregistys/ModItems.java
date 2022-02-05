@@ -38,6 +38,7 @@ import de.industria.items.ItemSchredderToolCrusher;
 import de.industria.items.ItemSchredderToolMacerator;
 import de.industria.items.ItemStructureCladdingPane;
 import de.industria.items.ItemWrench;
+import de.industria.items.ItemWritableBlueprint;
 import de.industria.items.panelitems.ItemButtonElement;
 import de.industria.items.panelitems.ItemLampElement;
 import de.industria.items.panelitems.ItemLeverElement;
@@ -1041,6 +1042,7 @@ public class ModItems {
 	public static final Item netherite_processor = new ItemProcessor("netherite_processor", 14, true, Rarity.EPIC);
 	public static final Item empty_blueprint = new ItemEmptyBlueprint();
 	public static final Item blueprint = new ItemBlueprint();
+	public static final Item writable_blueprint = new ItemWritableBlueprint();
 	public static final Item lever_element = new ItemLeverElement();
 	public static final Item button_element = new ItemButtonElement();
 	public static final Item lamp_element = new ItemLampElement();

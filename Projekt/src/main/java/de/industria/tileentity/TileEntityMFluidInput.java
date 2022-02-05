@@ -3,6 +3,7 @@ package de.industria.tileentity;
 import de.industria.blocks.BlockMFluidInput;
 import de.industria.typeregistys.ModSoundEvents;
 import de.industria.typeregistys.ModTileEntityType;
+import de.industria.util.DataWatcher;
 import de.industria.util.blockfeatures.ITEFluidConnective;
 import de.industria.util.blockfeatures.ITESimpleMachineSound;
 import de.industria.util.blockfeatures.IBElectricConnectiveBlock.Voltage;
@@ -27,6 +28,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class TileEntityMFluidInput extends TileEntity implements ITEFluidConnective, ITickableTileEntity, ITESimpleMachineSound {
 	
@@ -39,6 +41,11 @@ public class TileEntityMFluidInput extends TileEntity implements ITEFluidConnect
 		super(ModTileEntityType.FLUID_INPUT);
 		this.maxFluid = 1500;
 		this.fluid = FluidStack.EMPTY;
+		DataWatcher.registerBlockEntity(this, (tileEntity, data) -> {
+			if (data[0] != null) ((TileEntityMFluidInput) tileEntity).progress = (int) data[0];
+			if (data[1] != null) ((TileEntityMFluidInput) tileEntity).fluid = (FluidStack) data[1];
+			if (data[2] != null) ((TileEntityMFluidInput) tileEntity).filterFluid = ForgeRegistries.FLUIDS.getValue((ResourceLocation) data[2]);
+		}, () -> this.progress, () -> this.fluid, () -> this.filterFluid != null ? this.filterFluid.getRegistryName() : null);
 	}
 	
 	@Override
@@ -55,7 +62,7 @@ public class TileEntityMFluidInput extends TileEntity implements ITEFluidConnect
 		this.fluid = FluidStack.loadFluidStackFromNBT(compund.getCompound("Fluid"));
 		this.progress = compund.getInt("progress");
 		if (compund.contains("FluidFilter")) this.filterFluid = Registry.FLUID.get(new ResourceLocation(compund.getString("FluidFilter")));
-		if (this.filterFluid == Fluids.EMPTY) this.filterFluid = null;
+		if (this.filterFluid == Fluids.EMPTY) this.filterFluid = Fluids.EMPTY;
 		super.load(state, compund);
 	}
 	

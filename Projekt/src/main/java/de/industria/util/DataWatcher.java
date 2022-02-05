@@ -71,7 +71,7 @@ public class DataWatcher {
 			});
 			requestUpdates.clear();
 		} catch (ConcurrentModificationException e) {
-			System.err.println("ConcurrentModificationException on accessing observed BlockEntity list, i dont know why ...");
+			//System.err.println("ConcurrentModificationException on accessing observed BlockEntity list, i dont know why ...");
 		}
 		return !blockEntitysToUpdate.isEmpty() || !blockEntitysToRemove.isEmpty();
 	}

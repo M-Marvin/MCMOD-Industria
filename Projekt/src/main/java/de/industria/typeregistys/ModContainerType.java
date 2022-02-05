@@ -6,6 +6,7 @@ import de.industria.gui.ContainerRHoverControler;
 import de.industria.gui.ContainerCardboardBox;
 import de.industria.gui.ContainerItemDistributor;
 import de.industria.gui.ContainerJigsaw;
+import de.industria.gui.ContainerLoadBlueprint;
 import de.industria.gui.ContainerMAirCompressor;
 import de.industria.gui.ContainerMAlloyFurnace;
 import de.industria.gui.ContainerMBlastFurnace;
@@ -21,6 +22,7 @@ import de.industria.gui.ContainerMRaffinery;
 import de.industria.gui.ContainerMSchredder;
 import de.industria.gui.ContainerMThermalZentrifuge;
 import de.industria.gui.ContainerNComputer;
+import de.industria.gui.ContainerNameBlueprint;
 import de.industria.gui.ContainerNetworkConfigurator;
 import de.industria.gui.ContainerRProcessor;
 import de.industria.gui.ContainerRecipeCreator;
@@ -62,6 +64,8 @@ public class ModContainerType {
 	public static final ContainerType<ContainerMOreWashingPlant> ORE_WASHING_PLANT = register(new ResourceLocation(Industria.MODID, "ore_washing_plant"), ContainerMOreWashingPlant::new);
 	public static final ContainerType<ContainerCardboardBox> CARDBOARD_BOX = register(new ResourceLocation(Industria.MODID, "cardboard_box"), ContainerCardboardBox::new);
 	public static final ContainerType<ContainerRecipeCreator> RECIPE_CREATOR = register(new ResourceLocation(Industria.MODID, "recipe_creator"), ContainerRecipeCreator::new);
+	public static final ContainerType<ContainerNameBlueprint> NAME_BLUEPRINT = register(new ResourceLocation(Industria.MODID, "name_blueprint"), ContainerNameBlueprint::new);
+	public static final ContainerType<ContainerLoadBlueprint> LOAD_BLUEPRINT = register(new ResourceLocation(Industria.MODID, "load_blueprint"), ContainerLoadBlueprint::new);
 	
 	protected static <T extends Container> ContainerType<T> register(ResourceLocation key, IContainerFactory<T> factory) {
 		ContainerType<T> type = IForgeContainerType.create(factory);

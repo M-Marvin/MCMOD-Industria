@@ -169,10 +169,10 @@ public class TileEntityRSignalProcessorContact extends TileEntity implements ITi
 			if (variable.getValue() != OperatorResult.EMPTY && variable.getValue() != OperatorResult.FAIL) {
 				CompoundNBT variableTag = new CompoundNBT();
 				variableTag.putString("Type", variable.getValue().getInitType() == OperatorType.BOOL ? "Bool" : "Int");
-				if (variable.getValue().isBool()) {
-					variableTag.putBoolean("Value", variable.getValue().getBValue());
-				} else {
+				if (variable.getValue().isInt()) {
 					variableTag.putInt("Value", variable.getValue().getIValue());
+				} else {
+					variableTag.putBoolean("Value", variable.getValue().getBValue());
 				}
 				bufferNBT.put(variable.getKey(), variableTag);
 			}

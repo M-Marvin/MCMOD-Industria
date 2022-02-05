@@ -47,7 +47,7 @@ public class ItemRemoteControll extends ItemBase {
 				
 				return ActionResult.success(stack);
 				
-			} else {
+			} else if (stack.getTag().contains("ChanelItem")) {
 				
 				CompoundNBT tag = stack.getTag();
 				CompoundNBT chanelItemTag = tag.getCompound("ChanelItem");

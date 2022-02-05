@@ -20,6 +20,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -221,6 +223,17 @@ public class BlockStructureScaffold extends BlockContainerBase implements IBAdva
 			}
 		}
 		return true;
+	}
+	
+	@Override
+	public void onRemove(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+		if (!state.is(newState.getBlock()) && !(state.getBlock() instanceof BlockEncasedElectricWire || state.getBlock() instanceof BlockEncasedFluidPipe || state.getBlock() instanceof BlockEncasedNetworkCable)) {
+			TileEntity te = world.getBlockEntity(pos);
+			if (te instanceof IInventory) {
+				InventoryHelper.dropContents(world, pos, (IInventory) te);
+			}
+			world.removeBlockEntity(pos);
+		}
 	}
 	
 }

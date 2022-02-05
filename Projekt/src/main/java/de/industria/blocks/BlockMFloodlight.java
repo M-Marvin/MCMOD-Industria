@@ -63,13 +63,14 @@ public class BlockMFloodlight extends BlockContainerBase implements IBAdvancedBl
 		Direction facing = face == AttachFace.FLOOR ? Direction.UP : (face  == AttachFace.CEILING) ? Direction.DOWN : hfacing.getOpposite();
 		
 		HashMap<BlockPos, Direction> lights = new HashMap<BlockPos, Direction>();
-		for (int i = 0; i < 50; i++) {
+		for (int i = 0; i < 30; i++) {
 			BlockPos p1 = BlockPos.ZERO.relative(facing, i);
 			lights.put(p1, facing);
 			
 			int w = (int) (i * 0.2F);
-			Direction d1 = UtilHelper.getDirectionOutOfAxis(facing.getAxis());
-			Direction d2 = UtilHelper.rotateOnAxis(d1, 90, facing.getAxis());
+			Direction[] outOfAxis = UtilHelper.getDirectionsOutOfAxis(facing.getAxis());
+			Direction d1 = outOfAxis[0];
+			Direction d2 = outOfAxis[1];
 			for (int j1 = 0; j1 < w; j1++) {
 				
 				BlockPos p21 = p1.relative(d1, j1);

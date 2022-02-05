@@ -80,7 +80,7 @@ public class TileEntityMBattery extends TileEntity implements ITickableTileEntit
 						this.storage += Math.min(this.voltage.getVoltage() * chargeCurrent, MAX_STORAGE - storage);
 					}
 					if (network.getVoltage().getVoltage() > this.voltage.getVoltage()) this.voltage = network.getVoltage();
-				} else if (state.getValue(BlockMBattery.MODE) == BatteryMode.DISCHARGING) {
+				} else if (state.getValue(BlockMBattery.MODE) == BatteryMode.DISCHARGING && this.voltage != Voltage.NoLimit) {
 					this.maxCurrent = Math.max(network.getNeedCurrent(), this.storage / this.voltage.getVoltage());
 					float load = network.getGeneratorProductivity();
 					float dischargeCurrent = load * (network.getNeedCurrent());

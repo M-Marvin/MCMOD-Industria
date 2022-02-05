@@ -10,12 +10,16 @@ import net.minecraft.block.material.Material;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -75,7 +79,7 @@ public abstract class BlockWiring extends BlockBase implements IWaterLoggable {
 		World world = context.getLevel();
 		
 		BlockState replaceState = context.getLevel().getBlockState(context.getClickedPos());
-		state =  state.setValue(WATERLOGGED, replaceState.getBlock() == Blocks.WATER);
+		state = state.setValue(WATERLOGGED, replaceState.getBlock() == Blocks.WATER);
 		
 		for (Direction side : Direction.values()) {
 			BooleanProperty prop = CONNECTIONS[side.get3DDataValue()];
@@ -104,7 +108,17 @@ public abstract class BlockWiring extends BlockBase implements IWaterLoggable {
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 		BlockState newState = updateState(state, worldIn, pos);
-		if (!newState.equals(state)) worldIn.setBlockAndUpdate(pos, newState);
+		if (!newState.equals(state)) {
+			TileEntity te = worldIn.getBlockEntity(pos);
+			if (te != null) {
+				CompoundNBT nbt = te.save(new CompoundNBT());
+				worldIn.setBlockAndUpdate(pos, newState);
+				TileEntity newTe = worldIn.getBlockEntity(pos);
+				if (newTe != null) newTe.load(newState, nbt);
+			} else {
+				worldIn.setBlockAndUpdate(pos, newState);
+			}
+		}
 	}
 	
 	public BlockState updateState(BlockState state, World worldIn, BlockPos pos) {
@@ -184,6 +198,31 @@ public abstract class BlockWiring extends BlockBase implements IWaterLoggable {
 			return this.name;
 		}
 		
+	}
+	
+	public BlockState rotate(BlockState state, Rotation rotation) {
+		switch(rotation) {
+		case CLOCKWISE_180:
+			return state.setValue(NORTH, state.getValue(SOUTH)).setValue(EAST, state.getValue(WEST)).setValue(SOUTH, state.getValue(NORTH)).setValue(WEST, state.getValue(EAST));
+		case COUNTERCLOCKWISE_90:
+			return state.setValue(NORTH, state.getValue(EAST)).setValue(EAST, state.getValue(SOUTH)).setValue(SOUTH, state.getValue(WEST)).setValue(WEST, state.getValue(NORTH));
+		case CLOCKWISE_90:
+			return state.setValue(NORTH, state.getValue(WEST)).setValue(EAST, state.getValue(NORTH)).setValue(SOUTH, state.getValue(EAST)).setValue(WEST, state.getValue(SOUTH));
+		default:
+			return state;
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	public BlockState mirror(BlockState state, Mirror mirror) {
+		switch(mirror) {
+		case LEFT_RIGHT:
+			return state.setValue(NORTH, state.getValue(SOUTH)).setValue(SOUTH, state.getValue(NORTH));
+		case FRONT_BACK:
+			return state.setValue(EAST, state.getValue(WEST)).setValue(WEST, state.getValue(EAST));
+		default:
+			return super.mirror(state, mirror);
+		}
 	}
 	
 }

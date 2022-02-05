@@ -652,6 +652,11 @@
 "industria.jigsaw_block.generate": "Generieren",
 "industria.jigsaw_block.levels": "Levels: %s",
 "industria.generator.remainingFuel": "Treibstoff",
+"industria.blueprint.screen": "Bauplan benennen",
+"industria.blueprint.structureName": "Name",
+"industria.blueprint.structureName.fail": "Bauplanname ung\u00dcltig!",
+"industria.blueprint.structureName.valid": "Bauplanname eingeben:",
+"industria.blueprint.structureSize": "Konstruktionsmasse: %1$s",
 
 "itemGroup.machines": "Maschinen",
 "itemGroup.building_blocks": "Baumaterial",

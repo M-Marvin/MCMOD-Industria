@@ -70,30 +70,30 @@ public class TileEntityStructureScaffold extends TileEntityInventoryBase impleme
 	
 	@Override
 	public void tick() {
-		if (!this.level.isClientSide()) {
+		if (getBlockState().getBlock() == ModItems.energy_barrier_generator && !this.level.isClientSide()) {
 			// The Energybarrier Generator blocks use this BlockEntity too!
-			if (getBlockState().getBlock() == ModItems.energy_barrier_generator) ModItems.energy_barrier_generator.onNetworkChanges(this.level, this.worldPosition, getBlockState(), ElectricityNetworkHandler.getHandlerForWorld(this.level).getNetwork(this.worldPosition));
+			ModItems.energy_barrier_generator.onNetworkChanges(this.level, this.worldPosition, getBlockState(), ElectricityNetworkHandler.getHandlerForWorld(this.level).getNetwork(this.worldPosition));
 		}
 	}
 	
 	@Override
 	public void deserializeNBT(CompoundNBT nbt) {
-		super.deserializeNBT(nbt);
+		super.deserializeNBT(nbt); //&&DDDD
 	}
 	
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(worldPosition, 0, this.serializeNBT());
+		return new SUpdateTileEntityPacket(worldPosition, 0, this.serializeNBT()); // TTTT
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		this.deserializeNBT(pkt.getTag());
+		this.deserializeNBT(pkt.getTag());// TTT
 	}
 
 	@Override
 	public void handlePostMove(BlockPos pos, BlockPos newPos, boolean multipleCall) {
-		this.level.sendBlockUpdated(pos, getBlockState(), getBlockState(), 2);
+		//this.level.sendBlockUpdated(pos, getBlockState(), getBlockState(), 2);
 	}
 
 	@Override

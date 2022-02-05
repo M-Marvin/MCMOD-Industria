@@ -109,7 +109,7 @@ public class BlockRLightbarrier extends BlockContainerBase {
 				
 				double dist = i;
 				for (Entity entity : entitysBetween) {
-					Vector3d entityPos = entity.getPosition(0).multiply(facingVec.getX(), facingVec.getY(), facingVec.getZ());
+					Vector3d entityPos = entity.position().multiply(facingVec.getX(), facingVec.getY(), facingVec.getZ());
 					Vector3d blockPos = new Vector3d(pos.getX(), pos.getY(), pos.getZ()).multiply(facingVec.getX(), facingVec.getY(), facingVec.getZ());
 					double distance = MathHelper.getDistance(entityPos.x + entityPos.y + entityPos.z, blockPos.x + blockPos.y + blockPos.z);
 					

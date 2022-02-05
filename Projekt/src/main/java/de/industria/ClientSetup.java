@@ -3,6 +3,7 @@ package de.industria;
 import de.industria.gui.ScreenCardboardBox;
 import de.industria.gui.ScreenItemDistributor;
 import de.industria.gui.ScreenJigsaw;
+import de.industria.gui.ScreenLoadBlueprint;
 import de.industria.gui.ScreenMAirCompressor;
 import de.industria.gui.ScreenMAlloyFurnace;
 import de.industria.gui.ScreenMBlastFurnace;
@@ -19,6 +20,7 @@ import de.industria.gui.ScreenMSchredder;
 import de.industria.gui.ScreenMStoredCrafting;
 import de.industria.gui.ScreenMThermalZentrifuge;
 import de.industria.gui.ScreenNComputer;
+import de.industria.gui.ScreenNameBlueprint;
 import de.industria.gui.ScreenNetworkConfigurator;
 import de.industria.gui.ScreenRHarvester;
 import de.industria.gui.ScreenRHoverControler;
@@ -221,6 +223,8 @@ public class ClientSetup {
 		ScreenManager.register(ModContainerType.ORE_WASHING_PLANT, ScreenMOreWashingPlant::new);
 		ScreenManager.register(ModContainerType.CARDBOARD_BOX, ScreenCardboardBox::new);
 		ScreenManager.register(ModContainerType.RECIPE_CREATOR, ScreenRecipeCreator::new);
+		ScreenManager.register(ModContainerType.NAME_BLUEPRINT, ScreenNameBlueprint::new);
+		ScreenManager.register(ModContainerType.LOAD_BLUEPRINT, ScreenLoadBlueprint::new);
 		
 		ModClientBindings.bindModelToitem(ModItems.schredder_crusher, new ResourceLocation(Industria.MODID, "textures/item/schredder_crusher.png"), new ItemSchredderToolCrusherModel());
 		ModClientBindings.bindModelToitem(ModItems.schredder_macerator, new ResourceLocation(Industria.MODID, "textures/item/schredder_macerator.png"), new ItemSchredderToolMaceratorModel());

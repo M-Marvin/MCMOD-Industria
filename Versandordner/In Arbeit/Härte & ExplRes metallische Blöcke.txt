@@ -1,24 +1,26 @@
 ===HÄRTE===
 
-|Material      |Block         |Blechbl.      |Latten        |Gitter        |
+ger = gerundet auf natürliche Zahlen
+
+|Material      |Block         |Blechbl.      |Latten,Schind.|Gitter        |
 |--------------|--------------|--------------|--------------|--------------|
 |Aluminium     |2             |Block*0,75 ger|Block*0,75 ger|wie Block     |
 |Messing       |3             |Block*0,75 ger|Block*0,75 ger|wie Block     |
 |Kupfer        |3             |Block*0,75 ger|Block*0,75 ger|wie Block     |
 |Elektrolytkpf.|3             |nicht geplant |nicht geplant |nicht geplant |
-|Gold          |3             |nicht geplant |nicht geplant |wie Block     |
+|Gold          |3             |Block*0,75 ger|Block*0,75 ger|wie Block     |
 |Eisen         |5             |Block*0,75 ger|Block*0,75 ger|wie Block     |
-|Blei          |1             |Block*0,75 ger|Block*0,75 ger|nicht geplant |
+|Blei          |1             |Block*0,75 ger|Block*0,75 ger|wie Block     |
 |Metallglas    |Berech aus Zut|nicht geplant |nicht geplant |nicht geplant |
-|Monel         |4             |Block*0,75 ger|Block*0,75 ger|nicht geplant |
-|Netherit      |50            |nicht geplant |nicht geplant |nicht geplant |
-|Nickel        |5             |Block*0,75 ger|Block*0,75 ger|exist mglw spt|
-|Vanadium/Plld.|8             |nicht geplant |nicht geplant |nicht geplant |
-|Redstone-Alloy|3             |nicht geplant |nicht geplant |nicht geplant |
-|Silber        |3             |nicht geplant |nicht geplant |wie Block     |
+|Monel         |4             |Block*0,75 ger|Block*0,75 ger|wie Block     |
+|Netherit      |50            |Block*0,75 ger|Block*0,75 ger|wie Block     |
+|Nickel        |5             |Block*0,75 ger|Block*0,75 ger|wie Block     |
+|Vanadium/Plld.|8             |Block*0,75 ger|Block*0,75 ger|wie Block     |
+|Redstone-Alloy|3             |Block*0,75 ger|Block*0,75 ger|wie Block     |
+|Silber        |3             |Block*0,75 ger|Block*0,75 ger|wie Block     |
 |Stahl         |6             |Block*0,75 ger|Block*0,75 ger|wie Block     |
-|Zinn          |1             |Block*0,75 ger|Block*0,75 ger|exist mglw spt|
-|Wolfram       |10            |nicht geplant |nicht geplant |exist mglw spt|
+|Zinn          |1             |Block*0,75 ger|Block*0,75 ger|wie Block     |
+|Wolfram       |10            |Block*0,75 ger|Block*0,75 ger|wie Block     |
 |Zirkonium     |6             |nicht geplant |nicht geplant |nicht geplant |
 |Zink          |3             |Block*0,75 ger|Block*0,75 ger|wie Block     |
 
@@ -31,5 +33,5 @@ Metallglas = 10
 Netherit = 1200
 Alu = 4
 
-Für Blech- und Lattenblöcke immer *0,5
+Für Blech-, Schindel- und Lattenblöcke immer *0,5
 Für Gitter immmer wie Block

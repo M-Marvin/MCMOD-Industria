@@ -22,7 +22,7 @@ public class BlockBurnedFence extends FenceBlock {
 	public static final IntegerProperty DISTANCE = IntegerProperty.create("distance", 1, 8);
 	
 	public BlockBurnedFence() {
-		super(Properties.of(Material.WOOD).strength(1F, 0.3F).sound(SoundType.LADDER).harvestTool(BlockBase.getDefaultToolType(Material.WOOD)).requiresCorrectToolForDrops());
+		super(Properties.of(Material.WOOD).strength(1F, 0.3F).sound(SoundType.LADDER).requiresCorrectToolForDrops());
 		this.registerDefaultState(this.stateDefinition.any().setValue(NORTH, Boolean.valueOf(false)).setValue(EAST, Boolean.valueOf(false)).setValue(SOUTH, Boolean.valueOf(false)).setValue(WEST, Boolean.valueOf(false)).setValue(WATERLOGGED, Boolean.valueOf(false)).setValue(PERSISTANT, true).setValue(DISTANCE, 1));
 		this.setRegistryName(Industria.MODID, "burned_fence");
 	}

@@ -1,6 +1,6 @@
 {
-    "pack": {
-        "description": "examplemod resources",
-        "pack_format": 8
-    }
+  "pack": {
+    "pack_format": 7,
+    "description": "Daten- und Resourcenpacket fc\u00A7fr Industria 1.16"
+  }
 }

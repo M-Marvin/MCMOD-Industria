@@ -21,22 +21,22 @@ public abstract class BlockContainerBase extends ContainerBlock {
 	}
 	
 	public BlockContainerBase(String name, Material material, float hardnessAndResistance, SoundType sound) {
-		super(Properties.of(material).strength(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)));
+		super(Properties.of(material).strength(hardnessAndResistance).sound(sound));
 		this.setRegistryName(Industria.MODID, name);
 	}
 	
 	public BlockContainerBase(String name, Material material, float hardness, float resistance, SoundType sound) {
-		super(Properties.of(material).strength(hardness, resistance).sound(sound).harvestTool(getDefaultToolType(material)));
+		super(Properties.of(material).strength(hardness, resistance).sound(sound));
 		this.setRegistryName(Industria.MODID, name);
 	}
 
 	public BlockContainerBase(String name, Material material, float hardnessAndResistance, SoundType sound, boolean dropsEver) {
-		super(Properties.of(material).strength(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)));
+		super(Properties.of(material).strength(hardnessAndResistance).sound(sound));
 		this.setRegistryName(Industria.MODID, name);
 	}
 	
 	public BlockContainerBase(String name, Material material, float hardness, float resistance, SoundType sound, boolean dropsEver) {
-		super(Properties.of(material).strength(hardness, resistance).sound(sound).harvestTool(getDefaultToolType(material)));
+		super(Properties.of(material).strength(hardness, resistance).sound(sound));
 		this.setRegistryName(Industria.MODID, name);
 	}
 	

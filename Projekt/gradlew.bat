@@ -1,3 +1,5 @@
+
+set %JAVA_HOME%="C:\Program Files\Java\jdk-15\bin"
 @rem
 @rem Copyright 2015 the original author or authors.
 @rem

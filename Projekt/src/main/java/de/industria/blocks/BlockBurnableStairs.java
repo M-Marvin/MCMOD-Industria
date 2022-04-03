@@ -24,14 +24,14 @@ public class BlockBurnableStairs extends BlockStairsBase implements IBBurnableBl
 	}
 	
 	public BlockBurnableStairs(Supplier<BlockState> modelBlock, String name, Material material, float hardnessAndResistance, SoundType sound, int flammability, int fireSpreadTime, int burnTime, boolean dropsEver) {
-		super(modelBlock, name, Properties.of(material).strength(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)));
+		super(modelBlock, name, Properties.of(material).strength(hardnessAndResistance).sound(sound));
 		this.flammability = flammability;
 		this.fireSpreadChance = fireSpreadTime;
 		this.burnTime = burnTime;
 	}
 	
 	public BlockBurnableStairs(Supplier<BlockState> modelBlock, String name, Material material, float hardness, float resistance, SoundType sound, int flammability, int fireSpreadTime, int burnTime, boolean dropsEver) {
-		super(modelBlock, name, Properties.of(material).strength(hardness, resistance).sound(sound).harvestTool(getDefaultToolType(material)));
+		super(modelBlock, name, Properties.of(material).strength(hardness, resistance).sound(sound));
 		this.flammability = flammability;
 		this.fireSpreadChance = fireSpreadTime;
 		this.burnTime = burnTime;
@@ -39,14 +39,14 @@ public class BlockBurnableStairs extends BlockStairsBase implements IBBurnableBl
 	}
 
 	public BlockBurnableStairs(Supplier<BlockState> modelBlock, String name, Material material, float hardnessAndResistance, SoundType sound, int flammability, int fireSpreadTime, int burnTime) {
-		super(modelBlock, name, Properties.of(material).strength(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)).requiresCorrectToolForDrops());
+		super(modelBlock, name, Properties.of(material).strength(hardnessAndResistance).sound(sound).requiresCorrectToolForDrops());
 		this.flammability = flammability;
 		this.fireSpreadChance = fireSpreadTime;
 		this.burnTime = burnTime;
 	}
 	
 	public BlockBurnableStairs(Supplier<BlockState> modelBlock, String name, Material material, float hardness, float resistance, SoundType sound, int flammability, int fireSpreadTime, int burnTime) {
-		super(modelBlock, name, Properties.of(material).strength(hardness, resistance).sound(sound).harvestTool(getDefaultToolType(material)).requiresCorrectToolForDrops());
+		super(modelBlock, name, Properties.of(material).strength(hardness, resistance).sound(sound).requiresCorrectToolForDrops());
 		this.flammability = flammability;
 		this.fireSpreadChance = fireSpreadTime;
 		this.burnTime = burnTime;

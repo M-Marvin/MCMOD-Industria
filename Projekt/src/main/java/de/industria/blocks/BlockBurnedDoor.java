@@ -25,7 +25,7 @@ public class BlockBurnedDoor extends DoorBlock {
 	public static final IntegerProperty DISTANCE = IntegerProperty.create("distance", 1, 8);
 	
 	public BlockBurnedDoor() {
-		super(Properties.of(Material.WOOD).strength(1.5F, 0.5F).sound(SoundType.LADDER).harvestTool(BlockBase.getDefaultToolType(Material.WOOD)).requiresCorrectToolForDrops().noOcclusion());
+		super(Properties.of(Material.WOOD).strength(1.5F, 0.5F).sound(SoundType.LADDER).requiresCorrectToolForDrops().noOcclusion());
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(OPEN, Boolean.valueOf(false)).setValue(HINGE, DoorHingeSide.LEFT).setValue(POWERED, Boolean.valueOf(false)).setValue(HALF, DoubleBlockHalf.LOWER).setValue(PERSISTANT, true).setValue(DISTANCE, 1));
 		this.setRegistryName(Industria.MODID, "burned_door");
 	}

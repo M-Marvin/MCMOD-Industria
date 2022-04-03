@@ -25,7 +25,7 @@ public class BlockBurnedTrapdoor extends TrapDoorBlock
 	public static final IntegerProperty DISTANCE = IntegerProperty.create("distance", 1, 8);
 	
 	public BlockBurnedTrapdoor() {
-		super(Properties.of(Material.WOOD).strength(0.8F, 0.2F).sound(SoundType.LADDER).harvestTool(BlockBase.getDefaultToolType(Material.WOOD)).requiresCorrectToolForDrops().noOcclusion());
+		super(Properties.of(Material.WOOD).strength(0.8F, 0.2F).sound(SoundType.LADDER).requiresCorrectToolForDrops().noOcclusion());
 		this.setRegistryName(Industria.MODID, "burned_trapdoor");
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(OPEN, Boolean.valueOf(false)).setValue(HALF, Half.BOTTOM).setValue(POWERED, Boolean.valueOf(false)).setValue(WATERLOGGED, Boolean.valueOf(false)).setValue(PERSISTANT, true).setValue(DISTANCE, 1));
 	}

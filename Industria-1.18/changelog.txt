@@ -598,7 +598,7 @@
  - 35.1.30 Prevent NPE and deprecated MissingMappings.getMappings function. Closes #6252
  - 35.1.29 Fix entities not correctly being able to be ridden under water.
  - 35.1.28 Fix crash when beehive is broken by fake player (#7566)
- - 35.1.27 Add supplier variant to `AbstractBlock.Properties#lootFrom` (#7563)
+ - 35.1.27 Add supplier variant to `Block.Properties#lootFrom` (#7563)
  - 35.1.26 Fix ModFileResourcePack.getAllResourceLocations ignoring resourceNamespace. (#7562)
            Fixes #7405
  - 35.1.25 Fix missing serializers when deserializing global loot modifiers (#7561)
@@ -1016,8 +1016,8 @@
             * Favor Forge's map over vanilla
  - 32.0.12  Fixed creative screen arrows (#6827)
  - 32.0.11  Added call to method for tooltip with FontRenderer (#6831)
- - 32.0.10  Retarget Block.Properties patch to the new AbstractBlock, reintroduce harvestLevel and harvestTool fields (#6819)
-            * Retarget Block.Properties patch to the new AbstractBlock, reintroduces the harvestLevel and harvestTool fields.
+ - 32.0.10  Retarget Block.Properties patch to the new Block, reintroduce harvestLevel and harvestTool fields (#6819)
+            * Retarget Block.Properties patch to the new Block, reintroduces the harvestLevel and harvestTool fields.
             * Slight adjustment to fix the lootTableSupplier.
  - 32.0.9   Fixed sneaking while swimming (#6817)
  - 32.0.8   Fixed tooltip rendering issues (#6815)

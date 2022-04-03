@@ -16,19 +16,19 @@ public class BlockWoodenSlabBase extends BlockSlabBase implements IBBurnableBloc
 	}
 	
 	public BlockWoodenSlabBase(String name, Material material, float hardnessAndResistance, SoundType sound, boolean dropsEver) {
-		super(name, Properties.of(material).strength(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)));
+		super(name, Properties.of(material).strength(hardnessAndResistance).sound(sound));
 	}
 	
 	public BlockWoodenSlabBase(String name, Material material, float hardness, float resistance, SoundType sound, boolean dropsEver) {
-		super(name, Properties.of(material).strength(hardness, resistance).sound(sound).harvestTool(getDefaultToolType(material)));
+		super(name, Properties.of(material).strength(hardness, resistance).sound(sound));
 	}
 
 	public BlockWoodenSlabBase(String name, Material material, float hardnessAndResistance, SoundType sound) {
-		super(name, Properties.of(material).strength(hardnessAndResistance).sound(sound).harvestTool(getDefaultToolType(material)).requiresCorrectToolForDrops());
+		super(name, Properties.of(material).strength(hardnessAndResistance).sound(sound).requiresCorrectToolForDrops());
 	}
 	
 	public BlockWoodenSlabBase(String name, Material material, float hardness, float resistance, SoundType sound) {
-		super(name, Properties.of(material).strength(hardness, resistance).sound(sound).harvestTool(getDefaultToolType(material)).requiresCorrectToolForDrops());
+		super(name, Properties.of(material).strength(hardness, resistance).sound(sound).requiresCorrectToolForDrops());
 	}
 	
 	public static ToolType getDefaultToolType(Material material) {

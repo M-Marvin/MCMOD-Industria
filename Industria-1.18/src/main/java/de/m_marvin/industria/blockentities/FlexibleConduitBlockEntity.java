@@ -30,7 +30,7 @@ public class FlexibleConduitBlockEntity extends BlockEntity implements IFlexible
 	@Override
 	public void addConnection(FlexConnection connection) {
 		this.connections.add(connection);
-		this.connectionAngles.add(0);
+		this.connectionAngles.add(0F);
 	}
 
 	@SuppressWarnings("unlikely-arg-type")

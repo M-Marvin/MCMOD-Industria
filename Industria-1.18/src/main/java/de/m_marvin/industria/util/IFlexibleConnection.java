@@ -3,9 +3,12 @@ package de.m_marvin.industria.util;
 import java.util.List;
 import java.util.UUID;
 
+import com.jozufozu.flywheel.repack.joml.Vector3i;
+
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.registries.ModRegistries;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
@@ -17,11 +20,11 @@ public interface IFlexibleConnection {
 	public List<FlexConnection> getConnections();
 	public void addConnection(FlexConnection connection);
 	public void removeConnection(UUID uuid);
-	public float[] getAviableAngles();
+	public ConnectionPoint[] getAviableConnections();
 	public default boolean anyAngleAviable() {return false;};
 	
 	public default boolean angleAviable() {
-		return this.angleAviable() ? true : this.getAviableAngles().length > 0;
+		return this.angleAviable() ? true : this.getAviableConnections().length > 0;
 	}
 	
 	public default boolean connectedWith(FlexConnection connection) {
@@ -57,17 +60,24 @@ public interface IFlexibleConnection {
 		return false;
 	}
 	
+	public static record ConnectionPoint(
+		IFlexibleConnection block,
+		Vector3i offset,
+		float angle,
+		Direction attachmentFace
+	) {}
+	
 	public static class FlexConnection {
 		private UUID uuid;
 		private BlockPos savedPos1;
 		private BlockPos savedPos2;
-		private IFlexibleConnection block1;
-		private IFlexibleConnection block2;
+		private ConnectionPoint con1;
+		private ConnectionPoint con2;
 		private Conduit conduit;
 		
-		public FlexConnection(IFlexibleConnection block1, IFlexibleConnection block2, Conduit conduit) {
-			this.block1 = block1;
-			this.block2 = block2;
+		public FlexConnection(ConnectionPoint con1, ConnectionPoint con2, Conduit conduit) {
+			this.con1 = con1;
+			this.con2 = con2;
 			this.uuid = UUID.randomUUID();
 			this.conduit = conduit;
 		}
@@ -79,14 +89,22 @@ public interface IFlexibleConnection {
 			this.conduit = conduit;
 		}
 		
-		public CompoundTag save() {
+		public CompoundTag save(BlockPos posOfConnection) {
 			CompoundTag tag = new CompoundTag();
-			BlockPos pos1 = this.block1 != null ? ((BlockEntity) this.block1).getBlockPos() : this.savedPos1;
+			BlockPos pos1 = this.con1.block() != null ? ((BlockEntity) this.con1.block()).getBlockPos() : this.savedPos1;
 			if (pos1 == null) return null;
 			tag.put("Pos1", NbtUtils.writeBlockPos(pos1));
-			BlockPos pos2 = this.block2 != null ? ((BlockEntity) this.block2).getBlockPos() : this.savedPos2;
+			BlockPos pos2 = this.con2.block() != null ? ((BlockEntity) this.con2.block()).getBlockPos() : this.savedPos2;
 			if (pos2 == null) return null;
 			tag.put("Pos2", NbtUtils.writeBlockPos(pos1));
+			if (pos1 == posOfConnection || posOfConnection == null) {
+				CompoundTag connection1Tag = new CompoundTag();
+				connection1Tag.putFloat("Angle", con1.angle());
+				connection1Tag.put("Offset", MathHelper.writeVector(con1.offset()));
+			}
+			if (pos2 == posOfConnection || posOfConnection == null) {
+				
+			}
 			tag.putUUID("UUID", this.uuid);
 			tag.putString("Conduit", this.conduit.getRegistryName().toString());
 			return tag;

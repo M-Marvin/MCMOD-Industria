@@ -1,9 +1,11 @@
 package de.m_marvin.industria.items;
 
 import de.m_marvin.industria.conduits.Conduit;
-import de.m_marvin.industria.registries.ModBlocks;
-import de.m_marvin.industria.registries.ModRegistries;
+import de.m_marvin.industria.registries.Conduits;
+import de.m_marvin.industria.registries.ModCapabilities;
+import de.m_marvin.industria.util.IConduitHolder;
 import de.m_marvin.industria.util.IFlexibleConnection;
+import de.m_marvin.industria.util.IFlexibleConnection.ConnectionPoint;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -12,8 +14,8 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.util.LazyOptional;
 
 public class FlexibleConduitItem extends Item {
 	
@@ -29,23 +31,20 @@ public class FlexibleConduitItem extends Item {
 	}
 	
 	public void placeConduit(Level level, BlockPos pos1, BlockPos pos2) {
-		BlockEntity nodeBE1 = level.getBlockEntity(pos1);
-		BlockEntity nodeBE2 = level.getBlockEntity(pos2);
-		IFlexibleConnection node1;
-		IFlexibleConnection node2;
-		if (nodeBE1 instanceof IFlexibleConnection) {
-			node1 = (IFlexibleConnection) nodeBE1;
-		} else {
-			level.setBlockAndUpdate(pos1, ModBlocks.CONDUIT_NODE.defaultBlockState());
-			node1 = (IFlexibleConnection) level.getBlockEntity(pos1);
+		BlockState stateA = level.getBlockState(pos1);
+		BlockState stateB = level.getBlockState(pos2);
+		if (!(stateA.getBlock() instanceof IFlexibleConnection)) {
+			return;
 		}
-		if (nodeBE2 instanceof IFlexibleConnection) {
-			node2 = (IFlexibleConnection) nodeBE2;
-		} else {
-			level.setBlockAndUpdate(pos2, ModBlocks.CONDUIT_NODE.defaultBlockState());
-			node2 = (IFlexibleConnection) level.getBlockEntity(pos2);
+		if (!(stateB.getBlock() instanceof IFlexibleConnection)) {
+			return;
 		}
-		node1.connectWith(node2, this.conduit);
+		LazyOptional<IConduitHolder> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		if (conduitHolder.isPresent()) {
+			ConnectionPoint nodeA = ((IFlexibleConnection) stateA.getBlock()).getConnectionPoints(level, pos1, stateA)[0];
+			ConnectionPoint nodeB = ((IFlexibleConnection) stateB.getBlock()).getConnectionPoints(level, pos1, stateB)[0];
+			conduitHolder.resolve().get().addConduit(nodeA, nodeB, Conduits.DEFAULT_CONDUIT);
+		}
 	}
 	
 	@Override
@@ -75,28 +74,20 @@ public class FlexibleConduitItem extends Item {
 	}
 	
 	protected BlockPos tryGetNodePos(Level level, BlockPos clicked, Direction face) {
-		BlockEntity clickedBE = level.getBlockEntity(clicked);
-		if (clickedBE instanceof IFlexibleConnection) {
-			IFlexibleConnection node = (IFlexibleConnection) clickedBE;
-			if (node.angleAviable()) {
+		BlockState clickedState = level.getBlockState(clicked);
+		if (clickedState.getBlock() instanceof IFlexibleConnection) {
+			IFlexibleConnection node = (IFlexibleConnection) clickedState.getBlock();
+			if (node.connectionAviable(level, clicked, clickedState)) {
 				return clicked;
 			}
 		} else {
-			BlockState clickedState = level.getBlockState(clicked);
+			clickedState = level.getBlockState(clicked.relative(face.getOpposite()));
 			if (clickedState.getMaterial().isReplaceable()) {
-				return clicked;
-			} else {
-				clickedBE = level.getBlockEntity(clicked.relative(face));
-				if (clickedBE instanceof IFlexibleConnection) {
-					IFlexibleConnection node = (IFlexibleConnection) clickedBE;
-					if (node.angleAviable()) {
-						return clicked.relative(face);
-					}
-				} else {
-					clickedState = level.getBlockState(clicked.relative(face));
-					if (clickedState.getMaterial().isReplaceable()) {
-						return clicked.relative(face);
-					}
+				return clicked.relative(face.getOpposite());
+			} else if (clickedState.getBlock() instanceof IFlexibleConnection) {
+				IFlexibleConnection node = (IFlexibleConnection) clickedState.getBlock();
+				if (node.connectionAviable(level, clicked.relative(face.getOpposite()), clickedState)) {
+					return clicked.relative(face.getOpposite());
 				}
 			}
 		}

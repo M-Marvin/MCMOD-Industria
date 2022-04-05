@@ -40,4 +40,11 @@ public enum WallOrientations implements StringRepresentable {
 	public Axis getAxialOrientation() {
 		return orientation;
 	}
+	
+	public static WallOrientations fromFaceAndAxis(Direction face, Axis axis) {
+		for (WallOrientations orientation : WallOrientations.values()) {
+			if (orientation.getFace() == face && orientation.getAxialOrientation() == axis) return orientation;
+		}
+		return null;
+	}
 }

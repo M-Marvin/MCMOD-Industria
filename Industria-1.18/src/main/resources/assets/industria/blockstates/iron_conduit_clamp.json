@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "orientation=ground_ns,offset=0": { "model": "industria:block/iron_conduit_clamp" },
+    "orientation=ground_ew,offset=0": { "model": "industria:block/iron_conduit_clamp", "y": 90 },
+    "orientation=ceiling_nw,offset=0": { "model": "industria:block/iron_conduit_clamp", "x": 180 },
+    "orientation=ceiling_ew,offset=0": { "model": "industria:block/iron_conduit_clamp", "x": 180, "y": 90 },
+    
+    "orientation=north_ud,offset=0": { "model": "industria:block/iron_conduit_clamp", "x": 90 },
+    "orientation=north_ew,offset=0": { "model": "industria:block/iron_conduit_clamp", "y": 90, "x": 90 }
+    
+    
+  }
+}

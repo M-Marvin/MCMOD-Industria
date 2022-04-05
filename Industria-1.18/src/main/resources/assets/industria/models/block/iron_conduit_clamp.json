@@ -1,0 +1,21 @@
+{   "parent": "block/block",
+    "ambientocclusion": false,
+    "textures": {
+        "iron_rod": "industria:block/iron_rod",
+        "particle": "industria:block/iron_rod"
+    },
+    "elements": [
+        {
+            "from": [ 3, 0, 7 ],
+            "to": [ 13, 6, 9 ],
+            "faces": {
+                "down":  { "uv": [ 6, 6, 2, 2 ], "texture": "#iron_rod", "cullface": "down" },
+                "up":    { "uv": [ 2, 2, 6, 6 ], "texture": "#iron_rod" },
+                "north": { "uv": [ 2, 6, 6, 7 ], "texture": "#iron_rod" },
+                "south": { "uv": [ 2, 6, 6, 7 ], "texture": "#iron_rod" },
+                "west":  { "uv": [ 2, 6, 6, 7 ], "texture": "#iron_rod" },
+                "east":  { "uv": [ 2, 6, 6, 7 ], "texture": "#iron_rod" }
+            }
+        }
+    ]
+}

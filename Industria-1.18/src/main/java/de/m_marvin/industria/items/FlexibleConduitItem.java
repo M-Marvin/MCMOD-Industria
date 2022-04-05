@@ -1,13 +1,17 @@
 package de.m_marvin.industria.items;
 
+import com.mojang.math.Vector3f;
+
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.registries.Conduits;
 import de.m_marvin.industria.registries.ModCapabilities;
 import de.m_marvin.industria.util.IConduitHolder;
 import de.m_marvin.industria.util.IFlexibleConnection;
+import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.IFlexibleConnection.ConnectionPoint;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.InteractionResult;

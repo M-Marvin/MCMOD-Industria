@@ -1,7 +1,6 @@
 package de.m_marvin.industria.items;
 
 import de.m_marvin.industria.conduits.Conduit;
-import de.m_marvin.industria.registries.Conduits;
 import de.m_marvin.industria.registries.ModCapabilities;
 import de.m_marvin.industria.util.IConduitHolder;
 import de.m_marvin.industria.util.IFlexibleConnection;
@@ -43,7 +42,7 @@ public class FlexibleConduitItem extends Item {
 		if (conduitHolder.isPresent()) {
 			ConnectionPoint nodeA = ((IFlexibleConnection) stateA.getBlock()).getConnectionPoints(level, pos1, stateA)[0];
 			ConnectionPoint nodeB = ((IFlexibleConnection) stateB.getBlock()).getConnectionPoints(level, pos1, stateB)[0];
-			conduitHolder.resolve().get().addConduit(nodeA, nodeB, Conduits.DEFAULT_CONDUIT);
+			conduitHolder.resolve().get().addConduit(nodeA, nodeB, this.conduit);
 		}
 	}
 	

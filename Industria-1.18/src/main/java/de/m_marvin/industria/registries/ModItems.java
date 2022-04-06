@@ -13,7 +13,7 @@ import net.minecraftforge.registries.GameData;
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD,modid=Industria.MODID)
 public class ModItems {
 	
-	public static final Item IRON_CONDUIT_CLAMP = registerItem("conduit_clamp", new BlockItem(ModBlocks.IRON_CONDUIT_CLAMP, new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE)));
+	public static final Item IRON_CONDUIT_CLAMP = registerItem("iron_conduit_clamp", new BlockItem(ModBlocks.IRON_CONDUIT_CLAMP, new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE)));
 	public static final Item CONDUIT_TEST = registerItem("conduit_test", new FlexibleConduitItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE), Conduits.DEFAULT_CONDUIT));
 	
 	public static BlockItem registerBlockItem(Block block) {

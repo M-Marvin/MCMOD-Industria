@@ -7,7 +7,7 @@ import java.util.Optional;
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.registries.ModCapabilities;
 import de.m_marvin.industria.util.IFlexibleConnection.ConnectionPoint;
-import de.m_marvin.industria.util.IFlexibleConnection.FlexConnection;
+import de.m_marvin.industria.util.IFlexibleConnection.PlacedConduit;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -18,8 +18,8 @@ import net.minecraftforge.common.util.LazyOptional;
 public interface IConduitHolder {
 	
 	public boolean addConduit(ConnectionPoint nodeA, ConnectionPoint nodeB, Conduit conduit);
-	public Optional<FlexConnection> getConduit(ConnectionPoint node);
-	public List<FlexConnection> getConduits();
+	public Optional<PlacedConduit> getConduit(ConnectionPoint node);
+	public List<PlacedConduit> getConduits();
 	
 	public static class ConduitWorldStorageCapability implements IConduitHolder, ICapabilitySerializable<ListTag> {
 		
@@ -33,12 +33,12 @@ public interface IConduitHolder {
 			return LazyOptional.empty();
 		}
 		
-		private List<FlexConnection> conduits = new ArrayList<>();
+		private List<PlacedConduit> conduits = new ArrayList<>();
 		
 		@Override
 		public ListTag serializeNBT() {
 			ListTag tag = new ListTag();
-			for (FlexConnection con : conduits) {
+			for (PlacedConduit con : conduits) {
 				CompoundTag conTag = con.save();
 				if (conTag != null) tag.add(conTag);
 			}
@@ -50,7 +50,7 @@ public interface IConduitHolder {
 			this.conduits.clear();
 			for (int i = 0; i < tag.size(); i++) {
 				CompoundTag conTag = tag.getCompound(i);
-				FlexConnection con = FlexConnection.load(conTag);
+				PlacedConduit con = PlacedConduit.load(conTag);
 				if (con != null) this.conduits.add(con);
 			}
 		}
@@ -60,15 +60,15 @@ public interface IConduitHolder {
 			if (getConduit(nodeA).isPresent() || getConduit(nodeB).isPresent()) {
 				return false;
 			} else {
-				FlexConnection connection = new FlexConnection(nodeA.position(), nodeA.connectionId(), nodeB.position(), nodeB.connectionId(), conduit);
+				PlacedConduit connection = new PlacedConduit(nodeA.position(), nodeA.connectionId(), nodeB.position(), nodeB.connectionId(), conduit);
 				this.conduits.add(connection);
 				return true;
 			}
 		}
 		
 		@Override
-		public Optional<FlexConnection> getConduit(ConnectionPoint node) {
-			for (FlexConnection con : this.conduits) {
+		public Optional<PlacedConduit> getConduit(ConnectionPoint node) {
+			for (PlacedConduit con : this.conduits) {
 				if (con.getNodeA().equals(node.position())) {
 					return Optional.of(con);
 				}
@@ -77,7 +77,7 @@ public interface IConduitHolder {
 		}
 		
 		@Override
-		public List<FlexConnection> getConduits() {
+		public List<PlacedConduit> getConduits() {
 			return this.conduits;
 		}
 		

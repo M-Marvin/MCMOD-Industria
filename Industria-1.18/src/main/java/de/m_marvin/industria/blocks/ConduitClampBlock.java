@@ -115,11 +115,11 @@ public class ConduitClampBlock extends Block implements IFlexibleConnection {
 			switch (attachFace.getAxis()) {
 			default:
 			case Y:
-				offset = new Vector3i(clampOffset * 8, 0, 8);
+				offset = new Vector3i(2 + clampOffset * 6, 4, 8);
 				angle = 0;
 				break;
 			case Z:
-				offset = new Vector3i(clampOffset * 8, 8, 0);
+				offset = new Vector3i(2 + clampOffset * 6, 8, 4);
 				angle = 90;
 				break;
 			}
@@ -128,11 +128,11 @@ public class ConduitClampBlock extends Block implements IFlexibleConnection {
 			switch (attachFace.getAxis()) {
 			default:
 			case X:
-				offset = new Vector3i(0, clampOffset * 8, 8);
+				offset = new Vector3i(4, 2 + clampOffset * 6, 8);
 				angle = 0;
 				break;
 			case Z:
-				offset = new Vector3i(8, clampOffset * 8, 0);
+				offset = new Vector3i(8, 2 + clampOffset * 6, 4);
 				angle = 90;
 				break;
 			}
@@ -141,11 +141,11 @@ public class ConduitClampBlock extends Block implements IFlexibleConnection {
 			switch (attachFace.getAxis()) {
 			default:
 			case X:
-				offset = new Vector3i(0, 8, clampOffset * 8);
+				offset = new Vector3i(4, 8, 2 + clampOffset * 6);
 				angle = 90;
 				break;
 			case Y:
-				offset = new Vector3i(8, 0, clampOffset * 8);
+				offset = new Vector3i(8, 4, 2 + clampOffset * 6);
 				angle = 0;
 				break;
 			}

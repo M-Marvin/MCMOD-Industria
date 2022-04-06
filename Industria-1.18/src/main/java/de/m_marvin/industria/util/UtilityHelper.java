@@ -34,6 +34,21 @@ public class UtilityHelper {
 		return new Vector3i(tag.getInt("x"), tag.getInt("y"), tag.getInt("z"));
 	}
 	
+	public static BlockPos getMinCorner(BlockPos pos1, BlockPos pos2) {
+		return new BlockPos(
+				Math.min(pos1.getX(), pos2.getX()),
+				Math.min(pos1.getY(), pos2.getY()),
+				Math.min(pos1.getZ(), pos2.getZ())
+			);
+	}
+	public static BlockPos getMaxCorner(BlockPos pos1, BlockPos pos2) {
+		return new BlockPos(
+				Math.max(pos1.getX(), pos2.getX()),
+				Math.max(pos1.getY(), pos2.getY()),
+				Math.max(pos1.getZ(), pos2.getZ())
+			);
+	}
+	
 	public static BlockPos getMiddle(BlockPos pos1, BlockPos pos2) {
 		int middleX = Math.min(pos1.getX(), pos2.getX()) + (Math.max(pos1.getX(), pos2.getX()) - Math.min(pos1.getX(), pos2.getX())) / 2;
 		int middleY = Math.min(pos1.getY(), pos2.getY()) + (Math.max(pos1.getY(), pos2.getY()) - Math.min(pos1.getY(), pos2.getY())) / 2;

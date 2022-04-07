@@ -12,6 +12,7 @@ import de.m_marvin.industria.util.UtilityHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -103,23 +104,24 @@ public class ConduitClampBlock extends Block implements IFlexibleConnection {
 	}
 	
 	@Override
-	public ConnectionPoint[] getConnectionPoints(Level level, BlockPos pos, BlockState state) {
+	public ConnectionPoint[] getConnectionPoints(BlockGetter level, BlockPos pos, BlockState state) {
 		WallOrientations orientation = state.getValue(ModBlockStateProperties.ORIENTATION);
 		Direction attachFace = orientation.getFace();
 		Axis connectionAxis = orientation.getAxialOrientation();
 		int clampOffset = state.getValue(ModBlockStateProperties.CLAMP_OFFSET);
 		Vector3i offset = null;
 		float angle = 0;
+		int axisOffset = attachFace.getAxisDirection() == AxisDirection.POSITIVE ? 12 : 4;
 		switch (connectionAxis) {
 		case X:
 			switch (attachFace.getAxis()) {
 			default:
 			case Y:
-				offset = new Vector3i(clampOffset * 8, 0, 8);
+				offset = new Vector3i(2 + clampOffset * 6, axisOffset, 8);
 				angle = 0;
 				break;
 			case Z:
-				offset = new Vector3i(clampOffset * 8, 8, 0);
+				offset = new Vector3i(2 + clampOffset * 6, 8, axisOffset);
 				angle = 90;
 				break;
 			}
@@ -128,11 +130,11 @@ public class ConduitClampBlock extends Block implements IFlexibleConnection {
 			switch (attachFace.getAxis()) {
 			default:
 			case X:
-				offset = new Vector3i(0, clampOffset * 8, 8);
+				offset = new Vector3i(axisOffset, 2 + clampOffset * 6, 8);
 				angle = 0;
 				break;
 			case Z:
-				offset = new Vector3i(8, clampOffset * 8, 0);
+				offset = new Vector3i(8, 2 + clampOffset * 6, axisOffset);
 				angle = 90;
 				break;
 			}
@@ -141,11 +143,11 @@ public class ConduitClampBlock extends Block implements IFlexibleConnection {
 			switch (attachFace.getAxis()) {
 			default:
 			case X:
-				offset = new Vector3i(0, 8, clampOffset * 8);
+				offset = new Vector3i(axisOffset, 8, 2 + clampOffset * 6);
 				angle = 90;
 				break;
 			case Y:
-				offset = new Vector3i(8, 0, clampOffset * 8);
+				offset = new Vector3i(8, axisOffset, 2 + clampOffset * 6);
 				angle = 0;
 				break;
 			}

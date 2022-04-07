@@ -17,7 +17,7 @@ public class TileEntityMGasHeaterModel extends EntityModel<Entity> {
 	public TileEntityMGasHeaterModel() {
 		texWidth = 256;
 		texHeight = 256;
-
+		
 		root = new ModelRenderer(this);
 		root.setPos(0.0F, 24.0F, 0.0F);
 		root.texOffs(96, 0).addBox(-7.0F, -14.0F, -8.0F, 13.0F, 13.0F, 14.0F, 0.0F, false);

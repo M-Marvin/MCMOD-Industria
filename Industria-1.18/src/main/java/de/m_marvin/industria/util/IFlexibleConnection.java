@@ -14,26 +14,27 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 
 public interface IFlexibleConnection {
 	
-	public ConnectionPoint[] getConnectionPoints(Level level, BlockPos pos, BlockState state);
+	public ConnectionPoint[] getConnectionPoints(BlockGetter level, BlockPos pos, BlockState state);
 	
-	public default FlexConnection[] getConnectedConduits(Level level, BlockPos pos, BlockState state) {
-		List<FlexConnection> connections = new ArrayList<>();
+	public default PlacedConduit[] getConnectedConduits(Level level, BlockPos pos, BlockState state) {
+		List<PlacedConduit> connections = new ArrayList<>();
 		for (ConnectionPoint node : getConnectionPoints(level, pos, state)) {
 			LazyOptional<IConduitHolder> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
 			if (conduitHolder.isPresent()) {
-				Optional<FlexConnection> conduit = conduitHolder.resolve().get().getConduit(node);
+				Optional<PlacedConduit> conduit = conduitHolder.resolve().get().getConduit(node);
 				if (conduit.isPresent()) {
 					connections.add(conduit.get());
 				}
 			}
 		}
-		return connections.toArray(new FlexConnection[] {});
+		return connections.toArray(new PlacedConduit[] {});
 	}
 	
 	public default boolean connectionAviable(Level level, BlockPos pos, BlockState state) {
@@ -54,14 +55,14 @@ public interface IFlexibleConnection {
 		Direction attachmentFace
 	) {}
 	
-	public static class FlexConnection {
+	public static class PlacedConduit {
 		private BlockPos pos1;
 		private BlockPos pos2;
 		private int connectionPoint1;
 		private int connectionPoint2;
 		private Conduit conduit;
 		
-		public FlexConnection(BlockPos pos1, int connectionPoint1, BlockPos pos2, int connectionPoint2, Conduit conduit) {
+		public PlacedConduit(BlockPos pos1, int connectionPoint1, BlockPos pos2, int connectionPoint2, Conduit conduit) {
 			this.pos1 = pos1;
 			this.pos2 = pos2;
 			this.connectionPoint1 = connectionPoint1;
@@ -79,7 +80,7 @@ public interface IFlexibleConnection {
 			return tag;
 		}
 		
-		public static FlexConnection load(CompoundTag tag) {
+		public static PlacedConduit load(CompoundTag tag) {
 			BlockPos pos1 = NbtUtils.readBlockPos(tag.getCompound("PosA"));
 			BlockPos pos2 = NbtUtils.readBlockPos(tag.getCompound("PosB"));
 			int connectionPoint1 = tag.getInt("ConnectionPointA");
@@ -87,7 +88,7 @@ public interface IFlexibleConnection {
 			ResourceLocation conduitName = new ResourceLocation(tag.getString("Conduit"));
 			Conduit conduit = ModRegistries.CONDUITES.get().getValue(conduitName);
 			if (conduit == null) return null;
-			return new FlexConnection(pos1, connectionPoint1, pos2, connectionPoint2, conduit);
+			return new PlacedConduit(pos1, connectionPoint1, pos2, connectionPoint2, conduit);
 		}
 		
 		public Conduit getConduit() {

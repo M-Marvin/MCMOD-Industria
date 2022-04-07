@@ -41,8 +41,9 @@ public class FlexibleConduitItem extends Item {
 		LazyOptional<IConduitHolder> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
 			ConnectionPoint nodeA = ((IFlexibleConnection) stateA.getBlock()).getConnectionPoints(level, pos1, stateA)[0];
-			ConnectionPoint nodeB = ((IFlexibleConnection) stateB.getBlock()).getConnectionPoints(level, pos1, stateB)[0];
+			ConnectionPoint nodeB = ((IFlexibleConnection) stateB.getBlock()).getConnectionPoints(level, pos2, stateB)[0];
 			conduitHolder.resolve().get().addConduit(nodeA, nodeB, this.conduit);
+			System.out.println("Placed Conduit at " + pos1 + " - " + pos2);
 		}
 	}
 	

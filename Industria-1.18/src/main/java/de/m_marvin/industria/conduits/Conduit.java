@@ -1,11 +1,11 @@
 package de.m_marvin.industria.conduits;
 
-import com.jozufozu.flywheel.repack.joml.Vector3f;
-
-import de.m_marvin.industria.util.IFlexibleConnection;
 import de.m_marvin.industria.util.UtilityHelper;
-import de.m_marvin.industria.util.IFlexibleConnection.ConnectionPoint;
-import de.m_marvin.industria.util.IFlexibleConnection.PlacedConduit;
+import de.m_marvin.industria.util.conduit.IFlexibleConnection;
+import de.m_marvin.industria.util.conduit.IFlexibleConnection.ConnectionPoint;
+import de.m_marvin.industria.util.conduit.IFlexibleConnection.PlacedConduit;
+import de.m_marvin.industria.util.unifiedvectors.Vec3f;
+import de.m_marvin.industria.util.unifiedvectors.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockGetter;
@@ -100,9 +100,28 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		BlockPos cornerMin = UtilityHelper.getMinCorner(nodeApos, nodeBpos);
 		
 		if (nodeAstate.getBlock() instanceof IFlexibleConnection && nodeBstate.getBlock() instanceof IFlexibleConnection) {
-
+			
 			ConnectionPoint pointA = ((IFlexibleConnection) nodeAstate.getBlock()).getConnectionPoints(level, nodeApos, nodeAstate)[conduit.getConnectionPointA()];
 			ConnectionPoint pointB = ((IFlexibleConnection) nodeBstate.getBlock()).getConnectionPoints(level, nodeBpos, nodeBstate)[conduit.getConnectionPointB()];
+			
+			Vec3f pointStart = new Vec3f(
+					nodeApos.getX() - cornerMin.getX(),
+					nodeApos.getY() - cornerMin.getY(),
+					nodeApos.getZ() - cornerMin.getZ()
+				).add(pointA.offset().toFloat());
+			Vec3f pointEnd = new Vec3f(
+					nodeBpos.getX() - cornerMin.getX(),
+					nodeBpos.getY() - cornerMin.getY(),
+					nodeBpos.getZ() - cornerMin.getZ()
+				).add(pointA.offset().toFloat());
+			
+			Vec3f rotationStart = UtilityHelper.rotationFromAxisAndAngle(pointA.attachmentFace().getAxis(), pointA.angle());
+			Vec3f rotationEnd = UtilityHelper.rotationFromAxisAndAngle(pointB.attachmentFace().getAxis(), pointB.angle());
+			
+			float planeAngleStart = (float) (pointStart.angle(pointEnd) - rotationStart.y());
+			float planeAngleEnd = (float) (pointEnd.angle(pointStart) - rotationEnd.y());
+			
+			
 			
 			BlockPos bp1 = nodeApos.subtract(cornerMin);
 			BlockPos bp2 = nodeBpos.subtract(cornerMin);

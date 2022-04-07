@@ -12,10 +12,10 @@ import com.mojang.math.Vector3f;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.registries.ModCapabilities;
-import de.m_marvin.industria.util.IConduitHolder;
-import de.m_marvin.industria.util.IFlexibleConnection;
-import de.m_marvin.industria.util.IFlexibleConnection.ConnectionPoint;
-import de.m_marvin.industria.util.IFlexibleConnection.PlacedConduit;
+import de.m_marvin.industria.util.conduit.ConduitWorldStorageCapability;
+import de.m_marvin.industria.util.conduit.IFlexibleConnection;
+import de.m_marvin.industria.util.conduit.IFlexibleConnection.ConnectionPoint;
+import de.m_marvin.industria.util.conduit.IFlexibleConnection.PlacedConduit;
 import de.m_marvin.industria.util.UtilityHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -60,10 +60,10 @@ public class ConduitWorldRenderer {
 		RenderSystem.disableCull();
 		
 		ClientLevel clientLevel = Minecraft.getInstance().level;
-		LazyOptional<IConduitHolder> optionalConduitHolder = clientLevel.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		LazyOptional<ConduitWorldStorageCapability> optionalConduitHolder = clientLevel.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
 		if (optionalConduitHolder.isPresent()) {
 			
-			IConduitHolder conduitHolder = optionalConduitHolder.resolve().get();
+			ConduitWorldStorageCapability conduitHolder = optionalConduitHolder.resolve().get();
 			
 			for (PlacedConduit conduit : conduitHolder.getConduits()) {
 				

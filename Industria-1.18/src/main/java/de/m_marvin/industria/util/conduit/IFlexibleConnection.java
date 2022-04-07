@@ -1,14 +1,13 @@
-package de.m_marvin.industria.util;
+package de.m_marvin.industria.util.conduit;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.jozufozu.flywheel.repack.joml.Vector3i;
-
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.registries.ModCapabilities;
 import de.m_marvin.industria.registries.ModRegistries;
+import de.m_marvin.industria.util.unifiedvectors.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -26,7 +25,7 @@ public interface IFlexibleConnection {
 	public default PlacedConduit[] getConnectedConduits(Level level, BlockPos pos, BlockState state) {
 		List<PlacedConduit> connections = new ArrayList<>();
 		for (ConnectionPoint node : getConnectionPoints(level, pos, state)) {
-			LazyOptional<IConduitHolder> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+			LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
 			if (conduitHolder.isPresent()) {
 				Optional<PlacedConduit> conduit = conduitHolder.resolve().get().getConduit(node);
 				if (conduit.isPresent()) {
@@ -38,7 +37,7 @@ public interface IFlexibleConnection {
 	}
 	
 	public default boolean connectionAviable(Level level, BlockPos pos, BlockState state) {
-		LazyOptional<IConduitHolder> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
 			for (ConnectionPoint con : getConnectionPoints(level, pos, state)) {
 				if (!conduitHolder.resolve().get().getConduit(con).isPresent()) return true;
@@ -50,7 +49,7 @@ public interface IFlexibleConnection {
 	public static record ConnectionPoint(
 		BlockPos position,
 		int connectionId,
-		Vector3i offset,
+		Vec3i offset,
 		float angle,
 		Direction attachmentFace
 	) {}

@@ -2,9 +2,10 @@ package de.m_marvin.industria.items;
 
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.registries.ModCapabilities;
-import de.m_marvin.industria.util.IConduitHolder;
-import de.m_marvin.industria.util.IFlexibleConnection;
-import de.m_marvin.industria.util.IFlexibleConnection.ConnectionPoint;
+import de.m_marvin.industria.util.UtilityHelper;
+import de.m_marvin.industria.util.conduit.ConduitWorldStorageCapability;
+import de.m_marvin.industria.util.conduit.IFlexibleConnection;
+import de.m_marvin.industria.util.conduit.IFlexibleConnection.ConnectionPoint;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -38,13 +39,9 @@ public class FlexibleConduitItem extends Item {
 		if (!(stateB.getBlock() instanceof IFlexibleConnection)) {
 			return;
 		}
-		LazyOptional<IConduitHolder> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
-		if (conduitHolder.isPresent()) {
-			ConnectionPoint nodeA = ((IFlexibleConnection) stateA.getBlock()).getConnectionPoints(level, pos1, stateA)[0];
-			ConnectionPoint nodeB = ((IFlexibleConnection) stateB.getBlock()).getConnectionPoints(level, pos2, stateB)[0];
-			conduitHolder.resolve().get().addConduit(nodeA, nodeB, this.conduit);
-			System.out.println("Placed Conduit at " + pos1 + " - " + pos2);
-		}
+		ConnectionPoint nodeA = ((IFlexibleConnection) stateA.getBlock()).getConnectionPoints(level, pos1, stateA)[0];
+		ConnectionPoint nodeB = ((IFlexibleConnection) stateB.getBlock()).getConnectionPoints(level, pos2, stateB)[0];
+		UtilityHelper.setConduit(level, nodeA, nodeB, this.conduit);
 	}
 	
 	@Override

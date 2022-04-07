@@ -2,20 +2,18 @@ package de.m_marvin.industria.blocks;
 
 import java.util.stream.Stream;
 
-import com.jozufozu.flywheel.repack.joml.Vector3i;
-import com.mojang.math.Vector3f;
-
 import de.m_marvin.industria.registries.ModBlockStateProperties;
 import de.m_marvin.industria.types.WallOrientations;
-import de.m_marvin.industria.util.IFlexibleConnection;
 import de.m_marvin.industria.util.UtilityHelper;
+import de.m_marvin.industria.util.conduit.IFlexibleConnection;
+import de.m_marvin.industria.util.unifiedvectors.Vec3f;
+import de.m_marvin.industria.util.unifiedvectors.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
@@ -47,34 +45,34 @@ public class ConduitClampBlock extends Block implements IFlexibleConnection {
 		case NORHT_UD:
 		case SOUTH_UD:
 		case WEST_UD:
-			shape = UtilityHelper.rotateShape(SHAPE, new Vector3f(8, 8, 8), orientation.getFace(), Axis.Y);
+			shape = UtilityHelper.rotateShape(SHAPE, new Vec3f(8, 8, 8), orientation.getFace(), Axis.Y);
 			break;
 		case WEST_NS:
 		case EAST_NS:
-			shape = UtilityHelper.rotateShape(SHAPE, new Vector3f(8, 8, 8), orientation.getFace(), Axis.Y);
-			shape = UtilityHelper.rotateShape(shape, new Vector3f(8, 8, 8), Math.toRadians(90), Axis.X);
+			shape = UtilityHelper.rotateShape(SHAPE, new Vec3f(8, 8, 8), orientation.getFace(), Axis.Y);
+			shape = UtilityHelper.rotateShape(shape, new Vec3f(8, 8, 8), Math.toRadians(90), Axis.X);
 			break;
 		case NORTH_EW:
 		case SOUTH_EW:
-			shape = UtilityHelper.rotateShape(SHAPE, new Vector3f(8, 8, 8), orientation.getFace(), Axis.Y);
-			shape = UtilityHelper.rotateShape(shape, new Vector3f(8, 8, 8), Math.toRadians(90), Axis.Z);
+			shape = UtilityHelper.rotateShape(SHAPE, new Vec3f(8, 8, 8), orientation.getFace(), Axis.Y);
+			shape = UtilityHelper.rotateShape(shape, new Vec3f(8, 8, 8), Math.toRadians(90), Axis.Z);
 			break;
 		case CEILING_EW:
 		case GROUND_EW:
-			shape = UtilityHelper.rotateShape(SHAPE, new Vector3f(8, 8, 8), orientation.getFace(), Axis.X);
-			shape = UtilityHelper.rotateShape(shape, new Vector3f(8, 8, 8), Math.toRadians(90), Axis.Y);
+			shape = UtilityHelper.rotateShape(SHAPE, new Vec3f(8, 8, 8), orientation.getFace(), Axis.X);
+			shape = UtilityHelper.rotateShape(shape, new Vec3f(8, 8, 8), Math.toRadians(90), Axis.Y);
 			break;
 		case CEILING_NS:
 		case GROUND_NS:
-			shape = UtilityHelper.rotateShape(SHAPE, new Vector3f(8, 8, 8), orientation.getFace(), Axis.X);
+			shape = UtilityHelper.rotateShape(SHAPE, new Vec3f(8, 8, 8), orientation.getFace(), Axis.X);
 			break;
 		default: shape = SHAPE;
 		}
-		Vector3f clampOffset = null;
+		Vec3f clampOffset = null;
 		switch (orientation.getAxialOrientation()) {
-		case X: clampOffset = new Vector3f((state.getValue(ModBlockStateProperties.CLAMP_OFFSET) - 1) * 6, 0, 0); break;
-		case Y: clampOffset = new Vector3f(0, (state.getValue(ModBlockStateProperties.CLAMP_OFFSET) - 1) * 6, 0); break;
-		case Z: clampOffset = new Vector3f(0, 0, (state.getValue(ModBlockStateProperties.CLAMP_OFFSET) - 1) * 6); break;
+		case X: clampOffset = new Vec3f((state.getValue(ModBlockStateProperties.CLAMP_OFFSET) - 1) * 6, 0, 0); break;
+		case Y: clampOffset = new Vec3f(0, (state.getValue(ModBlockStateProperties.CLAMP_OFFSET) - 1) * 6, 0); break;
+		case Z: clampOffset = new Vec3f(0, 0, (state.getValue(ModBlockStateProperties.CLAMP_OFFSET) - 1) * 6); break;
 		}
 		return UtilityHelper.offsetShape(shape, clampOffset);
 	}
@@ -109,7 +107,7 @@ public class ConduitClampBlock extends Block implements IFlexibleConnection {
 		Direction attachFace = orientation.getFace();
 		Axis connectionAxis = orientation.getAxialOrientation();
 		int clampOffset = state.getValue(ModBlockStateProperties.CLAMP_OFFSET);
-		Vector3i offset = null;
+		Vec3i offset = null;
 		float angle = 0;
 		int axisOffset = attachFace.getAxisDirection() == AxisDirection.POSITIVE ? 12 : 4;
 		switch (connectionAxis) {
@@ -117,12 +115,12 @@ public class ConduitClampBlock extends Block implements IFlexibleConnection {
 			switch (attachFace.getAxis()) {
 			default:
 			case Y:
-				offset = new Vector3i(2 + clampOffset * 6, axisOffset, 8);
-				angle = 0;
+				offset = new Vec3i(2 + clampOffset * 6, axisOffset, 8);
+				angle = -90;
 				break;
 			case Z:
-				offset = new Vector3i(2 + clampOffset * 6, 8, axisOffset);
-				angle = 90;
+				offset = new Vec3i(2 + clampOffset * 6, 8, axisOffset);
+				angle = 0;
 				break;
 			}
 			break;
@@ -130,11 +128,11 @@ public class ConduitClampBlock extends Block implements IFlexibleConnection {
 			switch (attachFace.getAxis()) {
 			default:
 			case X:
-				offset = new Vector3i(axisOffset, 2 + clampOffset * 6, 8);
-				angle = 0;
+				offset = new Vec3i(axisOffset, 2 + clampOffset * 6, 8);
+				angle = 90;
 				break;
 			case Z:
-				offset = new Vector3i(8, 2 + clampOffset * 6, axisOffset);
+				offset = new Vec3i(8, 2 + clampOffset * 6, axisOffset);
 				angle = 90;
 				break;
 			}
@@ -143,11 +141,11 @@ public class ConduitClampBlock extends Block implements IFlexibleConnection {
 			switch (attachFace.getAxis()) {
 			default:
 			case X:
-				offset = new Vector3i(axisOffset, 8, 2 + clampOffset * 6);
-				angle = 90;
+				offset = new Vec3i(axisOffset, 8, 2 + clampOffset * 6);
+				angle = 0;
 				break;
 			case Y:
-				offset = new Vector3i(8, axisOffset, 2 + clampOffset * 6);
+				offset = new Vec3i(8, axisOffset, 2 + clampOffset * 6);
 				angle = 0;
 				break;
 			}

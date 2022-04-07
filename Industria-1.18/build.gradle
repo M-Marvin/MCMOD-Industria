@@ -181,6 +181,7 @@ dependencies {
 	
 	implementation fg.deobf("curse.maven:flywheel-486392:3687357")
 	implementation fg.deobf("curse.maven:create-328085:3706700")
+	implementation "cz.advel.jbullet:jbullet:20101010-1"
 	
     // Examples using mod jars from ./libs
     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")

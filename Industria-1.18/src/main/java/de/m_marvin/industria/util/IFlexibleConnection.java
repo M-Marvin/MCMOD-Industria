@@ -14,13 +14,14 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 
 public interface IFlexibleConnection {
 	
-	public ConnectionPoint[] getConnectionPoints(Level level, BlockPos pos, BlockState state);
+	public ConnectionPoint[] getConnectionPoints(BlockGetter level, BlockPos pos, BlockState state);
 	
 	public default PlacedConduit[] getConnectedConduits(Level level, BlockPos pos, BlockState state) {
 		List<PlacedConduit> connections = new ArrayList<>();

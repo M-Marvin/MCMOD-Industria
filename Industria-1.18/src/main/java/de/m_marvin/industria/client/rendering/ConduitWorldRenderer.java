@@ -1,31 +1,28 @@
 package de.m_marvin.industria.client.rendering;
 
-import java.awt.Color;
-import java.util.List;
+import javax.swing.plaf.basic.BasicDesktopIconUI;
 
-import org.apache.logging.log4j.Level;
-
-import com.jozufozu.flywheel.repack.joml.Vector3f;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.registries.ModCapabilities;
 import de.m_marvin.industria.util.IConduitHolder;
 import de.m_marvin.industria.util.IFlexibleConnection;
-import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.IFlexibleConnection.ConnectionPoint;
 import de.m_marvin.industria.util.IFlexibleConnection.PlacedConduit;
+import de.m_marvin.industria.util.UtilityHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.entity.FishingHookRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -84,42 +81,59 @@ public class ConduitWorldRenderer {
 				
 				matrixStack.translate(cornerMin.getX(), cornerMin.getY(), cornerMin.getZ());
 				
-				if (nodeAstate.getBlock() instanceof IFlexibleConnection && nodeBstate.getBlock() instanceof IFlexibleConnection) {
-					
-					ConnectionPoint pointA = ((IFlexibleConnection) nodeAstate.getBlock()).getConnectionPoints(clientLevel, nodeApos, nodeAstate)[conduit.getConnectionPointA()];
-					ConnectionPoint pointB = ((IFlexibleConnection) nodeBstate.getBlock()).getConnectionPoints(clientLevel, nodeBpos, nodeBstate)[conduit.getConnectionPointB()];
-					
-					BlockPos bp1 = nodeApos.subtract(cornerMin);
-					BlockPos bp2 = nodeBpos.subtract(cornerMin);
-					Vector3f conduitEndA = new Vector3f(bp1.getX() + pointA.offset().x / 16F, bp1.getY() + pointA.offset().y / 16F, bp1.getZ() + pointA.offset().z / 16F);
-					Vector3f conduitEndB = new Vector3f(bp2.getX() + pointB.offset().x / 16F, bp2.getY() + pointB.offset().y / 16F, bp2.getZ() + pointB.offset().z / 16F);
+				float[] conduitNodes = conduit.getConduit().calculateShape(clientLevel, conduit);	
+				
+				if (conduitNodes.length > 1 && conduitNodes.length % 6 == 0) {
 					
 					Matrix4f matrix4f = matrixStack.last().pose();
 					Matrix3f matrix3f = matrixStack.last().normal();
-					VertexConsumer vertexBuilder = bufferSource.getBuffer(RenderType.solid());
+					VertexConsumer vertexBuilder = bufferSource.getBuffer(RenderType.lineStrip());
 					
-					//System.out.println("TSET" + nodeApos + " " + nodeBpos);
+					int size = conduit.getConduit().getConduitType().getThickness();
 					
-					int lightA = LevelRenderer.getLightColor(clientLevel, nodeApos);
-					int lightB = LevelRenderer.getLightColor(clientLevel, nodeBpos);
-					vertex(vertexBuilder, matrix4f, matrix3f, conduitEndA.x + 0, conduitEndA.y + 0.2F, conduitEndA.z + 0, 0, 0, lightA, 255, 255, 255, 255);
-					vertex(vertexBuilder, matrix4f, matrix3f, conduitEndA.x + 0, conduitEndA.y + 0, conduitEndA.z + 0, 0, 0, lightA, 255, 255, 255, 255);
-					vertex(vertexBuilder, matrix4f, matrix3f, conduitEndB.x + 0, conduitEndB.y + 0, conduitEndB.z + 0, 0, 0, lightB, 255, 255, 255, 255);
-					vertex(vertexBuilder, matrix4f, matrix3f, conduitEndB.x + 0, conduitEndB.y + 0.2F, conduitEndB.z + 0, 0, 0, lightB, 255, 255, 255, 255);
-					
-					// TODO Debug markers
-					vertex(vertexBuilder, matrix4f, matrix3f, conduitEndA.x + -0.5F, conduitEndA.y + 1, conduitEndA.z + -0.5F, 0, 0, lightB, 255, 0, 0, 255);
-					vertex(vertexBuilder, matrix4f, matrix3f, conduitEndA.x + 0.5F, conduitEndA.y + 1, conduitEndA.z + 0.5F, 0, 0, lightB, 255, 0, 0, 255);
-					vertex(vertexBuilder, matrix4f, matrix3f, conduitEndA.x + 0, conduitEndA.y + 0, conduitEndA.z + 0, 0, 0, lightB, 255, 0, 0, 255);
-					vertex(vertexBuilder, matrix4f, matrix3f, conduitEndA.x + 0, conduitEndA.y + 0, conduitEndA.z + 0, 0, 0, lightB, 255, 0, 0, 255);
-					vertex(vertexBuilder, matrix4f, matrix3f, conduitEndB.x + -0.5F, conduitEndB.y + 1, conduitEndB.z + -0.5F, 0, 0, lightB, 0, 255, 0, 255);
-					vertex(vertexBuilder, matrix4f, matrix3f, conduitEndB.x + 0.5F, conduitEndB.y + 1, conduitEndB.z + 0.5F, 0, 0, lightB, 0, 255, 0, 255);
-					vertex(vertexBuilder, matrix4f, matrix3f, conduitEndB.x + 0, conduitEndB.y + 0, conduitEndB.z + 0, 0, 0, lightB, 0, 255, 0, 255);
-					vertex(vertexBuilder, matrix4f, matrix3f, conduitEndB.x + 0, conduitEndB.y + 0, conduitEndB.z + 0, 0, 0, lightB, 0, 255, 0, 255);
+					for (int n = 0; n < conduitNodes.length; n += 6) {
+						
+						float x = conduitNodes[n + 0];
+						float y = conduitNodes[n + 1];
+						float z = conduitNodes[n + 2];
+						float rx = conduitNodes[n + 3];
+						float ry = conduitNodes[n + 4];
+						float rz = conduitNodes[n + 5];
+						
+						Vector3f nodeAtl = new Vector3f(x - size / 2, y + size / 2, z - size / 2);
+						Vector3f nodeAbl = new Vector3f(x - size / 2, y - size / 2, z - size / 2);
+						Vector3f nodeAtr = new Vector3f(x + size / 2, y + size / 2, z - size / 2);
+						Vector3f nodeAbr = new Vector3f(x + size / 2, y - size / 2, z - size / 2);
+						
+//						Quaternion quaternion = Quaternion.fromXYZ(rx, ry, rz);
+//						quaternion.;
+//						FishingHookRenderer
+						
+						//System.out.println("TSET" + nodeApos + " " + nodeBpos);
+						
+						vertex(vertexBuilder, matrix4f, matrix3f, x, y, z, 0, 0, 0, 0, 0, 0, 255);
+						
+//						int lightA = LevelRenderer.getLightColor(clientLevel, nodeApos);
+//						int lightB = LevelRenderer.getLightColor(clientLevel, nodeBpos);
+//						vertex(vertexBuilder, matrix4f, matrix3f, conduitEndA.x + 0, conduitEndA.y + 0.2F, conduitEndA.z + 0, 0, 0, lightA, 255, 255, 255, 255);
+//						vertex(vertexBuilder, matrix4f, matrix3f, conduitEndA.x + 0, conduitEndA.y + 0, conduitEndA.z + 0, 0, 0, lightA, 255, 255, 255, 255);
+//						vertex(vertexBuilder, matrix4f, matrix3f, conduitEndB.x + 0, conduitEndB.y + 0, conduitEndB.z + 0, 0, 0, lightB, 255, 255, 255, 255);
+//						vertex(vertexBuilder, matrix4f, matrix3f, conduitEndB.x + 0, conduitEndB.y + 0.2F, conduitEndB.z + 0, 0, 0, lightB, 255, 255, 255, 255);
+						
+					}
 					
 				}
 				
-				
+				// TODO Debug markers
+//				vertex(vertexBuilder, matrix4f, matrix3f, conduitEndA.x + -0.5F, conduitEndA.y + 1, conduitEndA.z + -0.5F, 0, 0, lightB, 255, 0, 0, 255);
+//				vertex(vertexBuilder, matrix4f, matrix3f, conduitEndA.x + 0.5F, conduitEndA.y + 1, conduitEndA.z + 0.5F, 0, 0, lightB, 255, 0, 0, 255);
+//				vertex(vertexBuilder, matrix4f, matrix3f, conduitEndA.x + 0, conduitEndA.y + 0, conduitEndA.z + 0, 0, 0, lightB, 255, 0, 0, 255);
+//				vertex(vertexBuilder, matrix4f, matrix3f, conduitEndA.x + 0, conduitEndA.y + 0, conduitEndA.z + 0, 0, 0, lightB, 255, 0, 0, 255);
+//				vertex(vertexBuilder, matrix4f, matrix3f, conduitEndB.x + -0.5F, conduitEndB.y + 1, conduitEndB.z + -0.5F, 0, 0, lightB, 0, 255, 0, 255);
+//				vertex(vertexBuilder, matrix4f, matrix3f, conduitEndB.x + 0.5F, conduitEndB.y + 1, conduitEndB.z + 0.5F, 0, 0, lightB, 0, 255, 0, 255);
+//				vertex(vertexBuilder, matrix4f, matrix3f, conduitEndB.x + 0, conduitEndB.y + 0, conduitEndB.z + 0, 0, 0, lightB, 0, 255, 0, 255);
+//				vertex(vertexBuilder, matrix4f, matrix3f, conduitEndB.x + 0, conduitEndB.y + 0, conduitEndB.z + 0, 0, 0, lightB, 0, 255, 0, 255);
+								
 //				matrixStack.pushPose();
 //				matrixStack.translate(lowCorner.getX(), lowCorner.getY(), lowCorner.getZ());
 //				Matrix4f matrix4f = matrixStack.last().pose();

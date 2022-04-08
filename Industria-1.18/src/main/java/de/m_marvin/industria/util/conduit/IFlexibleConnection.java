@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import de.m_marvin.industria.conduits.Conduit;
+import de.m_marvin.industria.conduits.Conduit.ConduitShape;
 import de.m_marvin.industria.registries.ModCapabilities;
 import de.m_marvin.industria.registries.ModRegistries;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
@@ -60,6 +61,7 @@ public interface IFlexibleConnection {
 		private int connectionPoint1;
 		private int connectionPoint2;
 		private Conduit conduit;
+		private ConduitShape shape;
 		
 		public PlacedConduit(BlockPos pos1, int connectionPoint1, BlockPos pos2, int connectionPoint2, Conduit conduit) {
 			this.pos1 = pos1;
@@ -88,6 +90,14 @@ public interface IFlexibleConnection {
 			Conduit conduit = ModRegistries.CONDUITES.get().getValue(conduitName);
 			if (conduit == null) return null;
 			return new PlacedConduit(pos1, connectionPoint1, pos2, connectionPoint2, conduit);
+		}
+		
+		public void setShape(ConduitShape shape) {
+			this.shape = shape;
+		}
+		
+		public ConduitShape getShape() {
+			return shape;
 		}
 		
 		public Conduit getConduit() {

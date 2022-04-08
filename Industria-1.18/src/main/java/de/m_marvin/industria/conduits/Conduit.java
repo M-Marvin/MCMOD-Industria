@@ -1,5 +1,11 @@
 package de.m_marvin.industria.conduits;
 
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.lwjgl.BufferUtils;
+
 import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.conduit.IFlexibleConnection;
 import de.m_marvin.industria.util.conduit.IFlexibleConnection.ConnectionPoint;
@@ -13,6 +19,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 public class Conduit implements IForgeRegistryEntry<Conduit> {
+	
+	public static final float GRAPHICAL_SEGMENT_LENGTH = 1F;
 	
 	private ResourceLocation registryName;
 	private ConduitType conduitType;
@@ -91,7 +99,7 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		}
 	}
 	
-	public float[] calculateShape(BlockGetter level, PlacedConduit conduit) {
+	public float[] buildShape(BlockGetter level, PlacedConduit conduit) {
 		
 		BlockPos nodeApos = conduit.getNodeA();
 		BlockState nodeAstate = level.getBlockState(nodeApos);
@@ -118,9 +126,12 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 			Vec3f rotationStart = UtilityHelper.rotationFromAxisAndAngle(pointA.attachmentFace().getAxis(), pointA.angle());
 			Vec3f rotationEnd = UtilityHelper.rotationFromAxisAndAngle(pointB.attachmentFace().getAxis(), pointB.angle());
 			
-			float planeAngleStart = (float) (pointStart.angle(pointEnd) - rotationStart.y());
-			float planeAngleEnd = (float) (pointEnd.angle(pointStart) - rotationEnd.y());
+			conduit.setShape(new ConduitShape());
 			
+			float additionalNodes = conduit.getConduit().getConduitType().getStiffness() * 3;
+			for (int i = 0; i < additionalNodes; i++) {
+				
+			}
 			
 			
 			BlockPos bp1 = nodeApos.subtract(cornerMin);
@@ -131,6 +142,10 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		}
 		
 		return new float[] {};
+	}
+	
+	public static class ConduitShape {
+		Vec3f[] nodes;
 	}
 	
 }

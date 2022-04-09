@@ -29,17 +29,7 @@ public class Vec3i {
 		this.y = (int) vector.getY();
 		this.z = (int) vector.getZ();
 	}
-	public Vec3i(javax.vecmath.Vector3f vector) {
-		this.x = (int) vector.x;
-		this.y = (int) vector.y;
-		this.z = (int) vector.z;
-	}
-	public Vec3i(javax.vecmath.Vector3d vector) {
-		this.x = (int) vector.x;
-		this.y = (int) vector.y;
-		this.z = (int) vector.z;
-	}
-
+	
 	public Vec3i(BlockPos pos) {
 		this.x = pos.getX();
 		this.y = pos.getY();

@@ -11,6 +11,7 @@ import de.m_marvin.industria.util.conduit.IFlexibleConnection.PlacedConduit;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -49,11 +50,11 @@ public class ConduitWorldStorageCapability implements ICapabilitySerializable<Li
 		}
 	}
 	
-	public boolean addConduit(ConnectionPoint nodeA, ConnectionPoint nodeB, Conduit conduit) {
+	public boolean addConduit(BlockGetter level, ConnectionPoint nodeA, ConnectionPoint nodeB, Conduit conduit) {
 		if (getConduit(nodeA).isPresent() || getConduit(nodeB).isPresent()) {
 			return false;
 		} else {
-			PlacedConduit connection = new PlacedConduit(nodeA.position(), nodeA.connectionId(), nodeB.position(), nodeB.connectionId(), conduit);
+			PlacedConduit connection = new PlacedConduit(nodeA.position(), nodeA.connectionId(), nodeB.position(), nodeB.connectionId(), conduit).build(level);
 			this.conduits.add(connection);
 			return true;
 		}

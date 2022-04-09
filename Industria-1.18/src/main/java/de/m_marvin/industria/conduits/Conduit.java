@@ -12,6 +12,9 @@ import de.m_marvin.industria.util.conduit.IFlexibleConnection.ConnectionPoint;
 import de.m_marvin.industria.util.conduit.IFlexibleConnection.PlacedConduit;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
+import jnet.JNet;
+import jnet.physic.PhysicWorld;
+import jnet.util.Vec2d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockGetter;
@@ -99,7 +102,7 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		}
 	}
 	
-	public float[] buildShape(BlockGetter level, PlacedConduit conduit) {
+	public ConduitShape buildShape(BlockGetter level, PlacedConduit conduit) {
 		
 		BlockPos nodeApos = conduit.getNodeA();
 		BlockState nodeAstate = level.getBlockState(nodeApos);
@@ -116,36 +119,66 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 					nodeApos.getX() - cornerMin.getX(),
 					nodeApos.getY() - cornerMin.getY(),
 					nodeApos.getZ() - cornerMin.getZ()
-				).add(pointA.offset().toFloat());
+				).add(pointA.offset().toFloat().mul(0.0625F));
 			Vec3f pointEnd = new Vec3f(
 					nodeBpos.getX() - cornerMin.getX(),
 					nodeBpos.getY() - cornerMin.getY(),
 					nodeBpos.getZ() - cornerMin.getZ()
-				).add(pointA.offset().toFloat());
+				).add(pointB.offset().toFloat().mul(0.0625F));
 			
 			Vec3f rotationStart = UtilityHelper.rotationFromAxisAndAngle(pointA.attachmentFace().getAxis(), pointA.angle());
 			Vec3f rotationEnd = UtilityHelper.rotationFromAxisAndAngle(pointB.attachmentFace().getAxis(), pointB.angle());
+			float cornerSegments = conduit.getConduit().getConduitType().getStiffness() * 3;
+			Vec3f connectionVec = pointEnd.copy().sub(pointStart);
+			float conduitLength = (float) connectionVec.length();
+			connectionVec.normalize();
 			
-			conduit.setShape(new ConduitShape());
-			
-			float additionalNodes = conduit.getConduit().getConduitType().getStiffness() * 3;
-			for (int i = 0; i < additionalNodes; i++) {
-				
+			List<Vec3f> nodes = new ArrayList<>();
+			nodes.add(pointStart);
+			nodes.add(rotationStart);
+			for (int i = 0; i < cornerSegments; i++) {
+				nodes.add(new Vec3f(0, GRAPHICAL_SEGMENT_LENGTH, 0).add(nodes.get(nodes.size() - 2)));
+				nodes.add(new Vec3f(0, 0, 0));
 			}
+			for (float f = 0; f < conduitLength; f += GRAPHICAL_SEGMENT_LENGTH) {
+				nodes.add(connectionVec.copy().mul(GRAPHICAL_SEGMENT_LENGTH).add(nodes.get(nodes.size() - 2)));
+				nodes.add(new Vec3f(0, 0, 0));
+			}
+			nodes.add(connectionVec.copy().mul(GRAPHICAL_SEGMENT_LENGTH).add(nodes.get(nodes.size() - 2)));
+			nodes.add(new Vec3f(0, 0, 0));
+			for (int i = 0; i < cornerSegments; i++) {
+				nodes.add(new Vec3f(0, -GRAPHICAL_SEGMENT_LENGTH, 0).add(nodes.get(nodes.size() - 2)));
+				nodes.add(new Vec3f(0, 0, 0));
+			}
+			nodes.add(pointEnd);
+			nodes.add(rotationEnd);
 			
-			
-			BlockPos bp1 = nodeApos.subtract(cornerMin);
-			BlockPos bp2 = nodeBpos.subtract(cornerMin);
-			return new float[] {bp1.getX() + pointA.offset().x / 16F, bp1.getY() + pointA.offset().y / 16F, bp1.getZ() + pointA.offset().z / 16F, 0, 0, 0,
-			bp2.getX() + pointB.offset().x / 16F, bp2.getY() + pointB.offset().y / 16F, bp2.getZ() + pointB.offset().z / 16F, 0, 0, 0};
+			ConduitShape shape = new ConduitShape(nodes);
+			return shape;
 			
 		}
 		
-		return new float[] {};
+		return null;
+	}
+	
+	public void updatePhysicalNodes(BlockGetter level, PlacedConduit conduit) {
+		
+		JNet.buildShape();
+		
 	}
 	
 	public static class ConduitShape {
-		Vec3f[] nodes;
+		public Vec3f[] nodes;
+		public Vec3f[] angles;
+		
+		public ConduitShape(List<Vec3f> nodesAndAngles) {
+			this.nodes = new Vec3f[nodesAndAngles.size() / 2];
+			this.angles = new Vec3f[nodesAndAngles.size() / 2];
+			for (int i = 0; i < nodesAndAngles.size(); i += 2) {
+				this.nodes[i / 2] = nodesAndAngles.get(i);
+				this.angles[i / 2] = nodesAndAngles.get(i + 1);
+			}
+		}
 	}
 	
 }

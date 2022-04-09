@@ -11,15 +11,6 @@ public class Vec2f {
 		this.x = (float) vector.x;
 		this.y = (float) vector.y;
 	}
-
-	public Vec2f(javax.vecmath.Vector2f vector) {
-		this.x = (float) vector.x;
-		this.y = (float) vector.y;
-	}
-	public Vec2f(javax.vecmath.Vector2d vector) {
-		this.x = (float) vector.x;
-		this.y = (float) vector.y;
-	}
 	
 	public Vec2f(float x, float y) {
 		this.x = x;

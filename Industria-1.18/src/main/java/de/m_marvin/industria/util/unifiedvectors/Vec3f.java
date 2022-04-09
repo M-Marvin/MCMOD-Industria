@@ -32,17 +32,7 @@ public class Vec3f {
 		this.y = (float) vector.getY();
 		this.z = (float) vector.getZ();
 	}
-	public Vec3f(javax.vecmath.Vector3f vector) {
-		this.x = (float) vector.x;
-		this.y = (float) vector.y;
-		this.z = (float) vector.z;
-	}
-	public Vec3f(javax.vecmath.Vector3d vector) {
-		this.x = (float) vector.x;
-		this.y = (float) vector.y;
-		this.z = (float) vector.z;
-	}
-
+	
 	public Vec3f(BlockPos pos) {
 		this.x = pos.getX();
 		this.y = pos.getY();
@@ -168,6 +158,19 @@ public class Vec3f {
 		this.x = f1 * f5 - f2 * f4;
 		this.y = f2 * f3 - f * f5;
 		this.z = f * f4 - f1 * f3;
+	}
+	
+	public boolean normalize() {
+		float f = this.x * this.x + this.y * this.y + this.z * this.z;
+		if (f < Float.MIN_NORMAL) { //Forge: Fix MC-239212
+			return false;
+		} else {
+			float f1 = Mth.fastInvSqrt(f);
+			this.x *= f1;
+			this.y *= f1;
+			this.z *= f1;
+			return true;
+		}
 	}
 	
 	public void transform(Quaternion pQuaternion) {

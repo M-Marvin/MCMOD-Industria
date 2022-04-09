@@ -11,15 +11,6 @@ public class Vec2i {
 		this.x = (int) vector.x;
 		this.y = (int) vector.y;
 	}
-
-	public Vec2i(javax.vecmath.Vector2f vector) {
-		this.x = (int) vector.x;
-		this.y = (int) vector.y;
-	}
-	public Vec2i(javax.vecmath.Vector2d vector) {
-		this.x = (int) vector.x;
-		this.y = (int) vector.y;
-	}
 	
 	public Vec2i(int x, int y) {
 		this.x = x;

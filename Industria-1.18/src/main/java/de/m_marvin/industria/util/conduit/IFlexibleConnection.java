@@ -71,6 +71,16 @@ public interface IFlexibleConnection {
 			this.conduit = conduit;
 		}
 		
+		public PlacedConduit build(BlockGetter level) {
+			this.shape = conduit.buildShape(level, this);
+			updatePosition(level);
+			return this;
+		}
+		
+		public void updatePosition(BlockGetter level) {
+			this.conduit.updatePhysicalNodes(level, this);
+		}
+		
 		public CompoundTag save() {
 			CompoundTag tag = new CompoundTag();
 			tag.put("PosA", NbtUtils.writeBlockPos(pos1));
@@ -90,10 +100,6 @@ public interface IFlexibleConnection {
 			Conduit conduit = ModRegistries.CONDUITES.get().getValue(conduitName);
 			if (conduit == null) return null;
 			return new PlacedConduit(pos1, connectionPoint1, pos2, connectionPoint2, conduit);
-		}
-		
-		public void setShape(ConduitShape shape) {
-			this.shape = shape;
 		}
 		
 		public ConduitShape getShape() {

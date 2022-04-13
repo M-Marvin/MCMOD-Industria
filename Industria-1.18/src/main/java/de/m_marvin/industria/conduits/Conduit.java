@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.glfw.GLFW;
 
 import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.conduit.IFlexibleConnection;
@@ -13,7 +14,9 @@ import de.m_marvin.industria.util.conduit.IFlexibleConnection.PlacedConduit;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
 import jnet.JNet;
+import jnet.physic.PhysicSolver;
 import jnet.physic.PhysicWorld;
+import jnet.physic.SoftBody.Constrain;
 import jnet.util.Vec2d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -163,7 +166,7 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 	
 	public void updatePhysicalNodes(BlockGetter level, PlacedConduit conduit) {
 		
-		JNet.buildShape();
+		Vec3f
 		
 	}
 	

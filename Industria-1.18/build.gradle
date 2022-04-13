@@ -3,93 +3,84 @@ buildscript {
         maven { url = 'https://maven.parchmentmc.org' }
         maven { url = 'https://maven.minecraftforge.net' }
         mavenCentral()
+        gradlePluginPortal()
 	}
-	
+ 
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.parchmentmc:librarian:1.+'
         classpath 'org.spongepowered:mixingradle:0.7.+'
     }
+ 
 }
-
-configurations {
-    library
-    implementation.extendsFrom library
-    shadow.extendsFrom library
-}
-
-reobf {
-    shadowJar {}
-}
-
-minecraft.runs.all {
-    lazyToken('minecraft_classpath') {
-        configurations.library.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
-    }
+ 
+plugins {
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
-
+apply plugin: 'eclipse'
+ 
 version = '1.0'
 group = 'com.yourname.modid' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'modid'
-
+ 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-	
+ 
     mappings channel: 'parchment', version: '1.18.1-2022.03.06-1.18.1'
-	
+ 
     runs {
         client {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', 'examplemod'
-
+ 
             mods {
                 examplemod {
                     source sourceSets.main
                 }
             }
         }
-
+ 
         server {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', 'examplemod'
-
+ 
             mods {
                 examplemod {
                     source sourceSets.main
                 }
             }
         }
-		
+ 
         gameTestServer {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', 'examplemod'
-
+ 
             mods {
                 examplemod {
                     source sourceSets.main
                 }
             }
         }
-
+ 		
         data {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
 			args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
+ 
             mods {
                 examplemod {
                     source sourceSets.main
@@ -111,15 +102,32 @@ repositories {
     }
 }
 
+configurations {
+    shade
+    implementation.extendsFrom shade
+}
+
 dependencies {
-
+ 
     minecraft 'net.minecraftforge:forge:1.18.1-39.1.0'
-
+ 
 	implementation fg.deobf("curse.maven:flywheel-486392:3687357")
 	implementation fg.deobf("curse.maven:create-328085:3706700")
-	library 'com.github.M-Marvin:LIBRARY-JNetLWSBE:v1.0'
-	//implementation fileTree(dir: 'libs', include: '*.jar')
-	
+	implementation 'com.github.M-Marvin:LIBRARY-JNetLWSBE:v1.0'
+ 	
+}
+
+shadowJar {
+    archiveClassifier = ''
+    configurations = [project.configurations.shade]
+    //relocate 'com.example.example-thing', "${project.group}.relocated.example-thing"
+    finalizedBy 'reobfShadowJar'
+}
+
+assemble.dependsOn shadowJar
+
+reobf {
+    shadowJar {}
 }
 
 jar {
@@ -137,7 +145,7 @@ jar {
 }
 
 jar.finalizedBy('reobfJar')
-
+ 
 publishing {
     publications {
         mavenJava(MavenPublication) {

@@ -10,7 +10,7 @@ import org.lwjgl.glfw.GLFW;
 import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.conduit.IFlexibleConnection;
 import de.m_marvin.industria.util.conduit.IFlexibleConnection.ConnectionPoint;
-import de.m_marvin.industria.util.conduit.IFlexibleConnection.PlacedConduit;
+import de.m_marvin.industria.util.conduit.PlacedConduit;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
 import jnet.JNet;
@@ -22,6 +22,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 public class Conduit implements IForgeRegistryEntry<Conduit> {
@@ -129,34 +131,22 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 					nodeBpos.getZ() - cornerMin.getZ()
 				).add(pointB.offset().toFloat().mul(0.0625F));
 			
-			Vec3f rotationStart = UtilityHelper.rotationFromAxisAndAngle(pointA.attachmentFace().getAxis(), pointA.angle());
-			Vec3f rotationEnd = UtilityHelper.rotationFromAxisAndAngle(pointB.attachmentFace().getAxis(), pointB.angle());
-			float cornerSegments = conduit.getConduit().getConduitType().getStiffness() * 3;
+//			Vec3f rotationStart = UtilityHelper.rotationFromAxisAndAngle(pointA.attachmentFace().getAxis(), pointA.angle());
+//			Vec3f rotationEnd = UtilityHelper.rotationFromAxisAndAngle(pointB.attachmentFace().getAxis(), pointB.angle());
 			Vec3f connectionVec = pointEnd.copy().sub(pointStart);
 			float conduitLength = (float) connectionVec.length();
+			float cornerSegments = conduitLength * 3F;
+			float beamLength = conduitLength / (cornerSegments + 1);
 			connectionVec.normalize();
 			
 			List<Vec3f> nodes = new ArrayList<>();
 			nodes.add(pointStart);
-			nodes.add(rotationStart);
-			for (int i = 0; i < cornerSegments; i++) {
-				nodes.add(new Vec3f(0, GRAPHICAL_SEGMENT_LENGTH, 0).add(nodes.get(nodes.size() - 2)));
-				nodes.add(new Vec3f(0, 0, 0));
-			}
-			for (float f = 0; f < conduitLength; f += GRAPHICAL_SEGMENT_LENGTH) {
-				nodes.add(connectionVec.copy().mul(GRAPHICAL_SEGMENT_LENGTH).add(nodes.get(nodes.size() - 2)));
-				nodes.add(new Vec3f(0, 0, 0));
-			}
-			nodes.add(connectionVec.copy().mul(GRAPHICAL_SEGMENT_LENGTH).add(nodes.get(nodes.size() - 2)));
-			nodes.add(new Vec3f(0, 0, 0));
-			for (int i = 0; i < cornerSegments; i++) {
-				nodes.add(new Vec3f(0, -GRAPHICAL_SEGMENT_LENGTH, 0).add(nodes.get(nodes.size() - 2)));
-				nodes.add(new Vec3f(0, 0, 0));
+			for (int i = 1; i <= cornerSegments; i++) {
+				nodes.add(connectionVec.copy().mul(beamLength * i).add(pointStart));
 			}
 			nodes.add(pointEnd);
-			nodes.add(rotationEnd);
 			
-			ConduitShape shape = new ConduitShape(nodes);
+			ConduitShape shape = new ConduitShape(nodes, beamLength);
 			return shape;
 			
 		}
@@ -166,21 +156,139 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 	
 	public void updatePhysicalNodes(BlockGetter level, PlacedConduit conduit) {
 		
-		Vec3f
+		ConduitShape shape = conduit.getShape();
+		BlockPos origin = UtilityHelper.getMinCorner(conduit.getNodeA(), conduit.getNodeB());
+		
+		if (shape != null) {
+			
+			// Integrate nodes
+			for (int i = 1; i < shape.nodes.length - 1; i++) {
+				Vec3f temp = shape.nodes[i].copy();
+				shape.nodes[i].add(shape.nodes[i].copy().sub(shape.lastPos[i]));
+				shape.lastPos[i] = temp;
+			}
+			
+			// Solve beams
+			for (int itteration = 1; itteration <= 10; itteration++) {
+				for (int i = 1; i < shape.nodes.length; i++) {
+					
+					Vec3f nodeB = shape.nodes[i];
+					Vec3f nodeA = shape.nodes[i - 1];
+					
+					// Calculate spring deformation
+					Vec3f delta = nodeB.copy().sub(nodeA);
+					double deltalength = delta.length(); // Math.sqrt(delta.dot(delta));
+					float diff = (float) ((deltalength - shape.beamLength) / deltalength);
+					
+					// Reform spring
+					float stiffness = conduit.getConduit().getConduitType().getStiffness() * 1.0F;
+					float stiffnessLinear = (float) (1 - Math.pow((1 - stiffness), 1 / itteration));
+					boolean oneStatic = i == 1 || i == shape.nodes.length - 1;
+					nodeA.add(delta.copy().mul(i == 1 ? 0 : (oneStatic ? 1 : 0.5F)).mul(diff).mul(stiffnessLinear));
+					nodeB.sub(delta.copy().mul(i == shape.nodes.length - 1 ? 0 : (oneStatic ? 1 : 0.5F)).mul(diff).mul(stiffnessLinear));
+					
+				}
+			}
+			
+			// Accumulate gravity
+			for (int i = 1; i < shape.nodes.length - 1; i++) {
+				shape.lastPos[i].add(UtilityHelper.getWorldGravity(level));
+			}
+
+			// Solve collision
+			for (int i = 1; i < shape.nodes.length - 1; i++) {
+				
+				Vec3f nodePos = shape.nodes[i].copy().add(new Vec3f(origin));
+				BlockPos nodeBlockPos = new BlockPos(nodePos.x, nodePos.y, nodePos.z);
+				
+				if (!nodeBlockPos.equals(conduit.getNodeA()) && !nodeBlockPos.equals(conduit.getNodeB())) {
+					
+					VoxelShape collisionShape = level.getBlockState(nodeBlockPos).getCollisionShape(level, nodeBlockPos);
+					
+					if (!collisionShape.isEmpty()) {
+						
+						AABB bounds = collisionShape.bounds().move(nodeBlockPos);
+						
+						if (bounds.maxY + 0.04F - nodePos.y <= 0.5F) {
+							if (!level.getBlockState(nodeBlockPos.above()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
+								shape.nodes[i].y = (float) bounds.maxY - origin.getY() + 0.04F;
+								shape.lastPos[i] = shape.nodes[i];
+								continue;
+							}
+						}
+						
+						if (bounds.maxZ - nodePos.z >= 0.5F) {
+							if (!level.getBlockState(nodeBlockPos.north()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
+								shape.nodes[i].z = (float) bounds.minZ - origin.getZ();
+								shape.lastPos[i] = shape.nodes[i];
+								continue;
+							} else if (!level.getBlockState(nodeBlockPos.south()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
+								shape.nodes[i].z = (float) bounds.maxZ - origin.getZ();
+								shape.lastPos[i] = shape.nodes[i];
+								continue;
+							}
+						} else {
+							if (!level.getBlockState(nodeBlockPos.south()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
+								shape.nodes[i].z = (float) bounds.maxZ - origin.getZ();
+								shape.lastPos[i] = shape.nodes[i];
+								continue;
+							} else if (!level.getBlockState(nodeBlockPos.north()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
+								shape.nodes[i].z = (float) bounds.minZ - origin.getZ();
+								shape.lastPos[i] = shape.nodes[i];
+								continue;
+							}
+						}
+						
+						if (bounds.maxX - nodePos.x >= 0.5F) {
+							if (!level.getBlockState(nodeBlockPos.west()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
+								shape.nodes[i].x = (float) bounds.minX - origin.getX();
+								shape.lastPos[i] = shape.nodes[i];
+								continue;
+							} else if (!level.getBlockState(nodeBlockPos.east()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
+								shape.nodes[i].x = (float) bounds.maxX - origin.getX();
+								continue;
+							}
+						} else {
+							if (!level.getBlockState(nodeBlockPos.east()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
+								shape.nodes[i].x = (float) bounds.maxX - origin.getX();
+								shape.lastPos[i] = shape.nodes[i];
+								continue;
+							} else if (!level.getBlockState(nodeBlockPos.west()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
+								shape.nodes[i].x = (float) bounds.minX - origin.getX();
+								shape.lastPos[i] = shape.nodes[i];
+								continue;
+							}
+						}
+						
+						if (bounds.maxY - nodePos.y >= 0.5F) {
+							if (!level.getBlockState(nodeBlockPos.below()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
+								shape.nodes[i].y = (float) bounds.minY - origin.getY();
+								shape.lastPos[i] = shape.nodes[i];
+								continue;
+							}
+						}
+						
+						shape.nodes[i].y = (float) bounds.maxY + 0.04F - origin.getY();
+											
+					}
+					
+				}
+				
+			}
+			
+		}
 		
 	}
 	
 	public static class ConduitShape {
 		public Vec3f[] nodes;
-		public Vec3f[] angles;
+		public Vec3f[] lastPos;
+		public float beamLength;
 		
-		public ConduitShape(List<Vec3f> nodesAndAngles) {
-			this.nodes = new Vec3f[nodesAndAngles.size() / 2];
-			this.angles = new Vec3f[nodesAndAngles.size() / 2];
-			for (int i = 0; i < nodesAndAngles.size(); i += 2) {
-				this.nodes[i / 2] = nodesAndAngles.get(i);
-				this.angles[i / 2] = nodesAndAngles.get(i + 1);
-			}
+		public ConduitShape(List<Vec3f> nodes, float beamLength) {
+			this.nodes = nodes.toArray(new Vec3f[] {});
+			this.lastPos = nodes.toArray(new Vec3f[] {});
+			this.beamLength = beamLength;
 		}
 	}
 	

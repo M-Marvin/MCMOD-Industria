@@ -13,6 +13,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
@@ -174,6 +175,10 @@ public class UtilityHelper {
 		if (conduitHolder.isPresent()) {
 			conduitHolder.resolve().get().addConduit(level, nodeA, nodeB, conduit);
 		}
+	}
+	
+	public static Vec3f getWorldGravity(BlockGetter level) {
+		return new Vec3f(0, 0.1F, 0); // TODO
 	}
 	
 }

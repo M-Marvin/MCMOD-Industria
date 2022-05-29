@@ -17,7 +17,7 @@ import de.m_marvin.industria.registries.ModCapabilities;
 import de.m_marvin.industria.util.conduit.ConduitWorldStorageCapability;
 import de.m_marvin.industria.util.conduit.IFlexibleConnection;
 import de.m_marvin.industria.util.conduit.IFlexibleConnection.ConnectionPoint;
-import de.m_marvin.industria.util.conduit.IFlexibleConnection.PlacedConduit;
+import de.m_marvin.industria.util.conduit.PlacedConduit;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import de.m_marvin.industria.util.UtilityHelper;
 import net.minecraft.client.Minecraft;

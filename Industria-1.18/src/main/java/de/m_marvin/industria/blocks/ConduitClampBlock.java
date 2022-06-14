@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 import de.m_marvin.industria.registries.ModBlockStateProperties;
 import de.m_marvin.industria.types.WallOrientations;
 import de.m_marvin.industria.util.UtilityHelper;
-import de.m_marvin.industria.util.conduit.IFlexibleConnection;
+import de.m_marvin.industria.util.conduit.IWireConnector;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
 import net.minecraft.core.BlockPos;
@@ -22,7 +22,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class ConduitClampBlock extends Block implements IFlexibleConnection {
+public class ConduitClampBlock extends Block implements IWireConnector {
 	
 	public static final VoxelShape SHAPE = Stream.of(
 			Block.box(12, 6, 0, 15, 10, 1),
@@ -108,7 +108,6 @@ public class ConduitClampBlock extends Block implements IFlexibleConnection {
 		Axis connectionAxis = orientation.getAxialOrientation();
 		int clampOffset = state.getValue(ModBlockStateProperties.CLAMP_OFFSET);
 		Vec3i offset = null;
-		float angle = 0;
 		int axisOffset = attachFace.getAxisDirection() == AxisDirection.POSITIVE ? 12 : 4;
 		switch (connectionAxis) {
 		case X:
@@ -116,11 +115,9 @@ public class ConduitClampBlock extends Block implements IFlexibleConnection {
 			default:
 			case Y:
 				offset = new Vec3i(2 + clampOffset * 6, axisOffset, 8);
-				angle = -90;
 				break;
 			case Z:
 				offset = new Vec3i(2 + clampOffset * 6, 8, axisOffset);
-				angle = 0;
 				break;
 			}
 			break;
@@ -129,11 +126,9 @@ public class ConduitClampBlock extends Block implements IFlexibleConnection {
 			default:
 			case X:
 				offset = new Vec3i(axisOffset, 2 + clampOffset * 6, 8);
-				angle = 90;
 				break;
 			case Z:
 				offset = new Vec3i(8, 2 + clampOffset * 6, axisOffset);
-				angle = 90;
 				break;
 			}
 			break;
@@ -142,16 +137,14 @@ public class ConduitClampBlock extends Block implements IFlexibleConnection {
 			default:
 			case X:
 				offset = new Vec3i(axisOffset, 8, 2 + clampOffset * 6);
-				angle = 0;
 				break;
 			case Y:
 				offset = new Vec3i(8, axisOffset, 2 + clampOffset * 6);
-				angle = 0;
 				break;
 			}
 			break;
 		}
-		return new ConnectionPoint[] {new ConnectionPoint(pos, 0, offset, angle, attachFace), new ConnectionPoint(pos, 1, offset, angle + 180, attachFace)};
+		return new ConnectionPoint[] {new ConnectionPoint(pos, 0, offset, attachFace), new ConnectionPoint(pos, 1, offset, attachFace)};
 	}
 	
 }

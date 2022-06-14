@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.registries.ModCapabilities;
-import de.m_marvin.industria.util.conduit.IFlexibleConnection.ConnectionPoint;
+import de.m_marvin.industria.util.conduit.IWireConnector.ConnectionPoint;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;

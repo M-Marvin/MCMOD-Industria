@@ -4,22 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import de.m_marvin.industria.conduits.Conduit;
-import de.m_marvin.industria.conduits.Conduit.ConduitShape;
 import de.m_marvin.industria.registries.ModCapabilities;
-import de.m_marvin.industria.registries.ModRegistries;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 
-public interface IFlexibleConnection {
+public interface IWireConnector {
 	
 	public ConnectionPoint[] getConnectionPoints(BlockGetter level, BlockPos pos, BlockState state);
 	
@@ -51,7 +45,6 @@ public interface IFlexibleConnection {
 		BlockPos position,
 		int connectionId,
 		Vec3i offset,
-		float angle,
 		Direction attachmentFace
 	) {}
 	

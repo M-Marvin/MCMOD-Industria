@@ -148,7 +148,7 @@ public class Vec3f {
 		this.z = z;
 	}
 	
-	public void cross(Vec3f vec) {
+	public Vec3f cross(Vec3f vec) {
 		float f = this.x;
 		float f1 = this.y;
 		float f2 = this.z;
@@ -158,6 +158,7 @@ public class Vec3f {
 		this.x = f1 * f5 - f2 * f4;
 		this.y = f2 * f3 - f * f5;
 		this.z = f * f4 - f1 * f3;
+		return this;
 	}
 	
 	public boolean normalize() {
@@ -171,6 +172,13 @@ public class Vec3f {
 			this.z *= f1;
 			return true;
 		}
+	}
+	
+	public Quaternion rotationQuatFromDirection(Vec3f reference) {
+		Vec3f v = reference.copy().cross(this);
+		v.normalize();
+		float angle = (float) Math.acos(this.copy().dot(reference) / reference.length() * this.length());
+		return new Quaternion(new Vector3f(v.x, v.y, v.z), angle, false);
 	}
 	
 	public void transform(Quaternion pQuaternion) {

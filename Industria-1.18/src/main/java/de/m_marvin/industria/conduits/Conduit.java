@@ -8,8 +8,8 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 
 import de.m_marvin.industria.util.UtilityHelper;
-import de.m_marvin.industria.util.conduit.IFlexibleConnection;
-import de.m_marvin.industria.util.conduit.IFlexibleConnection.ConnectionPoint;
+import de.m_marvin.industria.util.conduit.IWireConnector;
+import de.m_marvin.industria.util.conduit.IWireConnector.ConnectionPoint;
 import de.m_marvin.industria.util.conduit.PlacedConduit;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
@@ -115,10 +115,10 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		BlockState nodeBstate = level.getBlockState(nodeBpos);
 		BlockPos cornerMin = UtilityHelper.getMinCorner(nodeApos, nodeBpos);
 		
-		if (nodeAstate.getBlock() instanceof IFlexibleConnection && nodeBstate.getBlock() instanceof IFlexibleConnection) {
+		if (nodeAstate.getBlock() instanceof IWireConnector && nodeBstate.getBlock() instanceof IWireConnector) {
 			
-			ConnectionPoint pointA = ((IFlexibleConnection) nodeAstate.getBlock()).getConnectionPoints(level, nodeApos, nodeAstate)[conduit.getConnectionPointA()];
-			ConnectionPoint pointB = ((IFlexibleConnection) nodeBstate.getBlock()).getConnectionPoints(level, nodeBpos, nodeBstate)[conduit.getConnectionPointB()];
+			ConnectionPoint pointA = ((IWireConnector) nodeAstate.getBlock()).getConnectionPoints(level, nodeApos, nodeAstate)[conduit.getConnectionPointA()];
+			ConnectionPoint pointB = ((IWireConnector) nodeBstate.getBlock()).getConnectionPoints(level, nodeBpos, nodeBstate)[conduit.getConnectionPointB()];
 			
 			Vec3f pointStart = new Vec3f(
 					nodeApos.getX() - cornerMin.getX(),

@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.registries.ModCapabilities;
 import de.m_marvin.industria.util.conduit.ConduitWorldStorageCapability;
-import de.m_marvin.industria.util.conduit.IFlexibleConnection.ConnectionPoint;
+import de.m_marvin.industria.util.conduit.IWireConnector.ConnectionPoint;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
 import net.minecraft.core.BlockPos;

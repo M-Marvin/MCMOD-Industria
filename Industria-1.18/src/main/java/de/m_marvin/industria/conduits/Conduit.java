@@ -1,24 +1,17 @@
 package de.m_marvin.industria.conduits;
 
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.GLFW;
 
 import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.conduit.IWireConnector;
 import de.m_marvin.industria.util.conduit.IWireConnector.ConnectionPoint;
 import de.m_marvin.industria.util.conduit.PlacedConduit;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
-import de.m_marvin.industria.util.unifiedvectors.Vec3i;
-import jnet.JNet;
-import jnet.physic.PhysicSolver;
-import jnet.physic.PhysicWorld;
-import jnet.physic.SoftBody.Constrain;
-import jnet.util.Vec2d;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
+import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,9 +20,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 public class Conduit implements IForgeRegistryEntry<Conduit> {
-	
-	public static final float GRAPHICAL_SEGMENT_LENGTH = 1F;
-	
+		
 	private ResourceLocation registryName;
 	private ConduitType conduitType;
 	
@@ -135,7 +126,7 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 //			Vec3f rotationEnd = UtilityHelper.rotationFromAxisAndAngle(pointB.attachmentFace().getAxis(), pointB.angle());
 			Vec3f connectionVec = pointEnd.copy().sub(pointStart);
 			float conduitLength = (float) connectionVec.length();
-			float cornerSegments = conduitLength * 3F;
+			float cornerSegments = conduitLength * 6F;
 			float beamLength = conduitLength / (cornerSegments + 1);
 			connectionVec.normalize();
 			
@@ -190,6 +181,9 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 				}
 			}
 			
+			// Solve angles
+			
+			
 			// Accumulate gravity
 			for (int i = 1; i < shape.nodes.length - 1; i++) {
 				shape.lastPos[i].add(UtilityHelper.getWorldGravity(level));
@@ -209,66 +203,95 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 						
 						AABB bounds = collisionShape.bounds().move(nodeBlockPos);
 						
-						if (bounds.maxY + 0.04F - nodePos.y <= 0.5F) {
-							if (!level.getBlockState(nodeBlockPos.above()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
-								shape.nodes[i].y = (float) bounds.maxY - origin.getY() + 0.04F;
-								shape.lastPos[i] = shape.nodes[i];
-								continue;
+						Vec3f surface = nodePos.copy();
+						float dist = 1F;
+						
+						for (Direction d : Direction.values()) {
+							
+							Vec3f surfacePoint = nodePos.copy();
+							if (d.getAxis() == Axis.X && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.x = (float) bounds.maxX;
+							if (d.getAxis() == Axis.X && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.x = (float) bounds.minX;
+							if (d.getAxis() == Axis.Y && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.y = (float) bounds.maxY;
+							if (d.getAxis() == Axis.Y && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.y = (float) bounds.minY;
+							if (d.getAxis() == Axis.Z && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.z = (float) bounds.maxZ;
+							if (d.getAxis() == Axis.Z && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.z = (float) bounds.minZ;
+							
+							float distance = (float) nodePos.copy().sub(surfacePoint).length();
+							
+							if (distance < dist && distance > 0) {
+								dist = distance;
+								surface = surfacePoint;
 							}
+							
 						}
 						
-						if (bounds.maxZ - nodePos.z >= 0.5F) {
-							if (!level.getBlockState(nodeBlockPos.north()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
-								shape.nodes[i].z = (float) bounds.minZ - origin.getZ();
-								shape.lastPos[i] = shape.nodes[i];
-								continue;
-							} else if (!level.getBlockState(nodeBlockPos.south()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
-								shape.nodes[i].z = (float) bounds.maxZ - origin.getZ();
-								shape.lastPos[i] = shape.nodes[i];
-								continue;
-							}
-						} else {
-							if (!level.getBlockState(nodeBlockPos.south()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
-								shape.nodes[i].z = (float) bounds.maxZ - origin.getZ();
-								shape.lastPos[i] = shape.nodes[i];
-								continue;
-							} else if (!level.getBlockState(nodeBlockPos.north()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
-								shape.nodes[i].z = (float) bounds.minZ - origin.getZ();
-								shape.lastPos[i] = shape.nodes[i];
-								continue;
-							}
-						}
+						if (dist == 1F) surface.z = (float) bounds.maxZ;
 						
-						if (bounds.maxX - nodePos.x >= 0.5F) {
-							if (!level.getBlockState(nodeBlockPos.west()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
-								shape.nodes[i].x = (float) bounds.minX - origin.getX();
-								shape.lastPos[i] = shape.nodes[i];
-								continue;
-							} else if (!level.getBlockState(nodeBlockPos.east()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
-								shape.nodes[i].x = (float) bounds.maxX - origin.getX();
-								continue;
-							}
-						} else {
-							if (!level.getBlockState(nodeBlockPos.east()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
-								shape.nodes[i].x = (float) bounds.maxX - origin.getX();
-								shape.lastPos[i] = shape.nodes[i];
-								continue;
-							} else if (!level.getBlockState(nodeBlockPos.west()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
-								shape.nodes[i].x = (float) bounds.minX - origin.getX();
-								shape.lastPos[i] = shape.nodes[i];
-								continue;
-							}
-						}
+						surface.sub(new Vec3f(origin));
 						
-						if (bounds.maxY - nodePos.y >= 0.5F) {
-							if (!level.getBlockState(nodeBlockPos.below()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
-								shape.nodes[i].y = (float) bounds.minY - origin.getY();
-								shape.lastPos[i] = shape.nodes[i];
-								continue;
-							}
-						}
+						shape.nodes[i].set(surface.x, surface.y, surface.z);
+ 						shape.lastPos[i] = shape.nodes[i];
 						
-						shape.nodes[i].y = (float) bounds.maxY + 0.04F - origin.getY();
+//						if (bounds.maxY + 0.04F - nodePos.y <= 0.5F) {
+//							if (!level.getBlockState(nodeBlockPos.above()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
+//								shape.nodes[i].y = (float) bounds.maxY - origin.getY() + 0.04F;
+//								shape.lastPos[i] = shape.nodes[i];
+//								continue;
+//							}
+//						}
+//						
+//						if (bounds.maxZ - nodePos.z >= 0.5F) {
+//							if (!level.getBlockState(nodeBlockPos.north()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
+//								shape.nodes[i].z = (float) bounds.minZ - origin.getZ();
+//								shape.lastPos[i] = shape.nodes[i];
+//								continue;
+//							} else if (!level.getBlockState(nodeBlockPos.south()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
+//								shape.nodes[i].z = (float) bounds.maxZ - origin.getZ();
+//								shape.lastPos[i] = shape.nodes[i];
+//								continue;
+//							}
+//						} else {
+//							if (!level.getBlockState(nodeBlockPos.south()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
+//								shape.nodes[i].z = (float) bounds.maxZ - origin.getZ();
+//								shape.lastPos[i] = shape.nodes[i];
+//								continue;
+//							} else if (!level.getBlockState(nodeBlockPos.north()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
+//								shape.nodes[i].z = (float) bounds.minZ - origin.getZ();
+//								shape.lastPos[i] = shape.nodes[i];
+//								continue;
+//							}
+//						}
+//						
+//						if (bounds.maxX - nodePos.x >= 0.5F) {
+//							if (!level.getBlockState(nodeBlockPos.west()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
+//								shape.nodes[i].x = (float) bounds.minX - origin.getX();
+//								shape.lastPos[i] = shape.nodes[i];
+//								continue;
+//							} else if (!level.getBlockState(nodeBlockPos.east()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
+//								shape.nodes[i].x = (float) bounds.maxX - origin.getX();
+//								continue;
+//							}
+//						} else {
+//							if (!level.getBlockState(nodeBlockPos.east()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
+//								shape.nodes[i].x = (float) bounds.maxX - origin.getX();
+//								shape.lastPos[i] = shape.nodes[i];
+//								continue;
+//							} else if (!level.getBlockState(nodeBlockPos.west()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
+//								shape.nodes[i].x = (float) bounds.minX - origin.getX();
+//								shape.lastPos[i] = shape.nodes[i];
+//								continue;
+//							}
+//						}
+//						
+//						if (bounds.maxY - nodePos.y >= 0.5F) {
+//							if (!level.getBlockState(nodeBlockPos.below()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
+//								shape.nodes[i].y = (float) bounds.minY - origin.getY();
+//								shape.lastPos[i] = shape.nodes[i];
+//								continue;
+//							}
+//						}
+//						
+//						shape.nodes[i].y = (float) bounds.maxY + 0.04F - origin.getY();
 											
 					}
 					

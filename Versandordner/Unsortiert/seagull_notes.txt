@@ -1,0 +1,19 @@
+Sind Eier oder Küken im Nest, ist bei diesem der Blockstatus "occupied" "true".
+Ist "occpied" "true", bleibt ein Elternteil der Möwen immer beim Nest (die Position des EIGENEN Nests spiechern die Eltern).
+
+Sind alle Küken erwachsen oder tot (Spieler, Mobs), wird "occupied" "false". Die Eltern löschen die Infos zu ihrem eigenen Nest dann. Sie können dann ein neues Nest bauen.
+
+Ist "occupied" "false", zerfällt das Nest mit einer geringen Chance pro Tick und droppt Stöcke und Federn.
+
+Solange erwachsene Möwen ein eigenes Nest mit Eiern oder Küken haben, greifen sie alle Spieler, Füchse, Ozelots, Katzen und untoten eierzertrampelnden Mobs (siehe Schildkröte) in dessen Radius von 10 Blöcken an (dafür können sie es kurz verlassen, das Beschützen hat höhere Priorität als das Betreuen.).
+
+Küken werden immer bei ihrem Nest bleiben, werden sie herausgeschoben, wandern sie lediglich zurück.
+
+Mit Behutsamkeit können Eier abgebaut werden, der Spieler wird aber dabei von den Eltern-Möwen angegriffen werden. (Außer friedlicher Modus)
+
+Beim Erwachsenwerden droppen Küken 1-3 Daunen (?).
+Erwachsende Möwen droppen Federn. Küken droppen beim Tod nichts.
+
+Möwen spawnen in allen kalten und gemäßigten Meeresbiomen und am Biom Steinklippe. Nester können nur im Biom Steinklippe gebaut werden. In gefrorenen Meeresbiomen spawnen sie seltener, in warmen und lauwarmen nie. Sie meiden warme und waldreiche Biome.
+
+Beim Flug lassen Möwen ab und zu Möwenkot fallen. Dieser verbleibt kurz auf dem Boden, nach wenigen Minuten verschwindet er ohne Drops. Auf unsoliden Blöcken kann er nicht bestehen. Wird ein Spieler davon getroffen, erhält er für 3 Sek den Effekt "Blindheit".

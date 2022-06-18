@@ -1,6 +1,6 @@
 package de.m_marvin.industria.registries;
 
-import de.m_marvin.industria.types.WallOrientations;
+import de.m_marvin.industria.util.types.WallOrientations;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 

@@ -3,9 +3,9 @@ package de.m_marvin.industria.blocks;
 import java.util.stream.Stream;
 
 import de.m_marvin.industria.registries.ModBlockStateProperties;
-import de.m_marvin.industria.types.WallOrientations;
 import de.m_marvin.industria.util.UtilityHelper;
-import de.m_marvin.industria.util.conduit.IWireConnector;
+import de.m_marvin.industria.util.block.IConduitConnector;
+import de.m_marvin.industria.util.types.WallOrientations;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
 import net.minecraft.core.BlockPos;
@@ -22,7 +22,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class ConduitClampBlock extends Block implements IWireConnector {
+public class ConduitClampBlock extends Block implements IConduitConnector {
 	
 	public static final VoxelShape SHAPE = Stream.of(
 			Block.box(12, 6, 0, 15, 10, 1),

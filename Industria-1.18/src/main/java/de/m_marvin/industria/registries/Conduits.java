@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD,modid=Industria.MODID)
 public class Conduits {
 	
-	public static final ConduitType DEFAULT_CONDUIT_TYPE = new ConduitType(1F, 20, 3).setRegistryName(new ResourceLocation(Industria.MODID, "default_type"));
+	public static final ConduitType DEFAULT_CONDUIT_TYPE = new ConduitType(0.03F, 1F, 20, 4).setRegistryName(new ResourceLocation(Industria.MODID, "default_type"));
 	
 	@SubscribeEvent
 	public static void registerConduitTypes(RegistryEvent.Register<ConduitType> event) {
@@ -19,7 +19,7 @@ public class Conduits {
 		reg.register(DEFAULT_CONDUIT_TYPE);
 	}
 	
-	public static final Conduit DEFAULT_CONDUIT = new Conduit(DEFAULT_CONDUIT_TYPE).setRegistryName(new ResourceLocation(Industria.MODID, "default_conduit"));
+	public static final Conduit DEFAULT_CONDUIT = new Conduit(DEFAULT_CONDUIT_TYPE, new ResourceLocation(Industria.MODID, "textures/conduit/test_conduit.png")).setRegistryName(new ResourceLocation(Industria.MODID, "default_conduit"));
 	
 	@SubscribeEvent
 	public static void registerConduits(RegistryEvent.Register<Conduit> event) {

@@ -1,10 +1,12 @@
-package de.m_marvin.industria.util.conduit;
+package de.m_marvin.industria.util.block;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import de.m_marvin.industria.registries.ModCapabilities;
+import de.m_marvin.industria.util.conduit.ConduitWorldStorageCapability;
+import de.m_marvin.industria.util.conduit.PlacedConduit;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -13,7 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 
-public interface IWireConnector {
+public interface IConduitConnector {
 	
 	public ConnectionPoint[] getConnectionPoints(BlockGetter level, BlockPos pos, BlockState state);
 	

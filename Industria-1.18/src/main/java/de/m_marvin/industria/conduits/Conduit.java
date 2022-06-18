@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.m_marvin.industria.util.UtilityHelper;
-import de.m_marvin.industria.util.conduit.IWireConnector;
-import de.m_marvin.industria.util.conduit.IWireConnector.ConnectionPoint;
+import de.m_marvin.industria.util.block.IConduitConnector;
+import de.m_marvin.industria.util.block.IConduitConnector.ConnectionPoint;
 import de.m_marvin.industria.util.conduit.PlacedConduit;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -23,13 +24,19 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		
 	private ResourceLocation registryName;
 	private ConduitType conduitType;
+	private ResourceLocation texture;
 	
-	public Conduit(ConduitType type) {
+	public Conduit(ConduitType type, ResourceLocation texture) {
 		this.conduitType = type;
+		this.texture = texture;
 	}
 	
 	public ConduitType getConduitType() {
 		return conduitType;
+	}
+	
+	public ResourceLocation getTexture() {
+		return texture;
 	}
 	
 	@Override
@@ -48,20 +55,33 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		return Conduit.class;
 	}
 	
+	public int getColorAt(ClientLevel level, Vec3f nodePos, PlacedConduit conduitState) {
+		return 0xFFFFFF;
+	}
+	
 	public static class ConduitType implements IForgeRegistryEntry<ConduitType>{
 		protected ResourceLocation registryName;
+		protected float nodeMass;
 		protected float stiffness;
 		protected int clampingLength;
 		protected int thickness;
 
-		public ConduitType(float stiffness, int clampingLength, int thickness) {
-			this.stiffness = stiffness;
+		public ConduitType(float nodeMass, float stiffness, int clampingLength, int thickness) {
+			this.nodeMass = nodeMass;
+			this.stiffness = UtilityHelper.clamp(stiffness, 0, 1);
 			this.clampingLength = clampingLength;
 			this.thickness = thickness;
 		}
 		
 		/*
-		 * The stiffness of the wire, defines how much the wire can bend 
+		 * The mass of the individual nodes
+		 */
+		public float getNodeMass() {
+			return nodeMass;
+		}
+		
+		/*
+		 * The stiffness of the wire beams
 		 */
 		public float getStiffness() {
 			return stiffness;
@@ -96,9 +116,10 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		public Class<ConduitType> getRegistryType() {
 			return ConduitType.class;
 		}
+		
 	}
 	
-	public ConduitShape buildShape(BlockGetter level, PlacedConduit conduit) {
+	public ConduitShape buildShape(BlockGetter level, PlacedConduit conduit, int nodesPerBlock) {
 		
 		BlockPos nodeApos = conduit.getNodeA();
 		BlockState nodeAstate = level.getBlockState(nodeApos);
@@ -106,10 +127,10 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		BlockState nodeBstate = level.getBlockState(nodeBpos);
 		BlockPos cornerMin = UtilityHelper.getMinCorner(nodeApos, nodeBpos);
 		
-		if (nodeAstate.getBlock() instanceof IWireConnector && nodeBstate.getBlock() instanceof IWireConnector) {
+		if (nodeAstate.getBlock() instanceof IConduitConnector && nodeBstate.getBlock() instanceof IConduitConnector) {
 			
-			ConnectionPoint pointA = ((IWireConnector) nodeAstate.getBlock()).getConnectionPoints(level, nodeApos, nodeAstate)[conduit.getConnectionPointA()];
-			ConnectionPoint pointB = ((IWireConnector) nodeBstate.getBlock()).getConnectionPoints(level, nodeBpos, nodeBstate)[conduit.getConnectionPointB()];
+			ConnectionPoint pointA = ((IConduitConnector) nodeAstate.getBlock()).getConnectionPoints(level, nodeApos, nodeAstate)[conduit.getConnectionPointA()];
+			ConnectionPoint pointB = ((IConduitConnector) nodeBstate.getBlock()).getConnectionPoints(level, nodeBpos, nodeBstate)[conduit.getConnectionPointB()];
 			
 			Vec3f pointStart = new Vec3f(
 					nodeApos.getX() - cornerMin.getX(),
@@ -122,11 +143,9 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 					nodeBpos.getZ() - cornerMin.getZ()
 				).add(pointB.offset().toFloat().mul(0.0625F));
 			
-//			Vec3f rotationStart = UtilityHelper.rotationFromAxisAndAngle(pointA.attachmentFace().getAxis(), pointA.angle());
-//			Vec3f rotationEnd = UtilityHelper.rotationFromAxisAndAngle(pointB.attachmentFace().getAxis(), pointB.angle());
 			Vec3f connectionVec = pointEnd.copy().sub(pointStart);
 			float conduitLength = (float) connectionVec.length();
-			float cornerSegments = conduitLength * 6F;
+			float cornerSegments = conduitLength * nodesPerBlock;
 			float beamLength = conduitLength / (cornerSegments + 1);
 			connectionVec.normalize();
 			
@@ -159,8 +178,9 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 				shape.lastPos[i] = temp;
 			}
 			
-			// Solve beams
 			for (int itteration = 1; itteration <= 10; itteration++) {
+
+				// Solve beams
 				for (int i = 1; i < shape.nodes.length; i++) {
 					
 					Vec3f nodeB = shape.nodes[i];
@@ -179,16 +199,14 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 					nodeB.sub(delta.copy().mul(i == shape.nodes.length - 1 ? 0 : (oneStatic ? 1 : 0.5F)).mul(diff).mul(stiffnessLinear));
 					
 				}
+				
 			}
-			
-			// Solve angles
-			
 			
 			// Accumulate gravity
 			for (int i = 1; i < shape.nodes.length - 1; i++) {
-				shape.lastPos[i].add(UtilityHelper.getWorldGravity(level));
+				shape.lastPos[i].add(UtilityHelper.getWorldGravity(level).copy().mul(conduit.getConduit().getConduitType().getNodeMass()));
 			}
-
+			
 			// Solve collision
 			for (int i = 1; i < shape.nodes.length - 1; i++) {
 				
@@ -231,68 +249,7 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 						
 						shape.nodes[i].set(surface.x, surface.y, surface.z);
  						shape.lastPos[i] = shape.nodes[i];
-						
-//						if (bounds.maxY + 0.04F - nodePos.y <= 0.5F) {
-//							if (!level.getBlockState(nodeBlockPos.above()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
-//								shape.nodes[i].y = (float) bounds.maxY - origin.getY() + 0.04F;
-//								shape.lastPos[i] = shape.nodes[i];
-//								continue;
-//							}
-//						}
-//						
-//						if (bounds.maxZ - nodePos.z >= 0.5F) {
-//							if (!level.getBlockState(nodeBlockPos.north()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
-//								shape.nodes[i].z = (float) bounds.minZ - origin.getZ();
-//								shape.lastPos[i] = shape.nodes[i];
-//								continue;
-//							} else if (!level.getBlockState(nodeBlockPos.south()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
-//								shape.nodes[i].z = (float) bounds.maxZ - origin.getZ();
-//								shape.lastPos[i] = shape.nodes[i];
-//								continue;
-//							}
-//						} else {
-//							if (!level.getBlockState(nodeBlockPos.south()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
-//								shape.nodes[i].z = (float) bounds.maxZ - origin.getZ();
-//								shape.lastPos[i] = shape.nodes[i];
-//								continue;
-//							} else if (!level.getBlockState(nodeBlockPos.north()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
-//								shape.nodes[i].z = (float) bounds.minZ - origin.getZ();
-//								shape.lastPos[i] = shape.nodes[i];
-//								continue;
-//							}
-//						}
-//						
-//						if (bounds.maxX - nodePos.x >= 0.5F) {
-//							if (!level.getBlockState(nodeBlockPos.west()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
-//								shape.nodes[i].x = (float) bounds.minX - origin.getX();
-//								shape.lastPos[i] = shape.nodes[i];
-//								continue;
-//							} else if (!level.getBlockState(nodeBlockPos.east()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
-//								shape.nodes[i].x = (float) bounds.maxX - origin.getX();
-//								continue;
-//							}
-//						} else {
-//							if (!level.getBlockState(nodeBlockPos.east()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
-//								shape.nodes[i].x = (float) bounds.maxX - origin.getX();
-//								shape.lastPos[i] = shape.nodes[i];
-//								continue;
-//							} else if (!level.getBlockState(nodeBlockPos.west()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
-//								shape.nodes[i].x = (float) bounds.minX - origin.getX();
-//								shape.lastPos[i] = shape.nodes[i];
-//								continue;
-//							}
-//						}
-//						
-//						if (bounds.maxY - nodePos.y >= 0.5F) {
-//							if (!level.getBlockState(nodeBlockPos.below()).isCollisionShapeFullBlock(level, nodeBlockPos)) {
-//								shape.nodes[i].y = (float) bounds.minY - origin.getY();
-//								shape.lastPos[i] = shape.nodes[i];
-//								continue;
-//							}
-//						}
-//						
-//						shape.nodes[i].y = (float) bounds.maxY + 0.04F - origin.getY();
-											
+									
 					}
 					
 				}
@@ -313,6 +270,7 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 			this.lastPos = nodes.toArray(new Vec3f[] {});
 			this.beamLength = beamLength;
 		}
+		
 	}
 	
 }

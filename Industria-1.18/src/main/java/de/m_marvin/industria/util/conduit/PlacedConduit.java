@@ -13,6 +13,7 @@ public class PlacedConduit {
 	
 	private BlockPos pos1;
 	private BlockPos pos2;
+	private int nodesPerBlock;
 	private int connectionPoint1;
 	private int connectionPoint2;
 	private Conduit conduit;
@@ -20,16 +21,17 @@ public class PlacedConduit {
 	
 	public ConduitShape conduitShape;
 	
-	public PlacedConduit(BlockPos pos1, int connectionPoint1, BlockPos pos2, int connectionPoint2, Conduit conduit) {
+	public PlacedConduit(BlockPos pos1, int connectionPoint1, BlockPos pos2, int connectionPoint2, Conduit conduit, int nodesPerBlock) {
 		this.pos1 = pos1;
 		this.pos2 = pos2;
 		this.connectionPoint1 = connectionPoint1;
 		this.connectionPoint2 = connectionPoint2;
 		this.conduit = conduit;
+		this.nodesPerBlock = nodesPerBlock;
 	}
 	
 	public PlacedConduit build(BlockGetter level) {
-		this.shape = conduit.buildShape(level, this);
+		this.shape = conduit.buildShape(level, this, nodesPerBlock);
 		updateShape(level);
 		return this;
 	}
@@ -45,6 +47,7 @@ public class PlacedConduit {
 		tag.put("PosB", NbtUtils.writeBlockPos(pos2));
 		tag.putInt("ConnectionPointB", connectionPoint2);
 		tag.putString("Conduit", this.conduit.getRegistryName().toString());
+		tag.putInt("Nodes", this.nodesPerBlock);
 		return tag;
 	}
 	
@@ -54,9 +57,10 @@ public class PlacedConduit {
 		int connectionPoint1 = tag.getInt("ConnectionPointA");
 		int connectionPoint2 = tag.getInt("ConnectionPointB");
 		ResourceLocation conduitName = new ResourceLocation(tag.getString("Conduit"));
-		Conduit conduit = ModRegistries.CONDUITES.get().getValue(conduitName);
+		Conduit conduit = ModRegistries.CONDUITS.get().getValue(conduitName);
+		int nodesPerBlock = tag.getInt("Nodes");
 		if (conduit == null) return null;
-		return new PlacedConduit(pos1, connectionPoint1, pos2, connectionPoint2, conduit);
+		return new PlacedConduit(pos1, connectionPoint1, pos2, connectionPoint2, conduit, nodesPerBlock);
 	}
 	
 	public ConduitShape getShape() {
@@ -70,17 +74,21 @@ public class PlacedConduit {
 	public BlockPos getNodeA() {
 		return this.pos1;
 	}
+
+	public BlockPos getNodeB() {
+		return this.pos2;
+	}
 	
 	public int getConnectionPointA() {
 		return connectionPoint1;
 	}
 	
-	public BlockPos getNodeB() {
-		return this.pos2;
-	}
-	
 	public int getConnectionPointB() {
 		return connectionPoint2;
+	}
+	
+	public int getNodesPerBlock() {
+		return nodesPerBlock;
 	}
 	
 }

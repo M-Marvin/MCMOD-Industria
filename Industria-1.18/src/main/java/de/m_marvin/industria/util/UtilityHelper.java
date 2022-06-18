@@ -4,8 +4,8 @@ import java.util.stream.Stream;
 
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.registries.ModCapabilities;
+import de.m_marvin.industria.util.block.IConduitConnector.ConnectionPoint;
 import de.m_marvin.industria.util.conduit.ConduitWorldStorageCapability;
-import de.m_marvin.industria.util.conduit.IWireConnector.ConnectionPoint;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
 import net.minecraft.core.BlockPos;
@@ -22,6 +22,18 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.util.LazyOptional;
 
 public class UtilityHelper {
+	
+	public static float clamp(float v, float min, float max) {
+		if (v < min) return min;
+		if (v > max) return max;
+		return v;
+	}
+	
+	public static double clamp(double v, double min, double max) {
+		if (v < min) return min;
+		if (v > max) return max;
+		return v;
+	}
 	
 	public static float clampToDegree(float angle) {
 		return angle % 360;
@@ -170,10 +182,10 @@ public class UtilityHelper {
 		return new Vec3f(0, 0, 0);
 	}
 	
-	public static void setConduit(Level level, ConnectionPoint nodeA, ConnectionPoint nodeB, Conduit conduit) {
+	public static void setConduit(Level level, ConnectionPoint nodeA, ConnectionPoint nodeB, Conduit conduit, int nodesPerBlock) {
 		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
-			conduitHolder.resolve().get().addConduit(level, nodeA, nodeB, conduit);
+			conduitHolder.resolve().get().addConduit(level, nodeA, nodeB, conduit, nodesPerBlock);
 		}
 	}
 	

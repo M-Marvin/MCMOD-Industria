@@ -17,7 +17,7 @@ import net.minecraftforge.registries.RegistryManager;
 public class ModRegistries {
 	
 	public static final Supplier<IForgeRegistry<ConduitType>> CONDUIT_TYPES = () -> RegistryManager.ACTIVE.getRegistry(ConduitType.class);
-	public static final Supplier<IForgeRegistry<Conduit>> CONDUITES = () -> RegistryManager.ACTIVE.getRegistry(Conduit.class);
+	public static final Supplier<IForgeRegistry<Conduit>> CONDUITS = () -> RegistryManager.ACTIVE.getRegistry(Conduit.class);
 	
 	@SubscribeEvent
 	public static void register(RegistryEvent.NewRegistry event) {

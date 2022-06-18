@@ -1,4 +1,4 @@
-package de.m_marvin.industria.types;
+package de.m_marvin.industria.util.types;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;

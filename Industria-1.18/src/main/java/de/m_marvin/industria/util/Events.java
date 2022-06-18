@@ -1,43 +1,33 @@
 package de.m_marvin.industria.util;
 
 import de.m_marvin.industria.Industria;
-import de.m_marvin.industria.registries.ModCapabilities;
-import de.m_marvin.industria.util.conduit.ConduitWorldStorageCapability;
+import de.m_marvin.industria.util.item.IScrollOverride;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.TickEvent.ClientTickEvent;
-import net.minecraftforge.event.TickEvent.WorldTickEvent;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid=Industria.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class Events {
-
-	@SubscribeEvent
-	public static void onClientWorldTick(ClientTickEvent event) {
-		
-		@SuppressWarnings("resource")
-		ClientLevel level = Minecraft.getInstance().level;
-		
-		if (level != null) {
-			LazyOptional<ConduitWorldStorageCapability> conduitCap = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
-			if (conduitCap.isPresent()) {
-				conduitCap.resolve().get().updateConduitPhysic(level);
-			}
-		}
-		
-	}
 	
+	@SuppressWarnings("resource")
 	@SubscribeEvent
-	public static void onWorldTick(WorldTickEvent event) {
+	public static void onMouseScrollInput(InputEvent.MouseScrollEvent event) {
 		
-		Level level = event.world;
+		ClientLevel level = Minecraft.getInstance().level;
+		LocalPlayer player = Minecraft.getInstance().player;
+		ItemStack heldItem = player.getMainHandItem();
 		
-		LazyOptional<ConduitWorldStorageCapability> conduitCap = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
-		if (conduitCap.isPresent()) {
-			conduitCap.resolve().get().updateConduitPhysic(level);
+		if (!heldItem.isEmpty() && heldItem.getItem() instanceof IScrollOverride && ((IScrollOverride) heldItem.getItem()).overridesScroll(heldItem)) {
+			
+			event.setCanceled(true);
+			((IScrollOverride) heldItem.getItem()).onScroll(new UseOnContext(level, player, InteractionHand.MAIN_HAND, heldItem, null), event.getScrollDelta());
+			
 		}
 		
 	}

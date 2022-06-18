@@ -177,7 +177,7 @@ public class Vec3f {
 	public Quaternion rotationQuatFromDirection(Vec3f reference) {
 		Vec3f v = reference.copy().cross(this);
 		v.normalize();
-		float angle = (float) Math.acos(this.copy().dot(reference) / reference.length() * this.length());
+		float angle = (float) Math.acos(this.dot(reference));
 		return new Quaternion(new Vector3f(v.x, v.y, v.z), angle, false);
 	}
 	
@@ -228,6 +228,10 @@ public class Vec3f {
 			return ((Vec3f) obj).x == x && ((Vec3f) obj).y == y && ((Vec3f) obj).z == z;
 		}
 		return false;
+	}
+	
+	public Vec3f getInterpolated(Vec3f other, float partial) {
+		return new Vec3f(this.x + (other.x - this.x)* partial, this.y + (other.y - this.y)* partial, this.z + (other.z - this.z)* partial);
 	}
 	
 }

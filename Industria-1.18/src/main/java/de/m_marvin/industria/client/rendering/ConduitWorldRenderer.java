@@ -27,12 +27,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.FORGE,modid=Industria.MODID)
+@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.FORGE,modid=Industria.MODID, value=Dist.CLIENT)
 public class ConduitWorldRenderer {
 	
 	public static final int TEXTURE_MAP_SIZE = 64;
@@ -41,12 +42,13 @@ public class ConduitWorldRenderer {
 	@SubscribeEvent
 	public static void onWorldRenderLast(RenderLevelLastEvent event) {
 		
+		
 		MultiBufferSource.BufferSource source = Minecraft.getInstance().renderBuffers().bufferSource();
 		PoseStack matrixStack = event.getPoseStack();
 		ClientLevel level = Minecraft.getInstance().level;
 		
 		RenderSystem.enableDepthTest();
-
+		
 		Vec3 offset = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
 		matrixStack.translate(-offset.x, -offset.y, -offset.z);
 		

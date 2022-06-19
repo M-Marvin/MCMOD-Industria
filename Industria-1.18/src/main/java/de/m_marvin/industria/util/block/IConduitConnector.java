@@ -24,7 +24,7 @@ public interface IConduitConnector {
 		for (ConnectionPoint node : getConnectionPoints(level, pos, state)) {
 			LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
 			if (conduitHolder.isPresent()) {
-				Optional<PlacedConduit> conduit = conduitHolder.resolve().get().getConduit(node);
+				Optional<PlacedConduit> conduit = conduitHolder.resolve().get().getConduitAtNode(node);
 				if (conduit.isPresent()) {
 					connections.add(conduit.get());
 				}
@@ -37,8 +37,18 @@ public interface IConduitConnector {
 		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
 			for (ConnectionPoint con : getConnectionPoints(level, pos, state)) {
-				if (!conduitHolder.resolve().get().getConduit(con).isPresent()) return true;
+				if (!conduitHolder.resolve().get().getConduitAtNode(con).isPresent()) return true;
 			}
+		}
+		return false;
+	}
+	
+	public default boolean connectionAviable(Level level, BlockPos pos, BlockState state, int id) {
+		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		if (conduitHolder.isPresent()) {
+			ConnectionPoint[] connections = getConnectionPoints(level, pos, state);
+			if (id >= connections.length) return false;
+			return !conduitHolder.resolve().get().getConduitAtNode(connections[id]).isPresent();
 		}
 		return false;
 	}

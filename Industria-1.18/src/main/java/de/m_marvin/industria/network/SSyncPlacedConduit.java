@@ -1,67 +1,85 @@
 package de.m_marvin.industria.network;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 import de.m_marvin.industria.Industria;
+import de.m_marvin.industria.client.rendering.util.ClientPackageHandler;
 import de.m_marvin.industria.conduits.Conduit;
-import de.m_marvin.industria.registries.ModCapabilities;
 import de.m_marvin.industria.registries.ModRegistries;
-import de.m_marvin.industria.util.conduit.ConduitWorldStorageCapability;
 import de.m_marvin.industria.util.conduit.PlacedConduit;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.util.LazyOptional;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
+/*
+ * Sends existing conduits from server to client to sync the conduits
+ */
 public class SSyncPlacedConduit {
 	
-	public PlacedConduit conduitState;
+	public ChunkPos chunkPos;
+	public List<PlacedConduit> conduitStates;
 	
-	public SSyncPlacedConduit(PlacedConduit conduitState) {
-		this.conduitState = conduitState;
+	public SSyncPlacedConduit(List<PlacedConduit> conduitStates, ChunkPos targetChunk) {
+		this.conduitStates = conduitStates;
+		this.chunkPos = targetChunk;
 	}
-		
+	
+	public SSyncPlacedConduit(PlacedConduit conduitState, ChunkPos targetChunk) {
+		this.conduitStates = new ArrayList<PlacedConduit>();
+		this.conduitStates.add(conduitState);
+		this.chunkPos = targetChunk;
+	}
+	
+	public ChunkPos getChunkPos() {
+		return chunkPos;
+	}
+	
 	public static void encode(SSyncPlacedConduit msg, FriendlyByteBuf buff) {
-		buff.writeBlockPos(msg.conduitState.getNodeA());
-		buff.writeBlockPos(msg.conduitState.getNodeB());
-		buff.writeInt(msg.conduitState.getNodesPerBlock());
-		buff.writeInt(msg.conduitState.getConnectionPointA());
-		buff.writeInt(msg.conduitState.getConnectionPointB());
-		buff.writeResourceLocation(msg.conduitState.getConduit().getRegistryName());
+		buff.writeChunkPos(msg.chunkPos);
+		buff.writeInt(msg.conduitStates.size());
+		for (PlacedConduit conduitState : msg.conduitStates) {
+			buff.writeBlockPos(conduitState.getNodeA());
+			buff.writeBlockPos(conduitState.getNodeB());
+			buff.writeInt(conduitState.getNodesPerBlock());
+			buff.writeInt(conduitState.getConnectionPointA());
+			buff.writeInt(conduitState.getConnectionPointB());
+			buff.writeResourceLocation(conduitState.getConduit().getRegistryName());
+		}
 	}
 	
 	public static SSyncPlacedConduit decode(FriendlyByteBuf buff) {
-		BlockPos nodeApos = buff.readBlockPos();
-		BlockPos nodeBpos = buff.readBlockPos();
-		int nodesPerBlock = buff.readInt();
-		int connectionPointA = buff.readInt();
-		int connectionPointB = buff.readInt();
-		ResourceLocation conduitName = buff.readResourceLocation();
-		if (!ModRegistries.CONDUITS.get().containsKey(conduitName)) {
-			Industria.LOGGER.error("Recived package for unregistered conduit: " + conduitName);
-			return new SSyncPlacedConduit(null);
+		ChunkPos chunkPos = buff.readChunkPos();
+		int count = buff.readInt();
+		List<PlacedConduit> conduitStates = new ArrayList<PlacedConduit>();
+		for (int i = 0; i < count; i++) {
+			BlockPos nodeApos = buff.readBlockPos();
+			BlockPos nodeBpos = buff.readBlockPos();
+			int nodesPerBlock = buff.readInt();
+			int connectionPointA = buff.readInt();
+			int connectionPointB = buff.readInt();
+			ResourceLocation conduitName = buff.readResourceLocation();
+			if (!ModRegistries.CONDUITS.get().containsKey(conduitName)) {
+				Industria.LOGGER.error("Recived package for unregistered conduit: " + conduitName);
+				continue;
+			}
+			Conduit conduit = ModRegistries.CONDUITS.get().getValue(conduitName);
+			conduitStates.add(new PlacedConduit(nodeApos, connectionPointA, nodeBpos, connectionPointB, conduit, nodesPerBlock));
 		}
-		Conduit conduit = ModRegistries.CONDUITS.get().getValue(conduitName);
-		
-		return new SSyncPlacedConduit(new PlacedConduit(nodeApos, connectionPointA, nodeBpos, connectionPointB, conduit, nodesPerBlock));
+		return new SSyncPlacedConduit(conduitStates, chunkPos);
 	}
 	
-	@SuppressWarnings("resource")
 	public static void handle(SSyncPlacedConduit msg, Supplier<NetworkEvent.Context> ctx) {
 		
 		ctx.get().enqueueWork(() -> {
-			
-			if (msg.conduitState != null) {
-				ClientLevel level = Minecraft.getInstance().level;
-				LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
-				if (conduitHolder.isPresent()) {
-					conduitHolder.resolve().get().getConduits().add(msg.conduitState);
-				}
-			}
-			
+			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+				ClientPackageHandler.handleSyncConduitsFromServer(msg, ctx.get());
+			});
 		});
 		ctx.get().setPacketHandled(true);
 		

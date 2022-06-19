@@ -15,6 +15,7 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -119,7 +120,7 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		
 	}
 	
-	public ConduitShape buildShape(BlockGetter level, PlacedConduit conduit, int nodesPerBlock) {
+	public ConduitShape buildShape(Level level, PlacedConduit conduit, int nodesPerBlock) {
 		
 		BlockPos nodeApos = conduit.getNodeA();
 		BlockState nodeAstate = level.getBlockState(nodeApos);
@@ -127,7 +128,7 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		BlockState nodeBstate = level.getBlockState(nodeBpos);
 		BlockPos cornerMin = UtilityHelper.getMinCorner(nodeApos, nodeBpos);
 		
-		if (nodeAstate.getBlock() instanceof IConduitConnector && nodeBstate.getBlock() instanceof IConduitConnector) {
+		if ((nodeAstate.getBlock() instanceof IConduitConnector && nodeBstate.getBlock() instanceof IConduitConnector)) {
 			
 			ConnectionPoint pointA = ((IConduitConnector) nodeAstate.getBlock()).getConnectionPoints(level, nodeApos, nodeAstate)[conduit.getConnectionPointA()];
 			ConnectionPoint pointB = ((IConduitConnector) nodeBstate.getBlock()).getConnectionPoints(level, nodeBpos, nodeBstate)[conduit.getConnectionPointB()];
@@ -157,6 +158,7 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 			nodes.add(pointEnd);
 			
 			ConduitShape shape = new ConduitShape(nodes, beamLength);
+			
 			return shape;
 			
 		}

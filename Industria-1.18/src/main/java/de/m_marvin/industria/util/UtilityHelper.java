@@ -4,7 +4,7 @@ import java.util.stream.Stream;
 
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.registries.ModCapabilities;
-import de.m_marvin.industria.util.block.IConduitConnector.ConnectionPoint;
+import de.m_marvin.industria.util.conduit.ConduitPos;
 import de.m_marvin.industria.util.conduit.ConduitWorldStorageCapability;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
@@ -14,6 +14,7 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
@@ -182,15 +183,21 @@ public class UtilityHelper {
 		return new Vec3f(0, 0, 0);
 	}
 	
-	public static void setConduit(Level level, ConnectionPoint nodeA, ConnectionPoint nodeB, Conduit conduit, int nodesPerBlock) {
+	public static boolean setConduit(Level level, ConduitPos position, Conduit conduit, int nodesPerBlock) {
 		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
-			conduitHolder.resolve().get().addConduit(level, nodeA, nodeB, conduit, nodesPerBlock);
+			return conduitHolder.resolve().get().placeConduit(level, position, conduit, nodesPerBlock);
 		}
+		return false;
 	}
 	
 	public static Vec3f getWorldGravity(BlockGetter level) {
 		return new Vec3f(0, 0.1F, 0); // TODO
+	}
+
+	public static boolean isInChunk(ChunkPos chunk, BlockPos block) {
+		return 	chunk.getMinBlockX() <= block.getX() && chunk.getMaxBlockX() >= block.getX() &&
+				chunk.getMinBlockZ() <= block.getZ() && chunk.getMaxBlockZ() >= block.getZ();
 	}
 	
 }

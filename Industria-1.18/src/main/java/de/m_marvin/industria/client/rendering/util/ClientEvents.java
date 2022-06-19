@@ -1,4 +1,4 @@
-package de.m_marvin.industria.util;
+package de.m_marvin.industria.client.rendering.util;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.util.item.IScrollOverride;
@@ -8,12 +8,13 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid=Industria.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
-public class Events {
+@Mod.EventBusSubscriber(modid=Industria.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE, value=Dist.CLIENT)
+public class ClientEvents {
 	
 	@SuppressWarnings("resource")
 	@SubscribeEvent

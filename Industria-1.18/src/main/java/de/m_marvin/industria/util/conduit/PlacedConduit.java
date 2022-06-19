@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 
 public class PlacedConduit {
 	
@@ -30,7 +31,7 @@ public class PlacedConduit {
 		this.nodesPerBlock = nodesPerBlock;
 	}
 	
-	public PlacedConduit build(BlockGetter level) {
+	public PlacedConduit build(Level level) {
 		this.shape = conduit.buildShape(level, this, nodesPerBlock);
 		updateShape(level);
 		return this;
@@ -89,6 +90,17 @@ public class PlacedConduit {
 	
 	public int getNodesPerBlock() {
 		return nodesPerBlock;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof PlacedConduit) {
+			PlacedConduit other = (PlacedConduit) obj;
+			return 	other.pos1.equals(this.pos1) && other.pos2.equals(this.pos2) && 
+					other.connectionPoint1 == this.connectionPoint1 && other.connectionPoint2 == connectionPoint2 &&
+					other.conduit == this.conduit;
+		}
+		return false;
 	}
 	
 }

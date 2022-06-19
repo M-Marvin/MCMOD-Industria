@@ -1,8 +1,8 @@
 {
 
-"industria.item.info.conduit.nodeSelect": "Erste Verbindung ausgewählt (Abbrechen mit Shift-R-Click)",
-"industria.item.info.conduit.changeNodes": "Leitungslänge: %1$s (Abbrechen mit Shift-R-Click)",
-"industria.item.info.conduit.placed": "Leitung plaziert",
-"industria.item.info.conduit.abbort": "Plazieren abgebrochen"
+"industria.item.info.conduit.nodeSelect": "Erste Verbindung ausgewählt (Abbrechen mit Shift-R-Klick)",
+"industria.item.info.conduit.changeNodes": "Leitungslänge: %1$s (Abbrechen mit Shift-R-Klick)",
+"industria.item.info.conduit.placed": "Leitung platziert",
+"industria.item.info.conduit.abbort": "Platzieren abgebrochen"
 
 }

@@ -1,0 +1,8 @@
+{
+
+"industria.item.info.conduit.nodeSelect": "First Connection Point selected (Exit with Shift-R-Click)",
+"industria.item.info.conduit.changeNodes": "Conduit Length: %1$s (Exit with Shift-R-Click)",
+"industria.item.info.conduit.placed": "Conduit placed",
+"industria.item.info.conduit.abbort": "Placing aborted"
+
+}

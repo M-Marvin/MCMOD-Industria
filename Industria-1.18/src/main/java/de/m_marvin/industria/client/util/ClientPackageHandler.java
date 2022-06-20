@@ -1,4 +1,4 @@
-package de.m_marvin.industria.client.rendering.util;
+package de.m_marvin.industria.client.util;
 
 import java.util.HashMap;
 
@@ -47,8 +47,14 @@ public class ClientPackageHandler {
 		Level level = Minecraft.getInstance().level;
 		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
-			for (PlacedConduit conduitState : msg.conduitStates) {
-				conduitHolder.resolve().get().addConduit(conduitState);
+			if (!msg.removed) {
+				for (PlacedConduit conduitState : msg.conduitStates) {
+					conduitHolder.resolve().get().addConduit(conduitState);
+				}
+			} else {
+				for (PlacedConduit conduitState : msg.conduitStates) {
+					conduitHolder.resolve().get().removeConduit(conduitState);
+				}
 			}
 		}
 	}

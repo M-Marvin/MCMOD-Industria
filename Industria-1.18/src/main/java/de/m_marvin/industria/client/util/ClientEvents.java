@@ -1,4 +1,4 @@
-package de.m_marvin.industria.client.rendering.util;
+package de.m_marvin.industria.client.util;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.util.item.IScrollOverride;

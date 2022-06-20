@@ -191,6 +191,14 @@ public class UtilityHelper {
 		return false;
 	}
 	
+	public static boolean removeConduit(Level level, ConduitPos position) {
+		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		if (conduitHolder.isPresent()) {
+			return conduitHolder.resolve().get().breakConduit(position);
+		}
+		return false;
+	}
+	
 	public static Vec3f getWorldGravity(BlockGetter level) {
 		return new Vec3f(0, 0.1F, 0); // TODO
 	}

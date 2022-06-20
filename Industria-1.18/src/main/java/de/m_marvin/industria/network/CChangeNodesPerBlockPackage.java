@@ -4,8 +4,6 @@ import java.util.function.Supplier;
 
 import de.m_marvin.industria.util.ServerPackageHandler;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 /*
@@ -35,9 +33,7 @@ public class CChangeNodesPerBlockPackage {
 	public static void handle(CChangeNodesPerBlockPackage msg, Supplier<NetworkEvent.Context> ctx) {
 		
 		ctx.get().enqueueWork(() -> {
-			DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
-				ServerPackageHandler.handleChangeNodesPerBlock(msg, ctx.get());
-			});
+			ServerPackageHandler.handleChangeNodesPerBlock(msg, ctx.get());
 		});
 		ctx.get().setPacketHandled(true);
 		

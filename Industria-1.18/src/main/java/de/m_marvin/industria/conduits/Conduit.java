@@ -3,9 +3,11 @@ package de.m_marvin.industria.conduits;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.block.IConduitConnector;
 import de.m_marvin.industria.util.block.IConduitConnector.ConnectionPoint;
+import de.m_marvin.industria.util.conduit.ConduitPos;
 import de.m_marvin.industria.util.conduit.PlacedConduit;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -58,6 +60,21 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 	
 	public int getColorAt(ClientLevel level, Vec3f nodePos, PlacedConduit conduitState) {
 		return 0xFFFFFF;
+	}
+	
+	public void onNodeStateChange(Level level, BlockPos nodePos, BlockState nodeState, PlacedConduit conduitState) {
+		if (nodeState.getBlock() instanceof IConduitConnector) {
+			int nodeId = conduitState.getNodeA().equals(nodePos) ? conduitState.getConnectionPointA() : conduitState.getConnectionPointB();
+			if (((IConduitConnector) nodeState.getBlock()).getConnectionPoints(level, nodePos, nodeState).length <= nodeId) {
+				destroyConduit(level, conduitState.getConduitPosition());
+			}
+		} else {
+			destroyConduit(level, conduitState.getConduitPosition());
+		}
+	}
+	
+	public void destroyConduit(Level level, ConduitPos position) {
+		UtilityHelper.removeConduit(level, position);
 	}
 	
 	public static class ConduitType implements IForgeRegistryEntry<ConduitType>{
@@ -162,6 +179,8 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 			return shape;
 			
 		}
+		
+		Industria.LOGGER.log(org.apache.logging.log4j.Level.WARN, "Failed to build conduit shape at " + conduit.getNodeA() + "/" + conduit.getNodeB() + "!");
 		
 		return null;
 	}

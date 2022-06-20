@@ -5,9 +5,10 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import de.m_marvin.industria.Industria;
-import de.m_marvin.industria.client.rendering.util.ClientPackageHandler;
+import de.m_marvin.industria.client.util.ClientPackageHandler;
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.registries.ModRegistries;
+import de.m_marvin.industria.util.conduit.ConduitPos;
 import de.m_marvin.industria.util.conduit.PlacedConduit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -24,16 +25,19 @@ public class SSyncPlacedConduit {
 	
 	public ChunkPos chunkPos;
 	public List<PlacedConduit> conduitStates;
+	public boolean removed;
 	
-	public SSyncPlacedConduit(List<PlacedConduit> conduitStates, ChunkPos targetChunk) {
+	public SSyncPlacedConduit(List<PlacedConduit> conduitStates, ChunkPos targetChunk, boolean removed) {
 		this.conduitStates = conduitStates;
 		this.chunkPos = targetChunk;
+		this.removed = removed;
 	}
 	
-	public SSyncPlacedConduit(PlacedConduit conduitState, ChunkPos targetChunk) {
+	public SSyncPlacedConduit(PlacedConduit conduitState, ChunkPos targetChunk, boolean removed) {
 		this.conduitStates = new ArrayList<PlacedConduit>();
 		this.conduitStates.add(conduitState);
 		this.chunkPos = targetChunk;
+		this.removed = removed;
 	}
 	
 	public ChunkPos getChunkPos() {
@@ -41,6 +45,7 @@ public class SSyncPlacedConduit {
 	}
 	
 	public static void encode(SSyncPlacedConduit msg, FriendlyByteBuf buff) {
+		buff.writeBoolean(msg.removed);
 		buff.writeChunkPos(msg.chunkPos);
 		buff.writeInt(msg.conduitStates.size());
 		for (PlacedConduit conduitState : msg.conduitStates) {
@@ -54,6 +59,7 @@ public class SSyncPlacedConduit {
 	}
 	
 	public static SSyncPlacedConduit decode(FriendlyByteBuf buff) {
+		boolean removed = buff.readBoolean();
 		ChunkPos chunkPos = buff.readChunkPos();
 		int count = buff.readInt();
 		List<PlacedConduit> conduitStates = new ArrayList<PlacedConduit>();
@@ -69,9 +75,10 @@ public class SSyncPlacedConduit {
 				continue;
 			}
 			Conduit conduit = ModRegistries.CONDUITS.get().getValue(conduitName);
-			conduitStates.add(new PlacedConduit(nodeApos, connectionPointA, nodeBpos, connectionPointB, conduit, nodesPerBlock));
+			ConduitPos position = new ConduitPos(nodeApos, nodeBpos, connectionPointA, connectionPointB);
+			conduitStates.add(new PlacedConduit(position, conduit, nodesPerBlock));
 		}
-		return new SSyncPlacedConduit(conduitStates, chunkPos);
+		return new SSyncPlacedConduit(conduitStates, chunkPos, removed);
 	}
 	
 	public static void handle(SSyncPlacedConduit msg, Supplier<NetworkEvent.Context> ctx) {

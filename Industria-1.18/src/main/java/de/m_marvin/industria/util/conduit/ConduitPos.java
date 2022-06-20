@@ -1,6 +1,8 @@
 package de.m_marvin.industria.util.conduit;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.FriendlyByteBuf;
 
 public class ConduitPos {
@@ -56,6 +58,18 @@ public class ConduitPos {
 		int nodeAid = buff.readInt();
 		int nodeBid = buff.readInt();
 		return new ConduitPos(nodeApos, nodeBpos, nodeAid, nodeBid);
+	}
+	
+	public CompoundTag writeNBT(CompoundTag nbt) {
+		nbt.put("PosA", NbtUtils.writeBlockPos(this.nodeApos));
+		nbt.put("PosB", NbtUtils.writeBlockPos(this.nodeBpos));
+		nbt.putInt("IdA", this.nodeAid);
+		nbt.putInt("IdB", this.nodeBid);
+		return nbt;
+	}
+	
+	public static ConduitPos readNBT(CompoundTag nbt) {
+		return new ConduitPos(NbtUtils.readBlockPos(nbt.getCompound("PosA")), NbtUtils.readBlockPos(nbt.getCompound("PosB")), nbt.getInt("IdA"), nbt.getInt("IdB"));
 	}
 	
 	@Override

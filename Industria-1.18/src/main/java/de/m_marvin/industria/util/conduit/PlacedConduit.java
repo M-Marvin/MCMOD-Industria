@@ -103,4 +103,12 @@ public class PlacedConduit {
 		return false;
 	}
 	
+	@Override
+	public String toString() {
+		return "PlacedConduit{conduit=" + this.conduit.getRegistryName() + 
+				",nodeA=[" + this.pos1.getX() + "," + this.pos1.getY() + "," + this.pos1.getZ() + "@" + this.connectionPoint1 + "]" +
+				",nodeB=[" + this.pos2.getX() + "," + this.pos2.getY() + "," + this.pos2.getZ() + "@" + this.connectionPoint2 + "]" +
+				"}";
+ 	}
+	
 }

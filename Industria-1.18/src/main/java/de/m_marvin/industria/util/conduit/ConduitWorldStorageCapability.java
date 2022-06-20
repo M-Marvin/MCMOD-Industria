@@ -32,7 +32,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
 
 /*
- * Contains the conduits in a world (dimension), used on seber and client side
+ * Contains the conduits in a world (dimension), used on server and client side
  */
 @Mod.EventBusSubscriber(modid=Industria.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class ConduitWorldStorageCapability implements ICapabilitySerializable<ListTag> {
@@ -49,7 +49,9 @@ public class ConduitWorldStorageCapability implements ICapabilitySerializable<Li
 		return LazyOptional.empty();
 	}
 	
+	private boolean preBuildLoad = false;
 	private List<PlacedConduit> conduits = new ArrayList<>();
+	private Level level;
 	
 	@Override
 	public ListTag serializeNBT() {
@@ -58,17 +60,24 @@ public class ConduitWorldStorageCapability implements ICapabilitySerializable<Li
 			CompoundTag conTag = con.save();
 			if (conTag != null) tag.add(conTag);
 		}
+		Industria.LOGGER.log(org.apache.logging.log4j.Level.INFO ,"Saved " + tag.size() + " Conduits");
 		return tag;
 	}
 
 	@Override
 	public void deserializeNBT(ListTag tag) {
-		//this.conduits.clear();
+		this.conduits.clear();
+		this.preBuildLoad = true;
 		for (int i = 0; i < tag.size(); i++) {
 			CompoundTag conTag = tag.getCompound(i);
 			PlacedConduit con = PlacedConduit.load(conTag);
-			// FIXME if (con != null) addConduit(con);
+			if (con != null) this.conduits.add(con);
 		}
+		Industria.LOGGER.log(org.apache.logging.log4j.Level.INFO ,"Loaded " + this.conduits.size() + "/" + tag.size() + "  Conduits");
+	}
+	
+	public ConduitWorldStorageCapability(Level level) {
+		this.level = level;
 	}
 	
 	/* Event handling */
@@ -119,7 +128,7 @@ public class ConduitWorldStorageCapability implements ICapabilitySerializable<Li
 	/*
 	 * Places a new conduit in the world if both nodes are free, and sends the changes to clients
 	 */
-	public boolean placeConduit(Level level, ConduitPos position, Conduit conduit, int nodesPerBlock) {
+	public boolean placeConduit(ConduitPos position, Conduit conduit, int nodesPerBlock) {
 		BlockState nodeAstate = level.getBlockState(position.getNodeApos());
 		ConnectionPoint[] nodesA = nodeAstate.getBlock() instanceof IConduitConnector ? ((IConduitConnector) nodeAstate.getBlock()).getConnectionPoints(level, position.getNodeApos(), nodeAstate) : null;
 		ConnectionPoint nodeA = nodesA != null && nodesA.length > position.getNodeAid() ? nodesA[position.getNodeAid()] : null;
@@ -133,7 +142,7 @@ public class ConduitWorldStorageCapability implements ICapabilitySerializable<Li
 			return false;
 		} else {
 			PlacedConduit conduitState = new PlacedConduit(nodeA.position(), nodeA.connectionId(), nodeB.position(), nodeB.connectionId(), conduit, nodesPerBlock);
-			addConduit(level, conduitState);
+			addConduit(conduitState);
 			if (!level.isClientSide()) {
 				Industria.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(nodeA.position())), new SSyncPlacedConduit(conduitState, new ChunkPos(nodeA.position())));
 				Industria.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(nodeB.position())), new SSyncPlacedConduit(conduitState, new ChunkPos(nodeB.position())));
@@ -145,7 +154,7 @@ public class ConduitWorldStorageCapability implements ICapabilitySerializable<Li
 	/*
 	 * Adds a conduit to the world, called on server AND client side to synchronize conduits
 	 */
-	public void addConduit(Level level, PlacedConduit conduitState) {
+	public void addConduit(PlacedConduit conduitState) {
 		if (level.isLoaded(conduitState.getNodeA()) && level.isLoaded(conduitState.getNodeB())) {
 			if (!conduits.contains(conduitState)) {
 				conduitState.build(level);
@@ -170,7 +179,7 @@ public class ConduitWorldStorageCapability implements ICapabilitySerializable<Li
 	/*
 	 * Gets the conduit at the given position
 	 */
-	public Optional<PlacedConduit> getConduit(Level level, ConduitPos position) {
+	public Optional<PlacedConduit> getConduit(ConduitPos position) {
 		BlockState nodeAstate = level.getBlockState(position.getNodeApos());
 		ConnectionPoint[] nodesA = nodeAstate instanceof IConduitConnector ? ((IConduitConnector) nodeAstate).getConnectionPoints(level, position.getNodeApos(), nodeAstate) : null;
 		ConnectionPoint nodeA = nodesA != null && nodesA.length > position.getNodeAid() ? nodesA[position.getNodeAid()] : null;
@@ -193,7 +202,8 @@ public class ConduitWorldStorageCapability implements ICapabilitySerializable<Li
 	 */
 	public Optional<PlacedConduit> getConduitAtNode(ConnectionPoint node) {
 		for (PlacedConduit con : this.conduits) {
-			if (con.getNodeA().equals(node.position())) {
+			if (	(con.getNodeA().equals(node.position()) && con.getConnectionPointA() == node.connectionId()) ||
+					(con.getNodeB().equals(node.position()) && con.getConnectionPointB() == node.connectionId())) {
 				return Optional.of(con);
 			}
 		}
@@ -212,8 +222,13 @@ public class ConduitWorldStorageCapability implements ICapabilitySerializable<Li
 	 */
 	public void update(BlockGetter level) {
 		for (PlacedConduit conduit : this.getConduits()) {
-			conduit.updateShape(level);
+			if (this.preBuildLoad) {
+				conduit.build(this.level);
+			} else {
+				conduit.updateShape(level);
+			}
 		}
+		if (this.preBuildLoad) this.preBuildLoad = false;
 	}
 		
 }

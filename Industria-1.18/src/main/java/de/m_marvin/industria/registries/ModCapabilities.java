@@ -27,7 +27,7 @@ public class ModCapabilities {
 		
 		@SubscribeEvent
 		public static void attachCapabilities(AttachCapabilitiesEvent<Level> event) {
-			event.addCapability(new ResourceLocation(Industria.MODID, "conduits"), new ConduitWorldStorageCapability());
+			event.addCapability(new ResourceLocation(Industria.MODID, "conduits"), new ConduitWorldStorageCapability(event.getObject()));
 		}
 		
 	}

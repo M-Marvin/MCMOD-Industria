@@ -57,8 +57,7 @@ public class FlexibleConduitItem extends Item implements IScrollOverride {
 	public InteractionResult useOn(UseOnContext context) {
 		
 		CompoundTag itemTag = context.getItemInHand().getOrCreateTag();
-		if (context.getPlayer().isShiftKeyDown()) {
-			
+		if (context.getPlayer().isShiftKeyDown() && itemTag.contains("FirstNode")) {
 			itemTag.remove("FirstNode");
 			context.getItemInHand().setTag(itemTag);
 			context.getPlayer().displayClientMessage(new TranslatableComponent("industria.item.info.conduit.abbort"), true);
@@ -74,16 +73,24 @@ public class FlexibleConduitItem extends Item implements IScrollOverride {
 					ConnectionPoint secondNode = tryGetNode(context);
 					if (secondNode != null) {
 						int nodesPerBlock = Math.max(itemTag.getInt("NodesPerBlock"), 1);
-						itemTag.remove("FirstNode");
-						context.getItemInHand().setTag(itemTag);
 						ConduitPos conduitPos = new ConduitPos(firstNodePos, secondNode.position(), firstNodeId, secondNode.connectionId());
 						
-						if (UtilityHelper.setConduit(context.getLevel(), conduitPos, this.conduit, nodesPerBlock)) {
-							context.getPlayer().displayClientMessage(new TranslatableComponent("industria.item.info.conduit.placed"), true);
+						double nodeDist = Math.sqrt(firstNodePos.distSqr(secondNode.position()));
+						if (nodeDist <= this.conduit.getConduitType().getClampingLength()) {
+							
+							itemTag.remove("FirstNode");
+							context.getItemInHand().setTag(itemTag);
+							if (UtilityHelper.setConduit(context.getLevel(), conduitPos, this.conduit, nodesPerBlock)) {
+								context.getPlayer().displayClientMessage(new TranslatableComponent("industria.item.info.conduit.placed"), true);
+							} else {
+								context.getPlayer().displayClientMessage(new TranslatableComponent("industria.item.info.conduit.failed"), true);
+							}
+							return InteractionResult.SUCCESS;
+							
 						} else {
-							context.getPlayer().displayClientMessage(new TranslatableComponent("industria.item.info.conduit.failed"), true);
+							context.getPlayer().displayClientMessage(new TranslatableComponent("industria.item.info.conduit.toFarNodes", nodeDist, this.conduit.getConduitType().getClampingLength()), true);
+							return InteractionResult.FAIL;
 						}
-						return InteractionResult.SUCCESS;
 					}
 				}
 				return InteractionResult.FAIL;

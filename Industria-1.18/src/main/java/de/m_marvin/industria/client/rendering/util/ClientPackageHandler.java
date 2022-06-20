@@ -48,7 +48,7 @@ public class ClientPackageHandler {
 		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
 			for (PlacedConduit conduitState : msg.conduitStates) {
-				conduitHolder.resolve().get().addConduit(level, conduitState);
+				conduitHolder.resolve().get().addConduit(conduitState);
 			}
 		}
 	}

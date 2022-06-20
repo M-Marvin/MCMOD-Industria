@@ -186,7 +186,7 @@ public class UtilityHelper {
 	public static boolean setConduit(Level level, ConduitPos position, Conduit conduit, int nodesPerBlock) {
 		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
-			return conduitHolder.resolve().get().placeConduit(level, position, conduit, nodesPerBlock);
+			return conduitHolder.resolve().get().placeConduit(position, conduit, nodesPerBlock);
 		}
 		return false;
 	}

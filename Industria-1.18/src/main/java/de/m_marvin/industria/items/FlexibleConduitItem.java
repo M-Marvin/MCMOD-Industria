@@ -75,7 +75,7 @@ public class FlexibleConduitItem extends Item implements IScrollOverride {
 						int nodesPerBlock = Math.max(itemTag.getInt("NodesPerBlock"), 1);
 						ConduitPos conduitPos = new ConduitPos(firstNodePos, secondNode.position(), firstNodeId, secondNode.connectionId());
 						
-						double nodeDist = Math.sqrt(firstNodePos.distSqr(secondNode.position()));
+						int nodeDist = (int) Math.round(Math.sqrt(firstNodePos.distSqr(secondNode.position())));
 						if (nodeDist <= this.conduit.getConduitType().getClampingLength()) {
 							
 							itemTag.remove("FirstNode");

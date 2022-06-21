@@ -1,11 +1,16 @@
 package de.m_marvin.industria.util;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.registries.ModCapabilities;
+import de.m_marvin.industria.util.block.IConduitConnector.ConnectionPoint;
 import de.m_marvin.industria.util.conduit.ConduitPos;
 import de.m_marvin.industria.util.conduit.ConduitWorldStorageCapability;
+import de.m_marvin.industria.util.conduit.PlacedConduit;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
 import net.minecraft.core.BlockPos;
@@ -191,12 +196,44 @@ public class UtilityHelper {
 		return false;
 	}
 	
-	public static boolean removeConduit(Level level, ConduitPos position) {
+	public static boolean removeConduit(Level level, ConduitPos position, boolean dropItems) {
 		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
-			return conduitHolder.resolve().get().breakConduit(position);
+			return conduitHolder.resolve().get().breakConduit(position, dropItems);
 		}
 		return false;
+	}
+
+	public static Optional<PlacedConduit> getConduit(Level level, ConduitPos position) {
+		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		if (conduitHolder.isPresent()) {
+			return conduitHolder.resolve().get().getConduit(position);
+		}
+		return Optional.empty();
+	}
+
+	public static Optional<PlacedConduit> getConduitAtNode(Level level, ConnectionPoint node) {
+		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		if (conduitHolder.isPresent()) {
+			return conduitHolder.resolve().get().getConduitAtNode(node);
+		}
+		return Optional.empty();
+	}
+	
+	public static List<PlacedConduit> getConduitsAtBlock(Level level, BlockPos position) {
+		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		if (conduitHolder.isPresent()) {
+			return conduitHolder.resolve().get().getConduitsAtBlock(position);
+		}
+		return new ArrayList<>();
+	}
+	
+	public static List<PlacedConduit> getConduitsInChunk(Level level, ChunkPos chunk) {
+		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		if (conduitHolder.isPresent()) {
+			return conduitHolder.resolve().get().getConduitsInChunk(chunk);
+		}
+		return new ArrayList<>();
 	}
 	
 	public static Vec3f getWorldGravity(BlockGetter level) {

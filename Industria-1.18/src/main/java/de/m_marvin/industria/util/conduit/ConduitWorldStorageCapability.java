@@ -7,6 +7,7 @@ import java.util.Optional;
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.network.SSyncPlacedConduit;
+import de.m_marvin.industria.registries.Conduits;
 import de.m_marvin.industria.registries.ModCapabilities;
 import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.block.IConduitConnector;
@@ -159,7 +160,7 @@ public class ConduitWorldStorageCapability implements ICapabilitySerializable<Li
 	/*
 	 * Removes the conduit at the given position if a conduit exists
 	 */
-	public boolean breakConduit(ConduitPos position) {
+	public boolean breakConduit(ConduitPos position, boolean dropItems) {
 		PlacedConduit conduitToRemove = null;
 		for (PlacedConduit con : this.conduits) {
 			if (con.getConduitPosition().equals(position)) {
@@ -168,6 +169,7 @@ public class ConduitWorldStorageCapability implements ICapabilitySerializable<Li
 			}
 		}
 		if (conduitToRemove != null) {
+			conduitToRemove.getConduit().onBreak(level, position, conduitToRemove, dropItems);
 			removeConduit(conduitToRemove);
 			if (!level.isClientSide()) {
 				Industria.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(position.getNodeApos())), new SSyncPlacedConduit(conduitToRemove, new ChunkPos(position.getNodeApos()), true));
@@ -182,6 +184,10 @@ public class ConduitWorldStorageCapability implements ICapabilitySerializable<Li
 	 * Places a new conduit in the world if both nodes are free, and sends the changes to clients
 	 */
 	public boolean placeConduit(ConduitPos position, Conduit conduit, int nodesPerBlock) {
+		if (conduit == Conduits.NONE) {
+			return false;
+		}
+		
 		BlockState nodeAstate = level.getBlockState(position.getNodeApos());
 		ConnectionPoint[] nodesA = nodeAstate.getBlock() instanceof IConduitConnector ? ((IConduitConnector) nodeAstate.getBlock()).getConnectionPoints(level, position.getNodeApos(), nodeAstate) : null;
 		ConnectionPoint nodeA = nodesA != null && nodesA.length > position.getNodeAid() ? nodesA[position.getNodeAid()] : null;
@@ -246,17 +252,19 @@ public class ConduitWorldStorageCapability implements ICapabilitySerializable<Li
 	 */
 	public Optional<PlacedConduit> getConduit(ConduitPos position) {
 		BlockState nodeAstate = level.getBlockState(position.getNodeApos());
-		ConnectionPoint[] nodesA = nodeAstate instanceof IConduitConnector ? ((IConduitConnector) nodeAstate).getConnectionPoints(level, position.getNodeApos(), nodeAstate) : null;
+		ConnectionPoint[] nodesA = nodeAstate.getBlock() instanceof IConduitConnector ? ((IConduitConnector) nodeAstate.getBlock()).getConnectionPoints(level, position.getNodeApos(), nodeAstate) : null;
 		ConnectionPoint nodeA = nodesA != null && nodesA.length > position.getNodeAid() ? nodesA[position.getNodeAid()] : null;
 		BlockState nodeBstate = level.getBlockState(position.getNodeBpos());
-		ConnectionPoint[] nodesB = nodeBstate instanceof IConduitConnector ? ((IConduitConnector) nodeBstate).getConnectionPoints(level, position.getNodeBpos(), nodeBstate) : null;
+		ConnectionPoint[] nodesB = nodeBstate.getBlock() instanceof IConduitConnector ? ((IConduitConnector) nodeBstate.getBlock()).getConnectionPoints(level, position.getNodeBpos(), nodeBstate) : null;
 		ConnectionPoint nodeB = nodesB != null && nodesB.length > position.getNodeAid() ? nodesA[position.getNodeAid()] : null;
 		
-		Optional<PlacedConduit> conduitA = getConduitAtNode(nodeA);
-		Optional<PlacedConduit> conduitB = getConduitAtNode(nodeB);
-		
-		if (conduitA.isPresent() && conduitB.isPresent() && conduitA.get() == conduitB.get()) {
-			return conduitA;
+		if (nodeA != null && nodeB != null) {
+			Optional<PlacedConduit> conduitA = getConduitAtNode(nodeA);
+			Optional<PlacedConduit> conduitB = getConduitAtNode(nodeB);
+			
+			if (conduitA.isPresent() && conduitB.isPresent() && conduitA.get() == conduitB.get()) {
+				return conduitA;
+			}
 		}
 		
 		return Optional.empty();

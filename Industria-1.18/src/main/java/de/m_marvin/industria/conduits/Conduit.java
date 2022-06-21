@@ -66,15 +66,15 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		if (nodeState.getBlock() instanceof IConduitConnector) {
 			int nodeId = conduitState.getNodeA().equals(nodePos) ? conduitState.getConnectionPointA() : conduitState.getConnectionPointB();
 			if (((IConduitConnector) nodeState.getBlock()).getConnectionPoints(level, nodePos, nodeState).length <= nodeId) {
-				destroyConduit(level, conduitState.getConduitPosition());
+				UtilityHelper.removeConduit(level, conduitState.getConduitPosition(), true);
 			}
 		} else {
-			destroyConduit(level, conduitState.getConduitPosition());
+			UtilityHelper.removeConduit(level, conduitState.getConduitPosition(), true);
 		}
 	}
 	
-	public void destroyConduit(Level level, ConduitPos position) {
-		UtilityHelper.removeConduit(level, position);
+	public void onBreak(Level level, ConduitPos position, PlacedConduit conduitState, boolean dropItems) {
+		// TODO
 	}
 	
 	public static class ConduitType implements IForgeRegistryEntry<ConduitType>{

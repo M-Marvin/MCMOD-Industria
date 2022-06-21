@@ -19,11 +19,13 @@ public class Conduits {
 		reg.register(DEFAULT_CONDUIT_TYPE);
 	}
 	
+	public static final Conduit NONE = new Conduit(new ConduitType(0F, 1F, 0, 1), new ResourceLocation(Industria.MODID, "invalid")).setRegistryName(new ResourceLocation(Industria.MODID, "none"));
 	public static final Conduit DEFAULT_CONDUIT = new Conduit(DEFAULT_CONDUIT_TYPE, new ResourceLocation(Industria.MODID, "textures/conduit/test_conduit.png")).setRegistryName(new ResourceLocation(Industria.MODID, "default_conduit"));
 	
 	@SubscribeEvent
 	public static void registerConduits(RegistryEvent.Register<Conduit> event) {
 		var reg = event.getRegistry();
+		reg.register(NONE);
 		reg.register(DEFAULT_CONDUIT);
 	}
 	

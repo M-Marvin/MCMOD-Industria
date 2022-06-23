@@ -1,13 +1,13 @@
 {
 
-"industria.item.info.conduit.nodeSelect": "Erste Verbindung ausgewählt (Abbrechen mit Shift-R-Klick)",
-"industria.item.info.conduit.changeNodes": "Leitungslänge: %1$s (Abbrechen mit Shift-R-Klick)",
-"industria.item.info.conduit.placed": "Leitung platziert",
-"industria.item.info.conduit.abbort": "Platzieren abgebrochen",
-"industria.item.info.conduit.failed": "Plazieren fehlgeschlagen",
-"industria.item.info.conduit.toFarNodes": "Die Leitung ist zu lang: %1$s > max. %2$s",
+"industria.item.info.conduit.nodeSelect":    "Erste Verbindung ausgewählt (Abbrechen mit Shift-R-Klick)",
+"industria.item.info.conduit.changeNodes":   "Leitungslänge: %1$s (Abbrechen mit Shift-R-Klick)",
+"industria.item.info.conduit.placed":        "Leitung platziert",
+"industria.item.info.conduit.abbort":        "Platzieren abgebrochen",
+"industria.item.info.conduit.failed":        "Platzieren fehlgeschlagen",
+"industria.item.info.conduit.toFarNodes":    "Die Leitung ist zu lang: %1$s > max. %2$s",
 
-"industria.commands.setconduit.success": "Conduit beginnend bei %1$s %2$s %3$s geändert",
-"industria.commands.setconduit.failure": "Setzen der Conduit nicht möglich!"
+"industria.commands.setconduit.success":     "Conduit beginnend bei %1$s %2$s %3$s geändert",
+"industria.commands.setconduit.failure":     "Setzen der Conduit nicht möglich!"
 
 }

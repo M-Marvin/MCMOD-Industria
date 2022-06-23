@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.m_marvin.industria.Industria;
+import de.m_marvin.industria.items.ConduitCableItem;
+import de.m_marvin.industria.registries.ModItems;
 import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.block.IConduitConnector;
 import de.m_marvin.industria.util.block.IConduitConnector.ConnectionPoint;
-import de.m_marvin.industria.util.conduit.ConduitPos;
 import de.m_marvin.industria.util.conduit.PlacedConduit;
+import de.m_marvin.industria.util.types.ConduitPos;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -16,6 +18,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -40,6 +44,10 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 	
 	public ResourceLocation getTexture() {
 		return texture;
+	}
+	
+	public Item getItem() {
+		return ModItems.CONDUIT_TEST;
 	}
 	
 	@Override
@@ -74,7 +82,19 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 	}
 	
 	public void onBreak(Level level, ConduitPos position, PlacedConduit conduitState, boolean dropItems) {
-		// TODO
+		
+		if (dropItems) {
+			int conduitLength = (int) Math.round(Math.sqrt(conduitState.getNodeA().distSqr(conduitState.getNodeB())));
+			int wireCost = (int) Math.ceil(conduitLength / (float) ConduitCableItem.BLOCKS_PER_WIRE_ITEM);
+			BlockPos middle = conduitState.getNodeB().subtract(conduitState.getNodeA());
+			middle = conduitState.getNodeA().offset(middle.getX() / 2, middle.getY() / 2, middle.getZ() / 2);
+			for (int i = 0; i < wireCost; i++) {
+				UtilityHelper.dropItem(level, new ItemStack(getItem()), new Vec3f(middle).add(new Vec3f(0.5F, 0.5F, 0.5F)), 0.5F, 0.1F);
+			}
+		}
+		
+		// TODO Particles
+		
 	}
 	
 	public static class ConduitType implements IForgeRegistryEntry<ConduitType>{

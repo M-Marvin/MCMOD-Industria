@@ -5,6 +5,7 @@ import com.mojang.math.Vector3f;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 
 public class Vec3f {
 	
@@ -163,7 +164,7 @@ public class Vec3f {
 	
 	public boolean normalize() {
 		float f = this.x * this.x + this.y * this.y + this.z * this.z;
-		if (f < Float.MIN_NORMAL) { //Forge: Fix MC-239212
+		if (f < Float.MIN_NORMAL) {
 			return false;
 		} else {
 			float f1 = Mth.fastInvSqrt(f);
@@ -232,6 +233,21 @@ public class Vec3f {
 	
 	public Vec3f getInterpolated(Vec3f other, float partial) {
 		return new Vec3f(this.x + (other.x - this.x)* partial, this.y + (other.y - this.y)* partial, this.z + (other.z - this.z)* partial);
+	}
+	
+	public Vec3f module(float m) {
+		this.x %= m;
+		this.x %= m;
+		this.x %= m;
+		return this;
+	}
+	
+	public Vec3 getVec3() {
+		return new Vec3(x, y, z);
+	}
+	
+	public net.minecraft.core.Vec3i getVec3i() {
+		return new net.minecraft.core.Vec3i((int) Math.floor(x), (int) Math.floor(y), (int) Math.floor(z));
 	}
 	
 }

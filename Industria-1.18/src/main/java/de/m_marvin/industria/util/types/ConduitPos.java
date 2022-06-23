@@ -1,4 +1,4 @@
-package de.m_marvin.industria.util.conduit;
+package de.m_marvin.industria.util.types;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

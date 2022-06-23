@@ -133,5 +133,23 @@ public class Vec2f {
 		}
 		return false;
 	}
+
+	public Vec2f module(float m) {
+		this.x %= m;
+		this.y %= m;
+		return this;
+	}
+
+	public boolean normalize() {
+		float f = this.x * this.x + this.y * this.y;
+		if (f < Float.MIN_NORMAL) {
+			return false;
+		} else {
+			float f1 = Mth.fastInvSqrt(f);
+			this.x *= f1;
+			this.y *= f1;
+			return true;
+		}
+	}
 	
 }

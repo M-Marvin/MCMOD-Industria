@@ -12,6 +12,8 @@ import de.m_marvin.industria.registries.ModCapabilities;
 import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.block.IConduitConnector;
 import de.m_marvin.industria.util.block.IConduitConnector.ConnectionPoint;
+import de.m_marvin.industria.util.types.ConduitPos;
+import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -21,6 +23,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -158,7 +161,7 @@ public class ConduitWorldStorageCapability implements ICapabilitySerializable<Li
 	/* Conduit handling */
 	
 	/*
-	 * Removes the conduit at the given position if a conduit exists
+	 * Removes the conduit at the given position if a conduit exists, and sends the changes to clients
 	 */
 	public boolean breakConduit(ConduitPos position, boolean dropItems) {
 		PlacedConduit conduitToRemove = null;
@@ -294,6 +297,50 @@ public class ConduitWorldStorageCapability implements ICapabilitySerializable<Li
 			}
 		}
 		return conduits;
+	}
+	
+	/*
+	 * Runs a raytrace to determine the first conduit on this ray
+	 */
+	public ConduitHitResult clipConduits(ClipContext context) {
+		
+		double distanceToOriging = context.getFrom().distanceTo(context.getTo());
+		PlacedConduit nearestConduit = null;
+		Vec3f nearestHitPoint = null;
+		int nodeIndex = 0;
+		
+		for (PlacedConduit conduit : this.conduits) {
+			double distance = Math.sqrt(Math.max(
+					conduit.getNodeA().distSqr(context.getFrom(), true),
+					conduit.getNodeB().distSqr(context.getFrom(), true)));
+			double maxRange = conduit.getConduit().getConduitType().getClampingLength() + context.getTo().subtract(context.getFrom()).length();
+							
+			if (distance <= maxRange && conduit.getShape() != null) {
+				BlockPos nodeApos = conduit.getNodeA();
+				BlockPos nodeBpos = conduit.getNodeB();
+				BlockPos cornerMin = UtilityHelper.getMinCorner(nodeApos, nodeBpos);
+				
+				for (int i = 1; i < conduit.getShape().nodes.length; i++) {
+					Vec3f nodeA = conduit.getShape().nodes[i - 1].copy().add(new Vec3f(cornerMin));
+					Vec3f nodeB = conduit.getShape().nodes[i].copy().add(new Vec3f(cornerMin));
+					Optional<Vec3f> hitPoint = UtilityHelper.getHitPoint(nodeA, nodeB, new Vec3f(context.getFrom()), new Vec3f(context.getTo()), conduit.getConduit().getConduitType().getThickness() / 32F);
+					
+					if (hitPoint.isPresent()) {
+						double conduitDistance = context.getFrom().distanceTo(hitPoint.get().getVec3());
+						if (conduitDistance < distanceToOriging) {
+							distanceToOriging = conduitDistance;
+							nearestConduit = conduit;
+							nearestHitPoint = hitPoint.get();
+							nodeIndex = i;
+							break;
+						}
+					}
+				}
+			}
+		}
+		if (nearestConduit != null) return ConduitHitResult.hit(nearestConduit, nearestHitPoint, nodeIndex - 1, nodeIndex);
+		
+		return ConduitHitResult.miss();
 	}
 	
 	/*

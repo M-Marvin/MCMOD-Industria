@@ -1,7 +1,7 @@
 package de.m_marvin.industria.registries;
 
 import de.m_marvin.industria.Industria;
-import de.m_marvin.industria.items.FlexibleConduitItem;
+import de.m_marvin.industria.items.ConduitCableItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -14,7 +14,7 @@ import net.minecraftforge.registries.GameData;
 public class ModItems {
 	
 	public static final Item IRON_CONDUIT_CLAMP = registerItem("iron_conduit_clamp", new BlockItem(ModBlocks.IRON_CONDUIT_CLAMP, new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE)));
-	public static final Item CONDUIT_TEST = registerItem("conduit_test", new FlexibleConduitItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE), Conduits.DEFAULT_CONDUIT));
+	public static final Item CONDUIT_TEST = registerItem("conduit_test", new ConduitCableItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).stacksTo(16), Conduits.DEFAULT_CONDUIT));
 	
 	public static BlockItem registerBlockItem(Block block) {
 		return registerBlockItem(block, new Item.Properties());

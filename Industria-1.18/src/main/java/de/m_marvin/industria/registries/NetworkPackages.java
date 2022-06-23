@@ -2,6 +2,7 @@ package de.m_marvin.industria.registries;
 
 import java.util.Optional;
 
+import de.m_marvin.industria.network.CBreakConduitPackage;
 import de.m_marvin.industria.network.CChangeNodesPerBlockPackage;
 import de.m_marvin.industria.network.SSyncPlacedConduit;
 import net.minecraftforge.network.NetworkDirection;
@@ -16,6 +17,7 @@ public class NetworkPackages {
 		int id = 0;
 		network.registerMessage(id++, SSyncPlacedConduit.class, SSyncPlacedConduit::encode, SSyncPlacedConduit::decode, SSyncPlacedConduit::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		network.registerMessage(id++, CChangeNodesPerBlockPackage.class, CChangeNodesPerBlockPackage::encode, CChangeNodesPerBlockPackage::decode, CChangeNodesPerBlockPackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+		network.registerMessage(id++, CBreakConduitPackage.class, CBreakConduitPackage::encode, CBreakConduitPackage::decode, CBreakConduitPackage::handle);
 		
 	}
 	

@@ -6,8 +6,8 @@ import de.m_marvin.industria.network.CChangeNodesPerBlockPackage;
 import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.block.IConduitConnector;
 import de.m_marvin.industria.util.block.IConduitConnector.ConnectionPoint;
-import de.m_marvin.industria.util.conduit.ConduitPos;
 import de.m_marvin.industria.util.item.IScrollOverride;
+import de.m_marvin.industria.util.types.ConduitPos;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,11 +21,11 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class FlexibleConduitItem extends Item implements IScrollOverride {
+public abstract class AbstractConduitItem extends Item implements IScrollOverride {
 	
 	private Conduit conduit;
 	
-	public FlexibleConduitItem(Properties properties, Conduit conduit) {
+	public AbstractConduitItem(Properties properties, Conduit conduit) {
 		super(properties);
 		this.conduit = conduit;
 	}
@@ -33,6 +33,9 @@ public class FlexibleConduitItem extends Item implements IScrollOverride {
 	public Conduit getConduit() {
 		return conduit;
 	}
+	
+	public abstract int getMaxPlacingLength(ItemStack stack);
+	public abstract void onPlaced(ItemStack stack, int length);
 	
 	@Override
 	public boolean overridesScroll(ItemStack stack) {
@@ -76,19 +79,21 @@ public class FlexibleConduitItem extends Item implements IScrollOverride {
 						ConduitPos conduitPos = new ConduitPos(firstNodePos, secondNode.position(), firstNodeId, secondNode.connectionId());
 						
 						int nodeDist = (int) Math.round(Math.sqrt(firstNodePos.distSqr(secondNode.position())));
-						if (nodeDist <= this.conduit.getConduitType().getClampingLength()) {
+						int maxLength = Math.min(this.conduit.getConduitType().getClampingLength(), getMaxPlacingLength(context.getItemInHand()));
+						if (nodeDist <= maxLength) {
 							
 							itemTag.remove("FirstNode");
 							context.getItemInHand().setTag(itemTag);
 							if (UtilityHelper.setConduit(context.getLevel(), conduitPos, this.conduit, nodesPerBlock)) {
 								context.getPlayer().displayClientMessage(new TranslatableComponent("industria.item.info.conduit.placed"), true);
+								onPlaced(context.getItemInHand(), nodeDist);
 							} else {
 								context.getPlayer().displayClientMessage(new TranslatableComponent("industria.item.info.conduit.failed"), true);
 							}
 							return InteractionResult.SUCCESS;
 							
 						} else {
-							context.getPlayer().displayClientMessage(new TranslatableComponent("industria.item.info.conduit.toFarNodes", nodeDist, this.conduit.getConduitType().getClampingLength()), true);
+							context.getPlayer().displayClientMessage(new TranslatableComponent("industria.item.info.conduit.toFarNodes", nodeDist, maxLength), true);
 							return InteractionResult.FAIL;
 						}
 					}

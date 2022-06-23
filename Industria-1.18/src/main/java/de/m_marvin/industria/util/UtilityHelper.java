@@ -1,16 +1,23 @@
 package de.m_marvin.industria.util;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
+import cpw.mods.modlauncher.api.INameMappingService.Domain;
+import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.registries.ModCapabilities;
 import de.m_marvin.industria.util.block.IConduitConnector.ConnectionPoint;
-import de.m_marvin.industria.util.conduit.ConduitPos;
+import de.m_marvin.industria.util.conduit.ConduitHitResult;
 import de.m_marvin.industria.util.conduit.ConduitWorldStorageCapability;
 import de.m_marvin.industria.util.conduit.PlacedConduit;
+import de.m_marvin.industria.util.types.ConduitPos;
+import de.m_marvin.industria.util.unifiedvectors.Vec2f;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
 import net.minecraft.core.BlockPos;
@@ -18,14 +25,21 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult.Type;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 public class UtilityHelper {
 	
@@ -114,20 +128,20 @@ public class UtilityHelper {
 	}
 	
 	public static Vec3f rotateVectorCC(Vec3f vec, Vec3f axis, double theta){
-	    float x, y, z;
-	    float u, v, w;
-	    x=vec.x();y=vec.y();z=vec.z();
-	    u=axis.x();v=axis.y();w=axis.z();
-	    float xPrime = (float) (u*(u*x + v*y + w*z)*(1d - Math.cos(theta)) 
-	            + x*Math.cos(theta)
-	            + (-w*y + v*z)*Math.sin(theta));
-	    float yPrime = (float) (v*(u*x + v*y + w*z)*(1d - Math.cos(theta))
-	            + y*Math.cos(theta)
-	            + (w*x - u*z)*Math.sin(theta));
-	    float zPrime = (float) (w*(u*x + v*y + w*z)*(1d - Math.cos(theta))
-	            + z*Math.cos(theta)
-	            + (-v*x + u*y)*Math.sin(theta));
-	    return new Vec3f(xPrime, yPrime, zPrime);
+		float x, y, z;
+		float u, v, w;
+		x=vec.x();y=vec.y();z=vec.z();
+		u=axis.x();v=axis.y();w=axis.z();
+		float xPrime = (float) (u*(u*x + v*y + w*z)*(1d - Math.cos(theta)) 
+				+ x*Math.cos(theta)
+				+ (-w*y + v*z)*Math.sin(theta));
+		float yPrime = (float) (v*(u*x + v*y + w*z)*(1d - Math.cos(theta))
+				+ y*Math.cos(theta)
+				+ (w*x - u*z)*Math.sin(theta));
+		float zPrime = (float) (w*(u*x + v*y + w*z)*(1d - Math.cos(theta))
+				+ z*Math.cos(theta)
+				+ (-v*x + u*y)*Math.sin(theta));
+		return new Vec3f(xPrime, yPrime, zPrime);
 	}
 	
 	public static VoxelShape rotateShape(VoxelShape shape, Vec3f rotationPoint, Direction direction, Axis axis) {
@@ -236,6 +250,59 @@ public class UtilityHelper {
 		return new ArrayList<>();
 	}
 	
+	public static <T> void accessReflective(Object target, String name, T value) {
+		try {
+			Field field = target.getClass().getDeclaredField(ObfuscationReflectionHelper.remapName(Domain.FIELD, name));
+			field.setAccessible(true);
+			field.set(target, value);
+		} catch (IllegalAccessException | IllegalArgumentException e) {
+			Industria.LOGGER.log(org.apache.logging.log4j.Level.WARN, "Failed to write field " + name + " vie reflection on " + target.getClass().getName());
+		} catch (ClassCastException e) {
+			Industria.LOGGER.log(org.apache.logging.log4j.Level.WARN, "Failed to cast reflection-field " + name + " from " + target.getClass().getName());
+		} catch (NoSuchFieldException | SecurityException e) {
+			Industria.LOGGER.log(org.apache.logging.log4j.Level.WARN, "Failed to access field " + name + " vie reflection on " + target.getClass().getName());
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T accessReflective(Object source, String name) {
+		try {
+			Field value = source.getClass().getDeclaredField(ObfuscationReflectionHelper.remapName(Domain.FIELD, name));
+			value.setAccessible(true);
+			return (T) value.get(source);
+		} catch (IllegalAccessException | IllegalArgumentException e) {
+			Industria.LOGGER.log(org.apache.logging.log4j.Level.WARN, "Failed to read field " + name + " vie reflection on " + source.getClass().getName());
+			return null;
+		} catch (ClassCastException e) {
+			Industria.LOGGER.log(org.apache.logging.log4j.Level.WARN, "Failed to cast reflection-field " + name + " from " + source.getClass().getName());
+			return null;
+		} catch (NoSuchFieldException | SecurityException e) {
+			Industria.LOGGER.log(org.apache.logging.log4j.Level.WARN, "Failed to access field " + name + " vie reflection on " + source.getClass().getName());
+			return null;
+		}
+	}
+	
+	public static ConduitHitResult clipConduits(Level level, ClipContext context, boolean skipBlockClip) {
+		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		if (conduitHolder.isPresent()) {
+			ConduitHitResult cResult = conduitHolder.resolve().get().clipConduits(context);
+			if (cResult.isHit() && !skipBlockClip) {
+				Vec3f newTarget = cResult.getHitPos().copy();
+				Vec3f blockDistance = new Vec3f(context.getTo().subtract(context.getFrom()));
+				blockDistance.normalize();
+				newTarget.add(blockDistance.mul(-0.1F));
+				
+				accessReflective(context, "to", newTarget.getVec3());
+				BlockHitResult bResult = level.clip(context);
+				if (bResult.getType() == Type.BLOCK) {
+					return ConduitHitResult.block(bResult);
+				}
+			}
+			return cResult;
+		}
+		return ConduitHitResult.miss();
+	}
+	
 	public static Vec3f getWorldGravity(BlockGetter level) {
 		return new Vec3f(0, 0.1F, 0); // TODO
 	}
@@ -243,6 +310,88 @@ public class UtilityHelper {
 	public static boolean isInChunk(ChunkPos chunk, BlockPos block) {
 		return 	chunk.getMinBlockX() <= block.getX() && chunk.getMaxBlockX() >= block.getX() &&
 				chunk.getMinBlockZ() <= block.getZ() && chunk.getMaxBlockZ() >= block.getZ();
+	}
+	
+	public static Set<ChunkPos> getChunksOnLine(Vec2f from, Vec2f to) {	
+		Vec2f lineVec = to.copy().sub(from);
+		Vec2f chunkOff = from.copy().module(16);
+		chunkOff.x = lineVec.x() < 0 ? -(16 - chunkOff.x()) : chunkOff.x();
+		chunkOff.y = lineVec.y() < 0 ? -(16 - chunkOff.y()) : chunkOff.y();
+		Vec2f worldOff = from.copy().sub(chunkOff);
+		Vec2f lineRlativeTarget = to.copy().sub(worldOff);
+		
+		int insecsX = (int) Math.floor(Math.abs(lineRlativeTarget.x()) / 16);
+		int insecsZ = (int) Math.floor(Math.abs(lineRlativeTarget.y()) / 16);
+		
+		Set<ChunkPos> chunks = new HashSet<ChunkPos>();
+		chunks.add(new ChunkPos(new BlockPos(from.x, 0, from.y)));
+		
+		for (int insecX = 1; insecX <= insecsX; insecX++) {
+			int chunkX = (int) (worldOff.x + insecX * (lineVec.x() < 0 ? -16 : 16));
+			if (lineVec.x() < 0) chunkX -= 1;
+			int chunkZ = (int) ((Math.abs(chunkX - from.x()) / Math.abs(lineVec.x())) * lineVec.y() + from.y());
+			chunks.add(new ChunkPos(new BlockPos(chunkX, 0, chunkZ)));
+		}
+		for (int insecZ = 1; insecZ <= insecsZ; insecZ++) {
+			int chunkZ = (int) (worldOff.y + insecZ * (lineVec.y() < 0 ? -16 : 16));
+			if (lineVec.y() < 0) chunkZ -= 1;
+			int chunkX = (int) ((Math.abs(chunkZ - from.y()) / Math.abs(lineVec.y())) * lineVec.x() + from.x());
+			chunks.add(new ChunkPos(new BlockPos(chunkX, 0, chunkZ)));
+		}
+		
+		return chunks;
+	}
+	
+	public static Vec3f[] lineInfinityIntersection(Vec3f lineA1, Vec3f lineA2, Vec3f lineB1, Vec3f lineB2) {
+		Vec3f p43 = new Vec3f(lineB2.x - lineB1.x, lineB2.y - lineB1.y, lineB2.z - lineB1.z);
+		Vec3f p21 = new Vec3f(lineA2.x - lineA1.x, lineA2.y - lineA1.y, lineA2.z - lineA1.z);
+		Vec3f p13 = new Vec3f(lineA1.x - lineB1.x, lineA1.y - lineB1.y, lineA1.z - lineB1.z);
+		double d1343 = p13.x * p43.x + p13.y * p43.y + p13.z * p43.z;
+		double d4321 = p43.x * p21.x + p43.y * p21.y + p43.z * p21.z;
+		double d4343 = p43.x * p43.x + p43.y * p43.y + p43.z * p43.z;
+		double d2121 = p21.x * p21.x + p21.y * p21.y + p21.z * p21.z;
+		double denom = d2121 * d4343 - d4321 * d4321;
+		double d1321 = p13.x * p21.x + p13.y * p21.y + p13.z * p21.z;
+		double numer = d1343 * d4321 - d1321 * d4343;
+		
+		double mua = numer / denom;
+		double mub = (d1343 + d4321 * mua) / d4343;
+		
+		Vec3 cl1 = new Vec3(lineA1.x+mua*p21.x, lineA1.y+mua*p21.y, lineA1.z+mua*p21.z);
+		Vec3 cl2 = new Vec3(lineB1.x+mub*p43.x, lineB1.y+mub*p43.y, lineB1.z+mub*p43.z);
+		
+		return new Vec3f[] {new Vec3f(cl1), new Vec3f(cl2)};
+	}
+	
+	public static boolean isOnLine(Vec3f point, Vec3f line1, Vec3f line2, float t) {
+		return line1.copy().sub(point).length() + line2.copy().sub(point).length() <= line1.copy().sub(line2).length() + t;
+	}
+
+	public static Optional<Vec3f> getHitPoint(Vec3f lineA1, Vec3f lineA2, Vec3f lineB1, Vec3f lineB2, float tolerance) {
+		Vec3f[] shortesLine = lineInfinityIntersection(lineA1, lineA2, lineB1, lineB2);
+		if (isOnLine(shortesLine[0], lineA1, lineA2, 0.1F) && isOnLine(shortesLine[1], lineB1, lineB2, 0.1F)) {
+			if (shortesLine[0].copy().sub(shortesLine[1]).length() <= tolerance) return Optional.of(shortesLine[0]);
+		}
+		return Optional.empty();
+	}
+	
+	public static boolean doLinesCross(Vec3f lineA1, Vec3f lineA2, Vec3f lineB1, Vec3f lineB2, float tolerance) {
+		Vec3f[] shortesLine = lineInfinityIntersection(lineA1, lineA2, lineB1, lineB2);
+		if (isOnLine(shortesLine[0], lineA1, lineA2, 0.1F) && isOnLine(shortesLine[1], lineB1, lineB2, 0.1F)) {
+			return shortesLine[0].copy().sub(shortesLine[1]).length() <= tolerance;
+		}
+		return false;
+	}
+
+	public static void dropItem(Level level, ItemStack stack, Vec3f position, float spreadFactH, float spreadFactV) {
+		ItemEntity drop = new ItemEntity(level, position.x, position.y, position.z, stack);
+		Vec3f spread = new Vec3f(
+				(level.random.nextFloat() - 0.5F) * spreadFactH,
+				level.random.nextFloat() * spreadFactV,
+				(level.random.nextFloat() - 0.5F) * spreadFactH
+				);
+		drop.setDeltaMovement(spread.getVec3());
+		level.addFreshEntity(drop);
 	}
 	
 }

@@ -28,7 +28,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 public class Conduit implements IForgeRegistryEntry<Conduit> {
-		
+	
 	private ResourceLocation registryName;
 	private ConduitType conduitType;
 	private ResourceLocation texture;

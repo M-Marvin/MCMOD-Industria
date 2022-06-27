@@ -2,17 +2,15 @@ package de.m_marvin.industria.registries;
 
 import de.m_marvin.industria.Industria;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
-@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD,modid=Industria.MODID)
 public class ModBlockEntities {
-	
-	//public static final BlockEntityType<FlexibleConduitBlockEntity> FLEXIBLE_CONDUIT_NODE = register("flexible_conduit_node", BlockEntityType.Builder.of(FlexibleConduitBlockEntity::new));
-	
-	public static void registerBlockEntities(RegistryEvent.Register<BlockEntityType<?>> event) {
-		//IForgeRegistry<BlockEntityType<?>> reg = event.getRegistry();
-		
+
+	private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Industria.MODID);
+	public static void register() {
+		BLOCK_ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 	
 }

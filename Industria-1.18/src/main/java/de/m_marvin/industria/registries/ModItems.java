@@ -5,30 +5,19 @@ import de.m_marvin.industria.items.ConduitCableItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.GameData;
+import net.minecraftforge.registries.RegistryObject;
 
-@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD,modid=Industria.MODID)
 public class ModItems {
 	
-	public static final Item IRON_CONDUIT_CLAMP = registerItem("iron_conduit_clamp", new BlockItem(ModBlocks.IRON_CONDUIT_CLAMP, new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE)));
-	public static final Item CONDUIT_TEST = registerItem("conduit_test", new ConduitCableItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).stacksTo(16), Conduits.DEFAULT_CONDUIT));
-	
-	public static BlockItem registerBlockItem(Block block) {
-		return registerBlockItem(block, new Item.Properties());
-	}
-	public static BlockItem registerBlockItem(Block block, Item.Properties properties) {
-		BlockItem item = new BlockItem(block, properties);
-		GameData.getBlockItemMap().put(block, item);
-		return registerItem(block.getRegistryName().getPath(), item);
+	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Industria.MODID);
+	public static void register() {
+		ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 	
-	public static <T extends Item> T registerItem(String name, T item) {
-		item.setRegistryName(Industria.MODID, name);
-		ForgeRegistries.ITEMS.register(item);
-		return item;
-	}
+	public static final RegistryObject<BlockItem> IRON_CONDUIT_CLAMP = ITEMS.register("iron_conduit_clamp", () -> new BlockItem(ModBlocks.IRON_CONDUIT_CLAMP.get(), new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE)));
+	public static final RegistryObject<ConduitCableItem> CONDUIT_TEST = ITEMS.register("conduit_test", () -> new ConduitCableItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).stacksTo(16), Conduits.DEFAULT_CONDUIT));
 	
 }

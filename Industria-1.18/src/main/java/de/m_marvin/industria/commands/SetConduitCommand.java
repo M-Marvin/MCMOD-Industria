@@ -9,7 +9,6 @@ import com.mojang.brigadier.context.CommandContext;
 
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.registries.Conduits;
-import de.m_marvin.industria.registries.ModRegistries;
 import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.commandargs.ConduitArgument;
 import de.m_marvin.industria.util.conduit.PlacedConduit;
@@ -39,14 +38,14 @@ public class SetConduitCommand {
 	public static int setConduit(CommandContext<CommandSourceStack> source, BlockPos nodeApos, BlockPos nodeBpos, int nodeAid, int nodeBid, ResourceLocation conduitKey, int nodesPerBlock, boolean drop) {
 		ServerLevel level = source.getSource().getLevel();
 		ConduitPos position = new ConduitPos(nodeApos, nodeBpos, nodeAid, nodeBid);
-		Conduit conduit = ModRegistries.CONDUITS.get().getValue(conduitKey);
+		Conduit conduit = Conduits.CONDUITS_REGISTRY.get().getValue(conduitKey);
 		
 		Optional<PlacedConduit> existingConduit = UtilityHelper.getConduit(level, position);
 		if (existingConduit.isPresent()) {
 			UtilityHelper.removeConduit(level, position, drop);
 		}
 		
-		if (conduit != Conduits.NONE) {
+		if (conduit != Conduits.NONE.get()) {
 			if (UtilityHelper.setConduit(level, position, conduit, nodesPerBlock)) {
 				source.getSource().sendSuccess(new TranslatableComponent("industria.commands.setconduit.success", nodeApos.getX(), nodeApos.getY(), nodeApos.getZ()), true);
 				return Command.SINGLE_SUCCESS;

@@ -15,7 +15,7 @@ public class ModParticleProvoiders {
 	@SubscribeEvent
 	public static void registerParticleProvoiders(ParticleFactoryRegisterEvent event) {
 		ParticleEngine reg = Minecraft.getInstance().particleEngine;
-		reg.register(ModParticleTypes.CONDUIT, new ConduitBreakParticle.Provider());
+		reg.register(ModParticleTypes.CONDUIT.get(), new ConduitBreakParticle.Provider());
 	}
 	
 }

@@ -11,8 +11,8 @@ import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.conduits.Conduit.ConduitShape;
 import de.m_marvin.industria.conduits.Conduit.ConduitType;
+import de.m_marvin.industria.registries.Conduits;
 import de.m_marvin.industria.registries.ModCapabilities;
-import de.m_marvin.industria.registries.ModRegistries;
 import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.conduit.ConduitWorldStorageCapability;
 import de.m_marvin.industria.util.conduit.PlacedConduit;
@@ -69,9 +69,9 @@ public class ConduitWorldRenderer {
 			ConduitWorldStorageCapability conduitHolder = optionalConduitHolder.resolve().get();
 			
 			// Sort for type
-			for (Conduit conduitType : ModRegistries.CONDUITS.get()) {
+			for (Conduit conduitType : Conduits.CONDUITS_REGISTRY.get()) {
 				
-				ResourceLocation texturePath = conduitType.getTexture();
+				ResourceLocation texturePath = conduitType.getTextureLoc();
 				VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entitySolid(texturePath));
 				
 				for (PlacedConduit conduit : conduitHolder.getConduits()) {

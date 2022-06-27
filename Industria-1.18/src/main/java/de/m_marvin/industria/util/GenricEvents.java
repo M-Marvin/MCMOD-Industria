@@ -28,7 +28,8 @@ public class GenricEvents {
 		ItemStack itemStack = event.getPlayer().getMainHandItem();
 		
 		if (itemStack.getItem() == Items.SHEARS && event.getWorld().isClientSide()) {
-			float range = 6;
+						
+			float range = 6; // FIXME Correct range
 			Vec3 viewVec = entity.getViewVector(0);
 			Vec3 eyePos = entity.getEyePosition();
 			Vec3 rayTarget = eyePos.add(viewVec.multiply(range, range, range));
@@ -37,8 +38,7 @@ public class GenricEvents {
 			ConduitHitResult hitResult = UtilityHelper.clipConduits(event.getWorld(), clipContext, true);
 			if (hitResult.isHit()) {
 				PlacedConduit conduit = hitResult.getConduitState();
-				UtilityHelper.removeConduit(event.getWorld(), conduit.getConduitPosition(), true);
-				Industria.NETWORK.sendToServer(new CBreakConduitPackage(conduit.getConduitPosition(), true));
+				UtilityHelper.removeConduitFromClient(event.getWorld(), conduit.getConduitPosition(), true);
 				
 				event.setCanceled(true);
 				event.setCancellationResult(InteractionResult.SUCCESS);

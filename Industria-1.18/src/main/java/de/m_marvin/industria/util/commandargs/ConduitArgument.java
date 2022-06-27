@@ -12,7 +12,7 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
-import de.m_marvin.industria.registries.ModRegistries;
+import de.m_marvin.industria.registries.Conduits;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -39,12 +39,12 @@ public class ConduitArgument implements ArgumentType<ResourceLocation> {
 	
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-		ModRegistries.CONDUITS.get().getValues().stream().forEach((conduit) -> builder.suggest(conduit.getRegistryName().toString()));
+		Conduits.CONDUITS_REGISTRY.get().getValues().stream().forEach((conduit) -> builder.suggest(conduit.getRegistryName().toString()));
 		return builder.buildFuture();
 	}
 	
 	public static ResourceLocation verifyConduitType(ResourceLocation registryName) throws CommandSyntaxException {
-		if (ModRegistries.CONDUITS.get().containsKey(registryName)) {
+		if (Conduits.CONDUITS_REGISTRY.get().containsKey(registryName)) {
 			return registryName;
 		} else {
 			throw ERROR_UNKNOWN_CONDUIT.create(registryName);

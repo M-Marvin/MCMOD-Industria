@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 import cpw.mods.modlauncher.api.INameMappingService.Domain;
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.conduits.Conduit;
+import de.m_marvin.industria.network.CBreakConduitPackage;
 import de.m_marvin.industria.registries.ModCapabilities;
 import de.m_marvin.industria.util.block.IConduitConnector.ConnectionPoint;
 import de.m_marvin.industria.util.conduit.ConduitHitResult;
@@ -392,6 +393,11 @@ public class UtilityHelper {
 				);
 		drop.setDeltaMovement(spread.getVec3());
 		level.addFreshEntity(drop);
+	}
+
+	public static void removeConduitFromClient(Level level, ConduitPos conduitPosition, boolean dropItems) {
+		UtilityHelper.removeConduit(level, conduitPosition, dropItems);
+		Industria.NETWORK.sendToServer(new CBreakConduitPackage(conduitPosition, dropItems));
 	}
 	
 }

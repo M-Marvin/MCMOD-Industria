@@ -33,7 +33,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
  
-    mappings channel: 'parchment', version: '1.18.1-2022.03.06-1.18.1'
+    mappings channel: 'parchment', version: '1.18.2-2022.06.26-1.18.2'
  
     runs {
         client {
@@ -109,11 +109,12 @@ configurations {
 
 dependencies {
  
-    minecraft 'net.minecraftforge:forge:1.18.1-39.1.0'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.1.52'
  
-	implementation fg.deobf("curse.maven:flywheel-486392:3687357")
-	implementation fg.deobf("curse.maven:create-328085:3706700")
-	implementation 'com.github.M-Marvin:LIBRARY-JNetLWSBE:v1.0'
+	implementation fg.deobf("curse.maven:flywheel-486392:3737402")
+	implementation fg.deobf("curse.maven:create-328085:3737418")
+	implementation fg.deobf("curse.maven:atlasviewer-633577:3832297")
+	//implementation 'com.github.M-Marvin:LIBRARY-JNetLWSBE:v1.0'
  	
 }
 

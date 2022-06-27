@@ -187,7 +187,7 @@ public class ConduitWorldStorageCapability implements ICapabilitySerializable<Li
 	 * Places a new conduit in the world if both nodes are free, and sends the changes to clients
 	 */
 	public boolean placeConduit(ConduitPos position, Conduit conduit, int nodesPerBlock) {
-		if (conduit == Conduits.NONE) {
+		if (conduit == Conduits.NONE.get()) {
 			return false;
 		}
 		
@@ -311,8 +311,8 @@ public class ConduitWorldStorageCapability implements ICapabilitySerializable<Li
 		
 		for (PlacedConduit conduit : this.conduits) {
 			double distance = Math.sqrt(Math.max(
-					conduit.getNodeA().distSqr(context.getFrom(), true),
-					conduit.getNodeB().distSqr(context.getFrom(), true)));
+					conduit.getNodeA().distSqr(new Vec3f(context.getFrom()).getVec3i()),
+					conduit.getNodeB().distSqr(new Vec3f(context.getFrom()).getVec3i())));
 			double maxRange = conduit.getConduit().getConduitType().getClampingLength() + context.getTo().subtract(context.getFrom()).length();
 							
 			if (distance <= maxRange && conduit.getShape() != null) {

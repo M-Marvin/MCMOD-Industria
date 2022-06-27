@@ -1,5 +1,7 @@
 package de.m_marvin.industria.items;
 
+import java.util.function.Supplier;
+
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.network.CChangeNodesPerBlockPackage;
@@ -23,15 +25,15 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public abstract class AbstractConduitItem extends Item implements IScrollOverride {
 	
-	private Conduit conduit;
+	private Supplier<Conduit> conduit;
 	
-	public AbstractConduitItem(Properties properties, Conduit conduit) {
+	public AbstractConduitItem(Properties properties, Supplier<Conduit> conduit) {
 		super(properties);
 		this.conduit = conduit;
 	}
 	
 	public Conduit getConduit() {
-		return conduit;
+		return conduit.get();
 	}
 	
 	public abstract int getMaxPlacingLength(ItemStack stack);
@@ -79,12 +81,12 @@ public abstract class AbstractConduitItem extends Item implements IScrollOverrid
 						ConduitPos conduitPos = new ConduitPos(firstNodePos, secondNode.position(), firstNodeId, secondNode.connectionId());
 						
 						int nodeDist = (int) Math.round(Math.sqrt(firstNodePos.distSqr(secondNode.position())));
-						int maxLength = Math.min(this.conduit.getConduitType().getClampingLength(), getMaxPlacingLength(context.getItemInHand()));
+						int maxLength = Math.min(this.getConduit().getConduitType().getClampingLength(), getMaxPlacingLength(context.getItemInHand()));
 						if (nodeDist <= maxLength) {
 							
 							itemTag.remove("FirstNode");
 							context.getItemInHand().setTag(itemTag);
-							if (UtilityHelper.setConduit(context.getLevel(), conduitPos, this.conduit, nodesPerBlock)) {
+							if (UtilityHelper.setConduit(context.getLevel(), conduitPos, this.getConduit(), nodesPerBlock)) {
 								context.getPlayer().displayClientMessage(new TranslatableComponent("industria.item.info.conduit.placed"), true);
 								onPlaced(context.getItemInHand(), nodeDist);
 							} else {

@@ -2,7 +2,7 @@ package de.m_marvin.industria.util.conduit;
 
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.conduits.Conduit.ConduitShape;
-import de.m_marvin.industria.registries.ModRegistries;
+import de.m_marvin.industria.registries.Conduits;
 import de.m_marvin.industria.util.types.ConduitPos;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -50,7 +50,7 @@ public class PlacedConduit {
 	public static PlacedConduit load(CompoundTag tag) {
 		ConduitPos position = ConduitPos.readNBT(tag.getCompound("Position"));
 		ResourceLocation conduitName = new ResourceLocation(tag.getString("Conduit"));
-		Conduit conduit = ModRegistries.CONDUITS.get().getValue(conduitName);
+		Conduit conduit = Conduits.CONDUITS_REGISTRY.get().getValue(conduitName);
 		int nodesPerBlock = tag.getInt("Nodes");
 		if (conduit == null) return null;
 		return new PlacedConduit(position, conduit, nodesPerBlock);

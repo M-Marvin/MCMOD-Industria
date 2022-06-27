@@ -5,7 +5,9 @@ import java.util.List;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.items.ConduitCableItem;
+import de.m_marvin.industria.particleoptions.ConduitParticleOption;
 import de.m_marvin.industria.registries.ModItems;
+import de.m_marvin.industria.registries.ModParticleTypes;
 import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.block.IConduitConnector;
 import de.m_marvin.industria.util.block.IConduitConnector.ConnectionPoint;
@@ -18,6 +20,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.commands.ParticleCommand;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -46,8 +49,12 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		return texture;
 	}
 	
+	public ResourceLocation getTextureLoc() {
+		return new ResourceLocation(this.texture.getNamespace(), "textures/" + this.texture.getPath() + ".png");
+	}
+	
 	public Item getItem() {
-		return ModItems.CONDUIT_TEST;
+		return ModItems.CONDUIT_TEST.get();
 	}
 	
 	@Override
@@ -93,7 +100,10 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 			}
 		}
 		
-		// TODO Particles
+		for (Vec3f node : conduitState.getShape().nodes) {
+			//level.addParticle(new ConduitParticleOption(ModParticleTypes.CONDUIT.get(), conduitState.getConduit()), node.x, node.y, node.z, 0.2F, 0.2F, 0.2F);
+			level.addParticle(new ConduitParticleOption(ModParticleTypes.CONDUIT.get(), conduitState.getConduit()), node.x, node.y, node.z, 0.2F, 0.2F, 0.2F);
+		}
 		
 	}
 	

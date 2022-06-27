@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.client.util.ClientPackageHandler;
 import de.m_marvin.industria.conduits.Conduit;
-import de.m_marvin.industria.registries.ModRegistries;
+import de.m_marvin.industria.registries.Conduits;
 import de.m_marvin.industria.util.conduit.PlacedConduit;
 import de.m_marvin.industria.util.types.ConduitPos;
 import net.minecraft.core.BlockPos;
@@ -70,11 +70,11 @@ public class SSyncPlacedConduit {
 			int connectionPointA = buff.readInt();
 			int connectionPointB = buff.readInt();
 			ResourceLocation conduitName = buff.readResourceLocation();
-			if (!ModRegistries.CONDUITS.get().containsKey(conduitName)) {
+			if (!Conduits.CONDUITS_REGISTRY.get().containsKey(conduitName)) {
 				Industria.LOGGER.error("Recived package for unregistered conduit: " + conduitName);
 				continue;
 			}
-			Conduit conduit = ModRegistries.CONDUITS.get().getValue(conduitName);
+			Conduit conduit = Conduits.CONDUITS_REGISTRY.get().getValue(conduitName);
 			ConduitPos position = new ConduitPos(nodeApos, nodeBpos, connectionPointA, connectionPointB);
 			conduitStates.add(new PlacedConduit(position, conduit, nodesPerBlock));
 		}

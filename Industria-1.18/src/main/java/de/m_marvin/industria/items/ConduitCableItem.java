@@ -1,5 +1,7 @@
 package de.m_marvin.industria.items;
 
+import java.util.function.Supplier;
+
 import de.m_marvin.industria.conduits.Conduit;
 import net.minecraft.world.item.ItemStack;
 
@@ -7,7 +9,7 @@ public class ConduitCableItem extends AbstractConduitItem {
 	
 	public static final int BLOCKS_PER_WIRE_ITEM = 2;
 	
-	public ConduitCableItem(Properties properties, Conduit conduit) {
+	public ConduitCableItem(Properties properties, Supplier<Conduit> conduit) {
 		super(properties, conduit);
 	}
 

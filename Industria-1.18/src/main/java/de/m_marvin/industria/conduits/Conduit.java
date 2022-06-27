@@ -20,7 +20,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.commands.ParticleCommand;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -100,9 +99,12 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 			}
 		}
 		
+		BlockPos nodeA = conduitState.getNodeA();
+		BlockPos nodeB = conduitState.getNodeB();
+		BlockPos cornerMin = new BlockPos(Math.min(nodeA.getX(), nodeB.getX()), Math.min(nodeA.getY(), nodeB.getY()), Math.min(nodeA.getZ(), nodeB.getZ()));
+		
 		for (Vec3f node : conduitState.getShape().nodes) {
-			//level.addParticle(new ConduitParticleOption(ModParticleTypes.CONDUIT.get(), conduitState.getConduit()), node.x, node.y, node.z, 0.2F, 0.2F, 0.2F);
-			level.addParticle(new ConduitParticleOption(ModParticleTypes.CONDUIT.get(), conduitState.getConduit()), node.x, node.y, node.z, 0.2F, 0.2F, 0.2F);
+			level.addParticle(new ConduitParticleOption(ModParticleTypes.CONDUIT.get(), conduitState.getConduit()), node.x + cornerMin.getX(), node.y + cornerMin.getY(), node.z + cornerMin.getZ(), 0.2F, 0.2F, 0.2F);
 		}
 		
 	}

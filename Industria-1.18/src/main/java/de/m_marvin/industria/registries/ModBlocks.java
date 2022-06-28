@@ -17,7 +17,7 @@ public class ModBlocks {
 	public static void register() {
 		BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
-		
+	
 	public static final RegistryObject<Block> IRON_CONDUIT_CLAMP = BLOCKS.register("iron_conduit_clamp", () -> new ConduitClampBlock(Properties.of(Material.METAL, MaterialColor.METAL)));
 	
 }

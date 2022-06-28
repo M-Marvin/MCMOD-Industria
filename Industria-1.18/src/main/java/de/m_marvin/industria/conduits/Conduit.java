@@ -6,7 +6,6 @@ import java.util.List;
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.items.ConduitCableItem;
 import de.m_marvin.industria.particleoptions.ConduitParticleOption;
-import de.m_marvin.industria.registries.ModItems;
 import de.m_marvin.industria.registries.ModParticleTypes;
 import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.block.IConduitConnector;
@@ -20,10 +19,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -33,11 +35,19 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 	
 	private ResourceLocation registryName;
 	private ConduitType conduitType;
+	private Item item;
 	private ResourceLocation texture;
+	private SoundType soundType;
 	
-	public Conduit(ConduitType type, ResourceLocation texture) {
+	public Conduit(ConduitType type, Item item, ResourceLocation texture, SoundType sound) {
 		this.conduitType = type;
+		this.item = item;
 		this.texture = texture;
+		this.soundType = sound;
+	}
+	
+	public SoundType getSoundType() {
+		return soundType;
 	}
 	
 	public ConduitType getConduitType() {
@@ -53,7 +63,7 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 	}
 	
 	public Item getItem() {
-		return ModItems.CONDUIT_TEST.get();
+		return this.item;
 	}
 	
 	@Override
@@ -87,6 +97,16 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		}
 	}
 	
+	public void onPlace(Level level, ConduitPos position, PlacedConduit conduitState) {
+		
+		BlockPos nodeA = conduitState.getNodeA();
+		BlockPos nodeB = conduitState.getNodeB();
+		Vec3f middle = new Vec3f(nodeA).sub(new Vec3f(nodeB)).mul(0.5F).add(new Vec3f(nodeB));
+		
+		level.playLocalSound(middle.x, middle.y, middle.z, this.getSoundType().getBreakSound(), SoundSource.BLOCKS, this.getSoundType().getVolume(), this.getSoundType().getPitch(), false);
+		
+	}
+	
 	public void onBreak(Level level, ConduitPos position, PlacedConduit conduitState, boolean dropItems) {
 		
 		if (dropItems) {
@@ -102,9 +122,14 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		BlockPos nodeA = conduitState.getNodeA();
 		BlockPos nodeB = conduitState.getNodeB();
 		BlockPos cornerMin = new BlockPos(Math.min(nodeA.getX(), nodeB.getX()), Math.min(nodeA.getY(), nodeB.getY()), Math.min(nodeA.getZ(), nodeB.getZ()));
+		Vec3f middle = new Vec3f(nodeA).sub(new Vec3f(nodeB)).mul(0.5F).add(new Vec3f(nodeB));
 		
-		for (Vec3f node : conduitState.getShape().nodes) {
-			level.addParticle(new ConduitParticleOption(ModParticleTypes.CONDUIT.get(), conduitState.getConduit()), node.x + cornerMin.getX(), node.y + cornerMin.getY(), node.z + cornerMin.getZ(), 0.2F, 0.2F, 0.2F);
+		level.playLocalSound(middle.x, middle.y, middle.z, this.getSoundType().getBreakSound(), SoundSource.BLOCKS, this.getSoundType().getVolume(), this.getSoundType().getPitch(), false);
+		
+		if (!level.isClientSide()) {
+			for (Vec3f node : conduitState.getShape().nodes) {
+				((ServerLevel) level).sendParticles(new ConduitParticleOption(ModParticleTypes.CONDUIT.get(), conduitState.getConduit()), node.x + cornerMin.getX(), node.y + cornerMin.getY(), node.z + cornerMin.getZ(), 10, 0.2F, 0.2F, 0.2F, 1);
+			}
 		}
 		
 	}

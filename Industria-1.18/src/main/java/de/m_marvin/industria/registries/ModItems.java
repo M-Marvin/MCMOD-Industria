@@ -18,6 +18,7 @@ public class ModItems {
 	}
 	
 	public static final RegistryObject<BlockItem> IRON_CONDUIT_CLAMP = ITEMS.register("iron_conduit_clamp", () -> new BlockItem(ModBlocks.IRON_CONDUIT_CLAMP.get(), new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE)));
-	public static final RegistryObject<ConduitCableItem> CONDUIT_TEST = ITEMS.register("conduit_test", () -> new ConduitCableItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).stacksTo(16), Conduits.DEFAULT_CONDUIT));
+	public static final RegistryObject<ConduitCableItem> ISOLATED_COPPER_WIRE = ITEMS.register("isolated_copper_wire", () -> new ConduitCableItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).stacksTo(16), Conduits.ISOLATED_COPPER_WIRE));
+	public static final RegistryObject<ConduitCableItem> UNISOLATED_COPPER_WIRE = ITEMS.register("unisolated_copper_wire", () -> new ConduitCableItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).stacksTo(16), Conduits.UNISOLATED_COPPER_WIRE));
 	
 }

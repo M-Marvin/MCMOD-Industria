@@ -85,9 +85,9 @@ public class ConduitWorldRenderer {
 						double distancaA = Minecraft.getInstance().player.blockPosition().distSqr(nodeApos);
 						double distancaB = Minecraft.getInstance().player.blockPosition().distSqr(nodeBpos);
 						double distance = Math.sqrt((distancaA + distancaB) / 2);
+						int renderDistance = Minecraft.getInstance().options.renderDistance * 16;
 						
-						// FIXME use settings render distance
-						if (distance < 16 * 16) conduitModel(clientLevel, vertexConsumer, matrixStack, conduit, cornerMin, partialTicks);
+						if (distance < renderDistance * renderDistance) conduitModel(clientLevel, vertexConsumer, matrixStack, conduit, cornerMin, partialTicks);
 						
 					}
 					
@@ -167,7 +167,7 @@ public class ConduitWorldRenderer {
 		
 		Vec3f lineVec = end.copy().sub(start);
 		Vec3f lineNormal = lineVec.copy();
-		lineNormal.normalize();
+		lineNormal.safeNormalize();
 		
 		float length = (float) lineVec.length();
 		Quaternion rotation = lineNormal.rotationQuatFromDirection(new Vec3f(0, 0, 1)); // Default model orientation positive Z

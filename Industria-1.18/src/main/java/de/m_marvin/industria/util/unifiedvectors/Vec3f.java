@@ -150,19 +150,28 @@ public class Vec3f {
 	}
 	
 	public Vec3f cross(Vec3f vec) {
-		float f = this.x;
-		float f1 = this.y;
-		float f2 = this.z;
-		float f3 = vec.x();
-		float f4 = vec.y();
-		float f5 = vec.z();
-		this.x = f1 * f5 - f2 * f4;
-		this.y = f2 * f3 - f * f5;
-		this.z = f * f4 - f1 * f3;
+		double f = this.x;
+		double f1 = this.y;
+		double f2 = this.z;
+		double f3 = vec.x();
+		double f4 = vec.y();
+		double f5 = vec.z();
+		this.x = (float) (f1 * f5 - f2 * f4);
+		this.y = (float) (f2 * f3 - f * f5);
+		this.z = (float) (f * f4 - f1 * f3);
 		return this;
 	}
 	
-	public boolean normalize() {
+	public Vec3f normalize() {
+		float f = this.x * this.x + this.y * this.y + this.z * this.z;
+		float f1 = Mth.fastInvSqrt(f);
+		this.x *= f1;
+		this.y *= f1;
+		this.z *= f1;
+		return this;
+	}
+	
+	public boolean safeNormalize() {
 		float f = this.x * this.x + this.y * this.y + this.z * this.z;
 		if (f < Float.MIN_NORMAL) {
 			return false;
@@ -177,7 +186,11 @@ public class Vec3f {
 	
 	public Quaternion rotationQuatFromDirection(Vec3f reference) {
 		Vec3f v = reference.copy().cross(this);
-		v.normalize();
+		if (v.length() == 0) {
+			v = new Vec3f(reference.y, reference.z, reference.x);
+		} else {
+			v.safeNormalize();
+		}
 		float angle = (float) Math.acos(this.dot(reference));
 		return new Quaternion(new Vector3f(v.x, v.y, v.z), angle, false);
 	}

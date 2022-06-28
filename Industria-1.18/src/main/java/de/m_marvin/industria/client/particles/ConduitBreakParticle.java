@@ -23,12 +23,14 @@ public class ConduitBreakParticle extends SingleQuadParticle {
 	public ConduitBreakParticle(ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed, Conduit conduit) {
 		super(pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed);
 		this.sprite = ((TextureAtlas) Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_PARTICLES)).getSprite(conduit.getTexture());
+		this.gravity = 1.0F;
+		this.quadSize /= 2.0F;
 		
 		Vec2f spriteUV0 = new Vec2f(sprite.getU0(), sprite.getV0());
 		Vec2f spriteUV1 = new Vec2f(sprite.getU1(), sprite.getV1());
 		float segHight = conduit.getConduitType().getThickness() / (float) ConduitWorldRenderer.TEXTURE_MAP_SIZE;
-		Vec2f particleSeg = new Vec2f(random.nextFloat(), random.nextFloat() * segHight * 3);
-		this.uv0 = particleSeg.copy().mul(spriteUV1.copy().sub(spriteUV0));
+		Vec2f particleSeg = new Vec2f(random.nextFloat() * (1 - segHight), random.nextFloat() * segHight * 3);
+		this.uv0 = particleSeg.copy().mul(spriteUV1.copy().sub(spriteUV0)).add(spriteUV0);
 		this.uv1 = this.uv0.copy().add(new Vec2f(segHight, segHight).mul(spriteUV1.copy().sub(spriteUV0)));
 	}
 	

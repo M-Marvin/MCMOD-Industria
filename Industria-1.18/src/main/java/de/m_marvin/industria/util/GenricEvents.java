@@ -1,7 +1,6 @@
 package de.m_marvin.industria.util;
 
 import de.m_marvin.industria.Industria;
-import de.m_marvin.industria.network.CBreakConduitPackage;
 import de.m_marvin.industria.util.conduit.ConduitHitResult;
 import de.m_marvin.industria.util.conduit.PlacedConduit;
 import net.minecraft.world.InteractionResult;
@@ -10,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -28,8 +28,8 @@ public class GenricEvents {
 		ItemStack itemStack = event.getPlayer().getMainHandItem();
 		
 		if (itemStack.getItem() == Items.SHEARS && event.getWorld().isClientSide()) {
-						
-			float range = 6; // FIXME Correct range
+			
+			double range = entity.getAttributeValue(ForgeMod.REACH_DISTANCE.get());
 			Vec3 viewVec = entity.getViewVector(0);
 			Vec3 eyePos = entity.getEyePosition();
 			Vec3 rayTarget = eyePos.add(viewVec.multiply(range, range, range));

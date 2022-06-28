@@ -147,7 +147,7 @@ public class ConduitWorldStorageCapability implements ICapabilitySerializable<Li
 	@SubscribeEvent
 	// Pass block updates to corresponding conduits
 	public static void onBlockStateChange(BlockEvent.NeighborNotifyEvent event) {
-		ServerLevel level = (ServerLevel) event.getWorld();
+		Level level = (Level) event.getWorld();
 		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
 			BlockPos nodePos = event.getPos();
@@ -205,6 +205,7 @@ public class ConduitWorldStorageCapability implements ICapabilitySerializable<Li
 		} else {
 			PlacedConduit conduitState = new PlacedConduit(position, conduit, nodesPerBlock);
 			addConduit(conduitState);
+			conduitState.getConduit().onPlace(level, position, conduitState);
 			if (!level.isClientSide()) {
 				Industria.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(nodeA.position())), new SSyncPlacedConduit(conduitState, new ChunkPos(nodeA.position()), false));
 				Industria.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(nodeB.position())), new SSyncPlacedConduit(conduitState, new ChunkPos(nodeB.position()), false));

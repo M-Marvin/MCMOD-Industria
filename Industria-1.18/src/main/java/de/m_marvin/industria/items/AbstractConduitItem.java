@@ -62,12 +62,11 @@ public abstract class AbstractConduitItem extends Item implements IScrollOverrid
 	public InteractionResult useOn(UseOnContext context) {
 		
 		CompoundTag itemTag = context.getItemInHand().getOrCreateTag();
-		if (context.getPlayer().isShiftKeyDown() && itemTag.contains("FirstNode")) {
+		if (context.getPlayer().isShiftKeyDown() && (itemTag.contains("FirstNode") || itemTag.contains("NodesPerBlock"))) {
 			itemTag.remove("FirstNode");
-			context.getItemInHand().setTag(itemTag);
-			context.getPlayer().displayClientMessage(new TranslatableComponent("industria.item.info.conduit.abbort"), true);
+			itemTag.remove("NodesPerBlock");
+			context.getItemInHand().setTag(itemTag.isEmpty() ? null : itemTag);
 			return InteractionResult.SUCCESS;
-			
 		} else {
 			
 			if (itemTag.contains("FirstNode")) {

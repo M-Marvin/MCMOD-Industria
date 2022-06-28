@@ -1,13 +1,14 @@
 {
 
 "industria.item.info.conduit.nodeSelect":    "First Connection Point selected (Abort with Shift-R-Click)",
-"industria.item.info.conduit.changeNodes":   "Conduit Length: %1$s (Abort with Shift-R-Click)",
+"industria.item.info.conduit.changeNodes":   "Length of Conduit: %1$s (Abort with Shift-R-Click)",
 "industria.item.info.conduit.placed":        "Conduit placed",
-"industria.item.info.conduit.abbort":        "Placing aborted"
-"industria.item.info.conduit.failed":        "Placing failed",
+"industria.item.info.conduit.abbort":        "Placing of Conduit aborted"
+"industria.item.info.conduit.failed":        "Placing of Conduit failed",
 "industria.item.info.conduit.toFarNodes":    "Conduit to long: %1$s > max. %2$s",
 
 "industria.commands.setconduit.success":     "Conduit changed starting at %1$s %2$s %3$s",
 "industria.commands.setconduit.failure":     "Placing of conduit impossible!"
+"industria.argument.conduit.id.invalid":				"Unknown Conduit '%s'"
 
 }

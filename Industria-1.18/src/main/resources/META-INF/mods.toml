@@ -51,3 +51,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mollis lacinia magn
     versionRange="[1.18.1,1.19)"
     ordering="NONE"
     side="BOTH"
+[[dependencies.industria]]
+    modId="create"
+    mandatory=true
+    versionRange="[0.4.1,)"
+    ordering="NONE"
+    side="BOTH"

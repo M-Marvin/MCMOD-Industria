@@ -2,6 +2,7 @@ package de.m_marvin.industria.registries;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.blocks.ConduitClampBlock;
+import de.m_marvin.industria.blocks.MotorBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.material.Material;
@@ -19,5 +20,6 @@ public class ModBlocks {
 	}
 	
 	public static final RegistryObject<Block> IRON_CONDUIT_CLAMP = BLOCKS.register("iron_conduit_clamp", () -> new ConduitClampBlock(Properties.of(Material.METAL, MaterialColor.METAL)));
+	public static final RegistryObject<Block> MOTOR = BLOCKS.register("motor", () -> new MotorBlock(Properties.of(Material.METAL, MaterialColor.METAL)));
 	
 }

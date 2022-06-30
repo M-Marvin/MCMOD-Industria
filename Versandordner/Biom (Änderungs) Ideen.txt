@@ -1,0 +1,76 @@
+#GEBIRGSPLATEAU
+---------------
+> Klima: kalt (kein Schnee)
+> Boden: Stein, Gras
+> Flora: Gras, Moos, wenige Gebirgsblumen, Gestrüpp, keine Bäume
+> Fauna: Lamas, Esel, Ziegen
+> Sonst: Felsbrocken mit Flechten
+> Strkt: Pillager-Außenposten
+
+===============
+
+#LAVENDELFELD
+-------------
+> Klima: gemäßigt
+> Boden: Gras
+> Flora: Gras, Hohes Gras, Lavendel, seltener Eichen
+> Fauna: Bienen, Standart-Tiere, Kaninchen
+> Sonst: flach, wie Plains
+> Strkt: Dörfer, Pillager-Außenposten
+
+===============
+
+#NEBELWALD
+-----------
+> Klima: feucht-warm bis gemäßigt, in höhreren Stufen gemäßigt bis kalt (kein Schnee)
+> Boden: Gras
+> Flora: Gras, Hohes Gras, Farn, Hoher Farn, Gestrüpp, Eichen, Blumen (geringe Farbvarianz), Moos, selten Blütenbäume, Hängeranken
+> Fauna: Kiwis, Hühner, Schnecken, selten Ozelots und Papageien
+> Sonst: Hügelige Landschaft, Gischtfarbener Nebel, Seen mit kristallfarben-blauem Wasser, Steinsteilwände, Generierung z.B. am Gebirgsfuß
+> Strkt: -
+
+===============
+
+#AHORNWALD
+----------
+> Klima: gemäßigt bis kalt (kein Schnee)
+> Boden: Gras
+> Flora: Ahornbäume, Gras, Moos, Flechten
+> Fauna: Schnecken, Tauben, Füchse, Standart-Tiere (Hühner verstärkt)
+> Sonst: Erdgruben
+> Strkt: -
+
+===============
+
+#TOTHOLZTAIGA
+-------------
+> Klima: gemäßigt bis kalt (kein Schnee)
+> Boden: Gras, Podsol, Grobe Erde
+> Flora: vereinzelt Gras und Farn, Tote laubarme Fichten
+> Fauna: Käfer und Milben?, selten Füchse und Wölfe, verstärkt Skelette
+> Sonst: -
+> Strkt: Hexenhütte (Andere Bauart)
+
+===============
+
+#KALKSINTERTERASSEN
+-------------------
+> Klima: warm bis gemäßigt
+> Boden: Kalkstein, Wasser
+> Flora: -
+> Fauna: -
+> Sonst: -
+> Strkt: -
+
+===============
+
+#KNOCHENFELSHÖHLEN
+------------------
+> Klima: warm
+> Boden: -
+> Flora: Leuchtflechten, Braune Pilze
+> Fauna: Standart-Höhenmobs, Milben?
+> Sonst: Knochenfelsspitzen, -bögen, -korallen, verstärkt Magmaseen, Treppenklippen
+> Strkt: Standart-Höhenstrukturen, evtl neues Dungeon?
+
+===============

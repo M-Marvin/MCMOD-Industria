@@ -1,0 +1,8 @@
+Schwarz          Gemäßigte Biome, Neutral, Schwarmagressivität    z.B. Wald, Plains
+Braun            Gemäßigte Biome, Neutral, Schwarmagressivität    z.B. Wald, Plains
+Sandfarben/Beige Trockenwarme Biome, Neutral, Schwarmagressivität z.B. Savanne, Mesa
+
+Grün             Feuchtwarme Biome, Agressiv                      z.B. Jungle
+Feuerameise      Gemäßigte und Trockenwarme Biome, Agressiv       z.B. Wald, Plains, Savanne
+
+Keine Ameisen: Verschneite Biome, Kalte Biome, Gebirgsbiome, Ozeane, Pilzland, Höhlen

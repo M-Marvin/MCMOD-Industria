@@ -47,7 +47,7 @@
 > Klima: gemäßigt bis kalt (kein Schnee)
 > Boden: Gras, Podsol, Grobe Erde
 > Flora: vereinzelt Gras und Farn, Tote laubarme Fichten
-> Fauna: Käfer und Milben?, selten Füchse und Wölfe, verstärkt Skelette
+> Fauna: Käfer oder Ameisen und Milben?, selten Füchse und Wölfe, verstärkt Skelette
 > Sonst: -
 > Strkt: Hexenhütte (Andere Bauart)
 
@@ -74,3 +74,12 @@
 > Strkt: Standart-Höhenstrukturen, evtl neues Dungeon?
 
 ===============
+
+#SALZWÜSTE
+----------
+> Klima: heiß
+> Boden: Salzkruste
+> Flora: Tote Büsche
+> Fauna: verstärkt Skelette
+> Sonst: Salzwassersee (sollte es Salzwasser geben)
+> Strkt: -

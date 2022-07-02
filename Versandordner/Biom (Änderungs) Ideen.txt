@@ -25,7 +25,7 @@
 > Klima: feucht-warm bis gemäßigt, in höhreren Stufen gemäßigt bis kalt (kein Schnee)
 > Boden: Gras
 > Flora: Gras, Hohes Gras, Farn, Hoher Farn, Gestrüpp, Eichen, Blumen (geringe Farbvarianz), Moos, selten Blütenbäume, Hängeranken
-> Fauna: Kiwis, Hühner, Schnecken, selten Ozelots und Papageien
+> Fauna: Kiwis, Hühner, Schnecken, Libellen, selten Ozelots und Papageien
 > Sonst: Hügelige Landschaft, Gischtfarbener Nebel, Seen mit kristallfarben-blauem Wasser, Steinsteilwände, Generierung z.B. am Gebirgsfuß
 > Strkt: -
 
@@ -46,15 +46,15 @@
 -------------
 > Klima: gemäßigt bis kalt (kein Schnee)
 > Boden: Gras, Podsol, Grobe Erde
-> Flora: vereinzelt Gras und Farn, Tote laubarme Fichten
+> Flora: Gras und Farn, Tote laubarme Fichten
 > Fauna: Käfer oder Ameisen und Milben?, selten Füchse und Wölfe, verstärkt Skelette
 > Sonst: -
 > Strkt: Hexenhütte (Andere Bauart)
 
 ===============
 
-#KALKSINTERTERASSEN
--------------------
+#KALKSINTERTERASSEN (Küstenbiom)
+--------------------------------
 > Klima: warm bis gemäßigt
 > Boden: Kalkstein, Wasser
 > Flora: -

@@ -2,6 +2,7 @@ package de.m_marvin.industria.util.unifiedvectors;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 
 public class Vec3i {
 	
@@ -9,10 +10,10 @@ public class Vec3i {
 	public int y;
 	public int z;
 	
-	public Vec3i(net.minecraft.world.phys.Vec3 vector) {
-		this.x = (int) vector.x;
-		this.y = (int) vector.y;
-		this.z = (int) vector.z;
+	public Vec3i(Vec3f v) {
+		this.x = (int) v.x;
+		this.y = (int) v.y;
+		this.z = (int) v.z;
 	}
 	public Vec3i(com.mojang.math.Vector3f vector) {
 		this.x = (int) vector.x();
@@ -28,6 +29,11 @@ public class Vec3i {
 		this.x = (int) vector.getX();
 		this.y = (int) vector.getY();
 		this.z = (int) vector.getZ();
+	}
+	public Vec3i(Vec3 vector) {
+		this.x = (int) vector.x();
+		this.y = (int) vector.y();
+		this.z = (int) vector.z();
 	}
 	
 	public Vec3i(BlockPos pos) {

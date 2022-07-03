@@ -3,7 +3,7 @@ package de.m_marvin.industria.network;
 import java.util.function.Supplier;
 
 import de.m_marvin.industria.util.ServerPackageHandler;
-import de.m_marvin.industria.util.types.ConduitPos;
+import de.m_marvin.industria.util.conduit.ConduitPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 

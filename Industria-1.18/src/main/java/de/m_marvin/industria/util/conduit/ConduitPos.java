@@ -1,4 +1,4 @@
-package de.m_marvin.industria.util.types;
+package de.m_marvin.industria.util.conduit;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -70,6 +70,17 @@ public class ConduitPos {
 	
 	public static ConduitPos readNBT(CompoundTag nbt) {
 		return new ConduitPos(NbtUtils.readBlockPos(nbt.getCompound("PosA")), NbtUtils.readBlockPos(nbt.getCompound("PosB")), nbt.getInt("IdA"), nbt.getInt("IdB"));
+	}
+	
+	@Override
+	public int hashCode() {
+		int prime = 31;
+		int result = 1;
+		result = prime * result + ((this.nodeApos != null) ? 0 : this.nodeApos.hashCode());
+		result = prime * result + ((this.nodeBpos != null) ? 0 : this.nodeBpos.hashCode());
+		result = prime * result + this.nodeAid;
+		result = prime * result + this.nodeBid;
+		return result;
 	}
 	
 	@Override

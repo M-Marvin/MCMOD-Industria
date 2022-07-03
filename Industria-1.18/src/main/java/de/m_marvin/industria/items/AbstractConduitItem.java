@@ -7,9 +7,9 @@ import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.network.CChangeNodesPerBlockPackage;
 import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.block.IConduitConnector;
-import de.m_marvin.industria.util.block.IConduitConnector.ConnectionPoint;
+import de.m_marvin.industria.util.conduit.ConduitPos;
+import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier.ConnectionPoint;
 import de.m_marvin.industria.util.item.IScrollOverride;
-import de.m_marvin.industria.util.types.ConduitPos;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -77,9 +77,9 @@ public abstract class AbstractConduitItem extends Item implements IScrollOverrid
 					ConnectionPoint secondNode = tryGetNode(context);
 					if (secondNode != null) {
 						int nodesPerBlock = Math.max(itemTag.getInt("NodesPerBlock"), 1);
-						ConduitPos conduitPos = new ConduitPos(firstNodePos, secondNode.position(), firstNodeId, secondNode.connectionId());
+						ConduitPos conduitPos = new ConduitPos(firstNodePos, secondNode.position, firstNodeId, secondNode.connectionId);
 						
-						int nodeDist = (int) Math.round(Math.sqrt(firstNodePos.distSqr(secondNode.position())));
+						int nodeDist = (int) Math.round(Math.sqrt(firstNodePos.distSqr(secondNode.position)));
 						int maxLength = Math.min(this.getConduit().getConduitType().getClampingLength(), getMaxPlacingLength(context.getItemInHand()));
 						if (nodeDist <= maxLength) {
 							
@@ -106,8 +106,8 @@ public abstract class AbstractConduitItem extends Item implements IScrollOverrid
 				ConnectionPoint firstNode = tryGetNode(context);
 				if (firstNode != null) {
 					CompoundTag nodeTag = new CompoundTag();
-					nodeTag.put("Pos", NbtUtils.writeBlockPos(firstNode.position()));
-					nodeTag.putInt("Id", firstNode.connectionId());
+					nodeTag.put("Pos", NbtUtils.writeBlockPos(firstNode.position));
+					nodeTag.putInt("Id", firstNode.connectionId);
 					itemTag.put("FirstNode", nodeTag);
 					context.getItemInHand().setTag(itemTag);
 					context.getPlayer().displayClientMessage(new TranslatableComponent("industria.item.info.conduit.nodeSelect"), true);
@@ -127,10 +127,10 @@ public abstract class AbstractConduitItem extends Item implements IScrollOverrid
 			BlockState nodeState = context.getLevel().getBlockState(nodePos);
 			ConnectionPoint nearestNode = null;
 			float distance = 2;
-			for (ConnectionPoint node : ((IConduitConnector) nodeState.getBlock()).getConnectionPoints(context.getLevel(), nodePos, nodeState)) {
-				float nodeDist = (float) node.offset().copy().sub(new Vec3i(context.getClickLocation().subtract(nodePos.getX(), nodePos.getY(), nodePos.getZ()).multiply(16, 16, 16))).length() / 16F;
+			for (ConnectionPoint node : ((IConduitConnector) nodeState.getBlock()).getConnectionPoints(nodePos, nodeState)) {
+				float nodeDist = (float) node.offset.copy().sub(new Vec3i(context.getClickLocation().subtract(nodePos.getX(), nodePos.getY(), nodePos.getZ()).multiply(16, 16, 16))).length() / 16F;
 				if (nodeDist < distance) {
-					if (((IConduitConnector) nodeState.getBlock()).connectionAviable(context.getLevel(), nodePos, nodeState, node.connectionId())) {
+					if (((IConduitConnector) nodeState.getBlock()).connectionAviable(context.getLevel(), nodePos, nodeState, node.connectionId)) {
 						nearestNode = node;
 						distance = nodeDist;
 					}

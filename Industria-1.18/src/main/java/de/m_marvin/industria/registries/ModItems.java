@@ -21,4 +21,6 @@ public class ModItems {
 	public static final RegistryObject<ConduitCableItem> ISOLATED_COPPER_WIRE = ITEMS.register("isolated_copper_wire", () -> new ConduitCableItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).stacksTo(16), Conduits.ISOLATED_COPPER_WIRE));
 	public static final RegistryObject<ConduitCableItem> UNISOLATED_COPPER_WIRE = ITEMS.register("unisolated_copper_wire", () -> new ConduitCableItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).stacksTo(16), Conduits.UNISOLATED_COPPER_WIRE));
 	
+	public static final RegistryObject<BlockItem> MOTOR = ITEMS.register("motor", () -> new BlockItem(ModBlocks.MOTOR.get(), new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE)));
+	
 }

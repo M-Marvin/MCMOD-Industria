@@ -13,11 +13,11 @@ import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.network.CBreakConduitPackage;
 import de.m_marvin.industria.registries.ModCapabilities;
-import de.m_marvin.industria.util.block.IConduitConnector.ConnectionPoint;
+import de.m_marvin.industria.util.conduit.ConduitHandlerCapability;
 import de.m_marvin.industria.util.conduit.ConduitHitResult;
-import de.m_marvin.industria.util.conduit.ConduitWorldStorageCapability;
+import de.m_marvin.industria.util.conduit.ConduitPos;
+import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier.ConnectionPoint;
 import de.m_marvin.industria.util.conduit.PlacedConduit;
-import de.m_marvin.industria.util.types.ConduitPos;
 import de.m_marvin.industria.util.unifiedvectors.Vec2f;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
@@ -128,6 +128,33 @@ public class UtilityHelper {
 		return rotateVectorCC(point, rotationVec, angle);
 	}
 	
+	public static Vec3i rotatePoint(Vec3i point, double angle, Axis axis) {
+		Vec3f rotationVec = null;
+		switch (axis) {
+		case X: rotationVec = new Vec3f(1, 0, 0); break;
+		case Y: rotationVec = new Vec3f(0, 1, 0); break;
+		case Z: rotationVec = new Vec3f(0, 0, 1); break;
+		}
+		return rotateVectorCC(point, rotationVec, angle);
+	}
+	
+	public static Vec3i rotateVectorCC(Vec3i vec, Vec3f axis, double theta){
+		float x, y, z;
+		float u, v, w;
+		x=vec.x();y=vec.y();z=vec.z();
+		u=axis.x();v=axis.y();w=axis.z();
+		int xPrime = (int) Math.round( (u*(u*x + v*y + w*z)*(1d - Math.cos(theta)) 
+				+ x*Math.cos(theta)
+				+ (-w*y + v*z)*Math.sin(theta)));
+		int yPrime = (int) Math.round(  (v*(u*x + v*y + w*z)*(1d - Math.cos(theta))
+				+ y*Math.cos(theta)
+				+ (w*x - u*z)*Math.sin(theta)));
+		int zPrime = (int) Math.round(  (w*(u*x + v*y + w*z)*(1d - Math.cos(theta))
+				+ z*Math.cos(theta)
+				+ (-v*x + u*y)*Math.sin(theta)));
+		return new Vec3i(xPrime, yPrime, zPrime);
+	}
+	
 	public static Vec3f rotateVectorCC(Vec3f vec, Vec3f axis, double theta){
 		float x, y, z;
 		float u, v, w;
@@ -204,7 +231,7 @@ public class UtilityHelper {
 	}
 	
 	public static boolean setConduit(Level level, ConduitPos position, Conduit conduit, int nodesPerBlock) {
-		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
 			return conduitHolder.resolve().get().placeConduit(position, conduit, nodesPerBlock);
 		}
@@ -212,7 +239,7 @@ public class UtilityHelper {
 	}
 	
 	public static boolean removeConduit(Level level, ConduitPos position, boolean dropItems) {
-		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
 			return conduitHolder.resolve().get().breakConduit(position, dropItems);
 		}
@@ -220,7 +247,7 @@ public class UtilityHelper {
 	}
 
 	public static Optional<PlacedConduit> getConduit(Level level, ConduitPos position) {
-		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
 			return conduitHolder.resolve().get().getConduit(position);
 		}
@@ -228,7 +255,7 @@ public class UtilityHelper {
 	}
 
 	public static Optional<PlacedConduit> getConduitAtNode(Level level, ConnectionPoint node) {
-		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
 			return conduitHolder.resolve().get().getConduitAtNode(node);
 		}
@@ -236,7 +263,7 @@ public class UtilityHelper {
 	}
 	
 	public static List<PlacedConduit> getConduitsAtBlock(Level level, BlockPos position) {
-		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
 			return conduitHolder.resolve().get().getConduitsAtBlock(position);
 		}
@@ -244,7 +271,7 @@ public class UtilityHelper {
 	}
 	
 	public static List<PlacedConduit> getConduitsInChunk(Level level, ChunkPos chunk) {
-		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
 			return conduitHolder.resolve().get().getConduitsInChunk(chunk);
 		}
@@ -284,7 +311,7 @@ public class UtilityHelper {
 	}
 	
 	public static ConduitHitResult clipConduits(Level level, ClipContext context, boolean skipBlockClip) {
-		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
 			ConduitHitResult cResult = conduitHolder.resolve().get().clipConduits(context);
 			if (cResult.isHit() && !skipBlockClip) {

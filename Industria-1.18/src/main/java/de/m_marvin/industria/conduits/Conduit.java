@@ -9,9 +9,9 @@ import de.m_marvin.industria.particleoptions.ConduitParticleOption;
 import de.m_marvin.industria.registries.ModParticleTypes;
 import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.block.IConduitConnector;
-import de.m_marvin.industria.util.block.IConduitConnector.ConnectionPoint;
+import de.m_marvin.industria.util.conduit.ConduitPos;
+import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier.ConnectionPoint;
 import de.m_marvin.industria.util.conduit.PlacedConduit;
-import de.m_marvin.industria.util.types.ConduitPos;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -89,7 +89,7 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 	public void onNodeStateChange(Level level, BlockPos nodePos, BlockState nodeState, PlacedConduit conduitState) {
 		if (nodeState.getBlock() instanceof IConduitConnector) {
 			int nodeId = conduitState.getNodeA().equals(nodePos) ? conduitState.getConnectionPointA() : conduitState.getConnectionPointB();
-			if (((IConduitConnector) nodeState.getBlock()).getConnectionPoints(level, nodePos, nodeState).length <= nodeId) {
+			if (((IConduitConnector) nodeState.getBlock()).getConnectionPoints(nodePos, nodeState).length <= nodeId) {
 				UtilityHelper.removeConduit(level, conduitState.getConduitPosition(), true);
 			}
 		} else {
@@ -204,19 +204,21 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		
 		if ((nodeAstate.getBlock() instanceof IConduitConnector && nodeBstate.getBlock() instanceof IConduitConnector)) {
 			
-			ConnectionPoint pointA = ((IConduitConnector) nodeAstate.getBlock()).getConnectionPoints(level, nodeApos, nodeAstate)[conduit.getConnectionPointA()];
-			ConnectionPoint pointB = ((IConduitConnector) nodeBstate.getBlock()).getConnectionPoints(level, nodeBpos, nodeBstate)[conduit.getConnectionPointB()];
+			ConnectionPoint pointA = ((IConduitConnector) nodeAstate.getBlock()).getConnectionPoints(nodeApos, nodeAstate)[conduit.getConnectionPointA()];
+			ConnectionPoint pointB = ((IConduitConnector) nodeBstate.getBlock()).getConnectionPoints(nodeBpos, nodeBstate)[conduit.getConnectionPointB()];
+			
+			// TODO Random-Noise offset to the nodes for random wire placement.
 			
 			Vec3f pointStart = new Vec3f(
 					nodeApos.getX() - cornerMin.getX(),
 					nodeApos.getY() - cornerMin.getY(),
 					nodeApos.getZ() - cornerMin.getZ()
-				).add(pointA.offset().toFloat().mul(0.0625F));
+				).add(pointA.offset.toFloat().mul(0.0625F));
 			Vec3f pointEnd = new Vec3f(
 					nodeBpos.getX() - cornerMin.getX(),
 					nodeBpos.getY() - cornerMin.getY(),
 					nodeBpos.getZ() - cornerMin.getZ()
-				).add(pointB.offset().toFloat().mul(0.0625F));
+				).add(pointB.offset.toFloat().mul(0.0625F));
 			
 			Vec3f connectionVec = pointEnd.copy().sub(pointStart);
 			float conduitLength = (float) connectionVec.length();

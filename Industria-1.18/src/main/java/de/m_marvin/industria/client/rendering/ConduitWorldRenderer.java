@@ -14,7 +14,7 @@ import de.m_marvin.industria.conduits.Conduit.ConduitType;
 import de.m_marvin.industria.registries.Conduits;
 import de.m_marvin.industria.registries.ModCapabilities;
 import de.m_marvin.industria.util.UtilityHelper;
-import de.m_marvin.industria.util.conduit.ConduitWorldStorageCapability;
+import de.m_marvin.industria.util.conduit.ConduitHandlerCapability;
 import de.m_marvin.industria.util.conduit.PlacedConduit;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import net.minecraft.client.Minecraft;
@@ -63,10 +63,10 @@ public class ConduitWorldRenderer {
 	@SuppressWarnings("resource")
 	public static void drawConduits(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, float partialTicks) {
 		
-		LazyOptional<ConduitWorldStorageCapability> optionalConduitHolder = clientLevel.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		LazyOptional<ConduitHandlerCapability> optionalConduitHolder = clientLevel.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (optionalConduitHolder.isPresent()) {
 			
-			ConduitWorldStorageCapability conduitHolder = optionalConduitHolder.resolve().get();
+			ConduitHandlerCapability conduitHolder = optionalConduitHolder.resolve().get();
 			
 			// Sort for type
 			for (Conduit conduitType : Conduits.CONDUITS_REGISTRY.get()) {

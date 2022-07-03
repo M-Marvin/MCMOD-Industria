@@ -3,7 +3,6 @@ package de.m_marvin.industria.util.conduit;
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.conduits.Conduit.ConduitShape;
 import de.m_marvin.industria.registries.Conduits;
-import de.m_marvin.industria.util.types.ConduitPos;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;

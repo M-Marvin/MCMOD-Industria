@@ -3,20 +3,44 @@ package de.m_marvin.industria.blocks;
 import java.util.stream.Stream;
 
 import com.simibubi.create.content.contraptions.base.DirectionalKineticBlock;
-import com.simibubi.create.foundation.block.ITE;
 
+import de.m_marvin.industria.blockentities.GeneratorBlockEntity;
 import de.m_marvin.industria.blockentities.MotorBlockEntity;
+import de.m_marvin.industria.registries.ConduitConnectionTypes;
 import de.m_marvin.industria.registries.ModBlockEntities;
+import de.m_marvin.industria.registries.ModBlockStateProperties;
+import de.m_marvin.industria.util.UtilityHelper;
+import de.m_marvin.industria.util.block.IElectricConnector;
+import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier;
+import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier.ConnectionPoint;
+import de.m_marvin.industria.util.types.MotorMode;
+import de.m_marvin.industria.util.unifiedvectors.Vec3f;
+import de.m_marvin.industria.util.unifiedvectors.Vec3i;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.core.Direction.AxisDirection;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition.Builder;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class MotorBlock extends DirectionalKineticBlock implements ITE<MotorBlockEntity> {
+public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, IElectricConnector {
 	
-	public static VoxelShape BLOCK_SHAPE = Stream.of(
+	public static final VoxelShape BLOCK_SHAPE = Stream.of(
 			Block.box(3, 3, 1, 13, 13, 16),
 			Block.box(12, 2, 0, 14, 4, 16),
 			Block.box(12, 12, 0, 14, 14, 16),
@@ -24,7 +48,7 @@ public class MotorBlock extends DirectionalKineticBlock implements ITE<MotorBloc
 			Block.box(2, 12, 0, 4, 14, 16),
 			Block.box(1, 0, 6, 15, 3, 13)
 			).reduce((v1, v2) -> Shapes.or(v1, v2)).get();
-	public static VoxelShape BLOCK_SHAPE_VERTICAL = Stream.of(
+	public static final VoxelShape BLOCK_SHAPE_VERTICAL = Stream.of(
 			Block.box(3, 0, 3, 13, 15, 13),
 			Block.box(12, 0, 2, 14, 16, 4),
 			Block.box(12, 0, 12, 14, 16, 14),
@@ -32,13 +56,55 @@ public class MotorBlock extends DirectionalKineticBlock implements ITE<MotorBloc
 			Block.box(2, 0, 2, 4, 16, 4)
 			).reduce((v1, v2) -> Shapes.or(v1, v2)).get();
 	
+	public static final MutableConnectionPointSupplier CONDUIT_NODES = MutableConnectionPointSupplier.basedOnOrientation(FACING)
+			.addOnFace(new Vec3i(8, 9, 4), ConduitConnectionTypes.ELECTRIC, 1, Direction.SOUTH)
+			.addOnFace(new Vec3i(8, 9, 4), ConduitConnectionTypes.ELECTRIC, 1, Direction.EAST)
+			.addOnFace(new Vec3i(8, 9, 4), ConduitConnectionTypes.ELECTRIC, 1, Direction.WEST)
+			.rotateBase(Direction.DOWN);
+	public static final MutableConnectionPointSupplier CONDUIT_NODES_VERTICAL = MutableConnectionPointSupplier.basedOnOrientation(FACING)
+			.addOnSidesOfAxis(new Vec3i(8, 10, 4), ConduitConnectionTypes.ELECTRIC, 1, Axis.Y)
+			.rotateBase(Direction.DOWN);
+	
 	public MotorBlock(Properties properties) {
 		super(properties);
 		// TODO Auto-generated constructor stub
 	}
 	
+	@Override
+	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		Direction facing = state.getValue(BlockStateProperties.FACING);
+		if (facing.getAxis() == Axis.Y) {
+			return facing.getAxisDirection() == AxisDirection.POSITIVE ? BLOCK_SHAPE_VERTICAL : UtilityHelper.rotateShape(BLOCK_SHAPE_VERTICAL, new Vec3f(8, 8, 8), Math.PI, Axis.X);
+		} else {
+			return UtilityHelper.rotateShape(BLOCK_SHAPE, new Vec3f(8, 8, 8), facing, Axis.Y);
+		}
+	}
+	
 	// https://github.com/mrh0/createaddition/blob/67958eb55fac0654200fe355c2bc4fc5859de3e4/src/main/java/com/mrh0/createaddition/index/CABlocks.java#L150
 	// https://github.com/Creators-of-Create/Create/blob/mc1.18/dev/src/main/java/com/simibubi/create/content/contraptions/components/motor/CreativeMotorTileEntity.java
+	
+	@Override
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
+		builder.add(ModBlockStateProperties.MOTOR_MODE);
+	}
+	
+	@Override
+	public InteractionResult use(BlockState pState, Level level, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+		MutableConnectionPointSupplier.basedOnOrientation(FACING)
+				.addOnFace(new Vec3i(8, 9, 5), ConduitConnectionTypes.ELECTRIC, 1, Direction.SOUTH)
+				.addOnFace(new Vec3i(8, 9, 5), ConduitConnectionTypes.ELECTRIC, 1, Direction.EAST)
+				.addOnFace(new Vec3i(8, 9, 5), ConduitConnectionTypes.ELECTRIC, 1, Direction.WEST)
+				.rotateBase(Direction.DOWN);
+		
+		BlockEntity be = level.getBlockEntity(pPos);
+		if (be instanceof MotorBlockEntity) {
+			((MotorBlockEntity) be).setGenerator(1, 1000);
+		} else if (be instanceof GeneratorBlockEntity) {
+			((GeneratorBlockEntity) be).tick();
+		}
+		return InteractionResult.PASS;
+	}
 	
 	@Override
 	public Axis getRotationAxis(BlockState state) {
@@ -46,13 +112,53 @@ public class MotorBlock extends DirectionalKineticBlock implements ITE<MotorBloc
 	}
 	
 	@Override
-	public Class<MotorBlockEntity> getTileEntityClass() {
-		return MotorBlockEntity.class;
+	public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
+		return face.getAxis() == getRotationAxis(state);
+	}
+	
+	public BlockEntityType<?> getMotorTileEntityType() {
+		return ModBlockEntities.MOTOR.get();
+	}
+	
+	public BlockEntityType<?> getGeneratorTileEntityType() {
+		return ModBlockEntities.GENERATOR.get();
+	}
+	
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return state.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.MOTOR ? getMotorTileEntityType().create(pos, state) : getGeneratorTileEntityType().create(pos, state);
+	}
+	
+	@Override
+	public ConnectionPoint[] getConnectionPoints(BlockPos pos, BlockState state) {
+		Direction facing = state.getValue(BlockStateProperties.FACING);
+		if (facing.getAxis() == Axis.Y) {
+			return CONDUIT_NODES_VERTICAL.getNodes(pos, state);
+		} else {
+			return CONDUIT_NODES.getNodes(pos, state);
+		}
 	}
 
 	@Override
-	public BlockEntityType<? extends MotorBlockEntity> getTileEntityType() {
-		return ModBlockEntities.MOTOR.get();
+	public float getParalelResistance(BlockState instance, ConnectionPoint n) {
+		// TODO
+		return 0;
+	}
+
+	@Override
+	public float getSerialResistance(BlockState instance, ConnectionPoint n1, ConnectionPoint n2) {
+		return 0;
+	}
+
+	@Override
+	public float getGeneratedVoltage(BlockState instance, ConnectionPoint n) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	@Override
+	public ConnectionPoint[] getConnections(Level level, BlockPos pos, BlockState instance) {
+		return getConnectionPoints(pos, instance);
 	}
 	
 }

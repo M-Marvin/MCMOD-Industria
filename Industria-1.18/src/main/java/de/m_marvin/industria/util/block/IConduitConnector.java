@@ -5,11 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 import de.m_marvin.industria.registries.ModCapabilities;
-import de.m_marvin.industria.util.conduit.ConduitWorldStorageCapability;
+import de.m_marvin.industria.util.conduit.ConduitHandlerCapability;
+import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier.ConnectionPoint;
 import de.m_marvin.industria.util.conduit.PlacedConduit;
-import de.m_marvin.industria.util.unifiedvectors.Vec3i;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -17,12 +16,12 @@ import net.minecraftforge.common.util.LazyOptional;
 
 public interface IConduitConnector {
 	
-	public ConnectionPoint[] getConnectionPoints(BlockGetter level, BlockPos pos, BlockState state);
+	public ConnectionPoint[] getConnectionPoints(BlockPos pos, BlockState state);
 	
 	public default PlacedConduit[] getConnectedConduits(Level level, BlockPos pos, BlockState state) {
 		List<PlacedConduit> connections = new ArrayList<>();
-		for (ConnectionPoint node : getConnectionPoints(level, pos, state)) {
-			LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		for (ConnectionPoint node : getConnectionPoints(pos, state)) {
+			LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
 			if (conduitHolder.isPresent()) {
 				Optional<PlacedConduit> conduit = conduitHolder.resolve().get().getConduitAtNode(node);
 				if (conduit.isPresent()) {
@@ -34,9 +33,9 @@ public interface IConduitConnector {
 	}
 	
 	public default boolean connectionAviable(Level level, BlockPos pos, BlockState state) {
-		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
-			for (ConnectionPoint con : getConnectionPoints(level, pos, state)) {
+			for (ConnectionPoint con : getConnectionPoints(pos, state)) {
 				if (!conduitHolder.resolve().get().getConduitAtNode(con).isPresent()) return true;
 			}
 		}
@@ -44,20 +43,13 @@ public interface IConduitConnector {
 	}
 	
 	public default boolean connectionAviable(Level level, BlockPos pos, BlockState state, int id) {
-		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
-			ConnectionPoint[] connections = getConnectionPoints(level, pos, state);
+			ConnectionPoint[] connections = getConnectionPoints(pos, state);
 			if (id >= connections.length) return false;
 			return !conduitHolder.resolve().get().getConduitAtNode(connections[id]).isPresent();
 		}
 		return false;
 	}
-	
-	public static record ConnectionPoint(
-		BlockPos position,
-		int connectionId,
-		Vec3i offset,
-		Direction attachmentFace
-	) {}
 	
 }

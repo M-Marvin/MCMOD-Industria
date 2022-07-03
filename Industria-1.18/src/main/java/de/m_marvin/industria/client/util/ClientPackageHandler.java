@@ -5,7 +5,7 @@ import java.util.HashMap;
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.network.SSyncPlacedConduit;
 import de.m_marvin.industria.registries.ModCapabilities;
-import de.m_marvin.industria.util.conduit.ConduitWorldStorageCapability;
+import de.m_marvin.industria.util.conduit.ConduitHandlerCapability;
 import de.m_marvin.industria.util.conduit.PlacedConduit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.ChunkPos;
@@ -45,7 +45,7 @@ public class ClientPackageHandler {
 	@SuppressWarnings("resource")
 	public static void handlePackageInLoadedChunk(SSyncPlacedConduit msg) {
 		Level level = Minecraft.getInstance().level;
-		LazyOptional<ConduitWorldStorageCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HOLDER_CAPABILITY);
+		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
 			if (!msg.removed) {
 				for (PlacedConduit conduitState : msg.conduitStates) {

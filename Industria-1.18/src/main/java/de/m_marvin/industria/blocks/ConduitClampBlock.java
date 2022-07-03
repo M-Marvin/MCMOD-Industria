@@ -2,16 +2,18 @@ package de.m_marvin.industria.blocks;
 
 import java.util.stream.Stream;
 
+import de.m_marvin.industria.registries.ConduitConnectionTypes;
 import de.m_marvin.industria.registries.ModBlockStateProperties;
 import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.block.IConduitConnector;
+import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier;
+import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier.ConnectionPoint;
 import de.m_marvin.industria.util.types.WallOrientations;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
-import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
@@ -31,6 +33,9 @@ public class ConduitClampBlock extends Block implements IConduitConnector {
 			Block.box(11, 6, 0, 12, 10, 7),
 			Block.box(4, 6, 7, 12, 10, 8)
 			).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
+	
+	public static final MutableConnectionPointSupplier CONDUIT_NODES = MutableConnectionPointSupplier.staticOrientation()
+			.addPoint(new Vec3i(8, 8, 8), ConduitConnectionTypes.ELECTRIC, 4);
 	
 	public ConduitClampBlock(Properties properties) {
 		super(properties);
@@ -102,49 +107,50 @@ public class ConduitClampBlock extends Block implements IConduitConnector {
 	}
 	
 	@Override
-	public ConnectionPoint[] getConnectionPoints(BlockGetter level, BlockPos pos, BlockState state) {
-		WallOrientations orientation = state.getValue(ModBlockStateProperties.ORIENTATION);
-		Direction attachFace = orientation.getFace();
-		Axis connectionAxis = orientation.getAxialOrientation();
-		int clampOffset = state.getValue(ModBlockStateProperties.CLAMP_OFFSET);
-		Vec3i offset = null;
-		int axisOffset = attachFace.getAxisDirection() == AxisDirection.POSITIVE ? 12 : 4;
-		switch (connectionAxis) {
-		case X:
-			switch (attachFace.getAxis()) {
-			default:
-			case Y:
-				offset = new Vec3i(2 + clampOffset * 6, axisOffset, 8);
-				break;
-			case Z:
-				offset = new Vec3i(2 + clampOffset * 6, 8, axisOffset);
-				break;
-			}
-			break;
-		case Y:
-			switch (attachFace.getAxis()) {
-			default:
-			case X:
-				offset = new Vec3i(axisOffset, 2 + clampOffset * 6, 8);
-				break;
-			case Z:
-				offset = new Vec3i(8, 2 + clampOffset * 6, axisOffset);
-				break;
-			}
-			break;
-		case Z:
-			switch (attachFace.getAxis()) {
-			default:
-			case X:
-				offset = new Vec3i(axisOffset, 8, 2 + clampOffset * 6);
-				break;
-			case Y:
-				offset = new Vec3i(8, axisOffset, 2 + clampOffset * 6);
-				break;
-			}
-			break;
-		}
-		return new ConnectionPoint[] {new ConnectionPoint(pos, 0, offset, attachFace), new ConnectionPoint(pos, 1, offset, attachFace)};
+	public ConnectionPoint[] getConnectionPoints(BlockPos pos, BlockState state) {
+//		WallOrientations orientation = state.getValue(ModBlockStateProperties.ORIENTATION);
+//		Direction attachFace = orientation.getFace();
+//		Axis connectionAxis = orientation.getAxialOrientation();
+//		int clampOffset = state.getValue(ModBlockStateProperties.CLAMP_OFFSET);
+//		Vec3i offset = null;
+//		int axisOffset = attachFace.getAxisDirection() == AxisDirection.POSITIVE ? 12 : 4;
+//		switch (connectionAxis) {
+//		case X:
+//			switch (attachFace.getAxis()) {
+//			default:
+//			case Y:
+//				offset = new Vec3i(2 + clampOffset * 6, axisOffset, 8);
+//				break;
+//			case Z:
+//				offset = new Vec3i(2 + clampOffset * 6, 8, axisOffset);
+//				break;
+//			}
+//			break;
+//		case Y:
+//			switch (attachFace.getAxis()) {
+//			default:
+//			case X:
+//				offset = new Vec3i(axisOffset, 2 + clampOffset * 6, 8);
+//				break;
+//			case Z:
+//				offset = new Vec3i(8, 2 + clampOffset * 6, axisOffset);
+//				break;
+//			}
+//			break;
+//		case Z:
+//			switch (attachFace.getAxis()) {
+//			default:
+//			case X:
+//				offset = new Vec3i(axisOffset, 8, 2 + clampOffset * 6);
+//				break;
+//			case Y:
+//				offset = new Vec3i(8, axisOffset, 2 + clampOffset * 6);
+//				break;
+//			}
+//			break;
+//		}
+//		return new ConnectionPoint[] {new ConnectionPoint(pos, 0, offset, attachFace), new ConnectionPoint(pos, 1, offset, attachFace)};
+		return CONDUIT_NODES.getNodes(pos, state);
 	}
 	
 }

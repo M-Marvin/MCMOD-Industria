@@ -1,7 +1,5 @@
 package de.m_marvin.industria.blocks;
 
-import java.util.stream.Stream;
-
 import com.simibubi.create.content.contraptions.base.DirectionalKineticBlock;
 
 import de.m_marvin.industria.blockentities.GeneratorBlockEntity;
@@ -9,10 +7,12 @@ import de.m_marvin.industria.blockentities.MotorBlockEntity;
 import de.m_marvin.industria.registries.ConduitConnectionTypes;
 import de.m_marvin.industria.registries.ModBlockEntities;
 import de.m_marvin.industria.registries.ModBlockStateProperties;
+import de.m_marvin.industria.registries.ModCapabilities;
 import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.block.IElectricConnector;
 import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier;
 import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier.ConnectionPoint;
+import de.m_marvin.industria.util.electricity.ElectricNetworkHandlerCapability;
 import de.m_marvin.industria.util.types.MotorMode;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
@@ -35,26 +35,13 @@ import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.util.LazyOptional;
 
 public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, IElectricConnector {
 	
-	public static final VoxelShape BLOCK_SHAPE = Stream.of(
-			Block.box(3, 3, 1, 13, 13, 16),
-			Block.box(12, 2, 0, 14, 4, 16),
-			Block.box(12, 12, 0, 14, 14, 16),
-			Block.box(2, 2, 0, 4, 4, 16),
-			Block.box(2, 12, 0, 4, 14, 16),
-			Block.box(1, 0, 6, 15, 3, 13)
-			).reduce((v1, v2) -> Shapes.or(v1, v2)).get();
-	public static final VoxelShape BLOCK_SHAPE_VERTICAL = Stream.of(
-			Block.box(3, 0, 3, 13, 15, 13),
-			Block.box(12, 0, 2, 14, 16, 4),
-			Block.box(12, 0, 12, 14, 16, 14),
-			Block.box(2, 0, 12, 4, 16, 14),
-			Block.box(2, 0, 2, 4, 16, 4)
-			).reduce((v1, v2) -> Shapes.or(v1, v2)).get();
+	public static final VoxelShape BLOCK_SHAPE = Block.box(3, 3, 1, 13, 13, 16);
+	public static final VoxelShape BLOCK_SHAPE_VERTICAL = Block.box(3, 0, 3, 13, 15, 13);
 	
 	public static final MutableConnectionPointSupplier CONDUIT_NODES = MutableConnectionPointSupplier.basedOnOrientation(FACING)
 			.addOnFace(new Vec3i(8, 9, 4), ConduitConnectionTypes.ELECTRIC, 1, Direction.SOUTH)
@@ -91,11 +78,11 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 	
 	@Override
 	public InteractionResult use(BlockState pState, Level level, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-		MutableConnectionPointSupplier.basedOnOrientation(FACING)
-				.addOnFace(new Vec3i(8, 9, 5), ConduitConnectionTypes.ELECTRIC, 1, Direction.SOUTH)
-				.addOnFace(new Vec3i(8, 9, 5), ConduitConnectionTypes.ELECTRIC, 1, Direction.EAST)
-				.addOnFace(new Vec3i(8, 9, 5), ConduitConnectionTypes.ELECTRIC, 1, Direction.WEST)
-				.rotateBase(Direction.DOWN);
+		
+		LazyOptional<ElectricNetworkHandlerCapability> networkHandler = level.getCapability(ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		if (networkHandler.isPresent() && !level.isClientSide()) {
+			networkHandler.resolve().get().calculateNetwork(pPos);
+		}
 		
 		BlockEntity be = level.getBlockEntity(pPos);
 		if (be instanceof MotorBlockEntity) {
@@ -142,7 +129,7 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 	@Override
 	public float getParalelResistance(BlockState instance, ConnectionPoint n) {
 		// TODO
-		return 0;
+		return 50 * 3;
 	}
 
 	@Override
@@ -152,8 +139,7 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 
 	@Override
 	public float getGeneratedVoltage(BlockState instance, ConnectionPoint n) {
-		// TODO Auto-generated method stub
-		return 0;
+		return instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR ? 230 : 0;
 	}
 	
 	@Override

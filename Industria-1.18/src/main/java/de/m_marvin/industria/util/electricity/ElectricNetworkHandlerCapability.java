@@ -134,7 +134,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			return type.getConnections(level, pos, instance);
 		}
 	}
-	public static class NodeInfo { float voltage; float current; long frame; }
+	public static class NodeInfo { float voltage; float current; float resistance; long frame; }
 	
 	public void tick() {
 		
@@ -156,8 +156,9 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				removeFromNetwork(pos);
 			}
 		}
-		addToNetwork(pos, new Component<I, P>(pos, type, instance));
-		updateNetwork(component.getNodes(this.level)[0]);
+		Component<I, P> component2 = new Component<I, P>(pos, type, instance);
+		addToNetwork(pos, component2);
+		updateNetwork(component2.getNodes(this.level)[0]);
 	}
 	
 	public <I, P> void addToNetwork(P pos, Component<I, P> component) {
@@ -183,42 +184,163 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	}
 	
 	public void updateNetwork(ConnectionPoint node) {
-		long newFrame = this.frame;
-		while (newFrame == this.frame) newFrame = this.level.random.nextLong();
-		this.frame = newFrame;
-		updateNodeTree(null, node, 0);
+
+		//updateNodeTree(null, node, 0);
 	}
 	
 	private void updateNodeTree(@Nullable Component<?, ?> lastComponent, ConnectionPoint node, float lastVoltage) {
 		
-		NodeInfo info = this.node2stateMap.get(node);
-		if (info == null || (info.voltage >= lastVoltage && info.frame == this.frame)) return;
-		
-		info.frame = this.frame;
-		info.voltage = lastVoltage;
-		for (Component<?, ?> component : this.node2componentMap.get(node)) {
-			if (component.equals(lastComponent)) continue;
-			
-			ConnectionPoint[] nodes = component.getNodes(level);
-			for (ConnectionPoint node2 : nodes) {
-				if (node2.equals(node)) continue;	
-				 
-				float serialResistance = component.getSerialResistance(node, node2);
-				float paralelResistance = getParalelResistance(node2);
-				float voltageTransfered = paralelResistance * lastVoltage / (paralelResistance + serialResistance);
-				float voltageGenerated = getGeneratedVoltage(node2);
-				float nodeVoltage = Math.max(voltageTransfered, voltageGenerated);
-				
-				updateNodeTree(component, node2, nodeVoltage);
-			}
-		}
+//		NodeInfo info = this.node2stateMap.get(node);
+//		if (info == null || (info.voltage >= lastVoltage && info.frame == this.frame)) return;
+//		
+//		info.frame = this.frame;
+//		info.voltage = lastVoltage;
+//		for (Component<?, ?> component : this.node2componentMap.get(node)) {
+//			if (component.equals(lastComponent)) continue;
+//			
+//			ConnectionPoint[] nodes = component.getNodes(level);
+//			for (ConnectionPoint node2 : nodes) {
+//				if (node2.equals(node)) continue;	
+//				 
+//				float serialResistance = component.getSerialResistance(node, node2);
+//				float paralelResistance = getParalelResistance(node2);
+//				float voltageTransfered = paralelResistance * lastVoltage / (paralelResistance + serialResistance);
+//				float voltageGenerated = getGeneratedVoltage(node2);
+//				float nodeVoltage = Math.max(voltageTransfered, voltageGenerated);
+//				
+//				updateNodeTree(component, node2, nodeVoltage);
+//			}
+//		}
 		
 		// TODO Updates only voltage
 		
 	}
 	
+	public void calculateNetwork(Object position) {
+		
+		Component<?, ?> component = this.pos2componentMap.get(position);
+		Set<Component<?, ?>> generators = scannNetworkGenerators(component);
+		
+		System.out.println("Found " + generators.size() + " generators");
+		
+		generators.forEach((generatorComponent) -> {
+			
+			ConnectionPoint[] nodes = generatorComponent.getNodes(this.level);
+			for (ConnectionPoint node : nodes) {
+				
+				if (generatorComponent.getGeneratedVoltage(node) <= 0) continue;
+				
+				calculateNetworkResistance(generatorComponent, node);
+				calculateNetworkVoltages(generatorComponent, node);
+				
+			}
+			
+		});
+		
+		System.out.println("Done");
+		
+	}
+	
+	public Set<Component<?, ?>> scannNetworkGenerators(Component<?, ?> component) {
+		newFrame();
+		Set<Component<?, ?>> generators = new HashSet<Component<?, ?>>();
+		scannNetworkGeneratorsP(component, generators);
+		return generators;
+	}
+	protected void scannNetworkGeneratorsP(Component<?, ?> currentComponent, Set<Component<?, ?>> generators)  {
+		
+		ConnectionPoint[] nodes = currentComponent.getNodes(this.level);
+		for (ConnectionPoint node : nodes) {
+			
+			NodeInfo info = this.node2stateMap.get(node);
+			if (info.frame == this.frame) continue;
+			info.frame = this.frame;
+			info.voltage = 0; // Prepare for recalculating voltages
+			
+			if (currentComponent.getGeneratedVoltage(node) > 0) generators.add(currentComponent);
+			
+			this.node2componentMap.get(node).forEach((component) -> {
+				
+				if (!component.equals(currentComponent)) scannNetworkGeneratorsP(component, generators);
+				
+			});
+			
+		}
+	}
+	
+	public void calculateNetworkResistance(@Nullable Component<? , ?> component, ConnectionPoint node) {
+		newFrame();
+		calculateNetworkResistanceP(component, node);
+	}
+	private float calculateNetworkResistanceP(@Nullable Component<?, ?> excludingComponent, ConnectionPoint node) {
+		
+		NodeInfo info = this.node2stateMap.get(node);
+		
+		if (info.frame == this.frame) return Float.MAX_VALUE;
+		
+		info.resistance = Float.MAX_VALUE;
+		info.frame = this.frame;
+		
+		for (Component<?, ?> component : this.node2componentMap.get(node)) {
+			if (component.equals(excludingComponent)) continue;
+			
+			ConnectionPoint[] nodes = component.getNodes(this.level);
+			for (ConnectionPoint node2 : nodes) {
+				if (node2.equals(node) && excludingComponent != null) continue;
+				
+				float networkResistance = calculateNetworkResistanceP(component, node2);
+				float paralelResistance = getParalelResistance(node2);
+				float serialResistance = component.getSerialResistance(node, node2);
+				float pathResistance = 1 / (1 / networkResistance + 1 / paralelResistance) + serialResistance;
+				info.resistance = 1 / (1 / info.resistance + 1 / pathResistance);
+				
+			}
+		}
+		
+		return info.resistance;
+		
+	}
+	
+	public void calculateNetworkVoltages(Component<?, ?> component, ConnectionPoint node) {
+		newFrame();
+		this.node2stateMap.get(node).voltage = component.getGeneratedVoltage(node);
+		calculateNetworkVoltagesP(component, node);
+	}
+	private void calculateNetworkVoltagesP(Component<?, ?> excludingComponent, ConnectionPoint node) {
+		
+		NodeInfo info = this.node2stateMap.get(node);
+		
+		if (info.frame == this.frame) return;
+		
+		info.frame = this.frame;
+		
+		for (Component<?, ?> component : this.node2componentMap.get(node)) {
+			if (component.equals(excludingComponent)) continue;
+			
+			ConnectionPoint[] nodes = component.getNodes(this.level);
+			for (ConnectionPoint node2 : nodes) {
+				if (node2.equals(node) && excludingComponent != null) continue;
+				
+				float serialResistance = component.getSerialResistance(node, node2);
+				float paralelResistance = this.node2stateMap.get(node2).resistance;
+				float voltage = this.node2stateMap.get(node).voltage;
+				
+				float transmittedVoltage = (voltage * paralelResistance) / (serialResistance + paralelResistance);
+				float generatedVoltage = getGeneratedVoltage(node2);
+				
+				if (transmittedVoltage >= generatedVoltage) {
+					info.voltage = transmittedVoltage;
+					calculateNetworkVoltagesP(component, node2);
+				}
+				
+			}
+			
+		}
+		
+	}
+	
 	private float getParalelResistance(ConnectionPoint node) {
-		float resistance = 0;
+		float resistance = Float.MAX_VALUE;
 		for (Component<?, ?> component : this.node2componentMap.get(node)) {
 			float r = component.getParalelResistance(node);
 			resistance = 1 / (1 / resistance + 1 / r);
@@ -232,6 +354,12 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			voltage += component.getGeneratedVoltage(node);
 		}
 		return voltage;
+	}
+	
+	private void newFrame() {
+		long newFrame = this.frame;
+		while (newFrame == this.frame) newFrame = this.level.random.nextLong();
+		this.frame = newFrame;
 	}
 	
 }

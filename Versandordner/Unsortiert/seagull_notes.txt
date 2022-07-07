@@ -1,5 +1,5 @@
 Sind Eier oder Küken im Nest, ist bei diesem der Blockstatus "occupied" "true".
-Ist "occpied" "true", bleibt ein Elternteil der Möwen immer beim Nest (die Position des EIGENEN Nests spiechern die Eltern).
+Ist "occpied" "true", bleibt ein Elternteil der Möwen immer beim Nest (die Position des EIGENEN Nests speichern die Eltern).
 
 Sind alle Küken erwachsen oder tot (Spieler, Mobs), wird "occupied" "false". Die Eltern löschen die Infos zu ihrem eigenen Nest dann. Sie können dann ein neues Nest bauen.
 

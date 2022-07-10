@@ -81,5 +81,35 @@
 > Boden: Salzkruste
 > Flora: Tote Büsche
 > Fauna: verstärkt Skelette
-> Sonst: Salzwassersee (sollte es Salzwasser geben)
+> Sonst: Salzwassersee (sollte es Salzwasser geben), unterirdisch Fossilien
 > Strkt: -
+
+===============
+
+#VULKAN
+-------
+> Klima: heiß
+> Boden: Stein, Schwarzstein, Glatter Basalt, Tuff
+> Flora: Tote Büsche, vereinzelt kleine Blumen
+> Fauna: Reptilien? (Welche?)
+> Sonst: Gebirgige Form/Kegelform, oben Magmakrater, Höhlen verstärkt mit Magma geflutet, Magmaströme am Berghang, Magmakammer im Vulkaninneren
+> Strkt: -
+
+===============
+
+#VULKANISCHES SANDFELD
+----------------------
+> Klima: heiß oder feuchtwarm
+> Boden: Schwarzer Sand
+> Flora: Tote Büsche, kleine Blumen
+> Fauna: Ameisen
+> Sonst: Flache Gegend
+> Strkt: -
+
+===============
+
+#VULKANSTRAND
+-------------
+> Strand aus Schwarzem Sand an Schnittstelle von Meer und Vulkan oder Vulkanischem Sandfeld
+
+===============

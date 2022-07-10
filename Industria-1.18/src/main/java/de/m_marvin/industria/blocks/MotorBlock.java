@@ -80,8 +80,10 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 	public InteractionResult use(BlockState pState, Level level, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
 		
 		LazyOptional<ElectricNetworkHandlerCapability> networkHandler = level.getCapability(ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-		if (networkHandler.isPresent() && !level.isClientSide()) {
+		if (networkHandler.isPresent() && !level.isClientSide() && pHand == InteractionHand.MAIN_HAND) {
+			System.out.println("####################### DEBUG ########################");
 			networkHandler.resolve().get().calculateNetwork(pPos);
+			System.out.println("####################### END ##########################");
 		}
 		
 		BlockEntity be = level.getBlockEntity(pPos);
@@ -129,7 +131,7 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 	@Override
 	public float getParalelResistance(BlockState instance, ConnectionPoint n) {
 		// TODO
-		return 50 * 3;
+		return instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR ? Float.MAX_VALUE :(3 * 50);
 	}
 
 	@Override
@@ -138,7 +140,7 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 	}
 
 	@Override
-	public float getGeneratedVoltage(BlockState instance, ConnectionPoint n) {
+	public float getGeneratedVoltage(BlockState instance, ConnectionPoint n, float load) {
 		return instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR ? 230 : 0;
 	}
 	

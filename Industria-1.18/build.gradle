@@ -111,8 +111,8 @@ dependencies {
  
     minecraft 'net.minecraftforge:forge:1.18.2-40.1.52'
  	
-	implementation fg.deobf("curse.maven:flywheel-486392:3737402")
-	implementation fg.deobf("curse.maven:create-328085:3737418")
+	implementation fg.deobf("curse.maven:flywheel-486392:3864518")
+	implementation fg.deobf("curse.maven:create-328085:3864525")
 	implementation fg.deobf("curse.maven:atlasviewer-633577:3832297")
 	//implementation 'com.github.M-Marvin:LIBRARY-JNetLWSBE:v1.0'
  	

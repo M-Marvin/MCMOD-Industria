@@ -25,7 +25,7 @@ public class ElectricConduit extends Conduit implements IElectricConduit {
 	}
 
 	@Override
-	public float getGeneratedVoltage(PlacedConduit instance, ConnectionPoint n) {
+	public float getGeneratedVoltage(PlacedConduit instance, ConnectionPoint n, float load) {
 		return 0;
 	}
 	

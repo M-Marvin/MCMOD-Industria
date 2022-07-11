@@ -131,7 +131,7 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 	@Override
 	public float getParalelResistance(BlockState instance, ConnectionPoint n) {
 		// TODO
-		return instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR ? Float.MAX_VALUE :(3 * 50);
+		return instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR ? Float.MAX_VALUE : (3 * 50);
 	}
 
 	@Override

@@ -3,13 +3,15 @@ package de.m_marvin.industria.util.conduit;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.util.block.IConduitConnector;
 import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier.ConnectionPoint;
 import de.m_marvin.industria.util.electricity.IElectric;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-public interface IElectricConduit extends IElectric<PlacedConduit, ConduitPos> {
+public interface IElectricConduit extends IElectric<PlacedConduit, ConduitPos, Conduit> {
 	
 	@Override
 	default ConnectionPoint[] getConnections(Level level, ConduitPos pos, PlacedConduit instance) {
@@ -21,6 +23,22 @@ public interface IElectricConduit extends IElectric<PlacedConduit, ConduitPos> {
 		if (points1 != null && points1.length > instance.getConnectionPointA()) points.add(points1[instance.getConnectionPointA()]);
 		if (points2 != null && points2.length > instance.getConnectionPointB()) points.add(points2[instance.getConnectionPointB()]);
 		return points.toArray((length) -> new ConnectionPoint[length]);
+	}
+
+	@Override
+	default void serializeNBT(PlacedConduit instance, ConduitPos position, CompoundTag nbt) {
+		nbt.put("State", instance.save());
+		nbt.put("Position", position.writeNBT(new CompoundTag()));
+	}
+
+	@Override
+	default PlacedConduit deserializeNBTInstance(CompoundTag nbt) {
+		return PlacedConduit.load(nbt.getCompound("State"));
+	}
+	
+	@Override
+	default ConduitPos deserializeNBTPosition(CompoundTag nbt) {
+		return ConduitPos.readNBT(nbt.getCompound("Position"));
 	}
 	
 }

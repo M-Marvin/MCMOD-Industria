@@ -69,7 +69,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 			CompoundTag conTag = con.save();
 			if (conTag != null) tag.add(conTag);
 		}
-		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Saved " + tag.size() + " Conduits");
+		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Saved " + tag.size() + " conduits");
 		return tag;
 	}
 
@@ -82,7 +82,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 			PlacedConduit con = PlacedConduit.load(conTag);
 			if (con != null) this.conduits.add(con);
 		}
-		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Loaded " + this.conduits.size() + "/" + tag.size() + "  Conduits");
+		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Loaded " + this.conduits.size() + "/" + tag.size() + " conduits");
 	}
 	
 	public ConduitHandlerCapability(Level level) {

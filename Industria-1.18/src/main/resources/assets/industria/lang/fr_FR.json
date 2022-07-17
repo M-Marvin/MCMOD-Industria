@@ -1,0 +1,14 @@
+{
+
+"industria.item.info.conduit.nodeSelect":	"Premier Nœud sélectionné (Avorter avec Maj + Clic-Droit)",
+"industria.item.info.conduit.changeNodes":	"Longueur du Câble: %1$s (Avorter avec Maj + Clic-Droit)",
+"industria.item.info.conduit.placed":		"Câble placé",
+"industria.item.info.conduit.abbort":		"Placement du Câble avorté",
+"industria.item.info.conduit.failed":		"Placement du Câble échoué",
+"industria.item.info.conduit.toFarNodes":	"Câble trop long: %1$s > max. %2$s",
+
+"industria.commands.setconduit.success":	"Changé le Câble commençant à %1$s %2$s %3$s",
+"industria.commands.setconduit.failure":	"Placement du Câble impossible!",
+"industria.argument.conduit.id.invalid":				"Câble inconnu '%s'"
+
+}

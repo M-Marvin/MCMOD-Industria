@@ -5,8 +5,8 @@ import java.util.function.Supplier;
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.conduits.Conduit.ConduitType;
-import de.m_marvin.industria.conduits.IsolatedElectricConduit;
-import de.m_marvin.industria.conduits.UnisolatedElectricConduit;
+import de.m_marvin.industria.conduits.InsulatedElectricConduit;
+import de.m_marvin.industria.conduits.UninsulatedElectricConduit;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -33,11 +33,17 @@ public class Conduits {
 		CONDUIT_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 	
-	public static final RegistryObject<ConduitType> ELECTRIC_ISOLATED_TYPE = CONDUIT_TYPES.register("electric_isolated_type", () -> new ConduitType(0.05F, 1F, 16, 4));
-	public static final RegistryObject<ConduitType> ELECTRIC_UNISOLATED_TYPE = CONDUIT_TYPES.register("electric_unisolated_type", () -> new ConduitType(0.015F, 1F, 128, 2));
+	public static final RegistryObject<ConduitType> ELECTRIC_INSULATED_TYPE = CONDUIT_TYPES.register("electric_insulated_type", () -> new ConduitType(0.05F, 1F, 16, 3));
+	public static final RegistryObject<ConduitType> ELECTRIC_UNINSULATED_TYPE = CONDUIT_TYPES.register("electric_uninsulated_type", () -> new ConduitType(0.015F, 1F, 128, 1));
 	
 	public static final RegistryObject<Conduit> NONE = CONDUITS.register("none", () -> new Conduit(new ConduitType(0F, 1F, 0, 1), null, MissingTextureAtlasSprite.getLocation(), SoundType.STONE));
-	public static final RegistryObject<Conduit> ISOLATED_COPPER_WIRE = CONDUITS.register("isolated_copper_wire", () -> new IsolatedElectricConduit(ELECTRIC_ISOLATED_TYPE.get(), ModItems.ISOLATED_COPPER_WIRE.get(), new ResourceLocation(Industria.MODID, "conduit/isolated_copper_wire"), SoundType.WOOL));
-	public static final RegistryObject<Conduit> UNISOLATED_COPPER_WIRE = CONDUITS.register("unisolated_copper_wire", () -> new UnisolatedElectricConduit(ELECTRIC_UNISOLATED_TYPE.get(), ModItems.UNISOLATED_COPPER_WIRE.get(), new ResourceLocation(Industria.MODID, "conduit/unisolated_copper_wire"), SoundType.WOOL));
+	public static final RegistryObject<Conduit> INSULATED_COPPER_WIRE = CONDUITS.register("insulated_copper_wire", () -> new InsulatedElectricConduit(ELECTRIC_INSULATED_TYPE.get(), ModItems.INSULATED_COPPER_WIRE.get(), new ResourceLocation(Industria.MODID, "conduit/insulated_copper_wire"), SoundType.WOOL));
+	public static final RegistryObject<Conduit> INSULATED_ALUMINUM_WIRE = CONDUITS.register("insulated_aluminum_wire", () -> new InsulatedElectricConduit(ELECTRIC_INSULATED_TYPE.get(), ModItems.INSULATED_ALUMINUM_WIRE.get(), new ResourceLocation(Industria.MODID, "conduit/insulated_aluminum_wire"), SoundType.WOOL));
+	public static final RegistryObject<Conduit> INSULATED_GOLD_WIRE = CONDUITS.register("insulated_gold_wire", () -> new InsulatedElectricConduit(ELECTRIC_INSULATED_TYPE.get(), ModItems.INSULATED_GOLD_WIRE.get(), new ResourceLocation(Industria.MODID, "conduit/insulated_gold_wire"), SoundType.WOOL));
+	public static final RegistryObject<Conduit> INSULATED_TIN_WIRE = CONDUITS.register("insulated_tin_wire", () -> new InsulatedElectricConduit(ELECTRIC_INSULATED_TYPE.get(), ModItems.INSULATED_TIN_WIRE.get(), new ResourceLocation(Industria.MODID, "conduit/insulated_tin_wire"), SoundType.WOOL));
+	public static final RegistryObject<Conduit> COPPER_WIRE = CONDUITS.register("copper_wire", () -> new UninsulatedElectricConduit(ELECTRIC_UNINSULATED_TYPE.get(), ModItems.COPPER_WIRE.get(), new ResourceLocation(Industria.MODID, "conduit/copper_wire"), SoundType.WOOL));
+	public static final RegistryObject<Conduit> ALUMINUM_WIRE = CONDUITS.register("aluminum_wire", () -> new UninsulatedElectricConduit(ELECTRIC_UNINSULATED_TYPE.get(), ModItems.ALUMINUM_WIRE.get(), new ResourceLocation(Industria.MODID, "conduit/aluminum_wire"), SoundType.WOOL));
+	public static final RegistryObject<Conduit> GOLD_WIRE = CONDUITS.register("gold_wire", () -> new UninsulatedElectricConduit(ELECTRIC_UNINSULATED_TYPE.get(), ModItems.GOLD_WIRE.get(), new ResourceLocation(Industria.MODID, "conduit/gold_wire"), SoundType.WOOL));
+	public static final RegistryObject<Conduit> TIN_WIRE = CONDUITS.register("tin_wire", () -> new UninsulatedElectricConduit(ELECTRIC_UNINSULATED_TYPE.get(), ModItems.TIN_WIRE.get(), new ResourceLocation(Industria.MODID, "conduit/tin_wire"), SoundType.WOOL));
 	
 }

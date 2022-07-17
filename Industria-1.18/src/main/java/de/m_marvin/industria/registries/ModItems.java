@@ -18,8 +18,14 @@ public class ModItems {
 	}
 	
 	public static final RegistryObject<BlockItem> IRON_CONDUIT_CLAMP = ITEMS.register("iron_conduit_clamp", () -> new BlockItem(ModBlocks.IRON_CONDUIT_CLAMP.get(), new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE)));
-	public static final RegistryObject<ConduitCableItem> ISOLATED_COPPER_WIRE = ITEMS.register("isolated_copper_wire", () -> new ConduitCableItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).stacksTo(16), Conduits.ISOLATED_COPPER_WIRE));
-	public static final RegistryObject<ConduitCableItem> UNISOLATED_COPPER_WIRE = ITEMS.register("unisolated_copper_wire", () -> new ConduitCableItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).stacksTo(16), Conduits.UNISOLATED_COPPER_WIRE));
+	public static final RegistryObject<ConduitCableItem> INSULATED_COPPER_WIRE = ITEMS.register("insulated_copper_wire", () -> new ConduitCableItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).stacksTo(16), Conduits.INSULATED_COPPER_WIRE));
+	public static final RegistryObject<ConduitCableItem> INSULATED_ALUMINUM_WIRE = ITEMS.register("insulated_aluminum_wire", () -> new ConduitCableItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).stacksTo(16), Conduits.INSULATED_ALUMINUM_WIRE));
+	public static final RegistryObject<ConduitCableItem> INSULATED_GOLD_WIRE = ITEMS.register("insulated_gold_wire", () -> new ConduitCableItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).stacksTo(16), Conduits.INSULATED_GOLD_WIRE));
+	public static final RegistryObject<ConduitCableItem> INSULATED_TIN_WIRE = ITEMS.register("insulated_tin_wire", () -> new ConduitCableItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).stacksTo(16), Conduits.INSULATED_TIN_WIRE));
+	public static final RegistryObject<ConduitCableItem> COPPER_WIRE = ITEMS.register("copper_wire", () -> new ConduitCableItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).stacksTo(16), Conduits.COPPER_WIRE));
+	public static final RegistryObject<ConduitCableItem> ALUMINUM_WIRE = ITEMS.register("aluminum_wire", () -> new ConduitCableItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).stacksTo(16), Conduits.ALUMINUM_WIRE));
+	public static final RegistryObject<ConduitCableItem> GOLD_WIRE = ITEMS.register("gold_wire", () -> new ConduitCableItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).stacksTo(16), Conduits.GOLD_WIRE));
+	public static final RegistryObject<ConduitCableItem> TIN_WIRE = ITEMS.register("tin_wire", () -> new ConduitCableItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).stacksTo(16), Conduits.TIN_WIRE));
 	
 	public static final RegistryObject<BlockItem> MOTOR = ITEMS.register("motor", () -> new BlockItem(ModBlocks.MOTOR.get(), new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE)));
 	

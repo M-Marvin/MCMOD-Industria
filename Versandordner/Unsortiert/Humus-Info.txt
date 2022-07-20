@@ -1,3 +1,4 @@
-Komposter stellt statt Knochenmehl Humus her.
+Komposter stellt statt Knochenmehl Humus her und 0-2 Biodünger/orangischer Dünger/Ökodünger/wie auch immer.
+Nutzen Biodünger: auf Pflanze/Grasblöcke/"underwater_bonemeal"-Blöcke -> Wie Knochenmehl | auf Ackerboden -> Block bleibt längere Zeit gedüngt, Pflanzen wachsen in dieser Zeit schneller.
 
-Rechtsklick mit Humus auf Ackerboden oder Umpflügen von Humus mit Feldhacke ergibt "fruchtbaren Ackerboden" -> schnelleres Wachstum der Feldfrüchte, wir beim Vetrocknen wieder zu Humus.
+Rechtsklick mit Humus auf Ackerboden oder Umpflügen von Humus mit Feldhacke ergibt "fruchtbaren Ackerboden" -> schnelleres Wachstum der Feldfrüchte, wird beim Vetrocknen wieder zu Humus.

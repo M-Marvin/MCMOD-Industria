@@ -140,10 +140,17 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 	public float getSerialResistance(BlockState instance, ConnectionPoint n1, ConnectionPoint n2) {
 		return 0;
 	}
-
+	
 	@Override
 	public float getGeneratedVoltage(BlockState instance, ConnectionPoint n, float load) {
-		return instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR ? 230 : 0;
+		if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR) {
+			if (load > ElectricNetworkHandlerCapability.MAX_RESISTANCE) return 230;
+			float energy = 1060F;
+			float resultingVoltage = (float) Math.sqrt(load * energy);
+			return Math.min(230, resultingVoltage);
+		} else {
+			return 0;
+		}
 	}
 	
 	@Override

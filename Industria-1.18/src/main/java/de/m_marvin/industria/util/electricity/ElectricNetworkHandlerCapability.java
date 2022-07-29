@@ -42,6 +42,8 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	
 	public static final float MAX_RESISTANCE = 100000000;
 	
+	public static int debug = 0;
+	
 	/* Capability handling */
 	
 	private LazyOptional<ElectricNetworkHandlerCapability> holder = LazyOptional.of(() -> this);
@@ -245,8 +247,8 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		System.out.println("Found " + generators.size() + " generators");
 		
 		node2stateMap.forEach((node, info) -> {
-			info.load = Float.MAX_VALUE;
 			info.voltage = 0;
+			info.load = Float.MAX_VALUE;
 		});
 		voltageItterationCache.clear();
 		
@@ -255,21 +257,17 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		float itterations = 1; // TODO itterations
 		
 		for (int i = 0; i < itterations; i++) {
-			//boolean test = false;
+			
+			node2stateMap.forEach((node, info) -> {
+				info.voltage = 0;
+			});
+			
 			for (Component<?, ?, ?> generatorComponent : generators) {
-				
-//				if (!test) {
-//					test = true;
-//					continue;
-//				}
 				
 				ConnectionPoint[] nodes = generatorComponent.getNodes(this.level);
 				
 				for (ConnectionPoint node : nodes) {
-//					node2stateMap.forEach((node23, info) -> {
-//						info.resistance = Float.MAX_VALUE;
-//					});
-//					
+					
 					if (generatorComponent.getGeneratedVoltage(node, Float.MAX_VALUE) <= 0) continue;
 					
 					calculateNetworkResistance(generatorComponent, node);
@@ -283,6 +281,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			
 			for (Component<?, ?, ?> generatorComponent : generators) {
 
+				debug++;
 				ConnectionPoint[] nodes = generatorComponent.getNodes(this.level);
 				for (ConnectionPoint node : nodes) {
 					
@@ -293,6 +292,8 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				}
 				
 			}
+			
+			debug = 0;
 		}
 
 		this.node2stateMap.forEach((node, info) -> {
@@ -301,7 +302,17 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			BlockEntity e =  this.level.getBlockEntity(node.position.offset(0, 3, 0));
 			if (e instanceof SignBlockEntity) ((SignBlockEntity) e).setMessage(node.connectionId, new TextComponent(info.voltage + "V"));
 			
+			
 		});
+		
+		for (Component<?, ?, ?> component2 : generators) {
+
+			this.level.setBlock(((BlockPos) component2.pos).offset(0, 1, 0), Blocks.DARK_OAK_SIGN.defaultBlockState(), 3);
+			BlockEntity e =  this.level.getBlockEntity(((BlockPos) component2.pos).offset(0, 1, 0));
+			if (e instanceof SignBlockEntity) ((SignBlockEntity) e).setMessage(0, new TextComponent(this.node2stateMap.get(component2.getNodes(level)[0]).load + "R"));
+			if (e instanceof SignBlockEntity) ((SignBlockEntity) e).setMessage(1, new TextComponent(this.node2stateMap.get(component2.getNodes(level)[1]).load + "R"));
+			if (e instanceof SignBlockEntity) ((SignBlockEntity) e).setMessage(2, new TextComponent(this.node2stateMap.get(component2.getNodes(level)[2]).load + "R"));
+		}
 		
 		System.out.println("Done");
 //		
@@ -363,11 +374,8 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	public void calculateNetworkLoadResistance(@Nullable Component<? , ?, ?> excludingComponent, ConnectionPoint node, float t) { // TODO wrong paramter name
 		newFrame();
 		float load = calculateNetworkLoadResistanceP(excludingComponent, node, t);
-		System.out.println("LOAD " + node.position + " > " + load);
+		//System.out.println("LOAD " + node.position + " > " + load);
 		
-		this.level.setBlock(node.position.offset(0, 1, 0), Blocks.DARK_OAK_SIGN.defaultBlockState(), 3);
-		BlockEntity e =  this.level.getBlockEntity(node.position.offset(0, 1, 0));
-		if (e instanceof SignBlockEntity) ((SignBlockEntity) e).setMessage(0, new TextComponent(load + ""));
 	}
 	private float calculateNetworkLoadResistanceP(@Nullable Component<? , ?, ?> excludingComponent, ConnectionPoint node, float t) {
 		
@@ -403,21 +411,21 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 					
 					float expectedVoltage = nodeResistance <= MAX_RESISTANCE ? (info.voltage * nodeResistance) / (nodeResistance + serialResistance) : info.voltage;
 					
-					System.out.println("XX" + serialResistance + " " + info2.voltage + " > " + expectedVoltage);
+					//System.out.println("XX" + serialResistance + " " + info2.voltage + " > " + expectedVoltage);
 					
 					if (info2.voltage - expectedVoltage > t) {
 						
 //						System.out.println(info2.resistance + " " + serialResistance);
-						System.out.println("XXIst " + info2.voltage + " " + node.position);
-						System.out.println("XXSolte " + expectedVoltage);
-						System.out.println(serialResistance);
+						//System.out.println("XXIst " + info2.voltage + " " + node.position);
+						//System.out.println("XXSolte " + expectedVoltage);
+						//System.out.println(serialResistance);
 						
-						this.level.setBlock(node2.position.offset(0, 4, 0), Blocks.DIAMOND_BLOCK.defaultBlockState(), 3);
+						//this.level.setBlock(node2.position.offset(0, 4, 0), Blocks.DIAMOND_BLOCK.defaultBlockState(), 3);
 						
 						return Float.MAX_VALUE;
 					}
 					
-					
+					level.setBlock(node2.position.above(4 + debug), Blocks.RED_WOOL.defaultBlockState(), 3);	
 					
 					//float serialResistance = component.getSerialResistance(node, node2);
 					float pathResistance = nodeResistance + serialResistance;
@@ -426,10 +434,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				
 			}
 		}
-		
-		this.level.setBlock(node.position.offset(0, 5, 0), Blocks.OAK_SIGN.defaultBlockState(), 3);
-		BlockEntity e =  this.level.getBlockEntity(node.position.offset(0, 5, 0));
-		if (e instanceof SignBlockEntity) ((SignBlockEntity) e).setMessage(node.connectionId, new TextComponent(info.load + "R"));
 		
 		return info.load;
 		
@@ -477,10 +481,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			}
 		}
 		
-		this.level.setBlock(node.position.offset(0, 5, 0), Blocks.OAK_SIGN.defaultBlockState(), 3);
-		BlockEntity e =  this.level.getBlockEntity(node.position.offset(0, 5, 0));
-		if (e instanceof SignBlockEntity) ((SignBlockEntity) e).setMessage(node.connectionId, new TextComponent(info.resistance + "R"));
-		
 		return info.resistance;
 		
 	}
@@ -491,16 +491,16 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	public void calculateNetworkVoltages(Component<?, ?, ?> component, ConnectionPoint node, float itterationProgress) {
 		newFrame();
 		
+		float f = 1 - itterationProgress;
+		
 		// Set generated voltage from generator
 		NodeInfo info = this.node2stateMap.get(node);
 		float generatedVoltage = component.getGeneratedVoltage(node, info.load);
+		float lastItterationVoltage = voltageItterationCache.getOrDefault(node, generatedVoltage);
+		generatedVoltage = lastItterationVoltage + (generatedVoltage - lastItterationVoltage) * 1; // DEBUG
+		
 		if (generatedVoltage < info.voltage) return;
 		info.voltage = generatedVoltage;
-		
-		// TODO Debug
-		this.level.setBlock(node.position.offset(0, 2, 0), Blocks.OAK_SIGN.defaultBlockState(), 3);
-		BlockEntity e =  this.level.getBlockEntity(node.position.offset(0, 2, 0));
-		if (e instanceof SignBlockEntity) ((SignBlockEntity) e).setMessage(0, new TextComponent(info.voltage + ""));
 		
 		calculateNetworkVoltagesP(component, node, 1 - itterationProgress);
 	}
@@ -529,15 +529,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 					
 					float old = info2.voltage;
 					info2.voltage = transmittedVoltage;
-					
-					// TODO Debug
-					this.level.setBlock(node2.position.offset(0, 2, 0), Blocks.OAK_SIGN.defaultBlockState(), 3);
-					BlockEntity e =  this.level.getBlockEntity(node2.position.offset(0, 2, 0));
-					if (e instanceof SignBlockEntity) ((SignBlockEntity) e).setMessage(0, new TextComponent(info2.voltage + ""));
-					if (e instanceof SignBlockEntity) ((SignBlockEntity) e).setMessage(1, new TextComponent(old + "V"));
-					if (e instanceof SignBlockEntity) ((SignBlockEntity) e).setMessage(2, new TextComponent(paralelResistance + ""));
-					if (e instanceof SignBlockEntity) ((SignBlockEntity) e).setMessage(3, new TextComponent(info.voltage + ""));
-					this.level.markAndNotifyBlock(node2.position.offset(0, 2, 0), this.level.getChunkAt(node2.position.offset(0, 2, 0)), Blocks.OAK_SIGN.defaultBlockState(), Blocks.OAK_SIGN.defaultBlockState(), 3, 1);
 					
 					calculateNetworkVoltagesP(component, node2, voltageRisingSpeed);
 				}

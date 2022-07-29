@@ -21,7 +21,7 @@ public class ElectricConduit extends Conduit implements IElectricConduit {
 
 	@Override
 	public float getSerialResistance(PlacedConduit instance, ConnectionPoint n1, ConnectionPoint n2) {
-		return n1.equals(n2) ? 0 : 1; // TODO Leitungswiederstand
+		return n1.equals(n2) ? 0F : 0.1F; // TODO Leitungswiederstand
 	}
 
 	@Override

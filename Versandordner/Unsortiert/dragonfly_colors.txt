@@ -1,6 +1,6 @@
-cyan  -> swamp, jungle
-red   -> swamp, jungle
-brown-green stripes -> swamp
+cyan  -> mangrove_swamp, jungle
+red   -> jungle
+brown(-green stripes) -> swamp
 black -> swamp
 
 larvae -> swamp

@@ -1,0 +1,28 @@
+VERZAUBERUNGEN/FLÜCHE:
+======================
+FLUCH DES VERFALLS
+-Werkzeug verliert schneller Haltbarkeit
+-nicht kombinierbar mit Haltbarkeit, aber mit Reparatur
+
+=> Rüstung, Waffen, Werkzeuge
+
+
+(SCHOCK)FROST/EINFRIEREN/ (I-III)
+-friert getroffene Entity für kurze Zeit ein (Bewegungsunfähigkeit, weiße Frost-Partikel um Entity)
+-mehr Schaden gegen Nether-Mobs (Lohe, Magmawürfel, Ghast, Schreiter, Witherskelett)
+-Eis-Mobs sind immun (Eiswanderer, Eisbär, Schneefuchs)
+-Einfrierzeit je nach Stufe: I - 0,5 sek | II - 1 sek | III - 1,5 sek
+-nicht kombinierbar mit Verbrennung(?)
+
+=> Schwert(, Dreizack)
+
+
+EFFEKTE:
+========
+TAUBHEIT
+-Spieler hört nur noch Geräusche in nächster Umgebung (je nach Stufe geringerer Radius)
+-Spielmusik ist ausgenommen.
+
+
+DRÖHNEN
+-Spieler hört metallisches klangschalenähnliches Dröhnen in gewissen Zeitabständen, lauter werdend, nervtötend wie das alte Netherportal. D:

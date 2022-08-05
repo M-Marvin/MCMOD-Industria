@@ -107,6 +107,12 @@ configurations {
     implementation.extendsFrom shade
 }
 
+minecraft.runs.all {
+    lazyToken('minecraft_classpath') {
+        configurations.shade.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
+    }
+}
+
 dependencies {
  
     minecraft 'net.minecraftforge:forge:1.18.2-40.1.52'
@@ -114,8 +120,8 @@ dependencies {
 	implementation fg.deobf("curse.maven:flywheel-486392:3864518")
 	implementation fg.deobf("curse.maven:create-328085:3864525")
 	implementation fg.deobf("curse.maven:atlasviewer-633577:3832297")
-	//implementation 'com.github.M-Marvin:LIBRARY-JNetLWSBE:v1.0'
- 	
+	shade 'com.github.M-Marvin:LIBRARY-NGLink:v1.0'
+	
 }
 
 shadowJar {

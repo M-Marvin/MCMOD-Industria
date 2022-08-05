@@ -24,7 +24,7 @@ public class Industria {
 	public static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(new ResourceLocation(MODID, "main"), () -> NetworkPackages.PROTOCOL_VERSION, NetworkPackages.PROTOCOL_VERSION::equals, NetworkPackages.PROTOCOL_VERSION::equals);
 	
 	public Industria() {
-		
+				
 		NetworkPackages.setupPackages(NETWORK);
 		ModBlocks.register();
 		ModItems.register();

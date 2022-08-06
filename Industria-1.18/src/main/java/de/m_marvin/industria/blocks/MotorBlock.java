@@ -12,6 +12,7 @@ import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.block.IElectricConnector;
 import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier;
 import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier.ConnectionPoint;
+import de.m_marvin.industria.util.electricity.CircuitConfiguration;
 import de.m_marvin.industria.util.electricity.ElectricNetworkHandlerCapability;
 import de.m_marvin.industria.util.types.MotorMode;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
@@ -84,7 +85,7 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 		LazyOptional<ElectricNetworkHandlerCapability> networkHandler = level.getCapability(ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 		if (networkHandler.isPresent() && !level.isClientSide() && pHand == InteractionHand.MAIN_HAND) {
 			System.out.println("####################### DEBUG ########################");
-			networkHandler.resolve().get().calculateNetwork(pPos);
+			networkHandler.resolve().get().updateNetwork(pPos);
 			System.out.println("####################### END ##########################");
 		}
 		
@@ -129,28 +130,24 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 			return CONDUIT_NODES.getNodes(pos, state);
 		}
 	}
-
-	@Override
-	public float getParalelResistance(BlockState instance, ConnectionPoint n) {
-		// TODO
-		return instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR ? Float.MAX_VALUE : (3 * 50);
-	}
-
-	@Override
-	public float getSerialResistance(BlockState instance, ConnectionPoint n1, ConnectionPoint n2) {
-		return 0;
-	}
 	
 	@Override
-	public float getGeneratedVoltage(BlockState instance, ConnectionPoint n, float load) {
+	public void plotCircuit(Level level, BlockState instance, BlockPos position, CircuitConfiguration circuit) {
+		
+		ConnectionPoint[] points = CONDUIT_NODES.getNodes(position, instance);
+		
 		if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR) {
-			if (load > ElectricNetworkHandlerCapability.MAX_RESISTANCE) return 230;
-			float energy = 1060F;
-			float resultingVoltage = (float) Math.sqrt(load * energy);
-			return Math.min(230, resultingVoltage);
+			
+			circuit.addSource(points[0], 230);
 		} else {
-			return 0;
+
+			circuit.addParalelResistance(points[0], 50);
 		}
+		
+		circuit.addSerialResistance(points[0], points[1], 0);
+		circuit.addSerialResistance(points[1], points[2], 0);
+		
+		
 	}
 	
 	@Override

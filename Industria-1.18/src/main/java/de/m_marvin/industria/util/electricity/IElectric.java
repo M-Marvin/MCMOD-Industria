@@ -15,9 +15,7 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 
 public interface IElectric<I, P, T> extends IForgeRegistryEntry<T> {
 	
-	public float getParalelResistance(I instance, ConnectionPoint n);
-	public float getSerialResistance(I instance, ConnectionPoint n1, ConnectionPoint n2);
-	public float getGeneratedVoltage(I instance, ConnectionPoint n, float networkLoad);
+	public void plotCircuit(Level level, I instance, P position, CircuitConfiguration circuit);
 	public void serializeNBT(I instance, P position, CompoundTag nbt);
 	public I deserializeNBTInstance(CompoundTag nbt);
 	public P deserializeNBTPosition(CompoundTag nbt);

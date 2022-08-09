@@ -138,7 +138,7 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 		
 		if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR) {
 			
-			circuit.addSource(points[0], 230);
+			circuit.addSource(points[0], 230, 5);
 		} else {
 
 			circuit.addParalelResistance(points[0], 50);

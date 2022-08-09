@@ -1,12 +1,8 @@
 package de.m_marvin.industria.util.electricity;
 
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
-import javax.annotation.Nullable;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.registries.ModCapabilities;
@@ -15,24 +11,14 @@ import de.m_marvin.industria.util.conduit.ConduitEvent;
 import de.m_marvin.industria.util.conduit.ConduitEvent.ConduitPlaceEvent;
 import de.m_marvin.industria.util.conduit.IElectricConduit;
 import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier.ConnectionPoint;
-import de.m_marvin.nglink.NativeExtractor;
-import de.m_marvin.nglink.NativeNGLink;
-import de.m_marvin.nglink.NativeNGLink.PlotDescription;
-import de.m_marvin.nglink.NativeNGLink.VectorValue;
-import de.m_marvin.nglink.NativeNGLink.VectorValuesAll;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -62,9 +48,10 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	}
 	
 	private Level level;
-	private NativeNGLink nglink;
+	
 	private HashMap<Object, Component<?, ?, ?>> pos2componentMap = new HashMap<Object, Component<?, ?, ?>>();
 	private HashMap<ConnectionPoint, Set<Component<?, ?, ?>>> node2componentMap = new HashMap<ConnectionPoint, Set<Component<?, ?, ?>>>();
+	private HashMap<ConnectionPoint, NodeState> node2stateMap = new HashMap<ConnectionPoint, NodeState>();
 	
 	@Override
 	public ListTag serializeNBT() {
@@ -93,8 +80,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	
 	public ElectricNetworkHandlerCapability(Level level) {
 		this.level = level;
-		if (!NativeNGLink.loadedSuccessfully()) throw new IllegalStateException("Failed to load natives for nglink in ElectricityNetworkHandler!");
-		this.nglink = new NativeNGLink();
 	}
 	
 	/* Event handling */
@@ -181,7 +166,8 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			return type.getConnections(level, pos, instance);
 		}
 	}
-	public static class NodeInfo { float voltage; float current; float resistance; float load; long frame; }
+
+	public static record NodeState(double value) {};
 	
 	public void tick() {
 		
@@ -231,75 +217,49 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	public <P> void updateNetwork(P position) {
 		Component<?, ?, ?> component = this.pos2componentMap.get(position);
 		if (component != null) {
-			setCallbacks();
 			CircuitConfiguration circuit = buildCircuit(component);
-			
-			try {
+			SPICE.processCircuit(circuit);
+			double groundVoltage = SPICE.vectorData().get(CircuitConfiguration.GND_NODE);
+			SPICE.vectorData().forEach((hashName, value) ->  {
+				ConnectionPoint node = circuit.getNode(hashName);
+				this.node2stateMap.put(node, new NodeState(-groundVoltage + value));
+			});
+			circuit.getComponents().forEach((comp) -> {
 				
-				Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "Circuit: \n" + circuit.toString());
-				nglink.initNGSpice(NativeExtractor.findNative("ngspice"));
-				nglink.loadCircuit(circuit.toString());
-				nglink.execCommand("tran 1 1");
-				nglink.detachNGSpice();
-				
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
-	}
-	
-	private void setCallbacks() {
-
-		if (!nglink.isInitialized()) {
-			this.nglink.initNGLink(new NativeNGLink.NGCallback() {
-				
-				@Override
-				public void reciveVecData(VectorValuesAll vecData, int vectorCount) {
+				// TODO Notify update
+				try {
+					double vA = this.node2stateMap.get(comp.getNodes(level)[0]).value();
+					double vB = this.node2stateMap.get(comp.getNodes(level)[1]).value();
+					double r = circuit.getSerialResistance(comp.getNodes(level)[0], comp.getNodes(level)[1]);
+					double v = Math.abs(vA - vB);
+					double i = v/r;
 					
-					System.out.println("RECIVED DATA " + vecData.count());
-					for (VectorValue value : vecData.values()) {
-						System.out.println("VECTOR " + value.name() + " = " + value.realdata());
-					}
-					
+					System.out.println("COMPONENT VOLTAGES: " + comp.toString() + " " + this.node2stateMap.get(comp.getNodes(level)[0]).value() + "V");
+					System.out.println("COMPONENT CURRENTS: " + comp.toString() + " " + i + "I");
+				} catch (NullPointerException e) {
+					e.printStackTrace();
 				}
 				
-				@Override
-				public void reciveInitData(PlotDescription plotInfo) {}
-				
-				@Override
-				public void log(String s) {
-					Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "JNGLINK: " + s);
-				}
-				
-				@Override
-				public void detacheNGSpice() {
-					Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "JNGLINK: Detaching spice!");
-					nglink.detachNGSpice();
-				}
 			});
 		}
-		
 	}
 	
 	private CircuitConfiguration buildCircuit(Component<?, ?, ?> component) {
 		CircuitConfiguration circuit = new CircuitConfiguration("recalc-circuit");
-		Set<Component<?, ?, ?>> components = new HashSet<Component<?, ?, ?>>();
-		buildCircuit0(component, null, components, circuit);
+		buildCircuit0(component, null, circuit);
 		circuit.complete();
 		return circuit;
 	}
-	private void buildCircuit0(Component<?, ?, ?> component, ConnectionPoint node, Set<Component<?, ?, ?>> components, CircuitConfiguration circuit) {
+	private void buildCircuit0(Component<?, ?, ?> component, ConnectionPoint node, CircuitConfiguration circuit) {
 		
-		if (components.contains(component)) return;
-		components.add(component);
+		if (circuit.getComponents().contains(component)) return;
+		circuit.getComponents().add(component);
 		component.plotCircuit(level, circuit);
 		
 		for (ConnectionPoint node2 : component.getNodes(level)) {
 			if (node2.equals(node)) continue; 
 			for (Component<?, ?, ?> component2 : this.node2componentMap.get(node2)) {
-				buildCircuit0(component2, node2, components, circuit);
+				buildCircuit0(component2, node2, circuit);
 			}
 		}
 		

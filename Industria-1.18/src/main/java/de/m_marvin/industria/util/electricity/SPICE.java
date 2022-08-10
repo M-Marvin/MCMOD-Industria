@@ -26,7 +26,7 @@ public class SPICE {
 		return ngVecData;
 	}
 	
-	public static void processCircuit(CircuitConfiguration circuit) {
+	public static void processCircuit(ElectricNetwork circuit) {
 
 		if (!nglink.isInitialized()) {
 			nglink.initNGLink(new NativeNGLink.NGCallback() {

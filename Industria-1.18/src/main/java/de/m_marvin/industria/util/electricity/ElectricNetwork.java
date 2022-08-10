@@ -8,25 +8,34 @@ import java.util.Set;
 import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier.ConnectionPoint;
 import de.m_marvin.industria.util.electricity.ElectricNetworkHandlerCapability.Component;
 
-public class CircuitConfiguration {
+public class ElectricNetwork {
 	
 	public static final String GND_NODE = "node-gnd";
 	
-	protected Map<String, ConnectionPoint> hash2node;
+	// Stored results
 	protected Map<Long, Double> serialResistance;
 	protected Map<ConnectionPoint, Double> paralelResistance;
+	protected Map<ConnectionPoint, Double> nodeVoltages;
 	protected Set<Component<?, ?, ?>> components;
+	
+	// Cache for circuit building
+	protected String title;
+	protected Map<String, ConnectionPoint> hash2node;
 	protected StringBuilder stringBuilder;
+	protected Set<String> modelMap;
 	protected int resistorCount = 1;
 	protected int sourceCount = 1;
 	
-	public CircuitConfiguration(String titleInfo) {
+	public ElectricNetwork(String titleInfo) {
+		this.title = titleInfo;
 		this.stringBuilder = new StringBuilder();
 		this.stringBuilder.append(titleInfo + "\n");
 		this.hash2node = new HashMap<String, ConnectionPoint>();
+		this.nodeVoltages = new HashMap<ConnectionPoint, Double>();
 		this.paralelResistance = new HashMap<ConnectionPoint, Double>();
 		this.serialResistance = new HashMap<Long, Double>();
 		this.components = new HashSet<Component<?, ?, ?>>();
+		this.modelMap = new HashSet<String>();
 	}
 	
 	public Set<Component<?, ?, ?>> getComponents() {
@@ -57,13 +66,18 @@ public class CircuitConfiguration {
 	
 	protected void addSource(String nodeP, String nodeN, double voltage, double maxCurrent) {
 		if (maxCurrent < 0) {
-			stringBuilder.append("V" + (sourceCount++) + " " + nodeP + " " + nodeN + " " + voltage + "\n");
+			stringBuilder.append("V" + (sourceCount++) + "v " + nodeP + " " + nodeN + " " + voltage + "\n");
 		} else {
-			// TODO Current-dependent voltage source
-			String deviceName = "B" + (sourceCount++);
-			String expr = "min(" + voltage + "," + voltage + " * (" + 8 + "/" + "i(" + "R1" + ")))";
-			//stringBuilder.append("V" + (sourceCount++) + " " + nodeP + " " + nodeN + " " + voltage + "\n");
-			stringBuilder.append(deviceName + " " + nodeP + " " + nodeN + " V = " + expr + "\n");
+			int id = sourceCount++;
+			String nodeL = "node-limit" + id;
+			// Voltage Source
+			stringBuilder.append("V" + id + "v " + nodeP + " " + nodeL + " " + voltage + "\n");
+			// Current Limitation
+			String diodeModel = "D(Ron=0 Roff=1G Vfwd=0)";
+			String modelName = "M" + Integer.toHexString(diodeModel.hashCode());
+			if (this.modelMap.add(diodeModel)) stringBuilder.append(".model " + modelName + " " + diodeModel + "\n");
+			stringBuilder.append("I" + id + "v " + nodeN + " " + nodeL + " " + maxCurrent + "\n");
+			stringBuilder.append("D" + id + "v " + nodeL + " " + nodeN + " " + modelName + "\n");
 		}
 	}
 	
@@ -88,6 +102,25 @@ public class CircuitConfiguration {
 
 	public double getSerialResistance(ConnectionPoint nodeA, ConnectionPoint nodeB) {
 		return this.serialResistance.getOrDefault((long) (nodeA.hashCode() + nodeB.hashCode()), Double.MAX_VALUE);
+	}
+
+	public double getParalelResistance(ConnectionPoint node) {
+		return this.paralelResistance.getOrDefault(node, Double.MAX_VALUE);
+	}
+	
+	public double getVoltage(ConnectionPoint node) {
+		return this.nodeVoltages.getOrDefault(node, 0D);
+	}
+	
+	public void reset() {
+		this.stringBuilder = new StringBuilder();
+		this.stringBuilder.append(title + "\n");
+		this.hash2node.clear();
+		this.nodeVoltages.clear();
+		this.paralelResistance .clear();
+		this.serialResistance.clear();
+		this.components.clear();
+		this.modelMap.clear();
 	}
 	
 }

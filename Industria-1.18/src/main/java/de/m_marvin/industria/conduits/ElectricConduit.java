@@ -4,7 +4,7 @@ import de.m_marvin.industria.util.conduit.ConduitPos;
 import de.m_marvin.industria.util.conduit.IElectricConduit;
 import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier.ConnectionPoint;
 import de.m_marvin.industria.util.conduit.PlacedConduit;
-import de.m_marvin.industria.util.electricity.CircuitConfiguration;
+import de.m_marvin.industria.util.electricity.ElectricNetwork;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
@@ -18,7 +18,7 @@ public class ElectricConduit extends Conduit implements IElectricConduit {
 	}
 
 	@Override
-	public void plotCircuit(Level level, PlacedConduit instance, ConduitPos position, CircuitConfiguration circuit) {
+	public void plotCircuit(Level level, PlacedConduit instance, ConduitPos position, ElectricNetwork circuit) {
 		
 		ConnectionPoint[] nodes = getConnections(level, position, instance);
 		

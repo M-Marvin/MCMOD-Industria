@@ -6,7 +6,6 @@ import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.registries.Conduits;
 import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier.ConnectionPoint;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -15,7 +14,8 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 
 public interface IElectric<I, P, T> extends IForgeRegistryEntry<T> {
 	
-	public void plotCircuit(Level level, I instance, P position, CircuitConfiguration circuit);
+	public default void onNetworkNotify(Level level, I instance, P position) {}
+	public void plotCircuit(Level level, I instance, P position, ElectricNetwork circuit);
 	public void serializeNBT(I instance, P position, CompoundTag nbt);
 	public I deserializeNBTInstance(CompoundTag nbt);
 	public P deserializeNBTPosition(CompoundTag nbt);

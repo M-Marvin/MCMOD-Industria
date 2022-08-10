@@ -48,10 +48,10 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	}
 	
 	private Level level;
-	
 	private HashMap<Object, Component<?, ?, ?>> pos2componentMap = new HashMap<Object, Component<?, ?, ?>>();
 	private HashMap<ConnectionPoint, Set<Component<?, ?, ?>>> node2componentMap = new HashMap<ConnectionPoint, Set<Component<?, ?, ?>>>();
-	private HashMap<ConnectionPoint, NodeState> node2stateMap = new HashMap<ConnectionPoint, NodeState>();
+	private HashSet<ElectricNetwork> circuitNetworks = new HashSet<ElectricNetwork>();
+	private HashMap<Component<?, ?, ?>, ElectricNetwork> component2circuitMap = new HashMap<Component<?, ?, ?>, ElectricNetwork>();
 	
 	@Override
 	public ListTag serializeNBT() {
@@ -84,26 +84,26 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	
 	/* Event handling */
 	
-	@SubscribeEvent
-	public static void onWorldTick(WorldTickEvent event) {
-		ServerLevel level = (ServerLevel) event.world;
-		LazyOptional<ElectricNetworkHandlerCapability> networkHandler = level.getCapability(ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-		if (networkHandler.isPresent()) {
-			networkHandler.resolve().get().tick();
-		}
-	}
+//	@SubscribeEvent
+//	public static void onWorldTick(WorldTickEvent event) {
+//		ServerLevel level = (ServerLevel) event.world;
+//		LazyOptional<ElectricNetworkHandlerCapability> networkHandler = level.getCapability(ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+//		if (networkHandler.isPresent()) {
+//			networkHandler.resolve().get().tick();
+//		}
+//	}
 	
-	@SubscribeEvent
-	@SuppressWarnings("resource")
-	public static void onClientWorldTick(ClientTickEvent event) {
-		ClientLevel level = Minecraft.getInstance().level;
-		if (level != null) {
-			LazyOptional<ElectricNetworkHandlerCapability> networkHandler = level.getCapability(ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-			if (networkHandler.isPresent()) {
-				networkHandler.resolve().get().tick();
-			}
-		}
-	}
+//	@SubscribeEvent
+//	@SuppressWarnings("resource")
+//	public static void onClientWorldTick(ClientTickEvent event) {
+//		ClientLevel level = Minecraft.getInstance().level;
+//		if (level != null) {
+//			LazyOptional<ElectricNetworkHandlerCapability> networkHandler = level.getCapability(ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+//			if (networkHandler.isPresent()) {
+//				networkHandler.resolve().get().tick();
+//			}
+//		}
+//	}
 	
 	@SubscribeEvent
 	public static void onBlockStateChange(BlockEvent.NeighborNotifyEvent event) {
@@ -159,20 +159,65 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			}
 			return null;
 		}
-		public void plotCircuit(Level level, CircuitConfiguration circuit) {
+		public void plotCircuit(Level level, ElectricNetwork circuit) {
 			type.plotCircuit(level, instance, pos, circuit);
 		}
 		public ConnectionPoint[] getNodes(Level level) {
 			return type.getConnections(level, pos, instance);
 		}
+		public void onNetworkChange(Level level) {
+			type.onNetworkNotify(level, instance, pos);
+		}
 	}
 
-	public static record NodeState(double value) {};
+	public static record NodeState(double voltage, ElectricNetwork circuit) {};
 	
-	public void tick() {
-		
+	public ElectricNetwork getCircuit(Component<?, ?, ?> component) {
+		return this.component2circuitMap.get(component);
 	}
 	
+	public double getVoltageAt(ConnectionPoint node) {
+		Set<Component<?, ?, ?>> components = this.node2componentMap.get(node);
+		if (components != null && components.size() > 0) {
+			ElectricNetwork circuit = getCircuit(components.toArray(new Component<?, ?, ?>[] {})[0]);
+			if (circuit != null) {
+				double voltage =  circuit.getVoltage(node);
+				return Double.isFinite(voltage) ? voltage : 0D;
+			}
+		}
+		return 0D;
+	}
+	
+	public double getSerialResistance(ConnectionPoint nodeA, ConnectionPoint nodeB) {
+		Set<Component<?, ?, ?>> components = this.node2componentMap.get(nodeA);
+		if (components != null && components.size() > 0) {
+			ElectricNetwork circuit = getCircuit(components.toArray(new Component<?, ?, ?>[] {})[0]);
+			if (circuit != null) {
+				double resistance =  circuit.getSerialResistance(nodeA, nodeB);
+				return Double.isFinite(resistance) ? resistance : Double.MAX_VALUE;
+			}
+		}
+		return Double.MAX_VALUE;
+	}
+	
+	public double getParalelResistance(ConnectionPoint node) {
+		Set<Component<?, ?, ?>> components = this.node2componentMap.get(node);
+		if (components != null && components.size() > 0) {
+			ElectricNetwork circuit = getCircuit(components.toArray(new Component<?, ?, ?>[] {})[0]);
+			if (circuit != null) {
+				double resistance =  circuit.getParalelResistance(node);
+				return Double.isFinite(resistance) ? resistance : Double.MAX_VALUE;
+			}
+		}
+		return Double.MAX_VALUE;
+	}
+	
+	public double getCurrent(Component<?, ?, ?> component, ConnectionPoint nodeA, ConnectionPoint nodeB) {
+		double voltageA = getVoltageAt(nodeA);
+		double voltageB = getVoltageAt(nodeB);
+		double resistance = getSerialResistance(nodeA, nodeB);
+		return Math.abs(voltageA - voltageB) / resistance;
+	}
 	public <I, P, T> void removeComponent(P pos, I state) {
 		if (this.pos2componentMap.containsKey(pos)) {
 			Component<?, ?, ?> component = removeFromNetwork(pos);
@@ -217,40 +262,49 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	public <P> void updateNetwork(P position) {
 		Component<?, ?, ?> component = this.pos2componentMap.get(position);
 		if (component != null) {
-			CircuitConfiguration circuit = buildCircuit(component);
+			ElectricNetwork circuit = this.component2circuitMap.getOrDefault(component, new ElectricNetwork("ingame-level-circuit"));
+			circuit.reset();
+			buildCircuit(component, circuit);
+			this.circuitNetworks.add(circuit);
+			
 			SPICE.processCircuit(circuit);
-			double groundVoltage = SPICE.vectorData().get(CircuitConfiguration.GND_NODE);
+			double groundVoltage = SPICE.vectorData().get(ElectricNetwork.GND_NODE);
 			SPICE.vectorData().forEach((hashName, value) ->  {
 				ConnectionPoint node = circuit.getNode(hashName);
-				this.node2stateMap.put(node, new NodeState(-groundVoltage + value));
+				circuit.nodeVoltages.put(node, -groundVoltage + value);
 			});
+			
 			circuit.getComponents().forEach((comp) -> {
 				
-				// TODO Notify update
-				try {
-					double vA = this.node2stateMap.get(comp.getNodes(level)[0]).value();
-					double vB = this.node2stateMap.get(comp.getNodes(level)[1]).value();
-					double r = circuit.getSerialResistance(comp.getNodes(level)[0], comp.getNodes(level)[1]);
-					double v = Math.abs(vA - vB);
-					double i = v/r;
-					
-					System.out.println("COMPONENT VOLTAGES: " + comp.toString() + " " + this.node2stateMap.get(comp.getNodes(level)[0]).value() + "V");
-					System.out.println("COMPONENT CURRENTS: " + comp.toString() + " " + i + "I");
-				} catch (NullPointerException e) {
-					e.printStackTrace();
-				}
+				this.component2circuitMap.put(comp, circuit);
+				
+				comp.onNetworkChange(level);
+				
+//				// TODO Notify update
+//				try {
+//					double vA = this.node2stateMap.get(comp.getNodes(level)[0]).voltage();
+//					double vB = this.node2stateMap.get(comp.getNodes(level)[1]).voltage();
+//					double r = circuit.getSerialResistance(comp.getNodes(level)[0], comp.getNodes(level)[1]);
+//					double v = Math.abs(vA - vB);
+//					double i = v/r;
+//					
+//					System.out.println("COMPONENT VOLTAGES: " + comp.toString() + " " + this.node2stateMap.get(comp.getNodes(level)[0]).voltage() + "V");
+//					System.out.println("COMPONENT CURRENTS: " + comp.toString() + " " + i + "I");
+//				} catch (NullPointerException e) {
+//					e.printStackTrace();
+//				}
 				
 			});
+			
 		}
 	}
 	
-	private CircuitConfiguration buildCircuit(Component<?, ?, ?> component) {
-		CircuitConfiguration circuit = new CircuitConfiguration("recalc-circuit");
+	
+	private void buildCircuit(Component<?, ?, ?> component, ElectricNetwork circuit) {
 		buildCircuit0(component, null, circuit);
 		circuit.complete();
-		return circuit;
 	}
-	private void buildCircuit0(Component<?, ?, ?> component, ConnectionPoint node, CircuitConfiguration circuit) {
+	private void buildCircuit0(Component<?, ?, ?> component, ConnectionPoint node, ElectricNetwork circuit) {
 		
 		if (circuit.getComponents().contains(component)) return;
 		circuit.getComponents().add(component);

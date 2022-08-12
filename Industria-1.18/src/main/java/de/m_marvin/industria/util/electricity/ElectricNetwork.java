@@ -24,6 +24,7 @@ public class ElectricNetwork {
 	protected StringBuilder stringBuilder;
 	protected Set<String> modelMap;
 	protected int resistorCount = 1;
+	protected int loadCount = 1;
 	protected int sourceCount = 1;
 	
 	public ElectricNetwork(String titleInfo) {
@@ -64,20 +65,37 @@ public class ElectricNetwork {
 		stringBuilder.append("R" + (resistorCount++) + " " + nodeA + " " + nodeB + " " + resistance + "\n");
 	}
 	
+	protected void addLoad(String nodeA, String nodeB, double current) {
+		int id = this.loadCount++;
+		String diodeModel = "D";
+		String modelName = "M" + Integer.toHexString(diodeModel.hashCode());
+		if (this.modelMap.add(diodeModel)) stringBuilder.append(".model " + modelName + " " + diodeModel + "\n");
+//		stringBuilder.append("I" + id + "l " + nodeA + " " + nodeB + " " + current + "\n");
+//		stringBuilder.append("D" + id + "l " + nodeB + " " + nodeA + " " + modelName + "\n");
+		//stringBuilder.append("B" + id + "l " + nodeA + " " + nodeB + " I=" + current + "\n");
+	}
+	
 	protected void addSource(String nodeP, String nodeN, double voltage, double maxCurrent) {
 		if (maxCurrent < 0) {
 			stringBuilder.append("V" + (sourceCount++) + "v " + nodeP + " " + nodeN + " " + voltage + "\n");
 		} else {
 			int id = sourceCount++;
-			String nodeL = "node-limit" + id;
-			// Voltage Source
-			stringBuilder.append("V" + id + "v " + nodeP + " " + nodeL + " " + voltage + "\n");
-			// Current Limitation
-			String diodeModel = "D(Ron=0 Roff=1G Vfwd=0)";
+			String nodeL1 = "node-limit" + id + "-1";
+			String nodeL2 = "node-limit" + id + "-2";
+			String diodeModel = "D";
 			String modelName = "M" + Integer.toHexString(diodeModel.hashCode());
 			if (this.modelMap.add(diodeModel)) stringBuilder.append(".model " + modelName + " " + diodeModel + "\n");
-			stringBuilder.append("I" + id + "v " + nodeN + " " + nodeL + " " + maxCurrent + "\n");
-			stringBuilder.append("D" + id + "v " + nodeL + " " + nodeN + " " + modelName + "\n");
+			stringBuilder.append("V" + id + "v " + nodeP + " " + nodeL1 + " " + voltage + "\n");
+			
+			stringBuilder.append("I" + id + "v1 " + nodeL2 + " " + nodeL1 + " " + maxCurrent + "\n");
+			stringBuilder.append("I" + id + "v2 " + nodeL2 + " " + nodeN + " " + maxCurrent + "\n");
+			stringBuilder.append("D" + id + "v1 " + nodeL1 + " " + nodeL2 + " " + modelName + "\n");
+			stringBuilder.append("D" + id + "v2 " + nodeN + " " + nodeL2 + " " + modelName + "\n");
+			
+//			stringBuilder.append("I" + id + "v1 " + nodeL2 + " " + nodeL1 + " " + maxCurrent + "\n");
+//			stringBuilder.append("D" + id + "v1 " + nodeL1 + " " + nodeL2 + " " + modelName + "\n");
+//			stringBuilder.append("I" + id + "v2 " + nodeL2 + " " + nodeN + " " + maxCurrent + "\n");
+//			stringBuilder.append("D" + id + "v2 " + nodeN + " " + nodeL2 + " " + modelName + "\n");
 		}
 	}
 	
@@ -93,6 +111,10 @@ public class ElectricNetwork {
 	
 	public void addSource(ConnectionPoint node, double voltage, double maxCurrent) {
 		addSource(getNodeName(node), GND_NODE, voltage, maxCurrent);
+	}
+	
+	public void addFixLoad(ConnectionPoint node, double current) {
+		addLoad(getNodeName(node), GND_NODE, current);
 	}
 	
 	@Override
@@ -121,6 +143,9 @@ public class ElectricNetwork {
 		this.serialResistance.clear();
 		this.components.clear();
 		this.modelMap.clear();
+		this.resistorCount = 1;
+		this.sourceCount = 1;
+		this.loadCount = 1;
 	}
 	
 }

@@ -4,6 +4,8 @@ import java.util.function.Supplier;
 
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.registries.Conduits;
+import de.m_marvin.industria.registries.ModCapabilities;
+import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier.ConnectionPoint;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
@@ -13,6 +15,11 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 public interface IElectric<I, P, T> extends IForgeRegistryEntry<T> {
+	
+	public default void updateNetwork(Level level, P position) {
+		ElectricNetworkHandlerCapability handler = UtilityHelper.getCapability(level, ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		handler.updateNetwork(position);
+	}
 	
 	public default void onNetworkNotify(Level level, I instance, P position) {}
 	public void plotCircuit(Level level, I instance, P position, ElectricNetwork circuit);

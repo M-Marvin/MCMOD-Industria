@@ -22,7 +22,7 @@ public class ElectricConduit extends Conduit implements IElectricConduit {
 		
 		ConnectionPoint[] nodes = getConnections(level, position, instance);
 		
-		circuit.addSerialResistance(nodes[0], nodes[1], 1);
+		circuit.addSerialResistance(nodes[0], nodes[1], 0);
 		
 	}
 	

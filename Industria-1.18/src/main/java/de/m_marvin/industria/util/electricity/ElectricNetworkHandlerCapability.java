@@ -268,11 +268,16 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			this.circuitNetworks.add(circuit);
 			
 			SPICE.processCircuit(circuit);
-			double groundVoltage = SPICE.vectorData().get(ElectricNetwork.GND_NODE);
-			SPICE.vectorData().forEach((hashName, value) ->  {
-				ConnectionPoint node = circuit.getNode(hashName);
-				circuit.nodeVoltages.put(node, -groundVoltage + value);
-			});
+			if (!SPICE.vectorData().containsKey(ElectricNetwork.GND_NODE)) {
+				Industria.LOGGER.log(org.apache.logging.log4j.Level.ERROR, "Could not read data from SPICE results!");
+			} else {
+				double groundVoltage = SPICE.vectorData().get(ElectricNetwork.GND_NODE);
+				SPICE.vectorData().forEach((hashName, value) ->  {
+					ConnectionPoint node = circuit.getNode(hashName);
+					circuit.nodeVoltages.put(node, -groundVoltage + value);
+				});
+			}
+			
 			
 			circuit.getComponents().forEach((comp) -> {
 				

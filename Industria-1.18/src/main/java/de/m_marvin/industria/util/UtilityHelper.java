@@ -18,6 +18,7 @@ import de.m_marvin.industria.util.conduit.ConduitHitResult;
 import de.m_marvin.industria.util.conduit.ConduitPos;
 import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier.ConnectionPoint;
 import de.m_marvin.industria.util.conduit.PlacedConduit;
+import de.m_marvin.industria.util.electricity.ElectricNetworkHandlerCapability;
 import de.m_marvin.industria.util.unifiedvectors.Vec2f;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
@@ -39,6 +40,8 @@ import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
@@ -425,6 +428,17 @@ public class UtilityHelper {
 	public static void removeConduitFromClient(Level level, ConduitPos conduitPosition, boolean dropItems) {
 		UtilityHelper.removeConduit(level, conduitPosition, dropItems);
 		Industria.NETWORK.sendToServer(new CBreakConduitPackage(conduitPosition, dropItems));
+	}
+	
+	public static <T extends Capability<C>, C extends ICapabilitySerializable<?>> C getCapability(Level level, T cap) {
+		LazyOptional<C> conduitHolder = level.getCapability(cap);
+		if (!conduitHolder.isPresent()) throw new IllegalStateException("Capability " + cap + " not attached on level " + level);
+		return conduitHolder.resolve().get();
+	}
+
+	public static void updateElectricNetwork(Level level, BlockPos worldPosition) {
+		ElectricNetworkHandlerCapability handler = getCapability(level, ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		handler.updateNetwork(worldPosition);
 	}
 	
 }

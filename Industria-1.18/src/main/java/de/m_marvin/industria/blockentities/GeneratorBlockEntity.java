@@ -1,12 +1,23 @@
 package de.m_marvin.industria.blockentities;
 
+import java.util.List;
+
 import com.simibubi.create.content.contraptions.base.KineticTileEntity;
+import com.simibubi.create.content.contraptions.goggles.IHaveGoggleInformation;
 
 import de.m_marvin.industria.registries.ModBlockEntities;
+import de.m_marvin.industria.util.Formater;
+import de.m_marvin.industria.util.UtilityHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class GeneratorBlockEntity extends KineticTileEntity {
+public class GeneratorBlockEntity extends KineticTileEntity implements IHaveGoggleInformation {
+	
+	// TODO CONFIG
+	public static float motorStress = 10;
+	public static float stressToCurrentRate = 1;
+	public static float voltagePerRPM = 1;
 	
 	public GeneratorBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.GENERATOR.get(), pos, state);
@@ -15,44 +26,35 @@ public class GeneratorBlockEntity extends KineticTileEntity {
 	
 	@Override
 	public float calculateStressApplied() {
-		float impact = 10;
-		this.lastStressApplied = impact;
-		return impact;
-	}
-	
-	@Override
-	public void tick() {
-		super.tick();
-		
-		System.out.println(this.getSpeed());
+		this.lastStressApplied = motorStress;
+		return motorStress;
 	}
 	
 	@Override
 	public void onSpeedChanged(float previousSpeed) {
 		super.onSpeedChanged(previousSpeed);
-		
-		System.out.println("Speed: " + this.getSpeed());
-		
-		double voltage = Math.abs(this.getSpeed() * 2);
-		double energy = Math.abs(this.getSpeed() * 10);
-		double current = energy / voltage;
-		
-		System.out.println("Energy: " + energy + "W");
-		System.out.println("Voltage: " + voltage + "V");
-		System.out.println("Current: " + current + "I");
-		
+		UtilityHelper.updateElectricNetwork(level, worldPosition);
 	}
 	
 	public double getVoltage() {
-		return Math.abs(this.getSpeed() * 2);
+		return Math.abs(this.getSpeed() * voltagePerRPM);
 	}
 	
 	public double getCurrent() {
-		return getPower() / getVoltage();
+		return motorStress * stressToCurrentRate;
 	}
 	
 	public double getPower() {
-		return Math.abs(this.getSpeed() * 10);
+		return getVoltage() * getCurrent();
+	}
+	
+	@Override
+	public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+		super.addToGoggleTooltip(tooltip, isPlayerSneaking);
+		Formater.build().space(4).text("Power:").space().text("" + getPower()).addTooltip(tooltip);
+		Formater.build().space(4).text("Voltage:").space().text("" + getVoltage()).addTooltip(tooltip);
+		Formater.build().space(4).text("Current:").space().text("" + getCurrent()).addTooltip(tooltip);
+		return true;
 	}
 	
 }

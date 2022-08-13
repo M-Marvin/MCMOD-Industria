@@ -3,6 +3,7 @@ package de.m_marvin.industria.util.electricity;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.IntFunction;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.registries.ModCapabilities;
@@ -30,10 +31,6 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid=Industria.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class ElectricNetworkHandlerCapability implements ICapabilitySerializable<ListTag> {
-	
-	public static final float MAX_RESISTANCE = 100000000;
-	
-	public static int debug = 0;
 	
 	/* Capability handling */
 	
@@ -138,7 +135,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	}
 	
 	/* ElectricNetwork handling */
-	
+		
 	public static record Component<I, P, T>(P pos, IElectric<I, P, T> type, I instance) {
 		public void serializeNbt(CompoundTag nbt) {
 			IElectric.Type componentType = IElectric.Type.getType(this.type);
@@ -268,16 +265,26 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			this.circuitNetworks.add(circuit);
 			
 			SPICE.processCircuit(circuit);
-			if (!SPICE.vectorData().containsKey(ElectricNetwork.GND_NODE)) {
-				Industria.LOGGER.log(org.apache.logging.log4j.Level.ERROR, "Could not read data from SPICE results!");
-			} else {
-				double groundVoltage = SPICE.vectorData().get(ElectricNetwork.GND_NODE);
-				SPICE.vectorData().forEach((hashName, value) ->  {
-					ConnectionPoint node = circuit.getNode(hashName);
-					circuit.nodeVoltages.put(node, -groundVoltage + value);
-				});
-			}
+//			if (!SPICE.vectorData().containsKey(ElectricNetwork.GND_NODE)) {
+//				Industria.LOGGER.log(org.apache.logging.log4j.Level.ERROR, "Could not read data from SPICE results!");
+//			} else {
+//				//double groundVoltage = SPICE.vectorData().get(ElectricNetwork.GND_NODE);
+//				SPICE.vectorData().keySet().stream().filter((s) -> s.startsWith("node")).forEach((hashName) ->  {
+//					Set<ConnectionPoint> nodes = circuit.getNodes(hashName);
+//					if (nodes != null) {
+//						System.out.println(-groundVoltage + SPICE.vectorData().get(hashName));
+//						nodes.forEach((node) -> circuit.nodeVoltages.put(node, -groundVoltage + SPICE.vectorData().get(hashName)));
+//					}
+//				});
+//			}
 			
+			SPICE.vectorData().keySet().stream().filter((s) -> s.startsWith("node")).forEach((hashName) ->  {
+				Set<ConnectionPoint> nodes = circuit.getNodes(hashName);
+				if (nodes != null) {
+					System.out.println(SPICE.vectorData().get(hashName));
+					nodes.forEach((node) -> circuit.nodeVoltages.put(node, SPICE.vectorData().get(hashName)));
+				}
+			});
 			
 			circuit.getComponents().forEach((comp) -> {
 				

@@ -44,7 +44,8 @@ public class MotorBlockEntity extends GeneratingKineticTileEntity implements IHa
 	public double getCurrent() {
 		float stressPercent = 1F; // TODO
 		float requiredStress = maxMotorStress * stressPercent;
-		return currentPerStress * requiredStress;
+		return 9.9;
+		//return currentPerStress * requiredStress;
 	}
 	 
 	@Override

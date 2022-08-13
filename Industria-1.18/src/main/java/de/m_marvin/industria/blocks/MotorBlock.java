@@ -155,8 +155,8 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 			System.out.println(((GeneratorBlockEntity) blockEntity).getCurrent() + " " + ((GeneratorBlockEntity) blockEntity).getVoltage() + " " + level.isClientSide());
 			circuit.addSource(points[0], ((GeneratorBlockEntity) blockEntity).getVoltage(), ((GeneratorBlockEntity) blockEntity).getCurrent());
 		} else if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.MOTOR && blockEntity instanceof MotorBlockEntity) {
-			//circuit.addFixLoad(points[0], ((MotorBlockEntity) blockEntity).getCurrent());
-			circuit.addParalelResistance(points[0], 50);
+			circuit.addLoad(points[0], ((MotorBlockEntity) blockEntity).getCurrent());
+			//circuit.addParalelResistance(points[0], 50);
 		}
 		circuit.addSerialResistance(points[0], points[1], 0);
 		circuit.addSerialResistance(points[1], points[2], 0);

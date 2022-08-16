@@ -6,3 +6,6 @@ Grün             Feuchtwarme Biome, Agressiv                      z.B. Jungle
 Feuerameise      Gemäßigte und Trockenwarme Biome, Agressiv       z.B. Wald, Plains, Savanne
 
 Keine Ameisen: Verschneite Biome, Kalte Biome, Gebirgsbiome, Ozeane, Pilzland, Höhlen
+
+Nahkampfangriff : Ameise nähert sich Spieler und verursacht Schaden (vgl Zombie)
+Fernkampfangriff: Ameise verspritzt Säure (Partikel) aus 5-10 Blöcken Abstand auf Spieler, verursacht Schaden (evtl Effekt, der das Sichtfeld beeinträchtigt?) (vgl Lama)

@@ -1,6 +1,7 @@
 package de.m_marvin.industria.blocks;
 
 import java.util.List;
+import java.util.Random;
 
 import com.simibubi.create.content.contraptions.base.DirectionalKineticBlock;
 import com.simibubi.create.content.contraptions.base.IRotate;
@@ -33,6 +34,7 @@ import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -41,6 +43,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -100,21 +103,6 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 	}
 	
 	@Override
-	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {
-		ElectricNetworkHandlerCapability networkHandler = UtilityHelper.getCapability(level, ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-		BlockEntity entity = level.getBlockEntity(position);
-		if (entity instanceof MotorBlockEntity) {
-			double voltage = networkHandler.getVoltageAt(getConnectionPoints(position, instance)[0]);
-			((MotorBlockEntity) entity).setVoltage(voltage);
-			
-			System.out.println("####################### DEBUG ########################");
-			System.out.println("Motor Voltage: " + voltage);
-			System.out.println("####################### END ##########################");
-			
-		}
-	}
-	
-	@Override
 	public Axis getRotationAxis(BlockState state) {
 		return state.getValue(FACING).getAxis();
 	}
@@ -130,6 +118,11 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 	
 	public BlockEntityType<?> getGeneratorTileEntityType() {
 		return ModBlockEntities.GENERATOR.get();
+	}
+
+	@Override
+	public ConnectionPoint[] getConnections(Level level, BlockPos pos, BlockState instance) {
+		return getConnectionPoints(pos, instance);
 	}
 	
 	@Override
@@ -156,15 +149,34 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 			circuit.addSource(points[0], ((GeneratorBlockEntity) blockEntity).getVoltage(), ((GeneratorBlockEntity) blockEntity).getCurrent());
 		} else if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.MOTOR && blockEntity instanceof MotorBlockEntity) {
 			circuit.addLoad(points[0], ((MotorBlockEntity) blockEntity).getCurrent());
-			//circuit.addParalelResistance(points[0], 50);
+			//ircuit.addParalelResistance(points[0], 50);
 		}
 		circuit.addSerialResistance(points[0], points[1], 0);
 		circuit.addSerialResistance(points[1], points[2], 0);
 	}
 	
 	@Override
-	public ConnectionPoint[] getConnections(Level level, BlockPos pos, BlockState instance) {
-		return getConnectionPoints(pos, instance);
+	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {
+		if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.MOTOR) level.scheduleTick(position, instance.getBlock(), 1);
+	}
+	
+	@Override
+	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRandom) {
+		if (pState.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR) {
+			UtilityHelper.updateElectricNetwork(pLevel, pPos);
+		} else {
+			ElectricNetworkHandlerCapability networkHandler = UtilityHelper.getCapability(pLevel, ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+			BlockEntity entity = pLevel.getBlockEntity(pPos);
+			if (entity instanceof MotorBlockEntity) {
+				double voltage = networkHandler.getVoltageAt(getConnectionPoints(pPos, pState)[0]);
+				((MotorBlockEntity) entity).setVoltage(voltage);
+				
+				System.out.println("####################### DEBUG ########################");
+				System.out.println("Motor Voltage: " + voltage);
+				System.out.println("####################### END ##########################");
+				
+			}
+		}
 	}
 	
 }

@@ -2,9 +2,11 @@ package de.m_marvin.industria.util.electricity;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier.ConnectionPoint;
 import de.m_marvin.industria.util.electricity.ElectricNetworkHandlerCapability.Component;
@@ -21,12 +23,19 @@ public class ElectricNetwork {
 	// param: 0 node+ 1 node- 2 current 3 voltage
 	public static final NetListBuilder SOURCE_BUILDER = (net, id, param) -> {
 		String md = net.addModel("sw vt=0 vh=0.001 ron=0.001 roff=10e9");
-		return    "V1"+id+" N1"+id+" N2"+id+" "+param[3]+"\n"
-				+ "I1"+id+" N3"+id+" N2"+id+" "+param[2]+"\n"
-				+ "S1"+id+" N2"+id+" N3"+id+" N2"+id+" N3"+id+" "+md+"\n"
-				+ "I2"+id+" N3"+id+" "+param[1]+" "+param[2]+"\n"
-				+ "S3"+id+" "+param[1]+" N3"+id+" "+param[1]+" N3"+id+" "+md+"\n"
-				+ "S4"+id+" N1"+id+" "+param[0]+" N1"+id+" "+param[0]+" "+md+"\n";
+		return    "I1"+id+" N1"+id+" N3"+id+" "+param[2]+"\n"
+				+ "I2"+id+" N1"+id+" "+param[1]+" "+param[2]+"\n"
+				+ "V1"+id+" N2"+id+" N3"+id+" "+param[3]+"\n"
+				+ "S1"+id+" "+param[0]+" N2"+id+" N2"+id+" "+param[0]+" "+md+"\n"
+				+ "S2"+id+" N1"+id+" N3"+id+" N3"+id+" N1"+id+" "+md+"\n"
+				+ "S3"+id+" N1"+id+" "+param[1]+" "+param[1]+" N1"+id+" "+md+"\n";
+		
+//		return    "V1"+id+" N1"+id+" N2"+id+" "+param[3]+"\n"
+//				+ "I1"+id+" N3"+id+" N2"+id+" "+param[2]+"\n"
+//				+ "S1"+id+" N2"+id+" N3"+id+" N2"+id+" N3"+id+" "+md+"\n"
+//				+ "I2"+id+" N3"+id+" "+param[1]+" "+param[2]+"\n"
+//				+ "S3"+id+" "+param[1]+" N3"+id+" N3"+id+" "+param[1]+" "+md+"\n"
+//				+ "S4"+id+" N1"+id+" "+param[0]+" "+param[0]+" N1"+id+" "+md+"\n";
 	};
 	
 	// param: 0 nodeA 1 nodeB 2 resistance
@@ -36,7 +45,9 @@ public class ElectricNetwork {
 	
 	// param 0 node+ 1 node- 2 current
 	public static final NetListBuilder LOAD_BUILDER = (net, id, param) -> {
-		return    "I1"+id+" "+param[0]+" "+param[1]+" "+param[2]+"\n";
+		String md = net.addModel("sw vt=0 vh=0.001 ron=0.001 roff=10e9");
+		return    "I1"+id+" "+param[0]+" "+param[1]+" "+param[2]+"\n"
+				+ "S1"+id+" "+param[0]+" "+param[1]+" "+param[1]+" "+param[0]+" "+md+"\n";
 	};
 	
 	// Stored results
@@ -44,6 +55,7 @@ public class ElectricNetwork {
 	protected Map<ConnectionPoint, Double> paralelResistance;
 	protected Map<ConnectionPoint, Double> nodeVoltages;
 	protected Set<Component<?, ?, ?>> components;
+	protected long lastUpdated;
 	
 	// Cache for circuit building
 	protected String title;
@@ -111,24 +123,26 @@ public class ElectricNetwork {
 			nodeSetA.get().add(nodeB);
 		} else {
 			nodeSetB.get().stream().forEach(nodeSetA.get()::add);
-			connectedNodes.remove(nodeSetB.get());
+			List<Set<String>> stream = connectedNodes.stream().filter((set) -> !set.equals(nodeSetB.get())).toList();
+			connectedNodes.clear();
+			stream.forEach(connectedNodes::add);
 		}
 	}
 	
 	protected void addLoad(String nodeA, String nodeB, double current) {
-		stringBuilder.append(LOAD_BUILDER.build(this, loadCount++ + "-l", nodeA, nodeB, String.valueOf(current)));
+		stringBuilder.append(LOAD_BUILDER.build(this, "-" + loadCount++ + "l", nodeA, nodeB, String.valueOf(current)));
 	}
 	
 	protected void addResistor(String nodeA, String nodeB, double resistance) {
 		if (resistance == 0) {
 			combineNodes(nodeA, nodeB);
 		} else {
-			stringBuilder.append(RESISTANCE_BUILDER.build(this, resistorCount++ + "-r", nodeA, nodeB, String.valueOf(resistance)));
+			stringBuilder.append(RESISTANCE_BUILDER.build(this, "-" + resistorCount++ + "r", nodeA, nodeB, String.valueOf(resistance)));
 		}
 	}
 	
 	protected void addSource(String nodeP, String nodeN, double voltage, double maxCurrent) {
-		stringBuilder.append(SOURCE_BUILDER.build(this, sourceCount++ + "-s", nodeP, nodeN, String.valueOf(maxCurrent), String.valueOf(voltage)));
+		stringBuilder.append(SOURCE_BUILDER.build(this, "-" + sourceCount++ + "s", nodeP, nodeN, String.valueOf(maxCurrent), String.valueOf(voltage)));
 	}
 	
 	public void addSerialResistance(ConnectionPoint nodeA, ConnectionPoint nodeB, double resistance) {
@@ -166,18 +180,21 @@ public class ElectricNetwork {
 		return this.nodeVoltages.getOrDefault(node, 0D);
 	}
 
-	public void complete() {
+	public void complete(long frame) {
 		this.stringBuilder.append(".end\n");
 		this.netList = this.stringBuilder.toString();
+		System.out.println("Combine " + connectedNodes.size());
 		this.connectedNodes.forEach((nodeSet) -> {
 			Set<ConnectionPoint> mapedNodes = new HashSet<ConnectionPoint>();
 			String nodeName = nodeSet.stream().findAny().get() + "-com";
+			System.out.println("Nodes " + nodeSet.size());
 			nodeSet.forEach((node) -> {
 				mapedNodes.addAll(getNodes(node));
 				netList = netList.replace(node, nodeName);
 			});
 			hash2node.put(nodeName, mapedNodes);
 		});
+		this.lastUpdated = frame;
 	}
 	
 	public void reset() {
@@ -194,6 +211,10 @@ public class ElectricNetwork {
 		this.resistorCount = 1;
 		this.sourceCount = 1;
 		this.loadCount = 1;
+	}
+
+	public boolean updatedInFrame(long frame) {
+		return this.lastUpdated == frame;
 	}
 	
 }

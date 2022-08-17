@@ -33,7 +33,10 @@ public class GeneratorBlockEntity extends KineticTileEntity implements IHaveGogg
 	@Override
 	public void onSpeedChanged(float previousSpeed) {
 		super.onSpeedChanged(previousSpeed);
-		UtilityHelper.updateElectricNetwork(level, worldPosition);
+		
+		this.level.scheduleTick(worldPosition, this.getBlockState().getBlock(), 1);
+		// SHEDULE TICK
+		
 	}
 	
 	public double getVoltage() {

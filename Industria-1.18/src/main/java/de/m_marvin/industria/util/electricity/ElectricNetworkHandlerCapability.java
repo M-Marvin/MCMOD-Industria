@@ -218,7 +218,17 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	public <I, P, T> void removeComponent(P pos, I state) {
 		if (this.pos2componentMap.containsKey(pos)) {
 			Component<?, ?, ?> component = removeFromNetwork(pos);
-			updateNetwork(component.getNodes(this.level)[0]);
+			
+			if (component != null) {
+				Set<Component<?, ?, ?>> componentsToUpdate = new HashSet<Component<?, ?, ?>>();
+				ConnectionPoint[] nodes = component.getNodes(level);
+				for (int i = 0; i < nodes.length; i++) {
+					ConnectionPoint node = nodes[i];
+					componentsToUpdate.addAll(this.node2componentMap.get(node));
+				}
+				componentsToUpdate.forEach((comp) -> updateNetwork(comp.pos()));
+				System.out.println(componentsToUpdate.size());
+			}
 		}
 	}
 	
@@ -233,7 +243,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		}
 		Component<I, P, T> component2 = new Component<I, P, T>(pos, type, instance);
 		addToNetwork(component2);
-		updateNetwork(component2.getNodes(this.level)[0]);
+		updateNetwork(pos);
 	}
 	
 	public <I, P, T> void addToNetwork(Component<I, P, T> component) {
@@ -257,9 +267,17 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	}
 	
 	public <P> void updateNetwork(P position) {
+		
 		Component<?, ?, ?> component = this.pos2componentMap.get(position);
+
+		System.out.println("UPDATE " + component);
+		
 		if (component != null) {
+
+			System.out.println("UPDATE2222 " + position);
+			
 			ElectricNetwork circuit = this.component2circuitMap.getOrDefault(component, new ElectricNetwork("ingame-level-circuit"));
+			if (circuit.updatedInFrame(this.level.getGameTime())) return;
 			circuit.reset();
 			buildCircuit(component, circuit);
 			this.circuitNetworks.add(circuit);
@@ -314,7 +332,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	
 	private void buildCircuit(Component<?, ?, ?> component, ElectricNetwork circuit) {
 		buildCircuit0(component, null, circuit);
-		circuit.complete();
+		circuit.complete(this.level.getGameTime());
 	}
 	private void buildCircuit0(Component<?, ?, ?> component, ConnectionPoint node, ElectricNetwork circuit) {
 		

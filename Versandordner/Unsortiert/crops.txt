@@ -1,11 +1,16 @@
 tomato_bush:
 
--Stadien 0-2 nochmal überarbeiten
+-Stadien 0-7
 -Übergang von 3 zu 4 erst nach Bienen-Bestäubung?
 
 
 
 strawberry_plant:
 
--Stadien 2-4 nochmal überarbeiten
+-Stadien 0-7  
 -Übergang von 3 zu 4 erst nach Bienen-Bestäubung?
+
+
+
+flax:
+- Stadien 0-5

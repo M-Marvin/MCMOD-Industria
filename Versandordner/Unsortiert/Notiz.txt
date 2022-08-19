@@ -21,3 +21,5 @@ Kleine Details, die man noch ergänzen könnte:
 10. Bauxit und Wolframit sollten nur durch die Schredder, nicht durch den Hammer, mahlbar sein, da man weder Alu noch Wolfram für Stahl braucht.
 
 11. -
+
+12. Gamerule, mit der man einstellen kann, ob Schnee durch Laub schneien und Schneeschichten erzeugen kann. (Und die auch durch Laub Schnee bei Sonne schmelzen kann). Zahlenwert = Anzahl der Blöcke Laub, durch die der Schnee (vertikal) durch schneien kann (evtl begrenzt), 0=kann gar nicht durch schneien. (Falls es mal Jahrenzeiten geben sollte, wäre das nötig, da in Wäldern sonst im Winter bei einsetzendem Schnee um die Bäume Graskreise wären. Sollte es keine geben, ist die Gamerule unnötig). Standartwert = zwischen 8 und 16?

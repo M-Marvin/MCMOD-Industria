@@ -9,3 +9,5 @@ Keine Ameisen: Verschneite Biome, Kalte Biome, Gebirgsbiome, Ozeane, Pilzland, H
 
 Nahkampfangriff : Ameise nähert sich Spieler und verursacht Schaden (vgl Zombie)
 Fernkampfangriff: Ameise verspritzt Säure (Partikel) aus 5-10 Blöcken Abstand auf Spieler, verursacht Schaden (evtl Effekt, der das Sichtfeld beeinträchtigt?) (vgl Lama)
+
+Können (wie Silberfische  bei Stein) bei Inaktivität den Ameisenhügelerdblock "befallen". Spawnen beim Abbau des Block aggressiv. (Können evtl auch ohne Abbau spawnen, dann aber neutral?)

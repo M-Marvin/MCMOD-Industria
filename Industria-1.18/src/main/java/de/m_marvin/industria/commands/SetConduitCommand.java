@@ -7,10 +7,10 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
+import de.m_marvin.industria.commands.argtypes.ConduitArgument;
 import de.m_marvin.industria.conduits.Conduit;
 import de.m_marvin.industria.registries.Conduits;
 import de.m_marvin.industria.util.UtilityHelper;
-import de.m_marvin.industria.util.commandargs.ConduitArgument;
 import de.m_marvin.industria.util.conduit.ConduitPos;
 import de.m_marvin.industria.util.conduit.PlacedConduit;
 import net.minecraft.commands.CommandSourceStack;

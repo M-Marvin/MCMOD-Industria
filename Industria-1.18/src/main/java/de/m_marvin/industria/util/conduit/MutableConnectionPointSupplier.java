@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.m_marvin.industria.util.UtilityHelper;
+import de.m_marvin.industria.util.block.IConduitConnector;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 
@@ -103,6 +105,23 @@ public class MutableConnectionPointSupplier {
 			this.connectionId = connectionId;
 			this.offset = offset;
 			this.nodeType = nodeType;
+		}
+		
+		public String getKeyString() {
+			return "Node{pos=" + this.position.asLong() + ",id=" + connectionId + "}";
+		}
+		
+		public static ConnectionPoint getFromKeyString(Level level, String keyString) {
+			try {
+				String[] s = keyString.split("pos=")[1].split("}")[0].split(",id=");
+				BlockPos position = BlockPos.of(Long.valueOf(s[0]));
+				int connectionId = Integer.valueOf(s[1]);
+				BlockState state = level.getBlockState(position);
+				if (state.getBlock() instanceof IConduitConnector connector) return connector.getConnectionPoints(position, state)[connectionId];
+				return null;
+			} catch (Exception e) {
+				return null;
+			}
 		}
 		
 		@Override

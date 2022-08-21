@@ -1,31 +1,31 @@
 * E:\GitHub\MCMOD-Industria\Versandordner\NGspice\Generator-Test.asc
 .model Ma595ab15 sw vt=0 vh=0.001 ron=0.001 roff=10e9
 
-I1-1l node-e3f48b0c-com 0 9.9
+I1-1l node-e3f48b0c-com 0 10
 S1-1l node-e3f48b0c-com 0 0 node-e3f48b0c-com Ma595ab15
 
-I1-2s N1-2s N3-2s 10.0
-I2-2s N1-2s 0 10.0
-V1-2s N2-2s N3-2s 96.0
+I1-2s N1-2s N3-2s 10.5
+I2-2s N1-2s 0 10.5
+V1-2s N2-2s N3-2s 130.0
 S1-2s node-e3f48b0c-com N2-2s N2-2s node-e3f48b0c-com Ma595ab15
 S2-2s N1-2s N3-2s N3-2s N1-2s Ma595ab15
 S3-2s N1-2s 0 0 N1-2s Ma595ab15
 
-I1-3s N1-3s N3-3s 10.0
-I2-3s N1-3s 0 10.0
-V1-3s N2-3s N3-3s 96.0
+I1-3s N1-3s N3-3s 10.5 * <<-- Produktion um 0,5 erhöhen um verluste auszugleichen
+I2-3s N1-3s 0 10.5
+V1-3s N2-3s N3-3s 69.0
 S1-3s node-e3f48b0c-com N2-3s N2-3s node-e3f48b0c-com Ma595ab15
 S2-3s N1-3s N3-3s N3-3s N1-3s Ma595ab15
 S3-3s N1-3s 0 0 N1-3s Ma595ab15
 
-I1-2l node-e3f48b0c-com 0 9.9
+I1-2l node-e3f48b0c-com 0 10
 S1-2l node-e3f48b0c-com 0 0 node-e3f48b0c-com Ma595ab15
 
 * Problem mit 0V bei inaktivem motor vvv
 
-I1-1s N1-1s N3-1s 10.0
-I2-1s N1-1s 0 10.0
-V1-1s N2-1s N3-1s 0.1
+I1-1s N1-1s N3-1s 10.5
+I2-1s N1-1s 0 10.5
+V1-1s N2-1s N3-1s 1 *  <<-- Spannungsquelle mit 0V wirkt wie ein kurzschluss, prüfung in addSource() einbauen!
 S1-1s node-e3f48b0c-com N2-1s N2-1s node-e3f48b0c-com Ma595ab15
 S2-1s N1-1s N3-1s N3-1s N1-1s Ma595ab15
 S3-1s N1-1s 0 0 N1-1s Ma595ab15

@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier.ConnectionPoint;
 import de.m_marvin.industria.util.electricity.ElectricNetworkHandlerCapability.Component;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.level.Level;
 
 public class ElectricNetwork {
 	
@@ -29,13 +31,6 @@ public class ElectricNetwork {
 				+ "S1"+id+" "+param[0]+" N2"+id+" N2"+id+" "+param[0]+" "+md+"\n"
 				+ "S2"+id+" N1"+id+" N3"+id+" N3"+id+" N1"+id+" "+md+"\n"
 				+ "S3"+id+" N1"+id+" "+param[1]+" "+param[1]+" N1"+id+" "+md+"\n";
-		
-//		return    "V1"+id+" N1"+id+" N2"+id+" "+param[3]+"\n"
-//				+ "I1"+id+" N3"+id+" N2"+id+" "+param[2]+"\n"
-//				+ "S1"+id+" N2"+id+" N3"+id+" N2"+id+" N3"+id+" "+md+"\n"
-//				+ "I2"+id+" N3"+id+" "+param[1]+" "+param[2]+"\n"
-//				+ "S3"+id+" "+param[1]+" N3"+id+" N3"+id+" "+param[1]+" "+md+"\n"
-//				+ "S4"+id+" N1"+id+" "+param[0]+" "+param[0]+" N1"+id+" "+md+"\n";
 	};
 	
 	// param: 0 nodeA 1 nodeB 2 resistance
@@ -52,7 +47,7 @@ public class ElectricNetwork {
 	
 	// Stored results
 	protected Map<Long, Double> serialResistance;
-	protected Map<ConnectionPoint, Double> paralelResistance;
+	protected Map<ConnectionPoint, Double> parallelResistance;
 	protected Map<ConnectionPoint, Double> nodeVoltages;
 	protected Set<Component<?, ?, ?>> components;
 	protected long lastUpdated;
@@ -74,11 +69,51 @@ public class ElectricNetwork {
 		this.stringBuilder.append(titleInfo + "\n");
 		this.hash2node = new HashMap<String, Set<ConnectionPoint>>();
 		this.nodeVoltages = new HashMap<ConnectionPoint, Double>();
-		this.paralelResistance = new HashMap<ConnectionPoint, Double>();
+		this.parallelResistance = new HashMap<ConnectionPoint, Double>();
 		this.serialResistance = new HashMap<Long, Double>();
 		this.components = new HashSet<Component<?, ?, ?>>();
 		this.modelMap = new HashSet<String>();
 		this.connectedNodes = new HashSet<Set<String>>();
+	}
+	
+	public CompoundTag saveNBT() {
+		CompoundTag tag = new CompoundTag();
+		CompoundTag serialResistanceTag = new CompoundTag();
+		this.serialResistance.forEach((key, value) -> serialResistanceTag.putDouble(String.valueOf(key), value));
+		CompoundTag parallelResistanceTag = new CompoundTag();
+		this.parallelResistance.forEach((key, value) -> {if (key != null) parallelResistanceTag.putDouble(key.getKeyString(), value);});
+		CompoundTag nodeVoltagesTag = new CompoundTag();
+		this.nodeVoltages.forEach((key, value) -> {if (key != null) nodeVoltagesTag.putDouble(key.getKeyString(), value);});
+		ListTag componentsTag = new ListTag();
+		this.components.forEach((component) -> {
+			CompoundTag componentTag = new CompoundTag();
+			component.serializeNbt(componentTag);
+			componentsTag.add(componentTag);
+		});
+		tag.put("SerialResistance", serialResistanceTag);
+		tag.put("ParallelResistance", parallelResistanceTag);
+		tag.put("NodeVoltages", nodeVoltagesTag);
+		tag.put("Components", componentsTag);
+		return tag;
+	}
+	
+	public void loadNBT(Level level, CompoundTag tag) {
+		CompoundTag serialResistanceTag = tag.getCompound("SerialResistance");
+		serialResistanceTag.getAllKeys().forEach((key) -> {
+			this.serialResistance.put(Long.valueOf(key), serialResistanceTag.getDouble(key));
+		});
+		CompoundTag parallelResistanceTag = tag.getCompound("ParallelResistance");
+		parallelResistanceTag.getAllKeys().forEach((key) -> {
+			this.parallelResistance.put(ConnectionPoint.getFromKeyString(level, key), parallelResistanceTag.getDouble(key));
+		});
+		CompoundTag nodeVoltagesTag = tag.getCompound("NodeVoltages");
+		nodeVoltagesTag.getAllKeys().forEach((key) -> {
+			this.nodeVoltages.put(ConnectionPoint.getFromKeyString(level, key), nodeVoltagesTag.getDouble(key));
+		});
+		ListTag componentsTag = tag.getList("Components", 10);
+		componentsTag.stream().forEach((componentTag) -> {
+			this.components.add(Component.deserializeNbt((CompoundTag) componentTag));
+		});
 	}
 	
 	public Set<Component<?, ?, ?>> getComponents() {
@@ -142,7 +177,7 @@ public class ElectricNetwork {
 	}
 	
 	protected void addSource(String nodeP, String nodeN, double voltage, double maxCurrent) {
-		stringBuilder.append(SOURCE_BUILDER.build(this, "-" + sourceCount++ + "s", nodeP, nodeN, String.valueOf(maxCurrent), String.valueOf(voltage)));
+		if (voltage > 0) stringBuilder.append(SOURCE_BUILDER.build(this, "-" + sourceCount++ + "s", nodeP, nodeN, String.valueOf(maxCurrent), String.valueOf(voltage)));
 	}
 	
 	public void addSerialResistance(ConnectionPoint nodeA, ConnectionPoint nodeB, double resistance) {
@@ -150,8 +185,8 @@ public class ElectricNetwork {
 		addResistor(getNodeName(nodeA), getNodeName(nodeB), resistance);
 	}
 	
-	public void addParalelResistance(ConnectionPoint node, double resistance) {
-		this.paralelResistance.put(node, 1 / (1 / this.paralelResistance.getOrDefault(node, 0D) + 1 / resistance));
+	public void addParallelResistance(ConnectionPoint node, double resistance) {
+		this.parallelResistance.put(node, 1 / (1 / this.parallelResistance.getOrDefault(node, 0D) + 1 / resistance));
 		addResistor(getNodeName(node), GND_NODE, resistance);
 	}
 	
@@ -163,17 +198,21 @@ public class ElectricNetwork {
 		addLoad(getNodeName(node), GND_NODE, current);
 	}
 	
+	public boolean isEmpty() {
+		return sourceCount + loadCount + resistorCount == 0;
+	}
+	
 	@Override
 	public String toString() {
-		return this.netList == null ? this.stringBuilder.toString() : netList;
+		return isEmpty() ? "EMPTY" : (this.netList == null ? this.stringBuilder.toString() : netList);
 	}
-
+	
 	public double getSerialResistance(ConnectionPoint nodeA, ConnectionPoint nodeB) {
 		return this.serialResistance.getOrDefault((long) (nodeA.hashCode() + nodeB.hashCode()), Double.MAX_VALUE);
 	}
 
-	public double getParalelResistance(ConnectionPoint node) {
-		return this.paralelResistance.getOrDefault(node, Double.MAX_VALUE);
+	public double getParallelResistance(ConnectionPoint node) {
+		return this.parallelResistance.getOrDefault(node, Double.MAX_VALUE);
 	}
 	
 	public double getVoltage(ConnectionPoint node) {
@@ -183,11 +222,9 @@ public class ElectricNetwork {
 	public void complete(long frame) {
 		this.stringBuilder.append(".end\n");
 		this.netList = this.stringBuilder.toString();
-		System.out.println("Combine " + connectedNodes.size());
 		this.connectedNodes.forEach((nodeSet) -> {
 			Set<ConnectionPoint> mapedNodes = new HashSet<ConnectionPoint>();
 			String nodeName = nodeSet.stream().findAny().get() + "-com";
-			System.out.println("Nodes " + nodeSet.size());
 			nodeSet.forEach((node) -> {
 				mapedNodes.addAll(getNodes(node));
 				netList = netList.replace(node, nodeName);
@@ -204,13 +241,13 @@ public class ElectricNetwork {
 		this.hash2node.clear();
 		this.connectedNodes.clear();
 		this.nodeVoltages.clear();
-		this.paralelResistance .clear();
+		this.parallelResistance .clear();
 		this.serialResistance.clear();
 		this.components.clear();
 		this.modelMap.clear();
-		this.resistorCount = 1;
-		this.sourceCount = 1;
-		this.loadCount = 1;
+		this.resistorCount = 0;
+		this.sourceCount = 0;
+		this.loadCount = 0;
 	}
 
 	public boolean updatedInFrame(long frame) {

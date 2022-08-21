@@ -1,14 +1,8 @@
 package de.m_marvin.industria.blocks;
 
-import java.util.List;
 import java.util.Random;
 
 import com.simibubi.create.content.contraptions.base.DirectionalKineticBlock;
-import com.simibubi.create.content.contraptions.base.IRotate;
-import com.simibubi.create.content.contraptions.components.press.MechanicalPressBlock;
-import com.simibubi.create.content.contraptions.components.structureMovement.bearing.MechanicalBearingBlock;
-import com.simibubi.create.content.contraptions.goggles.IHaveGoggleInformation;
-import com.simibubi.create.foundation.utility.Lang;
 
 import de.m_marvin.industria.blockentities.GeneratorBlockEntity;
 import de.m_marvin.industria.blockentities.MotorBlockEntity;
@@ -16,7 +10,6 @@ import de.m_marvin.industria.registries.ConduitConnectionTypes;
 import de.m_marvin.industria.registries.ModBlockEntities;
 import de.m_marvin.industria.registries.ModBlockStateProperties;
 import de.m_marvin.industria.registries.ModCapabilities;
-import de.m_marvin.industria.util.Formater;
 import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.block.IElectricConnector;
 import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier;
@@ -26,16 +19,11 @@ import de.m_marvin.industria.util.electricity.ElectricNetworkHandlerCapability;
 import de.m_marvin.industria.util.types.MotorMode;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
 import de.m_marvin.industria.util.unifiedvectors.Vec3i;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -43,7 +31,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -53,7 +40,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.util.LazyOptional;
 
 public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, IElectricConnector {
 	
@@ -92,7 +78,6 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 	
 	@Override
 	public InteractionResult use(BlockState pState, Level level, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-		
 		BlockEntity be = level.getBlockEntity(pPos);
 		if (be instanceof MotorBlockEntity) {
 			//((MotorBlockEntity) be).setGenerator(1, 1000);
@@ -145,11 +130,9 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 		ConnectionPoint[] points = CONDUIT_NODES.getNodes(position, instance);
 		BlockEntity blockEntity = level.getBlockEntity(position);
 		if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR && blockEntity instanceof GeneratorBlockEntity) {
-			System.out.println(((GeneratorBlockEntity) blockEntity).getCurrent() + " " + ((GeneratorBlockEntity) blockEntity).getVoltage() + " " + level.isClientSide());
-			circuit.addSource(points[0], ((GeneratorBlockEntity) blockEntity).getVoltage(), ((GeneratorBlockEntity) blockEntity).getCurrent());
+			circuit.addSource(points[0], ((GeneratorBlockEntity) blockEntity).getVoltage(), ((GeneratorBlockEntity) blockEntity).getCompensatedCurrent());
 		} else if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.MOTOR && blockEntity instanceof MotorBlockEntity) {
 			circuit.addLoad(points[0], ((MotorBlockEntity) blockEntity).getCurrent());
-			//ircuit.addParalelResistance(points[0], 50);
 		}
 		circuit.addSerialResistance(points[0], points[1], 0);
 		circuit.addSerialResistance(points[1], points[2], 0);
@@ -170,11 +153,6 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 			if (entity instanceof MotorBlockEntity) {
 				double voltage = networkHandler.getVoltageAt(getConnectionPoints(pPos, pState)[0]);
 				((MotorBlockEntity) entity).setVoltage(voltage);
-				
-				System.out.println("####################### DEBUG ########################");
-				System.out.println("Motor Voltage: " + voltage);
-				System.out.println("####################### END ##########################");
-				
 			}
 		}
 	}

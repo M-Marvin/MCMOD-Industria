@@ -3,7 +3,6 @@ package de.m_marvin.industria.util.electricity;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.IntFunction;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.registries.ModCapabilities;
@@ -12,8 +11,6 @@ import de.m_marvin.industria.util.conduit.ConduitEvent;
 import de.m_marvin.industria.util.conduit.ConduitEvent.ConduitPlaceEvent;
 import de.m_marvin.industria.util.conduit.IElectricConduit;
 import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier.ConnectionPoint;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -23,8 +20,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.TickEvent.ClientTickEvent;
-import net.minecraftforge.event.TickEvent.WorldTickEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -52,27 +47,39 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	
 	@Override
 	public ListTag serializeNBT() {
-		ListTag nbt = new ListTag();
-		for (Component<?, ?, ?> component : this.pos2componentMap.values()) {
-			CompoundTag componentNbt = new CompoundTag();
-			component.serializeNbt(componentNbt);
-			nbt.add(componentNbt);
+		ListTag nbt2 = new ListTag();
+		for (ElectricNetwork circuitNetwork : this.circuitNetworks) {
+			nbt2.add(circuitNetwork.saveNBT());
 		}
-		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "Saved " + nbt.size() + " electric components");
-		return nbt;
+		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "Saved " + nbt2.size() + " electric networks");
+		
+		return nbt2;
 	}
 	
 	@Override
 	public void deserializeNBT(ListTag nbt) {
 		this.pos2componentMap.clear();
 		this.node2componentMap.clear();
+		this.circuitNetworks.clear();
+		this.component2circuitMap.clear();
 		
 		for (int i = 0; i < nbt.size(); i++) {
-			CompoundTag componentNbt = nbt.getCompound(i);
-			Component<?, ?, ?> component = Component.deserializeNbt(componentNbt);
-			if (component != null) this.addToNetwork(component);
+			CompoundTag circuitTag = nbt.getCompound(i);
+			ElectricNetwork circuitNetwork = new ElectricNetwork("ingame-level-circuit");
+			circuitNetwork.loadNBT(level, circuitTag);
+			if (!circuitNetwork.isEmpty()) {
+				if (circuitNetwork.getComponents().isEmpty()) continue;
+				this.circuitNetworks.add(circuitNetwork);
+				circuitNetwork.getComponents().forEach((component) -> {
+					this.component2circuitMap.put(component, circuitNetwork);
+					if (!this.pos2componentMap.containsValue(component)) {
+						this.addToNetwork(component);
+					}
+				});
+			}
 		}
-		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "Loaded " + this.pos2componentMap.size() + "/" + nbt.size() + " electric components");
+		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "Loaded " + this.circuitNetworks.size() + "/" + nbt.size() + " electric networks");
+		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "Loaded " + this.pos2componentMap.size() + " electric components");
 	}
 	
 	public ElectricNetworkHandlerCapability(Level level) {
@@ -135,7 +142,10 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	}
 	
 	/* ElectricNetwork handling */
-		
+	
+	/*
+	 * Represents a component (can be a conduit or a block) in the electric networks
+	 */
 	public static record Component<I, P, T>(P pos, IElectric<I, P, T> type, I instance) {
 		public void serializeNbt(CompoundTag nbt) {
 			IElectric.Type componentType = IElectric.Type.getType(this.type);
@@ -166,13 +176,17 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			type.onNetworkNotify(level, instance, pos);
 		}
 	}
-
-	public static record NodeState(double voltage, ElectricNetwork circuit) {};
 	
+	/*
+	 * Returns the circuit which contains this components
+	 */
 	public ElectricNetwork getCircuit(Component<?, ?, ?> component) {
 		return this.component2circuitMap.get(component);
 	}
 	
+	/*
+	 * Returns the voltage for the node calculated last time the network was updated
+	 */
 	public double getVoltageAt(ConnectionPoint node) {
 		Set<Component<?, ?, ?>> components = this.node2componentMap.get(node);
 		if (components != null && components.size() > 0) {
@@ -185,6 +199,9 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		return 0D;
 	}
 	
+	/*
+	 * Returns the serial resistance between two nodes calculated last time the network was updated
+	 */
 	public double getSerialResistance(ConnectionPoint nodeA, ConnectionPoint nodeB) {
 		Set<Component<?, ?, ?>> components = this.node2componentMap.get(nodeA);
 		if (components != null && components.size() > 0) {
@@ -197,24 +214,35 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		return Double.MAX_VALUE;
 	}
 	
-	public double getParalelResistance(ConnectionPoint node) {
+	/*
+	 * Returns the parallel resistance (resistance to ground) for the node calculated last time the network was updated
+	 * Ignores the resistance of other components connected to the node via a wire
+	 */
+	public double getParallelResistance(ConnectionPoint node) {
 		Set<Component<?, ?, ?>> components = this.node2componentMap.get(node);
 		if (components != null && components.size() > 0) {
 			ElectricNetwork circuit = getCircuit(components.toArray(new Component<?, ?, ?>[] {})[0]);
 			if (circuit != null) {
-				double resistance =  circuit.getParalelResistance(node);
+				double resistance =  circuit.getParallelResistance(node);
 				return Double.isFinite(resistance) ? resistance : Double.MAX_VALUE;
 			}
 		}
 		return Double.MAX_VALUE;
 	}
 	
+	/*
+	 * Returns the current flowing between two nodes calculated last time the network was updated
+	 */
 	public double getCurrent(Component<?, ?, ?> component, ConnectionPoint nodeA, ConnectionPoint nodeB) {
 		double voltageA = getVoltageAt(nodeA);
 		double voltageB = getVoltageAt(nodeB);
 		double resistance = getSerialResistance(nodeA, nodeB);
 		return Math.abs(voltageA - voltageB) / resistance;
 	}
+	
+	/*
+	 * Removes a component from the network and updates it and its components
+	 */
 	public <I, P, T> void removeComponent(P pos, I state) {
 		if (this.pos2componentMap.containsKey(pos)) {
 			Component<?, ?, ?> component = removeFromNetwork(pos);
@@ -226,12 +254,18 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 					ConnectionPoint node = nodes[i];
 					componentsToUpdate.addAll(this.node2componentMap.get(node));
 				}
+				if (componentsToUpdate.isEmpty()) {
+					ElectricNetwork emptyNetwork = this.component2circuitMap.remove(component);
+					if (emptyNetwork != null) this.circuitNetworks.remove(emptyNetwork);
+				}
 				componentsToUpdate.forEach((comp) -> updateNetwork(comp.pos()));
-				System.out.println(componentsToUpdate.size());
 			}
 		}
 	}
 	
+	/*
+	 * Adds a component to the network and updates it and its components
+	 */
 	public <I, P, T> void addComponent(P pos, IElectric<I, P, T> type, I instance) {
 		Component<?, ?, ?> component = this.pos2componentMap.get(pos);
 		if (component != null) {
@@ -246,6 +280,9 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		updateNetwork(pos);
 	}
 	
+	/*
+	 * Adds a component to the network but does not couse any updates
+	 */
 	public <I, P, T> void addToNetwork(Component<I, P, T> component) {
 		this.pos2componentMap.put(component.pos, component);
 		for (ConnectionPoint node : component.type().getConnections(this.level, component.pos, component.instance())) {
@@ -255,6 +292,9 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		}
 	}
 	
+	/*
+	 * Removes a component from the network but does not couse any updates
+	 */
 	public <I, P, T> Component<I, P, T> removeFromNetwork(P pos) {
 		@SuppressWarnings("unchecked")
 		Component<I, P, T> component = (Component<I, P, T>) this.pos2componentMap.remove(pos);
@@ -266,70 +306,48 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		return component;
 	}
 	
+	/*
+	 * Updates the network which has a component at the given position
+	 */
 	public <P> void updateNetwork(P position) {
 		
 		Component<?, ?, ?> component = this.pos2componentMap.get(position);
-
-		System.out.println("UPDATE " + component);
 		
 		if (component != null) {
-
-			System.out.println("UPDATE2222 " + position);
 			
 			ElectricNetwork circuit = this.component2circuitMap.getOrDefault(component, new ElectricNetwork("ingame-level-circuit"));
+			if (!circuit.getComponents().contains(component)) circuit = new ElectricNetwork("ingame-level-circuit");
 			if (circuit.updatedInFrame(this.level.getGameTime())) return;
 			circuit.reset();
 			buildCircuit(component, circuit);
+			if (circuit.isEmpty()) return;
 			this.circuitNetworks.add(circuit);
 			
+			final ElectricNetwork circuitFinalized = circuit;
 			SPICE.processCircuit(circuit);
-//			if (!SPICE.vectorData().containsKey(ElectricNetwork.GND_NODE)) {
-//				Industria.LOGGER.log(org.apache.logging.log4j.Level.ERROR, "Could not read data from SPICE results!");
-//			} else {
-//				//double groundVoltage = SPICE.vectorData().get(ElectricNetwork.GND_NODE);
-//				SPICE.vectorData().keySet().stream().filter((s) -> s.startsWith("node")).forEach((hashName) ->  {
-//					Set<ConnectionPoint> nodes = circuit.getNodes(hashName);
-//					if (nodes != null) {
-//						System.out.println(-groundVoltage + SPICE.vectorData().get(hashName));
-//						nodes.forEach((node) -> circuit.nodeVoltages.put(node, -groundVoltage + SPICE.vectorData().get(hashName)));
-//					}
-//				});
-//			}
-			
 			SPICE.vectorData().keySet().stream().filter((s) -> s.startsWith("node")).forEach((hashName) ->  {
-				Set<ConnectionPoint> nodes = circuit.getNodes(hashName);
+				Set<ConnectionPoint> nodes = circuitFinalized.getNodes(hashName);
 				if (nodes != null) {
-					System.out.println(SPICE.vectorData().get(hashName));
-					nodes.forEach((node) -> circuit.nodeVoltages.put(node, SPICE.vectorData().get(hashName)));
+					nodes.forEach((node) -> circuitFinalized.nodeVoltages.put(node, SPICE.vectorData().get(hashName)));
 				}
 			});
 			
 			circuit.getComponents().forEach((comp) -> {
-				
-				this.component2circuitMap.put(comp, circuit);
-				
+				ElectricNetwork previousNetwork = this.component2circuitMap.put(comp, circuitFinalized);
+				if (previousNetwork != null && previousNetwork != circuitFinalized) {
+					previousNetwork.getComponents().remove(comp);
+					if (previousNetwork.getComponents().isEmpty()) this.circuitNetworks.remove(previousNetwork);
+				}
 				comp.onNetworkChange(level);
-				
-//				// TODO Notify update
-//				try {
-//					double vA = this.node2stateMap.get(comp.getNodes(level)[0]).voltage();
-//					double vB = this.node2stateMap.get(comp.getNodes(level)[1]).voltage();
-//					double r = circuit.getSerialResistance(comp.getNodes(level)[0], comp.getNodes(level)[1]);
-//					double v = Math.abs(vA - vB);
-//					double i = v/r;
-//					
-//					System.out.println("COMPONENT VOLTAGES: " + comp.toString() + " " + this.node2stateMap.get(comp.getNodes(level)[0]).voltage() + "V");
-//					System.out.println("COMPONENT CURRENTS: " + comp.toString() + " " + i + "I");
-//				} catch (NullPointerException e) {
-//					e.printStackTrace();
-//				}
-				
 			});
 			
 		}
+		
 	}
 	
-	
+	/*
+	 * Builds a ngspice netlist for the given network begining from the given gomponent
+	 */
 	private void buildCircuit(Component<?, ?, ?> component, ElectricNetwork circuit) {
 		buildCircuit0(component, null, circuit);
 		circuit.complete(this.level.getGameTime());

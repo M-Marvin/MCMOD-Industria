@@ -18,6 +18,7 @@ public class GeneratorBlockEntity extends KineticTileEntity implements IHaveGogg
 	public static float motorStress = 10;
 	public static float stressToCurrentRate = 1;
 	public static float voltagePerRPM = 1;
+	public static float lossCompensationCurrent = 0.2F;
 	
 	public GeneratorBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.GENERATOR.get(), pos, state);
@@ -45,6 +46,9 @@ public class GeneratorBlockEntity extends KineticTileEntity implements IHaveGogg
 	
 	public double getCurrent() {
 		return motorStress * stressToCurrentRate;
+	}
+	public double getCompensatedCurrent() {
+		return getCurrent() + lossCompensationCurrent;
 	}
 	
 	public double getPower() {

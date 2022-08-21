@@ -12,7 +12,6 @@ import de.m_marvin.industria.registries.NetworkPackages;
 import de.m_marvin.industria.util.Config;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 
@@ -25,14 +24,13 @@ public class Industria {
 	
 	public Industria() {
 				
+		Config.register();
 		NetworkPackages.setupPackages(NETWORK);
 		ModBlocks.register();
 		ModItems.register();
 		ModBlockEntities.register();
 		Conduits.register();
 		ModParticleTypes.register();
-		
-		Config.loadConfig(FMLPaths.CONFIGDIR.get().resolve("industria.toml"));
 		
 	}
 	

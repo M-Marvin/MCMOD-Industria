@@ -1,4 +1,4 @@
-package de.m_marvin.industria.util.commandargs;
+package de.m_marvin.industria.commands.argtypes;
 
 import java.util.Arrays;
 import java.util.Collection;

@@ -1,5 +1,7 @@
 package de.m_marvin.industria.blocks;
 
+import java.util.Random;
+
 import com.simibubi.create.content.contraptions.base.DirectionalKineticBlock;
 
 import de.m_marvin.industria.blockentities.GeneratorBlockEntity;
@@ -12,6 +14,7 @@ import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.block.IElectricConnector;
 import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier;
 import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier.ConnectionPoint;
+import de.m_marvin.industria.util.electricity.ElectricNetwork;
 import de.m_marvin.industria.util.electricity.ElectricNetworkHandlerCapability;
 import de.m_marvin.industria.util.types.MotorMode;
 import de.m_marvin.industria.util.unifiedvectors.Vec3f;
@@ -20,8 +23,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -38,7 +40,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.util.LazyOptional;
 
 public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, IElectricConnector {
 	
@@ -69,9 +70,6 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 		}
 	}
 	
-	// https://github.com/mrh0/createaddition/blob/67958eb55fac0654200fe355c2bc4fc5859de3e4/src/main/java/com/mrh0/createaddition/index/CABlocks.java#L150
-	// https://github.com/Creators-of-Create/Create/blob/mc1.18/dev/src/main/java/com/simibubi/create/content/contraptions/components/motor/CreativeMotorTileEntity.java
-	
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
@@ -80,17 +78,9 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 	
 	@Override
 	public InteractionResult use(BlockState pState, Level level, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-		
-		LazyOptional<ElectricNetworkHandlerCapability> networkHandler = level.getCapability(ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-		if (networkHandler.isPresent() && !level.isClientSide() && pHand == InteractionHand.MAIN_HAND) {
-			System.out.println("####################### DEBUG ########################");
-			networkHandler.resolve().get().calculateNetwork(pPos);
-			System.out.println("####################### END ##########################");
-		}
-		
 		BlockEntity be = level.getBlockEntity(pPos);
 		if (be instanceof MotorBlockEntity) {
-			((MotorBlockEntity) be).setGenerator(1, 1000);
+			//((MotorBlockEntity) be).setGenerator(1, 1000);
 		} else if (be instanceof GeneratorBlockEntity) {
 			((GeneratorBlockEntity) be).tick();
 		}
@@ -114,6 +104,11 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 	public BlockEntityType<?> getGeneratorTileEntityType() {
 		return ModBlockEntities.GENERATOR.get();
 	}
+
+	@Override
+	public ConnectionPoint[] getConnections(Level level, BlockPos pos, BlockState instance) {
+		return getConnectionPoints(pos, instance);
+	}
 	
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
@@ -129,33 +124,37 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 			return CONDUIT_NODES.getNodes(pos, state);
 		}
 	}
-
-	@Override
-	public float getParalelResistance(BlockState instance, ConnectionPoint n) {
-		// TODO
-		return instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR ? Float.MAX_VALUE : (3 * 50);
-	}
-
-	@Override
-	public float getSerialResistance(BlockState instance, ConnectionPoint n1, ConnectionPoint n2) {
-		return 0;
-	}
 	
 	@Override
-	public float getGeneratedVoltage(BlockState instance, ConnectionPoint n, float load) {
-		if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR) {
-			if (load > ElectricNetworkHandlerCapability.MAX_RESISTANCE) return 230;
-			float energy = 1060F;
-			float resultingVoltage = (float) Math.sqrt(load * energy);
-			return Math.min(230, resultingVoltage);
-		} else {
-			return 0;
+	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit) {
+		ConnectionPoint[] points = CONDUIT_NODES.getNodes(position, instance);
+		BlockEntity blockEntity = level.getBlockEntity(position);
+		if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR && blockEntity instanceof GeneratorBlockEntity) {
+			circuit.addSource(points[0], ((GeneratorBlockEntity) blockEntity).getVoltage(), ((GeneratorBlockEntity) blockEntity).getCompensatedCurrent());
+		} else if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.MOTOR && blockEntity instanceof MotorBlockEntity) {
+			circuit.addLoad(points[0], ((MotorBlockEntity) blockEntity).getCurrent());
 		}
+		circuit.addSerialResistance(points[0], points[1], 0);
+		circuit.addSerialResistance(points[1], points[2], 0);
 	}
 	
 	@Override
-	public ConnectionPoint[] getConnections(Level level, BlockPos pos, BlockState instance) {
-		return getConnectionPoints(pos, instance);
+	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {
+		if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.MOTOR) level.scheduleTick(position, instance.getBlock(), 1);
+	}
+	
+	@Override
+	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRandom) {
+		if (pState.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR) {
+			UtilityHelper.updateElectricNetwork(pLevel, pPos);
+		} else {
+			ElectricNetworkHandlerCapability networkHandler = UtilityHelper.getCapability(pLevel, ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+			BlockEntity entity = pLevel.getBlockEntity(pPos);
+			if (entity instanceof MotorBlockEntity) {
+				double voltage = networkHandler.getVoltageAt(getConnectionPoints(pPos, pState)[0]);
+				((MotorBlockEntity) entity).setVoltage(voltage);
+			}
+		}
 	}
 	
 }

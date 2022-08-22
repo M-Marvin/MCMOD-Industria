@@ -146,7 +146,38 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	/*
 	 * Represents a component (can be a conduit or a block) in the electric networks
 	 */
-	public static record Component<I, P, T>(P pos, IElectric<I, P, T> type, I instance) {
+	public static class Component<I, P, T> {
+		protected P pos;
+		protected I instance;
+		protected IElectric<I, P, T> type;
+		
+		public Component(P pos, IElectric<I, P, T> type, I instance) {
+			this.type = type;
+			this.instance = instance;
+			this.pos = pos;
+		}
+		
+		public P pos() {
+			return pos;
+		}
+		
+		public IElectric<I, P, T> type() {
+			return type;
+		}
+		
+		public I instance() {
+			return instance;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (obj == this) return true;
+			if (obj instanceof @SuppressWarnings("rawtypes") Component other) {
+				return this.instance.equals(other.instance) && this.pos == other.pos;
+			}
+			return false;
+		}
+		
 		public void serializeNbt(CompoundTag nbt) {
 			IElectric.Type componentType = IElectric.Type.getType(this.type);
 			this.type.serializeNBT(instance, pos, nbt);
@@ -176,6 +207,36 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			type.onNetworkNotify(level, instance, pos);
 		}
 	}
+//	public static record Component<I, P, T>(P pos, IElectric<I, P, T> type, I instance) {
+//		public void serializeNbt(CompoundTag nbt) {
+//			IElectric.Type componentType = IElectric.Type.getType(this.type);
+//			this.type.serializeNBT(instance, pos, nbt);
+//			nbt.putString("Type", this.type.getRegistryName().toString());
+//			nbt.putString("ComponentType", componentType.name().toLowerCase());
+//		}
+//		public static <I, P, T> Component<I, P, T> deserializeNbt(CompoundTag nbt) {
+//			IElectric.Type componentType = IElectric.Type.valueOf(nbt.getString("ComponentType").toUpperCase());
+//			ResourceLocation typeName = new ResourceLocation(nbt.getString("Type"));
+//			Object typeObject = componentType.getRegistry().getValue(typeName);
+//			if (typeObject instanceof IElectric) {
+//				@SuppressWarnings("unchecked")
+//				IElectric<I, P, T> type = (IElectric<I, P, T>) typeObject;
+//				I instance = type.deserializeNBTInstance(nbt);
+//				P position = type.deserializeNBTPosition(nbt);
+//				return new Component<I, P, T>(position, type, instance);
+//			}
+//			return null;
+//		}
+//		public void plotCircuit(Level level, ElectricNetwork circuit) {
+//			type.plotCircuit(level, instance, pos, circuit);
+//		}
+//		public ConnectionPoint[] getNodes(Level level) {
+//			return type.getConnections(level, pos, instance);
+//		}
+//		public void onNetworkChange(Level level) {
+//			type.onNetworkNotify(level, instance, pos);
+//		}
+//	}
 	
 	/*
 	 * Returns the circuit which contains this components
@@ -359,7 +420,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		component.plotCircuit(level, circuit);
 		
 		for (ConnectionPoint node2 : component.getNodes(level)) {
-			if (node2.equals(node)) continue; 
+			if (node2.equals(node) || this.node2componentMap.get(node2) == null) continue; 
 			for (Component<?, ?, ?> component2 : this.node2componentMap.get(node2)) {
 				buildCircuit0(component2, node2, circuit);
 			}

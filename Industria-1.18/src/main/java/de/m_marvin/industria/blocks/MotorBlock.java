@@ -2,8 +2,6 @@ package de.m_marvin.industria.blocks;
 
 import java.util.Random;
 
-import com.simibubi.create.content.contraptions.base.DirectionalKineticBlock;
-
 import de.m_marvin.industria.blockentities.GeneratorBlockEntity;
 import de.m_marvin.industria.blockentities.MotorBlockEntity;
 import de.m_marvin.industria.registries.ConduitConnectionTypes;
@@ -41,7 +39,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, IElectricConnector {
+public class MotorBlock extends BaseDirectionalKineticBlock implements EntityBlock, IElectricConnector {
 	
 	public static final VoxelShape BLOCK_SHAPE = Block.box(3, 3, 1, 13, 13, 16);
 	public static final VoxelShape BLOCK_SHAPE_VERTICAL = Block.box(3, 0, 3, 13, 15, 13);
@@ -57,7 +55,6 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 	
 	public MotorBlock(Properties properties) {
 		super(properties);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
@@ -77,42 +74,39 @@ public class MotorBlock extends DirectionalKineticBlock implements EntityBlock, 
 	}
 	
 	@Override
-	public InteractionResult use(BlockState pState, Level level, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-		BlockEntity be = level.getBlockEntity(pPos);
-		if (be instanceof MotorBlockEntity) {
-			//((MotorBlockEntity) be).setGenerator(1, 1000);
-		} else if (be instanceof GeneratorBlockEntity) {
-			((GeneratorBlockEntity) be).tick();
-		}
-		return InteractionResult.PASS;
-	}
-	
-	@Override
 	public Axis getRotationAxis(BlockState state) {
 		return state.getValue(FACING).getAxis();
 	}
 	
 	@Override
 	public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
-		return face.getAxis() == getRotationAxis(state);
+		return face == state.getValue(BlockStateProperties.FACING);
 	}
 	
-	public BlockEntityType<?> getMotorTileEntityType() {
-		return ModBlockEntities.MOTOR.get();
-	}
-	
-	public BlockEntityType<?> getGeneratorTileEntityType() {
-		return ModBlockEntities.GENERATOR.get();
-	}
-
 	@Override
 	public ConnectionPoint[] getConnections(Level level, BlockPos pos, BlockState instance) {
 		return getConnectionPoints(pos, instance);
 	}
+
+	public BlockEntityType<?> getTileEntityType(BlockState state) {
+		return state.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.MOTOR ? ModBlockEntities.MOTOR.get() : ModBlockEntities.GENERATOR.get();
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+		if (	pState.getBlock() == pNewState.getBlock() && pNewState.getBlock() == this && 
+				pState.getValue(ModBlockStateProperties.MOTOR_MODE) != pNewState.getValue(ModBlockStateProperties.MOTOR_MODE)) {
+			pLevel.removeBlockEntity(pPos);
+			pLevel.setBlockEntity(newBlockEntity(pPos, pNewState));
+		} else {
+			super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
+		}
+	}
 	
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		return state.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.MOTOR ? getMotorTileEntityType().create(pos, state) : getGeneratorTileEntityType().create(pos, state);
+		return getTileEntityType(state).create(pos, state);
 	}
 	
 	@Override

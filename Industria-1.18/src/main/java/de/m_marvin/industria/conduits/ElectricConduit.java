@@ -1,5 +1,6 @@
 package de.m_marvin.industria.conduits;
 
+import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.util.conduit.ConduitPos;
 import de.m_marvin.industria.util.conduit.IElectricConduit;
 import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier.ConnectionPoint;
@@ -19,11 +20,12 @@ public class ElectricConduit extends Conduit implements IElectricConduit {
 
 	@Override
 	public void plotCircuit(Level level, PlacedConduit instance, ConduitPos position, ElectricNetwork circuit) {
-		
 		ConnectionPoint[] nodes = getConnections(level, position, instance);
-		
+		if (nodes.length < 2) {
+			Industria.LOGGER.log(org.apache.logging.log4j.Level.WARN, "Invalid conduit in electric network detected!");
+			return;
+		}
 		circuit.addSerialResistance(nodes[0], nodes[1], 0);
-		
 	}
 	
 }

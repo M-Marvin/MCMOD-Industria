@@ -136,6 +136,7 @@ public class MutableConnectionPointSupplier {
 		
 		@Override
 		public boolean equals(Object obj) {
+			if (this == obj) return true;
 			if (obj instanceof ConnectionPoint) {
 				ConnectionPoint other = (ConnectionPoint) obj;
 				return	position.equals(other.position) &&

@@ -2,42 +2,34 @@ package de.m_marvin.industria.blockentities;
 
 import java.util.List;
 
-import com.simibubi.create.content.contraptions.base.KineticTileEntity;
-import com.simibubi.create.content.contraptions.goggles.IHaveGoggleInformation;
-
 import de.m_marvin.industria.registries.ModBlockEntities;
 import de.m_marvin.industria.util.Formater;
-import de.m_marvin.industria.util.UtilityHelper;
+import de.m_marvin.industria.util.blockentity.IIngameTooltip;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class GeneratorBlockEntity extends KineticTileEntity implements IHaveGoggleInformation {
+public class GeneratorBlockEntity extends BaseKineticBlockEntity implements IIngameTooltip {
 	
 	// TODO CONFIG
-	public static float motorStress = 10;
+	public static float generatorStress = 10;
 	public static float stressToCurrentRate = 1;
 	public static float voltagePerRPM = 1;
 	public static float lossCompensationCurrent = 0.2F;
 	
 	public GeneratorBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.GENERATOR.get(), pos, state);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
-	public float calculateStressApplied() {
-		this.lastStressApplied = motorStress;
-		return motorStress;
+	public float getStressApplied() {
+		return generatorStress;
 	}
 	
 	@Override
 	public void onSpeedChanged(float previousSpeed) {
 		super.onSpeedChanged(previousSpeed);
-		
 		this.level.scheduleTick(worldPosition, this.getBlockState().getBlock(), 1);
-		// SHEDULE TICK
-		
 	}
 	
 	public double getVoltage() {
@@ -45,7 +37,7 @@ public class GeneratorBlockEntity extends KineticTileEntity implements IHaveGogg
 	}
 	
 	public double getCurrent() {
-		return motorStress * stressToCurrentRate;
+		return generatorStress * stressToCurrentRate;
 	}
 	public double getCompensatedCurrent() {
 		return getCurrent() + lossCompensationCurrent;

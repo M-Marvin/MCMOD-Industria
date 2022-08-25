@@ -1,0 +1,20 @@
+Nur mal ein paar lose festgehaltenen Gedanken / Ideen:
+
+
+Bei KKW-Zerstörung:
+
+Sollte das KKW so sehr zerstört werden, dass der Reaktor freigelegt wird:
+- nach kurzer Zeit (0,5-1,5 Spieltage) regional begrenzt Staubregen (lässt sich das an en Gebit binden, wie Überfälle), Staubregen löst Verstrahlungseffekt aus
+- bei Regen stärkerer Strahlungseffekt
+- Über längere Zeit Verseuchung der oberen Landschaftsschichten -> Blöcke Strahlen dauerhaft leicht
+- Über längere Zeit  Schädigung der Landschaft (Feldpflanzen wachsen nicht mehr, Tiere sterben am Strahlungseffekt, Laubfärbung???, Wasser wird verstrahlt???)
+- Ablgerung von radioaktivem Material???
+
+- Umkreis etwa Radius von 200-500 Blöcken um KKW?
+- Dauer 200-500 Spieltage, dann Abklingen der Folgen (Außer radioaktive Blöcke, diese sind nur durch Abtragen und Entsorgen zu entfernen)
+
+
+
+Bei nicht-freilegender Zerstörung des KKWs:
+- Folgen nur im Umkreis von etwa 50 Blöcken um Reaktor, kein Abregnen
+- Verstrahlung der Landschaftsblöcke auch nur in diesem Umkreis

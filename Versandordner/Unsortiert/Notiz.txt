@@ -27,3 +27,13 @@ Kleine Details, die man noch ergänzen könnte:
 13. Rissiger vertrockneter Ackerboden mit Erdschollen (z.B. im Sommer)?
 
 14. Wetterbeeinflussung?
+
+15. Für die geplanten "Langzeit-Abbau-Erze" (Möglichkeiten, sie weniger OP zu machen):
+	a) Geben entweder nur sehr langsam Erze ab oder müssen immer eine "Regenerationsperiode" duchlaufen.
+	b) Können nicht abgebaut werden -> wie Spawner beim Abbau zerstört.
+	c) Können nicht mit Bohrern freigelegt werden -> Bohrer (z.B. aus Create) zerstört sie, wie Spawner.
+	d) Abschaltbar bei Weltgenerierung
+	e) Müssen erst mit einem teueren Item/Block nutzbar gemacht werden.
+	f) Extraktionsgerät verbraucht viel Energie.
+	g) Gibt es nicht für alle Erze (z.B. nicht für Dia, Smaragd oder Ancient Debris, sondern eher für Metalle wie Eisen, Zinn, Gold usw.)
+	h) Nicht verschiebbar.

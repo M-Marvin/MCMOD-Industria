@@ -48,7 +48,6 @@ public class SPICE {
 		
 		if (!nglink.isInitialized() || !callbackInitialized) {
 			nglink.initNGLink(new NativeNGLink.NGCallback() {
-				
 				@Override
 				public void reciveVecData(VectorValuesAll vecData, int vectorCount) {
 					for (VectorValue value : vecData.values()) {
@@ -61,7 +60,7 @@ public class SPICE {
 				
 				@Override
 				public void log(String s) {
-					if (Config.SPICE_DEBUG_LOGGING.get())Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "JNGLINK: " + s);
+					if (Config.SPICE_DEBUG_LOGGING.get()) Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "JNGLINK: " + s);
 				}
 				
 				@Override
@@ -72,10 +71,10 @@ public class SPICE {
 			});
 			callbackInitialized = true;
 		}
-
+		
 		try {
 			
-			if (Config.SPICE_DEBUG_LOGGING.get())Industria.LOGGER.log(Level.DEBUG, "SPICE circuit result:\n" + circuit.toString() + "\nStarting simmulation ...");
+			if (Config.SPICE_DEBUG_LOGGING.get()) Industria.LOGGER.log(Level.DEBUG, "SPICE circuit result:\n" + circuit.toString() + "\nStarting simmulation ...");
 			
 			ngVecData.clear();
 			nglink.initNGSpice(NativeExtractor.findNative("ngspice"));
@@ -86,7 +85,7 @@ public class SPICE {
 			if (Config.SPICE_DEBUG_LOGGING.get())Industria.LOGGER.log(Level.DEBUG, "Done");
 			
 		} catch (FileNotFoundException e) {
-			Industria.LOGGER.log(org.apache.logging.log4j.Level.ERROR, "Failed to find ngspice native!");
+			Industria.LOGGER.log(org.apache.logging.log4j.Level.FATAL, "Failed to find ngspice native!");
 			e.printStackTrace();
 		}
 		

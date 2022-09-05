@@ -266,7 +266,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	public double getSerialResistance(ConnectionPoint nodeA, ConnectionPoint nodeB) {
 		Set<Component<?, ?, ?>> components = this.node2componentMap.get(nodeA);
 		if (components != null && components.size() > 0) {
-			ElectricNetwork circuit = getCircuit(components.toArray(new Component<?, ?, ?>[] {})[0]);
+			ElectricNetwork circuit = getCircuit(components.stream().findAny().get()); // .toArray(new Component<?, ?, ?>[] {})[0]
 			if (circuit != null) {
 				double resistance =  circuit.getSerialResistance(nodeA, nodeB);
 				return Double.isFinite(resistance) ? resistance : Double.MAX_VALUE;
@@ -376,8 +376,8 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		
 		if (component != null) {
 			
-			ElectricNetwork circuit = this.component2circuitMap.getOrDefault(component, new ElectricNetwork("ingame-level-circuit"));
-			if (!circuit.getComponents().contains(component)) circuit = new ElectricNetwork("ingame-level-circuit");
+			ElectricNetwork circuit = this.component2circuitMap.get(component);
+			if (circuit == null || !circuit.getComponents().contains(component)) circuit = new ElectricNetwork("ingame-level-circuit");
 			if (circuit.updatedInFrame(this.level.getGameTime())) return;
 			circuit.reset();
 			buildCircuit(component, circuit);

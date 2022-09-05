@@ -2,6 +2,8 @@ package de.m_marvin.industria.blocks;
 
 import java.util.Random;
 
+import com.simibubi.create.content.contraptions.components.motor.CreativeMotorBlock;
+
 import de.m_marvin.industria.blockentities.GeneratorBlockEntity;
 import de.m_marvin.industria.blockentities.MotorBlockEntity;
 import de.m_marvin.industria.registries.ConduitConnectionTypes;
@@ -25,6 +27,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;

@@ -198,13 +198,17 @@ public class ElectricNetwork {
 		addLoad(getNodeName(node), GND_NODE, current);
 	}
 	
-	public boolean isEmpty() {
+	public boolean isPlotEmpty() {
 		return sourceCount + loadCount + resistorCount == 0;
+	}
+	
+	public boolean isEmpty() {
+		return components.isEmpty();
 	}
 	
 	@Override
 	public String toString() {
-		return isEmpty() ? "EMPTY" : (this.netList == null ? this.stringBuilder.toString() : netList);
+		return isPlotEmpty() ? "EMPTY" : (this.netList == null ? this.stringBuilder.toString() : netList);
 	}
 	
 	public double getSerialResistance(ConnectionPoint nodeA, ConnectionPoint nodeB) {

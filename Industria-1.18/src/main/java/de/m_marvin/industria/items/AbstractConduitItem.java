@@ -40,7 +40,7 @@ public abstract class AbstractConduitItem extends Item implements IScrollOverrid
 	public abstract void onPlaced(ItemStack stack, int length);
 	
 	@Override
-	public boolean overridesScroll(ItemStack stack) {
+	public boolean overridesScroll(UseOnContext context, ItemStack stack) {
 		return stack.hasTag() && stack.getTag().contains("FirstNode");
 	}
 	

@@ -46,6 +46,13 @@ public class SPICE {
 	
 	public static void processCircuit(ElectricNetwork circuit) {
 		
+		if (circuit.isPlotEmpty()) {
+			
+			if (Config.SPICE_DEBUG_LOGGING.get()) Industria.LOGGER.log(org.apache.logging.log4j.Level.WARN, "JNGLINK: Detected spice-call with empty circuit, aborted to prevent crash!");
+			return;
+			
+		}
+		
 		if (!nglink.isInitialized() || !callbackInitialized) {
 			nglink.initNGLink(new NativeNGLink.NGCallback() {
 				@Override

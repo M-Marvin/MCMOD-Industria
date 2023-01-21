@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 
-public interface IConduitConnector {
+public interface IConduitConnector extends IScrewDriveable {
 	
 	public ConnectionPoint[] getConnectionPoints(BlockPos pos, BlockState state);
 	

@@ -15,7 +15,7 @@ public class MotorBlockEntity extends BaseGeneratingKineticBlockEntity implement
 	public static float maxMotorStress = 10;
 	public static float currentPerStress = 1;
 	public static float RPMPerVoltage = 1;
-		
+	
 	public float rpm;
 	
 	public MotorBlockEntity(BlockPos pos, BlockState state) {

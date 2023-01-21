@@ -2,7 +2,10 @@ package de.m_marvin.industria.blocks;
 
 import java.util.Random;
 
+import com.simibubi.create.content.contraptions.base.DirectionalKineticBlock;
+import com.simibubi.create.content.contraptions.base.KineticTileEntity;
 import com.simibubi.create.content.contraptions.components.motor.CreativeMotorBlock;
+import com.simibubi.create.foundation.block.ITE;
 
 import de.m_marvin.industria.blockentities.GeneratorBlockEntity;
 import de.m_marvin.industria.blockentities.MotorBlockEntity;
@@ -10,6 +13,7 @@ import de.m_marvin.industria.registries.ConduitConnectionTypes;
 import de.m_marvin.industria.registries.ModBlockEntities;
 import de.m_marvin.industria.registries.ModBlockStateProperties;
 import de.m_marvin.industria.registries.ModCapabilities;
+import de.m_marvin.industria.util.CreateHelper;
 import de.m_marvin.industria.util.UtilityHelper;
 import de.m_marvin.industria.util.block.IElectricConnector;
 import de.m_marvin.industria.util.conduit.MutableConnectionPointSupplier;
@@ -24,10 +28,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -38,11 +41,11 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class MotorBlock extends BaseDirectionalKineticBlock implements EntityBlock, IElectricConnector {
+public class MotorBlock extends BaseDirectionalKineticBlock implements EntityBlock, IElectricConnector, ITE<KineticTileEntity> {
 	
 	public static final VoxelShape BLOCK_SHAPE = Block.box(3, 3, 1, 13, 13, 16);
 	public static final VoxelShape BLOCK_SHAPE_VERTICAL = Block.box(3, 0, 3, 13, 15, 13);
@@ -68,6 +71,38 @@ public class MotorBlock extends BaseDirectionalKineticBlock implements EntityBlo
 		} else {
 			return UtilityHelper.rotateShape(BLOCK_SHAPE, new Vec3f(8, 8, 8), facing, Axis.Y);
 		}
+	}
+	
+	@Override
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		final Direction preferred = this.getPreferredFacing(context);
+		if (preferred == null || (context.getPlayer() != null && context.getPlayer().isShiftKeyDown())) {
+			final Direction nearestLookingDirection = context.getNearestLookingDirection();
+			return (BlockState) this.defaultBlockState().setValue(DirectionalKineticBlock.FACING,
+					((context.getPlayer() != null && context.getPlayer().isShiftKeyDown())
+							? nearestLookingDirection
+							: nearestLookingDirection.getOpposite()));
+		}
+		return (BlockState) this.defaultBlockState().setValue(DirectionalKineticBlock.FACING,
+				preferred);
+	}
+	
+	@Override
+	public boolean isAdjustable(BlockState targetBlock, Direction face, Vec3 position) {
+		return true;
+	}
+	
+	@Override
+	public InteractionResult onScrewDriveAdjusting(BlockState targetBlock, UseOnContext context, double delta) {
+		
+		Level level = context.getLevel();
+		
+		if (!level.isClientSide()) {
+			BlockState otherModeState = targetBlock.setValue(ModBlockStateProperties.MOTOR_MODE, targetBlock.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.MOTOR ? MotorMode.GENERATOR : MotorMode.MOTOR);
+			level.setBlockAndUpdate(context.getClickedPos(), otherModeState);
+		}
+		
+		return InteractionResult.SUCCESS;
 	}
 	
 	@Override
@@ -98,6 +133,9 @@ public class MotorBlock extends BaseDirectionalKineticBlock implements EntityBlo
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+		if (pNewState.getBlock() == this && pState.getValue(BlockStateProperties.FACING) != pNewState.getValue(BlockStateProperties.FACING)) {
+			UtilityHelper.getConduitsAtBlock(pLevel, pPos).forEach(conduit -> UtilityHelper.removeConduit(pLevel, conduit.getConduitPosition(), true));
+		}
 		if (	pState.getBlock() == pNewState.getBlock() && pNewState.getBlock() == this && 
 				pState.getValue(ModBlockStateProperties.MOTOR_MODE) != pNewState.getValue(ModBlockStateProperties.MOTOR_MODE)) {
 			pLevel.removeBlockEntity(pPos);
@@ -147,11 +185,22 @@ public class MotorBlock extends BaseDirectionalKineticBlock implements EntityBlo
 		} else {
 			ElectricNetworkHandlerCapability networkHandler = UtilityHelper.getCapability(pLevel, ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 			BlockEntity entity = pLevel.getBlockEntity(pPos);
-			if (entity instanceof MotorBlockEntity) {
+			if (entity instanceof MotorBlockEntity motor) {
 				double voltage = networkHandler.getVoltageAt(getConnectionPoints(pPos, pState)[0]);
-				((MotorBlockEntity) entity).setVoltage(voltage);
+				motor.setVoltage(voltage);
 			}
 		}
+		super.tick(pState, pLevel, pPos, pRandom);
+	}
+
+	@Override
+	public Class<KineticTileEntity> getTileEntityClass() {
+		return KineticTileEntity.class;
+	}
+
+	@Override
+	public BlockEntityType<? extends MotorBlockEntity> getTileEntityType() {
+		return null;
 	}
 	
 }

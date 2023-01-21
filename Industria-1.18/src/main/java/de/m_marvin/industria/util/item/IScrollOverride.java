@@ -5,7 +5,7 @@ import net.minecraft.world.item.context.UseOnContext;
 
 public interface IScrollOverride {
 	
-	public boolean overridesScroll(ItemStack stack);
+	public boolean overridesScroll(UseOnContext context, ItemStack stack);
 	public void onScroll(UseOnContext context, double delta);
 	
 }

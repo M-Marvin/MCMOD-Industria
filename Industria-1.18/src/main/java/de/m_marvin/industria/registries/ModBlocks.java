@@ -1,6 +1,7 @@
 package de.m_marvin.industria.registries;
 
 import de.m_marvin.industria.Industria;
+import de.m_marvin.industria.blocks.ElectricMotorBlock;
 import de.m_marvin.industria.blocks.ConduitClampBlock;
 import de.m_marvin.industria.blocks.DiamondDrillBlock;
 import de.m_marvin.industria.blocks.MotorBlock;
@@ -23,5 +24,6 @@ public class ModBlocks {
 	public static final RegistryObject<Block> IRON_CONDUIT_CLAMP = BLOCKS.register("iron_conduit_clamp", () -> new ConduitClampBlock(Properties.of(Material.METAL, MaterialColor.METAL)));
 	public static final RegistryObject<Block> MOTOR = BLOCKS.register("motor", () -> new MotorBlock(Properties.of(Material.METAL, MaterialColor.METAL)));
 	public static final RegistryObject<Block> DIAMOND_DRILL = BLOCKS.register("diamond_drill", () -> new DiamondDrillBlock(Properties.of(Material.METAL, MaterialColor.METAL)));
+	public static final RegistryObject<Block> ELECTRIC_MOTOR = BLOCKS.register("electric_motor", () -> new ElectricMotorBlock(Properties.of(Material.METAL, MaterialColor.METAL)));
 	
 }

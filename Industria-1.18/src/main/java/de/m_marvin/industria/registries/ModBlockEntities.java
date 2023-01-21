@@ -17,7 +17,7 @@ public class ModBlockEntities {
 		BLOCK_ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 	
-	public static final RegistryObject<BlockEntityType<MotorBlockEntity>> MOTOR = BLOCK_ENTITIES.register("motor", () -> BlockEntityType.Builder.of(MotorBlockEntity::new, ModBlocks.MOTOR.get()).build(null));
+	public static final RegistryObject<BlockEntityType<MotorBlockEntity>> MOTOR = BLOCK_ENTITIES.register("motor", () -> BlockEntityType.Builder.of(MotorBlockEntity::new, ModBlocks.MOTOR.get(), ModBlocks.ELECTRIC_MOTOR.get()).build(null));
 	public static final RegistryObject<BlockEntityType<GeneratorBlockEntity>> GENERATOR = BLOCK_ENTITIES.register("generator", () -> BlockEntityType.Builder.of(GeneratorBlockEntity::new, ModBlocks.MOTOR.get()).build(null));
 	public static final RegistryObject<BlockEntityType<DiamondDrillBlockEntity>> DIAMOND_DRILL = BLOCK_ENTITIES.register("diamond_drill", () -> BlockEntityType.Builder.of(DiamondDrillBlockEntity::new, ModBlocks.DIAMOND_DRILL.get()).build(null));
 	

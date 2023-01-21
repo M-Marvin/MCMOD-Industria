@@ -2,6 +2,7 @@ package de.m_marvin.industria.registries;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.items.ConduitCableItem;
+import de.m_marvin.industria.items.ScrewDriverItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -27,6 +28,9 @@ public class ModItems {
 	public static final RegistryObject<ConduitCableItem> GOLD_WIRE = ITEMS.register("gold_wire", () -> new ConduitCableItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).stacksTo(16), Conduits.GOLD_WIRE));
 	public static final RegistryObject<ConduitCableItem> TIN_WIRE = ITEMS.register("tin_wire", () -> new ConduitCableItem(new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE).stacksTo(16), Conduits.TIN_WIRE));
 	
+	public static final RegistryObject<ScrewDriverItem> SCREW_DRIVER = ITEMS.register("screw_driver", () -> new ScrewDriverItem(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).stacksTo(1)));
+	
 	public static final RegistryObject<BlockItem> MOTOR = ITEMS.register("motor", () -> new BlockItem(ModBlocks.MOTOR.get(), new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE)));
+	public static final RegistryObject<BlockItem> ELECTRIC_MOTOR = ITEMS.register("electric_motor", () -> new BlockItem(ModBlocks.ELECTRIC_MOTOR.get(), new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE)));
 	
 }

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.common.base.Objects;
+
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.registries.ModCapabilities;
 import de.m_marvin.industria.util.block.IElectricConnector;
@@ -67,7 +69,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			CompoundTag circuitTag = nbt.getCompound(i);
 			ElectricNetwork circuitNetwork = new ElectricNetwork("ingame-level-circuit");
 			circuitNetwork.loadNBT(level, circuitTag);
-			if (!circuitNetwork.isEmpty()) {
+			if (!circuitNetwork.isPlotEmpty()) {
 				if (circuitNetwork.getComponents().isEmpty()) continue;
 				this.circuitNetworks.add(circuitNetwork);
 				circuitNetwork.getComponents().forEach((component) -> {
@@ -135,6 +137,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 					IElectricConduit conduit = (IElectricConduit) event.getConduitState().getConduit();
 					networkHandler.resolve().get().addComponent(event.getPosition(), conduit, event.getConduitState());
 				} else {
+					System.out.println("BREAK " + event.getConduitState());
 					networkHandler.resolve().get().removeComponent(event.getPosition(), event.getConduitState());
 				}
 			}
@@ -170,10 +173,20 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		}
 		
 		@Override
+		public int hashCode() {
+			return Objects.hashCode(this.type, this.pos);
+		}
+		
+		@Override
+		public String toString() {
+			return "Component{pos=" + this.pos() + ",type=" + this.type.toString() + ",instance=" + this.instance.toString() + "}#hash=" + this.hashCode();
+		}
+		
+		@Override
 		public boolean equals(Object obj) {
 			if (obj == this) return true;
 			if (obj instanceof @SuppressWarnings("rawtypes") Component other) {
-				return this.instance.equals(other.instance) && this.pos == other.pos;
+				return this.type.equals(other.type) && this.pos.equals(other.pos);
 			}
 			return false;
 		}
@@ -334,6 +347,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				return;
 			} else {
 				removeFromNetwork(pos);
+				
 			}
 		}
 		Component<I, P, T> component2 = new Component<I, P, T>(pos, type, instance);
@@ -342,7 +356,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	}
 	
 	/*
-	 * Adds a component to the network but does not couse any updates
+	 * Adds a component to the network but does not cause any updates
 	 */
 	public <I, P, T> void addToNetwork(Component<I, P, T> component) {
 		this.pos2componentMap.put(component.pos, component);
@@ -354,15 +368,18 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	}
 	
 	/*
-	 * Removes a component from the network but does not couse any updates
+	 * Removes a component from the network but does not cause any updates
 	 */
 	public <I, P, T> Component<I, P, T> removeFromNetwork(P pos) {
 		@SuppressWarnings("unchecked")
 		Component<I, P, T> component = (Component<I, P, T>) this.pos2componentMap.remove(pos);
-		for (ConnectionPoint node : component.type().getConnections(this.level, component.pos, component.instance())) {
-			Set<Component<?, ?, ?>> componentSet = this.node2componentMap.getOrDefault(node, new HashSet<Component<?, ?, ?>>());
-			componentSet.remove(component);
-			this.node2componentMap.put(node, componentSet);
+		if (component != null) {
+			for (ConnectionPoint node : component.type().getConnections(this.level, component.pos, component.instance())) {
+				Set<Component<?, ?, ?>> componentSet = this.node2componentMap.getOrDefault(node, new HashSet<Component<?, ?, ?>>());
+				componentSet.remove(component);
+				if (componentSet.isEmpty()) this.node2componentMap.remove(node);
+				this.node2componentMap.put(node, componentSet);
+			}
 		}
 		return component;
 	}
@@ -377,21 +394,24 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		if (component != null) {
 			
 			ElectricNetwork circuit = this.component2circuitMap.get(component);
+			
 			if (circuit == null || !circuit.getComponents().contains(component)) circuit = new ElectricNetwork("ingame-level-circuit");
 			if (circuit.updatedInFrame(this.level.getGameTime())) return;
 			circuit.reset();
 			buildCircuit(component, circuit);
 			if (circuit.isEmpty()) return;
-			this.circuitNetworks.add(circuit);
+			if (!this.circuitNetworks.contains(circuit)) this.circuitNetworks.add(circuit);
 			
 			final ElectricNetwork circuitFinalized = circuit;
-			SPICE.processCircuit(circuit);
-			SPICE.vectorData().keySet().stream().filter((s) -> s.startsWith("node")).forEach((hashName) ->  {
-				Set<ConnectionPoint> nodes = circuitFinalized.getNodes(hashName);
-				if (nodes != null) {
-					nodes.forEach((node) -> circuitFinalized.nodeVoltages.put(node, SPICE.vectorData().get(hashName)));
-				}
-			});
+			if (!circuitFinalized.isPlotEmpty()) {
+				SPICE.processCircuit(circuit);
+				SPICE.vectorData().keySet().stream().filter((s) -> s.startsWith("node")).forEach((hashName) ->  {
+					Set<ConnectionPoint> nodes = circuitFinalized.getNodes(hashName);
+					if (nodes != null) {
+						nodes.forEach((node) -> circuitFinalized.nodeVoltages.put(node, SPICE.vectorData().get(hashName)));
+					}
+				});
+			}
 			
 			circuit.getComponents().forEach((comp) -> {
 				ElectricNetwork previousNetwork = this.component2circuitMap.put(comp, circuitFinalized);

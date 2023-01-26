@@ -14,6 +14,7 @@ import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.valkyrienskies.mod.common.ValkyrienSkiesMod;
 
 import com.simibubi.create.content.contraptions.components.actors.DrillBlock;
 
@@ -36,6 +37,7 @@ public class ExampleMod
         
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+       
     }
 
     private void setup(final FMLCommonSetupEvent event)

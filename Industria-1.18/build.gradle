@@ -117,12 +117,19 @@ minecraft.runs.all {
 
 dependencies {
  
-    minecraft 'net.minecraftforge:forge:1.18.2-40.1.52'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.2.0'
+ 	
+ 	implementation fg.deobf("curse.maven:kotlinforforge-351264:4311661")
+ 	implementation fg.deobf("curse.maven:valkyrienskies-258371:4328252")
+ 	
+ 	
  	
 	implementation fg.deobf("curse.maven:flywheel-486392:3864518")
 	implementation fg.deobf("curse.maven:create-328085:3864525")
 	implementation fg.deobf("curse.maven:atlasviewer-633577:3832297")
+	
 	shade 'com.github.M-Marvin:LIBRARY-NGLink:main-SNAPSHOT'
+	shade 'com.github.M-Marvin:LIBRARY-UnifiedVectors:84185ae9f9f5d1fe796113c8608bda5a3a8ebc5d'
 	
 }
 

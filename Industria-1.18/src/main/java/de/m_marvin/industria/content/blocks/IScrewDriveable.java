@@ -1,11 +1,5 @@
 package de.m_marvin.industria.content.blocks;
 
-import com.simibubi.create.content.contraptions.base.GeneratingKineticTileEntity;
-import com.simibubi.create.content.contraptions.base.IRotate;
-import com.simibubi.create.content.contraptions.base.KineticTileEntity;
-import com.simibubi.create.foundation.utility.DirectionHelper;
-import com.simibubi.create.foundation.utility.VoxelShaper;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -35,16 +29,16 @@ public interface IScrewDriveable {
 			return InteractionResult.PASS;
 		}
 		
-		if (targetedBlock.getBlock() instanceof IRotate) {
-			KineticTileEntity.switchToBlockState(context.getLevel(), context.getClickedPos(),
-					Block.updateFromNeighbourShapes(rotatedBlock, (LevelAccessor) context.getLevel(), context.getClickedPos()));
-			final BlockEntity te = context.getLevel().getBlockEntity(context.getClickedPos());
-			if (te instanceof GeneratingKineticTileEntity) {
-				((GeneratingKineticTileEntity) te).reActivateSource = true;
-			}
-		} else {
-			context.getLevel().setBlock(context.getClickedPos(), rotatedBlock, 3);
-		}
+//		if (targetedBlock.getBlock() instanceof IRotate) {
+//			KineticTileEntity.switchToBlockState(context.getLevel(), context.getClickedPos(),
+//					Block.updateFromNeighbourShapes(rotatedBlock, (LevelAccessor) context.getLevel(), context.getClickedPos()));
+//			final BlockEntity te = context.getLevel().getBlockEntity(context.getClickedPos());
+//			if (te instanceof GeneratingKineticTileEntity) {
+//				((GeneratingKineticTileEntity) te).reActivateSource = true;
+//			}
+//		} else {
+//			context.getLevel().setBlock(context.getClickedPos(), rotatedBlock, 3);
+//		}
 		
 		
 		
@@ -73,15 +67,15 @@ public interface IScrewDriveable {
 	
 	public static BlockState getRotatedBlockState(BlockState originalState, Direction rotatePlaneFace) {
 		
-		if (originalState.hasProperty(BlockStateProperties.FACING)) {
-			return originalState.setValue(BlockStateProperties.FACING, DirectionHelper.rotateAround(originalState.getValue(BlockStateProperties.FACING), rotatePlaneFace.getAxis()));
-		}
-		if (originalState.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
-			return originalState.setValue(BlockStateProperties.HORIZONTAL_FACING, originalState.getValue(BlockStateProperties.HORIZONTAL_FACING).getCounterClockWise());
-		}
-		if (originalState.hasProperty(BlockStateProperties.AXIS)) {
-			return originalState.setValue(BlockStateProperties.AXIS, DirectionHelper.rotateAround(VoxelShaper.axisAsFace(originalState.getValue(BlockStateProperties.AXIS)), rotatePlaneFace.getAxis()).getAxis());
-		}
+//		if (originalState.hasProperty(BlockStateProperties.FACING)) {
+//			return originalState.setValue(BlockStateProperties.FACING, DirectionHelper.rotateAround(originalState.getValue(BlockStateProperties.FACING), rotatePlaneFace.getAxis()));
+//		}
+//		if (originalState.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
+//			return originalState.setValue(BlockStateProperties.HORIZONTAL_FACING, originalState.getValue(BlockStateProperties.HORIZONTAL_FACING).getCounterClockWise());
+//		}
+//		if (originalState.hasProperty(BlockStateProperties.AXIS)) {
+//			return originalState.setValue(BlockStateProperties.AXIS, DirectionHelper.rotateAround(VoxelShaper.axisAsFace(originalState.getValue(BlockStateProperties.AXIS)), rotatePlaneFace.getAxis()).getAxis());
+//		}
 		return originalState;
 	}
 	

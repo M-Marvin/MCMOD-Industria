@@ -4,11 +4,11 @@ import java.util.stream.Stream;
 
 import de.m_marvin.industria.content.registries.ModBlockStateProperties;
 import de.m_marvin.industria.content.types.WallOrientations;
-import de.m_marvin.industria.core.VoxelShapeUtility;
 import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier;
 import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier.ConnectionPoint;
 import de.m_marvin.industria.core.conduits.registy.ConduitConnectionTypes;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
+import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.univec.impl.Vec3f;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;

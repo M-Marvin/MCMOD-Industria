@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core.conduits.types;
+package de.m_marvin.industria.core.conduits.types.conduits;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;

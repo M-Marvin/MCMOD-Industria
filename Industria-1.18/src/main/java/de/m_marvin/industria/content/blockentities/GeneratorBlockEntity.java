@@ -1,14 +1,11 @@
 package de.m_marvin.industria.content.blockentities;
 
-import java.util.List;
-
-import de.m_marvin.industria.content.Formater;
 import de.m_marvin.industria.content.registries.ModBlockEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class GeneratorBlockEntity extends BaseKineticBlockEntity implements IIngameTooltip {
+public class GeneratorBlockEntity extends BlockEntity implements IIngameTooltip {
 	
 	// TODO CONFIG
 	public static float generatorStress = 10;
@@ -20,19 +17,19 @@ public class GeneratorBlockEntity extends BaseKineticBlockEntity implements IIng
 		super(ModBlockEntities.GENERATOR.get(), pos, state);
 	}
 	
-	@Override
-	public float getStressApplied() {
-		return generatorStress;
-	}
-	
-	@Override
-	public void onSpeedChanged(float previousSpeed) {
-		super.onSpeedChanged(previousSpeed);
-		this.level.scheduleTick(worldPosition, this.getBlockState().getBlock(), 1);
-	}
+//	@Override
+//	public float getStressApplied() {
+//		return generatorStress;
+//	}
+//	
+//	@Override
+//	public void onSpeedChanged(float previousSpeed) {
+//		super.onSpeedChanged(previousSpeed);
+//		this.level.scheduleTick(worldPosition, this.getBlockState().getBlock(), 1);
+//	}
 	
 	public double getVoltage() {
-		return Math.abs(this.getSpeed() * voltagePerRPM);
+		return Math.abs(16 * voltagePerRPM); // this.getSpeed()
 	}
 	
 	public double getCurrent() {
@@ -45,14 +42,14 @@ public class GeneratorBlockEntity extends BaseKineticBlockEntity implements IIng
 	public double getPower() {
 		return getVoltage() * getCurrent();
 	}
-	
-	@Override
-	public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-		super.addToGoggleTooltip(tooltip, isPlayerSneaking);
-		Formater.build().space(4).text("Power:").space().text("" + getPower()).addTooltip(tooltip);
-		Formater.build().space(4).text("Voltage:").space().text("" + getVoltage()).addTooltip(tooltip);
-		Formater.build().space(4).text("Current:").space().text("" + getCurrent()).addTooltip(tooltip);
-		return true;
-	}
+
+//	@Override
+//	public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+//		super.addToGoggleTooltip(tooltip, isPlayerSneaking);
+//		Formater.build().space(4).text("Power:").space().text("" + getPower()).addTooltip(tooltip);
+//		Formater.build().space(4).text("Voltage:").space().text("" + getVoltage()).addTooltip(tooltip);
+//		Formater.build().space(4).text("Current:").space().text("" + getCurrent()).addTooltip(tooltip);
+//		return true;
+//	}
 	
 }

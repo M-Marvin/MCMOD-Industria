@@ -1,4 +1,4 @@
-package de.m_marvin.industria.content.registries;
+package de.m_marvin.industria.core.registries;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;

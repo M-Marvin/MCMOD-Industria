@@ -1,5 +1,7 @@
 package de.m_marvin.industria.core.conduits.engine;
 
+import de.m_marvin.industria.core.conduits.types.ConduitPos;
+import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraftforge.eventbus.api.Cancelable;
 import net.minecraftforge.eventbus.api.Event;

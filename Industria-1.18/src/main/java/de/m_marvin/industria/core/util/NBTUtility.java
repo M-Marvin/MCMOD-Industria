@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core;
+package de.m_marvin.industria.core.util;
 
 import de.m_marvin.univec.impl.Vec3f;
 import de.m_marvin.univec.impl.Vec3i;

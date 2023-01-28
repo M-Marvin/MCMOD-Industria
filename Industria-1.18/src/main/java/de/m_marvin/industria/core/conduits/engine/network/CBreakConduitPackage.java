@@ -2,8 +2,8 @@ package de.m_marvin.industria.core.conduits.engine.network;
 
 import java.util.function.Supplier;
 
-import de.m_marvin.industria.core.conduits.engine.ConduitPos;
 import de.m_marvin.industria.core.conduits.engine.ServerConduitPackageHandler;
+import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 

@@ -1,19 +1,19 @@
-package de.m_marvin.industria.core.conduits.types;
+package de.m_marvin.industria.core.conduits.types.conduits;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.content.registries.ModParticleTypes;
-import de.m_marvin.industria.core.GameUtility;
-import de.m_marvin.industria.core.MathUtility;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
-import de.m_marvin.industria.core.conduits.engine.ConduitPos;
-import de.m_marvin.industria.core.conduits.engine.PlacedConduit;
 import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier.ConnectionPoint;
 import de.m_marvin.industria.core.conduits.engine.particles.ConduitParticleOption;
+import de.m_marvin.industria.core.conduits.types.ConduitPos;
+import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.conduits.types.items.ConduitCableItem;
+import de.m_marvin.industria.core.util.GameUtility;
+import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -203,8 +203,6 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		BlockPos nodeBpos = conduit.getNodeB();
 		BlockState nodeBstate = level.getBlockState(nodeBpos);
 		BlockPos cornerMin = MathUtility.getMinCorner(nodeApos, nodeBpos);
-		
-		System.out.println("Build shape between " + nodeApos + " " + nodeBpos);
 		
 		if ((nodeAstate.getBlock() instanceof IConduitConnector && nodeBstate.getBlock() instanceof IConduitConnector)) {
 			

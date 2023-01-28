@@ -1,4 +1,4 @@
-package de.m_marvin.industria.content;
+package de.m_marvin.industria.core.util;
 
 import java.util.List;
 

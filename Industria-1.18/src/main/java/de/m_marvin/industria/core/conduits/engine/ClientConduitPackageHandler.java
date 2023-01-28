@@ -3,8 +3,9 @@ package de.m_marvin.industria.core.conduits.engine;
 import java.util.HashMap;
 
 import de.m_marvin.industria.Industria;
-import de.m_marvin.industria.content.registries.ModCapabilities;
 import de.m_marvin.industria.core.conduits.engine.network.SSyncPlacedConduit;
+import de.m_marvin.industria.core.conduits.types.PlacedConduit;
+import de.m_marvin.industria.core.registries.ModCapabilities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;

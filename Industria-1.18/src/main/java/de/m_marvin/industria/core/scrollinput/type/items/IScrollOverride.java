@@ -1,4 +1,4 @@
-package de.m_marvin.industria.content.items;
+package de.m_marvin.industria.core.scrollinput.type.items;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;

@@ -1,10 +1,11 @@
-package de.m_marvin.industria.core.conduits.engine;
+package de.m_marvin.industria.core.conduits.types.conduits;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier.ConnectionPoint;
-import de.m_marvin.industria.core.conduits.types.Conduit;
+import de.m_marvin.industria.core.conduits.types.ConduitPos;
+import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.electrics.types.IElectric;
 import net.minecraft.nbt.CompoundTag;

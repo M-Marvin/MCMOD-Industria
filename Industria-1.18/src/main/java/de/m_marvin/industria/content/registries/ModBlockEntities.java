@@ -1,7 +1,6 @@
 package de.m_marvin.industria.content.registries;
 
 import de.m_marvin.industria.Industria;
-import de.m_marvin.industria.content.blockentities.DiamondDrillBlockEntity;
 import de.m_marvin.industria.content.blockentities.GeneratorBlockEntity;
 import de.m_marvin.industria.content.blockentities.MotorBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -19,6 +18,5 @@ public class ModBlockEntities {
 	
 	public static final RegistryObject<BlockEntityType<MotorBlockEntity>> MOTOR = BLOCK_ENTITIES.register("motor", () -> BlockEntityType.Builder.of(MotorBlockEntity::new, ModBlocks.MOTOR.get()).build(null));
 	public static final RegistryObject<BlockEntityType<GeneratorBlockEntity>> GENERATOR = BLOCK_ENTITIES.register("generator", () -> BlockEntityType.Builder.of(GeneratorBlockEntity::new, ModBlocks.MOTOR.get()).build(null));
-	public static final RegistryObject<BlockEntityType<DiamondDrillBlockEntity>> DIAMOND_DRILL = BLOCK_ENTITIES.register("diamond_drill", () -> BlockEntityType.Builder.of(DiamondDrillBlockEntity::new, ModBlocks.DIAMOND_DRILL.get()).build(null));
 	
 }

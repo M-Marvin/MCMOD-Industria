@@ -7,14 +7,14 @@ import java.util.Set;
 import com.google.common.base.Objects;
 
 import de.m_marvin.industria.Industria;
-import de.m_marvin.industria.content.registries.ModCapabilities;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitPlaceEvent;
-import de.m_marvin.industria.core.conduits.engine.IElectricConduit;
 import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier.ConnectionPoint;
+import de.m_marvin.industria.core.conduits.types.conduits.IElectricConduit;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.IElectric;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
+import de.m_marvin.industria.core.registries.ModCapabilities;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -139,7 +139,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 					IElectricConduit conduit = (IElectricConduit) event.getConduitState().getConduit();
 					networkHandler.resolve().get().addComponent(event.getPosition(), conduit, event.getConduitState());
 				} else {
-					System.out.println("BREAK " + event.getConduitState());
 					networkHandler.resolve().get().removeComponent(event.getPosition(), event.getConduitState());
 				}
 			}

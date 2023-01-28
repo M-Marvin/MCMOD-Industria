@@ -3,14 +3,14 @@ package de.m_marvin.industria.core.conduits.types.items;
 import java.util.function.Supplier;
 
 import de.m_marvin.industria.Industria;
-import de.m_marvin.industria.content.items.IScrollOverride;
-import de.m_marvin.industria.core.MathUtility;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
-import de.m_marvin.industria.core.conduits.engine.ConduitPos;
 import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier.ConnectionPoint;
 import de.m_marvin.industria.core.conduits.engine.network.CChangeNodesPerBlockPackage;
-import de.m_marvin.industria.core.conduits.types.Conduit;
+import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
+import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
+import de.m_marvin.industria.core.scrollinput.type.items.IScrollOverride;
+import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3f;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;

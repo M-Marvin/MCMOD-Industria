@@ -1,15 +1,15 @@
-package de.m_marvin.industria.core;
+package de.m_marvin.industria.core.registries;
 
 import java.util.Optional;
 
-import de.m_marvin.industria.content.network.CScrewDriverAdjustmentPackage;
 import de.m_marvin.industria.core.conduits.engine.network.CBreakConduitPackage;
 import de.m_marvin.industria.core.conduits.engine.network.CChangeNodesPerBlockPackage;
 import de.m_marvin.industria.core.conduits.engine.network.SSyncPlacedConduit;
+import de.m_marvin.industria.core.scrollinput.engine.network.CScrollInputPackage;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.simple.SimpleChannel;
 
-public class NetworkPackages {
+public class ModNetworkPackages {
 	
 	public static final String PROTOCOL_VERSION = "1";
 	
@@ -18,7 +18,7 @@ public class NetworkPackages {
 		network.registerMessage(id++, SSyncPlacedConduit.class, SSyncPlacedConduit::encode, SSyncPlacedConduit::decode, SSyncPlacedConduit::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		network.registerMessage(id++, CChangeNodesPerBlockPackage.class, CChangeNodesPerBlockPackage::encode, CChangeNodesPerBlockPackage::decode, CChangeNodesPerBlockPackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		network.registerMessage(id++, CBreakConduitPackage.class, CBreakConduitPackage::encode, CBreakConduitPackage::decode, CBreakConduitPackage::handle);
-		network.registerMessage(id++, CScrewDriverAdjustmentPackage.class, CScrewDriverAdjustmentPackage::encode, CScrewDriverAdjustmentPackage::decode, CScrewDriverAdjustmentPackage::handle);
+		network.registerMessage(id++, CScrollInputPackage.class, CScrollInputPackage::encode, CScrollInputPackage::decode, CScrollInputPackage::handle);
 	}
 	
 }

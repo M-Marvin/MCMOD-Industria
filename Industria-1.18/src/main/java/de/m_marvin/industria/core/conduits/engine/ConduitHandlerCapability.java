@@ -5,15 +5,17 @@ import java.util.List;
 import java.util.Optional;
 
 import de.m_marvin.industria.Industria;
-import de.m_marvin.industria.content.registries.ModCapabilities;
-import de.m_marvin.industria.core.MathUtility;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitBreakEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitPlaceEvent;
 import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier.ConnectionPoint;
 import de.m_marvin.industria.core.conduits.engine.network.SSyncPlacedConduit;
 import de.m_marvin.industria.core.conduits.registy.Conduits;
-import de.m_marvin.industria.core.conduits.types.Conduit;
+import de.m_marvin.industria.core.conduits.types.ConduitPos;
+import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
+import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
+import de.m_marvin.industria.core.registries.ModCapabilities;
+import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -30,7 +32,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.TickEvent.WorldTickEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkEvent;
@@ -123,23 +124,23 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 		}
 	}
 	
-	@SubscribeEvent
-	// Ticking conduits on client side
-	public static void onClientWorldTick(ClientTickEvent event) {
-		@SuppressWarnings("resource")
-		ClientLevel level = Minecraft.getInstance().level;
-		if (level != null) {
-			LazyOptional<ConduitHandlerCapability> conduitCap = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
-			if (conduitCap.isPresent()) {
-				conduitCap.resolve().get().update();
-			}
-		}
-	}
+//	@SubscribeEvent
+//	// Ticking conduits on client side
+//	public static void onClientWorldTick(ClientTickEvent event) {
+//		@SuppressWarnings("resource")
+//		ClientLevel level = Minecraft.getInstance().level;
+//		if (level != null) {
+//			LazyOptional<ConduitHandlerCapability> conduitCap = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
+//			if (conduitCap.isPresent()) {
+//				conduitCap.resolve().get().update();
+//			}
+//		}
+//	}
 	
 	@SubscribeEvent
 	// Ticking conduits on server side
 	public static void onWorldTick(WorldTickEvent event) {
-		ServerLevel level = (ServerLevel) event.world;
+		Level level = event.world;
 		LazyOptional<ConduitHandlerCapability> conduitCap = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitCap.isPresent()) {
 			conduitCap.resolve().get().update();

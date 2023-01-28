@@ -1,8 +1,8 @@
 package de.m_marvin.industria.core.electrics;
 
-import de.m_marvin.industria.content.registries.ModCapabilities;
-import de.m_marvin.industria.core.GameUtility;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
+import de.m_marvin.industria.core.registries.ModCapabilities;
+import de.m_marvin.industria.core.util.GameUtility;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 

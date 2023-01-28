@@ -3,8 +3,8 @@ package de.m_marvin.industria.core.conduits.engine;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.m_marvin.industria.core.MathUtility;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
+import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

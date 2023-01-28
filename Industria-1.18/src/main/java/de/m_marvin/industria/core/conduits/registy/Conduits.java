@@ -4,10 +4,10 @@ import java.util.function.Supplier;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.content.registries.ModItems;
-import de.m_marvin.industria.core.conduits.types.Conduit;
-import de.m_marvin.industria.core.conduits.types.InsulatedElectricConduit;
-import de.m_marvin.industria.core.conduits.types.UninsulatedElectricConduit;
-import de.m_marvin.industria.core.conduits.types.Conduit.ConduitType;
+import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
+import de.m_marvin.industria.core.conduits.types.conduits.InsulatedElectricConduit;
+import de.m_marvin.industria.core.conduits.types.conduits.UninsulatedElectricConduit;
+import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitType;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;

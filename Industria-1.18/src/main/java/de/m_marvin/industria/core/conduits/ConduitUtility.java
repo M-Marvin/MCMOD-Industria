@@ -5,14 +5,14 @@ import java.util.List;
 import java.util.Optional;
 
 import de.m_marvin.industria.Industria;
-import de.m_marvin.industria.content.registries.ModCapabilities;
 import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
 import de.m_marvin.industria.core.conduits.engine.ConduitHitResult;
-import de.m_marvin.industria.core.conduits.engine.ConduitPos;
-import de.m_marvin.industria.core.conduits.engine.PlacedConduit;
 import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier.ConnectionPoint;
 import de.m_marvin.industria.core.conduits.engine.network.CBreakConduitPackage;
-import de.m_marvin.industria.core.conduits.types.Conduit;
+import de.m_marvin.industria.core.conduits.types.ConduitPos;
+import de.m_marvin.industria.core.conduits.types.PlacedConduit;
+import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
+import de.m_marvin.industria.core.registries.ModCapabilities;
 import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;

@@ -1,8 +1,8 @@
-package de.m_marvin.industria.core.conduits.engine;
+package de.m_marvin.industria.core.conduits.types;
 
 import de.m_marvin.industria.core.conduits.registy.Conduits;
-import de.m_marvin.industria.core.conduits.types.Conduit;
-import de.m_marvin.industria.core.conduits.types.Conduit.ConduitShape;
+import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
+import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitShape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;

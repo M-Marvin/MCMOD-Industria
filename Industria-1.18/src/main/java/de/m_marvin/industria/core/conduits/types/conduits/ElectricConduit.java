@@ -1,10 +1,9 @@
-package de.m_marvin.industria.core.conduits.types;
+package de.m_marvin.industria.core.conduits.types.conduits;
 
 import de.m_marvin.industria.Industria;
-import de.m_marvin.industria.core.conduits.engine.ConduitPos;
-import de.m_marvin.industria.core.conduits.engine.IElectricConduit;
-import de.m_marvin.industria.core.conduits.engine.PlacedConduit;
 import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier.ConnectionPoint;
+import de.m_marvin.industria.core.conduits.types.ConduitPos;
+import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;

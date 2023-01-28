@@ -1,6 +1,7 @@
-package de.m_marvin.industria.content.registries;
+package de.m_marvin.industria.core.client.registries;
 
 import de.m_marvin.industria.Industria;
+import de.m_marvin.industria.content.registries.ModParticleTypes;
 import de.m_marvin.industria.core.client.conduits.ConduitBreakParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleEngine;

@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core.conduits.engine;
+package de.m_marvin.industria.core.conduits.types;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

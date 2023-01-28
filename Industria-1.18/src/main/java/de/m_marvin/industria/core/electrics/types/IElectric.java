@@ -2,12 +2,12 @@ package de.m_marvin.industria.core.electrics.types;
 
 import java.util.function.Supplier;
 
-import de.m_marvin.industria.content.registries.ModCapabilities;
-import de.m_marvin.industria.core.GameUtility;
 import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier.ConnectionPoint;
 import de.m_marvin.industria.core.conduits.registy.Conduits;
-import de.m_marvin.industria.core.conduits.types.Conduit;
+import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
+import de.m_marvin.industria.core.registries.ModCapabilities;
+import de.m_marvin.industria.core.util.GameUtility;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;

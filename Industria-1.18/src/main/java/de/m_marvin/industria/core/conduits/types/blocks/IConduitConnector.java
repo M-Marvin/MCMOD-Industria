@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import de.m_marvin.industria.content.registries.ModCapabilities;
 import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
 import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier.ConnectionPoint;
-import de.m_marvin.industria.core.conduits.engine.PlacedConduit;
+import de.m_marvin.industria.core.conduits.types.PlacedConduit;
+import de.m_marvin.industria.core.registries.ModCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;

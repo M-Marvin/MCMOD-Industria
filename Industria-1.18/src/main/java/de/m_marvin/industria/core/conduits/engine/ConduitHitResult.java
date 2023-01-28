@@ -1,5 +1,6 @@
 package de.m_marvin.industria.core.conduits.engine;
 
+import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.world.phys.BlockHitResult;
 

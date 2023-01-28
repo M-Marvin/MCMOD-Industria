@@ -6,10 +6,10 @@ import java.util.function.Supplier;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.core.conduits.engine.ClientConduitPackageHandler;
-import de.m_marvin.industria.core.conduits.engine.ConduitPos;
-import de.m_marvin.industria.core.conduits.engine.PlacedConduit;
 import de.m_marvin.industria.core.conduits.registy.Conduits;
-import de.m_marvin.industria.core.conduits.types.Conduit;
+import de.m_marvin.industria.core.conduits.types.ConduitPos;
+import de.m_marvin.industria.core.conduits.types.PlacedConduit;
+import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

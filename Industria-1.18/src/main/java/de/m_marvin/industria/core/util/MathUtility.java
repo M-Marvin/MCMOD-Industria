@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core;
+package de.m_marvin.industria.core.util;
 
 import java.util.HashSet;
 import java.util.List;

@@ -1,7 +1,8 @@
-package de.m_marvin.industria.core;
+package de.m_marvin.industria.core.scrollinput.engine;
 
 import de.m_marvin.industria.Industria;
-import de.m_marvin.industria.content.items.IScrollOverride;
+import de.m_marvin.industria.core.scrollinput.type.items.IScrollOverride;
+import de.m_marvin.industria.core.util.MathUtility;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
@@ -15,7 +16,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid=Industria.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE, value=Dist.CLIENT)
-public class GenricClientEventListener {
+public class ScrollInputListener {
 	
 	@SubscribeEvent
 	public static void onMouseScrollInput(InputEvent.MouseScrollEvent event) {
@@ -40,6 +41,8 @@ public class GenricClientEventListener {
 			
 			event.setCanceled(true);
 			((IScrollOverride) heldItem.getItem()).onScroll(context, event.getScrollDelta());
+			
+			
 			
 		}
 		

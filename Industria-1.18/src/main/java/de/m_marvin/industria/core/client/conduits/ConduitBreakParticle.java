@@ -1,7 +1,7 @@
 package de.m_marvin.industria.core.client.conduits;
 
 import de.m_marvin.industria.core.conduits.engine.particles.ConduitParticleOption;
-import de.m_marvin.industria.core.conduits.types.Conduit;
+import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.univec.impl.Vec2f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;

@@ -15,6 +15,7 @@ public class ModTags {
 		return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(Industria.MODID, name));
 	}
 	
+	@SuppressWarnings("unused")
 	private static TagKey<Item> createItem(String name) {
 		return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(Industria.MODID, name));
 	}

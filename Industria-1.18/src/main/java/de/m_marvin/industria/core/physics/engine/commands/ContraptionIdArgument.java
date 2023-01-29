@@ -2,6 +2,7 @@ package de.m_marvin.industria.core.physics.engine.commands;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import org.valkyrienskies.core.api.ships.Ship;
@@ -15,7 +16,11 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import de.m_marvin.industria.core.physics.PhysicUtility;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.multiplayer.ClientSuggestionProvider;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 
@@ -45,16 +50,19 @@ public class ContraptionIdArgument implements ArgumentType<Long> {
 		return verifyContraptionId(reader.readString());
 	}
 	
+	@SuppressWarnings("resource")
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
 		
-		// TODO
-		System.out.println(context.getSource());
+		if (context.getSource() instanceof SharedSuggestionProvider) {
+			
+			ClientLevel level = Minecraft.getInstance().level;
+			for (Ship contraption : PhysicUtility.getLoadedContraptions(level)) {
+				builder.suggest(CONTRAPTION_PREFIX + contraption.getId());
+			}
+			// TODO
+		}
 		
-//		for (Ship contraption : PhysicUtility.getLoadedContraptions(null)) {
-//			builder.suggest(CONTRAPTION_PREFIX + contraption.getId());
-//		}
-		builder.suggest("test");
 		return builder.buildFuture();
 	}
 	

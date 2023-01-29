@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 
 import de.m_marvin.unimat.impl.Quaternion;
 import de.m_marvin.univec.impl.Vec2f;
+import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
@@ -68,11 +69,18 @@ public class MathUtility {
 			);
 	}
 	
-	public static BlockPos getMiddle(BlockPos pos1, BlockPos pos2) {
+	public static BlockPos getMiddleBlock(BlockPos pos1, BlockPos pos2) {
 		int middleX = Math.min(pos1.getX(), pos2.getX()) + (Math.max(pos1.getX(), pos2.getX()) - Math.min(pos1.getX(), pos2.getX())) / 2;
 		int middleY = Math.min(pos1.getY(), pos2.getY()) + (Math.max(pos1.getY(), pos2.getY()) - Math.min(pos1.getY(), pos2.getY())) / 2;
 		int middleZ = Math.min(pos1.getZ(), pos2.getZ()) + (Math.max(pos1.getZ(), pos2.getZ()) - Math.min(pos1.getZ(), pos2.getZ())) / 2;
 		return new BlockPos(middleX, middleY, middleZ);
+	}
+
+	public static Vec3d getMiddle(BlockPos pos1, BlockPos pos2) {
+		double middleX = Math.min(pos1.getX(), pos2.getX()) + (Math.max(pos1.getX(), pos2.getX()) - Math.min(pos1.getX(), pos2.getX()) + 1) / 2.0;
+		double middleY = Math.min(pos1.getY(), pos2.getY()) + (Math.max(pos1.getY(), pos2.getY()) - Math.min(pos1.getY(), pos2.getY()) + 1) / 2.0;
+		double middleZ = Math.min(pos1.getZ(), pos2.getZ()) + (Math.max(pos1.getZ(), pos2.getZ()) - Math.min(pos1.getZ(), pos2.getZ()) + 1) / 2.0;
+		return new Vec3d(middleX, middleY, middleZ);
 	}
 	
 	public static double directionAngleDegrees(Direction direction) {

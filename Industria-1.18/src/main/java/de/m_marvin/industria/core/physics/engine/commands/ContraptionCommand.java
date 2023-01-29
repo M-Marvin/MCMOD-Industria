@@ -39,13 +39,13 @@ public class ContraptionCommand {
 								)
 						)
 				)
+		)
+		.then(
+				Commands.literal("remove")
 				.then(
-						Commands.literal("remove")
-						.then(
-								Commands.argument("contraption", ContraptionIdArgument.contraption())
-								.executes((source) ->
-										removeContraption(source, ContraptionIdArgument.getContraption(source, "contraption"))
-								)
+						Commands.argument("contraption", ContraptionIdArgument.contraption())
+						.executes((source) ->
+								removeContraption(source, ContraptionIdArgument.getContraption(source, "contraption"))
 						)
 				)
 		));
@@ -55,7 +55,7 @@ public class ContraptionCommand {
 		
 		AABB bounds = new AABB(MathUtility.getMinCorner(pos1, pos2), MathUtility.getMaxCorner(pos1, pos2));
 		
-		if (bounds.getXsize() > 128 || bounds.getYsize() > 128 || bounds.getZsize() > 18) {
+		if (bounds.getXsize() > 128 || bounds.getYsize() > 128 || bounds.getZsize() > 128) {
 			source.getSource().sendFailure(new TranslatableComponent("industria.commands.contraption.create.toLarge", bounds.getXsize(), bounds.getYsize(), bounds.getZsize()));
 			return 0;
 		}

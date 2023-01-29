@@ -4,19 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.joml.Matrix4dc;
+import org.joml.Quaterniond;
+import org.joml.Quaterniondc;
 import org.joml.Vector3d;
-import org.joml.Vector3dc;
 import org.joml.Vector3i;
 import org.joml.primitives.AABBic;
 import org.valkyrienskies.core.api.ships.LoadedShip;
 import org.valkyrienskies.core.api.ships.QueryableShipData;
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
+import org.valkyrienskies.core.api.ships.properties.ShipTransform;
+import org.valkyrienskies.core.impl.game.ships.ShipData;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
-import org.valkyrienskies.mod.common.assembly.ShipAssemblyKt;
 import org.valkyrienskies.mod.util.RelocationUtilKt;
 
+import de.m_marvin.industria.core.physics.types.ContraptionPosition;
+import de.m_marvin.industria.core.util.MathUtility;
+import de.m_marvin.unimat.impl.Quaternion;
 import de.m_marvin.univec.impl.Vec3d;
+import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -57,6 +63,43 @@ public class PhysicUtility {
 		return new BlockPos(position.x, position.y, position.z);
 	}
 	
+	public static ContraptionPosition getPosition(Ship contraption, boolean massCenter) {
+		if (massCenter) {
+			Vec3d position = Vec3d.fromVec(contraption.getTransform().getPositionInWorld());
+			Quaterniondc jomlQuat = contraption.getTransform().getShipToWorldRotation();
+			Quaternion orientation = new Quaternion((float) jomlQuat.x(), (float) jomlQuat.y(), (float) jomlQuat.z(), (float) jomlQuat.w());
+			return new ContraptionPosition(orientation, position);		
+		} else {
+			AABBic shipBounds = contraption.getShipAABB();
+			Vec3d shipCoordCenter = MathUtility.getMiddle(new BlockPos(shipBounds.minX(), shipBounds.minY(), shipBounds.minZ()), new BlockPos(shipBounds.maxX(), shipBounds.maxY(), shipBounds.maxZ()));
+			Vec3d shipCoordMassCenter = Vec3d.fromVec(((ShipData) contraption).getInertiaData().getCenterOfMassInShip());
+			Vec3d centerOfMassOffset = shipCoordMassCenter.sub(shipCoordCenter).add(1.0, 1.0, 1.0);
+			Vec3d position = Vec3d.fromVec(contraption.getTransform().getPositionInWorld()).sub(centerOfMassOffset);
+			Quaterniondc jomlQuat = contraption.getTransform().getShipToWorldRotation();
+			Quaternion orientation = new Quaternion((float) jomlQuat.x(), (float) jomlQuat.y(), (float) jomlQuat.z(), (float) jomlQuat.w());
+			return new ContraptionPosition(orientation, position);		
+		}
+		
+	}
+	
+	public static void setPosition(Ship contraption, ContraptionPosition position, boolean massCenter) {
+		if (massCenter) {
+			ShipTransform transform = contraption.getTransform();
+			((Vector3d) transform.getPositionInWorld()).set(position.getPosition().writeTo(new Vector3d()));
+			((Quaterniond) transform.getShipToWorldRotation()).set(position.getOrientation().i(), position.getOrientation().j(), position.getOrientation().k(), position.getOrientation().r());
+			((ShipData) contraption).setTransform(transform);	
+		} else {
+			AABBic shipBounds = contraption.getShipAABB();
+			Vec3d shipCoordCenter = MathUtility.getMiddle(new BlockPos(shipBounds.minX(), shipBounds.minY(), shipBounds.minZ()), new BlockPos(shipBounds.maxX(), shipBounds.maxY(), shipBounds.maxZ()));
+			Vec3d shipCoordMassCenter = Vec3d.fromVec(((ShipData) contraption).getInertiaData().getCenterOfMassInShip());
+			Vec3d centerOfMassOffset = shipCoordMassCenter.sub(shipCoordCenter).add(1.0, 1.0, 1.0);
+			ShipTransform transform = contraption.getTransform();
+			((Vector3d) transform.getPositionInWorld()).set(position.getPosition().add(centerOfMassOffset).writeTo(new Vector3d()));
+			((Quaterniond) transform.getShipToWorldRotation()).set(position.getOrientation().i(), position.getOrientation().j(), position.getOrientation().k(), position.getOrientation().r());
+			((ShipData) contraption).setTransform(transform);	
+		}
+	}
+	
 	public static Vec3d toContraptionPos(Ship contraption, Vec3d pos) {
 		Matrix4dc worldToShip = contraption.getWorldToShip();
 		if (worldToShip != null) {
@@ -94,12 +137,6 @@ public class PhysicUtility {
 		String dimensionId = getDimensionId(level);
 		Ship newContraption = VSGameUtilsKt.getShipObjectWorld(level).createNewShipAtBlock(position.writeTo(new Vector3i()), false, 1, dimensionId);
 		
-		Vector3d transform = (Vector3d) newContraption.getTransform().getPositionInWorld();
-		
-		ShipAssemblyKt
-		
-		transform.add(new Vector3d(position.x - transform.x(), position.y - transform.y(), position.z - transform.z()), transform);
-			
 		// Stone for safety reasons
 		BlockPos pos2 = toContraptionBlockPos(newContraption, position);
 		level.setBlock(pos2, Blocks.STONE.defaultBlockState(), 3);
@@ -122,7 +159,8 @@ public class PhysicUtility {
 	
 	public static Ship convertToContraption(ServerLevel level, AABB structureBounds, boolean removeOriginal) {
 		
-		Vec3d center = Vec3d.fromVec(structureBounds.getCenter());
+		BlockPos max = null;
+		BlockPos min = null;
 		boolean isEmpty = true;
 		
 		for (int x = (int) structureBounds.minX; x <= structureBounds.maxX; x++) {
@@ -134,7 +172,19 @@ public class PhysicUtility {
 					
 					if (!state.getCollisionShape(level, pos).isEmpty()) {
 						isEmpty = false;
-						break;
+						
+						if (min == null) {
+							min = pos;
+						} else {
+							min = MathUtility.getMaxCorner(min, pos);
+						}
+						
+						if (max == null) {
+							max = pos;
+						} else {
+							max = MathUtility.getMinCorner(max, pos);
+						}
+						
 					}
 					
 				}
@@ -145,7 +195,9 @@ public class PhysicUtility {
 			return null;
 		}
 		
-		Ship contraption = createContraptionAt(level, center.add(0.0, 0.0, 0.0));
+		Vec3d structureCenter = MathUtility.getMiddle(min, max);
+		
+		Ship contraption = createContraptionAt(level, structureCenter);
 		
 		for (int x = (int) structureBounds.minX; x <= structureBounds.maxX; x++) {
 			for (int y = (int) structureBounds.minY; y <= structureBounds.maxY; y++) {
@@ -170,6 +222,8 @@ public class PhysicUtility {
 				}
 			}
 		}
+		
+		setPosition(contraption, new ContraptionPosition(new Quaternion(new Vec3i(1, 0, 0), 0), structureCenter), false);
 		
 		return contraption;
 		

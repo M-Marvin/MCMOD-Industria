@@ -1,14 +1,25 @@
 {
 
-"industria.item.info.conduit.nodeSelect":	"Erste Verbindung ausgewählt (Abbrechen mit Umschalt + Rechtsklick)",
-"industria.item.info.conduit.changeNodes":	"Leitungslänge: %1$s (Abbrechen mit Umschalt + Rechtsklick)",
-"industria.item.info.conduit.placed":		"Leitung platziert",
-"industria.item.info.conduit.abbort":		"Platzieren der Leitung abgebrochen",
-"industria.item.info.conduit.failed":		"Platzieren der Leitung fehlgeschlagen",
-"industria.item.info.conduit.toFarNodes":	"Die Leitung ist zu lang: %1$s > max. %2$s",
+"industria.item.info.conduit.nodeSelect":			"Erste Verbindung ausgewählt (Abbrechen mit Umschalt + Rechtsklick)",
+"industria.item.info.conduit.changeNodes":			"Leitungslänge: %1$s (Abbrechen mit Umschalt + Rechtsklick)",
+"industria.item.info.conduit.placed":				"Leitung platziert",
+"industria.item.info.conduit.abbort":				"Platzieren der Leitung abgebrochen",
+"industria.item.info.conduit.failed":				"Platzieren der Leitung fehlgeschlagen",
+"industria.item.info.conduit.toFarNodes":			"Die Leitung ist zu lang: %1$s > max. %2$s",
 
-"industria.commands.setconduit.success":	"Leitung beginnend bei %1$s %2$s %3$s geändert",
-"industria.commands.setconduit.failure":	"Platzieren der Leitung nicht möglich!",
-"industria.argument.conduit.id.invalid":				"Unbekannte Leitung '%s'"
+"industria.commands.setconduit.success":			"Leitung beginnend bei %1$s %2$s %3$s geändert",
+"industria.commands.setconduit.failure":			"Platzieren der Leitung nicht möglich!",
+"industria.commands.contraption.remove.success":	"Vorrichtung entfernt",
+"industria.commands.contraption.create.failed":		"Konnte keine Vorrichtung erzeugen!",
+"industria.commands.contraption.create.success": 	"Blöcke bei %1$s %2$s %3$s in Vorrichtung umgewandelt",
+"industria.commands.contraption.create.toLarge": 	"Der ausgewählte Bereich ist mit %1$sx%2$sx%3$s zu groß! (max. %4$sx%5$sx%6$s)",
+"industria.commands.contraption.teleport.success":	"Vorrichtung wurde nach %1$s %2$s %3$s teleportiert",
+"industria.commands.contraption.assemble.toLarge":	"Die Anzahl an Blöcken is zu groß! (max. %1$s)",
+"industria.commands.contraption.assemble.success":	"Vorrischtung wurde aus den Blöcken bei %1$s %2$s %3$s erzeugt",
+"industria.commands.contraption.assemble.failed":	"Konnte keine Vorrichtung erzeugen!",
+
+"industria.argument.conduit.id.invalid":			"Unbekannte Leitung '%s'!",
+"industria.argument.contraption.notFound":			"Vorrichtung '%s' nicht gefunden!",
+"industria.argument.contraption.maleFormed":		"Ungültige Vorrichtungs-Id '%s'!"
 
 }

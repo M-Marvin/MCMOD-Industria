@@ -46,7 +46,7 @@ public class ScrewDriverItem extends Item implements IScrollOverride {
 				
 			} else {
 
-				PhysicUtility.createNewContraptionAt((ServerLevel) context.getLevel(), context.getClickedPos());
+				PhysicUtility.createNewContraptionAt((ServerLevel) context.getLevel(), context.getClickedPos(), 1F);
 				
 			}
 			

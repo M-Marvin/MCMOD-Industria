@@ -53,14 +53,30 @@ public class ContraptionIdArgument implements ArgumentType<Long> {
 	@Override
 	public Long parse(StringReader reader) throws CommandSyntaxException {
 		String inputStr = reader.readString();
-		String prefix = inputStr.substring(0, CONTRAPTION_PREFIX.length());
+		long id = tryParseName(inputStr);
+		if (id == 0) {
+			id = tryParseId(inputStr);
+		}
+		if (id > 0) {
+			return id;
+		}
+		throw ERROR_MALEFORMED_CONTRAPTION.create(inputStr);
+	}
+	
+	public Long tryParseId(String input) {
+		String prefix = input.substring(0, CONTRAPTION_PREFIX.length());
 		try {
 			if (prefix.equals(CONTRAPTION_PREFIX)) {
-				String idStr = inputStr.substring(CONTRAPTION_PREFIX.length());
+				String idStr = input.substring(CONTRAPTION_PREFIX.length());
 				return Long.parseLong(idStr);
 			}
+			return 0L;
 		} catch (Exception e) {}
-		throw ERROR_MALEFORMED_CONTRAPTION.create(inputStr);
+		return 0L;
+	}
+	
+	public Long tryParseName(String input) {
+		return PhysicUtility.getFirstContraptionIdWithName(input);
 	}
 	
 	@SuppressWarnings("resource")

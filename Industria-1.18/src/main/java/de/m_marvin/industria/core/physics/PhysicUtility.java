@@ -1,9 +1,10 @@
 package de.m_marvin.industria.core.physics;
 
-import java.sql.Struct;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.joml.Matrix4dc;
 import org.joml.Quaterniond;
@@ -21,8 +22,8 @@ import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
 import de.m_marvin.industria.core.physics.types.ContraptionHitResult;
 import de.m_marvin.industria.core.physics.types.ContraptionPosition;
+import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
-import de.m_marvin.industria.core.util.StructureFinder;
 import de.m_marvin.unimat.impl.Quaternion;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3i;
@@ -39,6 +40,8 @@ import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.world.phys.Vec3;
 
 public class PhysicUtility {
+	
+	protected static Map<Long, String> contraptionNames = new HashMap<>();
 	
 	public static Iterable<Ship> getContraptionIntersecting(Level level, BlockPos position)  {
 		return VSGameUtilsKt.getShipsIntersecting(level, new AABB(position, position));
@@ -90,8 +93,6 @@ public class PhysicUtility {
 	}
 	
 	public static void setPosition(ServerShip contraption, ContraptionPosition position, boolean massCenter) {
-		System.out.println("DDD " + contraption);
-		
 		if (massCenter) {
 			ShipTransform transform = contraption.getTransform();
 			((Vector3d) transform.getPositionInWorld()).set(position.getPosition().writeTo(new Vector3d()));
@@ -107,6 +108,28 @@ public class PhysicUtility {
 			((Quaterniond) transform.getShipToWorldRotation()).set(position.getOrientation().i(), position.getOrientation().j(), position.getOrientation().k(), position.getOrientation().r());
 			((ShipData) contraption).setTransform(transform);	// FIXME does not work with LoadedShip
 		}
+	}
+	
+	public static void setName(Ship contraption, String name) {
+		contraptionNames.put(contraption.getId(), name);
+	}
+	
+	public static String getName(Ship contraption, String name) {
+		return contraptionNames.get(contraption.getId());
+	}
+	
+	public static Long getFirstContraptionIdWithName(String name) {
+		for (Entry<Long, String> entry : contraptionNames.entrySet()) {
+			if (entry.getValue().equals(name)) return entry.getKey();
+		}
+		return 0L;
+	}
+
+	public static Ship getFirstContraptionWithName(Level level, String name) {
+		for (Entry<Long, String> entry : contraptionNames.entrySet()) {
+			if (entry.getValue().equals(name)) return getContraptionById(level, entry.getKey());
+		}
+		return null;
 	}
 	
 	public static Vec3d toContraptionPos(Ship contraption, Vec3d pos) {
@@ -159,11 +182,12 @@ public class PhysicUtility {
 			for (int x = bounds.minX(); x <= bounds.maxX(); x++) {
 				for (int y = bounds.minY(); y <= bounds.maxY(); y++) {
 					for (int z = bounds.minZ(); z <= bounds.maxZ(); z++) {
-						level.setBlock(new BlockPos(x, y, z), Blocks.AIR.defaultBlockState(), 3);
+						GameUtility.removeBlock(level, new BlockPos(x, y, z));
 					}
 				}
 			}
 		}
+		contraptionNames.remove(contraption.getId());
 	}
 	
 	public static Ship convertToContraption(ServerLevel level, AABB areaBounds, boolean removeOriginal, float scale) {
@@ -178,20 +202,7 @@ public class PhysicUtility {
 		int areaMaxBlockX = (int) Math.floor(areaBounds.maxX);
 		int areaMaxBlockY = (int) Math.floor(areaBounds.maxY);
 		int areaMaxBlockZ = (int) Math.floor(areaBounds.maxZ);
-		
-		for (int x = areaMinBlockX; x <= areaMaxBlockX; x++) {
-			for (int z = areaMinBlockZ; z <= areaMaxBlockZ; z++) {
-				for (int y = areaMinBlockY; y <= areaMaxBlockY; y++) {
-					if (getContraptionOfBlock(level, new BlockPos(x, y, z)) != null) {
-						return null;
-					}
-				}
-			}
-		}
-		
-		Vec3d areaCenter = Vec3d.fromVec(areaBounds.getCenter());
-		ServerShip contraption =  createContraptionAt(level, areaCenter, scale);
-		
+
 		for (int x = areaMinBlockX; x <= areaMaxBlockX; x++) {
 			for (int z = areaMinBlockZ; z <= areaMaxBlockZ; z++) {
 				for (int y = areaMinBlockY; y <= areaMaxBlockY; y++) {
@@ -213,7 +224,32 @@ public class PhysicUtility {
 							structureCornerMax = MathUtility.getMaxCorner(itPos, structureCornerMax);
 						}
 						
-						level.setBlock(toContraptionBlockPos(contraption, itPos), itState, 34);
+					}
+					
+				}
+			}
+		}
+		
+		if (structureCornerMax == null) structureCornerMax = structureCornerMin = new BlockPos(areaBounds.getCenter().x(), areaBounds.getCenter().y(), areaBounds.getCenter().z());
+		
+		Vec3d contraptionPos = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
+		ServerShip contraption = createContraptionAt(level, contraptionPos, scale);
+		
+		Vec3d contraptionOrigin = toContraptionPos(contraption, contraptionPos);
+		
+		for (int x = areaMinBlockX; x <= areaMaxBlockX; x++) {
+			for (int z = areaMinBlockZ; z <= areaMaxBlockZ; z++) {
+				for (int y = areaMinBlockY; y <= areaMaxBlockY; y++) {
+					
+					BlockPos itPos = new BlockPos(x, y, z);
+					BlockState itState = level.getBlockState(itPos);
+					
+					if (isValidContraptionBlock(itState)) {
+						
+						Vec3d relativePosition = Vec3d.fromVec(itPos).sub(contraptionPos);
+						Vec3d shipPos = contraptionOrigin.add(relativePosition);
+						
+						GameUtility.copyBlock(level, itPos, new BlockPos(shipPos.x, shipPos.y, shipPos.z));
 						
 						if (isSolidContraptionBlock(level, itPos, itState)) {
 							
@@ -228,11 +264,11 @@ public class PhysicUtility {
 		}
 		
 		if (noSolids) {
-			level.setBlock(toContraptionBlockPos(contraption, areaCenter), Blocks.STONE.defaultBlockState(), 34);
+			level.setBlock(new BlockPos(contraptionOrigin.x, contraptionOrigin.y, contraptionOrigin.z), Blocks.STONE.defaultBlockState(), 34);
 		} else {
-			BlockState centerStructureBlock = level.getBlockState(new BlockPos(areaCenter.writeTo(new Vec3(0, 0, 0))));
+			BlockState centerStructureBlock = level.getBlockState(new BlockPos(contraptionPos.x, contraptionPos.y, contraptionPos.z));
 			if (!isValidContraptionBlock(centerStructureBlock)) {
-				level.setBlock(toContraptionBlockPos(contraption, areaCenter), Blocks.AIR.defaultBlockState(), 34);
+				level.setBlock(new BlockPos(contraptionOrigin.x, contraptionOrigin.y, contraptionOrigin.z), Blocks.AIR.defaultBlockState(), 34);
 			}
 		}
 		
@@ -241,16 +277,14 @@ public class PhysicUtility {
 				for (int z = structureCornerMin.getZ(); z <= structureCornerMax.getZ(); z++) {
 					for (int y = structureCornerMin.getY(); y <= structureCornerMax.getY(); y++) {
 						
-						level.removeBlock(new BlockPos(x, y, z), false);
+						GameUtility.removeBlock(level, new BlockPos(x, y, z));
 						
 					}
 				}
 			}
 		}
 		
-		Vec3d structurePosition = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
-		
-		setPosition((ServerShip) contraption, new ContraptionPosition(new Quaternion(new Vec3i(0, 1, 1), 0), structurePosition), false);
+		setPosition((ServerShip) contraption, new ContraptionPosition(new Quaternion(new Vec3i(0, 1, 1), 0), contraptionPos), false);
 		
 		return contraption;
 		
@@ -262,29 +296,28 @@ public class PhysicUtility {
 			return null;
 		}
 
-		BlockPos structureCornerMin = null;
-		BlockPos structureCornerMax = null;
-		boolean noSolids = true;
+		BlockPos structureCornerMin = blocks.get(0);
+		BlockPos structureCornerMax = blocks.get(0);
 		
-		ServerShip contraption = createContraptionAt(level, Vec3d.fromVec(blocks.get(0)), scale);
+		for (BlockPos itPos : blocks) {
+			structureCornerMin = MathUtility.getMinCorner(structureCornerMin, itPos);
+			structureCornerMax = MathUtility.getMaxCorner(structureCornerMax, itPos);
+		}
+		
+		Vec3d contraptionPos = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
+		ServerShip contraption = createContraptionAt(level, contraptionPos, scale);
+		
+		Vec3d contraptionOrigin = toContraptionPos(contraption, contraptionPos);
+		boolean noSolids = true;
 		
 		for (BlockPos itPos : blocks) {
 			
 			BlockState itState = level.getBlockState(itPos);
 			
-			if (structureCornerMin == null) {
-				structureCornerMin = itPos;
-			} else {
-				structureCornerMin = MathUtility.getMinCorner(itPos, structureCornerMin);
-			}
+			Vec3d relativePosition = Vec3d.fromVec(itPos).sub(contraptionPos);
+			Vec3d shipPos = contraptionOrigin.add(relativePosition);
 			
-			if (structureCornerMax == null) {
-				structureCornerMax = itPos;
-			} else {
-				structureCornerMax = MathUtility.getMaxCorner(itPos, structureCornerMax);
-			}
-			
-			level.setBlock(toContraptionBlockPos(contraption, itPos), itState, 34);
+			GameUtility.copyBlock(level, itPos, new BlockPos(shipPos.x, shipPos.y, shipPos.z));
 			
 			if (isSolidContraptionBlock(level, itPos, itState)) {
 				
@@ -293,32 +326,30 @@ public class PhysicUtility {
 			}
 			
 		}
-		
+
 		if (noSolids) {
-			level.setBlock(toContraptionBlockPos(contraption, blocks.get(0)), Blocks.STONE.defaultBlockState(), 34);
+			level.setBlock(new BlockPos(contraptionOrigin.x, contraptionOrigin.y, contraptionOrigin.z), Blocks.STONE.defaultBlockState(), 34);
 		} else {
-			BlockState centerStructureBlock = level.getBlockState(blocks.get(0));
+			BlockState centerStructureBlock = level.getBlockState(new BlockPos(contraptionPos.x, contraptionPos.y, contraptionPos.z));
 			if (!isValidContraptionBlock(centerStructureBlock)) {
-				level.setBlock(toContraptionBlockPos(contraption, blocks.get(0)), Blocks.AIR.defaultBlockState(), 34);
+				level.setBlock(new BlockPos(contraptionOrigin.x, contraptionOrigin.y, contraptionOrigin.z), Blocks.AIR.defaultBlockState(), 34);
 			}
 		}
 		
 		if (removeOriginal) {
 			for (BlockPos itPos : blocks) {
-				level.removeBlock(itPos, false);
+				GameUtility.removeBlock(level, itPos);
 			}
 		}
 		
-		Vec3d structurePosition = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
-		
-		setPosition((ServerShip) contraption, new ContraptionPosition(new Quaternion(new Vec3i(0, 1, 1), 0), structurePosition), false);
+		setPosition((ServerShip) contraption, new ContraptionPosition(new Quaternion(new Vec3i(0, 1, 1), 0), contraptionPos), false);
 		
 		return contraption;
 		
 	}
 	
 	public static boolean isSolidContraptionBlock(Level level, BlockPos pos, BlockState state) {
-		return !state.getCollisionShape(level, pos).isEmpty();
+		return !state.getCollisionShape(level, pos).isEmpty(); // FIXME Working way to check if block has collision as contraption part
 	}
 	
 	public static boolean isValidContraptionBlock(BlockState state) {

@@ -9,7 +9,7 @@ import org.valkyrienskies.core.api.ships.Ship;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.FloatArgumentType;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
 import de.m_marvin.industria.core.physics.PhysicUtility;
@@ -18,12 +18,18 @@ import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.StructureFinder;
 import de.m_marvin.unimat.impl.Quaternion;
 import de.m_marvin.univec.impl.Vec3d;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.ClickEvent.Action;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -46,7 +52,7 @@ public class ContraptionCommand {
 										createContraption(source, BlockPosArgument.getLoadedBlockPos(source, "pos1"), BlockPosArgument.getLoadedBlockPos(source, "pos2"), 1F)
 								)
 								.then(
-										Commands.argument("scale", FloatArgumentType.floatArg(0.0625F, 16F))
+										Commands.argument("scale", FloatArgumentType.floatArg(0.0625F, 8F))
 										.executes((source) ->
 												createContraption(source, BlockPosArgument.getLoadedBlockPos(source, "pos1"), BlockPosArgument.getLoadedBlockPos(source, "pos2"), FloatArgumentType.getFloat(source, "scale"))
 										)
@@ -62,7 +68,7 @@ public class ContraptionCommand {
 								assembleContraption(source, BlockPosArgument.getLoadedBlockPos(source, "startPos"), 1F)
 						)
 						.then(
-								Commands.argument("scale", FloatArgumentType.floatArg(0.0625F, 16F))
+								Commands.argument("scale", FloatArgumentType.floatArg(0.0625F, 8F))
 								.executes((source) -> 
 										assembleContraption(source, BlockPosArgument.getLoadedBlockPos(source, "startPos"), FloatArgumentType.getFloat(source, "scale"))
 								)
@@ -89,7 +95,79 @@ public class ContraptionCommand {
 								)
 						)
 				)
+		)
+		.then(
+				Commands.literal("find")
+				.then(
+						Commands.argument("contraption", ContraptionIdArgument.contraption())
+						.executes((source) ->
+							findContraption(source, ContraptionIdArgument.getContraption(source, "contraption"), false)
+						)
+						.then(
+								Commands.literal("teleport")
+								.executes((source) -> 
+										findContraption(source, ContraptionIdArgument.getContraption(source, "contraption"), true)
+								)
+						)
+				)
+		)
+		.then(
+				Commands.literal("name")
+				.then(
+						Commands.argument("contraption", ContraptionIdArgument.contraption())
+						.then(
+								Commands.argument("name", StringArgumentType.greedyString())
+								.executes((source) -> 
+										setName(source, ContraptionIdArgument.getContraption(source, "contraption"), StringArgumentType.getString(source, "name"))
+								)
+						)
+				)
 		));
+	}
+	
+	public static int setName(CommandContext<CommandSourceStack> source, Ship contraption, String name) {
+		
+		PhysicUtility.setName(contraption, name);
+		
+		source.getSource().sendSuccess(new TranslatableComponent("industria.commands.contraption.name.set", name), true);
+		return Command.SINGLE_SUCCESS;
+		
+	}
+	
+	public static int findContraption(CommandContext<CommandSourceStack> source, Ship contraption, boolean teleport) {
+		
+		Vec3d contraptionPosition = PhysicUtility.getPosition((ServerShip) contraption, false).getPosition();
+		
+		if (teleport) {
+						
+			if (source.getSource().getEntity() instanceof Player player) {
+				
+				player.teleportTo(contraptionPosition.x, contraptionPosition.y, contraptionPosition.z);
+				
+				source.getSource().sendSuccess(new TranslatableComponent("industria.commands.contraption.find.teleported", contraptionPosition.x().intValue(), contraptionPosition.y().intValue(), contraptionPosition.z().intValue()), true);
+				return Command.SINGLE_SUCCESS;
+				
+			} else {
+
+				source.getSource().sendSuccess(new TranslatableComponent("industria.commands.contraption.find.noplayer"), true);
+				return 0;
+				
+			}
+			
+		} else {
+			
+			Component coordMsgComp = new TranslatableComponent("industria.commands.coordinates", contraptionPosition.x().intValue(), contraptionPosition.y().intValue(), contraptionPosition.z().intValue()).withStyle((style) -> {
+				return style
+						.withColor(ChatFormatting.GREEN)
+						.withClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, "/tp @s " + contraptionPosition.x() + " " + contraptionPosition.y() + " " + contraptionPosition.z()))
+						.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("chat.coordinates.tooltip")));
+			});
+			
+			source.getSource().sendSuccess(new TranslatableComponent("industria.commands.contraption.find.found", coordMsgComp), true);
+			return Command.SINGLE_SUCCESS;
+			
+		}
+		
 	}
 	
 	public static int teleportContraption(CommandContext<CommandSourceStack> source, Ship contraption, Vec3 position, boolean rotate, float rotationX, float rotationY, float rotationZ) {
@@ -103,6 +181,7 @@ public class ContraptionCommand {
 		}
 		
 		PhysicUtility.setPosition((ServerShip) contraption, contraptionPos, false);
+		
 		source.getSource().sendSuccess(new TranslatableComponent("industria.commands.contraption.teleport.success", (int) position.x(), (int) position.y(), (int) position.z()), true);
 		return Command.SINGLE_SUCCESS;
 		
@@ -113,7 +192,7 @@ public class ContraptionCommand {
 		AABB bounds = new AABB(MathUtility.getMinCorner(pos1, pos2), MathUtility.getMaxCorner(pos1, pos2));
 		
 		if (bounds.getXsize() > 32 || bounds.getYsize() > 32 || bounds.getZsize() > 32) {
-			source.getSource().sendFailure(new TranslatableComponent("industria.commands.contraption.create.toLarge", (int) bounds.getXsize(), (int) bounds.getYsize(), (int) bounds.getZsize(), 32, 32, 32));
+			source.getSource().sendFailure(new TranslatableComponent("industria.commands.contraption.create.tolarge", (int) bounds.getXsize(), (int) bounds.getYsize(), (int) bounds.getZsize(), 32, 32, 32));
 			return 0;
 		}
 		
@@ -137,7 +216,7 @@ public class ContraptionCommand {
 		
 		if (structureBlocks.isEmpty()) {
 			
-			source.getSource().sendFailure(new TranslatableComponent("industria.commands.contraption.assemble.toLarge", 16 * 16 * 16)); // TODO
+			source.getSource().sendFailure(new TranslatableComponent("industria.commands.contraption.assemble.toLarge", 16 * 16 * 16));
 			return 0;
 			
 		}

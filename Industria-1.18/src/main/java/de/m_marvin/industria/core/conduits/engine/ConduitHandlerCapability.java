@@ -7,15 +7,16 @@ import java.util.Optional;
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitBreakEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitPlaceEvent;
-import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier.ConnectionPoint;
 import de.m_marvin.industria.core.conduits.engine.network.SSyncPlacedConduit;
-import de.m_marvin.industria.core.conduits.registy.Conduits;
+import de.m_marvin.industria.core.conduits.registry.Conduits;
+import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.registries.ModCapabilities;
 import de.m_marvin.industria.core.util.MathUtility;
+import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -196,37 +197,45 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	/*
 	 * Places a new conduit in the world if both nodes are free, and sends the changes to clients
 	 */
-	public boolean placeConduit(ConduitPos position, Conduit conduit, int nodesPerBlock) {
+	public boolean placeConduit(ConduitPos position, Conduit conduit, int nodesPerBlock, int length) {
 		if (conduit == Conduits.NONE.get()) {
 			return false;
 		}
 		
-		BlockState nodeAstate = level.getBlockState(position.getNodeApos());
-		ConnectionPoint[] nodesA = nodeAstate.getBlock() instanceof IConduitConnector ? ((IConduitConnector) nodeAstate.getBlock()).getConnectionPoints(position.getNodeApos(), nodeAstate) : null;
-		ConnectionPoint nodeA = nodesA != null && nodesA.length > position.getNodeAid() ? nodesA[position.getNodeAid()] : null;
-		BlockState nodeBstate = level.getBlockState(position.getNodeBpos());
-		ConnectionPoint[] nodesB = nodeBstate.getBlock() instanceof IConduitConnector ? ((IConduitConnector) nodeBstate.getBlock()).getConnectionPoints(position.getNodeBpos(), nodeBstate) : null;
-		ConnectionPoint nodeB = nodesB != null && nodesB.length > position.getNodeBid() ? nodesB[position.getNodeBid()] : null;
+		BlockPos nodeApos = position.getNodeApos();
+		BlockState nodeAstate = level.getBlockState(nodeApos);
+		ConduitNode nodeA = nodeAstate.getBlock() instanceof IConduitConnector ? ((IConduitConnector) nodeAstate.getBlock()).getConduitNode(level, nodeApos, nodeAstate, position.getNodeAid()) : null; //.getConnectionPoints(position.getNodeApos(), nodeAstate) : null;
 		
-		if (nodeA == null || nodeB == null || position.getNodeBpos().equals(position.getNodeApos())) return false;
+		BlockPos nodeBpos = position.getNodeBpos();
+		BlockState nodeBstate = level.getBlockState(nodeBpos);
+		ConduitNode nodeB = nodeBstate.getBlock() instanceof IConduitConnector ? ((IConduitConnector) nodeBstate.getBlock()).getConduitNode(level, nodeBpos, nodeBstate, position.getNodeBid()) : null;
 		
-		if (getConduitAtNode(nodeA).isPresent() || getConduitAtNode(nodeB).isPresent()) {
+		if (nodeA == null || nodeB == null || position.getNodeApos().equals(position.getNodeBpos())) return false;
+		
+		if (!nodeA.getType().isValid(conduit) || !nodeB.getType().isValid(conduit)) {
 			return false;
-		} else {
-			PlacedConduit conduitState = new PlacedConduit(position, conduit, nodesPerBlock);
-			
-			Event event = new ConduitPlaceEvent(this.level, position, conduitState);
-			MinecraftForge.EVENT_BUS.post(event);
-			
-			if (!event.isCanceled()) {
-				addConduit(conduitState);
-				conduitState.getConduit().onPlace(level, position, conduitState);
-				if (!level.isClientSide()) {
-					Industria.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(nodeA.position)), new SSyncPlacedConduit(conduitState, new ChunkPos(nodeA.position), false));
-					Industria.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(nodeB.position)), new SSyncPlacedConduit(conduitState, new ChunkPos(nodeB.position), false));
-				}
-				return true;
+		}
+		
+		int conduitsAtNodeA = getConduitsAtNode(nodeApos, position.getNodeAid()).size();
+		int conduitsAtNodeB = getConduitsAtNode(nodeBpos, position.getNodeBid()).size();
+		
+		if (conduitsAtNodeA >= nodeA.getMaxConnections() && conduitsAtNodeB >= nodeB.getMaxConnections()) {
+			return false;
+		}
+		
+		PlacedConduit conduitState = new PlacedConduit(position, conduit, nodesPerBlock, length);
+		
+		Event event = new ConduitPlaceEvent(this.level, position, conduitState);
+		MinecraftForge.EVENT_BUS.post(event);
+		
+		if (!event.isCanceled()) {
+			addConduit(conduitState);
+			conduitState.getConduit().onPlace(level, position, conduitState);
+			if (!level.isClientSide()) {
+				Industria.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(nodeApos)), new SSyncPlacedConduit(conduitState, new ChunkPos(nodeApos), false));
+				Industria.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(nodeBpos)), new SSyncPlacedConduit(conduitState, new ChunkPos(nodeBpos), false));
 			}
+			return true;
 		}
 		
 		return false;
@@ -273,32 +282,8 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	 * Gets the conduit at the given position
 	 */
 	public Optional<PlacedConduit> getConduit(ConduitPos position) {
-		BlockState nodeAstate = level.getBlockState(position.getNodeApos());
-		ConnectionPoint[] nodesA = nodeAstate.getBlock() instanceof IConduitConnector ? ((IConduitConnector) nodeAstate.getBlock()).getConnectionPoints(position.getNodeApos(), nodeAstate) : null;
-		ConnectionPoint nodeA = nodesA != null && nodesA.length > position.getNodeAid() ? nodesA[position.getNodeAid()] : null;
-		BlockState nodeBstate = level.getBlockState(position.getNodeBpos());
-		ConnectionPoint[] nodesB = nodeBstate.getBlock() instanceof IConduitConnector ? ((IConduitConnector) nodeBstate.getBlock()).getConnectionPoints(position.getNodeBpos(), nodeBstate) : null;
-		ConnectionPoint nodeB = nodesB != null && nodesB.length > position.getNodeAid() ? nodesA[position.getNodeAid()] : null;
-		
-		if (nodeA != null && nodeB != null) {
-			Optional<PlacedConduit> conduitA = getConduitAtNode(nodeA);
-			Optional<PlacedConduit> conduitB = getConduitAtNode(nodeB);
-			
-			if (conduitA.isPresent() && conduitB.isPresent() && conduitA.get() == conduitB.get()) {
-				return conduitA;
-			}
-		}
-		
-		return Optional.empty();
-	}
-	
-	/*
-	 * Try to get the conduit that is attached to the given node
-	 */
-	public Optional<PlacedConduit> getConduitAtNode(ConnectionPoint node) {
 		for (PlacedConduit con : this.conduits) {
-			if (	(con.getNodeA().equals(node.position) && con.getConnectionPointA() == node.connectionId) ||
-					(con.getNodeB().equals(node.position) && con.getConnectionPointB() == node.connectionId)) {
+			if (con.getConduitPosition().equals(position)) {
 				return Optional.of(con);
 			}
 		}
@@ -306,12 +291,39 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	}
 	
 	/*
-	 * Try to get all conduits connected with the given block
+	 * Try to get the conduit that is attached to the given node
 	 */
-	public List<PlacedConduit> getConduitsAtBlock(BlockPos blockPos) {
+	public Optional<PlacedConduit> getConduitAtNode(BlockPos block, int node) {
+		for (PlacedConduit con : this.conduits) {
+			if (	(con.getNodeA().equals(block) && con.getConnectionPointA() == node) ||
+					(con.getNodeB().equals(block) && con.getConnectionPointB() == node)) {
+				return Optional.of(con);
+			}
+		}
+		return Optional.empty();
+	}
+
+	/*
+	 * Try to get all conduits connected with the given node
+	 */
+	public List<PlacedConduit> getConduitsAtNode(BlockPos block, int node) {
 		List<PlacedConduit> conduits = new ArrayList<>();
 		for (PlacedConduit con : this.conduits) {
-			if (con.getNodeA().equals(blockPos) || con.getNodeB().equals(blockPos)) {
+			if (	(con.getNodeA().equals(block) && con.getConnectionPointA() == node) ||
+					(con.getNodeB().equals(block) && con.getConnectionPointB() == node)) {
+				conduits.add(con);
+			}
+		}
+		return conduits;
+	}
+	
+	/*
+	 * Try to get all conduits connected with the given block
+	 */
+	public List<PlacedConduit> getConduitsAtBlock(BlockPos block) {
+		List<PlacedConduit> conduits = new ArrayList<>();
+		for (PlacedConduit con : this.conduits) {
+			if (con.getNodeA().equals(block) || con.getNodeB().equals(block)) {
 				conduits.add(con);
 			}
 		}
@@ -325,7 +337,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 		
 		double distanceToOriging = context.getFrom().distanceTo(context.getTo());
 		PlacedConduit nearestConduit = null;
-		Vec3f nearestHitPoint = null;
+		Vec3d nearestHitPoint = null;
 		int nodeIndex = 0;
 		
 		for (PlacedConduit conduit : this.conduits) {
@@ -340,9 +352,9 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 				BlockPos cornerMin = MathUtility.getMinCorner(nodeApos, nodeBpos);
 				
 				for (int i = 1; i < conduit.getShape().nodes.length; i++) {
-					Vec3f nodeA = conduit.getShape().nodes[i - 1].copy().add(Vec3f.fromVec(cornerMin));
-					Vec3f nodeB = conduit.getShape().nodes[i].copy().add(Vec3f.fromVec(cornerMin));
-					Optional<Vec3f> hitPoint = MathUtility.getHitPoint(nodeA, nodeB, Vec3f.fromVec(context.getFrom()), Vec3f.fromVec(context.getTo()), conduit.getConduit().getConduitType().getThickness() / 32F);
+					Vec3d nodeA = conduit.getShape().nodes[i - 1].copy().add(Vec3f.fromVec(cornerMin));
+					Vec3d nodeB = conduit.getShape().nodes[i].copy().add(Vec3f.fromVec(cornerMin));
+					Optional<Vec3d> hitPoint = MathUtility.getHitPoint(nodeA, nodeB, Vec3d.fromVec(context.getFrom()), Vec3d.fromVec(context.getTo()), conduit.getConduit().getConduitType().getThickness() / 32F);
 					
 					if (hitPoint.isPresent()) {
 						double conduitDistance = Vec3f.fromVec(context.getFrom()).dist(hitPoint.get());

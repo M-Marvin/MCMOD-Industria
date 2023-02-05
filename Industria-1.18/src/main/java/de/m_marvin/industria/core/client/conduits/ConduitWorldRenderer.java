@@ -9,13 +9,14 @@ import com.mojang.math.Quaternion;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
-import de.m_marvin.industria.core.conduits.registy.Conduits;
+import de.m_marvin.industria.core.conduits.registry.Conduits;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitShape;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitType;
 import de.m_marvin.industria.core.registries.ModCapabilities;
 import de.m_marvin.industria.core.util.MathUtility;
+import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -121,8 +122,8 @@ public class ConduitWorldRenderer {
 			// Pre-iteration for lightning
 			for (int i = shape.nodes.length - 1; i > 0; i--) {
 				
-				Vec3f nodeB = shape.nodes[i - 1];
-				Vec3f nodeA = shape.nodes[i - 0];
+				Vec3d nodeB = shape.nodes[i - 1];
+				Vec3d nodeA = shape.nodes[i - 0];
 				
 				if (i == shape.nodes.length - 1) {
 					BlockPos nodeBlockPos = new BlockPos(nodeA.x, nodeA.y + 0.1F, nodeA.z).offset(cornerMin);
@@ -139,8 +140,8 @@ public class ConduitWorldRenderer {
 			
 			for (int i = 1; i < shape.nodes.length; i++) {
 				
-				Vec3f nodeA = shape.nodes[i - 1];
-				Vec3f nodeB = shape.nodes[i - 0];
+				Vec3d nodeA = shape.nodes[i - 1];
+				Vec3d nodeB = shape.nodes[i - 0];
 				
 				if (i == 1) {
 					BlockPos nodeBlockPos = new BlockPos(nodeA.x, nodeA.y + 0.1F, nodeA.z).offset(cornerMin);
@@ -154,8 +155,8 @@ public class ConduitWorldRenderer {
 				int packedLight = LightTexture.pack(blockLight, skyLight);
 				int segmentColor = conduit.getConduit().getColorAt(clientLevel, nodeA, conduit);
 				
-				Vec3f nodeAinterpolated = shape.lastPos[i - 1].lerp(nodeA, partialTicks);
-				Vec3f nodeBinterpolated = shape.lastPos[i - 0].lerp(nodeB, partialTicks);
+				Vec3d nodeAinterpolated = shape.lastPos[i - 1].lerp(nodeA, (double) partialTicks);
+				Vec3d nodeBinterpolated = shape.lastPos[i - 0].lerp(nodeB, (double) partialTicks);
 				
 				lengthOffset += wireModel(vertexConsumer, poseStack, segmentColor, packedLight, nodeAinterpolated, nodeBinterpolated, size, lengthOffset);
 				
@@ -167,19 +168,19 @@ public class ConduitWorldRenderer {
 		
 	}
 	
-	public static float wireModel(VertexConsumer vertexConsumer, PoseStack poseStack, int color, int packedLight, Vec3f start, Vec3f end, int width, float lengthOffset) {
+	public static double wireModel(VertexConsumer vertexConsumer, PoseStack poseStack, int color, int packedLight, Vec3d start, Vec3d end, int width, float lengthOffset) {
 		
-		Vec3f lineVec = end.copy().sub(start);
-		Vec3f lineNormal = lineVec.normalize();
+		Vec3d lineVec = end.copy().sub(start);
+		Vec3d lineNormal = lineVec.normalize();
 		
-		float length = (float) lineVec.length();
+		double length = lineVec.length();
 		de.m_marvin.unimat.impl.Quaternion rotation = lineNormal.relativeRotationQuat(new Vec3f(0, 0, 1)); // Default model orientation positive Z
 		
 		poseStack.pushPose();
 		poseStack.translate(start.x, start.y, start.z);
 		poseStack.mulPose(new Quaternion(rotation.i(), rotation.j(), rotation.k(), rotation.r()));
 		
-		wirePart(vertexConsumer, poseStack, color, packedLight, length, width / 16F, lengthOffset);
+		wirePart(vertexConsumer, poseStack, color, packedLight, (float) length, width / 16F, lengthOffset);
 		
 		poseStack.popPose();
 		

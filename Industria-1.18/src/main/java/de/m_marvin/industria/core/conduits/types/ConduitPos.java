@@ -1,85 +1,106 @@
 package de.m_marvin.industria.core.conduits.types;
 
+import java.util.Objects;
+
+import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class ConduitPos {
 	
-	private BlockPos nodeApos;
-	private BlockPos nodeBpos;
-	private int nodeAid;
-	private int nodeBid;
+	private NodePos nodeA;
+	private NodePos nodeB;
 	
 	public ConduitPos(BlockPos nodeApos, BlockPos nodeBpos, int nodeAid, int nodeBid) {
-		super();
-		this.nodeApos = nodeApos;
-		this.nodeBpos = nodeBpos;
-		this.nodeAid = nodeAid;
-		this.nodeBid = nodeBid;
+		this.nodeA = new NodePos(nodeApos, nodeAid);
+		this.nodeB = new NodePos(nodeBpos, nodeBid);
+	}
+
+	public ConduitPos(NodePos nodeApos, NodePos nodeBpos) {
+		this.nodeA = nodeApos;
+		this.nodeB = nodeBpos;
+	}
+	
+	public double calculateMinConduitLength(Level level) {
+		
+		BlockState nodeAstate = level.getBlockState(this.nodeA.getBlock());
+		BlockState nodeBstate = level.getBlockState(this.nodeB.getBlock());
+		if (nodeAstate.getBlock() instanceof IConduitConnector nodeAconnector && nodeBstate.getBlock() instanceof IConduitConnector nodeBconnector) {
+			ConduitNode nodeA = nodeAconnector.getConduitNode(level, this.nodeA.getBlock(), nodeAstate, this.nodeA.getNode());
+			ConduitNode nodeB = nodeBconnector.getConduitNode(level, this.nodeB.getBlock(), nodeBstate, this.nodeB.getNode());
+			if (nodeA != null && nodeB != null) {
+				return nodeA.getWorldPosition(level, this.nodeA.getBlock()).dist(nodeB.getWorldPosition(level, this.nodeB.getBlock()));
+			}
+		}
+		return -1;
+	}
+	
+	public NodePos getNodeA() {
+		return nodeA;
+	}
+	
+	public NodePos getNodeB() {
+		return nodeB;
 	}
 	
 	public BlockPos getNodeApos() {
-		return nodeApos;
+		return nodeA.getBlock();
 	}
-	public void setNodeApos(BlockPos nodeApos) {
-		this.nodeApos = nodeApos;
-	}
+//	public void setNodeApos(BlockPos nodeApos) {
+//		this.nodeApos = nodeApos;
+//	}
 	public BlockPos getNodeBpos() {
-		return nodeBpos;
+		return nodeB.getBlock();
 	}
-	public void setNodeBpos(BlockPos nodeBpos) {
-		this.nodeBpos = nodeBpos;
-	}
+//	public void setNodeBpos(BlockPos nodeBpos) {
+//		this.nodeBpos = nodeBpos;
+//	}
 	public int getNodeAid() {
-		return nodeAid;
+		return nodeA.getNode();
 	}
-	public void setNodeAid(int nodeAid) {
-		this.nodeAid = nodeAid;
-	}
+//	public void setNodeAid(int nodeAid) {
+//		this.nodeAid = nodeAid;
+//	}
 	public int getNodeBid() {
-		return nodeBid;
+		return nodeB.getNode();
 	}
-	public void setNodeBid(int nodeBid) {
-		this.nodeBid = nodeBid;
-	}
+//	public void setNodeBid(int nodeBid) {
+//		this.nodeBid = nodeBid;
+//	}
 	
 	public void write(FriendlyByteBuf buff) {
-		buff.writeBlockPos(nodeApos);
-		buff.writeBlockPos(nodeBpos);
-		buff.writeInt(nodeAid);
-		buff.writeInt(nodeBid);
+		this.nodeA.write(buff);
+		this.nodeB.write(buff);
 	}
 	
 	public static ConduitPos read(FriendlyByteBuf buff) {
-		BlockPos nodeApos = buff.readBlockPos();
-		BlockPos nodeBpos = buff.readBlockPos();
-		int nodeAid = buff.readInt();
-		int nodeBid = buff.readInt();
-		return new ConduitPos(nodeApos, nodeBpos, nodeAid, nodeBid);
+		NodePos nodeA = NodePos.read(buff);
+		NodePos nodeB = NodePos.read(buff);
+		return new ConduitPos(nodeA, nodeB);
 	}
 	
 	public CompoundTag writeNBT(CompoundTag nbt) {
-		nbt.put("PosA", NbtUtils.writeBlockPos(this.nodeApos));
-		nbt.put("PosB", NbtUtils.writeBlockPos(this.nodeBpos));
-		nbt.putInt("IdA", this.nodeAid);
-		nbt.putInt("IdB", this.nodeBid);
+		nbt.put("NodeA", this.nodeA.writeNBT(new CompoundTag()));
+		nbt.put("NodeB", this.nodeB.writeNBT(new CompoundTag()));
 		return nbt;
 	}
 	
 	public static ConduitPos readNBT(CompoundTag nbt) {
-		return new ConduitPos(NbtUtils.readBlockPos(nbt.getCompound("PosA")), NbtUtils.readBlockPos(nbt.getCompound("PosB")), nbt.getInt("IdA"), nbt.getInt("IdB"));
+		NodePos nodeA = NodePos.readNBT(nbt.getCompound("NodeA"));
+		NodePos nodeB = NodePos.readNBT(nbt.getCompound("NodeB"));
+		return new ConduitPos(nodeA, nodeB);
 	}
 	
 	@Override
 	public int hashCode() {
 		int prime = 31;
 		int result = 1;
-		result = prime * result + ((this.nodeApos != null) ? 0 : this.nodeApos.hashCode());
-		result = prime * result + ((this.nodeBpos != null) ? 0 : this.nodeBpos.hashCode());
-		result = prime * result + this.nodeAid;
-		result = prime * result + this.nodeBid;
+		result = prime * result + ((this.nodeA != null) ? 0 : this.nodeA.hashCode());
+		result = prime * result + ((this.nodeB != null) ? 0 : this.nodeB.hashCode());
 		return result;
 	}
 	
@@ -87,17 +108,89 @@ public class ConduitPos {
 	public boolean equals(Object obj) {
 		if (obj instanceof ConduitPos) {
 			ConduitPos other = (ConduitPos) obj;
-			return 	other.nodeApos.equals(nodeApos) &&
-					other.nodeBpos.equals(nodeBpos) &&
-					other.nodeAid == nodeAid &&
-					other.nodeBid == nodeBid;
+			return 	other.nodeA.equals(nodeA) &&
+					other.nodeB.equals(nodeB);
 		}
 		return false;
 	}
 	
 	@Override
 	public String toString() {
-		return "ConduitPos{A=[" + this.nodeAid + "@" + this.nodeApos.getX() + "," + nodeApos.getY() + "," + nodeApos.getZ() + "],B=[" + this.nodeBid + "@" + this.nodeBpos.getX() + "," + nodeBpos.getY() + "," + nodeBpos.getZ() + "]}";
+		return "ConduitPos{A=" + this.nodeA.toString() + ",B=" + this.nodeB + "}";
+	}
+	
+	public static class NodePos {
+		
+		protected BlockPos block;
+		protected int node;
+		
+		public NodePos(BlockPos block, int node) {
+			this.block = block;
+			this.node = node;
+		}
+		
+		public BlockPos getBlock() {
+			return block;
+		}
+		
+		public int getNode() {
+			return node;
+		}
+
+		public void write(FriendlyByteBuf buff) {
+			buff.writeBlockPos(block);
+			buff.writeInt(node);
+		}
+		
+		public static NodePos read(FriendlyByteBuf buff) {
+			BlockPos block = buff.readBlockPos();
+			int node = buff.readInt();
+			return new NodePos(block, node);
+		}
+		
+		public CompoundTag writeNBT(CompoundTag nbt) {
+			nbt.put("Pos", NbtUtils.writeBlockPos(this.block));
+			nbt.putInt("Id", this.node);
+			return nbt;
+		}
+		
+		public static NodePos readNBT(CompoundTag nbt) {
+			return new NodePos(NbtUtils.readBlockPos(nbt.getCompound("Pos")), nbt.getInt("Id"));
+		}
+		
+		@Override
+		public int hashCode() {
+			return Objects.hash(this.block, this.node);
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof NodePos other) {
+				return other.block.equals(this.block) && other.node == node;
+			}
+			return false;
+		}
+		
+		@Override
+		public String toString() {
+			return "NodePos{block=[" + this.block.getX() + "," + this.block.getY() + "," + this.block.getZ() + "],node=" + this.node + "}";
+		}
+		
+		public String getKeyString() {
+			return "Node{pos=" + this.block.asLong() + ",id=" + this.node + "}";
+		}
+		
+		public static NodePos getFromKeyString(String keyString) {
+			try {
+				String[] s = keyString.split("pos=")[1].split("}")[0].split(",id=");
+				BlockPos position = BlockPos.of(Long.valueOf(s[0]));
+				int node = Integer.valueOf(s[1]);
+				return new NodePos(position, node);
+			} catch (Exception e) {
+				return null;
+			}
+		}
+		
 	}
 	
 }

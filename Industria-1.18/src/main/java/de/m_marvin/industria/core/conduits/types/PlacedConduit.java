@@ -1,6 +1,6 @@
 package de.m_marvin.industria.core.conduits.types;
 
-import de.m_marvin.industria.core.conduits.registy.Conduits;
+import de.m_marvin.industria.core.conduits.registry.Conduits;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitShape;
 import net.minecraft.core.BlockPos;
@@ -12,20 +12,26 @@ import net.minecraft.world.level.Level;
 public class PlacedConduit {
 	
 	private ConduitPos position;
+	private int length;
 	private int nodesPerBlock;
 	private Conduit conduit;
 	private ConduitShape shape;
 	
 	public ConduitShape conduitShape;
 	
-	public PlacedConduit(ConduitPos position, Conduit conduit, int nodesPerBlock) {
+	public PlacedConduit(ConduitPos position, Conduit conduit, int nodesPerBlock, int length) {
 		this.position = position;
 		this.conduit = conduit;
 		this.nodesPerBlock = nodesPerBlock;
+		this.length = length;
 	}
 	
 	public ConduitPos getConduitPosition() {
 		return position;
+	}
+	
+	public int getLength() {
+		return length;
 	}
 	
 	public PlacedConduit build(Level level) {
@@ -51,8 +57,9 @@ public class PlacedConduit {
 		ResourceLocation conduitName = new ResourceLocation(tag.getString("Conduit"));
 		Conduit conduit = Conduits.CONDUITS_REGISTRY.get().getValue(conduitName);
 		int nodesPerBlock = tag.getInt("Nodes");
+		int length = tag.getInt("Length");
 		if (conduit == null) return null;
-		return new PlacedConduit(position, conduit, nodesPerBlock);
+		return new PlacedConduit(position, conduit, nodesPerBlock, length);
 	}
 	
 	public ConduitShape getShape() {
@@ -101,6 +108,7 @@ public class PlacedConduit {
 	public String toString() {
 		return "PlacedConduit{conduit=" + this.conduit.getRegistryName() + 
 				",nodes=" + this.nodesPerBlock +
+				",length=" + this.length +
 				",position=" + this.position.toString() + 
 				"}";
  	}

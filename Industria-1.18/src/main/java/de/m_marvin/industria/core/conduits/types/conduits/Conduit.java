@@ -6,14 +6,15 @@ import java.util.List;
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.content.registries.ModParticleTypes;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
-import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier.ConnectionPoint;
 import de.m_marvin.industria.core.conduits.engine.particles.ConduitParticleOption;
+import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.conduits.types.items.ConduitCableItem;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
+import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -84,14 +85,14 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		return Conduit.class;
 	}
 	
-	public int getColorAt(ClientLevel level, Vec3f nodePos, PlacedConduit conduitState) {
+	public int getColorAt(ClientLevel level, Vec3d nodePos, PlacedConduit conduitState) {
 		return 0xFFFFFF;
 	}
 	
 	public void onNodeStateChange(Level level, BlockPos nodePos, BlockState nodeState, PlacedConduit conduitState) {
 		if (nodeState.getBlock() instanceof IConduitConnector) {
 			int nodeId = conduitState.getNodeA().equals(nodePos) ? conduitState.getConnectionPointA() : conduitState.getConnectionPointB();
-			if (((IConduitConnector) nodeState.getBlock()).getConnectionPoints(nodePos, nodeState).length <= nodeId) {
+			if (((IConduitConnector) nodeState.getBlock()).getConduitNodes(level, nodePos, nodeState).length <= nodeId) {
 				ConduitUtility.removeConduit(level, conduitState.getConduitPosition(), true);
 			}
 		} else {
@@ -129,7 +130,7 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		level.playLocalSound(middle.x, middle.y, middle.z, this.getSoundType().getBreakSound(), SoundSource.BLOCKS, this.getSoundType().getVolume(), this.getSoundType().getPitch(), false);
 		
 		if (!level.isClientSide()) {
-			for (Vec3f node : conduitState.getShape().nodes) {
+			for (Vec3d node : conduitState.getShape().nodes) {
 				((ServerLevel) level).sendParticles(new ConduitParticleOption(ModParticleTypes.CONDUIT.get(), conduitState.getConduit()), node.x + cornerMin.getX(), node.y + cornerMin.getY(), node.z + cornerMin.getZ(), 10, 0.2F, 0.2F, 0.2F, 1);
 			}
 		}
@@ -206,29 +207,21 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		
 		if ((nodeAstate.getBlock() instanceof IConduitConnector && nodeBstate.getBlock() instanceof IConduitConnector)) {
 			
-			ConnectionPoint pointA = ((IConduitConnector) nodeAstate.getBlock()).getConnectionPoints(nodeApos, nodeAstate)[conduit.getConnectionPointA()];
-			ConnectionPoint pointB = ((IConduitConnector) nodeBstate.getBlock()).getConnectionPoints(nodeBpos, nodeBstate)[conduit.getConnectionPointB()];
+			ConduitNode nodeA = ((IConduitConnector) nodeAstate.getBlock()).getConduitNode(level, nodeApos, nodeAstate, conduit.getConnectionPointA());
+			ConduitNode nodeB = ((IConduitConnector) nodeBstate.getBlock()).getConduitNode(level, nodeBpos, nodeBstate, conduit.getConnectionPointB());
 			
 			// TODO Random-Noise offset to the nodes for random wire placement.
 			
-			Vec3f pointStart = new Vec3f(
-					nodeApos.getX() - cornerMin.getX(),
-					nodeApos.getY() - cornerMin.getY(),
-					nodeApos.getZ() - cornerMin.getZ()
-				).add(Vec3f.fromVec(pointA.offset).mul(0.0625F));
-			Vec3f pointEnd = new Vec3f(
-					nodeBpos.getX() - cornerMin.getX(),
-					nodeBpos.getY() - cornerMin.getY(),
-					nodeBpos.getZ() - cornerMin.getZ()
-				).add(Vec3f.fromVec(pointB.offset).mul(0.0625F));
+			Vec3d pointStart = nodeA.getWorldPosition(level, nodeApos).sub(Vec3d.fromVec(cornerMin));
+			Vec3d pointEnd = nodeB.getWorldPosition(level, nodeBpos).sub(Vec3d.fromVec(cornerMin));
 			
-			Vec3f connectionVec = pointEnd.copy().sub(pointStart);
-			float conduitLength = (float) connectionVec.length();
-			float cornerSegments = conduitLength * nodesPerBlock;
-			float beamLength = conduitLength / (cornerSegments + 1);
+			Vec3d connectionVec = pointEnd.copy().sub(pointStart);
+			double conduitLength = connectionVec.length();
+			double cornerSegments = conduitLength * nodesPerBlock;
+			double beamLength = conduitLength / (cornerSegments + 1);
 			connectionVec.normalizeI();
 			
-			List<Vec3f> nodes = new ArrayList<>();
+			List<Vec3d> nodes = new ArrayList<>();
 			nodes.add(pointStart);
 			for (int i = 1; i <= cornerSegments; i++) {
 				nodes.add(connectionVec.mul(beamLength * i).add(pointStart));
@@ -254,7 +247,7 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 			
 			// Integrate nodes
 			for (int i = 1; i < shape.nodes.length - 1; i++) {
-				Vec3f temp = shape.nodes[i].copy();
+				Vec3d temp = shape.nodes[i].copy();
 				shape.nodes[i].addI(shape.nodes[i].copy().sub(shape.lastPos[i]));
 				shape.lastPos[i] = temp;
 			}
@@ -264,20 +257,20 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 				// Solve beams
 				for (int i = 1; i < shape.nodes.length; i++) {
 					
-					Vec3f nodeB = shape.nodes[i];
-					Vec3f nodeA = shape.nodes[i - 1];
+					Vec3d nodeB = shape.nodes[i];
+					Vec3d nodeA = shape.nodes[i - 1];
 					
 					// Calculate spring deformation
-					Vec3f delta = nodeB.copy().sub(nodeA);
+					Vec3d delta = nodeB.copy().sub(nodeA);
 					double deltalength = delta.length(); // Math.sqrt(delta.dot(delta));
-					float diff = (float) ((deltalength - shape.beamLength) / deltalength);
+					double diff = (float) ((deltalength - shape.beamLength) / deltalength);
 					
 					// Reform spring
-					float stiffness = conduit.getConduit().getConduitType().getStiffness() * 1.0F;
-					float stiffnessLinear = (float) (1 - Math.pow((1 - stiffness), 1 / itteration));
+					double stiffness = conduit.getConduit().getConduitType().getStiffness() * 1.0F;
+					double stiffnessLinear = (float) (1 - Math.pow((1 - stiffness), 1 / itteration));
 					boolean oneStatic = i == 1 || i == shape.nodes.length - 1;
-					nodeA.addI(delta.copy().mul(i == 1 ? 0 : (oneStatic ? 1 : 0.5F)).mul(diff).mul(stiffnessLinear));
-					nodeB.subI(delta.copy().mul(i == shape.nodes.length - 1 ? 0 : (oneStatic ? 1 : 0.5F)).mul(diff).mul(stiffnessLinear));
+					nodeA.addI(delta.copy().mul(i == 1 ? 0 : (oneStatic ? 1 : 0.5)).mul(diff).mul(stiffnessLinear));
+					nodeB.subI(delta.copy().mul(i == shape.nodes.length - 1 ? 0 : (oneStatic ? 1 : 0.5)).mul(diff).mul(stiffnessLinear));
 					
 				}
 				
@@ -291,7 +284,7 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 			// Solve collision
 			for (int i = 1; i < shape.nodes.length - 1; i++) {
 				
-				Vec3f nodePos = shape.nodes[i].copy().add(Vec3f.fromVec(origin));
+				Vec3d nodePos = shape.nodes[i].copy().add(Vec3f.fromVec(origin));
 				BlockPos nodeBlockPos = new BlockPos(nodePos.x, nodePos.y, nodePos.z);
 				
 				if (!nodeBlockPos.equals(conduit.getNodeA()) && !nodeBlockPos.equals(conduit.getNodeB())) {
@@ -302,12 +295,12 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 						
 						AABB bounds = collisionShape.bounds().move(nodeBlockPos);
 						
-						Vec3f surface = nodePos.copy();
-						float dist = 1F;
+						Vec3d surface = nodePos.copy();
+						double dist = 1;
 						
 						for (Direction d : Direction.values()) {
 							
-							Vec3f surfacePoint = nodePos.copy();
+							Vec3d surfacePoint = nodePos.copy();
 							if (d.getAxis() == Axis.X && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.x = (float) bounds.maxX;
 							if (d.getAxis() == Axis.X && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.x = (float) bounds.minX;
 							if (d.getAxis() == Axis.Y && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.y = (float) bounds.maxY;
@@ -315,7 +308,7 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 							if (d.getAxis() == Axis.Z && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.z = (float) bounds.maxZ;
 							if (d.getAxis() == Axis.Z && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.z = (float) bounds.minZ;
 							
-							float distance = (float) nodePos.copy().sub(surfacePoint).length();
+							double distance = nodePos.copy().sub(surfacePoint).length();
 							
 							if (distance < dist && distance > 0) {
 								dist = distance;
@@ -342,13 +335,13 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 	}
 	
 	public static class ConduitShape {
-		public Vec3f[] nodes;
-		public Vec3f[] lastPos;
-		public float beamLength;
+		public Vec3d[] nodes;
+		public Vec3d[] lastPos;
+		public double beamLength;
 		
-		public ConduitShape(List<Vec3f> nodes, float beamLength) {
-			this.nodes = nodes.toArray(new Vec3f[] {});
-			this.lastPos = nodes.toArray(new Vec3f[] {});
+		public ConduitShape(List<Vec3d> nodes, double beamLength) {
+			this.nodes = nodes.toArray(new Vec3d[] {});
+			this.lastPos = nodes.toArray(new Vec3d[] {});
 			this.beamLength = beamLength;
 		}
 		

@@ -8,7 +8,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
 import de.m_marvin.industria.core.conduits.ConduitUtility;
-import de.m_marvin.industria.core.conduits.registy.Conduits;
+import de.m_marvin.industria.core.conduits.registry.Conduits;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
@@ -44,8 +44,10 @@ public class SetConduitCommand {
 			ConduitUtility.removeConduit(level, position, drop);
 		}
 		
+		int conduitLength = (int) Math.ceil(position.calculateMinConduitLength(level));
+		
 		if (conduit != Conduits.NONE.get()) {
-			if (ConduitUtility.setConduit(level, position, conduit, nodesPerBlock)) {
+			if (ConduitUtility.setConduit(level, position, conduit, nodesPerBlock, conduitLength)) {
 				source.getSource().sendSuccess(new TranslatableComponent("industria.commands.setconduit.success", nodeApos.getX(), nodeApos.getY(), nodeApos.getZ()), true);
 				return Command.SINGLE_SUCCESS;
 			} else {

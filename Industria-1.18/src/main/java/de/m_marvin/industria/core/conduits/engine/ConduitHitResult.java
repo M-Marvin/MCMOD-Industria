@@ -1,21 +1,21 @@
 package de.m_marvin.industria.core.conduits.engine;
 
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
-import de.m_marvin.univec.impl.Vec3f;
+import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class ConduitHitResult {
 	
 	protected BlockHitResult blockResult;
 	protected PlacedConduit conduitState;
-	protected Vec3f hitPos;
+	protected Vec3d hitPos;
 	protected int node1, node2;
 	
 	public ConduitHitResult(BlockHitResult result) {
 		this.blockResult = result;
 	}
 
-	protected ConduitHitResult(PlacedConduit conduitState, Vec3f hitPos, int node1, int node2) {
+	protected ConduitHitResult(PlacedConduit conduitState, Vec3d hitPos, int node1, int node2) {
 		super();
 		this.conduitState = conduitState;
 		this.hitPos = hitPos;
@@ -23,7 +23,7 @@ public class ConduitHitResult {
 		this.node2 = node2;
 	}
 
-	public static ConduitHitResult hit(PlacedConduit conduitState, Vec3f hitPos, int node1, int node2) {
+	public static ConduitHitResult hit(PlacedConduit conduitState, Vec3d hitPos, int node1, int node2) {
 		return new ConduitHitResult(conduitState, hitPos, node1, node2);
 	}
 	
@@ -51,7 +51,7 @@ public class ConduitHitResult {
 		return conduitState;
 	}
 
-	public Vec3f getHitPos() {
+	public Vec3d getHitPos() {
 		return hitPos;
 	}
 

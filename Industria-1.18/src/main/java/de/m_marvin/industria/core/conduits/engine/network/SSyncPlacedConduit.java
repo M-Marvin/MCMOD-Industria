@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.core.conduits.engine.ClientConduitPackageHandler;
-import de.m_marvin.industria.core.conduits.registy.Conduits;
+import de.m_marvin.industria.core.conduits.registry.Conduits;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
@@ -52,6 +52,7 @@ public class SSyncPlacedConduit {
 			buff.writeBlockPos(conduitState.getNodeA());
 			buff.writeBlockPos(conduitState.getNodeB());
 			buff.writeInt(conduitState.getNodesPerBlock());
+			buff.writeInt(conduitState.getLength());
 			buff.writeInt(conduitState.getConnectionPointA());
 			buff.writeInt(conduitState.getConnectionPointB());
 			buff.writeResourceLocation(conduitState.getConduit().getRegistryName());
@@ -67,6 +68,7 @@ public class SSyncPlacedConduit {
 			BlockPos nodeApos = buff.readBlockPos();
 			BlockPos nodeBpos = buff.readBlockPos();
 			int nodesPerBlock = buff.readInt();
+			int length = buff.readInt();
 			int connectionPointA = buff.readInt();
 			int connectionPointB = buff.readInt();
 			ResourceLocation conduitName = buff.readResourceLocation();
@@ -76,7 +78,7 @@ public class SSyncPlacedConduit {
 			}
 			Conduit conduit = Conduits.CONDUITS_REGISTRY.get().getValue(conduitName);
 			ConduitPos position = new ConduitPos(nodeApos, nodeBpos, connectionPointA, connectionPointB);
-			conduitStates.add(new PlacedConduit(position, conduit, nodesPerBlock));
+			conduitStates.add(new PlacedConduit(position, conduit, nodesPerBlock, length));
 		}
 		return new SSyncPlacedConduit(conduitStates, chunkPos, removed);
 	}

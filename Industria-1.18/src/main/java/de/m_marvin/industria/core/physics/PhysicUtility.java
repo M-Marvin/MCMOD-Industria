@@ -386,4 +386,12 @@ public class PhysicUtility {
 		return ContraptionHitResult.miss(clipResult.getLocation());
 	}
 	
+	public static Vec3d ensureWorldCoordinates(Level level, BlockPos referencePos, Vec3d position) {
+		Ship contraption = getContraptionOfBlock(level, referencePos);
+		if (contraption != null) {
+			return toWorldPos(contraption, position);
+		}
+		return position;
+	}
+	
 }

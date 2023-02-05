@@ -170,7 +170,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	public boolean breakConduit(ConduitPos position, boolean dropItems) {
 		PlacedConduit conduitToRemove = null;
 		for (PlacedConduit con : this.conduits) {
-			if (con.getConduitPosition().equals(position)) {
+			if (con.getPosition().equals(position)) {
 				conduitToRemove = con;
 				break;
 			}
@@ -229,7 +229,9 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 		MinecraftForge.EVENT_BUS.post(event);
 		
 		if (!event.isCanceled()) {
-			addConduit(conduitState);
+			if (!addConduit(conduitState)) {
+				return false;
+			}
 			conduitState.getConduit().onPlace(level, position, conduitState);
 			if (!level.isClientSide()) {
 				Industria.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(nodeApos)), new SSyncPlacedConduit(conduitState, new ChunkPos(nodeApos), false));
@@ -245,7 +247,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	 * Removes a conduit from the world, called on server AND client side to synchronize conduits
 	 */
 	public void removeConduit(PlacedConduit conduitState) {
-		if (level.isLoaded(conduitState.getNodeA()) && level.isLoaded(conduitState.getNodeB())) {
+		if (level.isLoaded(conduitState.getPosition().getNodeApos()) && level.isLoaded(conduitState.getPosition().getNodeBpos())) {
 			if (conduits.contains(conduitState)) {
 				this.conduits.remove(conduitState);
 				conduitState.setShape(null);
@@ -256,13 +258,15 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	/*
 	 * Adds a conduit to the world, called on server AND client side to synchronize conduits
 	 */
-	public void addConduit(PlacedConduit conduitState) {
-		if (level.isLoaded(conduitState.getNodeA()) && level.isLoaded(conduitState.getNodeB())) {
+	public boolean addConduit(PlacedConduit conduitState) {
+		if (level.isLoaded(conduitState.getPosition().getNodeApos()) && level.isLoaded(conduitState.getPosition().getNodeBpos())) {
 			if (!conduits.contains(conduitState)) {
 				conduitState.build(level);
 				this.conduits.add(conduitState);
+				return true;
 			}
 		}
+		return false;
 	}
 	
 	/*
@@ -271,7 +275,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	public List<PlacedConduit> getConduitsInChunk(ChunkPos chunk) {
 		List<PlacedConduit> conduits = new ArrayList<PlacedConduit>();
  		for (PlacedConduit con : this.conduits) {
-			if (MathUtility.isInChunk(chunk, con.getNodeA()) || MathUtility.isInChunk(chunk, con.getNodeB())) {
+			if (MathUtility.isInChunk(chunk, con.getPosition().getNodeApos()) || MathUtility.isInChunk(chunk, con.getPosition().getNodeBpos())) {
 				conduits.add(con);
 			}
 		}
@@ -283,7 +287,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	 */
 	public Optional<PlacedConduit> getConduit(ConduitPos position) {
 		for (PlacedConduit con : this.conduits) {
-			if (con.getConduitPosition().equals(position)) {
+			if (con.getPosition().equals(position)) {
 				return Optional.of(con);
 			}
 		}
@@ -295,8 +299,8 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	 */
 	public Optional<PlacedConduit> getConduitAtNode(BlockPos block, int node) {
 		for (PlacedConduit con : this.conduits) {
-			if (	(con.getNodeA().equals(block) && con.getConnectionPointA() == node) ||
-					(con.getNodeB().equals(block) && con.getConnectionPointB() == node)) {
+			if (	(con.getPosition().getNodeApos().equals(block) && con.getPosition().getNodeAid() == node) ||
+					(con.getPosition().getNodeBpos().equals(block) && con.getPosition().getNodeBid() == node)) {
 				return Optional.of(con);
 			}
 		}
@@ -309,8 +313,8 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	public List<PlacedConduit> getConduitsAtNode(BlockPos block, int node) {
 		List<PlacedConduit> conduits = new ArrayList<>();
 		for (PlacedConduit con : this.conduits) {
-			if (	(con.getNodeA().equals(block) && con.getConnectionPointA() == node) ||
-					(con.getNodeB().equals(block) && con.getConnectionPointB() == node)) {
+			if (	(con.getPosition().getNodeApos().equals(block) && con.getPosition().getNodeAid() == node) ||
+					(con.getPosition().getNodeBpos().equals(block) && con.getPosition().getNodeBid() == node)) {
 				conduits.add(con);
 			}
 		}
@@ -323,7 +327,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	public List<PlacedConduit> getConduitsAtBlock(BlockPos block) {
 		List<PlacedConduit> conduits = new ArrayList<>();
 		for (PlacedConduit con : this.conduits) {
-			if (con.getNodeA().equals(block) || con.getNodeB().equals(block)) {
+			if (con.getPosition().getNodeApos().equals(block) || con.getPosition().getNodeBpos().equals(block)) {
 				conduits.add(con);
 			}
 		}
@@ -342,13 +346,13 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 		
 		for (PlacedConduit conduit : this.conduits) {
 			double distance = Math.sqrt(Math.max(
-					Vec3f.fromVec(conduit.getNodeA()).distSqr(Vec3f.fromVec(context.getFrom())),
-					Vec3f.fromVec(conduit.getNodeB()).distSqr(Vec3f.fromVec(context.getFrom()))));
+					Vec3f.fromVec(conduit.getPosition().getNodeApos()).distSqr(Vec3f.fromVec(context.getFrom())),
+					Vec3f.fromVec(conduit.getPosition().getNodeBpos()).distSqr(Vec3f.fromVec(context.getFrom()))));
 			double maxRange = conduit.getConduit().getConduitType().getClampingLength() + context.getTo().subtract(context.getFrom()).length();
 							
 			if (distance <= maxRange && conduit.getShape() != null) {
-				BlockPos nodeApos = conduit.getNodeA();
-				BlockPos nodeBpos = conduit.getNodeB();
+				BlockPos nodeApos = conduit.getPosition().getNodeApos();
+				BlockPos nodeBpos = conduit.getPosition().getNodeBpos();
 				BlockPos cornerMin = MathUtility.getMinCorner(nodeApos, nodeBpos);
 				
 				for (int i = 1; i < conduit.getShape().nodes.length; i++) {

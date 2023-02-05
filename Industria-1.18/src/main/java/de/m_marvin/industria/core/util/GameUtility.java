@@ -1,16 +1,24 @@
 package de.m_marvin.industria.core.util;
 
+import org.valkyrienskies.core.api.ships.Ship;
+
+import de.m_marvin.industria.core.physics.types.ContraptionHitResult;
+import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.HitResult.Type;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -60,6 +68,15 @@ public class GameUtility {
 	public static void relocateBlock(Level level, BlockPos from, BlockPos to) {
 		copyBlock(level, from, to);
 		removeBlock(level, from);
+	}
+
+	public static HitResult raycast(Level level, Vec3d from, Vec3d direction, double range) {
+		return raycast(level, from, from.add(direction.mul(range)));
+	}
+	
+	public static HitResult raycast(Level level, Vec3d from, Vec3d to) {
+		ClipContext clipContext = new ClipContext(from.writeTo(new Vec3(0, 0, 0)), to.writeTo(new Vec3(0, 0, 0)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, null);
+		return level.clip(clipContext);
 	}
 	
 }

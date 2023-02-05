@@ -8,7 +8,6 @@ import de.m_marvin.industria.core.client.registries.NodeTypes;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
-import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitType;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.univec.impl.Vec3f;
 import de.m_marvin.univec.impl.Vec3i;

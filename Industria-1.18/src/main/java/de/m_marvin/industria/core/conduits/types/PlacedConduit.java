@@ -26,14 +26,6 @@ public class PlacedConduit {
 		this.length = length;
 	}
 	
-	public ConduitPos getConduitPosition() {
-		return position;
-	}
-	
-	public int getLength() {
-		return length;
-	}
-	
 	public PlacedConduit build(Level level) {
 		this.shape = conduit.buildShape(level, this, nodesPerBlock);
 		updateShape(level);
@@ -73,21 +65,13 @@ public class PlacedConduit {
 	public Conduit getConduit() {
 		return conduit;
 	}
-	
-	public BlockPos getNodeA() {
-		return this.position.getNodeApos();
-	}
 
-	public BlockPos getNodeB() {
-		return this.position.getNodeBpos();
+	public ConduitPos getPosition() {
+		return position;
 	}
 	
-	public int getConnectionPointA() {
-		return this.position.getNodeAid();
-	}
-	
-	public int getConnectionPointB() {
-		return this.position.getNodeBid();
+	public int getLength() {
+		return length;
 	}
 	
 	public int getNodesPerBlock() {
@@ -98,7 +82,7 @@ public class PlacedConduit {
 	public boolean equals(Object obj) {
 		if (obj instanceof PlacedConduit) {
 			PlacedConduit other = (PlacedConduit) obj;
-			return 	other.getConduitPosition().equals(this.getConduitPosition()) &
+			return 	other.getPosition().equals(this.getPosition()) &
 					other.conduit == this.conduit;
 		}
 		return false;

@@ -10,7 +10,6 @@ import de.m_marvin.industria.core.conduits.registry.Conduits;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
@@ -49,12 +48,9 @@ public class SSyncPlacedConduit {
 		buff.writeChunkPos(msg.chunkPos);
 		buff.writeInt(msg.conduitStates.size());
 		for (PlacedConduit conduitState : msg.conduitStates) {
-			buff.writeBlockPos(conduitState.getNodeA());
-			buff.writeBlockPos(conduitState.getNodeB());
+			conduitState.getPosition().write(buff);
 			buff.writeInt(conduitState.getNodesPerBlock());
 			buff.writeInt(conduitState.getLength());
-			buff.writeInt(conduitState.getConnectionPointA());
-			buff.writeInt(conduitState.getConnectionPointB());
 			buff.writeResourceLocation(conduitState.getConduit().getRegistryName());
 		}
 	}
@@ -65,19 +61,15 @@ public class SSyncPlacedConduit {
 		int count = buff.readInt();
 		List<PlacedConduit> conduitStates = new ArrayList<PlacedConduit>();
 		for (int i = 0; i < count; i++) {
-			BlockPos nodeApos = buff.readBlockPos();
-			BlockPos nodeBpos = buff.readBlockPos();
+			ConduitPos position = ConduitPos.read(buff);
 			int nodesPerBlock = buff.readInt();
 			int length = buff.readInt();
-			int connectionPointA = buff.readInt();
-			int connectionPointB = buff.readInt();
 			ResourceLocation conduitName = buff.readResourceLocation();
 			if (!Conduits.CONDUITS_REGISTRY.get().containsKey(conduitName)) {
 				Industria.LOGGER.error("Recived package for unregistered conduit: " + conduitName);
 				continue;
 			}
 			Conduit conduit = Conduits.CONDUITS_REGISTRY.get().getValue(conduitName);
-			ConduitPos position = new ConduitPos(nodeApos, nodeBpos, connectionPointA, connectionPointB);
 			conduitStates.add(new PlacedConduit(position, conduit, nodesPerBlock, length));
 		}
 		return new SSyncPlacedConduit(conduitStates, chunkPos, removed);

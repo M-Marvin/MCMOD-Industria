@@ -37,7 +37,7 @@ public class GenricConduitEventListener {
 			ConduitHitResult hitResult = ConduitUtility.clipConduits(event.getWorld(), clipContext, true);
 			if (hitResult.isHit()) {
 				PlacedConduit conduit = hitResult.getConduitState();
-				ConduitUtility.removeConduitFromClient(event.getWorld(), conduit.getConduitPosition(), !event.getPlayer().isCreative());
+				ConduitUtility.removeConduitFromClient(event.getWorld(), conduit.getPosition(), !event.getPlayer().isCreative());
 				
 				event.setCanceled(true);
 				event.setCancellationResult(InteractionResult.SUCCESS);

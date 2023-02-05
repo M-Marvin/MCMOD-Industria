@@ -108,8 +108,8 @@ public class ConduitPos {
 	public boolean equals(Object obj) {
 		if (obj instanceof ConduitPos) {
 			ConduitPos other = (ConduitPos) obj;
-			return 	other.nodeA.equals(nodeA) &&
-					other.nodeB.equals(nodeB);
+			return 	(other.nodeA.equals(nodeA) && other.nodeB.equals(nodeB)) ||
+					(other.nodeB.equals(nodeA) && other.nodeA.equals(nodeB));
 		}
 		return false;
 	}

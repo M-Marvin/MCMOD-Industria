@@ -91,19 +91,19 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 	
 	public void onNodeStateChange(Level level, BlockPos nodePos, BlockState nodeState, PlacedConduit conduitState) {
 		if (nodeState.getBlock() instanceof IConduitConnector) {
-			int nodeId = conduitState.getNodeA().equals(nodePos) ? conduitState.getConnectionPointA() : conduitState.getConnectionPointB();
+			int nodeId = conduitState.getPosition().getNodeApos().equals(nodePos) ? conduitState.getPosition().getNodeAid() : conduitState.getPosition().getNodeBid();
 			if (((IConduitConnector) nodeState.getBlock()).getConduitNodes(level, nodePos, nodeState).length <= nodeId) {
-				ConduitUtility.removeConduit(level, conduitState.getConduitPosition(), true);
+				ConduitUtility.removeConduit(level, conduitState.getPosition(), true);
 			}
 		} else {
-			ConduitUtility.removeConduit(level, conduitState.getConduitPosition(), true);
+			ConduitUtility.removeConduit(level, conduitState.getPosition(), true);
 		}
 	}
 	
 	public void onPlace(Level level, ConduitPos position, PlacedConduit conduitState) {
 		
-		BlockPos nodeA = conduitState.getNodeA();
-		BlockPos nodeB = conduitState.getNodeB();
+		BlockPos nodeA = conduitState.getPosition().getNodeApos();
+		BlockPos nodeB = conduitState.getPosition().getNodeBpos();
 		Vec3f middle = Vec3f.fromVec(nodeA).sub(Vec3f.fromVec(nodeB)).mul(0.5F).add(Vec3f.fromVec(nodeB));
 		
 		level.playLocalSound(middle.x, middle.y, middle.z, this.getSoundType().getBreakSound(), SoundSource.BLOCKS, this.getSoundType().getVolume(), this.getSoundType().getPitch(), false);
@@ -113,17 +113,17 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 	public void onBreak(Level level, ConduitPos position, PlacedConduit conduitState, boolean dropItems) {
 		
 		if (dropItems) {
-			int conduitLength = (int) Math.round(Math.sqrt(conduitState.getNodeA().distSqr(conduitState.getNodeB())));
+			int conduitLength = (int) Math.round(Math.sqrt(conduitState.getPosition().getNodeApos().distSqr(conduitState.getPosition().getNodeBpos())));
 			int wireCost = (int) Math.ceil(conduitLength / (float) ConduitCableItem.BLOCKS_PER_WIRE_ITEM);
-			BlockPos middle = conduitState.getNodeB().subtract(conduitState.getNodeA());
-			middle = conduitState.getNodeA().offset(middle.getX() / 2, middle.getY() / 2, middle.getZ() / 2);
+			BlockPos middle = conduitState.getPosition().getNodeBpos().subtract(conduitState.getPosition().getNodeApos());
+			middle = conduitState.getPosition().getNodeApos().offset(middle.getX() / 2, middle.getY() / 2, middle.getZ() / 2);
 			for (int i = 0; i < wireCost; i++) {
 				GameUtility.dropItem(level, new ItemStack(getItem()), Vec3f.fromVec(middle).add(new Vec3f(0.5F, 0.5F, 0.5F)), 0.5F, 0.1F);
 			}
 		}
 		
-		BlockPos nodeA = conduitState.getNodeA();
-		BlockPos nodeB = conduitState.getNodeB();
+		BlockPos nodeA = conduitState.getPosition().getNodeApos();
+		BlockPos nodeB = conduitState.getPosition().getNodeBpos();
 		BlockPos cornerMin = new BlockPos(Math.min(nodeA.getX(), nodeB.getX()), Math.min(nodeA.getY(), nodeB.getY()), Math.min(nodeA.getZ(), nodeB.getZ()));
 		Vec3f middle = Vec3f.fromVec(nodeA).sub(Vec3f.fromVec(nodeB)).mul(0.5F).add(Vec3f.fromVec(nodeB));
 		
@@ -199,21 +199,24 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 	
 	public ConduitShape buildShape(Level level, PlacedConduit conduit, int nodesPerBlock) {
 		
-		BlockPos nodeApos = conduit.getNodeA();
+		BlockPos nodeApos = conduit.getPosition().getNodeApos();
 		BlockState nodeAstate = level.getBlockState(nodeApos);
-		BlockPos nodeBpos = conduit.getNodeB();
+		BlockPos nodeBpos = conduit.getPosition().getNodeBpos();
 		BlockState nodeBstate = level.getBlockState(nodeBpos);
 		BlockPos cornerMin = MathUtility.getMinCorner(nodeApos, nodeBpos);
 		
 		if ((nodeAstate.getBlock() instanceof IConduitConnector && nodeBstate.getBlock() instanceof IConduitConnector)) {
 			
-			ConduitNode nodeA = ((IConduitConnector) nodeAstate.getBlock()).getConduitNode(level, nodeApos, nodeAstate, conduit.getConnectionPointA());
-			ConduitNode nodeB = ((IConduitConnector) nodeBstate.getBlock()).getConduitNode(level, nodeBpos, nodeBstate, conduit.getConnectionPointB());
+			ConduitNode nodeA = ((IConduitConnector) nodeAstate.getBlock()).getConduitNode(level, nodeApos, nodeAstate, conduit.getPosition().getNodeAid());
+			ConduitNode nodeB = ((IConduitConnector) nodeBstate.getBlock()).getConduitNode(level, nodeBpos, nodeBstate, conduit.getPosition().getNodeBid());
 			
 			// TODO Random-Noise offset to the nodes for random wire placement.
 			
-			Vec3d pointStart = nodeA.getWorldPosition(level, nodeApos).sub(Vec3d.fromVec(cornerMin));
-			Vec3d pointEnd = nodeB.getWorldPosition(level, nodeBpos).sub(Vec3d.fromVec(cornerMin));
+			Vec3d pointStart = nodeA.getWorldPosition(level, nodeApos);
+			Vec3d pointEnd = nodeB.getWorldPosition(level, nodeBpos);
+			Vec3d origin = new Vec3d(Math.min(pointStart.x, pointEnd.x), Math.min(pointStart.y, pointEnd.y), Math.min(pointStart.z, pointEnd.z)).sub(0.5, 0.5, 0.5);
+			pointStart.subI(origin);
+			pointEnd.subI(origin);
 			
 			Vec3d connectionVec = pointEnd.copy().sub(pointStart);
 			double conduitLength = connectionVec.length();
@@ -234,14 +237,14 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 			
 		}
 		
-		Industria.LOGGER.log(org.apache.logging.log4j.Level.WARN, "Failed to build conduit shape at " + conduit.getNodeA() + "/" + conduit.getNodeB() + "!");
+		Industria.LOGGER.log(org.apache.logging.log4j.Level.WARN, "Failed to build conduit shape at " + nodeApos + "/" + nodeBpos + "!");
 		
 		return null;
 	}
 	
 	public void updatePhysicalNodes(BlockGetter level, PlacedConduit conduit) {
 		ConduitShape shape = conduit.getShape();
-		BlockPos origin = MathUtility.getMinCorner(conduit.getNodeA(), conduit.getNodeB());
+		BlockPos origin = MathUtility.getMinCorner(conduit.getPosition().getNodeApos(), conduit.getPosition().getNodeBpos());
 		
 		if (shape != null) {
 			
@@ -287,7 +290,7 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 				Vec3d nodePos = shape.nodes[i].copy().add(Vec3f.fromVec(origin));
 				BlockPos nodeBlockPos = new BlockPos(nodePos.x, nodePos.y, nodePos.z);
 				
-				if (!nodeBlockPos.equals(conduit.getNodeA()) && !nodeBlockPos.equals(conduit.getNodeB())) {
+				if (!nodeBlockPos.equals(conduit.getPosition().getNodeApos()) && !nodeBlockPos.equals(conduit.getPosition().getNodeBpos())) {
 					
 					VoxelShape collisionShape = level.getBlockState(nodeBlockPos).getCollisionShape(level, nodeBlockPos);
 					

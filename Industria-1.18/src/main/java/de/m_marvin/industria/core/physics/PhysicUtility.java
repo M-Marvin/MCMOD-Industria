@@ -376,7 +376,6 @@ public class PhysicUtility {
 		if (clipResult.getType() == Type.BLOCK) {
 			BlockPos hitBlockPos = ((BlockHitResult) clipResult).getBlockPos();
 			Ship contraption = getContraptionOfBlock(level, hitBlockPos);
-			
 			if (contraption != null) {
 				Vec3 hitPosition = clipResult.getLocation();
 				return ContraptionHitResult.hit(hitPosition, hitBlockPos, contraption);

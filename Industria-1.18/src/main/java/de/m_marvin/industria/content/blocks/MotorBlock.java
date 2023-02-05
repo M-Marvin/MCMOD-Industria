@@ -98,7 +98,7 @@ public class MotorBlock extends Block implements IElectricConnector {
 	@Override
 	public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
 		if (pNewState.getBlock() == this && pState.getValue(BlockStateProperties.FACING) != pNewState.getValue(BlockStateProperties.FACING)) {
-			ConduitUtility.getConduitsAtBlock(pLevel, pPos).forEach(conduit -> ConduitUtility.removeConduit(pLevel, conduit.getConduitPosition(), true));
+			ConduitUtility.getConduitsAtBlock(pLevel, pPos).forEach(conduit -> ConduitUtility.removeConduit(pLevel, conduit.getPosition(), true));
 		}
 //		if (	pState.getBlock() == pNewState.getBlock() && pNewState.getBlock() == this && 
 //				pState.getValue(ModBlockStateProperties.MOTOR_MODE) != pNewState.getValue(ModBlockStateProperties.MOTOR_MODE)) {

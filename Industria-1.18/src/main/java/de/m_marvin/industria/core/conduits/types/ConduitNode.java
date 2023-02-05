@@ -43,4 +43,9 @@ public class ConduitNode {
 		return type;
 	}
 	
+	@Override
+	public String toString() {
+		return "ConduitNode{offset=[" + this.offset.x + "," + this.offset.y + "," + this.offset.z + "],type=" + this.type.toString() + ",connections=" + this.maxConnections + "}";
+	}
+	
 }

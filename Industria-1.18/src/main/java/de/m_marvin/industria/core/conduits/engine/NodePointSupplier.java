@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
+import de.m_marvin.industria.core.conduits.types.ConduitNode.NodeType;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.Direction;

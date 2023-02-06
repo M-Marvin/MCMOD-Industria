@@ -1,9 +1,13 @@
 package de.m_marvin.industria.core.conduits.types;
 
-import de.m_marvin.industria.core.conduits.engine.NodeType;
+import java.util.List;
+import java.util.function.Predicate;
+
+import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3i;
+import de.m_marvin.univec.impl.Vec4f;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
@@ -48,4 +52,32 @@ public class ConduitNode {
 		return "ConduitNode{offset=[" + this.offset.x + "," + this.offset.y + "," + this.offset.z + "],type=" + this.type.toString() + ",connections=" + this.maxConnections + "}";
 	}
 	
+	public static class NodeType {
+		
+		private final Predicate<Conduit> conduitPredicate;
+		private final Vec4f color;
+		
+		public boolean isValid(Conduit conduit) {
+			return this.conduitPredicate.test(conduit);
+		}
+		
+		protected NodeType(Predicate<Conduit> conduitPredicate, Vec4f color) {
+			this.conduitPredicate = conduitPredicate;
+			this.color = color;
+		}
+		
+		public static NodeType fromList(List<Conduit> validConduits, Vec4f color) {
+			return new NodeType(validConduits::contains, color);
+		}
+		
+		public static NodeType fromPredicate(Predicate<Conduit> predicate, Vec4f color) {
+			return new NodeType(predicate, color);
+		}
+	
+		public Vec4f getColor() {
+			return color;
+		}
+		
+	}
+
 }

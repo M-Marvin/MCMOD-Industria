@@ -3,6 +3,7 @@ package de.m_marvin.industria.core.conduits.types;
 import java.util.Objects;
 
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
+import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -39,6 +40,28 @@ public class ConduitPos {
 		return -1;
 	}
 	
+	public Vec3d calculateWorldNodeA(Level level) {
+		BlockState nodeAstate = level.getBlockState(this.nodeA.getBlock());
+		if (nodeAstate.getBlock() instanceof IConduitConnector nodeAconnector) {
+			ConduitNode nodeA = nodeAconnector.getConduitNode(level, this.nodeA.getBlock(), nodeAstate, this.nodeA.getNode());
+			if (nodeA != null && nodeB != null) {
+				return nodeA.getWorldPosition(level, this.nodeA.getBlock());
+			}
+		}
+		return new Vec3d(0, 0, 0);
+	}
+
+	public Vec3d calculateWorldNodeB(Level level) {
+		BlockState nodeBstate = level.getBlockState(this.nodeB.getBlock());
+		if (nodeBstate.getBlock() instanceof IConduitConnector nodeAconnector) {
+			ConduitNode nodeB = nodeAconnector.getConduitNode(level, this.nodeB.getBlock(), nodeBstate, this.nodeB.getNode());
+			if (nodeB != null && nodeB != null) {
+				return nodeB.getWorldPosition(level, this.nodeB.getBlock());
+			}
+		}
+		return new Vec3d(0, 0, 0);
+	}
+	
 	public NodePos getNodeA() {
 		return nodeA;
 	}
@@ -50,27 +73,18 @@ public class ConduitPos {
 	public BlockPos getNodeApos() {
 		return nodeA.getBlock();
 	}
-//	public void setNodeApos(BlockPos nodeApos) {
-//		this.nodeApos = nodeApos;
-//	}
+	
 	public BlockPos getNodeBpos() {
 		return nodeB.getBlock();
 	}
-//	public void setNodeBpos(BlockPos nodeBpos) {
-//		this.nodeBpos = nodeBpos;
-//	}
+	
 	public int getNodeAid() {
 		return nodeA.getNode();
 	}
-//	public void setNodeAid(int nodeAid) {
-//		this.nodeAid = nodeAid;
-//	}
+	
 	public int getNodeBid() {
 		return nodeB.getNode();
 	}
-//	public void setNodeBid(int nodeBid) {
-//		this.nodeBid = nodeBid;
-//	}
 	
 	public void write(FriendlyByteBuf buff) {
 		this.nodeA.write(buff);

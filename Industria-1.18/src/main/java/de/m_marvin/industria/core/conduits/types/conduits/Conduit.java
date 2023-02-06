@@ -3,7 +3,6 @@ package de.m_marvin.industria.core.conduits.types.conduits;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.content.registries.ModParticleTypes;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.engine.particles.ConduitParticleOption;
@@ -26,7 +25,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -102,9 +100,9 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 	
 	public void onPlace(Level level, ConduitPos position, PlacedConduit conduitState) {
 		
-		BlockPos nodeA = conduitState.getPosition().getNodeApos();
-		BlockPos nodeB = conduitState.getPosition().getNodeBpos();
-		Vec3f middle = Vec3f.fromVec(nodeA).sub(Vec3f.fromVec(nodeB)).mul(0.5F).add(Vec3f.fromVec(nodeB));
+		Vec3d nodeA = conduitState.getPosition().calculateWorldNodeA(level);
+		Vec3d nodeB = conduitState.getPosition().calculateWorldNodeB(level);
+		Vec3d middle = nodeA.sub(nodeB).mul(0.5).add(nodeB);
 		
 		level.playLocalSound(middle.x, middle.y, middle.z, this.getSoundType().getBreakSound(), SoundSource.BLOCKS, this.getSoundType().getVolume(), this.getSoundType().getPitch(), false);
 		
@@ -112,26 +110,23 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 	
 	public void onBreak(Level level, ConduitPos position, PlacedConduit conduitState, boolean dropItems) {
 		
+		Vec3d nodeA = conduitState.getPosition().calculateWorldNodeA(level);
+		Vec3d nodeB = conduitState.getPosition().calculateWorldNodeB(level);
+		Vec3d middle = nodeA.sub(nodeB).mul(0.5).add(nodeB);
+		Vec3d nodeOrigin = MathUtility.getMinCorner(nodeA, nodeB);
+		
 		if (dropItems) {
-			int conduitLength = (int) Math.round(Math.sqrt(conduitState.getPosition().getNodeApos().distSqr(conduitState.getPosition().getNodeBpos())));
-			int wireCost = (int) Math.ceil(conduitLength / (float) ConduitCableItem.BLOCKS_PER_WIRE_ITEM);
-			BlockPos middle = conduitState.getPosition().getNodeBpos().subtract(conduitState.getPosition().getNodeApos());
-			middle = conduitState.getPosition().getNodeApos().offset(middle.getX() / 2, middle.getY() / 2, middle.getZ() / 2);
+			int wireCost = (int) Math.ceil(conduitState.getLength() / (float) ConduitCableItem.BLOCKS_PER_WIRE_ITEM);
 			for (int i = 0; i < wireCost; i++) {
 				GameUtility.dropItem(level, new ItemStack(getItem()), Vec3f.fromVec(middle).add(new Vec3f(0.5F, 0.5F, 0.5F)), 0.5F, 0.1F);
 			}
 		}
 		
-		BlockPos nodeA = conduitState.getPosition().getNodeApos();
-		BlockPos nodeB = conduitState.getPosition().getNodeBpos();
-		BlockPos cornerMin = new BlockPos(Math.min(nodeA.getX(), nodeB.getX()), Math.min(nodeA.getY(), nodeB.getY()), Math.min(nodeA.getZ(), nodeB.getZ()));
-		Vec3f middle = Vec3f.fromVec(nodeA).sub(Vec3f.fromVec(nodeB)).mul(0.5F).add(Vec3f.fromVec(nodeB));
-		
 		level.playLocalSound(middle.x, middle.y, middle.z, this.getSoundType().getBreakSound(), SoundSource.BLOCKS, this.getSoundType().getVolume(), this.getSoundType().getPitch(), false);
 		
 		if (!level.isClientSide()) {
 			for (Vec3d node : conduitState.getShape().nodes) {
-				((ServerLevel) level).sendParticles(new ConduitParticleOption(ModParticleTypes.CONDUIT.get(), conduitState.getConduit()), node.x + cornerMin.getX(), node.y + cornerMin.getY(), node.z + cornerMin.getZ(), 10, 0.2F, 0.2F, 0.2F, 1);
+				((ServerLevel) level).sendParticles(new ConduitParticleOption(ModParticleTypes.CONDUIT.get(), conduitState.getConduit()), node.x + nodeOrigin.x, node.y + nodeOrigin.y, node.z + nodeOrigin.z, 10, 0.2F, 0.2F, 0.2F, 1);
 			}
 		}
 		
@@ -197,135 +192,142 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		
 	}
 	
-	public ConduitShape buildShape(Level level, PlacedConduit conduit, int nodesPerBlock) {
+	public ConduitShape buildShape(Level level, PlacedConduit conduit, double conduitLength) {
+
+		// TODO Random-Noise offset to the nodes for random wire placement.
 		
+		Vec3d pointStart = conduit.getPosition().calculateWorldNodeA(level);
+		Vec3d pointEnd = conduit.getPosition().calculateWorldNodeB(level);
+		Vec3d origin = new Vec3d(Math.min(pointStart.x, pointEnd.x), Math.min(pointStart.y, pointEnd.y), Math.min(pointStart.z, pointEnd.z)).sub(0.5, 0.5, 0.5);
+		pointStart.subI(origin);
+		pointEnd.subI(origin);
+		
+		int nodesPerBlock = conduit.getNodeCount();
+		
+		Vec3d connectionVec = pointEnd.copy().sub(pointStart);
+		double spanDistance = connectionVec.length();
+		double cornerSegments = conduitLength * nodesPerBlock;
+		double beamLength = spanDistance / (cornerSegments + 1);
+		connectionVec.normalizeI();
+		
+		List<Vec3d> nodes = new ArrayList<>();
+		nodes.add(pointStart);
+		for (int i = 1; i <= cornerSegments; i++) {
+			nodes.add(connectionVec.mul(beamLength * i).add(pointStart));
+		}
+		nodes.add(pointEnd);
+		
+		ConduitShape shape = new ConduitShape(nodes, beamLength);
+		
+		return shape;
+		
+		//Industria.LOGGER.log(org.apache.logging.log4j.Level.WARN, "Failed to build conduit shape at " + conduit.getPosition().getNodeApos() + "/" + conduit.getPosition().getNodeApos() + "!");
+		
+		//return null;
+	}
+	
+	public void updatePhysicalNodes(Level level, PlacedConduit conduit) {
+		ConduitShape shape = conduit.getShape();
 		BlockPos nodeApos = conduit.getPosition().getNodeApos();
 		BlockState nodeAstate = level.getBlockState(nodeApos);
 		BlockPos nodeBpos = conduit.getPosition().getNodeBpos();
 		BlockState nodeBstate = level.getBlockState(nodeBpos);
-		BlockPos cornerMin = MathUtility.getMinCorner(nodeApos, nodeBpos);
 		
 		if ((nodeAstate.getBlock() instanceof IConduitConnector && nodeBstate.getBlock() instanceof IConduitConnector)) {
 			
 			ConduitNode nodeA = ((IConduitConnector) nodeAstate.getBlock()).getConduitNode(level, nodeApos, nodeAstate, conduit.getPosition().getNodeAid());
 			ConduitNode nodeB = ((IConduitConnector) nodeBstate.getBlock()).getConduitNode(level, nodeBpos, nodeBstate, conduit.getPosition().getNodeBid());
-			
-			// TODO Random-Noise offset to the nodes for random wire placement.
-			
 			Vec3d pointStart = nodeA.getWorldPosition(level, nodeApos);
 			Vec3d pointEnd = nodeB.getWorldPosition(level, nodeBpos);
 			Vec3d origin = new Vec3d(Math.min(pointStart.x, pointEnd.x), Math.min(pointStart.y, pointEnd.y), Math.min(pointStart.z, pointEnd.z)).sub(0.5, 0.5, 0.5);
 			pointStart.subI(origin);
 			pointEnd.subI(origin);
 			
-			Vec3d connectionVec = pointEnd.copy().sub(pointStart);
-			double conduitLength = connectionVec.length();
-			double cornerSegments = conduitLength * nodesPerBlock;
-			double beamLength = conduitLength / (cornerSegments + 1);
-			connectionVec.normalizeI();
-			
-			List<Vec3d> nodes = new ArrayList<>();
-			nodes.add(pointStart);
-			for (int i = 1; i <= cornerSegments; i++) {
-				nodes.add(connectionVec.mul(beamLength * i).add(pointStart));
-			}
-			nodes.add(pointEnd);
-			
-			ConduitShape shape = new ConduitShape(nodes, beamLength);
-			
-			return shape;
-			
-		}
-		
-		Industria.LOGGER.log(org.apache.logging.log4j.Level.WARN, "Failed to build conduit shape at " + nodeApos + "/" + nodeBpos + "!");
-		
-		return null;
-	}
+			if (shape != null) {
+				
+				shape.nodes[0].setI(pointStart);
+				shape.nodes[shape.nodes.length - 1].setI(pointEnd);
+				
+				// Integrate nodes
+				for (int i = 1; i < shape.nodes.length - 1; i++) {
+					Vec3d temp = shape.nodes[i].copy();
+					shape.nodes[i].addI(shape.nodes[i].copy().sub(shape.lastPos[i]));
+					shape.lastPos[i] = temp;
+				}
+				
+				for (int itteration = 1; itteration <= 10; itteration++) {
 	
-	public void updatePhysicalNodes(BlockGetter level, PlacedConduit conduit) {
-		ConduitShape shape = conduit.getShape();
-		BlockPos origin = MathUtility.getMinCorner(conduit.getPosition().getNodeApos(), conduit.getPosition().getNodeBpos());
-		
-		if (shape != null) {
-			
-			// Integrate nodes
-			for (int i = 1; i < shape.nodes.length - 1; i++) {
-				Vec3d temp = shape.nodes[i].copy();
-				shape.nodes[i].addI(shape.nodes[i].copy().sub(shape.lastPos[i]));
-				shape.lastPos[i] = temp;
-			}
-			
-			for (int itteration = 1; itteration <= 10; itteration++) {
-
-				// Solve beams
-				for (int i = 1; i < shape.nodes.length; i++) {
-					
-					Vec3d nodeB = shape.nodes[i];
-					Vec3d nodeA = shape.nodes[i - 1];
-					
-					// Calculate spring deformation
-					Vec3d delta = nodeB.copy().sub(nodeA);
-					double deltalength = delta.length(); // Math.sqrt(delta.dot(delta));
-					double diff = (float) ((deltalength - shape.beamLength) / deltalength);
-					
-					// Reform spring
-					double stiffness = conduit.getConduit().getConduitType().getStiffness() * 1.0F;
-					double stiffnessLinear = (float) (1 - Math.pow((1 - stiffness), 1 / itteration));
-					boolean oneStatic = i == 1 || i == shape.nodes.length - 1;
-					nodeA.addI(delta.copy().mul(i == 1 ? 0 : (oneStatic ? 1 : 0.5)).mul(diff).mul(stiffnessLinear));
-					nodeB.subI(delta.copy().mul(i == shape.nodes.length - 1 ? 0 : (oneStatic ? 1 : 0.5)).mul(diff).mul(stiffnessLinear));
+					// Solve beams
+					for (int i = 1; i < shape.nodes.length; i++) {
+						
+						Vec3d node1 = shape.nodes[i];
+						Vec3d node2 = shape.nodes[i - 1];
+						
+						// Calculate spring deformation
+						Vec3d delta = node1.copy().sub(node2);
+						double deltalength = delta.length(); // Math.sqrt(delta.dot(delta));
+						double diff = (float) ((deltalength - shape.beamLength) / deltalength);
+						
+						// Reform spring
+						double stiffness = conduit.getConduit().getConduitType().getStiffness() * 1.0F;
+						double stiffnessLinear = (float) (1 - Math.pow((1 - stiffness), 1 / itteration));
+						boolean oneStatic = i == 1 || i == shape.nodes.length - 1;
+						node2.addI(delta.copy().mul(i == 1 ? 0 : (oneStatic ? 1 : 0.5)).mul(diff).mul(stiffnessLinear));
+						node1.subI(delta.copy().mul(i == shape.nodes.length - 1 ? 0 : (oneStatic ? 1 : 0.5)).mul(diff).mul(stiffnessLinear));
+						
+					}
 					
 				}
 				
-			}
-			
-			// Accumulate gravity
-			for (int i = 1; i < shape.nodes.length - 1; i++) {
-				shape.lastPos[i].addI(GameUtility.getWorldGravity(level).copy().mul(conduit.getConduit().getConduitType().getNodeMass()));
-			}
-			
-			// Solve collision
-			for (int i = 1; i < shape.nodes.length - 1; i++) {
+				// Accumulate gravity
+				for (int i = 1; i < shape.nodes.length - 1; i++) {
+					shape.lastPos[i].addI(GameUtility.getWorldGravity(level).copy().mul(conduit.getConduit().getConduitType().getNodeMass()));
+				}
 				
-				Vec3d nodePos = shape.nodes[i].copy().add(Vec3f.fromVec(origin));
-				BlockPos nodeBlockPos = new BlockPos(nodePos.x, nodePos.y, nodePos.z);
-				
-				if (!nodeBlockPos.equals(conduit.getPosition().getNodeApos()) && !nodeBlockPos.equals(conduit.getPosition().getNodeBpos())) {
+				// Solve collision
+				for (int i = 1; i < shape.nodes.length - 1; i++) {
 					
-					VoxelShape collisionShape = level.getBlockState(nodeBlockPos).getCollisionShape(level, nodeBlockPos);
+					Vec3d nodePos = shape.nodes[i].copy().add(Vec3f.fromVec(origin));
+					BlockPos nodeBlockPos = new BlockPos(nodePos.x, nodePos.y, nodePos.z);
 					
-					if (!collisionShape.isEmpty()) {
+					if (!nodeBlockPos.equals(conduit.getPosition().getNodeApos()) && !nodeBlockPos.equals(conduit.getPosition().getNodeBpos())) {
 						
-						AABB bounds = collisionShape.bounds().move(nodeBlockPos);
+						VoxelShape collisionShape = level.getBlockState(nodeBlockPos).getCollisionShape(level, nodeBlockPos);
 						
-						Vec3d surface = nodePos.copy();
-						double dist = 1;
-						
-						for (Direction d : Direction.values()) {
+						if (!collisionShape.isEmpty()) {
 							
-							Vec3d surfacePoint = nodePos.copy();
-							if (d.getAxis() == Axis.X && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.x = (float) bounds.maxX;
-							if (d.getAxis() == Axis.X && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.x = (float) bounds.minX;
-							if (d.getAxis() == Axis.Y && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.y = (float) bounds.maxY;
-							if (d.getAxis() == Axis.Y && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.y = (float) bounds.minY;
-							if (d.getAxis() == Axis.Z && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.z = (float) bounds.maxZ;
-							if (d.getAxis() == Axis.Z && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.z = (float) bounds.minZ;
+							AABB bounds = collisionShape.bounds().move(nodeBlockPos);
 							
-							double distance = nodePos.copy().sub(surfacePoint).length();
+							Vec3d surface = nodePos.copy();
+							double dist = 1;
 							
-							if (distance < dist && distance > 0) {
-								dist = distance;
-								surface = surfacePoint;
+							for (Direction d : Direction.values()) {
+								
+								Vec3d surfacePoint = nodePos.copy();
+								if (d.getAxis() == Axis.X && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.x = (float) bounds.maxX;
+								if (d.getAxis() == Axis.X && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.x = (float) bounds.minX;
+								if (d.getAxis() == Axis.Y && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.y = (float) bounds.maxY;
+								if (d.getAxis() == Axis.Y && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.y = (float) bounds.minY;
+								if (d.getAxis() == Axis.Z && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.z = (float) bounds.maxZ;
+								if (d.getAxis() == Axis.Z && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.z = (float) bounds.minZ;
+								
+								double distance = nodePos.copy().sub(surfacePoint).length();
+								
+								if (distance < dist && distance > 0) {
+									dist = distance;
+									surface = surfacePoint;
+								}
+								
 							}
 							
+							if (dist == 1F) surface.z = (float) bounds.maxZ;
+							
+							surface.subI(Vec3f.fromVec(origin));
+							
+							shape.nodes[i].setI(surface.x, surface.y, surface.z);
+	 						shape.lastPos[i] = shape.nodes[i];
+							
 						}
-						
-						if (dist == 1F) surface.z = (float) bounds.maxZ;
-						
-						surface.subI(Vec3f.fromVec(origin));
-						
-						shape.nodes[i].setI(surface.x, surface.y, surface.z);
- 						shape.lastPos[i] = shape.nodes[i];
 						
 					}
 					

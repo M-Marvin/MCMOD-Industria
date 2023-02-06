@@ -4,7 +4,7 @@ import java.util.function.Supplier;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
-import de.m_marvin.industria.core.conduits.engine.network.CChangeNodesPerBlockPackage;
+import de.m_marvin.industria.core.conduits.engine.network.CChangeConduitPlacementLength;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
@@ -48,14 +48,14 @@ public abstract class AbstractConduitItem extends Item implements IScrollOverrid
 	@Override
 	public void onScroll(UseOnContext context, double delta) {
 		CompoundTag itemTag = context.getItemInHand().getOrCreateTag();
-		int nodesPerBlock = (int) MathUtility.clamp(itemTag.getInt("NodesPerBlock") + delta, 1, 6);
-		Industria.NETWORK.sendToServer(new CChangeNodesPerBlockPackage(nodesPerBlock));
-		context.getPlayer().displayClientMessage(new TranslatableComponent("industria.item.info.conduit.changeNodes", nodesPerBlock), true);
+		float placementLength = (float) MathUtility.clamp(itemTag.getFloat("Length") + delta * 0.1F, 1F, 3F);
+		Industria.NETWORK.sendToServer(new CChangeConduitPlacementLength(placementLength));
+		context.getPlayer().displayClientMessage(new TranslatableComponent("industria.item.info.conduit.changeLength", placementLength), true);
 	}
 	
-	public void onChangeNodesPerBlock(ItemStack stack, int nodesPerBlock) {
+	public void onChangePlacementLength(ItemStack stack, float length) {
 		CompoundTag itemTag = stack.getOrCreateTag();
-		itemTag.putInt("NodesPerBlock", nodesPerBlock);
+		itemTag.putFloat("Length", length);
 		stack.setTag(itemTag);
 	}
 	
@@ -63,9 +63,9 @@ public abstract class AbstractConduitItem extends Item implements IScrollOverrid
 	public InteractionResult useOn(UseOnContext context) {
 		
 		CompoundTag itemTag = context.getItemInHand().getOrCreateTag();
-		if (context.getPlayer().isShiftKeyDown() && (itemTag.contains("FirstNode") || itemTag.contains("NodesPerBlock"))) {
+		if (context.getPlayer().isShiftKeyDown() && (itemTag.contains("FirstNode") || itemTag.contains("Length"))) {
 			itemTag.remove("FirstNode");
-			itemTag.remove("NodesPerBlock");
+			itemTag.remove("Length");
 			context.getItemInHand().setTag(itemTag.isEmpty() ? null : itemTag);
 			return InteractionResult.SUCCESS;
 		} else {
@@ -78,17 +78,17 @@ public abstract class AbstractConduitItem extends Item implements IScrollOverrid
 					BlockPos secondNodePos = tryGetNodePos(context);
 					int secondNodeId = tryGetNode(context, secondNodePos);
 					if (secondNodeId >= 0) {
-						int nodesPerBlock = Math.max(itemTag.getInt("NodesPerBlock"), 1);
+						float placementLengthModifier = Math.max(itemTag.getFloat("Length"), 1);
 						ConduitPos conduitPos = new ConduitPos(firstNodePos, secondNodePos, firstNodeId, secondNodeId);
 						
-						int conduitLengthBlocks = (int) Math.ceil(conduitPos.calculateMinConduitLength(context.getLevel()));
+						int conduitLengthBlocks = (int) Math.ceil(conduitPos.calculateMinConduitLength(context.getLevel()) * placementLengthModifier);
 						int maxLength = Math.min(this.getConduit().getConduitType().getClampingLength(), getMaxPlacingLength(context.getItemInHand()));
 						
 						if (conduitLengthBlocks <= maxLength) {
 							
 							itemTag.remove("FirstNode");
 							context.getItemInHand().setTag(itemTag);
-							if (ConduitUtility.setConduit(context.getLevel(), conduitPos, this.getConduit(), nodesPerBlock, conduitLengthBlocks)) {
+							if (ConduitUtility.setConduit(context.getLevel(), conduitPos, this.getConduit(), conduitLengthBlocks)) {
 								context.getPlayer().displayClientMessage(new TranslatableComponent("industria.item.info.conduit.placed"), true);
 								onPlaced(context.getItemInHand(), conduitLengthBlocks);
 							} else {

@@ -49,8 +49,7 @@ public class SSyncPlacedConduit {
 		buff.writeInt(msg.conduitStates.size());
 		for (PlacedConduit conduitState : msg.conduitStates) {
 			conduitState.getPosition().write(buff);
-			buff.writeInt(conduitState.getNodesPerBlock());
-			buff.writeInt(conduitState.getLength());
+			buff.writeDouble(conduitState.getLength());
 			buff.writeResourceLocation(conduitState.getConduit().getRegistryName());
 		}
 	}
@@ -62,15 +61,14 @@ public class SSyncPlacedConduit {
 		List<PlacedConduit> conduitStates = new ArrayList<PlacedConduit>();
 		for (int i = 0; i < count; i++) {
 			ConduitPos position = ConduitPos.read(buff);
-			int nodesPerBlock = buff.readInt();
-			int length = buff.readInt();
+			double length = buff.readDouble();
 			ResourceLocation conduitName = buff.readResourceLocation();
 			if (!Conduits.CONDUITS_REGISTRY.get().containsKey(conduitName)) {
 				Industria.LOGGER.error("Recived package for unregistered conduit: " + conduitName);
 				continue;
 			}
 			Conduit conduit = Conduits.CONDUITS_REGISTRY.get().getValue(conduitName);
-			conduitStates.add(new PlacedConduit(position, conduit, nodesPerBlock, length));
+			conduitStates.add(new PlacedConduit(position, conduit, length));
 		}
 		return new SSyncPlacedConduit(conduitStates, chunkPos, removed);
 	}

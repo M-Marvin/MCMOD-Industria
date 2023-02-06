@@ -2,7 +2,7 @@ package de.m_marvin.industria.core.conduits.engine;
 
 import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.engine.network.CBreakConduitPackage;
-import de.m_marvin.industria.core.conduits.engine.network.CChangeNodesPerBlockPackage;
+import de.m_marvin.industria.core.conduits.engine.network.CChangeConduitPlacementLength;
 import de.m_marvin.industria.core.conduits.types.items.AbstractConduitItem;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,11 +13,11 @@ public class ServerConduitPackageHandler {
 
 	/* Handle CChangeNodesPerBlock package */
 	
-	public static void handleChangeNodesPerBlock(CChangeNodesPerBlockPackage msg, Context ctx) {
+	public static void handleChangePlacementLength(CChangeConduitPlacementLength msg, Context ctx) {
 		ServerPlayer player = ctx.getSender();
 		ItemStack heldStack = player.getMainHandItem();
 		if (heldStack.getItem() instanceof AbstractConduitItem) {
-			((AbstractConduitItem) heldStack.getItem()).onChangeNodesPerBlock(heldStack, msg.getNodesPerBlock());
+			((AbstractConduitItem) heldStack.getItem()).onChangePlacementLength(heldStack, msg.getPlacementLength());
 		}
 	}
 	

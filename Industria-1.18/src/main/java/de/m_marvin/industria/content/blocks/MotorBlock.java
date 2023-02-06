@@ -8,7 +8,6 @@ import de.m_marvin.industria.content.registries.ModBlockEntities;
 import de.m_marvin.industria.content.registries.ModBlockStateProperties;
 import de.m_marvin.industria.content.types.MotorMode;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
-import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier;
 import de.m_marvin.industria.core.conduits.registry.ConduitConnectionTypes;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;

@@ -6,8 +6,8 @@ import java.util.Optional;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
-import de.m_marvin.industria.core.conduits.engine.ConduitHitResult;
 import de.m_marvin.industria.core.conduits.engine.network.CBreakConduitPackage;
+import de.m_marvin.industria.core.conduits.types.ConduitHitResult;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
@@ -24,10 +24,10 @@ import net.minecraftforge.common.util.LazyOptional;
 
 public class ConduitUtility {
 	
-	public static boolean setConduit(Level level, ConduitPos position, Conduit conduit, int nodesPerBlock, int length) {
+	public static boolean setConduit(Level level, ConduitPos position, Conduit conduit, double length) {
 		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
-			return conduitHolder.resolve().get().placeConduit(position, conduit, nodesPerBlock, length);
+			return conduitHolder.resolve().get().placeConduit(position, conduit, length);
 		}
 		return false;
 	}

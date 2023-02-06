@@ -9,6 +9,7 @@ import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitBreakEvent
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitPlaceEvent;
 import de.m_marvin.industria.core.conduits.engine.network.SSyncPlacedConduit;
 import de.m_marvin.industria.core.conduits.registry.Conduits;
+import de.m_marvin.industria.core.conduits.types.ConduitHitResult;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
@@ -197,7 +198,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	/*
 	 * Places a new conduit in the world if both nodes are free, and sends the changes to clients
 	 */
-	public boolean placeConduit(ConduitPos position, Conduit conduit, int nodesPerBlock, int length) {
+	public boolean placeConduit(ConduitPos position, Conduit conduit, double length) {
 		if (conduit == Conduits.NONE.get()) {
 			return false;
 		}
@@ -223,7 +224,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 			return false;
 		}
 		
-		PlacedConduit conduitState = new PlacedConduit(position, conduit, nodesPerBlock, length);
+		PlacedConduit conduitState = new PlacedConduit(position, conduit, length);
 		
 		Event event = new ConduitPlaceEvent(this.level, position, conduitState);
 		MinecraftForge.EVENT_BUS.post(event);
@@ -345,15 +346,16 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 		int nodeIndex = 0;
 		
 		for (PlacedConduit conduit : this.conduits) {
-			double distance = Math.sqrt(Math.max(
-					Vec3f.fromVec(conduit.getPosition().getNodeApos()).distSqr(Vec3f.fromVec(context.getFrom())),
-					Vec3f.fromVec(conduit.getPosition().getNodeBpos()).distSqr(Vec3f.fromVec(context.getFrom()))));
+			double distance = Math.max(
+					conduit.getPosition().calculateWorldNodeA(level).dist(Vec3d.fromVec(context.getFrom())),
+					conduit.getPosition().calculateWorldNodeB(level).dist(Vec3d.fromVec(context.getFrom()))
+					);
 			double maxRange = conduit.getConduit().getConduitType().getClampingLength() + context.getTo().subtract(context.getFrom()).length();
-							
+			
 			if (distance <= maxRange && conduit.getShape() != null) {
-				BlockPos nodeApos = conduit.getPosition().getNodeApos();
-				BlockPos nodeBpos = conduit.getPosition().getNodeBpos();
-				BlockPos cornerMin = MathUtility.getMinCorner(nodeApos, nodeBpos);
+				Vec3d nodeApos = conduit.getPosition().calculateWorldNodeA(level);
+				Vec3d nodeBpos = conduit.getPosition().calculateWorldNodeB(level);
+				Vec3d cornerMin = MathUtility.getMinCorner(nodeApos, nodeBpos).sub(0.5, 0.5, 0.5);
 				
 				for (int i = 1; i < conduit.getShape().nodes.length; i++) {
 					Vec3d nodeA = conduit.getShape().nodes[i - 1].copy().add(Vec3f.fromVec(cornerMin));

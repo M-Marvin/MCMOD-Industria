@@ -1,6 +1,6 @@
 package de.m_marvin.industria.core.client.registries;
 
-import de.m_marvin.industria.core.conduits.engine.NodeType;
+import de.m_marvin.industria.core.conduits.types.ConduitNode.NodeType;
 import de.m_marvin.univec.impl.Vec4f;
 
 public class NodeTypes {

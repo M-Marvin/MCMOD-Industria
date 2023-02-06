@@ -1,7 +1,5 @@
 package de.m_marvin.industria.core.client.conduits;
 
-import org.valkyrienskies.mod.mixin.feature.render_ship_debug_bb.MixinDebugRenderer;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -13,20 +11,16 @@ import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
 import de.m_marvin.industria.core.conduits.registry.Conduits;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
-import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitShape;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitType;
-import de.m_marvin.industria.core.physics.PhysicUtility;
-import de.m_marvin.industria.core.physics.types.ContraptionHitResult;
 import de.m_marvin.industria.core.registries.ModCapabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
-import de.m_marvin.univec.impl.Vec4d;
 import de.m_marvin.univec.impl.Vec4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -35,22 +29,15 @@ import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.StructureBlockRenderer;
-import net.minecraft.client.renderer.debug.ChunkBorderRenderer;
-import net.minecraft.client.renderer.debug.DebugRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.block.StructureBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.StructureMode;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.HitResult.Type;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent.Stage;
@@ -69,24 +56,28 @@ public class ConduitWorldRenderer {
 		
 		if (event.getStage() == Stage.AFTER_SOLID_BLOCKS) {
 
-			MultiBufferSource.BufferSource source = Minecraft.getInstance().renderBuffers().bufferSource();
-			PoseStack matrixStack = event.getPoseStack();
-			ClientLevel level = Minecraft.getInstance().level;
-			
-			RenderSystem.enableDepthTest();
-			
-			Vec3 offset = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
-			matrixStack.pushPose();
-			matrixStack.translate(-offset.x, -offset.y, -offset.z);
-			//drawConduits(matrixStack, source, level, event.getPartialTick());
-			source.endBatch();
-			matrixStack.popPose();
-			
-			RenderSystem.disableDepthTest();
+			if (!Minecraft.getInstance().getEntityRenderDispatcher().shouldRenderHitBoxes()) {
+				
+				MultiBufferSource.BufferSource source = Minecraft.getInstance().renderBuffers().bufferSource();
+				PoseStack matrixStack = event.getPoseStack();
+				ClientLevel level = Minecraft.getInstance().level;
+				
+				RenderSystem.enableDepthTest();
+				
+				Vec3 offset = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+				matrixStack.pushPose();
+				matrixStack.translate(-offset.x, -offset.y, -offset.z);
+				drawConduits(matrixStack, source, level, event.getPartialTick());
+				source.endBatch();
+				matrixStack.popPose();
+				
+				RenderSystem.disableDepthTest();
+				
+			}
 			
 		} else if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_CUTOUT_MIPPED_BLOCKS_BLOCKS) {
 			
-			if (true) { /// TODO F3+B check
+			if (Minecraft.getInstance().getEntityRenderDispatcher().shouldRenderHitBoxes()) {
 				
 				MultiBufferSource.BufferSource source = Minecraft.getInstance().renderBuffers().bufferSource();
 				PoseStack matrixStack = event.getPoseStack();
@@ -216,6 +207,7 @@ public class ConduitWorldRenderer {
 				
 				ResourceLocation texturePath = conduitType.getTextureLoc();
 				VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entitySolid(texturePath));
+				Vec3d playerPosition = Vec3d.fromVec(Minecraft.getInstance().player.position());
 				
 				for (PlacedConduit conduit : conduitHolder.getConduits()) {
 					
@@ -229,17 +221,15 @@ public class ConduitWorldRenderer {
 							if (nodeA != null && nodeB != null) {
 								Vec3d nodeAworldPosition = nodeA.getWorldPosition(clientLevel, conduit.getPosition().getNodeApos());
 								Vec3d nodeBworldPosition = nodeB.getWorldPosition(clientLevel, conduit.getPosition().getNodeBpos());
-								BlockPos nodeApos = new BlockPos(nodeAworldPosition.x, nodeAworldPosition.y, nodeAworldPosition.z);
-								BlockPos nodeBpos = new BlockPos(nodeBworldPosition.x, nodeBworldPosition.y, nodeBworldPosition.z);
 								
-								BlockPos cornerMin = MathUtility.getMinCorner(nodeApos, nodeBpos);
+								Vec3d nodeOrigin = MathUtility.getMinCorner(nodeAworldPosition, nodeBworldPosition).sub(0.5, 0.5, 0.5);
 								
-								double distancaA = Minecraft.getInstance().player.blockPosition().distSqr(nodeApos);
-								double distancaB = Minecraft.getInstance().player.blockPosition().distSqr(nodeBpos);
-								double distance = Math.sqrt((distancaA + distancaB) / 2);
+								double distancaA = playerPosition.dist(nodeAworldPosition);
+								double distancaB = playerPosition.dist(nodeBworldPosition);
+								double distance = (distancaA + distancaB) / 2;
 								int renderDistance = Minecraft.getInstance().options.renderDistance * 16;
 								
-								if (distance < renderDistance * renderDistance) conduitModel(clientLevel, vertexConsumer, matrixStack, conduit, cornerMin, partialTicks);
+								if (distance < renderDistance * renderDistance) conduitModel(clientLevel, vertexConsumer, matrixStack, conduit, nodeOrigin, partialTicks);
 								
 							}
 						}
@@ -254,11 +244,11 @@ public class ConduitWorldRenderer {
 		
 	}
 	
-	public static void conduitModel(ClientLevel clientLevel, VertexConsumer vertexConsumer, PoseStack poseStack, PlacedConduit conduit, BlockPos cornerMin, float partialTicks) {
+	public static void conduitModel(ClientLevel clientLevel, VertexConsumer vertexConsumer, PoseStack poseStack, PlacedConduit conduit, Vec3d nodeOrigin, float partialTicks) {
 		
 		poseStack.pushPose();
 		
-		poseStack.translate(cornerMin.getX(), cornerMin.getY(), cornerMin.getZ());
+		poseStack.translate(nodeOrigin.getX(), nodeOrigin.getY(), nodeOrigin.getZ());
 		
 		ConduitShape shape = conduit.getShape();
 		ConduitType type = conduit.getConduit().getConduitType();
@@ -276,11 +266,11 @@ public class ConduitWorldRenderer {
 				Vec3d nodeA = shape.nodes[i - 0];
 				
 				if (i == shape.nodes.length - 1) {
-					BlockPos nodeBlockPos = new BlockPos(nodeA.x, nodeA.y + 0.1F, nodeA.z).offset(cornerMin);
+					BlockPos nodeBlockPos =  nodeA.add(nodeOrigin).writeTo(new BlockPos(0, 0, 0)); // new BlockPos(nodeA.x, nodeA.y + 0.1F, nodeA.z).offset(nodeOrigin);
 					blockLight = clientLevel.getLightEmission(nodeBlockPos);
 					skyLight = clientLevel.getBrightness(LightLayer.SKY, nodeBlockPos);
 				}
-				BlockPos nodeBlockPos = new BlockPos(nodeB.x, nodeB.y + 0.1F, nodeB.z).offset(cornerMin);
+				BlockPos nodeBlockPos =  nodeB.add(nodeOrigin).writeTo(new BlockPos(0, 0, 0));
 				blockLight = (clientLevel.getLightEmission(nodeBlockPos) * 1 + blockLight * 1) / 2;
 				skyLight = (clientLevel.getBrightness(LightLayer.SKY, nodeBlockPos) * 1 + skyLight * 1) / 2;
 				
@@ -294,11 +284,11 @@ public class ConduitWorldRenderer {
 				Vec3d nodeB = shape.nodes[i - 0];
 				
 				if (i == 1) {
-					BlockPos nodeBlockPos = new BlockPos(nodeA.x, nodeA.y + 0.1F, nodeA.z).offset(cornerMin);
+					BlockPos nodeBlockPos =  nodeA.add(nodeOrigin).writeTo(new BlockPos(0, 0, 0)); // new BlockPos(nodeA.x, nodeA.y + 0.1F, nodeA.z).offset(nodeOrigin);
 					blockLight = (clientLevel.getLightEmission(nodeBlockPos) * 1 + blockLight * 2) / 3;
 					skyLight = (clientLevel.getBrightness(LightLayer.SKY, nodeBlockPos) * 1 + skyLight * 2) / 3;
 				}
-				BlockPos nodeBlockPos = new BlockPos(nodeB.x, nodeB.y + 0.1F, nodeB.z).offset(cornerMin);
+				BlockPos nodeBlockPos =  nodeB.add(nodeOrigin).writeTo(new BlockPos(0, 0, 0));
 				blockLight = (clientLevel.getLightEmission(nodeBlockPos) * 1 + blockLight * 2) / 3;
 				skyLight = (clientLevel.getBrightness(LightLayer.SKY, nodeBlockPos) * 1 + skyLight * 2) / 3;
 				
@@ -319,8 +309,6 @@ public class ConduitWorldRenderer {
 	}
 	
 	public static double wireModel(VertexConsumer vertexConsumer, PoseStack poseStack, int color, int packedLight, Vec3d start, Vec3d end, int width, float lengthOffset) {
-		
-		//System.out.println(start);
 		
 		Vec3d lineVec = end.copy().sub(start);
 		Vec3d lineNormal = lineVec.normalize();

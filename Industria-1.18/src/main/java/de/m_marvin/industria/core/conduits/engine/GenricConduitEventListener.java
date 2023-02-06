@@ -2,6 +2,7 @@ package de.m_marvin.industria.core.conduits.engine;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
+import de.m_marvin.industria.core.conduits.types.ConduitHitResult;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;

@@ -1,17 +1,9 @@
 package de.m_marvin.industria.core.conduits.types.conduits;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
-import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
-import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.electrics.types.IElectric;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 
 public interface IElectricConduit extends IElectric<PlacedConduit, ConduitPos, Conduit> {
 	

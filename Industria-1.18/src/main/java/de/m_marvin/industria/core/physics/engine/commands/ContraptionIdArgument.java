@@ -75,8 +75,10 @@ public class ContraptionIdArgument implements ArgumentType<Long> {
 		return 0L;
 	}
 	
+	@SuppressWarnings("resource")
 	public Long tryParseName(String input) {
-		return PhysicUtility.getFirstContraptionIdWithName(input);
+		return 0L; // FIXME How to access the name-map ???
+		//return PhysicUtility.getFirstContraptionIdWithName(Minecraft.getInstance().level, input);
 	}
 	
 	@SuppressWarnings("resource")
@@ -91,7 +93,7 @@ public class ContraptionIdArgument implements ArgumentType<Long> {
 			Vec3d direction = Vec3d.fromVec(player.getViewVector(0));
 			double range = player.getReachDistance();
 			
-			ContraptionHitResult result = PhysicUtility.raycastForContraption(level, eyePos, direction, range);
+			ContraptionHitResult result = PhysicUtility.clipForContraption(level, eyePos, direction, range);
 			
 			if (result.getType() != Type.MISS) {
 				long contraptionId = result.getContraption().getId();

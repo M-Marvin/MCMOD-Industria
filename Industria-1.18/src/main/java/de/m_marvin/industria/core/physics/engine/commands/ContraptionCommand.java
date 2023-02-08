@@ -127,7 +127,7 @@ public class ContraptionCommand {
 	
 	public static int setName(CommandContext<CommandSourceStack> source, Ship contraption, String name) {
 		
-		PhysicUtility.setName(contraption, name);
+		PhysicUtility.setContraptionName(source.getSource().getLevel(), contraption, name);
 		
 		source.getSource().sendSuccess(new TranslatableComponent("industria.commands.contraption.name.set", name), true);
 		return Command.SINGLE_SUCCESS;
@@ -136,7 +136,7 @@ public class ContraptionCommand {
 	
 	public static int findContraption(CommandContext<CommandSourceStack> source, Ship contraption, boolean teleport) {
 		
-		Vec3d contraptionPosition = PhysicUtility.getPosition((ServerShip) contraption, false).getPosition();
+		Vec3d contraptionPosition = PhysicUtility.getPosition(source.getSource().getLevel(), (ServerShip) contraption, false).getPosition();
 		
 		if (teleport) {
 						
@@ -176,11 +176,11 @@ public class ContraptionCommand {
 		if (rotate) {
 			contraptionPos = new ContraptionPosition(Quaternion.fromXYZDegrees(rotationX, rotationY, rotationZ), Vec3d.fromVec(position));
 		} else {
-			contraptionPos = PhysicUtility.getPosition((ServerShip) contraption, false);
+			contraptionPos = PhysicUtility.getPosition(source.getSource().getLevel(), (ServerShip) contraption, false);
 			contraptionPos.getPosition().setI(Vec3d.fromVec(position));
 		}
 		
-		PhysicUtility.setPosition((ServerShip) contraption, contraptionPos, false);
+		PhysicUtility.setPosition(source.getSource().getLevel(), (ServerShip) contraption, contraptionPos, false);
 		
 		source.getSource().sendSuccess(new TranslatableComponent("industria.commands.contraption.teleport.success", (int) position.x(), (int) position.y(), (int) position.z()), true);
 		return Command.SINGLE_SUCCESS;

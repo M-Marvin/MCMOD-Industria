@@ -3,7 +3,7 @@ package de.m_marvin.industria.core.client.conduits;
 import org.apache.logging.log4j.Level;
 
 import de.m_marvin.industria.Industria;
-import de.m_marvin.industria.core.conduits.registy.Conduits;
+import de.m_marvin.industria.core.conduits.registry.Conduits;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

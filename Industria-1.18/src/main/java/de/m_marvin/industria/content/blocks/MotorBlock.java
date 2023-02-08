@@ -8,9 +8,9 @@ import de.m_marvin.industria.content.registries.ModBlockEntities;
 import de.m_marvin.industria.content.registries.ModBlockStateProperties;
 import de.m_marvin.industria.content.types.MotorMode;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
-import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier;
-import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier.ConnectionPoint;
-import de.m_marvin.industria.core.conduits.registy.ConduitConnectionTypes;
+import de.m_marvin.industria.core.conduits.registry.ConduitConnectionTypes;
+import de.m_marvin.industria.core.conduits.types.ConduitNode;
+import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
@@ -42,14 +42,14 @@ public class MotorBlock extends Block implements IElectricConnector {
 	public static final VoxelShape BLOCK_SHAPE = Block.box(3, 3, 1, 13, 13, 16);
 	public static final VoxelShape BLOCK_SHAPE_VERTICAL = Block.box(3, 0, 3, 13, 15, 13);
 	
-	public static final MutableConnectionPointSupplier CONDUIT_NODES = MutableConnectionPointSupplier.basedOnOrientation(BlockStateProperties.FACING)
-			.addOnFace(new Vec3i(8, 9, 4), ConduitConnectionTypes.ELECTRIC, 1, Direction.SOUTH)
-			.addOnFace(new Vec3i(8, 9, 4), ConduitConnectionTypes.ELECTRIC, 1, Direction.EAST)
-			.addOnFace(new Vec3i(8, 9, 4), ConduitConnectionTypes.ELECTRIC, 1, Direction.WEST)
-			.rotateBase(Direction.DOWN);
-	public static final MutableConnectionPointSupplier CONDUIT_NODES_VERTICAL = MutableConnectionPointSupplier.basedOnOrientation(BlockStateProperties.FACING)
-			.addOnSidesOfAxis(new Vec3i(8, 10, 4), ConduitConnectionTypes.ELECTRIC, 1, Axis.Y)
-			.rotateBase(Direction.DOWN);
+//	public static final MutableConnectionPointSupplier CONDUIT_NODES = MutableConnectionPointSupplier.basedOnOrientation(BlockStateProperties.FACING)
+//			.addOnFace(new Vec3i(8, 9, 4), ConduitConnectionTypes.ELECTRIC, 1, Direction.SOUTH)
+//			.addOnFace(new Vec3i(8, 9, 4), ConduitConnectionTypes.ELECTRIC, 1, Direction.EAST)
+//			.addOnFace(new Vec3i(8, 9, 4), ConduitConnectionTypes.ELECTRIC, 1, Direction.WEST)
+//			.rotateBase(Direction.DOWN);
+//	public static final MutableConnectionPointSupplier CONDUIT_NODES_VERTICAL = MutableConnectionPointSupplier.basedOnOrientation(BlockStateProperties.FACING)
+//			.addOnSidesOfAxis(new Vec3i(8, 10, 4), ConduitConnectionTypes.ELECTRIC, 1, Axis.Y)
+//			.rotateBase(Direction.DOWN);
 	
 	public MotorBlock(Properties properties) {
 		super(properties);
@@ -85,10 +85,10 @@ public class MotorBlock extends Block implements IElectricConnector {
 		builder.add(ModBlockStateProperties.MOTOR_MODE, BlockStateProperties.FACING);
 	}
 	
-	@Override
-	public ConnectionPoint[] getConnections(Level level, BlockPos pos, BlockState instance) {
-		return getConnectionPoints(pos, instance);
-	}
+//	@Override
+//	public ConnectionPoint[] getConnections(Level level, BlockPos pos, BlockState instance) {
+//		return getConnectionPoints(pos, instance);
+//	}
 
 	public BlockEntityType<?> getTileEntityType(BlockState state) {
 		return state.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.MOTOR ? ModBlockEntities.MOTOR.get() : ModBlockEntities.GENERATOR.get();
@@ -97,7 +97,7 @@ public class MotorBlock extends Block implements IElectricConnector {
 	@Override
 	public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
 		if (pNewState.getBlock() == this && pState.getValue(BlockStateProperties.FACING) != pNewState.getValue(BlockStateProperties.FACING)) {
-			ConduitUtility.getConduitsAtBlock(pLevel, pPos).forEach(conduit -> ConduitUtility.removeConduit(pLevel, conduit.getConduitPosition(), true));
+			ConduitUtility.getConduitsAtBlock(pLevel, pPos).forEach(conduit -> ConduitUtility.removeConduit(pLevel, conduit.getPosition(), true));
 		}
 //		if (	pState.getBlock() == pNewState.getBlock() && pNewState.getBlock() == this && 
 //				pState.getValue(ModBlockStateProperties.MOTOR_MODE) != pNewState.getValue(ModBlockStateProperties.MOTOR_MODE)) {
@@ -108,27 +108,27 @@ public class MotorBlock extends Block implements IElectricConnector {
 //		}
 	}
 		
-	@Override
-	public ConnectionPoint[] getConnectionPoints(BlockPos pos, BlockState state) {
-		Direction facing = state.getValue(BlockStateProperties.FACING);
-		if (facing.getAxis() == Axis.Y) {
-			return CONDUIT_NODES_VERTICAL.getNodes(pos, state);
-		} else {
-			return CONDUIT_NODES.getNodes(pos, state);
-		}
-	}
+//	@Override
+//	public ConnectionPoint[] getConnectionPoints(BlockPos pos, BlockState state) {
+//		Direction facing = state.getValue(BlockStateProperties.FACING);
+//		if (facing.getAxis() == Axis.Y) {
+//			return CONDUIT_NODES_VERTICAL.getNodes(pos, state);
+//		} else {
+//			return CONDUIT_NODES.getNodes(pos, state);
+//		}
+//	}
 	
 	@Override
 	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit) {
-		ConnectionPoint[] points = CONDUIT_NODES.getNodes(position, instance);
-		BlockEntity blockEntity = level.getBlockEntity(position);
-		if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR && blockEntity instanceof GeneratorBlockEntity) {
-			circuit.addSource(points[0], ((GeneratorBlockEntity) blockEntity).getVoltage(), ((GeneratorBlockEntity) blockEntity).getCompensatedCurrent());
-		} else if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.MOTOR && blockEntity instanceof MotorBlockEntity) {
-			circuit.addLoad(points[0], ((MotorBlockEntity) blockEntity).getCurrent());
-		}
-		circuit.addSerialResistance(points[0], points[1], 0);
-		circuit.addSerialResistance(points[1], points[2], 0);
+//		ConnectionPoint[] points = CONDUIT_NODES.getNodes(position, instance);
+//		BlockEntity blockEntity = level.getBlockEntity(position);
+//		if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR && blockEntity instanceof GeneratorBlockEntity) {
+//			circuit.addSource(points[0], ((GeneratorBlockEntity) blockEntity).getVoltage(), ((GeneratorBlockEntity) blockEntity).getCompensatedCurrent());
+//		} else if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.MOTOR && blockEntity instanceof MotorBlockEntity) {
+//			circuit.addLoad(points[0], ((MotorBlockEntity) blockEntity).getCurrent());
+//		}
+//		circuit.addSerialResistance(points[0], points[1], 0);
+//		circuit.addSerialResistance(points[1], points[2], 0);
 	}
 	
 	@Override
@@ -144,10 +144,22 @@ public class MotorBlock extends Block implements IElectricConnector {
 			ElectricNetworkHandlerCapability networkHandler = GameUtility.getCapability(pLevel, ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 			BlockEntity entity = pLevel.getBlockEntity(pPos);
 			if (entity instanceof MotorBlockEntity motor) {
-				double voltage = networkHandler.getVoltageAt(getConnectionPoints(pPos, pState)[0]);
-				motor.setVoltage(voltage);
+//				double voltage = networkHandler.getVoltageAt(getConnectionPoints(pPos, pState)[0]);
+//				motor.setVoltage(voltage);
 			}
 		}
+	}
+
+	@Override
+	public ConduitNode[] getConduitNodes(Level level, BlockPos pos, BlockState state) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

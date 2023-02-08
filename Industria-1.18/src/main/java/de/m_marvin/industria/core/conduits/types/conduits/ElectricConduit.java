@@ -1,8 +1,7 @@
 package de.m_marvin.industria.core.conduits.types.conduits;
 
-import de.m_marvin.industria.Industria;
-import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier.ConnectionPoint;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
+import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import net.minecraft.resources.ResourceLocation;
@@ -19,12 +18,17 @@ public class ElectricConduit extends Conduit implements IElectricConduit {
 
 	@Override
 	public void plotCircuit(Level level, PlacedConduit instance, ConduitPos position, ElectricNetwork circuit) {
-		ConnectionPoint[] nodes = getConnections(level, position, instance);
-		if (nodes.length < 2) {
-			Industria.LOGGER.log(org.apache.logging.log4j.Level.WARN, "Invalid conduit in electric network detected!");
-			return;
-		}
-		circuit.addSerialResistance(nodes[0], nodes[1], 0);
+//		ConnectionPoint[] nodes = getConnections(level, position, instance);
+//		if (nodes.length < 2) {
+//			Industria.LOGGER.log(org.apache.logging.log4j.Level.WARN, "Invalid conduit in electric network detected!");
+//			return;
+//		}
+//		circuit.addSerialResistance(nodes[0], nodes[1], 0);
+	}
+
+	@Override
+	public NodePos[] getConnections(Level level, ConduitPos pos, PlacedConduit instance) {
+		return new NodePos[] { new NodePos(pos.getNodeApos(), 0), new NodePos(pos.getNodeBpos(), 1) };
 	}
 	
 }

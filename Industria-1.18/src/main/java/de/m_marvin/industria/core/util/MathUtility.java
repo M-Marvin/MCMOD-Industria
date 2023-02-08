@@ -68,6 +68,22 @@ public class MathUtility {
 				Math.max(pos1.getZ(), pos2.getZ())
 			);
 	}
+
+	public static Vec3d getMinCorner(Vec3d pos1, Vec3d pos2) {
+		return new Vec3d(
+				Math.min(pos1.getX(), pos2.getX()),
+				Math.min(pos1.getY(), pos2.getY()),
+				Math.min(pos1.getZ(), pos2.getZ())
+			);
+	}
+	
+	public static Vec3d getMaxCorner(Vec3d pos1, Vec3d pos2) {
+		return new Vec3d(
+				Math.max(pos1.getX(), pos2.getX()),
+				Math.max(pos1.getY(), pos2.getY()),
+				Math.max(pos1.getZ(), pos2.getZ())
+			);
+	}
 	
 	public static BlockPos getMiddleBlock(BlockPos pos1, BlockPos pos2) {
 		int middleX = Math.min(pos1.getX(), pos2.getX()) + (Math.max(pos1.getX(), pos2.getX()) - Math.min(pos1.getX(), pos2.getX())) / 2;
@@ -95,6 +111,16 @@ public class MathUtility {
 		}
 	}
 	
+	public static Vec3d rotatePoint(Vec3d point, float angle, boolean degrees, Axis axis) {
+		Vec3d rotationAxis = null;
+		switch (axis) {
+		case X: rotationAxis = new Vec3d(1, 0, 0); break;
+		case Y: rotationAxis = new Vec3d(0, 1, 0); break;
+		case Z: rotationAxis = new Vec3d(0, 0, 1); break;
+		}
+		return rotatePoint(point, rotationAxis, angle, degrees);
+	}
+	
 	public static Vec3f rotatePoint(Vec3f point, float angle, boolean degrees, Axis axis) {
 		Vec3f rotationAxis = null;
 		switch (axis) {
@@ -113,6 +139,12 @@ public class MathUtility {
 		case Z: rotationAxis = new Vec3f(0, 0, 1); break;
 		}
 		return rotatePoint(point, rotationAxis, angle, degrees);
+	}
+
+	public static Vec3d rotatePoint(Vec3d point, Vec3d axis, float angle, boolean degrees) {
+		if (degrees) angle = (float) Math.toRadians(angle);
+		Quaternion quat = new Quaternion(axis, angle);
+		return point.transform(quat);
 	}
 	
 	public static Vec3f rotatePoint(Vec3f point, Vec3f axis, float angle, boolean degrees) {
@@ -162,10 +194,10 @@ public class MathUtility {
 		return chunks;
 	}
 	
-	public static Vec3f[] lineInfinityIntersection(Vec3f lineA1, Vec3f lineA2, Vec3f lineB1, Vec3f lineB2) {
-		Vec3f p43 = new Vec3f(lineB2.x - lineB1.x, lineB2.y - lineB1.y, lineB2.z - lineB1.z);
-		Vec3f p21 = new Vec3f(lineA2.x - lineA1.x, lineA2.y - lineA1.y, lineA2.z - lineA1.z);
-		Vec3f p13 = new Vec3f(lineA1.x - lineB1.x, lineA1.y - lineB1.y, lineA1.z - lineB1.z);
+	public static Vec3d[] lineInfinityIntersection(Vec3d lineA1, Vec3d lineA2, Vec3d lineB1, Vec3d lineB2) {
+		Vec3d p43 = new Vec3d(lineB2.x - lineB1.x, lineB2.y - lineB1.y, lineB2.z - lineB1.z);
+		Vec3d p21 = new Vec3d(lineA2.x - lineA1.x, lineA2.y - lineA1.y, lineA2.z - lineA1.z);
+		Vec3d p13 = new Vec3d(lineA1.x - lineB1.x, lineA1.y - lineB1.y, lineA1.z - lineB1.z);
 		double d1343 = p13.x * p43.x + p13.y * p43.y + p13.z * p43.z;
 		double d4321 = p43.x * p21.x + p43.y * p21.y + p43.z * p21.z;
 		double d4343 = p43.x * p43.x + p43.y * p43.y + p43.z * p43.z;
@@ -180,23 +212,23 @@ public class MathUtility {
 		Vec3 cl1 = new Vec3(lineA1.x+mua*p21.x, lineA1.y+mua*p21.y, lineA1.z+mua*p21.z);
 		Vec3 cl2 = new Vec3(lineB1.x+mub*p43.x, lineB1.y+mub*p43.y, lineB1.z+mub*p43.z);
 		
-		return new Vec3f[] {Vec3f.fromVec(cl1), Vec3f.fromVec(cl2)};
+		return new Vec3d[] {Vec3d.fromVec(cl1), Vec3d.fromVec(cl2)};
 	}
 	
-	public static boolean isOnLine(Vec3f point, Vec3f line1, Vec3f line2, float t) {
+	public static boolean isOnLine(Vec3d point, Vec3d line1, Vec3d line2, double t) {
 		return line1.copy().sub(point).length() + line2.copy().sub(point).length() <= line1.copy().sub(line2).length() + t;
 	}
 	
-	public static Optional<Vec3f> getHitPoint(Vec3f lineA1, Vec3f lineA2, Vec3f lineB1, Vec3f lineB2, float tolerance) {
-		Vec3f[] shortesLine = lineInfinityIntersection(lineA1, lineA2, lineB1, lineB2);
+	public static Optional<Vec3d> getHitPoint(Vec3d lineA1, Vec3d lineA2, Vec3d lineB1, Vec3d lineB2, double tolerance) {
+		Vec3d[] shortesLine = lineInfinityIntersection(lineA1, lineA2, lineB1, lineB2);
 		if (isOnLine(shortesLine[0], lineA1, lineA2, 0.1F) && isOnLine(shortesLine[1], lineB1, lineB2, 0.1F)) {
 			if (shortesLine[0].copy().sub(shortesLine[1]).length() <= tolerance) return Optional.of(shortesLine[0]);
 		}
 		return Optional.empty();
 	}
 	
-	public static boolean doLinesCross(Vec3f lineA1, Vec3f lineA2, Vec3f lineB1, Vec3f lineB2, float tolerance) {
-		Vec3f[] shortesLine = lineInfinityIntersection(lineA1, lineA2, lineB1, lineB2);
+	public static boolean doLinesCross(Vec3d lineA1, Vec3d lineA2, Vec3d lineB1, Vec3d lineB2, double tolerance) {
+		Vec3d[] shortesLine = lineInfinityIntersection(lineA1, lineA2, lineB1, lineB2);
 		if (isOnLine(shortesLine[0], lineA1, lineA2, 0.1F) && isOnLine(shortesLine[1], lineB1, lineB2, 0.1F)) {
 			return shortesLine[0].copy().sub(shortesLine[1]).length() <= tolerance;
 		}

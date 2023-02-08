@@ -1,40 +1,34 @@
 package de.m_marvin.industria.core.conduits.types;
 
-import de.m_marvin.industria.core.conduits.registy.Conduits;
+import de.m_marvin.industria.core.conduits.registry.Conduits;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitShape;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 
 public class PlacedConduit {
 	
 	private ConduitPos position;
-	private int nodesPerBlock;
+	private double length;
 	private Conduit conduit;
 	private ConduitShape shape;
 	
 	public ConduitShape conduitShape;
 	
-	public PlacedConduit(ConduitPos position, Conduit conduit, int nodesPerBlock) {
+	public PlacedConduit(ConduitPos position, Conduit conduit, double length) {
 		this.position = position;
 		this.conduit = conduit;
-		this.nodesPerBlock = nodesPerBlock;
-	}
-	
-	public ConduitPos getConduitPosition() {
-		return position;
+		this.length = length;
 	}
 	
 	public PlacedConduit build(Level level) {
-		this.shape = conduit.buildShape(level, this, nodesPerBlock);
+		this.shape = conduit.buildShape(level, this, length);
 		updateShape(level);
 		return this;
 	}
 	
-	public void updateShape(BlockGetter level) {
+	public void updateShape(Level level) {
 		this.conduit.updatePhysicalNodes(level, this);
 	}
 	
@@ -42,7 +36,7 @@ public class PlacedConduit {
 		CompoundTag tag = new CompoundTag();
 		tag.put("Position", this.position.writeNBT(new CompoundTag()));
 		tag.putString("Conduit", this.conduit.getRegistryName().toString());
-		tag.putInt("Nodes", this.nodesPerBlock);
+		tag.putDouble("Length", this.length);
 		return tag;
 	}
 	
@@ -50,9 +44,9 @@ public class PlacedConduit {
 		ConduitPos position = ConduitPos.readNBT(tag.getCompound("Position"));
 		ResourceLocation conduitName = new ResourceLocation(tag.getString("Conduit"));
 		Conduit conduit = Conduits.CONDUITS_REGISTRY.get().getValue(conduitName);
-		int nodesPerBlock = tag.getInt("Nodes");
+		double length = tag.getDouble("Length");
 		if (conduit == null) return null;
-		return new PlacedConduit(position, conduit, nodesPerBlock);
+		return new PlacedConduit(position, conduit, length);
 	}
 	
 	public ConduitShape getShape() {
@@ -66,32 +60,20 @@ public class PlacedConduit {
 	public Conduit getConduit() {
 		return conduit;
 	}
-	
-	public BlockPos getNodeA() {
-		return this.position.getNodeApos();
-	}
 
-	public BlockPos getNodeB() {
-		return this.position.getNodeBpos();
+	public ConduitPos getPosition() {
+		return position;
 	}
 	
-	public int getConnectionPointA() {
-		return this.position.getNodeAid();
-	}
-	
-	public int getConnectionPointB() {
-		return this.position.getNodeBid();
-	}
-	
-	public int getNodesPerBlock() {
-		return nodesPerBlock;
+	public double getLength() {
+		return length;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof PlacedConduit) {
 			PlacedConduit other = (PlacedConduit) obj;
-			return 	other.getConduitPosition().equals(this.getConduitPosition()) &
+			return 	other.getPosition().equals(this.getPosition()) &
 					other.conduit == this.conduit;
 		}
 		return false;
@@ -100,9 +82,13 @@ public class PlacedConduit {
 	@Override
 	public String toString() {
 		return "PlacedConduit{conduit=" + this.conduit.getRegistryName() + 
-				",nodes=" + this.nodesPerBlock +
+				",length=" + this.length +
 				",position=" + this.position.toString() + 
 				"}";
  	}
+
+	public int getNodeCount() {
+		return 2;
+	}
 	
 }

@@ -6,29 +6,28 @@ import java.util.Optional;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
-import de.m_marvin.industria.core.conduits.engine.ConduitHitResult;
-import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier.ConnectionPoint;
 import de.m_marvin.industria.core.conduits.engine.network.CBreakConduitPackage;
+import de.m_marvin.industria.core.conduits.types.ConduitHitResult;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.registries.ModCapabilities;
-import de.m_marvin.univec.impl.Vec3f;
+import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.HitResult.Type;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
 
 public class ConduitUtility {
 	
-	public static boolean setConduit(Level level, ConduitPos position, Conduit conduit, int nodesPerBlock) {
+	public static boolean setConduit(Level level, ConduitPos position, Conduit conduit, double length) {
 		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
-			return conduitHolder.resolve().get().placeConduit(position, conduit, nodesPerBlock);
+			return conduitHolder.resolve().get().placeConduit(position, conduit, length);
 		}
 		return false;
 	}
@@ -49,12 +48,20 @@ public class ConduitUtility {
 		return Optional.empty();
 	}
 
-	public static Optional<PlacedConduit> getConduitAtNode(Level level, ConnectionPoint node) {
+	public static Optional<PlacedConduit> getConduitAtNode(Level level, BlockPos block, int node) {
 		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
-			return conduitHolder.resolve().get().getConduitAtNode(node);
+			return conduitHolder.resolve().get().getConduitAtNode(block, node);
 		}
 		return Optional.empty();
+	}
+	
+	public static List<PlacedConduit> getConduitsAtNode(Level level, BlockPos position, int node) {
+		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
+		if (conduitHolder.isPresent()) {
+			return conduitHolder.resolve().get().getConduitsAtNode(position, node);
+		}
+		return new ArrayList<>();
 	}
 	
 	public static List<PlacedConduit> getConduitsAtBlock(Level level, BlockPos position) {
@@ -78,10 +85,10 @@ public class ConduitUtility {
 		if (conduitHolder.isPresent()) {
 			ConduitHitResult cResult = conduitHolder.resolve().get().clipConduits(context);
 			if (cResult.isHit() && !skipBlockClip) {
-				Vec3f newTarget = cResult.getHitPos().copy();
-				Vec3f blockDistance = new Vec3f(Vec3f.fromVec(context.getTo()).sub(Vec3f.fromVec(context.getFrom())));
+				Vec3d newTarget = cResult.getHitPos().copy();
+				Vec3d blockDistance = Vec3d.fromVec(context.getTo()).sub(Vec3d.fromVec(context.getFrom()));
 				blockDistance.normalize();
-				newTarget.add(blockDistance.mul(-0.1F));
+				newTarget.add(blockDistance.mul(-0.1));
 				context.to = newTarget.writeTo(new Vec3(0, 0, 0));
 				
 				BlockHitResult bResult = level.clip(context);

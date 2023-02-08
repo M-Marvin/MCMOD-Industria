@@ -2,8 +2,8 @@ package de.m_marvin.industria.core.electrics.types;
 
 import java.util.function.Supplier;
 
-import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier.ConnectionPoint;
-import de.m_marvin.industria.core.conduits.registy.Conduits;
+import de.m_marvin.industria.core.conduits.registry.Conduits;
+import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
 import de.m_marvin.industria.core.registries.ModCapabilities;
@@ -28,7 +28,7 @@ public interface IElectric<I, P, T> extends IForgeRegistryEntry<T> {
 	public I deserializeNBTInstance(CompoundTag nbt);
 	public P deserializeNBTPosition(CompoundTag nbt);
 	
-	public ConnectionPoint[] getConnections(Level level, P pos, I instance);
+	public NodePos[] getConnections(Level level, P pos, I instance);
 	
 	public static enum Type {
 		

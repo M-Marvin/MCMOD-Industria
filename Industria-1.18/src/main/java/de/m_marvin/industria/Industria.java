@@ -8,7 +8,7 @@ import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.content.registries.ModItems;
 import de.m_marvin.industria.content.registries.ModParticleTypes;
 import de.m_marvin.industria.core.Config;
-import de.m_marvin.industria.core.conduits.registy.Conduits;
+import de.m_marvin.industria.core.conduits.registry.Conduits;
 import de.m_marvin.industria.core.registries.ModNetworkPackages;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;

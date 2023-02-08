@@ -4,9 +4,9 @@ import java.util.stream.Stream;
 
 import de.m_marvin.industria.content.registries.ModBlockStateProperties;
 import de.m_marvin.industria.content.types.WallOrientations;
-import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier;
-import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier.ConnectionPoint;
-import de.m_marvin.industria.core.conduits.registy.ConduitConnectionTypes;
+import de.m_marvin.industria.core.client.registries.NodeTypes;
+import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
+import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.univec.impl.Vec3f;
@@ -16,6 +16,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
@@ -34,8 +35,8 @@ public class ConduitClampBlock extends Block implements IConduitConnector {
 			Block.box(4, 6, 7, 12, 10, 8)
 			).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 	
-	public static final MutableConnectionPointSupplier CONDUIT_NODES = MutableConnectionPointSupplier.staticOrientation()
-			.addPoint(new Vec3i(8, 8, 8), ConduitConnectionTypes.ELECTRIC, 4);
+	public static final NodePointSupplier CONDUIT_NODES = NodePointSupplier.define()
+			.addNode(NodeTypes.ALL, 4, new Vec3i(8, 8, 8));
 	
 	public ConduitClampBlock(Properties properties) {
 		super(properties);
@@ -107,50 +108,8 @@ public class ConduitClampBlock extends Block implements IConduitConnector {
 	}
 	
 	@Override
-	public ConnectionPoint[] getConnectionPoints(BlockPos pos, BlockState state) {
-//		WallOrientations orientation = state.getValue(ModBlockStateProperties.ORIENTATION);
-//		Direction attachFace = orientation.getFace();
-//		Axis connectionAxis = orientation.getAxialOrientation();
-//		int clampOffset = state.getValue(ModBlockStateProperties.CLAMP_OFFSET);
-//		Vec3i offset = null;
-//		int axisOffset = attachFace.getAxisDirection() == AxisDirection.POSITIVE ? 12 : 4;
-//		switch (connectionAxis) {
-//		case X:
-//			switch (attachFace.getAxis()) {
-//			default:
-//			case Y:
-//				offset = new Vec3i(2 + clampOffset * 6, axisOffset, 8);
-//				break;
-//			case Z:
-//				offset = new Vec3i(2 + clampOffset * 6, 8, axisOffset);
-//				break;
-//			}
-//			break;
-//		case Y:
-//			switch (attachFace.getAxis()) {
-//			default:
-//			case X:
-//				offset = new Vec3i(axisOffset, 2 + clampOffset * 6, 8);
-//				break;
-//			case Z:
-//				offset = new Vec3i(8, 2 + clampOffset * 6, axisOffset);
-//				break;
-//			}
-//			break;
-//		case Z:
-//			switch (attachFace.getAxis()) {
-//			default:
-//			case X:
-//				offset = new Vec3i(axisOffset, 8, 2 + clampOffset * 6);
-//				break;
-//			case Y:
-//				offset = new Vec3i(8, axisOffset, 2 + clampOffset * 6);
-//				break;
-//			}
-//			break;
-//		}
-//		return new ConnectionPoint[] {new ConnectionPoint(pos, 0, offset, attachFace), new ConnectionPoint(pos, 1, offset, attachFace)};
-		return CONDUIT_NODES.getNodes(pos, state);
+	public ConduitNode[] getConduitNodes(Level level, BlockPos pos, BlockState state) {
+		return CONDUIT_NODES.updateNodes(state).getNodes();
 	}
 	
 }

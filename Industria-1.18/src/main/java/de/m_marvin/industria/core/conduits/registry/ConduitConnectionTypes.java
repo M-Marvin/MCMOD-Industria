@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core.conduits.registy;
+package de.m_marvin.industria.core.conduits.registry;
 
 import de.m_marvin.industria.Industria;
 import net.minecraft.resources.ResourceLocation;

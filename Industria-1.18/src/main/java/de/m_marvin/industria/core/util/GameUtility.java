@@ -1,15 +1,20 @@
 package de.m_marvin.industria.core.util;
 
+import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.chunk.LevelChunkSection;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -41,7 +46,13 @@ public class GameUtility {
 	public static void copyBlock(Level level, BlockPos from, BlockPos to) {
 		BlockState state = level.getBlockState(from);
 		BlockEntity blockentity = level.getBlockEntity(from);
-		level.setBlock(to, state, 50);
+		
+		// Hacky way to set a block without causing any updates
+		LevelChunk chunk = (LevelChunk) level.getChunk(to);
+		LevelChunkSection section = chunk.getSection(chunk.getSectionIndex(to.getY()));
+		chunk.setBlockState(to, Blocks.STONE.defaultBlockState(), false);
+		section.setBlockState(to.getX() & 15, to.getY() & 15, to.getZ() & 15, state);
+		
 		if (state.hasBlockEntity() && blockentity != null) {
 			CompoundTag data = blockentity.serializeNBT();
 			level.setBlockEntity(blockentity);
@@ -60,6 +71,15 @@ public class GameUtility {
 	public static void relocateBlock(Level level, BlockPos from, BlockPos to) {
 		copyBlock(level, from, to);
 		removeBlock(level, from);
+	}
+
+	public static HitResult raycast(Level level, Vec3d from, Vec3d direction, double range) {
+		return raycast(level, from, from.add(direction.mul(range)));
+	}
+	
+	public static HitResult raycast(Level level, Vec3d from, Vec3d to) {
+		ClipContext clipContext = new ClipContext(from.writeTo(new Vec3(0, 0, 0)), to.writeTo(new Vec3(0, 0, 0)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, null);
+		return level.clip(clipContext);
 	}
 	
 }

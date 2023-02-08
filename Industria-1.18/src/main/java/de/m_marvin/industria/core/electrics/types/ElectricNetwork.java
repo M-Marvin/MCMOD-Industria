@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import de.m_marvin.industria.core.conduits.engine.MutableConnectionPointSupplier.ConnectionPoint;
+import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -47,15 +47,15 @@ public class ElectricNetwork {
 	
 	// Stored results
 	protected Map<Long, Double> serialResistance;
-	protected Map<ConnectionPoint, Double> parallelResistance;
-	protected Map<ConnectionPoint, Double> nodeVoltages;
+	protected Map<NodePos, Double> parallelResistance;
+	protected Map<NodePos, Double> nodeVoltages;
 	protected Set<Component<?, ?, ?>> components;
 	protected long lastUpdated;
 	
 	// Cache for circuit building
 	protected String title;
 	protected Set<Set<String>> connectedNodes;
-	protected Map<String, Set<ConnectionPoint>> hash2node;
+	protected Map<String, Set<NodePos>> hash2node;
 	protected StringBuilder stringBuilder;
 	protected String netList;
 	protected Set<String> modelMap;
@@ -67,9 +67,9 @@ public class ElectricNetwork {
 		this.title = titleInfo;
 		this.stringBuilder = new StringBuilder();
 		this.stringBuilder.append(titleInfo + "\n");
-		this.hash2node = new HashMap<String, Set<ConnectionPoint>>();
-		this.nodeVoltages = new HashMap<ConnectionPoint, Double>();
-		this.parallelResistance = new HashMap<ConnectionPoint, Double>();
+		this.hash2node = new HashMap<String, Set<NodePos>>();
+		this.nodeVoltages = new HashMap<NodePos, Double>();
+		this.parallelResistance = new HashMap<NodePos, Double>();
 		this.serialResistance = new HashMap<Long, Double>();
 		this.components = new HashSet<Component<?, ?, ?>>();
 		this.modelMap = new HashSet<String>();
@@ -102,13 +102,13 @@ public class ElectricNetwork {
 		serialResistanceTag.getAllKeys().forEach((key) -> {
 			this.serialResistance.put(Long.valueOf(key), serialResistanceTag.getDouble(key));
 		});
-		CompoundTag parallelResistanceTag = tag.getCompound("ParallelResistance");
+		CompoundTag parallelResistanceTag = tag.getCompound("ParallelResistance");// FIXME 
 		parallelResistanceTag.getAllKeys().forEach((key) -> {
-			this.parallelResistance.put(ConnectionPoint.getFromKeyString(level, key), parallelResistanceTag.getDouble(key));
+			this.parallelResistance.put(NodePos.getFromKeyString(key), parallelResistanceTag.getDouble(key));
 		});
 		CompoundTag nodeVoltagesTag = tag.getCompound("NodeVoltages");
 		nodeVoltagesTag.getAllKeys().forEach((key) -> {
-			this.nodeVoltages.put(ConnectionPoint.getFromKeyString(level, key), nodeVoltagesTag.getDouble(key));
+			this.nodeVoltages.put(NodePos.getFromKeyString(key), nodeVoltagesTag.getDouble(key));
 		});
 		ListTag componentsTag = tag.getList("Components", 10);
 		componentsTag.stream().forEach((componentTag) -> {
@@ -120,19 +120,19 @@ public class ElectricNetwork {
 		return components;
 	}
 	
-	public Map<String, Set<ConnectionPoint>> getNodes() {
+	public Map<String, Set<NodePos>> getNodes() {
 		return this.hash2node;
 	}
 	
-	protected String getNodeName(ConnectionPoint node) {
+	protected String getNodeName(NodePos node) {
 		String hashName = "node-" + Integer.toHexString(node.hashCode());
-		Set<ConnectionPoint> nodes = this.hash2node.getOrDefault(hashName, new HashSet<ConnectionPoint>());
+		Set<NodePos> nodes = this.hash2node.getOrDefault(hashName, new HashSet<NodePos>());
 		nodes.add(node);
 		this.hash2node.put(hashName, nodes);
 		return hashName;
 	}
 	
-	public Set<ConnectionPoint> getNodes(String hashName) {
+	public Set<NodePos> getNodes(String hashName) {
 		return this.hash2node.get(hashName);
 	}
 	
@@ -180,21 +180,21 @@ public class ElectricNetwork {
 		if (voltage > 0) stringBuilder.append(SOURCE_BUILDER.build(this, "-" + sourceCount++ + "s", nodeP, nodeN, String.valueOf(maxCurrent), String.valueOf(voltage)));
 	}
 	
-	public void addSerialResistance(ConnectionPoint nodeA, ConnectionPoint nodeB, double resistance) {
+	public void addSerialResistance(NodePos nodeA, NodePos nodeB, double resistance) {
 		this.serialResistance.put((long) (nodeA.hashCode() + nodeB.hashCode()), resistance);
 		addResistor(getNodeName(nodeA), getNodeName(nodeB), resistance);
 	}
 	
-	public void addParallelResistance(ConnectionPoint node, double resistance) {
+	public void addParallelResistance(NodePos node, double resistance) {
 		this.parallelResistance.put(node, 1 / (1 / this.parallelResistance.getOrDefault(node, 0D) + 1 / resistance));
 		addResistor(getNodeName(node), GND_NODE, resistance);
 	}
 	
-	public void addSource(ConnectionPoint node, double voltage, double maxCurrent) {
+	public void addSource(NodePos node, double voltage, double maxCurrent) {
 		addSource(getNodeName(node), GND_NODE, voltage, maxCurrent);
 	}
 	
-	public void addLoad(ConnectionPoint node, double current) {
+	public void addLoad(NodePos node, double current) {
 		addLoad(getNodeName(node), GND_NODE, current);
 	}
 	
@@ -211,19 +211,19 @@ public class ElectricNetwork {
 		return isPlotEmpty() ? "EMPTY" : (this.netList == null ? this.stringBuilder.toString() : netList);
 	}
 	
-	public double getSerialResistance(ConnectionPoint nodeA, ConnectionPoint nodeB) {
+	public double getSerialResistance(NodePos nodeA, NodePos nodeB) {
 		return this.serialResistance.getOrDefault((long) (nodeA.hashCode() + nodeB.hashCode()), Double.MAX_VALUE);
 	}
 
-	public double getParallelResistance(ConnectionPoint node) {
+	public double getParallelResistance(NodePos node) {
 		return this.parallelResistance.getOrDefault(node, Double.MAX_VALUE);
 	}
 	
-	public Map<ConnectionPoint, Double> getNodeVoltages() {
+	public Map<NodePos, Double> getNodeVoltages() {
 		return this.nodeVoltages;
 	}
 	
-	public double getVoltage(ConnectionPoint node) {
+	public double getVoltage(NodePos node) {
 		return this.nodeVoltages.getOrDefault(node, 0D);
 	}
 
@@ -231,7 +231,7 @@ public class ElectricNetwork {
 		this.stringBuilder.append(".end\n");
 		this.netList = this.stringBuilder.toString();
 		this.connectedNodes.forEach((nodeSet) -> {
-			Set<ConnectionPoint> mapedNodes = new HashSet<ConnectionPoint>();
+			Set<NodePos> mapedNodes = new HashSet<NodePos>();
 			String nodeName = nodeSet.stream().findAny().get() + "-com";
 			nodeSet.forEach((node) -> {
 				mapedNodes.addAll(getNodes(node));

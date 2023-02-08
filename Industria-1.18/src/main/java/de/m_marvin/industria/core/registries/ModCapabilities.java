@@ -3,6 +3,7 @@ package de.m_marvin.industria.core.registries;
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
+import de.m_marvin.industria.core.physics.engine.PhysicHandlerCapability;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
@@ -18,6 +19,7 @@ public class ModCapabilities {
 	
 	public static final Capability<ConduitHandlerCapability> CONDUIT_HANDLER_CAPABILITY = CapabilityManager.get(new CapabilityToken<ConduitHandlerCapability>() {});
 	public static final Capability<ElectricNetworkHandlerCapability> ELECTRIC_NETWORK_HANDLER_CAPABILITY = CapabilityManager.get(new CapabilityToken<ElectricNetworkHandlerCapability>() {});
+	public static final Capability<PhysicHandlerCapability> PHYSIC_DATA_HOLDER_CAPABILITY = CapabilityManager.get(new CapabilityToken<PhysicHandlerCapability>() {});
 	
 	@SubscribeEvent
 	public static void registerCapabilities(RegisterCapabilitiesEvent event) {
@@ -30,7 +32,8 @@ public class ModCapabilities {
 		@SubscribeEvent
 		public static void attachCapabilities(AttachCapabilitiesEvent<Level> event) {
 			event.addCapability(new ResourceLocation(Industria.MODID, "conduits"), new ConduitHandlerCapability(event.getObject()));
-			event.addCapability(new ResourceLocation(Industria.MODID, "electric_networks"), new ElectricNetworkHandlerCapability(event.getObject()));
+			event.addCapability(new ResourceLocation(Industria.MODID, "electrics"), new ElectricNetworkHandlerCapability(event.getObject()));
+			event.addCapability(new ResourceLocation(Industria.MODID, "physics"), new PhysicHandlerCapability(event.getObject()));
 		}
 		
 	}

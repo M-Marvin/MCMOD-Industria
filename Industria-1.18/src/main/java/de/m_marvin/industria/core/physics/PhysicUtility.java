@@ -1,58 +1,103 @@
 package de.m_marvin.industria.core.physics;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.joml.Matrix4dc;
-import org.joml.Quaterniond;
-import org.joml.Quaterniondc;
 import org.joml.Vector3d;
-import org.joml.Vector3i;
-import org.joml.primitives.AABBic;
-import org.valkyrienskies.core.api.ships.LoadedShip;
-import org.valkyrienskies.core.api.ships.QueryableShipData;
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
-import org.valkyrienskies.core.api.ships.properties.ShipTransform;
-import org.valkyrienskies.core.impl.game.ships.ShipData;
+import org.valkyrienskies.core.apigame.constraints.VSForceConstraint;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
+import de.m_marvin.industria.core.physics.engine.PhysicHandlerCapability;
 import de.m_marvin.industria.core.physics.types.ContraptionHitResult;
 import de.m_marvin.industria.core.physics.types.ContraptionPosition;
-import de.m_marvin.industria.core.util.GameUtility;
-import de.m_marvin.industria.core.util.MathUtility;
-import de.m_marvin.unimat.impl.Quaternion;
+import de.m_marvin.industria.core.registries.ModCapabilities;
 import de.m_marvin.univec.impl.Vec3d;
-import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.HitResult.Type;
-import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.LazyOptional;
 
 public class PhysicUtility {
 	
-	protected static Map<Long, String> contraptionNames = new HashMap<>();
+	/* Naming and finding of contraptions */
 	
+	public static void setContraptionName(Level level, Ship contraption, String name) {
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		if (dataHolder.isPresent()) {
+			dataHolder.resolve().get().setContraptionName(contraption.getId(), name);
+		}
+	}
+	
+	public static String getContraptionName(Level level, Ship contraption, String name) {
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		if (dataHolder.isPresent()) {
+			return dataHolder.resolve().get().getContraptionName(contraption.getId());
+		}
+		return null;
+	}
+	
+	public static Long getFirstContraptionIdWithName(Level level, String name) {
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		if (dataHolder.isPresent()) {
+			return dataHolder.resolve().get().getContraption(name);
+		}
+		return -1L;
+	}
+
+	public static Ship getFirstContraptionWithName(Level level, String name) {
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		if (dataHolder.isPresent()) {
+			return getContraptionById(level, dataHolder.resolve().get().getContraption(name));
+		}
+		return null;
+	}
+
 	public static Iterable<Ship> getContraptionIntersecting(Level level, BlockPos position)  {
-		return VSGameUtilsKt.getShipsIntersecting(level, new AABB(position, position));
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		if (dataHolder.isPresent()) {
+			return dataHolder.resolve().get().getContraptionIntersecting(position);
+		}
+		return null;
 	}
 	
 	public static Ship getContraptionOfBlock(Level level, BlockPos shipBlockPos) {
-		return VSGameUtilsKt.getShipManagingPos(level, shipBlockPos);
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		if (dataHolder.isPresent()) {
+			return dataHolder.resolve().get().getContraptionOfBlock(shipBlockPos);
+		}
+		return null;
+	}
+
+	public static Ship getContraptionById(Level level, long id) {
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		if (dataHolder.isPresent()) {
+			return dataHolder.resolve().get().getContraptionById(id);
+		}
+		return null;
 	}
 	
-	public static String getDimensionId(Level level) {
-		return VSGameUtilsKt.getDimensionId(level);
+	/* Translating of positions and moving of contraptions */
+	
+	public static Vec3d toContraptionPos(Ship contraption, Vec3d pos) {
+		Matrix4dc worldToShip = contraption.getWorldToShip();
+		if (worldToShip != null) {
+			Vector3d transformPosition = worldToShip.transformPosition(pos.writeTo(new Vector3d()));
+			return Vec3d.fromVec(transformPosition);
+		}
+		return new Vec3d(0, 0, 0);
+	}
+	
+	public static BlockPos toContraptionBlockPos(Ship contraption, Vec3d pos) {
+		Vec3d position = toContraptionPos(contraption, pos);
+		return new BlockPos(position.x, position.y, position.z);
+	}
+	
+	public static BlockPos toContraptionBlockPos(Ship contraption, BlockPos pos) {
+		return toContraptionBlockPos(contraption, Vec3d.fromVec(pos));
 	}
 
 	public static Vec3d toWorldPos(Ship contraption, Vec3d pos) {
@@ -72,89 +117,46 @@ public class PhysicUtility {
 		Vec3d position = toWorldPos(contraption, pos);
 		return new BlockPos(position.x, position.y, position.z);
 	}
-	
-	public static ContraptionPosition getPosition(ServerShip contraption, boolean massCenter) {
-		if (massCenter) {
-			Vec3d position = Vec3d.fromVec(contraption.getTransform().getPositionInWorld());
-			Quaterniondc jomlQuat = contraption.getTransform().getShipToWorldRotation();
-			Quaternion orientation = new Quaternion((float) jomlQuat.x(), (float) jomlQuat.y(), (float) jomlQuat.z(), (float) jomlQuat.w());
-			return new ContraptionPosition(orientation, position);		
-		} else {
-			AABBic shipBounds = contraption.getShipAABB();
-			Vec3d shipCoordCenter = MathUtility.getMiddle(new BlockPos(shipBounds.minX(), shipBounds.minY(), shipBounds.minZ()), new BlockPos(shipBounds.maxX(), shipBounds.maxY(), shipBounds.maxZ()));
-			Vec3d shipCoordMassCenter = Vec3d.fromVec(contraption.getInertiaData().getCenterOfMassInShip());
-			Vec3d centerOfMassOffset = shipCoordMassCenter.sub(shipCoordCenter).add(1.0, 1.0, 1.0);
-			Vec3d position = Vec3d.fromVec(contraption.getTransform().getPositionInWorld()).sub(centerOfMassOffset);
-			Quaterniondc jomlQuat = contraption.getTransform().getShipToWorldRotation();
-			Quaternion orientation = new Quaternion((float) jomlQuat.x(), (float) jomlQuat.y(), (float) jomlQuat.z(), (float) jomlQuat.w());
-			return new ContraptionPosition(orientation, position);		
-		}
-		
-	}
-	
-	public static void setPosition(ServerShip contraption, ContraptionPosition position, boolean massCenter) {
-		if (massCenter) {
-			ShipTransform transform = contraption.getTransform();
-			((Vector3d) transform.getPositionInWorld()).set(position.getPosition().writeTo(new Vector3d()));
-			((Quaterniond) transform.getShipToWorldRotation()).set(position.getOrientation().i(), position.getOrientation().j(), position.getOrientation().k(), position.getOrientation().r());
-			((ShipData) contraption).setTransform(transform);	// FIXME does not work with LoadedShip
-		} else {
-			AABBic shipBounds = contraption.getShipAABB();
-			Vec3d shipCoordCenter = MathUtility.getMiddle(new BlockPos(shipBounds.minX(), shipBounds.minY(), shipBounds.minZ()), new BlockPos(shipBounds.maxX(), shipBounds.maxY(), shipBounds.maxZ()));
-			Vec3d shipCoordMassCenter = Vec3d.fromVec(contraption.getInertiaData().getCenterOfMassInShip());
-			Vec3d centerOfMassOffset = shipCoordMassCenter.sub(shipCoordCenter).add(1.0, 1.0, 1.0);
-			ShipTransform transform = contraption.getTransform();
-			((Vector3d) transform.getPositionInWorld()).set(position.getPosition().add(centerOfMassOffset).writeTo(new Vector3d()));
-			((Quaterniond) transform.getShipToWorldRotation()).set(position.getOrientation().i(), position.getOrientation().j(), position.getOrientation().k(), position.getOrientation().r());
-			((ShipData) contraption).setTransform(transform);	// FIXME does not work with LoadedShip
-		}
-	}
-	
-	public static void setName(Ship contraption, String name) {
-		contraptionNames.put(contraption.getId(), name);
-	}
-	
-	public static String getName(Ship contraption, String name) {
-		return contraptionNames.get(contraption.getId());
-	}
-	
-	public static Long getFirstContraptionIdWithName(String name) {
-		for (Entry<Long, String> entry : contraptionNames.entrySet()) {
-			if (entry.getValue().equals(name)) return entry.getKey();
-		}
-		return 0L;
-	}
 
-	public static Ship getFirstContraptionWithName(Level level, String name) {
-		for (Entry<Long, String> entry : contraptionNames.entrySet()) {
-			if (entry.getValue().equals(name)) return getContraptionById(level, entry.getKey());
+	public static Vec3d ensureWorldCoordinates(Level level, BlockPos referencePos, Vec3d position) {
+		Ship contraption = getContraptionOfBlock(level, referencePos);
+		if (contraption != null) {
+			return toWorldPos(contraption, position);
+		}
+		return position;
+	}
+	
+	public static ContraptionPosition getPosition(Level level, ServerShip contraption, boolean massCenter) {
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		if (dataHolder.isPresent()) {
+			return dataHolder.resolve().get().getPosition(contraption, massCenter);
 		}
 		return null;
 	}
 	
-	public static Vec3d toContraptionPos(Ship contraption, Vec3d pos) {
-		Matrix4dc worldToShip = contraption.getWorldToShip();
-		if (worldToShip != null) {
-			Vector3d transformPosition = worldToShip.transformPosition(pos.writeTo(new Vector3d()));
-			return Vec3d.fromVec(transformPosition);
+	public static void setPosition(ServerLevel level, ServerShip contraption, ContraptionPosition position, boolean massCenter) {
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		if (dataHolder.isPresent()) {
+			dataHolder.resolve().get().setPosition(contraption, position, massCenter);
 		}
-		return new Vec3d(0, 0, 0);
 	}
 	
-	public static BlockPos toContraptionBlockPos(Ship contraption, Vec3d pos) {
-		Vec3d position = toContraptionPos(contraption, pos);
-		return new BlockPos(position.x, position.y, position.z);
-	}
-	
-	public static BlockPos toContraptionBlockPos(Ship contraption, BlockPos pos) {
-		return toContraptionBlockPos(contraption, Vec3d.fromVec(pos));
-	}
+	/* Listing and creation contraptions in the world */
 	
 	public static List<Ship> getLoadedContraptions(Level level) {
-		QueryableShipData<LoadedShip> shipData = VSGameUtilsKt.getShipObjectWorld(level).getLoadedShips();
-		List<Ship> ships = new ArrayList<>();
-		ships.addAll(shipData);
-		return ships;
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		if (dataHolder.isPresent()) {
+			return dataHolder.resolve().get().getLoadedContraptions();
+		}
+		return null;
+	}
+
+	public static List<Ship> getAllContraptions(Level level) {
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		if (dataHolder.isPresent()) {
+			return dataHolder.resolve().get().getAllContraptions();
+		}
+		return null;
 	}
 	
 	public static Ship createNewContraptionAt(ServerLevel level, BlockPos position, float scale) {
@@ -162,235 +164,96 @@ public class PhysicUtility {
 	}
 	
 	public static ServerShip createContraptionAt(ServerLevel level, Vec3d position, float scale) {
-		Ship parentContraption = VSGameUtilsKt.getShipManagingPos(level, position.writeTo(new Vector3d()));
-		if (parentContraption != null) {
-			position = toWorldPos(parentContraption, position);
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		if (dataHolder.isPresent()) {
+			return dataHolder.resolve().get().createContraptionAt(position, scale);
 		}
-		String dimensionId = getDimensionId(level);
-		Ship newContraption = VSGameUtilsKt.getShipObjectWorld(level).createNewShipAtBlock(position.writeTo(new Vector3i()), false, scale, dimensionId);
-		
-		// Stone for safety reasons
-		BlockPos pos2 = toContraptionBlockPos(newContraption, position);
-		level.setBlock(pos2, Blocks.STONE.defaultBlockState(), 3);
-		
-		return (ServerShip) newContraption;
+		return null;
 	}
 	
-	public static void removeContraption(ServerLevel level, Ship contraption) {
-		AABBic bounds = contraption.getShipAABB();
-		if (bounds != null) {
-			for (int x = bounds.minX(); x <= bounds.maxX(); x++) {
-				for (int y = bounds.minY(); y <= bounds.maxY(); y++) {
-					for (int z = bounds.minZ(); z <= bounds.maxZ(); z++) {
-						GameUtility.removeBlock(level, new BlockPos(x, y, z));
-					}
-				}
-			}
+	public static boolean removeContraption(ServerLevel level, Ship contraption) {
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		if (dataHolder.isPresent()) {
+			return dataHolder.resolve().get().removeContraption(contraption);
 		}
-		contraptionNames.remove(contraption.getId());
+		return false;
 	}
 	
 	public static Ship convertToContraption(ServerLevel level, AABB areaBounds, boolean removeOriginal, float scale) {
-		
-		BlockPos structureCornerMin = null;
-		BlockPos structureCornerMax = null;
-		boolean noSolids = true;
-		
-		int areaMinBlockX = (int) Math.floor(areaBounds.minX);
-		int areaMinBlockY = (int) Math.floor(areaBounds.minY);
-		int areaMinBlockZ = (int) Math.floor(areaBounds.minZ);
-		int areaMaxBlockX = (int) Math.floor(areaBounds.maxX);
-		int areaMaxBlockY = (int) Math.floor(areaBounds.maxY);
-		int areaMaxBlockZ = (int) Math.floor(areaBounds.maxZ);
-
-		for (int x = areaMinBlockX; x <= areaMaxBlockX; x++) {
-			for (int z = areaMinBlockZ; z <= areaMaxBlockZ; z++) {
-				for (int y = areaMinBlockY; y <= areaMaxBlockY; y++) {
-					
-					BlockPos itPos = new BlockPos(x, y, z);
-					BlockState itState = level.getBlockState(itPos);
-					
-					if (isValidContraptionBlock(itState)) {
-						
-						if (structureCornerMin == null) {
-							structureCornerMin = itPos;
-						} else {
-							structureCornerMin = MathUtility.getMinCorner(itPos, structureCornerMin);
-						}
-						
-						if (structureCornerMax == null) {
-							structureCornerMax = itPos;
-						} else {
-							structureCornerMax = MathUtility.getMaxCorner(itPos, structureCornerMax);
-						}
-						
-					}
-					
-				}
-			}
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		if (dataHolder.isPresent()) {
+			return dataHolder.resolve().get().convertToContraption(areaBounds, removeOriginal, scale);
 		}
-		
-		if (structureCornerMax == null) structureCornerMax = structureCornerMin = new BlockPos(areaBounds.getCenter().x(), areaBounds.getCenter().y(), areaBounds.getCenter().z());
-		
-		Vec3d contraptionPos = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
-		ServerShip contraption = createContraptionAt(level, contraptionPos, scale);
-		
-		Vec3d contraptionOrigin = toContraptionPos(contraption, contraptionPos);
-		
-		for (int x = areaMinBlockX; x <= areaMaxBlockX; x++) {
-			for (int z = areaMinBlockZ; z <= areaMaxBlockZ; z++) {
-				for (int y = areaMinBlockY; y <= areaMaxBlockY; y++) {
-					
-					BlockPos itPos = new BlockPos(x, y, z);
-					BlockState itState = level.getBlockState(itPos);
-					
-					if (isValidContraptionBlock(itState)) {
-						
-						Vec3d relativePosition = Vec3d.fromVec(itPos).sub(contraptionPos);
-						Vec3d shipPos = contraptionOrigin.add(relativePosition);
-						
-						GameUtility.copyBlock(level, itPos, new BlockPos(shipPos.x, shipPos.y, shipPos.z));
-						
-						if (isSolidContraptionBlock(level, itPos, itState)) {
-							
-							noSolids = false;
-							
-						}
-						
-					}
-					
-				}
-			}
-		}
-		
-		if (noSolids) {
-			level.setBlock(new BlockPos(contraptionOrigin.x, contraptionOrigin.y, contraptionOrigin.z), Blocks.STONE.defaultBlockState(), 34);
-		} else {
-			BlockState centerStructureBlock = level.getBlockState(new BlockPos(contraptionPos.x, contraptionPos.y, contraptionPos.z));
-			if (!isValidContraptionBlock(centerStructureBlock)) {
-				level.setBlock(new BlockPos(contraptionOrigin.x, contraptionOrigin.y, contraptionOrigin.z), Blocks.AIR.defaultBlockState(), 34);
-			}
-		}
-		
-		if (removeOriginal) {
-			for (int x = structureCornerMin.getX(); x <= structureCornerMax.getX(); x++) {
-				for (int z = structureCornerMin.getZ(); z <= structureCornerMax.getZ(); z++) {
-					for (int y = structureCornerMin.getY(); y <= structureCornerMax.getY(); y++) {
-						
-						GameUtility.removeBlock(level, new BlockPos(x, y, z));
-						
-					}
-				}
-			}
-		}
-		
-		setPosition((ServerShip) contraption, new ContraptionPosition(new Quaternion(new Vec3i(0, 1, 1), 0), contraptionPos), false);
-		
-		return contraption;
-		
+		return null;
 	}
 	
 	public static ServerShip assembleToContraption(ServerLevel level, List<BlockPos> blocks, boolean removeOriginal, float scale) {
-		
-		if (blocks.isEmpty()) {
-			return null;
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		if (dataHolder.isPresent()) {
+			return dataHolder.resolve().get().assembleToContraption(blocks, removeOriginal, scale);
 		}
-
-		BlockPos structureCornerMin = blocks.get(0);
-		BlockPos structureCornerMax = blocks.get(0);
-		
-		for (BlockPos itPos : blocks) {
-			structureCornerMin = MathUtility.getMinCorner(structureCornerMin, itPos);
-			structureCornerMax = MathUtility.getMaxCorner(structureCornerMax, itPos);
-		}
-		
-		Vec3d contraptionPos = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
-		ServerShip contraption = createContraptionAt(level, contraptionPos, scale);
-		
-		Vec3d contraptionOrigin = toContraptionPos(contraption, contraptionPos);
-		boolean noSolids = true;
-		
-		for (BlockPos itPos : blocks) {
-			
-			BlockState itState = level.getBlockState(itPos);
-			
-			Vec3d relativePosition = Vec3d.fromVec(itPos).sub(contraptionPos);
-			Vec3d shipPos = contraptionOrigin.add(relativePosition);
-			
-			GameUtility.copyBlock(level, itPos, new BlockPos(shipPos.x, shipPos.y, shipPos.z));
-			
-			if (isSolidContraptionBlock(level, itPos, itState)) {
-				
-				noSolids = false;
-				
-			}
-			
-		}
-
-		if (noSolids) {
-			level.setBlock(new BlockPos(contraptionOrigin.x, contraptionOrigin.y, contraptionOrigin.z), Blocks.STONE.defaultBlockState(), 34);
-		} else {
-			BlockState centerStructureBlock = level.getBlockState(new BlockPos(contraptionPos.x, contraptionPos.y, contraptionPos.z));
-			if (!isValidContraptionBlock(centerStructureBlock)) {
-				level.setBlock(new BlockPos(contraptionOrigin.x, contraptionOrigin.y, contraptionOrigin.z), Blocks.AIR.defaultBlockState(), 34);
-			}
-		}
-		
-		if (removeOriginal) {
-			for (BlockPos itPos : blocks) {
-				GameUtility.removeBlock(level, itPos);
-			}
-		}
-		
-		setPosition((ServerShip) contraption, new ContraptionPosition(new Quaternion(new Vec3i(0, 1, 1), 0), contraptionPos), false);
-		
-		return contraption;
-		
+		return null;
 	}
 	
-	public static boolean isSolidContraptionBlock(Level level, BlockPos pos, BlockState state) {
-		return !state.getCollisionShape(level, pos).isEmpty(); // FIXME Working way to check if block has collision as contraption part
+	/* Raycasting for contraptions */
+	
+	public static ContraptionHitResult clipForContraption(Level level, Vec3d from, Vec3d direction, double range) {
+		return clipForContraption(level, from, from.add(direction.mul(range)));
+	}
+	
+	public static ContraptionHitResult clipForContraption(Level level, Vec3d from, Vec3d to) {
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		if (dataHolder.isPresent()) {
+			return dataHolder.resolve().get().clipForContraption(from, to);
+		}
+		return null;
+	}
+		
+	/* Util stuff */
+
+	public static String getDimensionId(Level level) {
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		if (dataHolder.isPresent()) {
+			return dataHolder.resolve().get().getDimensionId();
+		}
+		return null;
+	}
+	
+	public static boolean isSolidContraptionBlock(BlockState state) {
+		return true; // !state.getCollisionShape(level, pos).isEmpty(); // FIXME Working way to check if block has collision as contraption part
 	}
 	
 	public static boolean isValidContraptionBlock(BlockState state) {
 		return !state.isAir();
 	}
 	
-	public static Ship getContraptionById(Level level, long id) {
-		for (Ship contraption : getLoadedContraptions(level)) {
-			if (contraption.getId() == id) {
-				return contraption;
-			}
+	
+	
+	
+	
+	
+	
+	public static int addConstraint(ServerLevel level, VSForceConstraint constraint, String name) {
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		if (dataHolder.isPresent()) {
+			int constraintId = VSGameUtilsKt.getShipObjectWorld(level).createNewConstraint(constraint);
+			dataHolder.resolve().get().setConstraintName(constraintId, name);
+			return constraintId;
 		}
-		return null;
+		return -1;
 	}
 	
-	public static ContraptionHitResult raycastForContraption(Level level, Vec3d from, Vec3d direction, double range) {
-		return raycastForContraption(level, from, from.add(direction.mul(range)));
+	public static boolean removeConstraint(ServerLevel level, int constraint) {
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		if (dataHolder.isPresent()) {
+			dataHolder.resolve().get().removeConstraintId(constraint);
+			return VSGameUtilsKt.getShipObjectWorld(level).removeConstraint(constraint);
+		}
+		return false;
 	}
 	
-	public static ContraptionHitResult raycastForContraption(Level level, Vec3d from, Vec3d to) {
-		ClipContext clipContext = new ClipContext(from.writeTo(new Vec3(0, 0, 0)), to.writeTo(new Vec3(0, 0, 0)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, null);
-		HitResult clipResult = level.clip(clipContext);
-		
-		if (clipResult.getType() == Type.BLOCK) {
-			BlockPos hitBlockPos = ((BlockHitResult) clipResult).getBlockPos();
-			Ship contraption = getContraptionOfBlock(level, hitBlockPos);
-			if (contraption != null) {
-				Vec3 hitPosition = clipResult.getLocation();
-				return ContraptionHitResult.hit(hitPosition, hitBlockPos, contraption);
-			}
-			
-		}
-		return ContraptionHitResult.miss(clipResult.getLocation());
-	}
-	
-	public static Vec3d ensureWorldCoordinates(Level level, BlockPos referencePos, Vec3d position) {
-		Ship contraption = getContraptionOfBlock(level, referencePos);
-		if (contraption != null) {
-			return toWorldPos(contraption, position);
-		}
-		return position;
+	public static List<Integer> getAllConstraints(Level level) {
+		throw new UnsupportedOperationException("Not implemented yet!"); // TODO
 	}
 	
 }

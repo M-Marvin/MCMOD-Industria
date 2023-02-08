@@ -127,7 +127,7 @@ dependencies {
  
     minecraft 'net.minecraftforge:forge:1.18.2-40.2.1'
  	
-    implementation("org.valkyrienskies.core:api:1.1.0+2b2f93f793")
+    implementation "org.valkyrienskies.core:api:1.1.0+2b2f93f793"
  	implementation fg.deobf("curse.maven:kotlinforforge-351264:4311661")
  	implementation fg.deobf("curse.maven:valkyrienskies-258371:4367151")
  	
@@ -135,8 +135,9 @@ dependencies {
 	//implementation fg.deobf("curse.maven:create-328085:3864525")
 	implementation fg.deobf("curse.maven:atlasviewer-633577:3832297")
 	
-	shade 'com.github.M-Marvin:LIBRARY-NGLink:main-SNAPSHOT'
-	shade 'com.github.M-Marvin:LIBRARY-UnifiedVectors:4100b13c4458a5d5950f9d235f504bbf0511aa25'
+	//shade "org.apache.commons:commons-collections4:4.4"
+	shade "com.github.M-Marvin:LIBRARY-NGLink:main-SNAPSHOT"
+	shade "com.github.M-Marvin:LIBRARY-UnifiedVectors:41236ed39df7345be739cd67486b97b71a4a553a"
 	
 }
 

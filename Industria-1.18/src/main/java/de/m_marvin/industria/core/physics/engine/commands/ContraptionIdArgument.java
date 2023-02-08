@@ -22,51 +22,58 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult.Type;
 
-public class ContraptionIdArgument implements ArgumentType<Long> {
+public class ContraptionIdArgument implements ArgumentType<de.m_marvin.industria.core.physics.engine.commands.ContraptionIdArgument.ContraptionSelector> {
 	
 	public static final String CONTRAPTION_PREFIX = "contraption";
-	public static final Collection<String> EXAMPLES = Arrays.asList("contraption1", "contraption42");
+	public static final Collection<String> EXAMPLES = Arrays.asList("contraption1", "contraption42", "examplename");
 	public static final DynamicCommandExceptionType ERROR_NON_EXISTING_CONTRAPTION = new DynamicCommandExceptionType((object) -> {
 		return new TranslatableComponent("industria.argument.contraption.notFound", object);
-	});
-	public static final DynamicCommandExceptionType ERROR_MALEFORMED_CONTRAPTION = new DynamicCommandExceptionType((object) -> {
-		return new TranslatableComponent("industria.argument.contraption.maleFormed", object);
 	});
 	
 	public static ContraptionIdArgument contraption() {
 		return new ContraptionIdArgument();
 	}
 	
-	public static Ship getContraption(CommandContext<CommandSourceStack> context, String name) throws CommandSyntaxException {
-		long id = getContraptionId(context, name);
-		return PhysicUtility.getContraptionById(context.getSource().getLevel(), id);
+	public static ContraptionSelector getContraptionSelector(CommandContext<CommandSourceStack> context, String name) throws CommandSyntaxException {
+		return context.getArgument(name, ContraptionSelector.class);
 	}
 	
 	public static Long getContraptionId(CommandContext<CommandSourceStack> context, String name) throws CommandSyntaxException {
-		return verifyContraptionId(context.getSource().getLevel(), context.getArgument(name, Long.class));
+		ContraptionSelector selector = getContraptionSelector(context, name);
+		long id = selector.findContraptionId(context.getSource().getLevel());
+		if (id == 0 && selector.isNamed()) {
+			throw ERROR_NON_EXISTING_CONTRAPTION.create(selector.getName());
+		}
+		return id;
+	}
+	
+	public static Ship getContraption(CommandContext<CommandSourceStack> context, String name) throws CommandSyntaxException {
+		Long id = getContraptionId(context, name);
+		Ship contraption = PhysicUtility.getContraptionById(context.getSource().getLevel(), id);
+		if (contraption == null) {
+			throw ERROR_NON_EXISTING_CONTRAPTION.create(id);
+		}
+		return contraption;
 	}
 	
 	@Override
-	public Long parse(StringReader reader) throws CommandSyntaxException {
+	public ContraptionSelector parse(StringReader reader) throws CommandSyntaxException {
 		String inputStr = reader.readString();
-		long id = tryParseName(inputStr);
+		long id = tryParseId(inputStr);
 		if (id == 0) {
-			id = tryParseId(inputStr);
+			return ContraptionSelector.byName(inputStr);
+		} else {
+			return ContraptionSelector.byId(id);
 		}
-		if (id > 0) {
-			return id;
-		}
-		throw ERROR_MALEFORMED_CONTRAPTION.create(inputStr);
 	}
 	
 	public Long tryParseId(String input) {
-		String prefix = input.substring(0, CONTRAPTION_PREFIX.length());
 		try {
-			if (prefix.equals(CONTRAPTION_PREFIX)) {
+			if (input.startsWith(CONTRAPTION_PREFIX)) {
 				String idStr = input.substring(CONTRAPTION_PREFIX.length());
 				return Long.parseLong(idStr);
 			}
@@ -74,13 +81,7 @@ public class ContraptionIdArgument implements ArgumentType<Long> {
 		} catch (Exception e) {}
 		return 0L;
 	}
-	
-	@SuppressWarnings("resource")
-	public Long tryParseName(String input) {
-		return 0L; // FIXME How to access the name-map ???
-		//return PhysicUtility.getFirstContraptionIdWithName(Minecraft.getInstance().level, input);
-	}
-	
+		
 	@SuppressWarnings("resource")
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
@@ -109,16 +110,53 @@ public class ContraptionIdArgument implements ArgumentType<Long> {
 		return builder.buildFuture();
 	}
 	
-	public static Long verifyContraptionId(Level level, long contraptionId) throws CommandSyntaxException {
-		if (PhysicUtility.getContraptionById(level, contraptionId) != null) {
-			return contraptionId;
-		}
-		throw ERROR_NON_EXISTING_CONTRAPTION.create(contraptionId);
-	}
-	
 	@Override
 	public Collection<String> getExamples() {
 		return EXAMPLES;
+	}
+	
+	public static class ContraptionSelector {
+		
+		protected String name;
+		protected long id;
+		
+		public ContraptionSelector(String name, long id) {
+			this.name = name;
+			this.id = id;
+		}
+		
+		public String getName() {
+			return this.name;
+		}
+		
+		public long getId() {
+			return id;
+		}
+
+		public boolean isNamed() {
+			return this.name != null;
+		}
+
+		public boolean hasId() {
+			return this.id > 0;
+		}
+		
+		public static ContraptionSelector byName(String name) {
+			return new ContraptionSelector(name, -1);
+		}
+		
+		public static ContraptionSelector byId(long id) {
+			return new ContraptionSelector(null, id);
+		}
+		
+		public Long findContraptionId(ServerLevel level) {
+			if (this.id > 0) {
+				return this.id;
+			} else {
+				return PhysicUtility.getContraptionByName(level, this.name);
+			}
+		}
+		
 	}
 	
 }

@@ -136,7 +136,7 @@ dependencies {
 	implementation fg.deobf("curse.maven:atlasviewer-633577:3832297")
 	
 	//shade "org.apache.commons:commons-collections4:4.4"
-	shade "com.github.M-Marvin:LIBRARY-NGLink:main-SNAPSHOT"
+	shade "com.github.M-Marvin:LIBRARY-NGLink:8215f1fcb235ce5c5a78d85f557a5bd5d889161b"
 	shade "com.github.M-Marvin:LIBRARY-UnifiedVectors:41236ed39df7345be739cd67486b97b71a4a553a"
 	
 }

@@ -40,7 +40,7 @@ public class PhysicUtility {
 		return null;
 	}
 	
-	public static Long getFirstContraptionIdWithName(Level level, String name) {
+	public static Long getContraptionByName(Level level, String name) {
 		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
 		if (dataHolder.isPresent()) {
 			return dataHolder.resolve().get().getContraption(name);
@@ -48,7 +48,7 @@ public class PhysicUtility {
 		return -1L;
 	}
 
-	public static Ship getFirstContraptionWithName(Level level, String name) {
+	public static Ship getConstraintByName(Level level, String name) {
 		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
 		if (dataHolder.isPresent()) {
 			return getContraptionById(level, dataHolder.resolve().get().getContraption(name));
@@ -220,7 +220,7 @@ public class PhysicUtility {
 	}
 	
 	public static boolean isSolidContraptionBlock(BlockState state) {
-		return true; // !state.getCollisionShape(level, pos).isEmpty(); // FIXME Working way to check if block has collision as contraption part
+		return !state.getCollisionShape(null, null).isEmpty(); // FIXME Working way to check if block has collision as contraption part
 	}
 	
 	public static boolean isValidContraptionBlock(BlockState state) {

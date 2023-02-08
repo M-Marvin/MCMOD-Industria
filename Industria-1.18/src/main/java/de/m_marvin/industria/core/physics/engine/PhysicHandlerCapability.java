@@ -40,8 +40,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.HitResult.Type;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -68,16 +68,13 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 	public CompoundTag serializeNBT() {
 		CompoundTag tag = new CompoundTag();
 		CompoundTag contraptionNamesTag = new CompoundTag();
-		List<Long> contraptionIds = PhysicUtility.getAllContraptions(level).stream().map(Ship::getId).toList();
 		for (Entry<String, Long> entry : this.contraptionNames.entrySet()) {
-			if (contraptionIds.contains(entry.getValue())) contraptionNamesTag.putLong(entry.getKey(), entry.getValue());
+			contraptionNamesTag.putLong(entry.getKey(), entry.getValue());
 		}
 		tag.put("ContraptionNames", contraptionNamesTag);
 		CompoundTag constraintMapTag = new CompoundTag();
-		//List<Integer> constraintIds = PhysicUtility.getAllConstraints(level); TODO Requires implementation of PhysicUtility#getAllConstraints()
 		for (Entry<String, Integer> entry : this.constraintNames.entrySet()) {
-			//if (constraintIds.contains(entry.getValue())) 
-				constraintMapTag.putLong(entry.getKey(), entry.getValue());
+			constraintMapTag.putLong(entry.getKey(), entry.getValue());
 		}
 		tag.put("ConstraintNames", constraintMapTag);
 		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Saved " + contraptionNamesTag.size() + " constraption names and " + constraintMapTag.size() + " constraint names");
@@ -129,11 +126,11 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 	}
 	
 	public long getContraption(String name) {
-		return this.contraptionNames.get(name);
+		return this.contraptionNames.getOrDefault(name, 0L);
 	}
 	
 	public int getConstraint(String name) {
-		return this.constraintNames.get(name);
+		return this.constraintNames.getOrDefault(name, 0);
 	}
 	
 	public String getContraptionName(long id) {
@@ -287,7 +284,6 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		
 		BlockPos structureCornerMin = null;
 		BlockPos structureCornerMax = null;
-		boolean noSolids = true;
 		
 		int areaMinBlockX = (int) Math.floor(areaBounds.minX);
 		int areaMinBlockY = (int) Math.floor(areaBounds.minY);
@@ -295,7 +291,8 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		int areaMaxBlockX = (int) Math.floor(areaBounds.maxX);
 		int areaMaxBlockY = (int) Math.floor(areaBounds.maxY);
 		int areaMaxBlockZ = (int) Math.floor(areaBounds.maxZ);
-
+		boolean hasSolids = false;
+		
 		for (int x = areaMinBlockX; x <= areaMaxBlockX; x++) {
 			for (int z = areaMinBlockZ; z <= areaMaxBlockZ; z++) {
 				for (int y = areaMinBlockY; y <= areaMaxBlockY; y++) {
@@ -319,9 +316,13 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 						
 					}
 					
+					if (PhysicUtility.isSolidContraptionBlock(itState)) hasSolids = true;
+					
 				}
 			}
 		}
+		
+		if (!hasSolids) return null;
 		
 		if (structureCornerMax == null) structureCornerMax = structureCornerMin = new BlockPos(areaBounds.getCenter().x(), areaBounds.getCenter().y(), areaBounds.getCenter().z());
 		
@@ -329,39 +330,16 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		ServerShip contraption = createContraptionAt(contraptionPos, scale);
 		
 		Vec3d contraptionOrigin = PhysicUtility.toContraptionPos(contraption, contraptionPos);
-				
+
 		for (int x = areaMinBlockX; x <= areaMaxBlockX; x++) {
 			for (int z = areaMinBlockZ; z <= areaMaxBlockZ; z++) {
 				for (int y = areaMinBlockY; y <= areaMaxBlockY; y++) {
-					
 					BlockPos itPos = new BlockPos(x, y, z);
-					BlockState itState = level.getBlockState(itPos);
+					Vec3d relativePosition = Vec3d.fromVec(itPos).sub(contraptionPos);
+					Vec3d shipPos = contraptionOrigin.add(relativePosition);
 					
-					if (PhysicUtility.isValidContraptionBlock(itState)) {
-						
-						Vec3d relativePosition = Vec3d.fromVec(itPos).sub(contraptionPos);
-						Vec3d shipPos = contraptionOrigin.add(relativePosition);
-						
-						GameUtility.copyBlock(level, itPos, new BlockPos(shipPos.x, shipPos.y, shipPos.z));
-						
-						if (PhysicUtility.isSolidContraptionBlock(itState)) {
-							
-							noSolids = false;
-							
-						}
-						
-					}
-					
+					GameUtility.copyBlock(level, itPos, new BlockPos(shipPos.x, shipPos.y, shipPos.z));
 				}
-			}
-		}
-		
-		if (noSolids) {
-			level.setBlock(new BlockPos(contraptionOrigin.x, contraptionOrigin.y, contraptionOrigin.z), Blocks.STONE.defaultBlockState(), 34);
-		} else {
-			BlockState centerStructureBlock = level.getBlockState(new BlockPos(contraptionPos.x, contraptionPos.y, contraptionPos.z));
-			if (!PhysicUtility.isValidContraptionBlock(centerStructureBlock)) {
-				level.setBlock(new BlockPos(contraptionOrigin.x, contraptionOrigin.y, contraptionOrigin.z), Blocks.AIR.defaultBlockState(), 34);
 			}
 		}
 		
@@ -369,10 +347,21 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 			for (int x = structureCornerMin.getX(); x <= structureCornerMax.getX(); x++) {
 				for (int z = structureCornerMin.getZ(); z <= structureCornerMax.getZ(); z++) {
 					for (int y = structureCornerMin.getY(); y <= structureCornerMax.getY(); y++) {
-						
 						GameUtility.removeBlock(level, new BlockPos(x, y, z));
-						
 					}
+				}
+			}
+		}
+
+		for (int x = structureCornerMin.getX(); x <= structureCornerMax.getX(); x++) {
+			for (int z = structureCornerMin.getZ(); z <= structureCornerMax.getZ(); z++) {
+				for (int y = structureCornerMin.getY(); y <= structureCornerMax.getY(); y++) {
+					BlockPos itPos = new BlockPos(x, y, z);
+					Vec3d relativePosition = Vec3d.fromVec(itPos).sub(contraptionPos);
+					Vec3d shipPos = contraptionOrigin.add(relativePosition);
+					
+					GameUtility.triggerUpdate(level, itPos);
+					GameUtility.triggerUpdate(level, new BlockPos(shipPos.x, shipPos.y, shipPos.z));
 				}
 			}
 		}
@@ -389,51 +378,44 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		if (blocks.isEmpty()) {
 			return null;
 		}
-
+		
 		BlockPos structureCornerMin = blocks.get(0);
 		BlockPos structureCornerMax = blocks.get(0);
+		boolean hasSolids = false;
 		
 		for (BlockPos itPos : blocks) {
 			structureCornerMin = MathUtility.getMinCorner(structureCornerMin, itPos);
 			structureCornerMax = MathUtility.getMaxCorner(structureCornerMax, itPos);
+			
+			if (PhysicUtility.isSolidContraptionBlock(level.getBlockState(itPos))) hasSolids = true;
 		}
+		
+		if (!hasSolids) return null;
 		
 		Vec3d contraptionPos = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
 		ServerShip contraption = createContraptionAt(contraptionPos, scale);
 		
 		Vec3d contraptionOrigin = PhysicUtility.toContraptionPos(contraption, contraptionPos);
-		boolean noSolids = true;
-
+		
 		for (BlockPos itPos : blocks) {
-			
-			BlockState itState = level.getBlockState(itPos);
-			
 			Vec3d relativePosition = Vec3d.fromVec(itPos).sub(contraptionPos);
 			Vec3d shipPos = contraptionOrigin.add(relativePosition);
 			
 			GameUtility.copyBlock(level, itPos, new BlockPos(shipPos.x, shipPos.y, shipPos.z));
-			
-			if (PhysicUtility.isSolidContraptionBlock(itState)) {
-				
-				noSolids = false;
-				
-			}
-			
-		}
-		
-		if (noSolids) {
-			level.setBlock(new BlockPos(contraptionOrigin.x, contraptionOrigin.y, contraptionOrigin.z), Blocks.STONE.defaultBlockState(), 34);
-		} else {
-			BlockState centerStructureBlock = level.getBlockState(new BlockPos(contraptionPos.x, contraptionPos.y, contraptionPos.z));
-			if (!PhysicUtility.isValidContraptionBlock(centerStructureBlock)) {
-				level.setBlock(new BlockPos(contraptionOrigin.x, contraptionOrigin.y, contraptionOrigin.z), Blocks.AIR.defaultBlockState(), 34);
-			}
 		}
 		
 		if (removeOriginal) {
 			for (BlockPos itPos : blocks) {
 				GameUtility.removeBlock(level, itPos);
 			}
+		}
+		
+		for (BlockPos itPos : blocks) {
+			Vec3d relativePosition = Vec3d.fromVec(itPos).sub(contraptionPos);
+			Vec3d shipPos = contraptionOrigin.add(relativePosition);
+			
+			GameUtility.triggerUpdate(level, itPos);
+			GameUtility.triggerUpdate(level, new BlockPos(shipPos.x, shipPos.y, shipPos.z));
 		}
 		
 		setPosition((ServerShip) contraption, new ContraptionPosition(new Quaternion(new Vec3i(0, 1, 1), 0), contraptionPos), false);

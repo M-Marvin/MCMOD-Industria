@@ -24,7 +24,6 @@
 
 "industria.commands.coordinates":					"[%1$s %2$s %3$s]",
 "industria.argument.conduit.id.invalid":			"Unbekannte Leitung '%s'!",
-"industria.argument.contraption.notFound":			"Vorrichtung '%s' nicht gefunden!",
-"industria.argument.contraption.maleFormed":		"Ungültige Vorrichtungs-Id '%s'!"
+"industria.argument.contraption.notFound":			"Vorrichtung '%s' nicht gefunden!"
 
 }

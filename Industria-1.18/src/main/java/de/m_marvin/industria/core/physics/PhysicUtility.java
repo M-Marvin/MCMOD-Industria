@@ -7,6 +7,8 @@ import org.joml.Vector3d;
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
 import org.valkyrienskies.core.apigame.constraints.VSForceConstraint;
+import org.valkyrienskies.core.apigame.world.chunks.BlockType;
+import org.valkyrienskies.mod.common.BlockStateInfo;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
 import de.m_marvin.industria.core.physics.engine.PhysicHandlerCapability;
@@ -14,6 +16,7 @@ import de.m_marvin.industria.core.physics.types.ContraptionHitResult;
 import de.m_marvin.industria.core.physics.types.ContraptionPosition;
 import de.m_marvin.industria.core.registries.ModCapabilities;
 import de.m_marvin.univec.impl.Vec3d;
+import kotlin.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -218,42 +221,51 @@ public class PhysicUtility {
 		}
 		return null;
 	}
+
+	public static void triggerBlockChange(Level level, BlockPos pos, BlockState prevState, BlockState newState) {
+		BlockStateInfo.INSTANCE.onSetBlock(level, pos, prevState, newState);
+	}
 	
 	public static boolean isSolidContraptionBlock(BlockState state) {
-		return !state.getCollisionShape(null, null).isEmpty(); // FIXME Working way to check if block has collision as contraption part
+		Pair<Double, BlockType> blockData = BlockStateInfo.INSTANCE.get(state);
+		return blockData.getSecond() == VSGameUtilsKt.getVsCore().getBlockTypes().getSolid() && blockData.getFirst() > 0;
 	}
 	
 	public static boolean isValidContraptionBlock(BlockState state) {
 		return !state.isAir();
 	}
 	
-	
-	
-	
-	
-	
+	/* Constraints */
 	
 	public static int addConstraint(ServerLevel level, VSForceConstraint constraint, String name) {
 		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
 		if (dataHolder.isPresent()) {
-			int constraintId = VSGameUtilsKt.getShipObjectWorld(level).createNewConstraint(constraint);
-			dataHolder.resolve().get().setConstraintName(constraintId, name);
-			return constraintId;
+			return dataHolder.resolve().get().addConstraint(constraint, name);
 		}
-		return -1;
+		return 0;
 	}
 	
-	public static boolean removeConstraint(ServerLevel level, int constraint) {
+	public static int getConstraintByName(ServerLevel level, String name) {
 		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
 		if (dataHolder.isPresent()) {
-			dataHolder.resolve().get().removeConstraintId(constraint);
-			return VSGameUtilsKt.getShipObjectWorld(level).removeConstraint(constraint);
+			dataHolder.resolve().get().getConstraint(name);
 		}
-		return false;
+		return 0;
+	}
+	
+	public static void removeConstraint(ServerLevel level, int constraint) {
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		if (dataHolder.isPresent()) {
+			dataHolder.resolve().get().removeConstaint(constraint);
+		}
 	}
 	
 	public static List<Integer> getAllConstraints(Level level) {
-		throw new UnsupportedOperationException("Not implemented yet!"); // TODO
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		if (dataHolder.isPresent()) {
+			dataHolder.resolve().get().getAllConstraints();
+		}
+		return null;
 	}
 	
 }

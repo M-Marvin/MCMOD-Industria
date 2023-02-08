@@ -211,7 +211,7 @@ public class ContraptionCommand {
 	}
 	
 	public static int assembleContraption(CommandContext<CommandSourceStack> source, BlockPos startPos, float scale) {
-
+		
 		Optional<List<BlockPos>> structureBlocks = StructureFinder.findStructure(source.getSource().getLevel(), startPos, 16 * 16 * 16, state -> PhysicUtility.isValidContraptionBlock(state));
 		
 		if (structureBlocks.isEmpty()) {

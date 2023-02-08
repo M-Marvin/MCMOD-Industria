@@ -16,6 +16,7 @@ import org.valkyrienskies.core.api.ships.QueryableShipData;
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
 import org.valkyrienskies.core.api.ships.properties.ShipTransform;
+import org.valkyrienskies.core.apigame.constraints.VSConstraint;
 import org.valkyrienskies.core.impl.game.ships.ShipData;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
@@ -109,10 +110,6 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 	
 	/* Naming and finding of contraptions */
 	
-	public Map<String, Integer> getConstraintNames() {
-		return constraintNames;
-	}
-	
 	public Map<String, Long> getContraptionNames() {
 		return contraptionNames;
 	}
@@ -121,27 +118,12 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		this.contraptionNames.put(name, contraptionId);
 	}
 	
-	public void setConstraintName(int constraintId, String name) {
-		this.constraintNames.put(name, constraintId);
-	}
-	
 	public long getContraption(String name) {
 		return this.contraptionNames.getOrDefault(name, 0L);
 	}
 	
-	public int getConstraint(String name) {
-		return this.constraintNames.getOrDefault(name, 0);
-	}
-	
 	public String getContraptionName(long id) {
 		for (Entry<String, Long> entry : this.contraptionNames.entrySet()) {
-			if (entry.getValue() == id) return entry.getKey();
-		}
-		return null;
-	}
-
-	public String getConstraintName(int id) {
-		for (Entry<String, Integer> entry : this.constraintNames.entrySet()) {
 			if (entry.getValue() == id) return entry.getKey();
 		}
 		return null;
@@ -151,10 +133,6 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		this.contraptionNames.remove(name);
 	}
 	
-	public void removeConstraintName(String name) {
-		this.constraintNames.remove(name);
-	}
-
 	public void removeContraptionId(long id) {
 		String name = null;
 		for (Entry<String, Long> entry : this.contraptionNames.entrySet()) {
@@ -163,14 +141,6 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		if (name != null) this.contraptionNames.remove(name);
 	}
 	
-	public void removeConstraintId(int id) {
-		String name = null;
-		for (Entry<String, Integer> entry : this.constraintNames.entrySet()) {
-			if (entry.getValue() == id) name = entry.getKey();
-		}
-		if (name != null) this.constraintNames.remove(name);
-	}
-
 	public Iterable<Ship> getContraptionIntersecting(BlockPos position)  {
 		return VSGameUtilsKt.getShipsIntersecting(level, new AABB(position, position));
 	}
@@ -186,6 +156,60 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 			}
 		}
 		return null;
+	}
+
+	/* Naming and finding of constraints */
+	
+	public Map<String, Integer> getConstraintNames() {
+		return constraintNames;
+	}
+	
+	public void setConstraintName(int constraintId, String name) {
+		this.constraintNames.put(name, constraintId);
+	}
+	
+	public int getConstraint(String name) {
+		return this.constraintNames.getOrDefault(name, 0);
+	}
+	
+	public String getConstraintName(int id) {
+		for (Entry<String, Integer> entry : this.constraintNames.entrySet()) {
+			if (entry.getValue() == id) return entry.getKey();
+		}
+		return null;
+	}
+	
+	public void removeConstraintName(String name) {
+		this.constraintNames.remove(name);
+	}
+	
+	public void removeConstraintId(int id) {
+		String name = null;
+		for (Entry<String, Integer> entry : this.constraintNames.entrySet()) {
+			if (entry.getValue() == id) name = entry.getKey();
+		}
+		if (name != null) this.constraintNames.remove(name);
+	}
+	
+	/* Listing and creation of constraints */
+	
+	public int addConstraint(VSConstraint constraint, String name) {
+		assert level instanceof ServerLevel : "Can't manage contraptions on client side!";
+		
+		int constraintId = VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).createNewConstraint(constraint);
+		setConstraintName(constraintId, name);
+		return constraintId;
+	}
+	
+	public void removeConstaint(int constraintId) {
+		assert level instanceof ServerLevel : "Can't manage contraptions on client side!";
+		
+		removeConstraintId(constraintId);
+		VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).removeConstraint(constraintId);
+	}
+	
+	public List<VSConstraint> getAllConstraints() {
+		throw new UnsupportedOperationException("Not implemented yet!"); // TODO
 	}
 	
 	/* Translating/moving of contraptions */
@@ -330,7 +354,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		ServerShip contraption = createContraptionAt(contraptionPos, scale);
 		
 		Vec3d contraptionOrigin = PhysicUtility.toContraptionPos(contraption, contraptionPos);
-
+		
 		for (int x = areaMinBlockX; x <= areaMaxBlockX; x++) {
 			for (int z = areaMinBlockZ; z <= areaMaxBlockZ; z++) {
 				for (int y = areaMinBlockY; y <= areaMaxBlockY; y++) {
@@ -339,6 +363,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 					Vec3d shipPos = contraptionOrigin.add(relativePosition);
 					
 					GameUtility.copyBlock(level, itPos, new BlockPos(shipPos.x, shipPos.y, shipPos.z));
+					
 				}
 			}
 		}
@@ -396,12 +421,19 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		ServerShip contraption = createContraptionAt(contraptionPos, scale);
 		
 		Vec3d contraptionOrigin = PhysicUtility.toContraptionPos(contraption, contraptionPos);
+		BlockPos centerBlockPos = new BlockPos(contraptionPos.x, contraptionPos.y, contraptionPos.z);
 		
 		for (BlockPos itPos : blocks) {
 			Vec3d relativePosition = Vec3d.fromVec(itPos).sub(contraptionPos);
 			Vec3d shipPos = contraptionOrigin.add(relativePosition);
 			
 			GameUtility.copyBlock(level, itPos, new BlockPos(shipPos.x, shipPos.y, shipPos.z));
+
+		}
+		
+		if (!blocks.contains(centerBlockPos)) {
+			BlockPos centerShipPos = PhysicUtility.toContraptionBlockPos(contraption, centerBlockPos);
+			level.setBlock(centerShipPos, Blocks.AIR.defaultBlockState(), 3);
 		}
 		
 		if (removeOriginal) {
@@ -441,7 +473,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		}
 		return ContraptionHitResult.miss(clipResult.getLocation());
 	}
-		
+	
 	/* Util stuff */
 
 	public String getDimensionId() {

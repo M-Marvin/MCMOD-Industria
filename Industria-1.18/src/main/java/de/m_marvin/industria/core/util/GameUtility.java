@@ -1,5 +1,6 @@
 package de.m_marvin.industria.core.util;
 
+import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.core.BlockPos;
@@ -47,7 +48,9 @@ public class GameUtility {
 	public static void setBlock(Level level, BlockPos pos, BlockState state) {
 		LevelChunk chunk = (LevelChunk) level.getChunk(pos);
 		LevelChunkSection section = chunk.getSection(chunk.getSectionIndex(pos.getY()));
+		BlockState oldState = level.getBlockState(pos);
 		section.setBlockState(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15, state);
+		PhysicUtility.triggerBlockChange(level, pos, oldState, state);
 	}
 
 	public static void removeBlock(Level level, BlockPos pos) {

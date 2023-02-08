@@ -221,9 +221,6 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		
 		return shape;
 		
-		//Industria.LOGGER.log(org.apache.logging.log4j.Level.WARN, "Failed to build conduit shape at " + conduit.getPosition().getNodeApos() + "/" + conduit.getPosition().getNodeApos() + "!");
-		
-		//return null;
 	}
 	
 	public void updatePhysicalNodes(Level level, PlacedConduit conduit) {

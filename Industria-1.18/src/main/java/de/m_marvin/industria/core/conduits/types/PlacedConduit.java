@@ -14,8 +14,6 @@ public class PlacedConduit {
 	private Conduit conduit;
 	private ConduitShape shape;
 	
-	public ConduitShape conduitShape;
-	
 	public PlacedConduit(ConduitPos position, Conduit conduit, double length) {
 		this.position = position;
 		this.conduit = conduit;
@@ -23,12 +21,19 @@ public class PlacedConduit {
 	}
 	
 	public PlacedConduit build(Level level) {
-		this.shape = conduit.buildShape(level, this, length);
+		this.shape = conduit.buildShape(level, this);
 		updateShape(level);
 		return this;
 	}
 	
+	public PlacedConduit dismantle(Level level) {
+		this.conduit.dismantleShape(level, this);
+		this.shape = null;
+		return this;
+	}
+	
 	public void updateShape(Level level) {
+		assert this.shape != null : "Can't update un-build conduit!";
 		this.conduit.updatePhysicalNodes(level, this);
 	}
 	
@@ -37,16 +42,21 @@ public class PlacedConduit {
 		tag.put("Position", this.position.writeNBT(new CompoundTag()));
 		tag.putString("Conduit", this.conduit.getRegistryName().toString());
 		tag.putDouble("Length", this.length);
+		if (this.shape != null) tag.put("Shape", this.shape.save());
 		return tag;
 	}
 	
 	public static PlacedConduit load(CompoundTag tag) {
-		ConduitPos position = ConduitPos.readNBT(tag.getCompound("Position"));
 		ResourceLocation conduitName = new ResourceLocation(tag.getString("Conduit"));
 		Conduit conduit = Conduits.CONDUITS_REGISTRY.get().getValue(conduitName);
-		double length = tag.getDouble("Length");
 		if (conduit == null) return null;
-		return new PlacedConduit(position, conduit, length);
+		ConduitPos position = ConduitPos.readNBT(tag.getCompound("Position"));
+		double length = tag.getDouble("Length");
+		ConduitShape shape = tag.contains("Shape") ? ConduitShape.load(tag.getCompound("Shape")) : null;
+		if (shape == null) return null;
+		PlacedConduit state = new PlacedConduit(position, conduit, length);
+		state.setShape(shape);
+		return state;
 	}
 	
 	public ConduitShape getShape() {

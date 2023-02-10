@@ -22,7 +22,7 @@ public interface IElectricConduit extends IElectric<PlacedConduit, ConduitPos, C
 
 	@Override
 	default void serializeNBT(PlacedConduit instance, ConduitPos position, CompoundTag nbt) {
-		nbt.put("State", instance.save());
+//		nbt.put("State", instance.save());
 		nbt.put("Position", position.writeNBT(new CompoundTag()));
 	}
 

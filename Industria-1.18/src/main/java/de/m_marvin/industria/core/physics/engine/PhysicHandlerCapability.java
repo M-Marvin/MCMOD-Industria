@@ -1,11 +1,14 @@
 package de.m_marvin.industria.core.physics.engine;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.OptionalLong;
 
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
@@ -18,6 +21,7 @@ import org.valkyrienskies.core.api.ships.Ship;
 import org.valkyrienskies.core.api.ships.properties.ShipTransform;
 import org.valkyrienskies.core.apigame.constraints.VSConstraint;
 import org.valkyrienskies.core.impl.game.ships.ShipData;
+import org.valkyrienskies.core.impl.game.ships.ShipObjectServerWorld;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
 import de.m_marvin.industria.Industria;
@@ -46,6 +50,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 public class PhysicHandlerCapability implements ICapabilitySerializable<CompoundTag> {
 	
@@ -62,7 +67,6 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 	}
 
 	private Map<String, Long> contraptionNames = new HashMap<>();
-	private Map<String, Integer> constraintNames = new HashMap<>();
 	private Level level;
 	
 	@Override
@@ -73,12 +77,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 			contraptionNamesTag.putLong(entry.getKey(), entry.getValue());
 		}
 		tag.put("ContraptionNames", contraptionNamesTag);
-		CompoundTag constraintMapTag = new CompoundTag();
-		for (Entry<String, Integer> entry : this.constraintNames.entrySet()) {
-			constraintMapTag.putLong(entry.getKey(), entry.getValue());
-		}
-		tag.put("ConstraintNames", constraintMapTag);
-		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Saved " + contraptionNamesTag.size() + " constraption names and " + constraintMapTag.size() + " constraint names");
+		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Saved " + contraptionNamesTag.size() + " constraption names");
 		return tag;
 	}
 
@@ -89,12 +88,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		for (String name : contraptionNamesTag.getAllKeys()) {
 			this.contraptionNames.put(name, contraptionNamesTag.getLong(name));
 		}
-		CompoundTag constraintMapTag = tag.getCompound("ConstraintNames");
-		this.constraintNames.clear();
-		for (String name : constraintMapTag.getAllKeys()) {
-			this.constraintNames.put(name, constraintMapTag.getInt(name));
-		}
-		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Loaded " + this.contraptionNames.size() + " contraptions and  " + this.constraintNames.size() + " constraints");
+		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Loaded " + this.contraptionNames.size() + " contraption names");
 	}
 	
 	public PhysicHandlerCapability(Level level) {
@@ -118,8 +112,12 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		this.contraptionNames.put(name, contraptionId);
 	}
 	
-	public long getContraption(String name) {
-		return this.contraptionNames.getOrDefault(name, 0L);
+	public OptionalLong getContraption(String name) {
+		if (this.contraptionNames.containsKey(name)) {
+			return OptionalLong.of(this.contraptionNames.get(name));
+		} else {
+			return OptionalLong.empty();
+		}
 	}
 	
 	public String getContraptionName(long id) {
@@ -157,55 +155,39 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		}
 		return null;
 	}
-
-	/* Naming and finding of constraints */
-	
-	public Map<String, Integer> getConstraintNames() {
-		return constraintNames;
-	}
-	
-	public void setConstraintName(int constraintId, String name) {
-		this.constraintNames.put(name, constraintId);
-	}
-	
-	public int getConstraint(String name) {
-		return this.constraintNames.getOrDefault(name, 0);
-	}
-	
-	public String getConstraintName(int id) {
-		for (Entry<String, Integer> entry : this.constraintNames.entrySet()) {
-			if (entry.getValue() == id) return entry.getKey();
-		}
-		return null;
-	}
-	
-	public void removeConstraintName(String name) {
-		this.constraintNames.remove(name);
-	}
-	
-	public void removeConstraintId(int id) {
-		String name = null;
-		for (Entry<String, Integer> entry : this.constraintNames.entrySet()) {
-			if (entry.getValue() == id) name = entry.getKey();
-		}
-		if (name != null) this.constraintNames.remove(name);
-	}
 	
 	/* Listing and creation of constraints */
 	
-	public int addConstraint(VSConstraint constraint, String name) {
+	public int addConstraint(VSConstraint constraint) {
 		assert level instanceof ServerLevel : "Can't manage contraptions on client side!";
 		
-		int constraintId = VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).createNewConstraint(constraint);
-		setConstraintName(constraintId, name);
-		return constraintId;
+		return VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).createNewConstraint(constraint);
 	}
 	
-	public void removeConstaint(int constraintId) {
+	public boolean removeConstaint(int constraintId) {
 		assert level instanceof ServerLevel : "Can't manage contraptions on client side!";
 		
-		removeConstraintId(constraintId);
-		VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).removeConstraint(constraintId);
+		return VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).removeConstraint(constraintId);
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public VSConstraint getConstraint(int constraintId) {
+		assert level instanceof ServerLevel : "Can't manage contraptions on client side!";
+		
+		// FIXME This is horrible!!! hopefully VS2 adds a API for that soon ...
+		Map<Integer, VSConstraint> constraints = null;
+		try {
+			@NotNull Field constraintField = ObfuscationReflectionHelper.findField(ShipObjectServerWorld.class, "constraints");
+			constraintField.setAccessible(true);
+			constraints = (Map<Integer, VSConstraint>) constraintField.get(VSGameUtilsKt.getShipObjectWorld((ServerLevel) level));
+		} catch (Exception e) {
+			Industria.LOGGER.error("Something went wrong, but the code on that point is janky anyway ...");
+			e.printStackTrace();
+			constraints = new HashMap<>();
+		}
+		
+		return constraints.get(constraintId);
 	}
 	
 	public List<VSConstraint> getAllConstraints() {

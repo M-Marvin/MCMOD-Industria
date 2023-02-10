@@ -8,6 +8,7 @@ import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitBreakEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitPlaceEvent;
 import de.m_marvin.industria.core.conduits.engine.network.SSyncPlacedConduit;
+import de.m_marvin.industria.core.conduits.engine.network.SSyncPlacedConduit.Status;
 import de.m_marvin.industria.core.conduits.registry.Conduits;
 import de.m_marvin.industria.core.conduits.types.ConduitHitResult;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
@@ -19,8 +20,6 @@ import de.m_marvin.industria.core.registries.ModCapabilities;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -36,7 +35,6 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent.WorldTickEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -61,9 +59,9 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 		return LazyOptional.empty();
 	}
 	
-	private boolean preBuildLoad = false;
 	private List<PlacedConduit> conduits = new ArrayList<>();
 	private Level level;
+	private boolean preBuildLoad;
 	
 	@Override
 	public ListTag serializeNBT() {
@@ -79,12 +77,12 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	@Override
 	public void deserializeNBT(ListTag tag) {
 		this.conduits.clear();
-		this.preBuildLoad = true;
 		for (int i = 0; i < tag.size(); i++) {
 			CompoundTag conTag = tag.getCompound(i);
 			PlacedConduit con = PlacedConduit.load(conTag);
 			if (con != null) this.conduits.add(con);
 		}
+		this.preBuildLoad = true;
 		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Loaded " + this.conduits.size() + "/" + tag.size() + " conduits");
 	}
 	
@@ -95,52 +93,20 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	/* Event handling */
 
 	@SubscribeEvent
-	// Send corresponding conduits when server detects loading of a chunk on client side
+	// Send corresponding conduits when server detects loading of a chunk trough a client
 	public static void onClientLoadsChunk(ChunkWatchEvent.Watch event) {
 		ServerLevel level = event.getWorld();
 		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
-			List<PlacedConduit> conduits = conduitHolder.resolve().get().getConduitsInChunk(event.getPos());
-			
+			List<PlacedConduit> conduits = conduitHolder.resolve().get().getConduitsInChunk(event.getPos());	
 			if (conduits.size() > 0) {
-				Industria.NETWORK.send(PacketDistributor.PLAYER.with(() -> event.getPlayer()), new SSyncPlacedConduit(conduits, event.getPos(), false));
-			}
-		}
-		
-	}
-
-	@SuppressWarnings("resource")
-	@SubscribeEvent
-	// Clear conduits on client side if chunk gets unloaded (out of render distance)
-	public static void onClientUnloadsChunk(ChunkEvent.Unload event) {
-		if (event.getWorld().isClientSide()) {
-			ClientLevel level = Minecraft.getInstance().level;
-			LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
-			if (conduitHolder.isPresent()) {
-				List<PlacedConduit> loadedConduits = conduitHolder.resolve().get().getConduitsInChunk(event.getChunk().getPos());
-				
-				if (loadedConduits.size() > 0) {
-					conduitHolder.resolve().get().getConduits().removeAll(loadedConduits);
-				}
+				Industria.NETWORK.send(PacketDistributor.PLAYER.with(() -> event.getPlayer()), new SSyncPlacedConduit(conduits, event.getPos(), Status.ADDED, false, false));
 			}
 		}
 	}
 	
-//	@SubscribeEvent
-//	// Ticking conduits on client side
-//	public static void onClientWorldTick(ClientTickEvent event) {
-//		@SuppressWarnings("resource")
-//		ClientLevel level = Minecraft.getInstance().level;
-//		if (level != null) {
-//			LazyOptional<ConduitHandlerCapability> conduitCap = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
-//			if (conduitCap.isPresent()) {
-//				conduitCap.resolve().get().update();
-//			}
-//		}
-//	}
-	
 	@SubscribeEvent
-	// Ticking conduits on server side
+	// Ticking conduits on both sides
 	public static void onWorldTick(WorldTickEvent event) {
 		Level level = event.world;
 		LazyOptional<ConduitHandlerCapability> conduitCap = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
@@ -169,6 +135,8 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	 * Removes the conduit at the given position if a conduit exists, and sends the changes to clients
 	 */
 	public boolean breakConduit(ConduitPos position, boolean dropItems) {
+		if (level.isClientSide()) return false;
+		
 		PlacedConduit conduitToRemove = null;
 		for (PlacedConduit con : this.conduits) {
 			if (con.getPosition().equals(position)) {
@@ -182,11 +150,11 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 			MinecraftForge.EVENT_BUS.post(event);
 			
 			if (!event.isCanceled()) {
+				Vec3d middlePos = MathUtility.getMiddle(position.calculateWorldNodeA(level), position.calculateWorldNodeB(level));
+				Industria.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(new BlockPos(middlePos.x, middlePos.y, middlePos.z))), new SSyncPlacedConduit(conduitToRemove, new ChunkPos(new BlockPos(middlePos.x, middlePos.y, middlePos.z)), Status.REMOVED, true, dropItems));
 				conduitToRemove.getConduit().onBreak(level, position, conduitToRemove, dropItems);
-				removeConduit(conduitToRemove);
-				if (!level.isClientSide()) {
-					Industria.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(position.getNodeApos())), new SSyncPlacedConduit(conduitToRemove, new ChunkPos(position.getNodeApos()), true));
-					Industria.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(position.getNodeBpos())), new SSyncPlacedConduit(conduitToRemove, new ChunkPos(position.getNodeBpos()), true));
+				if (!removeConduit(conduitToRemove)) {
+					return false;
 				}
 				return true;
 			}
@@ -199,6 +167,8 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	 * Places a new conduit in the world if both nodes are free, and sends the changes to clients
 	 */
 	public boolean placeConduit(ConduitPos position, Conduit conduit, double length) {
+		if (level.isClientSide()) return false;
+		
 		if (conduit == Conduits.NONE.get()) {
 			return false;
 		}
@@ -234,10 +204,8 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 				return false;
 			}
 			conduitState.getConduit().onPlace(level, position, conduitState);
-			if (!level.isClientSide()) {
-				Industria.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(nodeApos)), new SSyncPlacedConduit(conduitState, new ChunkPos(nodeApos), false));
-				Industria.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(nodeBpos)), new SSyncPlacedConduit(conduitState, new ChunkPos(nodeBpos), false));
-			}
+			Vec3d middlePos = MathUtility.getMiddle(position.calculateWorldNodeA(level), position.calculateWorldNodeB(level));
+			Industria.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(new BlockPos(middlePos.x, middlePos.y, middlePos.z))), new SSyncPlacedConduit(conduitState, new ChunkPos(new BlockPos(middlePos.x, middlePos.y, middlePos.z)), Status.ADDED, true, false));
 			return true;
 		}
 		
@@ -246,21 +214,32 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	
 	/*
 	 * Removes a conduit from the world, called on server AND client side to synchronize conduits
+	 * Does not automatically sync the two sides!
 	 */
-	public void removeConduit(PlacedConduit conduitState) {
+	public boolean removeConduit(PlacedConduit conduitState) {
 		if (level.isLoaded(conduitState.getPosition().getNodeApos()) && level.isLoaded(conduitState.getPosition().getNodeBpos())) {
 			if (conduits.contains(conduitState)) {
-				this.conduits.remove(conduitState);
-				conduitState.setShape(null);
+				if (this.conduits.remove(conduitState)) {
+					conduitState.dismantle(level);
+					return true;
+				}
 			}
 		}
+		return false;
 	}
 	
 	/*
 	 * Adds a conduit to the world, called on server AND client side to synchronize conduits
+	 * Does not automatically sync the two sides!
 	 */
 	public boolean addConduit(PlacedConduit conduitState) {
 		if (level.isLoaded(conduitState.getPosition().getNodeApos()) && level.isLoaded(conduitState.getPosition().getNodeBpos())) {
+			
+			if (conduits.contains(conduitState)) {
+				System.err.println("THIS MAKES NO SENSE!!!!!");
+				conduits.remove(conduitState);
+			}
+			
 			if (!conduits.contains(conduitState)) {
 				conduitState.build(level);
 				this.conduits.add(conduitState);
@@ -388,17 +367,24 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	}
 	
 	/*
-	 * Called every game tick to update physics
+	 * Called every game tick to update physics and send client data
 	 */
 	public void update() {
+		
 		for (PlacedConduit conduit : this.getConduits()) {
-			if (this.preBuildLoad) {
-				conduit.build(this.level);
-			} else {
-				conduit.updateShape(level); // TODO server-conduit-physic config
-			}
+			if (this.preBuildLoad) conduit.build(level);
+			conduit.updateShape(level);
 		}
-		if (this.preBuildLoad) this.preBuildLoad = false;
+		this.preBuildLoad = false;
+		
+		if (level.isClientSide()) {
+			this.conduits.removeIf((conduit) -> {
+				Vec3d posA = conduit.getPosition().calculateWorldNodeA(level);
+				Vec3d posB = conduit.getPosition().calculateWorldNodeB(level);
+				return !level.isLoaded(new BlockPos(posA.x, posA.y, posA.z)) && !level.isLoaded(new BlockPos(posB.x, posB.y, posB.z));
+			});
+		}
+		
 	}
 	
 }

@@ -2,6 +2,7 @@ package de.m_marvin.industria.core.physics.engine.commands;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.OptionalLong;
 import java.util.concurrent.CompletableFuture;
 
 import org.valkyrienskies.core.api.ships.Ship;
@@ -42,18 +43,21 @@ public class ContraptionIdArgument implements ArgumentType<de.m_marvin.industria
 		return context.getArgument(name, ContraptionSelector.class);
 	}
 	
-	public static Long getContraptionId(CommandContext<CommandSourceStack> context, String name) throws CommandSyntaxException {
+	public static OptionalLong getContraptionId(CommandContext<CommandSourceStack> context, String name) throws CommandSyntaxException {
 		ContraptionSelector selector = getContraptionSelector(context, name);
-		long id = selector.findContraptionId(context.getSource().getLevel());
-		if (id == 0 && selector.isNamed()) {
+		OptionalLong id = selector.findContraptionId(context.getSource().getLevel());
+		if (id.isEmpty() && selector.isNamed()) {
 			throw ERROR_NON_EXISTING_CONTRAPTION.create(selector.getName());
 		}
 		return id;
 	}
 	
 	public static Ship getContraption(CommandContext<CommandSourceStack> context, String name) throws CommandSyntaxException {
-		Long id = getContraptionId(context, name);
-		Ship contraption = PhysicUtility.getContraptionById(context.getSource().getLevel(), id);
+		OptionalLong id = getContraptionId(context, name);
+		if (id.isEmpty()) {
+			throw ERROR_NON_EXISTING_CONTRAPTION.create(id);
+		}
+		Ship contraption = PhysicUtility.getContraptionById(context.getSource().getLevel(), id.getAsLong());
 		if (contraption == null) {
 			throw ERROR_NON_EXISTING_CONTRAPTION.create(id);
 		}
@@ -118,9 +122,9 @@ public class ContraptionIdArgument implements ArgumentType<de.m_marvin.industria
 	public static class ContraptionSelector {
 		
 		protected String name;
-		protected long id;
+		protected OptionalLong id;
 		
-		public ContraptionSelector(String name, long id) {
+		public ContraptionSelector(String name, OptionalLong id) {
 			this.name = name;
 			this.id = id;
 		}
@@ -129,7 +133,7 @@ public class ContraptionIdArgument implements ArgumentType<de.m_marvin.industria
 			return this.name;
 		}
 		
-		public long getId() {
+		public OptionalLong getId() {
 			return id;
 		}
 
@@ -138,22 +142,22 @@ public class ContraptionIdArgument implements ArgumentType<de.m_marvin.industria
 		}
 
 		public boolean hasId() {
-			return this.id > 0;
+			return this.id.isPresent();
 		}
 		
 		public static ContraptionSelector byName(String name) {
-			return new ContraptionSelector(name, -1);
+			return new ContraptionSelector(name, OptionalLong.empty());
 		}
 		
 		public static ContraptionSelector byId(long id) {
-			return new ContraptionSelector(null, id);
+			return new ContraptionSelector(null, OptionalLong.of(id));
 		}
 		
-		public Long findContraptionId(ServerLevel level) {
-			if (this.id > 0) {
+		public OptionalLong findContraptionId(ServerLevel level) {
+			if (this.hasId()) {
 				return this.id;
 			} else {
-				return PhysicUtility.getContraptionByName(level, this.name);
+				return PhysicUtility.getContraptionIdByName(level, this.name);
 			}
 		}
 		

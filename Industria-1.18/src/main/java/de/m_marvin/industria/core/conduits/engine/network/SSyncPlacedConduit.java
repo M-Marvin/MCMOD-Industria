@@ -10,6 +10,7 @@ import de.m_marvin.industria.core.conduits.registry.Conduits;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
+import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitShape;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
@@ -24,38 +25,65 @@ public class SSyncPlacedConduit {
 	
 	public ChunkPos chunkPos;
 	public List<PlacedConduit> conduitStates;
-	public boolean removed;
+	public Status status;
+	public boolean triggerEvents;
+	public boolean eventDropItems;
 	
-	public SSyncPlacedConduit(List<PlacedConduit> conduitStates, ChunkPos targetChunk, boolean removed) {
-		this.conduitStates = conduitStates;
-		this.chunkPos = targetChunk;
-		this.removed = removed;
+	public static enum Status {
+		REMOVED, ADDED;
 	}
 	
-	public SSyncPlacedConduit(PlacedConduit conduitState, ChunkPos targetChunk, boolean removed) {
+	public SSyncPlacedConduit(List<PlacedConduit> conduitStates, ChunkPos targetChunk, Status status, boolean triggerEvents, boolean eventDropItems) {
+		this.conduitStates = conduitStates;
+		this.chunkPos = targetChunk;
+		this.status = status;
+		this.triggerEvents = triggerEvents;
+		this.eventDropItems = eventDropItems;
+	}
+	
+	public SSyncPlacedConduit(PlacedConduit conduitState, ChunkPos targetChunk, Status status, boolean triggerEvents, boolean eventDropItems) {
 		this.conduitStates = new ArrayList<PlacedConduit>();
 		this.conduitStates.add(conduitState);
 		this.chunkPos = targetChunk;
-		this.removed = removed;
+		this.status = status;
+		this.triggerEvents = triggerEvents;
+		this.eventDropItems = eventDropItems;
 	}
 	
 	public ChunkPos getChunkPos() {
 		return chunkPos;
 	}
 	
+	public Status getStatus() {
+		return status;
+	}
+	
+	public boolean isTriggerEvents() {
+		return triggerEvents;
+	}
+	
+	public boolean isEventDropItems() {
+		return eventDropItems;
+	}
+	
 	public static void encode(SSyncPlacedConduit msg, FriendlyByteBuf buff) {
-		buff.writeBoolean(msg.removed);
+		buff.writeEnum(msg.status);
+		buff.writeBoolean(msg.triggerEvents);
+		buff.writeBoolean(msg.eventDropItems);
 		buff.writeChunkPos(msg.chunkPos);
 		buff.writeInt(msg.conduitStates.size());
 		for (PlacedConduit conduitState : msg.conduitStates) {
 			conduitState.getPosition().write(buff);
 			buff.writeDouble(conduitState.getLength());
 			buff.writeResourceLocation(conduitState.getConduit().getRegistryName());
+			conduitState.getShape().writeUpdateData(buff);
 		}
 	}
 	
 	public static SSyncPlacedConduit decode(FriendlyByteBuf buff) {
-		boolean removed = buff.readBoolean();
+		Status status = buff.readEnum(Status.class);
+		boolean triggerEvents = buff.readBoolean();
+		boolean eventDropsItems = buff.readBoolean();
 		ChunkPos chunkPos = buff.readChunkPos();
 		int count = buff.readInt();
 		List<PlacedConduit> conduitStates = new ArrayList<PlacedConduit>();
@@ -63,14 +91,21 @@ public class SSyncPlacedConduit {
 			ConduitPos position = ConduitPos.read(buff);
 			double length = buff.readDouble();
 			ResourceLocation conduitName = buff.readResourceLocation();
+			ConduitShape shape = new ConduitShape(null, null, 0);
+			shape.readUpdateData(buff);
 			if (!Conduits.CONDUITS_REGISTRY.get().containsKey(conduitName)) {
 				Industria.LOGGER.error("Recived package for unregistered conduit: " + conduitName);
 				continue;
+			} else if (shape.nodes == null || shape.lastPos == null) {
+				Industria.LOGGER.error("Recived package with invalid conduit shape: " + conduitName);
+				continue;
 			}
 			Conduit conduit = Conduits.CONDUITS_REGISTRY.get().getValue(conduitName);
-			conduitStates.add(new PlacedConduit(position, conduit, length));
+			PlacedConduit conduitState = new PlacedConduit(position, conduit, length);
+			conduitState.setShape(shape);
+			conduitStates.add(conduitState);
 		}
-		return new SSyncPlacedConduit(conduitStates, chunkPos, removed);
+		return new SSyncPlacedConduit(conduitStates, chunkPos, status, triggerEvents, eventDropsItems);
 	}
 	
 	public static void handle(SSyncPlacedConduit msg, Supplier<NetworkEvent.Context> ctx) {

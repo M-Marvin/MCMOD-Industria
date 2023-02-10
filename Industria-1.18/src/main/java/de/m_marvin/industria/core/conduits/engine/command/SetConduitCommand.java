@@ -24,15 +24,39 @@ import net.minecraft.server.level.ServerLevel;
 public class SetConduitCommand {
 	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-		dispatcher.register(Commands.literal("setconduit").requires((source) -> {
-			return source.hasPermission(2);
-		}).then(Commands.argument("nodeApos", BlockPosArgument.blockPos()).then(Commands.argument("nodeAid", IntegerArgumentType.integer(0)).then(Commands.argument("nodeBpos", BlockPosArgument.blockPos()).then(Commands.argument("nodeBid", IntegerArgumentType.integer(0)).then(Commands.argument("conduit", ConduitArgument.conduit()).executes((source) -> {
-			return setConduit(source, BlockPosArgument.getLoadedBlockPos(source, "nodeApos"), BlockPosArgument.getLoadedBlockPos(source, "nodeBpos"), IntegerArgumentType.getInteger(source, "nodeAid"), IntegerArgumentType.getInteger(source, "nodeBid"), ConduitArgument.getConduit(source, "conduit"), 1, false);
-		}).then(Commands.argument("length", FloatArgumentType.floatArg(1F, 3F)).executes((source) -> {
-			return setConduit(source, BlockPosArgument.getLoadedBlockPos(source, "nodeApos"), BlockPosArgument.getLoadedBlockPos(source, "nodeBpos"), IntegerArgumentType.getInteger(source, "nodeAid"), IntegerArgumentType.getInteger(source, "nodeBid"), ConduitArgument.getConduit(source, "conduit"), FloatArgumentType.getFloat(source, "length"), false);
-		}).then(Commands.literal("destroy").executes((source) -> {
-			return setConduit(source, BlockPosArgument.getLoadedBlockPos(source, "nodeApos"), BlockPosArgument.getLoadedBlockPos(source, "nodeBpos"), IntegerArgumentType.getInteger(source, "nodeAid"), IntegerArgumentType.getInteger(source, "nodeBid"), ConduitArgument.getConduit(source, "conduit"), FloatArgumentType.getFloat(source, "length"), true);
-		})))))))));		
+		dispatcher.register(Commands.literal("setconduit").requires((source) -> 
+			source.hasPermission(2)
+		)
+		.then(
+				Commands.argument("nodeApos", BlockPosArgument.blockPos())
+				.then(
+						Commands.argument("nodeAid", IntegerArgumentType.integer(0))
+						.then(
+								Commands.argument("nodeBpos", BlockPosArgument.blockPos())
+								.then(
+										Commands.argument("nodeBid", IntegerArgumentType.integer(0))
+										.then(
+												Commands.argument("conduit", ConduitArgument.conduit())
+												.executes((source) ->
+														setConduit(source, BlockPosArgument.getLoadedBlockPos(source, "nodeApos"), BlockPosArgument.getLoadedBlockPos(source, "nodeBpos"), IntegerArgumentType.getInteger(source, "nodeAid"), IntegerArgumentType.getInteger(source, "nodeBid"), ConduitArgument.getConduit(source, "conduit"), 1, false)
+												)
+												.then(
+														Commands.argument("length", FloatArgumentType.floatArg(1F, 3F))
+														.executes((source) -> 
+																setConduit(source, BlockPosArgument.getLoadedBlockPos(source, "nodeApos"), BlockPosArgument.getLoadedBlockPos(source, "nodeBpos"), IntegerArgumentType.getInteger(source, "nodeAid"), IntegerArgumentType.getInteger(source, "nodeBid"), ConduitArgument.getConduit(source, "conduit"), FloatArgumentType.getFloat(source, "length"), false)
+														)
+														.then(
+																Commands.literal("destroy")
+																.executes((source) ->
+																		setConduit(source, BlockPosArgument.getLoadedBlockPos(source, "nodeApos"), BlockPosArgument.getLoadedBlockPos(source, "nodeBpos"), IntegerArgumentType.getInteger(source, "nodeAid"), IntegerArgumentType.getInteger(source, "nodeBid"), ConduitArgument.getConduit(source, "conduit"), FloatArgumentType.getFloat(source, "length"), true)
+																)
+														)
+												)
+										)
+								)
+						)
+				)
+		));		
 	}
 	
 	public static int setConduit(CommandContext<CommandSourceStack> source, BlockPos nodeApos, BlockPos nodeBpos, int nodeAid, int nodeBid, ResourceLocation conduitKey, float length, boolean drop) {

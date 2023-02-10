@@ -38,6 +38,10 @@ public class ConduitNode {
 	public Vec3d getWorldPosition(Level level, BlockPos pos) {
 		return PhysicUtility.ensureWorldCoordinates(level, pos, Vec3d.fromVec(pos).add(getOffsetBlocks()));	
 	}
+
+	public Vec3d getContraptionPosition(BlockPos pos) {
+		return Vec3d.fromVec(pos).add(getOffsetBlocks());	
+	}
 	
 	public int getMaxConnections() {
 		return maxConnections;

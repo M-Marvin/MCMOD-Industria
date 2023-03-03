@@ -1,7 +1,9 @@
 package de.m_marvin.industria.core.physics;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.OptionalLong;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.joml.Matrix4dc;
 import org.joml.Vector3d;
@@ -9,8 +11,14 @@ import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
 import org.valkyrienskies.core.apigame.constraints.VSConstraint;
 import org.valkyrienskies.core.apigame.world.chunks.BlockType;
+import org.valkyrienskies.core.impl.pipelines.VSGameFrame;
+import org.valkyrienskies.core.impl.pipelines.VSGamePipelineStage;
+import org.valkyrienskies.core.impl.pipelines.VSPhysicsPipelineStage;
+import org.valkyrienskies.core.impl.pipelines.VSPipelineImpl;
 import org.valkyrienskies.mod.common.BlockStateInfo;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
+
+import com.electronwill.nightconfig.core.conversion.ReflectionException;
 
 import de.m_marvin.industria.core.physics.engine.PhysicHandlerCapability;
 import de.m_marvin.industria.core.physics.types.ContraptionHitResult;
@@ -19,68 +27,70 @@ import de.m_marvin.industria.core.registries.ModCapabilities;
 import de.m_marvin.univec.impl.Vec3d;
 import kotlin.Pair;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 public class PhysicUtility {
 	
 	/* Naming and finding of contraptions */
 	
 	public static void setContraptionName(Level level, Ship contraption, String name) {
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
-		if (dataHolder.isPresent()) {
-			dataHolder.resolve().get().setContraptionName(contraption.getId(), name);
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			physicHandler.resolve().get().setContraptionName(contraption.getId(), name);
 		}
 	}
 	
 	public static String getContraptionName(Level level, Ship contraption, String name) {
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
-		if (dataHolder.isPresent()) {
-			return dataHolder.resolve().get().getContraptionName(contraption.getId());
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			return physicHandler.resolve().get().getContraptionName(contraption.getId());
 		}
 		return null;
 	}
 	
 	public static OptionalLong getContraptionIdByName(Level level, String name) {
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
-		if (dataHolder.isPresent()) {
-			return dataHolder.resolve().get().getContraption(name);
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			return physicHandler.resolve().get().getContraption(name);
 		}
 		return OptionalLong.empty();
 	}
 
 	public static Ship getContraptionByName(Level level, String name) {
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
-		if (dataHolder.isPresent()) {
-			OptionalLong id = dataHolder.resolve().get().getContraption(name);
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			OptionalLong id = physicHandler.resolve().get().getContraption(name);
 			if (id.isPresent()) return getContraptionById(level, id.getAsLong());
 		}
 		return null;
 	}
 
 	public static Iterable<Ship> getContraptionIntersecting(Level level, BlockPos position)  {
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
-		if (dataHolder.isPresent()) {
-			return dataHolder.resolve().get().getContraptionIntersecting(position);
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			return physicHandler.resolve().get().getContraptionIntersecting(position);
 		}
 		return null;
 	}
 	
 	public static Ship getContraptionOfBlock(Level level, BlockPos shipBlockPos) {
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
-		if (dataHolder.isPresent()) {
-			return dataHolder.resolve().get().getContraptionOfBlock(shipBlockPos);
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			return physicHandler.resolve().get().getContraptionOfBlock(shipBlockPos);
 		}
 		return null;
 	}
 
 	public static Ship getContraptionById(Level level, long id) {
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
-		if (dataHolder.isPresent()) {
-			return dataHolder.resolve().get().getContraptionById(id);
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			return physicHandler.resolve().get().getContraptionById(id);
 		}
 		return null;
 	}
@@ -132,34 +142,34 @@ public class PhysicUtility {
 	}
 	
 	public static ContraptionPosition getPosition(Level level, ServerShip contraption, boolean massCenter) {
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
-		if (dataHolder.isPresent()) {
-			return dataHolder.resolve().get().getPosition(contraption, massCenter);
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			return physicHandler.resolve().get().getPosition(contraption, massCenter);
 		}
 		return null;
 	}
 	
 	public static void setPosition(ServerLevel level, ServerShip contraption, ContraptionPosition position, boolean massCenter) {
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
-		if (dataHolder.isPresent()) {
-			dataHolder.resolve().get().setPosition(contraption, position, massCenter);
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			physicHandler.resolve().get().setPosition(contraption, position, massCenter);
 		}
 	}
 	
 	/* Listing and creation contraptions in the world */
 	
 	public static List<Ship> getLoadedContraptions(Level level) {
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
-		if (dataHolder.isPresent()) {
-			return dataHolder.resolve().get().getLoadedContraptions();
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			return physicHandler.resolve().get().getLoadedContraptions();
 		}
 		return null;
 	}
 
 	public static List<Ship> getAllContraptions(Level level) {
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
-		if (dataHolder.isPresent()) {
-			return dataHolder.resolve().get().getAllContraptions();
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			return physicHandler.resolve().get().getAllContraptions();
 		}
 		return null;
 	}
@@ -169,33 +179,33 @@ public class PhysicUtility {
 	}
 	
 	public static ServerShip createContraptionAt(ServerLevel level, Vec3d position, float scale) {
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
-		if (dataHolder.isPresent()) {
-			return dataHolder.resolve().get().createContraptionAt(position, scale);
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			return physicHandler.resolve().get().createContraptionAt(position, scale);
 		}
 		return null;
 	}
 	
 	public static boolean removeContraption(ServerLevel level, Ship contraption) {
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
-		if (dataHolder.isPresent()) {
-			return dataHolder.resolve().get().removeContraption(contraption);
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			return physicHandler.resolve().get().removeContraption(contraption);
 		}
 		return false;
 	}
 	
 	public static Ship convertToContraption(ServerLevel level, AABB areaBounds, boolean removeOriginal, float scale) {
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
-		if (dataHolder.isPresent()) {
-			return dataHolder.resolve().get().convertToContraption(areaBounds, removeOriginal, scale);
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			return physicHandler.resolve().get().convertToContraption(areaBounds, removeOriginal, scale);
 		}
 		return null;
 	}
 	
 	public static ServerShip assembleToContraption(ServerLevel level, List<BlockPos> blocks, boolean removeOriginal, float scale) {
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
-		if (dataHolder.isPresent()) {
-			return dataHolder.resolve().get().assembleToContraption(blocks, removeOriginal, scale);
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			return physicHandler.resolve().get().assembleToContraption(blocks, removeOriginal, scale);
 		}
 		return null;
 	}
@@ -207,19 +217,53 @@ public class PhysicUtility {
 	}
 	
 	public static ContraptionHitResult clipForContraption(Level level, Vec3d from, Vec3d to) {
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
-		if (dataHolder.isPresent()) {
-			return dataHolder.resolve().get().clipForContraption(from, to);
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			return physicHandler.resolve().get().clipForContraption(from, to);
 		}
 		return null;
 	}
-		
+	
+	/* Constraints */
+	
+	public static int addConstraint(Level level, VSConstraint constraint) {
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			return physicHandler.resolve().get().addConstraint(constraint);
+		}
+		return 0;
+	}
+	
+	public static boolean removeConstraint(Level level, int constraint) {
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			return physicHandler.resolve().get().removeConstaint(constraint);
+		}
+		return false;
+	}
+
+	public static List<Integer> getAllConstraints(Level level) {
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			physicHandler.resolve().get().getAllConstraints();
+		}
+		return null;
+	}
+	
+	public static VSConstraint getConstraintInstance(Level level, int constraint) {
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			return physicHandler.resolve().get().getConstraint(constraint);
+		}
+		return null;
+	}
+	
 	/* Util stuff */
 
 	public static String getDimensionId(Level level) {
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
-		if (dataHolder.isPresent()) {
-			return dataHolder.resolve().get().getDimensionId();
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			return physicHandler.resolve().get().getDimensionId();
 		}
 		return null;
 	}
@@ -241,38 +285,12 @@ public class PhysicUtility {
 		return !state.isAir();
 	}
 	
-	/* Constraints */
-	
-	public static int addConstraint(Level level, VSConstraint constraint) {
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
-		if (dataHolder.isPresent()) {
-			return dataHolder.resolve().get().addConstraint(constraint);
-		}
-		return 0;
-	}
-	
-	public static boolean removeConstraint(Level level, int constraint) {
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
-		if (dataHolder.isPresent()) {
-			return dataHolder.resolve().get().removeConstaint(constraint);
+	public static boolean resetFrameQueue(ServerLevel level) {
+		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		if (physicHandler.isPresent()) {
+			return physicHandler.resolve().get().resetFrameQueue();
 		}
 		return false;
-	}
-
-	public static List<Integer> getAllConstraints(Level level) {
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
-		if (dataHolder.isPresent()) {
-			dataHolder.resolve().get().getAllConstraints();
-		}
-		return null;
-	}
-	
-	public static VSConstraint getConstraintInstance(Level level, int constraint) {
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
-		if (dataHolder.isPresent()) {
-			return dataHolder.resolve().get().getConstraint(constraint);
-		}
-		return null;
 	}
 	
 }

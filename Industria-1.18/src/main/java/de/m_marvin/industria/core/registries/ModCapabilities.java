@@ -19,7 +19,7 @@ public class ModCapabilities {
 	
 	public static final Capability<ConduitHandlerCapability> CONDUIT_HANDLER_CAPABILITY = CapabilityManager.get(new CapabilityToken<ConduitHandlerCapability>() {});
 	public static final Capability<ElectricNetworkHandlerCapability> ELECTRIC_NETWORK_HANDLER_CAPABILITY = CapabilityManager.get(new CapabilityToken<ElectricNetworkHandlerCapability>() {});
-	public static final Capability<PhysicHandlerCapability> PHYSIC_DATA_HOLDER_CAPABILITY = CapabilityManager.get(new CapabilityToken<PhysicHandlerCapability>() {});
+	public static final Capability<PhysicHandlerCapability> PHYSIC_HANDLER_CAPABILITY = CapabilityManager.get(new CapabilityToken<PhysicHandlerCapability>() {});
 	
 	@SubscribeEvent
 	public static void registerCapabilities(RegisterCapabilitiesEvent event) {

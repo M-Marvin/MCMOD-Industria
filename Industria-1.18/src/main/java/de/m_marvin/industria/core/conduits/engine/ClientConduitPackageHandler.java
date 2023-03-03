@@ -44,8 +44,10 @@ public class ClientConduitPackageHandler {
 			for (ChunkPos chunk : receivedPackages.keySet()) {
 				if (level.isLoaded(chunk.getWorldPosition())) {
 					SSyncPlacedConduit msg = receivedPackages.get(chunk);
-					handlePackageInLoadedChunk(msg);
-					handledPackages.add(chunk);
+					if (msg != null) {
+						handlePackageInLoadedChunk(msg);
+						handledPackages.add(chunk);
+					}
 				}
 			}
 			handledPackages.forEach(receivedPackages::remove);

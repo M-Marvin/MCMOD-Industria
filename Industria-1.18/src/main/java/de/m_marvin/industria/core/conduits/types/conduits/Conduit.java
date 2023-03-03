@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.OptionalInt;
 
 import org.joml.Vector3d;
+import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
 import org.valkyrienskies.core.apigame.constraints.VSAttachmentConstraint;
 import org.valkyrienskies.core.apigame.constraints.VSConstraint;
@@ -20,6 +21,7 @@ import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.conduits.types.items.ConduitCableItem;
 import de.m_marvin.industria.core.physics.PhysicUtility;
+import de.m_marvin.industria.core.physics.engine.ContraptionForceInducer;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.NBTUtility;
@@ -442,6 +444,37 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 //						}
 //					}
 //				}
+
+				shape.forceNodeA = shape.nodes[0].sub(pointStart);
+				shape.forceNodeB = shape.nodes[shape.nodes.length - 1].sub(pointEnd);
+				
+				if (!level.isClientSide()) {
+					
+					double strength = 100000;
+					
+					Ship contraptionA = PhysicUtility.getContraptionOfBlock(level, nodeApos);
+					if (contraptionA != null) {
+						
+						//ContraptionForceInducer.getOrCreate((ServerShip) contraptionA).applyInvariantLinearAt(shape.forceNodeA.mul(strength), nodeA.getContraptionPosition(nodeApos));
+						ContraptionForceInducer.getOrCreate((ServerShip) contraptionA).applyInvariantLinear(shape.forceNodeA.mul(strength));
+						//((ServerShip) contraptionA).
+						
+						//PhysicUtility.applyForce((ServerLevel) level, (ServerShip) contraptionA, nodeA.getContraptionPosition(nodeApos), shape.forceNodeA);
+						
+					}
+
+					Ship contraptionB = PhysicUtility.getContraptionOfBlock(level, nodeBpos);
+					if (contraptionB != null) {
+
+						//ContraptionForceInducer.getOrCreate((ServerShip) contraptionB).applyInvariantLinearAt(shape.forceNodeB.mul(strength), nodeB.getContraptionPosition(nodeBpos));
+						ContraptionForceInducer.getOrCreate((ServerShip) contraptionB).applyInvariantLinear(shape.forceNodeB.mul(strength));
+						
+						//PhysicUtility.applyForce((ServerLevel) level, (ServerShip) contraptionB, nodeB.getContraptionPosition(nodeBpos), shape.forceNodeB);
+						
+					}
+					
+				}
+				
 			}
 			
 		}
@@ -454,6 +487,9 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		public double beamLength;
 		
 		// Temporary data that gets not saved
+		public Vec3d forceNodeA = new Vec3d();
+		public Vec3d forceNodeB = new Vec3d();
+		
 		public OptionalInt constraintA = OptionalInt.empty();
 		public OptionalInt constraintB = OptionalInt.empty();
 		public Vec3d lastConstraintPosA = new Vec3d();

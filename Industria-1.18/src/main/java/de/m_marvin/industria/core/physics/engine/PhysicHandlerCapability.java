@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.OptionalLong;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +23,13 @@ import org.valkyrienskies.core.api.ships.properties.ShipTransform;
 import org.valkyrienskies.core.apigame.constraints.VSConstraint;
 import org.valkyrienskies.core.impl.game.ships.ShipData;
 import org.valkyrienskies.core.impl.game.ships.ShipObjectServerWorld;
+import org.valkyrienskies.core.impl.pipelines.VSGameFrame;
+import org.valkyrienskies.core.impl.pipelines.VSGamePipelineStage;
+import org.valkyrienskies.core.impl.pipelines.VSPhysicsPipelineStage;
+import org.valkyrienskies.core.impl.pipelines.VSPipelineImpl;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
+
+import com.electronwill.nightconfig.core.conversion.ReflectionException;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.core.physics.PhysicUtility;
@@ -37,6 +44,7 @@ import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -60,7 +68,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 	
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-		if (cap == ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY) {
+		if (cap == ModCapabilities.PHYSIC_HANDLER_CAPABILITY) {
 			return holder.cast();
 		}
 		return LazyOptional.empty();
@@ -98,6 +106,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 	public Level getLevel() {
 		return level;
 	}
+	
 	
 	
 	
@@ -144,7 +153,9 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 	}
 	
 	public Ship getContraptionOfBlock(BlockPos shipBlockPos) {
-		return VSGameUtilsKt.getShipManagingPos(level, shipBlockPos);
+		Ship contraption = VSGameUtilsKt.getShipObjectManagingPos(level, shipBlockPos);
+		if (contraption == null) contraption = VSGameUtilsKt.getShipManagingPos(level, shipBlockPos);
+		return contraption;
 	}
 
 	public Ship getContraptionById(long id) {
@@ -267,7 +278,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 	
 	public boolean removeContraption(Ship contraption) {
 		assert level instanceof ServerLevel : "Can't manage contraptions on client side!";
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_DATA_HOLDER_CAPABILITY);
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
 		if (dataHolder.isPresent()) {
 			AABBic bounds = contraption.getShipAABB();
 			if (bounds != null) {
@@ -460,6 +471,27 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 
 	public String getDimensionId() {
 		return VSGameUtilsKt.getDimensionId(level);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public boolean resetFrameQueue() {
+		try {
+			VSPipelineImpl pipeline = (VSPipelineImpl) VSGameUtilsKt.getVsPipeline(this.level.getServer());
+			
+			Field physicsStageField = ObfuscationReflectionHelper.findField(VSPipelineImpl.class, "physicsStage");
+			Field gameFramesQueueField = ObfuscationReflectionHelper.findField(VSPhysicsPipelineStage.class, "gameFramesQueue");
+			
+			physicsStageField.setAccessible(true);
+			gameFramesQueueField.setAccessible(true);
+			
+			VSPhysicsPipelineStage pipelineStage = (VSPhysicsPipelineStage) physicsStageField.get(pipeline);
+			ConcurrentLinkedQueue<VSGameFrame> frameQueue = (ConcurrentLinkedQueue<VSGameFrame>) gameFramesQueueField.get(pipelineStage);
+			
+			frameQueue.clear();
+			return true;
+		} catch (ReflectionException | IllegalAccessException | NullPointerException e) {
+			return false;
+		}
 	}
 	
 }

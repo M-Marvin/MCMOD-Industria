@@ -57,14 +57,14 @@ public class ContraptionForceInducer implements ShipForcesInducer {
 			});
 			forcesToApply.clear();
 		}
-				
+		
 	}
 	
 	public void apply(Force force) {
-		if (forcesToApply.size() < 200) {
+		if (forcesToApply.size() < 1) { // TODO
 			forcesToApply.add(force);
 		} else {
-			Industria.LOGGER.warn("Tick force list to large, is the server overloaded ?");
+			//Industria.LOGGER.warn("Tick force list to large, is the server overloaded ?");
 		}
 	}
 	

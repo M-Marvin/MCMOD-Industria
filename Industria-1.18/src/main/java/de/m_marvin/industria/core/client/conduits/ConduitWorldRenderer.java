@@ -175,15 +175,16 @@ public class ConduitWorldRenderer {
 				
 				color = new Vec4f(1.0F, 0.0F, 0.0F, 1F);
 				
-				Vec3d nodeAForceVecEnd = nodeAworldPosition.add(conduit.getShape().forceNodeA);
-				vertexconsumer.vertex(matrixStack.last().pose(), (float) nodeAworldPosition.x, (float) nodeAworldPosition.y + 0.2F, (float) nodeAworldPosition.z).color(color.x, color.y, color.z, color.w).normal(matrixStack.last().normal(), normal.x, normal.y, normal.z).endVertex();
-				vertexconsumer.vertex(matrixStack.last().pose(), (float) nodeAForceVecEnd.x, (float) nodeAForceVecEnd.y + 0.2F, (float) nodeAForceVecEnd.z).color(color.x, color.y, color.z, color.w).normal(matrixStack.last().normal(), normal.x, normal.y, normal.z).endVertex();
+				// TODO
+//				Vec3d nodeAForceVecEnd = nodeAworldPosition.add(conduit.getShape().forceNodeA);
+//				vertexconsumer.vertex(matrixStack.last().pose(), (float) nodeAworldPosition.x, (float) nodeAworldPosition.y + 0.2F, (float) nodeAworldPosition.z).color(color.x, color.y, color.z, color.w).normal(matrixStack.last().normal(), normal.x, normal.y, normal.z).endVertex();
+//				vertexconsumer.vertex(matrixStack.last().pose(), (float) nodeAForceVecEnd.x, (float) nodeAForceVecEnd.y + 0.2F, (float) nodeAForceVecEnd.z).color(color.x, color.y, color.z, color.w).normal(matrixStack.last().normal(), normal.x, normal.y, normal.z).endVertex();
 				
 				drawNodeInfo(matrixStack, bufferSource, level, partialTick, conduit.getPosition().getNodeBpos(), nodeB);
 
-				Vec3d nodeBForceVecEnd = nodeBworldPosition.add(conduit.getShape().forceNodeB);
-				vertexconsumer.vertex(matrixStack.last().pose(), (float) nodeBworldPosition.x, (float) nodeBworldPosition.y + 0.2F, (float) nodeBworldPosition.z).color(color.x, color.y, color.z, color.w).normal(matrixStack.last().normal(), normal.x, normal.y, normal.z).endVertex();
-				vertexconsumer.vertex(matrixStack.last().pose(), (float) nodeBForceVecEnd.x, (float) nodeBForceVecEnd.y + 0.2F, (float) nodeBForceVecEnd.z).color(color.x, color.y, color.z, color.w).normal(matrixStack.last().normal(), normal.x, normal.y, normal.z).endVertex();
+//				Vec3d nodeBForceVecEnd = nodeBworldPosition.add(conduit.getShape().forceNodeB);
+//				vertexconsumer.vertex(matrixStack.last().pose(), (float) nodeBworldPosition.x, (float) nodeBworldPosition.y + 0.2F, (float) nodeBworldPosition.z).color(color.x, color.y, color.z, color.w).normal(matrixStack.last().normal(), normal.x, normal.y, normal.z).endVertex();
+//				vertexconsumer.vertex(matrixStack.last().pose(), (float) nodeBForceVecEnd.x, (float) nodeBForceVecEnd.y + 0.2F, (float) nodeBForceVecEnd.z).color(color.x, color.y, color.z, color.w).normal(matrixStack.last().normal(), normal.x, normal.y, normal.z).endVertex();
 				
 			}
 		}

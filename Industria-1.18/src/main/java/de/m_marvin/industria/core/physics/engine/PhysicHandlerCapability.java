@@ -207,7 +207,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 	
 	/* Translating/moving of contraptions */
 	
-	public ContraptionPosition getPosition(ServerShip contraption, boolean massCenter) {
+	public static ContraptionPosition getPosition(ServerShip contraption, boolean massCenter) {
 		if (massCenter) {
 			Vec3d position = Vec3d.fromVec(contraption.getTransform().getPositionInWorld());
 			Quaterniondc jomlQuat = contraption.getTransform().getShipToWorldRotation();
@@ -223,10 +223,9 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 			Quaternion orientation = new Quaternion((float) jomlQuat.x(), (float) jomlQuat.y(), (float) jomlQuat.z(), (float) jomlQuat.w());
 			return new ContraptionPosition(orientation, position);		
 		}
-		
 	}
 	
-	public void setPosition(ServerShip contraption, ContraptionPosition position, boolean massCenter) {
+	public static void setPosition(ServerShip contraption, ContraptionPosition position, boolean massCenter) {
 		if (massCenter) {
 			ShipTransform transform = contraption.getTransform();
 			((Vector3d) transform.getPositionInWorld()).set(position.getPosition().writeTo(new Vector3d()));
@@ -264,13 +263,13 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		assert level instanceof ServerLevel : "Can't manage contraptions on client side!";
 		Ship parentContraption = VSGameUtilsKt.getShipManagingPos(level, position.writeTo(new Vector3d()));
 		if (parentContraption != null) {
-			position = PhysicUtility.toWorldPos(parentContraption, position);
+			position = PhysicUtility.toWorldPos(parentContraption.getTransform(), position);
 		}
 		String dimensionId = getDimensionId();
 		Ship newContraption = VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).createNewShipAtBlock(position.writeTo(new Vector3i()), false, scale, dimensionId);
 		
 		// Stone for safety reasons
-		BlockPos pos2 = PhysicUtility.toContraptionBlockPos(newContraption, position);
+		BlockPos pos2 = PhysicUtility.toContraptionBlockPos(newContraption.getTransform(), position);
 		level.setBlock(pos2, Blocks.STONE.defaultBlockState(), 3);
 		
 		return (ServerShip) newContraption;
@@ -346,7 +345,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		Vec3d contraptionPos = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
 		ServerShip contraption = createContraptionAt(contraptionPos, scale);
 		
-		Vec3d contraptionOrigin = PhysicUtility.toContraptionPos(contraption, contraptionPos);
+		Vec3d contraptionOrigin = PhysicUtility.toContraptionPos(contraption.getTransform(), contraptionPos);
 		
 		for (int x = areaMinBlockX; x <= areaMaxBlockX; x++) {
 			for (int z = areaMinBlockZ; z <= areaMaxBlockZ; z++) {
@@ -413,7 +412,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		Vec3d contraptionPos = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
 		ServerShip contraption = createContraptionAt(contraptionPos, scale);
 		
-		Vec3d contraptionOrigin = PhysicUtility.toContraptionPos(contraption, contraptionPos);
+		Vec3d contraptionOrigin = PhysicUtility.toContraptionPos(contraption.getTransform(), contraptionPos);
 		BlockPos centerBlockPos = new BlockPos(contraptionPos.x, contraptionPos.y, contraptionPos.z);
 		
 		for (BlockPos itPos : blocks) {
@@ -425,7 +424,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		}
 		
 		if (!blocks.contains(centerBlockPos)) {
-			BlockPos centerShipPos = PhysicUtility.toContraptionBlockPos(contraption, centerBlockPos);
+			BlockPos centerShipPos = PhysicUtility.toContraptionBlockPos(contraption.getTransform(), centerBlockPos);
 			level.setBlock(centerShipPos, Blocks.AIR.defaultBlockState(), 3);
 		}
 		

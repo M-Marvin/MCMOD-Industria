@@ -1,8 +1,14 @@
 package de.m_marvin.industria.core.conduits.engine;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+
+import org.valkyrienskies.core.api.ships.PhysShip;
+import org.valkyrienskies.core.api.ships.ServerShip;
+import org.valkyrienskies.core.impl.api.ShipForcesInducer;
+import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitBreakEvent;
@@ -16,6 +22,7 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
+import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.registries.ModCapabilities;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3d;
@@ -383,6 +390,42 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 				Vec3d posB = conduit.getPosition().calculateWorldNodeB(level);
 				return !level.isLoaded(new BlockPos(posA.x, posA.y, posA.z)) && !level.isLoaded(new BlockPos(posB.x, posB.y, posB.z));
 			});
+		}
+		
+	}
+
+	@SuppressWarnings("deprecation")
+	public static class ContraptionAttachment implements ShipForcesInducer {
+		
+		public static ContraptionAttachment attachIfMissing(Level level, ServerShip contraption) {
+			ContraptionAttachment attachment = contraption.getAttachment(ContraptionAttachment.class);
+			if (attachment == null) {
+				attachment = new ContraptionAttachment();
+				attachment.level = level;
+				contraption.saveAttachment(ContraptionAttachment.class, attachment);
+			}
+			return attachment;
+		}
+		
+		protected Level level;
+		protected HashMap<PlacedConduit, Integer> conduits2node = new HashMap<PlacedConduit, Integer>();
+		protected List<PlacedConduit> removedConduits = new ArrayList<PlacedConduit>();
+		
+		public void notifyNewConduit(PlacedConduit conduit, int nodeId) {
+			assert nodeId >= 0 && nodeId <= 1 : "The node ID can only be 0 or 1!";
+			if (!conduits2node.containsKey(conduit)) conduits2node.put(conduit, nodeId);
+		}
+		
+		@Override
+		public void applyForces(PhysShip contraption) {
+			
+			this.conduits2node.forEach((conduit, nodeId) -> {
+				if (!conduit.updateContraptions(level, contraption, nodeId)) {
+					this.removedConduits.add(conduit);
+				}
+			});
+			this.removedConduits.forEach(this.conduits2node::remove);
+			this.removedConduits.clear();
 		}
 		
 	}

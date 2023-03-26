@@ -1,0 +1,6 @@
+rot     Seitentexturen für Stücke UNTEN, NORDEN und WESTEN
+orange  Seitentexturen für Sonderstücke mit nur einem Anschluss
+gelb    Seitentexturen für Stücke OBEN,  SÜDEN  und OSTEN
+grün    Seitentexturen für Verbindungen gegenüberliegender Anschlüsse (nur nutzbar, wenn NUR gegenüberliegende Anschlüsse vorliegen. (Also NUR NS, OW, OU oder Teile davon) (evtl unnütz)
+blau    Textur für Mittelstück (außer bei nur einem Anschluss)
+violett Textur für Anschnittseite (zum nächsten Block hin oder bei nur einem Snschluss auch für blockinternes Endstück

@@ -241,13 +241,13 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 	
 	public void dismantleShape(Level level, PlacedConduit conduit) {
 		
-		ConduitShape shape = conduit.getShape();
+//		ConduitShape shape = conduit.getShape();
 		
-		if (shape.constraintA.isPresent() && !level.isClientSide()) PhysicUtility.removeConstraint(level, shape.constraintA.getAsInt());
-		if (shape.constraintB.isPresent() && !level.isClientSide()) PhysicUtility.removeConstraint(level, shape.constraintB.getAsInt());
+//		if (shape.constraintA.isPresent() && !level.isClientSide()) PhysicUtility.removeConstraint(level, shape.constraintA.getAsInt());
+//		if (shape.constraintB.isPresent() && !level.isClientSide()) PhysicUtility.removeConstraint(level, shape.constraintB.getAsInt());
 		
-		shape.constraintA = OptionalInt.empty();
-		shape.constraintB = OptionalInt.empty();
+//		shape.constraintA = OptionalInt.empty();
+//		shape.constraintB = OptionalInt.empty();
 		
 	}
 	
@@ -428,68 +428,15 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 					
 				}
 				
-//				if (shape.constraintA.isPresent()) {
-//					shape.lastConstraintPosA = shape.nodes[0].add(origin);
-//					if (!level.isClientSide()) {
-//						VSAttachmentConstraint constraint = (VSAttachmentConstraint) PhysicUtility.getConstraintInstance(level, shape.constraintA.getAsInt());
-//						if (constraint != null) {
-//							Ship contraption = PhysicUtility.getContraptionById(level, constraint.getShipId1());
-//							System.out.println(Vec3d.fromVec(constraint.getLocalPos0()) + "   " + shape.lastConstraintPosA);
-//							if (contraption != null) shape.lastConstraintPosA.writeTo(constraint.getLocalPos0());
-//						}
-//					}
-//				}
-//				if (shape.constraintB.isPresent()) {
-//					shape.lastConstraintPosB = shape.nodes[shape.nodes.length - 1].add(origin);
-//					if (!level.isClientSide()) {
-//						VSAttachmentConstraint constraint = (VSAttachmentConstraint) PhysicUtility.getConstraintInstance(level, shape.constraintB.getAsInt());
-//						if (constraint != null) {
-//							Ship contraption = PhysicUtility.getContraptionById(level, constraint.getShipId1());
-//							System.out.println(Vec3d.fromVec(constraint.getLocalPos0()) + "   " + shape.lastConstraintPosB);
-//							if (contraption != null) shape.lastConstraintPosB.writeTo(constraint.getLocalPos0());
-//						}
-//					}
-//				}
-				
-
-				shape.contraptionNodeA = conduit.getPosition().calculateContraptionNodeA(level);
-				shape.contraptionNodeB = conduit.getPosition().calculateContraptionNodeB(level);
 				shape.shapeNodeA = shape.nodes[0].add(origin);
 				shape.shapeNodeB = shape.nodes[shape.nodes.length - 1].add(origin);
+				shape.contraptionNodeA = conduit.getPosition().calculateContraptionNodeA(level);
+				shape.contraptionNodeB = conduit.getPosition().calculateContraptionNodeB(level);
 				
-//				if (!level.isClientSide()) {
-//					
-//					double strength = 2800000;
-//					
-//					Ship contraptionA = PhysicUtility.getContraptionOfBlock(level, nodeApos);
-//					if (contraptionA != null) {
-//						
-//						Vec3d forceOrigin = nodeA.getWorldPosition(level, nodeApos).sub(PhysicUtility.getPosition(level, (ServerShip) contraptionA, false).getPosition()).mul(-1D);
-//						Vec3d forceVec = shape.forceNodeA.normalize();
-//						double nodeError = 0.01; //shape.forceNodeA.length() / 16D;
-//						
-//						//System.out.println(nodeError);
-//						//ContraptionForceInducer.getOrCreate((ServerShip) contraptionA).applyInvariantLinearAt(forceVec.mul(nodeError * strength), forceOrigin);
-//						//ContraptionForceInducer.getOrCreate((ServerShip) contraptionA).applyInvariantLinear(shape.forceNodeA.mul(strength));
-//						//((ServerShip) contraptionA).
-//						
-//						//PhysicUtility.applyForce((ServerLevel) level, (ServerShip) contraptionA, nodeA.getContraptionPosition(nodeApos), shape.forceNodeA);
-//						
-//					}
-//
-//					Ship contraptionB = PhysicUtility.getContraptionOfBlock(level, nodeBpos);
-//					if (contraptionB != null) {
-//
-//						Vec3d forceOrigin = nodeB.getWorldPosition(level, nodeBpos).sub(PhysicUtility.getPosition(level, (ServerShip) contraptionB, false).getPosition()).mul(-1D);
-//						
-//						//ContraptionForceInducer.getOrCreate((ServerShip) contraptionB).applyInvariantLinearAt(shape.forceNodeB.mul(strength), forceOrigin);
-//						//ContraptionForceInducer.getOrCreate((ServerShip) contraptionB).applyInvariantLinear(shape.forceNodeB.mul(strength));
-//						
-//						//PhysicUtility.applyForce((ServerLevel) level, (ServerShip) contraptionB, nodeB.getContraptionPosition(nodeBpos), shape.forceNodeB);
-//						
-//					}
-//					
-//				}
+				if (!level.isClientSide()) {
+					shape.contraptionA = (ServerShip) PhysicUtility.getContraptionOfBlock(level, nodeApos);
+					shape.contraptionB = (ServerShip) PhysicUtility.getContraptionOfBlock(level, nodeBpos);
+				}
 				
 			}
 			
@@ -499,20 +446,17 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 	
 	public void updateContraptionForces(Level level, PhysShip contraption, PlacedConduit conduit, int nodeId) {
 		
-		//if (conduit.getShape().shapeNodeA.sub(conduit.getShape().shapeNodeB).length() > conduit.getLength()) {
-
-			Vec3d nodePos = nodeId == 0 ? conduit.getShape().contraptionNodeA : conduit.getShape().contraptionNodeB;
-			Vec3d massCenter = PhysicUtility.toContraptionPos(contraption.getTransform(), Vec3d.fromVec(contraption.getTransform().getPositionInWorld()));
-							
-			double strength = 1200000; // TODO
-			
-			Vec3d nodeInWorldPos = PhysicUtility.toWorldPos(contraption.getTransform(), nodePos);
-			Vec3d conduitEnd = nodeId == 0 ? conduit.getShape().shapeNodeA : conduit.getShape().shapeNodeB;
-			Vec3d force = nodeInWorldPos.sub(conduitEnd).mul(-strength).clampI(-strength, strength);
-			
-			contraption.applyInvariantForceToPos(force.writeTo(new Vector3d()), nodePos.sub(massCenter).writeTo(new Vector3d()));
-			
-		//}
+		ServerShip serverContraption = nodeId == 0 ? conduit.getShape().contraptionA : conduit.getShape().contraptionB;
+		Vec3d nodePos = nodeId == 0 ? conduit.getShape().contraptionNodeA : conduit.getShape().contraptionNodeB;
+		Vec3d massCenter = PhysicUtility.toContraptionPos(contraption.getTransform(), Vec3d.fromVec(contraption.getTransform().getPositionInWorld()));
+		
+		double strength = 120 * serverContraption.getInertiaData().getMass(); // TODO Node-Movement offset
+		
+		Vec3d nodeInWorldPos = PhysicUtility.toWorldPos(contraption.getTransform(), nodePos);
+		Vec3d conduitEnd = nodeId == 0 ? conduit.getShape().shapeNodeA : conduit.getShape().shapeNodeB;
+		Vec3d force = nodeInWorldPos.sub(conduitEnd).mul(-strength).clampI(-strength, strength);
+		System.out.println("D " + force.length().intValue());
+		contraption.applyInvariantForceToPos(force.writeTo(new Vector3d()), nodePos.sub(massCenter).writeTo(new Vector3d()));
 		
 	}
 	
@@ -522,22 +466,19 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		public double beamLength;
 		
 		// Temporary data that gets not saved
+		public ServerShip contraptionA;
+		public ServerShip contraptionB;
 		public Vec3d contraptionNodeA = new Vec3d();
 		public Vec3d contraptionNodeB = new Vec3d();
 		public Vec3d shapeNodeA = new Vec3d();
 		public Vec3d shapeNodeB = new Vec3d();
-		
-		public OptionalInt constraintA = OptionalInt.empty();
-		public OptionalInt constraintB = OptionalInt.empty();
-		public Vec3d lastConstraintPosA = new Vec3d();
-		public Vec3d lastConstraintPosB = new Vec3d();
 		
 		public ConduitShape(List<Vec3d> nodes, double beamLength) {
 			this.nodes = nodes.toArray(new Vec3d[] {});
 			this.lastPos = nodes.toArray(new Vec3d[] {});
 			this.beamLength = beamLength;
 		}
-
+		
 		public ConduitShape(Vec3d[] nodes, Vec3d[] lastPos, double beamLength) {
 			this.nodes = nodes;
 			this.lastPos = lastPos;
@@ -575,10 +516,10 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		
 		public void readUpdateData(FriendlyByteBuf buff) {
 			this.beamLength = buff.readDouble();
-			this.constraintA = buff.readBoolean() ? OptionalInt.of(buff.readInt()) : OptionalInt.empty();
-			this.constraintB = buff.readBoolean() ? OptionalInt.of(buff.readInt()) : OptionalInt.empty();
-			this.lastConstraintPosA = NBTUtility.readVector3d(buff);
-			this.lastConstraintPosB = NBTUtility.readVector3d(buff);
+//			this.constraintA = buff.readBoolean() ? OptionalInt.of(buff.readInt()) : OptionalInt.empty();
+//			this.constraintB = buff.readBoolean() ? OptionalInt.of(buff.readInt()) : OptionalInt.empty();
+//			this.lastConstraintPosA = NBTUtility.readVector3d(buff);
+//			this.lastConstraintPosB = NBTUtility.readVector3d(buff);
 			int nodeCount = buff.readInt();
 			if (this.nodes == null || nodeCount != this.nodes.length) {
 				this.nodes = new Vec3d[nodeCount];
@@ -589,15 +530,15 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 				this.lastPos[i] = NBTUtility.readVector3d(buff);
 			}
 		}
-
+		
 		public void writeUpdateData(FriendlyByteBuf buff) {
 			buff.writeDouble(beamLength);
-			buff.writeBoolean(constraintA.isPresent());
-			if (constraintA.isPresent()) buff.writeInt(constraintA.getAsInt());
-			buff.writeBoolean(constraintB.isPresent());
-			if (constraintB.isPresent()) buff.writeInt(constraintB.getAsInt());
-			NBTUtility.writeVector3d(lastConstraintPosA, buff);
-			NBTUtility.writeVector3d(lastConstraintPosB, buff);
+//			buff.writeBoolean(constraintA.isPresent());
+//			if (constraintA.isPresent()) buff.writeInt(constraintA.getAsInt());
+//			buff.writeBoolean(constraintB.isPresent());
+//			if (constraintB.isPresent()) buff.writeInt(constraintB.getAsInt());
+//			NBTUtility.writeVector3d(lastConstraintPosA, buff);
+//			NBTUtility.writeVector3d(lastConstraintPosB, buff);
 			buff.writeInt(this.nodes.length);
 			for (int i = 0; i < this.nodes.length; i++) {
 				NBTUtility.writeVector3d(this.nodes[i], buff);

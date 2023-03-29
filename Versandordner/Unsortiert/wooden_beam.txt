@@ -1,0 +1,40 @@
+Erklärungen der Farbmarkierungen in der Texturdatei:
+
+ violett  Seitentexturen für Sonderstücke mit nur einem Anschluss UNTEN, NORDEN und WESTEN
+ rot      Seitentexturen für Stücke UNTEN, NORDEN und WESTEN
+ orange   Seitentexturen für Sonderstücke mit nur einem Anschluss OBEN,  SÜDEN  und OSTEN
+ gelb     Seitentexturen für Stücke OBEN,  SÜDEN  und OSTEN
+ grün     Seitentexturen für Verbindungen gegenüberliegender Anschlüsse
+          (nur nutzbar, wenn NUR gegenüberliegende Anschlüsse vorliegen, also NUR N und S, O und W, O und U oder mehrere davon)
+ blau     Textur für Kopfseite (außer bei nur einem Anschluss)
+ Symbole  Je nach Ausrichtung
+
+
+
+Prioritäten der Direktverbindung ggü. Seitenzweigen (visuelles Erscheinen):
+
+ TOP  Ob-U
+ 2nd   N-S
+ LOW   O-W
+
+ Beispiele:
+
+ 1. Ob, U, W, O, S:  Ob und U höchste Priorität, wird verbunden; W, O, S als Abzweige
+ 2. Ob,    W, O, S:  Ob und U nicht beide vorhanden; N und S nicht beide vorhanden; verbinde W und O; Ob und S als Abzweige
+ 3.     U, W,    S:  Ob und U nicht beide vorhanden; N und S nicht beide vorhanden; W und O nicht beide vorhanden; keine Direktverbindung
+
+
+
+Blockeigenschaften:
+
+ north                            Zustände: direct         wenn möglich erzeugt nach Schema oben
+ (und alle 5 anderen Richtungen)                           (sollte sich evtl aus zwei gegenüberliegenden "single" zusammensetzen, "single" dann evtl in "straight" umbenennen)
+                                            branch         nach Schema oben
+                                            single         wenn einzige Richtung ist
+                                            none           wenn nicht vorhanden
+
+ center                           Zustände: up_down        wenn nie direct bei den Richtungen vorliegt und up und down bei den Richtungen als Zustand NICHT beide none oder beide direct haben
+                                            north_south    wenn nie direct bei den Richtungen vorliegt und north und south bei den Richtungen als Zustand NICHT beide none oder beide direkt haben
+                                                           und nicht schon up_down als Zustand gewählt ist
+                                           [east_west      nie (wird dann immer zu single für east oder west bei den Richtungen)]
+                                            none           wenn mindestens einmal direct bei den Richtungen vorliegt

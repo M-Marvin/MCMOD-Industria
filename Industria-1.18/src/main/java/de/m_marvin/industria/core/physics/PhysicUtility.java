@@ -1,9 +1,7 @@
 package de.m_marvin.industria.core.physics;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.OptionalLong;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.joml.Matrix4dc;
 import org.joml.Vector3d;
@@ -12,14 +10,8 @@ import org.valkyrienskies.core.api.ships.Ship;
 import org.valkyrienskies.core.api.ships.properties.ShipTransform;
 import org.valkyrienskies.core.apigame.constraints.VSConstraint;
 import org.valkyrienskies.core.apigame.world.chunks.BlockType;
-import org.valkyrienskies.core.impl.pipelines.VSGameFrame;
-import org.valkyrienskies.core.impl.pipelines.VSGamePipelineStage;
-import org.valkyrienskies.core.impl.pipelines.VSPhysicsPipelineStage;
-import org.valkyrienskies.core.impl.pipelines.VSPipelineImpl;
 import org.valkyrienskies.mod.common.BlockStateInfo;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
-
-import com.electronwill.nightconfig.core.conversion.ReflectionException;
 
 import de.m_marvin.industria.core.physics.engine.PhysicHandlerCapability;
 import de.m_marvin.industria.core.physics.types.ContraptionHitResult;
@@ -28,13 +20,11 @@ import de.m_marvin.industria.core.registries.ModCapabilities;
 import de.m_marvin.univec.impl.Vec3d;
 import kotlin.Pair;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 public class PhysicUtility {
 	

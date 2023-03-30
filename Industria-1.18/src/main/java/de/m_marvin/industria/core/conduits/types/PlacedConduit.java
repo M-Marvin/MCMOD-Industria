@@ -1,13 +1,8 @@
 package de.m_marvin.industria.core.conduits.types;
 
-import org.valkyrienskies.core.api.ships.PhysShip;
-import org.valkyrienskies.core.api.ships.ServerShip;
-
-import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability.ContraptionAttachment;
 import de.m_marvin.industria.core.conduits.registry.Conduits;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitShape;
-import de.m_marvin.industria.core.physics.PhysicUtility;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
@@ -28,12 +23,13 @@ public class PlacedConduit {
 	public PlacedConduit build(Level level) {
 		this.shape = conduit.buildShape(level, this);
 		updateShape(level);
-		if (!level.isClientSide) {
-			ServerShip contraptionA = (ServerShip) PhysicUtility.getContraptionOfBlock(level, this.getPosition().getNodeApos());
-			ServerShip contraptionB = (ServerShip) PhysicUtility.getContraptionOfBlock(level, this.getPosition().getNodeBpos());
-			if (contraptionA != null) ContraptionAttachment.attachIfMissing(level, contraptionA).notifyNewConduit(this, 0);
-			if (contraptionB != null) ContraptionAttachment.attachIfMissing(level, contraptionB).notifyNewConduit(this, 1);
-		}
+		// TODO Remove if not able to fix
+//		if (!level.isClientSide) {
+//			ServerShip contraptionA = (ServerShip) PhysicUtility.getContraptionOfBlock(level, this.getPosition().getNodeApos());
+//			ServerShip contraptionB = (ServerShip) PhysicUtility.getContraptionOfBlock(level, this.getPosition().getNodeBpos());
+//			if (contraptionA != null) ContraptionAttachment.attachIfMissing(contraptionA).notifyNewConduit(level, this, 0);
+//			if (contraptionB != null) ContraptionAttachment.attachIfMissing(contraptionB).notifyNewConduit(level, this, 1);
+//		}
 		return this;
 	}
 	
@@ -48,11 +44,12 @@ public class PlacedConduit {
 		this.conduit.updatePhysicalNodes(level, this);
 	}
 	
-	public boolean updateContraptions(Level level, PhysShip contraption, int nodeId) {
-		if (this.shape == null) return false;
-		this.conduit.updateContraptionForces(level, contraption, this, nodeId);
-		return true;
-	}
+	// TODO Remove if not able to fix
+//	public boolean updateContraptions(Level level, PhysShip contraption, int nodeId) {
+//		if (this.shape == null) return false;
+//		this.conduit.updateContraptionForces(level, contraption, this, nodeId);
+//		return true;
+//	}
 	
 	public CompoundTag save() {
 		CompoundTag tag = new CompoundTag();

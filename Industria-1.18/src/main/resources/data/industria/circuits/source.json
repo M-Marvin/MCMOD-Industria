@@ -1,4 +1,5 @@
 {
-	"Properties": [ "nominal_current", "nominal_voltage" ],
-	"Networks": [ "VDC", "GND" ]
+	"Properties": [ "id", "nominal_current", "nominal_voltage" ],
+	"Networks": [ "VDC", "GND" ],
+	"IdProperty": "id"
 }

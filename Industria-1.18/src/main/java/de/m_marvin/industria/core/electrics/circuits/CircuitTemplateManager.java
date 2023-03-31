@@ -41,9 +41,16 @@ public class CircuitTemplateManager extends SimplePreparableReloadListener<Map<R
 	private final String directory;
 	private Map<ResourceLocation, CircuitTemplate> byLocation = new HashMap<>();
 	
+	private static CircuitTemplateManager instance;
+	
 	@SubscribeEvent
 	public static void addReloadListenerEvent(AddReloadListenerEvent event) {
-		event.addListener(new CircuitTemplateManager(new Gson(), "circuits"));
+		instance = new CircuitTemplateManager(new Gson(), "circuits");
+		event.addListener(instance);
+	}
+	
+	public static CircuitTemplateManager getInstance() {
+		return instance;
 	}
 	
 	public CircuitTemplateManager(Gson gson, String directory) {
@@ -52,6 +59,10 @@ public class CircuitTemplateManager extends SimplePreparableReloadListener<Map<R
 	}
 	
 	public CircuitTemplate getTemplate(ResourceLocation location) {
+		if (!this.byLocation.containsKey(location)) {
+			this.byLocation.put(location, new CircuitTemplate(new String[] {}, new String[] {}, "", ""));
+			LOGGER.error("Couldn't find circuit template '" + location + "'!");
+		}
 		return this.byLocation.get(location);
 	}
 	
@@ -62,7 +73,7 @@ public class CircuitTemplateManager extends SimplePreparableReloadListener<Map<R
 	protected ResourceLocation getPreparedJsonPath(ResourceLocation rl) {
 		return new ResourceLocation(rl.getNamespace(), this.directory + "/" + rl.getPath() + PATH_JSON_SUFIX);
 	}
-
+	
 	protected ResourceLocation getPreparedNetPath(ResourceLocation rl) {
 		return new ResourceLocation(rl.getNamespace(), this.directory + "/" + rl.getPath() + PATH_NET_SUFIX);
 	}
@@ -76,7 +87,8 @@ public class CircuitTemplateManager extends SimplePreparableReloadListener<Map<R
 			return file.endsWith(PATH_JSON_SUFIX);
 		})) {
 			String path = resourceLocation.getPath();
-			ResourceLocation namedLocation = new ResourceLocation(resourceLocation.getNamespace(), path.substring(0, path.length() - PATH_JSON_SUFIX.length()));
+			int i = path.indexOf("/");
+			ResourceLocation namedLocation = new ResourceLocation(resourceLocation.getNamespace(), path.substring(i + 1, path.length() - PATH_JSON_SUFIX.length()));
 			
 			try {
 				Resource resource = resourceManager.getResource(resourceLocation);
@@ -90,8 +102,9 @@ public class CircuitTemplateManager extends SimplePreparableReloadListener<Map<R
 						
 						String[] properties = gson.fromJson(json.get("Properties"), String[].class);
 						String[] networks = gson.fromJson(json.get("Networks"), String[].class);
+						String idProperty = json.get("IdProperty").getAsString();
 						
-						Resource netResource = resourceManager.getResource(new ResourceLocation(resourceLocation.getNamespace(), namedLocation.getPath() + PATH_NET_SUFIX));
+						Resource netResource = resourceManager.getResource(new ResourceLocation(resourceLocation.getNamespace(), path.substring(0, path.length() - PATH_JSON_SUFIX.length()) + PATH_NET_SUFIX));
 						InputStream netInputStream = netResource.getInputStream();
 						BufferedReader netReader = new BufferedReader(new InputStreamReader(netInputStream, StandardCharsets.UTF_8));
 						
@@ -103,7 +116,7 @@ public class CircuitTemplateManager extends SimplePreparableReloadListener<Map<R
 						
 						netReader.close();
 						
-						CircuitTemplate circuit = map.put(namedLocation, new CircuitTemplate(networks, properties, netBuilder.toString()));
+						CircuitTemplate circuit = map.put(namedLocation, new CircuitTemplate(networks, properties, netBuilder.toString(), idProperty));
 						if (circuit != null) {
 							throw new IllegalStateException("Duplicate circuit template file ignored with ID " + namedLocation);
 						}
@@ -126,26 +139,7 @@ public class CircuitTemplateManager extends SimplePreparableReloadListener<Map<R
 
 	@Override
 	protected void apply(Map<ResourceLocation, CircuitTemplate> map, ResourceManager pResourceManager, ProfilerFiller pProfiler) {
-		
-		List<ResourceLocation> notVerifyed = new ArrayList<>();
-		for (Entry<ResourceLocation, CircuitTemplate> entry : map.entrySet()) {
-			
-			CircuitTemplate template = entry.getValue();
-			template.setDefault();
-			String circuit = template.plot();
-			
-			if (!SPICE.loadCircuit(circuit)) {
-				notVerifyed.add(entry.getKey());
-				LOGGER.error("Couldn't verify circuit template ", entry.getKey());
-			}
-			
-		}
-		
-		notVerifyed.forEach(map::remove);
 		this.byLocation = map;
-		
-		LOGGER.info("Verified " + map.size() + " circuit templates");
-		
 	}
 	
 }

@@ -4,11 +4,8 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.logging.log4j.Level;
-
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.core.Config;
-import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.nglink.NativeExtractor;
 import de.m_marvin.nglink.NativeNGLink;
 import de.m_marvin.nglink.NativeNGLink.PlotDescription;
@@ -26,7 +23,9 @@ public class SPICE {
 	private static HashMap<String, Double> ngVecData;
 	
 	static {
-		if (!NativeNGLink.loadedSuccessfully()) throw new IllegalStateException("Failed to load natives for nglink in SPICE class!");
+		if (!NativeNGLink.loadedSuccessfully()) {
+			throw new IllegalStateException("Failed to load natives for nglink in SPICE class!");
+		}
 		nglink = new NativeNGLink();
 		callbackInitialized = false;
 		ngVecData = new HashMap<String, Double>();
@@ -45,7 +44,7 @@ public class SPICE {
 		callbackInitialized = false;
 	}
 	
-	public static void makeReady() {
+	public static void makeReady() throws FileNotFoundException {
 
 		if (!nglink.isInitialized() || !callbackInitialized) {
 			nglink.initNGLink(new NativeNGLink.NGCallback() {
@@ -71,61 +70,58 @@ public class SPICE {
 				}
 			});
 			callbackInitialized = true;
+			
 		}
 		
 	}
 	
-	public static boolean loadCircuit(String circuit) {
-		makeReady();
+	public static boolean initSpice() {
 		try {
-			
-			ngVecData.clear();
-			if (nglink.initNGSpice(NativeExtractor.findNative("ngspice")) == 1) {
-				if (nglink.loadCircuit(circuit) == 1) {
-					return true;
-				} else {
-					Industria.LOGGER.error("Couldn't load circuit network!");
-				}
-			} else {
-				Industria.LOGGER.error("Could not init ngspice native!");
-			}
-			return false;
-			
-		} catch (FileNotFoundException e) {
-			Industria.LOGGER.log(org.apache.logging.log4j.Level.FATAL, "Failed to find ngspice native!");
-			e.printStackTrace();
-			return false;
-		}
-	}
-	
-	public static void processCircuit(ElectricNetwork circuit) {
-		
-		if (circuit.isPlotEmpty()) {
-			
-			if (Config.SPICE_DEBUG_LOGGING.get()) Industria.LOGGER.log(org.apache.logging.log4j.Level.WARN, "JNGLINK: Detected spice-call with empty circuit, aborted to prevent crash!");
-			return;
-			
-		}
-		
-		makeReady();
-		
-		try {
-			
-			if (Config.SPICE_DEBUG_LOGGING.get()) Industria.LOGGER.log(Level.DEBUG, "SPICE circuit result:\n" + circuit.toString() + "\nStarting simmulation ...");
-			
-			ngVecData.clear();
 			nglink.initNGSpice(NativeExtractor.findNative("ngspice"));
-			nglink.loadCircuit(circuit.toString());
-			nglink.execCommand("op");
-			nglink.detachNGSpice();
-			
-			if (Config.SPICE_DEBUG_LOGGING.get())Industria.LOGGER.log(Level.DEBUG, "Done");
-			
+			return true;
 		} catch (FileNotFoundException e) {
 			Industria.LOGGER.log(org.apache.logging.log4j.Level.FATAL, "Failed to find ngspice native!");
 			e.printStackTrace();
+			return false;
 		}
-		
 	}
+	
+	public static void loadCircuit(String circuit) {
+		nglink.loadCircuit(circuit);
+	}
+	
+	public static void detacheSpice() {
+		nglink.detachNGSpice();
+	}
+	
+//	public static void processCircuit(ElectricNetwork circuit) {
+//		
+//		if (circuit.isPlotEmpty()) {
+//			
+//			if (Config.SPICE_DEBUG_LOGGING.get()) Industria.LOGGER.log(org.apache.logging.log4j.Level.WARN, "JNGLINK: Detected spice-call with empty circuit, aborted to prevent crash!");
+//			return;
+//			
+//		}
+//		
+//		//makeReady();
+//		
+//		try {
+//			
+//			if (Config.SPICE_DEBUG_LOGGING.get()) Industria.LOGGER.log(Level.DEBUG, "SPICE circuit result:\n" + circuit.toString() + "\nStarting simmulation ...");
+//			
+//			ngVecData.clear();
+//			nglink.initNGSpice(NativeExtractor.findNative("ngspice"));
+//			nglink.loadCircuit(circuit.toString());
+//			nglink.execCommand("op");
+//			nglink.detachNGSpice();
+//			
+//			if (Config.SPICE_DEBUG_LOGGING.get())Industria.LOGGER.log(Level.DEBUG, "Done");
+//			
+//		} catch (FileNotFoundException e) {
+//			Industria.LOGGER.log(org.apache.logging.log4j.Level.FATAL, "Failed to find ngspice native!");
+//			e.printStackTrace();
+//		}
+//		
+//	}
 	
 }

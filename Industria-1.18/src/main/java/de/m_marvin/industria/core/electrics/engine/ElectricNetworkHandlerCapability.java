@@ -11,6 +11,7 @@ import de.m_marvin.industria.core.conduits.engine.ConduitEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitPlaceEvent;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.conduits.IElectricConduit;
+import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.IElectric;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
@@ -211,8 +212,8 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			}
 			return null;
 		}
-		public void plotCircuit(Level level, ElectricNetwork circuit) {
-			type.plotCircuit(level, instance, pos, circuit);
+		public CircuitTemplate plotCircuit(Level level, ElectricNetwork circuit) {
+			return type.plotCircuit(level, instance, pos, circuit);
 		}
 		public NodePos[] getNodes(Level level) {
 			return type.getConnections(level, pos, instance);
@@ -274,46 +275,46 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		return 0D;
 	}
 	
-	/*
-	 * Returns the serial resistance between two nodes calculated last time the network was updated
-	 */
-	public double getSerialResistance(NodePos nodeA, NodePos nodeB) {
-		Set<Component<?, ?, ?>> components = this.node2componentMap.get(nodeA);
-		if (components != null && components.size() > 0) {
-			ElectricNetwork circuit = getCircuit(components.stream().findAny().get()); // .toArray(new Component<?, ?, ?>[] {})[0]
-			if (circuit != null) {
-				double resistance =  circuit.getSerialResistance(nodeA, nodeB);
-				return Double.isFinite(resistance) ? resistance : Double.MAX_VALUE;
-			}
-		}
-		return Double.MAX_VALUE;
-	}
+//	/*
+//	 * Returns the serial resistance between two nodes calculated last time the network was updated
+//	 */
+//	public double getSerialResistance(NodePos nodeA, NodePos nodeB) {
+//		Set<Component<?, ?, ?>> components = this.node2componentMap.get(nodeA);
+//		if (components != null && components.size() > 0) {
+//			ElectricNetwork circuit = getCircuit(components.stream().findAny().get()); // .toArray(new Component<?, ?, ?>[] {})[0]
+//			if (circuit != null) {
+//				double resistance =  circuit.getSerialResistance(nodeA, nodeB);
+//				return Double.isFinite(resistance) ? resistance : Double.MAX_VALUE;
+//			}
+//		}
+//		return Double.MAX_VALUE;
+//	}
 	
-	/*
-	 * Returns the parallel resistance (resistance to ground) for the node calculated last time the network was updated
-	 * Ignores the resistance of other components connected to the node via a wire
-	 */
-	public double getParallelResistance(NodePos node) {
-		Set<Component<?, ?, ?>> components = this.node2componentMap.get(node);
-		if (components != null && components.size() > 0) {
-			ElectricNetwork circuit = getCircuit(components.toArray(new Component<?, ?, ?>[] {})[0]);
-			if (circuit != null) {
-				double resistance =  circuit.getParallelResistance(node);
-				return Double.isFinite(resistance) ? resistance : Double.MAX_VALUE;
-			}
-		}
-		return Double.MAX_VALUE;
-	}
+//	/*
+//	 * Returns the parallel resistance (resistance to ground) for the node calculated last time the network was updated
+//	 * Ignores the resistance of other components connected to the node via a wire
+//	 */
+//	public double getParallelResistance(NodePos node) {
+//		Set<Component<?, ?, ?>> components = this.node2componentMap.get(node);
+//		if (components != null && components.size() > 0) {
+//			ElectricNetwork circuit = getCircuit(components.toArray(new Component<?, ?, ?>[] {})[0]);
+//			if (circuit != null) {
+//				double resistance =  circuit.getParallelResistance(node);
+//				return Double.isFinite(resistance) ? resistance : Double.MAX_VALUE;
+//			}
+//		}
+//		return Double.MAX_VALUE;
+//	}
 	
-	/*
-	 * Returns the current flowing between two nodes calculated last time the network was updated
-	 */
-	public double getCurrent(Component<?, ?, ?> component, NodePos nodeA, NodePos nodeB) {
-		double voltageA = getVoltageAt(nodeA);
-		double voltageB = getVoltageAt(nodeB);
-		double resistance = getSerialResistance(nodeA, nodeB);
-		return Math.abs(voltageA - voltageB) / resistance;
-	}
+//	/*
+//	 * Returns the current flowing between two nodes calculated last time the network was updated
+//	 */
+//	public double getCurrent(Component<?, ?, ?> component, NodePos nodeA, NodePos nodeB) {
+//		double voltageA = getVoltageAt(nodeA);
+//		double voltageB = getVoltageAt(nodeB);
+//		double resistance = getSerialResistance(nodeA, nodeB);
+//		return Math.abs(voltageA - voltageB) / resistance;
+//	}
 	
 	/*
 	 * Removes a component from the network and updates it and its components
@@ -348,7 +349,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				return;
 			} else {
 				removeFromNetwork(pos);
-				
 			}
 		}
 		Component<I, P, T> component2 = new Component<I, P, T>(pos, type, instance);
@@ -404,15 +404,15 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			if (!this.circuitNetworks.contains(circuit)) this.circuitNetworks.add(circuit);
 			
 			final ElectricNetwork circuitFinalized = circuit;
-			if (!circuitFinalized.isPlotEmpty()) {
-				SPICE.processCircuit(circuit);
-				SPICE.vectorData().keySet().stream().filter((s) -> s.startsWith("node")).forEach((hashName) ->  {
-					Set<NodePos> nodes = circuitFinalized.getNodes(hashName);
-					if (nodes != null) {
-						nodes.forEach((node) -> circuitFinalized.getNodeVoltages().put(node, SPICE.vectorData().get(hashName)));
-					}
-				});
-			}
+//			if (!circuitFinalized.isPlotEmpty()) {
+//				SPICE.processCircuit(circuit);
+//				SPICE.vectorData().keySet().stream().filter((s) -> s.startsWith("node")).forEach((hashName) ->  {
+//					Set<NodePos> nodes = circuitFinalized.getNodes(hashName);
+//					if (nodes != null) {
+//						nodes.forEach((node) -> circuitFinalized.getNodeVoltages().put(node, SPICE.vectorData().get(hashName)));
+//					}
+//				});
+//			}
 			
 			circuit.getComponents().forEach((comp) -> {
 				ElectricNetwork previousNetwork = this.component2circuitMap.put(comp, circuitFinalized);
@@ -438,7 +438,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		
 		if (circuit.getComponents().contains(component)) return;
 		circuit.getComponents().add(component);
-		component.plotCircuit(level, circuit);
+		circuit.plotTemplate(component, component.plotCircuit(level, circuit));
 		
 		for (NodePos node2 : component.getNodes(level)) {
 			if (node2.equals(node) || this.node2componentMap.get(node2) == null) continue; 

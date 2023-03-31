@@ -1,6 +1,10 @@
 package de.m_marvin.industria.core.conduits.types;
 
+import java.io.StringReader;
 import java.util.Objects;
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.univec.impl.Vec3d;
@@ -209,18 +213,29 @@ public class ConduitPos {
 		
 		@Override
 		public String toString() {
-			return "NodePos{block=[" + this.block.getX() + "," + this.block.getY() + "," + this.block.getZ() + "],node=" + this.node + "}";
+			return "NodePos{block=[" + this.block.asLong() + "],node=" + this.node + "}";
 		}
 		
-		public String getKeyString() {
-			return "Node{pos=" + this.block.asLong() + ",id=" + this.node + "}";
+		public String getKeyString(String lane) {
+			return "Node{pos=" + this.block.asLong() + ",id=" + this.node + ",lane=" + lane + "}";
+		}
+		
+		public static String getLaneName(String keyString) {
+			try {
+				Properties props = new Properties();
+				props.load(new StringReader(keyString));
+				return props.getProperty("lane");
+			} catch (Exception e) {
+				return "";
+			}
 		}
 		
 		public static NodePos getFromKeyString(String keyString) {
 			try {
-				String[] s = keyString.split("pos=")[1].split("}")[0].split(",id=");
-				BlockPos position = BlockPos.of(Long.valueOf(s[0]));
-				int node = Integer.valueOf(s[1]);
+				Properties props = new Properties();
+				props.load(new StringReader(keyString));
+				BlockPos position = BlockPos.of(Long.valueOf(props.getProperty("pos")));
+				int node = Integer.valueOf(props.getProperty("id"));
 				return new NodePos(position, node);
 			} catch (Exception e) {
 				return null;

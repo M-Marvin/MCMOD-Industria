@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import de.m_marvin.industria.core.conduits.registry.Conduits;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
+import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
 import de.m_marvin.industria.core.registries.ModCapabilities;
 import de.m_marvin.industria.core.util.GameUtility;
@@ -23,7 +24,7 @@ public interface IElectric<I, P, T> extends IForgeRegistryEntry<T> {
 	}
 	
 	public default void onNetworkNotify(Level level, I instance, P position) {}
-	public void plotCircuit(Level level, I instance, P position, ElectricNetwork circuit);
+	public CircuitTemplate plotCircuit(Level level, I instance, P position, ElectricNetwork circuit);
 	public void serializeNBT(I instance, P position, CompoundTag nbt);
 	public I deserializeNBTInstance(CompoundTag nbt);
 	public P deserializeNBTPosition(CompoundTag nbt);

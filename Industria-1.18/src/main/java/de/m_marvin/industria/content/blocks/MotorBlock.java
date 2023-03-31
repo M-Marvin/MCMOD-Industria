@@ -12,6 +12,7 @@ import de.m_marvin.industria.core.conduits.registry.ConduitConnectionTypes;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
+import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
@@ -122,7 +123,7 @@ public class MotorBlock extends Block implements IElectricConnector {
 //	}
 	
 	@Override
-	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit) {
+	public CircuitTemplate plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit) {
 //		ConnectionPoint[] points = CONDUIT_NODES.getNodes(position, instance);
 //		BlockEntity blockEntity = level.getBlockEntity(position);
 //		if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR && blockEntity instanceof GeneratorBlockEntity) {
@@ -132,6 +133,7 @@ public class MotorBlock extends Block implements IElectricConnector {
 //		}
 //		circuit.addSerialResistance(points[0], points[1], 0);
 //		circuit.addSerialResistance(points[1], points[2], 0);
+		return null;
 	}
 	
 	@Override

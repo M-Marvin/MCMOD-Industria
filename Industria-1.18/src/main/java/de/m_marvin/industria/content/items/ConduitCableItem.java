@@ -1,8 +1,9 @@
-package de.m_marvin.industria.core.conduits.types.items;
+package de.m_marvin.industria.content.items;
 
 import java.util.function.Supplier;
 
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
+import de.m_marvin.industria.core.conduits.types.items.AbstractConduitItem;
 import net.minecraft.world.item.ItemStack;
 
 public class ConduitCableItem extends AbstractConduitItem {

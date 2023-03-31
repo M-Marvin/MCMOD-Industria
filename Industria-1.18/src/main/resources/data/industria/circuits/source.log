@@ -1,0 +1,15 @@
+Questionable use of curly braces in "i1 n003 n002 ${nominal_current}"
+    Error: undefined symbol in: "[nominal_current]"
+Questionable use of curly braces in "v1 n001 n002 ${nominal_voltage}"
+    Error: undefined symbol in: "[nominal_voltage]"
+Questionable use of curly braces in "i2 n003 0 ${nominal_current}"
+    Error: undefined symbol in: "[nominal_current]"
+Circuit: * E:\GitHub\MCMOD-Industria\Versandordner\NGspice\Generator.asc
+
+Error on line 2 : i1 n003 n002 $(nominal_current)
+	 Unknown parameter "$"
+Error on line 3 : v1 n001 n002 $(nominal_voltage)
+	 Unknown parameter "$"
+Error on line 4 : i2 n003 0 $(nominal_current)
+	 Unknown parameter "$"
+Fatal Error: No analysis request found.

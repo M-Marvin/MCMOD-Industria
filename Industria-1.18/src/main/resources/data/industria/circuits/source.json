@@ -1,0 +1,4 @@
+{
+	"Properties": [ "nominal_current", "nominal_voltage" ],
+	"Networks": [ "VDC", "GND" ]
+}

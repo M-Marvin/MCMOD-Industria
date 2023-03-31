@@ -9,6 +9,7 @@ import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.apigame.constraints.VSConstraint;
 import org.valkyrienskies.core.apigame.constraints.VSRopeConstraint;
 
+import de.m_marvin.industria.content.items.ConduitCableItem;
 import de.m_marvin.industria.content.registries.ModParticleTypes;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.engine.particles.ConduitParticleOption;
@@ -16,7 +17,6 @@ import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
-import de.m_marvin.industria.core.conduits.types.items.ConduitCableItem;
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;

@@ -57,6 +57,9 @@ public class MotorBlock extends Block implements IElectricConnector {
 	
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		
+		
+		
 		Direction facing = state.getValue(BlockStateProperties.FACING);
 		if (facing.getAxis() == Axis.Y) {
 			return facing.getAxisDirection() == AxisDirection.POSITIVE ? BLOCK_SHAPE_VERTICAL : VoxelShapeUtility.rotateShape(BLOCK_SHAPE_VERTICAL, new Vec3f(8, 8, 8), Math.PI, false, Axis.X);

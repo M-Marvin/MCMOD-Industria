@@ -21,7 +21,7 @@ public class MotorBlockEntity extends BlockEntity implements IIngameTooltip {
 	public MotorBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.MOTOR.get(), pos, state);
 	}
-		
+	
 //	@Override
 //	public float getGeneratedSpeed() {
 //		return this.rpm;

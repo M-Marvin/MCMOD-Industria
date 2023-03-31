@@ -45,15 +45,8 @@ public class SPICE {
 		callbackInitialized = false;
 	}
 	
-	public static void processCircuit(ElectricNetwork circuit) {
-		
-		if (circuit.isPlotEmpty()) {
-			
-			if (Config.SPICE_DEBUG_LOGGING.get()) Industria.LOGGER.log(org.apache.logging.log4j.Level.WARN, "JNGLINK: Detected spice-call with empty circuit, aborted to prevent crash!");
-			return;
-			
-		}
-		
+	public static void makeReady() {
+
 		if (!nglink.isInitialized() || !callbackInitialized) {
 			nglink.initNGLink(new NativeNGLink.NGCallback() {
 				@Override
@@ -79,6 +72,42 @@ public class SPICE {
 			});
 			callbackInitialized = true;
 		}
+		
+	}
+	
+	public static boolean loadCircuit(String circuit) {
+		makeReady();
+		try {
+			
+			ngVecData.clear();
+			if (nglink.initNGSpice(NativeExtractor.findNative("ngspice")) == 1) {
+				if (nglink.loadCircuit(circuit) == 1) {
+					return true;
+				} else {
+					Industria.LOGGER.error("Couldn't load circuit network!");
+				}
+			} else {
+				Industria.LOGGER.error("Could not init ngspice native!");
+			}
+			return false;
+			
+		} catch (FileNotFoundException e) {
+			Industria.LOGGER.log(org.apache.logging.log4j.Level.FATAL, "Failed to find ngspice native!");
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public static void processCircuit(ElectricNetwork circuit) {
+		
+		if (circuit.isPlotEmpty()) {
+			
+			if (Config.SPICE_DEBUG_LOGGING.get()) Industria.LOGGER.log(org.apache.logging.log4j.Level.WARN, "JNGLINK: Detected spice-call with empty circuit, aborted to prevent crash!");
+			return;
+			
+		}
+		
+		makeReady();
 		
 		try {
 			

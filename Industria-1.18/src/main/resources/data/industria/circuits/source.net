@@ -1,0 +1,9 @@
+* E:\GitHub\MCMOD-Industria\Versandordner\NGspice\Generator.asc
+I1 N003 N002 P{nominal_current}
+V1 N001 N002 P{nominal_voltage}
+I2 N003 N{GND} P{nominal_current}
+S4 N{VDC} N001 N001 N{VDC} diosw
+S5 N003 N002 N002 N003 diosw
+S6 N003 N{GND} N{GND} N003 diosw
+.model diosw sw vt=0 vh=0.001 ron=0.001 roff=10e9
+.end

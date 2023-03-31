@@ -1,0 +1,37 @@
+Circuit: * E:\GitHub\MCMOD-Industria\Versandordner\NGspice\Generator-Test diode.asc
+
+Direct Newton iteration for .op point succeeded.
+Semiconductor Device Operating Points:
+                        --- Diodes ---
+Name:      d6          d5          d4          d3          d2
+Model:      d           d           d           d           d
+Id:      3.00e+00   -1.20e-07    6.00e+00    3.00e+00    3.00e+00
+Vd:      3.00e-03   -1.20e+02    6.00e-03    3.00e-03    3.00e-03
+Req:     1.00e+03    1.00e-09    1.00e+03    1.00e+03    1.00e+03
+CAP:     0.00e+00    0.00e+00    0.00e+00    0.00e+00    0.00e+00
+
+Name:      d1
+Model:      d
+Id:     -1.10e-07
+Vd:     -1.10e+02
+Req:     1.00e-09
+CAP:     0.00e+00
+
+
+
+Date: Fri Mar 31 00:50:18 2023
+Total elapsed time: 0.026 seconds.
+
+tnom = 27
+temp = 27
+method = trap
+totiter = 8
+traniter = 0
+tranpoints = 0
+accept = 0
+rejected = 0
+matrix size = 9
+fillins = 8
+solver = Normal
+Matrix Compiler1: 584 bytes object code size
+Matrix Compiler2: 735 bytes object code size

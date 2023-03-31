@@ -1,9 +1,9 @@
 package de.m_marvin.industria.content.registries;
 
 import de.m_marvin.industria.Industria;
+import de.m_marvin.industria.content.items.ConduitCableItem;
 import de.m_marvin.industria.content.items.ScrewDriverItem;
 import de.m_marvin.industria.core.conduits.registry.Conduits;
-import de.m_marvin.industria.core.conduits.types.items.ConduitCableItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;

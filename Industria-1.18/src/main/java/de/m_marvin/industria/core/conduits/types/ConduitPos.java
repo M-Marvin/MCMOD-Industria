@@ -48,7 +48,7 @@ public class ConduitPos {
 		BlockState nodeAstate = level.getBlockState(this.nodeA.getBlock());
 		if (nodeAstate.getBlock() instanceof IConduitConnector nodeAconnector) {
 			ConduitNode nodeA = nodeAconnector.getConduitNode(level, this.nodeA.getBlock(), nodeAstate, this.nodeA.getNode());
-			if (nodeA != null && nodeB != null) {
+			if (nodeA != null && this.nodeA != null) {
 				return nodeA.getWorldPosition(level, this.nodeA.getBlock());
 			}
 		}
@@ -59,7 +59,7 @@ public class ConduitPos {
 		BlockState nodeAstate = level.getBlockState(this.nodeA.getBlock());
 		if (nodeAstate.getBlock() instanceof IConduitConnector nodeAconnector) {
 			ConduitNode nodeA = nodeAconnector.getConduitNode(level, this.nodeA.getBlock(), nodeAstate, this.nodeA.getNode());
-			if (nodeA != null && nodeB != null) {
+			if (nodeA != null && this.nodeA != null) {
 				return nodeA.getContraptionPosition(this.nodeA.getBlock());
 			}
 		}
@@ -68,9 +68,9 @@ public class ConduitPos {
 
 	public Vec3d calculateWorldNodeB(Level level) {
 		BlockState nodeBstate = level.getBlockState(this.nodeB.getBlock());
-		if (nodeBstate.getBlock() instanceof IConduitConnector nodeAconnector) {
-			ConduitNode nodeB = nodeAconnector.getConduitNode(level, this.nodeB.getBlock(), nodeBstate, this.nodeB.getNode());
-			if (nodeB != null && nodeB != null) {
+		if (nodeBstate.getBlock() instanceof IConduitConnector nodeBconnector) {
+			ConduitNode nodeB = nodeBconnector.getConduitNode(level, this.nodeB.getBlock(), nodeBstate, this.nodeB.getNode());
+			if (nodeB != null && this.nodeB != null) {
 				return nodeB.getWorldPosition(level, this.nodeB.getBlock());
 			}
 		}
@@ -79,9 +79,9 @@ public class ConduitPos {
 
 	public Vec3d calculateContraptionNodeB(Level level) {
 		BlockState nodeBstate = level.getBlockState(this.nodeB.getBlock());
-		if (nodeBstate.getBlock() instanceof IConduitConnector nodeAconnector) {
-			ConduitNode nodeB = nodeAconnector.getConduitNode(level, this.nodeB.getBlock(), nodeBstate, this.nodeB.getNode());
-			if (nodeB != null && nodeB != null) {
+		if (nodeBstate.getBlock() instanceof IConduitConnector nodeBconnector) {
+			ConduitNode nodeB = nodeBconnector.getConduitNode(level, this.nodeB.getBlock(), nodeBstate, this.nodeB.getNode());
+			if (nodeB != null && this.nodeB != null) {
 				return nodeB.getContraptionPosition(this.nodeB.getBlock());
 			}
 		}

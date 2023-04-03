@@ -79,6 +79,8 @@ public abstract class AbstractConduitItem extends Item implements IScrollOverrid
 					int secondNodeId = tryGetNode(context, secondNodePos);
 					if (secondNodeId >= 0) {
 						float placementLengthModifier = Math.max(itemTag.getFloat("Length"), 1);
+
+						System.out.println(firstNodePos + " - " + firstNodeId + " --- " + secondNodePos + " - " + secondNodeId);
 						ConduitPos conduitPos = new ConduitPos(firstNodePos, secondNodePos, firstNodeId, secondNodeId);
 						
 						int conduitLengthBlocks = (int) Math.ceil(conduitPos.calculateMinConduitLength(context.getLevel()) * placementLengthModifier);
@@ -133,7 +135,7 @@ public abstract class AbstractConduitItem extends Item implements IScrollOverrid
 			double distance = 2;
 			ConduitNode[] nodes = ((IConduitConnector) nodeState.getBlock()).getConduitNodes(level, pos, nodeState);
 			for (int nodeId = 0; nodeId < nodes.length; nodeId++) {
-				double nodeDist = nodes[nodeId].getOffset().sub(Vec3d.fromVec(context.getClickLocation()).sub(Vec3d.fromVec(pos)).mul(16.0, 16.0, 16.0)).length() / 16;
+				double nodeDist = nodes[nodeId].getOffset().sub(Vec3d.fromVec(context.getClickLocation()).sub(Vec3d.fromVec(pos)).mul(16.0, 16.0, 16.0)).length() / 16D;
 				if (nodeDist < distance) {
 					if (ConduitUtility.getConduitsAtNode(level, pos, nodeId).size() < nodes[nodeId].getMaxConnections()) {
 						nearestNode = nodeId;

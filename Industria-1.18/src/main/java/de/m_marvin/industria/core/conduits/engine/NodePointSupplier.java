@@ -21,6 +21,10 @@ public class NodePointSupplier {
 	protected List<ConduitNode> nodes = new ArrayList<>();
 	protected Map<Property<?>, BiFunction<Vec3i, Object, Vec3i>> modifiers = new HashMap<>();
 	
+	private NodePointSupplier() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	public static NodePointSupplier define() {
 		return new NodePointSupplier();
 	}
@@ -32,11 +36,11 @@ public class NodePointSupplier {
 	}
 	
 	public NodePointSupplier addNodesAround(Axis axis, NodeType type, int maxConnections, Vec3i position) {
-		for (Direction d : Direction.values()) {
-			if (d.getAxis() != axis) {
-				Vec3i orientedPosition = MathUtility.rotatePoint(position, (float) MathUtility.directionAngleDegrees(d), true, axis);
-				this.nodes.add(new ConduitNode(type, maxConnections, orientedPosition));
-			}
+		for (int i = 0; i < 360; i += 90) {
+			Vec3i orientedPosition = MathUtility.rotatePoint(position.sub(8, 8, 8), i, true, axis).add(8, 8, 8);
+			System.out.println(i + " -> " + orientedPosition);
+			this.nodes.add(new ConduitNode(type, maxConnections, orientedPosition));
+			this.positions.add(orientedPosition);
 		}
 		return this;
 	}
@@ -52,26 +56,35 @@ public class NodePointSupplier {
 	
 	public static final Vec3i BLOCK_CENTER = new Vec3i(8, 8, 8);
 	
-	public static final BiFunction<Vec3i, Object, Vec3i> FACING_HORIZONTAL_MODIFIER_DEFAULT_NORTH = (position, prop) -> MathUtility.rotatePoint(position.sub(BLOCK_CENTER), (float) MathUtility.directionAngleDegrees((Direction) prop), true, Axis.Y).add(BLOCK_CENTER);
-	public static final BiFunction<Vec3i, Object, Vec3i> FACING_MODIFIER_DEFAULT_NORTH = (position, prop) -> MathUtility.rotatePoint(position.sub(BLOCK_CENTER), (float) MathUtility.directionAngleDegrees((Direction) prop), true, ((Direction) prop).getAxis() == Axis.Y ? Axis.X : Axis.Y).add(BLOCK_CENTER);
+	public static final BiFunction<Vec3i, Object, Vec3i> FACING_HORIZONTAL_MODIFIER_DEFAULT_NORTH = (position, prop) -> MathUtility.rotatePoint(position.sub(BLOCK_CENTER), (float) MathUtility.directionHoriziontalAngleDegrees((Direction) prop), true, Axis.Y).add(BLOCK_CENTER);
+	public static final BiFunction<Vec3i, Object, Vec3i> FACING_MODIFIER_DEFAULT_NORTH = (position, prop) -> MathUtility.rotatePoint(position.sub(BLOCK_CENTER), (float) MathUtility.directionHoriziontalAngleDegrees((Direction) prop), true, ((Direction) prop).getAxis() == Axis.Y ? Axis.X : Axis.Y).add(BLOCK_CENTER);
 	
 	public NodePointSupplier addModifier(Property<?> property, BiFunction<Vec3i, Object, Vec3i> modifier) {
 		this.modifiers.put(property, modifier);
 		return this;
 	}
 	
-	public NodePointSupplier updateNodes(BlockState state) {
-		for (Property<?> property : state.getProperties()) {
-			if (this.modifiers.containsKey(property)) {
-				for (int i = 0; i < this.nodes.size(); i++) {
-					Vec3i originalPosition = this.positions.get(i);
-					ConduitNode node = this.nodes.get(i);
-					Vec3i modifiedPosition = this.modifiers.get(property).apply(originalPosition, state);
-					node.changeOffset(modifiedPosition);	
+	protected Map<BlockState, ConduitNode[]> state2nodes = new HashMap<>();
+	
+	public ConduitNode[] getNodes(BlockState state) {
+		if (!state2nodes.containsKey(state)) {
+			List<ConduitNode> nodes = new ArrayList<>();
+			for (int i = 0; i < this.nodes.size(); i++) {
+				nodes.add(new ConduitNode(this.nodes.get(i).getType(),this.nodes.get(i).getMaxConnections(), this.nodes.get(i).getOffset()));
+			}
+			for (Property<?> property : state.getProperties()) {
+				if (this.modifiers.containsKey(property)) {
+					for (int i = 0; i < nodes.size(); i++) {
+						ConduitNode node = nodes.get(i);
+						Vec3i originalPosition = node.getOffset();
+						Vec3i modifiedPosition = this.modifiers.get(property).apply(originalPosition, state.getValue(property));
+						node.changeOffset(modifiedPosition);	
+					}
 				}
 			}
+			state2nodes.put(state, nodes.toArray(i -> new ConduitNode[i]));
 		}
-		return this;
+		return state2nodes.get(state);
 	}
 	
 	public ConduitNode[] getNodes() {

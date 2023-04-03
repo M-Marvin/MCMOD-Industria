@@ -32,5 +32,6 @@ public class ModItems {
 	public static final RegistryObject<ScrewDriverItem> SCREW_DRIVER = ITEMS.register("screw_driver", () -> new ScrewDriverItem(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).stacksTo(1)));
 	
 	public static final RegistryObject<BlockItem> MOTOR = ITEMS.register("motor", () -> new BlockItem(ModBlocks.MOTOR.get(), new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE)));
+	public static final RegistryObject<BlockItem> JUNCTION_BOX = ITEMS.register("junction_box", () -> new BlockItem(ModBlocks.JUNCTION_BOX.get(), new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE)));
 	
 }

@@ -14,6 +14,7 @@ import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -106,7 +107,7 @@ public class MathUtility {
 		return new Vec3d(middleX, middleY, middleZ);
 	}
 	
-	public static double directionAngleDegrees(Direction direction) {
+	public static double directionHoriziontalAngleDegrees(Direction direction) {
 		switch (direction) {
 		case NORTH: return 0;
 		case SOUTH: return 180;
@@ -116,6 +117,20 @@ public class MathUtility {
 		case DOWN: return -90;
 		default: return 0;
 		}
+	}
+	
+	public static Vec3i directionVector(Direction direction) {
+		Vec3i vector = new Vec3i();
+		switch (direction.getAxis()) {
+		case X: vector.setX(1); break;
+		case Y: vector.setY(1); break;
+		case Z: vector.setZ(1); break;
+		}
+		return direction.getAxisDirection() == AxisDirection.POSITIVE ? vector : vector.mul(-1);
+	}
+	
+	public static double directionRelativeAngleDegrees(Direction direction, Direction origin) {
+		return directionVector(direction).angle(directionVector(direction));
 	}
 	
 	public static Vec3d rotatePoint(Vec3d point, float angle, boolean degrees, Axis axis) {
@@ -163,7 +178,8 @@ public class MathUtility {
 	public static Vec3i rotatePoint(Vec3i point, Vec3f axis, float angle, boolean degrees) {
 		if (degrees) angle = (float) Math.toRadians(angle);
 		Quaternion quat = new Quaternion(axis, angle);
-		return point.transform(quat);
+		Vec3f transform = new Vec3f(point).transform(quat);
+		return new Vec3i(Math.round(transform.x), Math.round(transform.y), Math.round(transform.z));
 	}
 	
 	public static boolean isInChunk(ChunkPos chunk, BlockPos block) {

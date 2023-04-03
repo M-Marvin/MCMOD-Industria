@@ -13,7 +13,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class VoxelShapeUtility {
 	
 	public static VoxelShape rotateShape(VoxelShape shape, Vec3f rotationPoint, Direction direction, Axis axis) {
-		return rotateShape(shape, rotationPoint, MathUtility.directionAngleDegrees(direction), true, axis); 
+		return rotateShape(shape, rotationPoint, MathUtility.directionHoriziontalAngleDegrees(direction), true, axis); 
 	}
 	
 	public static VoxelShape rotateShape(VoxelShape shape, Vec3f rotationPoint, double angle, boolean degrees, Axis axis) {

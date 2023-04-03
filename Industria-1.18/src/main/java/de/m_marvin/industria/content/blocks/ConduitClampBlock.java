@@ -109,7 +109,7 @@ public class ConduitClampBlock extends Block implements IConduitConnector {
 	
 	@Override
 	public ConduitNode[] getConduitNodes(Level level, BlockPos pos, BlockState state) {
-		return CONDUIT_NODES.updateNodes(state).getNodes();
+		return CONDUIT_NODES.getNodes();
 	}
 	
 }

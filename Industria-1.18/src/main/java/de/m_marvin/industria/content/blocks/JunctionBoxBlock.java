@@ -1,9 +1,7 @@
 package de.m_marvin.industria.content.blocks;
 
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
-import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.core.client.registries.NodeTypes;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
@@ -19,11 +17,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
@@ -35,7 +31,9 @@ public class JunctionBoxBlock extends Block implements IElectricConnector {
 	
 	public static final VoxelShape BLOCK_SHAPE = Block.box(3, 0, 3, 13, 3, 13);
 	
-	public static final NodePointSupplier NODE_POINTS = NodePointSupplier.define().addNodesAround(Axis.Z, NodeTypes.ALL, 1, new Vec3i(8, 3, 1)).addModifier(BlockStateProperties.FACING, NodePointSupplier.FACING_MODIFIER_DEFAULT_NORTH);
+	public static final NodePointSupplier NODE_POINTS = NodePointSupplier.define()
+			.addNodesAround(Axis.Z, NodeTypes.ALL, 1, new Vec3i(8, 3, 1))
+			.addModifier(BlockStateProperties.FACING, NodePointSupplier.FACING_MODIFIER_DEFAULT_NORTH);
 	public static final int NODE_COUNT = 4;
 	
 	public JunctionBoxBlock(Properties pProperties) {
@@ -71,7 +69,7 @@ public class JunctionBoxBlock extends Block implements IElectricConnector {
 	@Override
 	public CircuitTemplate plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit) {
 		// TODO Auto-generated method stub
-		return CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(Industria.MODID, "none"));
+		return CircuitTemplateManager.DEFAULT_TEMPLATE;
 	}
 	
 	@Override

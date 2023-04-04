@@ -2,7 +2,6 @@ package de.m_marvin.industria.core.conduits.types.conduits;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
-import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
@@ -36,9 +35,4 @@ public class ElectricConduit extends Conduit implements IElectricConduit {
 		return template;
 	}
 
-	@Override
-	public NodePos[] getConnections(Level level, ConduitPos pos, PlacedConduit instance) {
-		return new NodePos[] { new NodePos(pos.getNodeApos(), 0), new NodePos(pos.getNodeBpos(), 1) };
-	}
-	
 }

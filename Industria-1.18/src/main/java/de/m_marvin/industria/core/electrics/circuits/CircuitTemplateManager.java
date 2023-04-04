@@ -6,11 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +17,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import de.m_marvin.industria.Industria;
-import de.m_marvin.industria.core.electrics.engine.SPICE;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -32,6 +28,8 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid=Industria.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CircuitTemplateManager extends SimplePreparableReloadListener<Map<ResourceLocation, CircuitTemplate>> {
+	
+	public static final CircuitTemplate DEFAULT_TEMPLATE = new CircuitTemplate(new String[] {}, new String[] {}, "", "");
 	
 	private static final Logger LOGGER = Industria.LOGGER;
 	private static final String PATH_NET_SUFIX = ".net";
@@ -60,7 +58,7 @@ public class CircuitTemplateManager extends SimplePreparableReloadListener<Map<R
 	
 	public CircuitTemplate getTemplate(ResourceLocation location) {
 		if (!this.byLocation.containsKey(location)) {
-			this.byLocation.put(location, new CircuitTemplate(new String[] {}, new String[] {}, "", ""));
+			this.byLocation.put(location, DEFAULT_TEMPLATE);
 			LOGGER.error("Couldn't find circuit template '" + location + "'!");
 		}
 		return this.byLocation.get(location);

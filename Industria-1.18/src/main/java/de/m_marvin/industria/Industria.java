@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import de.m_marvin.industria.content.registries.ModBlockEntities;
 import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.content.registries.ModItems;
+import de.m_marvin.industria.content.registries.ModContainer;
 import de.m_marvin.industria.content.registries.ModParticleTypes;
 import de.m_marvin.industria.core.Config;
 import de.m_marvin.industria.core.conduits.registry.Conduits;
@@ -30,6 +31,7 @@ public class Industria {
 		ModItems.register();
 		ModBlockEntities.register();
 		Conduits.register();
+		ModContainer.register();
 		ModParticleTypes.register();
 		
 	}

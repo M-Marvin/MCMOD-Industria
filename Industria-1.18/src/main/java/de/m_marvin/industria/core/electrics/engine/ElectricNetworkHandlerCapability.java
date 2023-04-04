@@ -3,6 +3,7 @@ package de.m_marvin.industria.core.electrics.engine;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import com.google.common.base.Objects;
 
@@ -148,7 +149,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	
 	/* ElectricNetwork handling */
 	
-	/*
+	/**
 	 * Represents a component (can be a conduit or a block) in the electric networks
 	 */
 	public static class Component<I, P, T> {
@@ -212,14 +213,20 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			}
 			return null;
 		}
-		public CircuitTemplate plotCircuit(Level level, ElectricNetwork circuit) {
-			return type.plotCircuit(level, instance, pos, circuit);
+		public void plotCircuit(Level level, ElectricNetwork circuit, Consumer<CircuitTemplate> plotter) {
+			type.plotCircuit(level, instance, pos, circuit, plotter);
 		}
 		public NodePos[] getNodes(Level level) {
 			return type.getConnections(level, pos, instance);
 		}
 		public void onNetworkChange(Level level) {
 			type.onNetworkNotify(level, instance, pos);
+		}
+		public String[] getWireLanes(Level level, NodePos node) {
+			return type.getWireLanes(pos, instance, node);
+		}
+		public void notifyRewired(Level level, Component<?, ?, ?> neighbor) {
+			type.neighborRewired(level, instance, pos, neighbor);
 		}
 	}
 //	public static record Component<I, P, T>(P pos, IElectric<I, P, T> type, I instance) {
@@ -253,14 +260,22 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 //		}
 //	}
 	
-	/*
+	/**
 	 * Returns the circuit which contains this components
 	 */
 	public ElectricNetwork getCircuit(Component<?, ?, ?> component) {
 		return this.component2circuitMap.get(component);
 	}
 	
-	/*
+	/**
+	 * Returns the component with the given position
+	 */
+	@SuppressWarnings("unchecked")
+	public <I, P, T> Component<I, P, T> getComponent(P position) {
+		return (Component<I, P, T>) this.pos2componentMap.get(position);
+	}
+	
+	/**
 	 * Returns the voltage for the node calculated last time the network was updated
 	 */
 	public double getVoltageAt(NodePos node) {
@@ -316,7 +331,25 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 //		return Math.abs(voltageA - voltageB) / resistance;
 //	}
 	
-	/*
+	/**
+	 * Returns a Set containing all components attached to the given node
+	 */
+	public Set<Component<?, ?, ?>> findComponentsOnNode(NodePos node) {
+		return this.node2componentMap.getOrDefault(node, new HashSet<>());
+	}
+	
+	/**
+	 * Notifies all neighbors that the given component has changed its wire lane configuration
+	 */
+	public void notifyRewired(Component<?, ?, ?> component) {
+		Set<Component<?, ?, ?>> toNotify = new HashSet<>();
+		for (NodePos node : component.getNodes(level)) toNotify.addAll(findComponentsOnNode(node));
+		for (Component<?, ?, ?> neighbor : toNotify) {
+			if (neighbor != component) component.notifyRewired(level, component);
+		}
+	}
+	
+	/**
 	 * Removes a component from the network and updates it and its components
 	 */
 	public <I, P, T> void removeComponent(P pos, I state) {
@@ -339,7 +372,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		}
 	}
 	
-	/*
+	/**
 	 * Adds a component to the network and updates it and its components
 	 */
 	public <I, P, T> void addComponent(P pos, IElectric<I, P, T> type, I instance) {
@@ -353,10 +386,11 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		}
 		Component<I, P, T> component2 = new Component<I, P, T>(pos, type, instance);
 		addToNetwork(component2);
+		notifyRewired(component2);
 		updateNetwork(pos);
 	}
 	
-	/*
+	/**
 	 * Adds a component to the network but does not cause any updates
 	 */
 	public <I, P, T> void addToNetwork(Component<I, P, T> component) {
@@ -368,7 +402,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		}
 	}
 	
-	/*
+	/**
 	 * Removes a component from the network but does not cause any updates
 	 */
 	public <I, P, T> Component<I, P, T> removeFromNetwork(P pos) {
@@ -385,7 +419,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		return component;
 	}
 	
-	/*
+	/**
 	 * Updates the network which has a component at the given position
 	 */
 	public <P> void updateNetwork(P position) {
@@ -427,7 +461,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		
 	}
 	
-	/*
+	/**
 	 * Builds a ngspice netlist for the given network begining from the given gomponent
 	 */
 	private void buildCircuit(Component<?, ?, ?> component, ElectricNetwork circuit) {
@@ -438,7 +472,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		
 		if (circuit.getComponents().contains(component)) return;
 		circuit.getComponents().add(component);
-		circuit.plotTemplate(component, component.plotCircuit(level, circuit));
+		component.plotCircuit(level, circuit, template -> circuit.plotTemplate(component, template));
 		
 		for (NodePos node2 : component.getNodes(level)) {
 			if (node2.equals(node) || this.node2componentMap.get(node2) == null) continue; 

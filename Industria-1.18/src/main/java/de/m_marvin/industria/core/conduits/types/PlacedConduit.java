@@ -1,14 +1,52 @@
 package de.m_marvin.industria.core.conduits.types;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.Function;
+
 import de.m_marvin.industria.core.conduits.registry.Conduits;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitShape;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 
 public class PlacedConduit {
 	
+	public static class ConduitStateStorage<T, N extends Tag> {
+		
+		protected T data;
+		protected Function<T, N> serializer;
+		protected Function<N, T> deserializer;
+		
+		public ConduitStateStorage(T initialValue, Function<T, N> serializer, Function<N, T> deserializer) {
+			this.data = initialValue;
+			this.serializer = serializer;
+			this.deserializer = deserializer;
+		}
+		
+		public T getData() {
+			return data;
+		}
+		
+		public void setData(T data) {
+			this.data = data;
+		}
+		
+		public Tag serialize() {
+			return this.serializer.apply(data);
+		}
+		
+		@SuppressWarnings("unchecked")
+		public void deserialize(Tag tag) {
+			this.data = this.deserializer.apply((N) tag);
+		}
+		
+	}
+	
+	private Map<String, ConduitStateStorage<?, ? extends Tag>> dataStorages;
 	private ConduitPos position;
 	private double length;
 	private Conduit conduit;
@@ -18,9 +56,23 @@ public class PlacedConduit {
 		this.position = position;
 		this.conduit = conduit;
 		this.length = length;
+		this.dataStorages = new HashMap<>();
+	}
+	
+	public void addDataStorage(String name, ConduitStateStorage<?, ? extends Tag> storage) {
+		this.dataStorages.put(name, storage);
+	}
+	
+	public void removeDataStorage(String name) {
+		this.dataStorages.remove(name);
+	}
+	
+	public ConduitStateStorage<?, ? extends Tag> getDataStorage(String name) {
+		return this.dataStorages.get(name);
 	}
 	
 	public PlacedConduit build(Level level) {
+		this.conduit.onBuild(level, position, this);
 		this.shape = conduit.buildShape(level, this);
 		updateShape(level);
 		// TODO Remove if not able to fix
@@ -34,6 +86,7 @@ public class PlacedConduit {
 	}
 	
 	public PlacedConduit dismantle(Level level) {
+		this.conduit.onDismantle(level, position, this);
 		this.conduit.dismantleShape(level, this);
 		this.shape = null;
 		return this;
@@ -57,6 +110,13 @@ public class PlacedConduit {
 		tag.putString("Conduit", this.conduit.getRegistryName().toString());
 		tag.putDouble("Length", this.length);
 		if (this.shape != null) tag.put("Shape", this.shape.save());
+		if (this.dataStorages.size() > 0) {
+			CompoundTag storages = new CompoundTag();
+			for (Entry<String, ConduitStateStorage<?, ? extends Tag>> storage : this.dataStorages.entrySet()) {
+				storages.put(storage.getKey(), storage.getValue().serialize());
+			}
+			tag.put("Storages", storages);
+		}
 		return tag;
 	}
 	
@@ -70,6 +130,13 @@ public class PlacedConduit {
 		if (shape == null) return null;
 		PlacedConduit state = new PlacedConduit(position, conduit, length);
 		state.setShape(shape);
+		state.conduit.onBuild(null, position, state);
+		if (tag.contains("Storages")) {
+			CompoundTag storages = tag.getCompound("Storages");
+			for (String key : storages.getAllKeys()) {
+				state.dataStorages.get(key).deserialize(storages.get(key));
+			}
+		}
 		return state;
 	}
 	

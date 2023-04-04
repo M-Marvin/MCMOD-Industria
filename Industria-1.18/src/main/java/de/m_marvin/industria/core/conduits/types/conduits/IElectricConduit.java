@@ -29,4 +29,6 @@ public interface IElectricConduit extends IElectric<PlacedConduit, ConduitPos, C
 		return new NodePos[] { new NodePos(pos.getNodeApos(), 0), new NodePos(pos.getNodeBpos(), 1) };
 	}
 	
+	public int getWireCount();
+	
 }

@@ -2,6 +2,7 @@ package de.m_marvin.industria.content.registries;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.content.blockentities.GeneratorBlockEntity;
+import de.m_marvin.industria.content.blockentities.JunctionBoxBlockEntity;
 import de.m_marvin.industria.content.blockentities.MotorBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -18,5 +19,6 @@ public class ModBlockEntities {
 	
 	public static final RegistryObject<BlockEntityType<MotorBlockEntity>> MOTOR = BLOCK_ENTITIES.register("motor", () -> BlockEntityType.Builder.of(MotorBlockEntity::new, ModBlocks.MOTOR.get()).build(null));
 	public static final RegistryObject<BlockEntityType<GeneratorBlockEntity>> GENERATOR = BLOCK_ENTITIES.register("generator", () -> BlockEntityType.Builder.of(GeneratorBlockEntity::new, ModBlocks.MOTOR.get()).build(null));
+	public static final RegistryObject<BlockEntityType<JunctionBoxBlockEntity>> JUNCTION_BOX = BLOCK_ENTITIES.register("junction_box", () -> BlockEntityType.Builder.of(JunctionBoxBlockEntity::new, ModBlocks.JUNCTION_BOX.get()).build(null));
 	
 }

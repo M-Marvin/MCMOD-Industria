@@ -1,6 +1,7 @@
 package de.m_marvin.industria.content.blocks;
 
 import java.util.Random;
+import java.util.function.Consumer;
 
 import de.m_marvin.industria.content.blockentities.GeneratorBlockEntity;
 import de.m_marvin.industria.content.blockentities.MotorBlockEntity;
@@ -14,6 +15,7 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
 import de.m_marvin.industria.core.registries.ModCapabilities;
@@ -121,21 +123,7 @@ public class ThrusterBlock extends Block implements IElectricConnector {
 //			return CONDUIT_NODES.getNodes(pos, state);
 //		}
 //	}
-	
-	@Override
-	public CircuitTemplate plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit) {
-//		ConnectionPoint[] points = CONDUIT_NODES.getNodes(position, instance);
-//		BlockEntity blockEntity = level.getBlockEntity(position);
-//		if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR && blockEntity instanceof GeneratorBlockEntity) {
-//			circuit.addSource(points[0], ((GeneratorBlockEntity) blockEntity).getVoltage(), ((GeneratorBlockEntity) blockEntity).getCompensatedCurrent());
-//		} else if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.MOTOR && blockEntity instanceof MotorBlockEntity) {
-//			circuit.addLoad(points[0], ((MotorBlockEntity) blockEntity).getCurrent());
-//		}
-//		circuit.addSerialResistance(points[0], points[1], 0);
-//		circuit.addSerialResistance(points[1], points[2], 0);
-		return null;
-	}
-	
+		
 	@Override
 	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {
 		if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.MOTOR) level.scheduleTick(position, instance.getBlock(), 1);
@@ -144,7 +132,7 @@ public class ThrusterBlock extends Block implements IElectricConnector {
 	@Override
 	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRandom) {
 		if (pState.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR) {
-			ElectricUtility.updateElectricNetwork(pLevel, pPos);
+			ElectricUtility.updateNetwork(pLevel, pPos);
 		} else {
 			ElectricNetworkHandlerCapability networkHandler = GameUtility.getCapability(pLevel, ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 			BlockEntity entity = pLevel.getBlockEntity(pPos);
@@ -158,13 +146,32 @@ public class ThrusterBlock extends Block implements IElectricConnector {
 	@Override
 	public ConduitNode[] getConduitNodes(Level level, BlockPos pos, BlockState state) {
 		// TODO Auto-generated method stub
-		return null;
+		return new ConduitNode[] {};
 	}
 
 	@Override
 	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {
 		// TODO Auto-generated method stub
-		return null;
+		return new NodePos[] {};
+	}
+
+	@Override
+	public void neighborRewired(Level level, BlockState instance, BlockPos position, Component<?, ?, ?> neighbor) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String[] getWireLanes(BlockPos pos, BlockState instance, NodePos node) {
+		// TODO Auto-generated method stub
+		return new String[] {};
+	}
+
+	@Override
+	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit,
+			Consumer<CircuitTemplate> plotter) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

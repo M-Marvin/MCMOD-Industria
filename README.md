@@ -1,5 +1,5 @@
 # MCMOD-Industria
-Minecraft Industria Mod für MC 1.16.5 (vorher "RedTec")
+Minecraft Industria Mod für MC 1.18.2
 
 ========================================================================================
 MOD BESCHREIBUNG (kopiert aus der mod.toml)

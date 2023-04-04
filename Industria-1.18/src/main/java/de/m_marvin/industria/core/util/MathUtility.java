@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import de.m_marvin.unimat.impl.Quaternion;
 import de.m_marvin.univec.impl.Vec2f;
@@ -52,6 +53,22 @@ public class MathUtility {
 	
 	public static float clampToDegree(float angle) {
 		return angle % 360;
+	}
+
+	public static Direction[] getDirectionsAround(Axis nodeAxis) {
+		return Stream.of(Direction.values()).filter(d -> d.getAxis() != nodeAxis).toArray(i -> new Direction[i]);
+	}
+	
+	public static Vec3i getDirectionVec(Direction d) {
+		return new Vec3i(d.getStepX(), d.getStepY(), d.getStepZ());
+	}
+	
+	public static Direction getVecDirection(Vec3i v) {
+		Axis axis = Axis.X;
+		if (v.y() != 0) axis = Axis.Y;
+		if (v.z() != 0) axis = Axis.Z;
+		AxisDirection direction = (v.x + v.y + v.z) > 0 ? AxisDirection.POSITIVE : AxisDirection.NEGATIVE;
+		return Direction.fromAxisAndDirection(axis, direction);
 	}
 	
 	public static BlockPos getMinCorner(BlockPos pos1, BlockPos pos2) {

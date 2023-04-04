@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalInt;
 
+import javax.annotation.Nullable;
+
 import org.joml.Vector3d;
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.apigame.constraints.VSConstraint;
@@ -108,6 +110,9 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 			ConduitUtility.removeConduit(level, conduitState.getPosition(), true);
 		}
 	}
+	
+	public void onDismantle(@Nullable Level level, ConduitPos position, PlacedConduit conduitState) {}
+	public void onBuild(@Nullable Level level, ConduitPos position, PlacedConduit conduitState) {}
 	
 	public void onPlace(Level level, ConduitPos position, PlacedConduit conduitState) {
 		

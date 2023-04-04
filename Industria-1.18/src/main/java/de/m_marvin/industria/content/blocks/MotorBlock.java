@@ -1,6 +1,7 @@
 package de.m_marvin.industria.content.blocks;
 
 import java.util.Random;
+import java.util.function.Consumer;
 
 import de.m_marvin.industria.content.blockentities.GeneratorBlockEntity;
 import de.m_marvin.industria.content.blockentities.MotorBlockEntity;
@@ -14,6 +15,7 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
 import de.m_marvin.industria.core.registries.ModCapabilities;
@@ -93,10 +95,6 @@ public class MotorBlock extends Block implements IElectricConnector {
 //	public ConnectionPoint[] getConnections(Level level, BlockPos pos, BlockState instance) {
 //		return getConnectionPoints(pos, instance);
 //	}
-
-	public BlockEntityType<?> getTileEntityType(BlockState state) {
-		return state.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.MOTOR ? ModBlockEntities.MOTOR.get() : ModBlockEntities.GENERATOR.get();
-	}
 	
 	@Override
 	public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
@@ -122,18 +120,24 @@ public class MotorBlock extends Block implements IElectricConnector {
 //		}
 //	}
 	
+//	@Override
+//	public CircuitTemplate plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit) {
+////		ConnectionPoint[] points = CONDUIT_NODES.getNodes(position, instance);
+////		BlockEntity blockEntity = level.getBlockEntity(position);
+////		if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR && blockEntity instanceof GeneratorBlockEntity) {
+////			circuit.addSource(points[0], ((GeneratorBlockEntity) blockEntity).getVoltage(), ((GeneratorBlockEntity) blockEntity).getCompensatedCurrent());
+////		} else if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.MOTOR && blockEntity instanceof MotorBlockEntity) {
+////			circuit.addLoad(points[0], ((MotorBlockEntity) blockEntity).getCurrent());
+////		}
+////		circuit.addSerialResistance(points[0], points[1], 0);
+////		circuit.addSerialResistance(points[1], points[2], 0);
+//		return null;
+//	}
+
 	@Override
-	public CircuitTemplate plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit) {
-//		ConnectionPoint[] points = CONDUIT_NODES.getNodes(position, instance);
-//		BlockEntity blockEntity = level.getBlockEntity(position);
-//		if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR && blockEntity instanceof GeneratorBlockEntity) {
-//			circuit.addSource(points[0], ((GeneratorBlockEntity) blockEntity).getVoltage(), ((GeneratorBlockEntity) blockEntity).getCompensatedCurrent());
-//		} else if (instance.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.MOTOR && blockEntity instanceof MotorBlockEntity) {
-//			circuit.addLoad(points[0], ((MotorBlockEntity) blockEntity).getCurrent());
-//		}
-//		circuit.addSerialResistance(points[0], points[1], 0);
-//		circuit.addSerialResistance(points[1], points[2], 0);
-		return null;
+	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit,Consumer<CircuitTemplate> plotter) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	@Override
@@ -144,7 +148,7 @@ public class MotorBlock extends Block implements IElectricConnector {
 	@Override
 	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRandom) {
 		if (pState.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR) {
-			ElectricUtility.updateElectricNetwork(pLevel, pPos);
+			ElectricUtility.updateNetwork(pLevel, pPos);
 		} else {
 			ElectricNetworkHandlerCapability networkHandler = GameUtility.getCapability(pLevel, ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 			BlockEntity entity = pLevel.getBlockEntity(pPos);
@@ -158,13 +162,25 @@ public class MotorBlock extends Block implements IElectricConnector {
 	@Override
 	public ConduitNode[] getConduitNodes(Level level, BlockPos pos, BlockState state) {
 		// TODO Auto-generated method stub
-		return null;
+		return new ConduitNode[] {};
 	}
 
 	@Override
 	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {
 		// TODO Auto-generated method stub
-		return null;
+		return new NodePos[] {};
+	}
+
+	@Override
+	public void neighborRewired(Level level, BlockState instance, BlockPos position, Component<?, ?, ?> neighbor) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String[] getWireLanes(BlockPos pos, BlockState instance, NodePos node) {
+		// TODO Auto-generated method stub
+		return new String[] {};
 	}
 	
 }

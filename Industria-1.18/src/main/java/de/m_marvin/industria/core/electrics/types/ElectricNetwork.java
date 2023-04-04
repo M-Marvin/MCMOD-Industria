@@ -14,8 +14,6 @@ import net.minecraft.world.level.Level;
 
 public class ElectricNetwork {
 	
-	public static final String GND_NODE = "0";
-
 	@FunctionalInterface
 	public static interface NetListBuilder {
 		public String build(ElectricNetwork net, String id, String... param);

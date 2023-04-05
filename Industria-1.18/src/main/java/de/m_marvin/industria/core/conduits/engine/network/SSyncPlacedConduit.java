@@ -26,28 +26,22 @@ public class SSyncPlacedConduit {
 	public ChunkPos chunkPos;
 	public List<PlacedConduit> conduitStates;
 	public Status status;
-	public boolean triggerEvents;
-	public boolean eventDropItems;
 	
 	public static enum Status {
 		REMOVED, ADDED;
 	}
 	
-	public SSyncPlacedConduit(List<PlacedConduit> conduitStates, ChunkPos targetChunk, Status status, boolean triggerEvents, boolean eventDropItems) {
+	public SSyncPlacedConduit(List<PlacedConduit> conduitStates, ChunkPos targetChunk, Status status) {
 		this.conduitStates = conduitStates;
 		this.chunkPos = targetChunk;
 		this.status = status;
-		this.triggerEvents = triggerEvents;
-		this.eventDropItems = eventDropItems;
 	}
 	
-	public SSyncPlacedConduit(PlacedConduit conduitState, ChunkPos targetChunk, Status status, boolean triggerEvents, boolean eventDropItems) {
+	public SSyncPlacedConduit(PlacedConduit conduitState, ChunkPos targetChunk, Status status) {
 		this.conduitStates = new ArrayList<PlacedConduit>();
 		this.conduitStates.add(conduitState);
 		this.chunkPos = targetChunk;
 		this.status = status;
-		this.triggerEvents = triggerEvents;
-		this.eventDropItems = eventDropItems;
 	}
 	
 	public ChunkPos getChunkPos() {
@@ -58,18 +52,8 @@ public class SSyncPlacedConduit {
 		return status;
 	}
 	
-	public boolean isTriggerEvents() {
-		return triggerEvents;
-	}
-	
-	public boolean isEventDropItems() {
-		return eventDropItems;
-	}
-	
 	public static void encode(SSyncPlacedConduit msg, FriendlyByteBuf buff) {
 		buff.writeEnum(msg.status);
-		buff.writeBoolean(msg.triggerEvents);
-		buff.writeBoolean(msg.eventDropItems);
 		buff.writeChunkPos(msg.chunkPos);
 		buff.writeInt(msg.conduitStates.size());
 		for (PlacedConduit conduitState : msg.conduitStates) {
@@ -82,8 +66,6 @@ public class SSyncPlacedConduit {
 	
 	public static SSyncPlacedConduit decode(FriendlyByteBuf buff) {
 		Status status = buff.readEnum(Status.class);
-		boolean triggerEvents = buff.readBoolean();
-		boolean eventDropsItems = buff.readBoolean();
 		ChunkPos chunkPos = buff.readChunkPos();
 		int count = buff.readInt();
 		List<PlacedConduit> conduitStates = new ArrayList<PlacedConduit>();
@@ -105,7 +87,7 @@ public class SSyncPlacedConduit {
 			conduitState.setShape(shape);
 			conduitStates.add(conduitState);
 		}
-		return new SSyncPlacedConduit(conduitStates, chunkPos, status, triggerEvents, eventDropsItems);
+		return new SSyncPlacedConduit(conduitStates, chunkPos, status);
 	}
 	
 	public static void handle(SSyncPlacedConduit msg, Supplier<NetworkEvent.Context> ctx) {

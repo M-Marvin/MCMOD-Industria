@@ -116,8 +116,8 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 	
 	public void onPlace(Level level, ConduitPos position, PlacedConduit conduitState) {
 		
-		Vec3d nodeA = conduitState.getPosition().calculateWorldNodeA(level);
-		Vec3d nodeB = conduitState.getPosition().calculateWorldNodeB(level);
+		Vec3d nodeA = Vec3d.fromVec(conduitState.getPosition().getNodeApos());
+		Vec3d nodeB = Vec3d.fromVec(conduitState.getPosition().getNodeBpos());
 		Vec3d middle = nodeA.sub(nodeB).mul(0.5).add(nodeB);
 		
 		level.playLocalSound(middle.x, middle.y, middle.z, this.getSoundType().getBreakSound(), SoundSource.BLOCKS, this.getSoundType().getVolume(), this.getSoundType().getPitch(), false);
@@ -126,8 +126,8 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 	
 	public void onBreak(Level level, ConduitPos position, PlacedConduit conduitState, boolean dropItems) {
 		
-		Vec3d nodeA = conduitState.getPosition().calculateWorldNodeA(level);
-		Vec3d nodeB = conduitState.getPosition().calculateWorldNodeB(level);
+		Vec3d nodeA = Vec3d.fromVec(conduitState.getPosition().getNodeApos());
+		Vec3d nodeB = Vec3d.fromVec(conduitState.getPosition().getNodeBpos());
 		Vec3d middle = nodeA.sub(nodeB).mul(0.5).add(nodeB);
 		Vec3d nodeOrigin = MathUtility.getMinCorner(nodeA, nodeB);
 		

@@ -5,7 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.m_marvin.industria.Industria;
+import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.engine.network.SSyncPlacedConduit;
+import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitLoadEvent;
+import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitUnloadEvent;
+import de.m_marvin.industria.core.conduits.engine.network.SCConduitPackage.SCBreakConduitPackage;
+import de.m_marvin.industria.core.conduits.engine.network.SCConduitPackage.SCPlaceConduitPackage;
 import de.m_marvin.industria.core.conduits.engine.network.SSyncPlacedConduit.Status;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.registries.ModCapabilities;
@@ -13,11 +18,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent.Context;
 
 @Mod.EventBusSubscriber(modid=Industria.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE, value=Dist.CLIENT)
 public class ClientConduitPackageHandler {
@@ -32,8 +39,20 @@ public class ClientConduitPackageHandler {
 		if (Minecraft.getInstance().level.isLoaded(msg.getChunkPos().getWorldPosition())) {
 			handlePackageInLoadedChunk(msg);
 		} else {
-			receivedPackages.put(msg.getChunkPos(), msg);
+			synchronized (receivedPackages) {
+				receivedPackages.put(msg.getChunkPos(), msg);
+			}
 		}
+	}
+
+	@SuppressWarnings("resource")
+	public static void handlePlaceConduit(SCPlaceConduitPackage msg, Context ctx) {
+		ConduitUtility.setConduit(Minecraft.getInstance().level, msg.getPosition(), msg.getConduit(), msg.getLength());
+	}
+	
+	@SuppressWarnings("resource")
+	public static void handleRemoveConduit(SCBreakConduitPackage msg, Context ctx) {
+		ConduitUtility.removeConduit(Minecraft.getInstance().level, msg.getPosition(), msg.dropItems());
 	}
 	
 	@SuppressWarnings("resource")
@@ -50,7 +69,9 @@ public class ClientConduitPackageHandler {
 					}
 				}
 			}
-			handledPackages.forEach(receivedPackages::remove);
+			synchronized (receivedPackages) {
+				handledPackages.forEach(receivedPackages::remove);
+			}
 			handledPackages.clear();}
 		}
 	
@@ -64,12 +85,12 @@ public class ClientConduitPackageHandler {
 				if (msg.getStatus() == Status.ADDED) {
 					for (PlacedConduit conduitState : msg.conduitStates) {
 						conduitHolder.resolve().get().addConduit(conduitState);
-						if (msg.isTriggerEvents()) conduitState.getConduit().onPlace(level, conduitState.getPosition(), conduitState);
+						MinecraftForge.EVENT_BUS.post(new ConduitLoadEvent(level, conduitState.getPosition(), conduitState));
 					}
 				} else if (msg.getStatus() == Status.REMOVED) {
 					for (PlacedConduit conduitState : msg.conduitStates) {
 						conduitHolder.resolve().get().removeConduit(conduitState);
-						if (msg.isTriggerEvents()) conduitState.getConduit().onBreak(level, conduitState.getPosition(), conduitState, msg.isEventDropItems());
+						MinecraftForge.EVENT_BUS.post(new ConduitUnloadEvent(level, conduitState.getPosition(), conduitState));
 					}
 				}
 			}

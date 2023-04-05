@@ -40,6 +40,11 @@ public class GenricConduitEventListener {
 				PlacedConduit conduit = hitResult.getConduitState();
 				ConduitUtility.removeConduitFromClient(event.getWorld(), conduit.getPosition(), !event.getPlayer().isCreative());
 				
+				ItemStack toolItem = event.getPlayer().getMainHandItem();
+				if (!toolItem.isEmpty() && toolItem.getMaxDamage() != 0) {
+					toolItem.hurtAndBreak(1, event.getPlayer(), (p) -> {}); // TODO Test if damage is vissible on client side
+				}
+				
 				event.setCanceled(true);
 				event.setCancellationResult(InteractionResult.SUCCESS);
 			}

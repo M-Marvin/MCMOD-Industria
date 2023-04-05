@@ -9,14 +9,22 @@ import com.google.common.base.Objects;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent;
+import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
+import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitBreakEvent;
+import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitLoadEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitPlaceEvent;
+import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitUnloadEvent;
+import de.m_marvin.industria.core.conduits.types.PlacedConduit;
+import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
+import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.IElectricConduit;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.IElectric;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
 import de.m_marvin.industria.core.registries.ModCapabilities;
+import de.m_marvin.industria.core.util.GameUtility;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -27,6 +35,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -117,35 +126,54 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	
 	@SubscribeEvent
 	public static void onBlockStateChange(BlockEvent.NeighborNotifyEvent event) {
-		if (!event.getWorld().isClientSide()) {
-			ServerLevel level = (ServerLevel) event.getWorld();
-			LazyOptional<ElectricNetworkHandlerCapability> networkHandler = level.getCapability(ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-			if (networkHandler.isPresent()) {
-				if (event.getState().getBlock() instanceof IElectricConnector) {
-					IElectricConnector block = (IElectricConnector) event.getState().getBlock();
-					networkHandler.resolve().get().addComponent(event.getPos(), block, event.getState());
-				} else {
-					networkHandler.resolve().get().removeComponent(event.getPos(), event.getState());
-				}
-			}
+		Level level = (Level) event.getWorld();
+		ElectricNetworkHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		if (event.getState().getBlock() instanceof IElectricConnector) {
+			IElectricConnector block = (IElectricConnector) event.getState().getBlock();
+			handler.addComponent(event.getPos(), block, event.getState());
+		} else {
+			handler.removeComponent(event.getPos(), event.getState());
 		}
 	}
 	
 	@SubscribeEvent
 	public static void onConduitStateChange(ConduitEvent event) {
-		if (!event.getLevel().isClientSide()) {
-			ServerLevel level = (ServerLevel) event.getLevel();
-			LazyOptional<ElectricNetworkHandlerCapability> networkHandler = level.getCapability(ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-			if (networkHandler.isPresent()) {
-				if (event.getConduitState().getConduit() instanceof IElectricConduit && event instanceof ConduitPlaceEvent) {
-					IElectricConduit conduit = (IElectricConduit) event.getConduitState().getConduit();
-					networkHandler.resolve().get().addComponent(event.getPosition(), conduit, event.getConduitState());
-				} else {
-					networkHandler.resolve().get().removeComponent(event.getPosition(), event.getConduitState());
-				}
+		Level level = (Level) event.getLevel();
+		ElectricNetworkHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		if (event.getConduitState().getConduit() instanceof IElectricConduit) {
+			if (event instanceof ConduitPlaceEvent || event instanceof ConduitLoadEvent) {
+				IElectricConduit conduit = (IElectricConduit) event.getConduitState().getConduit();
+				handler.addComponent(event.getPosition(), conduit, event.getConduitState());
+			} else if (event instanceof ConduitBreakEvent || event instanceof ConduitUnloadEvent) {
+				handler.removeComponent(event.getPosition(), event.getConduitState());
 			}
 		}
 	}
+	
+//	@SuppressWarnings("unchecked")
+//	@SubscribeEvent
+//	public static void onClientLoadsChunk(ChunkWatchEvent.Watch event) {
+//		Level level = event.getPlayer().getLevel();
+//		ConduitHandlerCapability conduitHandler = GameUtility.getCapability(level, ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
+//		ElectricNetworkHandlerCapability electricHandler = GameUtility.getCapability(level, ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+//		for (PlacedConduit conduit : conduitHandler.getConduitsInChunk(event.getPos())) {
+//			if (conduit.getConduit() instanceof @SuppressWarnings("rawtypes") IElectric electricConduit) {
+//				electricHandler.addComponent(conduit.getPosition(), electricConduit, conduit);
+//			}
+//		}
+//	}
+//	
+//	@SubscribeEvent
+//	public static void onClientUnloadsChunk(ChunkWatchEvent.UnWatch event) {
+//		Level level = event.getPlayer().getLevel();
+//		ConduitHandlerCapability conduitHandler = GameUtility.getCapability(level, ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
+//		ElectricNetworkHandlerCapability electricHandler = GameUtility.getCapability(level, ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+//		for (PlacedConduit conduit : conduitHandler.getConduitsInChunk(event.getPos())) {
+//			if (conduit.getConduit() instanceof IElectric) {
+//				electricHandler.removeComponent(conduit.getPosition(), conduit);;
+//			}
+//		}
+//	}
 	
 	/* ElectricNetwork handling */
 	

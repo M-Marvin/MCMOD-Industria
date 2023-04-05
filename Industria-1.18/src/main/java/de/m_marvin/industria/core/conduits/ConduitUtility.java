@@ -1,109 +1,105 @@
 package de.m_marvin.industria.core.conduits;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
-import de.m_marvin.industria.core.conduits.engine.network.CBreakConduitPackage;
+import de.m_marvin.industria.core.conduits.engine.network.SCConduitPackage;
 import de.m_marvin.industria.core.conduits.types.ConduitHitResult;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.registries.ModCapabilities;
+import de.m_marvin.industria.core.util.GameUtility;
+import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3d;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.network.PacketDistributor;
 
 public class ConduitUtility {
 	
+	public static boolean setConduitFromServer(ServerLevel level, ConduitPos position, Conduit conduit, double length) {
+		Vec3d middlePos = MathUtility.getMiddle(position.calculateWorldNodeA(level), position.calculateWorldNodeB(level));
+		Industria.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middlePos.writeTo(new BlockPos(0, 0, 0)))), new SCConduitPackage.SCPlaceConduitPackage(position, conduit, length));
+		return setConduit(level, position, conduit, length);
+	}
+
+	public static boolean setConduitFromClient(ClientLevel level, ConduitPos position, Conduit conduit, double length) {
+		Industria.NETWORK.sendToServer(new SCConduitPackage.SCPlaceConduitPackage(position, conduit, length));
+		return setConduit(level, position, conduit, length);
+	}
+	
 	public static boolean setConduit(Level level, ConduitPos position, Conduit conduit, double length) {
-		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
-		if (conduitHolder.isPresent()) {
-			return conduitHolder.resolve().get().placeConduit(position, conduit, length);
-		}
-		return false;
+		ConduitHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
+		return handler.placeConduit(position, conduit, length);
+	}
+
+	public static boolean removeConduitFromServer(Level level, ConduitPos conduitPosition, boolean dropItems) {
+		Vec3d middlePos = MathUtility.getMiddle(conduitPosition.calculateWorldNodeA(level), conduitPosition.calculateWorldNodeB(level));
+		Industria.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middlePos.writeTo(new BlockPos(0, 0, 0)))), new SCConduitPackage.SCBreakConduitPackage(conduitPosition, dropItems));
+		return ConduitUtility.removeConduit(level, conduitPosition, dropItems);
+	}
+	
+	public static boolean removeConduitFromClient(Level level, ConduitPos conduitPosition, boolean dropItems) {
+		Industria.NETWORK.sendToServer(new SCConduitPackage.SCBreakConduitPackage(conduitPosition, dropItems));
+		return ConduitUtility.removeConduit(level, conduitPosition, dropItems);
 	}
 	
 	public static boolean removeConduit(Level level, ConduitPos position, boolean dropItems) {
-		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
-		if (conduitHolder.isPresent()) {
-			return conduitHolder.resolve().get().breakConduit(position, dropItems);
-		}
-		return false;
+		ConduitHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
+		return handler.breakConduit(position, dropItems);
 	}
 
 	public static Optional<PlacedConduit> getConduit(Level level, ConduitPos position) {
-		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
-		if (conduitHolder.isPresent()) {
-			return conduitHolder.resolve().get().getConduit(position);
-		}
-		return Optional.empty();
+		ConduitHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
+		return handler.getConduit(position);
 	}
 
 	public static Optional<PlacedConduit> getConduitAtNode(Level level, BlockPos block, int node) {
-		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
-		if (conduitHolder.isPresent()) {
-			return conduitHolder.resolve().get().getConduitAtNode(block, node);
-		}
-		return Optional.empty();
+		ConduitHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
+		return handler.getConduitAtNode(block, node);
 	}
 	
 	public static List<PlacedConduit> getConduitsAtNode(Level level, BlockPos position, int node) {
-		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
-		if (conduitHolder.isPresent()) {
-			return conduitHolder.resolve().get().getConduitsAtNode(position, node);
-		}
-		return new ArrayList<>();
+		ConduitHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
+		return handler.getConduitsAtNode(position, node);
 	}
 	
 	public static List<PlacedConduit> getConduitsAtBlock(Level level, BlockPos position) {
-		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
-		if (conduitHolder.isPresent()) {
-			return conduitHolder.resolve().get().getConduitsAtBlock(position);
-		}
-		return new ArrayList<>();
+		ConduitHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
+		return handler.getConduitsAtBlock(position);
 	}
 	
 	public static List<PlacedConduit> getConduitsInChunk(Level level, ChunkPos chunk) {
-		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
-		if (conduitHolder.isPresent()) {
-			return conduitHolder.resolve().get().getConduitsInChunk(chunk);
-		}
-		return new ArrayList<>();
+		ConduitHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
+		return handler.getConduitsInChunk(chunk);
 	}
 
 	public static ConduitHitResult clipConduits(Level level, ClipContext context, boolean skipBlockClip) {
-		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
-		if (conduitHolder.isPresent()) {
-			ConduitHitResult cResult = conduitHolder.resolve().get().clipConduits(context);
-			if (cResult.isHit() && !skipBlockClip) {
-				Vec3d newTarget = cResult.getHitPos().copy();
-				Vec3d blockDistance = Vec3d.fromVec(context.getTo()).sub(Vec3d.fromVec(context.getFrom()));
-				blockDistance.normalize();
-				newTarget.add(blockDistance.mul(-0.1));
-				context.to = newTarget.writeTo(new Vec3(0, 0, 0));
-				
-				BlockHitResult bResult = level.clip(context);
-				if (bResult.getType() == Type.BLOCK) {
-					return ConduitHitResult.block(bResult);
-				}
+		ConduitHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
+		ConduitHitResult cResult = handler.clipConduits(context);
+		if (cResult.isHit() && !skipBlockClip) {
+			Vec3d newTarget = cResult.getHitPos().copy();
+			Vec3d blockDistance = Vec3d.fromVec(context.getTo()).sub(Vec3d.fromVec(context.getFrom()));
+			blockDistance.normalize();
+			newTarget.add(blockDistance.mul(-0.1));
+			context.to = newTarget.writeTo(new Vec3(0, 0, 0));
+			
+			BlockHitResult bResult = level.clip(context);
+			if (bResult.getType() == Type.BLOCK) {
+				return ConduitHitResult.block(bResult);
 			}
-			return cResult;
 		}
-		return ConduitHitResult.miss();
-	}
-
-	public static void removeConduitFromClient(Level level, ConduitPos conduitPosition, boolean dropItems) {
-		ConduitUtility.removeConduit(level, conduitPosition, dropItems);
-		Industria.NETWORK.sendToServer(new CBreakConduitPackage(conduitPosition, dropItems));
+		return cResult;
 	}
 	
 }

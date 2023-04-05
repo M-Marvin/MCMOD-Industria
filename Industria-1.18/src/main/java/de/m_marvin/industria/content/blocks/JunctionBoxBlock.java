@@ -5,8 +5,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
-import com.mojang.datafixers.FunctionType.Instance;
-
 import de.m_marvin.industria.content.blockentities.JunctionBoxBlockEntity;
 import de.m_marvin.industria.core.client.registries.NodeTypes;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
@@ -21,7 +19,6 @@ import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.univec.impl.Vec3f;
 import de.m_marvin.univec.impl.Vec3i;
-import io.netty.util.internal.MathUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -112,14 +109,16 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricConnec
 		NodePos[] nodes = getConnections(level, position, instance);
 		ConduitNode[] connections = getConduitNodes(level, position, instance);
 		Vec3i center = new Vec3i(8, 8, 8);
-		switch (instance.getValue(BlockStateProperties.FACING).getAxis()) {
-			case X: center.setX(0); break;
-			case Y: center.setX(0); break;
-			case Z: center.setX(0); break;
+		Direction blockFacing = instance.getValue(BlockStateProperties.FACING);
+		switch (blockFacing.getAxis()) {
+			case X: center.setX(blockFacing.getAxisDirection() == AxisDirection.NEGATIVE ? 0 : 16); break;
+			case Y: center.setY(blockFacing.getAxisDirection() == AxisDirection.NEGATIVE ? 0 : 16); break;
+			case Z: center.setZ(blockFacing.getAxisDirection() == AxisDirection.NEGATIVE ? 0 : 16); break;
 		}
 		Map<Direction, NodePos> cables = new HashMap<>();
 		for (int i = 0; i < connections.length; i++) {
-			Vec3i dVec = new Vec3i(new Vec3f(connections[i].getOffset().sub(center)).div(8F));
+			Vec3f dVf = new Vec3f(connections[i].getOffset().sub(center)).div(8F);
+			Vec3i dVec = new Vec3i(Math.round(dVf.x), Math.round(dVf.y), Math.round(dVf.z));
 			Direction d = MathUtility.getVecDirection(dVec);
 			cables.put(d, nodes[i]);
 		}

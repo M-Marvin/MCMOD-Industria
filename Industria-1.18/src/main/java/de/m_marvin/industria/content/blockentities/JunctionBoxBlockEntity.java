@@ -1,16 +1,17 @@
 package de.m_marvin.industria.content.blockentities;
 
 import java.util.Map;
+import java.util.Optional;
 
 import de.m_marvin.industria.content.blocks.JunctionBoxBlock;
 import de.m_marvin.industria.content.container.JunctionBoxContainer;
 import de.m_marvin.industria.content.registries.ModBlockEntities;
 import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
-import net.minecraft.client.renderer.block.ModelBlockRenderer;
+import de.m_marvin.industria.core.electrics.ElectricUtility;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Direction.Axis;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -50,6 +51,15 @@ public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider 
 		return new TranslatableComponent("test");
 	}
 	
+	public String[] getCableWireLabels(NodePos node) {		
+		Optional<ElectricNetworkHandlerCapability.Component<?, ?, ?>> wire = ElectricUtility.findComponentsOnNode(level, node).stream().filter(component -> !component.pos().equals(this.worldPosition)).findAny();
+		if (wire.isPresent()) {
+			return wire.get().getWireLanes(level, node);
+		} else {
+			return new String[] {};
+		}
+	}
+	
 	public NodePos[] getUDLRCableNodes(Direction playerFacing) {
 		
 		BlockState state = this.level.getBlockState(this.worldPosition);
@@ -75,7 +85,7 @@ public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider 
 						cableNodes.get(Direction.fromYRot(90 + angle))
 				};
 			}
-						
+			
 		}
 		
 		return new NodePos[] {};

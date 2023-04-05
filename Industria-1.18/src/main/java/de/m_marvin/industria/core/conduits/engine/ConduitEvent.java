@@ -36,6 +36,11 @@ public class ConduitEvent extends Event {
 		public ConduitBreakEvent(LevelAccessor level, ConduitPos position, PlacedConduit conduitState) {
 			super(level, position, conduitState);
 		}
+
+		@Override
+		public boolean isCancelable() {
+			return true;
+		}
 		
 	}
 
@@ -43,6 +48,27 @@ public class ConduitEvent extends Event {
 	public static class ConduitPlaceEvent extends ConduitEvent {
 		
 		public ConduitPlaceEvent(LevelAccessor level, ConduitPos position, PlacedConduit conduitState) {
+			super(level, position, conduitState);
+		}
+		
+		@Override
+		public boolean isCancelable() {
+			return true;
+		}
+		
+	}
+	
+	public static class ConduitLoadEvent extends ConduitEvent {
+		
+		public ConduitLoadEvent(LevelAccessor level, ConduitPos position, PlacedConduit conduitState) {
+			super(level, position, conduitState);
+		}
+		
+	}
+
+	public static class ConduitUnloadEvent extends ConduitEvent {
+
+		public ConduitUnloadEvent(LevelAccessor level, ConduitPos position, PlacedConduit conduitState) {
 			super(level, position, conduitState);
 		}
 		

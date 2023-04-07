@@ -21,7 +21,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider {
 	
@@ -51,7 +50,7 @@ public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider 
 		return new TranslatableComponent("test");
 	}
 	
-	public String[] getCableWireLabels(NodePos node) {		
+	public String[] getCableWireLabels(NodePos node) {
 		Optional<ElectricNetworkHandlerCapability.Component<?, ?, ?>> wire = ElectricUtility.findComponentsOnNode(level, node).stream().filter(component -> !component.pos().equals(this.worldPosition)).findAny();
 		if (wire.isPresent()) {
 			return wire.get().getWireLanes(level, node);
@@ -66,7 +65,7 @@ public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider 
 		if (state.getBlock() == ModBlocks.JUNCTION_BOX.get()) {
 			
 			Map<Direction, NodePos> cableNodes = ((JunctionBoxBlock) state.getBlock()).getBlockRelativeCableNodes(level, state, worldPosition);
-			Direction blockFacing = state.getValue(BlockStateProperties.FACING);
+			Direction blockFacing = ((JunctionBoxBlock) state.getBlock()).getBlockFacing(level, state, worldPosition);
 			
 			if (blockFacing.getStepY() == 0) {
 				Direction left = blockFacing.getCounterClockWise();
@@ -79,7 +78,7 @@ public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider 
 			} else {
 				float angle = playerFacing.toYRot();
 				return new NodePos[] {
-						cableNodes.get(Direction.fromYRot(angle)), 
+						cableNodes.get(Direction.fromYRot(0 + angle)), 
 						cableNodes.get(Direction.fromYRot(180 + angle)),
 						cableNodes.get(Direction.fromYRot(-90 + angle)),
 						cableNodes.get(Direction.fromYRot(90 + angle))

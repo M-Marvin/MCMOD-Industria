@@ -3,8 +3,6 @@ package de.m_marvin.industria.core.conduits.types;
 import java.io.StringReader;
 import java.util.Objects;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.univec.impl.Vec3d;

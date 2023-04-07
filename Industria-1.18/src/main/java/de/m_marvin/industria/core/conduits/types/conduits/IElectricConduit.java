@@ -26,7 +26,7 @@ public interface IElectricConduit extends IElectric<PlacedConduit, ConduitPos, C
 	
 	@Override
 	default NodePos[] getConnections(Level level, ConduitPos pos, PlacedConduit instance) {
-		return new NodePos[] { new NodePos(pos.getNodeApos(), 0), new NodePos(pos.getNodeBpos(), 1) };
+		return new NodePos[] { pos.getNodeA(), pos.getNodeB() };
 	}
 	
 	public int getWireCount();

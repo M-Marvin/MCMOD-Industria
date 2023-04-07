@@ -2,9 +2,11 @@ package de.m_marvin.industria.core.physics;
 
 import java.util.List;
 import java.util.OptionalLong;
+import java.util.function.BiFunction;
 
 import org.joml.Matrix4dc;
 import org.joml.Vector3d;
+import org.joml.Vector4d;
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
 import org.valkyrienskies.core.api.ships.properties.ShipTransform;
@@ -17,76 +19,82 @@ import de.m_marvin.industria.core.physics.engine.PhysicHandlerCapability;
 import de.m_marvin.industria.core.physics.types.ContraptionHitResult;
 import de.m_marvin.industria.core.physics.types.ContraptionPosition;
 import de.m_marvin.industria.core.registries.ModCapabilities;
+import de.m_marvin.industria.core.util.GameUtility;
+import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3d;
+import de.m_marvin.univec.impl.Vec3i;
 import kotlin.Pair;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.util.LazyOptional;
 
 public class PhysicUtility {
 	
 	/* Naming and finding of contraptions */
 	
 	public static void setContraptionName(Level level, Ship contraption, String name) {
-		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
-		if (physicHandler.isPresent()) {
-			physicHandler.resolve().get().setContraptionName(contraption.getId(), name);
-		}
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		handler.setContraptionName(contraption.getId(), name);
 	}
 	
 	public static String getContraptionName(Level level, Ship contraption, String name) {
-		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
-		if (physicHandler.isPresent()) {
-			return physicHandler.resolve().get().getContraptionName(contraption.getId());
-		}
-		return null;
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		return handler.getContraptionName(contraption.getId());
 	}
 	
 	public static OptionalLong getContraptionIdByName(Level level, String name) {
-		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
-		if (physicHandler.isPresent()) {
-			return physicHandler.resolve().get().getContraption(name);
-		}
-		return OptionalLong.empty();
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		return handler.getContraption(name);
 	}
 
 	public static Ship getContraptionByName(Level level, String name) {
-		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
-		if (physicHandler.isPresent()) {
-			OptionalLong id = physicHandler.resolve().get().getContraption(name);
-			if (id.isPresent()) return getContraptionById(level, id.getAsLong());
-		}
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		OptionalLong id = handler.getContraption(name);
+		if (id.isPresent()) return getContraptionById(level, id.getAsLong());
 		return null;
 	}
 
 	public static Iterable<Ship> getContraptionIntersecting(Level level, BlockPos position)  {
-		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
-		if (physicHandler.isPresent()) {
-			return physicHandler.resolve().get().getContraptionIntersecting(position);
-		}
-		return null;
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		return handler.getContraptionIntersecting(position);
 	}
 	
 	public static Ship getContraptionOfBlock(Level level, BlockPos shipBlockPos) {
-		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
-		if (physicHandler.isPresent()) {
-			return physicHandler.resolve().get().getContraptionOfBlock(shipBlockPos);
-		}
-		return null;
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		return handler.getContraptionOfBlock(shipBlockPos);
 	}
 
 	public static Ship getContraptionById(Level level, long id) {
-		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
-		if (physicHandler.isPresent()) {
-			return physicHandler.resolve().get().getContraptionById(id);
-		}
-		return null;
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		return handler.getContraptionById(id);
 	}
 	
 	/* Translating of positions and moving of contraptions */
+
+	public static Direction toWorldDirection(ShipTransform contraption, Direction direction) {
+		Vec3d vec = new Vec3d(MathUtility.getDirectionVec(direction));
+		Vec3d worldVec = toWorldVector(contraption, vec);
+		return MathUtility.getVecDirection(new Vec3i((int) Math.round(worldVec.x), (int) Math.round(worldVec.x), (int) Math.round(worldVec.x)));
+	}
+	
+	public static Vec3d toWorldVector(ShipTransform contraption, Vec3d vector) {
+		Vector4d v = contraption.getShipToWorld().transform(new Vector4d(vector.x, vector.y, vector.z, 0));
+		return new Vec3d(v.x, v.y, v.z);
+	}
+
+	public static Direction toContraptionDirection(ShipTransform contraption, Direction direction) {
+		Vec3d vec = new Vec3d(MathUtility.getDirectionVec(direction));
+		Vec3d shipVec = toContraptionVector(contraption, vec);
+		return MathUtility.getVecDirection(new Vec3i((int) Math.round(shipVec.x), (int) Math.round(shipVec.x), (int) Math.round(shipVec.x)));
+	}
+	
+	public static Vec3d toContraptionVector(ShipTransform contraption, Vec3d vector) {
+		Vector4d v = contraption.getWorldToShip().transform(new Vector4d(vector.x, vector.y, vector.z, 0));
+		return new Vec3d(v.x, v.y, v.z);
+	}
 	
 	public static Vec3d toContraptionPos(ShipTransform contraption, Vec3d pos) {
 		Matrix4dc worldToShip = contraption.getWorldToShip();
@@ -125,13 +133,37 @@ public class PhysicUtility {
 	}
 
 	public static Vec3d ensureWorldCoordinates(Level level, BlockPos referencePos, Vec3d position) {
-		Ship contraption = getContraptionOfBlock(level, referencePos);
-		if (contraption != null) {
-			return toWorldPos(contraption.getTransform(), position);
-		}
-		return position;
+		return optionalContraptionTransform(level, referencePos, PhysicUtility::toWorldPos, position);
 	}
 	
+	public static Vec3d ensureContraptionCoordinates(Level level, BlockPos referencePos, Vec3d position) {
+		return optionalContraptionTransform(level, referencePos, PhysicUtility::toContraptionPos, position);
+	}
+
+	public static BlockPos ensureWorldBlockCoordinates(Level level, BlockPos referencePos, BlockPos position) {
+		return optionalContraptionTransform(level, referencePos, PhysicUtility::toWorldBlockPos, position);
+	}
+	
+	public static BlockPos ensureContraptionBlockCoordinates(Level level, BlockPos referencePos, BlockPos position) {
+		return optionalContraptionTransform(level, referencePos, PhysicUtility::toContraptionBlockPos, position);
+	}
+	
+	public static Direction ensureWorldDirection(Level level, BlockPos referencePos, Direction direction) {
+		return optionalContraptionTransform(level, referencePos, PhysicUtility::toWorldDirection, direction);
+	}
+
+	public static Vec3d ensureWorldVector(Level level, BlockPos referencePos, Vec3d vector) {
+		return optionalContraptionTransform(level, referencePos, PhysicUtility::toWorldVector, vector);
+	}
+
+	public static Direction ensureContraptionDirection(Level level, BlockPos referencePos, Direction direction) {
+		return optionalContraptionTransform(level, referencePos, PhysicUtility::toContraptionDirection, direction);
+	}
+
+	public static Vec3d ensureContraptionVector(Level level, BlockPos referencePos, Vec3d vector) {
+		return optionalContraptionTransform(level, referencePos, PhysicUtility::toContraptionVector, vector);
+	}
+		
 	public static ContraptionPosition getPosition(ServerShip contraption, boolean massCenter) {
 		return PhysicHandlerCapability.getPosition(contraption, massCenter);
 	}
@@ -143,19 +175,13 @@ public class PhysicUtility {
 	/* Listing and creation contraptions in the world */
 	
 	public static List<Ship> getLoadedContraptions(Level level) {
-		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
-		if (physicHandler.isPresent()) {
-			return physicHandler.resolve().get().getLoadedContraptions();
-		}
-		return null;
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		return handler.getLoadedContraptions();
 	}
 
 	public static List<Ship> getAllContraptions(Level level) {
-		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
-		if (physicHandler.isPresent()) {
-			return physicHandler.resolve().get().getAllContraptions();
-		}
-		return null;
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		return handler.getAllContraptions();
 	}
 	
 	public static Ship createNewContraptionAt(ServerLevel level, BlockPos position, float scale) {
@@ -163,35 +189,23 @@ public class PhysicUtility {
 	}
 	
 	public static ServerShip createContraptionAt(ServerLevel level, Vec3d position, float scale) {
-		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
-		if (physicHandler.isPresent()) {
-			return physicHandler.resolve().get().createContraptionAt(position, scale);
-		}
-		return null;
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		return handler.createContraptionAt(position, scale);
 	}
 	
 	public static boolean removeContraption(ServerLevel level, Ship contraption) {
-		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
-		if (physicHandler.isPresent()) {
-			return physicHandler.resolve().get().removeContraption(contraption);
-		}
-		return false;
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		return handler.removeContraption(contraption);
 	}
 	
 	public static Ship convertToContraption(ServerLevel level, AABB areaBounds, boolean removeOriginal, float scale) {
-		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
-		if (physicHandler.isPresent()) {
-			return physicHandler.resolve().get().convertToContraption(areaBounds, removeOriginal, scale);
-		}
-		return null;
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		return handler.convertToContraption(areaBounds, removeOriginal, scale);
 	}
 	
 	public static ServerShip assembleToContraption(ServerLevel level, List<BlockPos> blocks, boolean removeOriginal, float scale) {
-		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
-		if (physicHandler.isPresent()) {
-			return physicHandler.resolve().get().assembleToContraption(blocks, removeOriginal, scale);
-		}
-		return null;
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		return handler.assembleToContraption(blocks, removeOriginal, scale);
 	}
 	
 	/* Raycasting for contraptions */
@@ -201,55 +215,38 @@ public class PhysicUtility {
 	}
 	
 	public static ContraptionHitResult clipForContraption(Level level, Vec3d from, Vec3d to) {
-		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
-		if (physicHandler.isPresent()) {
-			return physicHandler.resolve().get().clipForContraption(from, to);
-		}
-		return null;
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		return handler.clipForContraption(from, to);
 	}
 	
 	/* Constraints */
 	
 	public static int addConstraint(Level level, VSConstraint constraint) {
-		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
-		if (physicHandler.isPresent()) {
-			return physicHandler.resolve().get().addConstraint(constraint);
-		}
-		return 0;
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		return handler.addConstraint(constraint);
 	}
 	
 	public static boolean removeConstraint(Level level, int constraint) {
-		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
-		if (physicHandler.isPresent()) {
-			return physicHandler.resolve().get().removeConstaint(constraint);
-		}
-		return false;
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		return handler.removeConstaint(constraint);
 	}
 
 	public static List<Integer> getAllConstraints(Level level) {
-		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
-		if (physicHandler.isPresent()) {
-			physicHandler.resolve().get().getAllConstraints();
-		}
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		handler.getAllConstraints(); // TODO
 		return null;
 	}
 	
 	public static VSConstraint getConstraintInstance(Level level, int constraint) {
-		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
-		if (physicHandler.isPresent()) {
-			return physicHandler.resolve().get().getConstraint(constraint);
-		}
-		return null;
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		return handler.getConstraint(constraint);
 	}
 	
 	/* Util stuff */
 
 	public static String getDimensionId(Level level) {
-		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
-		if (physicHandler.isPresent()) {
-			return physicHandler.resolve().get().getDimensionId();
-		}
-		return null;
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		return handler.getDimensionId();
 	}
 	
 	public static long getGroundBodyId(Level level) {
@@ -270,11 +267,16 @@ public class PhysicUtility {
 	}
 	
 	public static boolean resetFrameQueue(ServerLevel level) {
-		LazyOptional<PhysicHandlerCapability> physicHandler = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
-		if (physicHandler.isPresent()) {
-			return physicHandler.resolve().get().resetFrameQueue();
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		return handler.resetFrameQueue();
+	}
+	
+	public static <T> T optionalContraptionTransform(Level level, BlockPos position, BiFunction<ShipTransform, T, T> optionalTransform, T input) {
+		Ship contraption = getContraptionOfBlock(level, position);
+		if (contraption != null) {
+			return optionalTransform.apply(contraption.getTransform(), input);
 		}
-		return false;
+		return input;
 	}
 	
 }

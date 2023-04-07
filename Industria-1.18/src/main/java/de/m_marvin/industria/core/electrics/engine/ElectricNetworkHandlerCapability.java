@@ -9,15 +9,11 @@ import com.google.common.base.Objects;
 
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent;
-import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitBreakEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitLoadEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitPlaceEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitUnloadEvent;
-import de.m_marvin.industria.core.conduits.types.PlacedConduit;
-import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
-import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.IElectricConduit;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
@@ -29,13 +25,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -388,8 +382,8 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				Set<Component<?, ?, ?>> componentsToUpdate = new HashSet<Component<?, ?, ?>>();
 				NodePos[] nodes = component.getNodes(level);
 				for (int i = 0; i < nodes.length; i++) {
-					NodePos node = nodes[i];
-					componentsToUpdate.addAll(this.node2componentMap.get(node));
+					Set<Component<?, ?, ?>> components = this.node2componentMap.get(nodes[i]);
+					if (components != null) componentsToUpdate.addAll(components);
 				}
 				if (componentsToUpdate.isEmpty()) {
 					ElectricNetwork emptyNetwork = this.component2circuitMap.remove(component);
@@ -440,8 +434,11 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			for (NodePos node : component.type().getConnections(this.level, component.pos, component.instance())) {
 				Set<Component<?, ?, ?>> componentSet = this.node2componentMap.getOrDefault(node, new HashSet<Component<?, ?, ?>>());
 				componentSet.remove(component);
-				if (componentSet.isEmpty()) this.node2componentMap.remove(node);
-				this.node2componentMap.put(node, componentSet);
+				if (componentSet.isEmpty()) {
+					this.node2componentMap.remove(node);
+				} else {
+					this.node2componentMap.put(node, componentSet);
+				}
 			}
 		}
 		return component;

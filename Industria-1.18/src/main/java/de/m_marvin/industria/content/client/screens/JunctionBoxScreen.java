@@ -1,7 +1,10 @@
 package de.m_marvin.industria.content.client.screens;
 
 import java.lang.invoke.TypeDescriptor.OfField;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import com.ibm.icu.impl.RuleCharacterIterator.Position;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -10,7 +13,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.content.container.JunctionBoxContainer;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
+import de.m_marvin.univec.impl.Vec2d;
 import de.m_marvin.univec.impl.Vec2i;
+import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -39,7 +44,8 @@ public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContai
 	protected WireNode[] wireNodesRight;
 	
 	protected WireNode firstSelection = null;
-	protected WireNode secondSelection = null;
+	
+	protected Set<WireNode[]> connections = new HashSet<>();
 	
 	protected class WireNode implements GuiEventListener, NarratableEntry {
 		
@@ -76,7 +82,7 @@ public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContai
 		@Override
 		public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
 			if (isMouseOver(pMouseX, pMouseY)) {
-				JunctionBoxScreen.this.secondSelection = this;
+				connectNodes(JunctionBoxScreen.this.firstSelection, this);
 				return true;
 			}
 			return true;
@@ -89,6 +95,17 @@ public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContai
 			int i1 = horizontal ? WIRE_NODE_LENGTH : WIRE_NODE_WIDTH;
 			int i2 = !horizontal ? WIRE_NODE_LENGTH : WIRE_NODE_WIDTH;
 			return uiPos.x < i && uiPos.x + i1 > i && uiPos.y < j && uiPos.y + i2 > j;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			// TODO Auto-generated method stub
+			return super.equals(obj);
+		}
+		
+		@Override
+		public int hashCode() {
+			return Objects.hash()
 		}
 		
 	}
@@ -127,6 +144,23 @@ public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContai
 		this.wireNodesRight = new WireNode[this.laneWiresRight.length];
 		int offsetr = 89 - this.laneWiresRight.length * wireDistance / 2;
 		for (int i = 0; i < this.laneWiresRight.length; i++) this.wireNodesRight[i] = new WireNode(i, 3, new Vec2i(131, i * wireDistance + offsetr), true);
+		
+	}
+	
+	protected void connectNodes(WireNode nodeA, WireNode nodeB) {
+		
+		WireNode[] connection = new WireNode[] {nodeA, nodeB};
+		if (this.connections.contains(connection)) {
+			this.connections.remove(connection);
+		} else {
+			this.connections.add(connection);
+		}
+		
+	}
+	
+	protected void drawConnection(Vec2d origin, Vec2d nodeA, Vec2d nodeB) {
+		
+		
 		
 	}
 	

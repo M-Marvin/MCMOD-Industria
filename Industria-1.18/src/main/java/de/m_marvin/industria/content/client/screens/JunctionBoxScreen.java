@@ -170,6 +170,7 @@ public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContai
 		this.addWidget(this.namingField);
 		
 		//this.namingField.setVisible(false);
+		Industria.NETWORK.sendToServer(new );
 		
 	}
 	

@@ -131,6 +131,9 @@ dependencies {
  	implementation fg.deobf("curse.maven:kotlinforforge-351264:4311661")
  	implementation fg.deobf("curse.maven:valkyrienskies-258371:4367151")
  	
+	implementation fg.deobf("curse.maven:oculus-581495:4451905")
+	implementation fg.deobf("curse.maven:rubidium-574856:4494903")
+	
 	//implementation fg.deobf("curse.maven:flywheel-486392:3864518")
 	//implementation fg.deobf("curse.maven:create-328085:3864525")
 	implementation fg.deobf("curse.maven:atlasviewer-633577:3832297")

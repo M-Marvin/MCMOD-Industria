@@ -36,4 +36,6 @@ public class JunctionBoxContainer extends BlockEntityContainerBase<JunctionBoxBl
 		return this.blockEntity.getUDLRCableNodes(this.playerInv.player.getDirection());
 	}
 	
+	
+	
 }

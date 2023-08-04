@@ -54,7 +54,7 @@ public class ConduitWorldRenderer {
 	@SubscribeEvent
 	public static void onWorldRender(RenderLevelStageEvent event) {
 		
-		if (event.getStage() == Stage.AFTER_SOLID_BLOCKS) {
+		if (event.getStage() == Stage.AFTER_PARTICLES) { // AFTER_SOLID_BLOCKS // TODO
 
 			if (!Minecraft.getInstance().getEntityRenderDispatcher().shouldRenderHitBoxes()) {
 				
@@ -75,7 +75,7 @@ public class ConduitWorldRenderer {
 				
 			}
 			
-		} else if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_CUTOUT_MIPPED_BLOCKS_BLOCKS) {
+		//} else if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_CUTOUT_MIPPED_BLOCKS_BLOCKS) {
 			
 			if (Minecraft.getInstance().getEntityRenderDispatcher().shouldRenderHitBoxes()) {
 				

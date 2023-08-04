@@ -24,6 +24,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider {
 	
+	
+	
 	public JunctionBoxBlockEntity(BlockPos pPos, BlockState pBlockState) {
 		super(ModBlockEntities.JUNCTION_BOX.get(), pPos, pBlockState);
 	}

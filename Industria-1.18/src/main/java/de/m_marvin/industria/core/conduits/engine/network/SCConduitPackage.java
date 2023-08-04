@@ -10,7 +10,6 @@ import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.NetworkEvent;
 
 public class SCConduitPackage {

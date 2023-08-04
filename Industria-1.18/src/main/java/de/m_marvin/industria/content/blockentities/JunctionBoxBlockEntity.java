@@ -61,6 +61,13 @@ public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider 
 		}
 	}
 	
+	public void setCableWireLabels(NodePos node, String[] lanes) {
+		Optional<ElectricNetworkHandlerCapability.Component<?, ?, ?>> wire = ElectricUtility.findComponentsOnNode(level, node).stream().filter(component -> !component.pos().equals(this.worldPosition)).findAny();
+		if (wire.isPresent()) {
+			wire.get().setWireLanes(level, node, lanes);
+		}
+	}
+	
 	public NodePos[] getUDLRCableNodes(Direction playerFacing) {
 		
 		BlockState state = this.level.getBlockState(this.worldPosition);

@@ -247,6 +247,9 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		public String[] getWireLanes(Level level, NodePos node) {
 			return type.getWireLanes(pos, instance, node);
 		}
+		public void setWireLanes(Level level, NodePos node, String[] lanes) {
+			type.setWireLanes(pos, instance, node, lanes);
+		}
 		public void notifyRewired(Level level, Component<?, ?, ?> neighbor) {
 			type.neighborRewired(level, instance, pos, neighbor);
 		}

@@ -1,10 +1,7 @@
 package de.m_marvin.industria.content.client.screens;
 
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -12,6 +9,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import de.m_marvin.industria.Industria;
 import de.m_marvin.industria.content.container.JunctionBoxContainer;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
+import de.m_marvin.industria.core.electrics.engine.network.CUpdateJunctionLanes;
 import de.m_marvin.univec.impl.Vec2d;
 import de.m_marvin.univec.impl.Vec2i;
 import net.minecraft.client.gui.components.EditBox;
@@ -19,7 +17,6 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.gui.screens.inventory.AnvilScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -169,9 +166,6 @@ public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContai
 		this.namingField.setVisible(false);
 		this.addWidget(this.namingField);
 		
-		//this.namingField.setVisible(false);
-		Industria.NETWORK.sendToServer(new );
-		
 	}
 	
 	protected WireNode getNodeAt(Vec2d position) {
@@ -205,9 +199,6 @@ public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContai
 		case 3: this.namingField.setValue(this.laneWiresRight[node.labelId]); break;
 		}
 		
-
-		this.namingField.setValue("TESTS");
-		
 	}
 	
 	protected void renameNode(String name) {
@@ -215,14 +206,23 @@ public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContai
 		if (this.selectedNode == null) return;
 		
 		switch (this.selectedNode.nodeId) {
-		case 0: this.laneWiresUp[this.selectedNode.labelId] = this.namingField.getValue(); break;
-		case 1: this.laneWiresDown[this.selectedNode.labelId] = this.namingField.getValue(); break;
-		case 2: this.laneWiresLeft[this.selectedNode.labelId] = this.namingField.getValue(); break;
-		case 3: this.laneWiresRight[this.selectedNode.labelId] = this.namingField.getValue(); break;
+		case 0: 
+			this.laneWiresUp[this.selectedNode.labelId] = this.namingField.getValue();
+			Industria.NETWORK.sendToServer(new CUpdateJunctionLanes(this.laneWiresUp, this.cableNodesUDLR[0]));
+			break;
+		case 1: 
+			this.laneWiresDown[this.selectedNode.labelId] = this.namingField.getValue();
+			Industria.NETWORK.sendToServer(new CUpdateJunctionLanes(this.laneWiresDown, this.cableNodesUDLR[1]));
+			break;
+		case 2: 
+			this.laneWiresLeft[this.selectedNode.labelId] = this.namingField.getValue();
+			Industria.NETWORK.sendToServer(new CUpdateJunctionLanes(this.laneWiresLeft, this.cableNodesUDLR[2]));
+			break;
+		case 3: 
+			this.laneWiresRight[this.selectedNode.labelId] = this.namingField.getValue();
+			Industria.NETWORK.sendToServer(new CUpdateJunctionLanes(this.laneWiresRight, this.cableNodesUDLR[3]));
+			break;
 		}
-		
-		System.out.println("Lanes changed");
-		// TODO Send to server
 		
 	}
 	

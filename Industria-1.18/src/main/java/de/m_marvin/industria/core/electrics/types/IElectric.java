@@ -35,6 +35,7 @@ public interface IElectric<I, P, T> extends IForgeRegistryEntry<T> {
 	
 	public NodePos[] getConnections(Level level, P pos, I instance);
 	public String[] getWireLanes(P pos, I instance, NodePos node);
+	public void setWireLanes(P pos, I instance, NodePos node, String[] lanes);
 	
 	public static enum Type {
 		

@@ -5,6 +5,7 @@ import java.util.Optional;
 import de.m_marvin.industria.core.conduits.engine.network.CChangeConduitPlacementLength;
 import de.m_marvin.industria.core.conduits.engine.network.SCConduitPackage;
 import de.m_marvin.industria.core.conduits.engine.network.SSyncPlacedConduit;
+import de.m_marvin.industria.core.electrics.engine.network.CUpdateJunctionLanes;
 import de.m_marvin.industria.core.scrollinput.engine.network.CScrollInputPackage;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -20,6 +21,7 @@ public class ModNetworkPackages {
 		network.registerMessage(id++, SCConduitPackage.SCPlaceConduitPackage.class, SCConduitPackage.SCPlaceConduitPackage::encode, SCConduitPackage.SCPlaceConduitPackage::decode, SCConduitPackage.SCPlaceConduitPackage::handle);
 		network.registerMessage(id++, SCConduitPackage.SCBreakConduitPackage.class, SCConduitPackage.SCBreakConduitPackage::encode, SCConduitPackage.SCBreakConduitPackage::decode, SCConduitPackage.SCBreakConduitPackage::handle);
 		network.registerMessage(id++, CScrollInputPackage.class, CScrollInputPackage::encode, CScrollInputPackage::decode, CScrollInputPackage::handle);
+		network.registerMessage(id++, CUpdateJunctionLanes.class, CUpdateJunctionLanes::encode, CUpdateJunctionLanes::decode, CUpdateJunctionLanes::handle);
 	}
 	
 }

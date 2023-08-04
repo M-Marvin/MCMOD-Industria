@@ -120,6 +120,13 @@ public abstract class ElectricConduit extends Conduit implements IElectricCondui
 	}
 	
 	@Override
+	public void setWireLanes(ConduitPos pos, PlacedConduit instance, NodePos node, String[] lanes) {
+		if (this.wireLabelStorage != null) {
+			this.wireLabelStorage.setData(lanes);
+		}
+	}
+	
+	@Override
 	public void plotCircuit(Level level, PlacedConduit instance, ConduitPos position, ElectricNetwork circuit, Consumer<CircuitTemplate> plotter) {
 		CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(Industria.MODID, "resistor"));
 		template.setProperty("resistance", 10); // TODO Wire resistance

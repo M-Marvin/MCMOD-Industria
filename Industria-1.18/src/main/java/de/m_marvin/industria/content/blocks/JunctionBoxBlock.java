@@ -100,6 +100,12 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricConnec
 		// TODO Auto-generated method stub
 		return new String[] {};
 	}
+
+	@Override
+	public void setWireLanes(BlockPos pos, BlockState instance, NodePos node, String[] lanes) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	@Override
 	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit, Consumer<CircuitTemplate> plotter) {

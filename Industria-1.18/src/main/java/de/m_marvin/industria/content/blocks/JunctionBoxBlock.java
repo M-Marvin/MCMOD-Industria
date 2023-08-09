@@ -1,7 +1,5 @@
 package de.m_marvin.industria.content.blocks;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
@@ -16,9 +14,7 @@ import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapabil
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
 import de.m_marvin.industria.core.physics.PhysicUtility;
-import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
-import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
@@ -100,32 +96,17 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricConnec
 		// TODO Auto-generated method stub
 		return new String[] {};
 	}
+
+	@Override
+	public void setWireLanes(BlockPos pos, BlockState instance, NodePos node, String[] laneLabels) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	@Override
 	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit, Consumer<CircuitTemplate> plotter) {
 		// TODO Auto-generated method stub
 		
-	}
-	
-	public Map<Direction, NodePos> getBlockRelativeCableNodes(Level level, BlockState state, BlockPos position) {
-		NodePos[] nodes = getConnections(level, position, state);
-		ConduitNode[] connections = getConduitNodes(level, position, state);
-		Vec3i center = new Vec3i(8, 8, 8);
-		Direction blockFacing = state.getValue(BlockStateProperties.FACING);
-		switch (blockFacing.getAxis()) {
-			case X: center.setX(blockFacing.getAxisDirection() == AxisDirection.NEGATIVE ? 0 : 16); break;
-			case Y: center.setY(blockFacing.getAxisDirection() == AxisDirection.NEGATIVE ? 0 : 16); break;
-			case Z: center.setZ(blockFacing.getAxisDirection() == AxisDirection.NEGATIVE ? 0 : 16); break;
-		}
-		Map<Direction, NodePos> cables = new HashMap<>();
-		for (int i = 0; i < connections.length; i++) {
-			Vec3d dVf = PhysicUtility.ensureWorldCoordinates(level, position, new Vec3d(connections[i].getOffset())).sub(
-						PhysicUtility.ensureWorldCoordinates(level, position, new Vec3d(center))).div(8.0);
-			Vec3i dVec = new Vec3i((int) Math.round(dVf.x), (int) Math.round(dVf.y), (int) Math.round(dVf.z));
-			Direction d = MathUtility.getVecDirection(dVec);
-			cables.put(d, nodes[i]);
-		}
-		return cables;
 	}
 	
 	public Direction getBlockFacing(Level level, BlockState state, BlockPos position) {
@@ -152,5 +133,5 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricConnec
 		}
 		return InteractionResult.SUCCESS;
 	}
-
+	
 }

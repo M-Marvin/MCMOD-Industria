@@ -1,17 +1,14 @@
-package de.m_marvin.industria.content.client.screens;
+package de.m_marvin.industria.core.client.electrics;
 
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import de.m_marvin.industria.Industria;
-import de.m_marvin.industria.content.container.JunctionBoxContainer;
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
+import de.m_marvin.industria.core.electrics.engine.network.CUpdateJunctionLanes;
 import de.m_marvin.univec.impl.Vec2d;
 import de.m_marvin.univec.impl.Vec2i;
 import net.minecraft.client.gui.components.EditBox;
@@ -19,16 +16,15 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.gui.screens.inventory.AnvilScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContainer> {
+public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContainer<?>> {
 	
-	public static final ResourceLocation JUNCTION_BOX_LOCATION = new ResourceLocation(Industria.MODID, "textures/gui/junction_box.png");
+	public static final ResourceLocation JUNCTION_BOX_LOCATION = new ResourceLocation(IndustriaCore.MODID, "textures/gui/junction_box.png");
 
 	public static final int WIRE_NODE_WIDTH = 9;
 	public static final int WIRE_NODE_LENGTH = 18;
@@ -122,7 +118,7 @@ public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContai
 		
 	}
 	
-	public JunctionBoxScreen(JunctionBoxContainer pMenu, Inventory pPlayerInventory, Component pTitle) {
+	public JunctionBoxScreen(JunctionBoxContainer<?> pMenu, Inventory pPlayerInventory, Component pTitle) {
 		super(pMenu, pPlayerInventory, pTitle);
 		
 	}
@@ -170,7 +166,7 @@ public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContai
 		this.addWidget(this.namingField);
 		
 		//this.namingField.setVisible(false);
-		Industria.NETWORK.sendToServer(new );
+		//Industria.NETWORK.sendToServer(new );
 		
 	}
 	
@@ -215,14 +211,23 @@ public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContai
 		if (this.selectedNode == null) return;
 		
 		switch (this.selectedNode.nodeId) {
-		case 0: this.laneWiresUp[this.selectedNode.labelId] = this.namingField.getValue(); break;
-		case 1: this.laneWiresDown[this.selectedNode.labelId] = this.namingField.getValue(); break;
-		case 2: this.laneWiresLeft[this.selectedNode.labelId] = this.namingField.getValue(); break;
-		case 3: this.laneWiresRight[this.selectedNode.labelId] = this.namingField.getValue(); break;
+		case 0:
+			this.laneWiresUp[this.selectedNode.labelId] = this.namingField.getValue();
+			IndustriaCore.NETWORK.sendToServer(new CUpdateJunctionLanes(this.cableNodesUDLR[0], laneWiresUp));
+			break;
+		case 1:
+			this.laneWiresDown[this.selectedNode.labelId] = this.namingField.getValue();
+			IndustriaCore.NETWORK.sendToServer(new CUpdateJunctionLanes(this.cableNodesUDLR[1], laneWiresDown));
+			break;
+		case 2:
+			this.laneWiresLeft[this.selectedNode.labelId] = this.namingField.getValue();
+			IndustriaCore.NETWORK.sendToServer(new CUpdateJunctionLanes(this.cableNodesUDLR[2], laneWiresLeft));
+			break;
+		case 3:
+			this.laneWiresRight[this.selectedNode.labelId] = this.namingField.getValue();
+			IndustriaCore.NETWORK.sendToServer(new CUpdateJunctionLanes(this.cableNodesUDLR[3], laneWiresRight));
+			break;
 		}
-		
-		System.out.println("Lanes changed");
-		// TODO Send to server
 		
 	}
 	

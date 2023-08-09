@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import de.m_marvin.industria.Industria;
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.engine.network.SSyncPlacedConduit;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitLoadEvent;
@@ -13,7 +13,7 @@ import de.m_marvin.industria.core.conduits.engine.network.SCConduitPackage.SCBre
 import de.m_marvin.industria.core.conduits.engine.network.SCConduitPackage.SCPlaceConduitPackage;
 import de.m_marvin.industria.core.conduits.engine.network.SSyncPlacedConduit.Status;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
-import de.m_marvin.industria.core.registries.ModCapabilities;
+import de.m_marvin.industria.core.registries.Capabilities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -26,7 +26,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkEvent.Context;
 
-@Mod.EventBusSubscriber(modid=Industria.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE, value=Dist.CLIENT)
+@Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE, value=Dist.CLIENT)
 public class ClientConduitPackageHandler {
 	
 	/* Handle SSyncPlacedConduit package */
@@ -80,7 +80,7 @@ public class ClientConduitPackageHandler {
 		Level level = Minecraft.getInstance().level;
 		
 		if (level != null) {
-			LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
+			LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
 			if (conduitHolder.isPresent()) {
 				if (msg.getStatus() == Status.ADDED) {
 					for (PlacedConduit conduitState : msg.conduitStates) {

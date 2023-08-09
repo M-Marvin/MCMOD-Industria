@@ -2,7 +2,7 @@ package de.m_marvin.industria.core.conduits.types.items;
 
 import java.util.function.Supplier;
 
-import de.m_marvin.industria.Industria;
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.engine.network.CChangeConduitPlacementLength;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
@@ -49,7 +49,7 @@ public abstract class AbstractConduitItem extends Item implements IScrollOverrid
 	public void onScroll(UseOnContext context, double delta) {
 		CompoundTag itemTag = context.getItemInHand().getOrCreateTag();
 		float placementLength = (float) MathUtility.clamp(itemTag.getFloat("Length") + delta * 0.1F, 1F, 3F);
-		Industria.NETWORK.sendToServer(new CChangeConduitPlacementLength(placementLength));
+		IndustriaCore.NETWORK.sendToServer(new CChangeConduitPlacementLength(placementLength));
 		context.getPlayer().displayClientMessage(new TranslatableComponent("industria.item.info.conduit.changeLength", placementLength), true);
 	}
 	

@@ -5,9 +5,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Function;
 
-import de.m_marvin.industria.core.conduits.registry.Conduits;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitShape;
+import de.m_marvin.industria.core.registries.Conduits;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
@@ -114,6 +114,7 @@ public class PlacedConduit {
 			CompoundTag storages = new CompoundTag();
 			for (Entry<String, ConduitStateStorage<?, ? extends Tag>> storage : this.dataStorages.entrySet()) {
 				storages.put(storage.getKey(), storage.getValue().serialize());
+				System.out.println("Saved " + storage.getValue().serialize()); // FIXME find out why lanes get not saved
 			}
 			tag.put("Storages", storages);
 		}

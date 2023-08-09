@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 
 import com.google.common.base.Objects;
 
-import de.m_marvin.industria.Industria;
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitBreakEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitLoadEvent;
@@ -19,7 +19,7 @@ import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.IElectric;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
-import de.m_marvin.industria.core.registries.ModCapabilities;
+import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -33,7 +33,7 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid=Industria.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class ElectricNetworkHandlerCapability implements ICapabilitySerializable<ListTag> {
 	
 	/* Capability handling */
@@ -42,7 +42,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-		if (cap == ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY) {
+		if (cap == Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY) {
 			return holder.cast();
 		}
 		return LazyOptional.empty();
@@ -60,7 +60,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		for (ElectricNetwork circuitNetwork : this.circuitNetworks) {
 			nbt2.add(circuitNetwork.saveNBT());
 		}
-		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "Saved " + nbt2.size() + " electric networks");
+		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "Saved " + nbt2.size() + " electric networks");
 		
 		return nbt2;
 	}
@@ -87,8 +87,8 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				});
 			}
 		}
-		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "Loaded " + this.circuitNetworks.size() + "/" + nbt.size() + " electric networks");
-		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "Loaded " + this.pos2componentMap.size() + " electric components");
+		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "Loaded " + this.circuitNetworks.size() + "/" + nbt.size() + " electric networks");
+		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "Loaded " + this.pos2componentMap.size() + " electric components");
 	}
 	
 	public ElectricNetworkHandlerCapability(Level level) {
@@ -121,7 +121,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	@SubscribeEvent
 	public static void onBlockStateChange(BlockEvent.NeighborNotifyEvent event) {
 		Level level = (Level) event.getWorld();
-		ElectricNetworkHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		ElectricNetworkHandlerCapability handler = GameUtility.getCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 		if (event.getState().getBlock() instanceof IElectricConnector) {
 			IElectricConnector block = (IElectricConnector) event.getState().getBlock();
 			handler.addComponent(event.getPos(), block, event.getState());
@@ -133,7 +133,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	@SubscribeEvent
 	public static void onConduitStateChange(ConduitEvent event) {
 		Level level = (Level) event.getLevel();
-		ElectricNetworkHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		ElectricNetworkHandlerCapability handler = GameUtility.getCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 		if (event.getConduitState().getConduit() instanceof IElectricConduit) {
 			if (event instanceof ConduitPlaceEvent || event instanceof ConduitLoadEvent) {
 				IElectricConduit conduit = (IElectricConduit) event.getConduitState().getConduit();
@@ -247,8 +247,14 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		public String[] getWireLanes(Level level, NodePos node) {
 			return type.getWireLanes(pos, instance, node);
 		}
+		public void setWireLanes(Level level, NodePos node, String[] laneLabels) {
+			type.setWireLanes(pos, instance, node, laneLabels);
+		}
 		public void notifyRewired(Level level, Component<?, ?, ?> neighbor) {
 			type.neighborRewired(level, instance, pos, neighbor);
+		}
+		public boolean isWire() {
+			return type.isWire();
 		}
 	}
 //	public static record Component<I, P, T>(P pos, IElectric<I, P, T> type, I instance) {

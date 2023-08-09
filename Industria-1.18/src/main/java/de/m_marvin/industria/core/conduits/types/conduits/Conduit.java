@@ -12,7 +12,6 @@ import org.valkyrienskies.core.apigame.constraints.VSConstraint;
 import org.valkyrienskies.core.apigame.constraints.VSRopeConstraint;
 
 import de.m_marvin.industria.content.items.ConduitCableItem;
-import de.m_marvin.industria.content.registries.ModParticleTypes;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.engine.particles.ConduitParticleOption;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
@@ -20,6 +19,7 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.physics.PhysicUtility;
+import de.m_marvin.industria.core.registries.ParticleTypes;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.NBTUtility;
@@ -142,7 +142,7 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		
 		if (!level.isClientSide()) {
 			for (Vec3d node : conduitState.getShape().nodes) {
-				((ServerLevel) level).sendParticles(new ConduitParticleOption(ModParticleTypes.CONDUIT.get(), conduitState.getConduit()), node.x + nodeOrigin.x, node.y + nodeOrigin.y, node.z + nodeOrigin.z, 10, 0.2F, 0.2F, 0.2F, 1);
+				((ServerLevel) level).sendParticles(new ConduitParticleOption(ParticleTypes.CONDUIT.get(), conduitState.getConduit()), node.x + nodeOrigin.x, node.y + nodeOrigin.y, node.z + nodeOrigin.z, 10, 0.2F, 0.2F, 0.2F, 1);
 			}
 		}
 		

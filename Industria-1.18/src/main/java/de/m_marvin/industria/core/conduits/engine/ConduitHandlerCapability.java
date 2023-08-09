@@ -4,21 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import de.m_marvin.industria.Industria;
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitBreakEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitLoadEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitPlaceEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitUnloadEvent;
 import de.m_marvin.industria.core.conduits.engine.network.SSyncPlacedConduit;
 import de.m_marvin.industria.core.conduits.engine.network.SSyncPlacedConduit.Status;
-import de.m_marvin.industria.core.conduits.registry.Conduits;
 import de.m_marvin.industria.core.conduits.types.ConduitHitResult;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
-import de.m_marvin.industria.core.registries.ModCapabilities;
+import de.m_marvin.industria.core.registries.Conduits;
+import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
@@ -46,7 +46,7 @@ import net.minecraftforge.network.PacketDistributor;
 /*
  * Contains the conduits in a world (dimension), used on server and client side
  */
-@Mod.EventBusSubscriber(modid=Industria.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag> {
 	
 	/* Capability handling */
@@ -55,7 +55,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-		if (cap == ModCapabilities.CONDUIT_HANDLER_CAPABILITY) {
+		if (cap == Capabilities.CONDUIT_HANDLER_CAPABILITY) {
 			return holder.cast();
 		}
 		return LazyOptional.empty();
@@ -72,7 +72,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 			CompoundTag conTag = con.save();
 			if (conTag != null) tag.add(conTag);
 		}
-		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Saved " + tag.size() + " conduits");
+		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Saved " + tag.size() + " conduits");
 		return tag;
 	}
 
@@ -85,7 +85,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 			if (con != null) this.conduits.add(con);
 		}
 		this.preBuildLoad = true;
-		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Loaded " + this.conduits.size() + "/" + tag.size() + " conduits");
+		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Loaded " + this.conduits.size() + "/" + tag.size() + " conduits");
 	}
 	
 	public ConduitHandlerCapability(Level level) {
@@ -98,11 +98,11 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	// Send corresponding conduits when server detects loading of a chunk trough a client
 	public static void onClientLoadsChunk(ChunkWatchEvent.Watch event) {
 		ServerLevel level = event.getWorld();
-		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
+		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
 			List<PlacedConduit> conduits = conduitHolder.resolve().get().getConduitsInChunk(event.getPos());	
 			if (conduits.size() > 0) {
-				Industria.NETWORK.send(PacketDistributor.PLAYER.with(() -> event.getPlayer()), new SSyncPlacedConduit(conduits, event.getPos(), Status.ADDED));
+				IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(() -> event.getPlayer()), new SSyncPlacedConduit(conduits, event.getPos(), Status.ADDED));
 				for (PlacedConduit conduitState : conduits) {
 					MinecraftForge.EVENT_BUS.post(new ConduitLoadEvent(level, conduitState.getPosition(), conduitState));
 				}
@@ -113,11 +113,11 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	@SubscribeEvent
 	public static void onClientUnloadChunk(ChunkWatchEvent.UnWatch event) {
 		ServerLevel level = event.getWorld();
-		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
+		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
 			List<PlacedConduit> conduits = conduitHolder.resolve().get().getConduitsInChunk(event.getPos());	
 			if (conduits.size() > 0) {
-				Industria.NETWORK.send(PacketDistributor.PLAYER.with(() -> event.getPlayer()), new SSyncPlacedConduit(conduits, event.getPos(), Status.REMOVED));
+				IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(() -> event.getPlayer()), new SSyncPlacedConduit(conduits, event.getPos(), Status.REMOVED));
 				for (PlacedConduit conduitState : conduits) {
 					MinecraftForge.EVENT_BUS.post(new ConduitUnloadEvent(level, conduitState.getPosition(), conduitState));
 				}
@@ -129,7 +129,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	// Ticking conduits on both sides
 	public static void onWorldTick(WorldTickEvent event) {
 		Level level = event.world;
-		LazyOptional<ConduitHandlerCapability> conduitCap = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
+		LazyOptional<ConduitHandlerCapability> conduitCap = level.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitCap.isPresent()) {
 			conduitCap.resolve().get().update();
 		}
@@ -139,7 +139,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	// Pass block updates to corresponding conduits
 	public static void onBlockStateChange(BlockEvent.NeighborNotifyEvent event) {
 		Level level = (Level) event.getWorld();
-		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
+		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
 			BlockPos nodePos = event.getPos();
 			List<PlacedConduit> conduitStates = conduitHolder.resolve().get().getConduitsAtBlock(nodePos);

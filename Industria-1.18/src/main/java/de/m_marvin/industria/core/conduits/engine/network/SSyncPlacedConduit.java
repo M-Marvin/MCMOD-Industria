@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import de.m_marvin.industria.Industria;
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.engine.ClientConduitPackageHandler;
-import de.m_marvin.industria.core.conduits.registry.Conduits;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitShape;
+import de.m_marvin.industria.core.registries.Conduits;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
@@ -76,10 +76,10 @@ public class SSyncPlacedConduit {
 			ConduitShape shape = new ConduitShape(null, null, 0);
 			shape.readUpdateData(buff);
 			if (!Conduits.CONDUITS_REGISTRY.get().containsKey(conduitName)) {
-				Industria.LOGGER.error("Recived package for unregistered conduit: " + conduitName);
+				IndustriaCore.LOGGER.error("Recived package for unregistered conduit: " + conduitName);
 				continue;
 			} else if (shape.nodes == null || shape.lastPos == null) {
-				Industria.LOGGER.error("Recived package with invalid conduit shape: " + conduitName);
+				IndustriaCore.LOGGER.error("Recived package with invalid conduit shape: " + conduitName);
 				continue;
 			}
 			Conduit conduit = Conduits.CONDUITS_REGISTRY.get().getValue(conduitName);

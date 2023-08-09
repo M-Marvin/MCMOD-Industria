@@ -30,11 +30,11 @@ import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
 import com.electronwill.nightconfig.core.conversion.ReflectionException;
 
-import de.m_marvin.industria.Industria;
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.physics.types.ContraptionHitResult;
 import de.m_marvin.industria.core.physics.types.ContraptionPosition;
-import de.m_marvin.industria.core.registries.ModCapabilities;
+import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.unimat.impl.Quaternion;
@@ -66,7 +66,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 	
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-		if (cap == ModCapabilities.PHYSIC_HANDLER_CAPABILITY) {
+		if (cap == Capabilities.PHYSIC_HANDLER_CAPABILITY) {
 			return holder.cast();
 		}
 		return LazyOptional.empty();
@@ -83,7 +83,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 			contraptionNamesTag.putLong(entry.getKey(), entry.getValue());
 		}
 		tag.put("ContraptionNames", contraptionNamesTag);
-		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Saved " + contraptionNamesTag.size() + " constraption names");
+		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Saved " + contraptionNamesTag.size() + " constraption names");
 		return tag;
 	}
 
@@ -94,7 +94,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		for (String name : contraptionNamesTag.getAllKeys()) {
 			this.contraptionNames.put(name, contraptionNamesTag.getLong(name));
 		}
-		Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Loaded " + this.contraptionNames.size() + " contraption names");
+		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Loaded " + this.contraptionNames.size() + " contraption names");
 	}
 	
 	public PhysicHandlerCapability(Level level) {
@@ -191,7 +191,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 			constraintField.setAccessible(true);
 			constraints = (Map<Integer, VSConstraint>) constraintField.get(VSGameUtilsKt.getShipObjectWorld((ServerLevel) level));
 		} catch (Exception e) {
-			Industria.LOGGER.error("Something went wrong, but the code on that point is janky anyway ...");
+			IndustriaCore.LOGGER.error("Something went wrong, but the code on that point is janky anyway ...");
 			e.printStackTrace();
 			constraints = new HashMap<>();
 		}
@@ -275,7 +275,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 	
 	public boolean removeContraption(Ship contraption) {
 		assert level instanceof ServerLevel : "Can't manage contraptions on client side!";
-		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		LazyOptional<PhysicHandlerCapability> dataHolder = level.getCapability(Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		if (dataHolder.isPresent()) {
 			AABBic bounds = contraption.getShipAABB();
 			if (bounds != null) {

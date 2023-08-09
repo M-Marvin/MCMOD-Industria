@@ -1,6 +1,6 @@
 package de.m_marvin.industria.core.scrollinput.engine;
 
-import de.m_marvin.industria.Industria;
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.scrollinput.type.items.IScrollOverride;
 import de.m_marvin.industria.core.util.MathUtility;
 import net.minecraft.client.Minecraft;
@@ -15,7 +15,7 @@ import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid=Industria.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE, value=Dist.CLIENT)
+@Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE, value=Dist.CLIENT)
 public class ScrollInputListener {
 	
 	@SubscribeEvent

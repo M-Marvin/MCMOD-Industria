@@ -7,16 +7,16 @@ import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
 
-import de.m_marvin.industria.Industria;
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
-import de.m_marvin.industria.core.conduits.registry.Conduits;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitShape;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitType;
-import de.m_marvin.industria.core.registries.ModCapabilities;
+import de.m_marvin.industria.core.registries.Conduits;
+import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3d;
@@ -45,7 +45,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.FORGE,modid=Industria.MODID, value=Dist.CLIENT)
+@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.FORGE,modid=IndustriaCore.MODID, value=Dist.CLIENT)
 public class ConduitWorldRenderer {
 	
 	public static final int TEXTURE_MAP_SIZE = 64;
@@ -103,7 +103,7 @@ public class ConduitWorldRenderer {
 	
 	public static void drawDebugConduits(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, float partialTicks) {
 		
-		LazyOptional<ConduitHandlerCapability> optionalConduitHolder = clientLevel.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
+		LazyOptional<ConduitHandlerCapability> optionalConduitHolder = clientLevel.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (optionalConduitHolder.isPresent()) {
 			
 			ConduitHandlerCapability conduitHolder = optionalConduitHolder.resolve().get();
@@ -209,7 +209,7 @@ public class ConduitWorldRenderer {
 	@SuppressWarnings("resource")
 	public static void drawConduits(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, float partialTicks) {
 		
-		LazyOptional<ConduitHandlerCapability> optionalConduitHolder = clientLevel.getCapability(ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
+		LazyOptional<ConduitHandlerCapability> optionalConduitHolder = clientLevel.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (optionalConduitHolder.isPresent()) {
 			
 			ConduitHandlerCapability conduitHolder = optionalConduitHolder.resolve().get();

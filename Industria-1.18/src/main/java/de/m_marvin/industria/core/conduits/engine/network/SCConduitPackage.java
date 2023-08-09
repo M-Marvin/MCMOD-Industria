@@ -4,13 +4,12 @@ import java.util.function.Supplier;
 
 import de.m_marvin.industria.core.conduits.engine.ClientConduitPackageHandler;
 import de.m_marvin.industria.core.conduits.engine.ServerConduitPackageHandler;
-import de.m_marvin.industria.core.conduits.registry.Conduits;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
+import de.m_marvin.industria.core.registries.Conduits;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.NetworkEvent;
 
 public class SCConduitPackage {

@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import de.m_marvin.industria.Industria;
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.PlacedConduit;
@@ -120,8 +120,18 @@ public abstract class ElectricConduit extends Conduit implements IElectricCondui
 	}
 	
 	@Override
+	public void setWireLanes(ConduitPos pos, PlacedConduit instance, NodePos node, String[] laneLabels) {
+		if (this.wireLabelStorage != null) this.wireLabelStorage.setData(laneLabels);
+	}
+	
+	@Override
+	public boolean isWire() {
+		return true;
+	}
+	
+	@Override
 	public void plotCircuit(Level level, PlacedConduit instance, ConduitPos position, ElectricNetwork circuit, Consumer<CircuitTemplate> plotter) {
-		CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(Industria.MODID, "resistor"));
+		CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "resistor"));
 		template.setProperty("resistance", 10); // TODO Wire resistance
 		
 		NodePos[] connections = getConnections(level, position, instance);

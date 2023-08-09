@@ -18,7 +18,7 @@ import org.valkyrienskies.mod.common.VSGameUtilsKt;
 import de.m_marvin.industria.core.physics.engine.PhysicHandlerCapability;
 import de.m_marvin.industria.core.physics.types.ContraptionHitResult;
 import de.m_marvin.industria.core.physics.types.ContraptionPosition;
-import de.m_marvin.industria.core.registries.ModCapabilities;
+import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3d;
@@ -36,39 +36,39 @@ public class PhysicUtility {
 	/* Naming and finding of contraptions */
 	
 	public static void setContraptionName(Level level, Ship contraption, String name) {
-		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		handler.setContraptionName(contraption.getId(), name);
 	}
 	
 	public static String getContraptionName(Level level, Ship contraption, String name) {
-		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		return handler.getContraptionName(contraption.getId());
 	}
 	
 	public static OptionalLong getContraptionIdByName(Level level, String name) {
-		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		return handler.getContraption(name);
 	}
 
 	public static Ship getContraptionByName(Level level, String name) {
-		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		OptionalLong id = handler.getContraption(name);
 		if (id.isPresent()) return getContraptionById(level, id.getAsLong());
 		return null;
 	}
 
 	public static Iterable<Ship> getContraptionIntersecting(Level level, BlockPos position)  {
-		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		return handler.getContraptionIntersecting(position);
 	}
 	
 	public static Ship getContraptionOfBlock(Level level, BlockPos shipBlockPos) {
-		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		return handler.getContraptionOfBlock(shipBlockPos);
 	}
 
 	public static Ship getContraptionById(Level level, long id) {
-		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		return handler.getContraptionById(id);
 	}
 	
@@ -175,12 +175,12 @@ public class PhysicUtility {
 	/* Listing and creation contraptions in the world */
 	
 	public static List<Ship> getLoadedContraptions(Level level) {
-		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		return handler.getLoadedContraptions();
 	}
 
 	public static List<Ship> getAllContraptions(Level level) {
-		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		return handler.getAllContraptions();
 	}
 	
@@ -189,22 +189,22 @@ public class PhysicUtility {
 	}
 	
 	public static ServerShip createContraptionAt(ServerLevel level, Vec3d position, float scale) {
-		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		return handler.createContraptionAt(position, scale);
 	}
 	
 	public static boolean removeContraption(ServerLevel level, Ship contraption) {
-		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		return handler.removeContraption(contraption);
 	}
 	
 	public static Ship convertToContraption(ServerLevel level, AABB areaBounds, boolean removeOriginal, float scale) {
-		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		return handler.convertToContraption(areaBounds, removeOriginal, scale);
 	}
 	
 	public static ServerShip assembleToContraption(ServerLevel level, List<BlockPos> blocks, boolean removeOriginal, float scale) {
-		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		return handler.assembleToContraption(blocks, removeOriginal, scale);
 	}
 	
@@ -215,37 +215,37 @@ public class PhysicUtility {
 	}
 	
 	public static ContraptionHitResult clipForContraption(Level level, Vec3d from, Vec3d to) {
-		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		return handler.clipForContraption(from, to);
 	}
 	
 	/* Constraints */
 	
 	public static int addConstraint(Level level, VSConstraint constraint) {
-		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		return handler.addConstraint(constraint);
 	}
 	
 	public static boolean removeConstraint(Level level, int constraint) {
-		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		return handler.removeConstaint(constraint);
 	}
 
 	public static List<Integer> getAllConstraints(Level level) {
-		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		handler.getAllConstraints(); // TODO
 		return null;
 	}
 	
 	public static VSConstraint getConstraintInstance(Level level, int constraint) {
-		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		return handler.getConstraint(constraint);
 	}
 	
 	/* Util stuff */
 
 	public static String getDimensionId(Level level) {
-		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		return handler.getDimensionId();
 	}
 	
@@ -267,7 +267,7 @@ public class PhysicUtility {
 	}
 	
 	public static boolean resetFrameQueue(ServerLevel level) {
-		PhysicHandlerCapability handler = GameUtility.getCapability(level, ModCapabilities.PHYSIC_HANDLER_CAPABILITY);
+		PhysicHandlerCapability handler = GameUtility.getCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		return handler.resetFrameQueue();
 	}
 	

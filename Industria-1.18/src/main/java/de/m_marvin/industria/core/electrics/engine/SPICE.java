@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.m_marvin.industria.Industria;
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.Config;
 import de.m_marvin.nglink.NativeExtractor;
 import de.m_marvin.nglink.NativeNGLink;
@@ -15,7 +15,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid=Industria.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class SPICE {
 	
 	private static boolean callbackInitialized;
@@ -60,12 +60,12 @@ public class SPICE {
 				
 				@Override
 				public void log(String s) {
-					if (Config.SPICE_DEBUG_LOGGING.get()) Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "JNGLINK: " + s);
+					if (Config.SPICE_DEBUG_LOGGING.get()) IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "JNGLINK: " + s);
 				}
 				
 				@Override
 				public void detacheNGSpice() {
-					if (Config.SPICE_DEBUG_LOGGING.get()) Industria.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "JNGLINK: Detaching spice!");
+					if (Config.SPICE_DEBUG_LOGGING.get()) IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "JNGLINK: Detaching spice!");
 					nglink.detachNGSpice();
 				}
 			});
@@ -80,7 +80,7 @@ public class SPICE {
 			nglink.initNGSpice(NativeExtractor.findNative("ngspice"));
 			return true;
 		} catch (FileNotFoundException e) {
-			Industria.LOGGER.log(org.apache.logging.log4j.Level.FATAL, "Failed to find ngspice native!");
+			IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.FATAL, "Failed to find ngspice native!");
 			e.printStackTrace();
 			return false;
 		}

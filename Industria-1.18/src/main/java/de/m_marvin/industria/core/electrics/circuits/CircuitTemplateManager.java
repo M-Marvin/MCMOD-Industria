@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-import de.m_marvin.industria.Industria;
+import de.m_marvin.industria.IndustriaCore;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -26,12 +26,12 @@ import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid=Industria.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CircuitTemplateManager extends SimplePreparableReloadListener<Map<ResourceLocation, CircuitTemplate>> {
 	
 	public static final CircuitTemplate DEFAULT_TEMPLATE = new CircuitTemplate(new String[] {}, new String[] {}, "", "");
 	
-	private static final Logger LOGGER = Industria.LOGGER;
+	private static final Logger LOGGER = IndustriaCore.LOGGER;
 	private static final String PATH_NET_SUFIX = ".net";
 	private static final String PATH_JSON_SUFIX = ".json";
 	

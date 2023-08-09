@@ -1,0 +1,39 @@
+package de.m_marvin.industria.core.registries;
+
+import java.util.function.Supplier;
+
+import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
+import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitType;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.RegistryBuilder;
+import net.minecraftforge.registries.RegistryObject;
+
+@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD,modid=IndustriaCore.MODID)
+public class Conduits {
+	
+	public static final ResourceKey<Registry<ConduitType>> CONDUIT_TYPES_KEY = ResourceKey.createRegistryKey(new ResourceLocation(IndustriaCore.MODID, "conduit_types"));
+	public static final ResourceKey<Registry<Conduit>> CONDUITS_KEY = ResourceKey.createRegistryKey(new ResourceLocation(IndustriaCore.MODID, "conduits"));
+	public static final DeferredRegister<ConduitType> CONDUIT_TYPES = DeferredRegister.create(CONDUIT_TYPES_KEY, IndustriaCore.MODID);
+	public static final DeferredRegister<Conduit> CONDUITS = DeferredRegister.create(CONDUITS_KEY, IndustriaCore.MODID);
+    public static final Supplier<IForgeRegistry<ConduitType>> CONDUIT_TYPES_REGISTRY = CONDUIT_TYPES.makeRegistry(ConduitType.class, () -> new RegistryBuilder<ConduitType>().disableSaving());
+    public static final Supplier<IForgeRegistry<Conduit>> CONDUITS_REGISTRY = CONDUITS.makeRegistry(Conduit.class, () -> new RegistryBuilder<Conduit>().disableSaving());
+	public static void register() {
+		CONDUITS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		CONDUIT_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+	}
+	
+	public static final RegistryObject<ConduitType> ELECTRIC_INSULATED_TYPE = CONDUIT_TYPES.register("electric_insulated_type", () -> new ConduitType(0.05F, 1F, 16, 3));
+	public static final RegistryObject<ConduitType> ELECTRIC_UNINSULATED_TYPE = CONDUIT_TYPES.register("electric_uninsulated_type", () -> new ConduitType(0.015F, 1F, 128, 1));
+	
+	public static final RegistryObject<Conduit> NONE = CONDUITS.register("none", () -> new Conduit(new ConduitType(0F, 1F, 0, 1), null, MissingTextureAtlasSprite.getLocation(), SoundType.STONE));
+	
+}

@@ -9,7 +9,6 @@ import de.m_marvin.industria.content.registries.ModBlockEntities;
 import de.m_marvin.industria.content.registries.ModBlockStateProperties;
 import de.m_marvin.industria.content.types.MotorMode;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
-import de.m_marvin.industria.core.conduits.registry.ConduitConnectionTypes;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
@@ -18,7 +17,8 @@ import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapabil
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
-import de.m_marvin.industria.core.registries.ModCapabilities;
+import de.m_marvin.industria.core.registries.ConduitConnectionTypes;
+import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.univec.impl.Vec3f;
@@ -134,7 +134,7 @@ public class ThrusterBlock extends Block implements IElectricConnector {
 		if (pState.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR) {
 			ElectricUtility.updateNetwork(pLevel, pPos);
 		} else {
-			ElectricNetworkHandlerCapability networkHandler = GameUtility.getCapability(pLevel, ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+			ElectricNetworkHandlerCapability networkHandler = GameUtility.getCapability(pLevel, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 			BlockEntity entity = pLevel.getBlockEntity(pPos);
 			if (entity instanceof MotorBlockEntity motor) {
 //				double voltage = networkHandler.getVoltageAt(getConnectionPoints(pPos, pState)[0]);
@@ -170,6 +170,12 @@ public class ThrusterBlock extends Block implements IElectricConnector {
 	@Override
 	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit,
 			Consumer<CircuitTemplate> plotter) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setWireLanes(BlockPos pos, BlockState instance, NodePos node, String[] laneLabels) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -1,6 +1,6 @@
 package de.m_marvin.industria.content.registries;
 
-import de.m_marvin.industria.Industria;
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.content.blockentities.GeneratorBlockEntity;
 import de.m_marvin.industria.content.blockentities.JunctionBoxBlockEntity;
 import de.m_marvin.industria.content.blockentities.MotorBlockEntity;
@@ -12,7 +12,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class ModBlockEntities {
 
-	private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Industria.MODID);
+	private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, IndustriaCore.MODID);
 	public static void register() {
 		BLOCK_ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}

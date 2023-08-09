@@ -26,4 +26,9 @@ public interface IElectricConnector extends IConduitConnector, IElectric<BlockSt
 		return NbtUtils.readBlockPos(nbt.getCompound("Position"));
 	}
 	
+	@Override
+	default boolean isWire() {
+		return false;
+	}
+	
 }

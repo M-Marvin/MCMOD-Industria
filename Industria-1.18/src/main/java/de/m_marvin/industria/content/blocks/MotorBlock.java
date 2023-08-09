@@ -189,10 +189,4 @@ public class MotorBlock extends Block implements IElectricConnector {
 		
 	}
 	
-	@Override
-	public void setWireLanes(BlockPos pos, BlockState instance, NodePos node, String[] lanes) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 }

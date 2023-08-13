@@ -25,7 +25,6 @@ import net.minecraft.world.level.block.SoundType;
 
 public abstract class ElectricConduit extends Conduit implements IElectricConduit {
 	
-	public ConduitStateStorage<String[], ListTag> wireLabelStorage;
 	public final int wireCount;
 	
 	public ElectricConduit(ConduitType type, Item item, ResourceLocation texture, SoundType sound, int wireCount) {
@@ -37,37 +36,41 @@ public abstract class ElectricConduit extends Conduit implements IElectricCondui
 	public void onBuild(Level level, ConduitPos position, PlacedConduit conduitState) {
 		super.onBuild(level, position, conduitState);
 
-		String[] initialLabels = new String[wireCount];
-		Arrays.fill(initialLabels, "");
-		
-		if (level != null) {
+		if (conduitState.getDataStorage("Wires") == null) {
 
-			NodePos[] connections = getConnections(level, position, conduitState);
-			Set<ElectricNetworkHandlerCapability.Component<?, ?, ?>> neighborsA = ElectricUtility.findComponentsOnNode(level, connections[0]);
-			Set<ElectricNetworkHandlerCapability.Component<?, ?, ?>> neighborsB = ElectricUtility.findComponentsOnNode(level, connections[1]);
+			String[] initialLabels = new String[wireCount];
+			Arrays.fill(initialLabels, "");
 			
-			Set<String> availableLabels = new HashSet<>();
-			for (Component<?, ?, ?> component : neighborsA) {
-				for (String label : component.getWireLanes(level, connections[0])) availableLabels.add(label);
+			if (level != null) {
+				
+				NodePos[] connections = getConnections(level, position, conduitState);
+				Set<ElectricNetworkHandlerCapability.Component<?, ?, ?>> neighborsA = ElectricUtility.findComponentsOnNode(level, connections[0]);
+				Set<ElectricNetworkHandlerCapability.Component<?, ?, ?>> neighborsB = ElectricUtility.findComponentsOnNode(level, connections[1]);
+				
+				Set<String> availableLabels = new HashSet<>();
+				for (Component<?, ?, ?> component : neighborsA) {
+					for (String label : component.getWireLanes(level, connections[0])) availableLabels.add(label);
+				}
+				for (Component<?, ?, ?> component : neighborsB) {
+					for (String label : component.getWireLanes(level, connections[1])) availableLabels.add(label);
+				}
+				
+				String[] labels = availableLabels.toArray(i -> new String[i]);
+				for (int i = 0; i < Math.min(initialLabels.length, availableLabels.size()); i++) initialLabels[i] = labels[i];
+				
 			}
-			for (Component<?, ?, ?> component : neighborsB) {
-				for (String label : component.getWireLanes(level, connections[1])) availableLabels.add(label);
-			}
-			
-			String[] labels = availableLabels.toArray(i -> new String[i]);
-			for (int i = 0; i < Math.min(initialLabels.length, availableLabels.size()); i++) initialLabels[i] = labels[i];
-			
+
+			conduitState.addDataStorage("Wires", new ConduitStateStorage<String[], ListTag>(initialLabels, labels -> {
+				ListTag list = new ListTag();
+				for (String s : labels) list.add(StringTag.valueOf(s));
+				return list;
+			}, list -> {
+				String[] labels = new String[list.size()];
+				for (int i = 0; i < labels.length; i++) labels[i] = list.getString(i);
+				return labels;
+			}));
 		}
 		
-		conduitState.addDataStorage("Wires", this.wireLabelStorage = new ConduitStateStorage<String[], ListTag>(initialLabels, labels -> {
-			ListTag list = new ListTag();
-			for (String s : labels) list.add(StringTag.valueOf(s));
-			return list;
-		}, list -> {
-			String[] labels = new String[list.size()];
-			for (int i = 0; i < labels.length; i++) labels[i] = list.getString(i);
-			return labels;
-		}));
 	}
 
 	protected int searchForLabel(String[] lables, String label) {
@@ -81,7 +84,7 @@ public abstract class ElectricConduit extends Conduit implements IElectricCondui
 	
 	@Override
 	public void neighborRewired(Level level, PlacedConduit instance, ConduitPos position, Component<?, ?, ?> neighbor) {
-		assert this.wireLabelStorage != null : "Conduit has not ben build yet!";
+		assert instance.getDataStorage("Wires") != null : "Conduit has not ben build yet!"; // TODO Was this necessary ?
 		
 		NodePos[] connections = getConnections(level, position, instance);
 		NodePos[] connectionsNeighbor = neighbor.getNodes(level);
@@ -95,7 +98,7 @@ public abstract class ElectricConduit extends Conduit implements IElectricCondui
 			}
 		}
 		
-		String[] currentLabels = this.wireLabelStorage.getData();
+		String[] currentLabels = (String[]) instance.getStateData("Wires");
 		boolean changed = false;
 		for (String label : newLabels) {
 			int i = searchForLabel(currentLabels, label);
@@ -111,17 +114,17 @@ public abstract class ElectricConduit extends Conduit implements IElectricCondui
 	
 	@Override
 	public int getWireCount() {
-		return Math.min(this.wireCount, this.wireLabelStorage != null ? this.wireLabelStorage.getData().length : 0);
+		return this.wireCount;
 	}
 	
 	@Override
 	public String[] getWireLanes(ConduitPos pos, PlacedConduit instance, NodePos node) {
-		return this.wireLabelStorage != null ? this.wireLabelStorage.getData() : new String[] {};
+		return instance.getDataStorage("Wires") != null ? (String[]) instance.getStateData("Wires") : new String[] {};
 	}
 	
 	@Override
 	public void setWireLanes(ConduitPos pos, PlacedConduit instance, NodePos node, String[] laneLabels) {
-		if (this.wireLabelStorage != null) this.wireLabelStorage.setData(laneLabels);
+		instance.setStateData("Wires", laneLabels);
 	}
 	
 	@Override

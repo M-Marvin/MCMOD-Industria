@@ -73,8 +73,8 @@ public class MotorBlock extends Block implements IElectricConnector {
 	
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		final Direction preferred = null;
-		if (context.getPlayer() != null && context.getPlayer().isShiftKeyDown()) {
+		final Direction preferred = Direction.NORTH;
+		if (context.getPlayer() != null) {
 			final Direction nearestLookingDirection = context.getNearestLookingDirection();
 			return (BlockState) this.defaultBlockState().setValue(BlockStateProperties.FACING,
 					((context.getPlayer() != null && context.getPlayer().isShiftKeyDown())

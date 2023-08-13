@@ -8,8 +8,10 @@ import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.content.registries.ModConduits;
 import de.m_marvin.industria.content.registries.ModItems;
 import de.m_marvin.industria.core.Config;
+import de.m_marvin.industria.core.registries.Blocks;
 import de.m_marvin.industria.core.registries.Conduits;
 import de.m_marvin.industria.core.registries.Container;
+import de.m_marvin.industria.core.registries.Items;
 import de.m_marvin.industria.core.registries.NetworkPackages;
 import de.m_marvin.industria.core.registries.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -31,6 +33,8 @@ public class IndustriaCore {
 		Conduits.register();
 		Container.register();
 		ParticleTypes.register();
+		Blocks.register();
+		Items.register();
 		
 		registerTestingContent();
 		

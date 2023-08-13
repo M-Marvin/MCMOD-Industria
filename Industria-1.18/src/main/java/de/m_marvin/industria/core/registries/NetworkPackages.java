@@ -18,8 +18,8 @@ public class NetworkPackages {
 		int id = 0;
 		network.registerMessage(id++, SSyncPlacedConduit.class, SSyncPlacedConduit::encode, SSyncPlacedConduit::decode, SSyncPlacedConduit::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		network.registerMessage(id++, CChangeConduitPlacementLength.class, CChangeConduitPlacementLength::encode, CChangeConduitPlacementLength::decode, CChangeConduitPlacementLength::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		network.registerMessage(id++, SCConduitPackage.SCPlaceConduitPackage.class, SCConduitPackage.SCPlaceConduitPackage::encode, SCConduitPackage.SCPlaceConduitPackage::decode, SCConduitPackage.SCPlaceConduitPackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-		network.registerMessage(id++, SCConduitPackage.SCBreakConduitPackage.class, SCConduitPackage.SCBreakConduitPackage::encode, SCConduitPackage.SCBreakConduitPackage::decode, SCConduitPackage.SCBreakConduitPackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+		network.registerMessage(id++, SCConduitPackage.SCPlaceConduitPackage.class, SCConduitPackage.SCPlaceConduitPackage::encode, SCConduitPackage.SCPlaceConduitPackage::decode, SCConduitPackage.SCPlaceConduitPackage::handle);
+		network.registerMessage(id++, SCConduitPackage.SCBreakConduitPackage.class, SCConduitPackage.SCBreakConduitPackage::encode, SCConduitPackage.SCBreakConduitPackage::decode, SCConduitPackage.SCBreakConduitPackage::handle);
 		network.registerMessage(id++, CScrollInputPackage.class, CScrollInputPackage::encode, CScrollInputPackage::decode, CScrollInputPackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		network.registerMessage(id++, CUpdateJunctionLanes.class, CUpdateJunctionLanes::encode, CUpdateJunctionLanes::decode, CUpdateJunctionLanes::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 	}

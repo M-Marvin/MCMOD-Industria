@@ -80,7 +80,6 @@ public abstract class AbstractConduitItem extends Item implements IScrollOverrid
 					if (secondNodeId >= 0) {
 						float placementLengthModifier = Math.max(itemTag.getFloat("Length"), 1);
 
-						System.out.println(firstNodePos + " - " + firstNodeId + " --- " + secondNodePos + " - " + secondNodeId);
 						ConduitPos conduitPos = new ConduitPos(firstNodePos, secondNodePos, firstNodeId, secondNodeId);
 						
 						int conduitLengthBlocks = (int) Math.ceil(conduitPos.calculateMinConduitLength(context.getLevel()) * placementLengthModifier);

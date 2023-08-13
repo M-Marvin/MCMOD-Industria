@@ -202,7 +202,7 @@ public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContai
 		}
 		
 
-		this.namingField.setValue("TESTS");
+		//this.namingField.setValue("TESTS");
 		
 	}
 	

@@ -71,6 +71,15 @@ public class PlacedConduit {
 		return this.dataStorages.get(name);
 	}
 	
+	public Object getStateData(String name) {
+		return this.dataStorages.containsKey(name) ? getDataStorage(name).getData() : null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> void setStateData(String name, T value) {
+		if (this.dataStorages.containsKey(name)) ((ConduitStateStorage<T, ?>) this.dataStorages.get(name)).setData(value);
+	}
+	
 	public PlacedConduit build(Level level) {
 		this.conduit.onBuild(level, position, this);
 		this.shape = conduit.buildShape(level, this);
@@ -114,7 +123,6 @@ public class PlacedConduit {
 			CompoundTag storages = new CompoundTag();
 			for (Entry<String, ConduitStateStorage<?, ? extends Tag>> storage : this.dataStorages.entrySet()) {
 				storages.put(storage.getKey(), storage.getValue().serialize());
-				System.out.println("Saved " + storage.getValue().serialize()); // FIXME find out why lanes get not saved
 			}
 			tag.put("Storages", storages);
 		}
@@ -135,11 +143,14 @@ public class PlacedConduit {
 		if (tag.contains("Storages")) {
 			CompoundTag storages = tag.getCompound("Storages");
 			for (String key : storages.getAllKeys()) {
-				state.dataStorages.get(key).deserialize(storages.get(key));
+				ConduitStateStorage<?, ? extends Tag> st = state.getDataStorage(key);
+				if (st != null) st.deserialize(storages.get(key));
 			}
 		}
 		return state;
 	}
+	
+	// TODO Server->Client sync of state storages
 	
 	public ConduitShape getShape() {
 		return shape;

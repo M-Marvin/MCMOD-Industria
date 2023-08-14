@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.engine.ServerElectricPackageHandler;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -12,12 +13,35 @@ import net.minecraftforge.network.NetworkEvent;
  */
 public class CUpdateJunctionLanes {
 	
-	public NodePos cableNode;
-	public String[] laneLabels;
+	public final int internalNode;
+	public final BlockPos blockPos;
+	public final NodePos cableNode;
+	public final String[] laneLabels;
 	
-	public CUpdateJunctionLanes(NodePos cableNodes, String[] laneLabels) {
-		this.cableNode = cableNodes;
+	public CUpdateJunctionLanes(NodePos cableNode, String[] laneLabels) {
+		this.cableNode = cableNode;
+		this.blockPos = cableNode.getBlock();
 		this.laneLabels = laneLabels;
+		this.internalNode = -1;
+	}
+
+	public CUpdateJunctionLanes(int internalNode, BlockPos blockPos, String[] laneLabels) {
+		this.cableNode = null;
+		this.blockPos = blockPos;
+		this.internalNode = internalNode;
+		this.laneLabels = laneLabels;
+	}
+	
+	public boolean isInternalNode() {
+		return this.cableNode == null;
+	}
+	
+	public int getInternalNode() {
+		return internalNode;
+	}
+	
+	public BlockPos getBlockPos() {
+		return blockPos;
 	}
 	
 	public NodePos getCableNode() {
@@ -29,16 +53,20 @@ public class CUpdateJunctionLanes {
 	}
 	
 	public static void encode(CUpdateJunctionLanes msg, FriendlyByteBuf buff) {
-		msg.cableNode.write(buff);
+		buff.writeInt(msg.isInternalNode() ? msg.internalNode : -1);
+		if (!msg.isInternalNode()) msg.cableNode.write(buff);
+		buff.writeBlockPos(msg.blockPos);
 		buff.writeInt(msg.laneLabels.length);
 		for (String s : msg.laneLabels) buff.writeUtf(s);
 	}
 	
 	public static CUpdateJunctionLanes decode(FriendlyByteBuf buff) {
-		NodePos cableNode = NodePos.read(buff);
+		int internalNode = buff.readInt();
+		NodePos cableNode = internalNode >= 0 ? null : NodePos.read(buff);
+		BlockPos blockPos = buff.readBlockPos();
 		String[] laneLabels = new String[buff.readInt()];
 		for (int i = 0; i < laneLabels.length; i++) laneLabels[i] = buff.readUtf();
-		return new CUpdateJunctionLanes(cableNode, laneLabels);
+		return internalNode >= 0 ? new CUpdateJunctionLanes(internalNode, blockPos, laneLabels) : new CUpdateJunctionLanes(cableNode, laneLabels);
 	}
 	
 	public static void handle(CUpdateJunctionLanes msg, Supplier<NetworkEvent.Context> ctx) {

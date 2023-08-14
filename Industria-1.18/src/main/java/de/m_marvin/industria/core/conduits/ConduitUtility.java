@@ -54,9 +54,9 @@ public class ConduitUtility {
 		return ConduitUtility.removeConduit(level, conduitPosition, dropItems);
 	}
 	
-	public static boolean removeConduit(Level level, ConduitPos position, boolean dropItems) {
+	public static boolean removeConduit(Level level, ConduitPos conduitPosition, boolean dropItems) {
 		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
-		return handler.breakConduit(position, dropItems);
+		return handler.breakConduit(conduitPosition, dropItems);
 	}
 
 	public static Optional<ConduitEntity> getConduit(Level level, ConduitPos position) {

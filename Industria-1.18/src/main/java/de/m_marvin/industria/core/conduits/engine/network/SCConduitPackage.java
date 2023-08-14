@@ -54,10 +54,11 @@ public class SCConduitPackage {
 			return new SCPlaceConduitPackage(position, conduit, length);
 		}
 		
+		@SuppressWarnings("deprecation")
 		public static void handle(SCPlaceConduitPackage msg, Supplier<NetworkEvent.Context> ctx) {
 			ctx.get().enqueueWork(() -> {
-				DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> ServerConduitPackageHandler.handlePlaceConduit(msg, ctx.get()));
-				DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> ClientConduitPackageHandler.handlePlaceConduit(msg, ctx.get()));
+				DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> () -> ServerConduitPackageHandler.handlePlaceConduit(msg, ctx.get()));
+				DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> ClientConduitPackageHandler.handlePlaceConduit(msg, ctx.get()));
 			});	
 			ctx.get().setPacketHandled(true);	
 		}
@@ -93,11 +94,11 @@ public class SCConduitPackage {
 			return new SCBreakConduitPackage(position, dropItems);
 		}
 		
+		@SuppressWarnings("deprecation")
 		public static void handle(SCBreakConduitPackage msg, Supplier<NetworkEvent.Context> ctx) {
 			ctx.get().enqueueWork(() -> {
-				// TODO Test if working
-				DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> ServerConduitPackageHandler.handleRemoveConduit(msg, ctx.get()));
-				DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> ClientConduitPackageHandler.handleRemoveConduit(msg, ctx.get()));
+				DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> () -> ServerConduitPackageHandler.handleRemoveConduit(msg, ctx.get()));
+				DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> ClientConduitPackageHandler.handleRemoveConduit(msg, ctx.get()));
 			});
 			ctx.get().setPacketHandled(true);
 		}

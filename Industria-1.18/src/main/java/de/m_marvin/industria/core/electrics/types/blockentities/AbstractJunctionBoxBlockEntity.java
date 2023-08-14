@@ -1,7 +1,6 @@
 package de.m_marvin.industria.core.electrics.types.blockentities;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -9,9 +8,7 @@ import de.m_marvin.industria.content.registries.ModBlockEntities;
 import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
-import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
-import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3d;
@@ -22,15 +19,12 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
-public abstract class AbstractJunctionBoxBlockEntity extends BlockEntity implements MenuProvider {
+public abstract class AbstractJunctionBoxBlockEntity extends BlockEntity implements MenuProvider, IJunctionEdit {
 	
 	public AbstractJunctionBoxBlockEntity(BlockPos pPos, BlockState pBlockState) {
 		super(ModBlockEntities.JUNCTION_BOX.get(), pPos, pBlockState);
@@ -47,24 +41,7 @@ public abstract class AbstractJunctionBoxBlockEntity extends BlockEntity impleme
 	}
 	
 	@Override
-	public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-		return new JunctionBoxContainer<>(pContainerId, pPlayerInventory, this);
-	}
-	
-	public String[] getCableWireLabels(NodePos node) {
-		List<String[]> cableLaneLabels = ElectricUtility.getLaneLabels(this.getLevel(), node);
-		if (cableLaneLabels.size() >= 1) {
-			return cableLaneLabels.get(0);
-		} else {
-			return new String[] {};
-		}
-	}
-	
-	public void setCableWireLabels(NodePos node, String[] laneLabels) {
-		ElectricUtility.setLaneLabels(this.getLevel(), node, laneLabels);
-	}
-	
-	public NodePos[] getUDLRCableNodes(Direction playerFacing, Direction playerHorizontalFacing) {
+	public NodePos[] getEditCableNodes(Direction playerFacing, Direction playerHorizontalFacing) {
 		
 		Level level = this.getLevel();
 		BlockPos pos = this.getBlockPos();
@@ -120,7 +97,7 @@ public abstract class AbstractJunctionBoxBlockEntity extends BlockEntity impleme
 			
 		}
 		
-		return new NodePos[] {null, null, null, null};
+		return new NodePos[] {};
 		
 	}
 	

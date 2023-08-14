@@ -73,8 +73,16 @@ public class MathUtility {
 	
 	public static Direction getVecDirection(Vec3d v) {
 		v = v.normalize();
-		Vec3i vec = new Vec3i((int) Math.round(v.x), (int) Math.round(v.y), (int) Math.round(v.z));
-		return getVecDirection(vec);
+		Vec3d v2 = v.abs();
+		if (v2.x > v2.y && v2.x > v2.z) {
+			return v.x > 0 ? Direction.EAST : Direction.WEST;
+		} else if (v2.y > v2.x && v2.y > v2.z) {
+			return v.y > 0 ? Direction.UP : Direction.DOWN;
+		} else if (v2.z > v2.y && v2.z > v2.y) {
+			return v.z > 0 ? Direction.SOUTH : Direction.NORTH;
+		} else {
+			return Direction.NORTH;
+		}
 	}
 	
 	public static BlockPos getMinCorner(BlockPos pos1, BlockPos pos2) {

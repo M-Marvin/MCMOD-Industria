@@ -12,7 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
 public class ElectricUtility {
-
+	
 	public static void updateNetwork(Level level, BlockPos worldPosition) {
 		ElectricNetworkHandlerCapability handler = GameUtility.getCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 		handler.updateNetwork(worldPosition);

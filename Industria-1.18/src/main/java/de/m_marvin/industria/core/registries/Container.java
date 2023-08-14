@@ -1,7 +1,7 @@
 package de.m_marvin.industria.core.registries;
 
 import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.core.client.electrics.JunctionBoxContainer;
+import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;

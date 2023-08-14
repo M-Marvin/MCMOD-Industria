@@ -10,8 +10,8 @@ import com.mojang.brigadier.context.CommandContext;
 
 import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
-import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
+import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.registries.Conduits;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -64,7 +64,7 @@ public class SetConduitCommand {
 		ConduitPos position = new ConduitPos(nodeApos, nodeBpos, nodeAid, nodeBid);
 		Conduit conduit = Conduits.CONDUITS_REGISTRY.get().getValue(conduitKey);
 		
-		Optional<PlacedConduit> existingConduit = ConduitUtility.getConduit(level, position);
+		Optional<ConduitEntity> existingConduit = ConduitUtility.getConduit(level, position);
 		if (existingConduit.isPresent()) {
 			ConduitUtility.removeConduit(level, position, drop);
 		}

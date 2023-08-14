@@ -1,6 +1,9 @@
 package de.m_marvin.industria.content.client.registries;
 
 import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.content.client.screens.JunctionBoxScreen;
+import de.m_marvin.industria.core.registries.Container;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -11,7 +14,7 @@ public class ModScreens {
 	
 	@SubscribeEvent
 	public static void onClientSetup(FMLClientSetupEvent event) {
-		//MenuScreens.register(ModContainer.JUNCTION_BOX.get(), JunctionBoxScreen::new);
+		MenuScreens.register(Container.JUNCTION_BOX.get(), (a, b, c) -> new JunctionBoxScreen(a, b, c)); // Why can't this this shortened with Class::new ???
 	}
 	
 }

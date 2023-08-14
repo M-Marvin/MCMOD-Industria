@@ -2,21 +2,20 @@ package de.m_marvin.industria.core.conduits.types.conduits;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
-import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.electrics.types.IElectric;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 
-public interface IElectricConduit extends IElectric<PlacedConduit, ConduitPos, Conduit> {
+public interface IElectricConduit extends IElectric<ConduitEntity, ConduitPos, Conduit> {
 	
 	@Override
-	default void serializeNBT(PlacedConduit instance, ConduitPos position, CompoundTag nbt) {
+	default void serializeNBT(ConduitEntity instance, ConduitPos position, CompoundTag nbt) {
 		nbt.put("Position", position.writeNBT(new CompoundTag()));
 	}
 
 	@Override
-	default PlacedConduit deserializeNBTInstance(CompoundTag nbt) {
-		return PlacedConduit.load(nbt.getCompound("State"));
+	default ConduitEntity deserializeNBTInstance(CompoundTag nbt) {
+		return ConduitEntity.load(nbt.getCompound("State"));
 	}
 	
 	@Override
@@ -25,7 +24,7 @@ public interface IElectricConduit extends IElectric<PlacedConduit, ConduitPos, C
 	}
 	
 	@Override
-	default NodePos[] getConnections(Level level, ConduitPos pos, PlacedConduit instance) {
+	default NodePos[] getConnections(Level level, ConduitPos pos, ConduitEntity instance) {
 		return new NodePos[] { pos.getNodeA(), pos.getNodeB() };
 	}
 	

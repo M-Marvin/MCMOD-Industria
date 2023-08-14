@@ -9,6 +9,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.engine.network.CUpdateJunctionLanes;
+import de.m_marvin.industria.core.electrics.types.blockentities.AbstractJunctionBoxBlockEntity;
+import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.univec.impl.Vec2d;
 import de.m_marvin.univec.impl.Vec2i;
 import net.minecraft.client.gui.components.EditBox;
@@ -22,10 +24,8 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContainer<?>> {
+public abstract class AbstractJunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContainer<?>> {
 	
-	public static final ResourceLocation JUNCTION_BOX_LOCATION = new ResourceLocation(IndustriaCore.MODID, "textures/gui/junction_box.png");
-
 	public static final int WIRE_NODE_WIDTH = 9;
 	public static final int WIRE_NODE_LENGTH = 18;
 	
@@ -42,8 +42,6 @@ public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContai
 	protected EditBox namingField;
 	protected WireNode selectedNode = null;
 	
-	//protected Set<Set<WireNode>> connections = new HashSet<>();
-	
 	protected class WireNode implements GuiEventListener, NarratableEntry {
 		
 		protected final int labelId;
@@ -56,7 +54,7 @@ public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContai
 			this.nodeId = nodeId;
 			this.uiPos = uiPos;
 			this.horizontal = horizontal;
-			JunctionBoxScreen.this.addWidget(this);
+			AbstractJunctionBoxScreen.this.addWidget(this);
 		}
 
 		@Override
@@ -96,8 +94,8 @@ public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContai
 		
 		@Override
 		public boolean isMouseOver(double x, double y) {
-			double i = x - JunctionBoxScreen.this.leftPos;
-			double j = y - JunctionBoxScreen.this.topPos;
+			double i = x - AbstractJunctionBoxScreen.this.leftPos;
+			double j = y - AbstractJunctionBoxScreen.this.topPos;
 			int i1 = horizontal ? WIRE_NODE_LENGTH : WIRE_NODE_WIDTH;
 			int i2 = !horizontal ? WIRE_NODE_LENGTH : WIRE_NODE_WIDTH;
 			return uiPos.x < i && uiPos.x + i1 > i && uiPos.y < j && uiPos.y + i2 > j;
@@ -118,7 +116,7 @@ public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContai
 		
 	}
 	
-	public JunctionBoxScreen(JunctionBoxContainer<?> pMenu, Inventory pPlayerInventory, Component pTitle) {
+	public AbstractJunctionBoxScreen(JunctionBoxContainer<? extends AbstractJunctionBoxBlockEntity> pMenu, Inventory pPlayerInventory, Component pTitle) {
 		super(pMenu, pPlayerInventory, pTitle);
 		
 	}
@@ -165,9 +163,6 @@ public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContai
 		this.namingField.setVisible(false);
 		this.addWidget(this.namingField);
 		
-		//this.namingField.setVisible(false);
-		//Industria.NETWORK.sendToServer(new );
-		
 	}
 	
 	protected WireNode getNodeAt(Vec2d position) {
@@ -200,9 +195,6 @@ public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContai
 		case 2: this.namingField.setValue(this.laneWiresLeft[node.labelId]); break;
 		case 3: this.namingField.setValue(this.laneWiresRight[node.labelId]); break;
 		}
-		
-
-		//this.namingField.setValue("TESTS");
 		
 	}
 	
@@ -294,12 +286,14 @@ public class JunctionBoxScreen extends AbstractContainerScreen<JunctionBoxContai
 		return !this.namingField.keyPressed(pKeyCode, pScanCode, pModifiers) && !this.namingField.canConsumeInput() ? super.keyPressed(pKeyCode, pScanCode, pModifiers) : true;
 	}
 	
+	public abstract ResourceLocation getJunctionBoxTexture();
+	
 	@Override
 	protected void renderBg(PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY) {
 		
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, JUNCTION_BOX_LOCATION);
+		RenderSystem.setShaderTexture(0, getJunctionBoxTexture());
 		
 		int i = this.leftPos;
 		int j = this.topPos;

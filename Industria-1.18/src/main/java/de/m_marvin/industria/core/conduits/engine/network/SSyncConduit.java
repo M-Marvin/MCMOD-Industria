@@ -7,8 +7,8 @@ import java.util.function.Supplier;
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.engine.ClientConduitPackageHandler;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
-import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
+import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitShape;
 import de.m_marvin.industria.core.registries.Conduits;
 import net.minecraft.network.FriendlyByteBuf;
@@ -18,28 +18,29 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
-/*
- * Sends existing conduits from server to client to sync the conduits
+/**
+ * Tells the client about existing and removed conduits, for example if a chunk gets loaded on client side.
+ * It does not trigger any events on the client side and only updates the conduit-list.
  */
-public class SSyncPlacedConduit {
+public class SSyncConduit {
 	
 	public ChunkPos chunkPos;
-	public List<PlacedConduit> conduitStates;
+	public List<ConduitEntity> conduits;
 	public Status status;
 	
 	public static enum Status {
 		REMOVED, ADDED;
 	}
 	
-	public SSyncPlacedConduit(List<PlacedConduit> conduitStates, ChunkPos targetChunk, Status status) {
-		this.conduitStates = conduitStates;
+	public SSyncConduit(List<ConduitEntity> conduitStates, ChunkPos targetChunk, Status status) {
+		this.conduits = conduitStates;
 		this.chunkPos = targetChunk;
 		this.status = status;
 	}
 	
-	public SSyncPlacedConduit(PlacedConduit conduitState, ChunkPos targetChunk, Status status) {
-		this.conduitStates = new ArrayList<PlacedConduit>();
-		this.conduitStates.add(conduitState);
+	public SSyncConduit(ConduitEntity conduitState, ChunkPos targetChunk, Status status) {
+		this.conduits = new ArrayList<ConduitEntity>();
+		this.conduits.add(conduitState);
 		this.chunkPos = targetChunk;
 		this.status = status;
 	}
@@ -52,23 +53,24 @@ public class SSyncPlacedConduit {
 		return status;
 	}
 	
-	public static void encode(SSyncPlacedConduit msg, FriendlyByteBuf buff) {
+	public static void encode(SSyncConduit msg, FriendlyByteBuf buff) {
 		buff.writeEnum(msg.status);
 		buff.writeChunkPos(msg.chunkPos);
-		buff.writeInt(msg.conduitStates.size());
-		for (PlacedConduit conduitState : msg.conduitStates) {
+		buff.writeInt(msg.conduits.size());
+		for (ConduitEntity conduitState : msg.conduits) {
 			conduitState.getPosition().write(buff);
 			buff.writeDouble(conduitState.getLength());
 			buff.writeResourceLocation(conduitState.getConduit().getRegistryName());
 			conduitState.getShape().writeUpdateData(buff);
+			buff.writeNbt(conduitState.getUpdateTag());
 		}
 	}
 	
-	public static SSyncPlacedConduit decode(FriendlyByteBuf buff) {
+	public static SSyncConduit decode(FriendlyByteBuf buff) {
 		Status status = buff.readEnum(Status.class);
 		ChunkPos chunkPos = buff.readChunkPos();
 		int count = buff.readInt();
-		List<PlacedConduit> conduitStates = new ArrayList<PlacedConduit>();
+		List<ConduitEntity> conduitStates = new ArrayList<ConduitEntity>();
 		for (int i = 0; i < count; i++) {
 			ConduitPos position = ConduitPos.read(buff);
 			double length = buff.readDouble();
@@ -83,14 +85,15 @@ public class SSyncPlacedConduit {
 				continue;
 			}
 			Conduit conduit = Conduits.CONDUITS_REGISTRY.get().getValue(conduitName);
-			PlacedConduit conduitState = new PlacedConduit(position, conduit, length);
+			ConduitEntity conduitState = conduit.newConduitEntity(position, conduit, length);
 			conduitState.setShape(shape);
+			conduitState.readUpdateTag(buff.readNbt());
 			conduitStates.add(conduitState);
 		}
-		return new SSyncPlacedConduit(conduitStates, chunkPos, status);
+		return new SSyncConduit(conduitStates, chunkPos, status);
 	}
 	
-	public static void handle(SSyncPlacedConduit msg, Supplier<NetworkEvent.Context> ctx) {
+	public static void handle(SSyncConduit msg, Supplier<NetworkEvent.Context> ctx) {
 		
 		ctx.get().enqueueWork(() -> {
 			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {

@@ -6,9 +6,9 @@ import de.m_marvin.industria.core.conduits.engine.ServerConduitPackageHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
-/*
- * Tells the server that a conduit got placed by a client
- */
+/**
+ * Gets send if the player scrolls when placing an conduit to update the length placed by the server.
+ **/
 public class CChangeConduitPlacementLength {
 	
 	public float placementLength;

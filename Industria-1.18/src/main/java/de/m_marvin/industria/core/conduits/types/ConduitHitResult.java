@@ -1,12 +1,13 @@
 package de.m_marvin.industria.core.conduits.types;
 
+import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class ConduitHitResult {
 	
 	protected BlockHitResult blockResult;
-	protected PlacedConduit conduitState;
+	protected ConduitEntity conduitState;
 	protected Vec3d hitPos;
 	protected int node1, node2;
 	
@@ -14,7 +15,7 @@ public class ConduitHitResult {
 		this.blockResult = result;
 	}
 
-	protected ConduitHitResult(PlacedConduit conduitState, Vec3d hitPos, int node1, int node2) {
+	protected ConduitHitResult(ConduitEntity conduitState, Vec3d hitPos, int node1, int node2) {
 		super();
 		this.conduitState = conduitState;
 		this.hitPos = hitPos;
@@ -22,7 +23,7 @@ public class ConduitHitResult {
 		this.node2 = node2;
 	}
 
-	public static ConduitHitResult hit(PlacedConduit conduitState, Vec3d hitPos, int node1, int node2) {
+	public static ConduitHitResult hit(ConduitEntity conduitState, Vec3d hitPos, int node1, int node2) {
 		return new ConduitHitResult(conduitState, hitPos, node1, node2);
 	}
 	
@@ -46,7 +47,7 @@ public class ConduitHitResult {
 		return this.conduitState != null && this.hitPos != null && node1 >= 0 && node2 >= 0;
 	}
 	
-	public PlacedConduit getConduitState() {
+	public ConduitEntity getConduitState() {
 		return conduitState;
 	}
 

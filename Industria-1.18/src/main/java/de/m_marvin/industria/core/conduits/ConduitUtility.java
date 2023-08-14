@@ -8,8 +8,8 @@ import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
 import de.m_marvin.industria.core.conduits.engine.network.SCConduitPackage;
 import de.m_marvin.industria.core.conduits.types.ConduitHitResult;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
-import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
+import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
@@ -59,27 +59,27 @@ public class ConduitUtility {
 		return handler.breakConduit(position, dropItems);
 	}
 
-	public static Optional<PlacedConduit> getConduit(Level level, ConduitPos position) {
+	public static Optional<ConduitEntity> getConduit(Level level, ConduitPos position) {
 		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		return handler.getConduit(position);
 	}
 
-	public static Optional<PlacedConduit> getConduitAtNode(Level level, BlockPos block, int node) {
+	public static Optional<ConduitEntity> getConduitAtNode(Level level, BlockPos block, int node) {
 		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		return handler.getConduitAtNode(block, node);
 	}
 	
-	public static List<PlacedConduit> getConduitsAtNode(Level level, BlockPos position, int node) {
+	public static List<ConduitEntity> getConduitsAtNode(Level level, BlockPos position, int node) {
 		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		return handler.getConduitsAtNode(position, node);
 	}
 	
-	public static List<PlacedConduit> getConduitsAtBlock(Level level, BlockPos position) {
+	public static List<ConduitEntity> getConduitsAtBlock(Level level, BlockPos position) {
 		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		return handler.getConduitsAtBlock(position);
 	}
 	
-	public static List<PlacedConduit> getConduitsInChunk(Level level, ChunkPos chunk) {
+	public static List<ConduitEntity> getConduitsInChunk(Level level, ChunkPos chunk) {
 		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		return handler.getConduitsInChunk(chunk);
 	}

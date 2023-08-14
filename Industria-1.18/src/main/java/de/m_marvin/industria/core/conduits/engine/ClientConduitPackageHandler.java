@@ -6,13 +6,13 @@ import java.util.List;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
-import de.m_marvin.industria.core.conduits.engine.network.SSyncPlacedConduit;
+import de.m_marvin.industria.core.conduits.engine.network.SSyncConduit;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitLoadEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitUnloadEvent;
 import de.m_marvin.industria.core.conduits.engine.network.SCConduitPackage.SCBreakConduitPackage;
 import de.m_marvin.industria.core.conduits.engine.network.SCConduitPackage.SCPlaceConduitPackage;
-import de.m_marvin.industria.core.conduits.engine.network.SSyncPlacedConduit.Status;
-import de.m_marvin.industria.core.conduits.types.PlacedConduit;
+import de.m_marvin.industria.core.conduits.engine.network.SSyncConduit.Status;
+import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.registries.Capabilities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.ChunkPos;
@@ -31,11 +31,11 @@ public class ClientConduitPackageHandler {
 	
 	/* Handle SSyncPlacedConduit package */
 	
-	private static HashMap<ChunkPos, SSyncPlacedConduit> receivedPackages = new HashMap<ChunkPos, SSyncPlacedConduit>();
+	private static HashMap<ChunkPos, SSyncConduit> receivedPackages = new HashMap<ChunkPos, SSyncConduit>();
 	private static List<ChunkPos> handledPackages = new ArrayList<>();
 	
 	@SuppressWarnings("resource")
-	public static void handleSyncConduitsFromServer(SSyncPlacedConduit msg, NetworkEvent.Context ctx) {
+	public static void handleSyncConduitsFromServer(SSyncConduit msg, NetworkEvent.Context ctx) {
 		if (Minecraft.getInstance().level.isLoaded(msg.getChunkPos().getWorldPosition())) {
 			handlePackageInLoadedChunk(msg);
 		} else {
@@ -62,7 +62,7 @@ public class ClientConduitPackageHandler {
 		if (level != null) {
 			for (ChunkPos chunk : receivedPackages.keySet()) {
 				if (level.isLoaded(chunk.getWorldPosition())) {
-					SSyncPlacedConduit msg = receivedPackages.get(chunk);
+					SSyncConduit msg = receivedPackages.get(chunk);
 					if (msg != null) {
 						handlePackageInLoadedChunk(msg);
 						handledPackages.add(chunk);
@@ -76,19 +76,19 @@ public class ClientConduitPackageHandler {
 		}
 	
 	@SuppressWarnings("resource")
-	public static void handlePackageInLoadedChunk(SSyncPlacedConduit msg) {
+	public static void handlePackageInLoadedChunk(SSyncConduit msg) {
 		Level level = Minecraft.getInstance().level;
 		
 		if (level != null) {
 			LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
 			if (conduitHolder.isPresent()) {
 				if (msg.getStatus() == Status.ADDED) {
-					for (PlacedConduit conduitState : msg.conduitStates) {
+					for (ConduitEntity conduitState : msg.conduits) {
 						conduitHolder.resolve().get().addConduit(conduitState);
 						MinecraftForge.EVENT_BUS.post(new ConduitLoadEvent(level, conduitState.getPosition(), conduitState));
 					}
 				} else if (msg.getStatus() == Status.REMOVED) {
-					for (PlacedConduit conduitState : msg.conduitStates) {
+					for (ConduitEntity conduitState : msg.conduits) {
 						conduitHolder.resolve().get().removeConduit(conduitState);
 						MinecraftForge.EVENT_BUS.post(new ConduitUnloadEvent(level, conduitState.getPosition(), conduitState));
 					}

@@ -4,7 +4,9 @@ import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -23,6 +25,11 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
 public class GameUtility {
+	
+	public static Direction getFacingDirection(Entity entity) {
+		Vec3d viewVec = Vec3d.fromVec(entity.getViewVector(1));
+		return MathUtility.getVecDirection(viewVec);
+	}
 	
 	public static Vec3f getWorldGravity(BlockGetter level) {
 		return new Vec3f(0, 0.1F, 0); // TODO

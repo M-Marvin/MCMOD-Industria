@@ -16,7 +16,6 @@ import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.engine.particles.ConduitParticleOption;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
-import de.m_marvin.industria.core.conduits.types.PlacedConduit;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.registries.ParticleTypes;
@@ -96,11 +95,11 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		return Conduit.class;
 	}
 	
-	public int getColorAt(ClientLevel level, Vec3d nodePos, PlacedConduit conduitState) {
+	public int getColorAt(ClientLevel level, Vec3d nodePos, ConduitEntity conduitState) {
 		return 0xFFFFFF;
 	}
 	
-	public void onNodeStateChange(Level level, BlockPos nodePos, BlockState nodeState, PlacedConduit conduitState) {
+	public void onNodeStateChange(Level level, BlockPos nodePos, BlockState nodeState, ConduitEntity conduitState) {
 		if (nodeState.getBlock() instanceof IConduitConnector) {
 			int nodeId = conduitState.getPosition().getNodeApos().equals(nodePos) ? conduitState.getPosition().getNodeAid() : conduitState.getPosition().getNodeBid();
 			if (((IConduitConnector) nodeState.getBlock()).getConduitNodes(level, nodePos, nodeState).length <= nodeId) {
@@ -111,10 +110,10 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		}
 	}
 	
-	public void onDismantle(@Nullable Level level, ConduitPos position, PlacedConduit conduitState) {}
-	public void onBuild(@Nullable Level level, ConduitPos position, PlacedConduit conduitState) {}
+	public void onDismantle(@Nullable Level level, ConduitPos position, ConduitEntity conduitState) {}
+	public void onBuild(@Nullable Level level, ConduitPos position, ConduitEntity conduitState) {}
 	
-	public void onPlace(Level level, ConduitPos position, PlacedConduit conduitState) {
+	public void onPlace(Level level, ConduitPos position, ConduitEntity conduitState) {
 		
 		Vec3d nodeA = Vec3d.fromVec(PhysicUtility.ensureWorldBlockCoordinates(level, conduitState.getPosition().getNodeApos(), conduitState.getPosition().getNodeApos()));
 		Vec3d nodeB = Vec3d.fromVec(PhysicUtility.ensureWorldBlockCoordinates(level, conduitState.getPosition().getNodeBpos(), conduitState.getPosition().getNodeBpos()));
@@ -124,7 +123,7 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		
 	}
 	
-	public void onBreak(Level level, ConduitPos position, PlacedConduit conduitState, boolean dropItems) {
+	public void onBreak(Level level, ConduitPos position, ConduitEntity conduitState, boolean dropItems) {
 		
 		Vec3d nodeA = Vec3d.fromVec(PhysicUtility.ensureWorldBlockCoordinates(level, conduitState.getPosition().getNodeApos(), conduitState.getPosition().getNodeApos()));
 		Vec3d nodeB = Vec3d.fromVec(PhysicUtility.ensureWorldBlockCoordinates(level, conduitState.getPosition().getNodeBpos(), conduitState.getPosition().getNodeBpos()));
@@ -208,14 +207,14 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		
 	}
 	
-	public void dismantleShape(Level level, PlacedConduit conduit) {
+	public void dismantleShape(Level level, ConduitEntity conduit) {
 		
 		ConduitShape shape = conduit.getShape();
  		if (shape.constraint.isPresent() && !level.isClientSide()) PhysicUtility.removeConstraint(level, shape.constraint.getAsInt());
 		
 	}
 	
-	public ConduitShape buildShape(Level level, PlacedConduit conduit) {
+	public ConduitShape buildShape(Level level, ConduitEntity conduit) {
 		
 		Vec3d pointStart = conduit.getPosition().calculateWorldNodeA(level);
 		Vec3d pointEnd = conduit.getPosition().calculateWorldNodeB(level);
@@ -250,7 +249,7 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		
 	}
 	
-	public void updatePhysicalNodes(Level level, PlacedConduit conduit) {
+	public void updatePhysicalNodes(Level level, ConduitEntity conduit) {
 		ConduitShape shape = conduit.getShape();
 		BlockPos nodeApos = conduit.getPosition().getNodeApos();
 		BlockState nodeAstate = level.getBlockState(nodeApos);
@@ -502,6 +501,10 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 			}
 		}
 		
+	}
+
+	public ConduitEntity newConduitEntity(ConduitPos position, Conduit conduit, double length) {
+		 return new ConduitEntity(position, conduit, length);
 	}
 	
 }

@@ -1,6 +1,5 @@
 package de.m_marvin.industria.core.conduits.types.conduits;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -8,16 +7,11 @@ import java.util.function.Consumer;
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
-import de.m_marvin.industria.core.conduits.types.PlacedConduit;
-import de.m_marvin.industria.core.conduits.types.PlacedConduit.ConduitStateStorage;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
@@ -33,46 +27,40 @@ public abstract class ElectricConduit extends Conduit implements IElectricCondui
 	}
 	
 	@Override
-	public void onBuild(Level level, ConduitPos position, PlacedConduit conduitState) {
+	public void onBuild(Level level, ConduitPos position, ConduitEntity conduitState) {
 		super.onBuild(level, position, conduitState);
 
-		if (conduitState.getDataStorage("Wires") == null) {
-
-			String[] initialLabels = new String[wireCount];
-			Arrays.fill(initialLabels, "");
-			
-			if (level != null) {
-				
-				NodePos[] connections = getConnections(level, position, conduitState);
-				Set<ElectricNetworkHandlerCapability.Component<?, ?, ?>> neighborsA = ElectricUtility.findComponentsOnNode(level, connections[0]);
-				Set<ElectricNetworkHandlerCapability.Component<?, ?, ?>> neighborsB = ElectricUtility.findComponentsOnNode(level, connections[1]);
-				
-				Set<String> availableLabels = new HashSet<>();
-				for (Component<?, ?, ?> component : neighborsA) {
-					for (String label : component.getWireLanes(level, connections[0])) availableLabels.add(label);
-				}
-				for (Component<?, ?, ?> component : neighborsB) {
-					for (String label : component.getWireLanes(level, connections[1])) availableLabels.add(label);
-				}
-				
-				String[] labels = availableLabels.toArray(i -> new String[i]);
-				for (int i = 0; i < Math.min(initialLabels.length, availableLabels.size()); i++) initialLabels[i] = labels[i];
-				
-			}
-
-			conduitState.addDataStorage("Wires", new ConduitStateStorage<String[], ListTag>(initialLabels, labels -> {
-				ListTag list = new ListTag();
-				for (String s : labels) list.add(StringTag.valueOf(s));
-				return list;
-			}, list -> {
-				String[] labels = new String[list.size()];
-				for (int i = 0; i < labels.length; i++) labels[i] = list.getString(i);
-				return labels;
-			}));
-		}
+//		if (conduitState.getDataStorage("Wires") == null) {
+//			
+//			if (level != null) {
+//				
+//				NodePos[] connections = getConnections(level, position, conduitState);
+//				Set<ElectricNetworkHandlerCapability.Component<?, ?, ?>> neighborsA = ElectricUtility.findComponentsOnNode(level, connections[0]);
+//				Set<ElectricNetworkHandlerCapability.Component<?, ?, ?>> neighborsB = ElectricUtility.findComponentsOnNode(level, connections[1]);
+//				
+//				Set<String> availableLabels = new HashSet<>();
+//				for (Component<?, ?, ?> component : neighborsA) {
+//					for (String label : component.getWireLanes(level, connections[0])) availableLabels.add(label);
+//				}
+//				for (Component<?, ?, ?> component : neighborsB) {
+//					for (String label : component.getWireLanes(level, connections[1])) availableLabels.add(label);
+//				}
+//				
+//				String[] labels = availableLabels.toArray(i -> new String[i]);
+//				//for (int i = 0; i < Math.min(initialLabels.length, availableLabels.size()); i++) initialLabels[i] = labels[i];
+//				
+//			}
+//
+//			
+//		}
 		
 	}
-
+	
+	@Override
+	public ConduitEntity newConduitEntity(ConduitPos position, Conduit conduit, double length) {
+		return new ElectricConduitEntity(position, conduit, length, this.wireCount);
+	}
+	
 	protected int searchForLabel(String[] lables, String label) {
 		int freeSpot = -(lables.length + 1);
 		for (int i = 0; i < lables.length; i++) {
@@ -83,33 +71,35 @@ public abstract class ElectricConduit extends Conduit implements IElectricCondui
 	}
 	
 	@Override
-	public void neighborRewired(Level level, PlacedConduit instance, ConduitPos position, Component<?, ?, ?> neighbor) {
-		assert instance.getDataStorage("Wires") != null : "Conduit has not ben build yet!"; // TODO Was this necessary ?
-		
-		NodePos[] connections = getConnections(level, position, instance);
-		NodePos[] connectionsNeighbor = neighbor.getNodes(level);
-		
-		Set<String> newLabels = new HashSet<>();
-		for (int i = 0; i < connections.length; i++) {
-			for (int i2 = 0; i2 < connectionsNeighbor.length; i2++) {
-				if (connections[i].equals(connectionsNeighbor[i2])) {
-					for (String label : neighbor.getWireLanes(level, connectionsNeighbor[i2])) newLabels.add(label);
+	public void neighborRewired(Level level, ConduitEntity instance, ConduitPos position, Component<?, ?, ?> neighbor) {
+		if (instance instanceof ElectricConduitEntity entity) {
+			
+			// TODO
+			NodePos[] connections = getConnections(level, position, instance);
+			NodePos[] connectionsNeighbor = neighbor.getNodes(level);
+			
+			Set<String> newLabels = new HashSet<>();
+			for (int i = 0; i < connections.length; i++) {
+				for (int i2 = 0; i2 < connectionsNeighbor.length; i2++) {
+					if (connections[i].equals(connectionsNeighbor[i2])) {
+						for (String label : neighbor.getWireLanes(level, connectionsNeighbor[i2])) newLabels.add(label);
+					}
 				}
 			}
+			
+			String[] currentLabels = entity.getWireLanes();
+			boolean changed = false;
+			for (String label : newLabels) {
+				int i = searchForLabel(currentLabels, label);
+				if (i >= 0) continue;
+				if (-i > currentLabels.length) break;
+				currentLabels[-(i + 1)] = label;
+				changed = true;
+			}
+			
+			if (changed) ElectricUtility.notifyRewired(level, position);
+			
 		}
-		
-		String[] currentLabels = (String[]) instance.getStateData("Wires");
-		boolean changed = false;
-		for (String label : newLabels) {
-			int i = searchForLabel(currentLabels, label);
-			if (i >= 0) continue;
-			if (-i > currentLabels.length) break;
-			currentLabels[-(i + 1)] = label;
-			changed = true;
-		}
-		
-		if (changed) ElectricUtility.notifyRewired(level, position);
-		
 	}
 	
 	@Override
@@ -118,13 +108,18 @@ public abstract class ElectricConduit extends Conduit implements IElectricCondui
 	}
 	
 	@Override
-	public String[] getWireLanes(ConduitPos pos, PlacedConduit instance, NodePos node) {
-		return instance.getDataStorage("Wires") != null ? (String[]) instance.getStateData("Wires") : new String[] {};
+	public String[] getWireLanes(ConduitPos pos, ConduitEntity instance, NodePos node) {
+		if (instance instanceof ElectricConduitEntity entity) {
+			return entity.getWireLanes();
+		}
+		return new String[] {};
 	}
 	
 	@Override
-	public void setWireLanes(ConduitPos pos, PlacedConduit instance, NodePos node, String[] laneLabels) {
-		instance.setStateData("Wires", laneLabels);
+	public void setWireLanes(ConduitPos pos, ConduitEntity instance, NodePos node, String[] laneLabels) {
+		if (instance instanceof ElectricConduitEntity entity) {
+			entity.setWireLanes(laneLabels);
+		}
 	}
 	
 	@Override
@@ -133,7 +128,7 @@ public abstract class ElectricConduit extends Conduit implements IElectricCondui
 	}
 	
 	@Override
-	public void plotCircuit(Level level, PlacedConduit instance, ConduitPos position, ElectricNetwork circuit, Consumer<CircuitTemplate> plotter) {
+	public void plotCircuit(Level level, ConduitEntity instance, ConduitPos position, ElectricNetwork circuit, Consumer<CircuitTemplate> plotter) {
 		CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "resistor"));
 		template.setProperty("resistance", 10); // TODO Wire resistance
 		

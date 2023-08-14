@@ -3,7 +3,7 @@ package de.m_marvin.industria.core.conduits.engine;
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.types.ConduitHitResult;
-import de.m_marvin.industria.core.conduits.types.PlacedConduit;
+import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -37,7 +37,7 @@ public class GenricConduitEventListener {
 			
 			ConduitHitResult hitResult = ConduitUtility.clipConduits(event.getWorld(), clipContext, true);
 			if (hitResult.isHit()) {
-				PlacedConduit conduit = hitResult.getConduitState();
+				ConduitEntity conduit = hitResult.getConduitState();
 				ConduitUtility.removeConduitFromClient(event.getWorld(), conduit.getPosition(), !event.getPlayer().isCreative());
 				
 				ItemStack toolItem = event.getPlayer().getMainHandItem();

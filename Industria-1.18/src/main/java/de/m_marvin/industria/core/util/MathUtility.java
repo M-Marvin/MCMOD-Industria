@@ -71,6 +71,12 @@ public class MathUtility {
 		return Direction.fromAxisAndDirection(axis, direction);
 	}
 	
+	public static Direction getVecDirection(Vec3d v) {
+		v = v.normalize();
+		Vec3i vec = new Vec3i((int) Math.round(v.x), (int) Math.round(v.y), (int) Math.round(v.z));
+		return getVecDirection(vec);
+	}
+	
 	public static BlockPos getMinCorner(BlockPos pos1, BlockPos pos2) {
 		return new BlockPos(
 				Math.min(pos1.getX(), pos2.getX()),

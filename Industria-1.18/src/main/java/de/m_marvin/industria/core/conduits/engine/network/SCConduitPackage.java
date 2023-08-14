@@ -12,8 +12,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
+/**
+ * Used to send placed/removed updated from server to client and from client to server (bi-directional package)
+ **/
 public class SCConduitPackage {
-	
+		
 	public static class SCPlaceConduitPackage {
 		
 		public ConduitPos position;
@@ -51,11 +54,10 @@ public class SCConduitPackage {
 			return new SCPlaceConduitPackage(position, conduit, length);
 		}
 		
-		@SuppressWarnings("deprecation")
 		public static void handle(SCPlaceConduitPackage msg, Supplier<NetworkEvent.Context> ctx) {
 			ctx.get().enqueueWork(() -> {
-				DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> () -> ServerConduitPackageHandler.handlePlaceConduit(msg, ctx.get()));
-				DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> ClientConduitPackageHandler.handlePlaceConduit(msg, ctx.get()));
+				DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> ServerConduitPackageHandler.handlePlaceConduit(msg, ctx.get()));
+				DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> ClientConduitPackageHandler.handlePlaceConduit(msg, ctx.get()));
 			});	
 			ctx.get().setPacketHandled(true);	
 		}
@@ -93,11 +95,9 @@ public class SCConduitPackage {
 		
 		public static void handle(SCBreakConduitPackage msg, Supplier<NetworkEvent.Context> ctx) {
 			ctx.get().enqueueWork(() -> {
-				if (ctx.get().getSender() != null) {
-					ServerConduitPackageHandler.handleRemoveConduit(msg, ctx.get());
-				} else {
-					ClientConduitPackageHandler.handleRemoveConduit(msg, ctx.get());
-				}
+				// TODO Test if working
+				DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> ServerConduitPackageHandler.handleRemoveConduit(msg, ctx.get()));
+				DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> ClientConduitPackageHandler.handleRemoveConduit(msg, ctx.get()));
 			});
 			ctx.get().setPacketHandled(true);
 		}

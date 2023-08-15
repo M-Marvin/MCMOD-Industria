@@ -12,7 +12,7 @@ public class ServerElectricPackageHandler {
 	public static void handleUpdateJunctionLanes(CUpdateJunctionLanes msg, Context ctx) {
 		
 		BlockPos blockPos = msg.getBlockPos();
-		Level level = ctx.getSender().getLevel();
+		Level level = ctx.getSender().level();
 		BlockEntity blockEntity = level.getBlockEntity(blockPos);
 		if (blockEntity instanceof IJunctionEdit junctionEditEntity) {
 			if (msg.isInternalNode()) {

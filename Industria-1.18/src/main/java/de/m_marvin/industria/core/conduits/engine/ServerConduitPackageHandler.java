@@ -22,11 +22,11 @@ public class ServerConduitPackageHandler {
 	}
 	
 	public static void handlePlaceConduit(SCPlaceConduitPackage msg, Context ctx) {
-		ConduitUtility.setConduit(ctx.getSender().getLevel(), msg.getPosition(), msg.getConduit(), msg.getLength());
+		ConduitUtility.setConduit(ctx.getSender().level(), msg.getPosition(), msg.getConduit(), msg.getLength());
 	}
 
 	public static void handleRemoveConduit(SCBreakConduitPackage msg, Context ctx) {
-		ConduitUtility.removeConduit(ctx.getSender().getLevel(), msg.getPosition(), msg.dropItems());
+		ConduitUtility.removeConduit(ctx.getSender().level(), msg.getPosition(), msg.dropItems());
 	}
 	
 }

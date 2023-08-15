@@ -1,5 +1,7 @@
 package de.m_marvin.industria.core.client.electrics.screens;
 
+import org.antlr.v4.parse.ATNBuilder.subrule_return;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import de.m_marvin.industria.IndustriaCore;
@@ -7,6 +9,7 @@ import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.containers.AbstractJunctionEditContainer;
 import de.m_marvin.industria.core.util.Direction2d;
 import de.m_marvin.univec.impl.Vec2i;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -33,8 +36,8 @@ public class PowerSourceJunctionScreen extends AbstractJunctionEditScreen {
 	}
 
 	@Override
-	protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
-		this.font.draw(pPoseStack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
+	protected void renderLabels(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
+		pGuiGraphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false);
 	}
 	
 	@Override

@@ -2,13 +2,13 @@ package de.m_marvin.industria.core.client.conduits;
 
 import java.awt.Color;
 
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
@@ -22,6 +22,7 @@ import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.registries.Conduits;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
+import de.m_marvin.unimat.impl.Quaternion;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
 import de.m_marvin.univec.impl.Vec4f;
@@ -123,7 +124,7 @@ public class ConduitWorldRenderer {
 	
 	public static void drawDebugNodes(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, LocalPlayer player, float partialTicks) {
 		
-		HitResult result = GameUtility.raycast(clientLevel, Vec3d.fromVec(player.getEyePosition()), Vec3d.fromVec(player.getViewVector(partialTicks)), player.getReachDistance());
+		HitResult result = GameUtility.raycast(clientLevel, Vec3d.fromVec(player.getEyePosition()), Vec3d.fromVec(player.getViewVector(partialTicks)), player.getBlockReach());
 		
 		if (result.getType() == Type.BLOCK) {
 			
@@ -344,11 +345,11 @@ public class ConduitWorldRenderer {
 		Vec3d lineNormal = lineVec.normalize();
 		
 		double length = lineVec.length();
-		de.m_marvin.unimat.impl.Quaternion rotation = lineNormal.relativeRotationQuat(new Vec3f(0, 0, 1)); // Default model orientation positive Z
+		Quaternion rotation = lineNormal.relativeRotationQuat(new Vec3f(0, 0, 1)); // Default model orientation positive Z
 		
 		poseStack.pushPose();
 		poseStack.translate(start.x, start.y, start.z);
-		poseStack.mulPose(new Quaternion(rotation.i(), rotation.j(), rotation.k(), rotation.r()));
+		poseStack.mulPose(new Quaternionf(rotation.i(), rotation.j(), rotation.k(), rotation.r()));
 		
 		wirePart(vertexConsumer, poseStack, color, packedLight, (float) length, width / 16F, lengthOffset);
 		

@@ -30,7 +30,7 @@ public class ScrollInputListener {
 		ClientLevel level = Minecraft.getInstance().level;
 		LocalPlayer player = Minecraft.getInstance().player;
 		ItemStack heldItem = player.getItemInHand(hand);
-		UseOnContext result = MathUtility.raycastBlockClick(level, player, hand, player.getReachDistance());
+		UseOnContext result = MathUtility.raycastBlockClick(level, player, hand, player.getBlockReach());
 		BlockHitResult hitResult = null;
 		if (result != null) {
 			hitResult = result.getHitResult();

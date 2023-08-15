@@ -33,6 +33,10 @@ import net.minecraft.world.phys.Vec3;
 
 public class MathUtility {
 
+	public static BlockPos toBlockPos(double x, double y, double z) {
+		return new BlockPos((int) Math.floor(x), (int) Math.floor(y), (int) Math.floor(z));
+	}
+	
 	public static int clamp(int v, int min, int max) {
 		if (v < min) return min;
 		if (v > max) return max;

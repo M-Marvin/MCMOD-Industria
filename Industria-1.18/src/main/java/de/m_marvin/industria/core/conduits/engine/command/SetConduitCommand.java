@@ -73,13 +73,13 @@ public class SetConduitCommand {
 		
 		if (conduit != Conduits.NONE.get()) {
 			if (ConduitUtility.setConduit(level, position, conduit, conduitLength)) {
-				source.getSource().sendSuccess(Component.translatable("industria.commands.setconduit.success", nodeApos.getX(), nodeApos.getY(), nodeApos.getZ()), true);
+				source.getSource().sendSuccess(() -> Component.translatable("industria.commands.setconduit.success", nodeApos.getX(), nodeApos.getY(), nodeApos.getZ()), true);
 				return Command.SINGLE_SUCCESS;
 			} else {
 				source.getSource().sendFailure(Component.translatable("industria.commands.setconduit.failure"));
 			}
 		} else if (existingConduit.isPresent()) {
-			source.getSource().sendSuccess(Component.translatable("industria.commands.setconduit.success", nodeApos.getX(), nodeApos.getY(), nodeApos.getZ()), true);
+			source.getSource().sendSuccess(() -> Component.translatable("industria.commands.setconduit.success", nodeApos.getX(), nodeApos.getY(), nodeApos.getZ()), true);
 			return Command.SINGLE_SUCCESS;
 		}
 		

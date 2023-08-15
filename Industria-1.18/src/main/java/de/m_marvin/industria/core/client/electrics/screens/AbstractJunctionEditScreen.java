@@ -8,6 +8,7 @@ import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.containers.AbstractJunctionEditContainer;
 import de.m_marvin.industria.core.util.Direction2d;
 import de.m_marvin.univec.impl.Vec2i;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
@@ -84,7 +85,7 @@ public abstract class AbstractJunctionEditScreen extends AbstractContainerScreen
 				return pos.x < i && pos.x + i1 > i && pos.y < j && pos.y + i2 > j;
 			}
 
-			public void renderBg(PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY) {
+			public void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
 
 				int i = AbstractJunctionEditScreen.this.leftPos;
 				int j = AbstractJunctionEditScreen.this.topPos;
@@ -94,23 +95,31 @@ public abstract class AbstractJunctionEditScreen extends AbstractContainerScreen
 				
 				switch (CableNode.this.orientation) {
 				case UP:
-					blit(pPoseStack, i + uiPos.x(), j + uiPos.y(), 238, h, w, h);
-					blit(pPoseStack, i + uiPos.x(), j + uiPos.y(), 238 + w, h, w, h);
+					pGuiGraphics.blit(getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, h, w, h);
+					pGuiGraphics.blit(getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238 + w, h, w, h);
 					break;
 				case DOWN:
-					blit(pPoseStack, i + uiPos.x(), j + uiPos.y(), 238, 54, w, h);
-					blit(pPoseStack, i + uiPos.x(), j + uiPos.y(), 238 + w, 54, w, h);
+					pGuiGraphics.blit(getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 54, w, h);
+					pGuiGraphics.blit(getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238 + w, 54, w, h);
 					break;
 				case LEFT:
-					blit(pPoseStack, i + uiPos.x(), j + uiPos.y(), 238, 36, h, w);
-					blit(pPoseStack, i + uiPos.x(), j + uiPos.y(), 238, 36 + w, h, w);
+					pGuiGraphics.blit(getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 36, h, w);
+					pGuiGraphics.blit(getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 36 + w, h, w);
 					break;
 				case RIGHT:
-					blit(pPoseStack, i + uiPos.x(), j + uiPos.y(), 238, 0, h, w);
-					blit(pPoseStack, i + uiPos.x(), j + uiPos.y(), 238, 0 + w, h, w);
+					pGuiGraphics.blit(getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 0, h, w);
+					pGuiGraphics.blit(getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 0 + w, h, w);
 					break;
 				}
 				
+			}
+
+			@Override
+			public void setFocused(boolean p_265728_) {}
+
+			@Override
+			public boolean isFocused() {
+				return false;
 			}
 			
 		}
@@ -165,10 +174,18 @@ public abstract class AbstractJunctionEditScreen extends AbstractContainerScreen
 			return lanes;
 		}
 
-		public void renderBg(PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY) {
+		public void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
 			for (WireNode node : this.wireNodes) {
-				node.renderBg(pPoseStack, pPartialTick, pMouseX, pMouseY);
+				node.renderBg(pGuiGraphics, pPartialTick, pMouseX, pMouseY);
 			}
+		}
+
+		@Override
+		public void setFocused(boolean p_265728_) {}
+
+		@Override
+		public boolean isFocused() {
+			return false;
 		}
 		
 	}
@@ -227,8 +244,8 @@ public abstract class AbstractJunctionEditScreen extends AbstractContainerScreen
 	
 	protected void showNamingField(CableNode.WireNode node) {
 		this.selectedNode = node;
-		this.namingField.x = this.leftPos + node.getPosition().x;
-		this.namingField.y = this.topPos + node.getPosition().y;
+		this.namingField.setY(this.leftPos + node.getPosition().x);
+		this.namingField.setY(this.topPos + node.getPosition().y);
 		this.namingField.setVisible(true);
 		this.namingField.setValue(node.label);
 	}
@@ -255,7 +272,7 @@ public abstract class AbstractJunctionEditScreen extends AbstractContainerScreen
 	public abstract ResourceLocation getJunctionBoxTexture();
 	
 	@Override
-	protected void renderBg(PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY) {
+	protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
 		
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
@@ -263,13 +280,13 @@ public abstract class AbstractJunctionEditScreen extends AbstractContainerScreen
 		
 		int i = this.leftPos;
 		int j = this.topPos;
-		this.blit(pPoseStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
+		pGuiGraphics.blit(getJunctionBoxTexture(), i, j, 0, 0, this.imageWidth, this.imageHeight);
 		
 		for (CableNode node : this.cableNodes) {
-			if (node != null) node.renderBg(pPoseStack, pPartialTick, pMouseX, pMouseY);
+			if (node != null) node.renderBg(pGuiGraphics, pPartialTick, pMouseX, pMouseY);
 		}
 		
-		if (this.namingField != null) this.namingField.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+		if (this.namingField != null) this.namingField.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
 		
 	}
 	

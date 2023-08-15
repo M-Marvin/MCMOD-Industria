@@ -6,6 +6,7 @@ import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.containers.AbstractJunctionEditContainer;
 import de.m_marvin.industria.core.util.Direction2d;
 import de.m_marvin.univec.impl.Vec2i;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -29,7 +30,7 @@ public abstract class AbstractJunctionBoxScreen extends AbstractJunctionEditScre
 	}
 
 	@Override
-	protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
+	protected void renderLabels(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
 		// Disabling screen titles
 		//super.renderLabels(pPoseStack, pMouseX, pMouseY);
 	}

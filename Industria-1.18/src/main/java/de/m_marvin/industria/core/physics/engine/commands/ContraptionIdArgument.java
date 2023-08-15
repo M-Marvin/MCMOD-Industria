@@ -96,7 +96,7 @@ public class ContraptionIdArgument implements ArgumentType<ContraptionIdArgument
 			Player player = Minecraft.getInstance().player;
 			Vec3d eyePos = Vec3d.fromVec(player.getEyePosition());
 			Vec3d direction = Vec3d.fromVec(player.getViewVector(0));
-			double range = player.getReachDistance();
+			double range = player.getBlockReach();
 			
 			ContraptionHitResult result = PhysicUtility.clipForContraption(level, eyePos, direction, range);
 			

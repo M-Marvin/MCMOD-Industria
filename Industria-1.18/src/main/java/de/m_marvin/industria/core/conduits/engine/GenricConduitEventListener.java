@@ -29,7 +29,7 @@ public class GenricConduitEventListener {
 		
 		if (itemStack.getItem() == Items.SHEARS && event.getLevel().isClientSide()) {
 			
-			double range = player.getAttributeValue(ForgeMod.REACH_DISTANCE.get());
+			double range = player.getAttributeValue(ForgeMod.BLOCK_REACH.get());
 			Vec3 viewVec = player.getViewVector(0);
 			Vec3 eyePos = player.getEyePosition();
 			Vec3 rayTarget = eyePos.add(viewVec.multiply(range, range, range));

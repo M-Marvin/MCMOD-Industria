@@ -13,7 +13,7 @@ public class ServerScrollPackageHandler {
 	public static void handleScrollPackage(CScrollInputPackage msg, Context context) {
 
 		ServerPlayer player = context.getSender();
-		ServerLevel level = player.getLevel();
+		ServerLevel level = player.serverLevel();
 		ItemStack heldItem = player.getItemInHand(msg.getHand());
 		UseOnContext ctx = new UseOnContext(level, player, msg.getHand(), heldItem, msg.getHitResult());
 		

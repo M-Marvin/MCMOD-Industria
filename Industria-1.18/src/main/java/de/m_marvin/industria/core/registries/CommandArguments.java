@@ -19,9 +19,9 @@ public class CommandArguments {
 	}
 	
 	public static final RegistryObject<SingletonArgumentInfo<ContraptionIdArgument>> CONTRAPTION_ID_ARGUMENT = COMMAND_ARGUMENT_TYPES.register("contraption_id", () ->
-		ArgumentTypeInfos.registerByClass(ContraptionIdArgument.class, SingletonArgumentInfo.contextFree(() -> new ContraptionIdArgument())));
+		ArgumentTypeInfos.registerByClass(ContraptionIdArgument.class, SingletonArgumentInfo.contextFree(ContraptionIdArgument::contraption)));
 
 	public static final RegistryObject<SingletonArgumentInfo<ConduitArgument>> CONDUIT_ARGUMENT = COMMAND_ARGUMENT_TYPES.register("conduit", () ->
-		ArgumentTypeInfos.registerByClass(ConduitArgument.class, SingletonArgumentInfo.contextFree(() -> new ConduitArgument())));
+		ArgumentTypeInfos.registerByClass(ConduitArgument.class, SingletonArgumentInfo.contextFree(ConduitArgument::conduit)));
 	
 }

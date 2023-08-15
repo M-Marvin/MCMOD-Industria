@@ -338,7 +338,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		
 		if (!hasSolids) return null;
 		
-		if (structureCornerMax == null) structureCornerMax = structureCornerMin = new BlockPos(areaBounds.getCenter().x(), areaBounds.getCenter().y(), areaBounds.getCenter().z());
+		if (structureCornerMax == null) structureCornerMax = structureCornerMin = MathUtility.toBlockPos(areaBounds.getCenter().x(), areaBounds.getCenter().y(), areaBounds.getCenter().z());
 		
 		Vec3d contraptionPos = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
 		ServerShip contraption = createContraptionAt(contraptionPos, scale);
@@ -352,7 +352,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 					Vec3d relativePosition = Vec3d.fromVec(itPos).sub(contraptionPos);
 					Vec3d shipPos = contraptionOrigin.add(relativePosition);
 					
-					GameUtility.copyBlock(level, itPos, new BlockPos(shipPos.x, shipPos.y, shipPos.z));
+					GameUtility.copyBlock(level, itPos, MathUtility.toBlockPos(shipPos));
 					
 				}
 			}
@@ -376,7 +376,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 					Vec3d shipPos = contraptionOrigin.add(relativePosition);
 					
 					GameUtility.triggerUpdate(level, itPos);
-					GameUtility.triggerUpdate(level, new BlockPos(shipPos.x, shipPos.y, shipPos.z));
+					GameUtility.triggerUpdate(level, MathUtility.toBlockPos(shipPos));
 				}
 			}
 		}
@@ -411,13 +411,13 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		ServerShip contraption = createContraptionAt(contraptionPos, scale);
 		
 		Vec3d contraptionOrigin = PhysicUtility.toContraptionPos(contraption.getTransform(), contraptionPos);
-		BlockPos centerBlockPos = new BlockPos(contraptionPos.x, contraptionPos.y, contraptionPos.z);
+		BlockPos centerBlockPos = MathUtility.toBlockPos(contraptionPos);
 		
 		for (BlockPos itPos : blocks) {
 			Vec3d relativePosition = Vec3d.fromVec(itPos).sub(contraptionPos);
 			Vec3d shipPos = contraptionOrigin.add(relativePosition);
 			
-			GameUtility.copyBlock(level, itPos, new BlockPos(shipPos.x, shipPos.y, shipPos.z));
+			GameUtility.copyBlock(level, itPos, MathUtility.toBlockPos(shipPos));
 
 		}
 		
@@ -437,7 +437,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 			Vec3d shipPos = contraptionOrigin.add(relativePosition);
 			
 			GameUtility.triggerUpdate(level, itPos);
-			GameUtility.triggerUpdate(level, new BlockPos(shipPos.x, shipPos.y, shipPos.z));
+			GameUtility.triggerUpdate(level, MathUtility.toBlockPos(shipPos));
 		}
 		
 		setPosition((ServerShip) contraption, new ContraptionPosition(new Quaternion(new Vec3i(0, 1, 1), 0), contraptionPos), false);

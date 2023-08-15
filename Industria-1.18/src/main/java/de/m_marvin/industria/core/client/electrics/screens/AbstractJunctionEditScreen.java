@@ -1,7 +1,6 @@
 package de.m_marvin.industria.core.client.electrics.screens;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
@@ -16,7 +15,6 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -244,7 +242,7 @@ public abstract class AbstractJunctionEditScreen extends AbstractContainerScreen
 	
 	protected void showNamingField(CableNode.WireNode node) {
 		this.selectedNode = node;
-		this.namingField.setY(this.leftPos + node.getPosition().x);
+		this.namingField.setX(this.leftPos + node.getPosition().x);
 		this.namingField.setY(this.topPos + node.getPosition().y);
 		this.namingField.setVisible(true);
 		this.namingField.setValue(node.label);

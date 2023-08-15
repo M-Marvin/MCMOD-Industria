@@ -1,9 +1,5 @@
 package de.m_marvin.industria.core.client.electrics.screens;
 
-import org.antlr.v4.parse.ATNBuilder.subrule_return;
-
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.containers.AbstractJunctionEditContainer;

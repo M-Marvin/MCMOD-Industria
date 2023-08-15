@@ -1,7 +1,5 @@
 package de.m_marvin.industria.core.client.conduits;
 
-import java.awt.Color;
-
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
@@ -9,8 +7,10 @@ import org.joml.Quaternionf;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 
 import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.core.client.util.GraphicsUtility;
 import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
@@ -213,14 +213,11 @@ public class ConduitWorldRenderer {
 		
 		matrixStack.pushPose();
 		matrixStack.translate(position.x, position.y + 0.2, position.z);
-		matrixStack.mulPose(Vector3f.YN.rotationDegrees(Minecraft.getInstance().player.yHeadRot + 180));
+		matrixStack.mulPose(Axis.YN.rotationDegrees(Minecraft.getInstance().player.yHeadRot + 180));
 		matrixStack.translate(0, 0, 4 * 0.0635F);
 		matrixStack.scale(0.01F, -0.01F, 0.01F);
-		
 		String info = "Id:" + nodeId;
-		float width = Minecraft.getInstance().font.width(info);
-		Minecraft.getInstance().font.draw(matrixStack, info, -width / 2, 0, new Color(color.x, color.y, color.z, color.w).getRGB());
-		
+		GraphicsUtility.drawStringCentered(matrixStack, bufferSource, info, 0, 0, color.x, color.y, color.z, color.w);
 		matrixStack.popPose();
 		
 	}

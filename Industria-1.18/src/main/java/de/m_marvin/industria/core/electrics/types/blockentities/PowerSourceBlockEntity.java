@@ -50,6 +50,7 @@ public class PowerSourceBlockEntity extends BlockEntity implements MenuProvider,
 	public void setInternalWireLabels(int id, String[] laneLabels) {
 		if (laneLabels.length == 2) {
 			this.internalNodeLanes = laneLabels;
+			this.setChanged();
 		}
 	}
 	
@@ -57,33 +58,29 @@ public class PowerSourceBlockEntity extends BlockEntity implements MenuProvider,
 	public Component getDisplayName() {
  		return Component.translatable("industria.block.power_source");
 	}
-
 	
-	// FIXME save and load do not work for some reason
 	@Override
 	protected void saveAdditional(CompoundTag pTag) {
 		super.saveAdditional(pTag);
-		System.out.println("SAVEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 		pTag.putString("LiveWireLane", this.internalNodeLanes[0]);
 		pTag.putString("NeutralWireLane", this.internalNodeLanes[1]);
 	}
 	
 	@Override
 	public void load(CompoundTag pTag) {
+		super.load(pTag);
 		this.internalNodeLanes[0] = pTag.contains("LiveWireLane") ? pTag.getString("LiveWireLane") : "L";
 		this.internalNodeLanes[1] = pTag.contains("NeutralWireLane") ? pTag.getString("NeutralWireLane") : "N";
-		this.level.markAndNotifyBlock(worldPosition, this.level.getChunkAt(worldPosition), this.getBlockState(), this.getBlockState(), 0, 0);
-		super.load(pTag);
 	}
 	
 	@Override
 	public CompoundTag getUpdateTag() {
 		CompoundTag tag = new CompoundTag();
-		this.internalNodeLanes[0] = tag.getString("LiveWireLane");
-		this.internalNodeLanes[1] = tag.getString("NeutralWireLane");
+		tag.putString("LiveWireLane", this.internalNodeLanes[0]);
+		tag.putString("NeutralWireLane", this.internalNodeLanes[1]);
 		return tag;
 	}
-	// TODO check if working
+	
 	@Override
 	public void handleUpdateTag(CompoundTag tag) {
 		this.load(tag);

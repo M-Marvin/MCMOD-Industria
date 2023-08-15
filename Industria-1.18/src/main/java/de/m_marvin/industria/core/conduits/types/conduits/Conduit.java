@@ -274,7 +274,7 @@ public class Conduit {
 				for (int i = 1; i < shape.nodes.length - 1; i++) {
 					
 					Vec3d nodePos = shape.nodes[i].copy().add(Vec3f.fromVec(origin));
-					BlockPos nodeBlockPos = nodePos.writeTo(new BlockPos(0, 0, 0));
+					BlockPos nodeBlockPos = MathUtility.toBlockPos(nodePos);
 					
 					if (!nodeBlockPos.equals(conduit.getPosition().getNodeApos()) && !nodeBlockPos.equals(conduit.getPosition().getNodeBpos())) {
 						

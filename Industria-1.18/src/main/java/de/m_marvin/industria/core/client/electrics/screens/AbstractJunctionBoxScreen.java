@@ -1,7 +1,5 @@
 package de.m_marvin.industria.core.client.electrics.screens;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.containers.AbstractJunctionEditContainer;
 import de.m_marvin.industria.core.util.Direction2d;

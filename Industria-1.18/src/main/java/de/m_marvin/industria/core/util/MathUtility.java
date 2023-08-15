@@ -34,7 +34,15 @@ import net.minecraft.world.phys.Vec3;
 public class MathUtility {
 
 	public static BlockPos toBlockPos(double x, double y, double z) {
-		return new BlockPos((int) Math.floor(x), (int) Math.floor(y), (int) Math.floor(z));
+		return new BlockPos((int) Mth.floor(x), (int) Math.floor(y), (int) Math.floor(z));
+	}
+	
+	public static BlockPos toBlockPos(Vec3f vec) {
+		return toBlockPos(vec.x, vec.y, vec.z);
+	}
+
+	public static BlockPos toBlockPos(Vec3d vec) {
+		return toBlockPos(vec.x, vec.y, vec.z);
 	}
 	
 	public static int clamp(int v, int min, int max) {
@@ -234,7 +242,7 @@ public class MathUtility {
 		int insecsZ = (int) Math.floor(Math.abs(lineRlativeTarget.y()) / 16);
 		
 		Set<ChunkPos> chunks = new HashSet<ChunkPos>();
-		chunks.add(new ChunkPos(new BlockPos(from.x, 0, from.y)));
+		chunks.add(new ChunkPos(toBlockPos(from.x, 0, from.y)));
 		
 		for (int insecX = 1; insecX <= insecsX; insecX++) {
 			int chunkX = (int) (worldOff.x + insecX * (lineVec.x() < 0 ? -16 : 16));

@@ -107,7 +107,7 @@ public class PhysicUtility {
 	
 	public static BlockPos toContraptionBlockPos(ShipTransform contraption, Vec3d pos) {
 		Vec3d position = toContraptionPos(contraption, pos);
-		return new BlockPos(position.x, position.y, position.z);
+		return MathUtility.toBlockPos(position);
 	}
 	
 	public static BlockPos toContraptionBlockPos(ShipTransform contraption, BlockPos pos) {
@@ -129,7 +129,7 @@ public class PhysicUtility {
 
 	public static BlockPos toWorldBlockPos(ShipTransform contraption, BlockPos pos) {
 		Vec3d position = toWorldPos(contraption, pos);
-		return new BlockPos(position.x, position.y, position.z);
+		return MathUtility.toBlockPos(position);
 	}
 
 	public static Vec3d ensureWorldCoordinates(Level level, BlockPos referencePos, Vec3d position) {

@@ -384,7 +384,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 			this.conduits.removeIf((conduit) -> {
 				Vec3d posA = conduit.getPosition().calculateWorldNodeA(level);
 				Vec3d posB = conduit.getPosition().calculateWorldNodeB(level);
-				return !level.isLoaded(new BlockPos(posA.x, posA.y, posA.z)) && !level.isLoaded(posB.writeTo(new BlockPos(0, 0, 0)));
+				return !level.isLoaded(MathUtility.toBlockPos(posA)) && !level.isLoaded(MathUtility.toBlockPos(posB));
 			});
 		}
 		

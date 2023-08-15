@@ -16,7 +16,6 @@ import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -27,26 +26,18 @@ import net.minecraftforge.network.PacketDistributor;
 
 public class ConduitUtility {
 	
-	public static boolean setConduitFromServer(ServerLevel level, ConduitPos position, Conduit conduit, double length) {
-		Vec3d middlePos = MathUtility.getMiddle(position.calculateWorldNodeA(level), position.calculateWorldNodeB(level));
-		IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middlePos.writeTo(new BlockPos(0, 0, 0)))), new SCConduitPackage.SCPlaceConduitPackage(position, conduit, length));
-		return setConduit(level, position, conduit, length);
-	}
-
 	public static boolean setConduitFromClient(ClientLevel level, ConduitPos position, Conduit conduit, double length) {
 		IndustriaCore.NETWORK.sendToServer(new SCConduitPackage.SCPlaceConduitPackage(position, conduit, length));
 		return setConduit(level, position, conduit, length);
 	}
 	
 	public static boolean setConduit(Level level, ConduitPos position, Conduit conduit, double length) {
+		if (!level.isClientSide()) {
+			Vec3d middlePos = MathUtility.getMiddle(position.calculateWorldNodeA(level), position.calculateWorldNodeB(level));
+			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middlePos.writeTo(new BlockPos(0, 0, 0)))), new SCConduitPackage.SCPlaceConduitPackage(position, conduit, length));
+		}
 		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		return handler.placeConduit(position, conduit, length);
-	}
-
-	public static boolean removeConduitFromServer(Level level, ConduitPos conduitPosition, boolean dropItems) {
-		Vec3d middlePos = MathUtility.getMiddle(conduitPosition.calculateWorldNodeA(level), conduitPosition.calculateWorldNodeB(level));
-		IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middlePos.writeTo(new BlockPos(0, 0, 0)))), new SCConduitPackage.SCBreakConduitPackage(conduitPosition, dropItems));
-		return ConduitUtility.removeConduit(level, conduitPosition, dropItems);
 	}
 	
 	public static boolean removeConduitFromClient(Level level, ConduitPos conduitPosition, boolean dropItems) {
@@ -55,6 +46,10 @@ public class ConduitUtility {
 	}
 	
 	public static boolean removeConduit(Level level, ConduitPos conduitPosition, boolean dropItems) {
+		if (!level.isClientSide()) {
+			Vec3d middlePos = MathUtility.getMiddle(conduitPosition.calculateWorldNodeA(level), conduitPosition.calculateWorldNodeB(level));
+			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middlePos.writeTo(new BlockPos(0, 0, 0)))), new SCConduitPackage.SCBreakConduitPackage(conduitPosition, dropItems));
+		}
 		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		return handler.breakConduit(conduitPosition, dropItems);
 	}

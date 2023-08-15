@@ -137,7 +137,7 @@ dependencies {
 	
 	//implementation fg.deobf("curse.maven:flywheel-486392:3864518") outdated
 	//implementation fg.deobf("curse.maven:create-328085:3864525") outdated
-	//implementation fg.deobf("curse.maven:atlasviewer-633577:4597419")
+	implementation fg.deobf("curse.maven:atlasviewer-633577:4597419")
 	
 	//shade "org.apache.commons:commons-collections4:4.4"
 	shade "com.github.M-Marvin:LIBRARY-NGLink:main-SNAPSHOT"

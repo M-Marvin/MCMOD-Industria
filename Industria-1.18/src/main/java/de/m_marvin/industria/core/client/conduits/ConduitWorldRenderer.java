@@ -10,16 +10,15 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 
 import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.core.client.registries.TextureAtlasHolders;
 import de.m_marvin.industria.core.client.util.GraphicsUtility;
 import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
-import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitShape;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitType;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.registries.Capabilities;
-import de.m_marvin.industria.core.registries.Conduits;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.unimat.impl.Quaternion;
@@ -34,8 +33,8 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -51,8 +50,6 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.FORGE,modid=IndustriaCore.MODID, value=Dist.CLIENT)
 public class ConduitWorldRenderer {
-	
-	public static final int TEXTURE_MAP_SIZE = 64;
 	
 	@SuppressWarnings("resource")
 	@SubscribeEvent
@@ -230,37 +227,30 @@ public class ConduitWorldRenderer {
 			
 			ConduitHandlerCapability conduitHolder = optionalConduitHolder.resolve().get();
 			
-			// Sort for type
-			for (Conduit conduitType : Conduits.CONDUITS_REGISTRY.get()) {
+			VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entitySolid(ConduitTextureManager.LOCATION_CONDUITS));
+			
+			for (ConduitEntity conduit : conduitHolder.getConduits()) {
 				
-				ResourceLocation texturePath = conduitType.getTextureLoc();
-				VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entitySolid(texturePath));
+				TextureAtlasSprite sprite = TextureAtlasHolders.conduitTextureManager.get(conduit.getConduit());
 				Vec3d playerPosition = Vec3d.fromVec(Minecraft.getInstance().player.position());
 				
-				for (ConduitEntity conduit : conduitHolder.getConduits()) {
-					
-					if (conduit.getConduit() == conduitType) {
+				BlockState nodeAstate = clientLevel.getBlockState(conduit.getPosition().getNodeApos());
+				BlockState nodeBstate = clientLevel.getBlockState(conduit.getPosition().getNodeBpos());
+				if (nodeAstate.getBlock() instanceof IConduitConnector nodeAconnector && nodeBstate.getBlock() instanceof IConduitConnector nodeBconnector) {
+					ConduitNode nodeA = nodeAconnector.getConduitNode(clientLevel, conduit.getPosition().getNodeApos(), nodeAstate, conduit.getPosition().getNodeAid());
+					ConduitNode nodeB = nodeBconnector.getConduitNode(clientLevel, conduit.getPosition().getNodeBpos(), nodeBstate, conduit.getPosition().getNodeBid());
+					if (nodeA != null && nodeB != null) {
+						Vec3d nodeAworldPosition = nodeA.getWorldPosition(clientLevel, conduit.getPosition().getNodeApos());
+						Vec3d nodeBworldPosition = nodeB.getWorldPosition(clientLevel, conduit.getPosition().getNodeBpos());
 						
-						BlockState nodeAstate = clientLevel.getBlockState(conduit.getPosition().getNodeApos());
-						BlockState nodeBstate = clientLevel.getBlockState(conduit.getPosition().getNodeBpos());
-						if (nodeAstate.getBlock() instanceof IConduitConnector nodeAconnector && nodeBstate.getBlock() instanceof IConduitConnector nodeBconnector) {
-							ConduitNode nodeA = nodeAconnector.getConduitNode(clientLevel, conduit.getPosition().getNodeApos(), nodeAstate, conduit.getPosition().getNodeAid());
-							ConduitNode nodeB = nodeBconnector.getConduitNode(clientLevel, conduit.getPosition().getNodeBpos(), nodeBstate, conduit.getPosition().getNodeBid());
-							if (nodeA != null && nodeB != null) {
-								Vec3d nodeAworldPosition = nodeA.getWorldPosition(clientLevel, conduit.getPosition().getNodeApos());
-								Vec3d nodeBworldPosition = nodeB.getWorldPosition(clientLevel, conduit.getPosition().getNodeBpos());
-								
-								Vec3d nodeOrigin = MathUtility.getMinCorner(nodeAworldPosition, nodeBworldPosition).sub(0.5, 0.5, 0.5);
-								
-								double distancaA = playerPosition.dist(nodeAworldPosition);
-								double distancaB = playerPosition.dist(nodeBworldPosition);
-								double distance = (distancaA + distancaB) / 2;
-								int renderDistance = Minecraft.getInstance().options.renderDistance().get() * 16;
-								
-								if (distance < renderDistance * renderDistance) conduitModel(clientLevel, vertexConsumer, matrixStack, conduit, nodeOrigin, partialTicks);
-								
-							}
-						}
+						Vec3d nodeOrigin = MathUtility.getMinCorner(nodeAworldPosition, nodeBworldPosition).sub(0.5, 0.5, 0.5);
+						
+						double distancaA = playerPosition.dist(nodeAworldPosition);
+						double distancaB = playerPosition.dist(nodeBworldPosition);
+						double distance = (distancaA + distancaB) / 2;
+						int renderDistance = Minecraft.getInstance().options.renderDistance().get() * 16;
+						
+						if (distance < renderDistance * renderDistance) conduitModel(clientLevel, vertexConsumer, matrixStack, conduit, nodeOrigin, partialTicks, sprite);
 						
 					}
 					
@@ -272,7 +262,7 @@ public class ConduitWorldRenderer {
 		
 	}
 	
-	public static void conduitModel(ClientLevel clientLevel, VertexConsumer vertexConsumer, PoseStack poseStack, ConduitEntity conduit, Vec3d nodeOrigin, float partialTicks) {
+	public static void conduitModel(ClientLevel clientLevel, VertexConsumer vertexConsumer, PoseStack poseStack, ConduitEntity conduit, Vec3d nodeOrigin, float partialTicks, TextureAtlasSprite sprite) {
 		
 		poseStack.pushPose();
 		
@@ -326,7 +316,7 @@ public class ConduitWorldRenderer {
 				Vec3d nodeAinterpolated = shape.lastPos[i - 1].lerp(nodeA, (double) partialTicks);
 				Vec3d nodeBinterpolated = shape.lastPos[i - 0].lerp(nodeB, (double) partialTicks);
 				
-				lengthOffset += wireModel(vertexConsumer, poseStack, segmentColor, packedLight, nodeAinterpolated, nodeBinterpolated, size, lengthOffset);
+				lengthOffset += wireModel(vertexConsumer, poseStack, segmentColor, packedLight, nodeAinterpolated, nodeBinterpolated, size, lengthOffset, sprite);
 				
 			}
 			
@@ -336,7 +326,7 @@ public class ConduitWorldRenderer {
 		
 	}
 	
-	public static double wireModel(VertexConsumer vertexConsumer, PoseStack poseStack, int color, int packedLight, Vec3d start, Vec3d end, int width, float lengthOffset) {
+	public static double wireModel(VertexConsumer vertexConsumer, PoseStack poseStack, int color, int packedLight, Vec3d start, Vec3d end, int width, float lengthOffset, TextureAtlasSprite sprite) {
 		
 		Vec3d lineVec = end.copy().sub(start);
 		Vec3d lineNormal = lineVec.normalize();
@@ -348,7 +338,21 @@ public class ConduitWorldRenderer {
 		poseStack.translate(start.x, start.y, start.z);
 		poseStack.mulPose(new Quaternionf(rotation.i(), rotation.j(), rotation.k(), rotation.r()));
 		
-		wirePart(vertexConsumer, poseStack, color, packedLight, (float) length, width / 16F, lengthOffset);
+		float textureOvershot = (lengthOffset + (float) length) % (ConduitTextureManager.TEXTURE_MAP_WIDTH / 16F) - (float) length;
+		
+		if (textureOvershot < 0) {
+
+			wirePart(vertexConsumer, poseStack, color, packedLight, (float) -textureOvershot, width / 16F, 4F + textureOvershot, sprite);
+			poseStack.pushPose();
+			poseStack.translate(0, 0, -textureOvershot);
+			wirePart(vertexConsumer, poseStack, color, packedLight, (float) length + textureOvershot, width / 16F, 0, sprite);
+			poseStack.popPose();
+			
+		} else {
+
+			wirePart(vertexConsumer, poseStack, color, packedLight, (float) length, width / 16F, textureOvershot, sprite);
+			
+		}
 		
 		poseStack.popPose();
 		
@@ -356,7 +360,7 @@ public class ConduitWorldRenderer {
 		
 	}
 	
-	public static void wirePart(VertexConsumer vertexConsumer, PoseStack poseStack, int color, int packedLight, float length, float width, float lengthOffest) {
+	public static void wirePart(VertexConsumer vertexConsumer, PoseStack poseStack, int color, int packedLight, float length, float width, float lengthOffest, TextureAtlasSprite sprite) {
 		
 		float fwh = width / 2;
 		
@@ -365,23 +369,28 @@ public class ConduitWorldRenderer {
 		
 		float fw = width * 16;
 		float fl = length * 16;
+		float flo = lengthOffest * 16;
 		
-		float uvX0 = lengthOffest * 16 / TEXTURE_MAP_SIZE;
-		float uvYb0 = 0;
-		float uvYt0 = fw * 2 / TEXTURE_MAP_SIZE;
-		float uvYe0 = fw * 1 / TEXTURE_MAP_SIZE;
-		float uvYw0 = fw * 3 / TEXTURE_MAP_SIZE;
-		float uvX1 = uvX0 + fl / TEXTURE_MAP_SIZE;
-		float uvYb1 = fw * 1 / TEXTURE_MAP_SIZE;
-		float uvYt1 = fw * 3 / TEXTURE_MAP_SIZE;
-		float uvYe1 = fw * 2 / TEXTURE_MAP_SIZE;
-		float uvYw1 = fw * 4 / TEXTURE_MAP_SIZE;
-		float uvEXn0 = 0;
-		float uvEXs0 = fw * 1 / TEXTURE_MAP_SIZE;
-		float uvEXn1 = fw * 1 / TEXTURE_MAP_SIZE;
-		float uvEXs1 = fw * 2 / TEXTURE_MAP_SIZE;
-		float uvEY0 = fw * 4 / TEXTURE_MAP_SIZE;
-		float uvEY1 = fw * 5 / TEXTURE_MAP_SIZE;
+		float uf = sprite.getU1() - sprite.getU0();
+		float vf = sprite.getV1() - sprite.getV0();
+		
+		float uvX0 = sprite.getU0() + (flo / ConduitTextureManager.TEXTURE_MAP_WIDTH) * uf;
+		float uvYb0 = sprite.getV0() + (0 * fw / ConduitTextureManager.TEXTURE_MAP_HEIGHT) * vf;
+		float uvYt0 = sprite.getV0() + (1 * fw / ConduitTextureManager.TEXTURE_MAP_HEIGHT) * vf;
+		float uvYe0 = sprite.getV0() + (2 * fw / ConduitTextureManager.TEXTURE_MAP_HEIGHT) * vf;
+		float uvYw0 = sprite.getV0() + (3 * fw / ConduitTextureManager.TEXTURE_MAP_HEIGHT) * vf;
+		float uvX1 = sprite.getU0() + ((flo + fl) / ConduitTextureManager.TEXTURE_MAP_WIDTH) * uf;
+		float uvYb1 = sprite.getV0() + (1 * fw / ConduitTextureManager.TEXTURE_MAP_HEIGHT) * vf;
+		float uvYt1 = sprite.getV0() + (2 * fw / ConduitTextureManager.TEXTURE_MAP_HEIGHT) * vf;
+		float uvYe1 = sprite.getV0() + (3 * fw / ConduitTextureManager.TEXTURE_MAP_HEIGHT) * vf;
+		float uvYw1 = sprite.getV0() + (4 * fw / ConduitTextureManager.TEXTURE_MAP_HEIGHT) * vf;
+		
+		float uvEXn0 = sprite.getU0() + (0) * uf;
+		float uvEXs0 = sprite.getU0() + (fw * 1 / ConduitTextureManager.TEXTURE_MAP_WIDTH) * uf;
+		float uvEXn1 = sprite.getU0() + (fw * 1 / ConduitTextureManager.TEXTURE_MAP_WIDTH) * uf;
+		float uvEXs1 = sprite.getU0() + (fw * 2 / ConduitTextureManager.TEXTURE_MAP_WIDTH) * uf;
+		float uvEY0 = sprite.getV0() + (fw * 4 / ConduitTextureManager.TEXTURE_MAP_HEIGHT) * vf;
+		float uvEY1 = sprite.getV0() + (fw * 5 / ConduitTextureManager.TEXTURE_MAP_HEIGHT) * vf;
 		
 		// Bottom
 		vertex(vertexConsumer, pose, normal, -fwh, -fwh, 0, 		0, -1, 0, 	uvX0, uvYb0, packedLight, color);

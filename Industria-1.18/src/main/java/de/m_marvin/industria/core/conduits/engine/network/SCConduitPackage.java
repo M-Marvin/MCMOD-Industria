@@ -10,6 +10,7 @@ import de.m_marvin.industria.core.registries.Conduits;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 
 /**
@@ -94,11 +95,13 @@ public class SCConduitPackage {
 			return new SCBreakConduitPackage(position, dropItems);
 		}
 		
-		@SuppressWarnings("deprecation")
 		public static void handle(SCBreakConduitPackage msg, Supplier<NetworkEvent.Context> ctx) {
 			ctx.get().enqueueWork(() -> {
-				DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> () -> ServerConduitPackageHandler.handleRemoveConduit(msg, ctx.get()));
-				DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> ClientConduitPackageHandler.handleRemoveConduit(msg, ctx.get()));
+				if (ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
+					ClientConduitPackageHandler.handleRemoveConduit(msg, ctx.get());
+				} else if (ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER) {
+					ServerConduitPackageHandler.handleRemoveConduit(msg, ctx.get());
+				}
 			});
 			ctx.get().setPacketHandled(true);
 		}

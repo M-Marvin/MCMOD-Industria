@@ -85,10 +85,10 @@ public class Conduit {
 		if (nodeState.getBlock() instanceof IConduitConnector) {
 			int nodeId = conduitState.getPosition().getNodeApos().equals(nodePos) ? conduitState.getPosition().getNodeAid() : conduitState.getPosition().getNodeBid();
 			if (((IConduitConnector) nodeState.getBlock()).getConduitNodes(level, nodePos, nodeState).length <= nodeId) {
-				ConduitUtility.removeConduit(level, conduitState.getPosition(), true);
+				ConduitUtility.removeConduitFromClient(level, conduitState.getPosition(), true);
 			}
 		} else {
-			ConduitUtility.removeConduit(level, conduitState.getPosition(), true);
+			ConduitUtility.removeConduitFromClient(level, conduitState.getPosition(), true);
 		}
 	}
 	

@@ -14,8 +14,6 @@ import de.m_marvin.industria.core.registries.Conduits;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 /**
@@ -96,9 +94,7 @@ public class SSyncConduit {
 	public static void handle(SSyncConduit msg, Supplier<NetworkEvent.Context> ctx) {
 		
 		ctx.get().enqueueWork(() -> {
-			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-				ClientConduitPackageHandler.handleSyncConduitsFromServer(msg, ctx.get());
-			});
+			ClientConduitPackageHandler.handleSyncConduitsFromServer(msg, ctx.get());
 		});
 		ctx.get().setPacketHandled(true);
 		

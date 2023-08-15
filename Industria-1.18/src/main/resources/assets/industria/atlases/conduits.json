@@ -1,0 +1,14 @@
+{
+	"sources": [
+		{
+			"type": "directory",
+			"source": "particle2",
+			"prefix": ""
+		},
+		{
+			"type": "directory",
+			"source": "conduit",
+			"prefix": ""
+		}
+	]
+}

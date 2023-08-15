@@ -15,7 +15,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -214,7 +214,7 @@ public abstract class AbstractJunctionEditScreen extends AbstractContainerScreen
 		this.imageHeight = 138;
 		this.imageWidth = 138;
 		
-		this.namingField = new EditBox(this.font, this.leftPos, this.topPos, 103, 12, new TranslatableComponent("naming field "));
+		this.namingField = new EditBox(this.font, this.leftPos, this.topPos, 103, 12, Component.translatable("naming field "));
 		this.namingField.setTextColor(-1);
 		this.namingField.setTextColorUneditable(-1);
 		this.namingField.setBordered(false);

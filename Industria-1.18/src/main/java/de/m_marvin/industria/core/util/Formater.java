@@ -7,8 +7,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+
 
 public class Formater {
 	
@@ -24,15 +23,15 @@ public class Formater {
 	}
 	
 	public Formater text(String s) {
-		return appand(new TextComponent(s));
+		return appand(Component.literal(s));
 	}
 	
 	public Formater translate(String key) {
-		return appand(new TranslatableComponent(key));
+		return appand(Component.translatable(key));
 	}
 
 	public Formater translate(String key, Object... args) {
-		return appand(new TranslatableComponent(key, args));
+		return appand(Component.translatable(key, args));
 	}
 	
 	public Formater space() {

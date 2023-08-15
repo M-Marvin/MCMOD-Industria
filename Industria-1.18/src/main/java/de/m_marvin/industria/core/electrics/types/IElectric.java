@@ -8,17 +8,16 @@ import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
-import de.m_marvin.industria.core.registries.Conduits;
 import de.m_marvin.industria.core.registries.Capabilities;
+import de.m_marvin.industria.core.registries.Conduits;
 import de.m_marvin.industria.core.util.GameUtility;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 
-public interface IElectric<I, P, T> extends IForgeRegistryEntry<T> {
+public interface IElectric<I, P, T> {
 	
 	public default void updateNetwork(Level level, P position) {
 		ElectricNetworkHandlerCapability handler = GameUtility.getCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
@@ -48,8 +47,9 @@ public interface IElectric<I, P, T> extends IForgeRegistryEntry<T> {
 			this.registry = registry;
 		}
 		
-		public IForgeRegistry<?> getRegistry() {
-			return this.registry.get();
+		@SuppressWarnings("unchecked")
+		public IForgeRegistry<Object> getRegistry() {
+			return (IForgeRegistry<Object>) this.registry.get();
 		}
 		
 		public static Type getType(Object type) {

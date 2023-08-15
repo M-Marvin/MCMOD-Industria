@@ -5,7 +5,7 @@ import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.types.ConduitHitResult;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
@@ -24,25 +24,25 @@ public class GenricConduitEventListener {
 	@SubscribeEvent
 	public static void onItemUsed(PlayerInteractEvent.RightClickItem event) {
 		
-		LivingEntity entity = event.getEntityLiving();
-		ItemStack itemStack = event.getPlayer().getMainHandItem();
+		Player player = event.getEntity();
+		ItemStack itemStack = event.getEntity().getMainHandItem();
 		
-		if (itemStack.getItem() == Items.SHEARS && event.getWorld().isClientSide()) {
+		if (itemStack.getItem() == Items.SHEARS && event.getLevel().isClientSide()) {
 			
-			double range = entity.getAttributeValue(ForgeMod.REACH_DISTANCE.get());
-			Vec3 viewVec = entity.getViewVector(0);
-			Vec3 eyePos = entity.getEyePosition();
+			double range = player.getAttributeValue(ForgeMod.REACH_DISTANCE.get());
+			Vec3 viewVec = player.getViewVector(0);
+			Vec3 eyePos = player.getEyePosition();
 			Vec3 rayTarget = eyePos.add(viewVec.multiply(range, range, range));
-			ClipContext clipContext = new ClipContext(eyePos, rayTarget, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity);
+			ClipContext clipContext = new ClipContext(eyePos, rayTarget, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player);
 			
-			ConduitHitResult hitResult = ConduitUtility.clipConduits(event.getWorld(), clipContext, true);
+			ConduitHitResult hitResult = ConduitUtility.clipConduits(event.getLevel(), clipContext, true);
 			if (hitResult.isHit()) {
 				ConduitEntity conduit = hitResult.getConduitState();
-				ConduitUtility.removeConduitFromClient(event.getWorld(), conduit.getPosition(), !event.getPlayer().isCreative());
+				ConduitUtility.removeConduitFromClient(event.getLevel(), conduit.getPosition(), !player.isCreative());
 				
-				ItemStack toolItem = event.getPlayer().getMainHandItem();
+				ItemStack toolItem = event.getEntity().getMainHandItem();
 				if (!toolItem.isEmpty() && toolItem.getMaxDamage() != 0) {
-					toolItem.hurtAndBreak(1, event.getPlayer(), (p) -> {}); // TODO Test if damage is vissible on client side
+					toolItem.hurtAndBreak(1, player, (p) -> {}); // TODO Test if damage is vissible on client side
 				}
 				
 				event.setCanceled(true);

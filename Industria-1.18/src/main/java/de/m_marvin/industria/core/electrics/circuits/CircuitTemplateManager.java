@@ -8,6 +8,7 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.apache.logging.log4j.Logger;
 
@@ -82,15 +83,15 @@ public class CircuitTemplateManager extends SimplePreparableReloadListener<Map<R
 		Map<ResourceLocation, CircuitTemplate> map = Maps.newHashMap();
 		
 		for (ResourceLocation resourceLocation : resourceManager.listResources(this.directory, (file) -> {
-			return file.endsWith(PATH_JSON_SUFIX);
-		})) {
+			return file.getPath().endsWith(PATH_JSON_SUFIX);
+		}).keySet()) {
 			String path = resourceLocation.getPath();
 			int i = path.indexOf("/");
 			ResourceLocation namedLocation = new ResourceLocation(resourceLocation.getNamespace(), path.substring(i + 1, path.length() - PATH_JSON_SUFIX.length()));
 			
 			try {
-				Resource resource = resourceManager.getResource(resourceLocation);
-				InputStream inputStream = resource.getInputStream();
+				Resource resource = resourceManager.getResource(resourceLocation).get();
+				InputStream inputStream = resource.open();
 				Reader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 				JsonObject json = gson.fromJson(reader, JsonObject.class);
 				
@@ -102,8 +103,8 @@ public class CircuitTemplateManager extends SimplePreparableReloadListener<Map<R
 						String[] networks = gson.fromJson(json.get("Networks"), String[].class);
 						String idProperty = json.get("IdProperty").getAsString();
 						
-						Resource netResource = resourceManager.getResource(new ResourceLocation(resourceLocation.getNamespace(), path.substring(0, path.length() - PATH_JSON_SUFIX.length()) + PATH_NET_SUFIX));
-						InputStream netInputStream = netResource.getInputStream();
+						Resource netResource = resourceManager.getResourceOrThrow(new ResourceLocation(resourceLocation.getNamespace(), path.substring(0, path.length() - PATH_JSON_SUFIX.length()) + PATH_NET_SUFIX));
+						InputStream netInputStream = netResource.open();
 						BufferedReader netReader = new BufferedReader(new InputStreamReader(netInputStream, StandardCharsets.UTF_8));
 						
 						StringBuilder netBuilder = new StringBuilder();
@@ -125,7 +126,7 @@ public class CircuitTemplateManager extends SimplePreparableReloadListener<Map<R
 					
 				}
 							
-			} catch (IllegalArgumentException | IOException | JsonParseException jsonparseexception) {
+			} catch (NoSuchElementException | IllegalArgumentException | IOException | JsonParseException jsonparseexception) {
 				LOGGER.error("Couldn't parse circuit template file ", namedLocation, resourceLocation, jsonparseexception);
 			}
 		}

@@ -43,7 +43,7 @@ public class SCConduitPackage {
 		
 		public static void encode(SCPlaceConduitPackage msg, FriendlyByteBuf buff) {
 			msg.position.write(buff);
-			buff.writeResourceLocation(msg.conduit.getRegistryName());
+			buff.writeResourceLocation(Conduits.CONDUITS_REGISTRY.get().getKey(msg.conduit));
 			buff.writeDouble(msg.length);
 		}
 		

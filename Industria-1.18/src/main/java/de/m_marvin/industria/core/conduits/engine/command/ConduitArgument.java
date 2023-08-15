@@ -14,14 +14,14 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import de.m_marvin.industria.core.registries.Conduits;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 public class ConduitArgument implements ArgumentType<ResourceLocation> {
 	
 	public static final Collection<String> EXAMPLES = Arrays.asList("industria:todo", "work_in_progress");
 	public static final DynamicCommandExceptionType ERROR_UNKNOWN_CONDUIT = new DynamicCommandExceptionType((object) -> {
-		return new TranslatableComponent("industria.command.setconduit.notFound", object);
+		return Component.translatable("industria.command.setconduit.notFound", object);
 	});
 	
 	public static ConduitArgument conduit() {
@@ -39,7 +39,7 @@ public class ConduitArgument implements ArgumentType<ResourceLocation> {
 	
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-		Conduits.CONDUITS_REGISTRY.get().getValues().stream().forEach((conduit) -> builder.suggest(conduit.getRegistryName().toString()));
+		Conduits.CONDUITS_REGISTRY.get().getValues().stream().forEach((conduit) -> builder.suggest(Conduits.CONDUITS_REGISTRY.get().getKey(conduit).toString()));
 		return builder.buildFuture();
 	}
 	

@@ -56,7 +56,7 @@ public class ConduitEntity {
 	public CompoundTag save() {
 		CompoundTag tag = new CompoundTag();
 		tag.put("Position", this.position.writeNBT(new CompoundTag()));
-		tag.putString("Conduit", this.conduit.getRegistryName().toString());
+		tag.putString("Conduit", Conduits.CONDUITS_REGISTRY.get().getKey(this.conduit).toString());
 		tag.putDouble("Length", this.length);
 		if (this.shape != null) tag.put("Shape", this.shape.save());
 		this.saveAdditional(tag);
@@ -113,7 +113,7 @@ public class ConduitEntity {
 	
 	@Override
 	public String toString() {
-		return "PlacedConduit{conduit=" + this.conduit.getRegistryName() + 
+		return "PlacedConduit{conduit=" + Conduits.CONDUITS_REGISTRY.get().getKey(this.conduit) + 
 				",length=" + this.length +
 				",position=" + this.position.toString() + 
 				"}";

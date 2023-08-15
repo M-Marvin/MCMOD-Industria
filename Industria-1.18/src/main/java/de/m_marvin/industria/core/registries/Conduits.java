@@ -19,14 +19,15 @@ import net.minecraftforge.registries.RegistryObject;
 
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD,modid=IndustriaCore.MODID)
 public class Conduits {
-	
+
 	public static final ResourceKey<Registry<ConduitType>> CONDUIT_TYPES_KEY = ResourceKey.createRegistryKey(new ResourceLocation(IndustriaCore.MODID, "conduit_types"));
 	public static final ResourceKey<Registry<Conduit>> CONDUITS_KEY = ResourceKey.createRegistryKey(new ResourceLocation(IndustriaCore.MODID, "conduits"));
 	public static final DeferredRegister<ConduitType> CONDUIT_TYPES = DeferredRegister.create(CONDUIT_TYPES_KEY, IndustriaCore.MODID);
 	public static final DeferredRegister<Conduit> CONDUITS = DeferredRegister.create(CONDUITS_KEY, IndustriaCore.MODID);
-    public static final Supplier<IForgeRegistry<ConduitType>> CONDUIT_TYPES_REGISTRY = CONDUIT_TYPES.makeRegistry(ConduitType.class, () -> new RegistryBuilder<ConduitType>().disableSaving());
-    public static final Supplier<IForgeRegistry<Conduit>> CONDUITS_REGISTRY = CONDUITS.makeRegistry(Conduit.class, () -> new RegistryBuilder<Conduit>().disableSaving());
-	public static void register() {
+	public static final Supplier<IForgeRegistry<ConduitType>> CONDUIT_TYPES_REGISTY = Conduits.CONDUIT_TYPES.makeRegistry(() -> new RegistryBuilder<ConduitType>().disableSaving());
+    public static final Supplier<IForgeRegistry<Conduit>> CONDUITS_REGISTRY = Conduits.CONDUITS.makeRegistry(() -> new RegistryBuilder<Conduit>().disableSaving());
+	
+    public static void register() {
 		CONDUITS.register(FMLJavaModLoadingContext.get().getModEventBus());
 		CONDUIT_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}

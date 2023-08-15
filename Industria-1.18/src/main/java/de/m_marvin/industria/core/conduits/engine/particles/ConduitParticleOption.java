@@ -10,13 +10,14 @@ import de.m_marvin.industria.core.registries.Conduits;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ConduitParticleOption implements ParticleOptions {
 	
 	public static final DynamicCommandExceptionType ERROR_UNKNOWN_CONDUIT = new DynamicCommandExceptionType((key) -> {
-		return new TranslatableComponent("industria.argument.conduit.id.invalid", key);
+		return Component.translatable("industria.argument.conduit.id.invalid", key);
 	});
 	
 	@SuppressWarnings("deprecation")
@@ -37,7 +38,7 @@ public class ConduitParticleOption implements ParticleOptions {
 		return ResourceLocation.CODEC.xmap((key) -> {
 			return new ConduitParticleOption(type, Conduits.CONDUITS_REGISTRY.get().getValue(key));
 		}, (option) -> {
-			return option.getType().getRegistryName();
+			return ForgeRegistries.PARTICLE_TYPES.getKey(option.getType());
 		});
 	}
 	
@@ -60,12 +61,12 @@ public class ConduitParticleOption implements ParticleOptions {
 	
 	@Override
 	public void writeToNetwork(FriendlyByteBuf buff) {
-		buff.writeResourceLocation(this.conduit.getRegistryName());
+		buff.writeResourceLocation(Conduits.CONDUITS_REGISTRY.get().getKey(this.conduit));
 	}
 
 	@Override
 	public String writeToString() {
-	      return this.getType().getRegistryName() + " " + this.conduit.getRegistryName();
+	      return ForgeRegistries.PARTICLE_TYPES.getKey(this.getType()) + " " + Conduits.CONDUITS_REGISTRY.get().getKey(this.conduit);
 	}
 		
 }

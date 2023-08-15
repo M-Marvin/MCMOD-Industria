@@ -57,7 +57,7 @@ public interface IScrewDriveable {
 			Block.getDrops(state, (ServerLevel) context.getLevel(), position, context.getLevel().getBlockEntity(position), context.getPlayer(), context.getItemInHand()).
 				forEach(itemStack -> context.getPlayer().getInventory().placeItemBackInInventory(itemStack));
 		}
-		state.spawnAfterBreak((ServerLevel) context.getLevel(), position, ItemStack.EMPTY);
+		state.spawnAfterBreak((ServerLevel) context.getLevel(), position, ItemStack.EMPTY, false);
 		context.getLevel().destroyBlock(position, false);
 		return InteractionResult.SUCCESS;
 	}

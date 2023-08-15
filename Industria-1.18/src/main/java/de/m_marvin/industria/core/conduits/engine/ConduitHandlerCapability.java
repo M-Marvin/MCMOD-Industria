@@ -17,8 +17,8 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
-import de.m_marvin.industria.core.registries.Conduits;
 import de.m_marvin.industria.core.registries.Capabilities;
+import de.m_marvin.industria.core.registries.Conduits;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
@@ -35,9 +35,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.TickEvent.WorldTickEvent;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.ChunkWatchEvent;
+import net.minecraftforge.event.TickEvent.LevelTickEvent;
+import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.event.level.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -97,7 +97,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	@SubscribeEvent
 	// Send corresponding conduits when server detects loading of a chunk trough a client
 	public static void onClientLoadsChunk(ChunkWatchEvent.Watch event) {
-		ServerLevel level = event.getWorld();
+		ServerLevel level = event.getLevel();
 		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
 			List<ConduitEntity> conduits = conduitHolder.resolve().get().getConduitsInChunk(event.getPos());	
@@ -112,7 +112,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	
 	@SubscribeEvent
 	public static void onClientUnloadChunk(ChunkWatchEvent.UnWatch event) {
-		ServerLevel level = event.getWorld();
+		ServerLevel level = event.getLevel();
 		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
 			List<ConduitEntity> conduits = conduitHolder.resolve().get().getConduitsInChunk(event.getPos());	
@@ -127,8 +127,8 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	
 	@SubscribeEvent
 	// Ticking conduits on both sides
-	public static void onWorldTick(WorldTickEvent event) {
-		Level level = event.world;
+	public static void onWorldTick(LevelTickEvent event) {
+		Level level = event.level;
 		LazyOptional<ConduitHandlerCapability> conduitCap = level.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitCap.isPresent()) {
 			conduitCap.resolve().get().update();
@@ -138,7 +138,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	@SubscribeEvent
 	// Pass block updates to corresponding conduits
 	public static void onBlockStateChange(BlockEvent.NeighborNotifyEvent event) {
-		Level level = (Level) event.getWorld();
+		Level level = (Level) event.getLevel();
 		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
 			BlockPos nodePos = event.getPos();

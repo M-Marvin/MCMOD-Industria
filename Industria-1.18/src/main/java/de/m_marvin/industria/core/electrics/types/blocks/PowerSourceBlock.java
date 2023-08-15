@@ -83,7 +83,7 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricConnec
 		if (pPlayer.getItemInHand(pHand).getItem() instanceof AbstractConduitItem) return InteractionResult.PASS; // TODO Solve with tags in future
 		if (!pLevel.isClientSide()) {
 			BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-			if (blockEntity instanceof MenuProvider provider) NetworkHooks.openGui((ServerPlayer) pPlayer, provider, pPos);
+			if (blockEntity instanceof MenuProvider provider) NetworkHooks.openScreen((ServerPlayer) pPlayer, provider, pPos);
 			return InteractionResult.SUCCESS;
 		}
 		return InteractionResult.SUCCESS;

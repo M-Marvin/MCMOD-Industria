@@ -8,13 +8,13 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class BlockEntities {
+public class BlockEntityTypes {
 
-	private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, IndustriaCore.MODID);
+	private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, IndustriaCore.MODID);
 	public static void register() {
-		BLOCK_ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
+		BLOCK_ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 	
-	public static final RegistryObject<BlockEntityType<PowerSourceBlockEntity>> POWER_SOURCE = BLOCK_ENTITIES.register("power_source", () -> BlockEntityType.Builder.of(PowerSourceBlockEntity::new, Blocks.POWER_SOURCE.get()).build(null));
+	public static final RegistryObject<BlockEntityType<PowerSourceBlockEntity>> POWER_SOURCE = BLOCK_ENTITY_TYPES.register("power_source", () -> BlockEntityType.Builder.of(PowerSourceBlockEntity::new, Blocks.POWER_SOURCE.get()).build(null));
 	
 }

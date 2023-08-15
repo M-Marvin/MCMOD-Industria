@@ -1,11 +1,8 @@
 package de.m_marvin.industria.content.blocks;
 
-import java.util.Random;
 import java.util.function.Consumer;
 
-import de.m_marvin.industria.content.blockentities.GeneratorBlockEntity;
 import de.m_marvin.industria.content.blockentities.MotorBlockEntity;
-import de.m_marvin.industria.content.registries.ModBlockEntities;
 import de.m_marvin.industria.content.registries.ModBlockStateProperties;
 import de.m_marvin.industria.content.types.MotorMode;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
@@ -17,23 +14,21 @@ import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapabil
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
-import de.m_marvin.industria.core.registries.ConduitConnectionTypes;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.univec.impl.Vec3f;
-import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -146,7 +141,7 @@ public class MotorBlock extends Block implements IElectricConnector {
 	}
 	
 	@Override
-	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRandom) {
+	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
 		if (pState.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR) {
 			ElectricUtility.updateNetwork(pLevel, pPos);
 		} else {

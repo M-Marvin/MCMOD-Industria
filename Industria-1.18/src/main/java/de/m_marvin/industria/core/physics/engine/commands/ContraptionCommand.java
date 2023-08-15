@@ -28,7 +28,7 @@ import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.ClickEvent.Action;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.TranslatableComponent;
+
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -129,7 +129,7 @@ public class ContraptionCommand {
 		
 		PhysicUtility.setContraptionName(source.getSource().getLevel(), contraption, name);
 		
-		source.getSource().sendSuccess(new TranslatableComponent("industria.commands.contraption.name.set", name), true);
+		source.getSource().sendSuccess(Component.translatable("industria.commands.contraption.name.set", name), true);
 		return Command.SINGLE_SUCCESS;
 		
 	}
@@ -144,26 +144,26 @@ public class ContraptionCommand {
 				
 				player.teleportTo(contraptionPosition.x, contraptionPosition.y, contraptionPosition.z);
 				
-				source.getSource().sendSuccess(new TranslatableComponent("industria.commands.contraption.find.teleported", contraptionPosition.x().intValue(), contraptionPosition.y().intValue(), contraptionPosition.z().intValue()), true);
+				source.getSource().sendSuccess(Component.translatable("industria.commands.contraption.find.teleported", contraptionPosition.x().intValue(), contraptionPosition.y().intValue(), contraptionPosition.z().intValue()), true);
 				return Command.SINGLE_SUCCESS;
 				
 			} else {
 
-				source.getSource().sendSuccess(new TranslatableComponent("industria.commands.contraption.find.noplayer"), true);
+				source.getSource().sendSuccess(Component.translatable("industria.commands.contraption.find.noplayer"), true);
 				return 0;
 				
 			}
 			
 		} else {
 			
-			Component coordMsgComp = new TranslatableComponent("industria.commands.coordinates", contraptionPosition.x().intValue(), contraptionPosition.y().intValue(), contraptionPosition.z().intValue()).withStyle((style) -> {
+			Component coordMsgComp = Component.translatable("industria.commands.coordinates", contraptionPosition.x().intValue(), contraptionPosition.y().intValue(), contraptionPosition.z().intValue()).withStyle((style) -> {
 				return style
 						.withColor(ChatFormatting.GREEN)
 						.withClickEvent(new ClickEvent(Action.SUGGEST_COMMAND, "/tp @s " + contraptionPosition.x() + " " + contraptionPosition.y() + " " + contraptionPosition.z()))
-						.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("chat.coordinates.tooltip")));
+						.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("chat.coordinates.tooltip")));
 			});
 			
-			source.getSource().sendSuccess(new TranslatableComponent("industria.commands.contraption.find.found", coordMsgComp), true);
+			source.getSource().sendSuccess(Component.translatable("industria.commands.contraption.find.found", coordMsgComp), true);
 			return Command.SINGLE_SUCCESS;
 			
 		}
@@ -182,7 +182,7 @@ public class ContraptionCommand {
 		
 		PhysicUtility.setPosition((ServerShip) contraption, contraptionPos, false);
 		
-		source.getSource().sendSuccess(new TranslatableComponent("industria.commands.contraption.teleport.success", (int) position.x(), (int) position.y(), (int) position.z()), true);
+		source.getSource().sendSuccess(Component.translatable("industria.commands.contraption.teleport.success", (int) position.x(), (int) position.y(), (int) position.z()), true);
 		return Command.SINGLE_SUCCESS;
 		
 	}
@@ -192,7 +192,7 @@ public class ContraptionCommand {
 		AABB bounds = new AABB(MathUtility.getMinCorner(pos1, pos2), MathUtility.getMaxCorner(pos1, pos2));
 		
 		if (bounds.getXsize() > 32 || bounds.getYsize() > 32 || bounds.getZsize() > 32) {
-			source.getSource().sendFailure(new TranslatableComponent("industria.commands.contraption.create.tolarge", (int) bounds.getXsize(), (int) bounds.getYsize(), (int) bounds.getZsize(), 32, 32, 32));
+			source.getSource().sendFailure(Component.translatable("industria.commands.contraption.create.tolarge", (int) bounds.getXsize(), (int) bounds.getYsize(), (int) bounds.getZsize(), 32, 32, 32));
 			return 0;
 		}
 		
@@ -201,11 +201,11 @@ public class ContraptionCommand {
 		BlockPos minCorner = MathUtility.getMinCorner(pos1, pos2);
 		
 		if (contraption != null) {
-			source.getSource().sendSuccess(new TranslatableComponent("industria.commands.contraption.create.success", (int) minCorner.getX(), (int) minCorner.getY(), (int) minCorner.getZ()), true);
+			source.getSource().sendSuccess(Component.translatable("industria.commands.contraption.create.success", (int) minCorner.getX(), (int) minCorner.getY(), (int) minCorner.getZ()), true);
 			return Command.SINGLE_SUCCESS;
 		}
 		
-		source.getSource().sendFailure(new TranslatableComponent("industria.commands.contraption.create.failed"));
+		source.getSource().sendFailure(Component.translatable("industria.commands.contraption.create.failed"));
 		return 0;
 		
 	}
@@ -216,7 +216,7 @@ public class ContraptionCommand {
 		
 		if (structureBlocks.isEmpty()) {
 			
-			source.getSource().sendFailure(new TranslatableComponent("industria.commands.contraption.assemble.toLarge", 16 * 16 * 16));
+			source.getSource().sendFailure(Component.translatable("industria.commands.contraption.assemble.toLarge", 16 * 16 * 16));
 			return 0;
 			
 		}
@@ -224,11 +224,11 @@ public class ContraptionCommand {
 		ServerShip contraption = PhysicUtility.assembleToContraption(source.getSource().getLevel(), structureBlocks.get(), true, scale);
 		
 		if (contraption != null) {
-			source.getSource().sendSuccess(new TranslatableComponent("industria.commands.contraption.assemble.success", startPos.getX(), startPos.getY(), startPos.getZ(), startPos), true);
+			source.getSource().sendSuccess(Component.translatable("industria.commands.contraption.assemble.success", startPos.getX(), startPos.getY(), startPos.getZ(), startPos), true);
 			return Command.SINGLE_SUCCESS;
 		}
 		
-		source.getSource().sendFailure(new TranslatableComponent("industria.commands.contraption.assemble.failed"));
+		source.getSource().sendFailure(Component.translatable("industria.commands.contraption.assemble.failed"));
 		return 0;
 		
 	}
@@ -237,7 +237,7 @@ public class ContraptionCommand {
 
 		PhysicUtility.removeContraption(source.getSource().getLevel(), contraption);
 		
-		source.getSource().sendSuccess(new TranslatableComponent("industria.commands.contraption.remove.success", contraption.getId()), true);
+		source.getSource().sendSuccess(Component.translatable("industria.commands.contraption.remove.success", contraption.getId()), true);
 		return Command.SINGLE_SUCCESS;
 		
 	}

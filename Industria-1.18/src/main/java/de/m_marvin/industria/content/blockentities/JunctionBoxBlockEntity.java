@@ -4,7 +4,6 @@ import de.m_marvin.industria.content.container.JunctionBoxContainer;
 import de.m_marvin.industria.core.electrics.types.blockentities.AbstractJunctionBoxBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -18,7 +17,7 @@ public class JunctionBoxBlockEntity extends AbstractJunctionBoxBlockEntity {
 
 	@Override
 	public Component getDisplayName() {
-		return new TextComponent("junction_box_test");
+		return Component.literal("junction_box_test");
 	}
 
 	@Override

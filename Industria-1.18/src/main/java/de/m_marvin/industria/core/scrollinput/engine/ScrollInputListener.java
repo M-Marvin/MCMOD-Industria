@@ -19,13 +19,13 @@ import net.minecraftforge.fml.common.Mod;
 public class ScrollInputListener {
 	
 	@SubscribeEvent
-	public static void onMouseScrollInput(InputEvent.MouseScrollEvent event) {
+	public static void onMouseScrollInput(InputEvent.MouseScrollingEvent event) {
 		performScrollOverrides(event, InteractionHand.MAIN_HAND);
 		performScrollOverrides(event, InteractionHand.OFF_HAND);
 	}
 	
 	@SuppressWarnings("resource")
-	protected static void performScrollOverrides(InputEvent.MouseScrollEvent event, InteractionHand hand) {
+	protected static void performScrollOverrides(InputEvent.MouseScrollingEvent event, InteractionHand hand) {
 		
 		ClientLevel level = Minecraft.getInstance().level;
 		LocalPlayer player = Minecraft.getInstance().player;

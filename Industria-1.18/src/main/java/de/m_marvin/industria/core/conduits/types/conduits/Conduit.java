@@ -42,11 +42,9 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 
-public class Conduit implements IForgeRegistryEntry<Conduit> {
+public class Conduit {
 	
-	private ResourceLocation registryName;
 	private ConduitType conduitType;
 	private Item item;
 	private ResourceLocation texture;
@@ -77,22 +75,6 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 	
 	public Item getItem() {
 		return this.item;
-	}
-	
-	@Override
-	public Conduit setRegistryName(ResourceLocation name) {
-		this.registryName = name;
-		return this;
-	}
-	
-	@Override
-	public ResourceLocation getRegistryName() {
-		return this.registryName;
-	}
-	
-	@Override
-	public Class<Conduit> getRegistryType() {
-		return Conduit.class;
 	}
 	
 	public int getColorAt(ClientLevel level, Vec3d nodePos, ConduitEntity conduitState) {
@@ -147,7 +129,7 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		
 	}
 	
-	public static class ConduitType implements IForgeRegistryEntry<ConduitType>{
+	public static class ConduitType {
 		protected ResourceLocation registryName;
 		protected float nodeMass;
 		protected float stiffness;
@@ -187,22 +169,6 @@ public class Conduit implements IForgeRegistryEntry<Conduit> {
 		 */
 		public int getThickness() {
 			return thickness;
-		}
-		
-		@Override
-		public ConduitType setRegistryName(ResourceLocation name) {
-			this.registryName = name;
-			return this;
-		}
-		
-		@Override
-		public ResourceLocation getRegistryName() {
-			return this.registryName;
-		}
-		
-		@Override
-		public Class<ConduitType> getRegistryType() {
-			return ConduitType.class;
 		}
 		
 	}

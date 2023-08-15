@@ -11,11 +11,11 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class Container {
 
-	private static final DeferredRegister<MenuType<?>> CONTAINER = DeferredRegister.create(ForgeRegistries.CONTAINERS, IndustriaCore.MODID);
+	private static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, IndustriaCore.MODID);
 	public static void register() {
-		CONTAINER.register(FMLJavaModLoadingContext.get().getModEventBus());
+		MENU_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 	
-	public static final RegistryObject<MenuType<PowerSourceContainer>> POWER_SOURCE = CONTAINER.register("power_source", () -> IForgeMenuType.create(PowerSourceContainer::new));
+	public static final RegistryObject<MenuType<PowerSourceContainer>> POWER_SOURCE = MENU_TYPES.register("power_source", () -> IForgeMenuType.create(PowerSourceContainer::new));
 	
 }

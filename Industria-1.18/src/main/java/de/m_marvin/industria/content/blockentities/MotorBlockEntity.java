@@ -1,11 +1,7 @@
 package de.m_marvin.industria.content.blockentities;
 
-import java.util.List;
-
-import de.m_marvin.industria.content.registries.ModBlockEntities;
-import de.m_marvin.industria.core.util.Formater;
+import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -19,7 +15,7 @@ public class MotorBlockEntity extends BlockEntity implements IIngameTooltip {
 	public float rpm;
 	
 	public MotorBlockEntity(BlockPos pos, BlockState state) {
-		super(ModBlockEntities.MOTOR.get(), pos, state);
+		super(ModBlockEntityTypes.MOTOR.get(), pos, state);
 	}
 	
 //	@Override

@@ -29,7 +29,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -120,7 +120,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	
 	@SubscribeEvent
 	public static void onBlockStateChange(BlockEvent.NeighborNotifyEvent event) {
-		Level level = (Level) event.getWorld();
+		Level level = (Level) event.getLevel();
 		ElectricNetworkHandlerCapability handler = GameUtility.getCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 		if (event.getState().getBlock() instanceof IElectricConnector) {
 			IElectricConnector block = (IElectricConnector) event.getState().getBlock();
@@ -219,7 +219,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		public void serializeNbt(CompoundTag nbt) {
 			IElectric.Type componentType = IElectric.Type.getType(this.type);
 			this.type.serializeNBT(instance, pos, nbt);
-			nbt.putString("Type", this.type.getRegistryName().toString());
+			nbt.putString("Type", componentType.getRegistry().getKey(this.type).toString());
 			nbt.putString("ComponentType", componentType.name().toLowerCase());
 		}
 		public static <I, P, T> Component<I, P, T> deserializeNbt(CompoundTag nbt) {

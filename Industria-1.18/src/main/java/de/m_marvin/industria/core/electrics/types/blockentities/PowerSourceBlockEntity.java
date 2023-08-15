@@ -3,12 +3,12 @@ package de.m_marvin.industria.core.electrics.types.blockentities;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
 import de.m_marvin.industria.core.electrics.types.containers.PowerSourceContainer;
-import de.m_marvin.industria.core.registries.BlockEntities;
+import de.m_marvin.industria.core.registries.BlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -22,7 +22,7 @@ public class PowerSourceBlockEntity extends BlockEntity implements MenuProvider,
 	protected String[] internalNodeLanes = new String[] {"L", "N"};
 	
 	public PowerSourceBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(BlockEntities.POWER_SOURCE.get(), pPos, pBlockState);
+		super(BlockEntityTypes.POWER_SOURCE.get(), pPos, pBlockState);
 	}
 	
 	@Override
@@ -55,7 +55,7 @@ public class PowerSourceBlockEntity extends BlockEntity implements MenuProvider,
 	
 	@Override
 	public Component getDisplayName() {
- 		return new TranslatableComponent("industria.block.power_source");
+ 		return Component.translatable("industria.block.power_source");
 	}
 
 	

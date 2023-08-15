@@ -22,17 +22,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.HitResult.Type;
 
-public class ContraptionIdArgument implements ArgumentType<de.m_marvin.industria.core.physics.engine.commands.ContraptionIdArgument.ContraptionSelector> {
+public class ContraptionIdArgument implements ArgumentType<ContraptionIdArgument.ContraptionSelector> {
 	
 	public static final String CONTRAPTION_PREFIX = "contraption";
 	public static final Collection<String> EXAMPLES = Arrays.asList("contraption1", "contraption42", "examplename");
 	public static final DynamicCommandExceptionType ERROR_NON_EXISTING_CONTRAPTION = new DynamicCommandExceptionType((object) -> {
-		return new TranslatableComponent("industria.argument.contraption.notFound", object);
+		return Component.translatable("industria.argument.contraption.notFound", object);
 	});
 	
 	public static ContraptionIdArgument contraption() {

@@ -1,6 +1,6 @@
 package de.m_marvin.industria.content.blockentities;
 
-import de.m_marvin.industria.content.registries.ModBlockEntities;
+import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -14,7 +14,7 @@ public class GeneratorBlockEntity extends BlockEntity implements IIngameTooltip 
 	public static float lossCompensationCurrent = 0.2F;
 	
 	public GeneratorBlockEntity(BlockPos pos, BlockState state) {
-		super(ModBlockEntities.GENERATOR.get(), pos, state);
+		super(ModBlockEntityTypes.GENERATOR.get(), pos, state);
 	}
 	
 //	@Override

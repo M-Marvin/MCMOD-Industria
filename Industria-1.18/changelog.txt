@@ -1870,7 +1870,7 @@
  - 26.0.14 Adjust NetworkEvent#enqueueWork to match vanilla logic
            In singleplayer our packet work could get delayed until the next tick,
            breaking the expectation of packet read order. Fixes that using
-           NetworkHooks.openGui would result in missing inventory data on the client
+           NetworkHooks.openScreen would result in missing inventory data on the client
  - 26.0.13 Fix gameDir argument error on dedicated server.
  - 26.0.12 Add forge registries for most vanilla registries
            Made all registry names consistent with their vanilla counterparts

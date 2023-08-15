@@ -257,7 +257,7 @@ public class ConduitWorldRenderer {
 								double distancaA = playerPosition.dist(nodeAworldPosition);
 								double distancaB = playerPosition.dist(nodeBworldPosition);
 								double distance = (distancaA + distancaB) / 2;
-								int renderDistance = Minecraft.getInstance().options.renderDistance * 16;
+								int renderDistance = Minecraft.getInstance().options.renderDistance().get() * 16;
 								
 								if (distance < renderDistance * renderDistance) conduitModel(clientLevel, vertexConsumer, matrixStack, conduit, nodeOrigin, partialTicks);
 								

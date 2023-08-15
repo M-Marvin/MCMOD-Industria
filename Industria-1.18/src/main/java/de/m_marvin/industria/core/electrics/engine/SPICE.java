@@ -11,7 +11,7 @@ import de.m_marvin.nglink.NativeNGLink;
 import de.m_marvin.nglink.NativeNGLink.PlotDescription;
 import de.m_marvin.nglink.NativeNGLink.VectorValue;
 import de.m_marvin.nglink.NativeNGLink.VectorValuesAll;
-import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -32,7 +32,7 @@ public class SPICE {
 	}
 	
 	@SubscribeEvent
-	public static void onWorldUnloadEvent(WorldEvent.Unload event) {
+	public static void onWorldUnloadEvent(LevelEvent.Unload event) {
 		resetNativeLib();
 	}
 	

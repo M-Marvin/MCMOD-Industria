@@ -17,7 +17,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 
@@ -73,13 +73,13 @@ public class SetConduitCommand {
 		
 		if (conduit != Conduits.NONE.get()) {
 			if (ConduitUtility.setConduit(level, position, conduit, conduitLength)) {
-				source.getSource().sendSuccess(new TranslatableComponent("industria.commands.setconduit.success", nodeApos.getX(), nodeApos.getY(), nodeApos.getZ()), true);
+				source.getSource().sendSuccess(Component.translatable("industria.commands.setconduit.success", nodeApos.getX(), nodeApos.getY(), nodeApos.getZ()), true);
 				return Command.SINGLE_SUCCESS;
 			} else {
-				source.getSource().sendFailure(new TranslatableComponent("industria.commands.setconduit.failure"));
+				source.getSource().sendFailure(Component.translatable("industria.commands.setconduit.failure"));
 			}
 		} else if (existingConduit.isPresent()) {
-			source.getSource().sendSuccess(new TranslatableComponent("industria.commands.setconduit.success", nodeApos.getX(), nodeApos.getY(), nodeApos.getZ()), true);
+			source.getSource().sendSuccess(Component.translatable("industria.commands.setconduit.success", nodeApos.getX(), nodeApos.getY(), nodeApos.getZ()), true);
 			return Command.SINGLE_SUCCESS;
 		}
 		

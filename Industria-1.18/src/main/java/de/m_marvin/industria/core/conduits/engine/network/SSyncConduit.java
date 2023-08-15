@@ -8,8 +8,8 @@ import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.engine.ClientConduitPackageHandler;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
-import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitShape;
+import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.registries.Conduits;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -60,7 +60,7 @@ public class SSyncConduit {
 		for (ConduitEntity conduitState : msg.conduits) {
 			conduitState.getPosition().write(buff);
 			buff.writeDouble(conduitState.getLength());
-			buff.writeResourceLocation(conduitState.getConduit().getRegistryName());
+			buff.writeResourceLocation(Conduits.CONDUITS_REGISTRY.get().getKey(conduitState.getConduit()));
 			conduitState.getShape().writeUpdateData(buff);
 			buff.writeNbt(conduitState.getUpdateTag());
 		}

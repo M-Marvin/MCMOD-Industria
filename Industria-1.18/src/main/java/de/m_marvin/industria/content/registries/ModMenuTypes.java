@@ -9,13 +9,13 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class ModContainer {
+public class ModMenuTypes {
 
-	private static final DeferredRegister<MenuType<?>> CONTAINER = DeferredRegister.create(ForgeRegistries.CONTAINERS, IndustriaCore.MODID);
+	private static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, IndustriaCore.MODID);
 	public static void register() {
-		CONTAINER.register(FMLJavaModLoadingContext.get().getModEventBus());
+		MENU_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 	
-	public static final RegistryObject<MenuType<JunctionBoxContainer>> JUNCTION_BOX = CONTAINER.register("junction_box", () -> IForgeMenuType.create(JunctionBoxContainer::new));
+	public static final RegistryObject<MenuType<JunctionBoxContainer>> JUNCTION_BOX = MENU_TYPES.register("junction_box", () -> IForgeMenuType.create(JunctionBoxContainer::new));
 	
 }

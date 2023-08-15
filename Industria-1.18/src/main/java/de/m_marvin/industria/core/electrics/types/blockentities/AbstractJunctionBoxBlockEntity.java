@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import de.m_marvin.industria.content.registries.ModBlockEntities;
+import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
@@ -27,7 +27,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 public abstract class AbstractJunctionBoxBlockEntity extends BlockEntity implements MenuProvider, IJunctionEdit {
 	
 	public AbstractJunctionBoxBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(ModBlockEntities.JUNCTION_BOX.get(), pPos, pBlockState);
+		super(ModBlockEntityTypes.JUNCTION_BOX.get(), pPos, pBlockState);
 	}
 	
 	@Override

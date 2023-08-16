@@ -39,7 +39,6 @@ import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.unimat.impl.Quaternion;
 import de.m_marvin.univec.impl.Vec3d;
-import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -213,9 +212,9 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 			return new ContraptionPosition(orientation, position);		
 		} else {
 			AABBic shipBounds = contraption.getShipAABB();
-			Vec3d shipCoordCenter = MathUtility.getMiddle(new BlockPos(shipBounds.minX(), shipBounds.minY(), shipBounds.minZ()), new BlockPos(shipBounds.maxX(), shipBounds.maxY(), shipBounds.maxZ()));
-			Vec3d shipCoordMassCenter = Vec3d.fromVec(contraption.getInertiaData().getCenterOfMassInShip());
-			Vec3d centerOfMassOffset = shipCoordMassCenter.sub(shipCoordCenter).add(1.0, 1.0, 1.0);
+			Vec3d shipCoordCenter = MathUtility.getMiddle(new Vec3d(shipBounds.minX(), shipBounds.minY(), shipBounds.minZ()), new Vec3d(shipBounds.maxX(), shipBounds.maxY(), shipBounds.maxZ()));
+			Vec3d shipCoordMassCenter = Vec3d.fromVec(contraption.getInertiaData().getCenterOfMassInShip()).add(new Vec3d(0.5, 0.5, 0.5));
+			Vec3d centerOfMassOffset = shipCoordMassCenter.sub(shipCoordCenter);
 			Vec3d position = Vec3d.fromVec(contraption.getTransform().getPositionInWorld()).sub(centerOfMassOffset);
 			Quaterniondc jomlQuat = contraption.getTransform().getShipToWorldRotation();
 			Quaternion orientation = new Quaternion((float) jomlQuat.x(), (float) jomlQuat.y(), (float) jomlQuat.z(), (float) jomlQuat.w());
@@ -231,9 +230,9 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 			((ShipData) contraption).setTransform(transform);	// FIXME does not work with LoadedShip
 		} else {
 			AABBic shipBounds = contraption.getShipAABB();
-			Vec3d shipCoordCenter = MathUtility.getMiddle(new BlockPos(shipBounds.minX(), shipBounds.minY(), shipBounds.minZ()), new BlockPos(shipBounds.maxX(), shipBounds.maxY(), shipBounds.maxZ()));
-			Vec3d shipCoordMassCenter = Vec3d.fromVec(contraption.getInertiaData().getCenterOfMassInShip());
-			Vec3d centerOfMassOffset = shipCoordMassCenter.sub(shipCoordCenter).add(1.0, 1.0, 1.0);
+			Vec3d shipCoordCenter = MathUtility.getMiddle(new Vec3d(shipBounds.minX(), shipBounds.minY(), shipBounds.minZ()), new Vec3d(shipBounds.maxX(), shipBounds.maxY(), shipBounds.maxZ()));
+			Vec3d shipCoordMassCenter = Vec3d.fromVec(contraption.getInertiaData().getCenterOfMassInShip()).add(new Vec3d(0.5, 0.5, 0.5));
+			Vec3d centerOfMassOffset = shipCoordMassCenter.sub(shipCoordCenter);
 			ShipTransform transform = contraption.getTransform();
 			((Vector3d) transform.getPositionInWorld()).set(position.getPosition().add(centerOfMassOffset).writeTo(new Vector3d()));
 			((Quaterniond) transform.getShipToWorldRotation()).set(position.getOrientation().i(), position.getOrientation().j(), position.getOrientation().k(), position.getOrientation().r());
@@ -260,15 +259,22 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 	public ServerShip createContraptionAt(Vec3d position, float scale) {
 		assert level instanceof ServerLevel : "Can't manage contraptions on client side!";
 		Ship parentContraption = VSGameUtilsKt.getShipManagingPos(level, position.writeTo(new Vector3d()));
+		ContraptionPosition contraptionPosition = new ContraptionPosition(new Quaternion(new Vec3d(0, 1, 1), 0), position);
 		if (parentContraption != null) {
-			position = PhysicUtility.toWorldPos(parentContraption.getTransform(), position);
+			Quaterniondc jomlQuat = parentContraption.getTransform().getShipToWorldRotation();
+			Quaternion orientation = new Quaternion((float) jomlQuat.x(), (float) jomlQuat.y(), (float) jomlQuat.z(), (float) jomlQuat.w());
+			Vec3d pos = PhysicUtility.toWorldPos(parentContraption.getTransform(), position);
+			contraptionPosition = new ContraptionPosition(orientation, pos);
 		}
 		String dimensionId = getDimensionId();
+		
 		Ship newContraption = VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).createNewShipAtBlock(position.writeTo(new Vector3i()), false, scale, dimensionId);
 		
 		// Stone for safety reasons
 		BlockPos pos2 = PhysicUtility.toContraptionBlockPos(newContraption.getTransform(), position);
 		level.setBlock(pos2, Blocks.STONE.defaultBlockState(), 3);
+		
+		setPosition((ServerShip) newContraption, contraptionPosition, false);
 		
 		return (ServerShip) newContraption;
 	}
@@ -381,7 +387,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 			}
 		}
 		
-		setPosition((ServerShip) contraption, new ContraptionPosition(new Quaternion(new Vec3i(0, 1, 1), 0), contraptionPos), false);
+		//setPosition((ServerShip) contraption, new ContraptionPosition(new Quaternion(new Vec3i(0, 1, 1), 0), contraptionPos), false);
 		
 		return contraption;
 		
@@ -399,22 +405,23 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		boolean hasSolids = false;
 		
 		for (BlockPos itPos : blocks) {
-			structureCornerMin = MathUtility.getMinCorner(structureCornerMin, itPos);
-			structureCornerMax = MathUtility.getMaxCorner(structureCornerMax, itPos);
-			
-			if (PhysicUtility.isSolidContraptionBlock(level.getBlockState(itPos))) hasSolids = true;
+			if (PhysicUtility.isSolidContraptionBlock(level.getBlockState(itPos))) {
+				structureCornerMin = MathUtility.getMinCorner(structureCornerMin, itPos);
+				structureCornerMax = MathUtility.getMaxCorner(structureCornerMax, itPos);
+				hasSolids = true;
+			}
 		}
 		
 		if (!hasSolids) return null;
 		
-		Vec3d contraptionPos = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
-		ServerShip contraption = createContraptionAt(contraptionPos, scale);
+		Vec3d creationPos = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
+		ServerShip contraption = createContraptionAt(creationPos, scale);
 		
-		Vec3d contraptionOrigin = PhysicUtility.toContraptionPos(contraption.getTransform(), contraptionPos);
-		BlockPos centerBlockPos = MathUtility.toBlockPos(contraptionPos);
+		Vec3d contraptionOrigin = PhysicUtility.toContraptionPos(contraption.getTransform(), creationPos);
+		BlockPos centerBlockPos = MathUtility.toBlockPos(creationPos);
 		
 		for (BlockPos itPos : blocks) {
-			Vec3d relativePosition = Vec3d.fromVec(itPos).sub(contraptionPos);
+			Vec3d relativePosition = Vec3d.fromVec(itPos).sub(creationPos);
 			Vec3d shipPos = contraptionOrigin.add(relativePosition);
 			
 			GameUtility.copyBlock(level, itPos, MathUtility.toBlockPos(shipPos));
@@ -433,14 +440,12 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		}
 		
 		for (BlockPos itPos : blocks) {
-			Vec3d relativePosition = Vec3d.fromVec(itPos).sub(contraptionPos);
+			Vec3d relativePosition = Vec3d.fromVec(itPos).sub(creationPos);
 			Vec3d shipPos = contraptionOrigin.add(relativePosition);
 			
 			GameUtility.triggerUpdate(level, itPos);
 			GameUtility.triggerUpdate(level, MathUtility.toBlockPos(shipPos));
 		}
-		
-		setPosition((ServerShip) contraption, new ContraptionPosition(new Quaternion(new Vec3i(0, 1, 1), 0), contraptionPos), false);
 		
 		return contraption;
 		

@@ -8,30 +8,18 @@ import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapabil
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
 public class ElectricUtility {
 	
-	public static void updateNetwork(Level level, BlockPos worldPosition) {
+	public static <P> void updateNetwork(Level level, P position) {
 		ElectricNetworkHandlerCapability handler = GameUtility.getCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-		handler.updateNetwork(worldPosition);
+		handler.updateNetwork(position);
 	}
 	
 	public static Set<ElectricNetworkHandlerCapability.Component<?, ?, ?>> findComponentsOnNode(Level level, NodePos node) {
 		ElectricNetworkHandlerCapability handler = GameUtility.getCapability(level,	Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 		return handler.findComponentsOnNode(node);
-	}
-	
-	public static void notifyRewired(Level level, Object position) {
-		ElectricNetworkHandlerCapability handler = GameUtility.getCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-		ElectricNetworkHandlerCapability.Component<?, ?, ?> component = handler.getComponent(position);
-		if (component != null) handler.notifyRewired(component);		
-	}
-	
-	public static void notifyRewired(Level level, ElectricNetworkHandlerCapability.Component<?, ?, ?> component) {
-		ElectricNetworkHandlerCapability handler = GameUtility.getCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-		handler.notifyRewired(component);
 	}
 	
 	public static List<String[]> getLaneLabels(Level level, NodePos node) {

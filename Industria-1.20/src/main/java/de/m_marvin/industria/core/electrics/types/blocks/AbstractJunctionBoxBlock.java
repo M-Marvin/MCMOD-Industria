@@ -8,7 +8,6 @@ import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.items.AbstractConduitItem;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.registries.NodeTypes;
@@ -81,12 +80,6 @@ public abstract class AbstractJunctionBoxBlock extends BaseEntityBlock implement
 	@Override
 	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {
 		return IntStream.range(0, NODE_COUNT).mapToObj(id -> new NodePos(pos, id)).toArray(i -> new NodePos[i]);
-	}
-	
-	@Override
-	public void neighborRewired(Level level, BlockState instance, BlockPos position, Component<?, ?, ?> neighbor) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	@Override

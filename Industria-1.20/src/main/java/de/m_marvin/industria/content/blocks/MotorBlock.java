@@ -167,12 +167,6 @@ public class MotorBlock extends Block implements IElectricConnector {
 	}
 
 	@Override
-	public void neighborRewired(Level level, BlockState instance, BlockPos position, Component<?, ?, ?> neighbor) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public String[] getWireLanes(BlockPos pos, BlockState instance, NodePos node) {
 		// TODO Auto-generated method stub
 		return new String[] {};

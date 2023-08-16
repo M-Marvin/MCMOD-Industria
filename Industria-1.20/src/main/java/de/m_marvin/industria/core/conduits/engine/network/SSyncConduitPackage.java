@@ -11,6 +11,7 @@ import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitShape;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.registries.Conduits;
+import de.m_marvin.industria.core.util.SyncRequestType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
@@ -20,39 +21,35 @@ import net.minecraftforge.network.NetworkEvent;
  * Tells the client about existing and removed conduits, for example if a chunk gets loaded on client side.
  * It does not trigger any events on the client side and only updates the conduit-list.
  */
-public class SSyncConduit {
+public class SSyncConduitPackage {
 	
-	public ChunkPos chunkPos;
-	public List<ConduitEntity> conduits;
-	public Status status;
+	public final ChunkPos chunkPos;
+	public final List<ConduitEntity> conduits;
+	public final SyncRequestType request;
 	
-	public static enum Status {
-		REMOVED, ADDED;
-	}
-	
-	public SSyncConduit(List<ConduitEntity> conduitStates, ChunkPos targetChunk, Status status) {
+	public SSyncConduitPackage(List<ConduitEntity> conduitStates, ChunkPos targetChunk, SyncRequestType request) {
 		this.conduits = conduitStates;
 		this.chunkPos = targetChunk;
-		this.status = status;
+		this.request = request;
 	}
 	
-	public SSyncConduit(ConduitEntity conduitState, ChunkPos targetChunk, Status status) {
+	public SSyncConduitPackage(ConduitEntity conduitState, ChunkPos targetChunk, SyncRequestType request) {
 		this.conduits = new ArrayList<ConduitEntity>();
 		this.conduits.add(conduitState);
 		this.chunkPos = targetChunk;
-		this.status = status;
+		this.request = request;
 	}
 	
 	public ChunkPos getChunkPos() {
 		return chunkPos;
 	}
 	
-	public Status getStatus() {
-		return status;
+	public SyncRequestType getRquest() {
+		return request;
 	}
 	
-	public static void encode(SSyncConduit msg, FriendlyByteBuf buff) {
-		buff.writeEnum(msg.status);
+	public static void encode(SSyncConduitPackage msg, FriendlyByteBuf buff) {
+		buff.writeEnum(msg.request);
 		buff.writeChunkPos(msg.chunkPos);
 		buff.writeInt(msg.conduits.size());
 		for (ConduitEntity conduitState : msg.conduits) {
@@ -64,8 +61,8 @@ public class SSyncConduit {
 		}
 	}
 	
-	public static SSyncConduit decode(FriendlyByteBuf buff) {
-		Status status = buff.readEnum(Status.class);
+	public static SSyncConduitPackage decode(FriendlyByteBuf buff) {
+		SyncRequestType status = buff.readEnum(SyncRequestType.class);
 		ChunkPos chunkPos = buff.readChunkPos();
 		int count = buff.readInt();
 		List<ConduitEntity> conduitStates = new ArrayList<ConduitEntity>();
@@ -88,10 +85,10 @@ public class SSyncConduit {
 			conduitState.readUpdateTag(buff.readNbt());
 			conduitStates.add(conduitState);
 		}
-		return new SSyncConduit(conduitStates, chunkPos, status);
+		return new SSyncConduitPackage(conduitStates, chunkPos, status);
 	}
 	
-	public static void handle(SSyncConduit msg, Supplier<NetworkEvent.Context> ctx) {
+	public static void handle(SSyncConduitPackage msg, Supplier<NetworkEvent.Context> ctx) {
 		
 		ctx.get().enqueueWork(() -> {
 			ClientConduitPackageHandler.handleSyncConduitsFromServer(msg, ctx.get());

@@ -11,21 +11,21 @@ import net.minecraftforge.network.NetworkEvent;
 /*
  * Tells the server to change a electric cable conduit's lane names
  */
-public class CUpdateJunctionLanes {
+public class CUpdateJunctionLanesPackage {
 	
 	public final int internalNode;
 	public final BlockPos blockPos;
 	public final NodePos cableNode;
 	public final String[] laneLabels;
 	
-	public CUpdateJunctionLanes(NodePos cableNode, String[] laneLabels) {
+	public CUpdateJunctionLanesPackage(NodePos cableNode, String[] laneLabels) {
 		this.cableNode = cableNode;
 		this.blockPos = cableNode.getBlock();
 		this.laneLabels = laneLabels;
 		this.internalNode = -1;
 	}
 
-	public CUpdateJunctionLanes(int internalNode, BlockPos blockPos, String[] laneLabels) {
+	public CUpdateJunctionLanesPackage(int internalNode, BlockPos blockPos, String[] laneLabels) {
 		this.cableNode = null;
 		this.blockPos = blockPos;
 		this.internalNode = internalNode;
@@ -52,7 +52,7 @@ public class CUpdateJunctionLanes {
 		return laneLabels;
 	}
 	
-	public static void encode(CUpdateJunctionLanes msg, FriendlyByteBuf buff) {
+	public static void encode(CUpdateJunctionLanesPackage msg, FriendlyByteBuf buff) {
 		buff.writeInt(msg.isInternalNode() ? msg.internalNode : -1);
 		if (!msg.isInternalNode()) msg.cableNode.write(buff);
 		buff.writeBlockPos(msg.blockPos);
@@ -60,16 +60,16 @@ public class CUpdateJunctionLanes {
 		for (String s : msg.laneLabels) buff.writeUtf(s);
 	}
 	
-	public static CUpdateJunctionLanes decode(FriendlyByteBuf buff) {
+	public static CUpdateJunctionLanesPackage decode(FriendlyByteBuf buff) {
 		int internalNode = buff.readInt();
 		NodePos cableNode = internalNode >= 0 ? null : NodePos.read(buff);
 		BlockPos blockPos = buff.readBlockPos();
 		String[] laneLabels = new String[buff.readInt()];
 		for (int i = 0; i < laneLabels.length; i++) laneLabels[i] = buff.readUtf();
-		return internalNode >= 0 ? new CUpdateJunctionLanes(internalNode, blockPos, laneLabels) : new CUpdateJunctionLanes(cableNode, laneLabels);
+		return internalNode >= 0 ? new CUpdateJunctionLanesPackage(internalNode, blockPos, laneLabels) : new CUpdateJunctionLanesPackage(cableNode, laneLabels);
 	}
 	
-	public static void handle(CUpdateJunctionLanes msg, Supplier<NetworkEvent.Context> ctx) {
+	public static void handle(CUpdateJunctionLanesPackage msg, Supplier<NetworkEvent.Context> ctx) {
 		
 		ctx.get().enqueueWork(() -> {
 			ServerElectricPackageHandler.handleUpdateJunctionLanes(msg, ctx.get());

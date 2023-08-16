@@ -3,7 +3,7 @@ package de.m_marvin.industria.core.electrics.types.containers;
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.client.util.BlockEntityContainerBase;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
-import de.m_marvin.industria.core.electrics.engine.network.CUpdateJunctionLanes;
+import de.m_marvin.industria.core.electrics.engine.network.CUpdateJunctionLanesPackage;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.util.GameUtility;
 import net.minecraft.network.FriendlyByteBuf;
@@ -31,7 +31,7 @@ public abstract class AbstractJunctionEditContainer<T extends BlockEntity & IJun
 	
 	public void setWireLabels(NodePos node, String[] labels) {
 		blockEntity.setCableWireLabels(node, labels);
-		IndustriaCore.NETWORK.sendToServer(new CUpdateJunctionLanes(node, labels));
+		IndustriaCore.NETWORK.sendToServer(new CUpdateJunctionLanesPackage(node, labels));
 	}
 	
 	public String[] getWireLabels(NodePos node) {
@@ -49,7 +49,7 @@ public abstract class AbstractJunctionEditContainer<T extends BlockEntity & IJun
 
 	public void setInternalWireLabels(int id, String[] lanes) {
 		this.blockEntity.setInternalWireLabels(id, lanes);
-		IndustriaCore.NETWORK.sendToServer(new CUpdateJunctionLanes(id, this.blockEntity.getBlockPos(), lanes));
+		IndustriaCore.NETWORK.sendToServer(new CUpdateJunctionLanesPackage(id, this.blockEntity.getBlockPos(), lanes));
 	}
 	
 }

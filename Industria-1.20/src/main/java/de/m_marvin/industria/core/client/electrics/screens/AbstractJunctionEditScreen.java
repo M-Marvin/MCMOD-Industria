@@ -250,19 +250,24 @@ public abstract class AbstractJunctionEditScreen extends AbstractContainerScreen
 	
 	protected void renameNode(String name) {
 		if (this.selectedNode == null) return;
-		CableNode node = this.selectedNode.getNode();
 		this.selectedNode.label = name;
-		if (node instanceof InternalNode) {
-			this.menu.setInternalWireLabels(node.getNodeId(), node.getLanes());
-		} else {
-			this.menu.setWireLabels(node.getNode(), node.getLanes());
+	}
+	
+	public void sendNewNames() {
+		for (CableNode node : this.cableNodes) {
+			if (node instanceof InternalNode) {
+				this.menu.setInternalWireLabels(node.getNodeId(), node.getLanes());
+			} else {
+				this.menu.setWireLabels(node.getNode(), node.getLanes());
+			}
 		}
 	}
 	
 	@Override
 	public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
 		if (pKeyCode == 256) {
-			this.minecraft.player.closeContainer();
+			if (this.namingField.isVisible()) sendNewNames();
+			onClose();
 		}
 		return !this.namingField.keyPressed(pKeyCode, pScanCode, pModifiers) && !this.namingField.canConsumeInput() ? super.keyPressed(pKeyCode, pScanCode, pModifiers) : true;
 	}

@@ -9,8 +9,7 @@ import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitBreakEvent
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitLoadEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitPlaceEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitUnloadEvent;
-import de.m_marvin.industria.core.conduits.engine.network.SSyncConduit;
-import de.m_marvin.industria.core.conduits.engine.network.SSyncConduit.Status;
+import de.m_marvin.industria.core.conduits.engine.network.SSyncConduitPackage;
 import de.m_marvin.industria.core.conduits.types.ConduitHitResult;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
@@ -20,6 +19,7 @@ import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.registries.Conduits;
 import de.m_marvin.industria.core.util.MathUtility;
+import de.m_marvin.industria.core.util.SyncRequestType;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.core.BlockPos;
@@ -102,7 +102,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 		if (conduitHolder.isPresent()) {
 			List<ConduitEntity> conduits = conduitHolder.resolve().get().getConduitsInChunk(event.getPos());	
 			if (conduits.size() > 0) {
-				IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(() -> event.getPlayer()), new SSyncConduit(conduits, event.getPos(), Status.ADDED));
+				IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(() -> event.getPlayer()), new SSyncConduitPackage(conduits, event.getPos(), SyncRequestType.ADDED));
 				for (ConduitEntity conduitState : conduits) {
 					MinecraftForge.EVENT_BUS.post(new ConduitLoadEvent(level, conduitState.getPosition(), conduitState));
 				}
@@ -117,7 +117,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 		if (conduitHolder.isPresent()) {
 			List<ConduitEntity> conduits = conduitHolder.resolve().get().getConduitsInChunk(event.getPos());	
 			if (conduits.size() > 0) {
-				IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(() -> event.getPlayer()), new SSyncConduit(conduits, event.getPos(), Status.REMOVED));
+				IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(() -> event.getPlayer()), new SSyncConduitPackage(conduits, event.getPos(), SyncRequestType.REMOVED));
 				for (ConduitEntity conduitState : conduits) {
 					MinecraftForge.EVENT_BUS.post(new ConduitUnloadEvent(level, conduitState.getPosition(), conduitState));
 				}

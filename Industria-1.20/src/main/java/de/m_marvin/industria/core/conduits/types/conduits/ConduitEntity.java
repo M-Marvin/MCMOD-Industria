@@ -70,9 +70,8 @@ public class ConduitEntity {
 		ConduitPos position = ConduitPos.readNBT(tag.getCompound("Position"));
 		double length = tag.getDouble("Length");
 		ConduitShape shape = tag.contains("Shape") ? ConduitShape.load(tag.getCompound("Shape")) : null;
-		if (shape == null) return null;
 		ConduitEntity state = conduit.newConduitEntity(position, conduit, length);
-		state.setShape(shape);
+		if (shape != null) state.setShape(shape);
 		state.loadAdditional(tag);
 		return state;
 	}

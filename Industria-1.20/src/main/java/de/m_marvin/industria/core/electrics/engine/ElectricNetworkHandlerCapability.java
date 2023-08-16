@@ -2,6 +2,7 @@ package de.m_marvin.industria.core.electrics.engine;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -10,28 +11,32 @@ import com.google.common.base.Objects;
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitBreakEvent;
-import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitLoadEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitPlaceEvent;
-import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitUnloadEvent;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.conduits.IElectricConduit;
+import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
+import de.m_marvin.industria.core.electrics.engine.network.SSyncComponentsPackage;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.IElectric;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
+import de.m_marvin.industria.core.util.SyncRequestType;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.event.level.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.network.PacketDistributor;
 
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class ElectricNetworkHandlerCapability implements ICapabilitySerializable<ListTag> {
@@ -76,8 +81,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			CompoundTag circuitTag = nbt.getCompound(i);
 			ElectricNetwork circuitNetwork = new ElectricNetwork("ingame-level-circuit");
 			circuitNetwork.loadNBT(level, circuitTag);
-			if (!circuitNetwork.isPlotEmpty()) {
-				if (circuitNetwork.getComponents().isEmpty()) continue;
+			if (!circuitNetwork.isEmpty()) {
 				this.circuitNetworks.add(circuitNetwork);
 				circuitNetwork.getComponents().forEach((component) -> {
 					this.component2circuitMap.put(component, circuitNetwork);
@@ -133,41 +137,38 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	@SubscribeEvent
 	public static void onConduitStateChange(ConduitEvent event) {
 		Level level = (Level) event.getLevel();
-		ElectricNetworkHandlerCapability handler = GameUtility.getCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-		if (event.getConduitState().getConduit() instanceof IElectricConduit) {
-			if (event instanceof ConduitPlaceEvent || event instanceof ConduitLoadEvent) {
-				IElectricConduit conduit = (IElectricConduit) event.getConduitState().getConduit();
-				handler.addComponent(event.getPosition(), conduit, event.getConduitState());
-			} else if (event instanceof ConduitBreakEvent || event instanceof ConduitUnloadEvent) {
-				handler.removeComponent(event.getPosition(), event.getConduitState());
+		if (!level.isClientSide()) {
+			ElectricNetworkHandlerCapability handler = GameUtility.getCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+			if (event.getConduitState().getConduit() instanceof IElectricConduit) {
+				if (event instanceof ConduitPlaceEvent) {
+					IElectricConduit conduit = (IElectricConduit) event.getConduitState().getConduit();
+					handler.addComponent(event.getPosition(), conduit, event.getConduitState());
+				} else if (event instanceof ConduitBreakEvent) {
+					handler.removeComponent(event.getPosition(), event.getConduitState());
+				}
 			}
 		}
 	}
 	
-//	@SuppressWarnings("unchecked")
-//	@SubscribeEvent
-//	public static void onClientLoadsChunk(ChunkWatchEvent.Watch event) {
-//		Level level = event.getPlayer().getLevel();
-//		ConduitHandlerCapability conduitHandler = GameUtility.getCapability(level, ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
-//		ElectricNetworkHandlerCapability electricHandler = GameUtility.getCapability(level, ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-//		for (PlacedConduit conduit : conduitHandler.getConduitsInChunk(event.getPos())) {
-//			if (conduit.getConduit() instanceof @SuppressWarnings("rawtypes") IElectric electricConduit) {
-//				electricHandler.addComponent(conduit.getPosition(), electricConduit, conduit);
-//			}
-//		}
-//	}
-//	
-//	@SubscribeEvent
-//	public static void onClientUnloadsChunk(ChunkWatchEvent.UnWatch event) {
-//		Level level = event.getPlayer().getLevel();
-//		ConduitHandlerCapability conduitHandler = GameUtility.getCapability(level, ModCapabilities.CONDUIT_HANDLER_CAPABILITY);
-//		ElectricNetworkHandlerCapability electricHandler = GameUtility.getCapability(level, ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-//		for (PlacedConduit conduit : conduitHandler.getConduitsInChunk(event.getPos())) {
-//			if (conduit.getConduit() instanceof IElectric) {
-//				electricHandler.removeComponent(conduit.getPosition(), conduit);;
-//			}
-//		}
-//	}
+	@SubscribeEvent
+	public static void onClientLoadsChunk(ChunkWatchEvent.Watch event) {
+		Level level = event.getPlayer().level();
+		ElectricNetworkHandlerCapability electricHandler = GameUtility.getCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		Set<Component<?, ?, ?>> components = electricHandler.findComponentsInChunk(event.getPos());
+		if (!components.isEmpty()) {
+			 IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> event.getChunk()), new SSyncComponentsPackage(components, event.getChunk().getPos(), SyncRequestType.ADDED));
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onClientUnloadsChunk(ChunkWatchEvent.UnWatch event) {
+		Level level = event.getPlayer().level();
+		ElectricNetworkHandlerCapability electricHandler = GameUtility.getCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		Set<Component<?, ?, ?>> components = electricHandler.findComponentsInChunk(event.getPos());
+		if (!components.isEmpty()) {
+			 IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunk(event.getPos().x, event.getPos().z)), new SSyncComponentsPackage(components, event.getPos(), SyncRequestType.REMOVED));
+		}
+	}
 	
 	/* ElectricNetwork handling */
 	
@@ -182,6 +183,12 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		public Component(P pos, IElectric<I, P, T> type, I instance) {
 			this.type = type;
 			this.instance = instance;
+			this.pos = pos;
+		}
+
+		public Component(Level level, P pos, IElectric<I, P, T> type) {
+			this.type = type;
+			this.instance = this.type.getInstance(level, pos).get();
 			this.pos = pos;
 		}
 		
@@ -218,20 +225,19 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		
 		public void serializeNbt(CompoundTag nbt) {
 			IElectric.Type componentType = IElectric.Type.getType(this.type);
-			this.type.serializeNBT(instance, pos, nbt);
+			this.type.serializeNBTPosition(pos, nbt);
 			nbt.putString("Type", componentType.getRegistry().getKey(this.type).toString());
 			nbt.putString("ComponentType", componentType.name().toLowerCase());
 		}
-		public static <I, P, T> Component<I, P, T> deserializeNbt(CompoundTag nbt) {
+		public static <I, P, T> Component<I, P, T> deserializeNbt(Level level, CompoundTag nbt) {
 			IElectric.Type componentType = IElectric.Type.valueOf(nbt.getString("ComponentType").toUpperCase());
 			ResourceLocation typeName = new ResourceLocation(nbt.getString("Type"));
 			Object typeObject = componentType.getRegistry().getValue(typeName);
 			if (typeObject instanceof IElectric) {
 				@SuppressWarnings("unchecked")
 				IElectric<I, P, T> type = (IElectric<I, P, T>) typeObject;
-				I instance = type.deserializeNBTInstance(nbt);
 				P position = type.deserializeNBTPosition(nbt);
-				return new Component<I, P, T>(position, type, instance);
+				return new Component<I, P, T>(level, position, type);
 			}
 			return null;
 		}
@@ -248,13 +254,19 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			return type.getWireLanes(pos, instance, node);
 		}
 		public void setWireLanes(Level level, NodePos node, String[] laneLabels) {
+			String[] oldLanes = type.getWireLanes(pos, instance, node);
 			type.setWireLanes(pos, instance, node, laneLabels);
-		}
-		public void notifyRewired(Level level, Component<?, ?, ?> neighbor) {
-			type.neighborRewired(level, instance, pos, neighbor);
+			for (int i = 0; i < oldLanes.length && i < laneLabels.length; i++) {
+				if (!oldLanes[i].equals(laneLabels[i])) {
+					ElectricUtility.updateNetwork(level, pos);
+				}
+			}
 		}
 		public boolean isWire() {
 			return type.isWire();
+		}
+		public ChunkPos getChunkPos() {
+			return type.getChunkPos(pos);
 		}
 	}
 //	public static record Component<I, P, T>(P pos, IElectric<I, P, T> type, I instance) {
@@ -360,21 +372,21 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 //	}
 	
 	/**
-	 * Returns a Set containing all components attached to the given node
+	 * Returns a set containing all components attached to the given node
 	 */
 	public Set<Component<?, ?, ?>> findComponentsOnNode(NodePos node) {
 		return this.node2componentMap.getOrDefault(node, new HashSet<>());
 	}
 	
 	/**
-	 * Notifies all neighbors that the given component has changed its wire lane configuration
+	 * Returns a set containing all components in the given chunk
 	 */
-	public void notifyRewired(Component<?, ?, ?> component) {
-		Set<Component<?, ?, ?>> toNotify = new HashSet<>();
-		for (NodePos node : component.getNodes(level)) toNotify.addAll(findComponentsOnNode(node));
-		for (Component<?, ?, ?> neighbor : toNotify) {
-			if (neighbor != component) component.notifyRewired(level, component);
+	public Set<Component<?, ?, ?>> findComponentsInChunk(ChunkPos chunkPos) {
+		Set<Component<?, ?, ?>> components = new HashSet<>();
+		for (Entry<Object, Component<?, ?, ?>> componentEntry : this.pos2componentMap.entrySet()) {
+			if (componentEntry.getValue().getChunkPos().equals(chunkPos)) components.add(componentEntry.getValue());
 		}
+		return components;
 	}
 	
 	/**
@@ -395,7 +407,11 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 					ElectricNetwork emptyNetwork = this.component2circuitMap.remove(component);
 					if (emptyNetwork != null) this.circuitNetworks.remove(emptyNetwork);
 				}
-				componentsToUpdate.forEach((comp) -> updateNetwork(comp.pos()));
+				if (!this.level.isClientSide) {
+					componentsToUpdate.forEach((comp) -> updateNetwork(comp.pos()));
+					ChunkPos chunkPos = component.getChunkPos();
+					IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> this.level.getChunk(chunkPos.x, chunkPos.z)), new SSyncComponentsPackage(component, chunkPos, SyncRequestType.REMOVED));
+				}
 			}
 		}
 	}
@@ -414,8 +430,11 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		}
 		Component<I, P, T> component2 = new Component<I, P, T>(pos, type, instance);
 		addToNetwork(component2);
-		notifyRewired(component2);
-		updateNetwork(pos);
+		if (!this.level.isClientSide) {
+			updateNetwork(pos);
+			ChunkPos chunkPos = component2.getChunkPos();
+			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> this.level.getChunk(chunkPos.x, chunkPos.z)), new SSyncComponentsPackage(component2, chunkPos, SyncRequestType.ADDED));
+		}
 	}
 	
 	/**
@@ -502,6 +521,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	private void buildCircuit0(Component<?, ?, ?> component, NodePos node, ElectricNetwork circuit) {
 		
 		if (circuit.getComponents().contains(component)) return;
+		
 		circuit.getComponents().add(component);
 		component.plotCircuit(level, circuit, template -> circuit.plotTemplate(component, template));
 		

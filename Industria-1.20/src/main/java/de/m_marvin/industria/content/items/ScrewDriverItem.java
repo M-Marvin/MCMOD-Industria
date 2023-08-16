@@ -31,7 +31,6 @@ public class ScrewDriverItem extends Item implements IScrollOverride {
 			if (context.getPlayer().isShiftKeyDown()) {
 				
 				for (Ship contraption : PhysicUtility.getLoadedContraptions((ServerLevel) context.getLevel())) {
-					System.out.println("SHIP");
 					
 					AABBic shape = contraption.getShipAABB();
 					

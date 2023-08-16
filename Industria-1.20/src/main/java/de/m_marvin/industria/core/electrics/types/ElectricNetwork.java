@@ -10,6 +10,7 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.level.Level;
 
 public class ElectricNetwork {
@@ -36,42 +37,26 @@ public class ElectricNetwork {
 	
 	public CompoundTag saveNBT() {
 		CompoundTag tag = new CompoundTag();
-//		CompoundTag serialResistanceTag = new CompoundTag();
-//		this.serialResistance.forEach((key, value) -> serialResistanceTag.putDouble(String.valueOf(key), value));
-//		CompoundTag parallelResistanceTag = new CompoundTag();
-//		this.parallelResistance.forEach((key, value) -> {if (key != null) parallelResistanceTag.putDouble(key.getKeyString(), value);});
-//		CompoundTag nodeVoltagesTag = new CompoundTag();
-//		this.nodeVoltages.forEach((key, value) -> {if (key != null) nodeVoltagesTag.putDouble(key.getKeyString(), value);});
-//		ListTag componentsTag = new ListTag();
-//		this.components.forEach((component) -> {
-//			CompoundTag componentTag = new CompoundTag();
-//			component.serializeNbt(componentTag);
-//			componentsTag.add(componentTag);
-//		});
-//		tag.put("SerialResistance", serialResistanceTag);
-//		tag.put("ParallelResistance", parallelResistanceTag);
-//		tag.put("NodeVoltages", nodeVoltagesTag);
-//		tag.put("Components", componentsTag);
+		ListTag componentsTag = new ListTag();
+		for (Component<?, ?, ?> component : this.components) {
+			try {
+				CompoundTag compTag = new CompoundTag();
+				component.serializeNbt(compTag);
+				componentsTag.add(compTag);
+			} catch (Exception e) {
+				System.err.println("Failed to serialize electric component at " + component.pos() + "!");
+				e.printStackTrace();
+			}
+		}
+		tag.put("Components", componentsTag);
 		return tag;
 	}
 	
 	public void loadNBT(Level level, CompoundTag tag) {
-//		CompoundTag serialResistanceTag = tag.getCompound("SerialResistance");
-//		serialResistanceTag.getAllKeys().forEach((key) -> {
-//			this.serialResistance.put(Long.valueOf(key), serialResistanceTag.getDouble(key));
-//		});
-//		CompoundTag parallelResistanceTag = tag.getCompound("ParallelResistance");// FIXME 
-//		parallelResistanceTag.getAllKeys().forEach((key) -> {
-//			this.parallelResistance.put(NodePos.getFromKeyString(key), parallelResistanceTag.getDouble(key));
-//		});
-//		CompoundTag nodeVoltagesTag = tag.getCompound("NodeVoltages");
-//		nodeVoltagesTag.getAllKeys().forEach((key) -> {
-//			this.nodeVoltages.put(NodePos.getFromKeyString(key), nodeVoltagesTag.getDouble(key));
-//		});
-//		ListTag componentsTag = tag.getList("Components", 10);
-//		componentsTag.stream().forEach((componentTag) -> {
-//			this.components.add(Component.deserializeNbt((CompoundTag) componentTag));
-//		});
+		ListTag componentsTag = tag.getList("Components", ListTag.TAG_COMPOUND);
+		componentsTag.stream().forEach((componentTag) -> {
+			this.components.add(Component.deserializeNbt(level, (CompoundTag) componentTag));
+		});
 	}
 	
 	public Set<Component<?, ?, ?>> getComponents() {

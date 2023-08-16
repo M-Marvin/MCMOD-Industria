@@ -20,9 +20,9 @@ public class SCConduitPackage {
 		
 	public static class SCPlaceConduitPackage {
 		
-		public ConduitPos position;
-		public Conduit conduit;
-		public double length;
+		public final ConduitPos position;
+		public final Conduit conduit;
+		public final double length;
 		
 		public SCPlaceConduitPackage(ConduitPos position, Conduit conduit, double length) {
 			this.position = position;
@@ -68,8 +68,8 @@ public class SCConduitPackage {
 	
 	public static class SCBreakConduitPackage {
 		
-		public ConduitPos position;
-		public boolean dropItems;
+		public final ConduitPos position;
+		public final boolean dropItems;
 		
 		public SCBreakConduitPackage(ConduitPos position, boolean dropItems) {
 			this.position = position;

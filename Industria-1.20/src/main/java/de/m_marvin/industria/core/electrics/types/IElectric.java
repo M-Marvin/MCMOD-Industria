@@ -1,5 +1,6 @@
 package de.m_marvin.industria.core.electrics.types;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -7,11 +8,11 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.registries.Conduits;
 import de.m_marvin.industria.core.util.GameUtility;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -25,10 +26,15 @@ public interface IElectric<I, P, T> {
 	}
 	
 	public default void onNetworkNotify(Level level, I instance, P position) {}
+	//public void onNeighborRewired(Level level, I instance, P position, Component<?, ?, ?> neighbor);
 	
-	public void neighborRewired(Level level, I instance, P position, Component<?, ?, ?> neighbor);
 	public void plotCircuit(Level level, I instance, P position, ElectricNetwork circuit, Consumer<CircuitTemplate> plotter);
-	public void serializeNBT(I instance, P position, CompoundTag nbt);
+	public default void serializeNBT(I instance, P position, CompoundTag nbt) {
+		serializeNBTInstance(instance, nbt);
+		serializeNBTPosition(position, nbt);
+	}
+	public void serializeNBTInstance(I instance, CompoundTag nbt);
+	public void serializeNBTPosition(P position, CompoundTag nbt);
 	public I deserializeNBTInstance(CompoundTag nbt);
 	public P deserializeNBTPosition(CompoundTag nbt);
 	
@@ -36,6 +42,8 @@ public interface IElectric<I, P, T> {
 	public String[] getWireLanes(P pos, I instance, NodePos node);
 	public void setWireLanes(P pos, I instance, NodePos node, String[] laneLabels);
 	public boolean isWire();
+	public ChunkPos getChunkPos(P pos);
+	public Optional<I> getInstance(Level level, P pos);
 	
 	public static enum Type {
 		

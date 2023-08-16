@@ -268,10 +268,10 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		}
 		String dimensionId = getDimensionId();
 		
-		Ship newContraption = VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).createNewShipAtBlock(position.writeTo(new Vector3i()), false, scale, dimensionId);
+		Ship newContraption = VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).createNewShipAtBlock(new Vector3i((int) Math.floor(position.x), (int) Math.floor(position.y), (int) Math.floor(position.z)), false, scale, dimensionId);
 		
 		// Stone for safety reasons
-		BlockPos pos2 = PhysicUtility.toContraptionBlockPos(newContraption.getTransform(), position);
+		BlockPos pos2 = PhysicUtility.toContraptionBlockPos(newContraption.getTransform(), MathUtility.toBlockPos(position));
 		level.setBlock(pos2, Blocks.STONE.defaultBlockState(), 3);
 		
 		setPosition((ServerShip) newContraption, contraptionPosition, false);

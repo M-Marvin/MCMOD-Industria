@@ -38,7 +38,6 @@ public class NodePointSupplier {
 	public NodePointSupplier addNodesAround(Axis axis, NodeType type, int maxConnections, Vec3i position) {
 		for (int i = 0; i < 360; i += 90) {
 			Vec3i orientedPosition = MathUtility.rotatePoint(position.sub(8, 8, 8), i, true, axis).add(8, 8, 8);
-			System.out.println(i + " -> " + orientedPosition);
 			this.nodes.add(new ConduitNode(type, maxConnections, orientedPosition));
 			this.positions.add(orientedPosition);
 		}

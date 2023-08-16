@@ -1,7 +1,7 @@
 package de.m_marvin.industria.core.conduits.engine;
 
 import de.m_marvin.industria.core.conduits.ConduitUtility;
-import de.m_marvin.industria.core.conduits.engine.network.CChangeConduitPlacementLength;
+import de.m_marvin.industria.core.conduits.engine.network.CChangeConduitPlacementLengthPackage;
 import de.m_marvin.industria.core.conduits.engine.network.SCConduitPackage.SCBreakConduitPackage;
 import de.m_marvin.industria.core.conduits.engine.network.SCConduitPackage.SCPlaceConduitPackage;
 import de.m_marvin.industria.core.conduits.types.items.AbstractConduitItem;
@@ -13,7 +13,7 @@ public class ServerConduitPackageHandler {
 
 	/* Handle CChangeNodesPerBlock package */
 	
-	public static void handleChangePlacementLength(CChangeConduitPlacementLength msg, Context ctx) {
+	public static void handleChangePlacementLength(CChangeConduitPlacementLengthPackage msg, Context ctx) {
 		ServerPlayer player = ctx.getSender();
 		ItemStack heldStack = player.getMainHandItem();
 		if (heldStack.getItem() instanceof AbstractConduitItem) {

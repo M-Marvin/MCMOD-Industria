@@ -8,7 +8,6 @@ import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.items.AbstractConduitItem;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blockentities.PowerSourceBlockEntity;
 import de.m_marvin.industria.core.registries.Blocks;
@@ -58,10 +57,7 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricConnec
 	public ConduitNode[] getConduitNodes(Level level, BlockPos pos, BlockState state) {
 		return NODE_POINTS.getNodes(state);
 	}
-
-	@Override
-	public void neighborRewired(Level level, BlockState instance, BlockPos position, Component<?, ?, ?> neighbor) {}
-
+	
 	@Override
 	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit, Consumer<CircuitTemplate> plotter) {}
 

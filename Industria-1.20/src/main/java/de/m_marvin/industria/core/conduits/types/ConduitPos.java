@@ -211,11 +211,11 @@ public class ConduitPos {
 		
 		@Override
 		public String toString() {
-			return "NodePos{block=[" + this.block.asLong() + "],node=" + this.node + "}";
+			return "NodePos{block=[" + this.block.getX() + " " + block.getY() + " " + block.getZ() + "],node=" + this.node + "}";
 		}
 		
 		public String getKeyString(String lane) {
-			return "Node{pos=" + this.block.asLong() + ",id=" + this.node + ",lane=" + lane + "}";
+			return "Node{pos=" + this.block.getX() + "_" + block.getY() + "_" + block.getZ() + ",id=" + this.node + ",lane=" + lane + "}";
 		}
 		
 		public static String getLaneName(String keyString) {

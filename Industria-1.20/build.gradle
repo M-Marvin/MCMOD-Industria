@@ -32,8 +32,8 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
  
-    //mappings channel: 'parchment', version: '2022.11.27-1.19.2'
- 	mappings channel: 'official', version: '1.20.1'
+    mappings channel: 'parchment', version: '2023.08.13-1.20.1'
+ 	//mappings channel: 'official', version: '1.20.1'
  	
  	accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
  	
@@ -140,7 +140,7 @@ dependencies {
 	implementation fg.deobf("curse.maven:atlasviewer-633577:4597419")
 	
 	//shade "org.apache.commons:commons-collections4:4.4"
-	shade "com.github.M-Marvin:LIBRARY-NGLink:main-SNAPSHOT"
+	shade "com.github.M-Marvin:LIBRARY-NGLink:59aa9388d308e0097ae1002f13a06fd7966ce15c"
 	shade "com.github.M-Marvin:LIBRARY-UnifiedVectors:main-SNAPSHOT"
 	
 }

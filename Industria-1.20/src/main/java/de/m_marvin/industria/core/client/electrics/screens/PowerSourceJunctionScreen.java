@@ -32,6 +32,14 @@ public class PowerSourceJunctionScreen extends AbstractJunctionEditScreen {
 	}
 
 	@Override
+	protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
+		super.renderBg(pGuiGraphics, pPartialTick, pMouseX, pMouseY);
+		int i = this.leftPos;
+		int j = this.topPos;
+		pGuiGraphics.blit(getJunctionBoxTexture(), i, j - 14, 0, 138, this.imageWidth, 14);
+	}
+	
+	@Override
 	protected void renderLabels(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
 		pGuiGraphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false);
 	}

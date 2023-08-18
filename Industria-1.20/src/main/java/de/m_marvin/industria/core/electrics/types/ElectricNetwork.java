@@ -6,33 +6,32 @@ import java.util.Set;
 
 import com.google.common.collect.Maps;
 
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
-import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
+import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
+import de.m_marvin.nglink.NativeNGLink;
+import de.m_marvin.nglink.NativeNGLink.INGCallback;
+import de.m_marvin.nglink.NativeNGLink.PlotDescription;
+import de.m_marvin.nglink.NativeNGLink.VectorValuesAll;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.level.Level;
 
-public class ElectricNetwork {
+public class ElectricNetwork implements INGCallback {
 	
-	@FunctionalInterface
-	public static interface NetListBuilder {
-		public String build(ElectricNetwork net, String id, String... param);
-	}
-	
-	// Stored results
 	protected String title;
 	protected Map<NodePos, Double> nodeVoltages = Maps.newHashMap();
 	protected Set<Component<?, ?, ?>> components = new HashSet<>();
-	
-	//protected Set<Component<?, ?, ?>> components;
 	protected long lastUpdated;
-	
+	protected int templateCounter;
 	protected StringBuilder circuitBuilder;
 	protected String netList;
+	protected NativeNGLink nglink;
 	
 	public ElectricNetwork(String titleInfo) {
 		this.title = titleInfo;
+		this.nglink = new NativeNGLink();
 	}
 	
 	public CompoundTag saveNBT() {
@@ -63,61 +62,11 @@ public class ElectricNetwork {
 		return components;
 	}
 	
-//	public Map<String, Set<NodePos>> getNodes() {
-//		return this.hash2node;
-//	}
-	
-//	protected String getNodeName(NodePos node) {
-//		String hashName = "node-" + Integer.toHexString(node.hashCode());
-//		Set<NodePos> nodes = this.hash2node.getOrDefault(hashName, new HashSet<NodePos>());
-//		nodes.add(node);
-//		this.hash2node.put(hashName, nodes);
-//		return hashName;
-//	}
-	
-//	public Set<NodePos> getNodes(String hashName) {
-//		return this.hash2node.get(hashName);
-//	}
-	
-//	protected String addModel(String model) {
-//		String modelName = "M" + Integer.toHexString(model.hashCode());
-//		if (this.modelMap.add(model)) stringBuilder.append(".model " + modelName + " " + model + "\n");
-//		return modelName;
-//	}
-	
-//	protected void combineNodes(String nodeA, String nodeB) {
-//		Optional<Set<String>> nodeSetA = connectedNodes.stream().filter((nodeSet) -> nodeSet.contains(nodeA)).findAny();
-//		Optional<Set<String>> nodeSetB = connectedNodes.stream().filter((nodeSet) -> nodeSet.contains(nodeB)).findAny();
-//		if (nodeSetA.equals(nodeSetB)) {
-//			if (nodeSetA.isEmpty()) {
-//				Set<String> nodeSet = new HashSet<String>();
-//				nodeSet.add(nodeA);
-//				nodeSet.add(nodeB);
-//				connectedNodes.add(nodeSet);
-//			}
-//		} else if (nodeSetA.isEmpty()) {
-//			nodeSetB.get().add(nodeA);
-//		} else if (nodeSetB.isEmpty()) {
-//			nodeSetA.get().add(nodeB);
-//		} else {
-//			nodeSetB.get().stream().forEach(nodeSetA.get()::add);
-//			List<Set<String>> stream = connectedNodes.stream().filter((set) -> !set.equals(nodeSetB.get())).toList();
-//			connectedNodes.clear();
-//			stream.forEach(connectedNodes::add);
-//		}
-//	}
-	
-	protected int templateCounter;
-	
-	public void plotTemplate(Component<?, ?, ?> component, CircuitTemplate template) {
+	public void plotTemplate(Component<?, ?, ?> component, ICircuitPlot template) {
 		template.prepare(templateCounter++);
 		this.circuitBuilder.append(template.plot()); // TODO Model filtering
 		this.components.add(component);
 	}
-	
-	
-	
-	
 	
 	public boolean isPlotEmpty() {
 		return templateCounter == 0;
@@ -143,22 +92,11 @@ public class ElectricNetwork {
 	public void complete(long frame) {
 		this.circuitBuilder.append(".end\n");
 		this.netList = circuitBuilder.toString();
-		
-		System.out.println(netList);
-		
-//		this.connectedNodes.forEach((nodeSet) -> {
-//			Set<NodePos> mapedNodes = new HashSet<NodePos>();
-//			String nodeName = nodeSet.stream().findAny().get() + "-com";
-//			nodeSet.forEach((node) -> {
-//				mapedNodes.addAll(getNodes(node));
-//				netList = netList.replace(node, nodeName);
-//			});
-//			hash2node.put(nodeName, mapedNodes);
-//		});
 		this.lastUpdated = frame;
 	}
 	
 	public void reset() {
+		if (this.nglink.isNGSpiceAttached()) this.nglink.detachNGSpice();
 		this.circuitBuilder = new StringBuilder();
 		this.circuitBuilder.append(title + "\n");
 		this.netList = null;
@@ -168,6 +106,52 @@ public class ElectricNetwork {
 
 	public boolean updatedInFrame(long frame) {
 		return this.lastUpdated == frame;
+	}
+
+	public void startExecution() {
+		if (!this.netList.isEmpty()) {
+			
+			if (!this.nglink.isInitialized()) {
+				if (!nglink.initNGLink(this)) {
+					IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.ERROR, "Failed to start nglink! Electric simulation abborted!");
+					return;
+				}
+			}
+			
+			System.out.println("TODO Start simulation loop!");
+			// TODO
+			
+		}
+	}
+	
+	public void terminate() {
+		if (this.nglink.isInitialized()) {
+			this.nglink.detachNGLink();
+		}
+	}
+
+	@Override
+	public void log(String s) {
+		// TODO Debug print config
+		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, s);
+	}
+
+	@Override
+	public void detacheNGSpice() {
+		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.WARN, "SPICE-Engine requested detachment, this could lead to undefined behavior!");
+		this.nglink.detachNGSpice();
+	}
+
+	@Override
+	public void reciveVecData(VectorValuesAll vecData, int vectorCount) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reciveInitData(PlotDescription plotInfo) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

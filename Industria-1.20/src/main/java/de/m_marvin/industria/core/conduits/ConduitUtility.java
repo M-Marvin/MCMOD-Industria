@@ -33,8 +33,8 @@ public class ConduitUtility {
 	
 	public static boolean setConduit(Level level, ConduitPos position, Conduit conduit, double length) {
 		if (!level.isClientSide()) {
-			Vec3d middlePos = MathUtility.getMiddle(position.calculateWorldNodeA(level), position.calculateWorldNodeB(level));
-			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middlePos.writeTo(new BlockPos(0, 0, 0)))), new SCConduitPackage.SCPlaceConduitPackage(position, conduit, length));
+			BlockPos middlePos = MathUtility.getMiddleBlock(position.getNodeApos(), position.getNodeBpos());
+			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middlePos)), new SCConduitPackage.SCPlaceConduitPackage(position, conduit, length));
 		}
 		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		return handler.placeConduit(position, conduit, length);
@@ -45,13 +45,13 @@ public class ConduitUtility {
 		return ConduitUtility.removeConduit(level, conduitPosition, dropItems);
 	}
 	
-	public static boolean removeConduit(Level level, ConduitPos conduitPosition, boolean dropItems) {
+	public static boolean removeConduit(Level level, ConduitPos position, boolean dropItems) {
 		if (!level.isClientSide()) {
-			Vec3d middlePos = MathUtility.getMiddle(conduitPosition.calculateWorldNodeA(level), conduitPosition.calculateWorldNodeB(level));
-			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middlePos.writeTo(new BlockPos(0, 0, 0)))), new SCConduitPackage.SCBreakConduitPackage(conduitPosition, dropItems));
+			BlockPos middlePos = MathUtility.getMiddleBlock(position.getNodeApos(), position.getNodeBpos());
+			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middlePos)), new SCConduitPackage.SCBreakConduitPackage(position, dropItems));
 		}
 		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
-		return handler.breakConduit(conduitPosition, dropItems);
+		return handler.breakConduit(position, dropItems);
 	}
 
 	public static Optional<ConduitEntity> getConduit(Level level, ConduitPos position) {

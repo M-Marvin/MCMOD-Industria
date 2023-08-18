@@ -8,6 +8,7 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 
 import org.apache.logging.log4j.Logger;
@@ -82,15 +83,16 @@ public class CircuitTemplateManager extends SimplePreparableReloadListener<Map<R
 		
 		Map<ResourceLocation, CircuitTemplate> map = Maps.newHashMap();
 		
-		for (ResourceLocation resourceLocation : resourceManager.listResources(this.directory, (file) -> {
+		for (Entry<ResourceLocation, Resource> resourceEntry : resourceManager.listResources(this.directory, (file) -> {
 			return file.getPath().endsWith(PATH_JSON_SUFIX);
-		}).keySet()) {
+		}).entrySet()) {
+			ResourceLocation resourceLocation = resourceEntry.getKey();
 			String path = resourceLocation.getPath();
 			int i = path.indexOf("/");
 			ResourceLocation namedLocation = new ResourceLocation(resourceLocation.getNamespace(), path.substring(i + 1, path.length() - PATH_JSON_SUFIX.length()));
 			
 			try {
-				Resource resource = resourceManager.getResource(resourceLocation).get();
+				Resource resource = resourceEntry.getValue();
 				InputStream inputStream = resource.open();
 				Reader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 				JsonObject json = gson.fromJson(reader, JsonObject.class);

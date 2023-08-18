@@ -130,7 +130,7 @@ public class MotorBlock extends Block implements IElectricConnector {
 //	}
 
 	@Override
-	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit,Consumer<CircuitTemplate> plotter) {
+	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit,Consumer<ICircuitPlot> plotter) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -167,13 +167,13 @@ public class MotorBlock extends Block implements IElectricConnector {
 	}
 
 	@Override
-	public String[] getWireLanes(BlockPos pos, BlockState instance, NodePos node) {
+	public String[] getWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node) {
 		// TODO Auto-generated method stub
 		return new String[] {};
 	}
 
 	@Override
-	public void setWireLanes(BlockPos pos, BlockState instance, NodePos node, String[] laneLabels) {
+	public void setWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node, String[] laneLabels) {
 		// TODO Auto-generated method stub
 		
 	}

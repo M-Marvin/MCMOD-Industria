@@ -15,10 +15,10 @@ import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitPlaceEvent
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.conduits.IElectricConduit;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.engine.network.SSyncComponentsPackage;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.IElectric;
+import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
@@ -72,6 +72,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	
 	@Override
 	public void deserializeNBT(ListTag nbt) {
+		terminateNetworks();
 		this.pos2componentMap.clear();
 		this.node2componentMap.clear();
 		this.circuitNetworks.clear();
@@ -100,27 +101,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	}
 	
 	/* Event handling */
-	
-//	@SubscribeEvent
-//	public static void onWorldTick(WorldTickEvent event) {
-//		ServerLevel level = (ServerLevel) event.world;
-//		LazyOptional<ElectricNetworkHandlerCapability> networkHandler = level.getCapability(ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-//		if (networkHandler.isPresent()) {
-//			networkHandler.resolve().get().tick();
-//		}
-//	}
-	
-//	@SubscribeEvent
-//	@SuppressWarnings("resource")
-//	public static void onClientWorldTick(ClientTickEvent event) {
-//		ClientLevel level = Minecraft.getInstance().level;
-//		if (level != null) {
-//			LazyOptional<ElectricNetworkHandlerCapability> networkHandler = level.getCapability(ModCapabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-//			if (networkHandler.isPresent()) {
-//				networkHandler.resolve().get().tick();
-//			}
-//		}
-//	}
 	
 	@SubscribeEvent
 	public static void onBlockStateChange(BlockEvent.NeighborNotifyEvent event) {
@@ -241,7 +221,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			}
 			return null;
 		}
-		public void plotCircuit(Level level, ElectricNetwork circuit, Consumer<CircuitTemplate> plotter) {
+		public void plotCircuit(Level level, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
 			type.plotCircuit(level, instance, pos, circuit, plotter);
 		}
 		public NodePos[] getNodes(Level level) {
@@ -251,11 +231,11 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			type.onNetworkNotify(level, instance, pos);
 		}
 		public String[] getWireLanes(Level level, NodePos node) {
-			return type.getWireLanes(pos, instance, node);
+			return type.getWireLanes(level, pos, instance, node);
 		}
 		public void setWireLanes(Level level, NodePos node, String[] laneLabels) {
-			String[] oldLanes = type.getWireLanes(pos, instance, node);
-			type.setWireLanes(pos, instance, node, laneLabels);
+			String[] oldLanes = type.getWireLanes(level, pos, instance, node);
+			type.setWireLanes(level, pos, instance, node, laneLabels);
 			for (int i = 0; i < oldLanes.length && i < laneLabels.length; i++) {
 				if (!oldLanes[i].equals(laneLabels[i])) {
 					ElectricUtility.updateNetwork(level, pos);
@@ -269,36 +249,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			return type.getChunkPos(pos);
 		}
 	}
-//	public static record Component<I, P, T>(P pos, IElectric<I, P, T> type, I instance) {
-//		public void serializeNbt(CompoundTag nbt) {
-//			IElectric.Type componentType = IElectric.Type.getType(this.type);
-//			this.type.serializeNBT(instance, pos, nbt);
-//			nbt.putString("Type", this.type.getRegistryName().toString());
-//			nbt.putString("ComponentType", componentType.name().toLowerCase());
-//		}
-//		public static <I, P, T> Component<I, P, T> deserializeNbt(CompoundTag nbt) {
-//			IElectric.Type componentType = IElectric.Type.valueOf(nbt.getString("ComponentType").toUpperCase());
-//			ResourceLocation typeName = new ResourceLocation(nbt.getString("Type"));
-//			Object typeObject = componentType.getRegistry().getValue(typeName);
-//			if (typeObject instanceof IElectric) {
-//				@SuppressWarnings("unchecked")
-//				IElectric<I, P, T> type = (IElectric<I, P, T>) typeObject;
-//				I instance = type.deserializeNBTInstance(nbt);
-//				P position = type.deserializeNBTPosition(nbt);
-//				return new Component<I, P, T>(position, type, instance);
-//			}
-//			return null;
-//		}
-//		public void plotCircuit(Level level, ElectricNetwork circuit) {
-//			type.plotCircuit(level, instance, pos, circuit);
-//		}
-//		public NodePos[] getNodes(Level level) {
-//			return type.getConnections(level, pos, instance);
-//		}
-//		public void onNetworkChange(Level level) {
-//			type.onNetworkNotify(level, instance, pos);
-//		}
-//	}
 	
 	/**
 	 * Returns the circuit which contains this components
@@ -329,47 +279,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		}
 		return 0D;
 	}
-	
-//	/*
-//	 * Returns the serial resistance between two nodes calculated last time the network was updated
-//	 */
-//	public double getSerialResistance(NodePos nodeA, NodePos nodeB) {
-//		Set<Component<?, ?, ?>> components = this.node2componentMap.get(nodeA);
-//		if (components != null && components.size() > 0) {
-//			ElectricNetwork circuit = getCircuit(components.stream().findAny().get()); // .toArray(new Component<?, ?, ?>[] {})[0]
-//			if (circuit != null) {
-//				double resistance =  circuit.getSerialResistance(nodeA, nodeB);
-//				return Double.isFinite(resistance) ? resistance : Double.MAX_VALUE;
-//			}
-//		}
-//		return Double.MAX_VALUE;
-//	}
-	
-//	/*
-//	 * Returns the parallel resistance (resistance to ground) for the node calculated last time the network was updated
-//	 * Ignores the resistance of other components connected to the node via a wire
-//	 */
-//	public double getParallelResistance(NodePos node) {
-//		Set<Component<?, ?, ?>> components = this.node2componentMap.get(node);
-//		if (components != null && components.size() > 0) {
-//			ElectricNetwork circuit = getCircuit(components.toArray(new Component<?, ?, ?>[] {})[0]);
-//			if (circuit != null) {
-//				double resistance =  circuit.getParallelResistance(node);
-//				return Double.isFinite(resistance) ? resistance : Double.MAX_VALUE;
-//			}
-//		}
-//		return Double.MAX_VALUE;
-//	}
-	
-//	/*
-//	 * Returns the current flowing between two nodes calculated last time the network was updated
-//	 */
-//	public double getCurrent(Component<?, ?, ?> component, NodePos nodeA, NodePos nodeB) {
-//		double voltageA = getVoltageAt(nodeA);
-//		double voltageB = getVoltageAt(nodeB);
-//		double resistance = getSerialResistance(nodeA, nodeB);
-//		return Math.abs(voltageA - voltageB) / resistance;
-//	}
 	
 	/**
 	 * Returns a set containing all components attached to the given node
@@ -405,7 +314,10 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				}
 				if (componentsToUpdate.isEmpty()) {
 					ElectricNetwork emptyNetwork = this.component2circuitMap.remove(component);
-					if (emptyNetwork != null) this.circuitNetworks.remove(emptyNetwork);
+					if (emptyNetwork != null) {
+						emptyNetwork.terminate();
+						this.circuitNetworks.remove(emptyNetwork);
+					}
 				}
 				if (!this.level.isClientSide) {
 					componentsToUpdate.forEach((comp) -> updateNetwork(comp.pos()));
@@ -488,31 +400,26 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			if (!this.circuitNetworks.contains(circuit)) this.circuitNetworks.add(circuit);
 			
 			final ElectricNetwork circuitFinalized = circuit;
-//			if (!circuitFinalized.isPlotEmpty()) {
-//				SPICE.processCircuit(circuit);
-//				SPICE.vectorData().keySet().stream().filter((s) -> s.startsWith("node")).forEach((hashName) ->  {
-//					Set<NodePos> nodes = circuitFinalized.getNodes(hashName);
-//					if (nodes != null) {
-//						nodes.forEach((node) -> circuitFinalized.getNodeVoltages().put(node, SPICE.vectorData().get(hashName)));
-//					}
-//				});
-//			}
-			
 			circuit.getComponents().forEach((comp) -> {
 				ElectricNetwork previousNetwork = this.component2circuitMap.put(comp, circuitFinalized);
 				if (previousNetwork != null && previousNetwork != circuitFinalized) {
 					previousNetwork.getComponents().remove(comp);
-					if (previousNetwork.getComponents().isEmpty()) this.circuitNetworks.remove(previousNetwork);
+					if (previousNetwork.getComponents().isEmpty()) {
+						previousNetwork.terminate();
+						this.circuitNetworks.remove(previousNetwork);
+					}
 				}
 				comp.onNetworkChange(level);
 			});
+			
+			circuit.startExecution();
 			
 		}
 		
 	}
 	
 	/**
-	 * Builds a ngspice netlist for the given network begining from the given gomponent
+	 * Builds a ngspice netlist for the given network beginning from the given component
 	 */
 	private void buildCircuit(Component<?, ?, ?> component, ElectricNetwork circuit) {
 		buildCircuit0(component, null, circuit);
@@ -532,6 +439,12 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			}
 		}
 		
+	}
+	
+	public void terminateNetworks() {
+		for (ElectricNetwork network : this.circuitNetworks) {
+			network.terminate();
+		}
 	}
 	
 }

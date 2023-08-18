@@ -2,7 +2,7 @@ package de.m_marvin.industria.core.electrics.types.blockentities;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
-import de.m_marvin.industria.core.electrics.types.containers.PowerSourceContainer;
+import de.m_marvin.industria.core.electrics.types.containers.PowerSourceJunctionContainer;
 import de.m_marvin.industria.core.registries.BlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,7 +27,7 @@ public class PowerSourceBlockEntity extends BlockEntity implements MenuProvider,
 	
 	@Override
 	public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-		return new PowerSourceContainer(pContainerId, pPlayerInventory, this); 
+		return new PowerSourceJunctionContainer(pContainerId, pPlayerInventory, this); 
 	}
 
 	@Override
@@ -40,14 +40,12 @@ public class PowerSourceBlockEntity extends BlockEntity implements MenuProvider,
 		}
 		return new NodePos[] {};
 	}
-
-	@Override
-	public String[] getInternalWireLabels(int node) {
+	
+	public String[] getWireLabels() {
 		return this.internalNodeLanes;
 	}
 	
-	@Override
-	public void setInternalWireLabels(int id, String[] laneLabels) {
+	public void setWireLabels(String[] laneLabels) {
 		if (laneLabels.length == 2) {
 			this.internalNodeLanes = laneLabels;
 			this.setChanged();

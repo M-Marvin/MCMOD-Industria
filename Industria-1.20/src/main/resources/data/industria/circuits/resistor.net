@@ -1,2 +1,1 @@
-
-R1P{id} N{NET1} N{NET2} P{resistance}
+R1_P{id} N{NET1} N{NET2} P{resistance}

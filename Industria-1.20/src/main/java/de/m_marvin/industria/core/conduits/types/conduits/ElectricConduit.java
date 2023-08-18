@@ -42,7 +42,7 @@ public abstract class ElectricConduit extends Conduit implements IElectricCondui
 	}
 	
 	@Override
-	public String[] getWireLanes(ConduitPos pos, ConduitEntity instance, NodePos node) {
+	public String[] getWireLanes(Level level, ConduitPos pos, ConduitEntity instance, NodePos node) {
 		if (instance instanceof ElectricConduitEntity entity) {
 			return entity.getWireLanes();
 		}
@@ -50,7 +50,7 @@ public abstract class ElectricConduit extends Conduit implements IElectricCondui
 	}
 	
 	@Override
-	public void setWireLanes(ConduitPos pos, ConduitEntity instance, NodePos node, String[] laneLabels) {
+	public void setWireLanes(Level level, ConduitPos pos, ConduitEntity instance, NodePos node, String[] laneLabels) {
 		if (instance instanceof ElectricConduitEntity entity) {
 			entity.setWireLanes(laneLabels);
 		}
@@ -62,15 +62,17 @@ public abstract class ElectricConduit extends Conduit implements IElectricCondui
 	}
 	
 	@Override
-	public void plotCircuit(Level level, ConduitEntity instance, ConduitPos position, ElectricNetwork circuit, Consumer<CircuitTemplate> plotter) {
+	public void plotCircuit(Level level, ConduitEntity instance, ConduitPos position, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
 		CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "resistor"));
 		template.setProperty("resistance", 10); // TODO Wire resistance
 		
 		NodePos[] connections = getConnections(level, position, instance);
-		for (String wireLabel : this.getWireLanes(position, instance, null)) {
-			template.setNetworkNode("NET1", connections[0], wireLabel);
-			template.setNetworkNode("NET2", connections[1], wireLabel);
-			plotter.accept(template);
+		for (String wireLabel : this.getWireLanes(level, position, instance, null)) {
+			if (!wireLabel.isEmpty()) {
+				template.setNetworkNode("NET1", connections[0], wireLabel);
+				template.setNetworkNode("NET2", connections[1], wireLabel);
+				plotter.accept(template);
+			}
 		}
 	}
 	

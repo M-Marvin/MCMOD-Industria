@@ -1,7 +1,6 @@
 package de.m_marvin.industria.core.client.conduits;
 
 import de.m_marvin.industria.core.client.registries.ParticleRenderTypes;
-import de.m_marvin.industria.core.client.registries.TextureAtlasHolders;
 import de.m_marvin.industria.core.conduits.engine.particles.ConduitParticleOption;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.univec.impl.Vec2f;
@@ -22,8 +21,7 @@ public class ConduitBreakParticle extends SingleQuadParticle {
 		super(pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed);
 		this.gravity = 1.0F;
 		
-		ConduitTextureManager textureManager = TextureAtlasHolders.conduitTextureManager;
-		this.sprite = textureManager.get(conduit);
+		this.sprite = ConduitTextureManager.getInstance().get(conduit);
 		
 		float particleSize = random.nextFloat() * conduit.getConduitType().getThickness();
 		float particleWidth = particleSize / ConduitTextureManager.TEXTURE_MAP_HEIGHT;

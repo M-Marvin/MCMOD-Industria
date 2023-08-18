@@ -6,8 +6,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
+import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
 
-public class CircuitTemplate {
+public class CircuitTemplate implements ICircuitPlot {
 
 	private static final Pattern PROPERTY_PATTERN = Pattern.compile("P\\{([\\w]+)\\}");
 	private static final Pattern NETWORK_PATTERN = Pattern.compile("N\\{([\\w]+)\\}");
@@ -27,6 +28,10 @@ public class CircuitTemplate {
 	public void setProperty(String name, double value) {
 		if (this.properties.containsKey(name)) this.properties.put(name, Double.toString(value));
 	}
+
+	public void setProperty(String name, int value) {
+		if (this.properties.containsKey(name)) this.properties.put(name, Integer.toString(value));
+	}
 	
 	public void setNetworkNode(String name, NodePos node, String lane) {
 		setNetwork(name, node.getKeyString(lane));
@@ -36,6 +41,7 @@ public class CircuitTemplate {
 		if (this.networks.containsKey(name)) this.networks.put(name, net);
 	}
 
+	@Override
 	public void prepare(int templateId) {
 		setProperty(idProperty, templateId);
 	}
@@ -45,6 +51,7 @@ public class CircuitTemplate {
 		this.properties.keySet().forEach(key -> this.properties.put(key, "0"));
 	}
 	
+	@Override
 	public String plot() {
 		Matcher matcher1 = PROPERTY_PATTERN.matcher(template);
 		String plot = matcher1.replaceAll(match -> this.properties.get(match.group(1)));

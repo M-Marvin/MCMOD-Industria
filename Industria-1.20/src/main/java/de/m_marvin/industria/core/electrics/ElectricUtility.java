@@ -3,6 +3,8 @@ package de.m_marvin.industria.core.electrics;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.base.Predicate;
+
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
@@ -22,19 +24,19 @@ public class ElectricUtility {
 		return handler.findComponentsOnNode(node);
 	}
 	
-	public static List<String[]> getLaneLabels(Level level, NodePos node) {
-		return findComponentsOnNode(level, node).stream().filter(Component::isWire).map(component -> component.getWireLanes(level, node)).toList();
+	public static List<String[]> getLaneLabels(Level level, NodePos node, Predicate<Component<?, ?, ?>> componentPredicate) {
+		return findComponentsOnNode(level, node).stream().filter(componentPredicate).map(component -> component.getWireLanes(level, node)).toList();
 	}
 	
-	public static void setLaneLabels(Level level, NodePos node, List<String[]> laneLabels) {
-		List<Component<?, ?, ?>> cables = findComponentsOnNode(level, node).stream().filter(Component::isWire).toList();
+	public static void setLaneLabels(Level level, NodePos node, Predicate<Component<?, ?, ?>> componentPredicate, List<String[]> laneLabels) {
+		List<Component<?, ?, ?>> cables = findComponentsOnNode(level, node).stream().filter(componentPredicate).toList();
 		for (int i = 0; i < Math.min(cables.size(), laneLabels.size()); i++) {
 			cables.get(i).setWireLanes(level, node, laneLabels.get(i));
 		}
 	}
 
-	public static void setLaneLabels(Level level, NodePos node, String[]... laneLabels) {
-		List<Component<?, ?, ?>> cables = findComponentsOnNode(level, node).stream().filter(Component::isWire).toList();
+	public static void setLaneLabels(Level level, NodePos node, Predicate<Component<?, ?, ?>> componentPredicate, String[]... laneLabels) {
+		List<Component<?, ?, ?>> cables = findComponentsOnNode(level, node).stream().filter(componentPredicate).toList();
 		for (int i = 0; i < Math.min(cables.size(), laneLabels.length); i++) {
 			cables.get(i).setWireLanes(level, node, laneLabels[i]);
 		}

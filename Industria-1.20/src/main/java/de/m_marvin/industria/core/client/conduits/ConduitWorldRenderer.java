@@ -10,7 +10,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 
 import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.core.client.registries.TextureAtlasHolders;
 import de.m_marvin.industria.core.client.util.GraphicsUtility;
 import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
@@ -231,7 +230,7 @@ public class ConduitWorldRenderer {
 			
 			for (ConduitEntity conduit : conduitHolder.getConduits()) {
 				
-				TextureAtlasSprite sprite = TextureAtlasHolders.conduitTextureManager.get(conduit.getConduit());
+				TextureAtlasSprite sprite = ConduitTextureManager.getInstance().get(conduit.getConduit());
 				Vec3d playerPosition = Vec3d.fromVec(Minecraft.getInstance().player.position());
 				
 				BlockState nodeAstate = clientLevel.getBlockState(conduit.getPosition().getNodeApos());

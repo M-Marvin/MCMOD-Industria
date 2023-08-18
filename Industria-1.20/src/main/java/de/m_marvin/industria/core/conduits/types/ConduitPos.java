@@ -159,6 +159,8 @@ public class ConduitPos {
 	
 	public static class NodePos {
 		
+		public static final NodePos DUMMY = new NodePos(BlockPos.ZERO, 0);
+		
 		protected BlockPos block;
 		protected int node;
 		
@@ -215,7 +217,7 @@ public class ConduitPos {
 		}
 		
 		public String getKeyString(String lane) {
-			return "Node{pos=" + this.block.getX() + "_" + block.getY() + "_" + block.getZ() + ",id=" + this.node + ",lane=" + lane + "}";
+			return "Node[pos" + this.block.getX() + "_" + block.getY() + "_" + block.getZ() + "_id" + this.node + "_lane" + lane + "]";
 		}
 		
 		public static String getLaneName(String keyString) {

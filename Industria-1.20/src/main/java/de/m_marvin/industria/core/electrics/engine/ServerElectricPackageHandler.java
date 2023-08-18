@@ -11,12 +11,12 @@ public class ServerElectricPackageHandler {
 	
 	public static void handleUpdateJunctionLanes(CUpdateJunctionLanesPackage msg, Context ctx) {
 		
-		BlockPos blockPos = msg.getBlockPos();
+		BlockPos blockPos = msg.getCableNode().getBlock();
 		Level level = ctx.getSender().level();
 		BlockEntity blockEntity = level.getBlockEntity(blockPos);
 		if (blockEntity instanceof IJunctionEdit junctionEditEntity) {
 			if (msg.isInternalNode()) {
-				junctionEditEntity.setInternalWireLabels(msg.getInternalNode(), msg.getLaneLabels());
+				junctionEditEntity.setInternalWireLabels(msg.getCableNode(), msg.getLaneLabels());
 			} else {
 				junctionEditEntity.setCableWireLabels(msg.getCableNode(), msg.getLaneLabels());
 			}

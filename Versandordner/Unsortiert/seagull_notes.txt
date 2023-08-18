@@ -12,7 +12,7 @@ Küken werden immer bei ihrem Nest bleiben, werden sie herausgeschoben, wandern 
 Mit Behutsamkeit können Eier abgebaut werden, der Spieler wird aber dabei von den Eltern-Möwen angegriffen werden. (Außer friedlicher Modus)
 
 Beim Erwachsenwerden droppen Küken 1-3 Daunen (?).
-Erwachsende Möwen droppen Federn. Küken droppen beim Tod nichts.
+Erwachsene Möwen droppen Federn. Küken droppen beim Tod nichts.
 
 Möwen spawnen in allen kalten und gemäßigten Meeresbiomen und am Biom Steinklippe. Nester können nur im Biom Steinklippe gebaut werden. In gefrorenen Meeresbiomen spawnen sie seltener, in warmen und lauwarmen nie. Sie meiden warme und waldreiche Biome.
 

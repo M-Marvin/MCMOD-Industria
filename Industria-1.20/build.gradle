@@ -140,7 +140,7 @@ dependencies {
 	implementation fg.deobf("curse.maven:atlasviewer-633577:4597419")
 	
 	//shade "org.apache.commons:commons-collections4:4.4"
-	shade "com.github.M-Marvin:LIBRARY-NGLink:59aa9388d308e0097ae1002f13a06fd7966ce15c"
+	shade "com.github.M-Marvin:LIBRARY-NGLink:844e6813c7e61b5127bead6deb7cea93990a24a3"
 	shade "com.github.M-Marvin:LIBRARY-UnifiedVectors:main-SNAPSHOT"
 	
 }

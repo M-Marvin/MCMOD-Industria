@@ -40,6 +40,11 @@ public class BlockLuminousAir extends BlockBase {
 		builder.add(FACING);
 	}
 	
+	@Override
+	protected boolean isAir(BlockState state) {
+		return true;
+	}
+	
 	@SuppressWarnings("deprecation")
 	@Override
 	public void neighborChanged(BlockState state, World world, BlockPos pos, Block neighbor, BlockPos neighborPos, boolean moved) {

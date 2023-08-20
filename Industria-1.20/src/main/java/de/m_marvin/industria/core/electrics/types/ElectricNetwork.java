@@ -15,6 +15,7 @@ import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
 import de.m_marvin.nglink.NativeNGLink;
 import de.m_marvin.nglink.NativeNGLink.INGCallback;
 import de.m_marvin.nglink.NativeNGLink.PlotDescription;
+import de.m_marvin.nglink.NativeNGLink.VectorValue;
 import de.m_marvin.nglink.NativeNGLink.VectorValuesAll;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -22,7 +23,6 @@ import net.minecraft.nbt.ListTag;
 public class ElectricNetwork implements INGCallback {
 	
 	protected String title;
-	protected Map<NodePos, Double> nodeVoltages = Maps.newHashMap();
 	protected Set<Component<?, ?, ?>> components = new HashSet<>();
 	protected long lastUpdated;
 	protected int templateCounter;
@@ -31,6 +31,7 @@ public class ElectricNetwork implements INGCallback {
 	protected NativeNGLink nglink;
 	protected long timeLine;
 	protected long simulationStart;
+	//protected Queue<Map<NodePos, Double>> nodeVoltages = Maps.newHashMap();
 	
 	public ElectricNetwork(String titleInfo) {
 		this.title = titleInfo;
@@ -77,7 +78,6 @@ public class ElectricNetwork implements INGCallback {
 		if (this.nglink.isNGSpiceAttached()) this.nglink.detachNGSpice();
 		this.circuitBuilder = new StringBuilder();
 		this.netList = null;
-		this.nodeVoltages.clear();
 		this.components.clear();
 	}
 
@@ -113,7 +113,7 @@ public class ElectricNetwork implements INGCallback {
 		return this.lastUpdated == frame;
 	}
 
-	public void startExecution() {
+	public void startExecution(long gameTime) {
 		if (!this.netList.isEmpty()) {
 			if (!this.nglink.isInitialized()) {
 				if (!nglink.initNGLink(this)) {
@@ -130,7 +130,7 @@ public class ElectricNetwork implements INGCallback {
 				return;
 			}
 			this.timeLine = 0;
-			this.simulationStart = System.currentTimeMillis();
+			this.simulationStart = gameTime;
 		}
 	}
 	
@@ -175,24 +175,17 @@ public class ElectricNetwork implements INGCallback {
 	public void reciveVecData(VectorValuesAll vecData, int vectorCount) {
 		// TODO Auto-generated method stub
 		
+		for (int i = 0; i < vectorCount; i++) {
+			
+			VectorValue value = vecData.values()[i];
+			
+			//System.out.println(value.name() + " = " + value.realdata());
+			
+		}
+		
 	}
 
 	@Override
 	public void reciveInitData(PlotDescription plotInfo) {}
 	
-	
-	
-	
-	
-	
-	
-	
-	public Map<NodePos, Double> getNodeVoltages() {
-		return this.nodeVoltages;
-	}
-	
-	public double getVoltage(NodePos node) {
-		return this.nodeVoltages.getOrDefault(node, 0D);
-	}
-
 }

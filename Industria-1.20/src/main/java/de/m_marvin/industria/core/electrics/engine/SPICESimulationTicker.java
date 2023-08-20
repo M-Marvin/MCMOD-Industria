@@ -4,6 +4,8 @@ import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 
 public class SPICESimulationTicker {
 	
+	public static final int INITIAL_SIMULATION_STEP = 3000;
+	
 	protected final ElectricNetworkHandlerCapability handler;
 	
 	public SPICESimulationTicker(ElectricNetworkHandlerCapability handler) {
@@ -12,26 +14,22 @@ public class SPICESimulationTicker {
 	
 	protected void runSimulation(ElectricNetwork network, int timeStep) {
 		if (network.isExecutionActive()) {
-			long timeLine = 0; //network.getTimeLine();
-			String transientCommand = "tran " + timeStep + "m " + (timeLine + timeStep) + "m " + timeLine + "m uic";
-			//network.getNglink().execCommand(transientCommand);
+			long timeLine = network.getTimeLine();
+			String transientCommand = "tran " + timeStep * 50  + "m " + (timeLine + timeStep) * 50 + "m " + timeLine * 50 + "m";
+			System.out.println(transientCommand);
+			network.getNglink().execCommand(transientCommand);
 			network.setTimeLine(timeLine + timeStep);
 			
 		}
 	}
 	
-	protected void run(int timeStep) {
-		long currentTime = System.currentTimeMillis();
+	protected void tick() {
+		long currentTime = this.handler.getLevel().getGameTime();
 		for (ElectricNetwork network : this.handler.getCircuits()) {
 			if (currentTime >= network.getSimulationStart() + network.getTimeLine()) {
-				runSimulation(network, timeStep);
+				runSimulation(network, INITIAL_SIMULATION_STEP / 50);
 			}
 		}
-	}
-	
-	protected void tick() {
-		int stepTime = (int) Math.floor(this.handler.getLevel().getServer().getAverageTickTime());
-		run(stepTime);
 	}
 	
 }

@@ -497,7 +497,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				comp.onNetworkChange(level);
 			});
 			
-			circuit.startExecution();
+			circuit.startExecution(level.getGameTime());
 			
 		}
 		
@@ -534,7 +534,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	
 	public void startNetworks() {
 		for (ElectricNetwork network : this.circuitNetworks) {
-			network.startExecution();
+			network.startExecution(level.getGameTime());
 		}
 	}
 	

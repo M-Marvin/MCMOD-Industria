@@ -14,6 +14,7 @@ import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
+import de.m_marvin.industria.core.electrics.types.blockentities.JunctionBoxBlockEntity;
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
@@ -44,7 +45,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 
-public abstract class AbstractJunctionBoxBlock extends BaseEntityBlock implements IElectricConnector {
+public class JunctionBoxBlock extends BaseEntityBlock implements IElectricConnector {
 	
 	public static final VoxelShape BLOCK_SHAPE = Block.box(3, 0, 3, 13, 3, 13);
 	
@@ -53,10 +54,15 @@ public abstract class AbstractJunctionBoxBlock extends BaseEntityBlock implement
 			.addModifier(BlockStateProperties.FACING, NodePointSupplier.FACING_MODIFIER_DEFAULT_NORTH);
 	public static final int NODE_COUNT = 4;
 	
-	public AbstractJunctionBoxBlock(Properties pProperties) {
+	public JunctionBoxBlock(Properties pProperties) {
 		super(pProperties);
 	}
-	
+
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+		return new JunctionBoxBlockEntity(pPos, pState);
+	}
+
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> pBuilder) {
 		pBuilder.add(BlockStateProperties.FACING);

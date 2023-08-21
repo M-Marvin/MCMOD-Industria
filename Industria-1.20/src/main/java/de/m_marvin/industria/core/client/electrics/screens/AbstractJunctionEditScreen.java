@@ -17,22 +17,25 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
-public abstract class AbstractJunctionEditScreen extends AbstractContainerScreen<AbstractJunctionEditContainer<?>> {
+public abstract class AbstractJunctionEditScreen<B extends BlockEntity & IJunctionEdit, C extends AbstractJunctionEditContainer<B>> extends AbstractContainerScreen<C> {
 	
-	protected class CableNode implements GuiEventListener, NarratableEntry {
+	protected static class CableNode implements GuiEventListener, NarratableEntry {
 
-		protected class WireNode implements GuiEventListener, NarratableEntry {
+		protected static class WireNode implements GuiEventListener, NarratableEntry {
 
 			public static final int WIRE_NODE_WIDTH = 9;
 			public static final int WIRE_NODE_LENGTH = 18;
 			
+			protected final CableNode cableNode;
 			protected String label;
 			protected final int offset;
 			
-			public WireNode(int offset, String lane) {
+			public WireNode(CableNode cableNode, int offset, String lane) {
 				this.offset = offset;
 				this.label = lane;
+				this.cableNode = cableNode;
 			}
 			
 			@Override
@@ -44,8 +47,8 @@ public abstract class AbstractJunctionEditScreen extends AbstractContainerScreen
 			}
 			
 			public Vec2i getPosition() {
-				Vec2i pos = CableNode.this.position;
-				switch (CableNode.this.orientation) {
+				Vec2i pos = cableNode.position;
+				switch (cableNode.orientation) {
 				case LEFT:
 				case RIGHT:
 					return pos.add(0, this.offset);
@@ -57,14 +60,14 @@ public abstract class AbstractJunctionEditScreen extends AbstractContainerScreen
 			}
 			
 			public CableNode getNode() {
-				return CableNode.this;
+				return cableNode;
 			}
 			
 			@Override
 			public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
 				if (isMouseOver(pMouseX, pMouseY)) {
 					if (pButton == 0) {
-						showNamingField(this);
+						this.cableNode.getScreen().showNamingField(this);
 						return false;
 					} else if (pButton == 1) {
 						return true;
@@ -75,38 +78,38 @@ public abstract class AbstractJunctionEditScreen extends AbstractContainerScreen
 			
 			@Override
 			public boolean isMouseOver(double x, double y) {
-				double i = x - AbstractJunctionEditScreen.this.leftPos;
-				double j = y - AbstractJunctionEditScreen.this.topPos;
-				int i1 = isHorizontal() ? WIRE_NODE_LENGTH : WIRE_NODE_WIDTH;
-				int i2 = !isHorizontal() ? WIRE_NODE_LENGTH : WIRE_NODE_WIDTH;
+				double i = x - getNode().getScreen().leftPos;
+				double j = y - this.getNode().getScreen().topPos;
+				int i1 = this.cableNode.isHorizontal() ? WIRE_NODE_LENGTH : WIRE_NODE_WIDTH;
+				int i2 = !this.cableNode.isHorizontal() ? WIRE_NODE_LENGTH : WIRE_NODE_WIDTH;
 				Vec2i pos = getPosition();
 				return pos.x < i && pos.x + i1 > i && pos.y < j && pos.y + i2 > j;
 			}
 
 			public void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
 
-				int i = AbstractJunctionEditScreen.this.leftPos;
-				int j = AbstractJunctionEditScreen.this.topPos;
+				int i = this.cableNode.getScreen().leftPos;
+				int j = this.cableNode.getScreen().topPos;
 				int w = WIRE_NODE_WIDTH;
 				int h = WIRE_NODE_LENGTH;
 				Vec2i uiPos = getPosition();
 				
-				switch (CableNode.this.orientation) {
+				switch (this.cableNode.orientation) {
 				case UP:
-					pGuiGraphics.blit(getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, h, w, h);
-					pGuiGraphics.blit(getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238 + w, h, w, h);
+					pGuiGraphics.blit(this.cableNode.getScreen().getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, h, w, h);
+					pGuiGraphics.blit(this.cableNode.getScreen().getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238 + w, h, w, h);
 					break;
 				case DOWN:
-					pGuiGraphics.blit(getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 54, w, h);
-					pGuiGraphics.blit(getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238 + w, 54, w, h);
+					pGuiGraphics.blit(this.cableNode.getScreen().getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 54, w, h);
+					pGuiGraphics.blit(this.cableNode.getScreen().getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238 + w, 54, w, h);
 					break;
 				case LEFT:
-					pGuiGraphics.blit(getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 36, h, w);
-					pGuiGraphics.blit(getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 36 + w, h, w);
+					pGuiGraphics.blit(this.cableNode.getScreen().getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 36, h, w);
+					pGuiGraphics.blit(this.cableNode.getScreen().getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 36 + w, h, w);
 					break;
 				case RIGHT:
-					pGuiGraphics.blit(getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 0, h, w);
-					pGuiGraphics.blit(getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 0 + w, h, w);
+					pGuiGraphics.blit(this.cableNode.getScreen().getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 0, h, w);
+					pGuiGraphics.blit(this.cableNode.getScreen().getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 0 + w, h, w);
 					break;
 				}
 				
@@ -122,25 +125,27 @@ public abstract class AbstractJunctionEditScreen extends AbstractContainerScreen
 			
 		}
 		
+		protected final AbstractJunctionEditScreen<?, ?> screen;
 		protected Vec2i position;
 		protected Direction2d orientation;
 		protected NodePos cableNode;
 		protected WireNode[] wireNodes;
 		
-		public CableNode(Vec2i position, Direction2d orientation, NodePos cableNode) {
+		public CableNode(AbstractJunctionEditScreen<?, ?> screen, Vec2i position, Direction2d orientation, NodePos cableNode) {
+			this.screen = screen;
 			this.position = position;
 			this.orientation = orientation;
 			this.cableNode = cableNode;
 			
 			if (this.cableNode != null) {
-				String[] lanes = AbstractJunctionEditScreen.this.menu.getWireLabels(this.cableNode);
+				String[] lanes = screen.menu.getWireLabels(this.cableNode);
 				this.wireNodes = new WireNode[lanes.length];
 				int offset1 = -this.wireNodes.length * 10 / 2;
 				for (int i = 0; i < lanes.length; i++) {
-					this.wireNodes[i] = new WireNode(i * 10 + offset1, lanes[i]);
-					AbstractJunctionEditScreen.this.addWidget(this.wireNodes[i]);
+					this.wireNodes[i] = new WireNode(this, i * 10 + offset1, lanes[i]);
+					this.screen.addWidget(this.wireNodes[i]);
 				}
-				AbstractJunctionEditScreen.this.addWidget(this);
+				this.screen.addWidget(this);
 			} else {
 				this.wireNodes = new WireNode[0];
 			}
@@ -166,6 +171,10 @@ public abstract class AbstractJunctionEditScreen extends AbstractContainerScreen
 			return cableNode;
 		}
 		
+		public AbstractJunctionEditScreen<?, ?> getScreen() {
+			return screen;
+		}
+		
 		public String[] getLanes() {
 			String[] lanes = new String[this.wireNodes.length];
 			for (int i = 0; i < lanes.length; i++) lanes[i] = this.wireNodes[i].label;
@@ -188,22 +197,22 @@ public abstract class AbstractJunctionEditScreen extends AbstractContainerScreen
 		
 	}
 	
-	protected class InternalNode extends CableNode {
+	protected static class InternalNode extends CableNode {
 
 		protected int id;
 		
-		public InternalNode(Vec2i position, Direction2d orientation, int id) {
-			super(position, orientation, null);
+		public InternalNode(AbstractJunctionEditScreen<?, ?> screen, Vec2i position, Direction2d orientation, int id) {
+			super(screen, position, orientation, null);
 			this.id = id;
 			
-			String[] lanes = AbstractJunctionEditScreen.this.menu.getInternalLabels(this.id);
+			String[] lanes = this.screen.menu.getInternalLabels(this.id);
 			this.wireNodes = new WireNode[lanes.length];
 			int offset1 = -this.wireNodes.length * 10 / 2;
 			for (int i = 0; i < lanes.length; i++) {
-				this.wireNodes[i] = new WireNode(i * 10 + offset1, lanes[i]);
-				AbstractJunctionEditScreen.this.addWidget(this.wireNodes[i]);
+				this.wireNodes[i] = new WireNode(this, i * 10 + offset1, lanes[i]);
+				this.screen.addWidget(this.wireNodes[i]);
 			}
-			AbstractJunctionEditScreen.this.addWidget(this);
+			this.screen.addWidget(this);
 			
 		}
 
@@ -219,7 +228,7 @@ public abstract class AbstractJunctionEditScreen extends AbstractContainerScreen
 	protected EditBox namingField;
 	protected CableNode.WireNode selectedNode = null;
 	
-	public AbstractJunctionEditScreen(AbstractJunctionEditContainer<? extends IJunctionEdit> pMenu, Inventory pPlayerInventory, Component pTitle) {
+	public AbstractJunctionEditScreen(C pMenu, Inventory pPlayerInventory, Component pTitle) {
 		super(pMenu, pPlayerInventory, pTitle);
 	}
 	

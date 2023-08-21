@@ -41,7 +41,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.TickEvent.LevelTickEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.ChunkWatchEvent;
 import net.minecraftforge.event.level.LevelEvent;
@@ -67,7 +66,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		return LazyOptional.empty();
 	}
 	
-	private final SPICESimulationTicker simulationTicker;
 	private final Level level;
 	private final HashMap<Object, Component<?, ?, ?>> pos2componentMap = new HashMap<Object, Component<?, ?, ?>>();
 	private final HashMap<NodePos, Set<Component<?, ?, ?>>> node2componentMap = new HashMap<NodePos, Set<Component<?, ?, ?>>>();
@@ -173,7 +171,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	
 	public ElectricNetworkHandlerCapability(Level level) {
 		this.level = level;
-		this.simulationTicker = new SPICESimulationTicker(this);
 	}
 	
 	/* Event handling */
@@ -231,14 +228,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		if (!event.getLevel().isClientSide()) {
 			ElectricNetworkHandlerCapability electricHandler = GameUtility.getCapability((ServerLevel) event.getLevel(), Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 			electricHandler.terminateNetworks();
-		}
-	}
-	
-	@SubscribeEvent
-	public static void onWorldTickEvent(LevelTickEvent event) {
-		if (!event.level.isClientSide()) {
-			ElectricNetworkHandlerCapability electricHandler = GameUtility.getCapability((ServerLevel) event.level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-			electricHandler.getSimulationTicker().tick();
 		}
 	}
 	
@@ -340,10 +329,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		public ChunkPos getChunkPos() {
 			return type.getChunkPos(pos);
 		}
-	}
-	
-	public SPICESimulationTicker getSimulationTicker() {
-		return simulationTicker;
 	}
 	
 	/**
@@ -467,6 +452,21 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	}
 	
 	/**
+	 * Returns the floating voltage currently available on the given node.
+	 * NOTE: Floating means that the voltage is referenced to "global ground", meaning a second voltage is required to calculate the actual difference (the voltage) between the two nodes.
+	 */
+	public double getFloatingNodeVoltage(NodePos node, String lane) {
+		Set<Component<?, ?, ?>> components = this.node2componentMap.get(node);
+		if (components.size() > 0) {
+			ElectricNetwork network = this.component2circuitMap.get(components.stream().findAny().get());
+			if (network != null) {
+				return network.getFloatingNodeVoltage(node, lane);
+			}
+		}
+		return 0.0;
+	}
+	
+	/**
 	 * Updates the network which has a component at the given position
 	 */
 	public <P> void updateNetwork(P position) {
@@ -494,10 +494,13 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 						this.circuitNetworks.remove(previousNetwork);
 					}
 				}
-				comp.onNetworkChange(level);
 			});
 			
-			circuit.startExecution(level.getGameTime());
+			circuit.updateSimulation();
+			
+			circuit.getComponents().forEach((comp) -> { 
+				comp.onNetworkChange(level);
+			});
 			
 		}
 		
@@ -534,7 +537,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	
 	public void startNetworks() {
 		for (ElectricNetwork network : this.circuitNetworks) {
-			network.startExecution(level.getGameTime());
+			network.updateSimulation();
 		}
 	}
 	

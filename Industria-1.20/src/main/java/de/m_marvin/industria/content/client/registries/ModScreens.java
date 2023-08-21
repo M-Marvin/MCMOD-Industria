@@ -1,7 +1,6 @@
 package de.m_marvin.industria.content.client.registries;
 
 import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.content.client.screens.JunctionBoxScreen;
 import de.m_marvin.industria.content.registries.ModMenuTypes;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
@@ -14,7 +13,7 @@ public class ModScreens {
 	
 	@SubscribeEvent
 	public static void onClientSetup(FMLClientSetupEvent event) {
-		MenuScreens.register(ModMenuTypes.JUNCTION_BOX.get(), (a, b, c) -> new JunctionBoxScreen(a, b, c)); // Why can't this this shortened with Class::new ???
+		//MenuScreens.register(ModMenuTypes.JUNCTION_BOX.get(), (a, b, c) -> new JunctionBoxScreen(a, b, c)); // Why can't this this shortened with Class::new ???
 	}
 	
 }

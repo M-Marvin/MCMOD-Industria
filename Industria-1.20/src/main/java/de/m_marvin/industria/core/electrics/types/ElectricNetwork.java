@@ -29,9 +29,7 @@ public class ElectricNetwork implements INGCallback {
 	protected StringBuilder circuitBuilder;
 	protected String netList = "";
 	protected NativeNGLink nglink;
-	protected long timeLine;
-	protected long simulationStart;
-	//protected Queue<Map<NodePos, Double>> nodeVoltages = Maps.newHashMap();
+	protected Map<String, Double> nodeVoltages = Maps.newHashMap();
 	
 	public ElectricNetwork(String titleInfo) {
 		this.title = titleInfo;
@@ -113,7 +111,17 @@ public class ElectricNetwork implements INGCallback {
 		return this.lastUpdated == frame;
 	}
 
-	public void startExecution(long gameTime) {
+	public void terminateExecution() {
+		if (this.nglink.isInitialized()) {
+			this.nglink.detachNGLink();
+		}
+	}
+	
+	public NativeNGLink getNglink() {
+		return nglink;
+	}
+	
+	public void updateSimulation() {
 		if (!this.netList.isEmpty()) {
 			if (!this.nglink.isInitialized()) {
 				if (!nglink.initNGLink(this)) {
@@ -129,35 +137,12 @@ public class ElectricNetwork implements INGCallback {
 				IndustriaCore.LOGGER.warn("Failed to start electric simulation! Failed to load circuit!");
 				return;
 			}
-			this.timeLine = 0;
-			this.simulationStart = gameTime;
+			this.nglink.execCommand("op");
 		}
 	}
 	
-	public void terminateExecution() {
-		if (this.nglink.isInitialized()) {
-			this.nglink.detachNGLink();
-		}
-	}
-	
-	public boolean isExecutionActive() {
-		return this.nglink.isNGSpiceAttached();
-	}
-	
-	public NativeNGLink getNglink() {
-		return nglink;
-	}
-	
-	public long getTimeLine() {
-		return timeLine;
-	}
-	
-	public long getSimulationStart() {
-		return simulationStart;
-	}
-	
-	public void setTimeLine(long timeLine) {
-		this.timeLine = timeLine;
+	public double getFloatingNodeVoltage(NodePos node, String lane) {
+		return this.nodeVoltages.getOrDefault(node.getKeyString(netList), 0.0);
 	}
 	
 	@Override
@@ -173,16 +158,11 @@ public class ElectricNetwork implements INGCallback {
 
 	@Override
 	public void reciveVecData(VectorValuesAll vecData, int vectorCount) {
-		// TODO Auto-generated method stub
-		
+		this.nodeVoltages.clear();
 		for (int i = 0; i < vectorCount; i++) {
-			
 			VectorValue value = vecData.values()[i];
-			
-			//System.out.println(value.name() + " = " + value.realdata());
-			
+			this.nodeVoltages.put(value.name(), value.realdata());
 		}
-		
 	}
 
 	@Override

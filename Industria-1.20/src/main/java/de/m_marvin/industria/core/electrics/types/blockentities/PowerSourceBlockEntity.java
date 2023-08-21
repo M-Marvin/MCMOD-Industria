@@ -2,8 +2,12 @@ package de.m_marvin.industria.core.electrics.types.blockentities;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
-import de.m_marvin.industria.core.electrics.types.containers.PowerSourceJunctionContainer;
+import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
+import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
+import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.InternalNodeConstructor;
 import de.m_marvin.industria.core.registries.BlockEntityTypes;
+import de.m_marvin.industria.core.util.Direction2d;
+import de.m_marvin.univec.impl.Vec2i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -27,7 +31,7 @@ public class PowerSourceBlockEntity extends BlockEntity implements MenuProvider,
 	
 	@Override
 	public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-		return new PowerSourceJunctionContainer(pContainerId, pPlayerInventory, this); 
+		return new JunctionBoxContainer<>(pContainerId, pPlayerInventory, this); 
 	}
 
 	@Override
@@ -82,6 +86,12 @@ public class PowerSourceBlockEntity extends BlockEntity implements MenuProvider,
 	@Override
 	public void handleUpdateTag(CompoundTag tag) {
 		this.load(tag);
+	}
+	
+	@Override
+	public <B extends BlockEntity & IJunctionEdit> void setupScreenConduitNodes(JunctionBoxContainer<B> abstractJunctionBoxScreen, NodePos[] conduitNodes,ExternalNodeConstructor externalNodeConstructor, InternalNodeConstructor internalNodeConstructor) {
+		externalNodeConstructor.construct(new Vec2i(70, 8), 	Direction2d.UP, 	conduitNodes[0]);
+		internalNodeConstructor.construct(new Vec2i(70, 112), 	Direction2d.DOWN, 	0);
 	}
 	
 }

@@ -42,6 +42,10 @@ public class ElectricUtility {
 		}
 	}
 	
+	public static double getFloatingNodeVoltage(Level level, NodePos node, String lane) {
+		ElectricNetworkHandlerCapability handler = GameUtility.getCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		return handler.getFloatingNodeVoltage(node, lane);
+	}
 	
 	
 	// TODO Add all functions

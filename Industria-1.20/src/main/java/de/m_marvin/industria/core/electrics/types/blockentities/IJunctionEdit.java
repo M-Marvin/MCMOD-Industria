@@ -5,8 +5,12 @@ import java.util.List;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
+import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
+import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
+import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.InternalNodeConstructor;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 public interface IJunctionEdit {
 	
@@ -38,5 +42,6 @@ public interface IJunctionEdit {
 	
 	public Level getLevel();
 	public NodePos[] getEditCableNodes(Direction playerFacing, Direction playerHorizontalFacing);
+	public <B extends BlockEntity & IJunctionEdit> void setupScreenConduitNodes(JunctionBoxContainer<B> abstractJunctionBoxScreen, NodePos[] conduitNodes, ExternalNodeConstructor externalNodeConstructor, InternalNodeConstructor internalNodeConstructor);
 	
 }

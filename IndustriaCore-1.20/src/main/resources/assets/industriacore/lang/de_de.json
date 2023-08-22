@@ -2,30 +2,30 @@
 
 "industriacore.item.info.conduit.nodeSelect":		"Erster Punkt ausgew\u00e4hlt (Abbrechen mit Umschalt + Rechtsklick)",
 "industriacore.item.info.conduit.changeNodes":		"L\u00e4nge der Leitung: %1$s (Abbrechen mit Umschalt + Rechtsklick)",
-"industriacore.item.info.conduit.placed":			"Leitung platziert",
-"industriacore.item.info.conduit.abbort":			"Platzieren der Leitung abgebrochen",
-"industriacore.item.info.conduit.failed":			"Platzieren der Leitung fehlgeschlagen",
+"industriacore.item.info.conduit.placed":		"Leitung platziert",
+"industriacore.item.info.conduit.abbort":		"Platzieren der Leitung abgebrochen",
+"industriacore.item.info.conduit.failed":		"Platzieren der Leitung fehlgeschlagen",
 "industriacore.item.info.conduit.toFarNodes":		"Leitung zu lang: %1$s > max. %2$s",
 
 "industriacore.commands.setconduit.success":		"Leitung beginnend bei %1$s %2$s %3$s ge\u00e4ndert",
 "industriacore.commands.setconduit.failure":		"Platzieren der Leitung nicht m\u00f6glich!",
 "industriacore.commands.contraption.remove.success":	"Vorrichtung entfernt",
-"industriacore.commands.contraption.create.failed":		"Konnte keine Vorrichtung erzeugen!",
+"industriacore.commands.contraption.create.failed":	"Erzeugen der Vorrichtung fehlgeschlagen!",
 "industriacore.commands.contraption.create.success": 	"Vorrichtung aus Bl\u00f6cken bei %1$s %2$s %3$s erzeugt",
 "industriacore.commands.contraption.create.tolarge": 	"Der ausgew\u00e4hlte Bereich ist mit %1$sx%2$sx%3$s zu groﬂ! (max. %4$sx%5$sx%6$s)",
 "industriacore.commands.contraption.teleport.success":	"Vorrichtung nach %1$s %2$s %3$s teleportiert",
 "industriacore.commands.contraption.assemble.toLarge":	"Anzahl an Bl\u00f6cken zu groﬂ! (max. %1$s)",
 "industriacore.commands.contraption.assemble.success":	"Vorrichtung aus Bl\u00f6cken bei %1$s %2$s %3$s gebaut",
-"industriacore.commands.contraption.assemble.failed":	"Konnte keine Vorrichtung bauen!",
+"industriacore.commands.contraption.assemble.failed":	"Bau der Vorrichtung fehlgeschlagen!",
 "industriacore.commands.contraption.find.teleported":	"Spieler zu Vorrichtung bei %1$s %2$s %3$s teleportiert",
-"industriacore.commands.contraption.find.noplayer":		"Teleportation nur f\u00fcr Spieler m\u00f6glich!",
-"industriacore.commands.contraption.find.found":		"Vorrichtung befindet sich bei %1$s",
+"industriacore.commands.contraption.find.noplayer":	"Teleportation nur f\u00fcr Spieler m\u00f6glich!",
+"industriacore.commands.contraption.find.found":	"Vorrichtung befindet sich bei %1$s",
 "industriacore.commands.contraption.name.set":		"Name der Vorrichtung zu '%1$s' gesetzt",
 
 "industriacore.commands.coordinates":			"[%1$s %2$s %3$s]",
 "industriacore.argument.conduit.id.invalid":		"Unbekannte Leitung '%s'!",
 "industriacore.argument.contraption.notFound":		"Vorrichtung '%s' nicht gefunden!",
 
-"block.industriacore.power_source": "Spannungsquelle"
+"block.industriacore.power_source": 			"Spannungsquelle"
 
 }

@@ -1,0 +1,63 @@
+modLoader="javafml" #mandatory
+loaderVersion="[39,)" #mandatory
+
+license="All rights reserved"
+
+#issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/" #optional
+
+[[mods]] #mandatory
+
+modId="industriacore" #mandatory
+
+version="${file.jarVersion}" #mandatory
+
+displayName="Industria Core" #mandatory
+# A URL to query for updates for this mod. See the JSON update specification https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/
+
+#updateJSONURL="https://change.me.example.invalid/updates.json" #optional
+
+#displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional
+
+logoFile="logo.png" #optional
+# A text field displayed in the mod UI
+
+# A text field displayed in the mod UI
+authors="M_Marvin" #optional
+
+description='''
+Core-Engine for Industria Mod.
+Also useable by other mods.
+
+Contains folowing Features/Systems:
+- Conduit-System
+- Electricity SPICE-System
+- VS2-Physics-Wrapper
+- Some standart Blocks and Items for debuging and Creative-Mode.
+'''
+
+# A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
+[[dependencies.industriacore]]#optional
+    # the modid of the dependency
+    modId="forge" #mandatory
+    # Does this dependency have to exist - if not, ordering below must be specified
+    mandatory=true #mandatory
+    # The version range of the dependency
+    versionRange="[39,)" #mandatory
+    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
+    ordering="NONE"
+    # Side this dependency is applied on - BOTH, CLIENT or SERVER
+    side="BOTH"
+# Here's another dependency
+[[dependencies.industriacore]]
+    modId="minecraft"
+    mandatory=true
+# This version range declares a minimum of the current minecraft version up to but not including the next major version
+    versionRange="[1.20.1,1.21)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.industriacore]]
+    modId="valkyrienskies"
+    mandatory=true
+    versionRange="[2.1.0-beta.10,)"
+    ordering="NONE"
+    side="BOTH"

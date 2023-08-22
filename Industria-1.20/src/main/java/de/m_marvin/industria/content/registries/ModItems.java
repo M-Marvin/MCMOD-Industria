@@ -31,5 +31,6 @@ public class ModItems {
 	
 	public static final RegistryObject<BlockItem> MOTOR = ITEMS.register("motor", () -> new BlockItem(ModBlocks.MOTOR.get(), new Item.Properties()));
 	public static final RegistryObject<BlockItem> JUNCTION_BOX = ITEMS.register("junction_box", () -> new BlockItem(ModBlocks.JUNCTION_BOX.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> ELECTRIC_LAMP = ITEMS.register("electric_light", () -> new BlockItem(ModBlocks.ELECTRIC_LAMP.get(), new Item.Properties()));
 	
 }

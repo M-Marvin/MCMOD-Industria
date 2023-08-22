@@ -1,5 +1,0 @@
-{
-	"Properties": [ "id", "nominal_current" ],
-	"Networks": [ "NET1", "NET2" ],
-	"IdProperty": "id"
-}

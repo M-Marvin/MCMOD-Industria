@@ -1,0 +1,188 @@
+buildscript {
+    repositories {
+        maven { url = 'https://maven.parchmentmc.org' }
+        maven { url = 'https://maven.minecraftforge.net' }
+        mavenCentral()
+        gradlePluginPortal()
+	}
+ 	
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.parchmentmc:librarian:1.+'
+        classpath 'org.spongepowered:mixingradle:0.7.+'
+    }
+}
+
+plugins {
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'maven-publish'
+apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
+apply plugin: 'eclipse'
+
+version = '1.0'
+group = 'com.yourname.modid' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'modid'
+ 
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+minecraft {
+ 
+    mappings channel: 'parchment', version: '2023.08.13-1.20.1'
+ 	//mappings channel: 'official', version: '1.20.1'
+ 	
+ 	accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+ 	
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'examplemod'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
+ 
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'examplemod'
+   			property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
+ 
+        gameTestServer {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'examplemod'
+   			property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
+ 		
+        data {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+			property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+ 
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+repositories {
+    maven { url 'https://maven.valkyrienskies.org' }
+	maven { url 'https://jitpack.io' }
+    maven {
+    	url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+}
+
+configurations {
+    shade
+    implementation.extendsFrom shade
+}
+
+minecraft.runs.all {
+    lazyToken('minecraft_classpath') {
+        configurations.shade.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
+    }
+}
+
+dependencies {
+ 
+    minecraft 'net.minecraftforge:forge:1.20.1-47.1.44'
+ 	
+    implementation "org.valkyrienskies.core:api:1.1.0+2b2f93f793"
+ 	implementation fg.deobf("curse.maven:kotlinforforge-351264:4630525")
+ 	implementation fg.deobf("curse.maven:valkyrienskies-258371:4654328")
+ 	
+	//implementation fg.deobf("curse.maven:oculus-581495:4578741")
+	//implementation fg.deobf("curse.maven:rubidium-574856:4684247")
+	
+	//implementation fg.deobf("curse.maven:flywheel-486392:3864518") outdated
+	//implementation fg.deobf("curse.maven:create-328085:3864525") outdated
+	implementation fg.deobf("curse.maven:atlasviewer-633577:4597419")
+	
+	//shade "org.apache.commons:commons-collections4:4.4"
+	shade "com.github.M-Marvin:LIBRARY-NGLink:844e6813c7e61b5127bead6deb7cea93990a24a3"
+	shade "com.github.M-Marvin:LIBRARY-UnifiedVectors:main-SNAPSHOT"
+	
+}
+
+shadowJar {
+    archiveClassifier = ''
+    configurations = [project.configurations.shade]
+    //relocate 'com.example.example-thing', "${project.group}.relocated.example-thing"
+    finalizedBy 'reobfShadowJar'
+}
+
+assemble.dependsOn shadowJar
+
+reobf {
+    shadowJar {}
+}
+
+jar {
+    manifest {
+        attributes([
+                "Specification-Title"     : "examplemod",
+                "Specification-Vendor"    : "examplemodsareus",
+                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : project.jar.archiveVersion,
+                "Implementation-Vendor"   : "examplemodsareus",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+jar.finalizedBy('reobfJar')
+ 
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "file://${project.projectDir}/mcmodsrepo"
+        }
+    }
+}

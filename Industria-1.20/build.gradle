@@ -111,7 +111,6 @@ repositories {
             includeGroup "curse.maven"
         }
     }
-    //mavenLocal()
 }
 
 configurations {
@@ -133,12 +132,13 @@ dependencies {
     implementation "org.valkyrienskies.core:api:1.1.0+2b2f93f793"
  	implementation fg.deobf("curse.maven:kotlinforforge-351264:4630525")
  	implementation fg.deobf("curse.maven:valkyrienskies-258371:4654328")
- 	//implementation project(":IndustriaCore-1.20")
- 	implementation project(":IndustriaCore-1.20")
- 	
- 	// Code Dependencies
 	//shade "com.github.M-Marvin:LIBRARY-NGLink:844e6813c7e61b5127bead6deb7cea93990a24a3"
 	//shade "com.github.M-Marvin:LIBRARY-UnifiedVectors:main-SNAPSHOT"
+ 	implementation project(path: ":IndustriaCore-1.20", configuration: 'shadow')
+ 	
+ 	// Code Dependencies
+	implementation "com.github.M-Marvin:LIBRARY-NGLink:844e6813c7e61b5127bead6deb7cea93990a24a3"
+	implementation "com.github.M-Marvin:LIBRARY-UnifiedVectors:main-SNAPSHOT"
 	
 	// Mods used while testing
 	runtimeOnly fg.deobf("curse.maven:atlasviewer-633577:4597419")
@@ -152,7 +152,6 @@ dependencies {
 shadowJar {
     archiveClassifier = ''
     configurations = [project.configurations.shade]
-    //relocate 'com.example.example-thing', "${project.group}.relocated.example-thing"
     finalizedBy 'reobfShadowJar'
 }
 
@@ -165,12 +164,12 @@ reobf {
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "examplemod",
-                "Specification-Vendor"    : "examplemodsareus",
-                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Specification-Title"     : "Industria",
+                "Specification-Vendor"    : "m_marvin",
+                "Specification-Version"   : "1",
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "examplemodsareus",
+                "Implementation-Vendor"   : "m_marvin",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
@@ -189,4 +188,8 @@ publishing {
             url "file://${project.projectDir}/mcmodsrepo"
         }
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }

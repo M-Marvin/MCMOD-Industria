@@ -228,7 +228,6 @@ public class ModItems {
 	public static final Block wolfram_block = new BlockBase("wolfram_block", Material.METAL, 7F, 10F, SoundType.METAL);
 	public static final Block silver_block = new BlockBase("silver_block", Material.METAL, 5F, 6F, SoundType.METAL);
 	public static final Block vanadium_block = new BlockBase("vanadium_block", Material.METAL, 5F, 6F, SoundType.METAL);
-	public static final Block lead_block = new BlockBase("lead_block", Material.METAL, 7F, 8F, SoundType.METAL);
 	public static final Block tin_block = new BlockBase("tin_block", Material.METAL, 5F, 6F, SoundType.METAL);
 	public static final Block cardboard_block = new BlockBurnable("cardboard_block", Material.WOOL, 0.2F, 2.5F, ModSoundEvents.CARDBOARD, 400, 30, 60, true);
 	public static final Block preassure_pipe_item_terminal = new BlockPreassurePipeItemTerminal();
@@ -282,7 +281,6 @@ public class ModItems {
 	public static final Block electrolyt_copper_plates = new BlockBase("electrolyt_copper_plates", Material.METAL, 2.5F, 3F, SoundType.METAL);
 	public static final Block steel_plates = new BlockWeathering("steel_plates", Material.METAL, 2.5F, 3F, SoundType.METAL, exposed_steel_plates);
 	public static final Block redstone_alloy_plates = new BlockPowerEmiting("redstone_alloy_plates", Material.METAL, 2.5F, 3F, SoundType.METAL, 4);
-	public static final Block lead_plates = new BlockBase("lead_plates", Material.METAL, 2.5F, 3F, SoundType.METAL);
 	public static final Block tin_plates = new BlockWeathering("tin_plates", Material.METAL, 2.5F, 3F, SoundType.METAL, exposed_tin_plates);
 	public static final Block silver_plates = new BlockBase("silver_plates", Material.METAL, 2.5F, 3F, SoundType.METAL);
 	public static final Block vanadium_plates = new BlockBase("vanadium_plates", Material.METAL, 2.5F, 3F, SoundType.METAL);
@@ -298,7 +296,6 @@ public class ModItems {
 	public static final Block electrolyt_copper_planks = new BlockBase("electrolyt_copper_planks", Material.METAL, 2.5F, 3F, SoundType.METAL);
 	public static final Block steel_planks = new BlockWeathering("steel_planks", Material.METAL, 2.5F, 3F, SoundType.METAL, exposed_steel_planks);
 	public static final Block redstone_alloy_planks = new BlockPowerEmiting("redstone_alloy_planks", Material.METAL, 2.5F, 3F, SoundType.METAL, 4);
-	public static final Block lead_planks = new BlockBase("lead_planks", Material.METAL, 2.5F, 3F, SoundType.METAL);
 	public static final Block tin_planks = new BlockWeathering("tin_planks", Material.METAL, 2.5F, 3F, SoundType.METAL, exposed_tin_planks);
 	public static final Block silver_planks = new BlockBase("silver_planks", Material.METAL, 2.5F, 3F, SoundType.METAL);
 	public static final Block vanadium_planks = new BlockBase("vanadium_planks", Material.METAL, 2.5F, 3F, SoundType.METAL);
@@ -416,7 +413,6 @@ public class ModItems {
 	public static final Block exposed_iron_planks_slab = new BlockWeatheringSlab("exposed_iron_planks_slab", Material.STONE, 2.5F, 3F, SoundType.STONE, weathered_iron_planks_slab);
 	public static final Block exposed_steel_planks_slab = new BlockWeatheringSlab("exposed_steel_planks_slab", Material.STONE, 2.5F, 3F, SoundType.STONE, weathered_steel_planks_slab);
 	public static final Block tin_planks_slab = new BlockWeatheringSlab("tin_planks_slab", Material.STONE, 2.5F, 3F, SoundType.STONE, exposed_tin_planks_slab);
-	public static final Block lead_planks_slab = new BlockSlabBase("lead_planks_slab", Material.STONE, 2.5F, 3F, SoundType.STONE);
 	public static final Block steel_planks_slab = new BlockWeatheringSlab("steel_planks_slab", Material.STONE, 2.5F, 3F, SoundType.STONE, exposed_steel_planks_slab);
 	public static final Block copper_planks_slab = new BlockWeatheringSlab("copper_planks_slab", Material.STONE, 2.5F, 3F, SoundType.STONE, exposed_copper_planks_slab);
 	public static final Block iron_planks_slab = new BlockWeatheringSlab("iron_planks_slab", Material.STONE, 2.5F, 3F, SoundType.STONE, exposed_iron_planks_slab);
@@ -755,7 +751,6 @@ public class ModItems {
 	public static final Block exposed_tin_planks_stairs = new BlockWeatheringStairs(() -> exposed_tin_planks.defaultBlockState(), "exposed_tin_planks_stairs", Material.STONE, 2.5F, 3F, SoundType.STONE, weathered_tin_planks_stairs);
 	public static final Block exposed_iron_planks_stairs = new BlockWeatheringStairs(() -> exposed_iron_planks.defaultBlockState(), "exposed_iron_planks_stairs", Material.STONE, 2.5F, 3F, SoundType.STONE, weathered_iron_planks_stairs);
 	public static final Block exposed_steel_planks_stairs = new BlockWeatheringStairs(() -> exposed_steel_planks.defaultBlockState(), "exposed_steel_planks_stairs", Material.STONE, 2.5F, 3F, SoundType.STONE, weathered_steel_planks_stairs);
-	public static final Block lead_planks_stairs = new BlockStairsBase(() -> tin_planks.defaultBlockState(), "lead_planks_stairs", Material.STONE, 2.5F, 3F, SoundType.STONE);
 	public static final Block tin_planks_stairs = new BlockWeatheringStairs(() -> tin_planks.defaultBlockState(), "tin_planks_stairs", Material.STONE, 2.5F, 3F, SoundType.STONE, exposed_tin_planks_stairs);
 	public static final Block steel_planks_stairs = new BlockWeatheringStairs(() -> steel_planks.defaultBlockState(), "steel_planks_stairs", Material.STONE, 2.5F, 3F, SoundType.STONE, exposed_steel_planks_stairs);
 	public static final Block copper_planks_stairs = new BlockWeatheringStairs(() -> copper_planks.defaultBlockState(), "copper_planks_stairs", Material.STONE, 2.5F, 3F, SoundType.STONE, exposed_copper_planks_stairs);
@@ -876,7 +871,6 @@ public class ModItems {
 	// Ingots and Nuggets
 	public static final Item metallic_glass_ingot = new ItemBase("metallic_glass_ingot", ModTabs.MATERIALS);
 	public static final Item monel_ingot = new ItemBase("monel_ingot", ModTabs.MATERIALS);
-	public static final Item lead_ingot = new ItemBase("lead_ingot", ModTabs.MATERIALS);
 	public static final Item tin_ingot = new ItemBase("tin_ingot", ModTabs.MATERIALS);
 	public static final Item silver_ingot = new ItemBase("silver_ingot", ModTabs.MATERIALS);
 	public static final Item vanadium_ingot = new ItemBase("vanadium_ingot", ModTabs.MATERIALS);
@@ -889,7 +883,6 @@ public class ModItems {
 	public static final Item redstone_ingot = new ItemBase("redstone_ingot", ModTabs.MATERIALS);
 	public static final Item metallic_glass_nugget = new ItemBase("metallic_glass_nugget", ModTabs.MATERIALS);
 	public static final Item monel_nugget = new ItemBase("monel_nugget", ModTabs.MATERIALS);
-	public static final Item lead_nugget = new ItemBase("lead_nugget", ModTabs.MATERIALS);
 	public static final Item tin_nugget = new ItemBase("tin_nugget", ModTabs.MATERIALS);
 	public static final Item silver_nugget = new ItemBase("silver_nugget", ModTabs.MATERIALS);
 	public static final Item vanadium_nugget = new ItemBase("vanadium_nugget", ModTabs.MATERIALS);
@@ -901,7 +894,6 @@ public class ModItems {
 	public static final Item steel_nugget = new ItemBase("steel_nugget", ModTabs.MATERIALS);
 	public static final Item redstone_nugget = new ItemBase("redstone_nugget", ModTabs.MATERIALS);
 	public static final Item monel_dust = new ItemBase("monel_dust", ModTabs.MATERIALS);
-	public static final Item lead_dust = new ItemBase("lead_dust", ModTabs.MATERIALS);
 	public static final Item tin_dust = new ItemBase("tin_dust", ModTabs.MATERIALS);
 	public static final Item silver_dust = new ItemBase("silver_dust", ModTabs.MATERIALS);
 	public static final Item vanadium_dust = new ItemBase("vanadium_dust", ModTabs.MATERIALS);
@@ -917,7 +909,6 @@ public class ModItems {
 	public static final Item tpo_iron_dust = new ItemBase("tpo_iron_dust", ModTabs.MATERIALS);
 	public static final Item tpo_gold_dust = new ItemBase("tpo_gold_dust", ModTabs.MATERIALS);
 	public static final Item tpo_monel_dust = new ItemBase("tpo_monel_dust", ModTabs.MATERIALS);
-	public static final Item tpo_lead_dust = new ItemBase("tpo_lead_dust", ModTabs.MATERIALS);
 	public static final Item tpo_tin_dust = new ItemBase("tpo_tin_dust", ModTabs.MATERIALS);
 	public static final Item tpo_silver_dust = new ItemBase("tpo_silver_dust", ModTabs.MATERIALS);
 	public static final Item tpo_vanadium_dust = new ItemBase("tpo_vanadium_dust", ModTabs.MATERIALS);
@@ -930,7 +921,6 @@ public class ModItems {
 	public static final Item tpo_redstone_alloy_dust = new ItemBase("tpo_redstone_alloy_dust", ModTabs.MATERIALS);
 	public static final Item monel_plate = new ItemBase("monel_plate", ModTabs.MATERIALS);
 	public static final Item metallic_glass_plate = new ItemBase("metallic_glass_plate", ModTabs.MATERIALS);
-	public static final Item lead_plate = new ItemBase("lead_plate", ModTabs.MATERIALS);
 	public static final Item tin_plate = new ItemBase("tin_plate", ModTabs.MATERIALS);
 	public static final Item silver_plate = new ItemBase("silver_plate", ModTabs.MATERIALS);
 	public static final Item vanadium_plate = new ItemBase("vanadium_plate", ModTabs.MATERIALS);

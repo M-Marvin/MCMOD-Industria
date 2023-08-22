@@ -160,7 +160,6 @@ public class ServerSetup {
 		ModGameRegistry.registerBlock(ModItems.aluminium_block, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.electrolyt_copper_block, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.redstone_alloy_block, ModTabs.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.lead_block, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.tin_block, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.vanadium_block, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.silver_block, ModTabs.BUILDING_BLOCKS);
@@ -186,7 +185,6 @@ public class ServerSetup {
 		ModGameRegistry.registerBlock(ModItems.redstone_alloy_plates, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.silver_plates, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.vanadium_plates, ModTabs.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.lead_plates, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.tin_plates, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.wolfram_plates, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.nickel_plates, ModTabs.BUILDING_BLOCKS);
@@ -202,7 +200,6 @@ public class ServerSetup {
 		ModGameRegistry.registerBlock(ModItems.redstone_alloy_planks, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.silver_planks, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.vanadium_planks, ModTabs.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.lead_planks, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.tin_planks, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.wolfram_planks, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.nickel_planks, ModTabs.BUILDING_BLOCKS);
@@ -432,7 +429,6 @@ public class ServerSetup {
 		ModGameRegistry.registerBlock(ModItems.redstone_alloy_planks_slab, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.silver_planks_slab, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.vanadium_planks_slab, ModTabs.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.lead_planks_slab, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.tin_planks_slab, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.wolfram_planks_slab, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.nickel_planks_slab, ModTabs.BUILDING_BLOCKS);
@@ -779,7 +775,6 @@ public class ServerSetup {
 		ModGameRegistry.registerBlock(ModItems.exposed_tin_planks_stairs, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.exposed_iron_planks_stairs, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.exposed_steel_planks_stairs, ModTabs.BUILDING_BLOCKS);
-		ModGameRegistry.registerBlock(ModItems.lead_planks_stairs, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.tin_planks_stairs, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.steel_planks_stairs, ModTabs.BUILDING_BLOCKS);
 		ModGameRegistry.registerBlock(ModItems.copper_planks_stairs, ModTabs.BUILDING_BLOCKS);
@@ -993,11 +988,6 @@ public class ServerSetup {
 		ModGameRegistry.registerItem(ModItems.aluminium_ingot);
 		ModGameRegistry.registerItem(ModItems.aluminium_nugget);
 		ModGameRegistry.registerItem(ModItems.redstone_nugget);
-		ModGameRegistry.registerItem(ModItems.lead_ingot);
-		ModGameRegistry.registerItem(ModItems.lead_nugget);
-		ModGameRegistry.registerItem(ModItems.lead_dust);
-		ModGameRegistry.registerItem(ModItems.tpo_lead_dust);
-		ModGameRegistry.registerItem(ModItems.lead_plate);
 		ModGameRegistry.registerItem(ModItems.tin_ingot);
 		ModGameRegistry.registerItem(ModItems.tin_nugget);
 		ModGameRegistry.registerItem(ModItems.wolfram_ingot);

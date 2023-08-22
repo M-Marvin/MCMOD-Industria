@@ -50,7 +50,7 @@ public abstract class AbstractConduitItem extends Item implements IScrollOverrid
 		CompoundTag itemTag = context.getItemInHand().getOrCreateTag();
 		float placementLength = (float) MathUtility.clamp(itemTag.getFloat("Length") + delta * 0.1F, 1F, 3F);
 		IndustriaCore.NETWORK.sendToServer(new CChangeConduitPlacementLengthPackage(placementLength));
-		context.getPlayer().displayClientMessage(Component.translatable("industria.item.info.conduit.changeLength", placementLength), true);
+		context.getPlayer().displayClientMessage(Component.translatable("industriacore.item.info.conduit.changeLength", placementLength), true);
 	}
 	
 	public void onChangePlacementLength(ItemStack stack, float length) {
@@ -90,15 +90,15 @@ public abstract class AbstractConduitItem extends Item implements IScrollOverrid
 							itemTag.remove("FirstNode");
 							context.getItemInHand().setTag(itemTag);
 							if (ConduitUtility.setConduit(context.getLevel(), conduitPos, this.getConduit(), conduitLengthBlocks)) {
-								context.getPlayer().displayClientMessage(Component.translatable("industria.item.info.conduit.placed"), true);
+								context.getPlayer().displayClientMessage(Component.translatable("industriacore.item.info.conduit.placed"), true);
 								onPlaced(context.getItemInHand(), conduitLengthBlocks);
 							} else {
-								context.getPlayer().displayClientMessage(Component.translatable("industria.item.info.conduit.failed"), true);
+								context.getPlayer().displayClientMessage(Component.translatable("industriacore.item.info.conduit.failed"), true);
 							}
 							return InteractionResult.SUCCESS;
 							
 						} else {
-							context.getPlayer().displayClientMessage(Component.translatable("industria.item.info.conduit.toFarNodes", conduitLengthBlocks, maxLength), true);
+							context.getPlayer().displayClientMessage(Component.translatable("industriacore.item.info.conduit.toFarNodes", conduitLengthBlocks, maxLength), true);
 							return InteractionResult.FAIL;
 						}
 					}
@@ -115,7 +115,7 @@ public abstract class AbstractConduitItem extends Item implements IScrollOverrid
 					nodeTag.putInt("Id", firstNode);
 					itemTag.put("FirstNode", nodeTag);
 					context.getItemInHand().setTag(itemTag);
-					context.getPlayer().displayClientMessage(Component.translatable("industria.item.info.conduit.nodeSelect"), true);
+					context.getPlayer().displayClientMessage(Component.translatable("industriacore.item.info.conduit.nodeSelect"), true);
 					return InteractionResult.SUCCESS;
 				}
 				return InteractionResult.FAIL;

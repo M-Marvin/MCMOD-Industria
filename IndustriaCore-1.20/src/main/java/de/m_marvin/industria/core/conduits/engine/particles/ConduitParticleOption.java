@@ -17,7 +17,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ConduitParticleOption implements ParticleOptions {
 	
 	public static final DynamicCommandExceptionType ERROR_UNKNOWN_CONDUIT = new DynamicCommandExceptionType((key) -> {
-		return Component.translatable("industria.argument.conduit.id.invalid", key);
+		return Component.translatable("industriacore.argument.conduit.id.invalid", key);
 	});
 	
 	@SuppressWarnings("deprecation")

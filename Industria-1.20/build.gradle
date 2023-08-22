@@ -111,6 +111,7 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    //mavenLocal()
 }
 
 configurations {
@@ -128,20 +129,23 @@ dependencies {
  
     minecraft 'net.minecraftforge:forge:1.20.1-47.1.44'
  	
+ 	// Mod Dependencies
     implementation "org.valkyrienskies.core:api:1.1.0+2b2f93f793"
  	implementation fg.deobf("curse.maven:kotlinforforge-351264:4630525")
  	implementation fg.deobf("curse.maven:valkyrienskies-258371:4654328")
+ 	//implementation project(":IndustriaCore-1.20")
+ 	implementation project(":IndustriaCore-1.20")
  	
-	//implementation fg.deobf("curse.maven:oculus-581495:4578741")
-	//implementation fg.deobf("curse.maven:rubidium-574856:4684247")
+ 	// Code Dependencies
+	//shade "com.github.M-Marvin:LIBRARY-NGLink:844e6813c7e61b5127bead6deb7cea93990a24a3"
+	//shade "com.github.M-Marvin:LIBRARY-UnifiedVectors:main-SNAPSHOT"
 	
-	//implementation fg.deobf("curse.maven:flywheel-486392:3864518") outdated
-	//implementation fg.deobf("curse.maven:create-328085:3864525") outdated
-	implementation fg.deobf("curse.maven:atlasviewer-633577:4597419")
-	
-	//shade "org.apache.commons:commons-collections4:4.4"
-	shade "com.github.M-Marvin:LIBRARY-NGLink:844e6813c7e61b5127bead6deb7cea93990a24a3"
-	shade "com.github.M-Marvin:LIBRARY-UnifiedVectors:main-SNAPSHOT"
+	// Mods used while testing
+	runtimeOnly fg.deobf("curse.maven:atlasviewer-633577:4597419")
+	//runtimeOnly fg.deobf("curse.maven:oculus-581495:4578741")
+	//runtimeOnly fg.deobf("curse.maven:rubidium-574856:4684247")
+	//runtimeOnly fg.deobf("curse.maven:flywheel-486392:3864518") outdated
+	//runtimeOnly fg.deobf("curse.maven:create-328085:3864525") outdated
 	
 }
 

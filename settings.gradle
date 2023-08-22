@@ -1,0 +1,4 @@
+rootProject.name = 'root'
+//include 'IndustriaCore-1.20'
+//include 'Industria-1.20'
+includeBuild 'IndustriaCore-1.20'

@@ -58,7 +58,7 @@ public class PowerSourceBlockEntity extends BlockEntity implements MenuProvider,
 	
 	@Override
 	public Component getDisplayName() {
- 		return Component.translatable("industria.block.power_source");
+ 		return Component.translatable("industriacore.block.power_source");
 	}
 	
 	@Override

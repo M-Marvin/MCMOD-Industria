@@ -24,7 +24,7 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'eclipse'
 
 version = '1.0'
-group = 'com.yourname.modid' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = 'de.m_marvin.industriacore' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'modid'
  
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -128,27 +128,27 @@ dependencies {
  
     minecraft 'net.minecraftforge:forge:1.20.1-47.1.44'
  	
+ 	// Mod Dependencies
     implementation "org.valkyrienskies.core:api:1.1.0+2b2f93f793"
  	implementation fg.deobf("curse.maven:kotlinforforge-351264:4630525")
  	implementation fg.deobf("curse.maven:valkyrienskies-258371:4654328")
  	
-	//implementation fg.deobf("curse.maven:oculus-581495:4578741")
-	//implementation fg.deobf("curse.maven:rubidium-574856:4684247")
-	
-	//implementation fg.deobf("curse.maven:flywheel-486392:3864518") outdated
-	//implementation fg.deobf("curse.maven:create-328085:3864525") outdated
-	implementation fg.deobf("curse.maven:atlasviewer-633577:4597419")
-	
-	//shade "org.apache.commons:commons-collections4:4.4"
+ 	// Code Dependencies
 	shade "com.github.M-Marvin:LIBRARY-NGLink:844e6813c7e61b5127bead6deb7cea93990a24a3"
 	shade "com.github.M-Marvin:LIBRARY-UnifiedVectors:main-SNAPSHOT"
+	
+	// Mods used while testing
+	runtimeOnly fg.deobf("curse.maven:atlasviewer-633577:4597419")
+	//runtimeOnly fg.deobf("curse.maven:oculus-581495:4578741")
+	//runtimeOnly fg.deobf("curse.maven:rubidium-574856:4684247")
+	//runtimeOnly fg.deobf("curse.maven:flywheel-486392:3864518") outdated
+	//runtimeOnly fg.deobf("curse.maven:create-328085:3864525") outdated
 	
 }
 
 shadowJar {
     archiveClassifier = ''
     configurations = [project.configurations.shade]
-    //relocate 'com.example.example-thing', "${project.group}.relocated.example-thing"
     finalizedBy 'reobfShadowJar'
 }
 
@@ -161,12 +161,12 @@ reobf {
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "examplemod",
-                "Specification-Vendor"    : "examplemodsareus",
+                "Specification-Title"     : "IndustriaCore",
+                "Specification-Vendor"    : "m_marvin",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "examplemodsareus",
+                "Implementation-Vendor"   : "m_marvin",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
@@ -176,6 +176,9 @@ jar.finalizedBy('reobfJar')
  
 publishing {
     publications {
+        maven(MavenPublication) {
+			from components.java
+        }
         mavenJava(MavenPublication) {
             artifact jar
         }

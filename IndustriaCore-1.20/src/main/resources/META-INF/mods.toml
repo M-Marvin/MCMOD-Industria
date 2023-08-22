@@ -58,6 +58,6 @@ Contains folowing Features/Systems:
 [[dependencies.industriacore]]
     modId="valkyrienskies"
     mandatory=true
-    versionRange="[2.1.0-beta.10,)"
+    versionRange="[v2.3.0-beta.4,)"
     ordering="NONE"
     side="BOTH"

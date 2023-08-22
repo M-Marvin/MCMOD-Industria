@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=south": { "model": "industriacore:block/power_source", "x": -90 },
+    "facing=north": { "model": "industriacore:block/power_source", "x": 90 },
+    "facing=west": { "model": "industriacore:block/power_source", "y": 90, "x": -90 },
+    "facing=east": { "model": "industriacore:block/power_source", "y": 90, "x": 90 },
+    "facing=up": { "model": "industriacore:block/power_source" },
+    "facing=down": { "model": "industriacore:block/power_source", "x": 180 }
+  }
+}

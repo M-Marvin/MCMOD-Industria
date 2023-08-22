@@ -32,7 +32,7 @@ public class ContraptionIdArgument implements ArgumentType<ContraptionIdArgument
 	public static final String CONTRAPTION_PREFIX = "contraption";
 	public static final Collection<String> EXAMPLES = Arrays.asList("contraption1", "contraption42", "examplename");
 	public static final DynamicCommandExceptionType ERROR_NON_EXISTING_CONTRAPTION = new DynamicCommandExceptionType((object) -> {
-		return Component.translatable("industria.argument.contraption.notFound", object);
+		return Component.translatable("industriacore.argument.contraption.notFound", object);
 	});
 	
 	public static ContraptionIdArgument contraption() {

@@ -1,0 +1,26 @@
+[
+  {
+    "block": "industriacore:power_source",
+    "mass": 10.0
+  },
+  {
+    "block": "minecraft:command_block",
+    "mass": 10.0
+  },
+  {
+    "block": "minecraft:chain_command_block",
+    "mass": 10.0
+  },
+  {
+    "block": "minecraft:repeating_command_block",
+    "mass": 10.0
+  },
+  {
+    "block": "minecraft:jigsaw",
+    "mass": 10.0
+  },
+  {
+    "block": "minecraft:structure_block",
+    "mass": 10.0
+  }
+]

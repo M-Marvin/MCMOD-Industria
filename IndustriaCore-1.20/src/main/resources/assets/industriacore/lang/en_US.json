@@ -23,7 +23,7 @@
 "industriacore.commands.contraption.name.set":		"Name of Contraption set to '%1$s'",
 
 "industriacore.commands.coordinates":			"[%1$s %2$s %3$s]",
-"industriacore.argument.conduit.id.invalid":     	"Unknown Conduit '%s'",
+"industriacore.argument.conduit.id.invalid":     	"Conduit '%s unknown'",
 "industriacore.argument.contraption.notFound":		"Contraption '%s' not found!",
 
 "block.industriacorecore.power_source": 		"Voltage source"

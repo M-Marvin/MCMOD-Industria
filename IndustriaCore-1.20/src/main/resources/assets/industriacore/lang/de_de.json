@@ -23,7 +23,7 @@
 "industriacore.commands.contraption.name.set":		"Name der Vorrichtung zu '%1$s' gesetzt",
 
 "industriacore.commands.coordinates":			"[%1$s %2$s %3$s]",
-"industriacore.argument.conduit.id.invalid":		"Unbekannte Leitung '%s'!",
+"industriacore.argument.conduit.id.invalid":		"Leitung '%s' nicht bekannt!",
 "industriacore.argument.contraption.notFound":		"Vorrichtung '%s' nicht gefunden!",
 
 "block.industriacore.power_source": 			"Spannungsquelle"

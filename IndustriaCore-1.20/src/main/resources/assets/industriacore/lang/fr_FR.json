@@ -23,7 +23,7 @@
 "industriacore.commands.contraption.name.set":		"Nomm\u00e9 l\u2019appareil '%1$s'",
 
 "industriacore.commands.coordinates":			"[%1$s %2$s %3$s]",
-"industriacore.argument.conduit.id.invalid":		"C\u00e2ble inconnu '%s'"
+"industriacore.argument.conduit.id.invalid":		"C\u00e2ble '%s' inconnu"
 "industriacore.argument.contraption.notFound":		"Appareil '%s' introuvable!",
 
 "block.industriacorecore.power_source": 		"Source de voltage"

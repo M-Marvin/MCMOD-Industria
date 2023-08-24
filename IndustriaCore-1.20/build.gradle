@@ -14,7 +14,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.github.johnrengelman.shadow' // version '7.1.2'
+    id 'com.github.johnrengelman.shadow'
 }
 
 apply plugin: 'net.minecraftforge.gradle'
@@ -25,9 +25,11 @@ apply plugin: 'eclipse'
 
 version = '1.0'
 group = 'de.m_marvin.industriacore' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'modid'
+archivesBaseName = 'industriacore'
  
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+//jarJar.enable()
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
@@ -136,9 +138,12 @@ dependencies {
  	// Code Dependencies
 	shade "com.github.M-Marvin:LIBRARY-NGLink:844e6813c7e61b5127bead6deb7cea93990a24a3"
 	shade "com.github.M-Marvin:LIBRARY-UnifiedVectors:main-SNAPSHOT"
+	//jarJar(group: "com.github.M-Marvin", name: "LIBRARY-NGLink", version: "844e6813c7e61b5127bead6deb7cea93990a24a3")
+	//jarJar(group: "com.github.M-Marvin", name: "LIBRARY-UnifiedVectors", version: "main-SNAPSHOT")
 	
 	// Mods used while testing
 	runtimeOnly fg.deobf("curse.maven:atlasviewer-633577:4597419")
+	
 	//runtimeOnly fg.deobf("curse.maven:oculus-581495:4578741")
 	//runtimeOnly fg.deobf("curse.maven:rubidium-574856:4684247")
 	//runtimeOnly fg.deobf("curse.maven:flywheel-486392:3864518") outdated
@@ -149,7 +154,7 @@ dependencies {
 shadowJar {
     archiveClassifier = ''
     configurations = [project.configurations.shade]
-    finalizedBy 'reobfShadowJar'
+//    finalizedBy 'reobfShadowJar'
 }
 
 assemble.dependsOn shadowJar
@@ -174,10 +179,10 @@ jar {
 
 // Example configuration to allow publishing using the maven-publish plugin
 // This is the preferred method to reobfuscate your jar file
-jar.finalizedBy('reobfJar')
+//jar.finalizedBy('reobfJar')
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
 publish.dependsOn('reobfJar')
- 
+
 publishing {
     publications {
         mavenJava(MavenPublication) {

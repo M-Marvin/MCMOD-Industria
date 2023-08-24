@@ -3,19 +3,7 @@ package de.m_marvin.industria.content;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import de.m_marvin.industria.core.Config;
-import de.m_marvin.industria.core.registries.BlockEntityTypes;
-import de.m_marvin.industria.core.registries.Blocks;
-import de.m_marvin.industria.core.registries.CommandArguments;
-import de.m_marvin.industria.core.registries.Conduits;
-import de.m_marvin.industria.core.registries.Container;
-import de.m_marvin.industria.core.registries.Items;
-import de.m_marvin.industria.core.registries.NetworkPackages;
-import de.m_marvin.industria.core.registries.ParticleTypes;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
 
 @Mod("industria")
 public class Industria {
@@ -26,15 +14,15 @@ public class Industria {
 	
 	public Industria() {
 		
-//		Config.register();
-//		NetworkPackages.setupPackages(NETWORK);
-//		Conduits.register();
-//		Container.register();
-//		ParticleTypes.register();
-//		Blocks.register();
-//		Items.register();
-//		BlockEntityTypes.register();
-//		CommandArguments.register();
+		//ModConfig.register();
+		//ModNetworkPackages.setupPackages(NETWORK);
+//		ModConduits.register();
+		//ModContainer.register();
+		//ModParticleTypes.register();
+//		ModBlocks.register();
+//		ModItems.register();
+//		ModBlockEntityTypes.register();
+		//ModCommandArguments.register();
 		
 	}
 	

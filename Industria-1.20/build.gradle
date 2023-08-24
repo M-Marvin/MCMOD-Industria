@@ -14,7 +14,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'com.github.johnrengelman.shadow'
 }
 
 apply plugin: 'net.minecraftforge.gradle'
@@ -24,10 +24,12 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'eclipse'
 
 version = '1.0'
-group = 'com.yourname.modid' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'modid'
+group = 'de.m_marvin.industria' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'industria'
  
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+//jarJar.enable()
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
@@ -132,13 +134,11 @@ dependencies {
     implementation "org.valkyrienskies.core:api:1.1.0+2b2f93f793"
  	implementation fg.deobf("curse.maven:kotlinforforge-351264:4630525")
  	implementation fg.deobf("curse.maven:valkyrienskies-258371:4654328")
-	//shade "com.github.M-Marvin:LIBRARY-NGLink:844e6813c7e61b5127bead6deb7cea93990a24a3"
-	//shade "com.github.M-Marvin:LIBRARY-UnifiedVectors:main-SNAPSHOT"
+	implementation "com.github.M-Marvin:LIBRARY-NGLink:844e6813c7e61b5127bead6deb7cea93990a24a3"
+	implementation "com.github.M-Marvin:LIBRARY-UnifiedVectors:main-SNAPSHOT"
  	implementation project(path: ":IndustriaCore-1.20", configuration: 'shadow')
  	
  	// Code Dependencies
-	implementation "com.github.M-Marvin:LIBRARY-NGLink:844e6813c7e61b5127bead6deb7cea93990a24a3"
-	implementation "com.github.M-Marvin:LIBRARY-UnifiedVectors:main-SNAPSHOT"
 	
 	// Mods used while testing
 	runtimeOnly fg.deobf("curse.maven:atlasviewer-633577:4597419")

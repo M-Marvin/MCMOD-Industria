@@ -9,13 +9,8 @@ import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
-import de.m_marvin.industria.core.registries.Capabilities;
-import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.core.BlockPos;
@@ -145,7 +140,7 @@ public class MotorBlock extends Block implements IElectricConnector {
 		if (pState.getValue(ModBlockStateProperties.MOTOR_MODE) == MotorMode.GENERATOR) {
 			ElectricUtility.updateNetwork(pLevel, pPos);
 		} else {
-			ElectricNetworkHandlerCapability networkHandler = GameUtility.getCapability(pLevel, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+			//ElectricNetworkHandlerCapability networkHandler = GameUtility.getCapability(pLevel, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 			BlockEntity entity = pLevel.getBlockEntity(pPos);
 			if (entity instanceof MotorBlockEntity motor) {
 //				double voltage = networkHandler.getVoltageAt(getConnectionPoints(pPos, pState)[0]);

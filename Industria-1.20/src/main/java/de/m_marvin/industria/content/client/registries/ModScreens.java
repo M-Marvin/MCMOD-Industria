@@ -1,8 +1,6 @@
 package de.m_marvin.industria.content.client.registries;
 
 import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.content.registries.ModMenuTypes;
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;

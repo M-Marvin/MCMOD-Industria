@@ -1,6 +1,6 @@
 package de.m_marvin.industria.content.registries;
 
-import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.content.Industria;
 import de.m_marvin.industria.content.blocks.ConduitClampBlock;
 import de.m_marvin.industria.content.blocks.ElectricLampBlock;
 import de.m_marvin.industria.content.blocks.MotorBlock;
@@ -14,7 +14,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class ModBlocks {
 
-	private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, IndustriaCore.MODID);
+	private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Industria.MODID);
 	public static void register() {
 		BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}

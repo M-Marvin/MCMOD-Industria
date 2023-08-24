@@ -1,6 +1,6 @@
 package de.m_marvin.industria.content.registries;
 
-import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.content.Industria;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -8,7 +8,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModMenuTypes {
 
-	private static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, IndustriaCore.MODID);
+	private static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Industria.MODID);
 	public static void register() {
 		MENU_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}

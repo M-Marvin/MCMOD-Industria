@@ -46,7 +46,7 @@ public class ElectricNetwork implements INGCallback {
 				component.serializeNbt(compTag);
 				componentsTag.add(compTag);
 			} catch (Exception e) {
-				System.err.println("Failed to serialize electric component at " + component.pos() + "!");
+				IndustriaCore.LOGGER.error("Failed to serialize electric component at " + component.pos() + "!");
 				e.printStackTrace();
 			}
 		}

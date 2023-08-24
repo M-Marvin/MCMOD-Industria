@@ -1,6 +1,6 @@
 package de.m_marvin.industria.content.registries;
 
-import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.content.Industria;
 import de.m_marvin.industria.content.items.ConduitCableItem;
 import de.m_marvin.industria.content.items.ScrewDriverItem;
 import net.minecraft.world.item.BlockItem;
@@ -12,7 +12,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class ModItems {
 	
-	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, IndustriaCore.MODID);
+	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Industria.MODID);
 	public static void register() {
 		ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}

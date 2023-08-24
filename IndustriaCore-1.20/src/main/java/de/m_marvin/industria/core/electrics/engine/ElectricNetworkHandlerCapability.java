@@ -118,8 +118,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "Loaded " + this.circuitNetworks.size() + "/" + nbt.size() + " electric networks");
 		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "Loaded " + this.pos2componentMap.size() + " electric components");
 	}
-
-	// TODO Change circuit file path
 	
 	public String saveCircuit(String netList) {
 		if (this.level instanceof ServerLevel serverLevel) {
@@ -209,7 +207,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		ElectricNetworkHandlerCapability electricHandler = GameUtility.getCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 		Set<Component<?, ?, ?>> components = electricHandler.findComponentsInChunk(event.getPos());
 		if (!components.isEmpty()) {
-			 IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> event.getChunk()), new SSyncComponentsPackage(components, event.getChunk().getPos(), SyncRequestType.ADDED));
+			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> event.getChunk()), new SSyncComponentsPackage(components, event.getChunk().getPos(), SyncRequestType.ADDED));
 		}
 	}
 	
@@ -423,6 +421,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	 * Adds a component to the network but does not cause any updates
 	 */
 	public <I, P, T> void addToNetwork(Component<I, P, T> component) {
+		if (component.instance() == null) return;
 		this.pos2componentMap.put(component.pos, component);
 		for (NodePos node : component.type().getConnections(this.level, component.pos, component.instance())) {
 			Set<Component<?, ?, ?>> componentSet = this.node2componentMap.getOrDefault(node, new HashSet<Component<?, ?, ?>>());
@@ -530,12 +529,18 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		
 	}
 	
+	/**
+	 * Terminates all running simulations and detaches all nglink instances
+	 */
 	public void terminateNetworks() {
 		for (ElectricNetwork network : this.circuitNetworks) {
 			network.terminateExecution();
 		}
 	}
 	
+	/**
+	 * Attaches nglink instances for all loaded networks and starts the initial simulation
+	 */
 	public void startNetworks() {
 		for (ElectricNetwork network : this.circuitNetworks) {
 			network.updateSimulation();

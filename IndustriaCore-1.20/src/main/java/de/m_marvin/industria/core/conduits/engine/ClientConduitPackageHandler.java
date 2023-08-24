@@ -6,20 +6,20 @@ import java.util.List;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
-import de.m_marvin.industria.core.conduits.engine.network.SSyncConduitPackage;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitLoadEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitUnloadEvent;
 import de.m_marvin.industria.core.conduits.engine.network.SCConduitPackage.SCBreakConduitPackage;
 import de.m_marvin.industria.core.conduits.engine.network.SCConduitPackage.SCPlaceConduitPackage;
+import de.m_marvin.industria.core.conduits.engine.network.SSyncConduitPackage;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.registries.Capabilities;
+import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.SyncRequestType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -29,7 +29,7 @@ import net.minecraftforge.network.NetworkEvent.Context;
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE, value=Dist.CLIENT)
 public class ClientConduitPackageHandler {
 	
-	/* Handle SSyncPlacedConduit package */
+	/* Handle SSyncConduitPackage package */
 	
 	private static HashMap<ChunkPos, SSyncConduitPackage> receivedPackages = new HashMap<ChunkPos, SSyncConduitPackage>();
 	private static List<ChunkPos> handledPackages = new ArrayList<>();
@@ -37,22 +37,12 @@ public class ClientConduitPackageHandler {
 	@SuppressWarnings("resource")
 	public static void handleSyncConduitsFromServer(SSyncConduitPackage msg, NetworkEvent.Context ctx) {
 		if (Minecraft.getInstance().level.isLoaded(msg.getChunkPos().getWorldPosition())) {
-			handlePackageInLoadedChunk(msg);
+			if (!handlePackageInLoadedChunk(msg)) receivedPackages.put(msg.getChunkPos(), msg);
 		} else {
 			synchronized (receivedPackages) {
 				receivedPackages.put(msg.getChunkPos(), msg);
 			}
 		}
-	}
-
-	@SuppressWarnings("resource")
-	public static void handlePlaceConduit(SCPlaceConduitPackage msg, Context ctx) {
-		ConduitUtility.setConduit(Minecraft.getInstance().level, msg.getPosition(), msg.getConduit(), msg.getLength());
-	}
-	
-	@SuppressWarnings("resource")
-	public static void handleRemoveConduit(SCBreakConduitPackage msg, Context ctx) {
-		ConduitUtility.removeConduit(Minecraft.getInstance().level, msg.getPosition(), msg.dropItems());
 	}
 	
 	@SuppressWarnings("resource")
@@ -64,37 +54,46 @@ public class ClientConduitPackageHandler {
 				if (level.isLoaded(chunk.getWorldPosition())) {
 					SSyncConduitPackage msg = receivedPackages.get(chunk);
 					if (msg != null) {
-						handlePackageInLoadedChunk(msg);
-						handledPackages.add(chunk);
+						if (handlePackageInLoadedChunk(msg)) handledPackages.add(chunk);
 					}
 				}
 			}
 			synchronized (receivedPackages) {
 				handledPackages.forEach(receivedPackages::remove);
 			}
-			handledPackages.clear();}
+			handledPackages.clear();
 		}
-	
+	}
+
 	@SuppressWarnings("resource")
-	public static void handlePackageInLoadedChunk(SSyncConduitPackage msg) {
+	public static boolean handlePackageInLoadedChunk(SSyncConduitPackage msg) {
 		Level level = Minecraft.getInstance().level;
+		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		
-		if (level != null) {
-			LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
-			if (conduitHolder.isPresent()) {
-				if (msg.getRquest() == SyncRequestType.ADDED) {
-					for (ConduitEntity conduitState : msg.conduits) {
-						conduitHolder.resolve().get().addConduit(conduitState);
-						MinecraftForge.EVENT_BUS.post(new ConduitLoadEvent(level, conduitState.getPosition(), conduitState));
-					}
-				} else if (msg.getRquest() == SyncRequestType.REMOVED) {
-					for (ConduitEntity conduitState : msg.conduits) {
-						conduitHolder.resolve().get().removeConduit(conduitState);
-						MinecraftForge.EVENT_BUS.post(new ConduitUnloadEvent(level, conduitState.getPosition(), conduitState));
-					}
-				}
+		if (msg.getRquest() == SyncRequestType.ADDED) {
+			for (ConduitEntity conduitState : msg.conduits) {
+				handler.addConduit(conduitState);
+				MinecraftForge.EVENT_BUS.post(new ConduitLoadEvent(level, conduitState.getPosition(), conduitState));
+			}
+		} else if (msg.getRquest() == SyncRequestType.REMOVED) {
+			for (ConduitEntity conduitState : msg.conduits) {
+				handler.removeConduit(conduitState);
+				MinecraftForge.EVENT_BUS.post(new ConduitUnloadEvent(level, conduitState.getPosition(), conduitState));
 			}
 		}
+		return true;
+	}
+
+	/* Handle SCConduitPackage package */
+	
+	@SuppressWarnings("resource")
+	public static void handlePlaceConduit(SCPlaceConduitPackage msg, Context ctx) {
+		ConduitUtility.setConduit(Minecraft.getInstance().level, msg.getPosition(), msg.getConduit(), msg.getLength());
+	}
+	
+	@SuppressWarnings("resource")
+	public static void handleRemoveConduit(SCBreakConduitPackage msg, Context ctx) {
+		ConduitUtility.removeConduit(Minecraft.getInstance().level, msg.getPosition(), msg.dropItems());
 	}
 	
 	/* End of package handling */

@@ -18,6 +18,7 @@ import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.registries.Conduits;
+import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.SyncRequestType;
 import de.m_marvin.univec.impl.Vec3d;
@@ -95,17 +96,15 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	/* Event handling */
 
 	@SubscribeEvent
-	// Send corresponding conduits when server detects loading of a chunk trough a client
 	public static void onClientLoadsChunk(ChunkWatchEvent.Watch event) {
 		ServerLevel level = event.getLevel();
-		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
-		if (conduitHolder.isPresent()) {
-			List<ConduitEntity> conduits = conduitHolder.resolve().get().getConduitsInChunk(event.getPos());	
-			if (conduits.size() > 0) {
-				IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(() -> event.getPlayer()), new SSyncConduitPackage(conduits, event.getPos(), SyncRequestType.ADDED));
-				for (ConduitEntity conduitState : conduits) {
-					MinecraftForge.EVENT_BUS.post(new ConduitLoadEvent(level, conduitState.getPosition(), conduitState));
-				}
+		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
+		
+		List<ConduitEntity> conduits = handler.getConduitsInChunk(event.getPos());	
+		if (conduits.size() > 0) {
+			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(() -> event.getPlayer()), new SSyncConduitPackage(conduits, event.getPos(), SyncRequestType.ADDED));
+			for (ConduitEntity conduitState : conduits) {
+				MinecraftForge.EVENT_BUS.post(new ConduitLoadEvent(level, conduitState.getPosition(), conduitState));
 			}
 		}
 	}
@@ -113,14 +112,13 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	@SubscribeEvent
 	public static void onClientUnloadChunk(ChunkWatchEvent.UnWatch event) {
 		ServerLevel level = event.getLevel();
-		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
-		if (conduitHolder.isPresent()) {
-			List<ConduitEntity> conduits = conduitHolder.resolve().get().getConduitsInChunk(event.getPos());	
-			if (conduits.size() > 0) {
-				IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(() -> event.getPlayer()), new SSyncConduitPackage(conduits, event.getPos(), SyncRequestType.REMOVED));
-				for (ConduitEntity conduitState : conduits) {
-					MinecraftForge.EVENT_BUS.post(new ConduitUnloadEvent(level, conduitState.getPosition(), conduitState));
-				}
+		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
+		
+		List<ConduitEntity> conduits = handler.getConduitsInChunk(event.getPos());	
+		if (conduits.size() > 0) {
+			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(() -> event.getPlayer()), new SSyncConduitPackage(conduits, event.getPos(), SyncRequestType.REMOVED));
+			for (ConduitEntity conduitState : conduits) {
+				MinecraftForge.EVENT_BUS.post(new ConduitUnloadEvent(level, conduitState.getPosition(), conduitState));
 			}
 		}
 	}
@@ -129,10 +127,9 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	// Ticking conduits on both sides
 	public static void onWorldTick(LevelTickEvent event) {
 		Level level = event.level;
-		LazyOptional<ConduitHandlerCapability> conduitCap = level.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
-		if (conduitCap.isPresent()) {
-			conduitCap.resolve().get().update();
-		}
+		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
+		
+		handler.update();
 	}
 	
 	@SubscribeEvent
@@ -389,43 +386,5 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 		}
 		
 	}
-	
-	// TODO Remove if not able to fix
-//	@SuppressWarnings("deprecation")
-//	public static class ContraptionAttachment implements ShipForcesInducer {
-//		
-//		public static ContraptionAttachment attachIfMissing(ServerShip contraption) {
-//			ContraptionAttachment attachment = contraption.getAttachment(ContraptionAttachment.class);
-//			if (attachment == null) {
-//				attachment = new ContraptionAttachment();
-//				contraption.saveAttachment(ContraptionAttachment.class, attachment);
-//			}
-//			return attachment;
-//		}
-//		
-//		//protected Level level;
-//		protected Level level;
-//		protected HashMap<PlacedConduit, Integer> conduits2node = new HashMap<PlacedConduit, Integer>();
-//		protected List<PlacedConduit> removedConduits = new ArrayList<PlacedConduit>();
-//		
-//		public void notifyNewConduit(Level level, PlacedConduit conduit, int nodeId) {
-//			assert nodeId >= 0 && nodeId <= 1 : "The node ID can only be 0 or 1!";
-//			if (this.level == null) this.level = level;
-//			if (!conduits2node.containsKey(conduit)) conduits2node.put(conduit, nodeId);
-//		}
-//		
-//		@Override
-//		public void applyForces(PhysShip contraption) {
-//			
-//			this.conduits2node.forEach((conduit, nodeId) -> {
-//				if (!conduit.updateContraptions(level, contraption, nodeId)) {
-//					this.removedConduits.add(conduit);
-//				}
-//			});
-//			this.removedConduits.forEach(this.conduits2node::remove);
-//			this.removedConduits.clear();
-//		}
-//		
-//	}
 	
 }

@@ -70,10 +70,6 @@ public class Conduit {
 		return texture;
 	}
 	
-	public ResourceLocation getTextureLoc() {
-		return new ResourceLocation(this.texture.getNamespace(), "textures/" + this.texture.getPath() + ".png");
-	}
-	
 	public Item getItem() {
 		return this.item;
 	}

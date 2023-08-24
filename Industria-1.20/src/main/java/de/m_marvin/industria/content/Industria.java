@@ -3,6 +3,10 @@ package de.m_marvin.industria.content;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
+import de.m_marvin.industria.content.registries.ModBlocks;
+import de.m_marvin.industria.content.registries.ModConduits;
+import de.m_marvin.industria.content.registries.ModItems;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod("industria")
@@ -16,12 +20,12 @@ public class Industria {
 		
 		//ModConfig.register();
 		//ModNetworkPackages.setupPackages(NETWORK);
-//		ModConduits.register();
+		ModConduits.register();
 		//ModContainer.register();
 		//ModParticleTypes.register();
-//		ModBlocks.register();
-//		ModItems.register();
-//		ModBlockEntityTypes.register();
+		ModBlocks.register();
+		ModItems.register();
+		ModBlockEntityTypes.register();
 		//ModCommandArguments.register();
 		
 	}

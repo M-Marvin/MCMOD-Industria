@@ -21,7 +21,8 @@ public class ElectricUtility {
 	
 	public static Set<ElectricNetworkHandlerCapability.Component<?, ?, ?>> findComponentsOnNode(Level level, NodePos node) {
 		ElectricNetworkHandlerCapability handler = GameUtility.getCapability(level,	Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-		return handler.findComponentsOnNode(node);
+		Set<Component<?, ?, ?>> s =handler.findComponentsOnNode(node);
+		return s;
 	}
 	
 	public static List<String[]> getLaneLabels(Level level, NodePos node, Predicate<Component<?, ?, ?>> componentPredicate) {

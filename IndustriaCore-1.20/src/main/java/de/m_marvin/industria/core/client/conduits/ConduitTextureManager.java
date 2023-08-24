@@ -2,7 +2,6 @@ package de.m_marvin.industria.core.client.conduits;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
-import de.m_marvin.industria.core.registries.Conduits;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -38,7 +37,7 @@ public class ConduitTextureManager extends TextureAtlasHolder {
 	}
 	
 	public TextureAtlasSprite get(Conduit conduit) {
-		return this.getSprite(Conduits.CONDUITS_REGISTRY.get().getKey(conduit));
+		return this.getSprite(conduit.getTexture());
 	}
 	
 }

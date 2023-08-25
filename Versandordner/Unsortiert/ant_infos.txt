@@ -13,3 +13,10 @@ Fernkampfangriff: Ameise verspritzt Säure (Partikel) aus 5-10 Blöcken Abstand 
 
 Können (wie Silberfische  bei Stein) bei Inaktivität den Ameisenhügelerdblock "befallen". Spawnen beim Abbau des Blocks aggressiv. (Können evtl auch ohne Abbau spawnen, dann aber neutral?)
 Bei Spawnen und Befallen kurze Partikel-Grab-Animation?
+
+===
+
+IDEE:
+negativer Effekt "(Ameisen)Biss"
+-> mehr Schaden durch Säuren und Säureangriff der Ameisen
+Säureangriff nur schädlich, wenn Spieler diesen Effekt auch hat.

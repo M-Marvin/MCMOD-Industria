@@ -51,26 +51,23 @@ public class ConduitClampBlock extends Block implements IConduitConnector {
 		case NORHT_UD:
 		case SOUTH_UD:
 		case WEST_UD:
-			shape = VoxelShapeUtility.rotateShape(SHAPE, new Vec3f(8, 8, 8), orientation.getFace(), Axis.Y);
+			shape = VoxelShapeUtility.transformation().centered().rotateY(orientation.getFace().get2DDataValue() * 90).uncentered().transform(shape);
 			break;
 		case WEST_NS:
 		case EAST_NS:
-			shape = VoxelShapeUtility.rotateShape(SHAPE, new Vec3f(8, 8, 8), orientation.getFace(), Axis.Y);
-			shape = VoxelShapeUtility.rotateShape(shape, new Vec3f(8, 8, 8), 90, true, Axis.X);
+			shape = VoxelShapeUtility.transformation().centered().rotateY(orientation.getFace().get2DDataValue() * 90).rotateX(90).uncentered().transform(shape);
 			break;
 		case NORTH_EW:
 		case SOUTH_EW:
-			shape = VoxelShapeUtility.rotateShape(SHAPE, new Vec3f(8, 8, 8), orientation.getFace(), Axis.Y);
-			shape = VoxelShapeUtility.rotateShape(shape, new Vec3f(8, 8, 8), 90, true, Axis.Z);
+			shape = VoxelShapeUtility.transformation().centered().rotateY(orientation.getFace().get2DDataValue() * 90).rotateZ(90).uncentered().transform(shape);
 			break;
 		case CEILING_EW:
 		case GROUND_EW:
-			shape = VoxelShapeUtility.rotateShape(SHAPE, new Vec3f(8, 8, 8), orientation.getFace(), Axis.X);
-			shape = VoxelShapeUtility.rotateShape(shape, new Vec3f(8, 8, 8), 90, true, Axis.Y);
+			shape = VoxelShapeUtility.transformation().centered().rotateX(orientation.getFace().get2DDataValue() * 90).rotateY(90).uncentered().transform(shape);
 			break;
 		case CEILING_NS:
 		case GROUND_NS:
-			shape = VoxelShapeUtility.rotateShape(SHAPE, new Vec3f(8, 8, 8), orientation.getFace(), Axis.X);
+			shape = VoxelShapeUtility.transformation().centered().rotateX(orientation.getFace().get2DDataValue() * 90).uncentered().transform(shape);
 			break;
 		default: shape = SHAPE;
 		}
@@ -80,7 +77,7 @@ public class ConduitClampBlock extends Block implements IConduitConnector {
 		case Y: clampOffset = new Vec3f(0, (state.getValue(ModBlockStateProperties.CLAMP_OFFSET) - 1) * 6, 0); break;
 		case Z: clampOffset = new Vec3f(0, 0, (state.getValue(ModBlockStateProperties.CLAMP_OFFSET) - 1) * 6); break;
 		}
-		return VoxelShapeUtility.offsetShape(shape, clampOffset);
+		return null; //VoxelShapeUtility.offsetShape(shape, clampOffset);
 	}
 	
 	@Override

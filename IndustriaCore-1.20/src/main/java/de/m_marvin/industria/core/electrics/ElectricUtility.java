@@ -48,7 +48,18 @@ public class ElectricUtility {
 		return handler.getFloatingNodeVoltage(node, lane);
 	}
 	
+	public static double getVoltageBetween(Level level, NodePos nodeP, NodePos nodeN, String laneP, String laneN) {
+		double v1 = ElectricUtility.getFloatingNodeVoltage(level, nodeN, laneN);
+		double v2 = ElectricUtility.getFloatingNodeVoltage(level, nodeP, laneP);
+		return v1 - v2;
+	}
 	
-	// TODO Add all functions
+	public static double getPowerPercentage(double power, double targetPower) {
+		return power / targetPower;
+	}
+	
+	public static double getPowerOvershoot(double voltage, double targetVoltage) {
+		return Math.max(voltage - targetVoltage, 0) / targetVoltage;
+	}
 	
 }

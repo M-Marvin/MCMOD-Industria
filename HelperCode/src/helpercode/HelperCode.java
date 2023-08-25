@@ -10,9 +10,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Scanner;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;

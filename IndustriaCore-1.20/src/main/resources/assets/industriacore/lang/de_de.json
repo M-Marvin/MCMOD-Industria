@@ -12,17 +12,17 @@
 "industriacore.commands.contraption.remove.success":	"Vorrichtung entfernt",
 "industriacore.commands.contraption.create.failed":	"Erzeugen der Vorrichtung fehlgeschlagen!",
 "industriacore.commands.contraption.create.success": 	"Vorrichtung aus Bl\u00f6cken bei %1$s %2$s %3$s erzeugt",
-"industriacore.commands.contraption.create.tolarge": 	"Der ausgew\u00e4hlte Bereich ist mit %1$sx%2$sx%3$s zu groß! (max. %4$sx%5$sx%6$s)",
+"industriacore.commands.contraption.create.tolarge": 	"Der ausgew\u00e4hlte Bereich ist mit %1$sx%2$sx%3$s zu groï¿½! (max. %4$sx%5$sx%6$s)",
 "industriacore.commands.contraption.teleport.success":	"Vorrichtung nach %1$s %2$s %3$s teleportiert",
-"industriacore.commands.contraption.assemble.toLarge":	"Anzahl an Bl\u00f6cken zu groß! (max. %1$s)",
+"industriacore.commands.contraption.assemble.toLarge":	"Anzahl an Bl\u00f6cken zu groï¿½! (max. %1$s)",
 "industriacore.commands.contraption.assemble.success":	"Vorrichtung aus Bl\u00f6cken bei %1$s %2$s %3$s gebaut",
 "industriacore.commands.contraption.assemble.failed":	"Bau der Vorrichtung fehlgeschlagen!",
 "industriacore.commands.contraption.find.teleported":	"Spieler zu Vorrichtung bei %1$s %2$s %3$s teleportiert",
 "industriacore.commands.contraption.find.noplayer":	"Teleportation nur f\u00fcr Spieler m\u00f6glich!",
 "industriacore.commands.contraption.find.found":	"Vorrichtung befindet sich bei %1$s",
 "industriacore.commands.contraption.name.set":		"Name der Vorrichtung zu '%1$s' gesetzt",
-
 "industriacore.commands.coordinates":			"[%1$s %2$s %3$s]",
+
 "industriacore.argument.conduit.id.invalid":		"Leitung '%s' nicht bekannt!",
 "industriacore.argument.contraption.notFound":		"Vorrichtung '%s' nicht gefunden!",
 

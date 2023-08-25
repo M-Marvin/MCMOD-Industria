@@ -1,1 +1,0 @@
-https://github.com/ValkyrienSkies/Valkyrien-Skies-2/blob/d84531555f6d27171b763ffb6d6c9575defe3b36/common/src/main/kotlin/org/valkyrienskies/mod/common/assembly/ShipAssembly.kt#L23

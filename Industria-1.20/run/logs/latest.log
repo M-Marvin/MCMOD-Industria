@@ -1,31 +1,31 @@
-[25Aug.2023 00:04:12.395] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeclientuserdev, --version, MOD_DEV, --assetIndex, 5, --assetsDir, C:\Users\marvi\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.1.44, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412]
-[25Aug.2023 00:04:12.399] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.2 by Eclipse Adoptium; OS Windows 10 arch amd64 version 10.0
-[25Aug.2023 00:04:12.504] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: Loading ImmediateWindowProvider fmlearlywindow
-[25Aug.2023 00:04:12.570] [main/INFO] [EARLYDISPLAY/]: Trying GL version 4.6
-[25Aug.2023 00:04:12.709] [main/INFO] [EARLYDISPLAY/]: Requested GL version 4.6 got version 4.6
-[25Aug.2023 00:04:12.782] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/marvi/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23128!/ Service=ModLauncher Env=CLIENT
-[25Aug.2023 00:04:12.831] [pool-2-thread-1/INFO] [EARLYDISPLAY/]: GL info: NVIDIA GeForce RTX 2070 SUPER/PCIe/SSE2 GL version 4.6.0 NVIDIA 536.67, NVIDIA Corporation
-[25Aug.2023 00:04:13.039] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\marvi\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.1.44\5f9e4f02111b8556646fe30d438a395d7831489b\javafmllanguage-1.20.1-47.1.44.jar is missing mods.toml file
-[25Aug.2023 00:04:13.042] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\marvi\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.1.44\b0c75b3aaa10da1e196c661e2d26a95f2ef06f89\lowcodelanguage-1.20.1-47.1.44.jar is missing mods.toml file
-[25Aug.2023 00:04:13.046] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\marvi\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.1.44\c9b0a38bc3bb899928b360953b4a562783c54661\mclanguage-1.20.1-47.1.44.jar is missing mods.toml file
-[25Aug.2023 00:04:13.049] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\marvi\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.1.44\92f79b4cb3298ce1c261e2d14515244b3445f130\fmlcore-1.20.1-47.1.44.jar is missing mods.toml file
-[25Aug.2023 00:04:13.618] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: Found 25 dependencies adding them to mods collection
-[25Aug.2023 00:04:14.755] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
-[25Aug.2023 00:04:14.772] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeclientuserdev' with arguments [--version, MOD_DEV, --gameDir, ., --assetsDir, C:\Users\marvi\.gradle\caches\forge_gradle\assets, --assetIndex, 5]
-[25Aug.2023 00:04:15.088] [main/INFO] [mixin/]: Remapping refMap atlasviewer.refmap.json using E:\GitHub\MCMOD-Industria\Industria-1.20/build/createSrgToMcp/output.srg
-[25Aug.2023 00:04:15.136] [main/INFO] [mixin/]: Remapping refMap valkyrienskies-1201-common-refmap.json using E:\GitHub\MCMOD-Industria\Industria-1.20/build/createSrgToMcp/output.srg
-[25Aug.2023 00:04:15.138] [main/INFO] [mixin/]: Remapping refMap valkyrienskies-refmap.json using E:\GitHub\MCMOD-Industria\Industria-1.20/build/createSrgToMcp/output.srg
-[25Aug.2023 00:04:15.685] [main/WARN] [mixin/]: Error loading class: com/jozufozu/flywheel/backend/instancing/instancing/InstancingEngine (java.lang.ClassNotFoundException: com.jozufozu.flywheel.backend.instancing.instancing.InstancingEngine)
-[25Aug.2023 00:04:15.688] [main/WARN] [mixin/]: Error loading class: com/jozufozu/flywheel/backend/instancing/blockentity/BlockEntityInstanceManager (java.lang.ClassNotFoundException: com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstanceManager)
-[25Aug.2023 00:04:15.691] [main/WARN] [mixin/]: Error loading class: com/jozufozu/flywheel/backend/instancing/InstanceManager (java.lang.ClassNotFoundException: com.jozufozu.flywheel.backend.instancing.InstanceManager)
-[25Aug.2023 00:04:15.693] [main/WARN] [mixin/]: Error loading class: com/jozufozu/flywheel/backend/instancing/InstanceWorld (java.lang.ClassNotFoundException: com.jozufozu.flywheel.backend.instancing.InstanceWorld)
-[25Aug.2023 00:04:15.695] [main/WARN] [mixin/]: Error loading class: com/jozufozu/flywheel/backend/instancing/instancing/InstancingEngine (java.lang.ClassNotFoundException: com.jozufozu.flywheel.backend.instancing.instancing.InstancingEngine)
-[25Aug.2023 00:04:15.697] [main/WARN] [mixin/]: Error loading class: com/sonicether/soundphysics/SoundPhysics (java.lang.ClassNotFoundException: com.sonicether.soundphysics.SoundPhysics)
-[25Aug.2023 00:04:15.715] [main/WARN] [mixin/]: Error loading class: blusunrize/immersiveengineering/common/gui/BlockEntityInventory (java.lang.ClassNotFoundException: blusunrize.immersiveengineering.common.gui.BlockEntityInventory)
-[25Aug.2023 00:04:15.717] [main/WARN] [mixin/]: Error loading class: cofh/core/block/entity/TileCoFH (java.lang.ClassNotFoundException: cofh.core.block.entity.TileCoFH)
-[25Aug.2023 00:04:15.722] [main/WARN] [mixin/]: Error loading class: me/jellysquid/mods/sodium/client/render/chunk/RenderSectionManager (java.lang.ClassNotFoundException: me.jellysquid.mods.sodium.client.render.chunk.RenderSectionManager)
-[25Aug.2023 00:04:15.723] [main/WARN] [mixin/]: @Mixin target me.jellysquid.mods.sodium.client.render.chunk.RenderSectionManager was not found valkyrienskies-forge.mixins.json:compat.sodium.MixinRenderSectionManager
-[25Aug.2023 00:04:15.743] [main/ERROR] [mixin/]: valkyrienskies-common.mixins.json:feature.container_distance_check.MixinContainer: Interface mixin contains a non-public method! Found includeShipsInDistanceCheck(Lnet/minecraft/world/entity/player/Player;DDD)D in valkyrienskies-common.mixins.json:feature.container_distance_check.MixinContainer
+[25Aug.2023 22:55:42.050] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeclientuserdev, --version, MOD_DEV, --assetIndex, 5, --assetsDir, C:\Users\marvi\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.1.44, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412]
+[25Aug.2023 22:55:42.055] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 18.0.2 by Oracle Corporation; OS Windows 10 arch amd64 version 10.0
+[25Aug.2023 22:55:42.182] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: Loading ImmediateWindowProvider fmlearlywindow
+[25Aug.2023 22:55:42.283] [main/INFO] [EARLYDISPLAY/]: Trying GL version 4.6
+[25Aug.2023 22:55:42.412] [main/INFO] [EARLYDISPLAY/]: Requested GL version 4.6 got version 4.6
+[25Aug.2023 22:55:42.534] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/marvi/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23128!/ Service=ModLauncher Env=CLIENT
+[25Aug.2023 22:55:42.613] [pool-2-thread-1/INFO] [EARLYDISPLAY/]: GL info: NVIDIA GeForce RTX 2070 SUPER/PCIe/SSE2 GL version 4.6.0 NVIDIA 536.67, NVIDIA Corporation
+[25Aug.2023 22:55:42.842] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\marvi\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.1.44\5f9e4f02111b8556646fe30d438a395d7831489b\javafmllanguage-1.20.1-47.1.44.jar is missing mods.toml file
+[25Aug.2023 22:55:42.848] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\marvi\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.1.44\b0c75b3aaa10da1e196c661e2d26a95f2ef06f89\lowcodelanguage-1.20.1-47.1.44.jar is missing mods.toml file
+[25Aug.2023 22:55:42.852] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\marvi\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.1.44\c9b0a38bc3bb899928b360953b4a562783c54661\mclanguage-1.20.1-47.1.44.jar is missing mods.toml file
+[25Aug.2023 22:55:42.858] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\marvi\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.1.44\92f79b4cb3298ce1c261e2d14515244b3445f130\fmlcore-1.20.1-47.1.44.jar is missing mods.toml file
+[25Aug.2023 22:55:43.668] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: Found 25 dependencies adding them to mods collection
+[25Aug.2023 22:55:44.964] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
+[25Aug.2023 22:55:44.990] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeclientuserdev' with arguments [--version, MOD_DEV, --gameDir, ., --assetsDir, C:\Users\marvi\.gradle\caches\forge_gradle\assets, --assetIndex, 5]
+[25Aug.2023 22:55:45.328] [main/INFO] [mixin/]: Remapping refMap atlasviewer.refmap.json using E:\GitHub\MCMOD-Industria\Industria-1.20/build/createSrgToMcp/output.srg
+[25Aug.2023 22:55:45.388] [main/INFO] [mixin/]: Remapping refMap valkyrienskies-1201-common-refmap.json using E:\GitHub\MCMOD-Industria\Industria-1.20/build/createSrgToMcp/output.srg
+[25Aug.2023 22:55:45.403] [main/INFO] [mixin/]: Remapping refMap valkyrienskies-refmap.json using E:\GitHub\MCMOD-Industria\Industria-1.20/build/createSrgToMcp/output.srg
+[25Aug.2023 22:55:45.941] [main/WARN] [mixin/]: Error loading class: com/jozufozu/flywheel/backend/instancing/instancing/InstancingEngine (java.lang.ClassNotFoundException: com.jozufozu.flywheel.backend.instancing.instancing.InstancingEngine)
+[25Aug.2023 22:55:45.967] [main/WARN] [mixin/]: Error loading class: com/jozufozu/flywheel/backend/instancing/blockentity/BlockEntityInstanceManager (java.lang.ClassNotFoundException: com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstanceManager)
+[25Aug.2023 22:55:45.980] [main/WARN] [mixin/]: Error loading class: com/jozufozu/flywheel/backend/instancing/InstanceManager (java.lang.ClassNotFoundException: com.jozufozu.flywheel.backend.instancing.InstanceManager)
+[25Aug.2023 22:55:45.997] [main/WARN] [mixin/]: Error loading class: com/jozufozu/flywheel/backend/instancing/InstanceWorld (java.lang.ClassNotFoundException: com.jozufozu.flywheel.backend.instancing.InstanceWorld)
+[25Aug.2023 22:55:46.016] [main/WARN] [mixin/]: Error loading class: com/jozufozu/flywheel/backend/instancing/instancing/InstancingEngine (java.lang.ClassNotFoundException: com.jozufozu.flywheel.backend.instancing.instancing.InstancingEngine)
+[25Aug.2023 22:55:46.032] [main/WARN] [mixin/]: Error loading class: com/sonicether/soundphysics/SoundPhysics (java.lang.ClassNotFoundException: com.sonicether.soundphysics.SoundPhysics)
+[25Aug.2023 22:55:46.074] [main/WARN] [mixin/]: Error loading class: blusunrize/immersiveengineering/common/gui/BlockEntityInventory (java.lang.ClassNotFoundException: blusunrize.immersiveengineering.common.gui.BlockEntityInventory)
+[25Aug.2023 22:55:46.085] [main/WARN] [mixin/]: Error loading class: cofh/core/block/entity/TileCoFH (java.lang.ClassNotFoundException: cofh.core.block.entity.TileCoFH)
+[25Aug.2023 22:55:46.102] [main/WARN] [mixin/]: Error loading class: me/jellysquid/mods/sodium/client/render/chunk/RenderSectionManager (java.lang.ClassNotFoundException: me.jellysquid.mods.sodium.client.render.chunk.RenderSectionManager)
+[25Aug.2023 22:55:46.102] [main/WARN] [mixin/]: @Mixin target me.jellysquid.mods.sodium.client.render.chunk.RenderSectionManager was not found valkyrienskies-forge.mixins.json:compat.sodium.MixinRenderSectionManager
+[25Aug.2023 22:55:46.116] [main/ERROR] [mixin/]: valkyrienskies-common.mixins.json:feature.container_distance_check.MixinContainer: Interface mixin contains a non-public method! Found includeShipsInDistanceCheck(Lnet/minecraft/world/entity/player/Player;DDD)D in valkyrienskies-common.mixins.json:feature.container_distance_check.MixinContainer
 org.spongepowered.asm.mixin.transformer.throwables.InvalidInterfaceMixinException: Interface mixin contains a non-public method! Found includeShipsInDistanceCheck(Lnet/minecraft/world/entity/player/Player;DDD)D in valkyrienskies-common.mixins.json:feature.container_distance_check.MixinContainer
 	at org.spongepowered.asm.mixin.transformer.MixinPreProcessorInterface.prepareMethod(MixinPreProcessorInterface.java:65) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
 	at org.spongepowered.asm.mixin.transformer.MixinPreProcessorStandard.prepare(MixinPreProcessorStandard.java:187) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
@@ -47,8 +47,9 @@ org.spongepowered.asm.mixin.transformer.throwables.InvalidInterfaceMixinExceptio
 	at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
 	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?]
 	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
-	at java.lang.ClassLoader.loadClass(ClassLoader.java:632) ~[?:?]
-	at java.lang.Class.forName(Class.java:545) ~[?:?]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:633) ~[?:?]
+	at java.lang.Class.forName(Class.java:577) ~[?:?]
+	at java.lang.Class.forName(Class.java:552) ~[?:?]
 	at net.minecraftforge.fml.earlydisplay.DisplayWindow.lambda$updateModuleReads$18(DisplayWindow.java:586) ~[fmlearlydisplay-1.20.1-47.1.44.jar:1.0]
 	at java.util.Optional.map(Optional.java:260) ~[?:?]
 	at net.minecraftforge.fml.earlydisplay.DisplayWindow.updateModuleReads(DisplayWindow.java:586) ~[fmlearlydisplay-1.20.1-47.1.44.jar:1.0]
@@ -63,117 +64,294 @@ org.spongepowered.asm.mixin.transformer.throwables.InvalidInterfaceMixinExceptio
 	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar:?]
 	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar:?]
 	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?]
-[25Aug.2023 00:04:19.265] [Datafixer Bootstrap/INFO] [com.mojang.datafixers.DataFixerBuilder/]: 188 Datafixer optimizations took 116 milliseconds
-[25Aug.2023 00:04:20.591] [Render thread/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/E:/GitHub/MCMOD-Industria/Industria-1.20/build/fg_cache/net/minecraftforge/forge/1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1/forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/assets/.mcassetsroot' uses unexpected schema
-[25Aug.2023 00:04:20.591] [Render thread/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/E:/GitHub/MCMOD-Industria/Industria-1.20/build/fg_cache/net/minecraftforge/forge/1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1/forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/data/.mcassetsroot' uses unexpected schema
-[25Aug.2023 00:04:20.607] [Render thread/INFO] [com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService/]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
-[25Aug.2023 00:04:20.612] [Render thread/INFO] [net.minecraft.client.Minecraft/]: Setting user: Dev
-[25Aug.2023 00:04:20.697] [Render thread/INFO] [net.minecraft.client.Minecraft/]: Backend library: LWJGL version 3.3.1 build 7
-[25Aug.2023 00:04:20.910] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.1.44, for MC 1.20.1 with MCP 20230612.114412
-[25Aug.2023 00:04:20.912] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.1.44 Initialized
-[25Aug.2023 00:04:21.200] [modloading-worker-0/INFO] [thedarkcolour.kotlinforforge.test.KotlinForForge/]: Kotlin For Forge Enabled!
-[25Aug.2023 00:04:22.705] [Render thread/INFO] [net.minecraftforge.gametest.ForgeGameTestHooks/]: Enabled Gametest Namespaces: [examplemod]
-[25Aug.2023 00:04:22.871] [Render thread/INFO] [net.minecraft.server.packs.resources.ReloadableResourceManager/]: Reloading ResourceManager: vanilla, mod_resources
-[25Aug.2023 00:04:22.952] [Forge Version Check/INFO] [net.minecraftforge.fml.VersionChecker/]: [forge] Starting version check at https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json
-[25Aug.2023 00:04:23.011] [Worker-Main-13/INFO] [net.minecraft.client.gui.font.providers.UnihexProvider/]: Found unifont_all_no_pua-15.0.06.hex, loading
-[25Aug.2023 00:04:23.658] [Forge Version Check/INFO] [net.minecraftforge.fml.VersionChecker/]: [forge] Found status: AHEAD Current: 47.1.44 Target: null
-[25Aug.2023 00:04:23.710] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/electric_lamp.json' missing model for variant: 'industria:electric_lamp#facing=north,powered=false'
-[25Aug.2023 00:04:23.710] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/electric_lamp.json' missing model for variant: 'industria:electric_lamp#facing=east,powered=false'
-[25Aug.2023 00:04:23.710] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/electric_lamp.json' missing model for variant: 'industria:electric_lamp#facing=south,powered=true'
-[25Aug.2023 00:04:23.710] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/electric_lamp.json' missing model for variant: 'industria:electric_lamp#facing=west,powered=true'
-[25Aug.2023 00:04:23.710] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/electric_lamp.json' missing model for variant: 'industria:electric_lamp#facing=west,powered=false'
-[25Aug.2023 00:04:23.710] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/electric_lamp.json' missing model for variant: 'industria:electric_lamp#facing=down,powered=true'
-[25Aug.2023 00:04:23.710] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/electric_lamp.json' missing model for variant: 'industria:electric_lamp#facing=north,powered=true'
-[25Aug.2023 00:04:23.710] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/electric_lamp.json' missing model for variant: 'industria:electric_lamp#facing=east,powered=true'
-[25Aug.2023 00:04:23.710] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/electric_lamp.json' missing model for variant: 'industria:electric_lamp#facing=south,powered=false'
-[25Aug.2023 00:04:23.710] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/electric_lamp.json' missing model for variant: 'industria:electric_lamp#facing=down,powered=false'
-[25Aug.2023 00:04:23.710] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/electric_lamp.json' missing model for variant: 'industria:electric_lamp#facing=up,powered=false'
-[25Aug.2023 00:04:23.710] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/electric_lamp.json' missing model for variant: 'industria:electric_lamp#facing=up,powered=true'
-[25Aug.2023 00:04:23.711] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:valkyrienskies' referenced from: valkyrienskies:test_flap#facing=north: java.io.FileNotFoundException: minecraft:models/valkyrienskies.json
-[25Aug.2023 00:04:23.716] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:insulated_copper_wire#inventory' referenced from: industria:insulated_copper_wire#inventory: java.io.FileNotFoundException: industria:models/item/insulated_copper_wire.json
-[25Aug.2023 00:04:23.717] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:insulated_aluminum_wire#inventory' referenced from: industria:insulated_aluminum_wire#inventory: java.io.FileNotFoundException: industria:models/item/insulated_aluminum_wire.json
-[25Aug.2023 00:04:23.717] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:insulated_gold_wire#inventory' referenced from: industria:insulated_gold_wire#inventory: java.io.FileNotFoundException: industria:models/item/insulated_gold_wire.json
-[25Aug.2023 00:04:23.717] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:insulated_tin_wire#inventory' referenced from: industria:insulated_tin_wire#inventory: java.io.FileNotFoundException: industria:models/item/insulated_tin_wire.json
-[25Aug.2023 00:04:23.717] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:copper_wire#inventory' referenced from: industria:copper_wire#inventory: java.io.FileNotFoundException: industria:models/item/copper_wire.json
-[25Aug.2023 00:04:23.717] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:aluminum_wire#inventory' referenced from: industria:aluminum_wire#inventory: java.io.FileNotFoundException: industria:models/item/aluminum_wire.json
-[25Aug.2023 00:04:23.717] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:gold_wire#inventory' referenced from: industria:gold_wire#inventory: java.io.FileNotFoundException: industria:models/item/gold_wire.json
-[25Aug.2023 00:04:23.717] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:tin_wire#inventory' referenced from: industria:tin_wire#inventory: java.io.FileNotFoundException: industria:models/item/tin_wire.json
-[25Aug.2023 00:04:23.717] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:junction_box#inventory' referenced from: industria:junction_box#inventory: java.io.FileNotFoundException: industria:models/item/junction_box.json
-[25Aug.2023 00:04:23.717] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:electric_light#inventory' referenced from: industria:electric_light#inventory: java.io.FileNotFoundException: industria:models/item/electric_light.json
-[25Aug.2023 00:04:23.717] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'valkyrienskies:ship_assembler#inventory' referenced from: valkyrienskies:ship_assembler#inventory: java.io.FileNotFoundException: valkyrienskies:models/item/ship_assembler.json
-[25Aug.2023 00:04:24.122] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_flap#facing=north:
+[25Aug.2023 22:55:50.345] [Datafixer Bootstrap/INFO] [com.mojang.datafixers.DataFixerBuilder/]: 188 Datafixer optimizations took 117 milliseconds
+[25Aug.2023 22:55:51.900] [Render thread/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/E:/GitHub/MCMOD-Industria/Industria-1.20/build/fg_cache/net/minecraftforge/forge/1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1/forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/assets/.mcassetsroot' uses unexpected schema
+[25Aug.2023 22:55:51.900] [Render thread/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/E:/GitHub/MCMOD-Industria/Industria-1.20/build/fg_cache/net/minecraftforge/forge/1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1/forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/data/.mcassetsroot' uses unexpected schema
+[25Aug.2023 22:55:51.915] [Render thread/INFO] [com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService/]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
+[25Aug.2023 22:55:51.919] [Render thread/INFO] [net.minecraft.client.Minecraft/]: Setting user: Dev
+[25Aug.2023 22:55:52.028] [Render thread/INFO] [net.minecraft.client.Minecraft/]: Backend library: LWJGL version 3.3.1 build 7
+[25Aug.2023 22:55:52.261] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.1.44, for MC 1.20.1 with MCP 20230612.114412
+[25Aug.2023 22:55:52.263] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.1.44 Initialized
+[25Aug.2023 22:55:52.520] [modloading-worker-0/INFO] [thedarkcolour.kotlinforforge.test.KotlinForForge/]: Kotlin For Forge Enabled!
+[25Aug.2023 22:55:54.142] [Render thread/INFO] [net.minecraftforge.gametest.ForgeGameTestHooks/]: Enabled Gametest Namespaces: [examplemod]
+[25Aug.2023 22:55:54.352] [Render thread/INFO] [net.minecraft.server.packs.resources.ReloadableResourceManager/]: Reloading ResourceManager: vanilla, mod_resources
+[25Aug.2023 22:55:54.437] [Forge Version Check/INFO] [net.minecraftforge.fml.VersionChecker/]: [forge] Starting version check at https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json
+[25Aug.2023 22:55:54.516] [Worker-Main-11/INFO] [net.minecraft.client.gui.font.providers.UnihexProvider/]: Found unifont_all_no_pua-15.0.06.hex, loading
+[25Aug.2023 22:55:54.678] [Worker-Main-17/ERROR] [net.minecraft.client.resources.model.ModelManager/]: Failed to load model industria:models/item/machines/floodlight.json
+com.google.gson.JsonSyntaxException: Expected parent to be a string, was an object ({"mo...t"})
+	at net.minecraft.util.GsonHelper.convertToString(GsonHelper.java:114) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/:?]
+	at net.minecraft.util.GsonHelper.getAsString(GsonHelper.java:136) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/:?]
+	at net.minecraft.client.renderer.block.model.BlockModel$Deserializer.getParentName(BlockModel.java:364) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/:?]
+	at net.minecraft.client.renderer.block.model.BlockModel$Deserializer.deserialize(BlockModel.java:306) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/:?]
+	at net.minecraftforge.client.model.ExtendedBlockModelDeserializer.deserialize(ExtendedBlockModelDeserializer.java:53) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23190%23197!/:?]
+	at net.minecraftforge.client.model.ExtendedBlockModelDeserializer.deserialize(ExtendedBlockModelDeserializer.java:38) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23190%23197!/:?]
+	at com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76) ~[gson-2.10.jar%23130!/:?]
+	at net.minecraft.util.GsonHelper.fromNullableJson(GsonHelper.java:522) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/:?]
+	at net.minecraft.util.GsonHelper.fromJson(GsonHelper.java:529) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/:?]
+	at net.minecraft.util.GsonHelper.fromJson(GsonHelper.java:581) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/:?]
+	at net.minecraft.client.renderer.block.model.BlockModel.fromStream(BlockModel.java:74) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/:?]
+	at net.minecraft.client.resources.model.ModelManager.lambda$loadBlockModels$8(ModelManager.java:110) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/:?]
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) ~[?:?]
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760) ~[?:?]
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?]
+	at java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182) ~[?:?]
+	at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
+[25Aug.2023 22:55:55.026] [Forge Version Check/INFO] [net.minecraftforge.fml.VersionChecker/]: [forge] Found status: AHEAD Current: 47.1.44 Target: null
+[25Aug.2023 22:55:55.193] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:valkyrienskies' referenced from: valkyrienskies:test_flap#facing=north: java.io.FileNotFoundException: minecraft:models/valkyrienskies.json
+[25Aug.2023 22:55:55.200] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:insulated_copper_wire#inventory' referenced from: industria:insulated_copper_wire#inventory: java.io.FileNotFoundException: industria:models/item/insulated_copper_wire.json
+[25Aug.2023 22:55:55.200] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:insulated_aluminum_wire#inventory' referenced from: industria:insulated_aluminum_wire#inventory: java.io.FileNotFoundException: industria:models/item/insulated_aluminum_wire.json
+[25Aug.2023 22:55:55.200] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:insulated_gold_wire#inventory' referenced from: industria:insulated_gold_wire#inventory: java.io.FileNotFoundException: industria:models/item/insulated_gold_wire.json
+[25Aug.2023 22:55:55.201] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:insulated_tin_wire#inventory' referenced from: industria:insulated_tin_wire#inventory: java.io.FileNotFoundException: industria:models/item/insulated_tin_wire.json
+[25Aug.2023 22:55:55.201] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:copper_wire#inventory' referenced from: industria:copper_wire#inventory: java.io.FileNotFoundException: industria:models/item/copper_wire.json
+[25Aug.2023 22:55:55.201] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:aluminum_wire#inventory' referenced from: industria:aluminum_wire#inventory: java.io.FileNotFoundException: industria:models/item/aluminum_wire.json
+[25Aug.2023 22:55:55.201] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:gold_wire#inventory' referenced from: industria:gold_wire#inventory: java.io.FileNotFoundException: industria:models/item/gold_wire.json
+[25Aug.2023 22:55:55.202] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:tin_wire#inventory' referenced from: industria:tin_wire#inventory: java.io.FileNotFoundException: industria:models/item/tin_wire.json
+[25Aug.2023 22:55:55.202] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:junction_box#inventory' referenced from: industria:junction_box#inventory: java.io.FileNotFoundException: industria:models/item/junction_box.json
+[25Aug.2023 22:55:55.202] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:floodlight#inventory' referenced from: industria:floodlight#inventory: java.io.FileNotFoundException: industria:models/item/floodlight.json
+[25Aug.2023 22:55:55.202] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'valkyrienskies:ship_assembler#inventory' referenced from: valkyrienskies:ship_assembler#inventory: java.io.FileNotFoundException: valkyrienskies:models/item/ship_assembler.json
+[25Aug.2023 22:55:55.601] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_flap#facing=north:
     minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
-[25Aug.2023 00:04:24.122] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_wing#facing=east:
+[25Aug.2023 22:55:55.601] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_wing#facing=east:
     minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
-[25Aug.2023 00:04:24.123] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:iron_conduit_clamp#inventory:
-    minecraft:textures/atlas/blocks.png:industria:itemblock/iron_conduit_clamp
-[25Aug.2023 00:04:24.123] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_wing#facing=south:
+[25Aug.2023 22:55:55.601] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=floor,facing=south,lit=false,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 22:55:55.602] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_wing#facing=south:
     minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
-[25Aug.2023 00:04:24.123] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_flap#inventory:
+[25Aug.2023 22:55:55.602] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=ceiling,facing=east,lit=false,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 22:55:55.602] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=ceiling,facing=north,lit=false,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 22:55:55.602] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_flap#inventory:
     minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
-[25Aug.2023 00:04:24.123] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_flap#facing=west:
+[25Aug.2023 22:55:55.602] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_flap#facing=west:
     minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
-[25Aug.2023 00:04:24.123] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_wing#facing=up:
+[25Aug.2023 22:55:55.602] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=floor,facing=west,lit=true,waterlogged=false:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 22:55:55.602] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_wing#facing=up:
     minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
-[25Aug.2023 00:04:24.123] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_wing#inventory:
+[25Aug.2023 22:55:55.602] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=ceiling,facing=west,lit=false,waterlogged=false:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 22:55:55.602] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=floor,facing=west,lit=false,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 22:55:55.602] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=wall,facing=east,lit=false,waterlogged=false:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 22:55:55.602] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=ceiling,facing=south,lit=false,waterlogged=false:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 22:55:55.602] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=ceiling,facing=north,lit=true,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 22:55:55.602] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=ceiling,facing=south,lit=true,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 22:55:55.602] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=wall,facing=south,lit=true,waterlogged=false:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 22:55:55.602] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=floor,facing=north,lit=true,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 22:55:55.602] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=wall,facing=east,lit=true,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 22:55:55.602] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=wall,facing=west,lit=true,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 22:55:55.602] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=wall,facing=south,lit=false,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 22:55:55.602] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=ceiling,facing=west,lit=true,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 22:55:55.602] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=wall,facing=north,lit=false,waterlogged=false:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 22:55:55.602] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=wall,facing=north,lit=true,waterlogged=false:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 22:55:55.603] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=wall,facing=west,lit=false,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 22:55:55.603] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=floor,facing=north,lit=false,waterlogged=false:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 22:55:55.603] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=floor,facing=south,lit=true,waterlogged=false:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 22:55:55.603] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=floor,facing=east,lit=false,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 22:55:55.603] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=floor,facing=east,lit=true,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 22:55:55.603] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_wing#inventory:
     minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
-[25Aug.2023 00:04:24.123] [Worker-Main-5/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_flap#facing=down:
+[25Aug.2023 22:55:55.603] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=ceiling,facing=east,lit=true,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 22:55:55.603] [Worker-Main-1/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_flap#facing=down:
     minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
-[25Aug.2023 00:04:25.216] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine/]: Missing sound for event: minecraft:item.goat_horn.play
-[25Aug.2023 00:04:25.217] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine/]: Missing sound for event: minecraft:entity.goat.screaming.horn_break
-[25Aug.2023 00:04:25.251] [Render thread/INFO] [com.mojang.blaze3d.audio.Library/]: OpenAL initialized on device OpenAL Soft on Lautsprecher (Realtek(R) Audio)
-[25Aug.2023 00:04:25.252] [Render thread/INFO] [net.minecraft.client.sounds.SoundEngine/SOUNDS]: Sound engine started
-[25Aug.2023 00:04:25.359] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 1024x512x4 minecraft:textures/atlas/blocks.png-atlas
-[25Aug.2023 00:04:25.366] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x4 minecraft:textures/atlas/signs.png-atlas
-[25Aug.2023 00:04:25.367] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x512x4 minecraft:textures/atlas/shield_patterns.png-atlas
-[25Aug.2023 00:04:25.368] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x512x4 minecraft:textures/atlas/banner_patterns.png-atlas
-[25Aug.2023 00:04:25.368] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 1024x1024x4 minecraft:textures/atlas/armor_trims.png-atlas
-[25Aug.2023 00:04:25.371] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 128x64x4 minecraft:textures/atlas/decorated_pot.png-atlas
-[25Aug.2023 00:04:25.373] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x4 minecraft:textures/atlas/chest.png-atlas
-[25Aug.2023 00:04:25.373] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x4 minecraft:textures/atlas/shulker_boxes.png-atlas
-[25Aug.2023 00:04:25.374] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x4 minecraft:textures/atlas/beds.png-atlas
-[25Aug.2023 00:04:25.471] [Render thread/WARN] [net.minecraft.client.renderer.ShaderInstance/]: Shader rendertype_entity_translucent_emissive could not find sampler named Sampler2 in the specified shader program.
-[25Aug.2023 00:04:25.519] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x0 minecraft:textures/atlas/particles.png-atlas
-[25Aug.2023 00:04:25.521] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x0 minecraft:textures/atlas/paintings.png-atlas
-[25Aug.2023 00:04:25.521] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 128x128x0 minecraft:textures/atlas/mob_effects.png-atlas
-[25Aug.2023 00:04:25.522] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x128x0 industriacore:textures/atlas/conduits.png-atlas
-[25Aug.2023 00:04:25.721] [Realms Notification Availability checker #1/INFO] [com.mojang.realmsclient.client.RealmsClient/]: Could not authorize you against Realms server: Invalid session id
-[25Aug.2023 00:04:29.191] [Render thread/INFO] [net.minecraftforge.registries.GameData/REGISTRIES]: Injecting existing registry data into this CLIENT instance
-[25Aug.2023 00:04:30.272] [Worker-Main-8/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 3 circuit templates
-[25Aug.2023 00:04:30.510] [Render thread/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 7 recipes
-[25Aug.2023 00:04:30.576] [Render thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 1271 advancements
-[25Aug.2023 00:04:30.981] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
-[25Aug.2023 00:04:31.071] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Starting integrated minecraft server version 1.20.1
-[25Aug.2023 00:04:31.071] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Generating keypair
-[25Aug.2023 00:04:32.050] [Server thread/INFO] [org.valkyrienskies.core.impl.networking.VSNetworking/]: We are not using UDP, falling back to TCP
-[25Aug.2023 00:04:32.094] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Preparing start region for dimension minecraft:overworld
-[25Aug.2023 00:04:32.121] [Render thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Einstiegsbereich wird vorbereitet: 0 %
-[25Aug.2023 00:04:32.867] [Render thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Einstiegsbereich wird vorbereitet: 83 %
-[25Aug.2023 00:04:33.171] [Server thread/INFO] [net.minecraftforge.server.permission.PermissionAPI/]: Successfully initialized permission handler forge:default_handler
-[25Aug.2023 00:04:33.180] [Render thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Time elapsed: 1078 ms
-[25Aug.2023 00:04:33.410] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Changing view distance to 12, from 10
-[25Aug.2023 00:04:33.412] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Changing simulation distance to 12, from 0
-[25Aug.2023 00:04:33.486] [Render thread/WARN] [io.netty.util.internal.SystemPropertyUtil/]: Unable to parse the boolean system property 'java.net.preferIPv6Addresses':system - using the default value: false
-[25Aug.2023 00:04:33.948] [Netty Local Client IO #0/INFO] [net.minecraftforge.network.NetworkHooks/]: Connected to a modded server.
-[25Aug.2023 00:04:34.040] [Server thread/INFO] [net.minecraft.server.players.PlayerList/]: Dev[local:E:584f7ce4] logged in with entity id 95 at (-5.39668326693812, -60.0, 5.575796749919459)
-[25Aug.2023 00:04:34.102] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Dev hat das Spiel betreten
-[25Aug.2023 00:04:34.685] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
-[25Aug.2023 00:04:34.798] [Render thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 2 advancements
-[25Aug.2023 00:04:39.122] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Saving and pausing game...
-[25Aug.2023 00:04:39.132] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:overworld
-[25Aug.2023 00:04:39.160] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:the_nether
-[25Aug.2023 00:04:39.161] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:the_end
-[25Aug.2023 00:04:40.079] [Server thread/INFO] [net.minecraft.server.network.ServerGamePacketListenerImpl/]: Dev lost connection: Verbindung getrennt
-[25Aug.2023 00:04:40.079] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Dev hat das Spiel verlassen
-[25Aug.2023 00:04:40.090] [Server thread/INFO] [net.minecraft.server.network.ServerGamePacketListenerImpl/]: Stopping singleplayer server as player logged out
-[25Aug.2023 00:04:40.125] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Stopping server
-[25Aug.2023 00:04:40.125] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving players
-[25Aug.2023 00:04:40.125] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving worlds
-[25Aug.2023 00:04:40.445] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:overworld
-[25Aug.2023 00:04:41.179] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:the_nether
-[25Aug.2023 00:04:41.180] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:the_end
-[25Aug.2023 00:04:41.196] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (Neue Welt): All chunks are saved
-[25Aug.2023 00:04:41.196] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
-[25Aug.2023 00:04:41.196] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
-[25Aug.2023 00:04:41.196] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage: All dimensions are saved
-[25Aug.2023 00:04:42.556] [Render thread/INFO] [net.minecraft.client.Minecraft/]: Stopping!
+[25Aug.2023 22:55:56.785] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine/]: Missing sound for event: minecraft:item.goat_horn.play
+[25Aug.2023 22:55:56.785] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine/]: Missing sound for event: minecraft:entity.goat.screaming.horn_break
+[25Aug.2023 22:55:56.841] [Render thread/INFO] [com.mojang.blaze3d.audio.Library/]: OpenAL initialized on device OpenAL Soft on Lautsprecher (Realtek(R) Audio)
+[25Aug.2023 22:55:56.842] [Render thread/INFO] [net.minecraft.client.sounds.SoundEngine/SOUNDS]: Sound engine started
+[25Aug.2023 22:55:56.965] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 1024x512x4 minecraft:textures/atlas/blocks.png-atlas
+[25Aug.2023 22:55:56.972] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x4 minecraft:textures/atlas/signs.png-atlas
+[25Aug.2023 22:55:56.974] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x512x4 minecraft:textures/atlas/banner_patterns.png-atlas
+[25Aug.2023 22:55:56.975] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x512x4 minecraft:textures/atlas/shield_patterns.png-atlas
+[25Aug.2023 22:55:56.975] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 1024x1024x4 minecraft:textures/atlas/armor_trims.png-atlas
+[25Aug.2023 22:55:56.978] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x4 minecraft:textures/atlas/chest.png-atlas
+[25Aug.2023 22:55:56.980] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 128x64x4 minecraft:textures/atlas/decorated_pot.png-atlas
+[25Aug.2023 22:55:56.980] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x4 minecraft:textures/atlas/beds.png-atlas
+[25Aug.2023 22:55:56.981] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x4 minecraft:textures/atlas/shulker_boxes.png-atlas
+[25Aug.2023 22:55:57.104] [Render thread/WARN] [net.minecraft.client.renderer.ShaderInstance/]: Shader rendertype_entity_translucent_emissive could not find sampler named Sampler2 in the specified shader program.
+[25Aug.2023 22:55:57.148] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x0 minecraft:textures/atlas/particles.png-atlas
+[25Aug.2023 22:55:57.150] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x0 minecraft:textures/atlas/paintings.png-atlas
+[25Aug.2023 22:55:57.151] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 128x128x0 minecraft:textures/atlas/mob_effects.png-atlas
+[25Aug.2023 22:55:57.152] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x128x0 industriacore:textures/atlas/conduits.png-atlas
+[25Aug.2023 22:55:57.322] [Realms Notification Availability checker #1/INFO] [com.mojang.realmsclient.client.RealmsClient/]: Could not authorize you against Realms server: Invalid session id
+[25Aug.2023 22:56:06.011] [Render thread/INFO] [net.minecraftforge.registries.GameData/REGISTRIES]: Injecting existing registry data into this CLIENT instance
+[25Aug.2023 22:56:07.273] [Worker-Main-16/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 3 circuit templates
+[25Aug.2023 22:56:07.715] [Render thread/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 7 recipes
+[25Aug.2023 22:56:07.792] [Render thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 1271 advancements
+[25Aug.2023 22:56:08.195] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[25Aug.2023 22:56:08.274] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Starting integrated minecraft server version 1.20.1
+[25Aug.2023 22:56:08.274] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Generating keypair
+[25Aug.2023 22:56:09.269] [Server thread/INFO] [org.valkyrienskies.core.impl.networking.VSNetworking/]: We are not using UDP, falling back to TCP
+[25Aug.2023 22:56:09.304] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Preparing start region for dimension minecraft:overworld
+[25Aug.2023 22:56:10.588] [Render thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Einstiegsbereich wird vorbereitet: 0 %
+[25Aug.2023 22:56:10.588] [Render thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Einstiegsbereich wird vorbereitet: 0 %
+[25Aug.2023 22:56:10.588] [Render thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Einstiegsbereich wird vorbereitet: 0 %
+[25Aug.2023 22:56:10.829] [Render thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Einstiegsbereich wird vorbereitet: 10 %
+[25Aug.2023 22:56:11.231] [Server thread/INFO] [net.minecraftforge.server.permission.PermissionAPI/]: Successfully initialized permission handler forge:default_handler
+[25Aug.2023 22:56:11.235] [Render thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Time elapsed: 1919 ms
+[25Aug.2023 22:56:11.508] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Changing view distance to 12, from 10
+[25Aug.2023 22:56:11.511] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Changing simulation distance to 12, from 0
+[25Aug.2023 22:56:11.580] [Render thread/WARN] [io.netty.util.internal.SystemPropertyUtil/]: Unable to parse the boolean system property 'java.net.preferIPv6Addresses':system - using the default value: false
+[25Aug.2023 22:56:11.995] [Netty Local Client IO #0/INFO] [net.minecraftforge.network.NetworkHooks/]: Connected to a modded server.
+[25Aug.2023 22:56:12.099] [Server thread/INFO] [net.minecraft.server.players.PlayerList/]: Dev[local:E:030893d5] logged in with entity id 21 at (411.30000001192093, -62.0, -369.05172088020925)
+[25Aug.2023 22:56:12.181] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Dev hat das Spiel betreten
+[25Aug.2023 22:56:12.686] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[25Aug.2023 22:56:12.701] [Render thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 93 advancements
+[25Aug.2023 23:01:25.142] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] [Debug]: Ressourcenpakete neu geladen
+[25Aug.2023 23:01:25.155] [Render thread/INFO] [net.minecraft.server.packs.resources.ReloadableResourceManager/]: Reloading ResourceManager: vanilla, mod_resources
+[25Aug.2023 23:01:25.165] [Worker-Main-2/INFO] [net.minecraft.client.gui.font.providers.UnihexProvider/]: Found unifont_all_no_pua-15.0.06.hex, loading
+[25Aug.2023 23:01:25.182] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Saving and pausing game...
+[25Aug.2023 23:01:25.198] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:overworld
+[25Aug.2023 23:01:25.207] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:the_nether
+[25Aug.2023 23:01:25.208] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:the_end
+[25Aug.2023 23:01:25.337] [Worker-Main-21/ERROR] [net.minecraft.client.resources.model.ModelManager/]: Failed to load model industria:models/item/machines/floodlight.json
+com.google.gson.JsonSyntaxException: Expected parent to be a string, was an object ({"mo...t"})
+	at net.minecraft.util.GsonHelper.convertToString(GsonHelper.java:114) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/:?]
+	at net.minecraft.util.GsonHelper.getAsString(GsonHelper.java:136) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/:?]
+	at net.minecraft.client.renderer.block.model.BlockModel$Deserializer.getParentName(BlockModel.java:364) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/:?]
+	at net.minecraft.client.renderer.block.model.BlockModel$Deserializer.deserialize(BlockModel.java:306) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/:?]
+	at net.minecraftforge.client.model.ExtendedBlockModelDeserializer.deserialize(ExtendedBlockModelDeserializer.java:53) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23190%23197!/:?]
+	at net.minecraftforge.client.model.ExtendedBlockModelDeserializer.deserialize(ExtendedBlockModelDeserializer.java:38) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23190%23197!/:?]
+	at com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76) ~[gson-2.10.jar%23130!/:?]
+	at net.minecraft.util.GsonHelper.fromNullableJson(GsonHelper.java:522) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/:?]
+	at net.minecraft.util.GsonHelper.fromJson(GsonHelper.java:529) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/:?]
+	at net.minecraft.util.GsonHelper.fromJson(GsonHelper.java:581) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/:?]
+	at net.minecraft.client.renderer.block.model.BlockModel.fromStream(BlockModel.java:74) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/:?]
+	at net.minecraft.client.resources.model.ModelManager.lambda$loadBlockModels$8(ModelManager.java:110) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/:?]
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) ~[?:?]
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760) ~[?:?]
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?]
+	at java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182) ~[?:?]
+	at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
+[25Aug.2023 23:01:25.533] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:valkyrienskies' referenced from: valkyrienskies:test_flap#facing=north: java.io.FileNotFoundException: minecraft:models/valkyrienskies.json
+[25Aug.2023 23:01:25.562] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:aluminum_wire#inventory' referenced from: industria:aluminum_wire#inventory: java.io.FileNotFoundException: industria:models/item/aluminum_wire.json
+[25Aug.2023 23:01:25.562] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:copper_wire#inventory' referenced from: industria:copper_wire#inventory: java.io.FileNotFoundException: industria:models/item/copper_wire.json
+[25Aug.2023 23:01:25.562] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:floodlight#inventory' referenced from: industria:floodlight#inventory: java.io.FileNotFoundException: industria:models/item/floodlight.json
+[25Aug.2023 23:01:25.562] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:gold_wire#inventory' referenced from: industria:gold_wire#inventory: java.io.FileNotFoundException: industria:models/item/gold_wire.json
+[25Aug.2023 23:01:25.562] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:insulated_aluminum_wire#inventory' referenced from: industria:insulated_aluminum_wire#inventory: java.io.FileNotFoundException: industria:models/item/insulated_aluminum_wire.json
+[25Aug.2023 23:01:25.562] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:insulated_copper_wire#inventory' referenced from: industria:insulated_copper_wire#inventory: java.io.FileNotFoundException: industria:models/item/insulated_copper_wire.json
+[25Aug.2023 23:01:25.563] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:insulated_gold_wire#inventory' referenced from: industria:insulated_gold_wire#inventory: java.io.FileNotFoundException: industria:models/item/insulated_gold_wire.json
+[25Aug.2023 23:01:25.563] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:insulated_tin_wire#inventory' referenced from: industria:insulated_tin_wire#inventory: java.io.FileNotFoundException: industria:models/item/insulated_tin_wire.json
+[25Aug.2023 23:01:25.563] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:junction_box#inventory' referenced from: industria:junction_box#inventory: java.io.FileNotFoundException: industria:models/item/junction_box.json
+[25Aug.2023 23:01:25.563] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:tin_wire#inventory' referenced from: industria:tin_wire#inventory: java.io.FileNotFoundException: industria:models/item/tin_wire.json
+[25Aug.2023 23:01:25.568] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'valkyrienskies:ship_assembler#inventory' referenced from: valkyrienskies:ship_assembler#inventory: java.io.FileNotFoundException: valkyrienskies:models/item/ship_assembler.json
+[25Aug.2023 23:01:25.789] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_flap#facing=north:
+    minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
+[25Aug.2023 23:01:25.789] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_wing#facing=east:
+    minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
+[25Aug.2023 23:01:25.789] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=floor,facing=south,lit=false,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 23:01:25.789] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_wing#facing=south:
+    minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
+[25Aug.2023 23:01:25.789] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=ceiling,facing=east,lit=false,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 23:01:25.789] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=ceiling,facing=north,lit=false,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 23:01:25.789] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_flap#inventory:
+    minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
+[25Aug.2023 23:01:25.789] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_flap#facing=west:
+    minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
+[25Aug.2023 23:01:25.789] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=floor,facing=west,lit=true,waterlogged=false:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 23:01:25.789] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_wing#facing=up:
+    minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
+[25Aug.2023 23:01:25.789] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=ceiling,facing=west,lit=false,waterlogged=false:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 23:01:25.789] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=floor,facing=west,lit=false,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 23:01:25.789] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=wall,facing=east,lit=false,waterlogged=false:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 23:01:25.789] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=ceiling,facing=south,lit=false,waterlogged=false:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 23:01:25.789] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=ceiling,facing=north,lit=true,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 23:01:25.789] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=ceiling,facing=south,lit=true,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 23:01:25.789] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=wall,facing=south,lit=true,waterlogged=false:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 23:01:25.789] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=floor,facing=north,lit=true,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 23:01:25.789] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=wall,facing=east,lit=true,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 23:01:25.789] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=wall,facing=west,lit=true,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 23:01:25.789] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=wall,facing=south,lit=false,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 23:01:25.790] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=ceiling,facing=west,lit=true,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 23:01:25.790] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=wall,facing=north,lit=false,waterlogged=false:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 23:01:25.790] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=wall,facing=north,lit=true,waterlogged=false:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 23:01:25.790] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=wall,facing=west,lit=false,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 23:01:25.790] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=floor,facing=north,lit=false,waterlogged=false:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 23:01:25.790] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=floor,facing=south,lit=true,waterlogged=false:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 23:01:25.790] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=floor,facing=east,lit=false,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp
+[25Aug.2023 23:01:25.790] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=floor,facing=east,lit=true,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 23:01:25.790] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_wing#inventory:
+    minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
+[25Aug.2023 23:01:25.790] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model industria:floodlight#face=ceiling,facing=east,lit=true,waterlogged=true:
+    minecraft:textures/atlas/blocks.png:industria:block/panel_lamp_on
+[25Aug.2023 23:01:25.790] [Worker-Main-11/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_flap#facing=down:
+    minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
+[25Aug.2023 23:01:25.896] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine/]: Missing sound for event: minecraft:item.goat_horn.play
+[25Aug.2023 23:01:25.896] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine/]: Missing sound for event: minecraft:entity.goat.screaming.horn_break
+[25Aug.2023 23:01:25.945] [Render thread/INFO] [com.mojang.blaze3d.audio.Library/]: OpenAL initialized on device OpenAL Soft on Lautsprecher (Realtek(R) Audio)
+[25Aug.2023 23:01:25.945] [Render thread/INFO] [net.minecraft.client.sounds.SoundEngine/SOUNDS]: Sound engine started
+[25Aug.2023 23:01:26.008] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 1024x512x4 minecraft:textures/atlas/blocks.png-atlas
+[25Aug.2023 23:01:26.020] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x4 minecraft:textures/atlas/signs.png-atlas
+[25Aug.2023 23:01:26.020] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x512x4 minecraft:textures/atlas/banner_patterns.png-atlas
+[25Aug.2023 23:01:26.021] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x512x4 minecraft:textures/atlas/shield_patterns.png-atlas
+[25Aug.2023 23:01:26.021] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 1024x1024x4 minecraft:textures/atlas/armor_trims.png-atlas
+[25Aug.2023 23:01:26.025] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x4 minecraft:textures/atlas/chest.png-atlas
+[25Aug.2023 23:01:26.025] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 128x64x4 minecraft:textures/atlas/decorated_pot.png-atlas
+[25Aug.2023 23:01:26.025] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x4 minecraft:textures/atlas/beds.png-atlas
+[25Aug.2023 23:01:26.025] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x4 minecraft:textures/atlas/shulker_boxes.png-atlas
+[25Aug.2023 23:01:26.047] [Render thread/WARN] [net.minecraft.client.renderer.ShaderInstance/]: Shader rendertype_entity_translucent_emissive could not find sampler named Sampler2 in the specified shader program.
+[25Aug.2023 23:01:26.105] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x0 minecraft:textures/atlas/particles.png-atlas
+[25Aug.2023 23:01:26.106] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x0 minecraft:textures/atlas/paintings.png-atlas
+[25Aug.2023 23:01:26.106] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 128x128x0 minecraft:textures/atlas/mob_effects.png-atlas
+[25Aug.2023 23:01:26.106] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x128x0 industriacore:textures/atlas/conduits.png-atlas
+[25Aug.2023 23:03:27.809] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] [Debug]: Hitboxen: sichtbar
+[25Aug.2023 23:09:07.328] [Render thread/INFO] [net.minecraft.client.Minecraft/]: Stopping!
+[25Aug.2023 23:09:07.341] [Server thread/INFO] [net.minecraft.server.network.ServerGamePacketListenerImpl/]: Dev lost connection: Verbindung getrennt
+[25Aug.2023 23:09:07.341] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Dev hat das Spiel verlassen
+[25Aug.2023 23:09:07.846] [Server thread/INFO] [net.minecraft.server.network.ServerGamePacketListenerImpl/]: Stopping singleplayer server as player logged out
+[25Aug.2023 23:09:07.856] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Stopping server
+[25Aug.2023 23:09:07.856] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving players
+[25Aug.2023 23:09:07.856] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving worlds
+[25Aug.2023 23:09:07.880] [Physics thread/WARN] [org.valkyrienskies.core.impl.pipelines.VSPhysicsPipelineBackgroundTask/]: Physics pipeline ending
+[25Aug.2023 23:09:08.118] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:overworld
+[25Aug.2023 23:09:09.619] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:the_nether
+[25Aug.2023 23:09:09.620] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:the_end
+[25Aug.2023 23:09:09.639] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (Neue Welt (1)): All chunks are saved
+[25Aug.2023 23:09:09.639] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[25Aug.2023 23:09:09.639] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[25Aug.2023 23:09:09.639] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage: All dimensions are saved

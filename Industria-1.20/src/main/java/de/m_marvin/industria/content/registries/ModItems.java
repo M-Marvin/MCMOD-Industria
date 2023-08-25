@@ -3,7 +3,10 @@ package de.m_marvin.industria.content.registries;
 import de.m_marvin.industria.content.Industria;
 import de.m_marvin.industria.content.items.ConduitCableItem;
 import de.m_marvin.industria.content.items.ScrewDriverItem;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -13,11 +16,13 @@ import net.minecraftforge.registries.RegistryObject;
 public class ModItems {
 	
 	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Industria.MODID);
+	private static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Industria.MODID);
 	public static void register() {
 		ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		CREATIVE_MODE_TABS.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 	
-	public static final RegistryObject<BlockItem> IRON_CONDUIT_CLAMP = ITEMS.register("iron_conduit_clamp", () -> new BlockItem(ModBlocks.IRON_CONDUIT_CLAMP.get(), new Item.Properties()));
+	//public static final RegistryObject<BlockItem> IRON_CONDUIT_CLAMP = ITEMS.register("iron_conduit_clamp", () -> new BlockItem(ModBlocks.IRON_CONDUIT_CLAMP.get(), new Item.Properties()));
 	public static final RegistryObject<ConduitCableItem> INSULATED_COPPER_WIRE = ITEMS.register("insulated_copper_wire", () -> new ConduitCableItem(new Item.Properties().stacksTo(16), ModConduits.INSULATED_COPPER_WIRE));
 	public static final RegistryObject<ConduitCableItem> INSULATED_ALUMINUM_WIRE = ITEMS.register("insulated_aluminum_wire", () -> new ConduitCableItem(new Item.Properties().stacksTo(16), ModConduits.INSULATED_ALUMINUM_WIRE));
 	public static final RegistryObject<ConduitCableItem> INSULATED_GOLD_WIRE = ITEMS.register("insulated_gold_wire", () -> new ConduitCableItem(new Item.Properties().stacksTo(16), ModConduits.INSULATED_GOLD_WIRE));
@@ -29,8 +34,28 @@ public class ModItems {
 	
 	public static final RegistryObject<ScrewDriverItem> SCREW_DRIVER = ITEMS.register("screw_driver", () -> new ScrewDriverItem(new Item.Properties().stacksTo(1)));
 	
-	public static final RegistryObject<BlockItem> MOTOR = ITEMS.register("motor", () -> new BlockItem(ModBlocks.MOTOR.get(), new Item.Properties()));
+	//public static final RegistryObject<BlockItem> MOTOR = ITEMS.register("motor", () -> new BlockItem(ModBlocks.MOTOR.get(), new Item.Properties()));
 	public static final RegistryObject<BlockItem> JUNCTION_BOX = ITEMS.register("junction_box", () -> new BlockItem(ModBlocks.JUNCTION_BOX.get(), new Item.Properties()));
-	public static final RegistryObject<BlockItem> ELECTRIC_LAMP = ITEMS.register("electric_light", () -> new BlockItem(ModBlocks.ELECTRIC_LAMP.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> FLOODLIGHT = ITEMS.register("floodlight", () -> new BlockItem(ModBlocks.FLOODLIGHT.get(), new Item.Properties()));
+	
+	/* Creative tabs */
+	
+	public static final RegistryObject<CreativeModeTab> MACHINES_TAB = CREATIVE_MODE_TABS.register("machines", () -> CreativeModeTab.builder()
+			.title(Component.translatable("industria.creative_tab.machines"))
+			.icon(() -> INSULATED_COPPER_WIRE.get().getDefaultInstance())
+			.displayItems((displayParams, output) -> {
+				output.accept(COPPER_WIRE.get().getDefaultInstance());
+				output.accept(ALUMINUM_WIRE.get().getDefaultInstance());
+				output.accept(GOLD_WIRE.get().getDefaultInstance());
+				output.accept(TIN_WIRE.get().getDefaultInstance());
+				output.accept(INSULATED_COPPER_WIRE.get().getDefaultInstance());
+				output.accept(INSULATED_ALUMINUM_WIRE.get().getDefaultInstance());
+				output.accept(INSULATED_GOLD_WIRE.get().getDefaultInstance());
+				output.accept(INSULATED_TIN_WIRE.get().getDefaultInstance());
+				output.accept(JUNCTION_BOX.get().getDefaultInstance());
+				output.accept(FLOODLIGHT.get().getDefaultInstance());
+			})
+			.build()
+	);
 	
 }

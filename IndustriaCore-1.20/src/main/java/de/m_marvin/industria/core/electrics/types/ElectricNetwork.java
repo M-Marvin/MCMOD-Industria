@@ -51,7 +51,7 @@ public class ElectricNetwork implements INGCallback {
 			}
 		}
 		tag.put("Components", componentsTag);
-		if (!this.isEmpty() && !this.isPlotEmpty()) {
+		if (!this.isEmpty() && !this.isPlotEmpty() && this.components.size() > 1) {
 			String circuitName = handler.saveCircuit(this.netList);
 			tag.putString("Circuit", circuitName);
 		}

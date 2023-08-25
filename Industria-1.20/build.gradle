@@ -113,6 +113,7 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    flatDir dirs: ["../IndustriaCore-1.20/build/libs"]
 }
 
 configurations {
@@ -137,6 +138,7 @@ dependencies {
 	implementation "com.github.M-Marvin:LIBRARY-NGLink:844e6813c7e61b5127bead6deb7cea93990a24a3"
 	implementation "com.github.M-Marvin:LIBRARY-UnifiedVectors:main-SNAPSHOT"
  	implementation project(path: ":IndustriaCore-1.20", configuration: 'shadow')
+ 	runtimeOnly "industria:industriacore:1.0"
  	
  	// Code Dependencies
 	

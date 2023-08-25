@@ -1,7 +1,9 @@
 package de.m_marvin.industria.content.blockentities;
 
+import de.m_marvin.industria.content.blocks.FloodlightBlock;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
+import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
@@ -21,12 +23,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class ElectricLampBlockEntity extends BlockEntity implements MenuProvider, IJunctionEdit {
+public class FloodlightBlockEntity extends BlockEntity implements MenuProvider, IJunctionEdit {
 	
-	protected String[] nodeLanes = new String[] {"+", "-"};
+	protected String[] nodeLanes = new String[] {"L", "N"};
 	
-	public ElectricLampBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(ModBlockEntityTypes.ELECTRIC_LAMP.get(), pPos, pBlockState);
+	public FloodlightBlockEntity(BlockPos pPos, BlockState pBlockState) {
+		super(ModBlockEntityTypes.FLOODLIGHT.get(), pPos, pBlockState);
 	}
 
 	@Override
@@ -72,12 +74,22 @@ public class ElectricLampBlockEntity extends BlockEntity implements MenuProvider
 
 	@Override
 	public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-		return new JunctionBoxContainer<ElectricLampBlockEntity>(pContainerId, pPlayerInventory, this);
+		return new JunctionBoxContainer<FloodlightBlockEntity>(pContainerId, pPlayerInventory, this);
 	}
 
 	@Override
 	public Component getDisplayName() {
 		return this.getBlockState().getBlock().getName();
+	}
+
+	public void updateLight() {
+		
+		double voltage = ElectricUtility.getVoltageBetween(level, new NodePos(worldPosition, 0), new NodePos(worldPosition, 0), "electric_lamp_P", "electric_lamp_N");
+		double overshoot = ElectricUtility.getPowerOvershoot(voltage, FloodlightBlock.TARGET_VOLTAGE);
+		double power = ElectricUtility.getPowerPercentage(voltage * FloodlightBlock.TARGET_POWER / FloodlightBlock.TARGET_VOLTAGE, FloodlightBlock.TARGET_POWER);
+		
+		
+		
 	}
 	
 }

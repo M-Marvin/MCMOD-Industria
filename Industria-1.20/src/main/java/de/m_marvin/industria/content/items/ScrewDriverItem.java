@@ -3,7 +3,6 @@ package de.m_marvin.industria.content.items;
 import org.joml.primitives.AABBic;
 import org.valkyrienskies.core.api.ships.Ship;
 
-import de.m_marvin.industria.content.blocks.IScrewDriveable;
 import de.m_marvin.industria.content.registries.ModTags;
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.scrollinput.type.items.IScrollOverride;
@@ -85,25 +84,25 @@ public class ScrewDriverItem extends Item implements IScrollOverride {
 	}
 	
 	public void adjustTargetedBlock(BlockState targetedBlock, UseOnContext context, double scrollDelta) {
-		IScrewDriveable actor = (IScrewDriveable) targetedBlock.getBlock();
-		InteractionResult result = actor.onScrewDriveAdjusting(targetedBlock, context, scrollDelta);
-		
-		if (result.shouldSwing()) {
-			
-		}
+//		IScrewDriveable actor = (IScrewDriveable) targetedBlock.getBlock();
+//		InteractionResult result = actor.onScrewDriveAdjusting(targetedBlock, context, scrollDelta);
+//		
+//		if (result.shouldSwing()) {
+//			
+//		}
 	}
 	
 	@Override
 	public boolean overridesScroll(UseOnContext context, ItemStack stack) {
 		if (context.getHitResult() != null) {
-			BlockPos targetedPos = context.getClickedPos();
-			Direction targetedFace = context.getClickedFace();
-			Vec3 targetedVec = context.getClickLocation();
-			BlockState targetedBlock = context.getLevel().getBlockState(targetedPos);
-			if (targetedBlock.getBlock() instanceof IScrewDriveable) {
-				IScrewDriveable actor = (IScrewDriveable) targetedBlock.getBlock();
-				return actor.isAdjustable(targetedBlock, targetedFace, targetedVec);
-			}
+//			BlockPos targetedPos = context.getClickedPos();
+//			Direction targetedFace = context.getClickedFace();
+//			Vec3 targetedVec = context.getClickLocation();
+//			BlockState targetedBlock = context.getLevel().getBlockState(targetedPos);
+//			if (targetedBlock.getBlock() instanceof IScrewDriveable) {
+//				IScrewDriveable actor = (IScrewDriveable) targetedBlock.getBlock();
+//				return actor.isAdjustable(targetedBlock, targetedFace, targetedVec);
+//			}
 		}
 		return false;		
 	}

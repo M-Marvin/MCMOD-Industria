@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "industria:copper_wire",
+    "industria:aluminum_wire",
+    "industria:gold_wire",
+    "industria:tin_wire",
+    "industria:insulated_copper_wire",
+    "industria:insulated_aluminum_wire",
+    "industria:insulated_gold_wire",
+    "industria:insulated_tin_wire"
+  ]
+}

@@ -72,9 +72,11 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricConnec
 	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
 		Direction facing = pState.getValue(BlockStateProperties.FACING);
 		if (facing.getAxis() == Axis.Y) {
-			return facing.getAxisDirection() == AxisDirection.POSITIVE ? VoxelShapeUtility.rotateShape(BLOCK_SHAPE, new Vec3f(8, 8, 8), 180, true, Axis.X) : BLOCK_SHAPE;
+			//return facing.getAxisDirection() == AxisDirection.POSITIVE ? VoxelShapeUtility.rotateShape(BLOCK_SHAPE, new Vec3f(8, 8, 8), 180, true, Axis.X) : BLOCK_SHAPE;
+			return VoxelShapeUtility.transformation().centered().rotateX(facing.getAxisDirection() == AxisDirection.POSITIVE ? 90 : -90).uncentered().transform(BLOCK_SHAPE);
 		} else {
-			return VoxelShapeUtility.rotateShape(VoxelShapeUtility.rotateShape(BLOCK_SHAPE, new Vec3f(8, 8, 8), 90, true, Axis.X), new Vec3f(8, 8, 8), facing, Axis.Y);
+			return VoxelShapeUtility.transformation().centered().rotateY(facing.get2DDataValue() * 90).uncentered().transform(BLOCK_SHAPE);
+			//return VoxelShapeUtility.rotateShape(VoxelShapeUtility.rotateShape(BLOCK_SHAPE, new Vec3f(8, 8, 8), 90, true, Axis.X), new Vec3f(8, 8, 8), facing, Axis.Y);
 		}
 	}
 	

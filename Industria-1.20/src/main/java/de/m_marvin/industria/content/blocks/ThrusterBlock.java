@@ -35,7 +35,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class ThrusterBlock extends Block implements IElectricConnector {
 	
 	public static final VoxelShape BLOCK_SHAPE = Block.box(3, 3, 1, 13, 13, 16);
-	public static final VoxelShape BLOCK_SHAPE_VERTICAL = Block.box(3, 0, 3, 13, 15, 13);
+	//public static final VoxelShape BLOCK_SHAPE_VERTICAL = Block.box(3, 0, 3, 13, 15, 13);
 	
 //	public static final MutableConnectionPointSupplier CONDUIT_NODES = MutableConnectionPointSupplier.basedOnOrientation(BlockStateProperties.FACING)
 //			.addOnFace(new Vec3i(8, 9, 4), ConduitConnectionTypes.ELECTRIC, 1, Direction.SOUTH)
@@ -57,9 +57,10 @@ public class ThrusterBlock extends Block implements IElectricConnector {
 		
 		Direction facing = state.getValue(BlockStateProperties.FACING);
 		if (facing.getAxis() == Axis.Y) {
-			return facing.getAxisDirection() == AxisDirection.POSITIVE ? BLOCK_SHAPE_VERTICAL : VoxelShapeUtility.rotateShape(BLOCK_SHAPE_VERTICAL, new Vec3f(8, 8, 8), Math.PI, false, Axis.X);
+			return VoxelShapeUtility.transformation().centered().rotateX(facing.getAxisDirection() == AxisDirection.POSITIVE ? -90 : 90).uncentered().transform(BLOCK_SHAPE);
+			//return facing.getAxisDirection() == AxisDirection.POSITIVE ? BLOCK_SHAPE_VERTICAL : VoxelShapeUtility.rotateShape(BLOCK_SHAPE_VERTICAL, new Vec3f(8, 8, 8), Math.PI, false, Axis.X);
 		} else {
-			return VoxelShapeUtility.rotateShape(BLOCK_SHAPE, new Vec3f(8, 8, 8), facing, Axis.Y);
+			return VoxelShapeUtility.transformation().centered().rotateY(facing.get2DDataValue() * 90).uncentered().transform(BLOCK_SHAPE);
 		}
 	}
 	

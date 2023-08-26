@@ -10,6 +10,7 @@ import de.m_marvin.industria.core.conduits.types.ConduitHitResult;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
+import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
@@ -36,7 +37,7 @@ public class ConduitUtility {
 			BlockPos middlePos = MathUtility.getMiddleBlock(position.getNodeApos(), position.getNodeBpos());
 			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middlePos)), new SCConduitPackage.SCPlaceConduitPackage(position, conduit, length));
 		}
-		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
+		ConduitHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		return handler.placeConduit(position, conduit, length);
 	}
 	
@@ -47,40 +48,42 @@ public class ConduitUtility {
 	
 	public static boolean removeConduit(Level level, ConduitPos position, boolean dropItems) {
 		if (!level.isClientSide()) {
-			BlockPos middlePos = MathUtility.getMiddleBlock(position.getNodeApos(), position.getNodeBpos());
+			BlockPos middlePos = MathUtility.getMiddleBlock(
+					PhysicUtility.ensureWorldBlockCoordinates(level, position.getNodeApos(), position.getNodeApos()), 
+					PhysicUtility.ensureWorldBlockCoordinates(level, position.getNodeBpos(), position.getNodeBpos()));
 			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middlePos)), new SCConduitPackage.SCBreakConduitPackage(position, dropItems));
 		}
-		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
+		ConduitHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		return handler.breakConduit(position, dropItems);
 	}
 
 	public static Optional<ConduitEntity> getConduit(Level level, ConduitPos position) {
-		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
+		ConduitHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		return handler.getConduit(position);
 	}
 
 	public static Optional<ConduitEntity> getConduitAtNode(Level level, BlockPos block, int node) {
-		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
+		ConduitHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		return handler.getConduitAtNode(block, node);
 	}
 	
 	public static List<ConduitEntity> getConduitsAtNode(Level level, BlockPos position, int node) {
-		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
+		ConduitHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		return handler.getConduitsAtNode(position, node);
 	}
 	
 	public static List<ConduitEntity> getConduitsAtBlock(Level level, BlockPos position) {
-		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
+		ConduitHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		return handler.getConduitsAtBlock(position);
 	}
 	
 	public static List<ConduitEntity> getConduitsInChunk(Level level, ChunkPos chunk) {
-		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
+		ConduitHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		return handler.getConduitsInChunk(chunk);
 	}
 
 	public static ConduitHitResult clipConduits(Level level, ClipContext context, boolean skipBlockClip) {
-		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
+		ConduitHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		ConduitHitResult cResult = handler.clipConduits(context);
 		if (cResult.isHit() && !skipBlockClip) {
 			Vec3d newTarget = cResult.getHitPos().copy();

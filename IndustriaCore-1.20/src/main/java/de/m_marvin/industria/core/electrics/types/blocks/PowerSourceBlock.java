@@ -69,33 +69,14 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricConnec
 
 		if (level.getBlockEntity(position) instanceof PowerSourceBlockEntity source) {
 
-			NodePos[] nodes = getConnections(level, position, instance);
-			List<String[]> lanes = Stream.of(nodes).map(node -> source.getCableWireLabels(node)).toList();
 			String[] sourceLanes = source.getWireLabels();
+			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, sourceLanes[0], sourceLanes[1]);
 			
-			CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "resistor"));
-			template.setProperty("resistance", 0);
-			
-			for (int i = 0; i < nodes.length; i++) {
-				String[] wireLanes = lanes.get(i);
-				for (String lane : wireLanes) {
-					if (lane.equals(sourceLanes[0])) {
-						template.setNetworkNode("NET1", nodes[i], lane);
-						template.setNetworkNode("NET2", new NodePos(position, 0), "source_P");
-						plotter.accept(template);
-					} else if (lane.equals(sourceLanes[1])) {
-						template.setNetworkNode("NET1", nodes[i], lane);
-						template.setNetworkNode("NET2", new NodePos(position, 0), "source_N");
-						plotter.accept(template);
-					}
-				}
-			}
-
 			CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "source"));
 			templateSource.setProperty("nominal_current", 10);
 			templateSource.setProperty("nominal_voltage", 100);
-			templateSource.setNetworkNode("VDC", new NodePos(position, 0), "source_P");
-			templateSource.setNetworkNode("GND", new NodePos(position, 0), "source_N");
+			templateSource.setNetworkNode("VDC", new NodePos(position, 0), sourceLanes[0]);
+			templateSource.setNetworkNode("GND", new NodePos(position, 0), sourceLanes[1]);
 			plotter.accept(templateSource);
 			
 		}
@@ -105,12 +86,12 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricConnec
 	@Override
 	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {
 		
-		double v1 = ElectricUtility.getFloatingNodeVoltage(level, new NodePos(position, 0), "source_P");
-		double v2 = ElectricUtility.getFloatingNodeVoltage(level, new NodePos(position, 0), "source_N");
-		double voltage = v1 - v2;
-		
-		System.out.println("Source voltage: " + voltage + "V");
-		System.out.println("Source current max.: " + 10 + "A");
+//		double v1 = ElectricUtility.getFloatingNodeVoltage(level, new NodePos(position, 0), "source_P");
+//		double v2 = ElectricUtility.getFloatingNodeVoltage(level, new NodePos(position, 0), "source_N");
+//		double voltage = v1 - v2;
+//		
+//		System.out.println("Source voltage: " + voltage + "V");
+//		System.out.println("Source current max.: " + 10 + "A");
 		
 	}
 	
@@ -136,13 +117,7 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricConnec
 	
 	@Override
 	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-		if (pPlayer.getItemInHand(pHand).getItem() instanceof AbstractConduitItem) return InteractionResult.PASS; // TODO Solve with tags in future
-		if (!pLevel.isClientSide()) {
-			BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-			if (blockEntity instanceof MenuProvider provider) NetworkHooks.openScreen((ServerPlayer) pPlayer, provider, pPos);
-			return InteractionResult.SUCCESS;
-		}
-		return InteractionResult.SUCCESS;
+		return GameUtility.openElectricBlockEntityUI(pLevel, pPos, pPlayer, pHand);
 	}
 
 	@Override

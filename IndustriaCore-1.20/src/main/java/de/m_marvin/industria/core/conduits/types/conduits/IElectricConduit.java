@@ -6,6 +6,7 @@ import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.types.IElectric;
+import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -42,9 +43,11 @@ public interface IElectricConduit extends IElectric<ConduitEntity, ConduitPos, C
 	public int getWireCount();
 	
 	@Override
-	default ChunkPos getChunkPos(ConduitPos position) {
-		BlockPos pos = MathUtility.getMiddleBlock(position.getNodeApos(), position.getNodeBpos());
-		return new ChunkPos(pos);
+	default ChunkPos getAffectedChunk(Level level, ConduitPos position) {
+		BlockPos middlePos = MathUtility.getMiddleBlock(
+				PhysicUtility.ensureWorldBlockCoordinates(level, position.getNodeApos(), position.getNodeApos()),
+				PhysicUtility.ensureWorldBlockCoordinates(level, position.getNodeApos(), position.getNodeApos()));
+		return new ChunkPos(middlePos);
 	}
 	
 	@Override

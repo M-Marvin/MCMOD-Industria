@@ -36,7 +36,7 @@ public class ModItems {
 	
 	//public static final RegistryObject<BlockItem> MOTOR = ITEMS.register("motor", () -> new BlockItem(ModBlocks.MOTOR.get(), new Item.Properties()));
 	public static final RegistryObject<BlockItem> JUNCTION_BOX = ITEMS.register("junction_box", () -> new BlockItem(ModBlocks.JUNCTION_BOX.get(), new Item.Properties()));
-	public static final RegistryObject<BlockItem> FLOODLIGHT = ITEMS.register("floodlight", () -> new BlockItem(ModBlocks.FLOODLIGHT.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> FLOODLIGHT = ITEMS.register("brass_floodlight", () -> new BlockItem(ModBlocks.BRASS_FLOODLIGHT.get(), new Item.Properties()));
 	
 	/* Creative tabs */
 	
@@ -54,6 +54,14 @@ public class ModItems {
 				output.accept(INSULATED_TIN_WIRE.get().getDefaultInstance());
 				output.accept(JUNCTION_BOX.get().getDefaultInstance());
 				output.accept(FLOODLIGHT.get().getDefaultInstance());
+			})
+			.build()
+	);
+	public static final RegistryObject<CreativeModeTab> TOOLS_TAB = CREATIVE_MODE_TABS.register("tools", () -> CreativeModeTab.builder()
+			.title(Component.translatable("industria.creative_tab.tools"))
+			.icon(() -> SCREW_DRIVER.get().getDefaultInstance())
+			.displayItems((displayParams, output) -> {
+				output.accept(SCREW_DRIVER.get().getDefaultInstance());
 			})
 			.build()
 	);

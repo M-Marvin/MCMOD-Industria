@@ -10,6 +10,7 @@ import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.items.AbstractConduitItem;
+import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
@@ -17,6 +18,7 @@ import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.blockentities.JunctionBoxBlockEntity;
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.registries.NodeTypes;
+import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.univec.impl.Vec3f;
 import de.m_marvin.univec.impl.Vec3i;
@@ -72,11 +74,18 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricConnec
 	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
 		Direction facing = pState.getValue(BlockStateProperties.FACING);
 		if (facing.getAxis() == Axis.Y) {
-			//return facing.getAxisDirection() == AxisDirection.POSITIVE ? VoxelShapeUtility.rotateShape(BLOCK_SHAPE, new Vec3f(8, 8, 8), 180, true, Axis.X) : BLOCK_SHAPE;
-			return VoxelShapeUtility.transformation().centered().rotateX(facing.getAxisDirection() == AxisDirection.POSITIVE ? 90 : -90).uncentered().transform(BLOCK_SHAPE);
+			return VoxelShapeUtility.transformation()
+					.centered()
+					.rotateX(facing.getAxisDirection() == AxisDirection.POSITIVE ? 180 : 0)
+					.uncentered()
+					.transform(BLOCK_SHAPE);
 		} else {
-			return VoxelShapeUtility.transformation().centered().rotateY(facing.get2DDataValue() * 90).uncentered().transform(BLOCK_SHAPE);
-			//return VoxelShapeUtility.rotateShape(VoxelShapeUtility.rotateShape(BLOCK_SHAPE, new Vec3f(8, 8, 8), 90, true, Axis.X), new Vec3f(8, 8, 8), facing, Axis.Y);
+			return VoxelShapeUtility.transformation()
+					.centered()
+					.rotateX(90)
+					.rotateZ(facing.get2DDataValue() * -90)
+					.uncentered()
+					.transform(BLOCK_SHAPE);
 		}
 	}
 	
@@ -110,7 +119,7 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricConnec
 		if (level.getBlockEntity(position) instanceof IJunctionEdit junction) {
 
 			NodePos[] nodes = getConnections(level, position, instance);
-			List<String[]> lanes = Stream.of(nodes).map(node -> junction.getCableWireLabels(node)).toList();
+			List<String[]> lanes = Stream.of(nodes).map(node -> ElectricUtility.getLaneLabelsSummarized(level, node)).toList();
 			
 			CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "resistor"));
 			template.setProperty("resistance", 0.015);
@@ -141,13 +150,7 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricConnec
 	
 	@Override
 	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-		if (pPlayer.getItemInHand(pHand).getItem() instanceof AbstractConduitItem) return InteractionResult.PASS; // TODO Solve with tags in future
-		if (!pLevel.isClientSide()) {
-			BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-			if (blockEntity instanceof MenuProvider provider) NetworkHooks.openScreen((ServerPlayer) pPlayer, provider, pPos);
-			return InteractionResult.SUCCESS;
-		}
-		return InteractionResult.SUCCESS;
+		return GameUtility.openElectricBlockEntityUI(pLevel, pPos, pPlayer, pHand);
 	}
 	
 }

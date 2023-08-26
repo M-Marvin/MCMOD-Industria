@@ -15,6 +15,10 @@ public class ElectricConduitEntity extends ConduitEntity {
 		super(position, conduit, length);
 		this.wireLanes = new String[laneCount];
 		Arrays.fill(this.wireLanes, "");
+		if (laneCount >= 2) {
+			this.wireLanes[0] = "L";
+			this.wireLanes[1] = "N";
+		}
 	}
 	
 	public void setWireLanes(String[] laneLabels) {

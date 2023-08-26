@@ -17,7 +17,7 @@ public class ModBlockEntityTypes {
 		BLOCK_ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 	
-	public static final RegistryObject<BlockEntityType<FloodlightBlockEntity>> FLOODLIGHT = BLOCK_ENTITY_TYPES.register("floodlight", () -> BlockEntityType.Builder.of(FloodlightBlockEntity::new, ModBlocks.FLOODLIGHT.get()).build(null));
+	public static final RegistryObject<BlockEntityType<FloodlightBlockEntity>> FLOODLIGHT = BLOCK_ENTITY_TYPES.register("floodlight", () -> BlockEntityType.Builder.of(FloodlightBlockEntity::new, ModBlocks.BRASS_FLOODLIGHT.get()).build(null));
 	public static final RegistryObject<BlockEntityType<MotorBlockEntity>> MOTOR = null; //BLOCK_ENTITY_TYPES.register("motor", () -> BlockEntityType.Builder.of(MotorBlockEntity::new, ModBlocks.MOTOR.get()).build(null));
 	public static final RegistryObject<BlockEntityType<GeneratorBlockEntity>> GENERATOR = null;//BLOCK_ENTITY_TYPES.register("generator", () -> BlockEntityType.Builder.of(GeneratorBlockEntity::new, ModBlocks.MOTOR.get()).build(null));
 	

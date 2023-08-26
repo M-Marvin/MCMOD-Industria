@@ -176,7 +176,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	@SubscribeEvent
 	public static void onBlockStateChange(BlockEvent.NeighborNotifyEvent event) {
 		Level level = (Level) event.getLevel();
-		ElectricNetworkHandlerCapability handler = GameUtility.getCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 		if (event.getState().getBlock() instanceof IElectricConnector) {
 			IElectricConnector block = (IElectricConnector) event.getState().getBlock();
 			handler.addComponent(event.getPos(), block, event.getState());
@@ -189,7 +189,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	public static void onConduitStateChange(ConduitEvent event) {
 		Level level = (Level) event.getLevel();
 		if (!level.isClientSide()) {
-			ElectricNetworkHandlerCapability handler = GameUtility.getCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+			ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 			if (event.getConduitState().getConduit() instanceof IElectricConduit) {
 				if (event instanceof ConduitPlaceEvent) {
 					IElectricConduit conduit = (IElectricConduit) event.getConduitState().getConduit();
@@ -204,7 +204,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	@SubscribeEvent
 	public static void onClientLoadsChunk(ChunkWatchEvent.Watch event) {
 		Level level = event.getPlayer().level();
-		ElectricNetworkHandlerCapability electricHandler = GameUtility.getCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		ElectricNetworkHandlerCapability electricHandler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 		Set<Component<?, ?, ?>> components = electricHandler.findComponentsInChunk(event.getPos());
 		if (!components.isEmpty()) {
 			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> event.getChunk()), new SSyncComponentsPackage(components, event.getChunk().getPos(), SyncRequestType.ADDED));
@@ -214,7 +214,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	@SubscribeEvent
 	public static void onClientUnloadsChunk(ChunkWatchEvent.UnWatch event) {
 		Level level = event.getPlayer().level();
-		ElectricNetworkHandlerCapability electricHandler = GameUtility.getCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		ElectricNetworkHandlerCapability electricHandler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 		Set<Component<?, ?, ?>> components = electricHandler.findComponentsInChunk(event.getPos());
 		if (!components.isEmpty()) {
 			 IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunk(event.getPos().x, event.getPos().z)), new SSyncComponentsPackage(components, event.getPos(), SyncRequestType.REMOVED));
@@ -224,7 +224,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	@SubscribeEvent
 	public static void onWorldUnloadEvent(LevelEvent.Unload event) {
 		if (!event.getLevel().isClientSide()) {
-			ElectricNetworkHandlerCapability electricHandler = GameUtility.getCapability((ServerLevel) event.getLevel(), Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+			ElectricNetworkHandlerCapability electricHandler = GameUtility.getLevelCapability((ServerLevel) event.getLevel(), Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 			electricHandler.terminateNetworks();
 		}
 	}
@@ -324,8 +324,8 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		public boolean isWire() {
 			return type.isWire();
 		}
-		public ChunkPos getChunkPos() {
-			return type.getChunkPos(pos);
+		public ChunkPos getAffectedChunk(Level level) {
+			return type.getAffectedChunk(level, pos);
 		}
 	}
 	
@@ -361,7 +361,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	public Set<Component<?, ?, ?>> findComponentsInChunk(ChunkPos chunkPos) {
 		Set<Component<?, ?, ?>> components = new HashSet<>();
 		for (Entry<Object, Component<?, ?, ?>> componentEntry : this.pos2componentMap.entrySet()) {
-			if (componentEntry.getValue().getChunkPos().equals(chunkPos)) components.add(componentEntry.getValue());
+			if (componentEntry.getValue().getAffectedChunk(level).equals(chunkPos)) components.add(componentEntry.getValue()); // TODO Check
 		}
 		return components;
 	}
@@ -389,7 +389,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				}
 				if (!this.level.isClientSide) {
 					componentsToUpdate.forEach((comp) -> updateNetwork(comp.pos()));
-					ChunkPos chunkPos = component.getChunkPos();
+					ChunkPos chunkPos = component.getAffectedChunk(level);
 					IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> this.level.getChunk(chunkPos.x, chunkPos.z)), new SSyncComponentsPackage(component, chunkPos, SyncRequestType.REMOVED));
 				}
 			}
@@ -412,7 +412,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		addToNetwork(component2);
 		if (!this.level.isClientSide) {
 			updateNetwork(pos);
-			ChunkPos chunkPos = component2.getChunkPos();
+			ChunkPos chunkPos = component2.getAffectedChunk(level);
 			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> this.level.getChunk(chunkPos.x, chunkPos.z)), new SSyncComponentsPackage(component2, chunkPos, SyncRequestType.ADDED));
 		}
 	}

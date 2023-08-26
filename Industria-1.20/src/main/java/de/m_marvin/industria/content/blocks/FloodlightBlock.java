@@ -1,9 +1,8 @@
 package de.m_marvin.industria.content.blocks;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.content.blockentities.FloodlightBlockEntity;
@@ -11,21 +10,20 @@ import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
-import de.m_marvin.industria.core.conduits.types.items.AbstractConduitItem;
+import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
 import de.m_marvin.industria.core.registries.NodeTypes;
+import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -42,15 +40,16 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.network.NetworkHooks;
 
 public class FloodlightBlock extends BaseEntityBlock implements IElectricConnector {
 	
 	public static final NodePointSupplier NODES = NodePointSupplier.define()
-			.addNode(NodeTypes.ALL, 1, new Vec3i(8, 8, 0))
+			.addNode(NodeTypes.ALL, 2, new Vec3i(0, 8, 13))
+			.addNode(NodeTypes.ALL, 2, new Vec3i(8, 8, 16))
+			.addNode(NodeTypes.ALL, 2, new Vec3i(16, 8, 13))
+			.addModifier(BlockStateProperties.ATTACH_FACE, NodePointSupplier.ATTACH_FACE_MODIFIER_DEFAULT_WALL)
 			.addModifier(BlockStateProperties.HORIZONTAL_FACING, NodePointSupplier.FACING_MODIFIER_DEFAULT_NORTH);
-	public static final int NODE_COUNT = 1;
+	public static final int NODE_COUNT = 3;
 	public static final int TARGET_VOLTAGE = 100;
 	public static final int TARGET_POWER = 200;
 	
@@ -77,7 +76,7 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricConnect
 		} else {
 			blockstate = this.defaultBlockState().setValue(BlockStateProperties.ATTACH_FACE, AttachFace.WALL).setValue(BlockStateProperties.HORIZONTAL_FACING, direction.getOpposite());
 		}
-		return blockstate;
+		return blockstate.setValue(BlockStateProperties.LIT, false);
 	}
 	
 	@Override
@@ -117,33 +116,14 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricConnect
 	@Override
 	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
 		if (level.getBlockEntity(position) instanceof FloodlightBlockEntity lamp) {
-
-			NodePos[] nodes = getConnections(level, position, instance);
-			List<String[]> lanes = Stream.of(nodes).map(node -> lamp.getCableWireLabels(node)).toList();
+			
 			String[] lampLanes = lamp.getNodeLanes();
-			
-			CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "resistor"));
-			template.setProperty("resistance", 0);
-			
-			for (int i = 0; i < nodes.length; i++) {
-				String[] wireLanes = lanes.get(i);
-				for (String lane : wireLanes) {
-					if (lane.equals(lampLanes[0])) {
-						template.setNetworkNode("NET1", nodes[i], lane);
-						template.setNetworkNode("NET2", new NodePos(position, 0), "electric_lamp_P");
-						plotter.accept(template);
-					} else if (lane.equals(lampLanes[1])) {
-						template.setNetworkNode("NET1", nodes[i], lane);
-						template.setNetworkNode("NET2", new NodePos(position, 0), "electric_lamp_N");
-						plotter.accept(template);
-					}
-				}
-			}
+			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, lampLanes[0], lampLanes[1]);
 			
 			CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "current_load"));
 			templateSource.setProperty("nominal_current", TARGET_POWER / TARGET_VOLTAGE);
-			templateSource.setNetworkNode("VDC", new NodePos(position, 0), "electric_lamp_P");
-			templateSource.setNetworkNode("GND", new NodePos(position, 0), "electric_lamp_N");
+			templateSource.setNetworkNode("VDC", new NodePos(position, 0), lampLanes[0]);
+			templateSource.setNetworkNode("GND", new NodePos(position, 0), lampLanes[1]);
 			plotter.accept(templateSource);
 			
 		}
@@ -159,7 +139,7 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricConnect
 	
 	@Override
 	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {
-		return new NodePos[] {new NodePos(pos, 0)};
+		return IntStream.range(0, NODE_COUNT).mapToObj(i -> new NodePos(pos, i)).toArray(i -> new NodePos[i]);
 	}
 	
 	@Override
@@ -184,16 +164,7 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricConnect
 	
 	@Override
 	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-		if (pPlayer.getItemInHand(pHand).getItem() instanceof AbstractConduitItem) return InteractionResult.PASS; // TODO Solve with tags in future
-		
-		if (!pLevel.isClientSide()) {
-			BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-			if (blockEntity instanceof MenuProvider provider) {
-				NetworkHooks.openScreen((ServerPlayer) pPlayer, provider, pPos);
-			}
-			return InteractionResult.SUCCESS;
-		}
-		return InteractionResult.SUCCESS;
+		return GameUtility.openJunctionBlockEntityUI(pLevel, pPos, pPlayer, pHand);
 	}
 	
 }

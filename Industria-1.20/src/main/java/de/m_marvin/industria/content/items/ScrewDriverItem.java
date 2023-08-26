@@ -24,48 +24,6 @@ public class ScrewDriverItem extends Item implements IScrollOverride {
 		
 	@Override
 	public InteractionResult useOn(UseOnContext context) {
-		
-		if (!context.getLevel().isClientSide()) {
-			
-			if (context.getPlayer().isShiftKeyDown()) {
-				
-				for (Ship contraption : PhysicUtility.getLoadedContraptions((ServerLevel) context.getLevel())) {
-					
-					AABBic shape = contraption.getShipAABB();
-					
-					if (shape == null) {
-						
-						PhysicUtility.removeContraption((ServerLevel) context.getLevel(), contraption);
-						
-					}
-					
-					PhysicUtility.removeContraption((ServerLevel) context.getLevel(), contraption);
-				}
-				
-			} else {
-
-				PhysicUtility.createNewContraptionAt((ServerLevel) context.getLevel(), context.getClickedPos(), 1F);
-				
-			}
-			
-		}
-		
-//		BlockPos targetedPos = context.getClickedPos();
-//		BlockState targetedBlock = context.getLevel().getBlockState(targetedPos);
-//		if (context.getPlayer() == null || !context.getPlayer().mayBuild()) {
-//			return super.useOn(context);
-//		}
-//		if (!(targetedBlock.getBlock() instanceof IScrewDriveable)) {
-//			if (canScrewDriverPickup(targetedBlock)) {
-//				return IScrewDriveable.pickupBlock(targetedPos, targetedBlock, context);
-//			}Client received packet of type
-//		} else {
-//			IScrewDriveable actor = (IScrewDriveable) targetedBlock.getBlock();
-//			if (context.getPlayer().isShiftKeyDown()) {
-//				return actor.onSneakScrewDrived(targetedBlock, context);
-//			}
-//			return actor.onScrewDrived(targetedBlock, context);
-//		}
 		return super.useOn(context);
 	}
 	

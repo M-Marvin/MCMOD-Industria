@@ -7,6 +7,7 @@ import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContaine
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.InternalNodeConstructor;
 import de.m_marvin.industria.core.registries.BlockEntityTypes;
 import de.m_marvin.industria.core.util.Direction2d;
+import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.univec.impl.Vec2i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -31,7 +32,7 @@ public class PowerSourceBlockEntity extends BlockEntity implements MenuProvider,
 	
 	@Override
 	public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-		return new JunctionBoxContainer<>(pContainerId, pPlayerInventory, this); 
+		return GameUtility.openJunctionScreenOr(this, pContainerId, pPlayer, pPlayerInventory, () -> null);
 	}
 
 	@Override

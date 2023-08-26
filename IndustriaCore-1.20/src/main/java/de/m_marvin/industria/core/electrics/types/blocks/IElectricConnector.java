@@ -42,7 +42,7 @@ public interface IElectricConnector extends IConduitConnector, IElectric<BlockSt
 	}
 
 	@Override
-	default ChunkPos getChunkPos(BlockPos position) {
+	default ChunkPos getAffectedChunk(Level level, BlockPos position) {
 		return new ChunkPos(position);
 	}
 	

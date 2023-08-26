@@ -1,13 +1,25 @@
 package de.m_marvin.industria.core.util;
 
+import java.util.function.Supplier;
+
+import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
+import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.industria.core.physics.PhysicUtility;
+import de.m_marvin.industria.core.registries.IndustriaTags;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ClipContext;
@@ -23,8 +35,34 @@ import net.minecraft.world.ticks.ScheduledTick;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.network.NetworkHooks;
 
 public class GameUtility {
+	
+	public static <T extends BlockEntity & IJunctionEdit> AbstractContainerMenu openJunctionScreenOr(T blockEntity, int containerId, Player player, Inventory inventory, Supplier<AbstractContainerMenu> container) {
+		return player.getItemInHand(InteractionHand.MAIN_HAND).is(IndustriaTags.Items.SCREW_DRIVERS) ? new JunctionBoxContainer<T>(containerId, inventory, blockEntity) : container.get();
+	}
+
+	public static InteractionResult openJunctionBlockEntityUI(Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand) {
+		if (!pPlayer.getItemInHand(pHand).is(IndustriaTags.Items.SCREW_DRIVERS)) return InteractionResult.PASS;
+		return openBlockEntityUI(pLevel, pPos, pPlayer, pHand);
+	}
+
+	public static InteractionResult openElectricBlockEntityUI(Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand) {
+		if (pPlayer.getItemInHand(pHand).is(IndustriaTags.Items.CONDUITS)) return InteractionResult.PASS;
+		return openBlockEntityUI(pLevel, pPos, pPlayer, pHand);
+	}
+
+	public static InteractionResult openBlockEntityUI(Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand) {
+		if (!pLevel.isClientSide()) {
+			BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
+			if (blockEntity instanceof MenuProvider provider) {
+				NetworkHooks.openScreen((ServerPlayer) pPlayer, provider, pPos);
+			}
+			return InteractionResult.SUCCESS;
+		}
+		return InteractionResult.SUCCESS;
+	}
 	
 	public static Direction getFacingDirection(Entity entity) {
 		Vec3d viewVec = Vec3d.fromVec(entity.getViewVector(1));
@@ -35,7 +73,7 @@ public class GameUtility {
 		return new Vec3f(0, 0.1F, 0); // TODO
 	}
 	
-	public static <T extends Capability<C>, C extends ICapabilitySerializable<?>> C getCapability(Level level, T cap) {
+	public static <T extends Capability<C>, C extends ICapabilitySerializable<?>> C getLevelCapability(Level level, T cap) {
 		LazyOptional<C> conduitHolder = level.getCapability(cap);
 		if (!conduitHolder.isPresent()) throw new IllegalStateException("Capability " + cap + " not attached on level " + level);
 		return conduitHolder.resolve().get();

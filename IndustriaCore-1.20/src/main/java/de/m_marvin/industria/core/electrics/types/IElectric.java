@@ -25,7 +25,7 @@ public interface IElectric<I, P, T> {
 	}
 	
 	public default void updateNetwork(Level level, P position) {
-		ElectricNetworkHandlerCapability handler = GameUtility.getCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 		handler.updateNetwork(position);
 	}
 	
@@ -43,7 +43,7 @@ public interface IElectric<I, P, T> {
 	public String[] getWireLanes(Level level, P pos, I instance, NodePos node);
 	public void setWireLanes(Level level, P pos, I instance, NodePos node, String[] laneLabels);
 	public boolean isWire();
-	public ChunkPos getChunkPos(P pos);
+	public ChunkPos getAffectedChunk(Level level, P pos);
 	public Optional<I> getInstance(Level level, P pos);
 
 	public default void onNetworkNotify(Level level, I instance, P position) {}

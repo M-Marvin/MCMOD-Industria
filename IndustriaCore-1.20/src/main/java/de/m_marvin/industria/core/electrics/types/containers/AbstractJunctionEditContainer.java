@@ -3,6 +3,7 @@ package de.m_marvin.industria.core.electrics.types.containers;
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.client.util.BlockEntityContainerBase;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
+import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.network.CUpdateJunctionLanesPackage;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.util.GameUtility;
@@ -36,7 +37,7 @@ public abstract class AbstractJunctionEditContainer<T extends BlockEntity & IJun
 	
 	public String[] getWireLabels(NodePos node) {
 		if (node == null) return new String[] {};
-		return this.blockEntity.getCableWireLabels(node);
+		return ElectricUtility.getLaneLabelsSummarized(this.blockEntity.getLevel(), node);
 	}
 	
 	public NodePos[] getCableNodes() {

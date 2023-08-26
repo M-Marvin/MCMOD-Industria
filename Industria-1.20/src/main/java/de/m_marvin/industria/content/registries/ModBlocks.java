@@ -22,6 +22,6 @@ public class ModBlocks {
 	//public static final RegistryObject<Block> IRON_CONDUIT_CLAMP = BLOCKS.register("iron_conduit_clamp", () -> new ConduitClampBlock(Properties.of()));
 	//public static final RegistryObject<Block> MOTOR = BLOCKS.register("motor", () -> new MotorBlock(Properties.of()));
 	public static final RegistryObject<Block> JUNCTION_BOX = BLOCKS.register("junction_box", () -> new JunctionBoxBlock(Properties.of()));
-	public static final RegistryObject<Block> FLOODLIGHT = BLOCKS.register("floodlight", () -> new FloodlightBlock(Properties.of()));
+	public static final RegistryObject<Block> BRASS_FLOODLIGHT = BLOCKS.register("brass_floodlight", () -> new FloodlightBlock(Properties.of()));
 	
 }

@@ -20,6 +20,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -47,7 +48,7 @@ public class ClientConduitPackageHandler {
 	
 	@SuppressWarnings("resource")
 	@SubscribeEvent
-	public static void onChunkLoad(ChunkEvent.Load event) {
+	public static void onWorldTick(ClientTickEvent event) {
 		Level level = Minecraft.getInstance().level;
 		if (level != null) {
 			for (ChunkPos chunk : receivedPackages.keySet()) {
@@ -68,7 +69,7 @@ public class ClientConduitPackageHandler {
 	@SuppressWarnings("resource")
 	public static boolean handlePackageInLoadedChunk(SSyncConduitPackage msg) {
 		Level level = Minecraft.getInstance().level;
-		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
+		ConduitHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		
 		if (msg.getRquest() == SyncRequestType.ADDED) {
 			for (ConduitEntity conduitState : msg.conduits) {

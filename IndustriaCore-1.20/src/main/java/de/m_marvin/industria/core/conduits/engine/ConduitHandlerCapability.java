@@ -98,7 +98,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	@SubscribeEvent
 	public static void onClientLoadsChunk(ChunkWatchEvent.Watch event) {
 		ServerLevel level = event.getLevel();
-		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
+		ConduitHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		
 		List<ConduitEntity> conduits = handler.getConduitsInChunk(event.getPos());	
 		if (conduits.size() > 0) {
@@ -112,7 +112,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	@SubscribeEvent
 	public static void onClientUnloadChunk(ChunkWatchEvent.UnWatch event) {
 		ServerLevel level = event.getLevel();
-		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
+		ConduitHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		
 		List<ConduitEntity> conduits = handler.getConduitsInChunk(event.getPos());	
 		if (conduits.size() > 0) {
@@ -127,7 +127,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	// Ticking conduits on both sides
 	public static void onWorldTick(LevelTickEvent event) {
 		Level level = event.level;
-		ConduitHandlerCapability handler = GameUtility.getCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
+		ConduitHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		
 		handler.update();
 	}

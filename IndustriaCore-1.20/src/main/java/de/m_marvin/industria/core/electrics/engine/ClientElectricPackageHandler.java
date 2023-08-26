@@ -17,6 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -43,7 +44,7 @@ public class ClientElectricPackageHandler {
 	
 	@SuppressWarnings("resource")
 	@SubscribeEvent
-	public static void onChunkLoad(ChunkEvent.Load event) {
+	public static void onWorldTick(ClientTickEvent event) {
 		Level level = Minecraft.getInstance().level;
 		if (level != null) {
 			for (ChunkPos chunk : receivedPackages.keySet()) {
@@ -65,7 +66,7 @@ public class ClientElectricPackageHandler {
 	@SuppressWarnings({ "resource", "unchecked", "rawtypes" })
 	public static boolean handlePackageInLoadedChunk(SSyncComponentsPackage msg) {
 		Level level = Minecraft.getInstance().level;
-		ElectricNetworkHandlerCapability handler = GameUtility.getCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 		
 		if (msg.request == SyncRequestType.ADDED) {
 			List<Object> handledComponents = new ArrayList<>();

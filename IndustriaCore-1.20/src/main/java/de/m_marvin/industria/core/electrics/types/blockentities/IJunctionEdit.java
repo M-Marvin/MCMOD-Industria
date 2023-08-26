@@ -5,26 +5,20 @@ import java.util.List;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
+import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.InternalNodeConstructor;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 public interface IJunctionEdit {
 	
-	public default String[] getCableWireLabels(NodePos node) {
-		List<String[]> laneLabels = ElectricUtility.getLaneLabels(this.getLevel(), node, Component::isWire);
-		if (laneLabels.size() >= 1) {
-			return laneLabels.get(0);
-		} else {
-			return new String[] {};
-		}
-	}
-
 	public default void setCableWireLabels(NodePos node, String[] laneLabels) {
-		ElectricUtility.setLaneLabels(this.getLevel(), node, Component::isWire, laneLabels);
+		ElectricUtility.setLaneLabelsEqueal(this.getLevel(), node, Component::isWire, laneLabels);
 	}
 	
 	public default String[] getInternalWireLabels(NodePos node) {
@@ -41,7 +35,16 @@ public interface IJunctionEdit {
 	}
 	
 	public Level getLevel();
-	public NodePos[] getEditCableNodes(Direction playerFacing, Direction playerHorizontalFacing);
+	public BlockPos getBlockPos();
+	public default NodePos[] getEditCableNodes(Direction playerFacing, Direction playerHorizontalFacing) {
+		Level level = this.getLevel();
+		BlockPos pos = this.getBlockPos();
+		BlockState state = level.getBlockState(pos);
+		if (state.getBlock() instanceof IElectricConnector connector) {
+			return connector.getConnections(level, pos, state);
+		}
+		return new NodePos[] {};
+	}
 	public <B extends BlockEntity & IJunctionEdit> void setupScreenConduitNodes(JunctionBoxContainer<B> abstractJunctionBoxScreen, NodePos[] conduitNodes, ExternalNodeConstructor externalNodeConstructor, InternalNodeConstructor internalNodeConstructor);
 	
 }

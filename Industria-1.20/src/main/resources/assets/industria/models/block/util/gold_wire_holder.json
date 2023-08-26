@@ -1,0 +1,9 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "industria:block/util/wire_holder_basic",
+		"2": "industria:block/util/wire_connector_gold",
+		"particle": "industria:block/util/wire_connector_gold"
+	},
+	"parent": "industria:block/util/wire_holder"
+}

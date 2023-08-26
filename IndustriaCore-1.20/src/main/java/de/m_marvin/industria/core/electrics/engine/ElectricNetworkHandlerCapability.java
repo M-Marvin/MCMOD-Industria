@@ -82,12 +82,17 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		this.circuitFileCounter = 0;
 		
 		ListTag nbt2 = new ListTag();
+		int componentCount = 0;
 		for (ElectricNetwork circuitNetwork : this.circuitNetworks) {
+			circuitNetwork.removeInvalidComponents();
+			if (circuitNetwork.isEmpty()) continue;
 			nbt2.add(circuitNetwork.saveNBT(this));
+			componentCount += circuitNetwork.getComponents().size();
 		}
 		cleanupUnusedCircuitFiles();
 		
 		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "Saved " + nbt2.size() + " electric networks");
+		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "Saved " + componentCount + " electric components");
 		return nbt2;
 	}
 	
@@ -244,10 +249,10 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			this.instance = instance;
 			this.pos = pos;
 		}
-
+		
 		public Component(Level level, P pos, IElectric<I, P, T> type) {
-			this.type = type;
-			this.instance = this.type.getInstance(level, pos).get();
+			this.type = type; 
+			this.instance = this.type.getInstance(level, pos).orElse(null);
 			this.pos = pos;
 		}
 		
@@ -270,7 +275,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		
 		@Override
 		public String toString() {
-			return "Component{pos=" + this.pos() + ",type=" + this.type.toString() + ",instance=" + this.instance.toString() + "}#hash=" + this.hashCode();
+			return "Component{pos=" + this.pos() + ",type=" + this.type.toString() + ",instance=" + (this.instance() == null ? "N/A" : this.instance().toString()) + "}#hash=" + this.hashCode();
 		}
 		
 		@Override
@@ -301,20 +306,20 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			return null;
 		}
 		public void plotCircuit(Level level, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
-			type.plotCircuit(level, instance, pos, circuit, plotter);
+			type.plotCircuit(level, instance(), pos, circuit, plotter);
 		}
 		public NodePos[] getNodes(Level level) {
-			return type.getConnections(level, pos, instance);
+			return type.getConnections(level, pos, instance());
 		}
 		public void onNetworkChange(Level level) {
-			type.onNetworkNotify(level, instance, pos);
+			type.onNetworkNotify(level, instance(), pos);
 		}
 		public String[] getWireLanes(Level level, NodePos node) {
-			return type.getWireLanes(level, pos, instance, node);
+			return type.getWireLanes(level, pos, instance(), node);
 		}
 		public void setWireLanes(Level level, NodePos node, String[] laneLabels) {
-			String[] oldLanes = type.getWireLanes(level, pos, instance, node);
-			type.setWireLanes(level, pos, instance, node, laneLabels);
+			String[] oldLanes = type.getWireLanes(level, pos, instance(), node);
+			type.setWireLanes(level, pos, instance(), node, laneLabels);
 			for (int i = 0; i < oldLanes.length && i < laneLabels.length; i++) {
 				if (!oldLanes[i].equals(laneLabels[i])) {
 					ElectricUtility.updateNetwork(level, pos);
@@ -402,7 +407,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	public <I, P, T> void addComponent(P pos, IElectric<I, P, T> type, I instance) {
 		Component<?, ?, ?> component = this.pos2componentMap.get(pos);
 		if (component != null) {
-			if (component.type.equals(type) && component.instance.equals(instance)) {
+			if (component.type.equals(type)) {
 				return;
 			} else {
 				removeFromNetwork(pos);
@@ -454,13 +459,13 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	 * Returns the floating voltage currently available on the given node.
 	 * NOTE: Floating means that the voltage is referenced to "global ground", meaning a second voltage is required to calculate the actual difference (the voltage) between the two nodes.
 	 */
-	public double getFloatingNodeVoltage(NodePos node, String lane) {
+	public double getFloatingNodeVoltage(NodePos node, int laneId, String lane) {
 		Set<Component<?, ?, ?>> components = this.node2componentMap.get(node);
 		Component<?, ?, ?> component = components.stream().findAny().orElseGet(() -> this.pos2componentMap.get(node.getBlock()));
 		if (component != null) {
 			ElectricNetwork network = this.component2circuitMap.get(component);
 			if (network != null) {
-				return network.getFloatingNodeVoltage(node, lane);
+				return network.getFloatingNodeVoltage(node, laneId, lane);
 			}
 		}
 		return 0.0;
@@ -478,7 +483,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			ElectricNetwork circuit = this.component2circuitMap.get(component);
 			
 			if (circuit == null || !circuit.getComponents().contains(component)) circuit = new ElectricNetwork("ingame-level-circuit");
-			if (circuit.updatedInFrame(this.level.getGameTime())) return;
+			//if (circuit.updatedInFrame(this.level.getGameTime())) return;
 			circuit.reset();
 			buildCircuit(component, circuit);
 			if (circuit.isEmpty()) return;

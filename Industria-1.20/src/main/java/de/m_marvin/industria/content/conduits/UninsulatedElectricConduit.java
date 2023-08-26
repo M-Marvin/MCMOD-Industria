@@ -7,8 +7,8 @@ import net.minecraft.world.level.block.SoundType;
 
 public class UninsulatedElectricConduit extends ElectricConduit {
 
-	public UninsulatedElectricConduit(ConduitType type, Item item, ResourceLocation texture, SoundType sound) {
-		super(type, item, texture, sound, 1);
+	public UninsulatedElectricConduit(ConduitType type, double resistance, Item item, ResourceLocation texture, SoundType sound) {
+		super(type, item, texture, sound, 1, resistance);
 		// TODO Auto-generated constructor stub
 	}
 	

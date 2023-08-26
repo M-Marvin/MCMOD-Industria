@@ -1,0 +1,5 @@
+{
+	"Properties": [ "id" ],
+	"Networks": [ "NET1", "NET2" ],
+	"IdProperty": "id"
+}

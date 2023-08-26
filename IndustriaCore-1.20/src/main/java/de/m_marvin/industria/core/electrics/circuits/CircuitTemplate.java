@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
 
@@ -33,8 +34,8 @@ public class CircuitTemplate implements ICircuitPlot {
 		if (this.properties.containsKey(name)) this.properties.put(name, Integer.toString(value));
 	}
 	
-	public void setNetworkNode(String name, NodePos node, String lane) {
-		setNetwork(name, node.getKeyString(lane));
+	public void setNetworkNode(String name, NodePos node, int laneId, String lane) {
+		setNetwork(name, node.getKeyString(laneId, lane));
 	}
 	
 	public void setNetwork(String name, String net) {
@@ -53,10 +54,16 @@ public class CircuitTemplate implements ICircuitPlot {
 	
 	@Override
 	public String plot() {
-		Matcher matcher1 = PROPERTY_PATTERN.matcher(template);
-		String plot = matcher1.replaceAll(match -> this.properties.get(match.group(1)));
-		Matcher matcher2 = NETWORK_PATTERN.matcher(plot);
-		return matcher2.replaceAll(match -> this.networks.get(match.group(1)));
+		try {
+			Matcher matcher1 = PROPERTY_PATTERN.matcher(template);
+			String plot = matcher1.replaceAll(match -> this.properties.get(match.group(1)));
+			Matcher matcher2 = NETWORK_PATTERN.matcher(plot);
+			return matcher2.replaceAll(match -> this.networks.get(match.group(1)));
+		} catch (Exception e) {
+			IndustriaCore.LOGGER.error("Could't plot circuit template!");
+			e.printStackTrace();
+		}
+		return "";
 	}
 	
 }

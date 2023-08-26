@@ -79,14 +79,14 @@ public class ElectricUtility {
 		}
 	}
 	
-	public static double getFloatingNodeVoltage(Level level, NodePos node, String lane) {
+	public static double getFloatingNodeVoltage(Level level, NodePos node, int laneId, String lane) {
 		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-		return handler.getFloatingNodeVoltage(node, lane);
+		return handler.getFloatingNodeVoltage(node, laneId, lane);
 	}
 	
-	public static double getVoltageBetween(Level level, NodePos nodeP, NodePos nodeN, String laneP, String laneN) {
-		double v1 = ElectricUtility.getFloatingNodeVoltage(level, nodeN, laneN);
-		double v2 = ElectricUtility.getFloatingNodeVoltage(level, nodeP, laneP);
+	public static double getVoltageBetween(Level level, NodePos nodeP, NodePos nodeN, int laneIdP, int laneIdN, String laneP, String laneN) {
+		double v1 = ElectricUtility.getFloatingNodeVoltage(level, nodeN, laneIdN, laneN);
+		double v2 = ElectricUtility.getFloatingNodeVoltage(level, nodeP, laneIdP, laneP);
 		return v2 - v1;
 	}
 	
@@ -98,23 +98,22 @@ public class ElectricUtility {
 		return Math.max(voltage - targetVoltage, 0) / targetVoltage;
 	}
 	
-	public static void plotJoinTogether(Consumer<ICircuitPlot> plotter, Level level, IElectricConnector block, BlockPos position, BlockState instance, String innerLaneP, String innerLaneN) {
+	public static void plotJoinTogether(Consumer<ICircuitPlot> plotter, Level level, IElectricConnector block, BlockPos position, BlockState instance, int innerLaneIdP, String innerLaneP, int innerLaneIdN, String innerLaneN) {
 		NodePos[] nodes = block.getConnections(level, position, instance);
 		List<String[]> lanes = Stream.of(nodes).map(node -> getLaneLabelsSummarized(level, node)).toList();
 		
-		CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "resistor"));
-		template.setProperty("resistance", 0);
+		CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "junction_resistor"));
 		
 		for (int i = 0; i < nodes.length; i++) {
 			String[] wireLanes = lanes.get(i);
-			for (String lane : wireLanes) {
-				if (lane.equals(innerLaneP)) {
-					template.setNetworkNode("NET1", nodes[i], lane);
-					template.setNetworkNode("NET2", new NodePos(position, 0), innerLaneP);
+			for (int i1 = 0; i1 < wireLanes.length; i1++) {
+				if (wireLanes[i1].equals(innerLaneP)) {
+					template.setNetworkNode("NET1", nodes[i], i1, wireLanes[i1]);
+					template.setNetworkNode("NET2", new NodePos(position, 0), innerLaneIdP, innerLaneP);
 					plotter.accept(template);
-				} else if (lane.equals(innerLaneN)) {
-					template.setNetworkNode("NET1", nodes[i], lane);
-					template.setNetworkNode("NET2", new NodePos(position, 0), innerLaneN);
+				} else if (wireLanes[i1].equals(innerLaneN)) {
+					template.setNetworkNode("NET1", nodes[i], i1, wireLanes[i1]);
+					template.setNetworkNode("NET2", new NodePos(position, 0), innerLaneIdN, innerLaneN);
 					plotter.accept(template);
 				}
 			}

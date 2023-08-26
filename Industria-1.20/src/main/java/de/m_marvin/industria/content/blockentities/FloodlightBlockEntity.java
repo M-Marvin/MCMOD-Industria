@@ -1,7 +1,11 @@
 package de.m_marvin.industria.content.blockentities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.m_marvin.industria.content.blocks.FloodlightBlock;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
+import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
@@ -12,12 +16,17 @@ import de.m_marvin.industria.core.util.Direction2d;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.univec.impl.Vec2i;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -25,6 +34,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 public class FloodlightBlockEntity extends BlockEntity implements MenuProvider, IJunctionEdit {
 	
 	protected String[] nodeLanes = new String[] {"L", "N"};
+	protected List<BlockPos> lightBlocks = new ArrayList<>();
 	
 	public FloodlightBlockEntity(BlockPos pPos, BlockState pBlockState) {
 		super(ModBlockEntityTypes.FLOODLIGHT.get(), pPos, pBlockState);
@@ -34,6 +44,11 @@ public class FloodlightBlockEntity extends BlockEntity implements MenuProvider, 
 	protected void saveAdditional(CompoundTag pTag) {
 		pTag.putString("PositiveLane", this.nodeLanes[0]);
 		pTag.putString("NegativeLane", this.nodeLanes[1]);
+		ListTag lightBlockTag = new ListTag();
+		for (BlockPos lightBlock : this.lightBlocks) {
+			lightBlockTag.add(NbtUtils.writeBlockPos(lightBlock));
+		}
+		pTag.put("LightBlocks", lightBlockTag);
 	}
 	
 	@Override
@@ -41,6 +56,11 @@ public class FloodlightBlockEntity extends BlockEntity implements MenuProvider, 
 		super.load(pTag);
 		this.nodeLanes[0] = pTag.getString("PositiveLane");
 		this.nodeLanes[1] = pTag.getString("NegativeLane");
+		ListTag lightBlockTags = pTag.getList("LightBlocks", ListTag.TAG_COMPOUND);
+		this.lightBlocks.clear();
+		for (int i = 0; i < lightBlockTags.size(); i++) {
+			this.lightBlocks.add(NbtUtils.readBlockPos(lightBlockTags.getCompound(i)));
+		}
 	}
 	
 	public String[] getNodeLanes() {
@@ -74,16 +94,111 @@ public class FloodlightBlockEntity extends BlockEntity implements MenuProvider, 
 	
 	public void updateLight() {
 		
-		double voltage = ElectricUtility.getVoltageBetween(level, new NodePos(worldPosition, 0), new NodePos(worldPosition, 0), nodeLanes[0], nodeLanes[1]);
+		double voltage = ElectricUtility.getVoltageBetween(level, new NodePos(worldPosition, 0), new NodePos(worldPosition, 0), 0, 1, nodeLanes[0], nodeLanes[1]);
 		double overshoot = ElectricUtility.getPowerOvershoot(voltage, FloodlightBlock.TARGET_VOLTAGE);
 		double power = ElectricUtility.getPowerPercentage(voltage * FloodlightBlock.TARGET_POWER / FloodlightBlock.TARGET_VOLTAGE, FloodlightBlock.TARGET_POWER);
 		
 		boolean shouldLit = power > 0.8;
-		if (getBlockState().getValue(BlockStateProperties.LIT) != shouldLit) this.level.setBlockAndUpdate(this.worldPosition, getBlockState().setValue(BlockStateProperties.LIT, shouldLit));
+		if (getBlockState().getValue(BlockStateProperties.LIT) != shouldLit) setLightState(shouldLit);
 		
 		if (this.level.random.nextFloat() < overshoot) {
 			System.err.println("BOOM!"); // TODO
 		}
+		
+	}
+	
+	public void setLightState(boolean lit) {
+
+		Direction facing = ((FloodlightBlock) getBlockState().getBlock()).getLightDirection(getBlockState());
+		this.level.setBlockAndUpdate(this.worldPosition, getBlockState().setValue(BlockStateProperties.LIT, lit));
+		
+		if (lit) {
+			createLightBlocks(worldPosition.relative(facing), facing);
+		} else {
+			clearLightBlocks();
+		}
+		
+	}
+	
+	public boolean canShineTrough(BlockPos position) {
+		BlockState state = this.level.getBlockState(position);
+		return !state.isCollisionShapeFullBlock(level, position) || state.isAir() || state.getBlock() == ModBlocks.LIGHT_AIR.get();
+	}
+	
+	public static final int MAX_RANGE = 32;
+	public static final int SPREAD = 16;
+	
+	public void createLightBlocks(BlockPos origin, Direction direction) {
+		
+		int length = 0;
+		for (int i = 0; i < MAX_RANGE; i++) {
+			if (!canShineTrough(origin.relative(direction, i))) break;
+			length++;
+		}
+		
+		for (int i = 0; i < length; i++) {
+			BlockPos pos = origin.relative(direction, i);
+			int spread = (int) ((i / (double) MAX_RANGE) * SPREAD);
+			int level = 15;
+			
+			if (this.level.getBlockState(pos).isAir()) {
+				this.lightBlocks.add(pos);
+				this.level.setBlockAndUpdate(pos, ModBlocks.LIGHT_AIR.get().defaultBlockState().setValue(BlockStateProperties.LEVEL, level));
+			}
+			
+			for (int i2 = -spread / 2; i2 < spread / 2; i2++) {
+				
+				if (direction.getAxis() != Axis.Y && this.level.random.nextFloat() > 0.8F) {
+					BlockPos pos1 = pos.offset(0, i2, 0);
+					BlockPos pos2 = pos.offset(0, -i2, 0);
+					if (this.level.getBlockState(pos1).isAir()) {
+						this.lightBlocks.add(pos1);
+						this.level.setBlockAndUpdate(pos1, ModBlocks.LIGHT_AIR.get().defaultBlockState().setValue(BlockStateProperties.LEVEL, level));
+					}
+					if (this.level.getBlockState(pos2).isAir()) {
+						this.lightBlocks.add(pos2);
+						this.level.setBlockAndUpdate(pos2, ModBlocks.LIGHT_AIR.get().defaultBlockState().setValue(BlockStateProperties.LEVEL, level));
+					}
+				}
+				if (direction.getAxis() != Axis.X && this.level.random.nextFloat() > 0.8F) {
+					BlockPos pos1 = pos.offset(i2, 0, 0);
+					BlockPos pos2 = pos.offset(-i2, 0, 0);
+					if (this.level.getBlockState(pos1).isAir()) {
+						this.lightBlocks.add(pos1);
+						this.level.setBlockAndUpdate(pos1, ModBlocks.LIGHT_AIR.get().defaultBlockState().setValue(BlockStateProperties.LEVEL, level));
+					}
+					if (this.level.getBlockState(pos2).isAir()) {
+						this.lightBlocks.add(pos2);
+						this.level.setBlockAndUpdate(pos2, ModBlocks.LIGHT_AIR.get().defaultBlockState().setValue(BlockStateProperties.LEVEL, level));
+					}
+				}
+				if (direction.getAxis() != Axis.Z && this.level.random.nextFloat() > 0.8F) {
+					BlockPos pos1 = pos.offset(0, 0, i2);
+					BlockPos pos2 = pos.offset(0, 0, -i2);
+					if (this.level.getBlockState(pos1).isAir()) {
+						this.lightBlocks.add(pos1);
+						this.level.setBlockAndUpdate(pos1, ModBlocks.LIGHT_AIR.get().defaultBlockState().setValue(BlockStateProperties.LEVEL, level));
+					}
+					if (this.level.getBlockState(pos2).isAir()) {
+						this.lightBlocks.add(pos2);
+						this.level.setBlockAndUpdate(pos2, ModBlocks.LIGHT_AIR.get().defaultBlockState().setValue(BlockStateProperties.LEVEL, level));
+					}
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+	public void clearLightBlocks() {
+		
+		for (BlockPos pos : this.lightBlocks) {
+			if (this.level.getBlockState(pos).isAir()) {
+				this.level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+			}
+		}
+		this.lightBlocks.clear();
 		
 	}
 	

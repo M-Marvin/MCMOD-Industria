@@ -81,7 +81,7 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricConnect
 	
 	@Override
 	public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
-		return state.getValue(BlockStateProperties.LIT) ? 15 : 0;
+		return 0;//return state.getValue(BlockStateProperties.LIT) ? 15 : 0;
 	}
 	
 	@Override
@@ -96,7 +96,7 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricConnect
 			VoxelShape s = VoxelShapeUtility.transformation()
 					.centered()
 					.rotateX(pState.getValue(BlockStateProperties.ATTACH_FACE) == AttachFace.CEILING ? -90 : 90)
-					.rotateZ(pState.getValue(BlockStateProperties.HORIZONTAL_FACING).get2DDataValue() * 90)
+					.rotateY(pState.getValue(BlockStateProperties.HORIZONTAL_FACING).get2DDataValue() * 90)
 					.uncentered()
 					.transform(SHAPE);
 			return s;
@@ -118,12 +118,12 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricConnect
 		if (level.getBlockEntity(position) instanceof FloodlightBlockEntity lamp) {
 			
 			String[] lampLanes = lamp.getNodeLanes();
-			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, lampLanes[0], lampLanes[1]);
+			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, lampLanes[0], 1, lampLanes[1]);
 			
 			CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "current_load"));
 			templateSource.setProperty("nominal_current", TARGET_POWER / TARGET_VOLTAGE);
-			templateSource.setNetworkNode("VDC", new NodePos(position, 0), lampLanes[0]);
-			templateSource.setNetworkNode("GND", new NodePos(position, 0), lampLanes[1]);
+			templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, lampLanes[0]);
+			templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, lampLanes[1]);
 			plotter.accept(templateSource);
 			
 		}
@@ -165,6 +165,24 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricConnect
 	@Override
 	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
 		return GameUtility.openJunctionBlockEntityUI(pLevel, pPos, pPlayer, pHand);
+	}
+	
+	public Direction getLightDirection(BlockState pState) {
+		switch (pState.getValue(BlockStateProperties.ATTACH_FACE)) {
+		case CEILING: return Direction.DOWN;
+		case FLOOR: return Direction.UP;
+		default: return pState.getValue(BlockStateProperties.HORIZONTAL_FACING);
+		}
+	}
+	
+	@Override
+	public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
+		if (!(pNewState.getBlock() instanceof FloodlightBlock)) {
+			BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
+			if (blockEntity instanceof FloodlightBlockEntity lamp) {
+				lamp.clearLightBlocks();
+			}
+		}
 	}
 	
 }

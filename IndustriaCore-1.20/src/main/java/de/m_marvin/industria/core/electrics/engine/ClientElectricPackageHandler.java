@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.NoSuchElementException;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
@@ -18,7 +17,6 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
-import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.NetworkEvent;
@@ -70,17 +68,14 @@ public class ClientElectricPackageHandler {
 		
 		if (msg.request == SyncRequestType.ADDED) {
 			List<Object> handledComponents = new ArrayList<>();
-			try {
-				for (Entry<Object, IElectric<?, ?, ?>> component : msg.components.entrySet()) {
-					handler.addToNetwork(new Component(level, component.getKey(), component.getValue()));
-					handledComponents.add(component.getKey());
-				}
-			} catch (NoSuchElementException e) {
-				for (Object pos : handledComponents) {
-					msg.components.remove(pos);
-				}
-				return false;
+			for (Entry<Object, IElectric<?, ?, ?>> electric : msg.components.entrySet()) {
+				Component<?, ?, ?> component = new Component(level, electric.getKey(), electric.getValue());
+				if (component.instance() == null) continue;
+				handler.addToNetwork(component);
+				handledComponents.add(electric.getKey());
 			}
+			handledComponents.forEach(msg.components::remove);
+			if (msg.components.size() > 0) return false;
 		} else {
 			for (Entry<Object, IElectric<?, ?, ?>> component : msg.components.entrySet()) {
 				handler.removeFromNetwork(component.getKey());

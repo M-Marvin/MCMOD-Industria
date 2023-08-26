@@ -1,15 +1,12 @@
 package de.m_marvin.industria.core.electrics.types.blocks;
 
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
-import de.m_marvin.industria.core.conduits.types.items.AbstractConduitItem;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
@@ -21,10 +18,8 @@ import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -36,7 +31,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.network.NetworkHooks;
 
 public class PowerSourceBlock extends BaseEntityBlock implements IElectricConnector{
 	
@@ -70,13 +64,13 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricConnec
 		if (level.getBlockEntity(position) instanceof PowerSourceBlockEntity source) {
 
 			String[] sourceLanes = source.getWireLabels();
-			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, sourceLanes[0], sourceLanes[1]);
+			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, sourceLanes[0], 1, sourceLanes[1]);
 			
 			CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "source"));
 			templateSource.setProperty("nominal_current", 10);
 			templateSource.setProperty("nominal_voltage", 100);
-			templateSource.setNetworkNode("VDC", new NodePos(position, 0), sourceLanes[0]);
-			templateSource.setNetworkNode("GND", new NodePos(position, 0), sourceLanes[1]);
+			templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, sourceLanes[0]);
+			templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, sourceLanes[1]);
 			plotter.accept(templateSource);
 			
 		}

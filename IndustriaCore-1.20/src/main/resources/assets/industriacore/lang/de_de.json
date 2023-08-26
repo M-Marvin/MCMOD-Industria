@@ -1,7 +1,7 @@
 {
 
 "industriacore.item.info.conduit.nodeSelect":		"Erster Punkt ausgew\u00e4hlt (Abbrechen mit Umschalt + Rechtsklick)",
-"industriacore.item.info.conduit.changeNodes":		"L\u00e4nge der Leitung: %1$s (Abbrechen mit Umschalt + Rechtsklick)",
+"industriacore.item.info.conduit.changeLength":		"L\u00e4nge der Leitung: x%1$s (Abbrechen mit Umschalt + Rechtsklick)",
 "industriacore.item.info.conduit.placed":		"Leitung platziert",
 "industriacore.item.info.conduit.abbort":		"Platzieren der Leitung abgebrochen",
 "industriacore.item.info.conduit.failed":		"Platzieren der Leitung fehlgeschlagen",

@@ -50,7 +50,7 @@ public abstract class AbstractConduitItem extends Item implements IScrollOverrid
 		CompoundTag itemTag = context.getItemInHand().getOrCreateTag();
 		float placementLength = (float) MathUtility.clamp(itemTag.getFloat("Length") + delta * 0.1F, 1F, 3F);
 		IndustriaCore.NETWORK.sendToServer(new CChangeConduitPlacementLengthPackage(placementLength));
-		context.getPlayer().displayClientMessage(Component.translatable("industriacore.item.info.conduit.changeLength", placementLength), true);
+		context.getPlayer().displayClientMessage(Component.translatable("industriacore.item.info.conduit.changeLength", Math.round(placementLength * 10.0) / 10.0), true);
 	}
 	
 	public void onChangePlacementLength(ItemStack stack, float length) {

@@ -123,13 +123,13 @@ public class CircuitTemplateManager extends SimplePreparableReloadListener<Map<R
 						}
 						
 					} else {
-						LOGGER.error("Couldn't load circuit template file as its null or empty", namedLocation, resourceLocation);
+						LOGGER.error("Couldn't load circuit template file {} as its null or empty", namedLocation);
 					}
 					
 				}
 							
 			} catch (NoSuchElementException | IllegalArgumentException | IOException | JsonParseException jsonparseexception) {
-				LOGGER.error("Couldn't parse circuit template file ", namedLocation, resourceLocation, jsonparseexception);
+				LOGGER.error("Couldn't parse circuit template file {}: {}", namedLocation, jsonparseexception);
 			}
 		}
 		

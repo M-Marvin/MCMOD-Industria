@@ -1,0 +1,8 @@
+Questionable use of curly braces in "r1_p{id} n{net1} n{net2} 0.015"
+    Error: undefined symbol in: "[id]"
+Questionable use of curly braces in "r1_p(id) n{net1} n{net2} 0.015"
+    Error: undefined symbol in: "[net1]"
+Questionable use of curly braces in "r1_p(id) n(net1) n{net2} 0.015"
+    Error: undefined symbol in: "[net2]"
+Circuit: * Simple resistor for different uses
+

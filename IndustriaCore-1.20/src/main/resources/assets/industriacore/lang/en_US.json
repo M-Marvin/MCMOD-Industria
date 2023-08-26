@@ -1,7 +1,7 @@
 {
 
 "industriacore.item.info.conduit.nodeSelect":   	"First Node selected (Abort with Shift + Right Click)",
-"industriacore.item.info.conduit.changeNodes":  	"Length of Conduit: %1$s (Abort with Shift + Right Click)",
+"industriacore.item.info.conduit.changeLength":  	"Length of Conduit: x%1$s (Abort with Shift + Right Click)",
 "industriacore.item.info.conduit.placed":     		"Conduit placed",
 "industriacore.item.info.conduit.abbort":     		"Placement of Conduit aborted",
 "industriacore.item.info.conduit.failed":     		"Placement of Conduit failed!",

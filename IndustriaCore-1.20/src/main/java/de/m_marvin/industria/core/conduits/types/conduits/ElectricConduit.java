@@ -16,10 +16,12 @@ import net.minecraft.world.level.block.SoundType;
 public abstract class ElectricConduit extends Conduit implements IElectricConduit {
 	
 	public final int wireCount;
+	public final double resistance;
 	
-	public ElectricConduit(ConduitType type, Item item, ResourceLocation texture, SoundType sound, int wireCount) {
+	public ElectricConduit(ConduitType type, Item item, ResourceLocation texture, SoundType sound, int wireCount, double resistance) {
 		super(type, item, texture, sound);
 		this.wireCount = wireCount;
+		this.resistance = resistance;
 	}
 	
 	@Override
@@ -64,13 +66,14 @@ public abstract class ElectricConduit extends Conduit implements IElectricCondui
 	@Override
 	public void plotCircuit(Level level, ConduitEntity instance, ConduitPos position, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
 		CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "resistor"));
-		template.setProperty("resistance", 0.001); // TODO Wire resistance
+		template.setProperty("resistance", this.resistance * instance.length);
 		
 		NodePos[] connections = getConnections(level, position, instance);
-		for (String wireLabel : this.getWireLanes(level, position, instance, null)) {
-			if (!wireLabel.isEmpty()) {
-				template.setNetworkNode("NET1", connections[0], wireLabel);
-				template.setNetworkNode("NET2", connections[1], wireLabel);
+		String[] wireLabels = this.getWireLanes(level, position, instance, null);
+		for (int i = 0; i < wireLabels.length; i++) {
+			if (!wireLabels[i].isEmpty()) {
+				template.setNetworkNode("NET1", connections[0], i, wireLabels[i]);
+				template.setNetworkNode("NET2", connections[1], i, wireLabels[i]);
 				plotter.accept(template);
 			}
 		}

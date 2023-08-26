@@ -1,7 +1,7 @@
 {
 
 "industriacore.item.info.conduit.nodeSelect":		"Premier N\u0153ud s\u00e9lectionn\u00e9 (Avorter avec Maj + Clic-Droit)",
-"industriacore.item.info.conduit.changeNodes":		"Longueur du C\u00e2ble: %1$s (Avorter avec Maj + Clic-Droit)",
+"industriacore.item.info.conduit.changeLength":		"Longueur du C\u00e2ble: x%1$s (Avorter avec Maj + Clic-Droit)",
 "industriacore.item.info.conduit.placed":		"C\u00e2ble plac\u00e9",
 "industriacore.item.info.conduit.abbort":		"Placement du C\u00e2ble avort\u00e9",
 "industriacore.item.info.conduit.failed":		"Placement du C\u00e2ble \u00e9chou\u00e9",

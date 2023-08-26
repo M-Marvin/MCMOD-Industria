@@ -1,8 +1,9 @@
 package de.m_marvin.industria.core.conduits.engine.particles;
 
+import java.util.function.Function;
+
 import com.mojang.serialization.Codec;
 
-import java.util.function.Function;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleOptions.Deserializer;
 import net.minecraft.core.particles.ParticleType;

@@ -194,13 +194,14 @@ public class Conduit {
 			Vec3d connectionVec = pointEnd.copy().sub(pointStart);
 			double spanDistance = connectionVec.length();
 			double cornerSegments = conduit.getLength() * nodesPerBlock;
-			double beamLength = spanDistance / (cornerSegments + 1);
+			double beamLength = conduit.getLength() / (cornerSegments + 1);
+			double beamPlacementLength = spanDistance / (cornerSegments + 1);
 			connectionVec.normalizeI();
 			
 			List<Vec3d> nodes = new ArrayList<>();
 			nodes.add(pointStart);
 			for (int i = 1; i <= cornerSegments; i++) {
-				nodes.add(connectionVec.mul(beamLength * i).add(pointStart));
+				nodes.add(connectionVec.mul(beamPlacementLength * i).add(pointStart));
 			}
 			nodes.add(pointEnd);
 			

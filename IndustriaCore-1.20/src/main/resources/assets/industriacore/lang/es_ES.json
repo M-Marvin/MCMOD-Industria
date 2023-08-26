@@ -1,7 +1,7 @@
 {
 
 "industriacore.item.info.conduit.nodeSelect":   	"Primer nodo seleccionado (Cancelar con May\u00fas + clic derecho)",
-"industriacore.item.info.conduit.changeNodes":  	"Longitud del cable: %1$s (Cancelar con May\u00fas + clic derecho)",
+"industriacore.item.info.conduit.changeLength":  	"Longitud del cable: x%1$s (Cancelar con May\u00fas + clic derecho)",
 "industriacore.item.info.conduit.placed":     		"Cable colocado",
 "industriacore.item.info.conduit.abbort":     		"Colocaci\u00f3n de cable abortada",
 "industriacore.item.info.conduit.failed":     		"\u00a1Colocaci\u00f3n de cable fall\u00f3!",

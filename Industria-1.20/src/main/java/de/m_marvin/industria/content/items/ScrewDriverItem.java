@@ -1,20 +1,12 @@
 package de.m_marvin.industria.content.items;
 
-import org.joml.primitives.AABBic;
-import org.valkyrienskies.core.api.ships.Ship;
-
 import de.m_marvin.industria.content.registries.ModTags;
-import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.scrollinput.type.items.IScrollOverride;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
 
 public class ScrewDriverItem extends Item implements IScrollOverride {
 	

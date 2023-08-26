@@ -6,8 +6,8 @@
 		"1": "industria:block/machines/floodlight_brass_side_long",
 		"2": "industria:block/machines/floodlight_brass_side_short",
 		"3": "industria:block/machines/floodlight_brass_back",
-		"5": "industria:block/panel_lamp",
-		"particle": "industria:block/machines/floodlight_brass"
+		"5": "industria:block/machines/floodlight_brass_inner_lit",
+		"particle": "industria:block/machines/floodlight_brass_inner_lit"
 	},
 	"elements": [
 		{

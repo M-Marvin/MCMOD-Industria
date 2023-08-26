@@ -22,21 +22,24 @@ public class ModItems {
 		CREATIVE_MODE_TABS.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 	
-	//public static final RegistryObject<BlockItem> IRON_CONDUIT_CLAMP = ITEMS.register("iron_conduit_clamp", () -> new BlockItem(ModBlocks.IRON_CONDUIT_CLAMP.get(), new Item.Properties()));
-	public static final RegistryObject<ConduitCableItem> INSULATED_COPPER_WIRE = ITEMS.register("insulated_copper_wire", () -> new ConduitCableItem(new Item.Properties().stacksTo(16), ModConduits.INSULATED_COPPER_WIRE));
-	public static final RegistryObject<ConduitCableItem> INSULATED_ALUMINUM_WIRE = ITEMS.register("insulated_aluminum_wire", () -> new ConduitCableItem(new Item.Properties().stacksTo(16), ModConduits.INSULATED_ALUMINUM_WIRE));
-	public static final RegistryObject<ConduitCableItem> INSULATED_GOLD_WIRE = ITEMS.register("insulated_gold_wire", () -> new ConduitCableItem(new Item.Properties().stacksTo(16), ModConduits.INSULATED_GOLD_WIRE));
-	public static final RegistryObject<ConduitCableItem> INSULATED_TIN_WIRE = ITEMS.register("insulated_tin_wire", () -> new ConduitCableItem(new Item.Properties().stacksTo(16), ModConduits.INSULATED_TIN_WIRE));
-	public static final RegistryObject<ConduitCableItem> COPPER_WIRE = ITEMS.register("copper_wire", () -> new ConduitCableItem(new Item.Properties().stacksTo(16), ModConduits.COPPER_WIRE));
-	public static final RegistryObject<ConduitCableItem> ALUMINUM_WIRE = ITEMS.register("aluminum_wire", () -> new ConduitCableItem(new Item.Properties().stacksTo(16), ModConduits.ALUMINUM_WIRE));
-	public static final RegistryObject<ConduitCableItem> GOLD_WIRE = ITEMS.register("gold_wire", () -> new ConduitCableItem(new Item.Properties().stacksTo(16), ModConduits.GOLD_WIRE));
-	public static final RegistryObject<ConduitCableItem> TIN_WIRE = ITEMS.register("tin_wire", () -> new ConduitCableItem(new Item.Properties().stacksTo(16), ModConduits.TIN_WIRE));
+	public static final RegistryObject<ConduitCableItem> INSULATED_COPPER_WIRE 		= ITEMS.register("insulated_copper_wire", () -> new ConduitCableItem(new Item.Properties().stacksTo(16), ModConduits.INSULATED_COPPER_WIRE));
+	public static final RegistryObject<ConduitCableItem> INSULATED_ALUMINUM_WIRE 	= ITEMS.register("insulated_aluminum_wire", () -> new ConduitCableItem(new Item.Properties().stacksTo(16), ModConduits.INSULATED_ALUMINUM_WIRE));
+	public static final RegistryObject<ConduitCableItem> INSULATED_GOLD_WIRE 		= ITEMS.register("insulated_gold_wire", () -> new ConduitCableItem(new Item.Properties().stacksTo(16), ModConduits.INSULATED_GOLD_WIRE));
+	public static final RegistryObject<ConduitCableItem> INSULATED_TIN_WIRE 		= ITEMS.register("insulated_tin_wire", () -> new ConduitCableItem(new Item.Properties().stacksTo(16), ModConduits.INSULATED_TIN_WIRE));
+	public static final RegistryObject<ConduitCableItem> COPPER_WIRE 				= ITEMS.register("copper_wire", () -> new ConduitCableItem(new Item.Properties().stacksTo(16), ModConduits.COPPER_WIRE));
+	public static final RegistryObject<ConduitCableItem> ALUMINUM_WIRE 				= ITEMS.register("aluminum_wire", () -> new ConduitCableItem(new Item.Properties().stacksTo(16), ModConduits.ALUMINUM_WIRE));
+	public static final RegistryObject<ConduitCableItem> GOLD_WIRE 					= ITEMS.register("gold_wire", () -> new ConduitCableItem(new Item.Properties().stacksTo(16), ModConduits.GOLD_WIRE));
+	public static final RegistryObject<ConduitCableItem> TIN_WIRE 					= ITEMS.register("tin_wire", () -> new ConduitCableItem(new Item.Properties().stacksTo(16), ModConduits.TIN_WIRE));
 	
-	public static final RegistryObject<ScrewDriverItem> SCREW_DRIVER = ITEMS.register("screw_driver", () -> new ScrewDriverItem(new Item.Properties().stacksTo(1)));
+	public static final RegistryObject<ScrewDriverItem> SCREW_DRIVER				= ITEMS.register("screw_driver", () -> new ScrewDriverItem(new Item.Properties().stacksTo(1)));
 	
-	//public static final RegistryObject<BlockItem> MOTOR = ITEMS.register("motor", () -> new BlockItem(ModBlocks.MOTOR.get(), new Item.Properties()));
-	public static final RegistryObject<BlockItem> JUNCTION_BOX = ITEMS.register("junction_box", () -> new BlockItem(ModBlocks.JUNCTION_BOX.get(), new Item.Properties()));
-	public static final RegistryObject<BlockItem> FLOODLIGHT = ITEMS.register("brass_floodlight", () -> new BlockItem(ModBlocks.BRASS_FLOODLIGHT.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> COPPER_WIRE_HOLDER 				= ITEMS.register("copper_wire_holder", () -> new BlockItem(ModBlocks.COPPER_WIRE_HOLDER.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> ALUMINUM_WIRE_HOLDER 				= ITEMS.register("aluminum_wire_holder", () -> new BlockItem(ModBlocks.ALUMINUM_WIRE_HOLDER.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> GOLD_WIRE_HOLDER 					= ITEMS.register("gold_wire_holder", () -> new BlockItem(ModBlocks.GOLD_WIRE_HOLDER.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> TIN_WIRE_HOLDER 					= ITEMS.register("tin_wire_holder", () -> new BlockItem(ModBlocks.TIN_WIRE_HOLDER.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> JUNCTION_BOX						= ITEMS.register("junction_box", () -> new BlockItem(ModBlocks.JUNCTION_BOX.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> BRASS_FLOODLIGHT					= ITEMS.register("brass_floodlight", () -> new BlockItem(ModBlocks.BRASS_FLOODLIGHT.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> STEEL_FLOODLIGHT					= ITEMS.register("steel_floodlight", () -> new BlockItem(ModBlocks.STEEL_FLOOFLIGHT.get(), new Item.Properties()));
 	
 	/* Creative tabs */
 	
@@ -52,8 +55,15 @@ public class ModItems {
 				output.accept(INSULATED_ALUMINUM_WIRE.get().getDefaultInstance());
 				output.accept(INSULATED_GOLD_WIRE.get().getDefaultInstance());
 				output.accept(INSULATED_TIN_WIRE.get().getDefaultInstance());
+				
+				output.accept(COPPER_WIRE_HOLDER.get().getDefaultInstance());
+				output.accept(ALUMINUM_WIRE_HOLDER.get().getDefaultInstance());
+				output.accept(GOLD_WIRE_HOLDER.get().getDefaultInstance());
+				output.accept(TIN_WIRE_HOLDER.get().getDefaultInstance());
 				output.accept(JUNCTION_BOX.get().getDefaultInstance());
-				output.accept(FLOODLIGHT.get().getDefaultInstance());
+				
+				output.accept(BRASS_FLOODLIGHT.get().getDefaultInstance());
+				output.accept(STEEL_FLOODLIGHT.get().getDefaultInstance());
 			})
 			.build()
 	);

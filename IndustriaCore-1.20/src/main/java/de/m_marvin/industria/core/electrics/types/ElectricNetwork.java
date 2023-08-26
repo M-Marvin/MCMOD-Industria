@@ -1,6 +1,8 @@
 package de.m_marvin.industria.core.electrics.types;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,7 +26,7 @@ public class ElectricNetwork implements INGCallback {
 	
 	protected String title;
 	protected Set<Component<?, ?, ?>> components = new HashSet<>();
-	protected long lastUpdated;
+	//protected long lastUpdated;
 	protected int templateCounter;
 	protected StringBuilder circuitBuilder;
 	protected String netList = "";
@@ -79,7 +81,7 @@ public class ElectricNetwork implements INGCallback {
 		this.netList = null;
 		this.components.clear();
 	}
-
+	
 	public void plotTemplate(Component<?, ?, ?> component, ICircuitPlot template) {
 		template.prepare(templateCounter++);
 		this.circuitBuilder.append(template.plot()); // TODO Model filtering
@@ -92,7 +94,7 @@ public class ElectricNetwork implements INGCallback {
 		} else {
 			this.netList = "";
 		}
-		this.lastUpdated = frame;
+		//this.lastUpdated = frame;
 	}
 	
 	public boolean isPlotEmpty() {
@@ -102,15 +104,23 @@ public class ElectricNetwork implements INGCallback {
 	public boolean isEmpty() {
 		return components.isEmpty();
 	}
+
+	public void removeInvalidComponents() {
+		List<Component<?, ?, ?>> invalid = new ArrayList<>();
+		for (Component<?, ?, ?> component : this.components) {
+			if (component.instance() == null) invalid.add(component);
+		}
+		invalid.forEach(c -> components.remove(c));
+	}
 	
 	@Override
 	public String toString() {
 		return isPlotEmpty() ? "EMPTY" : (this.netList == null ? this.circuitBuilder.toString() : netList);
 	}
 
-	public boolean updatedInFrame(long frame) {
-		return this.lastUpdated == frame;
-	}
+//	public boolean updatedInFrame(long frame) {
+//		return this.lastUpdated == frame;
+//	}
 
 	public void terminateExecution() {
 		if (this.nglink.isInitialized()) {
@@ -142,8 +152,8 @@ public class ElectricNetwork implements INGCallback {
 		}
 	}
 	
-	public double getFloatingNodeVoltage(NodePos node, String lane) {
-		return this.nodeVoltages.getOrDefault(node.getKeyString(lane), 0.0);
+	public double getFloatingNodeVoltage(NodePos node, int laneId, String lane) {
+		return this.nodeVoltages.getOrDefault(node.getKeyString(laneId, lane), 0.0);
 	}
 	
 	@Override
@@ -168,5 +178,5 @@ public class ElectricNetwork implements INGCallback {
 
 	@Override
 	public void reciveInitData(PlotDescription plotInfo) {}
-	
+
 }

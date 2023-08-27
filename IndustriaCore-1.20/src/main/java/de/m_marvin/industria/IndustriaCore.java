@@ -23,6 +23,8 @@ public class IndustriaCore {
 	public static final String MODID = "industriacore";
 	public static final Logger LOGGER = LogManager.getLogger();
 	public static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(new ResourceLocation(MODID, "main"), () -> NetworkPackages.PROTOCOL_VERSION, NetworkPackages.PROTOCOL_VERSION::equals, NetworkPackages.PROTOCOL_VERSION::equals);
+
+	public static final ResourceLocation UTILITY_WIDGETS_TEXTURE = new ResourceLocation(IndustriaCore.MODID, "textures/gui/utility_widgets.png");
 	
 	public IndustriaCore() {
 		

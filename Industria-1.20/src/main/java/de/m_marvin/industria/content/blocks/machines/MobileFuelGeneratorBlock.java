@@ -10,10 +10,10 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
+import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.univec.impl.Vec3i;
-import net.minecraft.client.telemetry.TelemetryProperty.GameMode;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -29,7 +29,7 @@ import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class MobileFuelGeneratorBlock extends BaseEntityBlock implements IElectricConnector {
+public class MobileFuelGeneratorBlock extends BaseEntityBlock implements IElectricConnector, IElectricInfoProvider {
 	
 	public static final NodePointSupplier NODES = NodePointSupplier.define()
 			.addNode(NodeTypes.ALL, 4, new Vec3i(8, 8, 16))
@@ -84,7 +84,49 @@ public class MobileFuelGeneratorBlock extends BaseEntityBlock implements IElectr
 		}
 		
 	}
-
+	
+	@Override
+	public double getVoltage(BlockState state, Level level, BlockPos pos) {
+		if (level.getBlockEntity(pos) instanceof MobileFuelGeneratorBlockEntity generator) {
+			String[] wireLanes = generator.getNodeLanes();
+			return ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]);
+		}
+		return 0.0;
+	}
+	
+	@Override
+	public double getPower(BlockState state, Level level, BlockPos pos) {
+		if (level.getBlockEntity(pos) instanceof MobileFuelGeneratorBlockEntity generator) {
+			String[] wireLanes = generator.getNodeLanes();
+			return ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]) * 2; // TODO
+		}
+		return 0.0;
+	}
+	
+	@Override
+	public int getNominalPower(BlockState state, Level level, BlockPos pos) {
+		// TODO Auto-generated method stub
+		return 1000;
+	}
+	
+	@Override
+	public int getNominalVoltage(BlockState state, Level level, BlockPos pos) {
+		// TODO Auto-generated method stub
+		return 230;
+	}
+	
+	@Override
+	public float getPowerTolerance(BlockState state, Level level, BlockPos pos) {
+		// TODO Auto-generated method stub
+		return 0.1F;
+	}
+	
+	@Override
+	public float getVoltageTolerance(BlockState state, Level level, BlockPos pos) {
+		// TODO Auto-generated method stub
+		return 0.2F;
+	}
+	
 	@Override
 	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {
 		return IntStream.range(0, NODE_COUNT).mapToObj(i -> new NodePos(pos, i)).toArray(i -> new NodePos[i]);

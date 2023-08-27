@@ -38,8 +38,10 @@ public class ModItems {
 	public static final RegistryObject<BlockItem> GOLD_WIRE_HOLDER 					= ITEMS.register("gold_wire_holder", () -> new BlockItem(ModBlocks.GOLD_WIRE_HOLDER.get(), new Item.Properties()));
 	public static final RegistryObject<BlockItem> TIN_WIRE_HOLDER 					= ITEMS.register("tin_wire_holder", () -> new BlockItem(ModBlocks.TIN_WIRE_HOLDER.get(), new Item.Properties()));
 	public static final RegistryObject<BlockItem> JUNCTION_BOX						= ITEMS.register("junction_box", () -> new BlockItem(ModBlocks.JUNCTION_BOX.get(), new Item.Properties()));
+	
 	public static final RegistryObject<BlockItem> BRASS_FLOODLIGHT					= ITEMS.register("brass_floodlight", () -> new BlockItem(ModBlocks.BRASS_FLOODLIGHT.get(), new Item.Properties()));
 	public static final RegistryObject<BlockItem> STEEL_FLOODLIGHT					= ITEMS.register("steel_floodlight", () -> new BlockItem(ModBlocks.STEEL_FLOOFLIGHT.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> MOBILE_FUEL_GENERATOR				= ITEMS.register("mobile_fuel_generator", () -> new BlockItem(ModBlocks.MOBILE_FUEL_GENERATOR.get(), new Item.Properties()));
 	
 	/* Creative tabs */
 	
@@ -64,6 +66,7 @@ public class ModItems {
 				
 				output.accept(BRASS_FLOODLIGHT.get().getDefaultInstance());
 				output.accept(STEEL_FLOODLIGHT.get().getDefaultInstance());
+				output.accept(MOBILE_FUEL_GENERATOR.get().getDefaultInstance());
 			})
 			.build()
 	);

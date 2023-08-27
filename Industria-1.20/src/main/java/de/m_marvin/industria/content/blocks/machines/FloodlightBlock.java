@@ -1,11 +1,11 @@
-package de.m_marvin.industria.content.blocks;
+package de.m_marvin.industria.content.blocks.machines;
 
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.content.blockentities.FloodlightBlockEntity;
+import de.m_marvin.industria.content.blockentities.machines.FloodlightBlockEntity;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;

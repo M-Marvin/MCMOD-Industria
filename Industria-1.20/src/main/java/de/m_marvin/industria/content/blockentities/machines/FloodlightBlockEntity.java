@@ -1,9 +1,9 @@
-package de.m_marvin.industria.content.blockentities;
+package de.m_marvin.industria.content.blockentities.machines;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import de.m_marvin.industria.content.blocks.FloodlightBlock;
+import de.m_marvin.industria.content.blocks.machines.FloodlightBlock;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;

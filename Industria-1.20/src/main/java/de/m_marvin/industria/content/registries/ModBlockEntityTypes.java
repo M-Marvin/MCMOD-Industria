@@ -1,9 +1,8 @@
 package de.m_marvin.industria.content.registries;
 
 import de.m_marvin.industria.content.Industria;
-import de.m_marvin.industria.content.blockentities.FloodlightBlockEntity;
-import de.m_marvin.industria.content.blockentities.GeneratorBlockEntity;
-import de.m_marvin.industria.content.blockentities.MotorBlockEntity;
+import de.m_marvin.industria.content.blockentities.machines.FloodlightBlockEntity;
+import de.m_marvin.industria.content.blockentities.machines.MobileFuelGeneratorBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -17,8 +16,7 @@ public class ModBlockEntityTypes {
 		BLOCK_ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 	
-	public static final RegistryObject<BlockEntityType<FloodlightBlockEntity>> FLOODLIGHT = BLOCK_ENTITY_TYPES.register("floodlight", () -> BlockEntityType.Builder.of(FloodlightBlockEntity::new, ModBlocks.BRASS_FLOODLIGHT.get(), ModBlocks.STEEL_FLOOFLIGHT.get()).build(null));
-	public static final RegistryObject<BlockEntityType<MotorBlockEntity>> MOTOR = null; //BLOCK_ENTITY_TYPES.register("motor", () -> BlockEntityType.Builder.of(MotorBlockEntity::new, ModBlocks.MOTOR.get()).build(null));
-	public static final RegistryObject<BlockEntityType<GeneratorBlockEntity>> GENERATOR = null;//BLOCK_ENTITY_TYPES.register("generator", () -> BlockEntityType.Builder.of(GeneratorBlockEntity::new, ModBlocks.MOTOR.get()).build(null));
+	public static final RegistryObject<BlockEntityType<FloodlightBlockEntity>> FLOODLIGHT 						= BLOCK_ENTITY_TYPES.register("floodlight", () -> BlockEntityType.Builder.of(FloodlightBlockEntity::new, ModBlocks.BRASS_FLOODLIGHT.get(), ModBlocks.STEEL_FLOOFLIGHT.get()).build(null));
+	public static final RegistryObject<BlockEntityType<MobileFuelGeneratorBlockEntity>> MOBILE_FUEL_GENERATOR 	= BLOCK_ENTITY_TYPES.register("mobile_fuel_generator", () -> BlockEntityType.Builder.of(MobileFuelGeneratorBlockEntity::new, ModBlocks.MOBILE_FUEL_GENERATOR.get()).build(null));
 	
 }

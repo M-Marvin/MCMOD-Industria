@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core.client.electrics.screens.widgets;
+package de.m_marvin.industria.content.client.screens;
 
 import de.m_marvin.industria.IndustriaCore;
 import net.minecraft.client.gui.Font;
@@ -60,9 +60,8 @@ public class StatusBar extends AbstractWidget {
 	@Override
 	protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
 		
-		pGuiGraphics.blit(texture, this.getX(), this.getY() + 1, 1, 36, 1, 12);
-		pGuiGraphics.blit(texture, this.getX() + 1, this.getY() + 1, 2, 36, this.getWidth() - 2, 12);
-		pGuiGraphics.blit(texture, this.getX() + this.getWidth() - 1, this.getY() + 1, 162, 36, 10, 12);
+		pGuiGraphics.blit(texture, this.getX(), this.getY() + 1, 2, 36, this.getWidth() - 1, 12);
+		pGuiGraphics.blit(texture, this.getX() + this.getWidth() - 1, this.getY() + 1, 162, 36, 1, 12);
 		
 		float length = this.getWidth() - 2;
 		int l = Math.round(Math.min(1, state) * length);

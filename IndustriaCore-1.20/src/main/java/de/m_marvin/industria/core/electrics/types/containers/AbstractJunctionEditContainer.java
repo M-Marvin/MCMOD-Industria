@@ -1,18 +1,18 @@
 package de.m_marvin.industria.core.electrics.types.containers;
 
 import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.core.client.util.BlockEntityContainerBase;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.network.CUpdateJunctionLanesPackage;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.util.GameUtility;
+import de.m_marvin.industria.core.util.container.AbstractBlockEntityContainerBase;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public abstract class AbstractJunctionEditContainer<T extends BlockEntity & IJunctionEdit> extends BlockEntityContainerBase<T> {
+public abstract class AbstractJunctionEditContainer<T extends BlockEntity & IJunctionEdit> extends AbstractBlockEntityContainerBase<T> {
 
 	public AbstractJunctionEditContainer(MenuType<?> type, int id, Inventory playerInv, FriendlyByteBuf data) {
 		super(type, id, playerInv, data);

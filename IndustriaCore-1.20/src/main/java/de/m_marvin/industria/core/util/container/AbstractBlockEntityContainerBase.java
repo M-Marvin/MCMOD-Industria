@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core.client.util;
+package de.m_marvin.industria.core.util.container;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -11,17 +11,17 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public abstract class BlockEntityContainerBase<T extends BlockEntity> extends AbstractContainerMenu {
+public abstract class AbstractBlockEntityContainerBase<T extends BlockEntity> extends AbstractContainerMenu {
 	
 	protected Inventory playerInv;
 	protected T blockEntity;
 	
 	@SuppressWarnings("unchecked")
-	public BlockEntityContainerBase(MenuType<?> type, int id, Inventory playerInv, FriendlyByteBuf data) {
+	public AbstractBlockEntityContainerBase(MenuType<?> type, int id, Inventory playerInv, FriendlyByteBuf data) {
 		this(type, id, playerInv, (T) getClientBlockEntity(data));
 	}
 	
-	public BlockEntityContainerBase(MenuType<?> type, int id, Inventory playerInv, T tileEntity) {
+	public AbstractBlockEntityContainerBase(MenuType<?> type, int id, Inventory playerInv, T tileEntity) {
 		super(type, id);
 		this.blockEntity = tileEntity;
 		this.playerInv = playerInv;

@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core.client.electrics.screens.widgets;
+package de.m_marvin.industria.content.client.screens;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider.ElectricInfo;
@@ -18,7 +18,7 @@ public class PowerInfo extends AbstractWidget {
 	protected final StatusBar powerBar;
 	
 	public PowerInfo(Font font, int pX, int pY, ElectricInfo electricInfo) {
-		this(font, pX, pY, 64, electricInfo);
+		this(font, pX, pY, 60, electricInfo);
 	}
 	
 	public PowerInfo(Font font, int pX, int pY, int pWidth, ElectricInfo electricInfo) {
@@ -26,15 +26,15 @@ public class PowerInfo extends AbstractWidget {
 	}
 	
 	public PowerInfo(Font font, int pX, int pY, int pWidth, int targetVoltage, float voltageTolerance, int targetPower, float powerTolerance) {
-		super(pX, pY, pWidth, 48, Component.empty());
+		super(pX, pY, pWidth, 44, Component.empty());
 		float voltageMax = targetVoltage + (targetVoltage * voltageTolerance * 0.5F);
 		float voltageMin = targetVoltage - (targetVoltage * voltageTolerance * 0.5F);
 		this.voltageBarMax = voltageMax * 1.2F;
-		this.voltageBar = new StatusBar(font, pX + 2, pY + 10, pWidth - 4, Component.empty(), voltageMin / voltageBarMax, voltageMax / voltageBarMax, voltageMax / voltageBarMax);
+		this.voltageBar = new StatusBar(font, pX, pY + 8, pWidth, Component.empty(), voltageMin / voltageBarMax, voltageMax / voltageBarMax, voltageMax / voltageBarMax);
 		float powerMax = targetPower + (targetPower * powerTolerance * 0.5F);
 		float powerMin = targetPower - (targetPower * powerTolerance * 0.5F);
 		this.powerBarMax = powerMax * 1.2F;
-		this.powerBar = new StatusBar(font, pX + 2, pY + 33, pWidth - 4, Component.empty(), powerMin / powerBarMax, powerMax / powerBarMax, powerMax / powerBarMax);
+		this.powerBar = new StatusBar(font, pX, pY + 31, pWidth, Component.empty(), powerMin / powerBarMax, powerMax / powerBarMax, powerMax / powerBarMax);
 	}
 	
 	public void setTexture(ResourceLocation texture) {
@@ -56,9 +56,6 @@ public class PowerInfo extends AbstractWidget {
 	
 	@Override
 	protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-
-		pGuiGraphics.blit(texture, getX(), getY(), 1, 71, Math.min(getWidth() - 1, 161), getHeight());
-		pGuiGraphics.blit(texture, getX() + getWidth() - 1, getY(), 162, 71, 1, getHeight());
 		
 		this.voltageBar.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
 		this.powerBar.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);

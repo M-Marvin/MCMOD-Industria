@@ -9,6 +9,7 @@ import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContaine
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.InternalNodeConstructor;
 import de.m_marvin.industria.core.util.Direction2d;
 import de.m_marvin.industria.core.util.GameUtility;
+import de.m_marvin.industria.core.util.container.IFluidSlotContainer.FluidContainer;
 import de.m_marvin.univec.impl.Vec2i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -23,11 +24,16 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class MobileFuelGeneratorBlockEntity extends BlockEntity implements IJunctionEdit, MenuProvider {
 	
+	protected FluidContainer fluidContainer = new FluidContainer(1);
 	protected String[] nodeLanes = new String[] {"L", "N"};
-	protected FluidStack fuelStorage = FluidStack.EMPTY;
 	
 	public MobileFuelGeneratorBlockEntity(BlockPos pPos, BlockState pBlockState) {
 		super(ModBlockEntityTypes.MOBILE_FUEL_GENERATOR.get(), pPos, pBlockState);
+		this.fluidContainer.addListener(container -> this.setChanged());
+	}
+	
+	public FluidContainer getFluidContainer() {
+		return fluidContainer;
 	}
 	
 	public void setNodeLanes(String[] nodeLanes) {
@@ -40,12 +46,12 @@ public class MobileFuelGeneratorBlockEntity extends BlockEntity implements IJunc
 	}
 	
 	public void setFuelStorage(FluidStack fuelStorage) {
-		this.fuelStorage = fuelStorage;
+		this.fluidContainer.setFluid(0, fuelStorage);
 		this.setChanged();
 	}
 	
 	public FluidStack getFuelStorage() {
-		return fuelStorage;
+		return this.fluidContainer.getFluid(0);
 	}
 	
 	@Override
@@ -63,7 +69,7 @@ public class MobileFuelGeneratorBlockEntity extends BlockEntity implements IJunc
 		super.saveAdditional(pTag);
 		pTag.putString("LiveWireLane", this.nodeLanes[0]);
 		pTag.putString("NeutralWireLane", this.nodeLanes[1]);
-		pTag.put("Fuel", this.fuelStorage.writeToNBT(new CompoundTag()));
+		pTag.put("Fuel", this.getFuelStorage().writeToNBT(new CompoundTag()));
 	}
 	
 	@Override
@@ -71,7 +77,7 @@ public class MobileFuelGeneratorBlockEntity extends BlockEntity implements IJunc
 		super.load(pTag);
 		this.nodeLanes[0] = pTag.contains("LiveWireLane") ? pTag.getString("LiveWireLane") : "L";
 		this.nodeLanes[1] = pTag.contains("NeutralWireLane") ? pTag.getString("NeutralWireLane") : "N";
-		this.fuelStorage = FluidStack.loadFluidStackFromNBT(pTag.getCompound("Fuel"));
+		this.setFuelStorage(FluidStack.loadFluidStackFromNBT(pTag.getCompound("Fuel")));
 	}
 	
 	@Override
@@ -79,6 +85,7 @@ public class MobileFuelGeneratorBlockEntity extends BlockEntity implements IJunc
 		CompoundTag tag = new CompoundTag();
 		tag.putString("LiveWireLane", this.nodeLanes[0]);
 		tag.putString("NeutralWireLane", this.nodeLanes[1]);
+		tag.put("Fuel", this.getFuelStorage().writeToNBT(new CompoundTag()));
 		return tag;
 	}
 	

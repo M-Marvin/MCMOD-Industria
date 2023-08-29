@@ -4,14 +4,10 @@ import de.m_marvin.industria.content.blockentities.machines.MobileFuelGeneratorB
 import de.m_marvin.industria.content.registries.ModMenuTypes;
 import de.m_marvin.industria.core.util.container.AbstractBlockEntityFluidContainerBase;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.entity.player.Player;
 
 public class MobileFuelGeneratorContainer extends AbstractBlockEntityFluidContainerBase<MobileFuelGeneratorBlockEntity> {
-	
-	protected Container container;
 	
 	public MobileFuelGeneratorContainer(int id, Inventory playerInv, MobileFuelGeneratorBlockEntity tileEntity) {
 		super(ModMenuTypes.MOBILE_FUEL_GENERATOR.get(), id, playerInv, tileEntity);
@@ -23,22 +19,24 @@ public class MobileFuelGeneratorContainer extends AbstractBlockEntityFluidContai
 	
 	@Override
 	public int getSlots() {
-		return 2;
+		return this.blockEntity.getFluidContainer().getContainerSize();
 	}
 	
 	@Override
 	public void init() {
-		
-		this.container = new SimpleContainer(getSlots());
+		super.init();
 		
 		initPlayerInventory(playerInv, 0, 0);
 		
-		addSlot(new Slot(this.container, 0, 125, 18));
-		addSlot(new Slot(this.container, 1, 125, 51));
-		
-		System.out.println(this.fluidSlots);
-		//addFluidSlot(new FluidSlot(30, 18));
-		
+		FluidSlot fluidSlot = addFluidSlot(new FluidSlot(this.blockEntity.getFluidContainer(), 0, 125, 15));
+		addSlot(fluidSlot.makeFillSlot(this.blockEntity.getFluidContainer()));
+		addSlot(fluidSlot.makeDrainSlot(this.blockEntity.getFluidContainer()));
+	}
+	
+	@Override
+	public void removed(Player pPlayer) {
+		super.removed(pPlayer);
+		this.clearContainer(pPlayer, this.blockEntity.getFluidContainer());
 	}
 	
 }

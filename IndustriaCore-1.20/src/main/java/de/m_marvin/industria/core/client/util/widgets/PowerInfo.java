@@ -1,4 +1,4 @@
-package de.m_marvin.industria.content.client.screens;
+package de.m_marvin.industria.core.client.util.widgets;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider.ElectricInfo;

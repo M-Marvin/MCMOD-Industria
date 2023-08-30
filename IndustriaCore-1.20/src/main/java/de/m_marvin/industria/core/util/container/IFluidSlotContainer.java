@@ -14,6 +14,7 @@ import net.minecraft.world.ContainerListener;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 public interface IFluidSlotContainer {
@@ -86,6 +87,13 @@ public interface IFluidSlotContainer {
 		protected NonNullList<ItemStack> items;
 		@Nullable
 		private List<ContainerListener> listeners;
+		private List<FluidContainerListener> fillListeners;
+		private List<FluidContainerListener> drainListeners;
+		
+		@FunctionalInterface
+		public static interface FluidContainerListener {
+			void containerChanged(FluidContainer pContainer, Fluid fluid);
+		}
 		
 		public FluidContainer(int fluidSlots) {
 			this(fluidSlots, 5000);
@@ -108,6 +116,32 @@ public interface IFluidSlotContainer {
 		public void removeListener(ContainerListener pListener) {
 			if (this.listeners != null) {
 				this.listeners.remove(pListener);
+			}
+		}
+
+		public void addFillListener(FluidContainerListener pListener) {
+			if (this.fillListeners == null) {
+				this.fillListeners = Lists.newArrayList();
+			}
+			this.fillListeners.add(pListener);
+		}
+
+		public void removeFillListener(FluidContainerListener pListener) {
+			if (this.fillListeners != null) {
+				this.fillListeners.remove(pListener);
+			}
+		}
+
+		public void addDrainListener(FluidContainerListener pListener) {
+			if (this.drainListeners == null) {
+				this.drainListeners = Lists.newArrayList();
+			}
+			this.drainListeners.add(pListener);
+		}
+
+		public void removeDrainListener(FluidContainerListener pListener) {
+			if (this.drainListeners != null) {
+				this.drainListeners.remove(pListener);
 			}
 		}
 
@@ -184,10 +218,19 @@ public interface IFluidSlotContainer {
 			FluidStack fluidStack = getFluid(fluidSlot);
 			if (slot > fluidSlot) {
 				// Drain FluidSlot
-				return ItemFluidExchangeHelper.fillFluid(stack, fluidStack, fs -> this.setFluid(fluidSlot, fs));
+				Fluid fluid = fluidStack.getFluid();
+				ItemStack result = ItemFluidExchangeHelper.fillFluid(stack, fluidStack, fs -> this.setFluid(fluidSlot, fs));
+				if (!result.equals(stack)) {
+					if (this.drainListeners != null) for (FluidContainerListener drainListener : this.drainListeners) drainListener.containerChanged(this, fluid);
+				}
+				return result;
 			} else {
 				// Fill FluidSlot
-				return ItemFluidExchangeHelper.drainFluid(stack, fluidStack, this.maxFluidAmount, fs -> this.setFluid(fluidSlot, fs));
+				ItemStack result = ItemFluidExchangeHelper.drainFluid(stack, fluidStack, this.maxFluidAmount, fs -> this.setFluid(fluidSlot, fs));
+				if (!result.equals(stack)) {
+					if (this.fillListeners != null) for (FluidContainerListener fillListener : this.fillListeners) fillListener.containerChanged(this, this.getFluid(fluidSlot).getFluid());
+				}
+				return result;
 			}
 		}
 		

@@ -3,6 +3,7 @@ package de.m_marvin.industria.content.blockentities.machines;
 import de.m_marvin.industria.content.container.MobileFuelGeneratorContainer;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
+import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
@@ -18,6 +19,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
@@ -26,6 +28,7 @@ public class MobileFuelGeneratorBlockEntity extends BlockEntity implements IJunc
 	
 	protected FluidContainer fluidContainer = new FluidContainer(1);
 	protected String[] nodeLanes = new String[] {"L", "N"};
+	protected boolean canRun = false;
 	
 	public MobileFuelGeneratorBlockEntity(BlockPos pPos, BlockState pBlockState) {
 		super(ModBlockEntityTypes.MOBILE_FUEL_GENERATOR.get(), pPos, pBlockState);
@@ -54,6 +57,34 @@ public class MobileFuelGeneratorBlockEntity extends BlockEntity implements IJunc
 		return this.fluidContainer.getFluid(0);
 	}
 	
+	public boolean canRun() {
+		return getFuelStorage().getAmount() > 0; // TODO
+	}
+	
+	public int getPowerUsed() {
+		return 0;
+	}
+	
+	public static void tick(Level pLevel, BlockPos pPos, BlockState pState, MobileFuelGeneratorBlockEntity pBlockEntity) {
+		
+		if (pBlockEntity.canRun != pBlockEntity.canRun()) {
+			pBlockEntity.canRun = pBlockEntity.canRun();
+			pBlockEntity.setChanged();
+			ElectricUtility.updateNetwork(pLevel, pPos);
+		}
+		
+		if (pBlockEntity.canRun) {
+			
+			// TODO drain fuel
+			FluidStack fuel = pBlockEntity.getFuelStorage();
+			if (!fuel.isEmpty()) {
+				//fuel.shrink(10);
+			}
+			
+		}
+		
+	}
+	
 	@Override
 	public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
 		return GameUtility.openJunctionScreenOr(this, pContainerId, pPlayer, pPlayerInventory, () -> new MobileFuelGeneratorContainer(pContainerId, pPlayerInventory, this)); // TODO
@@ -70,6 +101,7 @@ public class MobileFuelGeneratorBlockEntity extends BlockEntity implements IJunc
 		pTag.putString("LiveWireLane", this.nodeLanes[0]);
 		pTag.putString("NeutralWireLane", this.nodeLanes[1]);
 		pTag.put("Fuel", this.getFuelStorage().writeToNBT(new CompoundTag()));
+		pTag.putBoolean("canRun", this.canRun);
 	}
 	
 	@Override
@@ -78,6 +110,7 @@ public class MobileFuelGeneratorBlockEntity extends BlockEntity implements IJunc
 		this.nodeLanes[0] = pTag.contains("LiveWireLane") ? pTag.getString("LiveWireLane") : "L";
 		this.nodeLanes[1] = pTag.contains("NeutralWireLane") ? pTag.getString("NeutralWireLane") : "N";
 		this.setFuelStorage(FluidStack.loadFluidStackFromNBT(pTag.getCompound("Fuel")));
+		this.canRun = pTag.getBoolean("canRun");
 	}
 	
 	@Override

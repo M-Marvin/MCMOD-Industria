@@ -1,8 +1,8 @@
 package de.m_marvin.industria.content.client.screens;
 
 import de.m_marvin.industria.content.Industria;
-import de.m_marvin.industria.content.container.AbstractFluidContainerScreen;
 import de.m_marvin.industria.content.container.MobileFuelGeneratorContainer;
+import de.m_marvin.industria.core.client.electrics.screens.AbstractFluidContainerScreen;
 import de.m_marvin.industria.core.client.util.widgets.PowerInfo;
 import de.m_marvin.industria.core.client.util.widgets.StatusBar;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider;
@@ -39,15 +39,14 @@ public class MobileFuelGeneratorScreen extends AbstractFluidContainerScreen<Mobi
 		this.powerInfo = new PowerInfo(font, this.leftPos + 27, this.topPos + 20, this.electricInfo);
 		this.addRenderableWidget(this.powerInfo);
 		
-		
-		this.powerInfo.setStatus(240, 1102);
-		
 	}
 	
 	@Override
 	protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
 		
 		pGuiGraphics.blit(SCREEN_TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+
+		this.powerInfo.setStatus(this.electricInfo);
 		
 	}
 	

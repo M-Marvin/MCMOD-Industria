@@ -2,11 +2,14 @@ package de.m_marvin.industria.core.util.container;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.common.SoundActions;
 
 public abstract class AbstractBlockEntityFluidContainerBase<T extends BlockEntity> extends AbstractBlockEntityContainerBase<T> implements IFluidSlotContainer {
 	
@@ -34,6 +37,16 @@ public abstract class AbstractBlockEntityFluidContainerBase<T extends BlockEntit
 	public FluidSlot addFluidSlot(FluidSlot fluidSlot) {
 		this.fluidSlots.add(fluidSlot);
 		return fluidSlot;
+	}
+	
+	public void playDrainSound(FluidContainer container, Fluid fluid) {
+		SoundEvent sound = fluid.getFluidType().getSound(SoundActions.BUCKET_FILL);
+		if (sound != null) this.playerInv.player.playSound(sound);
+	}
+	
+	public void playFillSound(FluidContainer container, Fluid fluid) {
+		SoundEvent sound = fluid.getFluidType().getSound(SoundActions.BUCKET_EMPTY);
+		if (sound != null) this.playerInv.player.playSound(sound);
 	}
 	
 	@Override

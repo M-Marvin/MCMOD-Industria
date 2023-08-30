@@ -31,6 +31,9 @@ public class MobileFuelGeneratorContainer extends AbstractBlockEntityFluidContai
 		FluidSlot fluidSlot = addFluidSlot(new FluidSlot(this.blockEntity.getFluidContainer(), 0, 125, 15));
 		addSlot(fluidSlot.makeFillSlot(this.blockEntity.getFluidContainer()));
 		addSlot(fluidSlot.makeDrainSlot(this.blockEntity.getFluidContainer()));
+		
+		this.blockEntity.getFluidContainer().addFillListener(this::playFillSound);
+		this.blockEntity.getFluidContainer().addDrainListener(this::playDrainSound);
 	}
 	
 	@Override

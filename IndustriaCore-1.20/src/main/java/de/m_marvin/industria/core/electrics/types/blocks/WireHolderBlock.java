@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
-import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
+import de.m_marvin.industria.core.electrics.circuits.Circuits;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.registries.NodeTypes;
@@ -18,7 +18,6 @@ import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -77,7 +76,7 @@ public class WireHolderBlock extends Block implements IElectricConnector {
 		List<String[]> cableLanes = ElectricUtility.getLaneLabels(level, node, Component::isWire);
 		int laneCount = cableLanes.stream().mapToInt(l -> l.length).max().orElse(0);
 
-		CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "junction_resistor"));
+		CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR);
 		
 		String[] lt = new String[laneCount];
 		for (int i = 0; i < laneCount; i++) {

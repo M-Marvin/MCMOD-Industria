@@ -7,10 +7,10 @@ import java.util.stream.Stream;
 
 import com.google.common.base.Predicate;
 
-import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
+import de.m_marvin.industria.core.electrics.circuits.Circuits;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
@@ -18,7 +18,6 @@ import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -102,7 +101,7 @@ public class ElectricUtility {
 		NodePos[] nodes = block.getConnections(level, position, instance);
 		List<String[]> lanes = Stream.of(nodes).map(node -> getLaneLabelsSummarized(level, node)).toList();
 		
-		CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "junction_resistor"));
+		CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR);
 		
 		for (int i = 0; i < nodes.length; i++) {
 			String[] wireLanes = lanes.get(i);

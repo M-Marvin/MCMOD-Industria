@@ -5,13 +5,13 @@ import java.util.function.Consumer;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
+import de.m_marvin.industria.core.electrics.circuits.Circuits;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.blockentities.JunctionBoxBlockEntity;
@@ -23,7 +23,6 @@ import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -110,7 +109,7 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricConnec
 			NodePos[] nodes = getConnections(level, position, instance);
 			List<String[]> lanes = Stream.of(nodes).map(node -> ElectricUtility.getLaneLabelsSummarized(level, node)).toList();
 			
-			CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "junction_resistor"));
+			CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR);
 			
 			for (int i = 0; i < nodes.length; i++) {
 				String[] wireLanes = lanes.get(i);

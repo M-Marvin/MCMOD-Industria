@@ -193,15 +193,13 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	@SubscribeEvent
 	public static void onConduitStateChange(ConduitEvent event) {
 		Level level = (Level) event.getLevel();
-		if (!level.isClientSide()) {
-			ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-			if (event.getConduitState().getConduit() instanceof IElectricConduit) {
-				if (event instanceof ConduitPlaceEvent) {
-					IElectricConduit conduit = (IElectricConduit) event.getConduitState().getConduit();
-					handler.addComponent(event.getPosition(), conduit, event.getConduitState());
-				} else if (event instanceof ConduitBreakEvent) {
-					handler.removeComponent(event.getPosition(), event.getConduitState());
-				}
+		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		if (event.getConduitState().getConduit() instanceof IElectricConduit) {
+			if (event instanceof ConduitPlaceEvent) {
+				IElectricConduit conduit = (IElectricConduit) event.getConduitState().getConduit();
+				handler.addComponent(event.getPosition(), conduit, event.getConduitState());
+			} else if (event instanceof ConduitBreakEvent) {
+				handler.removeComponent(event.getPosition(), event.getConduitState());
 			}
 		}
 	}
@@ -393,9 +391,11 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 					}
 				}
 				if (!this.level.isClientSide) {
-					componentsToUpdate.forEach((comp) -> updateNetwork(comp.pos()));
 					ChunkPos chunkPos = component.getAffectedChunk(level);
 					IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> this.level.getChunk(chunkPos.x, chunkPos.z)), new SSyncComponentsPackage(component, chunkPos, SyncRequestType.REMOVED));
+				}
+				for (Component<?, ?, ?> comp : componentsToUpdate) {
+					updateNetwork(comp.pos());
 				}
 			}
 		}
@@ -416,10 +416,10 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		Component<I, P, T> component2 = new Component<I, P, T>(pos, type, instance);
 		addToNetwork(component2);
 		if (!this.level.isClientSide) {
-			updateNetwork(pos);
 			ChunkPos chunkPos = component2.getAffectedChunk(level);
 			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> this.level.getChunk(chunkPos.x, chunkPos.z)), new SSyncComponentsPackage(component2, chunkPos, SyncRequestType.ADDED));
 		}
+		updateNetwork(pos);
 	}
 	
 	/**

@@ -3,13 +3,13 @@ package de.m_marvin.industria.core.electrics.types.blocks;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
-import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
+import de.m_marvin.industria.core.electrics.circuits.Circuits;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blockentities.PowerSourceBlockEntity;
 import de.m_marvin.industria.core.registries.Blocks;
@@ -17,7 +17,6 @@ import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -66,7 +65,7 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricConnec
 			String[] sourceLanes = source.getWireLabels();
 			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, sourceLanes[0], 1, sourceLanes[1]);
 			
-			CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "source"));
+			CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CURRENT_LIMITED_VOLTAGE_SOURCE);
 			templateSource.setProperty("nominal_current", 10);
 			templateSource.setProperty("nominal_voltage", 100);
 			templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, sourceLanes[0]);

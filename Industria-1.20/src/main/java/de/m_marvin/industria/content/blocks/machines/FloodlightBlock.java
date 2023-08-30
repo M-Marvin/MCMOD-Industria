@@ -13,6 +13,7 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
+import de.m_marvin.industria.core.electrics.circuits.Circuits;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
 import de.m_marvin.industria.core.registries.NodeTypes;
@@ -120,7 +121,7 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricConnect
 			String[] lampLanes = lamp.getNodeLanes();
 			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, lampLanes[0], 1, lampLanes[1]);
 			
-			CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "current_load"));
+			CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_CURRENT_LOAD);
 			templateSource.setProperty("nominal_current", TARGET_POWER / TARGET_VOLTAGE);
 			templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, lampLanes[0]);
 			templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, lampLanes[1]);

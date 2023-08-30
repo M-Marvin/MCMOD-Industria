@@ -24,3 +24,7 @@ Projekt/run
 # Files from Forge MDK
 forge*changelog.txt
 FileVariantHelper/bin/*
+*.log
+Industria-1.20/run/logs/latest.log
+Industria-1.20/run/logs/debug.log
+Industria-1.20/run/logs/debug-1.log.gz

@@ -14,10 +14,10 @@ public class CircuitTemplate implements ICircuitPlot {
 	private static final Pattern PROPERTY_PATTERN = Pattern.compile("P\\{([\\w]+)\\}");
 	private static final Pattern NETWORK_PATTERN = Pattern.compile("N\\{([\\w]+)\\}");
 	
-	private Map<String, String> networks = new HashMap<>();
-	private Map<String, String> properties = new HashMap<>();
-	private String idProperty;
-	private String template;
+	private final Map<String, String> networks = new HashMap<>();
+	private final Map<String, String> properties = new HashMap<>();
+	private final String idProperty;
+	private final String template;
 		
 	public CircuitTemplate(String[] networks, String[] properties, String template, String idProperty) {
 		this.template = template;

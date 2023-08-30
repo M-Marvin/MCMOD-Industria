@@ -33,6 +33,8 @@ public class ElectricNetwork implements INGCallback {
 	protected NativeNGLink nglink;
 	protected Map<String, Double> nodeVoltages = Maps.newHashMap();
 	
+	protected Object ngLinkLock = new Object();
+	
 	public ElectricNetwork(String titleInfo) {
 		this.title = titleInfo;
 		this.nglink = new NativeNGLink();
@@ -123,8 +125,10 @@ public class ElectricNetwork implements INGCallback {
 //	}
 
 	public void terminateExecution() {
-		if (this.nglink.isInitialized()) {
-			this.nglink.detachNGLink();
+		synchronized (ngLinkLock) {
+			if (this.nglink.isInitialized()) {
+				this.nglink.detachNGLink();
+			}
 		}
 	}
 	
@@ -133,22 +137,24 @@ public class ElectricNetwork implements INGCallback {
 	}
 	
 	public void updateSimulation() {
-		if (!this.netList.isEmpty()) {
-			if (!this.nglink.isInitialized()) {
-				if (!nglink.initNGLink(this)) {
-					IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.ERROR, "Failed to start nglink! Electric simulation abborted!");
+		synchronized (ngLinkLock) {
+			if (!this.netList.isEmpty()) {
+				if (!this.nglink.isInitialized()) {
+					if (!nglink.initNGLink(this)) {
+						IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.ERROR, "Failed to start nglink! Electric simulation abborted!");
+						return;
+					}
+				}
+				if (!this.nglink.initNGSpice()) {
+					IndustriaCore.LOGGER.warn("Failed to start electric simulation! Failed to init SPICE!");
 					return;
 				}
+				if (!this.nglink.loadCircuit(this.netList)) {
+					IndustriaCore.LOGGER.warn("Failed to start electric simulation! Failed to load circuit!");
+					return;
+				}
+				this.nglink.execCommand("op");
 			}
-			if (!this.nglink.initNGSpice()) {
-				IndustriaCore.LOGGER.warn("Failed to start electric simulation! Failed to init SPICE!");
-				return;
-			}
-			if (!this.nglink.loadCircuit(this.netList)) {
-				IndustriaCore.LOGGER.warn("Failed to start electric simulation! Failed to load circuit!");
-				return;
-			}
-			this.nglink.execCommand("op");
 		}
 	}
 	
@@ -166,7 +172,7 @@ public class ElectricNetwork implements INGCallback {
 		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.WARN, "SPICE-Engine requested detachment, this could lead to undefined behavior!");
 		this.nglink.detachNGSpice();
 	}
-
+ 
 	@Override
 	public void reciveVecData(VectorValuesAll vecData, int vectorCount) {
 		this.nodeVoltages.clear();

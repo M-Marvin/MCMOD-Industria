@@ -1,5 +1,6 @@
 package de.m_marvin.industria.content.blockentities.machines;
 
+import de.m_marvin.industria.content.blocks.machines.MobileFuelGeneratorBlock;
 import de.m_marvin.industria.content.container.MobileFuelGeneratorContainer;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
@@ -73,12 +74,13 @@ public class MobileFuelGeneratorBlockEntity extends BlockEntity implements IJunc
 			ElectricUtility.updateNetwork(pLevel, pPos);
 		}
 		
-		if (pBlockEntity.canRun) {
+		if (pBlockEntity.canRun && pState.getBlock() instanceof MobileFuelGeneratorBlock generatorBlock) {
 			
-			// TODO drain fuel
 			FluidStack fuel = pBlockEntity.getFuelStorage();
-			if (!fuel.isEmpty()) {
-				//fuel.shrink(10);
+			if (!fuel.isEmpty()) {	
+				double powerProduction = generatorBlock.getPower(pState, pLevel, pPos);
+				System.out.println(pBlockEntity.level.isClientSide + " " + powerProduction);
+				fuel.shrink((int) Math.ceil(powerProduction * 0.001));
 			}
 			
 		}

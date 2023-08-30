@@ -19,7 +19,7 @@ public class StatusBar extends AbstractWidget {
 	protected float state;
 	protected Component percentageText;
 	
-	public StatusBar(Font font, int x, int y, int length, Component title, float greenRange, float percentageOffset, float redRange) {
+	public StatusBar(Font font, int x, int y, int length, Component title, float greenRange, float redRange, float percentageOffset) {
 		super(x, y, Math.min(length, 164), 16, title);
 		this.greenRange = greenRange;
 		this.redRange = redRange;
@@ -60,7 +60,7 @@ public class StatusBar extends AbstractWidget {
 	@Override
 	protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
 		
-		pGuiGraphics.blit(texture, this.getX(), this.getY() + 1, 2, 36, this.getWidth() - 1, 12);
+		pGuiGraphics.blit(texture, this.getX(), this.getY() + 1, 1, 36, this.getWidth() - 1, 12);
 		pGuiGraphics.blit(texture, this.getX() + this.getWidth() - 1, this.getY() + 1, 162, 36, 1, 12);
 		
 		float length = this.getWidth() - 2;

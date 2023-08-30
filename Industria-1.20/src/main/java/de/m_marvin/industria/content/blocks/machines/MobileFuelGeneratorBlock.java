@@ -12,6 +12,8 @@ import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.circuits.Circuits;
+import de.m_marvin.industria.core.electrics.parametrics.DeviceParametrics;
+import de.m_marvin.industria.core.electrics.parametrics.DeviceParametricsManager;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider;
@@ -90,12 +92,12 @@ public class MobileFuelGeneratorBlock extends BaseEntityBlock implements IElectr
 			String[] wireLanes = generator.getNodeLanes();
 			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, wireLanes[0], 1, wireLanes[1]);
 			
-			int targetPower = generator.canRun() ? getNominalPower(instance, level, position) : 0;
-			int targetVoltage = generator.canRun() ? getNominalVoltage(instance, level, position) : 0;
-			int nominalVoltage = getNominalVoltage(instance, level, position);
+			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this);
+			int targetPower = generator.canRun() ? parametrics.getNominalPower() : 0;
+			int targetVoltage = generator.canRun() ? parametrics.getNominalVoltage() : 0;
 			
 			CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CURRENT_LIMITED_VOLTAGE_SOURCE);
-			templateSource.setProperty("nominal_current", targetPower / (double) nominalVoltage);
+			templateSource.setProperty("nominal_current", targetPower / (double) parametrics.getNominalVoltage());
 			templateSource.setProperty("nominal_voltage", targetVoltage);
 			templateSource.setNetworkNode("SHUNT", new NodePos(position, 0), 2, "power_shunt");
 			templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, wireLanes[0]);
@@ -119,35 +121,17 @@ public class MobileFuelGeneratorBlock extends BaseEntityBlock implements IElectr
 	public double getPower(BlockState state, Level level, BlockPos pos) {
 		if (level.getBlockEntity(pos) instanceof MobileFuelGeneratorBlockEntity generator) {
 			String[] wireLanes = generator.getNodeLanes();
-			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 2, wireLanes[0], "power_shunt");
-			double outletVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 1, 0, wireLanes[1], wireLanes[0]);
-			return shuntVoltage / Circuits.SHUNT_RESISTANCE * outletVoltage;
+			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 2, 0, "power_shunt", wireLanes[0]);
+			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this);
+			double powerUsed = (shuntVoltage / Circuits.SHUNT_RESISTANCE) * parametrics.getNominalVoltage();
+			return Math.max(powerUsed > 1.0 ? parametrics.getPowerMin() : 0, powerUsed);
 		}
 		return 0.0;
 	}
 	
 	@Override
-	public int getNominalPower(BlockState state, Level level, BlockPos pos) {
-		// TODO Auto-generated method stub
-		return 1000;
-	}
-	
-	@Override
-	public int getNominalVoltage(BlockState state, Level level, BlockPos pos) {
-		// TODO Auto-generated method stub
-		return 230;
-	}
-	
-	@Override
-	public float getPowerTolerance(BlockState state, Level level, BlockPos pos) {
-		// TODO Auto-generated method stub
-		return 0.1F;
-	}
-	
-	@Override
-	public float getVoltageTolerance(BlockState state, Level level, BlockPos pos) {
-		// TODO Auto-generated method stub
-		return 0.2F;
+	public DeviceParametrics getParametrics(BlockState state, Level level, BlockPos pos) {
+		return DeviceParametricsManager.getInstance().getParametrics(this);
 	}
 	
 	@Override

@@ -136,7 +136,7 @@ dependencies {
  	implementation fg.deobf("curse.maven:valkyrienskies-258371:4654328")
  	
  	// Code Dependencies
-	shade "com.github.M-Marvin:LIBRARY-NGLink:844e6813c7e61b5127bead6deb7cea93990a24a3"
+	shade "com.github.M-Marvin:LIBRARY-NGLink:ae6c10bbfd"
 	shade "com.github.M-Marvin:LIBRARY-UnifiedVectors:main-SNAPSHOT"
 	//jarJar(group: "com.github.M-Marvin", name: "LIBRARY-NGLink", version: "844e6813c7e61b5127bead6deb7cea93990a24a3")
 	//jarJar(group: "com.github.M-Marvin", name: "LIBRARY-UnifiedVectors", version: "main-SNAPSHOT")

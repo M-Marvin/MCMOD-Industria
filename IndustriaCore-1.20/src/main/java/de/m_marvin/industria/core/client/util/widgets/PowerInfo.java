@@ -1,6 +1,7 @@
 package de.m_marvin.industria.core.client.util.widgets;
 
 import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.core.electrics.parametrics.DeviceParametrics;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider.ElectricInfo;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -20,21 +21,17 @@ public class PowerInfo extends AbstractWidget {
 	public PowerInfo(Font font, int pX, int pY, ElectricInfo electricInfo) {
 		this(font, pX, pY, 60, electricInfo);
 	}
-	
+
 	public PowerInfo(Font font, int pX, int pY, int pWidth, ElectricInfo electricInfo) {
-		this(font, pX, pY, pWidth, electricInfo.targetVoltage().get(), electricInfo.voltageTolerance().get(), electricInfo.targetPower().get(), electricInfo.powerTolerance().get());
+		this(font, pX, pY, pWidth, electricInfo.parametrics().get());
 	}
 	
-	public PowerInfo(Font font, int pX, int pY, int pWidth, int targetVoltage, float voltageTolerance, int targetPower, float powerTolerance) {
+	public PowerInfo(Font font, int pX, int pY, int pWidth, DeviceParametrics parametrics) {
 		super(pX, pY, pWidth, 44, Component.empty());
-		float voltageMax = targetVoltage + (targetVoltage * voltageTolerance * 0.5F);
-		float voltageMin = targetVoltage - (targetVoltage * voltageTolerance * 0.5F);
-		this.voltageBarMax = voltageMax * 1.2F;
-		this.voltageBar = new StatusBar(font, pX, pY + 8, pWidth, Component.empty(), voltageMin / voltageBarMax, voltageMax / voltageBarMax, voltageMax / voltageBarMax);
-		float powerMax = targetPower + (targetPower * powerTolerance * 0.5F);
-		float powerMin = targetPower - (targetPower * powerTolerance * 0.5F);
-		this.powerBarMax = powerMax * 1.2F;
-		this.powerBar = new StatusBar(font, pX, pY + 31, pWidth, Component.empty(), powerMin / powerBarMax, powerMax / powerBarMax, powerMax / powerBarMax);
+		this.voltageBarMax = parametrics.getVoltageMax() * 1.2F;
+		this.voltageBar = new StatusBar(font, pX, pY + 8, pWidth, Component.empty(), parametrics.getVoltageMin() / voltageBarMax, parametrics.getVoltageMax() / voltageBarMax, parametrics.getNominalVoltage() / voltageBarMax);
+		this.powerBarMax = parametrics.getPowerMax() * 1.2F;
+		this.powerBar = new StatusBar(font, pX, pY + 31, pWidth, Component.empty(), parametrics.getPowerMin() / powerBarMax, parametrics.getPowerMax() / powerBarMax, parametrics.getNominalPower() / powerBarMax);
 	}
 	
 	public void setTexture(ResourceLocation texture) {
@@ -50,8 +47,8 @@ public class PowerInfo extends AbstractWidget {
 	public void setStatus(float voltage, float power) {
 		this.voltageBar.setStatus(voltage / this.voltageBarMax);
 		this.powerBar.setStatus(power / this.powerBarMax);
-		this.voltageBar.setMessage(Component.literal(String.format("%.0fV", voltage)));
-		this.powerBar.setMessage(Component.literal(String.format("%.0fW", power)));
+		this.voltageBar.setMessage(Component.literal(String.format("%.0fV", Math.abs(voltage))));
+		this.powerBar.setMessage(Component.literal(String.format("%.0fW", Math.abs(power))));
 	}
 	
 	@Override

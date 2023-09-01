@@ -4,7 +4,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
-import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.content.blockentities.machines.FloodlightBlockEntity;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
@@ -14,6 +13,8 @@ import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.circuits.Circuits;
+import de.m_marvin.industria.core.electrics.parametrics.DeviceParametrics;
+import de.m_marvin.industria.core.electrics.parametrics.DeviceParametricsManager;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
 import de.m_marvin.industria.core.registries.NodeTypes;
@@ -22,7 +23,6 @@ import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -51,8 +51,6 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricConnect
 			.addModifier(BlockStateProperties.ATTACH_FACE, NodePointSupplier.ATTACH_FACE_MODIFIER_DEFAULT_WALL)
 			.addModifier(BlockStateProperties.HORIZONTAL_FACING, NodePointSupplier.FACING_MODIFIER_DEFAULT_NORTH);
 	public static final int NODE_COUNT = 3;
-	public static final int TARGET_VOLTAGE = 100;
-	public static final int TARGET_POWER = 200;
 	
 	public static final VoxelShape SHAPE = Shapes.or(VoxelShapeUtility.box(0, 1, 0, 16, 15, 6), VoxelShapeUtility.box(0, 0, 6, 16, 16, 10));
 	
@@ -78,11 +76,6 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricConnect
 			blockstate = this.defaultBlockState().setValue(BlockStateProperties.ATTACH_FACE, AttachFace.WALL).setValue(BlockStateProperties.HORIZONTAL_FACING, direction.getOpposite());
 		}
 		return blockstate.setValue(BlockStateProperties.LIT, false);
-	}
-	
-	@Override
-	public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
-		return 0;//return state.getValue(BlockStateProperties.LIT) ? 15 : 0;
 	}
 	
 	@Override
@@ -121,8 +114,12 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricConnect
 			String[] lampLanes = lamp.getNodeLanes();
 			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, lampLanes[0], 1, lampLanes[1]);
 			
+			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this);
+			int targetVoltage = parametrics.getNominalVoltage();
+			int targetPower = parametrics.getNominalPower();
+			
 			CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_CURRENT_LOAD);
-			templateSource.setProperty("nominal_current", TARGET_POWER / TARGET_VOLTAGE);
+			templateSource.setProperty("nominal_current", targetPower / (double) targetVoltage);
 			templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, lampLanes[0]);
 			templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, lampLanes[1]);
 			plotter.accept(templateSource);

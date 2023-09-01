@@ -2,7 +2,7 @@ package de.m_marvin.industria.content.registries;
 
 import de.m_marvin.industria.content.Industria;
 import de.m_marvin.industria.content.blockentities.machines.FloodlightBlockEntity;
-import de.m_marvin.industria.content.blockentities.machines.MobileFuelGeneratorBlockEntity;
+import de.m_marvin.industria.content.blockentities.machines.PortableFuelGeneratorBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -16,7 +16,7 @@ public class ModBlockEntityTypes {
 		BLOCK_ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 	
-	public static final RegistryObject<BlockEntityType<FloodlightBlockEntity>> FLOODLIGHT 						= BLOCK_ENTITY_TYPES.register("floodlight", () -> BlockEntityType.Builder.of(FloodlightBlockEntity::new, ModBlocks.BRASS_FLOODLIGHT.get(), ModBlocks.STEEL_FLOOFLIGHT.get()).build(null));
-	public static final RegistryObject<BlockEntityType<MobileFuelGeneratorBlockEntity>> MOBILE_FUEL_GENERATOR 	= BLOCK_ENTITY_TYPES.register("mobile_fuel_generator", () -> BlockEntityType.Builder.of(MobileFuelGeneratorBlockEntity::new, ModBlocks.MOBILE_FUEL_GENERATOR.get()).build(null));
+	public static final RegistryObject<BlockEntityType<FloodlightBlockEntity>> 				FLOODLIGHT 					= BLOCK_ENTITY_TYPES.register("floodlight", () -> BlockEntityType.Builder.of(FloodlightBlockEntity::new, ModBlocks.BRASS_FLOODLIGHT.get(), ModBlocks.STEEL_FLOOFLIGHT.get()).build(null));
+	public static final RegistryObject<BlockEntityType<PortableFuelGeneratorBlockEntity>> 	PORTABLE_FUEL_GENERATOR 	= BLOCK_ENTITY_TYPES.register("portable_fuel_generator", () -> BlockEntityType.Builder.of(PortableFuelGeneratorBlockEntity::new, ModBlocks.PORTABLE_FUEL_GENERATOR.get()).build(null));
 	
 }

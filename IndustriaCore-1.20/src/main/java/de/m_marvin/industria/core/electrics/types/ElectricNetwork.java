@@ -110,7 +110,7 @@ public class ElectricNetwork implements INGCallback {
 	public void removeInvalidComponents() {
 		List<Component<?, ?, ?>> invalid = new ArrayList<>();
 		for (Component<?, ?, ?> component : this.components) {
-			if (component.instance() == null) invalid.add(component);
+			if (component == null || component.instance() == null) invalid.add(component);
 		}
 		invalid.forEach(c -> components.remove(c));
 	}

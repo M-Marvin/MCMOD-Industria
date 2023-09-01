@@ -8,7 +8,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
 /*
- * Tells the server to change a electric cable conduit's lane names
+ * Tells the server that a power source block has been edited
  */
 public class CUpdateJunctionLanesPackage {
 	

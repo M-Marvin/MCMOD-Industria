@@ -1,7 +1,7 @@
 package de.m_marvin.industria.content.client.registries;
 
 import de.m_marvin.industria.content.Industria;
-import de.m_marvin.industria.content.client.screens.MobileFuelGeneratorScreen;
+import de.m_marvin.industria.content.client.screens.PortableFuelGeneratorScreen;
 import de.m_marvin.industria.content.registries.ModMenuTypes;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
@@ -14,7 +14,7 @@ public class ModScreens {
 	
 	@SubscribeEvent
 	public static void onClientSetup(FMLClientSetupEvent event) {
-		MenuScreens.register(ModMenuTypes.MOBILE_FUEL_GENERATOR.get(), MobileFuelGeneratorScreen::new);
+		MenuScreens.register(ModMenuTypes.PORTABLE_FUEL_GENERATOR.get(), PortableFuelGeneratorScreen::new);
 	}
 	
 }

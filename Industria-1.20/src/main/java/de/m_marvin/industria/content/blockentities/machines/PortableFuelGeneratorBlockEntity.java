@@ -1,10 +1,12 @@
 package de.m_marvin.industria.content.blockentities.machines;
 
-import de.m_marvin.industria.content.blocks.machines.MobileFuelGeneratorBlock;
-import de.m_marvin.industria.content.container.MobileFuelGeneratorContainer;
+import de.m_marvin.industria.content.blocks.machines.PortableFuelGeneratorBlock;
+import de.m_marvin.industria.content.container.PortableFuelGeneratorContainer;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
+import de.m_marvin.industria.core.electrics.parametrics.DeviceParametrics;
+import de.m_marvin.industria.core.electrics.parametrics.DeviceParametricsManager;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
@@ -25,14 +27,14 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 
-public class MobileFuelGeneratorBlockEntity extends BlockEntity implements IJunctionEdit, MenuProvider {
+public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJunctionEdit, MenuProvider {
 	
 	protected FluidContainer fluidContainer = new FluidContainer(1);
 	protected String[] nodeLanes = new String[] {"L", "N"};
 	protected boolean canRun = false;
 	
-	public MobileFuelGeneratorBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(ModBlockEntityTypes.MOBILE_FUEL_GENERATOR.get(), pPos, pBlockState);
+	public PortableFuelGeneratorBlockEntity(BlockPos pPos, BlockState pBlockState) {
+		super(ModBlockEntityTypes.PORTABLE_FUEL_GENERATOR.get(), pPos, pBlockState);
 		this.fluidContainer.addListener(container -> this.setChanged());
 	}
 	
@@ -62,11 +64,11 @@ public class MobileFuelGeneratorBlockEntity extends BlockEntity implements IJunc
 		return getFuelStorage().getAmount() > 0; // TODO
 	}
 	
-	public int getPowerUsed() {
-		return 0;
+	public boolean isEmpty() {
+		return getFuelStorage().isEmpty();
 	}
 	
-	public static void tick(Level pLevel, BlockPos pPos, BlockState pState, MobileFuelGeneratorBlockEntity pBlockEntity) {
+	public static void tick(Level pLevel, BlockPos pPos, BlockState pState, PortableFuelGeneratorBlockEntity pBlockEntity) {
 		
 		if (pBlockEntity.canRun != pBlockEntity.canRun()) {
 			pBlockEntity.canRun = pBlockEntity.canRun();
@@ -74,13 +76,16 @@ public class MobileFuelGeneratorBlockEntity extends BlockEntity implements IJunc
 			ElectricUtility.updateNetwork(pLevel, pPos);
 		}
 		
-		if (pBlockEntity.canRun && pState.getBlock() instanceof MobileFuelGeneratorBlock generatorBlock) {
+		if (pBlockEntity.canRun && pState.getBlock() instanceof PortableFuelGeneratorBlock generatorBlock) {
 			
 			FluidStack fuel = pBlockEntity.getFuelStorage();
 			if (!fuel.isEmpty()) {	
+				DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(pState.getBlock());
 				double powerProduction = generatorBlock.getPower(pState, pLevel, pPos);
-				System.out.println(pBlockEntity.level.isClientSide + " " + powerProduction);
-				fuel.shrink((int) Math.ceil(powerProduction * 0.001));
+				double loadP = Math.max(0, parametrics.getPowerPercentageP(powerProduction) - 1);
+				
+				fuel.shrink((int) Math.ceil(loadP * 10));
+				pBlockEntity.setChanged();
 			}
 			
 		}
@@ -89,7 +94,7 @@ public class MobileFuelGeneratorBlockEntity extends BlockEntity implements IJunc
 	
 	@Override
 	public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-		return GameUtility.openJunctionScreenOr(this, pContainerId, pPlayer, pPlayerInventory, () -> new MobileFuelGeneratorContainer(pContainerId, pPlayerInventory, this)); // TODO
+		return GameUtility.openJunctionScreenOr(this, pContainerId, pPlayer, pPlayerInventory, () -> new PortableFuelGeneratorContainer(pContainerId, pPlayerInventory, this)); // TODO
 	}
 	
 	@Override

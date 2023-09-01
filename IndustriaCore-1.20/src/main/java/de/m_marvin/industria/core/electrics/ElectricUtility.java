@@ -106,11 +106,11 @@ public class ElectricUtility {
 		for (int i = 0; i < nodes.length; i++) {
 			String[] wireLanes = lanes.get(i);
 			for (int i1 = 0; i1 < wireLanes.length; i1++) {
-				if (wireLanes[i1].equals(innerLaneP)) {
+				if (wireLanes[i1].equals(innerLaneP) && (i1 != innerLaneIdP || nodes[i].getNode() != 0)) {
 					template.setNetworkNode("NET1", nodes[i], i1, wireLanes[i1]);
 					template.setNetworkNode("NET2", new NodePos(position, 0), innerLaneIdP, innerLaneP);
 					plotter.accept(template);
-				} else if (wireLanes[i1].equals(innerLaneN)) {
+				} else if (wireLanes[i1].equals(innerLaneN) && (i1 != innerLaneIdN || nodes[i].getNode() != 0)) {
 					template.setNetworkNode("NET1", nodes[i], i1, wireLanes[i1]);
 					template.setNetworkNode("NET2", new NodePos(position, 0), innerLaneIdN, innerLaneN);
 					plotter.accept(template);

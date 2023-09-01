@@ -1,20 +1,20 @@
 package de.m_marvin.industria.content.container;
 
-import de.m_marvin.industria.content.blockentities.machines.MobileFuelGeneratorBlockEntity;
+import de.m_marvin.industria.content.blockentities.machines.PortableFuelGeneratorBlockEntity;
 import de.m_marvin.industria.content.registries.ModMenuTypes;
 import de.m_marvin.industria.core.util.container.AbstractBlockEntityFluidContainerBase;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 
-public class MobileFuelGeneratorContainer extends AbstractBlockEntityFluidContainerBase<MobileFuelGeneratorBlockEntity> {
+public class PortableFuelGeneratorContainer extends AbstractBlockEntityFluidContainerBase<PortableFuelGeneratorBlockEntity> {
 	
-	public MobileFuelGeneratorContainer(int id, Inventory playerInv, MobileFuelGeneratorBlockEntity tileEntity) {
-		super(ModMenuTypes.MOBILE_FUEL_GENERATOR.get(), id, playerInv, tileEntity);
+	public PortableFuelGeneratorContainer(int id, Inventory playerInv, PortableFuelGeneratorBlockEntity tileEntity) {
+		super(ModMenuTypes.PORTABLE_FUEL_GENERATOR.get(), id, playerInv, tileEntity);
 	}
 
-	public MobileFuelGeneratorContainer(int id, Inventory playerInv, FriendlyByteBuf data) {
-		super(ModMenuTypes.MOBILE_FUEL_GENERATOR.get(), id, playerInv, data);
+	public PortableFuelGeneratorContainer(int id, Inventory playerInv, FriendlyByteBuf data) {
+		super(ModMenuTypes.PORTABLE_FUEL_GENERATOR.get(), id, playerInv, data);
 	}
 	
 	@Override

@@ -4,9 +4,9 @@
 	"textures": {
 		"2": "industria:block/machines/standart_machine_casing_bottom",
 		"3": "industria:block/machines/standart_machine_casing_side",
-		"5": "industria:block/machines/mobile_fuel_generator_front",
+		"4": "industria:block/machines/portable_fuel_generator_front_active",
 		"6": "industria:block/materials/iron_plates",
-		"particle": "industria:block/machines/mobile_fuel_generator_front"
+		"particle": "industria:block/machines/portable_fuel_generator_front"
 	},
 	"elements": [
 		{
@@ -25,7 +25,7 @@
 			"from": [0, 0, 0],
 			"to": [16, 16, 1],
 			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#5"},
+				"north": {"uv": [0, 0, 16, 16], "texture": "#4"},
 				"east": {"uv": [15, 0, 16, 16], "texture": "#3"},
 				"south": {"uv": [0, 0, 16, 16], "texture": "#missing"},
 				"west": {"uv": [0, 0, 1, 16], "texture": "#3"},

@@ -8,6 +8,8 @@ import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
+import de.m_marvin.industria.core.electrics.parametrics.DeviceParametrics;
+import de.m_marvin.industria.core.electrics.parametrics.DeviceParametricsManager;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
@@ -94,15 +96,19 @@ public class FloodlightBlockEntity extends BlockEntity implements MenuProvider, 
 	
 	public void updateLight() {
 		
-		double voltage = ElectricUtility.getVoltageBetween(level, new NodePos(worldPosition, 0), new NodePos(worldPosition, 0), 0, 1, nodeLanes[0], nodeLanes[1]);
-		double overshoot = ElectricUtility.getPowerOvershoot(voltage, FloodlightBlock.TARGET_VOLTAGE);
-		double power = ElectricUtility.getPowerPercentage(voltage * (FloodlightBlock.TARGET_POWER / FloodlightBlock.TARGET_VOLTAGE), FloodlightBlock.TARGET_POWER);
+		DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this.getBlockState().getBlock());
 		
-		boolean shouldLit = power > 0.8;
+		double voltage = ElectricUtility.getVoltageBetween(level, new NodePos(worldPosition, 0), new NodePos(worldPosition, 0), 0, 1, nodeLanes[0], nodeLanes[1]);
+		double voltageP = parametrics.getVoltageOvershoot(voltage);
+		double powerP = parametrics.getPowerPercentageV(voltage);
+		
+		boolean shouldLit = powerP >= 1;
+		System.out.println(voltage);
 		if (getBlockState().getValue(BlockStateProperties.LIT) != shouldLit) setLightState(shouldLit);
 		
-		if (this.level.random.nextFloat() < overshoot) {
+		if (this.level.random.nextFloat() < parametrics.getExplodeChance(voltageP, powerP)) {
 			System.err.println("BOOM!"); // TODO
+			
 		}
 		
 	}

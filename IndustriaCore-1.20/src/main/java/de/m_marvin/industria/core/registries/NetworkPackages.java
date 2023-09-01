@@ -5,6 +5,7 @@ import java.util.Optional;
 import de.m_marvin.industria.core.conduits.engine.network.CChangeConduitPlacementLengthPackage;
 import de.m_marvin.industria.core.conduits.engine.network.SCConduitPackage;
 import de.m_marvin.industria.core.conduits.engine.network.SSyncConduitPackage;
+import de.m_marvin.industria.core.electrics.engine.network.CEditPowerSourcePackage;
 import de.m_marvin.industria.core.electrics.engine.network.CUpdateJunctionLanesPackage;
 import de.m_marvin.industria.core.electrics.engine.network.SSyncComponentsPackage;
 import de.m_marvin.industria.core.scrollinput.engine.network.CScrollInputPackage;
@@ -24,6 +25,7 @@ public class NetworkPackages {
 		network.registerMessage(id++, CScrollInputPackage.class, CScrollInputPackage::encode, CScrollInputPackage::decode, CScrollInputPackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		network.registerMessage(id++, CUpdateJunctionLanesPackage.class, CUpdateJunctionLanesPackage::encode, CUpdateJunctionLanesPackage::decode, CUpdateJunctionLanesPackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		network.registerMessage(id++, SSyncComponentsPackage.class, SSyncComponentsPackage::encode, SSyncComponentsPackage::decode, SSyncComponentsPackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+		network.registerMessage(id++, CEditPowerSourcePackage.class, CEditPowerSourcePackage::encode, CEditPowerSourcePackage::decode, CEditPowerSourcePackage::handle);
 	}
 	
 }

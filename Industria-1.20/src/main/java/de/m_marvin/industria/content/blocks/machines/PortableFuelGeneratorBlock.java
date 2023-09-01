@@ -3,7 +3,7 @@ package de.m_marvin.industria.content.blocks.machines;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
-import de.m_marvin.industria.content.blockentities.machines.MobileFuelGeneratorBlockEntity;
+import de.m_marvin.industria.content.blockentities.machines.PortableFuelGeneratorBlockEntity;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
@@ -37,14 +37,14 @@ import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class MobileFuelGeneratorBlock extends BaseEntityBlock implements IElectricConnector, IElectricInfoProvider {
+public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElectricConnector, IElectricInfoProvider {
 	
 	public static final NodePointSupplier NODES = NodePointSupplier.define()
 			.addNode(NodeTypes.ALL, 4, new Vec3i(8, 8, 16))
 			.addModifier(BlockStateProperties.HORIZONTAL_FACING, NodePointSupplier.FACING_HORIZONTAL_MODIFIER_DEFAULT_NORTH);
 	public static final int NODE_COUNT = 1;
 	
-	public MobileFuelGeneratorBlock(Properties pProperties) {
+	public PortableFuelGeneratorBlock(Properties pProperties) {
 		super(pProperties);
 	}
 	
@@ -71,12 +71,12 @@ public class MobileFuelGeneratorBlock extends BaseEntityBlock implements IElectr
 	
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-		return new MobileFuelGeneratorBlockEntity(pPos, pState);
+		return new PortableFuelGeneratorBlockEntity(pPos, pState);
 	}
 	
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-		return createTickerHelper(pBlockEntityType, ModBlockEntityTypes.MOBILE_FUEL_GENERATOR.get(), MobileFuelGeneratorBlockEntity::tick);
+		return createTickerHelper(pBlockEntityType, ModBlockEntityTypes.PORTABLE_FUEL_GENERATOR.get(), PortableFuelGeneratorBlockEntity::tick);
 	}
 	
 	@Override
@@ -87,7 +87,7 @@ public class MobileFuelGeneratorBlock extends BaseEntityBlock implements IElectr
 	@Override
 	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
 		
-		if (level.getBlockEntity(position) instanceof MobileFuelGeneratorBlockEntity generator) {
+		if (level.getBlockEntity(position) instanceof PortableFuelGeneratorBlockEntity generator) {
 			
 			String[] wireLanes = generator.getNodeLanes();
 			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, wireLanes[0], 1, wireLanes[1]);
@@ -110,7 +110,7 @@ public class MobileFuelGeneratorBlock extends BaseEntityBlock implements IElectr
 	
 	@Override
 	public double getVoltage(BlockState state, Level level, BlockPos pos) {
-		if (level.getBlockEntity(pos) instanceof MobileFuelGeneratorBlockEntity generator) {
+		if (level.getBlockEntity(pos) instanceof PortableFuelGeneratorBlockEntity generator) {
 			String[] wireLanes = generator.getNodeLanes();
 			return ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]);
 		}
@@ -119,7 +119,7 @@ public class MobileFuelGeneratorBlock extends BaseEntityBlock implements IElectr
 	
 	@Override
 	public double getPower(BlockState state, Level level, BlockPos pos) {
-		if (level.getBlockEntity(pos) instanceof MobileFuelGeneratorBlockEntity generator) {
+		if (level.getBlockEntity(pos) instanceof PortableFuelGeneratorBlockEntity generator) {
 			String[] wireLanes = generator.getNodeLanes();
 			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 2, 0, "power_shunt", wireLanes[0]);
 			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this);
@@ -141,7 +141,7 @@ public class MobileFuelGeneratorBlock extends BaseEntityBlock implements IElectr
 
 	@Override
 	public String[] getWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node) {
-		if (level.getBlockEntity(pos) instanceof MobileFuelGeneratorBlockEntity generator) {
+		if (level.getBlockEntity(pos) instanceof PortableFuelGeneratorBlockEntity generator) {
 			return generator.getNodeLanes();
 		}
 		return new String[0];
@@ -149,7 +149,7 @@ public class MobileFuelGeneratorBlock extends BaseEntityBlock implements IElectr
 
 	@Override
 	public void setWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node, String[] laneLabels) {
-		if (level.getBlockEntity(pos) instanceof MobileFuelGeneratorBlockEntity generator) {
+		if (level.getBlockEntity(pos) instanceof PortableFuelGeneratorBlockEntity generator) {
 			generator.setNodeLanes(laneLabels);
 		}
 	}

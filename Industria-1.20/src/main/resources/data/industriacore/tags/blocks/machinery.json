@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+  	"industria:portable_fuel_generator",
+  	"industria:brass_floodlight",
+  	"industria:steel_floodlight"
+  ]
+}

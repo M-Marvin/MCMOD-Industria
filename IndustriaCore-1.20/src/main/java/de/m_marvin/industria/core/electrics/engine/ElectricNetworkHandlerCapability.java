@@ -461,6 +461,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	 */
 	public double getFloatingNodeVoltage(NodePos node, int laneId, String lane) {
 		Set<Component<?, ?, ?>> components = this.node2componentMap.get(node);
+		if (components == null) return 0.0;
 		Component<?, ?, ?> component = components.stream().findAny().orElseGet(() -> this.pos2componentMap.get(node.getBlock()));
 		if (component != null) {
 			ElectricNetwork network = this.component2circuitMap.get(component);

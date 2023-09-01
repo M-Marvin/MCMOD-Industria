@@ -85,14 +85,21 @@ public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider,
 						cableNodes.get(left),
 						cableNodes.get(left.getOpposite())
 					};
-				} else {
+				} else if (playerFacing.getAxisDirection() == AxisDirection.POSITIVE) {
 					return new NodePos[] {
-						cableNodes.get(playerHorizontalFacing),
 						cableNodes.get(playerHorizontalFacing.getOpposite()),
+						cableNodes.get(playerHorizontalFacing),
 						cableNodes.get(playerHorizontalFacing.getCounterClockWise()),
 						cableNodes.get(playerHorizontalFacing.getClockWise())
 					};
-				}
+				} else {
+					return new NodePos[] {
+							cableNodes.get(playerHorizontalFacing),
+							cableNodes.get(playerHorizontalFacing.getOpposite()),
+							cableNodes.get(playerHorizontalFacing.getCounterClockWise()),
+							cableNodes.get(playerHorizontalFacing.getClockWise())
+						};
+					}
 			} else if (blockAxis.isVertical() && playerAxis.isHorizontal()) {
 				return new NodePos[] {
 					cableNodes.get(playerHorizontalFacing),

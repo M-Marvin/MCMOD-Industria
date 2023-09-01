@@ -1,7 +1,5 @@
 package de.m_marvin.industria.core.client.electrics.screens;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.containers.AbstractJunctionEditContainer;
@@ -13,7 +11,6 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -245,7 +242,7 @@ public abstract class AbstractJunctionEditScreen<B extends BlockEntity & IJuncti
 		this.namingField.setMaxLength(50);
 		this.namingField.setResponder(this::renameNode);
 		this.namingField.setVisible(false);
-		this.addWidget(this.namingField);
+		this.addRenderableWidget(this.namingField);
 		
 	}
 	
@@ -286,19 +283,11 @@ public abstract class AbstractJunctionEditScreen<B extends BlockEntity & IJuncti
 	@Override
 	protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
 		
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, getJunctionBoxTexture());
-		
-		int i = this.leftPos;
-		int j = this.topPos;
-		pGuiGraphics.blit(getJunctionBoxTexture(), i, j, 0, 0, this.imageWidth, this.imageHeight);
+		pGuiGraphics.blit(getJunctionBoxTexture(), this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 		
 		for (CableNode node : this.cableNodes) {
 			if (node != null) node.renderBg(pGuiGraphics, pPartialTick, pMouseX, pMouseY);
 		}
-		
-		if (this.namingField != null) this.namingField.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
 		
 	}
 	

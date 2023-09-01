@@ -8,8 +8,8 @@ import de.m_marvin.industria.core.registries.BlockEntityTypes;
 import de.m_marvin.industria.core.registries.Blocks;
 import de.m_marvin.industria.core.registries.CommandArguments;
 import de.m_marvin.industria.core.registries.Conduits;
-import de.m_marvin.industria.core.registries.Container;
 import de.m_marvin.industria.core.registries.Items;
+import de.m_marvin.industria.core.registries.MenuTypes;
 import de.m_marvin.industria.core.registries.NetworkPackages;
 import de.m_marvin.industria.core.registries.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -28,10 +28,19 @@ public class IndustriaCore {
 	
 	public IndustriaCore() {
 		
+		// FIXME
+//		LOGGER.info("Set UniVec obfuscation resolver");
+//		VectorParser.setObfuscationResolver((clazz, field) -> {
+//			LOGGER.warn("Try to unobfuscate " + field);
+//			String s = ObfuscationReflectionHelper.remapName(Domain.FIELD, field);
+//			LOGGER.warn("Result: " + s);
+//			return Optional.of(s);
+//		});
+		
 		Config.register();
 		NetworkPackages.setupPackages(NETWORK);
 		Conduits.register();
-		Container.register();
+		MenuTypes.register();
 		ParticleTypes.register();
 		Blocks.register();
 		Items.register();

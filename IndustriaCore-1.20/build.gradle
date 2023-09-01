@@ -137,7 +137,7 @@ dependencies {
  	
  	// Code Dependencies
 	shade "com.github.M-Marvin:LIBRARY-NGLink:ae6c10bbfd"
-	shade "com.github.M-Marvin:LIBRARY-UnifiedVectors:main-SNAPSHOT"
+	shade "com.github.M-Marvin:LIBRARY-UnifiedVectors:ef191368b9"
 	//jarJar(group: "com.github.M-Marvin", name: "LIBRARY-NGLink", version: "844e6813c7e61b5127bead6deb7cea93990a24a3")
 	//jarJar(group: "com.github.M-Marvin", name: "LIBRARY-UnifiedVectors", version: "main-SNAPSHOT")
 	
@@ -155,6 +155,11 @@ shadowJar {
     archiveClassifier = ''
     configurations = [project.configurations.shade]
 //    finalizedBy 'reobfShadowJar'
+}
+
+task shadowReobf {
+	dependsOn shadowJar
+    finalizedBy 'reobfShadowJar'
 }
 
 assemble.dependsOn shadowJar

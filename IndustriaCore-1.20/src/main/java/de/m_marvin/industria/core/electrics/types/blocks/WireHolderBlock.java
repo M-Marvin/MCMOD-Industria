@@ -18,6 +18,7 @@ import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -81,7 +82,7 @@ public class WireHolderBlock extends Block implements IElectricConnector {
 		String[] lt = new String[laneCount];
 		for (int i = 0; i < laneCount; i++) {
 			for (String[] lanes : cableLanes) {
-				if (lanes.length > i && !lanes[i].isEmpty()) {
+				if (lanes.length > i) {
 					if (lt[i] == null || lt[i].equals(lanes[i])) {
 						lt[i] = lanes[i];
 						continue;
@@ -111,7 +112,10 @@ public class WireHolderBlock extends Block implements IElectricConnector {
 	
 	private boolean canAttachTo(BlockGetter pBlockReader, BlockPos pPos, Direction pDirection) {
 		BlockState blockstate = pBlockReader.getBlockState(pPos);
-		return blockstate.isFaceSturdy(pBlockReader, pPos, pDirection);
+		if (!blockstate.isFaceSturdy(pBlockReader, pPos, pDirection.getOpposite())) {
+			return pDirection.getAxis().isVertical() && (blockstate.is(BlockTags.FENCES) || blockstate.is(BlockTags.WALLS));
+		}
+		return true;
 	}
 
 	@Override

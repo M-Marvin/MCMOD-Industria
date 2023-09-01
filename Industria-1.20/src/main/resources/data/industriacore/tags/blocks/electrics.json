@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+  	"industria:portable_fuel_generator",
+  	"industria:brass_floodlight",
+  	"industria:steel_floodlight",
+  	"industria:tin_wire_holder",
+  	"industria:copper_wire_holder",
+  	"industria:aluminum_wire_holder",
+  	"industria:gold_wire_holder"
+  ]
+}

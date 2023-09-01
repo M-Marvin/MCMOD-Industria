@@ -14,10 +14,11 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class PortableFuelGeneratorScreen extends AbstractFluidContainerScreen<PortableFuelGeneratorContainer> {
 	
-	public static final ResourceLocation SCREEN_TEXTURE = new ResourceLocation(Industria.MODID, "textures/gui/mobile_fuel_generator.png");
+	public static final ResourceLocation SCREEN_TEXTURE = new ResourceLocation(Industria.MODID, "textures/gui/portable_fuel_generator.png");
 	
 	protected ElectricInfo electricInfo;
 	protected PowerInfo powerInfo;
+	protected int animationFrame = 0;
 	
 	public PortableFuelGeneratorScreen(PortableFuelGeneratorContainer pMenu, Inventory pPlayerInventory, Component pTitle) {
 		super(pMenu, pPlayerInventory, pTitle);
@@ -34,7 +35,7 @@ public class PortableFuelGeneratorScreen extends AbstractFluidContainerScreen<Po
 		
 		if (this.electricInfo == null) return;
 		
-		this.powerInfo = new PowerInfo(font, this.leftPos + 27, this.topPos + 20, this.electricInfo);
+		this.powerInfo = new PowerInfo(font, this.leftPos + 90, this.topPos + 19, 68, this.electricInfo);
 		this.addRenderableWidget(this.powerInfo);
 		
 	}
@@ -43,6 +44,16 @@ public class PortableFuelGeneratorScreen extends AbstractFluidContainerScreen<Po
 	protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
 		
 		pGuiGraphics.blit(SCREEN_TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+		
+		if (this.menu.getBlockEntity().canRun()) {
+
+			animationFrame++;
+			if (animationFrame > 40) animationFrame = 0;
+			
+			pGuiGraphics.blit(SCREEN_TEXTURE, this.leftPos + 54, this.topPos + 35, 176 + 13 * (animationFrame / 10), 0, 13, 12);
+			
+		}
+		
 		this.powerInfo.setStatus(this.electricInfo);
 		
 	}

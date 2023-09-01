@@ -1,6 +1,6 @@
 {
-"block.industria.aluminum_wire_holder":		"Aluminium-Kabelhalter",
-"block.industria.copper_wire_holder":		"Kupfer-Kabelhalter",
+"block.industria.aluminum_wire_holder":			"Aluminium-Kabelhalter",
+"block.industria.copper_wire_holder":			"Kupfer-Kabelhalter",
 "block.industria.gold_wire_holder":			"Gold-Kabelhalter",
 "block.industria.tin_wire_holder":			"Zinn-Kabelhalter",
 
@@ -11,7 +11,7 @@
 
 "block.industria.brass_floodlight":			"Messing-Fluchtlicht",
 "block.industria.steel_floodlight":			"Stahl-Flutlicht",
-"block.industria.portable_fuel_generator":	"Treibstoff-Generator",
+"block.industria.portable_fuel_generator":		"Tragbarer Fl\u00fcssigkraftstoff-Generator",
 
 "item.industria.screw_driver":				"Schraubendreher",
 

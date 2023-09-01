@@ -1,11 +1,12 @@
 {
-"block.industria.aluminum_wire_holder":		"Support de c\u00e2ble en aluminium",
-"block.industria.copper_wire_holder":		"Support de c\u00e2ble en cuivre",
+"block.industria.aluminum_wire_holder":			"Support de c\u00e2ble en aluminium",
+"block.industria.copper_wire_holder":			"Support de c\u00e2ble en cuivre",
 "block.industria.gold_wire_holder":			"Support de c\u00e2ble en or",
 "block.industria.tin_wire_holder":			"Support de c\u00e2ble en \u00e9tain",
 
 "block.industria.brass_floodlight":			"Phare en laiton",
 "block.industria.steel_floodlight":			"Phare en acier",
+"block.industria.portable_fuel_generator":		"G\u00e9n\u00e9rateur portatif de carburant liquide",
 
 "item.industria.screw_driver":				"Tournevis"
 }

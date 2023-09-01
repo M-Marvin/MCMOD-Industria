@@ -46,7 +46,7 @@ public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider,
 	
 	@Override
 	public Component getDisplayName() {
-		return this.getBlockState().getBlock().getName();
+		return Component.empty();
 	}
 	
 	@Override
@@ -67,8 +67,8 @@ public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider,
 	@Override
 	public NodePos[] getEditCableNodes(Direction playerFacing, Direction playerHorizontalFacing) {
 		
-		Level level = this.getLevel();
-		BlockPos pos = this.getBlockPos();
+		Level level = this.getJunctionLevel();
+		BlockPos pos = this.getJunctionBlockPos();
 		BlockState state = level.getBlockState(pos);
 		if (state.getBlock() instanceof IElectricConnector) {
 			
@@ -134,7 +134,7 @@ public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider,
 	
 	public Map<Direction, NodePos> getBlockRelativeCableNodes(BlockState state, BlockPos position) {
 		if (state.getBlock() instanceof IElectricConnector connectorBlock) {
-			Level level = this.getLevel();
+			Level level = this.getJunctionLevel();
 			NodePos[] nodes = connectorBlock.getConnections(level, position, state);
 			ConduitNode[] connections = connectorBlock.getConduitNodes(level, position, state);
 			Vec3i center = new Vec3i(8, 8, 8);
@@ -164,6 +164,16 @@ public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider,
 		externalNodeConstructor.construct(new Vec2i(70, 112), 	Direction2d.DOWN, 	conduitNodes[1]);
 		externalNodeConstructor.construct(new Vec2i(8, 70), 	Direction2d.LEFT, 	conduitNodes[2]);
 		externalNodeConstructor.construct(new Vec2i(112, 70), 	Direction2d.RIGHT, 	conduitNodes[3]);
+	}
+
+	@Override
+	public Level getJunctionLevel() {
+		return this.level;
+	}
+
+	@Override
+	public BlockPos getJunctionBlockPos() {
+		return this.worldPosition;
 	}
 	
 }

@@ -37,7 +37,7 @@ public abstract class AbstractJunctionEditContainer<T extends BlockEntity & IJun
 	
 	public String[] getWireLabels(NodePos node) {
 		if (node == null) return new String[] {};
-		return ElectricUtility.getLaneLabelsSummarized(this.blockEntity.getLevel(), node);
+		return ElectricUtility.getLaneLabelsSummarized(this.blockEntity.getJunctionLevel(), node);
 	}
 	
 	public NodePos[] getCableNodes() {
@@ -45,11 +45,11 @@ public abstract class AbstractJunctionEditContainer<T extends BlockEntity & IJun
 	}
 
 	public String[] getInternalLabels(int id) {
-		return this.blockEntity.getInternalWireLabels(new NodePos(this.blockEntity.getBlockPos(), id));
+		return this.blockEntity.getInternalWireLabels(new NodePos(this.blockEntity.getJunctionBlockPos(), id));
 	}
 
 	public void setInternalWireLabels(int id, String[] lanes) {
-		NodePos node = new NodePos(this.blockEntity.getBlockPos(), id);
+		NodePos node = new NodePos(this.blockEntity.getJunctionBlockPos(), id);
 		this.blockEntity.setInternalWireLabels(node, lanes);
 		IndustriaCore.NETWORK.sendToServer(new CUpdateJunctionLanesPackage(node, lanes, true));
 	}

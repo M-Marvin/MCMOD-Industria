@@ -138,22 +138,27 @@ public class ElectricNetwork implements INGCallback {
 	
 	public void updateSimulation() {
 		synchronized (ngLinkLock) {
-			if (!this.netList.isEmpty()) {
-				if (!this.nglink.isInitialized()) {
-					if (!nglink.initNGLink(this)) {
-						IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.ERROR, "Failed to start nglink! Electric simulation abborted!");
+			try {
+				if (!this.netList.isEmpty()) {
+					if (!this.nglink.isInitialized()) {
+						if (!nglink.initNGLink(this)) {
+							IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.ERROR, "Failed to start nglink! Electric simulation abborted!");
+							return;
+						}
+					}
+					if (!this.nglink.initNGSpice()) {
+						IndustriaCore.LOGGER.warn("Failed to start electric simulation! Failed to init SPICE!");
 						return;
 					}
+					if (!this.nglink.loadCircuit(this.netList)) {
+						IndustriaCore.LOGGER.warn("Failed to start electric simulation! Failed to load circuit!");
+						return;
+					}
+					this.nglink.execCommand("op");
 				}
-				if (!this.nglink.initNGSpice()) {
-					IndustriaCore.LOGGER.warn("Failed to start electric simulation! Failed to init SPICE!");
-					return;
-				}
-				if (!this.nglink.loadCircuit(this.netList)) {
-					IndustriaCore.LOGGER.warn("Failed to start electric simulation! Failed to load circuit!");
-					return;
-				}
-				this.nglink.execCommand("op");
+			} catch (Exception e) {
+				IndustriaCore.LOGGER.error("Error when accessing nglink!");
+				e.printStackTrace();
 			}
 		}
 	}

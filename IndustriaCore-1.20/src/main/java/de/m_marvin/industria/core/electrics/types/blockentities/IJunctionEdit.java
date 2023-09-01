@@ -18,11 +18,11 @@ import net.minecraft.world.level.block.state.BlockState;
 public interface IJunctionEdit {
 	
 	public default void setCableWireLabels(NodePos node, String[] laneLabels) {
-		ElectricUtility.setLaneLabelsEqueal(this.getLevel(), node, Component::isWire, laneLabels);
+		ElectricUtility.setLaneLabelsEqueal(this.getJunctionLevel(), node, Component::isWire, laneLabels);
 	}
 	
 	public default String[] getInternalWireLabels(NodePos node) {
-		List<String[]> laneLabels = ElectricUtility.getLaneLabels(getLevel(), node, c -> !c.isWire());
+		List<String[]> laneLabels = ElectricUtility.getLaneLabels(getJunctionLevel(), node, c -> !c.isWire());
 		if (laneLabels.size() >= 1) {
 			return laneLabels.get(0);
 		} else {
@@ -31,14 +31,14 @@ public interface IJunctionEdit {
 	}
 	
 	public default void setInternalWireLabels(NodePos node, String[] laneLabels) {
-		ElectricUtility.setLaneLabels(getLevel(), node, c -> !c.isWire(), laneLabels);
+		ElectricUtility.setLaneLabels(getJunctionLevel(), node, c -> !c.isWire(), laneLabels);
 	}
 	
-	public Level getLevel();
-	public BlockPos getBlockPos();
+	public Level getJunctionLevel();
+	public BlockPos getJunctionBlockPos();
 	public default NodePos[] getEditCableNodes(Direction playerFacing, Direction playerHorizontalFacing) {
-		Level level = this.getLevel();
-		BlockPos pos = this.getBlockPos();
+		Level level = this.getJunctionLevel();
+		BlockPos pos = this.getJunctionBlockPos();
 		BlockState state = level.getBlockState(pos);
 		if (state.getBlock() instanceof IElectricConnector connector) {
 			return connector.getConnections(level, pos, state);

@@ -1,5 +1,9 @@
 package de.m_marvin.industria;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,6 +16,7 @@ import de.m_marvin.industria.core.registries.Items;
 import de.m_marvin.industria.core.registries.MenuTypes;
 import de.m_marvin.industria.core.registries.NetworkPackages;
 import de.m_marvin.industria.core.registries.ParticleTypes;
+import de.m_marvin.univec.VectorParser;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.NetworkRegistry;
@@ -28,14 +33,16 @@ public class IndustriaCore {
 	
 	public IndustriaCore() {
 		
-		// FIXME
-//		LOGGER.info("Set UniVec obfuscation resolver");
-//		VectorParser.setObfuscationResolver((clazz, field) -> {
-//			LOGGER.warn("Try to unobfuscate " + field);
-//			String s = ObfuscationReflectionHelper.remapName(Domain.FIELD, field);
-//			LOGGER.warn("Result: " + s);
-//			return Optional.of(s);
-//		});
+		Map<String, String> obfuscationMappings = new HashMap<>();
+		obfuscationMappings.put("f_123285_", "x");
+		obfuscationMappings.put("f_123286_", "y");
+		obfuscationMappings.put("f_123289_", "z");
+		obfuscationMappings.put("f_82479_", "x");
+		obfuscationMappings.put("f_82480_", "y");
+		obfuscationMappings.put("f_82481_", "z");
+		
+		LOGGER.info("Set UniVec obfuscation resolver");
+		VectorParser.setObfuscationResolver((clazz, field) -> Optional.ofNullable(obfuscationMappings.getOrDefault(field, field)));
 		
 		Config.register();
 		NetworkPackages.setupPackages(NETWORK);

@@ -7,6 +7,10 @@
   	"industria:tin_wire_holder",
   	"industria:copper_wire_holder",
   	"industria:aluminum_wire_holder",
-  	"industria:gold_wire_holder"
+  	"industria:gold_wire_holder",
+  	"industria:iron_junction_box",
+  	"industria:zinc_junction_box",
+  	"industria:brass_junction_box",
+  	"industria:steel_junction_box"
   ]
 }

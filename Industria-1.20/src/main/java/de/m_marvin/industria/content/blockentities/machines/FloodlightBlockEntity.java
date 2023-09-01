@@ -28,6 +28,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -103,7 +104,6 @@ public class FloodlightBlockEntity extends BlockEntity implements MenuProvider, 
 		double powerP = parametrics.getPowerPercentageV(voltage);
 		
 		boolean shouldLit = powerP >= 1;
-		System.out.println(voltage);
 		if (getBlockState().getValue(BlockStateProperties.LIT) != shouldLit) setLightState(shouldLit);
 		
 		if (this.level.random.nextFloat() < parametrics.getExplodeChance(voltageP, powerP)) {
@@ -206,6 +206,16 @@ public class FloodlightBlockEntity extends BlockEntity implements MenuProvider, 
 		}
 		this.lightBlocks.clear();
 		
+	}
+
+	@Override
+	public Level getJunctionLevel() {
+		return this.level;
+	}
+
+	@Override
+	public BlockPos getJunctionBlockPos() {
+		return this.worldPosition;
 	}
 	
 }

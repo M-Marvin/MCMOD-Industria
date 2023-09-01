@@ -1,12 +1,14 @@
 package de.m_marvin.industria.content.blockentities.machines;
 
+import java.util.Optional;
+
 import de.m_marvin.industria.content.blocks.machines.PortableFuelGeneratorBlock;
 import de.m_marvin.industria.content.container.PortableFuelGeneratorContainer;
+import de.m_marvin.industria.content.recipes.GeneratorFuelRecipeType;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
+import de.m_marvin.industria.content.registries.ModRecipeTypes;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.parametrics.DeviceParametrics;
-import de.m_marvin.industria.core.electrics.parametrics.DeviceParametricsManager;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
@@ -22,9 +24,11 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.fluids.FluidStack;
 
 public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJunctionEdit, MenuProvider {
@@ -32,6 +36,8 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 	protected FluidContainer fluidContainer = new FluidContainer(1);
 	protected String[] nodeLanes = new String[] {"L", "N"};
 	protected boolean canRun = false;
+	protected float fuelTimer;
+	protected GeneratorFuelRecipeType recipe;
 	
 	public PortableFuelGeneratorBlockEntity(BlockPos pPos, BlockState pBlockState) {
 		super(ModBlockEntityTypes.PORTABLE_FUEL_GENERATOR.get(), pPos, pBlockState);
@@ -60,8 +66,20 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 		return this.fluidContainer.getFluid(0);
 	}
 	
+	public void checkRecipe() {
+		if (this.recipe == null || this.recipe.getFluid() != this.getFuelStorage().getFluid()) {
+			Optional<GeneratorFuelRecipeType> recipeFound = RecipeManager.createCheck(ModRecipeTypes.GENERATOR_FUEL.get()).getRecipeFor(this.getFluidContainer(), this.level);
+			if (recipeFound.isPresent()) {
+				this.recipe = recipeFound.get();
+			} else {
+				this.recipe = null;
+			}
+		}
+	}
+	
 	public boolean canRun() {
-		return getFuelStorage().getAmount() > 0; // TODO
+		checkRecipe();
+		return this.recipe != null && getFuelStorage().getFluid() == this.recipe.getFluid();
 	}
 	
 	public boolean isEmpty() {
@@ -72,6 +90,7 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 		
 		if (pBlockEntity.canRun != pBlockEntity.canRun()) {
 			pBlockEntity.canRun = pBlockEntity.canRun();
+			pBlockEntity.level.setBlockAndUpdate(pPos, pState.setValue(BlockStateProperties.LIT, pBlockEntity.canRun));
 			pBlockEntity.setChanged();
 			ElectricUtility.updateNetwork(pLevel, pPos);
 		}
@@ -79,12 +98,20 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 		if (pBlockEntity.canRun && pState.getBlock() instanceof PortableFuelGeneratorBlock generatorBlock) {
 			
 			FluidStack fuel = pBlockEntity.getFuelStorage();
-			if (!fuel.isEmpty()) {	
-				DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(pState.getBlock());
+			if (!fuel.isEmpty() && pBlockEntity.recipe != null) {	
 				double powerProduction = generatorBlock.getPower(pState, pLevel, pPos);
-				double loadP = Math.max(0, parametrics.getPowerPercentageP(powerProduction) - 1);
+				int wattsPerMB = pBlockEntity.recipe.getWattsPerMb();
+				double consumtionTick = powerProduction / wattsPerMB;
 				
-				fuel.shrink((int) Math.ceil(loadP * 10));
+				if (consumtionTick < 1.0) {
+					pBlockEntity.fuelTimer += consumtionTick;
+					if (pBlockEntity.fuelTimer >= 1) {
+						pBlockEntity.fuelTimer--;
+						fuel.shrink(1);
+					}
+				} else {
+					fuel.shrink((int) Math.ceil(consumtionTick));
+				}
 				pBlockEntity.setChanged();
 			}
 			
@@ -109,6 +136,7 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 		pTag.putString("NeutralWireLane", this.nodeLanes[1]);
 		pTag.put("Fuel", this.getFuelStorage().writeToNBT(new CompoundTag()));
 		pTag.putBoolean("canRun", this.canRun);
+		pTag.putFloat("fuelTimer", this.fuelTimer);
 	}
 	
 	@Override
@@ -118,6 +146,7 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 		this.nodeLanes[1] = pTag.contains("NeutralWireLane") ? pTag.getString("NeutralWireLane") : "N";
 		this.setFuelStorage(FluidStack.loadFluidStackFromNBT(pTag.getCompound("Fuel")));
 		this.canRun = pTag.getBoolean("canRun");
+		this.fuelTimer = pTag.getFloat("fuelTime");
 	}
 	
 	@Override
@@ -142,4 +171,14 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 		internalNodeConstructor.construct(new Vec2i(70, 112), 	Direction2d.DOWN, 	0);
 	}
 
+	@Override
+	public Level getJunctionLevel() {
+		return this.level;
+	}
+
+	@Override
+	public BlockPos getJunctionBlockPos() {
+		return this.worldPosition;
+	}
+	
 }

@@ -1,5 +1,7 @@
 package de.m_marvin.industria.core.client.electrics.screens;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.containers.AbstractJunctionEditContainer;
@@ -18,6 +20,17 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 public abstract class AbstractJunctionEditScreen<B extends BlockEntity & IJunctionEdit, C extends AbstractJunctionEditContainer<B>> extends AbstractContainerScreen<C> {
 	
+	public static final int[] WIRE_COLORS = {
+			0x9E511A,
+			0x0094FF,
+			0x19FF00,
+			0xFFEE00,
+			0xFF0000,
+			0x000000,
+			0xFF00FA,
+			0x545453
+	};
+	
 	protected static class CableNode implements GuiEventListener, NarratableEntry {
 
 		protected static class WireNode implements GuiEventListener, NarratableEntry {
@@ -27,11 +40,13 @@ public abstract class AbstractJunctionEditScreen<B extends BlockEntity & IJuncti
 			
 			protected final CableNode cableNode;
 			protected String label;
+			protected int id;
 			protected final int offset;
 			
-			public WireNode(CableNode cableNode, int offset, String lane) {
+			public WireNode(CableNode cableNode, int id, int offset, String lane) {
 				this.offset = offset;
 				this.label = lane;
+				this.id = id;
 				this.cableNode = cableNode;
 			}
 			
@@ -91,24 +106,32 @@ public abstract class AbstractJunctionEditScreen<B extends BlockEntity & IJuncti
 				int h = WIRE_NODE_LENGTH;
 				Vec2i uiPos = getPosition();
 				
+				int color = WIRE_COLORS[this.id % WIRE_COLORS.length];
+				
 				switch (this.cableNode.orientation) {
 				case UP:
 					pGuiGraphics.blit(this.cableNode.getScreen().getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, h, w, h);
+					RenderSystem.setShaderColor(((color >> 16) & 0xFF) / 255F, ((color >> 8) & 0xFF) / 255F, ((color >> 0) & 0xFF) / 255F, 1F);
 					pGuiGraphics.blit(this.cableNode.getScreen().getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238 + w, h, w, h);
 					break;
 				case DOWN:
-					pGuiGraphics.blit(this.cableNode.getScreen().getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 54, w, h);
 					pGuiGraphics.blit(this.cableNode.getScreen().getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238 + w, 54, w, h);
+					RenderSystem.setShaderColor(((color >> 16) & 0xFF) / 255F, ((color >> 8) & 0xFF) / 255F, ((color >> 0) & 0xFF) / 255F, 1F);
+					pGuiGraphics.blit(this.cableNode.getScreen().getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 54, w, h);
 					break;
 				case LEFT:
-					pGuiGraphics.blit(this.cableNode.getScreen().getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 36, h, w);
 					pGuiGraphics.blit(this.cableNode.getScreen().getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 36 + w, h, w);
+					RenderSystem.setShaderColor(((color >> 16) & 0xFF) / 255F, ((color >> 8) & 0xFF) / 255F, ((color >> 0) & 0xFF) / 255F, 1F);
+					pGuiGraphics.blit(this.cableNode.getScreen().getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 36, h, w);
 					break;
 				case RIGHT:
 					pGuiGraphics.blit(this.cableNode.getScreen().getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 0, h, w);
+					RenderSystem.setShaderColor(((color >> 16) & 0xFF) / 255F, ((color >> 8) & 0xFF) / 255F, ((color >> 0) & 0xFF) / 255F, 1F);
 					pGuiGraphics.blit(this.cableNode.getScreen().getJunctionBoxTexture(), i + uiPos.x(), j + uiPos.y(), 238, 0 + w, h, w);
 					break;
 				}
+				
+				RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 				
 			}
 
@@ -139,7 +162,7 @@ public abstract class AbstractJunctionEditScreen<B extends BlockEntity & IJuncti
 				this.wireNodes = new WireNode[lanes.length];
 				int offset1 = -this.wireNodes.length * 10 / 2;
 				for (int i = 0; i < lanes.length; i++) {
-					this.wireNodes[i] = new WireNode(this, i * 10 + offset1, lanes[i]);
+					this.wireNodes[i] = new WireNode(this, i, i * 10 + offset1, lanes[i]);
 					this.screen.addWidget(this.wireNodes[i]);
 				}
 				this.screen.addWidget(this);
@@ -206,7 +229,7 @@ public abstract class AbstractJunctionEditScreen<B extends BlockEntity & IJuncti
 			this.wireNodes = new WireNode[lanes.length];
 			int offset1 = -this.wireNodes.length * 10 / 2;
 			for (int i = 0; i < lanes.length; i++) {
-				this.wireNodes[i] = new WireNode(this, i * 10 + offset1, lanes[i]);
+				this.wireNodes[i] = new WireNode(this, i, i * 10 + offset1, lanes[i]);
 				this.screen.addWidget(this.wireNodes[i]);
 			}
 			this.screen.addWidget(this);

@@ -20,6 +20,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -110,6 +111,16 @@ public class PowerSourceBlockEntity extends BlockEntity implements MenuProvider,
 	public <B extends BlockEntity & IJunctionEdit> void setupScreenConduitNodes(JunctionBoxContainer<B> abstractJunctionBoxScreen, NodePos[] conduitNodes,ExternalNodeConstructor externalNodeConstructor, InternalNodeConstructor internalNodeConstructor) {
 		externalNodeConstructor.construct(new Vec2i(70, 8), 	Direction2d.UP, 	conduitNodes[0]);
 		internalNodeConstructor.construct(new Vec2i(70, 112), 	Direction2d.DOWN, 	0);
+	}
+
+	@Override
+	public Level getJunctionLevel() {
+		return this.level;
+	}
+	
+	@Override
+	public BlockPos getJunctionBlockPos() {
+		return this.worldPosition;
 	}
 	
 }

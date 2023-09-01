@@ -109,6 +109,11 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 	}
 	
 	@Override
+	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {
+		GameUtility.triggerUpdate(level, position);
+	}
+	
+	@Override
 	public double getVoltage(BlockState state, Level level, BlockPos pos) {
 		if (level.getBlockEntity(pos) instanceof PortableFuelGeneratorBlockEntity generator) {
 			String[] wireLanes = generator.getNodeLanes();

@@ -91,8 +91,8 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		}
 		cleanupUnusedCircuitFiles();
 		
-		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "Saved " + nbt2.size() + " electric networks");
-		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "Saved " + componentCount + " electric components");
+		IndustriaCore.LOGGER.info("Saved " + nbt2.size() + " electric networks");
+		IndustriaCore.LOGGER.info("Saved " + componentCount + " electric components");
 		return nbt2;
 	}
 	
@@ -120,8 +120,8 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		}
 		
 		startNetworks();
-		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "Loaded " + this.circuitNetworks.size() + "/" + nbt.size() + " electric networks");
-		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, "Loaded " + this.pos2componentMap.size() + " electric components");
+		IndustriaCore.LOGGER.info("Loaded " + this.circuitNetworks.size() + "/" + nbt.size() + " electric networks");
+		IndustriaCore.LOGGER.info("Loaded " + this.pos2componentMap.size() + " electric components");
 	}
 	
 	public String saveCircuit(String netList) {

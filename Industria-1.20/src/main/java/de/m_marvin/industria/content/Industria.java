@@ -8,6 +8,7 @@ import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.content.registries.ModConduits;
 import de.m_marvin.industria.content.registries.ModItems;
 import de.m_marvin.industria.content.registries.ModMenuTypes;
+import de.m_marvin.industria.content.registries.ModRecipeTypes;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod("industria")
@@ -21,13 +22,14 @@ public class Industria {
 		
 		//ModConfig.register();
 		//ModNetworkPackages.setupPackages(NETWORK);
+		ModBlocks.register();
+		ModItems.register();
 		ModConduits.register();
 		ModMenuTypes.register();
 		//ModParticleTypes.register();
-		ModBlocks.register();
-		ModItems.register();
 		ModBlockEntityTypes.register();
 		//ModCommandArguments.register();
+		ModRecipeTypes.register();
 		
 	}
 	

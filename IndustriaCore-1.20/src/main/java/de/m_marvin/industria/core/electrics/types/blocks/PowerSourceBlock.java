@@ -80,7 +80,9 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricConnec
 	}
 
 	@Override
-	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {}
+	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {
+		GameUtility.triggerUpdate(level, position);
+	}
 	
 	@Override
 	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {

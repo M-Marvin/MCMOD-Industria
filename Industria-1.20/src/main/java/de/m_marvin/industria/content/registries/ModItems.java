@@ -37,7 +37,10 @@ public class ModItems {
 	public static final RegistryObject<BlockItem> ALUMINUM_WIRE_HOLDER 				= ITEMS.register("aluminum_wire_holder", () -> new BlockItem(ModBlocks.ALUMINUM_WIRE_HOLDER.get(), new Item.Properties()));
 	public static final RegistryObject<BlockItem> GOLD_WIRE_HOLDER 					= ITEMS.register("gold_wire_holder", () -> new BlockItem(ModBlocks.GOLD_WIRE_HOLDER.get(), new Item.Properties()));
 	public static final RegistryObject<BlockItem> TIN_WIRE_HOLDER 					= ITEMS.register("tin_wire_holder", () -> new BlockItem(ModBlocks.TIN_WIRE_HOLDER.get(), new Item.Properties()));
-	public static final RegistryObject<BlockItem> JUNCTION_BOX						= ITEMS.register("junction_box", () -> new BlockItem(ModBlocks.JUNCTION_BOX.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> IRON_JUNCTION_BOX					= ITEMS.register("iron_junction_box", () -> new BlockItem(ModBlocks.IRON_JUNCTION_BOX.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> ZINC_JUNCTION_BOX					= ITEMS.register("zinc_junction_box", () -> new BlockItem(ModBlocks.ZINC_JUNCTION_BOX.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> BRASS_JUNCTION_BOX				= ITEMS.register("brass_junction_box", () -> new BlockItem(ModBlocks.BRASS_JUNCTION_BOX.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> STEEL_JUNCTION_BOX				= ITEMS.register("steel_junction_box", () -> new BlockItem(ModBlocks.STEEL_JUNCTION_BOX.get(), new Item.Properties()));
 	
 	public static final RegistryObject<BlockItem> BRASS_FLOODLIGHT					= ITEMS.register("brass_floodlight", () -> new BlockItem(ModBlocks.BRASS_FLOODLIGHT.get(), new Item.Properties()));
 	public static final RegistryObject<BlockItem> STEEL_FLOODLIGHT					= ITEMS.register("steel_floodlight", () -> new BlockItem(ModBlocks.STEEL_FLOOFLIGHT.get(), new Item.Properties()));
@@ -62,7 +65,10 @@ public class ModItems {
 				output.accept(ALUMINUM_WIRE_HOLDER.get().getDefaultInstance());
 				output.accept(GOLD_WIRE_HOLDER.get().getDefaultInstance());
 				output.accept(TIN_WIRE_HOLDER.get().getDefaultInstance());
-				output.accept(JUNCTION_BOX.get().getDefaultInstance());
+				output.accept(IRON_JUNCTION_BOX.get().getDefaultInstance());
+				output.accept(ZINC_JUNCTION_BOX.get().getDefaultInstance());
+				output.accept(BRASS_JUNCTION_BOX.get().getDefaultInstance());
+				output.accept(STEEL_JUNCTION_BOX.get().getDefaultInstance());
 				
 				output.accept(BRASS_FLOODLIGHT.get().getDefaultInstance());
 				output.accept(STEEL_FLOODLIGHT.get().getDefaultInstance());

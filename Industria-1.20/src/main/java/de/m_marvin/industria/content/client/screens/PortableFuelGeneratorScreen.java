@@ -30,7 +30,7 @@ public class PortableFuelGeneratorScreen extends AbstractFluidContainerScreen<Po
 		
 		BlockState blockState = this.menu.getBlockEntity().getBlockState();
 		if (blockState.getBlock() instanceof IElectricInfoProvider provider) {
-			this.electricInfo = provider.getInfo(blockState, this.menu.getBlockEntity().getLevel(), this.menu.getBlockEntity().getBlockPos());
+			this.electricInfo = provider.getInfo(blockState, this.menu.getBlockEntity().getJunctionLevel(), this.menu.getBlockEntity().getJunctionBlockPos());
 		}
 		
 		if (this.electricInfo == null) return;

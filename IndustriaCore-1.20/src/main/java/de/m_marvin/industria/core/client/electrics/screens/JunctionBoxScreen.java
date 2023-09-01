@@ -43,7 +43,7 @@ public class JunctionBoxScreen<B extends BlockEntity & IJunctionEdit, C extends 
 	
 	@Override
 	protected void renderLabels(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
-		pGuiGraphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false);
+		if (!this.title.getString().isEmpty()) pGuiGraphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false);
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class JunctionBoxScreen<B extends BlockEntity & IJunctionEdit, C extends 
 		super.renderBg(pGuiGraphics, pPartialTick, pMouseX, pMouseY);
 		int i = this.leftPos;
 		int j = this.topPos;
-		pGuiGraphics.blit(getJunctionBoxTexture(), i, j - 14, 0, 138, this.imageWidth, 14);
+		if (!this.title.getString().isEmpty()) pGuiGraphics.blit(getJunctionBoxTexture(), i, j - 14, 0, 138, this.imageWidth, 14);
 	}
 	
 	@Override

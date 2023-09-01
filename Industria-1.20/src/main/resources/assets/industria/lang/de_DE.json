@@ -4,9 +4,17 @@
 "block.industria.gold_wire_holder":			"Gold-Kabelhalter",
 "block.industria.tin_wire_holder":			"Zinn-Kabelhalter",
 
+"block.industria.iron_junction_box":		"Eisen-Abzweigdose",
+"block.industria.zinc_junction_box":		"Zink-Abzweigdose",
+"block.industria.brass_junction_box":		"Messing-Abzweigdose",
+"block.industria.steel_junction_box":		"Stahl-Abzweigdose",
+
 "block.industria.brass_floodlight":			"Messing-Fluchtlicht",
 "block.industria.steel_floodlight":			"Stahl-Flutlicht",
 "block.industria.portable_fuel_generator":	"Treibstoff-Generator",
 
-"item.industria.screw_driver":				"Schraubendreher"
+"item.industria.screw_driver":				"Schraubendreher",
+
+"industria.creative_tab.tools":				"Werkzeuge",
+"industria.creative_tab.machines":			"Maschinen"
 }

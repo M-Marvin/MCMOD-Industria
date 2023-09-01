@@ -25,7 +25,11 @@ public class ModBlocks {
 	public static final RegistryObject<Block> GOLD_WIRE_HOLDER 			= BLOCKS.register("gold_wire_holder", () -> new WireHolderBlock(Properties.of()));
 	public static final RegistryObject<Block> TIN_WIRE_HOLDER 			= BLOCKS.register("tin_wire_holder", () -> new WireHolderBlock(Properties.of()));
 	public static final RegistryObject<Block> ALUMINUM_WIRE_HOLDER 		= BLOCKS.register("aluminum_wire_holder", () -> new WireHolderBlock(Properties.of()));
-	public static final RegistryObject<Block> JUNCTION_BOX 				= BLOCKS.register("junction_box", () -> new JunctionBoxBlock(Properties.of()));
+	public static final RegistryObject<Block> IRON_JUNCTION_BOX 		= BLOCKS.register("iron_junction_box", () -> new JunctionBoxBlock(Properties.of()));
+	public static final RegistryObject<Block> ZINC_JUNCTION_BOX 		= BLOCKS.register("zinc_junction_box", () -> new JunctionBoxBlock(Properties.of()));
+	public static final RegistryObject<Block> BRASS_JUNCTION_BOX 		= BLOCKS.register("brass_junction_box", () -> new JunctionBoxBlock(Properties.of()));
+	public static final RegistryObject<Block> STEEL_JUNCTION_BOX 		= BLOCKS.register("steel_junction_box", () -> new JunctionBoxBlock(Properties.of()));
+	
 	public static final RegistryObject<Block> BRASS_FLOODLIGHT 			= BLOCKS.register("brass_floodlight", () -> new FloodlightBlock(Properties.of()));
 	public static final RegistryObject<Block> STEEL_FLOOFLIGHT 			= BLOCKS.register("steel_floodlight", () -> new FloodlightBlock(Properties.of()));
 	public static final RegistryObject<Block> PORTABLE_FUEL_GENERATOR 	= BLOCKS.register("portable_fuel_generator", () -> new PortableFuelGeneratorBlock(Properties.of()));

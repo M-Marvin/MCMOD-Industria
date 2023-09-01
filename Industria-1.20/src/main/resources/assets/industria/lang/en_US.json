@@ -4,9 +4,17 @@
 "block.industria.gold_wire_holder":			"Gold Wire Support",
 "block.industria.tin_wire_holder":			"Tin Wire Support",
 
+"block.industria.iron_junction_box":			"Iron Junction Box",
+"block.industria.zinc_junction_box":			"Zinc Junction Box",
+"block.industria.brass_junction_box":			"Brass Junction Box",
+"block.industria.steel_junction_box":			"Steel Junction Box",
+
 "block.industria.brass_floodlight":			"Brass Floodlight",
 "block.industria.steel_floodlight":			"Steel Floodlight",
 "block.industria.portable_fuel_generator":		"Portable Fluid Fuel Generator",
 
-"item.industria.screw_driver":				"Screwdriver"
+"item.industria.screw_driver":				"Screwdriver",
+
+"industria.creative_tab.tools":				"Tools",
+"industria.creative_tab.machines":			"Machines"
 }

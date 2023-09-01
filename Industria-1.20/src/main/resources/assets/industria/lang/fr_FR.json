@@ -4,9 +4,17 @@
 "block.industria.gold_wire_holder":			"Support de c\u00e2ble en or",
 "block.industria.tin_wire_holder":			"Support de c\u00e2ble en \u00e9tain",
 
+"block.industria.iron_junction_box":			"Bo\u00eete de d\u00e9rivation en fer",
+"block.industria.zinc_junction_box":			"Bo\u00eete de d\u00e9rivation en zinc",
+"block.industria.brass_junction_box":			"Bo\u00eete de d\u00e9rivation en laiton",
+"block.industria.steel_junction_box":			"Bo\u00eete de d\u00e9rivation en acier",
+
 "block.industria.brass_floodlight":			"Phare en laiton",
 "block.industria.steel_floodlight":			"Phare en acier",
 "block.industria.portable_fuel_generator":		"G\u00e9n\u00e9rateur portatif de carburant liquide",
 
-"item.industria.screw_driver":				"Tournevis"
+"item.industria.screw_driver":				"Tournevis",
+
+"industria.creative_tab.tools":				"Outils",
+"industria.creative_tab.machines":			"Machines"
 }

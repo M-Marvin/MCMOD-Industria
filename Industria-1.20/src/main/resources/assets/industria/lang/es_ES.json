@@ -1,12 +1,20 @@
 {
-"block.industria.aluminum_wire_holder":				"Colgador de cables de aluminio",
-"block.industria.copper_wire_holder":				"Colgador de cables de cobre",
-"block.industria.gold_wire_holder":				"Colgador de cables de oro",
-"block.industria.tin_wire_holder":				"Colgador de cables de esta\u00f1o",
+"block.industria.aluminum_wire_holder":			"Colgador de cables de aluminio",
+"block.industria.copper_wire_holder":			"Colgador de cables de cobre",
+"block.industria.gold_wire_holder":			"Colgador de cables de oro",
+"block.industria.tin_wire_holder":			"Colgador de cables de esta\u00f1o",
 
-"block.industria.brass_floodlight":				"Luz de inundaci\u00f3n de lat\u00f3n",
-"block.industria.steel_floodlight":				"Luz de inundaci\u00f3n de acero",
-"block.industria.portable_fuel_generator":			"Generador port\u00e1til de carburante l\u00edquido",
+"block.industria.iron_junction_box":			"Caja de conexiones de hierro",
+"block.industria.zinc_junction_box":			"Caja de conexiones de zinc",
+"block.industria.brass_junction_box":			"Caja de conexiones de lat\u00f3n",
+"block.industria.steel_junction_box":			"Caja de conexiones de acero",
 
-"item.industria.screw_driver":					"Destornillador"
+"block.industria.brass_floodlight":			"Luz de inundaci\u00f3n de lat\u00f3n",
+"block.industria.steel_floodlight":			"Luz de inundaci\u00f3n de acero",
+"block.industria.portable_fuel_generator":		"Generador port\u00e1til de carburante l\u00edquido",
+
+"item.industria.screw_driver":				"Destornillador",
+
+"industria.creative_tab.tools":				"Herramientas",
+"industria.creative_tab.machines":			"M\u00e1quinas"
 }

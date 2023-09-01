@@ -1,11 +1,12 @@
 {
-"block.industria.aluminum_wire_holder":		"Aluminum Wire Support",
-"block.industria.copper_wire_holder":		"Copper Wire Support",
+"block.industria.aluminum_wire_holder":			"Aluminum Wire Support",
+"block.industria.copper_wire_holder":			"Copper Wire Support",
 "block.industria.gold_wire_holder":			"Gold Wire Support",
 "block.industria.tin_wire_holder":			"Tin Wire Support",
 
 "block.industria.brass_floodlight":			"Brass Floodlight",
 "block.industria.steel_floodlight":			"Steel Floodlight",
+"block.industria.portable_fuel_generator":		"Portable Fluid Fuel Generator",
 
 "item.industria.screw_driver":				"Screwdriver"
 }

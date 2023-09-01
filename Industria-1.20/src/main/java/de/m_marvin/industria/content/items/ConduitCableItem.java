@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.items.AbstractConduitItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 
 public class ConduitCableItem extends AbstractConduitItem {
 	
@@ -18,9 +19,9 @@ public class ConduitCableItem extends AbstractConduitItem {
 	}
 
 	@Override
-	public void onPlaced(ItemStack stack, int length) {
+	public void onPlaced(UseOnContext context, int length) {
 		int required = (int) Math.ceil(length / (float) Conduit.BLOCKS_PER_WIRE_ITEM);
-		stack.shrink(required);
+		context.getItemInHand().shrink(required);
 	}
 	
 }

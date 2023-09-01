@@ -10,5 +10,6 @@ public class ModBlockStateProperties {
 	public static final IntegerProperty CLAMP_OFFSET = IntegerProperty.create("offset", 0, 2);
 	public static final EnumProperty<WallOrientations> ORIENTATION = EnumProperty.create("orientation", WallOrientations.class);
 	public static final EnumProperty<MotorMode> MOTOR_MODE = EnumProperty.create("mode", MotorMode.class);
+	public static final IntegerProperty LAYERS = IntegerProperty.create("layers", 1, 4);
 	
 }

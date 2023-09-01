@@ -1,0 +1,10 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"1": "industria:block/util/gold_wire_coil",
+		"5": "industria:block/util/wire_coil_edge",
+		"6": "industria:block/util/wire_coil_side",
+		"particle": "industria:block/util/wire_coil_edge"
+	},
+	"parent": "industria:block/util/wire_coil_2"
+}

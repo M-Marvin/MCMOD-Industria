@@ -21,8 +21,12 @@
 "industriacore.commands.contraption.find.noplayer":	"\u00a1Teletransportarse s\u00f3lo posible para jugadores!",
 "industriacore.commands.contraption.find.found":	"Dispositivo ubicado en %1$s",
 "industriacore.commands.contraption.name.set":		"Llamado el dispositivo '%1$s'",
-
 "industriacore.commands.coordinates":			"[%1$s %2$s %3$s]",
+"industriacore.command.fixelectrics.noelectric":	"\u00a1Bloque en %1$s %2$s %3$s no tiene propriedades eléctricas! ",
+"industriacore.command.fixelectrics.success":		"Bloque en %1$s %2$s %3$s actualizado",
+"industriacore.command.fixelectrics.multisuccess": 	"%1$s Bloques actualizados",
+"industriacore.command.fixelectrics.areatolarge":	"\u00a1Espaco demasiado largo! %1$s > %2$s",
+
 "industriacore.argument.conduit.id.invalid":     	"\u00a1Cable '%s' desconocido!",
 "industriacore.argument.contraption.notFound":		"\u00a1Dispositivo '%s' no encontrado!",
 

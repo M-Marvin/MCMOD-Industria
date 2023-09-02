@@ -12,8 +12,8 @@
 "industriacore.commands.contraption.remove.success":	"Appareil supprim\u00e9",
 "industriacore.commands.contraption.create.failed":	"Cr\u00e9ation de l\u2019appareil \u00e9chou\u00e9e!",
 "industriacore.commands.contraption.create.success": 	"Appareil cr\u00e9\u00e9 \u00e0 partir des blocs \u00e0 %1$s %2$s %3$s",
-"industriacore.commands.contraption.create.toLarge": 	"\u00e9space s\u00e9lectionn\u00e9 trop grand: %1$sx%2$sx%3$s (max. %4$sx%5$sx%6$s)",
-"industriacore.commands.contraption.teleport.success":	"Appreil t\u00e9l\u00e9port\u00e9 \u00e0 %1$s %2$s %3$s",
+"industriacore.commands.contraption.create.toLarge": 	"Espace s\u00e9lectionn\u00e9 trop grand: %1$sx%2$sx%3$s (max. %4$sx%5$sx%6$s)",
+"industriacore.commands.contraption.teleport.success":	"Appreil t\u00e9l\u00e9port\u00e9 vers %1$s %2$s %3$s",
 "industriacore.commands.contraption.assemble.toLarge":	"Nombre des blocs trop grand! (max. %1$s)",
 "industriacore.commands.contraption.assemble.success":	"Appareil construit \u00e0 partir des blocs \u00e0 %1$s %2$s %3$s",
 "industriacore.commands.contraption.assemble.failed":	"Construction de l\u2019appareil \u00e9chou\u00e9e!",
@@ -21,8 +21,12 @@
 "industriacore.commands.contraption.find.noplayer":	"T\u00e9l\u00e9portation seulement possible pour des joueurs!",
 "industriacore.commands.contraption.find.found":	"Appareil situ\u00e9 \u00e0 %1$s",
 "industriacore.commands.contraption.name.set":		"Nomm\u00e9 l\u2019appareil '%1$s'",
-
 "industriacore.commands.coordinates":			"[%1$s %2$s %3$s]",
+"industriacore.command.fixelectrics.noelectric":	"Bloc à %1$s %2$s %3$s n'a aucunes propriétés électriques! ",
+"industriacore.command.fixelectrics.success":		"Bloc à %1$s %2$s %3$s actualisé",
+"industriacore.command.fixelectrics.multisuccess": 	"%1$s blocs actualisés",
+"industriacore.command.fixelectrics.areatolarge":	"Espace trop grand! %1$s > %2$s",
+
 "industriacore.argument.conduit.id.invalid":		"C\u00e2ble '%s' inconnu",
 "industriacore.argument.contraption.notFound":		"Appareil '%s' introuvable!",
 

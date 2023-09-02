@@ -1,0 +1,12 @@
+Übersetzungen:
+
+Zu Übersetzen				DE			EN			FR			ES
+
+Spule (mit aufgerollten Fäden/Kabeln)	Spule			Reel			Bobine			Bobina
+Spule (Aufroll-Körper)			Spule			Spool			Bobine			Bobina
+
+Leitung (alle)				Leitung			Conduit			Conduite		Conducto
+Draht (unisoliert)			Draht			Wire			Fil			Alambre
+Draht (isoliert) / Kabel		Kabel			Cable			Câble			Cable
+
+Einige Items sollten evtl auch im Code entspr. der engl. Übersetzungen abgepasst werden, falls das kein Problem darstellt. (siehe en_us.json)

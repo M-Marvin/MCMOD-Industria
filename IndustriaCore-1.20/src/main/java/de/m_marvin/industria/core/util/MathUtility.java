@@ -26,6 +26,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -33,6 +34,10 @@ import net.minecraft.world.phys.Vec3;
 
 public class MathUtility {
 
+	public static Direction getPosRelativeFacing(BlockPos pos1, Block pos2) {
+		return getVecDirection(Vec3i.fromVec(pos2).sub(Vec3i.fromVec(pos1)));
+	}
+	
 	public static BlockPos toBlockPos(double x, double y, double z) {
 		return new BlockPos((int) Mth.floor(x), (int) Math.floor(y), (int) Math.floor(z));
 	}

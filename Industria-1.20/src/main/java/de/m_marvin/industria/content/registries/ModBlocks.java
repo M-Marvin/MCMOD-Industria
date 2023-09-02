@@ -3,6 +3,7 @@ package de.m_marvin.industria.content.registries;
 import de.m_marvin.industria.content.Industria;
 import de.m_marvin.industria.content.blocks.ConduitCoilBlock;
 import de.m_marvin.industria.content.blocks.machines.FloodlightBlock;
+import de.m_marvin.industria.content.blocks.machines.PortableCoalGeneratorBlock;
 import de.m_marvin.industria.content.blocks.machines.PortableFuelGeneratorBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.JunctionBoxBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.WireHolderBlock;
@@ -44,5 +45,6 @@ public class ModBlocks {
 	public static final RegistryObject<Block> BRASS_FLOODLIGHT 				= BLOCKS.register("brass_floodlight", () -> new FloodlightBlock(Properties.of()));
 	public static final RegistryObject<Block> STEEL_FLOOFLIGHT 				= BLOCKS.register("steel_floodlight", () -> new FloodlightBlock(Properties.of()));
 	public static final RegistryObject<Block> PORTABLE_FUEL_GENERATOR 		= BLOCKS.register("portable_fuel_generator", () -> new PortableFuelGeneratorBlock(Properties.of()));
+	public static final RegistryObject<Block> PORTABLE_COAL_GENERATOR		= BLOCKS.register("portable_coal_generator", () -> new PortableCoalGeneratorBlock(Properties.of()));
 	
 }

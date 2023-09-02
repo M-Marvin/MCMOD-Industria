@@ -56,6 +56,7 @@ public class ModItems {
 	public static final RegistryObject<BlockItem> BRASS_FLOODLIGHT						= ITEMS.register("brass_floodlight", () -> new BlockItem(ModBlocks.BRASS_FLOODLIGHT.get(), new Item.Properties()));
 	public static final RegistryObject<BlockItem> STEEL_FLOODLIGHT						= ITEMS.register("steel_floodlight", () -> new BlockItem(ModBlocks.STEEL_FLOOFLIGHT.get(), new Item.Properties()));
 	public static final RegistryObject<BlockItem> PORTABLE_FUEL_GENERATOR				= ITEMS.register("portable_fuel_generator", () -> new BlockItem(ModBlocks.PORTABLE_FUEL_GENERATOR.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> PORTABLE_COAL_GENERATOR				= ITEMS.register("portable_coal_generator", () -> new BlockItem(ModBlocks.PORTABLE_COAL_GENERATOR.get(), new Item.Properties()));
 	
 	/* Creative tabs */
 	

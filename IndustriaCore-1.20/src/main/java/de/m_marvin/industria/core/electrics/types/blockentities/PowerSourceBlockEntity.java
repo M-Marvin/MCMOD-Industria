@@ -60,7 +60,7 @@ public class PowerSourceBlockEntity extends BlockEntity implements MenuProvider,
 	public void setVoltageAndPower(int voltage, int power) {
 		DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(Blocks.POWER_SOURCE.get());
 		this.power = Math.max(parametrics.getPowerMin(), Math.min(parametrics.getPowerMax(), power));
-		this.voltage = Math.max(parametrics.getVoltageMin(), Math.min(parametrics.getVoltageMax(), power));
+		this.voltage = Math.max(parametrics.getVoltageMin(), Math.min(parametrics.getVoltageMax(), voltage));
 		this.setChanged();
 		ElectricUtility.updateNetwork(level, worldPosition);
 	}

@@ -1,0 +1,9 @@
+{
+	"credit": "Made with Blockbench",
+	"render_type": "cutout_mipped",
+	"texture_size": [64, 64],
+	"textures": {
+		"5": "industria:block/machines/portable_coal_generator_front_active"
+	},
+	"parent": "industria:block/machines/portable_coal_generator"
+}

@@ -10,18 +10,13 @@ public class Config {
 	private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 	public static ForgeConfigSpec CONFIG;
 	
-	public static final String CATAGORY_TEST = "test";
-	public static ForgeConfigSpec.IntValue ELECTRIC_MOTOR_STRESS;
-	
 	public static final String CATEGORY_UTIL = "util";
 	public static ForgeConfigSpec.BooleanValue SPICE_DEBUG_LOGGING;
 	
 	static {
-		BUILDER.comment("Test settings").push(CATAGORY_TEST);
-		ELECTRIC_MOTOR_STRESS = BUILDER.comment("Motor stress capacity").defineInRange("motor_stress", 8000, 1, Integer.MAX_VALUE);
-		BUILDER.pop();
-		BUILDER.push(CATEGORY_UTIL);
+		BUILDER.comment("Industria Core utility settings").push(CATEGORY_UTIL);
 		SPICE_DEBUG_LOGGING = BUILDER.comment("If true, the nglink native lib will print simmulation data (and some other things) from the electric networks into the logs.").define("spice_debug_logging", false);
+		BUILDER.pop();
 		CONFIG = BUILDER.build();
 	}
 	

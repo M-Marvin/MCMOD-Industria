@@ -135,7 +135,7 @@ dependencies {
     implementation "org.valkyrienskies.core:api:1.1.0+2b2f93f793"
  	implementation fg.deobf("curse.maven:kotlinforforge-351264:4630525")
  	implementation fg.deobf("curse.maven:valkyrienskies-258371:4654328")
-	implementation "com.github.M-Marvin:LIBRARY-NGLink:ae6c10bbfd"
+	implementation "com.github.M-Marvin:LIBRARY-NGLink:acf40e6a2a"
 	implementation "com.github.M-Marvin:LIBRARY-UnifiedVectors:ef191368b9"
  	implementation project(path: ":IndustriaCore-1.20", configuration: 'shadow')
  	runtimeOnly "industria:industriacore:1.0"

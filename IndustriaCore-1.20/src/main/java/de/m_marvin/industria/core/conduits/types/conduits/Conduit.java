@@ -17,6 +17,7 @@ import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.physics.PhysicUtility;
+import de.m_marvin.industria.core.registries.Conduits;
 import de.m_marvin.industria.core.registries.ParticleTypes;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
@@ -31,6 +32,7 @@ import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -469,6 +471,11 @@ public class Conduit {
 
 	public ConduitEntity newConduitEntity(ConduitPos position, Conduit conduit, double length) {
 		 return new ConduitEntity(position, conduit, length);
+	}
+
+	public Component getName() {
+		ResourceLocation conduitKey = Conduits.CONDUITS_REGISTRY.get().getKey(this);
+		return Component.translatable("conduit." + conduitKey.getNamespace() + "." + conduitKey.getPath());
 	}
 	
 }

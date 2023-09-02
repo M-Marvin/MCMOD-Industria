@@ -21,7 +21,7 @@ public class ConduitArgument implements ArgumentType<ResourceLocation> {
 	
 	public static final Collection<String> EXAMPLES = Arrays.asList("industria:todo", "work_in_progress");
 	public static final DynamicCommandExceptionType ERROR_UNKNOWN_CONDUIT = new DynamicCommandExceptionType((object) -> {
-		return Component.translatable("industriacore.command.setconduit.notFound", object);
+		return Component.translatable("industriacore.argument.conduit.notfound", object);
 	});
 	
 	public static ConduitArgument conduit() {

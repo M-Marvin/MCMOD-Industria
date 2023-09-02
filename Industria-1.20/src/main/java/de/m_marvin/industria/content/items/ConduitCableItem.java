@@ -20,8 +20,10 @@ public class ConduitCableItem extends AbstractConduitItem {
 
 	@Override
 	public void onPlaced(UseOnContext context, int length) {
-		int required = (int) Math.ceil(length / (float) Conduit.BLOCKS_PER_WIRE_ITEM);
-		context.getItemInHand().shrink(required);
+		if (!context.getPlayer().isCreative()) {
+			int required = (int) Math.ceil(length / (float) Conduit.BLOCKS_PER_WIRE_ITEM);
+			context.getItemInHand().shrink(required);
+		}
 	}
 	
 }

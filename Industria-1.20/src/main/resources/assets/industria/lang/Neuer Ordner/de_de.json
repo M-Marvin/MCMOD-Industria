@@ -1,0 +1,48 @@
+{
+"block.industria.aluminum_wire_holder":			"Aluminium-Kabelhalter",
+"block.industria.copper_wire_holder":			"Kupfer-Kabelhalter",
+"block.industria.gold_wire_holder":			"Gold-Kabelhalter",
+"block.industria.tin_wire_holder":			"Zinn-Kabelhalter",
+"block.industria.iron_junction_box":			"Eisen-Abzweigdose",
+"block.industria.zinc_junction_box":			"Zink-Abzweigdose",
+"block.industria.brass_junction_box":			"Messing-Abzweigdose",
+"block.industria.steel_junction_box":			"Stahl-Abzweigdose",
+"block.industria.aluminum_wire_coil":			"Aluminiumdrahtspule",
+"block.industria.copper_wire_coil":			"Kupferdrahtspule",
+"block.industria.empty_wire_coil":			"Leere Spule",
+"block.industria.gold_wire_coil":			"Golddrahtspule",
+"block.industria.tin_wire_coil":				"Zinndrahtspule",
+"block.industria.insulated_aluminum_wire_coil":		"Aluminiumkabelspule",
+"block.industria.insulated_copper_wire_coil":		"Kupferkabelspule",
+"block.industria.insulated_gold_wire_coil":		"Goldkabelspule",
+"block.industria.insulated_tin_wire_coil":		"Zinnkabelspule",
+
+"block.industria.brass_floodlight":			"Messing-Fluchtlicht",
+"block.industria.steel_floodlight":			"Stahl-Flutlicht",
+"block.industria.portable_fuel_generator":		"Tragbarer Fl\u00fcssigkraftstoff-Generator",
+
+"item.industria.screw_driver":				"Schraubendreher",
+"item.industria.aluminum_wire":				"Aluminiumdraht",
+"item.industria.copper_wire":				"Kupferdraht",
+"item.industria.gold_wire":				"Golddraht",
+"item.industria.tin_wire":				"Zinndraht",
+"item.industria.insulated_aluminum_wire":		"Aluminiumkabel",
+"item.industria.insulated_copper_wire":			"Kupferkabel",
+"item.industria.insulated_gold_wire":			"Goldkabel",
+"item.industria.insulated_tin_wire":			"Zinnkabel",
+
+"conduit.industria.copper_wire":				"Kupfer-Draht",
+"conduit.industria.tin_wire":					"Zin-Draht",
+"conduit.industria.gold_wire":					"Gold-Draht",
+"conduit.industria.aluminum_wire":				"Aluminium-Draht",
+"conduit.industria.insulated_copper_wire":		"Kupfer-Kabel",
+"conduit.industria.insulated_tin_wire":			"Zin-Kabel",
+"conduit.industria.insulated_gold_wire":		"Gold-Kabel",
+"conduit.industria.insulated_aluminum_wire":	"Aluminium-Kabel",
+
+"industria.tooltip.wire_coil.wire_on_coil": "Verbleibend: %1$s",
+"industria.tooltip.wire_coil.wire_type": "Auf Spule: %1$s",
+
+"industria.creative_tab.tools":				"Werkzeuge",
+"industria.creative_tab.machines":			"Maschinen"
+}

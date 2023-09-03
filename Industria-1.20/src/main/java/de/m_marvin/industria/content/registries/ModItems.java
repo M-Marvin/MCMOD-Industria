@@ -95,6 +95,7 @@ public class ModItems {
 				output.accept(BRASS_FLOODLIGHT.get().getDefaultInstance());
 				output.accept(STEEL_FLOODLIGHT.get().getDefaultInstance());
 				output.accept(PORTABLE_FUEL_GENERATOR.get().getDefaultInstance());
+				output.accept(PORTABLE_COAL_GENERATOR.get().getDefaultInstance());
 			})
 			.build()
 	);

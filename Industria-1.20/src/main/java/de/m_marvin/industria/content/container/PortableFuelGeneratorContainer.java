@@ -28,7 +28,7 @@ public class PortableFuelGeneratorContainer extends AbstractBlockEntityFluidCont
 		
 		initPlayerInventory(playerInv, 0, 0);
 		
-		FluidSlot fluidSlot = addFluidSlot(new FluidSlot(this.blockEntity.getFluidContainer(), 0, 17, 15));
+		FluidSlot fluidSlot = addFluidSlot(new FluidSlot(this.blockEntity.getFluidContainer(), 0, 17, 18));
 		addSlot(fluidSlot.makeFillSlot(this.blockEntity.getFluidContainer()));
 		addSlot(fluidSlot.makeDrainSlot(this.blockEntity.getFluidContainer()));
 		

@@ -1,5 +1,7 @@
 package de.m_marvin.industria.core.electrics.parametrics;
 
+import java.util.Map;
+
 public class DeviceParametrics {
 	
 	private final int nominalVoltage;
@@ -8,14 +10,16 @@ public class DeviceParametrics {
 	private final int nominalPower;
 	private final int powerMax;
 	private final int powerMin;
+	private final Map<String, Double> configs;
 	
-	public DeviceParametrics(int nominalVoltage, int voltageMax, int voltageMin, int nominalPower, int powerMax, int powerMin) {
+	public DeviceParametrics(int nominalVoltage, int voltageMax, int voltageMin, int nominalPower, int powerMax, int powerMin, Map<String, Double> configs) {
 		this.nominalVoltage = nominalVoltage;
 		this.voltageMax = voltageMax;
 		this.voltageMin = voltageMin;
 		this.nominalPower = nominalPower;
 		this.powerMax = powerMax;
 		this.powerMin = powerMin;
+		this.configs = configs;
 	}
 	
 	public int getNominalPower() {
@@ -57,6 +61,10 @@ public class DeviceParametrics {
 	
 	public double getExplodeChance(double voltagePercentage, double powerPercentage) {
 		return Math.max(0, voltagePercentage - 2) + Math.max(0, powerPercentage - 2);
+	}
+
+	public double getConfig(String string, double fallback) {
+		return this.configs.getOrDefault(string, fallback);
 	}
 	
 }

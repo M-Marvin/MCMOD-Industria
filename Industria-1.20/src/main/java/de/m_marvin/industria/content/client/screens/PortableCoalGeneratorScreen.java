@@ -1,7 +1,7 @@
 package de.m_marvin.industria.content.client.screens;
 
 import de.m_marvin.industria.content.Industria;
-import de.m_marvin.industria.content.container.PortableFuelGeneratorContainer;
+import de.m_marvin.industria.content.container.PortableCoalGeneratorContainer;
 import de.m_marvin.industria.core.client.electrics.screens.AbstractFluidContainerScreen;
 import de.m_marvin.industria.core.client.util.widgets.PowerInfo;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider;
@@ -12,15 +12,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class PortableFuelGeneratorScreen extends AbstractFluidContainerScreen<PortableFuelGeneratorContainer> {
+public class PortableCoalGeneratorScreen extends AbstractFluidContainerScreen<PortableCoalGeneratorContainer> {
 	
-	public static final ResourceLocation SCREEN_TEXTURE = new ResourceLocation(Industria.MODID, "textures/gui/portable_fuel_generator.png");
+	public static final ResourceLocation SCREEN_TEXTURE = new ResourceLocation(Industria.MODID, "textures/gui/portable_coal_generator.png");
 	
 	protected ElectricInfo electricInfo;
 	protected PowerInfo powerInfo;
-	protected int animationFrame = 0;
 	
-	public PortableFuelGeneratorScreen(PortableFuelGeneratorContainer pMenu, Inventory pPlayerInventory, Component pTitle) {
+	public PortableCoalGeneratorScreen(PortableCoalGeneratorContainer pMenu, Inventory pPlayerInventory, Component pTitle) {
 		super(pMenu, pPlayerInventory, pTitle);
 	}
 
@@ -46,11 +45,10 @@ public class PortableFuelGeneratorScreen extends AbstractFluidContainerScreen<Po
 		pGuiGraphics.blit(SCREEN_TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 		
 		if (this.menu.getBlockEntity().canRun()) {
-
-			animationFrame++;
-			if (animationFrame > 40) animationFrame = 0;
 			
-			pGuiGraphics.blit(SCREEN_TEXTURE, this.leftPos + 54, this.topPos + 38, 176 + 13 * (animationFrame / 10), 0, 13, 12);
+			float burnTime = this.menu.getBlockEntity().getBurnTime() / (float) this.menu.getBlockEntity().getMaxBurnTime();
+			
+			pGuiGraphics.blit(SCREEN_TEXTURE, this.leftPos + 54, this.topPos + 37 + 13 - (int) (burnTime * 13), 176, 13 - (int) (burnTime * 13), 14, (int) (burnTime * 13));
 			
 		}
 		

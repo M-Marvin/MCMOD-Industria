@@ -22,10 +22,11 @@ logoFile="logo.png" #optional
 # A text field displayed in the mod UI
 
 # A text field displayed in the mod UI
-authors="M_Marvin" #optional
+authors="M_Marvin(Code) and Hase_222(Textures)" #optional
 
 description='''
-
+Unique realistic conduits with physics, also with an realistic electricity system.
+Compatible with VS2 physics.
 '''
 
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
@@ -51,6 +52,6 @@ description='''
 [[dependencies.industria]]
     modId="industriacore"
     mandatory=true
-    versionRange="[v1,)"
+    versionRange="[v0.1-alpha,)"
     ordering="NONE"
     side="BOTH"

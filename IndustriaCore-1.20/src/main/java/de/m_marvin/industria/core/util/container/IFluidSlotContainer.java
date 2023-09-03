@@ -42,6 +42,14 @@ public interface IFluidSlotContainer {
 		public int getY() {
 			return y;
 		}
+		
+		public boolean mayPickup(ItemStack containerItem) {
+			return true;
+		}
+		
+		public boolean mayPlace(FluidStack fluid) {
+			return true;
+		}
 
 		public FluidStack getFluid() {
 			return this.container.getFluid(fluidSlot);
@@ -74,13 +82,20 @@ public interface IFluidSlotContainer {
 		
 		@Override
 		public boolean mayPlace(ItemStack pStack) {
-			return this.drainSlot ? (ItemFluidExchangeHelper.canBeFilled(pStack, this.fluidSlot.getFluid()) && this.fluidSlot.getFluid().getAmount() > 0) : (ItemFluidExchangeHelper.canBeDrained(pStack, this.fluidSlot.getFluid()) && this.fluidSlot.getCapacity() > this.fluidSlot.getFluid().getAmount());
+			if (this.drainSlot) {
+				if (!this.fluidSlot.mayPickup(pStack)) return false;
+				return ItemFluidExchangeHelper.canBeFilled(pStack, this.fluidSlot.getFluid()) && this.fluidSlot.getFluid().getAmount() > 0;
+			} else {
+				if (!this.fluidSlot.mayPlace(ItemFluidExchangeHelper.getFluidContent(pStack))) return false;
+				return ItemFluidExchangeHelper.canBeDrained(pStack, this.fluidSlot.getFluid()) && this.fluidSlot.getCapacity() > this.fluidSlot.getFluid().getAmount();
+			}
 		}
 		
 	}
 	
 	public static class FluidContainer implements Container {
 		
+		protected int additionalSlots;
 		protected int size;
 		protected int maxFluidAmount;
 		protected NonNullList<FluidStack> fluids;
@@ -96,12 +111,17 @@ public interface IFluidSlotContainer {
 		}
 		
 		public FluidContainer(int fluidSlots) {
-			this(fluidSlots, 5000);
+			this(fluidSlots, 0, 5000);
+		}
+
+		public FluidContainer(int fluidSlots, int additionalSlots) {
+			this(fluidSlots, additionalSlots, 5000);
 		}
 		
-		public FluidContainer(int fluidSlots, int maxFluidStackAmount) {
+		public FluidContainer(int fluidSlots, int additionalSlots, int maxFluidStackAmount) {
+			this.additionalSlots = additionalSlots;
 			this.size = fluidSlots;
-			this.items = NonNullList.withSize(fluidSlots * 2, ItemStack.EMPTY);
+			this.items = NonNullList.withSize(fluidSlots * 2 + additionalSlots, ItemStack.EMPTY);
 			this.fluids = NonNullList.withSize(fluidSlots, FluidStack.EMPTY);
 			this.maxFluidAmount = maxFluidStackAmount;
 		}
@@ -153,6 +173,10 @@ public interface IFluidSlotContainer {
 			this.fluids.set(fluidSlot, fluidStack);
 		}
 		
+		public int getFirstAdditional() {
+			return this.fluids.size() * 2;
+		}
+		
 		public int getMaxFluidAmount() {
 			return maxFluidAmount;
 		}
@@ -165,7 +189,7 @@ public interface IFluidSlotContainer {
 		
 		@Override
 		public int getContainerSize() {
-			return this.size * 2;
+			return this.size * 2 + this.additionalSlots;
 		}
 		
 		@Override
@@ -205,7 +229,7 @@ public interface IFluidSlotContainer {
 		
 		@Override
 		public void setItem(int pSlot, ItemStack pStack) {
-			pStack = exchangeFluid(pSlot, pStack);
+			if (pSlot < this.fluids.size() * 2) pStack = exchangeFluid(pSlot, pStack);
 			this.items.set(pSlot, pStack);
 			if (!pStack.isEmpty() && pStack.getCount() > this.getMaxStackSize()) {
 				pStack.setCount(this.getMaxStackSize());

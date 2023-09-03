@@ -2,6 +2,7 @@ package de.m_marvin.industria.core.util.container;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -55,5 +56,22 @@ public abstract class AbstractBlockEntityFluidContainerBase<T extends BlockEntit
 		
 		return super.quickMoveStack(playerIn, index);
 	}
-	
+
+	protected void clearContainerBucketsOnly(Player pPlayer, FluidContainer pContainer) {
+		if (!pPlayer.isAlive() || pPlayer instanceof ServerPlayer && ((ServerPlayer)pPlayer).hasDisconnected()) {
+			for(int j = 0; j < pContainer.getFirstAdditional(); ++j) {
+				pPlayer.drop(pContainer.removeItemNoUpdate(j), false);
+			}
+
+		} else {
+			for(int i = 0; i < pContainer.getFirstAdditional(); ++i) {
+				Inventory inventory = pPlayer.getInventory();
+				if (inventory.player instanceof ServerPlayer) {
+					inventory.placeItemBackInInventory(pContainer.removeItemNoUpdate(i));
+				}
+			}
+
+		}
+	}
+
 }

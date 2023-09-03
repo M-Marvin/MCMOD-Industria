@@ -24,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -134,6 +135,11 @@ public class GameUtility {
 	public static void triggerUpdate(Level level, BlockPos pos) {
 		LevelChunk chunk = level.getChunkAt(pos);
 		level.markAndNotifyBlock(pos, chunk, level.getBlockState(pos), level.getBlockState(pos), 3, 512);
+	}
+	
+	public static void triggerClientSync(Level level, BlockPos pos) {
+		BlockState state = level.getBlockState(pos);
+		level.sendBlockUpdated(pos, state, state, Block.UPDATE_ALL);
 	}
 	
 	public static HitResult raycast(Level level, Vec3d from, Vec3d direction, double range) {

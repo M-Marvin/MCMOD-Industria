@@ -23,7 +23,7 @@ apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'eclipse'
 
-version = '1.0'
+version = '0.1-alpha'
 group = 'de.m_marvin.industria' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'industria'
  
@@ -168,7 +168,7 @@ jar {
         attributes([
                 "Specification-Title"     : "Industria",
                 "Specification-Vendor"    : "m_marvin",
-                "Specification-Version"   : "1",
+                "Specification-Version"   : version,
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : "m_marvin",

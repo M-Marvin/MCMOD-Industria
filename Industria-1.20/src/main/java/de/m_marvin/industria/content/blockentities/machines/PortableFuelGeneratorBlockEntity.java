@@ -20,6 +20,9 @@ import de.m_marvin.univec.impl.Vec2i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -82,10 +85,6 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 		return this.recipe != null && getFuelStorage().getFluid() == this.recipe.getFluid();
 	}
 	
-	public boolean isEmpty() {
-		return getFuelStorage().isEmpty();
-	}
-	
 	public static void tick(Level pLevel, BlockPos pPos, BlockState pState, PortableFuelGeneratorBlockEntity pBlockEntity) {
 		
 		if (pBlockEntity.canRun != pBlockEntity.canRun()) {
@@ -93,6 +92,7 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 			pBlockEntity.level.setBlockAndUpdate(pPos, pState.setValue(BlockStateProperties.LIT, pBlockEntity.canRun));
 			pBlockEntity.setChanged();
 			ElectricUtility.updateNetwork(pLevel, pPos);
+			GameUtility.triggerClientSync(pBlockEntity.level, pBlockEntity.worldPosition);
 		}
 		
 		if (pBlockEntity.canRun && pState.getBlock() instanceof PortableFuelGeneratorBlock generatorBlock) {
@@ -112,7 +112,6 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 				} else {
 					fuel.shrink((int) Math.ceil(consumtionTick));
 				}
-				pBlockEntity.setChanged();
 			}
 			
 		}
@@ -135,7 +134,6 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 		pTag.putString("LiveWireLane", this.nodeLanes[0]);
 		pTag.putString("NeutralWireLane", this.nodeLanes[1]);
 		pTag.put("Fuel", this.getFuelStorage().writeToNBT(new CompoundTag()));
-		pTag.putBoolean("canRun", this.canRun);
 		pTag.putFloat("fuelTimer", this.fuelTimer);
 	}
 	
@@ -145,8 +143,12 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 		this.nodeLanes[0] = pTag.contains("LiveWireLane") ? pTag.getString("LiveWireLane") : "L";
 		this.nodeLanes[1] = pTag.contains("NeutralWireLane") ? pTag.getString("NeutralWireLane") : "N";
 		this.setFuelStorage(FluidStack.loadFluidStackFromNBT(pTag.getCompound("Fuel")));
-		this.canRun = pTag.getBoolean("canRun");
 		this.fuelTimer = pTag.getFloat("fuelTime");
+	}
+
+	@Override
+	public Packet<ClientGamePacketListener> getUpdatePacket() {
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 	
 	@Override

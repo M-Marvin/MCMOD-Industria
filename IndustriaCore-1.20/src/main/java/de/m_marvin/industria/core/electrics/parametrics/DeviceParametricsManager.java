@@ -32,7 +32,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class DeviceParametricsManager extends SimplePreparableReloadListener<Map<ResourceLocation, DeviceParametrics>> {
 	
-	public static final DeviceParametrics DEFAULT_TEMPLATE = new DeviceParametrics(230, 300, 200, 400, 390, 410);
+	public static final DeviceParametrics DEFAULT_TEMPLATE = new DeviceParametrics(230, 300, 200, 400, 390, 410, new HashMap<>());
 	
 	private static final Logger LOGGER = IndustriaCore.LOGGER;
 	private static final String PATH_JSON_SUFIX = ".json";

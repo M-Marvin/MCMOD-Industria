@@ -59,7 +59,7 @@ public class WireHolderBlock extends Block implements IElectricConnector {
 	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
 		return VoxelShapeUtility.transformation()
 				.centered()
-				.rotateX(90)
+				.rotateX(-90)
 				.rotateFromNorth(pState.getValue(BlockStateProperties.FACING))
 				.uncentered()
 				.transform(SHAPE);

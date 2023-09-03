@@ -55,6 +55,18 @@ public class ItemFluidExchangeHelper {
 		}
 		return containerStack;
 	}
+
+	public static FluidStack getFluidContent(ItemStack stack) {
+		@NotNull LazyOptional<IFluidHandlerItem> fluidHandlerCap = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM);
+		if (fluidHandlerCap.isPresent()) {
+			IFluidHandlerItem fluidHandler = fluidHandlerCap.resolve().get();
+			for (int i = 0; i < fluidHandler.getTanks(); i++) {
+				FluidStack content = fluidHandler.getFluidInTank(i);
+				if (!content.isEmpty()) return content;
+			}
+		}
+		return FluidStack.EMPTY;
+	}
 	
 	public static boolean canBeDrained(ItemStack stack, FluidStack fluidType) {
 		@NotNull LazyOptional<IFluidHandlerItem> fluidHandlerCap = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM);

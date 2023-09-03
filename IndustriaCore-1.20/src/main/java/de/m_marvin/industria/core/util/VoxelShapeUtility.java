@@ -57,9 +57,9 @@ public class VoxelShapeUtility {
 		
 		public VoxelShapeRotationBuilder rotateFromNorth(Direction direction) {
 			if (direction.getAxis() == Axis.Y) {
-				return rotateX(direction.getAxisDirection() == AxisDirection.POSITIVE ? 90 : -90);
+				return rotateX(direction.getAxisDirection() == AxisDirection.POSITIVE ? -90 : 90);
 			} else {
-				return rotateY(direction.get2DDataValue() * 90);
+				return rotateY((direction.get2DDataValue() - 2) * 90);
 			}
 		}
 		

@@ -2,6 +2,7 @@
 
 Zu Übersetzen				DE			EN			FR			ES
 
+Spule (elektronisches Element)		Spule			Coil			Bobine			Bobina
 Spule (mit aufgerollten Fäden/Kabeln)	Spule			Reel			Bobine			Bobina
 Spule (Aufroll-Körper)			Spule			Spool			Bobine			Bobina
 

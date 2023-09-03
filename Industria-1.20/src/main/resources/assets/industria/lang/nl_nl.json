@@ -1,0 +1,48 @@
+{
+"block.industria.aluminum_wire_holder":			"Aluminum kabelhouder",
+"block.industria.copper_wire_holder":			"Koperen kabelhouder",
+"block.industria.gold_wire_holder":			"Gouden kabelhouder",
+"block.industria.tin_wire_holder":			"Blikken kabelhouder",
+"block.industria.brass_junction_box":			"Messing aansluitdoos",
+"block.industria.iron_junction_box":			"IJzeren ansluitdoos",
+"block.industria.steel_junction_box":			"Stalen ansluitdoos",
+"block.industria.zinc_junction_box":			"Zinken ansluitdoos",
+"block.industria.aluminum_wire_coil":			"Haspel met aluminium draad",
+"block.industria.copper_wire_coil":			"Haspel met koperen draad",
+"block.industria.empty_wire_coil":			"Lege haspel",
+"block.industria.gold_wire_coil":			"Haspel met gouden draad",
+"block.industria.tin_wirecoil":				"Haspel met blikken draad",
+"block.industria.insulated_aluminum_wire_coil":		"Haspel met aluminium kabel",
+"block.industria.insulated_copper_wire_coil":		"Haspel met koperen kabel",
+"block.industria.insulated_gold_wire_coil":		"Haspel met gouden kabel",
+"block.industria.insulated_tin_wire_coil":		"Haspel met blikken kabel",
+
+"block.industria.brass_floodlight":			"Messing schijnwerper",
+"block.industria.steel_floodlight":			"Stalen schijnwerper",
+"block.industria.portable_fuel_generator":		"Draagbare vloeistofbrandstofgenerator",
+
+"item.industria.screw_driver":				"Schroevendraaier",
+"item.industria.aluminum_wire":				"Aluminium draad",
+"item.industria.copper_wire":				"Koperen draad",
+"item.industria.gold_wire":				"Gouden draad",
+"item.industria.tin_wire":				"Blikken draad",
+"item.industria.insulated_aluminum_wire":		"Aluminium kabel",
+"item.industria.insulated_copper_wire":			"Koperen kabel",
+"item.industria.insulated_gold_wire":			"Gouden kabel",
+"item.industria.insulated_tin_wire":			"Blikken kabel",
+
+"conduit.industria.aluminum_wire":			"Aluminium draad",
+"conduit.industria.copper_wire":			"Koperen draad",
+"conduit.industria.gold_wire":				"Gouden draad",
+"conduit.industria.tin_wire":				"Blikken draad",
+"conduit.industria.insulated_aluminum_wire":		"Aluminium kabel",
+"conduit.industria.insulated_copper_wire":		"Koperen kabel",
+"conduit.industria.insulated_gold_wire":		"Gouden kabel",
+"conduit.industria.insulated_tin_wire":			"Blikken kabel",
+
+"industria.tooltip.wire_coil.wire_on_coil":		"Resterend: %1$s",
+"industria.tooltip.wire_coil.wire_type":		"Soort lijn: %1$s",
+
+"industria.creative_tab.tools":				"Hulpmiddeln",
+"industria.creative_tab.machines":			"Machines"
+}

@@ -1,0 +1,48 @@
+{
+"block.industria.aluminum_wire_holder":			"Hlin\u00edkov\u00fd dr\u017eiak k\u00e1bla",
+"block.industria.copper_wire_holder":			"Meden\u00fd dr\u017eiak k\u00e1bla",
+"block.industria.gold_wire_holder":			"Zlat\u00fd dr\u017eiak k\u00e1bla",
+"block.industria.tin_wire_holder":			"C\u00ednov\u00fd dr\u017eiak k\u00e1bla",
+"block.industria.brass_junction_box":			"Mosadzn\u00e1 spojovacia skrinka",
+"block.industria.iron_junction_box":			"\u017delezn\u00e1 spojovacia skrinka",
+"block.industria.steel_junction_box":			"Oce\u013eov\u00e1 spojovacia skrinka",
+"block.industria.zinc_junction_box":			"Zinkov\u00e1 spojovacia skrinka",
+"block.industria.aluminum_wire_coil":			"Cievka s hlin\u00edkov\u00fdm dr\u00f4tom",
+"block.industria.copper_wire_coil":			"Cievka s meden\u00fdm dr\u00f4tom",
+"block.industria.empty_wire_coil":			"Pr\u00e1zdna cievka",
+"block.industria.gold_wire_coil":			"Cievka s zlat\u00fdm dr\u00f4tom",
+"block.industria.tin_wirecoil":				"Cievka s c\u00ednov\u00fdm dr\u00f4tom",
+"block.industria.insulated_aluminum_wire_coil":		"Cievka s hlin\u00edkov\u00fdm k\u00e1blom",
+"block.industria.insulated_copper_wire_coil":		"Cievka s meden\u00fdm k\u00e1blom",
+"block.industria.insulated_gold_wire_coil":		"Cievka s zlat\u00fdm k\u00e1blom",
+"block.industria.insulated_tin_wire_coil":		"Cievka s c\u00ednov\u00fdm k\u00e1blom",
+
+"block.industria.brass_floodlight":			"Mosadzn\u00fd svetlomet",
+"block.industria.steel_floodlight":			"Oce\u013eov\u00fd svetlomet",
+"block.industria.portable_fuel_generator":		"Presnosn\u00fd gener\u00e1tor kvapeln\u00e9ho paliva",
+
+"item.industria.screw_driver":				"Skrutkova\u010d
+"item.industria.aluminum_wire":				"Hlin\u00edkov\u00fd dr\u00f4t",
+"item.industria.copper_wire":				"Meden\u00fd dr\u00f4t",
+"item.industria.gold_wire":				"Zlat\u00fd dr\u00f4t",
+"item.industria.tin_wire":				"C\u00ednov\u00fd dr\u00f4t",
+"item.industria.insulated_aluminum_wire":		"Hlin\u00edkov\u00fd k\u00e1bel",
+"item.industria.insulated_copper_wire":			"Meden\u00fd k\u00e1bel",
+"item.industria.insulated_gold_wire":			"Zlat\u00fd k\u00e1bel",
+"item.industria.insulated_tin_wire":			"C\u00ednov\u00fd k\u00e1bel",
+
+"conduit.industria.aluminum_wire":			"Hlin\u00edkov\u00fd dr\u00f4t",
+"conduit.industria.copper_wire":			"Meden\u00fd dr\u00f4t",
+"conduit.industria.gold_wire":				"Zlat\u00fd dr\u00f4t",
+"conduit.industria.tin_wire":				"C\u00ednov\u00fd dr\u00f4t",
+"conduit.industria.insulated_aluminum_wire":		"Hlin\u00edkov\u00fd k\u00e1bel",
+"conduit.industria.insulated_copper_wire":		"Hlin\u00edkov\u00fd k\u00e1bel",
+"conduit.industria.insulated_gold_wire":		"Zlat\u00fd k\u00e1bel",
+"conduit.industria.insulated_tin_wire":			"C\u00ednov\u00fd k\u00e1bel",
+
+"industria.tooltip.wire_coil.wire_on_coil":		"Zost\u00e1va: %1$s",
+"industria.tooltip.wire_coil.wire_type":		"Typ linky: %1$s",
+
+"industria.creative_tab.tools":				"N\u00e1stroje",
+"industria.creative_tab.machines":			"Stroje"
+}

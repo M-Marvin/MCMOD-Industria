@@ -20,6 +20,7 @@
 "block.industria.brass_floodlight":			"Phare en laiton",
 "block.industria.steel_floodlight":			"Phare en acier",
 "block.industria.portable_fuel_generator":		"G\u00e9n\u00e9rateur portatif de carburant liquide",
+"block.industria.portable_coal_generator":		"G\u00e9n\u00e9rateur portatif de carburant solide",
 
 "item.industria.screw_driver":				"Tournevis",
 "item.industria.aluminum_wire":				"Fil d'aluminium",

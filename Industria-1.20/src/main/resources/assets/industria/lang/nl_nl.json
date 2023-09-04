@@ -20,6 +20,7 @@
 "block.industria.brass_floodlight":			"Messing schijnwerper",
 "block.industria.steel_floodlight":			"Stalen schijnwerper",
 "block.industria.portable_fuel_generator":		"Draagbare vloeistofbrandstofgenerator",
+"block.industria.portable_coal_generator":		"Draagbare vastebrandstofgenerator",
 
 "item.industria.screw_driver":				"Schroevendraaier",
 "item.industria.aluminum_wire":				"Aluminium draad",

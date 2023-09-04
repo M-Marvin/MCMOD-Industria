@@ -20,6 +20,7 @@
 "block.industria.brass_floodlight":			"Brass Floodlight",
 "block.industria.steel_floodlight":			"Steel Floodlight",
 "block.industria.portable_fuel_generator":		"Portable Fluid Fuel Generator",
+"block.industria.portable_coal_generator":		"Portable Solid Fuel Generator",
 
 "item.industria.screw_driver":				"Screwdriver",
 "item.industria.aluminum_wire":				"Aluminum Wire",

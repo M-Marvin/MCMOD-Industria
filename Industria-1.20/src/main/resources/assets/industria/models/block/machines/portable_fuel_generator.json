@@ -1,6 +1,5 @@
 {
 	"credit": "Made with Blockbench",
-	"render_type": "cutout_mipped",
 	"textures": {
 		"2": "industria:block/machines/standart_machine_casing_bottom",
 		"3": "industria:block/machines/standart_machine_casing_side",

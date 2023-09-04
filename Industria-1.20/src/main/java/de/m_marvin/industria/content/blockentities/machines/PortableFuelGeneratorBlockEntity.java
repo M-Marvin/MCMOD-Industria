@@ -133,7 +133,7 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 		super.saveAdditional(pTag);
 		pTag.putString("LiveWireLane", this.nodeLanes[0]);
 		pTag.putString("NeutralWireLane", this.nodeLanes[1]);
-		pTag.put("Fuel", this.getFuelStorage().writeToNBT(new CompoundTag()));
+		if (!this.getFuelStorage().isEmpty()) pTag.put("Fuel", this.getFuelStorage().writeToNBT(new CompoundTag()));
 		pTag.putFloat("fuelTimer", this.fuelTimer);
 	}
 	

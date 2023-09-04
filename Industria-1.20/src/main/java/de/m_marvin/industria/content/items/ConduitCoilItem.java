@@ -81,8 +81,7 @@ public class ConduitCoilItem extends AbstractConduitBlockItem {
 	
 	@Override
 	public void appendHoverText(ItemStack pStack, Level pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
-		pTooltip.add(Formater.build().appand(Component.translatable("industria.tooltip.wire_coil.wire_type", this.getConduit().getName())).withStyle(ChatFormatting.GRAY).component());
-		pTooltip.add(Formater.build().appand(Component.translatable("industria.tooltip.wire_coil.wire_on_coil", pStack.getOrCreateTag().getInt("WireLength"))).withStyle(ChatFormatting.GRAY).component());
+		pTooltip.add(Formater.build().appand(Component.translatable("industria.tooltip.wire_coil.wireOnCoil", pStack.getOrCreateTag().getInt("WireLength") * Conduit.BLOCKS_PER_WIRE_ITEM)).withStyle(ChatFormatting.GRAY).component());
 		super.appendHoverText(pStack, pLevel, pTooltip, pFlag);
 	}
 	

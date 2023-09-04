@@ -26,7 +26,6 @@ public class ElectricNetwork implements INGCallback {
 	
 	protected String title;
 	protected Set<Component<?, ?, ?>> components = new HashSet<>();
-	//protected long lastUpdated;
 	protected int templateCounter;
 	protected StringBuilder circuitBuilder;
 	protected String netList = "";
@@ -65,7 +64,7 @@ public class ElectricNetwork implements INGCallback {
 	public void loadNBT(ElectricNetworkHandlerCapability handler, CompoundTag tag) {
 		ListTag componentsTag = tag.getList("Components", ListTag.TAG_COMPOUND);
 		componentsTag.stream().forEach((componentTag) -> {
-			this.components.add(Component.deserializeNbt(handler.getLevel(), (CompoundTag) componentTag));
+			this.components.add(Component.deserializeNbt((CompoundTag) componentTag));
 		});
 		if (tag.contains("Circuit")) {
 			String circuitName = tag.getString("Circuit");
@@ -96,7 +95,6 @@ public class ElectricNetwork implements INGCallback {
 		} else {
 			this.netList = "";
 		}
-		//this.lastUpdated = frame;
 	}
 	
 	public boolean isPlotEmpty() {
@@ -110,7 +108,7 @@ public class ElectricNetwork implements INGCallback {
 	public void removeInvalidComponents() {
 		List<Component<?, ?, ?>> invalid = new ArrayList<>();
 		for (Component<?, ?, ?> component : this.components) {
-			if (component == null || component.instance() == null) invalid.add(component);
+			if (component == null || component.instance(null) == null) invalid.add(component);
 		}
 		invalid.forEach(c -> components.remove(c));
 	}
@@ -119,11 +117,7 @@ public class ElectricNetwork implements INGCallback {
 	public String toString() {
 		return isPlotEmpty() ? "EMPTY" : (this.netList == null ? this.circuitBuilder.toString() : netList);
 	}
-
-//	public boolean updatedInFrame(long frame) {
-//		return this.lastUpdated == frame;
-//	}
-
+	
 	public void terminateExecution() {
 		synchronized (ngLinkLock) {
 			if (this.nglink.isInitialized()) {

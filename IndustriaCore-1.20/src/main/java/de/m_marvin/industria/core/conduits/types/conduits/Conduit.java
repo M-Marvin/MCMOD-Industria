@@ -19,11 +19,13 @@ import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.registries.Conduits;
 import de.m_marvin.industria.core.registries.ParticleTypes;
+import de.m_marvin.industria.core.util.Formater;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.NBTUtility;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -38,6 +40,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -58,6 +61,11 @@ public class Conduit {
 		this.item = item;
 		this.texture = texture;
 		this.soundType = sound;
+	}
+	
+	public void appendHoverText(Level level, List<Component> tooltip, TooltipFlag flags) {
+		tooltip.add(Formater.build().appand(Component.translatable("industriacore.tooltip.conduit.name", this.getName())).withStyle(ChatFormatting.GRAY).component());
+		tooltip.add(Formater.build().appand(Component.translatable("industriacore.tooltip.conduit.maxClampDistance", this.getConduitType().getClampingLength())).withStyle(ChatFormatting.GRAY).component());
 	}
 	
 	public SoundType getSoundType() {

@@ -1,0 +1,52 @@
+{
+	"type":	"minecraft:block",
+	"pools": [
+		{
+			"bonus_rolls": 0.0,
+			"entries": [
+				{
+					"type": "minecraft:item",
+					"conditions": [
+						{
+							"block": "industria:portable_coal_generator",
+							"condition": "minecraft:block_state_property",
+							"properties": {
+								"mbpos_x": 0
+							}
+						}
+					],
+					"functions": [
+						{
+							"function": "minecraft:copy_nbt",
+							"ops": [
+								{
+									"op": "replace",
+									"source": "Water",
+									"target": "BlockEntityTag.Water"
+								},
+								{
+									"op": "replace",
+									"source": "Fuel",
+									"target": "BlockEntityTag.Fuel"
+								},
+								{
+									"op": "replace",
+									"source": "BurnTime",
+									"target": "BlockEntityTag.BurnTime"
+								},
+								{
+									"op": "replace",
+									"source": "MaxBurnTime",
+									"target": "BlockEntityTag.MaxBurnTime"
+								}
+							],
+							"source": "block_entity"
+						}
+					],
+					"name": "industria:portable_coal_generator"
+				}
+			],
+			"rolls": 1.0
+		}
+	]
+}

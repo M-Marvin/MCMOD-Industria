@@ -23,7 +23,12 @@ import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.industria.core.util.blocks.BaseEntityMultiBlock;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -121,6 +126,53 @@ public class PortableCoalGeneratorBlock extends BaseEntityMultiBlock implements 
 	}
 	
 	@Override
+	public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
+		
+		if (pState.getValue(BlockStateProperties.LIT)) {
+			
+			double d0 = (double)pPos.getX() + 0.5D;
+			double d1 = (double)pPos.getY();
+			double d2 = (double)pPos.getZ() + 0.5D;
+			
+			double power = getPower(pState, pLevel, pPos);
+			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this);
+			double loadP = Math.max(0, parametrics.getPowerPercentageP(power) - 1);
+			
+			if (loadP < pRandom.nextFloat()) return;
+			
+			if (getMBPos(pState).equals(new Vec3i(1, 0, 0))) {
+				
+				pLevel.playLocalSound(d0, d1, d2, SoundEvents.FURNACE_FIRE_CRACKLE, SoundSource.BLOCKS, 1.0F, 1.0F, false);
+				
+				Direction direction = pState.getValue(BlockStateProperties.HORIZONTAL_FACING);
+				Direction.Axis direction$axis = direction.getAxis();
+				double d4 = pRandom.nextDouble() * 0.3D - 0.04D;
+				double d5 = direction$axis == Direction.Axis.X ? (double)direction.getStepX() * 0.52D : d4;
+				double d6 = pRandom.nextDouble() * 0.2D  + 0.2;
+				double d7 = direction$axis == Direction.Axis.Z ? (double)direction.getStepZ() * 0.52D : d4;
+				pLevel.addParticle(ParticleTypes.SMOKE, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
+				pLevel.addParticle(ParticleTypes.FLAME, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
+				
+			} else {
+				
+				// TODO Sound
+				
+				for (int i = 0; i < 10; i++) {
+					Direction direction = pState.getValue(BlockStateProperties.HORIZONTAL_FACING);
+					Direction.Axis direction$axis = direction.getAxis();
+					double d4 = pRandom.nextDouble() * 0.3D - 0.04D;
+					double d5 = direction$axis == Direction.Axis.Z ? (double)direction.getStepZ() * 0.2D : d4;
+					double d6 = pRandom.nextDouble() * 0.2D  + 1.2;
+					double d7 = direction$axis == Direction.Axis.X ? (double)direction.getStepX() * 0.2D : d4;
+					pLevel.addParticle(ParticleTypes.POOF, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.2D, 0.0D);
+				}
+				
+			}
+		}
+		
+	}
+	
+	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
 		return getMBPos(pState).equals(new Vec3i(0, 0, 0)) ? createTickerHelper(pBlockEntityType, ModBlockEntityTypes.PORTABLE_COAL_GENERATOR.get(), PortableCoalGeneratorBlockEntity::tick) : null;
 	}
@@ -164,8 +216,9 @@ public class PortableCoalGeneratorBlock extends BaseEntityMultiBlock implements 
 	
 	@Override
 	public double getVoltage(BlockState state, Level level, BlockPos pos) {
-		BlockPos connectorBlock = getBlockAt(pos, state, new Vec3i(1, 0, 0));
-		if (level.getBlockEntity(pos) instanceof PortableCoalGeneratorBlockEntity generator) {
+		BlockPos blockEntityPos = getMasterBlockEntityBlock(state, pos);
+		BlockPos connectorBlock = getBlockAt(getCenterBlock(pos, state), state, new Vec3i(1, 0, 0));
+		if (level.getBlockEntity(blockEntityPos) instanceof PortableCoalGeneratorBlockEntity generator) {
 			String[] wireLanes = generator.getNodeLanes();
 			return ElectricUtility.getVoltageBetween(level, new NodePos(connectorBlock, 0), new NodePos(connectorBlock, 0), 0, 1, wireLanes[0], wireLanes[1]);
 		}
@@ -174,8 +227,9 @@ public class PortableCoalGeneratorBlock extends BaseEntityMultiBlock implements 
 	
 	@Override
 	public double getPower(BlockState state, Level level, BlockPos pos) {
-		BlockPos connectorBlock = getBlockAt(pos, state, new Vec3i(1, 0, 0));
-		if (level.getBlockEntity(pos) instanceof PortableCoalGeneratorBlockEntity generator) {
+		BlockPos blockEntityPos = getMasterBlockEntityBlock(state, pos);
+		BlockPos connectorBlock = getBlockAt(getCenterBlock(pos, state), state, new Vec3i(1, 0, 0));
+		if (level.getBlockEntity(blockEntityPos) instanceof PortableCoalGeneratorBlockEntity generator) {
 			String[] wireLanes = generator.getNodeLanes();
 			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(connectorBlock, 0), new NodePos(connectorBlock, 0), 2, 0, "power_shunt", wireLanes[0]);
 			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this);

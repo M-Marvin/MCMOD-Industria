@@ -39,7 +39,7 @@ public class WireHolderBlock extends Block implements IElectricConnector {
 			.addModifier(BlockStateProperties.FACING, NodePointSupplier.FACING_MODIFIER_DEFAULT_NORTH);
 	public static final int NODE_COUNT = 1;
 	
-	public static final VoxelShape SHAPE = VoxelShapeUtility.box(6, 0, 6, 10, 6, 10);
+	public static final VoxelShape SHAPE = VoxelShapeUtility.box(6, 1, 6, 10, 6, 10);
 	
 	public WireHolderBlock(Properties pProperties) {
 		super(pProperties);

@@ -22,14 +22,17 @@
 "industriacore.commands.contraption.find.found":	"Vorrichtung befindet sich bei %1$s",
 "industriacore.commands.contraption.name.set":		"Name der Vorrichtung zu '%1$s' gesetzt",
 "industriacore.commands.coordinates":			"[%1$s %2$s %3$s]",
-"industriacore.command.fixelectrics.noelectric":	"Block bei %1$s %2$s %3$s hat keine elektrischen Eigenschaften! ",
-"industriacore.command.fixelectrics.success":		"Block bei %1$s %2$s %3$s aktualisiert",
-"industriacore.command.fixelectrics.multisuccess": 	"%1$s Bl\u00fcke aktualisiert",
+"industriacore.command.fixelectrics.noelectric":	"Kein Block oder Conduit mit elektrischen Eigenschaften! ",
+"industriacore.command.fixelectrics.success":		"%1$s Blöcke und %2$s Conduits aktualisiert",
 "industriacore.command.fixelectrics.areatolarge":	"Bereich zu groß! %1$s > %2$s",
 
 "industriacore.argument.contraption.notFound":		"Vorrichtung '%s' nicht gefunden!",
 "industriacore.argument.conduit.notfound":		"Unbekannte Leitung '%s'",
 
-"block.industriacore.power_source": 			"Spannungsquelle"
+"block.industriacore.power_source": 			"Spannungsquelle",
+
+"industriacore.tooltip.conduit.name": "Leitung: %1$s",
+"industriacore.tooltip.conduit.maxClampDistance": "Spannweite: %1$s m",
+"industriacore.tooltip.electricconduit.resistance": "Widerstand: %1$s \u03a9/m"
 
 }

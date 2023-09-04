@@ -15,13 +15,13 @@ buildscript {
 
 plugins {
     id 'com.github.johnrengelman.shadow'
+    id 'eclipse'
 }
 
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
-apply plugin: 'eclipse'
 
 version = '0.1-alpha'
 group = 'de.m_marvin.industriacore' // http://maven.apache.org/guides/mini/guide-naming-conventions.html

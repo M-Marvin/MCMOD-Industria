@@ -1,10 +1,8 @@
 package de.m_marvin.industria.core.util.blocks;
 
-import java.util.List;
 import java.util.stream.IntStream;
 
 import de.m_marvin.industria.core.util.MathUtility;
-import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -21,13 +19,11 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.HitResult;
 
 public abstract class BaseEntityMultiBlock extends BaseEntityBlock {
@@ -114,11 +110,15 @@ public abstract class BaseEntityMultiBlock extends BaseEntityBlock {
 	}
 	
 	public Vec3i getMBPos(BlockState state) {
-		return new Vec3i(
-				this.mbposProperties[0] != null ? state.getValue(this.mbposProperties[0]) : 0,
-				this.mbposProperties[1] != null ? state.getValue(this.mbposProperties[1]) : 0,
-				this.mbposProperties[2] != null ? state.getValue(this.mbposProperties[2]) : 0
-		);
+		try {
+			return new Vec3i(
+					this.mbposProperties[0] != null ? state.getValue(this.mbposProperties[0]) : 0,
+					this.mbposProperties[1] != null ? state.getValue(this.mbposProperties[1]) : 0,
+					this.mbposProperties[2] != null ? state.getValue(this.mbposProperties[2]) : 0
+			);
+		} catch (IllegalArgumentException e) {
+			return new Vec3i(0, 0, 0);
+		}
 	}
 	
 	@Override
@@ -159,7 +159,7 @@ public abstract class BaseEntityMultiBlock extends BaseEntityBlock {
 		return new BlockPos(centerPos.getX() + mbOffset.x, centerPos.getY() + mbOffset.y, centerPos.getZ() + mbOffset.z);
 	}
 	
-	protected void breakMultiBlock(Level level, BlockPos pos, BlockState state, boolean removeClicked, boolean makeParticles) {
+	protected void breakMultiBlock(Level level, BlockPos pos, BlockState state, boolean removeClicked, boolean dropBlock) {
 
 		Vec3i mbPos = getMBPos(state);
 		Direction orientation = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
@@ -174,11 +174,7 @@ public abstract class BaseEntityMultiBlock extends BaseEntityBlock {
 					BlockState breakState = level.getBlockState(breakPos);
 					if (!removeClicked && breakPos.equals(pos)) continue;
 					if (breakState.getBlock() == this) {
-						if (makeParticles) {
-							level.destroyBlock(breakPos, false);
-						} else {
-							level.setBlock(breakPos, Blocks.AIR.defaultBlockState(), 3);
-						}
+						level.destroyBlock(breakPos, dropBlock);
 					}
 				}
 			}
@@ -211,16 +207,13 @@ public abstract class BaseEntityMultiBlock extends BaseEntityBlock {
 		}
 	}
 	
-	public abstract BlockPos getMasterBlockEntityBlock(BlockState state, BlockPos pos);
-	
-	@SuppressWarnings("deprecation")
 	@Override
-	public List<ItemStack> getDrops(BlockState pState, net.minecraft.world.level.storage.loot.LootParams.Builder pParams) {
-		BlockPos pos = MathUtility.toBlockPos(Vec3d.fromVec(pParams.getParameter(LootContextParams.ORIGIN)));
-		BlockPos blockEntityPos = getMasterBlockEntityBlock(pState, pos);
-		BlockEntity blockEntity = pParams.getLevel().getBlockEntity(blockEntityPos);
-		return super.getDrops(pState, pParams.withParameter(LootContextParams.BLOCK_ENTITY, blockEntity));
+	public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
+		super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
+		breakMultiBlock(pLevel, pPos, pState, true, pPlayer.hasCorrectToolForDrops(pState) && !pPlayer.isCreative());
 	}
+	
+	public abstract BlockPos getMasterBlockEntityBlock(BlockState state, BlockPos pos);
 	
 	@Override
 	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {

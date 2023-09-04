@@ -1,5 +1,4 @@
 {
-	"render_type": "cutout_mipped",
 	"credit": "Made with Blockbench",
 	"textures": {
 		"5": "industria:block/machines/portable_fuel_generator_front_active"

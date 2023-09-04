@@ -162,10 +162,10 @@ public class PortableCoalGeneratorBlockEntity extends BlockEntity implements IJu
 		super.saveAdditional(pTag);
 		pTag.putString("LiveWireLane", this.nodeLanes[0]);
 		pTag.putString("NeutralWireLane", this.nodeLanes[1]);
-		pTag.put("Fuel", this.getFuelStorage().save(new CompoundTag()));
-		pTag.put("Water", this.getWaterStorage().writeToNBT(new CompoundTag()));
-		pTag.putInt("BurnTime", this.burnTime);
-		pTag.putInt("MaxBurnTime", this.maxBurnTime);
+		if (!this.getFuelStorage().isEmpty()) pTag.put("Fuel", this.getFuelStorage().save(new CompoundTag()));
+		if (!this.getWaterStorage().isEmpty()) pTag.put("Water", this.getWaterStorage().writeToNBT(new CompoundTag()));
+		if (this.burnTime > 0) pTag.putInt("BurnTime", this.burnTime);
+		if (this.maxBurnTime > 0) pTag.putInt("MaxBurnTime", this.maxBurnTime);
 		pTag.putFloat("fuelTimer", this.fuelTimer);
 		pTag.putFloat("waterTimer", this.waterTimer);
 	}
@@ -230,6 +230,9 @@ public class PortableCoalGeneratorBlockEntity extends BlockEntity implements IJu
 
 	@Override
 	public BlockPos getJunctionBlockPos() {
+		if (this.getBlockState().getBlock() instanceof BaseEntityMultiBlock multiBlock) {
+			return multiBlock.getBlockAt(multiBlock.getCenterBlock(worldPosition, getBlockState()), getBlockState(), new Vec3i(1, 0, 0));
+		}
 		return this.worldPosition;
 	}
 	

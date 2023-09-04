@@ -13,11 +13,13 @@ import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.circuits.Circuits;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
+import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -29,10 +31,35 @@ public class ElectricUtility {
 	}
 	
 	public static Set<ElectricNetworkHandlerCapability.Component<?, ?, ?>> findComponentsOnNode(Level level, NodePos node) {
-		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level,	Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 		return handler.findComponentsOnNode(node);
 	}
 
+	public static Set<Component<?, ?, ?>> findComponentsInChunk(Level level, ChunkPos chunkPos) {
+		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		return handler.findComponentsInChunk(chunkPos);
+	}
+	
+	public static Set<Component<?, ?, ?>> findComponentsConnectedWith(Level level, Component<?, ?, ?>... components) {
+		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		return handler.findComponentsConnectedWith(components);
+	}
+	
+	public static ElectricNetwork getCircuitWithComponent(Level level, Component<?, ?, ?> component) {
+		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		return handler.getCircuitWithComponent(component);
+	}
+	
+	public static <I, P, T> Component<I, P, T> getComponentAt(Level level, P position) {
+		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		return handler.getComponentAt(position);
+	}
+	
+	public static boolean isInNetwork(Level level, Component<?, ?, ?> component) {
+		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		return handler.isInNetwork(component);
+	}
+	
 	public static String[] getLaneLabelsSummarized(Level level, NodePos node) {
 		List<String[]> laneLabels = getLaneLabels(level, node, Component::isWire);
 		int laneCount = laneLabels.stream().mapToInt(l -> l.length).max().orElseGet(() -> 0);

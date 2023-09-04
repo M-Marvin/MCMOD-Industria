@@ -15,13 +15,13 @@ buildscript {
 
 plugins {
     id 'com.github.johnrengelman.shadow'
+    id 'eclipse'
 }
 
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
-apply plugin: 'eclipse'
 
 version = '0.1-alpha'
 group = 'de.m_marvin.industria' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -138,7 +138,7 @@ dependencies {
 	implementation "com.github.M-Marvin:LIBRARY-NGLink:acf40e6a2a"
 	implementation "com.github.M-Marvin:LIBRARY-UnifiedVectors:ef191368b9"
  	implementation project(path: ":IndustriaCore-1.20", configuration: 'shadow')
- 	runtimeOnly "industria:industriacore:1.0"
+ 	runtimeOnly "industria:industriacore:0.1-alpha"
  	
  	// Code Dependencies
 	

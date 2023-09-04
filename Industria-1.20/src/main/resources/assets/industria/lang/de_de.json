@@ -41,8 +41,7 @@
 "conduit.industria.insulated_gold_wire":		"Goldkabel",
 "conduit.industria.insulated_tin_wire":			"Zinnkabel",
 
-"industria.tooltip.wire_coil.wire_on_coil":		"Verbleibend: %1$s",
-"industria.tooltip.wire_coil.wire_type":		"Leitungsart: %1$s",
+"industria.tooltip.wire_coil.wireOnCoil":		"Verbleibend: %1$s m",
 
 "industria.creative_tab.tools":				"Werkzeuge",
 "industria.creative_tab.machines":			"Maschinen"

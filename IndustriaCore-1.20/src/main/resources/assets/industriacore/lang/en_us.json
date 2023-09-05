@@ -22,9 +22,9 @@
 "industriacore.commands.contraption.find.found":	"Contraption located at %1$s",
 "industriacore.commands.contraption.name.set":		"Name of Contraption set to '%1$s'",
 "industriacore.commands.coordinates":			"[%1$s %2$s %3$s]",
-"industriacore.command.fixelectrics.noelectric":	"Not a block or conduit with electric properties!",
-"industriacore.command.fixelectrics.success":		"Updated %1$s blocks and %2$s conduits",
-"industriacore.command.fixelectrics.areatolarge":	"Space too large! %1$s > %2$s",
+"industriacore.commands.fixelectrics.noelectric":	"Not a block or conduit with electric properties!",
+"industriacore.commands.fixelectrics.success":		"Updated %1$s blocks and %2$s conduits",
+"industriacore.commands.fixelectrics.areatolarge":	"Space too large! %1$s > %2$s",
 
 "industriacore.argument.contraption.notFound":		"Contraption '%s' not found!",
 "industriacore.argument.conduit.id.invalid":     	"Conduit '%s unknown'",

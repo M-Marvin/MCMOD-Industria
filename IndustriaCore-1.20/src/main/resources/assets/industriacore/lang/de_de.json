@@ -22,9 +22,9 @@
 "industriacore.commands.contraption.find.found":	"Vorrichtung befindet sich bei %1$s",
 "industriacore.commands.contraption.name.set":		"Name der Vorrichtung zu '%1$s' geändert",
 "industriacore.commands.coordinates":			"[%1$s %2$s %3$s]",
-"industriacore.command.fixelectrics.noelectric":	"Kein/e Block oder Leitung mit elektrischen Eigenschaften!",
-"industriacore.command.fixelectrics.success":		"%1$s Blöcke und %2$s Leitungen aktualisiert",
-"industriacore.command.fixelectrics.areatolarge":	"Bereich zu gro\u00df! %1$s > %2$s",
+"industriacore.commands.fixelectrics.noelectric":	"Kein/e Block oder Leitung mit elektrischen Eigenschaften!",
+"industriacore.commands.fixelectrics.success":		"%1$s Blöcke und %2$s Leitungen aktualisiert",
+"industriacore.commands.fixelectrics.areatolarge":	"Bereich zu gro\u00df! %1$s > %2$s",
 
 "industriacore.argument.contraption.notFound":		"Vorrichtung '%s' nicht gefunden!",
 "industriacore.argument.conduit.notfound":		"Unbekannte Leitung '%s'",

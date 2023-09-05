@@ -22,9 +22,9 @@
 "industriacore.commands.contraption.find.found":	"V\u00fdstroj je na %1$s",
 "industriacore.commands.contraption.name.set":		"N\u00e1zov v\u00fdstroja sa bol zmenen\u00fd na '%1$s'",
 "industriacore.commands.coordinates":			"[%1$s %2$s %3$s]",
-"industriacore.command.fixelectrics.noelectric":	"\u017diadna kocka alebo linka s elektrick\u00fdmi vlastnos\u0165ami!",
-"industriacore.command.fixelectrics.success":		"%1$s kocky a %2$s linky boli aktualizovan\u00e9",	
-"industriacore.command.fixelectrics.areatolarge":	"Pr\u00edli\u0161 ve\u013eka oblas\u0165! %1$s > %2$s",
+"industriacore.commands.fixelectrics.noelectric":	"\u017diadna kocka alebo linka s elektrick\u00fdmi vlastnos\u0165ami!",
+"industriacore.commands.fixelectrics.success":		"%1$s kocky a %2$s linky boli aktualizovan\u00e9",	
+"industriacore.commands.fixelectrics.areatolarge":	"Pr\u00edli\u0161 ve\u013eka oblas\u0165! %1$s > %2$s",
 
 "industriacore.argument.conduit.id.invalid":     	"Nezn\u00e1ma linka '%s'",
 "industriacore.argument.contraption.notFound":		"V\u00fdstroj '%s' nebol n\u00e1jden\u00fd!",

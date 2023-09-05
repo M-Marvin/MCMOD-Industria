@@ -463,3 +463,52 @@ org.spongepowered.asm.mixin.transformer.throwables.InvalidInterfaceMixinExceptio
 [05Sept.2023 15:56:02.973] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
 [05Sept.2023 15:56:02.973] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
 [05Sept.2023 15:56:02.973] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[05Sept.2023 15:58:51.568] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Saving and pausing game...
+[05Sept.2023 15:58:51.579] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:overworld
+[05Sept.2023 15:58:51.580] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 55 conduits
+[05Sept.2023 15:58:51.581] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 22 electric networks
+[05Sept.2023 15:58:51.581] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 131 electric components
+[05Sept.2023 15:58:51.611] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:the_end
+[05Sept.2023 15:58:51.611] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[05Sept.2023 15:58:51.611] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[05Sept.2023 15:58:51.611] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[05Sept.2023 15:58:51.612] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:the_nether
+[05Sept.2023 15:58:51.612] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[05Sept.2023 15:58:51.612] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[05Sept.2023 15:58:51.612] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[05Sept.2023 16:02:14.718] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Saving and pausing game...
+[05Sept.2023 16:02:14.723] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:overworld
+[05Sept.2023 16:02:14.724] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 55 conduits
+[05Sept.2023 16:02:14.725] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 22 electric networks
+[05Sept.2023 16:02:14.725] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 131 electric components
+[05Sept.2023 16:02:14.754] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:the_end
+[05Sept.2023 16:02:14.754] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[05Sept.2023 16:02:14.754] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[05Sept.2023 16:02:14.754] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[05Sept.2023 16:02:14.755] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:the_nether
+[05Sept.2023 16:02:14.755] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[05Sept.2023 16:02:14.755] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[05Sept.2023 16:02:14.755] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[05Sept.2023 16:02:15.428] [Server thread/INFO] [net.minecraft.server.network.ServerGamePacketListenerImpl/]: Dev lost connection: Verbindung getrennt
+[05Sept.2023 16:02:15.428] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Dev hat das Spiel verlassen
+[05Sept.2023 16:02:15.446] [Server thread/INFO] [net.minecraft.server.network.ServerGamePacketListenerImpl/]: Stopping singleplayer server as player logged out
+[05Sept.2023 16:02:15.488] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Stopping server
+[05Sept.2023 16:02:15.488] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving players
+[05Sept.2023 16:02:15.488] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving worlds
+[05Sept.2023 16:02:15.873] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:overworld
+[05Sept.2023 16:02:15.873] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 55 conduits
+[05Sept.2023 16:02:15.874] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 22 electric networks
+[05Sept.2023 16:02:15.874] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 131 electric components
+[05Sept.2023 16:02:19.106] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:the_end
+[05Sept.2023 16:02:19.106] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[05Sept.2023 16:02:19.106] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[05Sept.2023 16:02:19.107] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[05Sept.2023 16:02:19.108] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:the_nether
+[05Sept.2023 16:02:19.108] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[05Sept.2023 16:02:19.108] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[05Sept.2023 16:02:19.108] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[05Sept.2023 16:02:19.125] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (Neue Welt): All chunks are saved
+[05Sept.2023 16:02:19.125] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[05Sept.2023 16:02:19.125] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[05Sept.2023 16:02:19.125] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage: All dimensions are saved
+[05Sept.2023 16:02:21.856] [Render thread/INFO] [net.minecraft.client.Minecraft/]: Stopping!

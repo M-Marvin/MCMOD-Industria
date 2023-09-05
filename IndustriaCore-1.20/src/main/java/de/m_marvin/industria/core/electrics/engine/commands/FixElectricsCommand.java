@@ -56,7 +56,7 @@ public class FixElectricsCommand {
 		int areaBlocks = (int) Math.pow(range, 3);
 		
 		if (areaBlocks > MAX_AREA_SIZE) {
-			source.getSource().sendFailure(Component.translatable("industriacore.command.fixelectrics.areatolarge", areaBlocks, MAX_AREA_SIZE));
+			source.getSource().sendFailure(Component.translatable("industriacore.commands.fixelectrics.areatolarge", areaBlocks, MAX_AREA_SIZE));
 			return 0;
 		}
 		
@@ -71,7 +71,7 @@ public class FixElectricsCommand {
 			}
 		}
 		
-		source.getSource().sendSuccess(() -> Component.translatable("industriacore.command.fixelectrics.success", fixedBlocks.size(), fixedConduits.size()), true);
+		source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.fixelectrics.success", fixedBlocks.size(), fixedConduits.size()), true);
 		return Command.SINGLE_SUCCESS;
 	}
 	
@@ -81,10 +81,10 @@ public class FixElectricsCommand {
 		Set<BlockPos> fixedBlocks = new HashSet<>();
 		fixBlockAndConduitsAt(level, position, fixedBlocks, fixedConduits);
 		if (fixedBlocks.size() > 0 || fixedConduits.size() > 0) {
-			source.getSource().sendSuccess(() -> Component.translatable("industriacore.command.fixelectrics.success", fixedBlocks.size(), fixedConduits.size()), true);
+			source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.fixelectrics.success", fixedBlocks.size(), fixedConduits.size()), true);
 			return Command.SINGLE_SUCCESS;
 		}
-		source.getSource().sendFailure(Component.translatable("industriacore.command.fixelectrics.noelectric", position.getX(), position.getY(), position.getZ()));
+		source.getSource().sendFailure(Component.translatable("industriacore.commands.fixelectrics.noelectric", position.getX(), position.getY(), position.getZ()));
 		return 0;
 	}
 	

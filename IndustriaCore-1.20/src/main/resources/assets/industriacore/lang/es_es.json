@@ -22,9 +22,9 @@
 "industriacore.commands.contraption.find.found":	"Dispositivo ubicado en %1$s",
 "industriacore.commands.contraption.name.set":		"Llamado el dispositivo '%1$s'",
 "industriacore.commands.coordinates":			"[%1$s %2$s %3$s]",
-"industriacore.command.fixelectrics.noelectric":	"\u00a1Sin bloque o conducto con propriedades el\u00e9ctricas!",
-"industriacore.command.fixelectrics.success":		"%1$s bloques y %2$s conductos actualizados ",
-"industriacore.command.fixelectrics.areatolarge":	"\u00a1Espaco demasiado largo! %1$s > %2$s",
+"industriacore.commands.fixelectrics.noelectric":	"\u00a1Sin bloque o conducto con propriedades el\u00e9ctricas!",
+"industriacore.commands.fixelectrics.success":		"%1$s bloques y %2$s conductos actualizados ",
+"industriacore.commands.fixelectrics.areatolarge":	"\u00a1Espaco demasiado largo! %1$s > %2$s",
 
 "industriacore.argument.conduit.id.invalid":     	"\u00a1Cable '%s' desconocido!",
 "industriacore.argument.contraption.notFound":		"\u00a1Dispositivo '%s' no encontrado!",

@@ -22,9 +22,9 @@
 "industriacore.commands.contraption.find.found":	"Appareil situ\u00e9 \u00e0 %1$s",
 "industriacore.commands.contraption.name.set":		"Nomm\u00e9 l\u2019appareil '%1$s'",
 "industriacore.commands.coordinates":			"[%1$s %2$s %3$s]",
-"industriacore.command.fixelectrics.noelectric":	"Pas un bloc ou une conduite avec des propri\u00e9t\u00e9s \u00e9lectriques! ",
-"industriacore.command.fixelectrics.success":		"%1$s blocs et %2$s conduites actualis\u00e9(e)s",
-"industriacore.command.fixelectrics.areatolarge":	"Espace trop grand! %1$s > %2$s",
+"industriacore.commands.fixelectrics.noelectric":	"Pas un bloc ou une conduite avec des propri\u00e9t\u00e9s \u00e9lectriques! ",
+"industriacore.commands.fixelectrics.success":		"%1$s blocs et %2$s conduites actualis\u00e9(e)s",
+"industriacore.commands.fixelectrics.areatolarge":	"Espace trop grand! %1$s > %2$s",
 
 "industriacore.argument.conduit.id.invalid":		"Conduite '%s' inconnu",
 "industriacore.argument.contraption.notFound":		"Appareil '%s' introuvable!",

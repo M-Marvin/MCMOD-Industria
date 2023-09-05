@@ -1,35 +1,38 @@
 {
 
-"industriacore.item.info.conduit.nodeSelect":   	"First Node selected (Abort with Shift + Right Click)",
-"industriacore.item.info.conduit.changeLength":  	"Length of Conduit: x%1$s (Abort with Shift + Right Click)",
+"industriacore.item.info.conduit.nodeSelect":   	"First node selected (Abort with Shift + Right Click)",
+"industriacore.item.info.conduit.changeLength":  	"Length of conduit: x%1$s (Abort with Shift + Right Click)",
 "industriacore.item.info.conduit.placed":     		"Conduit placed",
-"industriacore.item.info.conduit.abbort":     		"Placement of Conduit aborted",
-"industriacore.item.info.conduit.failed":     		"Placement of Conduit failed!",
+"industriacore.item.info.conduit.abbort":     		"Placement of conduit aborted",
+"industriacore.item.info.conduit.failed":     		"Placement of conduit failed!",
 "industriacore.item.info.conduit.toFarNodes":		"Conduit too long: %1$s > max. %2$s",
 
-"industriacore.commands.setconduit.success":    	"Changed Conduit beginning at %1$s %2$s %3$s",
+"industriacore.commands.setconduit.success":    	"Changed conduit beginning at %1$s %2$s %3$s",
 "industriacore.commands.setconduit.failure":    	"Placement of conduit impossible!",
 "industriacore.commands.contraption.remove.success":	"Contraption removed",
 "industriacore.commands.contraption.create.failed":	"Creation of Contraption failed!",
 "industriacore.commands.contraption.create.success": 	"Contraption created from blocks at %1$s %2$s %3$s",
-"industriacore.commands.contraption.create.toLarge": 	"Selected space with %1$sx%2$sx%3$s too large! (max. %4$sx%5$sx%6$s)",
+"industriacore.commands.contraption.create.toLarge": 	"Selected space too large: %1$sx%2$sx%3$s (max. %4$sx%5$sx%6$s)!",
 "industriacore.commands.contraption.teleport.success":	"Contraption teleported to %1$s %2$s %3$s",
-"industriacore.commands.contraption.assemble.toLarge":	"Number of blocks too high! (max. %1$s)",
+"industriacore.commands.contraption.assemble.failed":	"Assembly of contraption failed!",
 "industriacore.commands.contraption.assemble.success":	"Contraption assembled from blocks at %1$s %2$s %3$s",
-"industriacore.commands.contraption.assemble.failed":	"Assembly of Contraption failed!",
-"industriacore.commands.contraption.find.teleported":	"Teleported Player to Contraption at %1$s %2$s %3$s",
-"industriacore.commands.contraption.find.noplayer":	"Teleportation only possible for Players!",
+"industriacore.commands.contraption.assemble.toLarge":	"Amount of blocks too large! (max. %1$s)",
+"industriacore.commands.contraption.find.teleported":	"Teleported player to contraption at %1$s %2$s %3$s",
+"industriacore.commands.contraption.find.noplayer":	"Teleportation only possible for players!",
 "industriacore.commands.contraption.find.found":	"Contraption located at %1$s",
 "industriacore.commands.contraption.name.set":		"Name of Contraption set to '%1$s'",
 "industriacore.commands.coordinates":			"[%1$s %2$s %3$s]",
-"industriacore.command.fixelectrics.noelectric":	"Block at %1$s %2$s %3$s has no electric properties! ",
-"industriacore.command.fixelectrics.success":		"Updated Block at %1$s %2$s %3$s",
-"industriacore.command.fixelectrics.multisuccess": 	"Updated %1$s blocks",
+"industriacore.command.fixelectrics.noelectric":	"Not a block or conduit with electric properties!",
+"industriacore.command.fixelectrics.success":		"Updated %1$s blocks and %2$s conduits",
 "industriacore.command.fixelectrics.areatolarge":	"Space too large! %1$s > %2$s",
 
-"industriacore.argument.conduit.id.invalid":     	"Conduit '%s unknown'",
 "industriacore.argument.contraption.notFound":		"Contraption '%s' not found!",
+"industriacore.argument.conduit.id.invalid":     	"Conduit '%s unknown'",
 
-"block.industriacorecore.power_source": 		"Voltage source"
+"block.industriacorecore.power_source": 		"Voltage source",
+
+"industriacore.tooltip.conduit.name":			"Conduit: %1$s",
+"industriacore.tooltip.conduit.maxClampDistance":	"Range: %1$s m",
+"industriacore.tooltip.electricconduit.resistance":	"Resistance: %1$s \u03a9/m"
 
 }

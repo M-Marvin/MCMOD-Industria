@@ -1,0 +1,38 @@
+{
+
+"industriacore.item.info.conduit.nodeSelect":		"Erste punkt geselecteerd (Annuleer met Shift + klik met de rechtermuisknop)",
+"industriacore.item.info.conduit.changeLength":		"Lengte van de lijn: x%1$s (Annuleer met Shift + klik met de rechtermuisknop)",
+"industriacore.item.info.conduit.placed":		"Lijn geplaatst",
+"industriacore.item.info.conduit.abbort":		"Plaatsing van de lijn geannuleerd",
+"industriacore.item.info.conduit.failed":		"Plaatsing van de lijn mislukt",
+"industriacore.item.info.conduit.toFarNodes":		"Lijn te lang: %1$s > max. %2$s",
+
+"industriacore.commands.setconduit.success":		"Lijn beginnend bij %1$s %2$s %3$s gewijzigt",
+"industriacore.commands.setconduit.failure":		"Plaatsing van de lijn niet mogelijk!",
+"industriacore.commands.contraption.remove.success":	"Apparaat verwijdert",
+"industriacore.commands.contraption.create.failed":	"Genereren van de apparaat mislukt!",
+"industriacore.commands.contraption.create.success": 	"Apparaat gegenereerd van blokken op %1$s %2$s %3$s",
+"industriacore.commands.contraption.create.toLarge": 	"Geselecteerd gebied te groot: %1$sx%2$sx%3$s (max. %4$sx%5$sx%6$s)!",
+"industriacore.commands.contraption.teleport.success":	"Apparaat geteleporteerd naar %1$s %2$s %3$s",
+"industriacore.commands.contraption.assemble.failed":	"Construeren van de apparaat mislukt!",
+"industriacore.commands.contraption.assemble.success":	"Apparaat geconstrueerd van blokken op %1$s %2$s %3$s",
+"industriacore.commands.contraption.assemble.toLarge":	"Aantal blokken te groot! (max. %1$s)",
+"industriacore.commands.contraption.find.teleported":	"Speler geteleporteerd naar apparaat op %1$s %2$s %3$s",
+"industriacore.commands.contraption.find.noplayer":	"Teleportatie alleen mogelijk for spelers!",
+"industriacore.commands.contraption.find.found":	"Apparaat staat op %1$s",
+"industriacore.commands.contraption.name.set":		"Naam van de apparaat ingesteld op '%1$s'",
+"industriacore.commands.coordinates":			"[%1$s %2$s %3$s]",
+"industriacore.command.fixelectrics.noelectric":	"Geen block of lijn met elektrische eigenschappen!",
+"industriacore.command.fixelectrics.success":		"%1$s blokken en %2$s lijnen bijgewerkt",
+"industriacore.command.fixelectrics.areatolarge":	"Gebied te groot! %1$s > %2$s",
+
+"industriacore.argument.contraption.notFound":		"Apparaat '%s' niet gevonden!",
+"industriacore.argument.conduit.notfound":		"Onbekende lijn '%s'",
+
+"block.industriacore.power_source": 			"Voltage bron",
+
+"industriacore.tooltip.conduit.name":			"Lijn: %1$s",
+"industriacore.tooltip.conduit.maxClampDistance":	"Spanwijdte: %1$s m",
+"industriacore.tooltip.electricconduit.resistance":	"Weerstand: %1$s \u03a9/m"
+
+}

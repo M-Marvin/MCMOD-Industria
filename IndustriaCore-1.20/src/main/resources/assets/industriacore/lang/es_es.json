@@ -1,35 +1,38 @@
 {
 
 "industriacore.item.info.conduit.nodeSelect":   	"Primer nodo seleccionado (Cancelar con May\u00fas + clic derecho)",
-"industriacore.item.info.conduit.changeLength":  	"Longitud del cable: x%1$s (Cancelar con May\u00fas + clic derecho)",
-"industriacore.item.info.conduit.placed":     		"Cable colocado",
-"industriacore.item.info.conduit.abbort":     		"Colocaci\u00f3n de cable abortada",
-"industriacore.item.info.conduit.failed":     		"\u00a1Colocaci\u00f3n de cable fall\u00f3!",
-"industriacore.item.info.conduit.toFarNodes":		"Cable demasiado largo: %1$s > máx. %2$s",
+"industriacore.item.info.conduit.changeLength":  	"Longitud del conducto: x%1$s (Cancelar con May\u00fas + clic derecho)",
+"industriacore.item.info.conduit.placed":     		"Conducto colocado",
+"industriacore.item.info.conduit.abbort":     		"Colocaci\u00f3n de ccoducto abortada",
+"industriacore.item.info.conduit.failed":     		"\u00a1Colocaci\u00f3n de conducto fall\u00f3!",
+"industriacore.item.info.conduit.toFarNodes":		"Conducto demasiado largo: %1$s > máx. %2$s",
 
-"industriacore.commands.setconduit.success":    	"Cambi\u00f3 el cable a partir de %1$s %2$s %3$s",
-"industriacore.commands.setconduit.failure":    	"\u00a1Colocaci\u00f3n de cable no posible!",
+"industriacore.commands.setconduit.success":    	"Cambi\u00f3 el conducto a partir de %1$s %2$s %3$s",
+"industriacore.commands.setconduit.failure":    	"\u00a1Colocaci\u00f3n de conducto no posible!",
 "industriacore.commands.contraption.remove.success":	"Dispositivo eliminado",
 "industriacore.commands.contraption.create.failed":	"\u00a1Creaci\u00f3n de dispositivo fall\u00f3!",
 "industriacore.commands.contraption.create.success": 	"Dispositivo creado a partir de los bloques en %1$s %2$s %3$s",
 "industriacore.commands.contraption.create.toLarge": 	"Espaco seleccionado demasiado grande: %1$sx%2$sx%3$s (máx. %4$sx%5$sx%6$s)",
 "industriacore.commands.contraption.teleport.success":	"Dispositivo teletransportado a %1$s %2$s %3$s",
-"industriacore.commands.contraption.assemble.toLarge":	"\u00a1N\u00famero de bloques demasiado grande! (máx. %1$s)",
-"industriacore.commands.contraption.assemble.success":	"Dispositivo ensamblado a partir de los bloques en %1$s %2$s %3$s",
 "industriacore.commands.contraption.assemble.failed":	"Ensamblado de dispositivo fall\u00f3!",
+"industriacore.commands.contraption.assemble.success":	"Dispositivo ensamblado a partir de los bloques en %1$s %2$s %3$s",
+"industriacore.commands.contraption.assemble.toLarge":	"\u00a1N\u00famero de bloques demasiado grande! (máx. %1$s)",
 "industriacore.commands.contraption.find.teleported":	"Jugador teletransportado a dispositivo en %1$s %2$s %3$s",
 "industriacore.commands.contraption.find.noplayer":	"\u00a1Teletransportarse s\u00f3lo posible para jugadores!",
 "industriacore.commands.contraption.find.found":	"Dispositivo ubicado en %1$s",
 "industriacore.commands.contraption.name.set":		"Llamado el dispositivo '%1$s'",
 "industriacore.commands.coordinates":			"[%1$s %2$s %3$s]",
-"industriacore.command.fixelectrics.noelectric":	"\u00a1Bloque en %1$s %2$s %3$s no tiene propriedades eléctricas! ",
-"industriacore.command.fixelectrics.success":		"Bloque en %1$s %2$s %3$s actualizado",
-"industriacore.command.fixelectrics.multisuccess": 	"%1$s Bloques actualizados",
+"industriacore.command.fixelectrics.noelectric":	"\u00a1Sin bloque o conducto con propriedades el\u00e9ctricas!",
+"industriacore.command.fixelectrics.success":		"%1$s bloques y %2$s conductos actualizados ",
 "industriacore.command.fixelectrics.areatolarge":	"\u00a1Espaco demasiado largo! %1$s > %2$s",
 
 "industriacore.argument.conduit.id.invalid":     	"\u00a1Cable '%s' desconocido!",
 "industriacore.argument.contraption.notFound":		"\u00a1Dispositivo '%s' no encontrado!",
 
-"block.industriacorecore.power_source": 		"Fuente de voltaje"
+"block.industriacorecore.power_source": 		"Fuente de voltaje",
+
+"industriacore.tooltip.conduit.name":			"Conducto: %1$s",
+"industriacore.tooltip.conduit.maxClampDistance":	"Luz: %1$s m",
+"industriacore.tooltip.electricconduit.resistance":	"Resistencia: %1$s \u03a9/m"
 
 }

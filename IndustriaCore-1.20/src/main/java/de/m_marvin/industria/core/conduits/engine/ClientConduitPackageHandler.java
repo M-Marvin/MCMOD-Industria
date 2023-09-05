@@ -14,7 +14,7 @@ import de.m_marvin.industria.core.conduits.engine.network.SSyncConduitPackage;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
-import de.m_marvin.industria.core.util.SyncRequestType;
+import de.m_marvin.industria.core.util.types.SyncRequestType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;

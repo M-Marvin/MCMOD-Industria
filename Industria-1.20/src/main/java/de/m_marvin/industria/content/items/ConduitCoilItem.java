@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 import de.m_marvin.industria.content.blockentities.ConduitCoilBlockEntity;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.items.AbstractConduitBlockItem;
-import de.m_marvin.industria.core.util.Formater;
+import de.m_marvin.industria.core.util.Formatter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -37,6 +37,17 @@ public class ConduitCoilItem extends AbstractConduitBlockItem {
 	public int getMaxPlacingLength(ItemStack stack) {
 		int length = stack.getOrCreateTag().getInt("WireLength");
 		return length * Conduit.BLOCKS_PER_WIRE_ITEM;
+	}
+	
+	public int getConduitsOnCoil(ItemStack stack) {
+		if (stack.getTag() != null) {
+			return stack.getTag().getInt("WireLength");
+		}
+		return 0;
+	}
+	
+	public int getMaxConduits() {
+		return 32;
 	}
 	
 	@Override
@@ -81,7 +92,7 @@ public class ConduitCoilItem extends AbstractConduitBlockItem {
 	
 	@Override
 	public void appendHoverText(ItemStack pStack, Level pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
-		pTooltip.add(Formater.build().appand(Component.translatable("industria.tooltip.wire_coil.wireOnCoil", pStack.getOrCreateTag().getInt("WireLength") * Conduit.BLOCKS_PER_WIRE_ITEM)).withStyle(ChatFormatting.GRAY).component());
+		pTooltip.add(Formatter.build().appand(Component.translatable("industria.tooltip.wire_coil.wireOnCoil", pStack.getOrCreateTag().getInt("WireLength") * Conduit.BLOCKS_PER_WIRE_ITEM)).withStyle(ChatFormatting.GRAY).component());
 		super.appendHoverText(pStack, pLevel, pTooltip, pFlag);
 	}
 	

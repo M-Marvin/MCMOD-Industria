@@ -2,7 +2,8 @@ package de.m_marvin.industria.content.registries;
 
 import de.m_marvin.industria.content.Industria;
 import de.m_marvin.industria.content.recipes.GeneratorFuelRecipeType;
-import de.m_marvin.industria.content.recipes.UniversalRecipeSerializer;
+import de.m_marvin.industria.content.recipes.WireCoilWindingRecipeType;
+import de.m_marvin.industria.core.util.recipes.UniversalRecipeSerializer;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -29,7 +30,8 @@ public class ModRecipeTypes {
 		};
 	}
 	
-	public static final RegistryObject<RecipeType<GeneratorFuelRecipeType>> GENERATOR_FUEL 						= RECIPE_TYPES.register("generator_fuel", () -> buildType("generator_fuel"));
-	public static final RegistryObject<RecipeSerializer<GeneratorFuelRecipeType>> GENERATOR_FUEL_SERIALIZER 	= RECIPE_SERIALIZERS.register("generator_fuel", () -> new UniversalRecipeSerializer<>(GeneratorFuelRecipeType::fromNetwork, GeneratorFuelRecipeType::toNetwork, GeneratorFuelRecipeType::fromJson));
+	public static final RegistryObject<RecipeType<GeneratorFuelRecipeType>> 		GENERATOR_FUEL 					= RECIPE_TYPES.register("generator_fuel", () -> buildType("generator_fuel"));
+	public static final RegistryObject<RecipeSerializer<GeneratorFuelRecipeType>> 	GENERATOR_FUEL_SERIALIZER 		= RECIPE_SERIALIZERS.register("generator_fuel", () -> new UniversalRecipeSerializer<>(GeneratorFuelRecipeType::fromNetwork, GeneratorFuelRecipeType::toNetwork, GeneratorFuelRecipeType::fromJson));
+	public static final RegistryObject<RecipeSerializer<WireCoilWindingRecipeType>> WIRE_COIL_WINDING_SERIALIZER 	= RECIPE_SERIALIZERS.register("wire_coil_winding", () -> new UniversalRecipeSerializer<>(WireCoilWindingRecipeType::fromNetwork, WireCoilWindingRecipeType::toNetwork, WireCoilWindingRecipeType::fromJson));
 	
 }

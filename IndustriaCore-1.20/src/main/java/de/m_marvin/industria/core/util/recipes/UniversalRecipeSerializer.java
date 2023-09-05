@@ -1,4 +1,4 @@
-package de.m_marvin.industria.content.recipes;
+package de.m_marvin.industria.core.util.recipes;
 
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;

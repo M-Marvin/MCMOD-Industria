@@ -24,7 +24,7 @@ apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 version = '0.1-alpha'
-group = 'de.m_marvin.industriacore' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = 'de.m_marvin.industriacore'
 archivesBaseName = 'industriacore'
  
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -35,7 +35,6 @@ println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getPro
 minecraft {
  
     mappings channel: 'parchment', version: '2023.08.13-1.20.1'
- 	//mappings channel: 'official', version: '1.20.1'
  	
  	accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
  	
@@ -136,10 +135,8 @@ dependencies {
  	implementation fg.deobf("curse.maven:valkyrienskies-258371:4654328")
  	
  	// Code Dependencies
-	shade "com.github.M-Marvin:LIBRARY-NGLink:acf40e6a2a"
-	shade "com.github.M-Marvin:LIBRARY-UnifiedVectors:ef191368b9"
-	//jarJar(group: "com.github.M-Marvin", name: "LIBRARY-NGLink", version: "844e6813c7e61b5127bead6deb7cea93990a24a3")
-	//jarJar(group: "com.github.M-Marvin", name: "LIBRARY-UnifiedVectors", version: "main-SNAPSHOT")
+	shade 'com.github.M-Marvin:LIBRARY-NGLink:v1.1'
+	shade 'com.github.M-Marvin:LIBRARY-UnifiedVectors:v1.2'
 	
 	// Mods used while testing
 	runtimeOnly fg.deobf("curse.maven:atlasviewer-633577:4597419")

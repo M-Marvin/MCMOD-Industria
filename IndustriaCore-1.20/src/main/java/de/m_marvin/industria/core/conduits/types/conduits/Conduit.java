@@ -19,7 +19,7 @@ import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.registries.Conduits;
 import de.m_marvin.industria.core.registries.ParticleTypes;
-import de.m_marvin.industria.core.util.Formater;
+import de.m_marvin.industria.core.util.Formatter;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.NBTUtility;
@@ -64,8 +64,8 @@ public class Conduit {
 	}
 	
 	public void appendHoverText(Level level, List<Component> tooltip, TooltipFlag flags) {
-		tooltip.add(Formater.build().appand(Component.translatable("industriacore.tooltip.conduit.name", this.getName())).withStyle(ChatFormatting.GRAY).component());
-		tooltip.add(Formater.build().appand(Component.translatable("industriacore.tooltip.conduit.maxClampDistance", this.getConduitType().getClampingLength())).withStyle(ChatFormatting.GRAY).component());
+		tooltip.add(Formatter.build().appand(Component.translatable("industriacore.tooltip.conduit.name", this.getName())).withStyle(ChatFormatting.GRAY).component());
+		tooltip.add(Formatter.build().appand(Component.translatable("industriacore.tooltip.conduit.maxClampDistance", this.getConduitType().getClampingLength())).withStyle(ChatFormatting.GRAY).component());
 	}
 	
 	public SoundType getSoundType() {

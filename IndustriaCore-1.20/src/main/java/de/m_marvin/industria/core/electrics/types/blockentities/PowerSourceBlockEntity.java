@@ -10,8 +10,8 @@ import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContaine
 import de.m_marvin.industria.core.electrics.types.containers.PowerSourceContainer;
 import de.m_marvin.industria.core.registries.BlockEntityTypes;
 import de.m_marvin.industria.core.registries.Blocks;
-import de.m_marvin.industria.core.util.Direction2d;
 import de.m_marvin.industria.core.util.GameUtility;
+import de.m_marvin.industria.core.util.types.Direction2d;
 import de.m_marvin.univec.impl.Vec2i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

@@ -4,7 +4,7 @@ import java.util.List;
 
 import de.m_marvin.industria.core.electrics.parametrics.DeviceParametrics;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider;
-import de.m_marvin.industria.core.util.Formater;
+import de.m_marvin.industria.core.util.Formatter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -24,8 +24,8 @@ public class ElectricBlockItem extends BlockItem {
 	public void appendHoverText(ItemStack pStack, Level pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
 		if (this.getBlock() instanceof IElectricInfoProvider provider) {
 			DeviceParametrics parametrics = provider.getParametrics(this.getBlock().defaultBlockState(), null, BlockPos.ZERO);
-			pTooltip.add(Formater.build().appand(Component.translatable("industriacore.tooltip.electricblock.voltage", parametrics.getNominalVoltage())).withStyle(ChatFormatting.GRAY).component());
-			pTooltip.add(Formater.build().appand(Component.translatable("industriacore.tooltip.electricblock.power", parametrics.getNominalPower())).withStyle(ChatFormatting.GRAY).component());
+			pTooltip.add(Formatter.build().appand(Component.translatable("industriacore.tooltip.electricblock.voltage", parametrics.getNominalVoltage())).withStyle(ChatFormatting.GRAY).component());
+			pTooltip.add(Formatter.build().appand(Component.translatable("industriacore.tooltip.electricblock.power", parametrics.getNominalPower())).withStyle(ChatFormatting.GRAY).component());
 		}
 		super.appendHoverText(pStack, pLevel, pTooltip, pFlag);
 	}

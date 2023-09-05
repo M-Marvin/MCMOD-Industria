@@ -9,49 +9,49 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 
 
-public class Formater {
+public class Formatter {
 	
 	protected MutableComponent textComponent;
 	
-	public static Formater build() {
-		return new Formater();
+	public static Formatter build() {
+		return new Formatter();
 	}
 	
-	public Formater appand(Component comp) {
+	public Formatter appand(Component comp) {
 		textComponent = (textComponent == null) ? (MutableComponent) comp : textComponent.append(comp);
 		return this;
 	}
 	
-	public Formater text(String s) {
+	public Formatter text(String s) {
 		return appand(Component.literal(s));
 	}
 	
-	public Formater translate(String key) {
+	public Formatter translate(String key) {
 		return appand(Component.translatable(key));
 	}
 
-	public Formater translate(String key, Object... args) {
+	public Formatter translate(String key, Object... args) {
 		return appand(Component.translatable(key, args));
 	}
 	
-	public Formater space() {
+	public Formatter space() {
 		return text(" ");
 	}
 	
-	public Formater space(int spaces) {
+	public Formatter space(int spaces) {
 		return text(Strings.repeat(' ', spaces));
 	}
 	
-	public Formater newLine() {
+	public Formatter newLine() {
 		return text("\n");
 	}
 	
-	public Formater withStyle(Style style) {
+	public Formatter withStyle(Style style) {
 		if (textComponent != null) textComponent.withStyle(style);
 		return this;
 	}
 	
-	public Formater withStyle(ChatFormatting format) {
+	public Formatter withStyle(ChatFormatting format) {
 		if (textComponent != null) textComponent.withStyle(format);
 		return this;
 	}

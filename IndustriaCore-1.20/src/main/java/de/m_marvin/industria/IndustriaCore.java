@@ -33,6 +33,8 @@ public class IndustriaCore {
 	
 	public IndustriaCore() {
 		
+		/* Begin of UniVec deobfuscation configuration */
+		
 		Map<String, String> obfuscationMappings = new HashMap<>();
 		obfuscationMappings.put("f_123285_", "x");
 		obfuscationMappings.put("f_123286_", "y");
@@ -43,6 +45,8 @@ public class IndustriaCore {
 		
 		LOGGER.info("Set UniVec obfuscation resolver");
 		VectorParser.setObfuscationResolver((clazz, field) -> Optional.ofNullable(obfuscationMappings.getOrDefault(field, field)));
+
+		/* End of UniVec deobfuscation configuration */
 		
 		Config.register();
 		NetworkPackages.setupPackages(NETWORK);

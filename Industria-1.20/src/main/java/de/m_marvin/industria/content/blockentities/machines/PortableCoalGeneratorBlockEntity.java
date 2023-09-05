@@ -1,5 +1,8 @@
 package de.m_marvin.industria.content.blockentities.machines;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import de.m_marvin.industria.content.blocks.machines.PortableCoalGeneratorBlock;
 import de.m_marvin.industria.content.container.PortableCoalGeneratorContainer;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
@@ -11,13 +14,14 @@ import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.InternalNodeConstructor;
-import de.m_marvin.industria.core.util.Direction2d;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.blocks.BaseEntityMultiBlock;
 import de.m_marvin.industria.core.util.container.IFluidSlotContainer.FluidContainer;
+import de.m_marvin.industria.core.util.types.Direction2d;
 import de.m_marvin.univec.impl.Vec2i;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -35,9 +39,14 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.IItemHandler;
 
-public class PortableCoalGeneratorBlockEntity extends BlockEntity implements IJunctionEdit, MenuProvider {
+public class PortableCoalGeneratorBlockEntity extends BlockEntity implements IJunctionEdit, MenuProvider, IItemHandler, IFluidHandler {
 	
 	protected FluidContainer container = new FluidContainer(1, 1);
 	protected String[] nodeLanes = new String[] {"L", "N"};
@@ -234,6 +243,101 @@ public class PortableCoalGeneratorBlockEntity extends BlockEntity implements IJu
 			return multiBlock.getBlockAt(multiBlock.getCenterBlock(worldPosition, getBlockState()), getBlockState(), new Vec3i(1, 0, 0));
 		}
 		return this.worldPosition;
+	}
+	
+	@Override
+	public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+		if (cap == ForgeCapabilities.ITEM_HANDLER) return LazyOptional.of(() -> this).cast();
+		if (cap == ForgeCapabilities.FLUID_HANDLER) return LazyOptional.of(() -> this).cast();
+		return super.getCapability(cap, side);
+	}
+
+	@Override
+	public int getSlots() {
+		return 1;
+	}
+
+	@Override
+	public @NotNull ItemStack getStackInSlot(int slot) {
+		return this.container.getItem(this.container.getFirstAdditional() + slot);
+	}
+
+	@Override
+	public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack2, boolean simulate) {
+		ItemStack stack = this.container.getItem(this.container.getFirstAdditional() + slot);
+		ItemStack remainder = ItemStack.EMPTY;
+		if (stack.isEmpty()) {
+			if (!simulate) stack = stack2;
+		} else if (stack.getItem() == stack2.getItem()) {
+			int insertable = Math.min(stack.getMaxStackSize() - stack.getCount(), stack2.getCount());
+			if (insertable < stack2.getCount()) {
+				remainder = stack2.copy();
+				remainder.shrink(insertable);
+			}
+			if (!simulate) stack.grow(insertable);
+		}
+		if (!simulate) this.container.setItem(this.container.getFirstAdditional() + slot, stack);
+		return remainder;
+	}
+
+	@Override
+	public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
+		return ItemStack.EMPTY;
+//		ItemStack stack = this.container.getItem(this.container.getFirstAdditional() + slot);
+//		ItemStack extracted = stack.copy();
+//		extracted.setCount(Math.min(stack.getCount(), amount));
+//		if (!simulate) stack.shrink(extracted.getCount());
+//		return extracted;
+	}
+
+	@Override
+	public int getSlotLimit(int slot) {
+		return 64;
+	}
+
+	@Override
+	public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+		if (slot == 0) return ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0;
+		return false;
+	}
+
+	// TODO Fluid behavior gets implemented with pipes
+	
+	@Override
+	public int getTanks() {
+		return 2;
+	}
+
+	@Override
+	public @NotNull FluidStack getFluidInTank(int tank) {
+		return this.container.getFluid(tank);
+	}
+
+	@Override
+	public int getTankCapacity(int tank) {
+		return this.container.getMaxFluidAmount();
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
+		if (tank == 0) return stack.getFluid().is(FluidTags.WATER);
+		return false;
+	}
+
+	@Override
+	public int fill(FluidStack resource, FluidAction action) {
+		return 0;
+	}
+
+	@Override
+	public @NotNull FluidStack drain(FluidStack resource, FluidAction action) {
+		return FluidStack.EMPTY;
+	}
+
+	@Override
+	public @NotNull FluidStack drain(int maxDrain, FluidAction action) {
+		return FluidStack.EMPTY;
 	}
 	
 }

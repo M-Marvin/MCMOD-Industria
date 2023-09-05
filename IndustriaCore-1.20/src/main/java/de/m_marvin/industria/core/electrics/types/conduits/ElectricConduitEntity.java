@@ -1,8 +1,10 @@
-package de.m_marvin.industria.core.conduits.types.conduits;
+package de.m_marvin.industria.core.electrics.types.conduits;
 
 import java.util.Arrays;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
+import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
+import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;

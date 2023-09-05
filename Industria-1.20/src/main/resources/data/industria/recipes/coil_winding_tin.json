@@ -1,0 +1,6 @@
+{
+	"type": "industria:wire_coil_winding",
+	"conduitItem": "industria:tin_wire",
+	"emptyCoil": "industria:empty_wire_coil",
+	"wireCoil": "industria:tin_wire_coil"
+}

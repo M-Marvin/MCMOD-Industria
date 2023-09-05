@@ -5,7 +5,7 @@ import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapabil
 import de.m_marvin.industria.core.electrics.engine.network.SSyncComponentsPackage;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
-import de.m_marvin.industria.core.util.SyncRequestType;
+import de.m_marvin.industria.core.util.types.SyncRequestType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;

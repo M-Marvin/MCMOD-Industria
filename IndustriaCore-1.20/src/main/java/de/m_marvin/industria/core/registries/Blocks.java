@@ -4,6 +4,7 @@ import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.electrics.types.blocks.PowerSourceBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -16,6 +17,6 @@ public class Blocks {
 		BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 	
-	public static final RegistryObject<Block> POWER_SOURCE = BLOCKS.register("power_source", () -> new PowerSourceBlock(Properties.of()));
+	public static final RegistryObject<Block> POWER_SOURCE = BLOCKS.register("power_source", () -> new PowerSourceBlock(Properties.of().mapColor(MapColor.COLOR_BROWN).requiresCorrectToolForDrops().strength(-1.0F, 3600000.0F).noLootTable()));
 	
 }

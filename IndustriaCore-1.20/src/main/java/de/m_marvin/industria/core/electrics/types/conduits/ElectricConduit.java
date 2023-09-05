@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core.conduits.types.conduits;
+package de.m_marvin.industria.core.electrics.types.conduits;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -6,10 +6,12 @@ import java.util.function.Consumer;
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
+import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
+import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
-import de.m_marvin.industria.core.util.Formater;
+import de.m_marvin.industria.core.util.Formatter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -32,7 +34,7 @@ public abstract class ElectricConduit extends Conduit implements IElectricCondui
 	@Override
 	public void appendHoverText(Level level, List<Component> tooltip, TooltipFlag flags) {
 		super.appendHoverText(level, tooltip, flags);
-		tooltip.add(Formater.build().appand(Component.translatable("industriacore.tooltip.electricconduit.resistance", this.getResistancePerBlock())).withStyle(ChatFormatting.GRAY).component());
+		tooltip.add(Formatter.build().appand(Component.translatable("industriacore.tooltip.electricconduit.resistance", this.getResistancePerBlock())).withStyle(ChatFormatting.GRAY).component());
 	}
 	
 	public double getResistancePerBlock() {
@@ -81,7 +83,7 @@ public abstract class ElectricConduit extends Conduit implements IElectricCondui
 	@Override
 	public void plotCircuit(Level level, ConduitEntity instance, ConduitPos position, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
 		CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "resistor"));
-		template.setProperty("resistance", this.resistance * instance.length);
+		template.setProperty("resistance", this.resistance * instance.getLength());
 		
 		NodePos[] connections = getConnections(level, position, instance);
 		String[] wireLabels = this.getWireLanes(level, position, instance, null);

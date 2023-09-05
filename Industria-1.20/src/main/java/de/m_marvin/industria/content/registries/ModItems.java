@@ -4,6 +4,7 @@ import de.m_marvin.industria.content.Industria;
 import de.m_marvin.industria.content.items.ConduitCableItem;
 import de.m_marvin.industria.content.items.ConduitCoilItem;
 import de.m_marvin.industria.content.items.ScrewDriverItem;
+import de.m_marvin.industria.core.electrics.types.item.ElectricBlockItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
@@ -53,10 +54,10 @@ public class ModItems {
 	public static final RegistryObject<BlockItem> BRASS_JUNCTION_BOX					= ITEMS.register("brass_junction_box", () -> new BlockItem(ModBlocks.BRASS_JUNCTION_BOX.get(), new Item.Properties()));
 	public static final RegistryObject<BlockItem> STEEL_JUNCTION_BOX					= ITEMS.register("steel_junction_box", () -> new BlockItem(ModBlocks.STEEL_JUNCTION_BOX.get(), new Item.Properties()));
 	
-	public static final RegistryObject<BlockItem> BRASS_FLOODLIGHT						= ITEMS.register("brass_floodlight", () -> new BlockItem(ModBlocks.BRASS_FLOODLIGHT.get(), new Item.Properties()));
-	public static final RegistryObject<BlockItem> STEEL_FLOODLIGHT						= ITEMS.register("steel_floodlight", () -> new BlockItem(ModBlocks.STEEL_FLOOFLIGHT.get(), new Item.Properties()));
-	public static final RegistryObject<BlockItem> PORTABLE_FUEL_GENERATOR				= ITEMS.register("portable_fuel_generator", () -> new BlockItem(ModBlocks.PORTABLE_FUEL_GENERATOR.get(), new Item.Properties()));
-	public static final RegistryObject<BlockItem> PORTABLE_COAL_GENERATOR				= ITEMS.register("portable_coal_generator", () -> new BlockItem(ModBlocks.PORTABLE_COAL_GENERATOR.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> BRASS_FLOODLIGHT						= ITEMS.register("brass_floodlight", () -> new ElectricBlockItem(ModBlocks.BRASS_FLOODLIGHT.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> STEEL_FLOODLIGHT						= ITEMS.register("steel_floodlight", () -> new ElectricBlockItem(ModBlocks.STEEL_FLOOFLIGHT.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> PORTABLE_FUEL_GENERATOR				= ITEMS.register("portable_fuel_generator", () -> new ElectricBlockItem(ModBlocks.PORTABLE_FUEL_GENERATOR.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> PORTABLE_COAL_GENERATOR				= ITEMS.register("portable_coal_generator", () -> new ElectricBlockItem(ModBlocks.PORTABLE_COAL_GENERATOR.get(), new Item.Properties()));
 	
 	/* Creative tabs */
 	

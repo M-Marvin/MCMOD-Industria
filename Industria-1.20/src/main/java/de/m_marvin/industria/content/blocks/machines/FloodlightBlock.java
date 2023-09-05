@@ -17,6 +17,7 @@ import de.m_marvin.industria.core.electrics.parametrics.DeviceParametrics;
 import de.m_marvin.industria.core.electrics.parametrics.DeviceParametricsManager;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
+import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
@@ -42,7 +43,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class FloodlightBlock extends BaseEntityBlock implements IElectricConnector {
+public class FloodlightBlock extends BaseEntityBlock implements IElectricConnector, IElectricInfoProvider {
 	
 	public static final NodePointSupplier NODES = NodePointSupplier.define()
 			.addNode(NodeTypes.ALL, 2, new Vec3i(0, 8, 13))
@@ -125,6 +126,31 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricConnect
 			plotter.accept(templateSource);
 			
 		}
+	}
+	
+	@Override
+	public DeviceParametrics getParametrics(BlockState state, Level level, BlockPos pos) {
+		return DeviceParametricsManager.getInstance().getParametrics(this);
+	}
+	
+	@Override
+	public double getVoltage(BlockState state, Level level, BlockPos pos) {
+		if (level.getBlockEntity(pos) instanceof FloodlightBlockEntity floodlight) {
+			String[] wireLanes = floodlight.getNodeLanes();
+			return ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]);
+		}
+		return 0.0;
+	}
+	
+	@Override
+	public double getPower(BlockState state, Level level, BlockPos pos) {
+		if (level.getBlockEntity(pos) instanceof FloodlightBlockEntity floodlight) {
+			String[] wireLanes = floodlight.getNodeLanes();
+			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this);
+			double voltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]);
+			return voltage * (parametrics.getNominalPower() / parametrics.getNominalVoltage());
+		}
+		return 0.0;
 	}
 	
 	@Override

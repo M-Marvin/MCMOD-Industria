@@ -41,7 +41,15 @@ public class PortableFuelGeneratorScreen extends AbstractFluidContainerScreen<Po
 	}
 	
 	@Override
+	public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+		this.renderTooltip(pGuiGraphics, pMouseX, pMouseY);
+		super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+	}
+	
+	@Override
 	protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
+
+		super.renderBackground(pGuiGraphics);
 		
 		pGuiGraphics.blit(SCREEN_TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 		

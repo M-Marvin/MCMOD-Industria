@@ -38,6 +38,10 @@ public abstract class AbstractBlockEntityContainerBase<T extends BlockEntity> ex
 	}
 	
 	public abstract int getSlots();
+
+	public int getFirstNonPlayerSlot() {
+		return this.slots.size() - getSlots();
+	}
 	
 	public ItemStack quickMoveStack(Player playerIn, int index) {
 		ItemStack itemstack = ItemStack.EMPTY;
@@ -45,11 +49,11 @@ public abstract class AbstractBlockEntityContainerBase<T extends BlockEntity> ex
 		if (slot != null && slot.hasItem()) {
 			ItemStack itemstack1 = slot.getItem();
 			itemstack = itemstack1.copy();
-			if (index < this.getSlots()) {
-				if (!this.moveItemStackTo(itemstack1, this.getSlots(), this.slots.size(), true)) {
+			if (index < this.getFirstNonPlayerSlot()) {
+				if (!this.moveItemStackTo(itemstack1, this.getFirstNonPlayerSlot(), this.slots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.moveItemStackTo(itemstack1, 0, this.getSlots(), false)) {
+			} else if (!this.moveItemStackTo(itemstack1, 0, this.getFirstNonPlayerSlot(), false)) {
 				return ItemStack.EMPTY;
 			}
 			
@@ -61,54 +65,6 @@ public abstract class AbstractBlockEntityContainerBase<T extends BlockEntity> ex
 		}
 		
 		return itemstack;
-		
-		
-//	      ItemStack itemstack = ItemStack.EMPTY;
-//	      Slot slot = this.slots.get(pIndex);
-//	      if (slot != null && slot.hasItem()) {
-//	         ItemStack itemstack1 = slot.getItem();
-//	         itemstack = itemstack1.copy();
-//	         if (pIndex == 0) {
-//	            this.access.execute((p_39378_, p_39379_) -> {
-//	               itemstack1.getItem().onCraftedBy(itemstack1, p_39378_, pPlayer);
-//	            });
-//	            if (!this.moveItemStackTo(itemstack1, 10, 46, true)) {
-//	               return ItemStack.EMPTY;
-//	            }
-//
-//	            slot.onQuickCraft(itemstack1, itemstack);
-//	         } else if (pIndex >= 10 && pIndex < 46) {
-//	            if (!this.moveItemStackTo(itemstack1, 1, 10, false)) {
-//	               if (pIndex < 37) {
-//	                  if (!this.moveItemStackTo(itemstack1, 37, 46, false)) {
-//	                     return ItemStack.EMPTY;
-//	                  }
-//	               } else if (!this.moveItemStackTo(itemstack1, 10, 37, false)) {
-//	                  return ItemStack.EMPTY;
-//	               }
-//	            }
-//	         } else if (!this.moveItemStackTo(itemstack1, 10, 46, false)) {
-//	            return ItemStack.EMPTY;
-//	         }
-//
-//	         if (itemstack1.isEmpty()) {
-//	            slot.setByPlayer(ItemStack.EMPTY);
-//	         } else {
-//	            slot.setChanged();
-//	         }
-//
-//	         if (itemstack1.getCount() == itemstack.getCount()) {
-//	            return ItemStack.EMPTY;
-//	         }
-//
-//	         slot.onTake(pPlayer, itemstack1);
-//	         if (pIndex == 0) {
-//	            pPlayer.drop(itemstack1, false);
-//	         }
-//	      }
-//
-//	      return itemstack;
-		
 	}
 	
 	public abstract void init();

@@ -295,7 +295,8 @@ public class Conduit {
 							Vec3d surface = nodePos.copy();
 							double dist = 1;
 							
-							for (Direction d : Direction.values()) {
+							for (Direction d :
+								Direction.values()) {
 								
 								Vec3d surfacePoint = nodePos.copy();
 								if (d.getAxis() == Axis.X && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.x = (float) bounds.maxX;

@@ -7,7 +7,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.SoundActions;
@@ -50,13 +49,6 @@ public abstract class AbstractBlockEntityFluidContainerBase<T extends BlockEntit
 		if (sound != null) this.playerInv.player.playSound(sound);
 	}
 	
-	@Override
-	public ItemStack quickMoveStack(Player playerIn, int index) {
-		// TODO Auto-generated method stub
-		
-		return super.quickMoveStack(playerIn, index);
-	}
-
 	protected void clearContainerBucketsOnly(Player pPlayer, FluidContainer pContainer) {
 		if (!pPlayer.isAlive() || pPlayer instanceof ServerPlayer && ((ServerPlayer)pPlayer).hasDisconnected()) {
 			for(int j = 0; j < pContainer.getFirstAdditional(); ++j) {

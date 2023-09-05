@@ -55,6 +55,16 @@ kliknutie, kliknutia, kliknutiu, kliknutie, kliknutí, kliknutím
 NOM        GEN        DAT        AKK        LOK       INSTR
 
 kocka (Würfel/Block) nach Schema FEM-1
+kocka, kocky, kocke, kocku, kocke, kockou
+NOM   GEN     DAT    AKK    LOK    INSTR
+
+oblasť (Bereich) nach Schema FEM-3
+oblasť, oblasti, oblasti, oblasť, oblasti, oblasťou
+NOM     GEN      DAT      AKK     LOK      INSTR
+
+napätie (Spannung) nach Schema NEUTR-3
+napätie, napätia, napätiu, napätie, napätí, napätim
+NOM      GEN      DAT      AKK      LOK     INSTR
 
 
 

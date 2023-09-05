@@ -1,0 +1,38 @@
+{
+
+"industriacore.item.info.conduit.nodeSelect":   	"Prvý uzol bol vybraný (Zrušte stlačením Shift + pravým kliknutím)", [Hinweis: Zrušte als IMP 2. Pers. Plr. von Zrušiť; pravým kliknutým (von pravým kliknite) steht im INSTR wegen stlačením!]
+"industriacore.item.info.conduit.changeLength":  	"Dĺžka linky: x%1$s (Zrušte stlačením Shift + pravým kliknutím)",
+"industriacore.item.info.conduit.placed":     		"Linka bola umiestnená",
+"industriacore.item.info.conduit.abbort":     		"Umiestnenie linky bolo zrušené",
+"industriacore.item.info.conduit.failed":     		"Umiestnenie linky zlyhalo!",
+"industriacore.item.info.conduit.toFarNodes":		"Príliš dlhá linka: %1$s > max. %2$s",
+
+"industriacore.commands.setconduit.success":    	"Linka pri %1$s %2$s %3$s bola zmenená",
+"industriacore.commands.setconduit.failure":    	"Linka nebola možná umiestniť!",
+"industriacore.commands.contraption.remove.success":	"Výstroj bol odstránený",
+"industriacore.commands.contraption.create.failed":	"Vytvorenie výstroja zlyhalo!",
+"industriacore.commands.contraption.create.success": 	"Výstroj bol vytvorený z kociek pri %1$s %2$s %3$s",
+"industriacore.commands.contraption.create.toLarge": 	"Príliš veľka zvolená oblasť: %1$sx%2$sx%3$s (max. %4$sx%5$sx%6$s)!",
+"industriacore.commands.contraption.teleport.success":	"Výstroj bol teleportovaný na %1$s %2$s %3$s",
+"industriacore.commands.contraption.assemble.failed":	"Zostavenie výstroja zlyhalo!",
+"industriacore.commands.contraption.assemble.success":	"Výstroj bol zostavený z kociek pri %1$s %2$s %3$s",
+"industriacore.commands.contraption.assemble.toLarge":	"Príliš veľký počet kociek! (max. %1$s)",
+"industriacore.commands.contraption.find.teleported":	"Hráč bol teleportovaný do výstroj na %1$s %2$s %3$s",
+"industriacore.commands.contraption.find.noplayer":	"Teleportácia len možná pre hráčov!",
+"industriacore.commands.contraption.find.found":	"Výstroj je na %1$s",
+"industriacore.commands.contraption.name.set":		"Názov výstroja sa bol zmenený na '%1$s'",
+"industriacore.commands.coordinates":			"[%1$s %2$s %3$s]",
+"industriacore.command.fixelectrics.noelectric":	"Žiadna kocka alebo linka s elektrickými vlastnosťami!",
+"industriacore.command.fixelectrics.success":		"%1$s kocky a %2$s linky boli aktualizované",	
+"industriacore.command.fixelectrics.areatolarge":	"Príliš veľka oblasť! %1$s > %2$s",
+
+"industriacore.argument.conduit.id.invalid":     	"Neznáma linka '%s'",
+"industriacore.argument.contraption.notFound":		"Výstroj '%s' nebol nájdený!",
+
+"block.industriacorecore.power_source": 		"Zdroj napätia",
+
+"industriacore.tooltip.conduit.name":			"Linka: %1$s",
+"industriacore.tooltip.conduit.maxClampDistance":	"Rozpätie: %1$s m",
+"industriacore.tooltip.electricconduit.resistance":	"Odpor: %1$s \u03a9/m"
+
+}

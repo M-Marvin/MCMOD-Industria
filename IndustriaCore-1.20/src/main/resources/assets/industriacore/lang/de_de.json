@@ -12,27 +12,27 @@
 "industriacore.commands.contraption.remove.success":	"Vorrichtung entfernt",
 "industriacore.commands.contraption.create.failed":	"Erzeugen der Vorrichtung fehlgeschlagen!",
 "industriacore.commands.contraption.create.success": 	"Vorrichtung aus Bl\u00f6cken bei %1$s %2$s %3$s erzeugt",
-"industriacore.commands.contraption.create.tolarge": 	"Ausgew\u00e4hlter Bereich mit %1$sx%2$sx%3$s zu gro\u00df! (max. %4$sx%5$sx%6$s)",
+"industriacore.commands.contraption.create.toLarge": 	"Ausgew\u00e4hlter Bereich zu gro\u00df: %1$sx%2$sx%3$s (max. %4$sx%5$sx%6$s)!",
 "industriacore.commands.contraption.teleport.success":	"Vorrichtung nach %1$s %2$s %3$s teleportiert",
-"industriacore.commands.contraption.assemble.toLarge":	"Anzahl an Bl\u00f6cken zu gro\u00df! (max. %1$s)",
-"industriacore.commands.contraption.assemble.success":	"Vorrichtung aus Bl\u00f6cken bei %1$s %2$s %3$s gebaut",
 "industriacore.commands.contraption.assemble.failed":	"Bau der Vorrichtung fehlgeschlagen!",
+"industriacore.commands.contraption.assemble.success":	"Vorrichtung aus Bl\u00f6cken bei %1$s %2$s %3$s gebaut",
+"industriacore.commands.contraption.assemble.toLarge":	"Anzahl an Bl\u00f6cken zu gro\u00df! (max. %1$s)",
 "industriacore.commands.contraption.find.teleported":	"Spieler zu Vorrichtung bei %1$s %2$s %3$s teleportiert",
 "industriacore.commands.contraption.find.noplayer":	"Teleportation nur f\u00fcr Spieler m\u00f6glich!",
 "industriacore.commands.contraption.find.found":	"Vorrichtung befindet sich bei %1$s",
-"industriacore.commands.contraption.name.set":		"Name der Vorrichtung zu '%1$s' gesetzt",
+"industriacore.commands.contraption.name.set":		"Name der Vorrichtung zu '%1$s' geändert",
 "industriacore.commands.coordinates":			"[%1$s %2$s %3$s]",
-"industriacore.command.fixelectrics.noelectric":	"Kein Block oder Conduit mit elektrischen Eigenschaften! ",
-"industriacore.command.fixelectrics.success":		"%1$s Blöcke und %2$s Conduits aktualisiert",
-"industriacore.command.fixelectrics.areatolarge":	"Bereich zu groß! %1$s > %2$s",
+"industriacore.command.fixelectrics.noelectric":	"Kein/e Block oder Leitung mit elektrischen Eigenschaften!",
+"industriacore.command.fixelectrics.success":		"%1$s Blöcke und %2$s Leitungen aktualisiert",
+"industriacore.command.fixelectrics.areatolarge":	"Bereich zu gro\u00df! %1$s > %2$s",
 
 "industriacore.argument.contraption.notFound":		"Vorrichtung '%s' nicht gefunden!",
 "industriacore.argument.conduit.notfound":		"Unbekannte Leitung '%s'",
 
 "block.industriacore.power_source": 			"Spannungsquelle",
 
-"industriacore.tooltip.conduit.name": "Leitung: %1$s",
-"industriacore.tooltip.conduit.maxClampDistance": "Spannweite: %1$s m",
-"industriacore.tooltip.electricconduit.resistance": "Widerstand: %1$s \u03a9/m"
+"industriacore.tooltip.conduit.name":			"Leitung: %1$s",
+"industriacore.tooltip.conduit.maxClampDistance":	"Spannweite: %1$s m",
+"industriacore.tooltip.electricconduit.resistance":	"Widerstand: %1$s \u03a9/m"
 
 }

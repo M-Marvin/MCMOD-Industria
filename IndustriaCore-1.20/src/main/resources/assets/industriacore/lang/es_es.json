@@ -3,7 +3,7 @@
 "industriacore.item.info.conduit.nodeSelect":   	"Primer nodo seleccionado (Cancelar con May\u00fas + clic derecho)",
 "industriacore.item.info.conduit.changeLength":  	"Longitud del conducto: x%1$s (Cancelar con May\u00fas + clic derecho)",
 "industriacore.item.info.conduit.placed":     		"Conducto colocado",
-"industriacore.item.info.conduit.abbort":     		"Colocaci\u00f3n de ccoducto abortada",
+"industriacore.item.info.conduit.abbort":     		"Colocaci\u00f3n de conducto abortada",
 "industriacore.item.info.conduit.failed":     		"\u00a1Colocaci\u00f3n de conducto fall\u00f3!",
 "industriacore.item.info.conduit.toFarNodes":		"Conducto demasiado largo: %1$s > máx. %2$s",
 
@@ -33,6 +33,8 @@
 
 "industriacore.tooltip.conduit.name":			"Conducto: %1$s",
 "industriacore.tooltip.conduit.maxClampDistance":	"Luz: %1$s m",
-"industriacore.tooltip.electricconduit.resistance":	"Resistencia: %1$s \u03a9/m"
+"industriacore.tooltip.electricconduit.resistance":	"Resistencia: %1$s \u03a9/m",
+"industriacore.tooltip.electricblock.voltage":		"Tensi\u00f3n: %1$s V",
+"industriacore.tooltip.electricblock.power":		"Potencia: %1$s W"
 
 }

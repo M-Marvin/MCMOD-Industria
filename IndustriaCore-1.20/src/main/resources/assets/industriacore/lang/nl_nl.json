@@ -22,9 +22,9 @@
 "industriacore.commands.contraption.find.found":	"Apparaat staat op %1$s",
 "industriacore.commands.contraption.name.set":		"Naam van de apparaat ingesteld op '%1$s'",
 "industriacore.commands.coordinates":			"[%1$s %2$s %3$s]",
-"industriacore.command.fixelectrics.noelectric":	"Geen block of lijn met elektrische eigenschappen!",
-"industriacore.command.fixelectrics.success":		"%1$s blokken en %2$s lijnen bijgewerkt",
-"industriacore.command.fixelectrics.areatolarge":	"Gebied te groot! %1$s > %2$s",
+"industriacore.commands.fixelectrics.noelectric":	"Geen block of lijn met elektrische eigenschappen!",
+"industriacore.commands.fixelectrics.success":		"%1$s blokken en %2$s lijnen bijgewerkt",
+"industriacore.commands.fixelectrics.areatolarge":	"Gebied te groot! %1$s > %2$s",
 
 "industriacore.argument.contraption.notFound":		"Apparaat '%s' niet gevonden!",
 "industriacore.argument.conduit.notfound":		"Onbekende lijn '%s'",
@@ -33,6 +33,9 @@
 
 "industriacore.tooltip.conduit.name":			"Lijn: %1$s",
 "industriacore.tooltip.conduit.maxClampDistance":	"Spanwijdte: %1$s m",
-"industriacore.tooltip.electricconduit.resistance":	"Weerstand: %1$s \u03a9/m"
+"industriacore.tooltip.electricconduit.resistance":	"Weerstand: %1$s \u03a9/m",
+"industriacore.tooltip.electricblock.voltage":		"Spanning: %1$s V",
+"industriacore.tooltip.electricblock.power":		"Vermogen: %1$s W"
+
 
 }

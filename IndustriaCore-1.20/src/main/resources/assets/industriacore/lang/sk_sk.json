@@ -33,6 +33,8 @@
 
 "industriacore.tooltip.conduit.name":			"Linka: %1$s",
 "industriacore.tooltip.conduit.maxClampDistance":	"Rozp\u00e2tie: %1$s m",
-"industriacore.tooltip.electricconduit.resistance":	"Odpor: %1$s \u03a9/m"
+"industriacore.tooltip.electricconduit.resistance":	"Odpor: %1$s \u03a9/m",
+"industriacore.tooltip.electricblock.voltage":		"Nap\u00e2tie: %1$s V",
+"industriacore.tooltip.electricblock.power":		"V\u00fdkon: %1$s W"
 
 }

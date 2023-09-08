@@ -24,7 +24,7 @@ Für Verben und entsprechende Nomen:
 
 Verben enden mit                      -ť   (zlyhať)   - fehlschlagen
 in der Vergangenheit mit              -l   (zlyhal)   - fehlgeschlagen, aber noch eine Endung für jweilige Person nötig (MASK zlyhal, FEM zlyhala, NEUTR zlyhalo, PLR zlyhali)
-Nominalisierungen werden gebikdet mit -nie (zlyhanie) - das fehlschlagen
+Nominalisierungen werden gebikdet mit -nie (zlyhanie) - das Fehlschlagen
 
 
 
@@ -38,7 +38,7 @@ NEUTR: [Nomen]        + [Verb]lo
 
 Zusammengesetzte Nomen:
 
-Bildung [Nomen] + [Nomen]y/a
+Bildung [Nomen] + [Nomen]y/a/e
         Dĺžka     linky
         Länge     der Verbindung
 

@@ -69,7 +69,8 @@ public interface IConduitItem {
 	
 	public default InteractionResult onUsePlacement(UseOnContext context) {
 
-		CompoundTag itemTag = context.getItemInHand().getOrCreateTag();
+		CompoundTag itemTag = context.getItemInHand().getTag();
+		if (itemTag == null) itemTag = new CompoundTag();
 		if (context.getPlayer().isShiftKeyDown() && (itemTag.contains("FirstNode") || itemTag.contains("Length"))) {
 			itemTag.remove("FirstNode");
 			itemTag.remove("Length");

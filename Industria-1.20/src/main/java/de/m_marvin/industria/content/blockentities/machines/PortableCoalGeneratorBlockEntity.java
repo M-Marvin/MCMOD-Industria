@@ -16,6 +16,7 @@ import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContaine
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.InternalNodeConstructor;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.blocks.BaseEntityMultiBlock;
+import de.m_marvin.industria.core.util.blocks.MultiBlockEntity;
 import de.m_marvin.industria.core.util.container.IFluidSlotContainer.FluidContainer;
 import de.m_marvin.industria.core.util.types.Direction2d;
 import de.m_marvin.univec.impl.Vec2i;
@@ -46,7 +47,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 
-public class PortableCoalGeneratorBlockEntity extends BlockEntity implements IJunctionEdit, MenuProvider, IItemHandler, IFluidHandler {
+public class PortableCoalGeneratorBlockEntity extends MultiBlockEntity<PortableCoalGeneratorBlockEntity> implements IJunctionEdit, MenuProvider, IItemHandler, IFluidHandler {
 	
 	protected FluidContainer container = new FluidContainer(1, 1);
 	protected String[] nodeLanes = new String[] {"L", "N"};
@@ -61,58 +62,58 @@ public class PortableCoalGeneratorBlockEntity extends BlockEntity implements IJu
 	}
 
 	public FluidContainer getContainer() {
-		return this.container;
+		return getMaster().container;
 	}
 	
 	public FluidStack getWaterStorage() {
-		return this.container.getFluid(0);
+		return getMaster().container.getFluid(0);
 	}
 	
 	public void setWaterStorage(FluidStack waterStorage) {
-		this.container.setFluid(0, waterStorage);
-		this.setChanged();
+		getMaster().container.setFluid(0, waterStorage);
+		getMaster().setChanged();
 	}
 	
 	public ItemStack getFuelStorage() {
-		return this.container.getItem(this.container.getFirstAdditional());
+		return getMaster().container.getItem(this.container.getFirstAdditional());
 	}
 	
 	public void setFuelStorage(ItemStack fuelStorage) {
-		this.container.setItem(this.container.getFirstAdditional(), fuelStorage);
-		this.setChanged();
+		getMaster().container.setItem(this.container.getFirstAdditional(), fuelStorage);
+		getMaster().setChanged();
 	}
 	
 	public int getMaxBurnTime() {
-		return maxBurnTime;
+		return getMaster().maxBurnTime;
 	}
 	
 	public int getBurnTime() {
-		return burnTime;
+		return getMaster().burnTime;
 	}
 	
 	public String[] getNodeLanes() {
-		return nodeLanes;
+		return getMaster().nodeLanes;
 	}
 	
 	public void setNodeLanes(String[] nodeLanes) {
-		this.nodeLanes = nodeLanes;
-		this.setChanged();
+		getMaster().nodeLanes = nodeLanes;
+		getMaster().setChanged();
 	}
 
 	@SuppressWarnings("deprecation")
 	public boolean canRun() {
 		return
-				this.getWaterStorage().getFluid().is(FluidTags.WATER) && this.getWaterStorage().getAmount() > 0 &&
-				(ForgeHooks.getBurnTime(this.getFuelStorage(), RecipeType.SMELTING) > 0 || this.burnTime > 0);
+				getWaterStorage().getFluid().is(FluidTags.WATER) && getWaterStorage().getAmount() > 0 &&
+				(ForgeHooks.getBurnTime(getFuelStorage(), RecipeType.SMELTING) > 0 || getBurnTime() > 0);
 	}
 
 	public static void tick(Level pLevel, BlockPos pPos, BlockState pState, PortableCoalGeneratorBlockEntity pBlockEntity) {
-
+		
 		if (pBlockEntity.canRun != pBlockEntity.canRun()) {
 			pBlockEntity.canRun = pBlockEntity.canRun();
 			if (pBlockEntity.getBlockState().getBlock() instanceof BaseEntityMultiBlock multiBlock) {
-				BlockPos center = multiBlock.getCenterBlock(pBlockEntity.worldPosition, pBlockEntity.getBlockState());
-				BlockPos second = multiBlock.getBlockAt(center, pBlockEntity.getBlockState(), new Vec3i(1, 0, 0));
+				BlockPos center = multiBlock.getOriginBlock(pBlockEntity.worldPosition, pBlockEntity.getBlockState());
+				BlockPos second = multiBlock.getBlockAtMBPos(center, pBlockEntity.getBlockState(), new Vec3i(1, 0, 0));
 				pBlockEntity.level.setBlockAndUpdate(center, pBlockEntity.level.getBlockState(center).setValue(BlockStateProperties.LIT, pBlockEntity.canRun));
 				pBlockEntity.level.setBlockAndUpdate(second, pBlockEntity.level.getBlockState(second).setValue(BlockStateProperties.LIT, pBlockEntity.canRun));
 			}
@@ -171,8 +172,10 @@ public class PortableCoalGeneratorBlockEntity extends BlockEntity implements IJu
 		super.saveAdditional(pTag);
 		pTag.putString("LiveWireLane", this.nodeLanes[0]);
 		pTag.putString("NeutralWireLane", this.nodeLanes[1]);
-		if (!this.getFuelStorage().isEmpty()) pTag.put("Fuel", this.getFuelStorage().save(new CompoundTag()));
-		if (!this.getWaterStorage().isEmpty()) pTag.put("Water", this.getWaterStorage().writeToNBT(new CompoundTag()));
+		ItemStack fuelStorage = this.container.getItem(this.container.getFirstAdditional() + 0);
+		if (!fuelStorage.isEmpty()) pTag.put("Fuel", fuelStorage.save(new CompoundTag()));
+		FluidStack waterStorage = this.container.getFluid(0);
+		if (!waterStorage.isEmpty()) pTag.put("Water", waterStorage.writeToNBT(new CompoundTag()));
 		if (this.burnTime > 0) pTag.putInt("BurnTime", this.burnTime);
 		if (this.maxBurnTime > 0) pTag.putInt("MaxBurnTime", this.maxBurnTime);
 		pTag.putFloat("fuelTimer", this.fuelTimer);
@@ -184,8 +187,8 @@ public class PortableCoalGeneratorBlockEntity extends BlockEntity implements IJu
 		super.load(pTag);
 		this.nodeLanes[0] = pTag.contains("LiveWireLane") ? pTag.getString("LiveWireLane") : "L";
 		this.nodeLanes[1] = pTag.contains("NeutralWireLane") ? pTag.getString("NeutralWireLane") : "N";
-		this.setFuelStorage(ItemStack.of(pTag.getCompound("Fuel")));
-		this.setWaterStorage(FluidStack.loadFluidStackFromNBT(pTag.getCompound("Water")));
+		this.container.setItem(this.container.getFirstAdditional() + 0, ItemStack.of(pTag.getCompound("Fuel")));
+		this.container.setFluid(0, FluidStack.loadFluidStackFromNBT(pTag.getCompound("Water")));
 		this.burnTime = pTag.getInt("BurnTime");
 		this.maxBurnTime = pTag.getInt("MaxBurnTime");
 		this.fuelTimer = pTag.getFloat("fuelTimer");
@@ -202,8 +205,8 @@ public class PortableCoalGeneratorBlockEntity extends BlockEntity implements IJu
 		CompoundTag tag = new CompoundTag();
 		tag.putString("LiveWireLane", this.nodeLanes[0]);
 		tag.putString("NeutralWireLane", this.nodeLanes[1]);
-		tag.put("Fuel", this.getFuelStorage().save(new CompoundTag()));
-		tag.put("Water", this.getWaterStorage().writeToNBT(new CompoundTag()));
+		tag.put("Fuel", this.container.getItem(this.container.getFirstAdditional() + 0).save(new CompoundTag()));
+		tag.put("Water", this.container.getFluid(0).writeToNBT(new CompoundTag()));
 		tag.putInt("BurnTime", this.burnTime);
 		tag.putInt("MaxBurnTime", this.maxBurnTime);
 		return tag;
@@ -240,7 +243,7 @@ public class PortableCoalGeneratorBlockEntity extends BlockEntity implements IJu
 	@Override
 	public BlockPos getJunctionBlockPos() {
 		if (this.getBlockState().getBlock() instanceof BaseEntityMultiBlock multiBlock) {
-			return multiBlock.getBlockAt(multiBlock.getCenterBlock(worldPosition, getBlockState()), getBlockState(), new Vec3i(1, 0, 0));
+			return multiBlock.getBlockAtMBPos(multiBlock.getOriginBlock(worldPosition, getBlockState()), getBlockState(), new Vec3i(1, 0, 0));
 		}
 		return this.worldPosition;
 	}
@@ -259,12 +262,13 @@ public class PortableCoalGeneratorBlockEntity extends BlockEntity implements IJu
 
 	@Override
 	public @NotNull ItemStack getStackInSlot(int slot) {
-		return this.container.getItem(this.container.getFirstAdditional() + slot);
+		return getMaster().container.getItem(this.container.getFirstAdditional() + slot);
 	}
 
 	@Override
 	public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack2, boolean simulate) {
-		ItemStack stack = this.container.getItem(this.container.getFirstAdditional() + slot);
+		if (!isItemValid(slot, stack2)) return stack2;
+		ItemStack stack = getMaster().container.getItem(getMaster().container.getFirstAdditional() + slot);
 		ItemStack remainder = ItemStack.EMPTY;
 		if (stack.isEmpty()) {
 			if (!simulate) stack = stack2;
@@ -276,7 +280,7 @@ public class PortableCoalGeneratorBlockEntity extends BlockEntity implements IJu
 			}
 			if (!simulate) stack.grow(insertable);
 		}
-		if (!simulate) this.container.setItem(this.container.getFirstAdditional() + slot, stack);
+		if (!simulate) getMaster().container.setItem(getMaster().container.getFirstAdditional() + slot, stack);
 		return remainder;
 	}
 

@@ -23,8 +23,6 @@ import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -95,16 +93,15 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 			if (loadP < pRandom.nextFloat()) return;
 
 			// TODO Sound
-			pLevel.playLocalSound(d0, d1, d2, SoundEvents.FURNACE_FIRE_CRACKLE, SoundSource.BLOCKS, 1.0F, 1.0F, false);
+			//pLevel.playLocalSound(d0, d1, d2, SoundEvents.FURNACE_FIRE_CRACKLE, SoundSource.BLOCKS, 1.0F, 1.0F, false);
 			
 			Direction direction = pState.getValue(BlockStateProperties.HORIZONTAL_FACING);
 			Direction.Axis direction$axis = direction.getAxis();
-			double d4 = pRandom.nextDouble() * 0.3D - 0.26D;
+			double d4 = pRandom.nextDouble() * 0.5D - 0.25D;
 			double d5 = direction$axis == Direction.Axis.X ? (double)direction.getStepX() * 0.52D : d4;
 			double d6 = pRandom.nextDouble() * 0.2D  + 0.2;
 			double d7 = direction$axis == Direction.Axis.Z ? (double)direction.getStepZ() * 0.52D : d4;
 			pLevel.addParticle(ParticleTypes.SMOKE, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.1D, 0.0D);
-			pLevel.addParticle(ParticleTypes.FLAME, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
 			
 		}
 		

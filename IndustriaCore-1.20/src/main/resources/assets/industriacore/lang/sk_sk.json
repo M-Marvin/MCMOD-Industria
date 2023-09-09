@@ -29,12 +29,12 @@
 "industriacore.argument.conduit.id.invalid":     	"Nezn\u00e1ma linka '%s'",
 "industriacore.argument.contraption.notFound":		"V\u00fdstroj '%s' nebol n\u00e1jden\u00fd!",
 
-"block.industriacorecore.power_source": 		"Zdroj nap\u00e2tia",
+"block.industriacorecore.power_source": 		"Zdroj nap\u00e4tia",
 
 "industriacore.tooltip.conduit.name":			"Linka: %1$s",
-"industriacore.tooltip.conduit.maxClampDistance":	"Rozp\u00e2tie: %1$s m",
+"industriacore.tooltip.conduit.maxClampDistance":	"Rozp\u00e4tie: %1$s m",
 "industriacore.tooltip.electricconduit.resistance":	"Odpor: %1$s \u03a9/m",
-"industriacore.tooltip.electricblock.voltage":		"Nap\u00e2tie: %1$s V",
+"industriacore.tooltip.electricblock.voltage":		"Nap\u00e4tie: %1$s V",
 "industriacore.tooltip.electricblock.power":		"V\u00fdkon: %1$s W"
 
 }

@@ -172,8 +172,198 @@ public class ModItems {
 	public static final RegistryObject<Item> PURIFIED_CRUSHED_GOLD_ORE					= ITEMS.register("purified_crushed_gold_ore", () -> new Item(new Item.Properties()));
 	public static final RegistryObject<Item> PURIFIED_CRUSHED_SILVER_ORE				= ITEMS.register("purified_crushed_silver_ore", () -> new Item(new Item.Properties()));
 	
+	public static final RegistryObject<BlockItem> LEAD_BLOCK							= ITEMS.register("lead_block", () -> new BlockItem(ModBlocks.LEAD_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> STEEL_BLOCK							= ITEMS.register("steel_block", () -> new BlockItem(ModBlocks.STEEL_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WEATHERED_STEEL_BLOCK					= ITEMS.register("weathered_steel_block", () -> new BlockItem(ModBlocks.WEATHERED_STEEL_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> EXPOSED_STEEL_BLOCK					= ITEMS.register("exposed_steel_block", () -> new BlockItem(ModBlocks.EXPOSED_STEEL_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> OXIDIZED_STEEL_BLOCK					= ITEMS.register("oxidized_steel_block", () -> new BlockItem(ModBlocks.OXIDIZED_STEEL_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_STEEL_BLOCK							= ITEMS.register("waxed_steel_block", () -> new BlockItem(ModBlocks.WAXED_STEEL_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_WEATHERED_STEEL_BLOCK				= ITEMS.register("waxed_weathered_steel_block", () -> new BlockItem(ModBlocks.WAXED_WEATHERED_STEEL_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_EXPOSED_STEEL_BLOCK					= ITEMS.register("waxed_exposed_steel_block", () -> new BlockItem(ModBlocks.WAXED_EXPOSED_STEEL_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_OXIDIZED_STEEL_BLOCK				= ITEMS.register("waxed_oxidized_steel_block", () -> new BlockItem(ModBlocks.WAXED_OXIDIZED_STEEL_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> NICKEL_BLOCK							= ITEMS.register("nickel_block", () -> new BlockItem(ModBlocks.NICKEL_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> MONEL_BLOCK							= ITEMS.register("monel_block", () -> new BlockItem(ModBlocks.MONEL_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> PALLADIUM_BLOCK						= ITEMS.register("palladium_block", () -> new BlockItem(ModBlocks.PALLADIUM_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> ALUMINUM_BLOCK						= ITEMS.register("aluminum_block", () -> new BlockItem(ModBlocks.ALUMINUM_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> TUNGSTEN_BLOCK						= ITEMS.register("tungsten_block", () -> new BlockItem(ModBlocks.TUNGSTEN_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> TIN_BLOCK								= ITEMS.register("tin_block", () -> new BlockItem(ModBlocks.TIN_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WEATHERED_TIN_BLOCK					= ITEMS.register("weathered_tin_block", () -> new BlockItem(ModBlocks.WEATHERED_TIN_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> EXPOSED_TIN_BLOCK						= ITEMS.register("exposed_tin_block", () -> new BlockItem(ModBlocks.EXPOSED_TIN_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> OXIDIZED_TIN_BLOCK					= ITEMS.register("oxidized_tin_block", () -> new BlockItem(ModBlocks.OXIDIZED_TIN_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_TIN_BLOCK							= ITEMS.register("waxed_tin_block", () -> new BlockItem(ModBlocks.WAXED_TIN_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_WEATHERED_TIN_BLOCK					= ITEMS.register("waxed_weathered_tin_block", () -> new BlockItem(ModBlocks.WAXED_WEATHERED_TIN_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_EXPOSED_TIN_BLOCK					= ITEMS.register("waxed_exposed_tin_block", () -> new BlockItem(ModBlocks.WAXED_EXPOSED_TIN_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_OXIDIZED_TIN_BLOCK					= ITEMS.register("waxed_oxidized_tin_block", () -> new BlockItem(ModBlocks.WAXED_OXIDIZED_TIN_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WEATHERED_IRON_BLOCK					= ITEMS.register("weathered_iron_block", () -> new BlockItem(ModBlocks.WEATHERED_IRON_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> EXPOSED_IRON_BLOCK					= ITEMS.register("exposed_iron_block", () -> new BlockItem(ModBlocks.EXPOSED_IRON_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> OXIDIZED_IRON_BLOCK					= ITEMS.register("oxidized_iron_block", () -> new BlockItem(ModBlocks.OXIDIZED_IRON_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_IRON_BLOCK							= ITEMS.register("waxed_iron_block", () -> new BlockItem(ModBlocks.WAXED_IRON_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_WEATHERED_IRON_BLOCK				= ITEMS.register("waxed_weathered_iron_block", () -> new BlockItem(ModBlocks.WAXED_WEATHERED_IRON_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_EXPOSED_IRON_BLOCK					= ITEMS.register("waxed_exposed_iron_block", () -> new BlockItem(ModBlocks.WAXED_EXPOSED_IRON_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_OXIDIZED_IRON_BLOCK					= ITEMS.register("waxed_oxidized_iron_block", () -> new BlockItem(ModBlocks.WAXED_OXIDIZED_IRON_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> SILVER_BLOCK							= ITEMS.register("silver_block", () -> new BlockItem(ModBlocks.SILVER_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> BRASS_BLOCK							= ITEMS.register("brass_block", () -> new BlockItem(ModBlocks.BRASS_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WEATHERED_BRASS_BLOCK					= ITEMS.register("weathered_brass_block", () -> new BlockItem(ModBlocks.WEATHERED_BRASS_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> EXPOSED_BRASS_BLOCK					= ITEMS.register("exposed_brass_block", () -> new BlockItem(ModBlocks.EXPOSED_BRASS_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> OXIDIZED_BRASS_BLOCK					= ITEMS.register("oxidized_brass_block", () -> new BlockItem(ModBlocks.OXIDIZED_BRASS_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WYXED_BRASS_BLOCK							= ITEMS.register("waxed_brass_block", () -> new BlockItem(ModBlocks.WAXED_BRASS_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_WEATHERED_BRASS_BLOCK				= ITEMS.register("waxed_weathered_brass_block", () -> new BlockItem(ModBlocks.WAXED_WEATHERED_BRASS_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_EXPOSED_BRASS_BLOCK					= ITEMS.register("waxed_exposed_brass_block", () -> new BlockItem(ModBlocks.WAXED_EXPOSED_BRASS_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_OXIDIZED_BRASS_BLOCK				= ITEMS.register("waxed_oxidized_brass_block", () -> new BlockItem(ModBlocks.WAXED_OXIDIZED_BRASS_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> REDSTONE_ALLOY_BLOCK					= ITEMS.register("redstone_alloy_block", () -> new BlockItem(ModBlocks.REDSTONE_ALLOY_BLOCK.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> ZINC_BLOCK							= ITEMS.register("zinc_block", () -> new BlockItem(ModBlocks.ZINC_BLOCK.get(), new Item.Properties()));
+	
+	public static final RegistryObject<BlockItem> ZINC_PLATES							= ITEMS.register("zinc_plates", () -> new BlockItem(ModBlocks.ZINC_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> LEAD_PLATES							= ITEMS.register("lead_plates", () -> new BlockItem(ModBlocks.LEAD_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> GOLD_PLATES							= ITEMS.register("gold_plates", () -> new BlockItem(ModBlocks.GOLD_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> NETHERITE_PLATES						= ITEMS.register("netherite_plates", () -> new BlockItem(ModBlocks.NETHERITE_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> STEEL_PLATES							= ITEMS.register("steel_plates", () -> new BlockItem(ModBlocks.STEEL_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WEATHERED_STEEL_PLATES				= ITEMS.register("weathered_steel_plates", () -> new BlockItem(ModBlocks.WEATHERED_STEEL_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> OXIDIZED_STEEL_PLATES					= ITEMS.register("oxidized_steel_plates", () -> new BlockItem(ModBlocks.OXIDIZED_STEEL_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> EXPOSED_STEEL_PLATES					= ITEMS.register("exposed_steel_plates", () -> new BlockItem(ModBlocks.EXPOSED_STEEL_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_STEEL_PLATES						= ITEMS.register("waxed_steel_plates", () -> new BlockItem(ModBlocks.WAXED_STEEL_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_WEATHERED_STEEL_PLATES				= ITEMS.register("waxed_weathered_steel_plates", () -> new BlockItem(ModBlocks.WAXED_WEATHERED_STEEL_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_OXIDIZED_STEEL_PLATES				= ITEMS.register("waxed_oxidized_steel_plates", () -> new BlockItem(ModBlocks.WAXED_OXIDIZED_STEEL_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_EXPOSED_STEEL_PLATES				= ITEMS.register("waxed_exposed_steel_plates", () -> new BlockItem(ModBlocks.WAXED_EXPOSED_STEEL_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> NICKEL_PLATES							= ITEMS.register("nickel_plates", () -> new BlockItem(ModBlocks.NICKEL_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> MONEL_PLATES							= ITEMS.register("monel_plates", () -> new BlockItem(ModBlocks.MONEL_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> PALLADIUM_PLATES						= ITEMS.register("palladium_plates", () -> new BlockItem(ModBlocks.PALLADIUM_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> ALUMINUM_PLATES						= ITEMS.register("aluminum_plates", () -> new BlockItem(ModBlocks.ALUMINUM_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> TUNGSTEN_PLATES						= ITEMS.register("tungsten_plates", () -> new BlockItem(ModBlocks.TUNGSTEN_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> TIN_PLATES							= ITEMS.register("tin_plates", () -> new BlockItem(ModBlocks.TIN_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WEATHERED_TIN_PLATES					= ITEMS.register("weathered_tin_plates", () -> new BlockItem(ModBlocks.WEATHERED_TIN_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> EXPOSED_TIN_PLATES					= ITEMS.register("exposed_tin_plates", () -> new BlockItem(ModBlocks.EXPOSED_TIN_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> OXIDIZED_TIN_PLATES					= ITEMS.register("oxidized_tin_plates", () -> new BlockItem(ModBlocks.OXIDIZED_TIN_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_TIN_PLATES							= ITEMS.register("waxed_tin_plates", () -> new BlockItem(ModBlocks.WAXED_TIN_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_WEATHERED_TIN_PLATES				= ITEMS.register("waxed_weathered_tin_plates", () -> new BlockItem(ModBlocks.WAXED_WEATHERED_TIN_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_EXPOSED_TIN_PLATES					= ITEMS.register("waxed_exposed_tin_plates", () -> new BlockItem(ModBlocks.WAXED_EXPOSED_TIN_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_OXIDIZED_TIN_PLATES					= ITEMS.register("waxed_oxidized_tin_plates", () -> new BlockItem(ModBlocks.WAXED_OXIDIZED_TIN_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> IRON_PLATES							= ITEMS.register("iron_plates", () -> new BlockItem(ModBlocks.IRON_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WEATHERED_IRON_PLATES					= ITEMS.register("weathered_iron_plates", () -> new BlockItem(ModBlocks.WEATHERED_IRON_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> EXPOSED_IRON_PLATES					= ITEMS.register("exposed_iron_plates", () -> new BlockItem(ModBlocks.EXPOSED_IRON_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> OXIDIZED_IRON_PLATES					= ITEMS.register("oxidized_iron_plates", () -> new BlockItem(ModBlocks.OXIDIZED_IRON_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_IRON_PLATES							= ITEMS.register("waxed_iron_plates", () -> new BlockItem(ModBlocks.WAXED_IRON_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_WEATHERED_IRON_PLATES				= ITEMS.register("waxed_weathered_iron_plates", () -> new BlockItem(ModBlocks.WAXED_WEATHERED_IRON_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_EXPOSED_IRON_PLATES					= ITEMS.register("waxed_exposed_iron_plates", () -> new BlockItem(ModBlocks.WAXED_EXPOSED_IRON_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_OXIDIZED_IRON_PLATES				= ITEMS.register("waxed_oxidized_iron_plates", () -> new BlockItem(ModBlocks.WAXED_OXIDIZED_IRON_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> COPPER_PLATES							= ITEMS.register("copper_plates", () -> new BlockItem(ModBlocks.COPPER_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WEATHERED_COPPER_PLATES				= ITEMS.register("weathered_copper_plates", () -> new BlockItem(ModBlocks.WEATHERED_COPPER_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> EXPOSED_COPPER_PLATES					= ITEMS.register("exposed_copper_plates", () -> new BlockItem(ModBlocks.EXPOSED_COPPER_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> OXIDIZED_COPPER_PLATES				= ITEMS.register("oxidized_copper_plates", () -> new BlockItem(ModBlocks.OXIDIZED_COPPER_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_COPPER_PLATES						= ITEMS.register("waxed_copper_plates", () -> new BlockItem(ModBlocks.WAXED_COPPER_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_WEATHERED_COPPER_PLATES				= ITEMS.register("waxed_weathered_copper_plates", () -> new BlockItem(ModBlocks.WAXED_WEATHERED_COPPER_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_EXPOSED_COPPER_PLATES				= ITEMS.register("waxed_exposed_copper_plates", () -> new BlockItem(ModBlocks.WAXED_EXPOSED_COPPER_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_OXIDIZED_COPPER_PLATES				= ITEMS.register("waxed_oxidized_copper_plates", () -> new BlockItem(ModBlocks.WAXED_OXIDIZED_COPPER_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> SILVER_PLATES							= ITEMS.register("silver_plates", () -> new BlockItem(ModBlocks.SILVER_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> BRASS_PLATES							= ITEMS.register("brass_plates", () -> new BlockItem(ModBlocks.BRASS_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WEATHERED_BRASS_PLATES				= ITEMS.register("weathered_brass_plates", () -> new BlockItem(ModBlocks.WEATHERED_BRASS_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> EXPOSED_BRASS_PLATES					= ITEMS.register("exposed_brass_plates", () -> new BlockItem(ModBlocks.EXPOSED_BRASS_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> OXIDIZED_BRASS_PLATES					= ITEMS.register("oxidized_brass_plates", () -> new BlockItem(ModBlocks.OXIDIZED_BRASS_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_BRASS_PLATES						= ITEMS.register("waxed_brass_plates", () -> new BlockItem(ModBlocks.WAXED_BRASS_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_WEATHERED_BRASS_PLATES				= ITEMS.register("waxed_weathered_brass_plates", () -> new BlockItem(ModBlocks.WAXED_WEATHERED_BRASS_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_EXPOSED_BRASS_PLATES				= ITEMS.register("waxed_exposed_brass_plates", () -> new BlockItem(ModBlocks.WAXED_EXPOSED_BRASS_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> WAXED_OXIDIZED_BRASS_PLATES				= ITEMS.register("waxed_oxidized_brass_plates", () -> new BlockItem(ModBlocks.WAXED_OXIDIZED_BRASS_PLATES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> REDSTONE_ALLOY_PLATES					= ITEMS.register("redstone_alloy_plates", () -> new BlockItem(ModBlocks.REDSTONE_ALLOY_PLATES.get(), new Item.Properties()));
+	
 	/* Creative tabs */
 	
+	public static final RegistryObject<CreativeModeTab> BUILDING_BLOCKS = CREATIVE_MODE_TABS.register("building_blocks", () -> CreativeModeTab.builder()
+			.title(Component.translatable("industria.creative_tab.building_blocks"))
+			.icon(() -> ALUMINUM_BLOCK.get().getDefaultInstance())
+			.displayItems((displayParams, output) -> {
+				
+				output.accept(LEAD_BLOCK.get().getDefaultInstance());
+				output.accept(STEEL_BLOCK.get().getDefaultInstance());
+				output.accept(NICKEL_BLOCK.get().getDefaultInstance());
+				output.accept(MONEL_BLOCK.get().getDefaultInstance());
+				output.accept(PALLADIUM_BLOCK.get().getDefaultInstance());
+				output.accept(ALUMINUM_BLOCK.get().getDefaultInstance());
+				output.accept(TUNGSTEN_BLOCK.get().getDefaultInstance());
+				output.accept(TIN_BLOCK.get().getDefaultInstance());
+				output.accept(SILVER_BLOCK.get().getDefaultInstance());
+				output.accept(BRASS_BLOCK.get().getDefaultInstance());
+				output.accept(REDSTONE_ALLOY_BLOCK.get().getDefaultInstance());
+				output.accept(ZINC_BLOCK.get().getDefaultInstance());
+				
+
+				output.accept(WEATHERED_STEEL_BLOCK.get().getDefaultInstance());
+				output.accept(OXIDIZED_STEEL_BLOCK.get().getDefaultInstance());
+				output.accept(EXPOSED_STEEL_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_WEATHERED_STEEL_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_OXIDIZED_STEEL_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_EXPOSED_STEEL_BLOCK.get().getDefaultInstance());
+				output.accept(OXIDIZED_STEEL_BLOCK.get().getDefaultInstance());
+				output.accept(WEATHERED_TIN_BLOCK.get().getDefaultInstance());
+				output.accept(EXPOSED_TIN_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_OXIDIZED_STEEL_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_WEATHERED_TIN_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_EXPOSED_TIN_BLOCK.get().getDefaultInstance());
+				output.accept(OXIDIZED_TIN_BLOCK.get().getDefaultInstance());
+				output.accept(WEATHERED_IRON_BLOCK.get().getDefaultInstance());
+				output.accept(EXPOSED_IRON_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_OXIDIZED_TIN_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_WEATHERED_IRON_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_EXPOSED_IRON_BLOCK.get().getDefaultInstance());
+				output.accept(OXIDIZED_IRON_BLOCK.get().getDefaultInstance());
+				output.accept(WEATHERED_BRASS_BLOCK.get().getDefaultInstance());
+				output.accept(WEATHERED_BRASS_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_EXPOSED_BRASS_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_OXIDIZED_BRASS_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_EXPOSED_BRASS_BLOCK.get().getDefaultInstance());
+				output.accept(OXIDIZED_BRASS_BLOCK.get().getDefaultInstance());
+				
+				
+				output.accept(ZINC_PLATES.get().getDefaultInstance());
+				output.accept(LEAD_PLATES.get().getDefaultInstance());
+				output.accept(GOLD_PLATES.get().getDefaultInstance());
+				output.accept(NETHERITE_PLATES.get().getDefaultInstance());
+				output.accept(STEEL_PLATES.get().getDefaultInstance());
+				output.accept(NICKEL_PLATES.get().getDefaultInstance());
+				output.accept(MONEL_PLATES.get().getDefaultInstance());
+				output.accept(PALLADIUM_PLATES.get().getDefaultInstance());
+				output.accept(ALUMINUM_PLATES.get().getDefaultInstance());
+				output.accept(TUNGSTEN_PLATES.get().getDefaultInstance());
+				output.accept(TIN_PLATES.get().getDefaultInstance());
+				output.accept(IRON_PLATES.get().getDefaultInstance());
+				output.accept(COPPER_PLATES.get().getDefaultInstance());
+				output.accept(SILVER_PLATES.get().getDefaultInstance());
+				output.accept(BRASS_PLATES.get().getDefaultInstance());
+				output.accept(REDSTONE_ALLOY_PLATES.get().getDefaultInstance());
+
+				output.accept(WEATHERED_STEEL_PLATES.get().getDefaultInstance());
+				output.accept(OXIDIZED_STEEL_PLATES.get().getDefaultInstance());
+				output.accept(EXPOSED_STEEL_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_WEATHERED_STEEL_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_OXIDIZED_STEEL_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_EXPOSED_STEEL_PLATES.get().getDefaultInstance());
+				output.accept(WEATHERED_TIN_PLATES.get().getDefaultInstance());
+				output.accept(EXPOSED_TIN_PLATES.get().getDefaultInstance());
+				output.accept(OXIDIZED_TIN_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_WEATHERED_TIN_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_EXPOSED_TIN_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_OXIDIZED_TIN_PLATES.get().getDefaultInstance());
+				output.accept(WEATHERED_IRON_PLATES.get().getDefaultInstance());
+				output.accept(EXPOSED_IRON_PLATES.get().getDefaultInstance());
+				output.accept(OXIDIZED_IRON_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_WEATHERED_IRON_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_EXPOSED_IRON_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_OXIDIZED_IRON_PLATES.get().getDefaultInstance());
+				output.accept(WEATHERED_COPPER_PLATES.get().getDefaultInstance());
+				output.accept(EXPOSED_COPPER_PLATES.get().getDefaultInstance());
+				output.accept(OXIDIZED_COPPER_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_WEATHERED_COPPER_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_EXPOSED_COPPER_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_OXIDIZED_COPPER_PLATES.get().getDefaultInstance());
+				output.accept(WEATHERED_BRASS_PLATES.get().getDefaultInstance());
+				output.accept(EXPOSED_BRASS_PLATES.get().getDefaultInstance());
+				output.accept(OXIDIZED_BRASS_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_WEATHERED_BRASS_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_EXPOSED_BRASS_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_OXIDIZED_BRASS_PLATES.get().getDefaultInstance());
+				
+			})
+			.build()
+	);
 	public static final RegistryObject<CreativeModeTab> MATERIALS = CREATIVE_MODE_TABS.register("materials", () -> CreativeModeTab.builder()
 			.title(Component.translatable("industria.creative_tab.materials"))
 			.icon(() -> COPPER_PLATE.get().getDefaultInstance())
@@ -291,7 +481,7 @@ public class ModItems {
 				output.accept(PURIFIED_CRUSHED_TIN_ORE.get().getDefaultInstance());
 				output.accept(PURIFIED_CRUSHED_GOLD_ORE.get().getDefaultInstance());
 				output.accept(PURIFIED_CRUSHED_SILVER_ORE.get().getDefaultInstance());
-
+				
 			})
 			.build()
 	);

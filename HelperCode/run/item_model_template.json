@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "industria:item/materials/${item_name}"
+    "layer0": "industria:item${category}/${file_name}"
   }
 }

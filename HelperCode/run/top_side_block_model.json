@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/cube_column",
   "textures": {
-    "end": "industria:block${category}/${file_name}_top",
-    "side": "industria:block${category}/${file_name}"
+    "end": "industria:block${category}/${model_file}_top",
+    "side": "industria:block${category}/${model_file}"
   }
 }

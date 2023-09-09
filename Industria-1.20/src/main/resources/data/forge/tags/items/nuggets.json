@@ -1,0 +1,17 @@
+{
+	"replace": false,
+	"values": [
+		"industria:redstone_alloy_nugget",
+		"industria:monel_nugget",
+		"industria:silver_nugget",
+		"industria:brass_nugget",
+		"industria:steel_nugget",
+		"industria:palladium_nugget",
+		"industria:lead_nugget",
+		"industria:aluminum_nugget",
+		"industria:nickel_nugget",
+		"industria:tungsten_nugget",
+		"industria:tin_nugget",
+		"industria:zinc_nugget"
+	]
+}

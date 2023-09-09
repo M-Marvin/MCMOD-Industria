@@ -1,0 +1,21 @@
+{
+	"replace": false,
+	"values": [
+		"industria:lead_plate",
+		"industria:aluminum_plate",
+		"industria:gold_plate",
+		"industria:tungsten_plate",
+		"industria:zinc_plate",
+		"industria:netherite_plate",
+		"industria:silver_plate",
+		"industria:brass_plate",
+		"industria:tin_plate",
+		"industria:copper_plate",
+		"industria:nickel_plate",
+		"industria:steel_plate",
+		"industria:palladium_plate",
+		"industria:monel_plate",
+		"industria:redstone_alloy_plate",
+		"industria:iron_plate"
+	]
+}

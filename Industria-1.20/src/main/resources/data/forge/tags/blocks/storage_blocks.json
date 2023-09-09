@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+ 	"industria:lead_block",
+	"industria:steel_block",
+	"industria:nickel_block",
+	"industria:monel_block",
+	"industria:palladium_block",
+	"industria:aluminum_block",
+	"industria:tungsten_block",
+	"industria:tin_block",
+	"industria:silver_block",
+	"industria:brass_block",
+	"industria:redstone_alloy_block",
+	"industria:zinc_block"
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "industria:block${category}/${file_name}"
+    "all": "industria:block${category}/${model_file}"
   }
 }

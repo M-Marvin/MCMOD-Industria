@@ -12,9 +12,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
 
 import de.m_marvin.commandlineparser.CommandLineParser;
 
@@ -26,6 +25,8 @@ public class FileVariantHelper {
 		parser.addOption("gen_item_list", "", "Generate item list from texture files in the given folder");
 		parser.addOption("ignore_file_endings", "", "List of file endings ignored when generating item name list.");
 		parser.addOption("gen_file_variants", "", "Generate file variants from variant list specified in the path");
+		parser.addOption("gen_mass_file", "", "Generates a json file for the VS mass configuration");
+		parser.addOption("gen_tag_files", "", "Generates tag files from an tag table");
 		
 		parser.parseInput(args);
 		if (!parser.getOption("gen_item_list").isEmpty()) {
@@ -34,6 +35,121 @@ public class FileVariantHelper {
 		} else if (!parser.getOption("gen_file_variants").isEmpty()) {
 			System.out.println("Run make file varaints ...");
 			makeFileVariants(new File(parser.getOption("gen_file_variants")));
+		} else if (!parser.getOption("gen_mass_file").isEmpty()) {
+			System.out.println("Run gen mass file ...");
+			makeVSMasses(new File(parser.getOption("gen_mass_file")));
+		} else if (!parser.getOption("gen_tag_files").isEmpty()) {
+			System.out.println("Run gen tag files ...");
+			makeTagFiles(new File(parser.getOption("gen_tag_files")));
+		}
+		
+	}
+	
+	public static void makeTagFiles(File tagList) {
+		
+		try {
+			
+			if (tagList.isFile()) {
+				
+				InputStream is = new FileInputStream(tagList);
+				String[] entries = new String(is.readAllBytes()).split("\n");
+				is.close();
+				
+				File outputFolder = new File(tagList.getParentFile(), "tags");
+				outputFolder.mkdir();
+				
+				Map<String, Set<String>> tag2itemMap = new HashMap<>();
+				
+				for (String itemEntry : entries) {
+					
+					String[] columns = itemEntry.replace("\r", "").split("\t");
+					String itemName = columns[0];
+					
+					for (int i = 1; i < columns.length; i++) {
+						
+						String tag = columns[i];
+						
+						Set<String> itemSet = tag2itemMap.get(tag);
+						if (itemSet == null) itemSet = new HashSet<>();
+						itemSet.add(itemName);
+						if (!tag2itemMap.containsKey(tag)) tag2itemMap.put(tag, itemSet);
+						
+					}
+					
+				}
+				
+				for (Entry<String, Set<String>> tagEntry : tag2itemMap.entrySet()) {
+					
+					String tag = tagEntry.getKey();
+					String namespace = tag.split(":")[0];
+					String path = tag.substring(namespace.length() + 1) + ".json";
+					
+					StringBuilder tagBuilder = new StringBuilder();
+					
+					tagBuilder.append("{\n	\"replace\": false,\n	\"values\": [");
+					
+					boolean first = true;
+					for (String item : tagEntry.getValue()) {
+						tagBuilder.append(first ? "\n" : ",\n").append("		\"industria:" + item + "\"");
+						first = false;
+					}
+					
+					tagBuilder.append("\n	]\n}");
+					
+					File tagFile = new File(outputFolder, namespace + "/" + path);
+					tagFile.getParentFile().mkdirs();
+					OutputStream os = new FileOutputStream(tagFile);
+					os.write(tagBuilder.toString().getBytes());
+					os.close();
+					
+				}
+				
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public static void makeVSMasses(File massList) {
+		
+		try {
+			
+			if (massList.isFile()) {
+				
+				InputStream is = new FileInputStream(massList);
+				String[] entries = new String(is.readAllBytes()).split("\n");
+				is.close();
+				
+				StringBuilder massFile = new StringBuilder();
+				massFile.append("[");
+				
+				boolean first = true;
+				for (String entry : entries) {
+					
+					String[] columns = entry.split("\t");
+					String blockName = columns[0];
+					int mass = Integer.parseInt(columns[1].replace("\r", ""));
+					
+					if (mass >= 0) {
+						System.out.println("Append mass " + mass + " for block " + blockName);
+						massFile.append(first ? "\n" : ",\n").append("\t{\n\t\t\"block\": \"industria:").append(blockName).append("\",\n\t\t\"mass\": ").append(mass).append("\n\t}");
+						first = false;
+					}
+					
+				}
+				
+				massFile.append("\n]");
+				
+				OutputStream os = new FileOutputStream(new File(massList.getParentFile(), "vs_masses.json"));
+				os.write(massFile.toString().getBytes());
+				os.close();
+				
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 	}

@@ -1,286 +1,877 @@
-[09Sept.2023 16:57:53.497] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeclientuserdev, --version, MOD_DEV, --assetIndex, 5, --assetsDir, C:\Users\marvi\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.1.44, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412]
-[09Sept.2023 16:57:53.503] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 18.0.2 by Oracle Corporation; OS Windows 10 arch amd64 version 10.0
-[09Sept.2023 16:57:53.606] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: Loading ImmediateWindowProvider fmlearlywindow
-[09Sept.2023 16:57:53.664] [main/INFO] [EARLYDISPLAY/]: Trying GL version 4.6
-[09Sept.2023 16:57:53.788] [main/INFO] [EARLYDISPLAY/]: Requested GL version 4.6 got version 4.6
-[09Sept.2023 16:57:53.878] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/marvi/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23128!/ Service=ModLauncher Env=CLIENT
-[09Sept.2023 16:57:53.926] [pool-2-thread-1/INFO] [EARLYDISPLAY/]: GL info: NVIDIA GeForce RTX 2070 SUPER/PCIe/SSE2 GL version 4.6.0 NVIDIA 536.67, NVIDIA Corporation
-[09Sept.2023 16:57:54.113] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\marvi\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.1.44\5f9e4f02111b8556646fe30d438a395d7831489b\javafmllanguage-1.20.1-47.1.44.jar is missing mods.toml file
-[09Sept.2023 16:57:54.117] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\marvi\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.1.44\b0c75b3aaa10da1e196c661e2d26a95f2ef06f89\lowcodelanguage-1.20.1-47.1.44.jar is missing mods.toml file
-[09Sept.2023 16:57:54.122] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\marvi\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.1.44\c9b0a38bc3bb899928b360953b4a562783c54661\mclanguage-1.20.1-47.1.44.jar is missing mods.toml file
-[09Sept.2023 16:57:54.127] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\marvi\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.1.44\92f79b4cb3298ce1c261e2d14515244b3445f130\fmlcore-1.20.1-47.1.44.jar is missing mods.toml file
-[09Sept.2023 16:57:54.719] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: Found 25 dependencies adding them to mods collection
-[09Sept.2023 16:57:55.738] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
-[09Sept.2023 16:57:55.754] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeclientuserdev' with arguments [--version, MOD_DEV, --gameDir, ., --assetsDir, C:\Users\marvi\.gradle\caches\forge_gradle\assets, --assetIndex, 5]
-[09Sept.2023 16:57:56.004] [main/INFO] [mixin/]: Remapping refMap atlasviewer.refmap.json using E:\GitHub\MCMOD-Industria\Industria-1.20/build/createSrgToMcp/output.srg
-[09Sept.2023 16:57:56.048] [main/INFO] [mixin/]: Remapping refMap valkyrienskies-1201-common-refmap.json using E:\GitHub\MCMOD-Industria\Industria-1.20/build/createSrgToMcp/output.srg
-[09Sept.2023 16:57:56.051] [main/INFO] [mixin/]: Remapping refMap valkyrienskies-refmap.json using E:\GitHub\MCMOD-Industria\Industria-1.20/build/createSrgToMcp/output.srg
-[09Sept.2023 16:57:56.590] [main/WARN] [mixin/]: Error loading class: com/jozufozu/flywheel/backend/instancing/instancing/InstancingEngine (java.lang.ClassNotFoundException: com.jozufozu.flywheel.backend.instancing.instancing.InstancingEngine)
-[09Sept.2023 16:57:56.592] [main/WARN] [mixin/]: Error loading class: com/jozufozu/flywheel/backend/instancing/blockentity/BlockEntityInstanceManager (java.lang.ClassNotFoundException: com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstanceManager)
-[09Sept.2023 16:57:56.594] [main/WARN] [mixin/]: Error loading class: com/jozufozu/flywheel/backend/instancing/InstanceManager (java.lang.ClassNotFoundException: com.jozufozu.flywheel.backend.instancing.InstanceManager)
-[09Sept.2023 16:57:56.596] [main/WARN] [mixin/]: Error loading class: com/jozufozu/flywheel/backend/instancing/InstanceWorld (java.lang.ClassNotFoundException: com.jozufozu.flywheel.backend.instancing.InstanceWorld)
-[09Sept.2023 16:57:56.597] [main/WARN] [mixin/]: Error loading class: com/jozufozu/flywheel/backend/instancing/instancing/InstancingEngine (java.lang.ClassNotFoundException: com.jozufozu.flywheel.backend.instancing.instancing.InstancingEngine)
-[09Sept.2023 16:57:56.599] [main/WARN] [mixin/]: Error loading class: com/sonicether/soundphysics/SoundPhysics (java.lang.ClassNotFoundException: com.sonicether.soundphysics.SoundPhysics)
-[09Sept.2023 16:57:56.617] [main/WARN] [mixin/]: Error loading class: blusunrize/immersiveengineering/common/gui/BlockEntityInventory (java.lang.ClassNotFoundException: blusunrize.immersiveengineering.common.gui.BlockEntityInventory)
-[09Sept.2023 16:57:56.620] [main/WARN] [mixin/]: Error loading class: cofh/core/block/entity/TileCoFH (java.lang.ClassNotFoundException: cofh.core.block.entity.TileCoFH)
-[09Sept.2023 16:57:56.625] [main/WARN] [mixin/]: Error loading class: me/jellysquid/mods/sodium/client/render/chunk/RenderSectionManager (java.lang.ClassNotFoundException: me.jellysquid.mods.sodium.client.render.chunk.RenderSectionManager)
-[09Sept.2023 16:57:56.626] [main/WARN] [mixin/]: @Mixin target me.jellysquid.mods.sodium.client.render.chunk.RenderSectionManager was not found valkyrienskies-forge.mixins.json:compat.sodium.MixinRenderSectionManager
-[09Sept.2023 16:57:56.646] [main/ERROR] [mixin/]: valkyrienskies-common.mixins.json:feature.container_distance_check.MixinContainer: Interface mixin contains a non-public method! Found includeShipsInDistanceCheck(Lnet/minecraft/world/entity/player/Player;DDD)D in valkyrienskies-common.mixins.json:feature.container_distance_check.MixinContainer
-org.spongepowered.asm.mixin.transformer.throwables.InvalidInterfaceMixinException: Interface mixin contains a non-public method! Found includeShipsInDistanceCheck(Lnet/minecraft/world/entity/player/Player;DDD)D in valkyrienskies-common.mixins.json:feature.container_distance_check.MixinContainer
-	at org.spongepowered.asm.mixin.transformer.MixinPreProcessorInterface.prepareMethod(MixinPreProcessorInterface.java:65) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
-	at org.spongepowered.asm.mixin.transformer.MixinPreProcessorStandard.prepare(MixinPreProcessorStandard.java:187) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
-	at org.spongepowered.asm.mixin.transformer.MixinInfo$State.validate(MixinInfo.java:322) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
-	at org.spongepowered.asm.mixin.transformer.MixinInfo.validate(MixinInfo.java:913) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
-	at org.spongepowered.asm.mixin.transformer.MixinConfig.postInitialise(MixinConfig.java:801) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
-	at org.spongepowered.asm.mixin.transformer.MixinProcessor.prepareConfigs(MixinProcessor.java:567) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
-	at org.spongepowered.asm.mixin.transformer.MixinProcessor.select(MixinProcessor.java:462) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
-	at org.spongepowered.asm.mixin.transformer.MixinProcessor.checkSelect(MixinProcessor.java:438) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
-	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:290) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
-	at org.spongepowered.asm.mixin.transformer.MixinTransformer.transformClass(MixinTransformer.java:250) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
-	at org.spongepowered.asm.service.modlauncher.MixinTransformationHandler.processClass(MixinTransformationHandler.java:131) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
-	at org.spongepowered.asm.launch.MixinLaunchPluginLegacy.processClass(MixinLaunchPluginLegacy.java:131) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
-	at cpw.mods.modlauncher.serviceapi.ILaunchPluginService.processClassWithFlags(ILaunchPluginService.java:156) ~[modlauncher-10.0.9.jar:10.0.9+10.0.9+main.dcd20f30]
-	at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88) ~[modlauncher-10.0.9.jar:?]
-	at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120) ~[modlauncher-10.0.9.jar:?]
-	at cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50) ~[modlauncher-10.0.9.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
-	at java.lang.ClassLoader.loadClass(ClassLoader.java:633) ~[?:?]
-	at java.lang.Class.forName(Class.java:577) ~[?:?]
-	at java.lang.Class.forName(Class.java:552) ~[?:?]
-	at net.minecraftforge.fml.earlydisplay.DisplayWindow.lambda$updateModuleReads$18(DisplayWindow.java:586) ~[fmlearlydisplay-1.20.1-47.1.44.jar:1.0]
-	at java.util.Optional.map(Optional.java:260) ~[?:?]
-	at net.minecraftforge.fml.earlydisplay.DisplayWindow.updateModuleReads(DisplayWindow.java:586) ~[fmlearlydisplay-1.20.1-47.1.44.jar:1.0]
-	at net.minecraftforge.fml.loading.ImmediateWindowHandler.acceptGameLayer(ImmediateWindowHandler.java:71) ~[fmlloader-1.20.1-47.1.44.jar:1.0]
-	at net.minecraftforge.fml.loading.FMLLoader.beforeStart(FMLLoader.java:207) ~[fmlloader-1.20.1-47.1.44.jar:1.0]
-	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.launchService(CommonLaunchHandler.java:92) ~[fmlloader-1.20.1-47.1.44.jar:?]
-	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) ~[modlauncher-10.0.9.jar:?]
-	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) ~[modlauncher-10.0.9.jar:?]
-	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) ~[modlauncher-10.0.9.jar:?]
-	at cpw.mods.modlauncher.Launcher.run(Launcher.java:108) ~[modlauncher-10.0.9.jar:?]
-	at cpw.mods.modlauncher.Launcher.main(Launcher.java:78) ~[modlauncher-10.0.9.jar:?]
-	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar:?]
-	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar:?]
-	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?]
-[09Sept.2023 16:57:59.774] [Datafixer Bootstrap/INFO] [com.mojang.datafixers.DataFixerBuilder/]: 188 Datafixer optimizations took 97 milliseconds
-[09Sept.2023 16:58:01.158] [Render thread/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/E:/GitHub/MCMOD-Industria/Industria-1.20/build/fg_cache/net/minecraftforge/forge/1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1/forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/assets/.mcassetsroot' uses unexpected schema
-[09Sept.2023 16:58:01.158] [Render thread/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/E:/GitHub/MCMOD-Industria/Industria-1.20/build/fg_cache/net/minecraftforge/forge/1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1/forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/data/.mcassetsroot' uses unexpected schema
-[09Sept.2023 16:58:01.170] [Render thread/INFO] [com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService/]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
-[09Sept.2023 16:58:01.173] [Render thread/INFO] [net.minecraft.client.Minecraft/]: Setting user: Dev
-[09Sept.2023 16:58:01.251] [Render thread/INFO] [net.minecraft.client.Minecraft/]: Backend library: LWJGL version 3.3.1 build 7
-[09Sept.2023 16:58:01.490] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.1.44, for MC 1.20.1 with MCP 20230612.114412
-[09Sept.2023 16:58:01.493] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.1.44 Initialized
-[09Sept.2023 16:58:01.500] [modloading-worker-0/INFO] [de.m_marvin.industria.IndustriaCore/]: Set UniVec obfuscation resolver
-[09Sept.2023 16:58:01.750] [modloading-worker-0/INFO] [thedarkcolour.kotlinforforge.test.KotlinForForge/]: Kotlin For Forge Enabled!
-[09Sept.2023 16:58:03.232] [Render thread/INFO] [net.minecraftforge.gametest.ForgeGameTestHooks/]: Enabled Gametest Namespaces: [examplemod]
-[09Sept.2023 16:58:03.395] [Render thread/INFO] [net.minecraft.server.packs.resources.ReloadableResourceManager/]: Reloading ResourceManager: vanilla, mod_resources
-[09Sept.2023 16:58:03.482] [Forge Version Check/INFO] [net.minecraftforge.fml.VersionChecker/]: [forge] Starting version check at https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json
-[09Sept.2023 16:58:03.509] [Worker-Main-13/INFO] [net.minecraft.client.gui.font.providers.UnihexProvider/]: Found unifont_all_no_pua-15.0.06.hex, loading
-[09Sept.2023 16:58:04.045] [Forge Version Check/INFO] [net.minecraftforge.fml.VersionChecker/]: [forge] Found status: OUTDATED Current: 47.1.44 Target: 47.1.46
-[09Sept.2023 16:58:04.131] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=8,waterlogged=false'
-[09Sept.2023 16:58:04.131] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=5,waterlogged=false'
-[09Sept.2023 16:58:04.131] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=13,waterlogged=true'
-[09Sept.2023 16:58:04.131] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=14,waterlogged=false'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=11,waterlogged=false'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=2,waterlogged=false'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=1,waterlogged=true'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=0,waterlogged=false'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=5,waterlogged=true'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=9,waterlogged=true'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=12,waterlogged=false'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=3,waterlogged=false'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=15,waterlogged=false'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=6,waterlogged=false'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=9,waterlogged=false'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=11,waterlogged=true'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=12,waterlogged=true'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=0,waterlogged=true'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=4,waterlogged=true'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=1,waterlogged=false'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=8,waterlogged=true'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=10,waterlogged=false'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=15,waterlogged=true'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=10,waterlogged=true'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=7,waterlogged=true'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=3,waterlogged=true'
-[09Sept.2023 16:58:04.132] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=14,waterlogged=true'
-[09Sept.2023 16:58:04.133] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=6,waterlogged=true'
-[09Sept.2023 16:58:04.133] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=7,waterlogged=false'
-[09Sept.2023 16:58:04.133] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=13,waterlogged=false'
-[09Sept.2023 16:58:04.133] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=2,waterlogged=true'
-[09Sept.2023 16:58:04.133] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/light_air_block.json' missing model for variant: 'industria:light_air_block#level=4,waterlogged=false'
-[09Sept.2023 16:58:04.134] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_steel_block.json' missing model for variant: 'industria:waxed_steel_block#'
-[09Sept.2023 16:58:04.134] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_weathered_steel_block.json' missing model for variant: 'industria:waxed_weathered_steel_block#'
-[09Sept.2023 16:58:04.134] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_exposed_steel_block.json' missing model for variant: 'industria:waxed_exposed_steel_block#'
-[09Sept.2023 16:58:04.134] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_oxidized_steel_block.json' missing model for variant: 'industria:waxed_oxidized_steel_block#'
-[09Sept.2023 16:58:04.134] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_tin_block.json' missing model for variant: 'industria:waxed_tin_block#'
-[09Sept.2023 16:58:04.134] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_weathered_tin_block.json' missing model for variant: 'industria:waxed_weathered_tin_block#'
-[09Sept.2023 16:58:04.134] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_exposed_tin_block.json' missing model for variant: 'industria:waxed_exposed_tin_block#'
-[09Sept.2023 16:58:04.134] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_oxidized_tin_block.json' missing model for variant: 'industria:waxed_oxidized_tin_block#'
-[09Sept.2023 16:58:04.134] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_iron_block.json' missing model for variant: 'industria:waxed_iron_block#'
-[09Sept.2023 16:58:04.135] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_weathered_iron_block.json' missing model for variant: 'industria:waxed_weathered_iron_block#'
-[09Sept.2023 16:58:04.135] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_exposed_iron_block.json' missing model for variant: 'industria:waxed_exposed_iron_block#'
-[09Sept.2023 16:58:04.135] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_oxidized_iron_block.json' missing model for variant: 'industria:waxed_oxidized_iron_block#'
-[09Sept.2023 16:58:04.135] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_brass_block.json' missing model for variant: 'industria:waxed_brass_block#'
-[09Sept.2023 16:58:04.135] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_weathered_brass_block.json' missing model for variant: 'industria:waxed_weathered_brass_block#'
-[09Sept.2023 16:58:04.135] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_exposed_brass_block.json' missing model for variant: 'industria:waxed_exposed_brass_block#'
-[09Sept.2023 16:58:04.135] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_oxidized_brass_block.json' missing model for variant: 'industria:waxed_oxidized_brass_block#'
-[09Sept.2023 16:58:04.135] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/oxidized_steel_plates.json' missing model for variant: 'industria:oxidized_steel_plates#'
-[09Sept.2023 16:58:04.135] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_steel_plates.json' missing model for variant: 'industria:waxed_steel_plates#'
-[09Sept.2023 16:58:04.135] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_weathered_steel_plates.json' missing model for variant: 'industria:waxed_weathered_steel_plates#'
-[09Sept.2023 16:58:04.135] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_oxidized_steel_plates.json' missing model for variant: 'industria:waxed_oxidized_steel_plates#'
-[09Sept.2023 16:58:04.135] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_exposed_steel_plates.json' missing model for variant: 'industria:waxed_exposed_steel_plates#'
-[09Sept.2023 16:58:04.135] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_tin_plates.json' missing model for variant: 'industria:waxed_tin_plates#'
-[09Sept.2023 16:58:04.135] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_weathered_tin_plates.json' missing model for variant: 'industria:waxed_weathered_tin_plates#'
-[09Sept.2023 16:58:04.135] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_exposed_tin_plates.json' missing model for variant: 'industria:waxed_exposed_tin_plates#'
-[09Sept.2023 16:58:04.135] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_oxidized_tin_plates.json' missing model for variant: 'industria:waxed_oxidized_tin_plates#'
-[09Sept.2023 16:58:04.136] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_iron_plates.json' missing model for variant: 'industria:waxed_iron_plates#'
-[09Sept.2023 16:58:04.136] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_weathered_iron_plates.json' missing model for variant: 'industria:waxed_weathered_iron_plates#'
-[09Sept.2023 16:58:04.136] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_exposed_iron_plates.json' missing model for variant: 'industria:waxed_exposed_iron_plates#'
-[09Sept.2023 16:58:04.136] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_oxidized_iron_plates.json' missing model for variant: 'industria:waxed_oxidized_iron_plates#'
-[09Sept.2023 16:58:04.136] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_copper_plates.json' missing model for variant: 'industria:waxed_copper_plates#'
-[09Sept.2023 16:58:04.136] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_weathered_copper_plates.json' missing model for variant: 'industria:waxed_weathered_copper_plates#'
-[09Sept.2023 16:58:04.136] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_exposed_copper_plates.json' missing model for variant: 'industria:waxed_exposed_copper_plates#'
-[09Sept.2023 16:58:04.136] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_oxidized_copper_plates.json' missing model for variant: 'industria:waxed_oxidized_copper_plates#'
-[09Sept.2023 16:58:04.136] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_brass_plates.json' missing model for variant: 'industria:waxed_brass_plates#'
-[09Sept.2023 16:58:04.136] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_weathered_brass_plates.json' missing model for variant: 'industria:waxed_weathered_brass_plates#'
-[09Sept.2023 16:58:04.136] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_exposed_brass_plates.json' missing model for variant: 'industria:waxed_exposed_brass_plates#'
-[09Sept.2023 16:58:04.136] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Exception loading blockstate definition: 'industria:blockstates/waxed_oxidized_brass_plates.json' missing model for variant: 'industria:waxed_oxidized_brass_plates#'
-[09Sept.2023 16:58:04.137] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'minecraft:valkyrienskies' referenced from: valkyrienskies:test_flap#facing=north: java.io.FileNotFoundException: minecraft:models/valkyrienskies.json
-[09Sept.2023 16:58:04.142] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_steel_block#inventory' referenced from: industria:waxed_steel_block#inventory: java.io.FileNotFoundException: industria:models/item/waxed_steel_block.json
-[09Sept.2023 16:58:04.142] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_weathered_steel_block#inventory' referenced from: industria:waxed_weathered_steel_block#inventory: java.io.FileNotFoundException: industria:models/item/waxed_weathered_steel_block.json
-[09Sept.2023 16:58:04.142] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_exposed_steel_block#inventory' referenced from: industria:waxed_exposed_steel_block#inventory: java.io.FileNotFoundException: industria:models/item/waxed_exposed_steel_block.json
-[09Sept.2023 16:58:04.143] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_oxidized_steel_block#inventory' referenced from: industria:waxed_oxidized_steel_block#inventory: java.io.FileNotFoundException: industria:models/item/waxed_oxidized_steel_block.json
-[09Sept.2023 16:58:04.143] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_tin_block#inventory' referenced from: industria:waxed_tin_block#inventory: java.io.FileNotFoundException: industria:models/item/waxed_tin_block.json
-[09Sept.2023 16:58:04.143] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_weathered_tin_block#inventory' referenced from: industria:waxed_weathered_tin_block#inventory: java.io.FileNotFoundException: industria:models/item/waxed_weathered_tin_block.json
-[09Sept.2023 16:58:04.143] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_exposed_tin_block#inventory' referenced from: industria:waxed_exposed_tin_block#inventory: java.io.FileNotFoundException: industria:models/item/waxed_exposed_tin_block.json
-[09Sept.2023 16:58:04.143] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_oxidized_tin_block#inventory' referenced from: industria:waxed_oxidized_tin_block#inventory: java.io.FileNotFoundException: industria:models/item/waxed_oxidized_tin_block.json
-[09Sept.2023 16:58:04.143] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_iron_block#inventory' referenced from: industria:waxed_iron_block#inventory: java.io.FileNotFoundException: industria:models/item/waxed_iron_block.json
-[09Sept.2023 16:58:04.143] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_weathered_iron_block#inventory' referenced from: industria:waxed_weathered_iron_block#inventory: java.io.FileNotFoundException: industria:models/item/waxed_weathered_iron_block.json
-[09Sept.2023 16:58:04.143] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_exposed_iron_block#inventory' referenced from: industria:waxed_exposed_iron_block#inventory: java.io.FileNotFoundException: industria:models/item/waxed_exposed_iron_block.json
-[09Sept.2023 16:58:04.143] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_oxidized_iron_block#inventory' referenced from: industria:waxed_oxidized_iron_block#inventory: java.io.FileNotFoundException: industria:models/item/waxed_oxidized_iron_block.json
-[09Sept.2023 16:58:04.143] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_brass_block#inventory' referenced from: industria:waxed_brass_block#inventory: java.io.FileNotFoundException: industria:models/item/waxed_brass_block.json
-[09Sept.2023 16:58:04.143] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_weathered_brass_block#inventory' referenced from: industria:waxed_weathered_brass_block#inventory: java.io.FileNotFoundException: industria:models/item/waxed_weathered_brass_block.json
-[09Sept.2023 16:58:04.143] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_exposed_brass_block#inventory' referenced from: industria:waxed_exposed_brass_block#inventory: java.io.FileNotFoundException: industria:models/item/waxed_exposed_brass_block.json
-[09Sept.2023 16:58:04.143] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_oxidized_brass_block#inventory' referenced from: industria:waxed_oxidized_brass_block#inventory: java.io.FileNotFoundException: industria:models/item/waxed_oxidized_brass_block.json
-[09Sept.2023 16:58:04.143] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:oxidized_steel_plates#inventory' referenced from: industria:oxidized_steel_plates#inventory: java.io.FileNotFoundException: industria:models/item/oxidized_steel_plates.json
-[09Sept.2023 16:58:04.143] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_steel_plates#inventory' referenced from: industria:waxed_steel_plates#inventory: java.io.FileNotFoundException: industria:models/item/waxed_steel_plates.json
-[09Sept.2023 16:58:04.143] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_weathered_steel_plates#inventory' referenced from: industria:waxed_weathered_steel_plates#inventory: java.io.FileNotFoundException: industria:models/item/waxed_weathered_steel_plates.json
-[09Sept.2023 16:58:04.143] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_oxidized_steel_plates#inventory' referenced from: industria:waxed_oxidized_steel_plates#inventory: java.io.FileNotFoundException: industria:models/item/waxed_oxidized_steel_plates.json
-[09Sept.2023 16:58:04.143] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_exposed_steel_plates#inventory' referenced from: industria:waxed_exposed_steel_plates#inventory: java.io.FileNotFoundException: industria:models/item/waxed_exposed_steel_plates.json
-[09Sept.2023 16:58:04.143] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_tin_plates#inventory' referenced from: industria:waxed_tin_plates#inventory: java.io.FileNotFoundException: industria:models/item/waxed_tin_plates.json
-[09Sept.2023 16:58:04.144] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_weathered_tin_plates#inventory' referenced from: industria:waxed_weathered_tin_plates#inventory: java.io.FileNotFoundException: industria:models/item/waxed_weathered_tin_plates.json
-[09Sept.2023 16:58:04.144] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_exposed_tin_plates#inventory' referenced from: industria:waxed_exposed_tin_plates#inventory: java.io.FileNotFoundException: industria:models/item/waxed_exposed_tin_plates.json
-[09Sept.2023 16:58:04.144] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_oxidized_tin_plates#inventory' referenced from: industria:waxed_oxidized_tin_plates#inventory: java.io.FileNotFoundException: industria:models/item/waxed_oxidized_tin_plates.json
-[09Sept.2023 16:58:04.144] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_iron_plates#inventory' referenced from: industria:waxed_iron_plates#inventory: java.io.FileNotFoundException: industria:models/item/waxed_iron_plates.json
-[09Sept.2023 16:58:04.144] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_weathered_iron_plates#inventory' referenced from: industria:waxed_weathered_iron_plates#inventory: java.io.FileNotFoundException: industria:models/item/waxed_weathered_iron_plates.json
-[09Sept.2023 16:58:04.144] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_exposed_iron_plates#inventory' referenced from: industria:waxed_exposed_iron_plates#inventory: java.io.FileNotFoundException: industria:models/item/waxed_exposed_iron_plates.json
-[09Sept.2023 16:58:04.144] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_oxidized_iron_plates#inventory' referenced from: industria:waxed_oxidized_iron_plates#inventory: java.io.FileNotFoundException: industria:models/item/waxed_oxidized_iron_plates.json
-[09Sept.2023 16:58:04.144] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_copper_plates#inventory' referenced from: industria:waxed_copper_plates#inventory: java.io.FileNotFoundException: industria:models/item/waxed_copper_plates.json
-[09Sept.2023 16:58:04.144] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_weathered_copper_plates#inventory' referenced from: industria:waxed_weathered_copper_plates#inventory: java.io.FileNotFoundException: industria:models/item/waxed_weathered_copper_plates.json
-[09Sept.2023 16:58:04.144] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_exposed_copper_plates#inventory' referenced from: industria:waxed_exposed_copper_plates#inventory: java.io.FileNotFoundException: industria:models/item/waxed_exposed_copper_plates.json
-[09Sept.2023 16:58:04.144] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_oxidized_copper_plates#inventory' referenced from: industria:waxed_oxidized_copper_plates#inventory: java.io.FileNotFoundException: industria:models/item/waxed_oxidized_copper_plates.json
-[09Sept.2023 16:58:04.144] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_brass_plates#inventory' referenced from: industria:waxed_brass_plates#inventory: java.io.FileNotFoundException: industria:models/item/waxed_brass_plates.json
-[09Sept.2023 16:58:04.144] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_weathered_brass_plates#inventory' referenced from: industria:waxed_weathered_brass_plates#inventory: java.io.FileNotFoundException: industria:models/item/waxed_weathered_brass_plates.json
-[09Sept.2023 16:58:04.144] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_exposed_brass_plates#inventory' referenced from: industria:waxed_exposed_brass_plates#inventory: java.io.FileNotFoundException: industria:models/item/waxed_exposed_brass_plates.json
-[09Sept.2023 16:58:04.144] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'industria:waxed_oxidized_brass_plates#inventory' referenced from: industria:waxed_oxidized_brass_plates#inventory: java.io.FileNotFoundException: industria:models/item/waxed_oxidized_brass_plates.json
-[09Sept.2023 16:58:04.144] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelBakery/]: Unable to load model: 'valkyrienskies:ship_assembler#inventory' referenced from: valkyrienskies:ship_assembler#inventory: java.io.FileNotFoundException: valkyrienskies:models/item/ship_assembler.json
-[09Sept.2023 16:58:04.561] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_flap#facing=north:
-    minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
-[09Sept.2023 16:58:04.561] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_wing#facing=east:
-    minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
-[09Sept.2023 16:58:04.561] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_wing#facing=south:
-    minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
-[09Sept.2023 16:58:04.561] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_flap#inventory:
-    minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
-[09Sept.2023 16:58:04.561] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_flap#facing=west:
-    minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
-[09Sept.2023 16:58:04.561] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_wing#facing=up:
-    minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
-[09Sept.2023 16:58:04.561] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_wing#inventory:
-    minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
-[09Sept.2023 16:58:04.561] [Worker-Main-4/WARN] [net.minecraft.client.resources.model.ModelManager/]: Missing textures in model valkyrienskies:test_flap#facing=down:
-    minecraft:textures/atlas/blocks.png:valkyrienskies:test_wing
-[09Sept.2023 16:58:07.779] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine/]: Missing sound for event: minecraft:item.goat_horn.play
-[09Sept.2023 16:58:07.779] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine/]: Missing sound for event: minecraft:entity.goat.screaming.horn_break
-[09Sept.2023 16:58:07.822] [Render thread/INFO] [com.mojang.blaze3d.audio.Library/]: OpenAL initialized on device OpenAL Soft on Lautsprecher (Realtek(R) Audio)
-[09Sept.2023 16:58:07.822] [Render thread/INFO] [net.minecraft.client.sounds.SoundEngine/SOUNDS]: Sound engine started
-[09Sept.2023 16:58:07.914] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 1024x512x4 minecraft:textures/atlas/blocks.png-atlas
-[09Sept.2023 16:58:07.920] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x4 minecraft:textures/atlas/signs.png-atlas
-[09Sept.2023 16:58:07.922] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x512x4 minecraft:textures/atlas/banner_patterns.png-atlas
-[09Sept.2023 16:58:07.923] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x512x4 minecraft:textures/atlas/shield_patterns.png-atlas
-[09Sept.2023 16:58:07.924] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 1024x1024x4 minecraft:textures/atlas/armor_trims.png-atlas
-[09Sept.2023 16:58:07.927] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x4 minecraft:textures/atlas/chest.png-atlas
-[09Sept.2023 16:58:07.929] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 128x64x4 minecraft:textures/atlas/decorated_pot.png-atlas
-[09Sept.2023 16:58:07.929] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x4 minecraft:textures/atlas/beds.png-atlas
-[09Sept.2023 16:58:07.929] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x4 minecraft:textures/atlas/shulker_boxes.png-atlas
-[09Sept.2023 16:58:08.018] [Render thread/WARN] [net.minecraft.client.renderer.ShaderInstance/]: Shader rendertype_entity_translucent_emissive could not find sampler named Sampler2 in the specified shader program.
-[09Sept.2023 16:58:08.053] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x0 minecraft:textures/atlas/particles.png-atlas
-[09Sept.2023 16:58:08.054] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x0 minecraft:textures/atlas/paintings.png-atlas
-[09Sept.2023 16:58:08.054] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 128x128x0 minecraft:textures/atlas/mob_effects.png-atlas
-[09Sept.2023 16:58:08.055] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x128x0 industriacore:textures/atlas/conduits.png-atlas
-[09Sept.2023 16:58:08.220] [Realms Notification Availability checker #1/INFO] [com.mojang.realmsclient.client.RealmsClient/]: Could not authorize you against Realms server: Invalid session id
-[09Sept.2023 16:58:13.655] [Render thread/INFO] [net.minecraftforge.registries.GameData/REGISTRIES]: Injecting existing registry data into this CLIENT instance
-[09Sept.2023 16:58:13.687] [Render thread/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:block: Object did not get ID it asked for. Name: industria:waxed_steel_block Expected: 1031 Got: 1112
-[09Sept.2023 16:58:13.687] [Render thread/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:block: Object did not get ID it asked for. Name: industria:waxed_tin_block Expected: 1044 Got: 1113
-[09Sept.2023 16:58:13.687] [Render thread/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:block: Object did not get ID it asked for. Name: industria:waxed_iron_block Expected: 1051 Got: 1114
-[09Sept.2023 16:58:13.687] [Render thread/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:block: Object did not get ID it asked for. Name: industria:waxed_brass_block Expected: 1060 Got: 1115
-[09Sept.2023 16:58:13.687] [Render thread/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:block: Object did not get ID it asked for. Name: industria:waxed_steel_plates Expected: 1074 Got: 1116
-[09Sept.2023 16:58:13.687] [Render thread/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:block: Object did not get ID it asked for. Name: industria:waxed_tin_plates Expected: 1087 Got: 1117
-[09Sept.2023 16:58:13.687] [Render thread/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:block: Object did not get ID it asked for. Name: industria:waxed_iron_plates Expected: 1095 Got: 1118
-[09Sept.2023 16:58:13.687] [Render thread/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:block: Object did not get ID it asked for. Name: industria:waxed_copper_plates Expected: 1103 Got: 1119
-[09Sept.2023 16:58:13.687] [Render thread/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:block: Object did not get ID it asked for. Name: industria:waxed_brass_plates Expected: 1112 Got: 1120
-[09Sept.2023 16:58:13.688] [Render thread/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:item: Object did not get ID it asked for. Name: industria:waxed_steel_block Expected: 1396 Got: 1480
-[09Sept.2023 16:58:13.688] [Render thread/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:item: Object did not get ID it asked for. Name: industria:waxed_tin_block Expected: 1409 Got: 1481
-[09Sept.2023 16:58:13.688] [Render thread/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:item: Object did not get ID it asked for. Name: industria:waxed_iron_block Expected: 1416 Got: 1482
-[09Sept.2023 16:58:13.688] [Render thread/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:item: Object did not get ID it asked for. Name: industria:waxed_brass_block Expected: 1425 Got: 1483
-[09Sept.2023 16:58:13.688] [Render thread/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:item: Object did not get ID it asked for. Name: industria:waxed_steel_plates Expected: 1439 Got: 1484
-[09Sept.2023 16:58:13.688] [Render thread/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:item: Object did not get ID it asked for. Name: industria:waxed_tin_plates Expected: 1452 Got: 1485
-[09Sept.2023 16:58:13.688] [Render thread/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:item: Object did not get ID it asked for. Name: industria:waxed_iron_plates Expected: 1460 Got: 1486
-[09Sept.2023 16:58:13.688] [Render thread/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:item: Object did not get ID it asked for. Name: industria:waxed_copper_plates Expected: 1468 Got: 1487
-[09Sept.2023 16:58:13.688] [Render thread/WARN] [net.minecraftforge.registries.ForgeRegistry/REGISTRIES]: Registry minecraft:item: Object did not get ID it asked for. Name: industria:waxed_brass_plates Expected: 1477 Got: 1488
-[09Sept.2023 16:58:16.433] [Worker-Main-11/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 5 parametric
-[09Sept.2023 16:58:16.438] [Worker-Main-21/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 4 circuit templates
-[09Sept.2023 16:58:16.639] [Render thread/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 8 recipes
-[09Sept.2023 16:58:16.712] [Render thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 1271 advancements
-[09Sept.2023 16:58:18.881] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
-[09Sept.2023 16:58:18.957] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Starting integrated minecraft server version 1.20.1
-[09Sept.2023 16:58:18.957] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Generating keypair
-[09Sept.2023 16:58:19.338] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 59/59 conduits
-[09Sept.2023 16:58:20.397] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 21/21 electric networks
-[09Sept.2023 16:58:20.397] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 138 electric components
-[09Sept.2023 16:58:20.570] [Server thread/INFO] [org.valkyrienskies.core.impl.networking.VSNetworking/]: We are not using UDP, falling back to TCP
-[09Sept.2023 16:58:20.597] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 0/0 conduits
-[09Sept.2023 16:58:20.597] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 0/0 electric networks
-[09Sept.2023 16:58:20.597] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 0 electric components
-[09Sept.2023 16:58:20.606] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 0/0 conduits
-[09Sept.2023 16:58:20.606] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 0/0 electric networks
-[09Sept.2023 16:58:20.606] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 0 electric components
-[09Sept.2023 16:58:20.607] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Preparing start region for dimension minecraft:overworld
-[09Sept.2023 16:58:22.242] [Render thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Einstiegsbereich wird vorbereitet: 5 %
-[09Sept.2023 16:58:22.242] [Render thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Einstiegsbereich wird vorbereitet: 5 %
-[09Sept.2023 16:58:22.242] [Render thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Einstiegsbereich wird vorbereitet: 5 %
-[09Sept.2023 16:58:22.260] [Render thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Einstiegsbereich wird vorbereitet: 5 %
-[09Sept.2023 16:58:22.626] [Render thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Einstiegsbereich wird vorbereitet: 5 %
-[09Sept.2023 16:58:23.127] [Render thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Einstiegsbereich wird vorbereitet: 85 %
-[09Sept.2023 16:58:23.221] [Server thread/INFO] [net.minecraftforge.server.permission.PermissionAPI/]: Successfully initialized permission handler forge:default_handler
-[09Sept.2023 16:58:23.224] [Render thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Time elapsed: 2609 ms
-[09Sept.2023 16:58:23.823] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Changing view distance to 12, from 10
-[09Sept.2023 16:58:23.826] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Changing simulation distance to 12, from 0
-[09Sept.2023 16:58:23.906] [Render thread/WARN] [io.netty.util.internal.SystemPropertyUtil/]: Unable to parse the boolean system property 'java.net.preferIPv6Addresses':system - using the default value: false
-[09Sept.2023 16:58:24.207] [Netty Local Client IO #0/INFO] [net.minecraftforge.network.NetworkHooks/]: Connected to a modded server.
-[09Sept.2023 16:58:24.305] [Server thread/INFO] [net.minecraft.server.players.PlayerList/]: Dev[local:E:67a901c9] logged in with entity id 100 at (735.8047500026868, 78.03998836819258, -559.5378251444413)
-[09Sept.2023 16:58:24.372] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Dev hat das Spiel betreten
-[09Sept.2023 16:58:24.871] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
-[09Sept.2023 16:58:24.887] [Render thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 277 advancements
-[09Sept.2023 17:03:24.055] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
-[09Sept.2023 17:03:24.057] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
-[09Sept.2023 17:03:24.057] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
-[09Sept.2023 17:03:24.131] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
-[09Sept.2023 17:03:24.131] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
-[09Sept.2023 17:03:24.131] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
-[09Sept.2023 17:03:24.133] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
-[09Sept.2023 17:03:24.133] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
-[09Sept.2023 17:03:24.133] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:00:54.352] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 00:00:54.359] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 00:00:54.359] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 00:00:54.395] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:00:54.396] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:00:54.396] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:00:54.397] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:00:54.397] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:00:54.397] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:05:54.350] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 00:05:54.352] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 00:05:54.352] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 00:05:54.389] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:05:54.390] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:05:54.390] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:05:54.391] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:05:54.391] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:05:54.391] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:06:37.670] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: [Dev: Datenpakete werden neu geladen]
+[10Sept.2023 00:06:37.687] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Datenpakete werden neu geladen
+[10Sept.2023 00:06:37.769] [Worker-Main-22/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 4 circuit templates
+[10Sept.2023 00:06:37.779] [Worker-Main-3/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 5 parametric
+[10Sept.2023 00:06:37.780] [Worker-Main-9/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:palladium_block (from main), minecraft:netherite_plates (from main), minecraft:palladium_plates (from main)] as it is missing following references: minecraft:palladium_block (from main), 
+	minecraft:netherite_plates (from main), 
+	minecraft:palladium_plates (from main)
+[10Sept.2023 00:06:37.781] [Worker-Main-9/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:lead_block (from main), minecraft:steel_block (from main), minecraft:weathered_steel_block (from main), minecraft:exposed_steel_block (from main), minecraft:oxidized_steel_block (from main), minecraft:nickel_block (from main), minecraft:monel_block (from main), minecraft:tin_block (from main), minecraft:weathered_tin_block (from main), minecraft:exposed_tin_block (from main), minecraft:oxidized_tin_block (from main), minecraft:silver_block (from main), minecraft:redstone_alloy_block (from main), minecraft:zinc_block (from main), minecraft:lead_plates (from main), minecraft:gold_plates (from main), minecraft:steel_plates (from main), minecraft:weathered_steel_plates (from main), minecraft:exposed_steel_plates (from main), minecraft:nickel_plates (from main), minecraft:monel_plates (from main), minecraft:tin_plates (from main), minecraft:weathered_tin_plates (from main), minecraft:exposed_tin_plates (from main), minecraft:oxidized_tin_plates (from main), minecraft:silver_plates (from main), minecraft:redstone_alloy_plates (from main), minecraft:waxed_tin_block (from main), minecraft:waxed_exposed_tin_block (from main), minecraft:waxed_weathered_tin_block (from main), minecraft:waxed_oxidized_tin_block (from main), minecraft:waxed_tin_plates (from main), minecraft:waxed_exposed_tin_plates (from main), minecraft:waxed_weathered_tin_plates (from main), minecraft:waxed_oxidized_tin_plates (from main), minecraft:waxed_steel_block (from main), minecraft:waxed_exposed_steel_block (from main), minecraft:waxed_weathered_steel_block (from main), minecraft:waxed_oxidized_steel_block (from main), minecraft:waxed_steel_plates (from main), minecraft:waxed_exposed_steel_plates (from main), minecraft:waxed_weathered_steel_plates (from main), minecraft:waxed_oxidized_steel_plates (from main), minecraft:tungsten_block (from main), minecraft:tungsten_plates (from main)] as it is missing following references: minecraft:lead_block (from main), 
+	minecraft:steel_block (from main), 
+	minecraft:weathered_steel_block (from main), 
+	minecraft:exposed_steel_block (from main), 
+	minecraft:oxidized_steel_block (from main), 
+	minecraft:nickel_block (from main), 
+	minecraft:monel_block (from main), 
+	minecraft:tin_block (from main), 
+	minecraft:weathered_tin_block (from main), 
+	minecraft:exposed_tin_block (from main), 
+	minecraft:oxidized_tin_block (from main), 
+	minecraft:silver_block (from main), 
+	minecraft:redstone_alloy_block (from main), 
+	minecraft:zinc_block (from main), 
+	minecraft:lead_plates (from main), 
+	minecraft:gold_plates (from main), 
+	minecraft:steel_plates (from main), 
+	minecraft:weathered_steel_plates (from main), 
+	minecraft:exposed_steel_plates (from main), 
+	minecraft:nickel_plates (from main), 
+	minecraft:monel_plates (from main), 
+	minecraft:tin_plates (from main), 
+	minecraft:weathered_tin_plates (from main), 
+	minecraft:exposed_tin_plates (from main), 
+	minecraft:oxidized_tin_plates (from main), 
+	minecraft:silver_plates (from main), 
+	minecraft:redstone_alloy_plates (from main), 
+	minecraft:waxed_tin_block (from main), 
+	minecraft:waxed_exposed_tin_block (from main), 
+	minecraft:waxed_weathered_tin_block (from main), 
+	minecraft:waxed_oxidized_tin_block (from main), 
+	minecraft:waxed_tin_plates (from main), 
+	minecraft:waxed_exposed_tin_plates (from main), 
+	minecraft:waxed_weathered_tin_plates (from main), 
+	minecraft:waxed_oxidized_tin_plates (from main), 
+	minecraft:waxed_steel_block (from main), 
+	minecraft:waxed_exposed_steel_block (from main), 
+	minecraft:waxed_weathered_steel_block (from main), 
+	minecraft:waxed_oxidized_steel_block (from main), 
+	minecraft:waxed_steel_plates (from main), 
+	minecraft:waxed_exposed_steel_plates (from main), 
+	minecraft:waxed_weathered_steel_plates (from main), 
+	minecraft:waxed_oxidized_steel_plates (from main), 
+	minecraft:tungsten_block (from main), 
+	minecraft:tungsten_plates (from main)
+[10Sept.2023 00:06:37.781] [Worker-Main-9/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:aluminum_block (from main), minecraft:weathered_iron_block (from main), minecraft:exposed_iron_block (from main), minecraft:oxidized_iron_block (from main), minecraft:exposed_copper_block (from main), minecraft:brass_block (from main), minecraft:weathered_brass_block (from main), minecraft:exposed_brass_block (from main), minecraft:oxidized_brass_block (from main), minecraft:zinc_plates (from main), minecraft:aluminum_plates (from main), minecraft:iron_plates (from main), minecraft:weathered_iron_plates (from main), minecraft:exposed_iron_plates (from main), minecraft:oxidized_iron_plates (from main), minecraft:copper_plates (from main), minecraft:weathered_copper_plates (from main), minecraft:exposed_copper_plates (from main), minecraft:oxidized_copper_plates (from main), minecraft:brass_plates (from main), minecraft:weathered_brass_plates (from main), minecraft:exposed_brass_plates (from main), minecraft:oxidized_brass_plates (from main), minecraft:waxed_iron_block (from main), minecraft:waxed_exposed_iron_block (from main), minecraft:waxed_weathered_iron_block (from main), minecraft:waxed_oxidized_iron_block (from main), minecraft:waxed_iron_plates (from main), minecraft:waxed_exposed_iron_plantes (from main), minecraft:waxed_weathered_iron_plantes (from main), minecraft:waxed_oxidized_iron_plates (from main), minecraft:waxed_brass_block (from main), minecraft:waxed_exposed_brass_block (from main), minecraft:waxed_weathered_brass_block (from main), minecraft:waxed_oxidized_brass_block (from main), minecraft:waxed_brass_plates (from main), minecraft:waxed_exposed_brass_plates (from main), minecraft:waxed_weathered_brass_plates (from main), minecraft:waxed_oxidized_brass_plates (from main), minecraft:waxed_copper_plates (from main), minecraft:waxed_exposed_copper_plates (from main), minecraft:waxed_weathered_copper_plates (from main), minecraft:waxed_oxidized_copper_plates (from main)] as it is missing following references: minecraft:aluminum_block (from main), 
+	minecraft:weathered_iron_block (from main), 
+	minecraft:exposed_iron_block (from main), 
+	minecraft:oxidized_iron_block (from main), 
+	minecraft:exposed_copper_block (from main), 
+	minecraft:brass_block (from main), 
+	minecraft:weathered_brass_block (from main), 
+	minecraft:exposed_brass_block (from main), 
+	minecraft:oxidized_brass_block (from main), 
+	minecraft:zinc_plates (from main), 
+	minecraft:aluminum_plates (from main), 
+	minecraft:iron_plates (from main), 
+	minecraft:weathered_iron_plates (from main), 
+	minecraft:exposed_iron_plates (from main), 
+	minecraft:oxidized_iron_plates (from main), 
+	minecraft:copper_plates (from main), 
+	minecraft:weathered_copper_plates (from main), 
+	minecraft:exposed_copper_plates (from main), 
+	minecraft:oxidized_copper_plates (from main), 
+	minecraft:brass_plates (from main), 
+	minecraft:weathered_brass_plates (from main), 
+	minecraft:exposed_brass_plates (from main), 
+	minecraft:oxidized_brass_plates (from main), 
+	minecraft:waxed_iron_block (from main), 
+	minecraft:waxed_exposed_iron_block (from main), 
+	minecraft:waxed_weathered_iron_block (from main), 
+	minecraft:waxed_oxidized_iron_block (from main), 
+	minecraft:waxed_iron_plates (from main), 
+	minecraft:waxed_exposed_iron_plantes (from main), 
+	minecraft:waxed_weathered_iron_plantes (from main), 
+	minecraft:waxed_oxidized_iron_plates (from main), 
+	minecraft:waxed_brass_block (from main), 
+	minecraft:waxed_exposed_brass_block (from main), 
+	minecraft:waxed_weathered_brass_block (from main), 
+	minecraft:waxed_oxidized_brass_block (from main), 
+	minecraft:waxed_brass_plates (from main), 
+	minecraft:waxed_exposed_brass_plates (from main), 
+	minecraft:waxed_weathered_brass_plates (from main), 
+	minecraft:waxed_oxidized_brass_plates (from main), 
+	minecraft:waxed_copper_plates (from main), 
+	minecraft:waxed_exposed_copper_plates (from main), 
+	minecraft:waxed_weathered_copper_plates (from main), 
+	minecraft:waxed_oxidized_copper_plates (from main)
+[10Sept.2023 00:06:38.421] [Server thread/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 8 recipes
+[10Sept.2023 00:06:38.437] [Server thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 1271 advancements
+[10Sept.2023 00:06:38.442] [Server thread/WARN] [net.minecraftforge.registries.NamespacedWrapper/]: Not all defined tags for registry ResourceKey[minecraft:root / minecraft:block] are present in data pack: minecraft:needs_diamond_tool, 
+	minecraft:needs_iron_tool, 
+	minecraft:needs_stone_tool
+[10Sept.2023 00:06:41.065] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:06:41.066] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:06:41.066] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:06:41.093] [Server thread/WARN] [net.minecraft.server.MinecraftServer/]: Can't keep up! Is the server overloaded? Running 3420ms or 68 ticks behind
+[10Sept.2023 00:06:41.170] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:06:41.171] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:06:41.171] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:06:41.206] [Render thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 329 advancements
+[10Sept.2023 00:09:27.491] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: [Dev: Datenpakete werden neu geladen]
+[10Sept.2023 00:09:27.506] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Datenpakete werden neu geladen
+[10Sept.2023 00:09:27.588] [Worker-Main-10/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 5 parametric
+[10Sept.2023 00:09:27.593] [Worker-Main-5/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [industria:exposed_copper_block (from main), industria:waxed_exposed_iron_plantes (from main), industria:waxed_weathered_iron_plantes (from main)] as it is missing following references: industria:exposed_copper_block (from main), 
+	industria:waxed_exposed_iron_plantes (from main), 
+	industria:waxed_weathered_iron_plantes (from main)
+[10Sept.2023 00:09:27.599] [Worker-Main-13/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 4 circuit templates
+[10Sept.2023 00:09:28.186] [Server thread/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 8 recipes
+[10Sept.2023 00:09:28.200] [Server thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 1271 advancements
+[10Sept.2023 00:09:28.204] [Server thread/WARN] [net.minecraftforge.registries.NamespacedWrapper/]: Not all defined tags for registry ResourceKey[minecraft:root / minecraft:block] are present in data pack: minecraft:needs_stone_tool
+[10Sept.2023 00:09:30.816] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:09:30.817] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:09:30.817] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:09:30.817] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:09:30.845] [Server thread/WARN] [net.minecraft.server.MinecraftServer/]: Can't keep up! Is the server overloaded? Running 3321ms or 66 ticks behind
+[10Sept.2023 00:09:30.918] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:09:30.919] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:09:30.919] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:09:30.919] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:09:30.952] [Render thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 329 advancements
+[10Sept.2023 00:09:48.445] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: [Dev: Datenpakete werden neu geladen]
+[10Sept.2023 00:09:48.457] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Datenpakete werden neu geladen
+[10Sept.2023 00:09:48.534] [Worker-Main-7/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 5 parametric
+[10Sept.2023 00:09:48.535] [Worker-Main-21/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [industria:exposed_copper_block (from main)] as it is missing following references: industria:exposed_copper_block (from main)
+[10Sept.2023 00:09:48.536] [Worker-Main-15/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 4 circuit templates
+[10Sept.2023 00:09:49.145] [Server thread/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 8 recipes
+[10Sept.2023 00:09:49.160] [Server thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 1271 advancements
+[10Sept.2023 00:09:49.163] [Server thread/WARN] [net.minecraftforge.registries.NamespacedWrapper/]: Not all defined tags for registry ResourceKey[minecraft:root / minecraft:block] are present in data pack: minecraft:needs_stone_tool
+[10Sept.2023 00:09:51.764] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:09:51.764] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:09:51.765] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:09:51.765] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:09:51.765] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:09:51.791] [Server thread/WARN] [net.minecraft.server.MinecraftServer/]: Can't keep up! Is the server overloaded? Running 3317ms or 66 ticks behind
+[10Sept.2023 00:09:51.848] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:09:51.848] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:09:51.848] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:09:51.848] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:09:51.849] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:09:51.881] [Render thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 329 advancements
+[10Sept.2023 00:11:04.352] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 00:11:04.353] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 00:11:04.353] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 00:11:04.388] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:11:04.388] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:11:04.388] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:11:04.389] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:11:04.389] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:11:04.389] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:11:14.492] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: [Dev: Datenpakete werden neu geladen]
+[10Sept.2023 00:11:14.505] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Datenpakete werden neu geladen
+[10Sept.2023 00:11:14.580] [Worker-Main-12/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 5 parametric
+[10Sept.2023 00:11:14.582] [Worker-Main-2/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [industria:exposed_copper_block (from main)] as it is missing following references: industria:exposed_copper_block (from main)
+[10Sept.2023 00:11:14.582] [Worker-Main-4/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 4 circuit templates
+[10Sept.2023 00:11:15.171] [Server thread/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 8 recipes
+[10Sept.2023 00:11:15.184] [Server thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 1271 advancements
+[10Sept.2023 00:11:15.187] [Server thread/WARN] [net.minecraftforge.registries.NamespacedWrapper/]: Not all defined tags for registry ResourceKey[minecraft:root / minecraft:block] are present in data pack: minecraft:needs_stone_tool
+[10Sept.2023 00:11:17.813] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:17.813] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:17.813] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:17.814] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:17.814] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:17.814] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:17.839] [Server thread/WARN] [net.minecraft.server.MinecraftServer/]: Can't keep up! Is the server overloaded? Running 3315ms or 66 ticks behind
+[10Sept.2023 00:11:17.898] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:17.898] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:17.898] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:17.898] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:17.899] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:17.899] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:17.932] [Render thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 329 advancements
+[10Sept.2023 00:11:30.275] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Saving and pausing game...
+[10Sept.2023 00:11:30.298] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:overworld
+[10Sept.2023 00:11:30.299] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 00:11:30.300] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 00:11:30.300] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 00:11:30.333] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:the_nether
+[10Sept.2023 00:11:30.333] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:11:30.333] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:11:30.333] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:11:30.334] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:the_end
+[10Sept.2023 00:11:30.334] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:11:30.334] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:11:30.334] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:11:32.040] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: [Dev: Datenpakete werden neu geladen]
+[10Sept.2023 00:11:32.055] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Datenpakete werden neu geladen
+[10Sept.2023 00:11:32.124] [Worker-Main-20/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 5 parametric
+[10Sept.2023 00:11:32.126] [Worker-Main-15/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 4 circuit templates
+[10Sept.2023 00:11:32.716] [Server thread/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 8 recipes
+[10Sept.2023 00:11:32.729] [Server thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 1271 advancements
+[10Sept.2023 00:11:35.341] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:35.342] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:35.342] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:35.342] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:35.342] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:35.342] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:35.343] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:35.430] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:35.431] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:35.431] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:35.431] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:35.431] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:35.431] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:35.432] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:11:35.464] [Render thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 329 advancements
+[10Sept.2023 00:11:35.584] [Server thread/WARN] [net.minecraft.server.MinecraftServer/]: Can't keep up! Is the server overloaded? Running 2761ms or 55 ticks behind
+[10Sept.2023 00:12:05.684] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/131, l='ServerLevel[Neue Welt]', x=735.49, y=64.00, z=-570.25] died, message: 'Dorfbewohner versuchte, in Lava zu schwimmen'
+[10Sept.2023 00:12:05.690] [Render thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/131, l='ClientLevel', x=735.10, y=64.44, z=-570.57] died, message: 'Dorfbewohner starb'
+[10Sept.2023 00:12:07.679] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/107, l='ServerLevel[Neue Welt]', x=739.80, y=66.18, z=-564.51] died, message: 'Dorfbewohner verbrannte'
+[10Sept.2023 00:12:07.689] [Render thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/107, l='ClientLevel', x=739.73, y=66.08, z=-564.51] died, message: 'Dorfbewohner starb'
+[10Sept.2023 00:12:21.883] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/219, l='ServerLevel[Neue Welt]', x=732.51, y=67.00, z=-565.58] died, message: 'Dorfbewohner verbrannte'
+[10Sept.2023 00:12:21.889] [Render thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/219, l='ClientLevel', x=732.60, y=67.00, z=-564.84] died, message: 'Dorfbewohner starb'
+[10Sept.2023 00:12:30.932] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/185, l='ServerLevel[Neue Welt]', x=733.56, y=67.00, z=-566.48] died, message: 'Dorfbewohner verbrannte'
+[10Sept.2023 00:12:30.939] [Render thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/185, l='ClientLevel', x=733.54, y=67.00, z=-566.52] died, message: 'Dorfbewohner starb'
+[10Sept.2023 00:12:49.932] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/184, l='ServerLevel[Neue Welt]', x=728.38, y=65.00, z=-573.29] died, message: 'Dorfbewohner verbrannte'
+[10Sept.2023 00:12:49.939] [Render thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/184, l='ClientLevel', x=728.26, y=65.00, z=-572.57] died, message: 'Dorfbewohner starb'
+[10Sept.2023 00:12:50.229] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/113, l='ServerLevel[Neue Welt]', x=733.58, y=63.94, z=-572.20] died, message: 'Dorfbewohner verbrannte'
+[10Sept.2023 00:12:50.239] [Render thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/113, l='ClientLevel', x=733.28, y=64.00, z=-572.53] died, message: 'Dorfbewohner starb'
+[10Sept.2023 00:14:41.256] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: [Dev: Datenpakete werden neu geladen]
+[10Sept.2023 00:14:41.256] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Datenpakete werden neu geladen
+[10Sept.2023 00:14:41.349] [Worker-Main-16/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 5 parametric
+[10Sept.2023 00:14:41.349] [Worker-Main-8/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't read tag list forge:storage_blocks from forge:tags/blocks/storage_blocks.json in data pack main
+com.google.gson.JsonSyntaxException: com.google.gson.stream.MalformedJsonException: Unterminated array at line 4 column 15 path $.values[1]
+	at com.google.gson.internal.Streams.parse(Streams.java:61) ~[gson-2.10.jar%23130!/:?]
+	at com.google.gson.JsonParser.parseReader(JsonParser.java:102) ~[gson-2.10.jar%23130!/:?]
+	at com.google.gson.JsonParser.parseReader(JsonParser.java:70) ~[gson-2.10.jar%23130!/:?]
+	at net.minecraft.tags.TagLoader.load(TagLoader.java:49) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/:?]
+	at net.minecraft.tags.TagLoader.loadAndBuild(TagLoader.java:114) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/:?]
+	at net.minecraft.tags.TagManager.lambda$createLoader$4(TagManager.java:55) ~[forge-1.20.1-47.1.44_mapped_parchment_2023.08.13-1.20.1-recomp.jar%23191!/:?]
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) ~[?:?]
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760) ~[?:?]
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?]
+	at java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182) ~[?:?]
+	at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
+Caused by: com.google.gson.stream.MalformedJsonException: Unterminated array at line 4 column 15 path $.values[1]
+	at com.google.gson.stream.JsonReader.syntaxError(JsonReader.java:1657) ~[gson-2.10.jar%23130!/:?]
+	at com.google.gson.stream.JsonReader.doPeek(JsonReader.java:485) ~[gson-2.10.jar%23130!/:?]
+	at com.google.gson.stream.JsonReader.hasNext(JsonReader.java:422) ~[gson-2.10.jar%23130!/:?]
+	at com.google.gson.internal.bind.TypeAdapters$28.read(TypeAdapters.java:779) ~[gson-2.10.jar%23130!/:?]
+	at com.google.gson.internal.bind.TypeAdapters$28.read(TypeAdapters.java:725) ~[gson-2.10.jar%23130!/:?]
+	at com.google.gson.internal.Streams.parse(Streams.java:49) ~[gson-2.10.jar%23130!/:?]
+	... 12 more
+[10Sept.2023 00:14:41.351] [Worker-Main-20/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 4 circuit templates
+[10Sept.2023 00:14:41.930] [Server thread/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 8 recipes
+[10Sept.2023 00:14:41.941] [Server thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 1271 advancements
+[10Sept.2023 00:14:44.536] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:44.536] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:44.536] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:44.537] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:44.537] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:44.537] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:44.537] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:44.537] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:44.564] [Server thread/WARN] [net.minecraft.server.MinecraftServer/]: Can't keep up! Is the server overloaded? Running 3290ms or 65 ticks behind
+[10Sept.2023 00:14:44.633] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:44.633] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:44.633] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:44.633] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:44.634] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:44.634] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:44.634] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:44.634] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:44.665] [Render thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 329 advancements
+[10Sept.2023 00:14:52.342] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: [Dev: Datenpakete werden neu geladen]
+[10Sept.2023 00:14:52.357] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Datenpakete werden neu geladen
+[10Sept.2023 00:14:52.436] [Worker-Main-17/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 5 parametric
+[10Sept.2023 00:14:52.437] [Worker-Main-15/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 4 circuit templates
+[10Sept.2023 00:14:53.022] [Server thread/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 8 recipes
+[10Sept.2023 00:14:53.033] [Server thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 1271 advancements
+[10Sept.2023 00:14:55.627] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:55.627] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:55.627] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:55.628] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:55.628] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:55.628] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:55.628] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:55.628] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:55.628] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:55.714] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:55.715] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:55.715] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:55.715] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:55.715] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:55.715] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:55.716] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:55.716] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:55.716] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:14:55.747] [Render thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 329 advancements
+[10Sept.2023 00:16:14.279] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 00:16:14.280] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 00:16:14.280] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 00:16:14.314] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:16:14.314] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:16:14.314] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:16:14.315] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:16:14.315] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:16:14.315] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:19:53.196] [Render thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 333 advancements
+[10Sept.2023 00:20:15.882] [Render thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 338 advancements
+[10Sept.2023 00:20:30.230] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/109, l='ServerLevel[Neue Welt]', x=727.85, y=65.00, z=-571.33] died, message: 'Dorfbewohner verbrannte'
+[10Sept.2023 00:20:30.243] [Render thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/109, l='ClientLevel', x=728.54, y=65.00, z=-571.50] died, message: 'Dorfbewohner starb'
+[10Sept.2023 00:20:37.709] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: [Dev: Datenpakete werden neu geladen]
+[10Sept.2023 00:20:37.709] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Datenpakete werden neu geladen
+[10Sept.2023 00:20:37.794] [Worker-Main-17/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 5 parametric
+[10Sept.2023 00:20:37.795] [Worker-Main-22/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 4 circuit templates
+[10Sept.2023 00:20:38.372] [Server thread/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 8 recipes
+[10Sept.2023 00:20:38.383] [Server thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 1271 advancements
+[10Sept.2023 00:20:40.996] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:20:40.997] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:20:40.997] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:20:40.997] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:20:40.997] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:20:40.997] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:20:40.997] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:20:40.997] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:20:40.998] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:20:40.998] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:20:41.025] [Server thread/WARN] [net.minecraft.server.MinecraftServer/]: Can't keep up! Is the server overloaded? Running 3302ms or 66 ticks behind
+[10Sept.2023 00:20:41.086] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:20:41.086] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:20:41.086] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:20:41.086] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:20:41.086] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:20:41.087] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:20:41.087] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:20:41.087] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:20:41.087] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:20:41.087] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:20:41.119] [Render thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 338 advancements
+[10Sept.2023 00:21:01.994] [Render thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 343 advancements
+[10Sept.2023 00:21:12.187] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/238, l='ServerLevel[Neue Welt]', x=757.30, y=70.00, z=-563.33] died, message: 'Dorfbewohner wurde von Zombie erschlagen'
+[10Sept.2023 00:21:17.557] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 00:21:17.558] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 00:21:17.558] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 00:21:17.598] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:21:17.599] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:21:17.599] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:21:17.599] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:21:17.599] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:21:17.599] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:22:01.485] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Gerber'/112, l='ServerLevel[Neue Welt]', x=737.72, y=67.00, z=-551.56] died, message: 'Gerber wurde durch schallgeladenes Kreischen ausgelöscht'
+[10Sept.2023 00:22:01.496] [Render thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Gerber'/112, l='ClientLevel', x=736.62, y=67.00, z=-551.29] died, message: 'Gerber starb'
+[10Sept.2023 00:22:07.045] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/13, l='ServerLevel[Neue Welt]', x=757.83, y=70.00, z=-563.51] died, message: 'Dorfbewohner wurde von Zombiedorfbewohner erschlagen'
+[10Sept.2023 00:22:28.385] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/220, l='ServerLevel[Neue Welt]', x=710.27, y=68.00, z=-551.30] died, message: 'Dorfbewohner wurde durch schallgeladenes Kreischen ausgelöscht'
+[10Sept.2023 00:22:28.394] [Render thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/220, l='ClientLevel', x=710.27, y=68.00, z=-551.30] died, message: 'Dorfbewohner starb'
+[10Sept.2023 00:22:29.395] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/130, l='ServerLevel[Neue Welt]', x=768.29, y=70.18, z=-599.31] died, message: 'Dorfbewohner wurde von Zombie erschlagen'
+[10Sept.2023 00:22:29.410] [Render thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/130, l='ClientLevel', x=768.30, y=69.92, z=-599.27] died, message: 'Dorfbewohner starb'
+[10Sept.2023 00:22:31.887] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Gerber'/179, l='ServerLevel[Neue Welt]', x=722.51, y=68.00, z=-561.99] died, message: 'Gerber wurde von Zombiedorfbewohner erschlagen'
+[10Sept.2023 00:22:31.893] [Render thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Gerber'/179, l='ClientLevel', x=722.05, y=68.00, z=-562.87] died, message: 'Gerber starb'
+[10Sept.2023 00:22:40.801] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: [Dev: Wärter wurde beseitigt]
+[10Sept.2023 00:22:40.810] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Wärter wurde beseitigt
+[10Sept.2023 00:23:34.436] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/218, l='ServerLevel[Neue Welt]', x=746.70, y=71.00, z=-578.27] died, message: 'Dorfbewohner wurde von Zombiedorfbewohner erschlagen'
+[10Sept.2023 00:23:34.444] [Render thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/218, l='ClientLevel', x=746.70, y=71.30, z=-577.80] died, message: 'Dorfbewohner starb'
+[10Sept.2023 00:26:17.562] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 00:26:17.563] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 00:26:17.563] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 00:26:17.602] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:26:17.602] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:26:17.602] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:26:17.603] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:26:17.603] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:26:17.603] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:26:39.452] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: [Dev: Datenpakete werden neu geladen]
+[10Sept.2023 00:26:39.469] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Datenpakete werden neu geladen
+[10Sept.2023 00:26:39.536] [Worker-Main-11/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 5 parametric
+[10Sept.2023 00:26:39.539] [Worker-Main-7/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 4 circuit templates
+[10Sept.2023 00:26:40.113] [Server thread/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 8 recipes
+[10Sept.2023 00:26:40.123] [Server thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 1271 advancements
+[10Sept.2023 00:26:42.703] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.703] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.703] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.703] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.703] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.703] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.703] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.704] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.704] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.704] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.704] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.728] [Server thread/WARN] [net.minecraft.server.MinecraftServer/]: Can't keep up! Is the server overloaded? Running 3255ms or 65 ticks behind
+[10Sept.2023 00:26:42.794] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.794] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.794] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.794] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.794] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.794] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.794] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.795] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.795] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.795] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.795] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:26:42.826] [Render thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 343 advancements
+[10Sept.2023 00:31:20.798] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 00:31:20.800] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 00:31:20.800] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 00:31:20.832] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:31:20.832] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:31:20.832] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:31:20.833] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:31:20.833] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:31:20.833] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:35:33.187] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/208, l='ServerLevel[Neue Welt]', x=711.34, y=56.00, z=-564.08] died, message: 'Dorfbewohner wurde von Zombie erschlagen'
+[10Sept.2023 00:35:33.198] [Render thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/208, l='ClientLevel', x=711.58, y=56.00, z=-563.71] died, message: 'Dorfbewohner starb'
+[10Sept.2023 00:36:20.802] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 00:36:20.803] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 00:36:20.803] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 00:36:20.836] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:36:20.836] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:36:20.836] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:36:20.837] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:36:20.837] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:36:20.837] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:36:58.949] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Unbekannter oder unvollständiger Befehl, siehe unten für Fehler
+[10Sept.2023 00:36:58.949] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] w<--[HIER]
+[10Sept.2023 00:37:03.549] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Unbekannter oder unvollständiger Befehl, siehe unten für Fehler
+[10Sept.2023 00:37:03.549] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] w<--[HIER]
+[10Sept.2023 00:38:12.536] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Gerber'/254, l='ServerLevel[Neue Welt]', x=722.86, y=67.00, z=-551.30] died, message: 'Gerber wurde von Zombie erschlagen'
+[10Sept.2023 00:38:23.774] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: [Dev: Datenpakete werden neu geladen]
+[10Sept.2023 00:38:23.785] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Datenpakete werden neu geladen
+[10Sept.2023 00:38:23.865] [Worker-Main-12/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 5 parametric
+[10Sept.2023 00:38:23.868] [Worker-Main-21/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 4 circuit templates
+[10Sept.2023 00:38:24.440] [Server thread/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 8 recipes
+[10Sept.2023 00:38:24.451] [Server thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 1271 advancements
+[10Sept.2023 00:38:27.035] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.035] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.035] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.035] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.035] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.035] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.035] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.035] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.036] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.036] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.036] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.036] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.059] [Server thread/WARN] [net.minecraft.server.MinecraftServer/]: Can't keep up! Is the server overloaded? Running 3286ms or 65 ticks behind
+[10Sept.2023 00:38:27.125] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.125] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.125] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.125] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.126] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.126] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.126] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.126] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.126] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.126] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.126] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.126] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 00:38:27.157] [Render thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 343 advancements
+[10Sept.2023 00:41:24.054] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 00:41:24.055] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 00:41:24.055] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 00:41:24.088] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:41:24.088] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:41:24.088] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:41:24.089] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:41:24.089] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:41:24.089] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:46:24.050] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 00:46:24.052] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 00:46:24.052] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 00:46:24.084] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:46:24.085] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:46:24.085] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:46:24.086] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:46:24.086] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:46:24.086] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:47:31.729] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/128, l='ServerLevel[Neue Welt]', x=724.70, y=46.21, z=-575.30] died, message: 'Dorfbewohner ertrank'
+[10Sept.2023 00:47:31.737] [Render thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/128, l='ClientLevel', x=724.70, y=46.22, z=-575.30] died, message: 'Dorfbewohner starb'
+[10Sept.2023 00:51:24.052] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 00:51:24.053] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 00:51:24.053] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 00:51:24.085] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:51:24.086] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:51:24.086] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:51:24.086] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:51:24.087] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:51:24.087] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:56:24.571] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 00:56:24.572] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 00:56:24.572] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 00:56:24.605] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:56:24.605] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:56:24.605] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:56:24.606] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 00:56:24.606] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 00:56:24.606] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 00:59:06.086] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/217, l='ServerLevel[Neue Welt]', x=716.70, y=55.42, z=-564.70] died, message: 'Dorfbewohner ertrank'
+[10Sept.2023 00:59:06.093] [Render thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/217, l='ClientLevel', x=716.70, y=55.44, z=-564.70] died, message: 'Dorfbewohner starb'
+[10Sept.2023 01:01:24.048] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 01:01:24.049] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 01:01:24.049] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 01:01:24.081] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:01:24.081] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:01:24.081] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 01:01:24.082] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:01:24.082] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:01:24.082] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 01:04:22.386] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/207, l='ServerLevel[Neue Welt]', x=719.30, y=51.00, z=-575.70] died, message: 'Dorfbewohner wurde von Zombie erschlagen'
+[10Sept.2023 01:04:43.381] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/140, l='ServerLevel[Neue Welt]', x=719.30, y=30.00, z=-591.94] died, message: 'Dorfbewohner fiel der Schwerkraft zum Opfer'
+[10Sept.2023 01:04:43.393] [Render thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/140, l='ClientLevel', x=719.30, y=32.87, z=-591.84] died, message: 'Dorfbewohner starb'
+[10Sept.2023 01:06:24.047] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 01:06:24.048] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 01:06:24.048] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 01:06:24.081] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:06:24.081] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:06:24.081] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 01:06:24.082] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:06:24.082] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:06:24.082] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 01:11:24.050] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 01:11:24.051] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 01:11:24.051] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 01:11:24.083] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:11:24.083] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:11:24.083] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 01:11:24.084] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:11:24.084] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:11:24.084] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 01:15:13.582] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/260, l='ServerLevel[Neue Welt]', x=709.70, y=41.00, z=-583.88] died, message: 'Dorfbewohner fiel der Schwerkraft zum Opfer'
+[10Sept.2023 01:15:13.602] [Render thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/260, l='ClientLevel', x=709.70, y=44.38, z=-583.81] died, message: 'Dorfbewohner starb'
+[10Sept.2023 01:16:24.047] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 01:16:24.048] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 01:16:24.048] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 01:16:24.080] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:16:24.080] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:16:24.080] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 01:16:24.081] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:16:24.081] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:16:24.081] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 01:20:13.636] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Gerber'/108, l='ServerLevel[Neue Welt]', x=721.66, y=68.00, z=-562.30] died, message: 'Gerber wurde von Zombie erschlagen'
+[10Sept.2023 01:20:13.653] [Render thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Gerber'/108, l='ClientLevel', x=721.41, y=68.00, z=-563.25] died, message: 'Gerber starb'
+[10Sept.2023 01:21:00.533] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Gerber'/234, l='ServerLevel[Neue Welt]', x=706.48, y=71.54, z=-530.68] died, message: 'Gerber wurde von Zombie erschlagen'
+[10Sept.2023 01:21:00.541] [Render thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Gerber'/234, l='ClientLevel', x=706.53, y=72.00, z=-530.27] died, message: 'Gerber starb'
+[10Sept.2023 01:21:24.046] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 01:21:24.047] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 01:21:24.047] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 01:21:24.078] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:21:24.079] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:21:24.079] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 01:21:24.080] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:21:24.080] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:21:24.080] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 01:26:24.048] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 01:26:24.049] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 01:26:24.049] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 01:26:24.080] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:26:24.080] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:26:24.080] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 01:26:24.082] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:26:24.082] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:26:24.082] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 01:27:12.634] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/213, l='ServerLevel[Neue Welt]', x=709.42, y=41.00, z=-584.91] died, message: 'Dorfbewohner fiel der Schwerkraft zum Opfer'
+[10Sept.2023 01:27:12.651] [Render thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/213, l='ClientLevel', x=709.41, y=44.19, z=-584.91] died, message: 'Dorfbewohner starb'
+[10Sept.2023 01:28:50.034] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/239, l='ServerLevel[Neue Welt]', x=709.70, y=41.00, z=-583.81] died, message: 'Dorfbewohner fiel der Schwerkraft zum Opfer'
+[10Sept.2023 01:28:50.054] [Render thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Dorfbewohner'/239, l='ClientLevel', x=709.70, y=44.38, z=-583.75] died, message: 'Dorfbewohner starb'
+[10Sept.2023 01:30:16.711] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: [Dev: Datenpakete werden neu geladen]
+[10Sept.2023 01:30:16.737] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Datenpakete werden neu geladen
+[10Sept.2023 01:30:16.796] [Worker-Main-10/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 5 parametric
+[10Sept.2023 01:30:16.797] [Worker-Main-3/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 4 circuit templates
+[10Sept.2023 01:30:16.859] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:redstone_alloy_nugget (from main), minecraft:monel_nugget (from main), minecraft:silver_nugget (from main), minecraft:brass_nugget (from main), minecraft:steel_nugget (from main), minecraft:palladium_nugget (from main), minecraft:lead_nugget (from main), minecraft:aluminum_nugget (from main), minecraft:nickel_nugget (from main), minecraft:tungsten_nugget (from main), minecraft:tin_nugget (from main), minecraft:zinc_nugget (from main)] as it is missing following references: minecraft:redstone_alloy_nugget (from main), 
+	minecraft:monel_nugget (from main), 
+	minecraft:silver_nugget (from main), 
+	minecraft:brass_nugget (from main), 
+	minecraft:steel_nugget (from main), 
+	minecraft:palladium_nugget (from main), 
+	minecraft:lead_nugget (from main), 
+	minecraft:aluminum_nugget (from main), 
+	minecraft:nickel_nugget (from main), 
+	minecraft:tungsten_nugget (from main), 
+	minecraft:tin_nugget (from main), 
+	minecraft:zinc_nugget (from main)
+[10Sept.2023 01:30:16.859] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:lead_plate (from main), minecraft:aluminum_plate (from main), minecraft:gold_plate (from main), minecraft:tungsten_plate (from main), minecraft:zinc_plate (from main), minecraft:netherite_plate (from main), minecraft:silver_plate (from main), minecraft:brass_plate (from main), minecraft:tin_plate (from main), minecraft:copper_plate (from main), minecraft:nickel_plate (from main), minecraft:steel_plate (from main), minecraft:palladium_plate (from main), minecraft:monel_plate (from main), minecraft:redstone_alloy_plate (from main), minecraft:iron_plate (from main)] as it is missing following references: minecraft:lead_plate (from main), 
+	minecraft:aluminum_plate (from main), 
+	minecraft:gold_plate (from main), 
+	minecraft:tungsten_plate (from main), 
+	minecraft:zinc_plate (from main), 
+	minecraft:netherite_plate (from main), 
+	minecraft:silver_plate (from main), 
+	minecraft:brass_plate (from main), 
+	minecraft:tin_plate (from main), 
+	minecraft:copper_plate (from main), 
+	minecraft:nickel_plate (from main), 
+	minecraft:steel_plate (from main), 
+	minecraft:palladium_plate (from main), 
+	minecraft:monel_plate (from main), 
+	minecraft:redstone_alloy_plate (from main), 
+	minecraft:iron_plate (from main)
+[10Sept.2023 01:30:16.859] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:zinc_plate (from main)] as it is missing following references: minecraft:zinc_plate (from main)
+[10Sept.2023 01:30:16.859] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:netherite_plate (from main)] as it is missing following references: minecraft:netherite_plate (from main)
+[10Sept.2023 01:30:16.859] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:palladium_ingot (from main)] as it is missing following references: minecraft:palladium_ingot (from main)
+[10Sept.2023 01:30:16.859] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:silver_ingot (from main)] as it is missing following references: minecraft:silver_ingot (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:aluminum_nugget (from main)] as it is missing following references: minecraft:aluminum_nugget (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:tungsten_dust (from main)] as it is missing following references: minecraft:tungsten_dust (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:raw_lead (from main)] as it is missing following references: minecraft:raw_lead (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:zinc_dust (from main)] as it is missing following references: minecraft:zinc_dust (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:tin_ingot (from main)] as it is missing following references: minecraft:tin_ingot (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:spo_tin_dust (from main)] as it is missing following references: minecraft:spo_tin_dust (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:spo_silver_dust (from main)] as it is missing following references: minecraft:spo_silver_dust (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:lead_ingot (from main), minecraft:nickel_ingot (from main), minecraft:steel_ingot (from main), minecraft:redstone_alloy_ingot (from main), minecraft:tin_ingot (from main), minecraft:silver_ingot (from main), minecraft:brass_ingot (from main), minecraft:monel_ingot (from main), minecraft:palladium_ingot (from main), minecraft:aluminum_ingot (from main), minecraft:tungsten_ingot (from main), minecraft:zinc_ingot (from main)] as it is missing following references: minecraft:lead_ingot (from main), 
+	minecraft:nickel_ingot (from main), 
+	minecraft:steel_ingot (from main), 
+	minecraft:redstone_alloy_ingot (from main), 
+	minecraft:tin_ingot (from main), 
+	minecraft:silver_ingot (from main), 
+	minecraft:brass_ingot (from main), 
+	minecraft:monel_ingot (from main), 
+	minecraft:palladium_ingot (from main), 
+	minecraft:aluminum_ingot (from main), 
+	minecraft:tungsten_ingot (from main), 
+	minecraft:zinc_ingot (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:iron_dust (from main)] as it is missing following references: minecraft:iron_dust (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:spo_nickel_dust (from main), minecraft:spo_steel_dust (from main), minecraft:spo_tin_dust (from main), minecraft:spo_aluminum_dust (from main), minecraft:spo_tungsten_dust (from main), minecraft:spo_copper_dust (from main), minecraft:spo_netherite_dust (from main), minecraft:spo_iron_dust (from main), minecraft:spo_silver_dust (from main), minecraft:spo_lead_dust (from main), minecraft:spo_brass_dust (from main), minecraft:spo_gold_dust (from main), minecraft:spo_monel_dust (from main), minecraft:spo_zinc_dust (from main), minecraft:spo_palladium_dust (from main), minecraft:spo_redstone_alloy_dust (from main)] as it is missing following references: minecraft:spo_nickel_dust (from main), 
+	minecraft:spo_steel_dust (from main), 
+	minecraft:spo_tin_dust (from main), 
+	minecraft:spo_aluminum_dust (from main), 
+	minecraft:spo_tungsten_dust (from main), 
+	minecraft:spo_copper_dust (from main), 
+	minecraft:spo_netherite_dust (from main), 
+	minecraft:spo_iron_dust (from main), 
+	minecraft:spo_silver_dust (from main), 
+	minecraft:spo_lead_dust (from main), 
+	minecraft:spo_brass_dust (from main), 
+	minecraft:spo_gold_dust (from main), 
+	minecraft:spo_monel_dust (from main), 
+	minecraft:spo_zinc_dust (from main), 
+	minecraft:spo_palladium_dust (from main), 
+	minecraft:spo_redstone_alloy_dust (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:tungsten_plate (from main)] as it is missing following references: minecraft:tungsten_plate (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:palladium_nugget (from main)] as it is missing following references: minecraft:palladium_nugget (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:stone_dust (from main)] as it is missing following references: minecraft:stone_dust (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:steel_ingot (from main)] as it is missing following references: minecraft:steel_ingot (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:redstone_alloy_dust (from main)] as it is missing following references: minecraft:redstone_alloy_dust (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:silver_plate (from main)] as it is missing following references: minecraft:silver_plate (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:tungsten_ingot (from main)] as it is missing following references: minecraft:tungsten_ingot (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:palladium_plate (from main)] as it is missing following references: minecraft:palladium_plate (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:spo_gold_dust (from main)] as it is missing following references: minecraft:spo_gold_dust (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:redstone_alloy_ingot (from main)] as it is missing following references: minecraft:redstone_alloy_ingot (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:redstone_alloy_nugget (from main)] as it is missing following references: minecraft:redstone_alloy_nugget (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:monel_plate (from main)] as it is missing following references: minecraft:monel_plate (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:spo_tungsten_dust (from main)] as it is missing following references: minecraft:spo_tungsten_dust (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:silver_dust (from main)] as it is missing following references: minecraft:silver_dust (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:lead_plate (from main)] as it is missing following references: minecraft:lead_plate (from main)
+[10Sept.2023 01:30:16.860] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:raw_palladium (from main)] as it is missing following references: minecraft:raw_palladium (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:spo_monel_dust (from main)] as it is missing following references: minecraft:spo_monel_dust (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:raw_nickel (from main)] as it is missing following references: minecraft:raw_nickel (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:brass_nugget (from main)] as it is missing following references: minecraft:brass_nugget (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:raw_tin (from main)] as it is missing following references: minecraft:raw_tin (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:blackstone_dust (from main)] as it is missing following references: minecraft:blackstone_dust (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:tin_nugget (from main)] as it is missing following references: minecraft:tin_nugget (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:aluminum_dust (from main)] as it is missing following references: minecraft:aluminum_dust (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:nickel_dust (from main)] as it is missing following references: minecraft:nickel_dust (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:gold_dust (from main)] as it is missing following references: minecraft:gold_dust (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:aluminum_ingot (from main)] as it is missing following references: minecraft:aluminum_ingot (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:netherite_dust (from main)] as it is missing following references: minecraft:netherite_dust (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:aluminum_plate (from main)] as it is missing following references: minecraft:aluminum_plate (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:netherrack_dust (from main)] as it is missing following references: minecraft:netherrack_dust (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:brass_ingot (from main)] as it is missing following references: minecraft:brass_ingot (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:palladium_dust (from main)] as it is missing following references: minecraft:palladium_dust (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:lead_nugget (from main)] as it is missing following references: minecraft:lead_nugget (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:spo_copper_dust (from main)] as it is missing following references: minecraft:spo_copper_dust (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:brass_plate (from main)] as it is missing following references: minecraft:brass_plate (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:nickel_ingot (from main)] as it is missing following references: minecraft:nickel_ingot (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:spo_palladium_dust (from main)] as it is missing following references: minecraft:spo_palladium_dust (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:brass_dust (from main)] as it is missing following references: minecraft:brass_dust (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:nickel_plate (from main)] as it is missing following references: minecraft:nickel_plate (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:redstone_alloy_dust (from main), minecraft:monel_dust (from main), minecraft:iron_dust (from main), minecraft:nickel_dust (from main), minecraft:netherite_dust (from main), minecraft:steel_dust (from main), minecraft:aluminum_dust (from main), minecraft:silver_dust (from main), minecraft:gold_dust (from main), minecraft:palladium_dust (from main), minecraft:tin_dust (from main), minecraft:zinc_dust (from main), minecraft:netherrack_dust (from main), minecraft:lead_dust (from main), minecraft:tungsten_dust (from main), minecraft:blackstone_dust (from main), minecraft:brass_dust (from main), minecraft:copper_dust (from main), minecraft:stone_dust (from main)] as it is missing following references: minecraft:redstone_alloy_dust (from main), 
+	minecraft:monel_dust (from main), 
+	minecraft:iron_dust (from main), 
+	minecraft:nickel_dust (from main), 
+	minecraft:netherite_dust (from main), 
+	minecraft:steel_dust (from main), 
+	minecraft:aluminum_dust (from main), 
+	minecraft:silver_dust (from main), 
+	minecraft:gold_dust (from main), 
+	minecraft:palladium_dust (from main), 
+	minecraft:tin_dust (from main), 
+	minecraft:zinc_dust (from main), 
+	minecraft:netherrack_dust (from main), 
+	minecraft:lead_dust (from main), 
+	minecraft:tungsten_dust (from main), 
+	minecraft:blackstone_dust (from main), 
+	minecraft:brass_dust (from main), 
+	minecraft:copper_dust (from main), 
+	minecraft:stone_dust (from main)
+[10Sept.2023 01:30:16.861] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:spo_iron_dust (from main)] as it is missing following references: minecraft:spo_iron_dust (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:spo_aluminum_dust (from main)] as it is missing following references: minecraft:spo_aluminum_dust (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:raw_silver (from main), minecraft:raw_lead (from main), minecraft:raw_tin (from main), minecraft:raw_nickel (from main), minecraft:raw_palladium (from main), minecraft:raw_zinc (from main)] as it is missing following references: minecraft:raw_silver (from main), 
+	minecraft:raw_lead (from main), 
+	minecraft:raw_tin (from main), 
+	minecraft:raw_nickel (from main), 
+	minecraft:raw_palladium (from main), 
+	minecraft:raw_zinc (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:monel_dust (from main)] as it is missing following references: minecraft:monel_dust (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:spo_steel_dust (from main)] as it is missing following references: minecraft:spo_steel_dust (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:steel_dust (from main)] as it is missing following references: minecraft:steel_dust (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:zinc_ingot (from main)] as it is missing following references: minecraft:zinc_ingot (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:raw_silver (from main)] as it is missing following references: minecraft:raw_silver (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:zinc_nugget (from main)] as it is missing following references: minecraft:zinc_nugget (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:raw_zinc (from main)] as it is missing following references: minecraft:raw_zinc (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:copper_dust (from main)] as it is missing following references: minecraft:copper_dust (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:spo_nickel_dust (from main)] as it is missing following references: minecraft:spo_nickel_dust (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:spo_lead_dust (from main)] as it is missing following references: minecraft:spo_lead_dust (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:nickel_nugget (from main)] as it is missing following references: minecraft:nickel_nugget (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:monel_nugget (from main)] as it is missing following references: minecraft:monel_nugget (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:gold_plate (from main)] as it is missing following references: minecraft:gold_plate (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:steel_nugget (from main)] as it is missing following references: minecraft:steel_nugget (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:lead_ingot (from main)] as it is missing following references: minecraft:lead_ingot (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:steel_plate (from main)] as it is missing following references: minecraft:steel_plate (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:spo_redstone_alloy_dust (from main)] as it is missing following references: minecraft:spo_redstone_alloy_dust (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:redstone_alloy_plate (from main)] as it is missing following references: minecraft:redstone_alloy_plate (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:iron_plate (from main)] as it is missing following references: minecraft:iron_plate (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:tungsten_nugget (from main)] as it is missing following references: minecraft:tungsten_nugget (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:spo_netherite_dust (from main)] as it is missing following references: minecraft:spo_netherite_dust (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:tin_dust (from main)] as it is missing following references: minecraft:tin_dust (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:silver_nugget (from main)] as it is missing following references: minecraft:silver_nugget (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:spo_brass_dust (from main)] as it is missing following references: minecraft:spo_brass_dust (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:spo_zinc_dust (from main)] as it is missing following references: minecraft:spo_zinc_dust (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:tin_plate (from main)] as it is missing following references: minecraft:tin_plate (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:lead_dust (from main)] as it is missing following references: minecraft:lead_dust (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:copper_plate (from main)] as it is missing following references: minecraft:copper_plate (from main)
+[10Sept.2023 01:30:16.862] [Worker-Main-18/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag [minecraft:monel_ingot (from main)] as it is missing following references: minecraft:monel_ingot (from main)
+[10Sept.2023 01:30:17.369] [Server thread/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 8 recipes
+[10Sept.2023 01:30:17.380] [Server thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 1271 advancements
+[10Sept.2023 01:30:17.382] [Server thread/WARN] [net.minecraftforge.registries.NamespacedWrapper/]: Not all defined tags for registry ResourceKey[minecraft:root / minecraft:item] are present in data pack: forge:dusts, 
+	forge:ingots, 
+	forge:nuggets, 
+	forge:raw_materials
+[10Sept.2023 01:30:19.997] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:19.998] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:19.998] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:19.998] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:19.998] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:19.998] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:19.998] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:19.998] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:19.998] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:19.998] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:19.998] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:19.998] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:19.998] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:20.023] [Server thread/WARN] [net.minecraft.server.MinecraftServer/]: Can't keep up! Is the server overloaded? Running 3300ms or 66 ticks behind
+[10Sept.2023 01:30:20.091] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:20.091] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:20.091] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:20.091] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:20.091] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:20.091] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:20.091] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:20.091] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:20.091] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:20.092] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:20.092] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:20.092] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:20.092] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:30:20.122] [Render thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 343 advancements
+[10Sept.2023 01:31:00.099] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: [Dev: Datenpakete werden neu geladen]
+[10Sept.2023 01:31:00.119] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Datenpakete werden neu geladen
+[10Sept.2023 01:31:00.184] [Worker-Main-3/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 5 parametric
+[10Sept.2023 01:31:00.185] [Worker-Main-4/INFO] [de.m_marvin.industria.IndustriaCore/]: Loaded 4 circuit templates
+[10Sept.2023 01:31:00.756] [Server thread/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 8 recipes
+[10Sept.2023 01:31:00.767] [Server thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 1271 advancements
+[10Sept.2023 01:31:03.345] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.346] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.346] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.346] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.346] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.346] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.346] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.346] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.346] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.346] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.346] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.346] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.346] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.346] [Server thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.371] [Server thread/WARN] [net.minecraft.server.MinecraftServer/]: Can't keep up! Is the server overloaded? Running 3247ms or 64 ticks behind
+[10Sept.2023 01:31:03.452] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.452] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.452] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.452] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.452] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.452] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.452] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.452] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.453] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.453] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.453] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.453] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.453] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.453] [Render thread/WARN] [org.valkyrienskies.mod.common.config.MassDatapackResolver/]: No specified tag 'minecraft:carpets' doesn't exist!
+[10Sept.2023 01:31:03.483] [Render thread/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 343 advancements
+[10Sept.2023 01:31:30.548] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 01:31:30.550] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 01:31:30.550] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 01:31:30.581] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:31:30.581] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:31:30.581] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 01:31:30.582] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:31:30.582] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:31:30.582] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 01:36:30.548] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 01:36:30.549] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 01:36:30.549] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 01:36:30.580] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:36:30.580] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:36:30.580] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 01:36:30.581] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:36:30.581] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:36:30.581] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 01:38:18.342] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: [Dev: Dein Spielmodus wurde auf Zuschauermodus gesetzt]
+[10Sept.2023 01:38:18.357] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Dein Spielmodus wurde auf Zuschauermodus gesetzt
+[10Sept.2023 01:38:22.638] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: [Dev: Dein Spielmodus wurde auf Kreativmodus gesetzt]
+[10Sept.2023 01:38:22.641] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Dein Spielmodus wurde auf Kreativmodus gesetzt
+[10Sept.2023 01:41:24.273] [Server thread/INFO] [net.minecraft.client.server.IntegratedServer/]: Saving and pausing game...
+[10Sept.2023 01:41:24.283] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:overworld
+[10Sept.2023 01:41:24.283] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 01:41:24.284] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 01:41:24.284] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 01:41:24.316] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:the_nether
+[10Sept.2023 01:41:24.316] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:41:24.316] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:41:24.316] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 01:41:24.317] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[Neue Welt]'/minecraft:the_end
+[10Sept.2023 01:41:24.317] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:41:24.317] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:41:24.317] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 01:41:30.947] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 01:41:30.948] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 01:41:30.948] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 01:41:30.977] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:41:30.977] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:41:30.977] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 01:41:30.978] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:41:30.978] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:41:30.978] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 01:42:26.620] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] [Debug]: Erweiterte Schnellinfos: unsichtbar
+[10Sept.2023 01:42:35.071] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] [Debug]: Chunk‐Grenzen: sichtbar
+[10Sept.2023 01:42:35.356] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] [Debug]: Erweiterte Schnellinfos: sichtbar
+[10Sept.2023 01:43:16.533] [Server thread/INFO] [net.minecraft.world.entity.npc.Villager/]: Villager Villager['Gerber'/181, l='ServerLevel[Neue Welt]', x=706.11, y=70.00, z=-515.50] died, message: 'Gerber wurde von Zombie erschlagen'
+[10Sept.2023 01:46:30.949] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 59 conduits
+[10Sept.2023 01:46:30.950] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 21 electric networks
+[10Sept.2023 01:46:30.950] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 138 electric components
+[10Sept.2023 01:46:30.981] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:46:30.981] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:46:30.981] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components
+[10Sept.2023 01:46:30.983] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 conduits
+[10Sept.2023 01:46:30.983] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric networks
+[10Sept.2023 01:46:30.983] [Server thread/INFO] [de.m_marvin.industria.IndustriaCore/]: Saved 0 electric components

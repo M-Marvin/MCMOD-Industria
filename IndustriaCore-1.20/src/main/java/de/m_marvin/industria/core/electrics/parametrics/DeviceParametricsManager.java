@@ -63,6 +63,7 @@ public class DeviceParametricsManager extends SimplePreparableReloadListener<Map
 	}
 	
 	public DeviceParametrics getParametrics(ResourceLocation location) {
+		if (this.byLocation.isEmpty()) return DEFAULT_TEMPLATE;
 		if (!this.byLocation.containsKey(location)) {
 			this.byLocation.put(location, DEFAULT_TEMPLATE);
 			LOGGER.error("Couldn't find electric parametric '" + location + "'!");

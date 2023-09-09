@@ -1,0 +1,24 @@
+{
+	"replace": false,
+	"values": [
+		"industria:redstone_alloy_dust",
+		"industria:monel_dust",
+		"industria:iron_dust",
+		"industria:nickel_dust",
+		"industria:netherite_dust",
+		"industria:steel_dust",
+		"industria:aluminum_dust",
+		"industria:silver_dust",
+		"industria:gold_dust",
+		"industria:palladium_dust",
+		"industria:tin_dust",
+		"industria:zinc_dust",
+		"industria:netherrack_dust",
+		"industria:lead_dust",
+		"industria:tungsten_dust",
+		"industria:blackstone_dust",
+		"industria:brass_dust",
+		"industria:copper_dust",
+		"industria:stone_dust"
+	]
+}

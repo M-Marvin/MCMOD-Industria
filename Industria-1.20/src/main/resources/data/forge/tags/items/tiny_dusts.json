@@ -1,0 +1,21 @@
+{
+	"replace": false,
+	"values": [
+		"industria:spo_nickel_dust",
+		"industria:spo_steel_dust",
+		"industria:spo_tin_dust",
+		"industria:spo_aluminum_dust",
+		"industria:spo_tungsten_dust",
+		"industria:spo_copper_dust",
+		"industria:spo_netherite_dust",
+		"industria:spo_iron_dust",
+		"industria:spo_silver_dust",
+		"industria:spo_lead_dust",
+		"industria:spo_brass_dust",
+		"industria:spo_gold_dust",
+		"industria:spo_monel_dust",
+		"industria:spo_zinc_dust",
+		"industria:spo_palladium_dust",
+		"industria:spo_redstone_alloy_dust"
+	]
+}

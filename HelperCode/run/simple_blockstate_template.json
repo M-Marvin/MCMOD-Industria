@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "industria:block${category}/${file_name}"
+      "model": "industria:block${category}/${model_file}"
     }
   }
 }

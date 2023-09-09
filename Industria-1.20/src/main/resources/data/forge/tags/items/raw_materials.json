@@ -1,0 +1,11 @@
+{
+	"replace": false,
+	"values": [
+		"industria:raw_silver",
+		"industria:raw_lead",
+		"industria:raw_tin",
+		"industria:raw_nickel",
+		"industria:raw_palladium",
+		"industria:raw_zinc"
+	]
+}

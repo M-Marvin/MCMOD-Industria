@@ -1,0 +1,17 @@
+{
+	"replace": false,
+	"values": [
+		"industria:lead_ingot",
+		"industria:nickel_ingot",
+		"industria:steel_ingot",
+		"industria:redstone_alloy_ingot",
+		"industria:tin_ingot",
+		"industria:silver_ingot",
+		"industria:brass_ingot",
+		"industria:monel_ingot",
+		"industria:palladium_ingot",
+		"industria:aluminum_ingot",
+		"industria:tungsten_ingot",
+		"industria:zinc_ingot"
+	]
+}

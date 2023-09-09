@@ -1,0 +1,362 @@
+[
+	{
+		"block": "industria:lead_block",
+		"mass": 11340
+	},
+	{
+		"block": "industria:steel_block",
+		"mass": 7840
+	},
+	{
+		"block": "industria:weathered_steel_block",
+		"mass": 7840
+	},
+	{
+		"block": "industria:exposed_steel_block",
+		"mass": 7840
+	},
+	{
+		"block": "industria:oxidized_steel_block",
+		"mass": 7840
+	},
+	{
+		"block": "industria:nickel_block",
+		"mass": 8900
+	},
+	{
+		"block": "industria:monel_block",
+		"mass": 8900
+	},
+	{
+		"block": "industria:palladium_block",
+		"mass": 12000
+	},
+	{
+		"block": "industria:aluminum_block",
+		"mass": 2700
+	},
+	{
+		"block": "industria:tungsten_block",
+		"mass": 19250
+	},
+	{
+		"block": "industria:tin_block",
+		"mass": 6500
+	},
+	{
+		"block": "industria:weathered_tin_block",
+		"mass": 6500
+	},
+	{
+		"block": "industria:exposed_tin_block",
+		"mass": 6500
+	},
+	{
+		"block": "industria:oxidized_tin_block",
+		"mass": 6500
+	},
+	{
+		"block": "industria:weathered_iron_block",
+		"mass": 7840
+	},
+	{
+		"block": "industria:exposed_iron_block",
+		"mass": 7840
+	},
+	{
+		"block": "industria:oxidized_iron_block",
+		"mass": 7840
+	},
+	{
+		"block": "industria:silver_block",
+		"mass": 10500
+	},
+	{
+		"block": "industria:brass_block",
+		"mass": 8000
+	},
+	{
+		"block": "industria:weathered_brass_block",
+		"mass": 8000
+	},
+	{
+		"block": "industria:exposed_brass_block",
+		"mass": 8000
+	},
+	{
+		"block": "industria:oxidized_brass_block",
+		"mass": 8000
+	},
+	{
+		"block": "industria:redstone_alloy_block",
+		"mass": 1
+	},
+	{
+		"block": "industria:zinc_block",
+		"mass": 7150
+	},
+	{
+		"block": "industria:zinc_plates",
+		"mass": 400
+	},
+	{
+		"block": "industria:lead_plates",
+		"mass": 630
+	},
+	{
+		"block": "industria:gold_plates",
+		"mass": 1070
+	},
+	{
+		"block": "industria:netherite_plates",
+		"mass": 1070
+	},
+	{
+		"block": "industria:steel_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:weathered_steel_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:exposed_steel_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:nickel_plates",
+		"mass": 500
+	},
+	{
+		"block": "industria:monel_plates",
+		"mass": 500
+	},
+	{
+		"block": "industria:palladium_plates",
+		"mass": 670
+	},
+	{
+		"block": "industria:aluminum_plates",
+		"mass": 150
+	},
+	{
+		"block": "industria:tungsten_plates",
+		"mass": 1070
+	},
+	{
+		"block": "industria:tin_plates",
+		"mass": 360
+	},
+	{
+		"block": "industria:weathered_tin_plates",
+		"mass": 360
+	},
+	{
+		"block": "industria:exposed_tin_plates",
+		"mass": 360
+	},
+	{
+		"block": "industria:oxidized_tin_plates",
+		"mass": 360
+	},
+	{
+		"block": "industria:iron_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:weathered_iron_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:exposed_iron_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:oxidized_iron_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:copper_plates",
+		"mass": 500
+	},
+	{
+		"block": "industria:weathered_copper_plates",
+		"mass": 500
+	},
+	{
+		"block": "industria:exposed_copper_plates",
+		"mass": 500
+	},
+	{
+		"block": "industria:oxidized_copper_plates",
+		"mass": 500
+	},
+	{
+		"block": "industria:silver_plates",
+		"mass": 580
+	},
+	{
+		"block": "industria:brass_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:weathered_brass_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:exposed_brass_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:oxidized_brass_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:redstone_alloy_plates",
+		"mass": 1
+	},
+	{
+		"block": "industria:waxed_iron_block",
+		"mass": 7840
+	},
+	{
+		"block": "industria:waxed_exposed_iron_block",
+		"mass": 7840
+	},
+	{
+		"block": "industria:waxed_weathered_iron_block",
+		"mass": 7840
+	},
+	{
+		"block": "industria:waxed_oxidized_iron_block",
+		"mass": 7840
+	},
+	{
+		"block": "industria:waxed_iron_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:waxed_exposed_iron_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:waxed_weathered_iron_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:waxed_oxidized_iron_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:waxed_tin_block",
+		"mass": 6500
+	},
+	{
+		"block": "industria:waxed_exposed_tin_block",
+		"mass": 6500
+	},
+	{
+		"block": "industria:waxed_weathered_tin_block",
+		"mass": 6500
+	},
+	{
+		"block": "industria:waxed_oxidized_tin_block",
+		"mass": 6500
+	},
+	{
+		"block": "industria:waxed_tin_plates",
+		"mass": 360
+	},
+	{
+		"block": "industria:waxed_exposed_tin_plates",
+		"mass": 360
+	},
+	{
+		"block": "industria:waxed_weathered_tin_plates",
+		"mass": 360
+	},
+	{
+		"block": "industria:waxed_oxidized_tin_plates",
+		"mass": 360
+	},
+	{
+		"block": "industria:waxed_steel_block",
+		"mass": 7840
+	},
+	{
+		"block": "industria:waxed_exposed_steel_block",
+		"mass": 7840
+	},
+	{
+		"block": "industria:waxed_weathered_steel_block",
+		"mass": 7840
+	},
+	{
+		"block": "industria:waxed_oxidized_steel_block",
+		"mass": 7840
+	},
+	{
+		"block": "industria:waxed_steel_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:waxed_exposed_steel_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:waxed_weathered_steel_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:waxed_oxidized_steel_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:waxed_brass_block",
+		"mass": 8000
+	},
+	{
+		"block": "industria:waxed_exposed_brass_block",
+		"mass": 8000
+	},
+	{
+		"block": "industria:waxed_weathered_brass_block",
+		"mass": 8000
+	},
+	{
+		"block": "industria:waxed_oxidized_brass_block",
+		"mass": 8000
+	},
+	{
+		"block": "industria:waxed_brass_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:waxed_exposed_brass_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:waxed_weathered_brass_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:waxed_oxidized_brass_plates",
+		"mass": 440
+	},
+	{
+		"block": "industria:waxed_copper_plates",
+		"mass": 500
+	},
+	{
+		"block": "industria:waxed_exposed_copper_plates",
+		"mass": 500
+	},
+	{
+		"block": "industria:waxed_weathered_copper_plates",
+		"mass": 500
+	},
+	{
+		"block": "industria:waxed_oxidized_copper_plates",
+		"mass": 500
+	}
+]

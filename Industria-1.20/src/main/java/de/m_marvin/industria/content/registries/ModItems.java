@@ -285,7 +285,6 @@ public class ModItems {
 				output.accept(REDSTONE_ALLOY_BLOCK.get().getDefaultInstance());
 				output.accept(ZINC_BLOCK.get().getDefaultInstance());
 				
-
 				output.accept(WEATHERED_STEEL_BLOCK.get().getDefaultInstance());
 				output.accept(OXIDIZED_STEEL_BLOCK.get().getDefaultInstance());
 				output.accept(EXPOSED_STEEL_BLOCK.get().getDefaultInstance());
@@ -311,7 +310,6 @@ public class ModItems {
 				output.accept(WAXED_OXIDIZED_BRASS_BLOCK.get().getDefaultInstance());
 				output.accept(WAXED_EXPOSED_BRASS_BLOCK.get().getDefaultInstance());
 				output.accept(OXIDIZED_BRASS_BLOCK.get().getDefaultInstance());
-				
 				
 				output.accept(ZINC_PLATES.get().getDefaultInstance());
 				output.accept(LEAD_PLATES.get().getDefaultInstance());
@@ -360,6 +358,7 @@ public class ModItems {
 				output.accept(WAXED_WEATHERED_BRASS_PLATES.get().getDefaultInstance());
 				output.accept(WAXED_EXPOSED_BRASS_PLATES.get().getDefaultInstance());
 				output.accept(WAXED_OXIDIZED_BRASS_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_IRON_BLOCK.get().getDefaultInstance());
 				
 			})
 			.build()

@@ -66,6 +66,14 @@ napätie (Spannung) nach Schema NEUTR-3
 napätie, napätia, napätiu, napätie, napätí, napätim
 NOM      GEN      DAT      AKK      LOK     INSTR
 
+prášok (Pulver) nach Schema MASK-3 mit Ausnahmen
+prášok, prášku, prášku, prášok, práškom, prášku
+NOM     GEN     DAT     AKK     LOK      INSTR
+
+zliatina (Legierung) nach Schema FEM-1
+zliatina, zliatiny, zliatine, zliatinu, zliatine, zliatinou
+NOM       GEN       DAT       AKK       LOK       INSTR
+
 
 
 Bola umiestnená linka (Wurde platziert Leitung)

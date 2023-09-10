@@ -1,0 +1,70 @@
+Nomendeklinationen spezifischer Wörter:
+
+linka (Leitung) nach Schema FEM-1
+linka, linky, linke, linku, linke, linkou
+NOM    GEN    DAT    AKK    LOK    INSTR
+
+kliknutie (Klick) nach Schem NEUTR-3
+kliknutie, kliknutia, kliknutiu, kliknutie, kliknutí, kliknutím
+NOM        GEN        DAT        AKK        LOK       INSTR
+
+kocka (Würfel/Block) nach Schema FEM-1
+kocka, kocky, kocke, kocku, kocke, kockou
+NOM   GEN     DAT    AKK    LOK    INSTR
+
+oblasť (Bereich) nach Schema FEM-3
+oblasť, oblasti, oblasti, oblasť, oblasti, oblasťou
+NOM     GEN      DAT      AKK     LOK      INSTR
+
+napätie (Spannung) nach Schema NEUTR-3
+napätie, napätia, napätiu, napätie, napätí, napätim
+NOM      GEN      DAT      AKK      LOK     INSTR
+
+prášok (Pulver) nach Schema MASK-3 mit Ausnahmen
+prášok, prášku, prášku, prášok, práškom, prášku
+NOM     GEN__   DAT     AKK     LOK      INSTR
+
+zliatina (Legierung) nach Schema FEM-1
+zliatina, zliatiny, zliatine, zliatinu, zliatine, zliatinou
+NOM       GEN       DAT       AKK       LOK       INSTR
+
+zlato (Gold) nach Schema NEUTR-1
+zlato, zlata, zlatu, zlato, zlate, zlatom
+NOM    GEN    DAT    AKK    LOK    INSTR
+
+olovo (Blei) nach Schema NEUTR-1
+olovo, olova, olovu, olovo, olove, olovom
+NOM    GEN    DAT    AKK    LOK    INSTR
+
+nikel (Nickel) nach Schema MASK-3 mit Ausnahmen
+nikel, niklu, niklu, nikel, nikle, niklom
+NOM    GEN__  DAT    AKK    LOK    INSTR
+
+paládium (Palladium) nach Schema MASK-3 mit Ausnahmen
+paládium, paládia, paládiu, paládium, paládiu, paládiom
+NOM       GEN      DAT      AKK       LOK__    INSTR
+
+striebro (Silver) nach Schema NEUTR-1
+striebro, striebra, striebru, striebro, striebre, striebrom
+NOM       GEN       DAT       AKK       LOK       INSTR
+
+cín (Zinn) nach Schema MASK-3 mit Ausnahmen
+cín, cínu, cínu, cín, cíne, cínom
+NOM  GEN__ DAT   AKK  LOK   INSTR
+
+zinok (Zink) nach Schema MASK-3 mit Ausnahmen
+zinok, zinku, zinku, zinok, zinku, zinkom
+NOM    GEN__  DAT    AKK    LOK__  INSTR
+
+ruda (Erz) nach Schem FEM-1
+ruda, rudy, rude, rudu, rude, rudou
+NOM   GEN   DAT   AKK   LOK   INSTR
+
+kameň (Stein) nach Schema MASK-4 mit Ausnahmen
+kameň, kameňa, kameňu, kameň, kameni, kameňom
+NOM    GEN     DAT     AKK    LOK__   INSTR
+
+bauxit (Bauxit) nach Schema MASK-3 mit Ausnahmen
+bauxit, bauxitu, bauxitu, bauxit, bauxite, bauxitom
+NOM     GEN__    DAT      AKK     LOK      INSTR
+=> genau so auch wolframit (Wolframit)

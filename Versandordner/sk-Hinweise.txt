@@ -43,39 +43,6 @@ Bildung [Nomen] + [Nomen]y/a/e
         Länge     der Verbindung
 
 
-
-Nomendeklinationen spezifischer Wörter:
-
-linka (Leitung) nach Schema FEM-1
-linka, linky, linke, linku, linke, linkou
-NOM    GEN    DAT    AKK    LOK    INSTR
-
-kliknutie (Klick) nach Schem NEUTR-3
-kliknutie, kliknutia, kliknutiu, kliknutie, kliknutí, kliknutím
-NOM        GEN        DAT        AKK        LOK       INSTR
-
-kocka (Würfel/Block) nach Schema FEM-1
-kocka, kocky, kocke, kocku, kocke, kockou
-NOM   GEN     DAT    AKK    LOK    INSTR
-
-oblasť (Bereich) nach Schema FEM-3
-oblasť, oblasti, oblasti, oblasť, oblasti, oblasťou
-NOM     GEN      DAT      AKK     LOK      INSTR
-
-napätie (Spannung) nach Schema NEUTR-3
-napätie, napätia, napätiu, napätie, napätí, napätim
-NOM      GEN      DAT      AKK      LOK     INSTR
-
-prášok (Pulver) nach Schema MASK-3 mit Ausnahmen
-prášok, prášku, prášku, prášok, práškom, prášku
-NOM     GEN     DAT     AKK     LOK      INSTR
-
-zliatina (Legierung) nach Schema FEM-1
-zliatina, zliatiny, zliatine, zliatinu, zliatine, zliatinou
-NOM       GEN       DAT       AKK       LOK       INSTR
-
-
-
 Bola umiestnená linka (Wurde platziert Leitung)
 Bola, weil linka FEM ist. umiestnená ist ein ADJ, das an linka angeglichen ist.
 

@@ -121,7 +121,7 @@ key_key.hotbar.9:key.keyboard.9
 key_key.atlasviewer.open_viewer:key.keyboard.v
 key_key.valkyrienskies.ship_down:key.keyboard.v
 key_key.valkyrienskies.ship_cruise:key.keyboard.c
-soundCategory_master:0.2533112582781457
+soundCategory_master:0.0
 soundCategory_music:0.0
 soundCategory_record:1.0
 soundCategory_weather:1.0

@@ -139,10 +139,9 @@ public abstract class BaseEntityMultiBlock extends BaseEntityBlock {
 		for (int i = 0; i < positions.length; i++) {
 			BlockPos placementPos = positions[i];
 			BlockState state = pLevel.getBlockState(placementPos);
-			if (state.canBeReplaced()) {
-				Vec3i mbPos = getMBPosAtIndex(i);
-				pLevel.setBlockAndUpdate(placementPos, stateAtMBPos(mbPos, pState.getValue(BlockStateProperties.HORIZONTAL_FACING)));
-			}
+			if (!state.isAir()) pLevel.destroyBlock(placementPos, true);
+			Vec3i mbPos = getMBPosAtIndex(i);
+			pLevel.setBlockAndUpdate(placementPos, stateAtMBPos(mbPos, pState.getValue(BlockStateProperties.HORIZONTAL_FACING)));
 		}
 		if (pStack.hasTag() && pStack.getTag().contains("BlockEntityTag")) {
 			CompoundTag tag = pStack.getTag().getCompound("BlockEntityTag");
@@ -152,16 +151,22 @@ public abstract class BaseEntityMultiBlock extends BaseEntityBlock {
 	}
 	
 	public BlockPos getOriginBlock(BlockPos pos, BlockState state) {
-		Vec3i mbPos = getMBPos(state);
-		Direction orientation = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
-		Vec3i mbOffset = MathUtility.rotatePoint(mbPos, orientation.get2DDataValue() * -90, true, Axis.Y);
-		return new BlockPos(pos.getX() - mbOffset.x, pos.getY() - mbOffset.y, pos.getZ() - mbOffset.z);
+		if (state.getBlock() instanceof BaseEntityMultiBlock) {
+			Vec3i mbPos = getMBPos(state);
+			Direction orientation = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+			Vec3i mbOffset = MathUtility.rotatePoint(mbPos, orientation.get2DDataValue() * -90, true, Axis.Y);
+			return new BlockPos(pos.getX() - mbOffset.x, pos.getY() - mbOffset.y, pos.getZ() - mbOffset.z);
+		}
+		return pos;
 	}
 
 	public BlockPos getBlockAtMBPos(BlockPos centerPos, BlockState state, Vec3i mbPos) {
-		Direction orientation = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
-		Vec3i mbOffset = MathUtility.rotatePoint(mbPos, orientation.get2DDataValue() * -90, true, Axis.Y);
-		return new BlockPos(centerPos.getX() + mbOffset.x, centerPos.getY() + mbOffset.y, centerPos.getZ() + mbOffset.z);
+		if (state.getBlock() instanceof BaseEntityMultiBlock) {
+			Direction orientation = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+			Vec3i mbOffset = MathUtility.rotatePoint(mbPos, orientation.get2DDataValue() * -90, true, Axis.Y);
+			return new BlockPos(centerPos.getX() + mbOffset.x, centerPos.getY() + mbOffset.y, centerPos.getZ() + mbOffset.z);
+		}
+		return centerPos;
 	}
 	
 	protected void breakMultiBlock(Level level, BlockPos pos, BlockState state, boolean removeClicked, boolean dropBlock) {

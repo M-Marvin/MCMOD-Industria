@@ -62,24 +62,24 @@ public class PortableCoalGeneratorBlockEntity extends MultiBlockEntity<PortableC
 	}
 
 	public FluidContainer getContainer() {
-		return getMaster().container;
+		return getMaster() == null ? container : getMaster().container;
 	}
 	
 	public FluidStack getWaterStorage() {
-		return getMaster().container.getFluid(0);
+		return getContainer().getFluid(0);
 	}
 	
 	public void setWaterStorage(FluidStack waterStorage) {
-		getMaster().container.setFluid(0, waterStorage);
+		getContainer().setFluid(0, waterStorage);
 		getMaster().setChanged();
 	}
 	
 	public ItemStack getFuelStorage() {
-		return getMaster().container.getItem(this.container.getFirstAdditional());
+		return getContainer().getItem(this.container.getFirstAdditional());
 	}
 	
 	public void setFuelStorage(ItemStack fuelStorage) {
-		getMaster().container.setItem(this.container.getFirstAdditional(), fuelStorage);
+		getContainer().setItem(this.container.getFirstAdditional(), fuelStorage);
 		getMaster().setChanged();
 	}
 	
@@ -108,6 +108,8 @@ public class PortableCoalGeneratorBlockEntity extends MultiBlockEntity<PortableC
 	}
 
 	public static void tick(Level pLevel, BlockPos pPos, BlockState pState, PortableCoalGeneratorBlockEntity pBlockEntity) {
+		
+		if (pBlockEntity.getMaster() == null) return;
 		
 		if (pBlockEntity.canRun != pBlockEntity.canRun()) {
 			pBlockEntity.canRun = pBlockEntity.canRun();

@@ -1,6 +1,0 @@
-raw_zinc_block	forge:storage_blocks/raw_zinc
-raw_lead_block	forge:storage_blocks/raw_lead
-raw_nickel_block	forge:storage_blocks/raw_nickel
-raw_palladium_block	forge:storage_blocks/raw_palladium
-raw_tin_block	forge:storage_blocks/raw_tin
-raw_silver_block	forge:storage_blocks/raw_silver

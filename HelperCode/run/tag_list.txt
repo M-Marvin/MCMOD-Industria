@@ -1,0 +1,28 @@
+insulated_copper_wire_coil	industriacore:electrics	industria:conduits		
+insulated_tin_wire_coil	industriacore:electrics	industria:conduits		
+insulated_gold_wire_coil	industriacore:electrics	industria:conduits		
+insulated_aluminum_wire_coil	industriacore:electrics	industria:conduits		
+copper_wire_coil	industriacore:electrics	industria:conduits		
+tin_wire_coil	industriacore:electrics	industria:conduits		
+gold_wire_coil	industriacore:electrics	industria:conduits		
+aluminum_wire_coil	industriacore:electrics	industria:conduits		
+insulated_copper_wire	industriacore:electrics	industria:conduits		
+insulated_tin_wire	industriacore:electrics	industria:conduits		
+insulated_gold_wire	industriacore:electrics	industria:conduits		
+insulated_aluminum_wire	industriacore:electrics	industria:conduits		
+copper_wire	industriacore:electrics	industria:conduits	forge:wires	forge:wires/copper
+tin_wire	industriacore:electrics	industria:conduits	forge:wires	forge:wires/tin
+gold_wire	industriacore:electrics	industria:conduits	forge:wires	forge:wires/gold
+aluminum_wire	industriacore:electrics	industria:conduits	forge:wires	forge:wires/aluminum
+tin_wire_holder	industriacore:electrics	industria:wire_holders		
+iron_wire_holder	industriacore:electrics	industria:wire_holders		
+gold_wire_holder	industriacore:electrics	industria:wire_holders		
+aluminum_wire_holder	industriacore:electrics	industria:wire_holders		
+iron_junction_box	industriacore:electrics	industria:wire_holders		
+zinc_junction_box	industriacore:electrics	industria:wire_holders		
+brass_junction_box	industriacore:electrics	industria:wire_holders		
+steel_junction_box	industriacore:electrics	industria:wire_holders		
+brass_floodlight	industriacore:electrics	industriacore:machines		
+steel_floodlight	industriacore:electrics	industriacore:machines		
+portable_coal_generator	industriacore:electrics	industriacore:machines		
+portable_fuel_generator	industriacore:electrics	industriacore:machines		

@@ -1,6 +1,0 @@
-file_name	raw_zinc_block	template	blockitem_model_template.json	model_file	raw_zinc_block	category	/materials
-file_name	raw_lead_block	template	blockitem_model_template.json	model_file	raw_lead_block	category	/materials
-file_name	raw_nickel_block	template	blockitem_model_template.json	model_file	raw_nickel_block	category	/materials
-file_name	raw_palladium_block	template	blockitem_model_template.json	model_file	raw_palladium_block	category	/materials
-file_name	raw_tin_block	template	blockitem_model_template.json	model_file	raw_tin_block	category	/materials
-file_name	raw_silver_block	template	blockitem_model_template.json	model_file	raw_silver_block	category	/materials

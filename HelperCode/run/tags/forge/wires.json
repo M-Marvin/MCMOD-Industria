@@ -1,0 +1,9 @@
+{
+	"replace": false,
+	"values": [
+		"industria:aluminum_wire",
+		"industria:tin_wire",
+		"industria:copper_wire",
+		"industria:gold_wire"
+	]
+}

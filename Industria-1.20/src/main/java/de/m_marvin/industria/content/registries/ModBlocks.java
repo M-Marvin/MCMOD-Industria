@@ -28,30 +28,30 @@ public class ModBlocks {
 		BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 	
-	public static final RegistryObject<Block> EMPTY_WIRE_COIL					= BLOCKS.register("empty_wire_coil", () -> new ConduitCoilBlock(Properties.of(), false));
-	public static final RegistryObject<Block> INSULATED_COPPER_WIRE_COIL		= BLOCKS.register("insulated_copper_wire_coil", () -> new ConduitCoilBlock(Properties.of(), true));
-	public static final RegistryObject<Block> INSULATED_TIN_WIRE_COIL			= BLOCKS.register("insulated_tin_wire_coil", () -> new ConduitCoilBlock(Properties.of(), true));
-	public static final RegistryObject<Block> INSULATED_GOLD_WIRE_COIL			= BLOCKS.register("insulated_gold_wire_coil", () -> new ConduitCoilBlock(Properties.of(), true));
-	public static final RegistryObject<Block> INSULATED_ALUMINUM_WIRE_COIL		= BLOCKS.register("insulated_aluminum_wire_coil", () -> new ConduitCoilBlock(Properties.of(), true));
-	public static final RegistryObject<Block> COPPER_WIRE_COIL					= BLOCKS.register("copper_wire_coil", () -> new ConduitCoilBlock(Properties.of(), true));
-	public static final RegistryObject<Block> TIN_WIRE_COIL						= BLOCKS.register("tin_wire_coil", () -> new ConduitCoilBlock(Properties.of(), true));
-	public static final RegistryObject<Block> GOLD_WIRE_COIL					= BLOCKS.register("gold_wire_coil", () -> new ConduitCoilBlock(Properties.of(), true));
-	public static final RegistryObject<Block> ALUMINUM_WIRE_COIL				= BLOCKS.register("aluminum_wire_coil", () -> new ConduitCoilBlock(Properties.of(), true));
+	public static final RegistryObject<Block> EMPTY_WIRE_COIL					= BLOCKS.register("empty_wire_coil", () -> new ConduitCoilBlock(Properties.of().noCollission().strength(3, 3), false));
+	public static final RegistryObject<Block> INSULATED_COPPER_WIRE_COIL		= BLOCKS.register("insulated_copper_wire_coil", () -> new ConduitCoilBlock(Properties.of().strength(4, 4), true));
+	public static final RegistryObject<Block> INSULATED_TIN_WIRE_COIL			= BLOCKS.register("insulated_tin_wire_coil", () -> new ConduitCoilBlock(Properties.of().strength(4, 4), true));
+	public static final RegistryObject<Block> INSULATED_GOLD_WIRE_COIL			= BLOCKS.register("insulated_gold_wire_coil", () -> new ConduitCoilBlock(Properties.of().strength(4, 4), true));
+	public static final RegistryObject<Block> INSULATED_ALUMINUM_WIRE_COIL		= BLOCKS.register("insulated_aluminum_wire_coil", () -> new ConduitCoilBlock(Properties.of().strength(4, 4), true));
+	public static final RegistryObject<Block> COPPER_WIRE_COIL					= BLOCKS.register("copper_wire_coil", () -> new ConduitCoilBlock(Properties.of().strength(4, 4), true));
+	public static final RegistryObject<Block> TIN_WIRE_COIL						= BLOCKS.register("tin_wire_coil", () -> new ConduitCoilBlock(Properties.of().strength(4, 4), true));
+	public static final RegistryObject<Block> GOLD_WIRE_COIL					= BLOCKS.register("gold_wire_coil", () -> new ConduitCoilBlock(Properties.of().strength(4, 4), true));
+	public static final RegistryObject<Block> ALUMINUM_WIRE_COIL				= BLOCKS.register("aluminum_wire_coil", () -> new ConduitCoilBlock(Properties.of().strength(4, 4), true));
 	
 	public static final RegistryObject<Block> LIGHT_AIR 						= BLOCKS.register("light_air_block", () -> new LightBlock(Properties.of().replaceable().noCollission().air().strength(-1.0F, 3600000.8F).noLootTable().noOcclusion().lightLevel(LightBlock.LIGHT_EMISSION))); // TODO Fluids do not replace
-	public static final RegistryObject<Block> COPPER_WIRE_HOLDER 				= BLOCKS.register("copper_wire_holder", () -> new WireHolderBlock(Properties.of()));
-	public static final RegistryObject<Block> GOLD_WIRE_HOLDER 					= BLOCKS.register("gold_wire_holder", () -> new WireHolderBlock(Properties.of()));
-	public static final RegistryObject<Block> TIN_WIRE_HOLDER 					= BLOCKS.register("tin_wire_holder", () -> new WireHolderBlock(Properties.of()));
-	public static final RegistryObject<Block> ALUMINUM_WIRE_HOLDER 				= BLOCKS.register("aluminum_wire_holder", () -> new WireHolderBlock(Properties.of()));
-	public static final RegistryObject<Block> IRON_JUNCTION_BOX 				= BLOCKS.register("iron_junction_box", () -> new JunctionBoxBlock(Properties.of()));
-	public static final RegistryObject<Block> ZINC_JUNCTION_BOX 				= BLOCKS.register("zinc_junction_box", () -> new JunctionBoxBlock(Properties.of()));
-	public static final RegistryObject<Block> BRASS_JUNCTION_BOX 				= BLOCKS.register("brass_junction_box", () -> new JunctionBoxBlock(Properties.of()));
-	public static final RegistryObject<Block> STEEL_JUNCTION_BOX 				= BLOCKS.register("steel_junction_box", () -> new JunctionBoxBlock(Properties.of()));
+	public static final RegistryObject<Block> COPPER_WIRE_HOLDER 				= BLOCKS.register("copper_wire_holder", () -> new WireHolderBlock(Properties.of().strength(3, 3)));
+	public static final RegistryObject<Block> GOLD_WIRE_HOLDER 					= BLOCKS.register("gold_wire_holder", () -> new WireHolderBlock(Properties.of().strength(3, 3)));
+	public static final RegistryObject<Block> TIN_WIRE_HOLDER 					= BLOCKS.register("tin_wire_holder", () -> new WireHolderBlock(Properties.of().strength(3, 3)));
+	public static final RegistryObject<Block> ALUMINUM_WIRE_HOLDER 				= BLOCKS.register("aluminum_wire_holder", () -> new WireHolderBlock(Properties.of().strength(3, 3)));
+	public static final RegistryObject<Block> IRON_JUNCTION_BOX 				= BLOCKS.register("iron_junction_box", () -> new JunctionBoxBlock(Properties.of().strength(3F, 3F)));
+	public static final RegistryObject<Block> ZINC_JUNCTION_BOX 				= BLOCKS.register("zinc_junction_box", () -> new JunctionBoxBlock(Properties.of().strength(3F, 3F)));
+	public static final RegistryObject<Block> BRASS_JUNCTION_BOX 				= BLOCKS.register("brass_junction_box", () -> new JunctionBoxBlock(Properties.of().strength(3F, 3F)));
+	public static final RegistryObject<Block> STEEL_JUNCTION_BOX 				= BLOCKS.register("steel_junction_box", () -> new JunctionBoxBlock(Properties.of().strength(3F, 3F)));
 	
-	public static final RegistryObject<Block> BRASS_FLOODLIGHT 					= BLOCKS.register("brass_floodlight", () -> new FloodlightBlock(Properties.of()));
-	public static final RegistryObject<Block> STEEL_FLOOFLIGHT 					= BLOCKS.register("steel_floodlight", () -> new FloodlightBlock(Properties.of()));
-	public static final RegistryObject<Block> PORTABLE_FUEL_GENERATOR 			= BLOCKS.register("portable_fuel_generator", () -> new PortableFuelGeneratorBlock(Properties.of()));
-	public static final RegistryObject<Block> PORTABLE_COAL_GENERATOR			= BLOCKS.register("portable_coal_generator", () -> new PortableCoalGeneratorBlock(Properties.of()));
+	public static final RegistryObject<Block> BRASS_FLOODLIGHT 					= BLOCKS.register("brass_floodlight", () -> new FloodlightBlock(Properties.of().strength(2, 1.5F)));
+	public static final RegistryObject<Block> STEEL_FLOOFLIGHT 					= BLOCKS.register("steel_floodlight", () -> new FloodlightBlock(Properties.of().strength(2, 1.5F)));
+	public static final RegistryObject<Block> PORTABLE_FUEL_GENERATOR 			= BLOCKS.register("portable_fuel_generator", () -> new PortableFuelGeneratorBlock(Properties.of().strength(3.5F, 3.5F)));
+	public static final RegistryObject<Block> PORTABLE_COAL_GENERATOR			= BLOCKS.register("portable_coal_generator", () -> new PortableCoalGeneratorBlock(Properties.of().strength(3.5F, 3.5F)));
 	
 	public static final RegistryObject<Block> RAW_ZINC_BLOCK					= BLOCKS.register("raw_zinc_block", () -> new Block(Properties.of().strength(5, 6)));
 	public static final RegistryObject<Block> RAW_LEAD_BLOCK					= BLOCKS.register("raw_lead_block", () -> new Block(Properties.of().strength(5, 6)));

@@ -1,0 +1,13 @@
+{
+	"replace": false,
+	"values": [
+		"industria:aluminum_wire_holder",
+		"industria:steel_junction_box",
+		"industria:tin_wire_holder",
+		"industria:iron_junction_box",
+		"industria:gold_wire_holder",
+		"industria:zinc_junction_box",
+		"industria:brass_junction_box",
+		"industria:iron_wire_holder"
+	]
+}

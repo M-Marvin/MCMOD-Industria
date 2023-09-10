@@ -1,0 +1,86 @@
+[
+	{
+		"block": "industria:insulated_copper_wire_coil",
+		"mass": 4000
+	},
+	{
+		"block": "industria:insulated_tin_wire_coil",
+		"mass": 4000
+	},
+	{
+		"block": "industria:insulated_gold_wire_coil",
+		"mass": 4000
+	},
+	{
+		"block": "industria:insulated_aluminum_wire_coil",
+		"mass": 4000
+	},
+	{
+		"block": "industria:copper_wire_coil",
+		"mass": 4000
+	},
+	{
+		"block": "industria:tin_wire_coil",
+		"mass": 4000
+	},
+	{
+		"block": "industria:gold_wire_coil",
+		"mass": 4000
+	},
+	{
+		"block": "industria:aluminum_wire_coil",
+		"mass": 4000
+	},
+	{
+		"block": "industria:empty_wire_coil",
+		"mass": 600
+	},
+	{
+		"block": "industria:tin_wire_holder",
+		"mass": 30
+	},
+	{
+		"block": "industria:copper_wire_holder",
+		"mass": 30
+	},
+	{
+		"block": "industria:gold_wire_holder",
+		"mass": 30
+	},
+	{
+		"block": "industria:aluminum_wire_holder",
+		"mass": 30
+	},
+	{
+		"block": "industria:iron_junction_box",
+		"mass": 20
+	},
+	{
+		"block": "industria:zinc_junction_box",
+		"mass": 20
+	},
+	{
+		"block": "industria:brass_junction_box",
+		"mass": 20
+	},
+	{
+		"block": "industria:steel_junction_box",
+		"mass": 20
+	},
+	{
+		"block": "industria:brass_floodlight",
+		"mass": 900
+	},
+	{
+		"block": "industria:steel_floodlight",
+		"mass": 900
+	},
+	{
+		"block": "industria:portable_coal_generator",
+		"mass": 1500
+	},
+	{
+		"block": "industria:portable_fuel_generator",
+		"mass": 1500
+	}
+]

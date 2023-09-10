@@ -483,9 +483,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	public <I, P, T> void addComponent(P pos, IElectric<I, P, T> type, I instance) {
 		Component<?, ?, ?> component = this.pos2componentMap.get(pos);
 		if (component != null) {
-			if (component.type.equals(type)) {
-				return;
-			} else {
+			if (!component.type.equals(type)) {
 				removeFromNetwork(pos);
 			}
 		}
@@ -503,7 +501,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	 */
 	public boolean isInNetwork(Component<?, ?, ?> component) {
 		if (component.instance(level) == null) return false;
-		return this.component2circuitMap.containsKey(component);
+		return this.component2circuitMap.containsKey(component) && this.pos2componentMap.containsKey(component.pos());
 	}
 	
 	/**

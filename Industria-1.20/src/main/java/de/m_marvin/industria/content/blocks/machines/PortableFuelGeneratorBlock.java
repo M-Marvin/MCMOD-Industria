@@ -143,7 +143,7 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 	
 	@Override
 	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {
-		GameUtility.triggerUpdate(level, position);
+		GameUtility.triggerClientSync(level, position);
 	}
 	
 	@Override

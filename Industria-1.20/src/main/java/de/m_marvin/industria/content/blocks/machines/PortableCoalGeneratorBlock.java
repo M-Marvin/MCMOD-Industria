@@ -193,7 +193,7 @@ public class PortableCoalGeneratorBlock extends BaseEntityMultiBlock implements 
 	
 	@Override
 	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {
-		GameUtility.triggerUpdate(level, position);
+		GameUtility.triggerClientSync(level, position);
 	}
 	
 	@Override

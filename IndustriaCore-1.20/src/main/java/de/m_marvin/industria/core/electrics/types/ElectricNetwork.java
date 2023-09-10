@@ -26,13 +26,14 @@ public class ElectricNetwork implements INGCallback {
 	
 	protected String title;
 	protected Set<Component<?, ?, ?>> components = new HashSet<>();
+	protected Set<Component<?, ?, ?>> componentsLast = new HashSet<>();
 	protected int templateCounter;
 	protected StringBuilder circuitBuilder;
 	protected String netList = "";
 	protected NativeNGLink nglink;
 	protected Map<String, Double> nodeVoltages = Maps.newHashMap();
 	
-	protected Object ngLinkLock = new Object();
+	protected static Object ngLinkLock = new Object();
 	
 	public ElectricNetwork(String titleInfo) {
 		this.title = titleInfo;
@@ -80,7 +81,8 @@ public class ElectricNetwork implements INGCallback {
 		if (this.nglink.isNGSpiceAttached()) this.nglink.detachNGSpice();
 		this.circuitBuilder = new StringBuilder();
 		this.netList = null;
-		this.components.clear();
+		this.componentsLast = components;
+		this.components = new HashSet<>();
 	}
 	
 	public void plotTemplate(Component<?, ?, ?> component, ICircuitPlot template) {

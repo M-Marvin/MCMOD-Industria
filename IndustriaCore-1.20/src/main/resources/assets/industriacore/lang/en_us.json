@@ -33,7 +33,7 @@
 
 "industriacore.tooltip.conduit.name":			"Conduit: %1$s",
 "industriacore.tooltip.conduit.maxClampDistance":	"Range: %1$s m",
-"industriacore.tooltip.electricconduit.resistance":	"Resistance: %1$s \u03a9/m".
+"industriacore.tooltip.electricconduit.resistance":	"Resistance: %1$s \u03a9/m",
 "industriacore.tooltip.electricblock.voltage":		"Voltage: %1$s V",
 "industriacore.tooltip.electricblock.power":		"Power: %1$s W"
 

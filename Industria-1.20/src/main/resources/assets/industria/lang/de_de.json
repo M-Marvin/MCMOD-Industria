@@ -104,5 +104,9 @@
 "industria.tooltip.wire_coil.wireOnCoil":		"Verbleibend: %1$s m",
 
 "industria.creative_tab.tools":				"Werkzeuge",
-"industria.creative_tab.machines":			"Maschinen"
+"industria.creative_tab.machines":			"Maschinen",
+"industria.creative_tab.building_blocks":	"Baublöcke",
+"industria.creative_tab.nature_blocks":		"Naturblöcke",
+"industria.creative_tab.materials":			"Werkstoffe"
+
 }

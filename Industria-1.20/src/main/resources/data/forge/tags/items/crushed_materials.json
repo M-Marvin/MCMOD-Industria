@@ -1,0 +1,19 @@
+{
+	"replace": false,
+	"values": [
+		"industria:crushed_nether_gold_ore",
+		"industria:crushed_tin_ore",
+		"industria:crushed_stone",
+		"industria:crushed_silver_ore",
+		"industria:crushed_wolframite",
+		"industria:crushed_iron_ore",
+		"industria:crushed_zinc_ore",
+		"industria:crushed_gold_ore",
+		"industria:crushed_nickel_ore",
+		"industria:crushed_copper_ore",
+		"industria:crushed_netherrack",
+		"industria:crushed_palladium_ore",
+		"industria:crushed_lead_ore",
+		"industria:crushed_bauxite"
+	]
+}

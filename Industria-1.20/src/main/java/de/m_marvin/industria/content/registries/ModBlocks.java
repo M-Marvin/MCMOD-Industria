@@ -53,6 +53,13 @@ public class ModBlocks {
 	public static final RegistryObject<Block> PORTABLE_FUEL_GENERATOR 			= BLOCKS.register("portable_fuel_generator", () -> new PortableFuelGeneratorBlock(Properties.of()));
 	public static final RegistryObject<Block> PORTABLE_COAL_GENERATOR			= BLOCKS.register("portable_coal_generator", () -> new PortableCoalGeneratorBlock(Properties.of()));
 	
+	public static final RegistryObject<Block> RAW_ZINC_BLOCK					= BLOCKS.register("raw_zinc_block", () -> new Block(Properties.of().strength(5, 6)));
+	public static final RegistryObject<Block> RAW_LEAD_BLOCK					= BLOCKS.register("raw_lead_block", () -> new Block(Properties.of().strength(5, 6)));
+	public static final RegistryObject<Block> RAW_NICKEL_BLOCK					= BLOCKS.register("raw_nickel_block", () -> new Block(Properties.of().strength(5, 6)));
+	public static final RegistryObject<Block> RAW_PALLADIUM_BLOCK				= BLOCKS.register("raw_palladium_block", () -> new Block(Properties.of().strength(5, 6)));
+	public static final RegistryObject<Block> RAW_TIN_BLOCK						= BLOCKS.register("raw_tin_block", () -> new Block(Properties.of().strength(5, 6)));
+	public static final RegistryObject<Block> RAW_SILVER_BLOCK					= BLOCKS.register("raw_silver_block", () -> new Block(Properties.of().strength(5, 6)));
+	
 	public static final RegistryObject<Block> LEAD_BLOCK						= BLOCKS.register("lead_block", () -> new Block(Properties.of().strength(1, 6)));
 	public static final RegistryObject<Block> STEEL_BLOCK						= BLOCKS.register("steel_block", () -> new WeatheringSteelFullBlock(WeatherState.UNAFFECTED, Properties.of().strength(6, 10)));
 	public static final RegistryObject<Block> WEATHERED_STEEL_BLOCK				= BLOCKS.register("weathered_steel_block", () -> new WeatheringSteelFullBlock(WeatherState.WEATHERED, Properties.of().strength(6, 10)));

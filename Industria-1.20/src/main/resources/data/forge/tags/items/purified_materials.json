@@ -1,0 +1,14 @@
+{
+	"replace": false,
+	"values": [
+		"industria:purified_crushed_iron_ore",
+		"industria:purified_crushed_zinc_ore",
+		"industria:purified_crushed_palladium_ore",
+		"industria:purified_crushed_lead_ore",
+		"industria:purified_crushed_tin_ore",
+		"industria:purified_crushed_gold_ore",
+		"industria:purified_crushed_nickel_ore",
+		"industria:purified_crushed_silver_ore",
+		"industria:purified_crushed_copper_ore"
+	]
+}

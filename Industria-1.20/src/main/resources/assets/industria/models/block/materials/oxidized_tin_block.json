@@ -1,6 +1,7 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_column",
   "textures": {
-    "all": "industria:block/materials/oxidized_tin_block"
+    "end": "industria:block/materials/oxidized_tin_block_top",
+    "side": "industria:block/materials/oxidized_tin_block"
   }
 }

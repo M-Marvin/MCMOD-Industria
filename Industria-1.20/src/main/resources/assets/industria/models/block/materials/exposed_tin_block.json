@@ -1,6 +1,7 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_column",
   "textures": {
-    "all": "industria:block/materials/exposed_tin_block"
+    "end": "industria:block/materials/exposed_tin_block_top",
+    "side": "industria:block/materials/exposed_tin_block"
   }
 }

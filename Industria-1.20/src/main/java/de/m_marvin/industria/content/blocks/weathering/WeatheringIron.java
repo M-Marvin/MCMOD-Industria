@@ -49,6 +49,10 @@ public interface WeatheringIron extends WeatheringNonVanilla {
 		return Optional.ofNullable(WAXED_BY_BLOCK.get().get(state.getBlock())).map(block -> block.withPropertiesOf(state));
 	}
 	
+	static Optional<BlockState> getWaxedStateStatic(BlockState state) {
+		return Optional.ofNullable(WAXED_BY_BLOCK.get().get(state.getBlock())).map(block -> block.withPropertiesOf(state));
+	}
+	
 	@Override
 	default Optional<BlockState> getUnwaxedState(BlockState state) {
 		return Optional.ofNullable(UNWAXED_BY_BLOCK.get().get(state.getBlock())).map(block -> block.withPropertiesOf(state));

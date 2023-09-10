@@ -1,6 +1,10 @@
 package de.m_marvin.industria.content.blocks.weathering;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import de.m_marvin.industria.content.Industria;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -23,6 +27,12 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 @EventBusSubscriber(modid=Industria.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class GenericWeatheringEventListener {
 
+	public static Map<Predicate<BlockState>, Function<BlockState, Optional<BlockState>>> nonInterfaceWaxables = new HashMap<>();
+
+	public static void registerNonInterfaceWaxable(Predicate<BlockState> predicate, Function<BlockState, Optional<BlockState>> waxableFunction) {
+		nonInterfaceWaxables.put(predicate, waxableFunction);
+	}
+	
 	@SubscribeEvent
 	public static void onItemUsedOnBlock(PlayerInteractEvent.RightClickBlock event) {
 		
@@ -32,22 +42,51 @@ public class GenericWeatheringEventListener {
 		BlockState state = level.getBlockState(pos);
 		ItemStack item = event.getItemStack();
 		
-		if (state.getBlock() instanceof Waxable waxable && item.getItem() == Items.HONEYCOMB) {
+		if (item.getItem() == Items.HONEYCOMB) {
 			
-			InteractionResult result = waxable.getWaxedState(state).map(waxedState -> {
-		         if (player instanceof ServerPlayer) {
-		            CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger((ServerPlayer)player, pos, item);
-		         }
+			
+			if (state.getBlock() instanceof Waxable waxable) {
 
-		         item.shrink(1);
-		         level.setBlock(pos, waxedState, 11);
-		         level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, waxedState));
-		         level.levelEvent(player, 3003, pos, 0);
-		         return InteractionResult.sidedSuccess(level.isClientSide);
-			}).orElse(InteractionResult.PASS);
-			
-			if (result == InteractionResult.SUCCESS) {
-				event.setCancellationResult(result);
+				InteractionResult result = waxable.getWaxedState(state).map(waxedState -> {
+			         if (player instanceof ServerPlayer) {
+			            CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger((ServerPlayer)player, pos, item);
+			         }
+
+			         item.shrink(1);
+			         level.setBlock(pos, waxedState, 11);
+			         level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, waxedState));
+			         level.levelEvent(player, 3003, pos, 0);
+			         return InteractionResult.sidedSuccess(level.isClientSide);
+				}).orElse(InteractionResult.PASS);
+				
+				if (result == InteractionResult.SUCCESS) {
+					event.setCancellationResult(result);
+				}
+				
+			} else {
+
+				for (Predicate<BlockState> predicate : nonInterfaceWaxables.keySet()) {
+					if (predicate.test(state)) {
+						
+						InteractionResult result = nonInterfaceWaxables.get(predicate).apply(state).map(waxedState -> {
+					         if (player instanceof ServerPlayer) {
+					            CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger((ServerPlayer)player, pos, item);
+					         }
+
+					         item.shrink(1);
+					         level.setBlock(pos, waxedState, 11);
+					         level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, waxedState));
+					         level.levelEvent(player, 3003, pos, 0);
+					         return InteractionResult.sidedSuccess(level.isClientSide);
+						}).orElse(InteractionResult.PASS);
+
+						if (result == InteractionResult.SUCCESS) {
+							event.setCancellationResult(result);
+						}
+						
+					}
+				}
+				
 			}
 			
 		}

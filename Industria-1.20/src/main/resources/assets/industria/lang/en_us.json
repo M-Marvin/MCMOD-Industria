@@ -32,14 +32,6 @@
 "item.industria.insulated_gold_wire":			"Gold Cable",
 "item.industria.insulated_tin_wire":			"Tin Cable",
 
-"conduit.industria.aluminum_wire":			"Aluminum Wire",
-"conduit.industria.copper_wire":			"Copper Wire",
-"conduit.industria.gold_wire":				"Gold Wire",
-"conduit.industria.tin_wire":				"Tin Wire",
-"conduit.industria.insulated_aluminum_wire":		"Aluminum Cable",
-"conduit.industria.insulated_copper_wire":		"Copper Cable",
-"conduit.industria.insulated_gold_wire":		"Gold Cable",
-"conduit.industria.insulated_tin_wire":			"Tin Cable",
 "item.industria.aluminum_dust":				"Aluminum Dust",
 "item.industria.aluminum_ingot":			"Aluminum Ingot",
 "item.industria.aluminum_nugget":			"Aluminum Nugget",
@@ -118,30 +110,39 @@
 "item.industria.crushed_zinc_ore":			"",
 "item.industria.purified_crushed_zinc_ore":		"",
 "item.industria.spo_zinc_dust":				"Small Pile of Zinc Dust",
-"item.industria.iron_dust":
-"item.industria.iron_plate":
-"item.industria.crushed_iron_ore":
-"item.industria.purified_crushed_iron_ore":
-"item.industria.gold_dust":
-"item.industria.gold_plate":
-"item.industria.crushed_gold_ore":
-"item.industria.crushed_nether_gold_ore":
-"item.industria.purified_crushed_gold_ore":
-"item.industria.copper_dust":
-"item.industria.copper_plate":
-"item.industria.crushed_copper_ore":
-"item.industria.purified_crushed_copper_ore":
+"item.industria.iron_dust":				"",
+"item.industria.iron_plate":				"",
+"item.industria.crushed_iron_ore":			"",
+"item.industria.purified_crushed_iron_ore":		"",
+"item.industria.gold_dust":				"",
+"item.industria.gold_plate":				"",
+"item.industria.crushed_gold_ore":			"",
+"item.industria.crushed_nether_gold_ore":		"",
+"item.industria.purified_crushed_gold_ore":		"",
+"item.industria.copper_dust":				"",
+"item.industria.copper_plate":				"",
+"item.industria.crushed_copper_ore":			"",
+"item.industria.purified_crushed_copper_ore":		"",
 "item.industria.crushed_stone":				"",
 "item.industria.crushed_blackstone":			"",
 "item.industria.crushed_netherrack":			"",
 "item.industria.crushed_bauxite":			"",
 "item.industria.crushed_wolframite":			"",
 
+"conduit.industria.aluminum_wire":			"Aluminum Wire",
+"conduit.industria.copper_wire":			"Copper Wire",
+"conduit.industria.gold_wire":				"Gold Wire",
+"conduit.industria.tin_wire":				"Tin Wire",
+"conduit.industria.insulated_aluminum_wire":		"Aluminum Cable",
+"conduit.industria.insulated_copper_wire":		"Copper Cable",
+"conduit.industria.insulated_gold_wire":		"Gold Cable",
+"conduit.industria.insulated_tin_wire":			"Tin Cable",
+
 "industria.tooltip.wire_coil.wire_on_coil":		"Remaining: %1$s",
 "industria.tooltip.wire_coil.wire_type":		"Type of Conduit: %1$s",
 
 "industria.creative_tab.tools":				"Tools",
-"industria.creative_tab.machines":			"Machines"
+"industria.creative_tab.machines":			"Machines",
 "industria.creative_tab.building_blocks":		"",
 "industria.creative_tab.nature_blocks":			"",
 "industria.creative_tab.materials":			""

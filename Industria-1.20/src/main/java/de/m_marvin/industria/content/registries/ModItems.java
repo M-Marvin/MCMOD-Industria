@@ -272,94 +272,129 @@ public class ModItems {
 			.icon(() -> ALUMINUM_BLOCK.get().getDefaultInstance())
 			.displayItems((displayParams, output) -> {
 				
-				output.accept(LEAD_BLOCK.get().getDefaultInstance());
-				output.accept(STEEL_BLOCK.get().getDefaultInstance());
-				output.accept(NICKEL_BLOCK.get().getDefaultInstance());
-				output.accept(MONEL_BLOCK.get().getDefaultInstance());
-				output.accept(PALLADIUM_BLOCK.get().getDefaultInstance());
-				output.accept(ALUMINUM_BLOCK.get().getDefaultInstance());
-				output.accept(TUNGSTEN_BLOCK.get().getDefaultInstance());
-				output.accept(TIN_BLOCK.get().getDefaultInstance());
-				output.accept(SILVER_BLOCK.get().getDefaultInstance());
-				output.accept(BRASS_BLOCK.get().getDefaultInstance());
-				output.accept(REDSTONE_ALLOY_BLOCK.get().getDefaultInstance());
-				output.accept(ZINC_BLOCK.get().getDefaultInstance());
+				output.accept(Block.IRON_BLOCK.getDefaultInstance());
+				output.accept(IRON_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_IRON_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_IRON_PLATES.get().getDefaultInstance());
 				
+				output.accept(Block.COPPER_BLOCK.getDefaultInstance());
+				output.accept(COPPER_PLATES.get().getDefaultInstance());
+				output.accept(Block.WAXED_COPPER_BLOCK.getDefaultInstance());
+				output.accept(WAXED_COPPER_PLATES.get().getDefaultInstance());
+				
+				output.accept(Block.GOLD_BLOCK.getDefaultInstance());
+				output.accept(GOLD_PLATES.get().getDefaultInstance());
+				
+				output.accept(Block.NETHERITE_BLOCK.getDefaultInstance());
+				output.accept(NETHERITE_PLATES.get().getDefaultInstance());
+				
+				output.accept(ALUMINUM_BLOCK.get().getDefaultInstance());
+				output.accept(ALUMINUM_PLATES.get().getDefaultInstance());
+				
+				output.accept(NICKEL_BLOCK.get().getDefaultInstance());
+				output.accept(NICKEL_PLATES.get().getDefaultInstance());
+				
+				output.accept(MONEL_BLOCK.get().getDefaultInstance());
+				output.accept(MONEL_PLATES.get().getDefaultInstance());
+				
+				output.accept(STEEL_BLOCK.get().getDefaultInstance());
+				output.accept(STEEL_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_STEEL_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_STEEL_PLATES.get().getDefaultInstance());
+				
+				output.accept(TUNGSTEN_BLOCK.get().getDefaultInstance());
+				output.accept(TUNGSTEN_PLATES.get().getDefaultInstance());
+				
+				output.accept(PALLADIUM_BLOCK.get().getDefaultInstance());
+				output.accept(PALLADIUM_PLATES.get().getDefaultInstance());
+				
+				output.accept(TIN_BLOCK.get().getDefaultInstance());
+				output.accept(TIN_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_TIN_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_TIN_PLATES.get().getDefaultInstance());
+				
+				output.accept(SILVER_BLOCK.get().getDefaultInstance());
+				output.accept(SILVER_PLATES.get().getDefaultInstance());
+				
+				output.accept(BRASS_BLOCK.get().getDefaultInstance());
+				output.accept(BRASS_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_BRASS_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_BRASS_PLATES.get().getDefaultInstance());
+				
+				output.accept(ZINC_BLOCK.get().getDefaultInstance());
+				output.accept(ZINC_PLATES.get().getDefaultInstance());
+				
+				output.accept(REDSTONE_ALLOY_BLOCK.get().getDefaultInstance());
+				output.accept(REDSTONE_ALLOY_PLATES.get().getDefaultInstance());
+				
+				output.accept(LEAD_BLOCK.get().getDefaultInstance());
+				output.accept(LEAD_PLATES.get().getDefaultInstance());
+				
+				output.accept(EXPOSED_IRON_BLOCK.get().getDefaultInstance());
+				output.accept(WEATHERED_IRON_BLOCK.get().getDefaultInstance());
+				output.accept(OXIDIZED_IRON_BLOCK.get().getDefaultInstance());
+				output.accept(EXPOSED_IRON_PLATES.get().getDefaultInstance());
+				output.accept(WEATHERED_IRON_PLATES.get().getDefaultInstance());
+				output.accept(OXIDIZED_IRON_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_EXPOSED_IRON_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_WEATHERED_IRON_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_OXIDIZED_IRON_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_EXPOSED_IRON_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_WEATHERED_IRON_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_OXIDIZED_IRON_PLATES.get().getDefaultInstance());
+				
+				output.accept(Blocks.EXPOSED_COPPER_BLOCK.getDefaultInstance());
+				output.accept(Blocks.WEATHERED_COPPER_BLOCK.getDefaultInstance());
+				output.accept(Blocks.OXIDIZED_COPPER_BLOCK.getDefaultInstance());
+				output.accept(EXPOSED_COPPER_PLATES.get().getDefaultInstance());
+				output.accept(WEATHERED_COPPER_PLATES.get().getDefaultInstance());
+				output.accept(OXIDIZED_COPPER_PLATES.get().getDefaultInstance());
+				output.accept(Blocks.WAXED_EXPOSED_COPPER_BLOCK.getDefaultInstance());
+				output.accept(Blocks.WAXED_WEATHERED_COPPER_BLOCK.getDefaultInstance());
+				output.accept(Blocks.WAXED_OXIDIZED_COPPER_BLOCK.getDefaultInstance());
+				output.accept(WAXED_EXPOSED_COPPER_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_WEATHERED_COPPER_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_OXIDIZED_COPPER_PLATES.get().getDefaultInstance());
+				
+				output.accept(EXPOSED_STEEL_BLOCK.get().getDefaultInstance());
 				output.accept(WEATHERED_STEEL_BLOCK.get().getDefaultInstance());
 				output.accept(OXIDIZED_STEEL_BLOCK.get().getDefaultInstance());
-				output.accept(EXPOSED_STEEL_BLOCK.get().getDefaultInstance());
-				output.accept(WAXED_WEATHERED_STEEL_BLOCK.get().getDefaultInstance());
-				output.accept(WAXED_OXIDIZED_STEEL_BLOCK.get().getDefaultInstance());
-				output.accept(WAXED_EXPOSED_STEEL_BLOCK.get().getDefaultInstance());
-				output.accept(OXIDIZED_STEEL_BLOCK.get().getDefaultInstance());
-				output.accept(WEATHERED_TIN_BLOCK.get().getDefaultInstance());
-				output.accept(EXPOSED_TIN_BLOCK.get().getDefaultInstance());
-				output.accept(WAXED_OXIDIZED_STEEL_BLOCK.get().getDefaultInstance());
-				output.accept(WAXED_WEATHERED_TIN_BLOCK.get().getDefaultInstance());
-				output.accept(WAXED_EXPOSED_TIN_BLOCK.get().getDefaultInstance());
-				output.accept(OXIDIZED_TIN_BLOCK.get().getDefaultInstance());
-				output.accept(WEATHERED_IRON_BLOCK.get().getDefaultInstance());
-				output.accept(EXPOSED_IRON_BLOCK.get().getDefaultInstance());
-				output.accept(WAXED_OXIDIZED_TIN_BLOCK.get().getDefaultInstance());
-				output.accept(WAXED_WEATHERED_IRON_BLOCK.get().getDefaultInstance());
-				output.accept(WAXED_EXPOSED_IRON_BLOCK.get().getDefaultInstance());
-				output.accept(OXIDIZED_IRON_BLOCK.get().getDefaultInstance());
-				output.accept(WEATHERED_BRASS_BLOCK.get().getDefaultInstance());
-				output.accept(WEATHERED_BRASS_BLOCK.get().getDefaultInstance());
-				output.accept(WAXED_EXPOSED_BRASS_BLOCK.get().getDefaultInstance());
-				output.accept(WAXED_OXIDIZED_BRASS_BLOCK.get().getDefaultInstance());
-				output.accept(WAXED_EXPOSED_BRASS_BLOCK.get().getDefaultInstance());
-				output.accept(OXIDIZED_BRASS_BLOCK.get().getDefaultInstance());
-				
-				output.accept(ZINC_PLATES.get().getDefaultInstance());
-				output.accept(LEAD_PLATES.get().getDefaultInstance());
-				output.accept(GOLD_PLATES.get().getDefaultInstance());
-				output.accept(NETHERITE_PLATES.get().getDefaultInstance());
-				output.accept(STEEL_PLATES.get().getDefaultInstance());
-				output.accept(NICKEL_PLATES.get().getDefaultInstance());
-				output.accept(MONEL_PLATES.get().getDefaultInstance());
-				output.accept(PALLADIUM_PLATES.get().getDefaultInstance());
-				output.accept(ALUMINUM_PLATES.get().getDefaultInstance());
-				output.accept(TUNGSTEN_PLATES.get().getDefaultInstance());
-				output.accept(TIN_PLATES.get().getDefaultInstance());
-				output.accept(IRON_PLATES.get().getDefaultInstance());
-				output.accept(COPPER_PLATES.get().getDefaultInstance());
-				output.accept(SILVER_PLATES.get().getDefaultInstance());
-				output.accept(BRASS_PLATES.get().getDefaultInstance());
-				output.accept(REDSTONE_ALLOY_PLATES.get().getDefaultInstance());
-
+				output.accept(EXPOSED_STEEL_PLATES.get().getDefaultInstance());
 				output.accept(WEATHERED_STEEL_PLATES.get().getDefaultInstance());
 				output.accept(OXIDIZED_STEEL_PLATES.get().getDefaultInstance());
-				output.accept(EXPOSED_STEEL_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_EXPOSED_STEEL_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_WEATHERED_STEEL_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_OXIDIZED_STEEL_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_EXPOSED_STEEL_PLATES.get().getDefaultInstance());
 				output.accept(WAXED_WEATHERED_STEEL_PLATES.get().getDefaultInstance());
 				output.accept(WAXED_OXIDIZED_STEEL_PLATES.get().getDefaultInstance());
-				output.accept(WAXED_EXPOSED_STEEL_PLATES.get().getDefaultInstance());
-				output.accept(WEATHERED_TIN_PLATES.get().getDefaultInstance());
-				output.accept(EXPOSED_TIN_PLATES.get().getDefaultInstance());
-				output.accept(OXIDIZED_TIN_PLATES.get().getDefaultInstance());
-				output.accept(WAXED_WEATHERED_TIN_PLATES.get().getDefaultInstance());
-				output.accept(WAXED_EXPOSED_TIN_PLATES.get().getDefaultInstance());
-				output.accept(WAXED_OXIDIZED_TIN_PLATES.get().getDefaultInstance());
-				output.accept(WEATHERED_IRON_PLATES.get().getDefaultInstance());
-				output.accept(EXPOSED_IRON_PLATES.get().getDefaultInstance());
-				output.accept(OXIDIZED_IRON_PLATES.get().getDefaultInstance());
-				output.accept(WAXED_WEATHERED_IRON_PLATES.get().getDefaultInstance());
-				output.accept(WAXED_EXPOSED_IRON_PLATES.get().getDefaultInstance());
-				output.accept(WAXED_OXIDIZED_IRON_PLATES.get().getDefaultInstance());
-				output.accept(WEATHERED_COPPER_PLATES.get().getDefaultInstance());
-				output.accept(EXPOSED_COPPER_PLATES.get().getDefaultInstance());
-				output.accept(OXIDIZED_COPPER_PLATES.get().getDefaultInstance());
-				output.accept(WAXED_WEATHERED_COPPER_PLATES.get().getDefaultInstance());
-				output.accept(WAXED_EXPOSED_COPPER_PLATES.get().getDefaultInstance());
-				output.accept(WAXED_OXIDIZED_COPPER_PLATES.get().getDefaultInstance());
-				output.accept(WEATHERED_BRASS_PLATES.get().getDefaultInstance());
-				output.accept(EXPOSED_BRASS_PLATES.get().getDefaultInstance());
-				output.accept(OXIDIZED_BRASS_PLATES.get().getDefaultInstance());
-				output.accept(WAXED_WEATHERED_BRASS_PLATES.get().getDefaultInstance());
-				output.accept(WAXED_EXPOSED_BRASS_PLATES.get().getDefaultInstance());
-				output.accept(WAXED_OXIDIZED_BRASS_PLATES.get().getDefaultInstance());
-				output.accept(WAXED_IRON_BLOCK.get().getDefaultInstance());
 				
+				output.accept(EXPOSED_TIN_BLOCK.get().getDefaultInstance());
+				output.accept(WEATHERED_TIN_BLOCK.get().getDefaultInstance());
+				output.accept(OXIDIZED_TIN_BLOCK.get().getDefaultInstance());
+				output.accept(EXPOSED_TIN_PLATES.get().getDefaultInstance());
+				output.accept(WEATHERED_TIN_PLATES.get().getDefaultInstance());
+				output.accept(OXIDIZED_TIN_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_EXPOSED_TIN_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_WEATHERED_TIN_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_OXIDIZED_TIN_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_EXPOSED_TIN_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_WEATHERED_TIN_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_OXIDIZED_TIN_PLATES.get().getDefaultInstance());
+				
+				output.accept(EXPOSED_BRASS_BLOCK.get().getDefaultInstance());
+				output.accept(WEATHERED_BRASS_BLOCK.get().getDefaultInstance());
+				output.accept(OXIDIZED_BRASS_BLOCK.get().getDefaultInstance());
+				output.accept(EXPOSED_BRASS_PLATES.get().getDefaultInstance());
+				output.accept(WEATHERED_BRASS_PLATES.get().getDefaultInstance());
+				output.accept(OXIDIZED_BRASS_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_EXPOSED_BRASS_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_WEATHERED_BRASS_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_OXIDIZED_BRASS_BLOCK.get().getDefaultInstance());
+				output.accept(WAXED_EXPOSED_BRASS_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_WEATHERED_BRASS_PLATES.get().getDefaultInstance());
+				output.accept(WAXED_OXIDIZED_BRASS_PLATES.get().getDefaultInstance());
+			
 			})
 			.build()
 	);

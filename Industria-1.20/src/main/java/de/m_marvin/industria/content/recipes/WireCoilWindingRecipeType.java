@@ -14,6 +14,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -168,6 +169,12 @@ public class WireCoilWindingRecipeType implements CraftingRecipe {
 		return new ItemStack(this.wireCoil);
 	}
 
+	@Override
+	public NonNullList<Ingredient> getIngredients() {
+		// TODO Auto-generated method stub
+		return CraftingRecipe.super.getIngredients();
+	}
+	
 	@Override
 	public boolean canCraftInDimensions(int pWidth, int pHeight) {
 		return true;

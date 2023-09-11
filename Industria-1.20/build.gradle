@@ -133,6 +133,7 @@ dependencies {
  	
  	// Mod Dependencies
     implementation "org.valkyrienskies.core:api:1.1.0+2b2f93f793"
+    implementation "org.valkyrienskies.core:impl:1.1.0+2b2f93f793"
  	implementation fg.deobf("curse.maven:kotlinforforge-351264:4630525")
  	implementation fg.deobf("curse.maven:valkyrienskies-258371:4654328")
 	implementation 'com.github.M-Marvin:LIBRARY-NGLink:v1.1'
@@ -143,6 +144,7 @@ dependencies {
  	// Code Dependencies
 	
 	// Mods used while testing
+	runtimeOnly fg.deobf("curse.maven:jei-238222:4712868")
 	runtimeOnly fg.deobf("curse.maven:atlasviewer-633577:4597419")
 	//runtimeOnly fg.deobf("curse.maven:oculus-581495:4578741")
 	//runtimeOnly fg.deobf("curse.maven:rubidium-574856:4684247")

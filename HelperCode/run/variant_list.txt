@@ -1,6 +1,16 @@
-raw_zinc_block
-raw_lead_block
-raw_nickel_block
-raw_palladium_block
-raw_tin_block
-raw_silver_block
+file_name	zinc	template	templates/materials_block_to_ingot.json
+file_name	lead	template	templates/materials_block_to_ingot.json
+file_name	gold	template	templates/materials_block_to_ingot.json
+file_name	netherite	template	templates/materials_block_to_ingot.json
+file_name	steel	template	templates/materials_block_to_ingot.json
+file_name	nickel	template	templates/materials_block_to_ingot.json
+file_name	monel	template	templates/materials_block_to_ingot.json
+file_name	palladium	template	templates/materials_block_to_ingot.json
+file_name	aluminum	template	templates/materials_block_to_ingot.json
+file_name	tungsten	template	templates/materials_block_to_ingot.json
+file_name	tin	template	templates/materials_block_to_ingot.json
+file_name	iron	template	templates/materials_block_to_ingot.json
+file_name	copper	template	templates/materials_block_to_ingot.json
+file_name	silver	template	templates/materials_block_to_ingot.json
+file_name	brass	template	templates/materials_block_to_ingot.json
+file_name	redstone_alloy	template	templates/materials_block_to_ingot.json

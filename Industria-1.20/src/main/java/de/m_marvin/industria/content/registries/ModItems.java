@@ -425,120 +425,150 @@ public class ModItems {
 			.title(Component.translatable("industria.creative_tab.materials"))
 			.icon(() -> TIN_PLATE.get().getDefaultInstance())
 			.displayItems((displayParams, output) -> {
-				
-				output.accept(ALUMINUM_INGOT.get().getDefaultInstance());
-				output.accept(BRASS_INGOT.get().getDefaultInstance());
-				output.accept(LEAD_INGOT.get().getDefaultInstance());
-				output.accept(MONEL_INGOT.get().getDefaultInstance());
-				output.accept(NICKEL_INGOT.get().getDefaultInstance());
-				output.accept(PALLADIUM_INGOT .get().getDefaultInstance());
-				output.accept(REDSTONE_ALLOY_INGOT.get().getDefaultInstance());
-				output.accept(SILVER_INGOT .get().getDefaultInstance());
-				output.accept(STEEL_INGOT.get().getDefaultInstance());
-				output.accept(TIN_INGOT.get().getDefaultInstance());
-				output.accept(TUNGSTEN_INGOT.get().getDefaultInstance());
-				output.accept(ZINC_INGOT.get().getDefaultInstance());
 
-				output.accept(ALUMINUM_NUGGET.get().getDefaultInstance());
-				output.accept(BRASS_NUGGET.get().getDefaultInstance());
-				output.accept(LEAD_NUGGET .get().getDefaultInstance());
-				output.accept(MONEL_NUGGET.get().getDefaultInstance());
-				output.accept(NICKEL_NUGGET.get().getDefaultInstance());
-				output.accept(PALLADIUM_NUGGET.get().getDefaultInstance());
-				output.accept(REDSTONE_ALLOY_NUGGET.get().getDefaultInstance());
-				output.accept(SILVER_NUGGET.get().getDefaultInstance());
-				output.accept(STEEL_NUGGET.get().getDefaultInstance());
-				output.accept(TIN_NUGGET.get().getDefaultInstance());
-				output.accept(TUNGSTEN_NUGGET.get().getDefaultInstance());
-				output.accept(ZINC_NUGGET.get().getDefaultInstance());
-
-				output.accept(ALUMINUM_PLATE.get().getDefaultInstance());
-				output.accept(BRASS_PLATE.get().getDefaultInstance());
-				output.accept(LEAD_PLATE.get().getDefaultInstance());
-				output.accept(MONEL_PLATE.get().getDefaultInstance());
-				output.accept(NICKEL_PLATE.get().getDefaultInstance());
-				output.accept(PALLADIUM_PLATE.get().getDefaultInstance());
-				output.accept(REDSTONE_ALLOY_PLATE.get().getDefaultInstance());
-				output.accept(SILVER_PLATE.get().getDefaultInstance());
-				output.accept(STEEL_PLATE.get().getDefaultInstance());
-				output.accept(TIN_PLATE.get().getDefaultInstance());
-				output.accept(TUNGSTEN_PLATE.get().getDefaultInstance());
-				output.accept(ZINC_PLATE.get().getDefaultInstance());
+				output.accept(Items.IRON_INGOT.getDefaultInstance());
 				output.accept(IRON_PLATE.get().getDefaultInstance());
-				output.accept(COPPER_PLATE.get().getDefaultInstance());
-				output.accept(GOLD_PLATE.get().getDefaultInstance());
-				output.accept(NETHERITE_PLATE.get().getDefaultInstance());
-
-				output.accept(ALUMINUM_DUST.get().getDefaultInstance());
-				output.accept(BRASS_DUST.get().getDefaultInstance());
-				output.accept(LEAD_DUST.get().getDefaultInstance());
-				output.accept(MONEL_DUST .get().getDefaultInstance());
-				output.accept(NICKEL_DUST .get().getDefaultInstance());
-				output.accept(PALLADIUM_DUST.get().getDefaultInstance());
-				output.accept(REDSTONE_ALLOY_DUST.get().getDefaultInstance());
-				output.accept(SILVER_DUST.get().getDefaultInstance());
-				output.accept(STEEL_DUST.get().getDefaultInstance());
-				output.accept(TIN_DUST.get().getDefaultInstance());
-				output.accept(TUNGSTEN_DUST.get().getDefaultInstance());
-				output.accept(ZINC_DUST.get().getDefaultInstance());
+				output.accept(Items.IRON_NUGGET.getDefaultInstance());
 				output.accept(IRON_DUST.get().getDefaultInstance());
-				output.accept(COPPER_DUST.get().getDefaultInstance());
-				output.accept(GOLD_DUST.get().getDefaultInstance());
-				output.accept(NETHERITE_DUST.get().getDefaultInstance());
-				output.accept(STONE_DUST.get().getDefaultInstance());
-				output.accept(BLACKSTONE_DUST.get().getDefaultInstance());
-				output.accept(NETHERRACK_DUST.get().getDefaultInstance());
-				
-				output.accept(SPO_ALUMINUM_DUST.get().getDefaultInstance());
-				output.accept(SPO_BRASS_DUST.get().getDefaultInstance());
-				output.accept(SPO_LEAD_DUST.get().getDefaultInstance());
-				output.accept(SPO_MONEL_DUST.get().getDefaultInstance());
-				output.accept(SPO_NICKEL_DUST.get().getDefaultInstance());
-				output.accept(SPO_PALLADIUM_DUST.get().getDefaultInstance());
-				output.accept(SPO_REDSTONE_ALLOY_DUST.get().getDefaultInstance());
-				output.accept(SPO_SILVER_DUST.get().getDefaultInstance());
-				output.accept(SPO_STEEL_DUST.get().getDefaultInstance());
-				output.accept(SPO_TIN_DUST.get().getDefaultInstance());
-				output.accept(SPO_TUNGSTEN_DUST.get().getDefaultInstance());
-				output.accept(SPO_ZINC_DUST.get().getDefaultInstance());
 				output.accept(SPO_IRON_DUST.get().getDefaultInstance());
+
+				output.accept(Items.COPPER_INGOT.getDefaultInstance());
+				output.accept(COPPER_PLATE.get().getDefaultInstance());
+				output.accept(COPPER_NUGGET.get().getDefaultInstance());
+				output.accept(COPPER_DUST.get().getDefaultInstance());
 				output.accept(SPO_COPPER_DUST.get().getDefaultInstance());
+
+				output.accept(Items.GOLD_INGOT.getDefaultInstance());
+				output.accept(GOLD_PLATE.get().getDefaultInstance());
+				output.accept(Items.IRON_NUGGET.getDefaultInstance());
+				output.accept(GOLD_DUST.get().getDefaultInstance());
 				output.accept(SPO_GOLD_DUST.get().getDefaultInstance());
+
+				output.accept(Items.NETHERITE_INGOT.getDefaultInstance());
+				output.accept(NETHERITE_PLATE.get().getDefaultInstance());
+				output.accept(NETHERITE_NUGGET.get().getDefaultInstance());
+				output.accept(NETHERITE_DUST.get().getDefaultInstance());
 				output.accept(SPO_NETHERITE_DUST.get().getDefaultInstance());
 
-				output.accept(RAW_SILVER.get().getDefaultInstance());
-				output.accept(RAW_LEAD.get().getDefaultInstance());
-				output.accept(RAW_PLUTONIUM.get().getDefaultInstance());
-				output.accept(RAW_TIN.get().getDefaultInstance());
+				output.accept(ALUMINUM_INGOT.get().getDefaultInstance());
+				output.accept(ALUMINUM_PLATE.get().getDefaultInstance());
+				output.accept(ALUMINUM_NUGGET.get().getDefaultInstance());
+				output.accept(ALUMINUM_DUST.get().getDefaultInstance());
+				output.accept(SPO_ALUMINUM_DUST.get().getDefaultInstance());
+
+				output.accept(NICKEL_INGOT.get().getDefaultInstance());
+				output.accept(NICKEL_PLATE.get().getDefaultInstance());
+				output.accept(NICKEL_NUGGET.get().getDefaultInstance());
+				output.accept(NICKEL_DUST.get().getDefaultInstance());
+				output.accept(SPO_NICKEL_DUST.get().getDefaultInstance());
+
+				output.accept(MONEL_INGOT.get().getDefaultInstance());
+				output.accept(MONEL_PLATE.get().getDefaultInstance());
+				output.accept(MONEL_NUGGET.get().getDefaultInstance());
+				output.accept(MONEL_DUST.get().getDefaultInstance());
+				output.accept(SPO_MONEL_DUST.get().getDefaultInstance());
+
+				output.accept(STEEL_INGOT.get().getDefaultInstance());
+				output.accept(STEEL_PLATE.get().getDefaultInstance());
+				output.accept(STEEL_NUGGET.get().getDefaultInstance());
+				output.accept(STEEL_DUST.get().getDefaultInstance());
+				output.accept(SPO_STEEL_DUST.get().getDefaultInstance());
+
+				output.accept(TUNGSTEN_INGOT.get().getDefaultInstance());
+				output.accept(TUNGSTEN_PLATE.get().getDefaultInstance());
+				output.accept(TUNGSTEN_NUGGET.get().getDefaultInstance());
+				output.accept(TUNGSTEN_DUST.get().getDefaultInstance());
+				output.accept(SPO_TUNGSTEN_DUST.get().getDefaultInstance());
+
+				output.accept(PALLADIUM_INGOT .get().getDefaultInstance());
+				output.accept(PALLADIUM_PLATE.get().getDefaultInstance());
+				output.accept(PALLADIUM_NUGGET.get().getDefaultInstance());
+				output.accept(PALLADIUM_DUST.get().getDefaultInstance());
+				output.accept(SPO_PALLADIUM_DUST.get().getDefaultInstance());
+
+				output.accept(TIN_INGOT.get().getDefaultInstance());
+				output.accept(TIN_PLATE.get().getDefaultInstance());
+				output.accept(TIN_NUGGET.get().getDefaultInstance());
+				output.accept(TIN_DUST.get().getDefaultInstance());
+				output.accept(SPO_TIN_DUST.get().getDefaultInstance());
+
+				output.accept(SILVER_INGOT.get().getDefaultInstance());
+				output.accept(SILVER_PLATE.get().getDefaultInstance());
+				output.accept(SILVER_NUGGET.get().getDefaultInstance());
+				output.accept(SILVER_DUST.get().getDefaultInstance());
+				output.accept(SPO_SILVER_DUST.get().getDefaultInstance());
+
+				output.accept(BRASS_INGOT.get().getDefaultInstance());
+				output.accept(BRASS_PLATE.get().getDefaultInstance());
+				output.accept(BRASS_NUGGET.get().getDefaultInstance());
+				output.accept(BRASS_DUST.get().getDefaultInstance());
+				output.accept(SPO_BRASS_DUST.get().getDefaultInstance());
+
+				output.accept(ZINC_INGOT.get().getDefaultInstance());
+				output.accept(ZINC_PLATE.get().getDefaultInstance());
+				output.accept(ZINC_NUGGET.get().getDefaultInstance());
+				output.accept(ZINC_DUST.get().getDefaultInstance());
+				output.accept(SPO_ZINC_DUST.get().getDefaultInstance());
+
+				output.accept(REDSTONE_ALLOY_INGOT.get().getDefaultInstance());
+				output.accept(REDSTONE_ALLOY_PLATE.get().getDefaultInstance());
+				output.accept(REDSTONE_ALLOY_NUGGET.get().getDefaultInstance());
+				output.accept(REDSTONE_ALLOY_DUST.get().getDefaultInstance());
+				output.accept(SPO_REDSTONE_ALLOY_DUST.get().getDefaultInstance());
+
+				output.accept(LEAD_INGOT.get().getDefaultInstance());
+				output.accept(LEAD_PLATE.get().getDefaultInstance());
+				output.accept(LEAD_NUGGET.get().getDefaultInstance());
+				output.accept(LEAD_DUST.get().getDefaultInstance());
+				output.accept(SPO_LEAD_DUST.get().getDefaultInstance());
+
+				output.accept(CRUSHED_IRON_ORE.get().getDefaultInstance());
+				output.accept(PURIFIED_CRUSHED_IRON_ORE.get().getDefaultInstance());
+				output.accept(Items.RAW_IRON.getDefaultInstance());
+
+				output.accept(CRUSHED_COPPER_ORE.get().getDefaultInstance());
+				output.accept(PURIFIED_CRUSHED_COPPER_ORE.get().getDefaultInstance());
+				output.accept(Items.RAW_COPPER.getDefaultInstance());
+
+				output.accept(CRUSHED_GOLD_ORE.get().getDefaultInstance());
+				output.accept(CRUSHED_NETHER_GOLD_ORE.get().getDefaultInstance());
+				output.accept(PURIFIED_CRUSHED_GOLD_ORE.get().getDefaultInstance());
+				output.accept(Items.RAW_GOLD.getDefaultInstance());
+
+				output.accept(CRUSHED_NICKEL_ORE.get().getDefaultInstance());
+				output.accept(PURIFIED_CRUSHED_NICKEL_ORE.get().getDefaultInstance());
 				output.accept(RAW_NICKEL.get().getDefaultInstance());
+
+				output.accept(CRUSHED_PALLADIUM_ORE.get().getDefaultInstance());
+				output.accept(PURIFIED_CRUSHED_PALLADIUM_ORE.get().getDefaultInstance());
 				output.accept(RAW_PALLADIUM.get().getDefaultInstance());
+
+				output.accept(CRUSHED_TIN_ORE.get().getDefaultInstance());
+				output.accept(PURIFIED_CRUSHED_TIN_ORE.get().getDefaultInstance());
+				output.accept(RAW_TIN.get().getDefaultInstance());
+
+				output.accept(CRUSHED_SILVER_ORE.get().getDefaultInstance());
+				output.accept(PURIFIED_CRUSHED_SILVER_ORE.get().getDefaultInstance());
+				output.accept(RAW_SILVER.get().getDefaultInstance());
+
+				output.accept(CRUSHED_ZINC_ORE.get().getDefaultInstance());
+				output.accept(PURIFIED_CRUSHED_ZINC_ORE.get().getDefaultInstance());
 				output.accept(RAW_ZINC.get().getDefaultInstance());
 
-				output.accept(CRUSHED_NETHER_GOLD_ORE.get().getDefaultInstance());
-				output.accept(CRUSHED_TIN_ORE.get().getDefaultInstance());
-				output.accept(CRUSHED_STONE.get().getDefaultInstance());
-				output.accept(CRUSHED_SILVER_ORE.get().getDefaultInstance());
-				output.accept(CRUSHED_WOLFRAMITE.get().getDefaultInstance());
-				output.accept(CRUSHED_IRON_ORE.get().getDefaultInstance());
-				output.accept(CRUSHED_ZINC_ORE.get().getDefaultInstance());
-				output.accept(CRUSHED_GOLD_ORE.get().getDefaultInstance());
-				output.accept(CRUSHED_NICKEL_ORE.get().getDefaultInstance());
-				output.accept(CRUSHED_COPPER_ORE.get().getDefaultInstance());
-				output.accept(CRUSHED_NETHERRACK.get().getDefaultInstance());
-				output.accept(CRUSHED_PALLADIUM_ORE.get().getDefaultInstance());
 				output.accept(CRUSHED_LEAD_ORE.get().getDefaultInstance());
-				output.accept(CRUSHED_BAUXITE.get().getDefaultInstance());
-
-				output.accept(PURIFIED_CRUSHED_IRON_ORE.get().getDefaultInstance());
-				output.accept(PURIFIED_CRUSHED_NICKEL_ORE.get().getDefaultInstance());
-				output.accept(PURIFIED_CRUSHED_COPPER_ORE.get().getDefaultInstance());
-				output.accept(PURIFIED_CRUSHED_ZINC_ORE.get().getDefaultInstance());
-				output.accept(PURIFIED_CRUSHED_PALLADIUM_ORE.get().getDefaultInstance());
 				output.accept(PURIFIED_CRUSHED_LEAD_ORE.get().getDefaultInstance());
-				output.accept(PURIFIED_CRUSHED_TIN_ORE.get().getDefaultInstance());
-				output.accept(PURIFIED_CRUSHED_GOLD_ORE.get().getDefaultInstance());
-				output.accept(PURIFIED_CRUSHED_SILVER_ORE.get().getDefaultInstance());
-				
+				output.accept(RAW_LEAD.get().getDefaultInstance());
+
+				output.accept(CRUSHED_STONE.get().getDefaultInstance());
+				output.accept(STONE_DUST.get().getDefaultInstance());
+				output.accept(CRUSHED_BLACKSTONE.get().getDefaultInstance());
+				output.accept(BLACKSTONE_DUST.get().getDefaultInstance());
+				output.accept(CRUSHED_NETHERRACK.get().getDefaultInstance());
+				output.accept(NETHERRACK_DUST.get().getDefaultInstance());
+				output.accept(CRUSHED_BAUXITE.get().getDefaultInstance());
+				output.accept(CRUSHED_WOLFRAMITE.get().getDefaultInstance());
+				output.accept(RAW_PLUTONIUM.get().getDefaultInstance());
+
 			})
 			.build()
 	);

@@ -44,7 +44,7 @@ paládium (Palladium) nach Schema MASK-3 mit Ausnahmen
 paládium, paládia, paládiu, paládium, paládiu, paládiom
 NOM       GEN      DAT      AKK       LOK__    INSTR
 
-striebro (Silver) nach Schema NEUTR-1
+striebro (Silber) nach Schema NEUTR-1
 striebro, striebra, striebru, striebro, striebre, striebrom
 NOM       GEN       DAT       AKK       LOK       INSTR
 

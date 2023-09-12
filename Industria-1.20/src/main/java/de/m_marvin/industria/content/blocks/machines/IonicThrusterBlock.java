@@ -3,7 +3,10 @@ package de.m_marvin.industria.content.blocks.machines;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
-import de.m_marvin.industria.content.blockentities.machines.FloodlightBlockEntity;
+import org.valkyrienskies.core.api.ships.ServerShip;
+
+import de.m_marvin.industria.content.blockentities.machines.IonicThrusterBlockEntity;
+import de.m_marvin.industria.content.blocks.AbstractThrusterBlock;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
@@ -16,67 +19,41 @@ import de.m_marvin.industria.core.electrics.parametrics.DeviceParametricsManager
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider;
+import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class FloodlightBlock extends BaseEntityBlock implements IElectricConnector, IElectricInfoProvider {
-	
+public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectricConnector, IElectricInfoProvider {
+
 	public static final NodePointSupplier NODES = NodePointSupplier.define()
-			.addNode(NodeTypes.ALL, 2, new Vec3i(0, 8, 13))
-			.addNode(NodeTypes.ALL, 2, new Vec3i(8, 8, 16))
-			.addNode(NodeTypes.ALL, 2, new Vec3i(16, 8, 13))
+			.addNode(NodeTypes.ALL, 2, new Vec3i(8, 16, 5))
 			.addModifier(BlockStateProperties.ATTACH_FACE, NodePointSupplier.ATTACH_FACE_MODIFIER_DEFAULT_WALL)
 			.addModifier(BlockStateProperties.HORIZONTAL_FACING, NodePointSupplier.FACING_MODIFIER_DEFAULT_NORTH);
-	public static final int NODE_COUNT = 3;
+	public static final int NODE_COUNT = 1;
 	
-	public static final VoxelShape SHAPE = Shapes.or(VoxelShapeUtility.box(0, 1, 0, 16, 15, 6), VoxelShapeUtility.box(0, 0, 6, 16, 16, 10));
+	public static final VoxelShape SHAPE = VoxelShapeUtility.box(1, 1, 0, 15, 15, 15);
 	
-	public FloodlightBlock(Properties pProperties) {
+	public IonicThrusterBlock(Properties pProperties) {
 		super(pProperties);
 	}
 
-	@Override
-	protected void createBlockStateDefinition(Builder<Block, BlockState> pBuilder) {
-		pBuilder.add(BlockStateProperties.HORIZONTAL_FACING);
-		pBuilder.add(BlockStateProperties.ATTACH_FACE);
-		pBuilder.add(BlockStateProperties.LIT);
-		pBuilder.add(BlockStateProperties.WATERLOGGED);
-	}
-	
-	@Override
-	public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-		Direction direction = pContext.getNearestLookingDirection();
-		BlockState blockstate;
-		if (direction.getAxis() == Direction.Axis.Y) {
-			blockstate = this.defaultBlockState().setValue(BlockStateProperties.ATTACH_FACE, direction == Direction.UP ? AttachFace.CEILING : AttachFace.FLOOR).setValue(BlockStateProperties.HORIZONTAL_FACING, pContext.getHorizontalDirection());
-		} else {
-			blockstate = this.defaultBlockState().setValue(BlockStateProperties.ATTACH_FACE, AttachFace.WALL).setValue(BlockStateProperties.HORIZONTAL_FACING, direction.getOpposite());
-		}
-		return blockstate.setValue(BlockStateProperties.LIT, false);
-	}
-	
 	@Override
 	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
 		if (pState.getValue(BlockStateProperties.ATTACH_FACE) == AttachFace.WALL) {
@@ -102,16 +79,26 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricConnect
 	}
 	
 	@Override
+	public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+		return new IonicThrusterBlockEntity(pPos, pState);
+	}
+	
+	@Override
 	public ConduitNode[] getConduitNodes(Level level, BlockPos pos, BlockState state) {
 		return NODES.getNodes(state);
 	}
 
 	@Override
+	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {
+		return IntStream.range(0, NODE_COUNT).mapToObj(i -> new NodePos(pos, i)).toArray(i -> new NodePos[i]);
+	}
+	
+	@Override
 	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
-		if (level.getBlockEntity(position) instanceof FloodlightBlockEntity lamp) {
+		if (level.getBlockEntity(position) instanceof IonicThrusterBlockEntity thruster) { // TODO
 			
-			String[] lampLanes = lamp.getNodeLanes();
-			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, lampLanes[0], 1, lampLanes[1]);
+			String[] thrusterLanes = thruster.getNodeLanes();
+			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, thrusterLanes[0], 1, thrusterLanes[1]);
 			
 			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this);
 			int targetVoltage = parametrics.getNominalVoltage();
@@ -119,13 +106,13 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricConnect
 			
 			CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_CURRENT_LOAD);
 			templateSource.setProperty("nominal_current", targetPower / (double) targetVoltage);
-			templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, lampLanes[0]);
-			templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, lampLanes[1]);
+			templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, thrusterLanes[0]);
+			templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, thrusterLanes[1]);
 			plotter.accept(templateSource);
 			
 		}
 	}
-	
+
 	@Override
 	public DeviceParametrics getParametrics(BlockState state, Level level, BlockPos pos) {
 		return DeviceParametricsManager.getInstance().getParametrics(this);
@@ -133,8 +120,8 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricConnect
 	
 	@Override
 	public double getVoltage(BlockState state, Level level, BlockPos pos) {
-		if (level.getBlockEntity(pos) instanceof FloodlightBlockEntity floodlight) {
-			String[] wireLanes = floodlight.getNodeLanes();
+		if (level.getBlockEntity(pos) instanceof IonicThrusterBlockEntity thruster) {
+			String[] wireLanes = thruster.getNodeLanes();
 			return ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]);
 		}
 		return 0.0;
@@ -142,8 +129,8 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricConnect
 	
 	@Override
 	public double getPower(BlockState state, Level level, BlockPos pos) {
-		if (level.getBlockEntity(pos) instanceof FloodlightBlockEntity floodlight) {
-			String[] wireLanes = floodlight.getNodeLanes();
+		if (level.getBlockEntity(pos) instanceof IonicThrusterBlockEntity thruster) {
+			String[] wireLanes = thruster.getNodeLanes();
 			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this);
 			double voltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]);
 			return voltage * (parametrics.getNominalPower() / parametrics.getNominalVoltage());
@@ -153,34 +140,35 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricConnect
 	
 	@Override
 	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {
-		if (level.getBlockEntity(position) instanceof FloodlightBlockEntity lamp) {
-			lamp.updateLight();
+		if (level.getBlockEntity(position) instanceof IonicThrusterBlockEntity thruster) {
+			
+			if (!level.isClientSide()) {
+
+				// TODO triggers force inducer setup
+				ServerShip contraption = (ServerShip) PhysicUtility.getContraptionOfBlock(level, position);
+				ThrusterInducer inducer = PhysicUtility.getOrCreateForceInducer((ServerLevel) level, contraption, ThrusterInducer.class);
+				
+				// TODO Force inducer gets not saved
+				inducer.addThruster(position);
+				
+			}
+			
 		}
 	}
 	
 	@Override
-	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {
-		return IntStream.range(0, NODE_COUNT).mapToObj(i -> new NodePos(pos, i)).toArray(i -> new NodePos[i]);
-	}
-	
-	@Override
 	public String[] getWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node) {
-		if (level.getBlockEntity(pos) instanceof FloodlightBlockEntity lamp) {
-			return lamp.getNodeLanes();
+		if (level.getBlockEntity(pos) instanceof IonicThrusterBlockEntity thruster) {
+			return thruster.getNodeLanes();
 		}
 		return new String[0];
 	}
 
 	@Override
 	public void setWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node, String[] laneLabels) {
-		if (level.getBlockEntity(pos) instanceof FloodlightBlockEntity lamp) {
-			lamp.setNodeLanes(laneLabels);
+		if (level.getBlockEntity(pos) instanceof IonicThrusterBlockEntity thruster) {
+			thruster.setNodeLanes(laneLabels);
 		}
-	}
-
-	@Override
-	public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-		return new FloodlightBlockEntity(pPos, pState);
 	}
 	
 	@Override
@@ -188,22 +176,11 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricConnect
 		return GameUtility.openJunctionBlockEntityUI(pLevel, pPos, pPlayer, pHand);
 	}
 	
-	public Direction getLightDirection(BlockState pState) {
-		switch (pState.getValue(BlockStateProperties.ATTACH_FACE)) {
-		case CEILING: return Direction.DOWN;
-		case FLOOR: return Direction.UP;
-		default: return pState.getValue(BlockStateProperties.HORIZONTAL_FACING);
-		}
-	}
-	
 	@Override
-	public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
-		if (!(pNewState.getBlock() instanceof FloodlightBlock)) {
-			BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-			if (blockEntity instanceof FloodlightBlockEntity lamp) {
-				lamp.clearLightBlocks();
-			}
-		}
+	public int getThrust(Level level, BlockPos pos, BlockState state) {
+		double power = getPower(state, level, pos); // TODO cant get power on physics thread, move to block entity
+		System.out.println(power);
+		return 0;
 	}
 	
 }

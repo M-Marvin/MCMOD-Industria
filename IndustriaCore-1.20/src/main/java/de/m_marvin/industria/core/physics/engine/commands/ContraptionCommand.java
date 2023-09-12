@@ -179,7 +179,7 @@ public class ContraptionCommand {
 			contraptionPos.getPosition().setI(Vec3d.fromVec(position));
 		}
 		
-		PhysicUtility.setPosition((ServerShip) contraption, contraptionPos, false);
+		PhysicUtility.setPosition(source.getSource().getLevel(), (ServerShip) contraption, contraptionPos, false);
 		
 		source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.contraption.teleport.success", (int) position.x(), (int) position.y(), (int) position.z()), true);
 		return Command.SINGLE_SUCCESS;

@@ -1,5 +1,6 @@
 package de.m_marvin.industria.core.physics;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.OptionalLong;
 import java.util.function.BiFunction;
@@ -15,6 +16,8 @@ import org.valkyrienskies.core.apigame.world.chunks.BlockType;
 import org.valkyrienskies.mod.common.BlockStateInfo;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
+import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.core.physics.engine.ForcesInducer;
 import de.m_marvin.industria.core.physics.engine.PhysicHandlerCapability;
 import de.m_marvin.industria.core.physics.types.ContraptionHitResult;
 import de.m_marvin.industria.core.physics.types.ContraptionPosition;
@@ -168,8 +171,9 @@ public class PhysicUtility {
 		return PhysicHandlerCapability.getPosition(contraption, massCenter);
 	}
 	
-	public static void setPosition(ServerShip contraption, ContraptionPosition position, boolean massCenter) {
-		PhysicHandlerCapability.setPosition(contraption, position, massCenter);
+	public static void setPosition(ServerLevel level, ServerShip contraption, ContraptionPosition position, boolean massCenter) {
+		PhysicHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
+		handler.setPosition(contraption, position, massCenter);
 	}
 	
 	/* Listing and creation contraptions in the world */
@@ -240,6 +244,40 @@ public class PhysicUtility {
 	public static VSConstraint getConstraintInstance(Level level, int constraint) {
 		PhysicHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		return handler.getConstraint(constraint);
+	}
+	
+	/* Attachments */
+	
+	public static <T extends ForcesInducer> T getOrCreateForceInducer(ServerLevel level, ServerShip contratption, Class<T> inducerClass) {
+		T inducer = getOrCreateAttachment(contratption, inducerClass);
+		inducer.initLevel(level);
+		return inducer;
+	}
+	
+	public static <T> T getOrCreateAttachment(ServerShip contraption, Class<T> attachmentClass) {
+		T attachment = getAttachment(contraption, attachmentClass);
+		if (attachment == null) {
+			try {
+				attachment = attachmentClass.getConstructor().newInstance();
+				addAttachment(contraption, attachmentClass, attachment);
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
+				IndustriaCore.LOGGER.error("Failed to create attachment '" + attachmentClass.getSimpleName() + "'!");
+				e.printStackTrace();
+			}
+		}
+		return attachment;
+	}
+	
+	public static <T> void addAttachment(ServerShip contraption, Class<T> attachmentClass, T attachmentObject) {
+		PhysicHandlerCapability.attachObject(contraption, attachmentClass, attachmentObject);
+	}
+	
+	public static <T> T getAttachment(ServerShip contraption, Class<T> attachmentClass) {
+		return PhysicHandlerCapability.getAttachedObject(contraption, attachmentClass);
+	}
+	
+	public static <T> void removeAttachment(ServerShip contraption, Class<T> attachmentClass) {
+		PhysicHandlerCapability.attachObject(contraption, attachmentClass, null);
 	}
 	
 	/* Util stuff */

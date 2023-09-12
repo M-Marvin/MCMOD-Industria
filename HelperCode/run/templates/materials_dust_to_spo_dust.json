@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "iron_ingot",
+  "ingredients": [
+    {
+      "item": "industria:${file_name}_dust"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "industria:spo_${file_name}_dust"
+  }
+}

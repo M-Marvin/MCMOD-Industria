@@ -59,6 +59,7 @@ public class ModItems {
 	public static final RegistryObject<BlockItem> STEEL_FLOODLIGHT						= ITEMS.register("steel_floodlight", () -> new ElectricBlockItem(ModBlocks.STEEL_FLOOFLIGHT.get(), new Item.Properties()));
 	public static final RegistryObject<BlockItem> PORTABLE_FUEL_GENERATOR				= ITEMS.register("portable_fuel_generator", () -> new ElectricBlockItem(ModBlocks.PORTABLE_FUEL_GENERATOR.get(), new Item.Properties()));
 	public static final RegistryObject<BlockItem> PORTABLE_COAL_GENERATOR				= ITEMS.register("portable_coal_generator", () -> new ElectricBlockItem(ModBlocks.PORTABLE_COAL_GENERATOR.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> IONIC_THRUSTER						= ITEMS.register("ionic_thruster", () -> new ElectricBlockItem(ModBlocks.IONIC_THRUSTER.get(), new Item.Properties()));
 	
 	public static final RegistryObject<Item> ALUMINUM_INGOT								= ITEMS.register("aluminum_ingot", () -> new Item(new Item.Properties()));
 	public static final RegistryObject<Item> BRASS_INGOT								= ITEMS.register("brass_ingot", () -> new Item(new Item.Properties()));
@@ -85,6 +86,8 @@ public class ModItems {
 	public static final RegistryObject<Item> TIN_NUGGET									= ITEMS.register("tin_nugget", () -> new Item(new Item.Properties()));
 	public static final RegistryObject<Item> TUNGSTEN_NUGGET							= ITEMS.register("tungsten_nugget", () -> new Item(new Item.Properties()));
 	public static final RegistryObject<Item> ZINC_NUGGET								= ITEMS.register("zinc_nugget", () -> new Item(new Item.Properties()));
+	public static final RegistryObject<Item> COPPER_NUGGET								= ITEMS.register("copper_nugget", () -> new Item(new Item.Properties()));
+	public static final RegistryObject<Item> NETHERITE_NUGGET							= ITEMS.register("netherite_nugget", () -> new Item(new Item.Properties()));
 	
 	public static final RegistryObject<Item> ALUMINUM_PLATE								= ITEMS.register("aluminum_plate", () -> new Item(new Item.Properties()));
 	public static final RegistryObject<Item> BRASS_PLATE								= ITEMS.register("brass_plate", () -> new Item(new Item.Properties()));
@@ -151,6 +154,7 @@ public class ModItems {
 	public static final RegistryObject<Item> CRUSHED_NETHER_GOLD_ORE					= ITEMS.register("crushed_nether_gold_ore", () -> new Item(new Item.Properties()));
 	public static final RegistryObject<Item> CRUSHED_TIN_ORE							= ITEMS.register("crushed_tin_ore", () -> new Item(new Item.Properties()));
 	public static final RegistryObject<Item> CRUSHED_STONE								= ITEMS.register("crushed_stone", () -> new Item(new Item.Properties()));
+	public static final RegistryObject<Item> CRUSHED_BLACKSTONE							= ITEMS.register("crushed_blackstone", () -> new Item(new Item.Properties()));
 	public static final RegistryObject<Item> CRUSHED_SILVER_ORE							= ITEMS.register("crushed_silver_ore", () -> new Item(new Item.Properties()));
 	public static final RegistryObject<Item> CRUSHED_WOLFRAMITE							= ITEMS.register("crushed_wolframite", () -> new Item(new Item.Properties()));
 	public static final RegistryObject<Item> CRUSHED_IRON_ORE							= ITEMS.register("crushed_iron_ore", () -> new Item(new Item.Properties()));
@@ -608,6 +612,7 @@ public class ModItems {
 				output.accept(STEEL_FLOODLIGHT.get().getDefaultInstance());
 				output.accept(PORTABLE_FUEL_GENERATOR.get().getDefaultInstance());
 				output.accept(PORTABLE_COAL_GENERATOR.get().getDefaultInstance());
+				output.accept(IONIC_THRUSTER.get().getDefaultInstance());
 			})
 			.build()
 	);

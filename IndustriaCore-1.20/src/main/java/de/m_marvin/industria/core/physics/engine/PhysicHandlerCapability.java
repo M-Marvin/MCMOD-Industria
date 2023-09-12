@@ -19,9 +19,9 @@ import org.valkyrienskies.core.api.ships.LoadedShip;
 import org.valkyrienskies.core.api.ships.QueryableShipData;
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
-import org.valkyrienskies.core.api.ships.properties.ShipTransform;
+import org.valkyrienskies.core.apigame.ShipTeleportData;
 import org.valkyrienskies.core.apigame.constraints.VSConstraint;
-import org.valkyrienskies.core.impl.game.ships.ShipData;
+import org.valkyrienskies.core.impl.game.ShipTeleportDataImpl;
 import org.valkyrienskies.core.impl.game.ships.ShipObjectServerWorld;
 import org.valkyrienskies.core.impl.pipelines.VSGameFrame;
 import org.valkyrienskies.core.impl.pipelines.VSPhysicsPipelineStage;
@@ -202,6 +202,16 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		throw new UnsupportedOperationException("Not implemented yet!"); // TODO
 	}
 	
+	/* Adding and removing attachments */
+	
+	public static <T> void attachObject(ServerShip contraption, Class<T> attachmentClass, T attachment) {
+		contraption.saveAttachment(attachmentClass, attachment);
+	}
+	
+	public static <T> T getAttachedObject(ServerShip contraption, Class<T> attachmentClass) {
+		return contraption.getAttachment(attachmentClass);
+	}
+	
 	/* Translating/moving of contraptions */
 	
 	public static ContraptionPosition getPosition(ServerShip contraption, boolean massCenter) {
@@ -222,21 +232,28 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		}
 	}
 	
-	public static void setPosition(ServerShip contraption, ContraptionPosition position, boolean massCenter) {
+	public void setPosition(ServerShip contraption, ContraptionPosition position, boolean massCenter) {
 		if (massCenter) {
-			ShipTransform transform = contraption.getTransform();
-			((Vector3d) transform.getPositionInWorld()).set(position.getPosition().writeTo(new Vector3d()));
-			((Quaterniond) transform.getShipToWorldRotation()).set(position.getOrientation().i(), position.getOrientation().j(), position.getOrientation().k(), position.getOrientation().r());
-			((ShipData) contraption).setTransform(transform);	// FIXME does not work with LoadedShip
+			ShipTeleportData teleportData = new ShipTeleportDataImpl(
+					position.getPosition().writeTo(new Vector3d()), 
+					new Quaterniond(position.getOrientation().i(), position.getOrientation().j(), position.getOrientation().k(), position.getOrientation().r()), 
+					new Vector3d(), 
+					new Vector3d()
+			);
+			VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).teleportShip(contraption, teleportData);
 		} else {
 			AABBic shipBounds = contraption.getShipAABB();
 			Vec3d shipCoordCenter = MathUtility.getMiddle(new Vec3d(shipBounds.minX(), shipBounds.minY(), shipBounds.minZ()), new Vec3d(shipBounds.maxX(), shipBounds.maxY(), shipBounds.maxZ()));
 			Vec3d shipCoordMassCenter = Vec3d.fromVec(contraption.getInertiaData().getCenterOfMassInShip()).add(new Vec3d(0.5, 0.5, 0.5));
 			Vec3d centerOfMassOffset = shipCoordMassCenter.sub(shipCoordCenter);
-			ShipTransform transform = contraption.getTransform();
-			((Vector3d) transform.getPositionInWorld()).set(position.getPosition().add(centerOfMassOffset).writeTo(new Vector3d()));
-			((Quaterniond) transform.getShipToWorldRotation()).set(position.getOrientation().i(), position.getOrientation().j(), position.getOrientation().k(), position.getOrientation().r());
-			((ShipData) contraption).setTransform(transform);	// FIXME does not work with LoadedShip
+
+			ShipTeleportData teleportData = new ShipTeleportDataImpl(
+					position.getPosition().add(centerOfMassOffset).writeTo(new Vector3d()), 
+					new Quaterniond(position.getOrientation().i(), position.getOrientation().j(), position.getOrientation().k(), position.getOrientation().r()), 
+					new Vector3d(), 
+					new Vector3d()
+			);
+			VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).teleportShip(contraption, teleportData);
 		}
 	}
 	

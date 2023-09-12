@@ -8,6 +8,7 @@ import de.m_marvin.industria.content.blocks.WeatheringIronFullBlock;
 import de.m_marvin.industria.content.blocks.WeatheringSteelFullBlock;
 import de.m_marvin.industria.content.blocks.WeatheringTinFullBlock;
 import de.m_marvin.industria.content.blocks.machines.FloodlightBlock;
+import de.m_marvin.industria.content.blocks.machines.IonicThrusterBlock;
 import de.m_marvin.industria.content.blocks.machines.PortableCoalGeneratorBlock;
 import de.m_marvin.industria.content.blocks.machines.PortableFuelGeneratorBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.JunctionBoxBlock;
@@ -52,6 +53,7 @@ public class ModBlocks {
 	public static final RegistryObject<Block> STEEL_FLOOFLIGHT 					= BLOCKS.register("steel_floodlight", () -> new FloodlightBlock(Properties.of().strength(2, 1.5F)));
 	public static final RegistryObject<Block> PORTABLE_FUEL_GENERATOR 			= BLOCKS.register("portable_fuel_generator", () -> new PortableFuelGeneratorBlock(Properties.of().strength(3.5F, 3.5F)));
 	public static final RegistryObject<Block> PORTABLE_COAL_GENERATOR			= BLOCKS.register("portable_coal_generator", () -> new PortableCoalGeneratorBlock(Properties.of().strength(3.5F, 3.5F)));
+	public static final RegistryObject<Block> IONIC_THRUSTER					= BLOCKS.register("ionic_thruster", () -> new IonicThrusterBlock(Properties.of().strength(2, 1.5F)));
 	
 	public static final RegistryObject<Block> RAW_ZINC_BLOCK					= BLOCKS.register("raw_zinc_block", () -> new Block(Properties.of().strength(5, 6)));
 	public static final RegistryObject<Block> RAW_LEAD_BLOCK					= BLOCKS.register("raw_lead_block", () -> new Block(Properties.of().strength(5, 6)));

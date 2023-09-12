@@ -138,6 +138,7 @@ public abstract class BaseEntityMultiBlock extends BaseEntityBlock {
 		BlockPos[] positions = getPlacementPositions(pPos, pState.getValue(BlockStateProperties.HORIZONTAL_FACING));
 		for (int i = 0; i < positions.length; i++) {
 			BlockPos placementPos = positions[i];
+			if (placementPos.equals(pPos)) continue;
 			BlockState state = pLevel.getBlockState(placementPos);
 			if (!state.isAir()) pLevel.destroyBlock(placementPos, true);
 			Vec3i mbPos = getMBPosAtIndex(i);

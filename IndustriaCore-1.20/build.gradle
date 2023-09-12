@@ -106,6 +106,8 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {
     maven { url 'https://maven.valkyrienskies.org' }
 	maven { url 'https://jitpack.io' }
+	//maven { url 'https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind' }
+	//maven { url 'https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations' }
     maven {
     	url "https://cursemaven.com"
         content {
@@ -131,6 +133,10 @@ dependencies {
  	
  	// Mod Dependencies
     implementation "org.valkyrienskies.core:api:1.1.0+2b2f93f793"
+   	//implementation "org.valkyrienskies.core:impl:1.1.0+2b2f93f793"
+	//implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+	//implementation 'com.fasterxml.jackson.core:jackson-core:2.15.2'
+	implementation 'com.fasterxml.jackson.core:jackson-annotations:2.0.1'
  	implementation fg.deobf("curse.maven:kotlinforforge-351264:4630525")
  	implementation fg.deobf("curse.maven:valkyrienskies-258371:4654328")
  	

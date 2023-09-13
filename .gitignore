@@ -22,11 +22,7 @@ Projekt/eclipse
 Projekt/run
 
 # Files from Forge MDK
-forge*changelog.txt
-FileVariantHelper/bin/*
+forge
+*changelog.txt
 *.log
-Industria-1.20/run/logs/latest.log
-Industria-1.20/run/logs/debug.log
-Industria-1.20/run/logs/debug-1.log.gz
-Industria-1.20/run/logs/latest.log
-*.log
+*.log.gz

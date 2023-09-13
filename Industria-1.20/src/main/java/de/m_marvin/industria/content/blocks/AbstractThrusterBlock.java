@@ -1,6 +1,7 @@
 package de.m_marvin.industria.content.blocks;
 
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.joml.Vector3d;
 import org.valkyrienskies.core.api.ships.PhysShip;
@@ -10,7 +11,7 @@ import org.valkyrienskies.core.api.ships.Ship;
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.physics.engine.ForcesInducer;
 import de.m_marvin.industria.core.util.MathUtility;
-import de.m_marvin.univec.impl.Vec3i;
+import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -48,9 +49,9 @@ public abstract class AbstractThrusterBlock extends BaseEntityBlock {
 	
 	public Direction getThrustDirection(BlockState pState) {
 		switch (pState.getValue(BlockStateProperties.ATTACH_FACE)) {
-		case CEILING: return Direction.DOWN;
-		case FLOOR: return Direction.UP;
-		default: return pState.getValue(BlockStateProperties.HORIZONTAL_FACING);
+		case CEILING: return Direction.UP;
+		case FLOOR: return Direction.DOWN;
+		default: return pState.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
 		}
 	}
 	
@@ -63,7 +64,7 @@ public abstract class AbstractThrusterBlock extends BaseEntityBlock {
 		Ship contraption = PhysicUtility.getContraptionOfBlock(pLevel, pPos);
 		if (contraption instanceof ServerShip serverContraption) {
 			ThrusterInducer forceInducer = PhysicUtility.getOrCreateForceInducer((ServerLevel) pLevel, serverContraption, ThrusterInducer.class);
-			forceInducer.addThruster(pPos);
+			forceInducer.setThruster(pPos, 0);
 		}
 	}
 	
@@ -80,14 +81,14 @@ public abstract class AbstractThrusterBlock extends BaseEntityBlock {
 	
 	public static class ThrusterInducer extends ForcesInducer {
 		
-		protected HashSet<Long> thrusters;
+		protected HashMap<Long, Double> thrusters;
 		
 		public ThrusterInducer() {
-			this.thrusters = new HashSet<>();
+			this.thrusters = new HashMap<>();
 		}
 		
-		public void addThruster(BlockPos pos) {
-			this.thrusters.add(pos.asLong());
+		public void setThruster(BlockPos pos, double thrust) {
+			this.thrusters.put(pos.asLong(), thrust);
 		}
 		
 		public void removeThruster(BlockPos pos) {
@@ -98,16 +99,19 @@ public abstract class AbstractThrusterBlock extends BaseEntityBlock {
 		public void applyForces(PhysShip contraption) {
 			
 			if (getLevel() != null) {
-				for (long thruster : thrusters) {
+
+				Vec3d massCenter = PhysicUtility.toContraptionPos(contraption.getTransform(), Vec3d.fromVec(contraption.getTransform().getPositionInWorld()));
+				
+				for (Entry<Long, Double> thruster : thrusters.entrySet()) {
 					
-					BlockPos thrusterPos = BlockPos.of(thruster);
+					BlockPos thrusterPos = BlockPos.of(thruster.getKey());
 					BlockState state = getLevel().getBlockState(thrusterPos);
 					if (state.getBlock() instanceof AbstractThrusterBlock thrusterBlock) {
-						int thrust = thrusterBlock.getThrust(level, thrusterPos, state);
-						if (thrust != 0) {
+						double thrust = thruster.getValue();
+						if (Math.abs(thrust) >= 1) {
 							Direction direction = thrusterBlock.getThrustDirection(state);
-							Vec3i forceVec = MathUtility.getDirectionVec(direction).mul(thrust);
-							contraption.applyRotDependentForce(new Vector3d(forceVec.x, forceVec.y, forceVec.z));
+							Vec3d forceVec = new Vec3d(MathUtility.getDirectionVec(direction)).mul(thrust);
+							contraption.applyRotDependentForceToPos(new Vector3d(forceVec.x, forceVec.y, forceVec.z), Vec3d.fromVec(thrusterPos).sub(massCenter).writeTo(new Vector3d()));
 						}
 					}
 					

@@ -39,6 +39,11 @@ public class ConduitNode {
 		return PhysicUtility.ensureWorldCoordinates(level, pos, Vec3d.fromVec(pos).add(getOffsetBlocks()));	
 	}
 
+	public Vec3d getWorldRenderPosition(Level level, BlockPos pos) {
+		//return PhysicUtility.optionalContraptionTransform2(level, pos, PhysicUtility::toWorldPos, Vec3d.fromVec(pos).add(getOffsetBlocks()));
+		return PhysicUtility.optionalContraptionRenderTransform(level, pos, PhysicUtility::toWorldPos, Vec3d.fromVec(pos).add(getOffsetBlocks()));	
+	}
+
 	public Vec3d getContraptionPosition(BlockPos pos) {
 		return Vec3d.fromVec(pos).add(getOffsetBlocks());	
 	}

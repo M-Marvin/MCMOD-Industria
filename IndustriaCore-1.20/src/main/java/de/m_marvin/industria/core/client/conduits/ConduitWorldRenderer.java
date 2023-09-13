@@ -15,7 +15,7 @@ import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitShape;
-import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitType;
+import de.m_marvin.industria.core.conduits.types.ConduitType;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
@@ -147,8 +147,8 @@ public class ConduitWorldRenderer {
 			ConduitNode nodeA = nodeAconnector.getConduitNode(level, conduit.getPosition().getNodeApos(), nodeAstate, conduit.getPosition().getNodeAid());
 			ConduitNode nodeB = nodeBconnector.getConduitNode(level, conduit.getPosition().getNodeBpos(), nodeBstate, conduit.getPosition().getNodeBid());
 			if (nodeA != null && nodeB != null) {
-				Vec3d nodeAworldPosition = nodeA.getWorldPosition(level, conduit.getPosition().getNodeApos());
-				Vec3d nodeBworldPosition = nodeB.getWorldPosition(level, conduit.getPosition().getNodeBpos());
+				Vec3d nodeAworldPosition = nodeA.getWorldRenderPosition(level, conduit.getPosition().getNodeApos());
+				Vec3d nodeBworldPosition = nodeB.getWorldRenderPosition(level, conduit.getPosition().getNodeBpos());
 				
 				Vec4f color = new Vec4f(0.5F, 1.0F, 0.5F, 1F); // TODO Color representing physic-mode
 				
@@ -194,7 +194,7 @@ public class ConduitWorldRenderer {
 	public static void drawNodeInfo(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel level, float partialTicks, BlockPos pos, ConduitNode node, int nodeId) {
 		
 		
-		Vec3d position = node.getWorldPosition(level, pos);
+		Vec3d position = node.getWorldRenderPosition(level, pos);
 		Vec4f color = node.getType().getColor();
 		double halfSize = 1.5 / 16.0;
 		Vec3d boxMin = position.sub(halfSize, halfSize, halfSize);
@@ -239,8 +239,8 @@ public class ConduitWorldRenderer {
 					ConduitNode nodeA = nodeAconnector.getConduitNode(clientLevel, conduit.getPosition().getNodeApos(), nodeAstate, conduit.getPosition().getNodeAid());
 					ConduitNode nodeB = nodeBconnector.getConduitNode(clientLevel, conduit.getPosition().getNodeBpos(), nodeBstate, conduit.getPosition().getNodeBid());
 					if (nodeA != null && nodeB != null) {
-						Vec3d nodeAworldPosition = nodeA.getWorldPosition(clientLevel, conduit.getPosition().getNodeApos());
-						Vec3d nodeBworldPosition = nodeB.getWorldPosition(clientLevel, conduit.getPosition().getNodeBpos());
+						Vec3d nodeAworldPosition = nodeA.getWorldRenderPosition(clientLevel, conduit.getPosition().getNodeApos());
+						Vec3d nodeBworldPosition = nodeB.getWorldRenderPosition(clientLevel, conduit.getPosition().getNodeBpos());
 						
 						Vec3d nodeOrigin = MathUtility.getMinCorner(nodeAworldPosition, nodeBworldPosition).sub(0.5, 0.5, 0.5);
 						

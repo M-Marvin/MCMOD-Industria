@@ -15,6 +15,7 @@ import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.engine.particles.ConduitParticleOption;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
+import de.m_marvin.industria.core.conduits.types.ConduitType;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.registries.Conduits;
@@ -136,50 +137,6 @@ public class Conduit {
 		
 	}
 	
-	public static class ConduitType {
-		protected ResourceLocation registryName;
-		protected float nodeMass;
-		protected float stiffness;
-		protected int clampingLength;
-		protected int thickness;
-
-		public ConduitType(float nodeMass, float stiffness, int clampingLength, int thickness) {
-			this.nodeMass = nodeMass;
-			this.stiffness = MathUtility.clamp(stiffness, 0, 1);
-			this.clampingLength = clampingLength;
-			this.thickness = thickness;
-		}
-		
-		/*
-		 * The mass of the individual nodes
-		 */
-		public float getNodeMass() {
-			return nodeMass;
-		}
-		
-		/*
-		 * The stiffness of the wire beams
-		 */
-		public float getStiffness() {
-			return stiffness;
-		}
-		
-		/*
-		 * The maximum clamping length in blocks
-		 */
-		public int getClampingLength() {
-			return clampingLength;
-		}
-		
-		/*
-		 * The thickness of the wire in pixels (1/16 block)
-		 */
-		public int getThickness() {
-			return thickness;
-		}
-		
-	}
-	
 	public void dismantleShape(Level level, ConduitEntity conduit) {
 		
 		ConduitShape shape = conduit.getShape();
@@ -258,16 +215,16 @@ public class Conduit {
 						Vec3d node2 = shape.nodes[i - 1];
 						
 						// Calculate spring deformation
-						double constraintCompensation = pointStart.dist(pointEnd) / conduit.getLength()* 0.1F;
-						Vec3d delta = node1.copy().sub(node2);
+						//double constraintCompensation = pointStart.dist(pointEnd) / conduit.getLength()* 0.3F;
+						Vec3d delta = node1.sub(node2);
 						double deltalength = delta.length(); // Math.sqrt(delta.dot(delta));
-						double diff = (float) ((deltalength - shape.beamLength + constraintCompensation) / deltalength);
+						double diff = (float) ((deltalength - shape.beamLength) / deltalength);
 						
 						// Reform spring
 						double stiffness = conduit.getConduit().getConduitType().getStiffness();
-						double stiffnessLinear = (float) (1 - Math.pow((1 - stiffness), 1 / itteration));
-						node2.addI(delta.copy().mul(diff * 0.5).mul(stiffnessLinear));
-						node1.subI(delta.copy().mul(diff * 0.5).mul(stiffnessLinear));
+						//double stiffnessLinear = (float) (1 - Math.pow((1 - stiffness), 1 / itteration)); 
+						node2.addI(delta.copy().mul(diff * 0.5).mul(stiffness));
+						node1.subI(delta.copy().mul(diff * 0.5).mul(stiffness));
 						
 					}
 					
@@ -359,45 +316,6 @@ public class Conduit {
 		}
 		
 	}
-	
-	// TODO Remove if not able to fix
-//	public void updateContraptionForces(Level level, PhysShip contraption, PlacedConduit conduit, int nodeId) {
-//
-////		double constraint = conduit.getShape().shapeNodeA.dist(conduit.getShape().shapeNodeB) / conduit.getLength();
-////		
-////		if (constraint > 0.8F) {
-////			if (conduit.getShape().contraptionA == conduit.getShape().contraptionB) return;
-////			
-////			updatePhysicalNodes(level, conduit);
-////			
-////			ServerShip serverContraption = nodeId == 0 ? conduit.getShape().contraptionA : conduit.getShape().contraptionB;
-////			Vec3d nodePos = nodeId == 0 ? conduit.getShape().contraptionNodeA : conduit.getShape().contraptionNodeB;
-////			
-////			if (nodePos == null) return;
-////			
-////			Vec3d massCenter = PhysicUtility.toContraptionPos(contraption.getTransform(), Vec3d.fromVec(contraption.getTransform().getPositionInWorld()));
-////			
-////			
-////			
-////			double strength = 120 * serverContraption.getInertiaData().getMass();
-////			
-////			Vec3d nodeInWorldPos = PhysicUtility.toWorldPos(contraption.getTransform(), nodePos);
-////			Vec3d conduitEnd = nodeId == 0 ? conduit.getShape().shapeNodeA : conduit.getShape().shapeNodeB;
-////			
-////			Vec3d force = nodeInWorldPos.sub(conduitEnd).mul(-strength).clampI(-strength, strength);
-////
-////			conduitEnd.setI(nodeInWorldPos);
-////			
-////			contraption.applyInvariantForceToPos(force.writeTo(new Vector3d()), nodePos.sub(massCenter).writeTo(new Vector3d()));
-////			
-////			if (nodeId == 0) {
-////				conduit.getShape().contraptionNodeA = null; 
-////			} else {
-////				conduit.getShape().contraptionNodeB = null;
-////			}
-////		}
-//		
-//	}
 	
 	public static class ConduitShape {
 		public Vec3d[] nodes;

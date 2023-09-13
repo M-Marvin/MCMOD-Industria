@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
+import de.m_marvin.industria.core.conduits.types.ConduitType;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;

@@ -3,8 +3,8 @@ package de.m_marvin.industria.core.registries;
 import java.util.function.Supplier;
 
 import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.core.conduits.types.ConduitType;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
-import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitType;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;

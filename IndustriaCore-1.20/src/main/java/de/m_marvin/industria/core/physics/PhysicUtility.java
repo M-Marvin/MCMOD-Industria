@@ -8,6 +8,7 @@ import java.util.function.BiFunction;
 import org.joml.Matrix4dc;
 import org.joml.Vector3d;
 import org.joml.Vector4d;
+import org.valkyrienskies.core.api.ships.ClientShip;
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
 import org.valkyrienskies.core.api.ships.properties.ShipTransform;
@@ -313,6 +314,20 @@ public class PhysicUtility {
 		Ship contraption = getContraptionOfBlock(level, position);
 		if (contraption != null) {
 			return optionalTransform.apply(contraption.getTransform(), input);
+		}
+		return input;
+	}
+
+	public static <T> T optionalContraptionRenderTransform(Level level, BlockPos position, BiFunction<ShipTransform, T, T> optionalTransform, T input) {
+		Ship contraption = getContraptionOfBlock(level, position);
+		if (contraption != null) {
+			ShipTransform transform = null;
+			if (contraption instanceof ClientShip) {
+				transform = ((ClientShip) contraption).getRenderTransform();
+			} else {
+				transform = contraption.getTransform();
+			}
+			return optionalTransform.apply(transform, input);
 		}
 		return input;
 	}

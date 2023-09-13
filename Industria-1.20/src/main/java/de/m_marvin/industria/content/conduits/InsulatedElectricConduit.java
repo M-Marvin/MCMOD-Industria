@@ -1,5 +1,6 @@
 package de.m_marvin.industria.content.conduits;
 
+import de.m_marvin.industria.core.conduits.types.ConduitType;
 import de.m_marvin.industria.core.electrics.types.conduits.ElectricConduit;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;

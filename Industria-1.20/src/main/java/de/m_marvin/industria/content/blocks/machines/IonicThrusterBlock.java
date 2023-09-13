@@ -143,13 +143,17 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 		if (level.getBlockEntity(position) instanceof IonicThrusterBlockEntity thruster) {
 			
 			if (!level.isClientSide()) {
-
+				
+				double powerP = Math.max(0, DeviceParametricsManager.getInstance().getParametrics(this).getPowerPercentageV(getVoltage(instance, level, position)) - 1);
+				int maxThrust = getThrust(level, position, instance);
+				double thrust = powerP * maxThrust;
+				
 				// TODO triggers force inducer setup
 				ServerShip contraption = (ServerShip) PhysicUtility.getContraptionOfBlock(level, position);
 				ThrusterInducer inducer = PhysicUtility.getOrCreateForceInducer((ServerLevel) level, contraption, ThrusterInducer.class);
 				
 				// TODO Force inducer gets not saved
-				inducer.addThruster(position);
+				inducer.setThruster(position, thrust);
 				
 			}
 			
@@ -178,9 +182,7 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 	
 	@Override
 	public int getThrust(Level level, BlockPos pos, BlockState state) {
-		double power = getPower(state, level, pos); // TODO cant get power on physics thread, move to block entity
-		System.out.println(power);
-		return 0;
+		return 500000;
 	}
 	
 }

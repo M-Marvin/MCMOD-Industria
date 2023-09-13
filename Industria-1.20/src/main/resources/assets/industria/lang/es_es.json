@@ -234,7 +234,7 @@
 
 "industria.creative_tab.tools":				"Herramientas",
 "industria.creative_tab.machines":			"M\u00e1quinas",
-"industria.creative_tab.building_blocks":		"Bloques de construcci\u00f3n",
-"industria.creative_tab.nature_blocks":			"Bloques naturales",
-"industria.creative_tab.materials":			"Ingredientes"
+"industria.creative_tab.building_blocks":		"Bloques de construcci\u00f3n (Industria)",
+"industria.creative_tab.nature_blocks":			"Bloques naturales (Industria)",
+"industria.creative_tab.materials":			"Ingredientes (Industria)"
 }

@@ -44,7 +44,7 @@ Bildung [Nomen] + [Nomen]y/a/e
 
 
 Bola umiestnená linka (Wurde platziert Leitung)
-Bola, weil linka FEM ist. umiestnená ist ein ADJ, das an linka angeglichen ist.
+Bola, weil linka FEM ist. umiestnená ist ein VERB, das an linka angeglichen ist.
 
 Bolo zrušené umiestnenie linky (Wurde abgebrochen Platzieren der Leitung)
-Bolo, weil umiestnienie linky MASK ist. zrušené ist ein ADJ, das an umiestnenie limky angeglichen ist.
+Bolo, weil umiestnienie linky MASK ist. zrušené ist ein VERB, das an umiestnenie linky angeglichen ist.

@@ -33,7 +33,7 @@ import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class PowerSourceBlock extends BaseEntityBlock implements IElectricConnector, IElectricInfoProvider {
+public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock, IElectricInfoProvider {
 	
 	public static final NodePointSupplier NODE_POINTS = NodePointSupplier.define()
 			.addNode(NodeTypes.ALL, 8, new Vec3i(8, 8, 0))

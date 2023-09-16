@@ -14,7 +14,7 @@ import de.m_marvin.industria.core.electrics.circuits.Circuits;
 import de.m_marvin.industria.core.electrics.parametrics.DeviceParametrics;
 import de.m_marvin.industria.core.electrics.parametrics.DeviceParametricsManager;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
-import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
+import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
@@ -22,6 +22,8 @@ import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -41,7 +43,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class FloodlightBlock extends BaseEntityBlock implements IElectricConnector, IElectricInfoProvider {
+public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, IElectricInfoProvider {
 	
 	public static final NodePointSupplier NODES = NodePointSupplier.define()
 			.addNode(NodeTypes.ALL, 2, new Vec3i(0, 8, 13))
@@ -153,7 +155,13 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricConnect
 	
 	@Override
 	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {
-		if (level.getBlockEntity(position) instanceof FloodlightBlockEntity lamp) {
+		GameUtility.triggerClientSync(level, position);
+		level.scheduleTick(position, this, 1);
+	}
+	
+	@Override
+	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+		if (pLevel.getBlockEntity(pPos) instanceof FloodlightBlockEntity lamp) {
 			lamp.updateLight();
 		}
 	}

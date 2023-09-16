@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-public interface IElectricConnector extends IConduitConnector, IElectric<BlockState, BlockPos, Block> {
+public interface IElectricBlock extends IConduitConnector, IElectric<BlockState, BlockPos, Block> {
 	
 	@Override
 	default void serializeNBTInstance(BlockState instance, CompoundTag nbt) {
@@ -48,7 +48,14 @@ public interface IElectricConnector extends IConduitConnector, IElectric<BlockSt
 	
 	@Override
 	default Optional<BlockState> getInstance(Level level, BlockPos pos) {
+		BlockState state = level.getBlockState(pos);
+		if (state.isAir()) Optional.empty();
 		return Optional.of(level.getBlockState(pos));
+	}
+	
+	@Override
+	default boolean isInstanceValid(Level level, BlockState instance) {
+		return !instance.isAir();
 	}
 	
 }

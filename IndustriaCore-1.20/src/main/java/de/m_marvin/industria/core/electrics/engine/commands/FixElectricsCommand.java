@@ -13,7 +13,7 @@ import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
-import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
+import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.conduits.IElectricConduit;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -91,7 +91,7 @@ public class FixElectricsCommand {
 	public static void fixBlockAndConduitsAt(Level level, BlockPos pos, Set<BlockPos> fixedBlocks, Set<ConduitPos> fixedConduits) {
 		
 		BlockState state = level.getBlockState(pos);
-		if (state.getBlock() instanceof IElectricConnector connector) {
+		if (state.getBlock() instanceof IElectricBlock connector) {
 			
 			if (!fixedBlocks.contains(pos)) {
 				

@@ -1,17 +1,12 @@
 package de.m_marvin.industria.core.electrics.types.blocks;
 
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
-import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
-import de.m_marvin.industria.core.electrics.circuits.Circuits;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.blockentities.JunctionBoxBlockEntity;
@@ -43,7 +38,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class JunctionBoxBlock extends BaseEntityBlock implements IElectricConnector {
+public class JunctionBoxBlock extends BaseEntityBlock implements IElectricBlock {
 	
 	public static final VoxelShape BLOCK_SHAPE = Block.box(3, 0, 3, 13, 3, 13);
 	
@@ -106,22 +101,7 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricConnec
 		
 		if (level.getBlockEntity(position) instanceof IJunctionEdit junction) {
 
-			NodePos[] nodes = getConnections(level, position, instance);
-			List<String[]> lanes = Stream.of(nodes).map(node -> ElectricUtility.getLaneLabelsSummarized(level, node)).toList();
-			
-			CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR);
-			
-			for (int i = 0; i < nodes.length; i++) {
-				String[] wireLanes = lanes.get(i);
-				for (int i1 = 0; i1 < wireLanes.length; i1++) {
-					String wireLabel = wireLanes[i1];
-					if (!wireLabel.isEmpty()) {
-						template.setNetworkNode("NET1", nodes[i], i1, wireLabel);
-						template.setNetworkNode("NET2", new NodePos(position, 0), 0, "junction_" + wireLabel);
-						plotter.accept(template);
-					}
-				}
-			}
+			ElectricUtility.plotConnectEquealNamed(plotter, level, this, position, instance);
 			
 		}
 		

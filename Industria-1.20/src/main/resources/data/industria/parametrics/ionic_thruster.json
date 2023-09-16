@@ -1,0 +1,11 @@
+{
+	"nominalVoltage": 230,
+	"voltageMax": 230,
+	"voltageMin": 0,
+	"nominalPower": 400,
+	"powerMax": 500,
+	"powerMin": 0,
+	"configs": {
+		"maxThrust": 500000
+	}
+}

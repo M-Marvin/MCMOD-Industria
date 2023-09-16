@@ -7,26 +7,33 @@ import java.util.stream.Stream;
 
 import com.google.common.base.Predicate;
 
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.circuits.Circuits;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
+import de.m_marvin.industria.core.electrics.engine.network.SUpdateNetworkPackage;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
-import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
+import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.network.PacketDistributor;
 
 public class ElectricUtility {
 	
 	public static <P> void updateNetwork(Level level, P position) {
 		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		if (!level.isClientSide() && position instanceof BlockPos blockPos) {
+			// Conduit updates normally caused trough block updates on both sides, so no sending to the client required in that case
+			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(blockPos)), new SUpdateNetworkPackage(blockPos)); 
+		}
 		handler.updateNetwork(position);
 	}
 	
@@ -58,6 +65,11 @@ public class ElectricUtility {
 	public static boolean isInNetwork(Level level, Component<?, ?, ?> component) {
 		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 		return handler.isInNetwork(component);
+	}
+
+	public static boolean isInNetwork(Level level, Object pos) {
+		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		return handler.isInNetwork(pos);
 	}
 	
 	public static String[] getLaneLabelsSummarized(Level level, NodePos node) {
@@ -123,8 +135,26 @@ public class ElectricUtility {
 	public static double getPowerOvershoot(double voltage, double targetVoltage) {
 		return Math.max(voltage - targetVoltage, 0) / targetVoltage;
 	}
+
+	public static void plotJoinTogether(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, BlockPos position, BlockState instance, int innerLaneId, String innerLane) {
+		NodePos[] nodes = block.getConnections(level, position, instance);
+		List<String[]> lanes = Stream.of(nodes).map(node -> getLaneLabelsSummarized(level, node)).toList();
+		
+		CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR);
+		
+		for (int i = 0; i < nodes.length; i++) {
+			String[] wireLanes = lanes.get(i);
+			for (int i1 = 0; i1 < wireLanes.length; i1++) {
+				if (wireLanes[i1].equals(innerLane) && (i1 != innerLaneId || nodes[i].getNode() != 0)) {
+					template.setNetworkNode("NET1", nodes[i], i1, wireLanes[i1]);
+					template.setNetworkNode("NET2", new NodePos(position, 0), innerLaneId, innerLane);
+					plotter.accept(template);
+				}
+			}
+		}
+	}
 	
-	public static void plotJoinTogether(Consumer<ICircuitPlot> plotter, Level level, IElectricConnector block, BlockPos position, BlockState instance, int innerLaneIdP, String innerLaneP, int innerLaneIdN, String innerLaneN) {
+	public static void plotJoinTogether(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, BlockPos position, BlockState instance, int innerLaneIdP, String innerLaneP, int innerLaneIdN, String innerLaneN) {
 		NodePos[] nodes = block.getConnections(level, position, instance);
 		List<String[]> lanes = Stream.of(nodes).map(node -> getLaneLabelsSummarized(level, node)).toList();
 		
@@ -140,6 +170,25 @@ public class ElectricUtility {
 				} else if (wireLanes[i1].equals(innerLaneN) && (i1 != innerLaneIdN || nodes[i].getNode() != 0)) {
 					template.setNetworkNode("NET1", nodes[i], i1, wireLanes[i1]);
 					template.setNetworkNode("NET2", new NodePos(position, 0), innerLaneIdN, innerLaneN);
+					plotter.accept(template);
+				}
+			}
+		}
+	}
+	
+	public static void plotConnectEquealNamed(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, BlockPos position, BlockState instance) {
+		NodePos[] nodes = block.getConnections(level, position, instance);
+		List<String[]> lanes = Stream.of(nodes).map(node -> ElectricUtility.getLaneLabelsSummarized(level, node)).toList();
+		
+		CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR);
+		
+		for (int i = 0; i < nodes.length; i++) {
+			String[] wireLanes = lanes.get(i);
+			for (int i1 = 0; i1 < wireLanes.length; i1++) {
+				String wireLabel = wireLanes[i1];
+				if (!wireLabel.isEmpty()) {
+					template.setNetworkNode("NET1", nodes[i], i1, wireLabel);
+					template.setNetworkNode("NET2", new NodePos(position, 0), 0, "junction_" + wireLabel);
 					plotter.accept(template);
 				}
 			}

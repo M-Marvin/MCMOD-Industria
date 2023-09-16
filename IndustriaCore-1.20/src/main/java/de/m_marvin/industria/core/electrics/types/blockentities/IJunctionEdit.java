@@ -5,7 +5,7 @@ import java.util.List;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
-import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
+import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.InternalNodeConstructor;
@@ -40,7 +40,7 @@ public interface IJunctionEdit {
 		Level level = this.getJunctionLevel();
 		BlockPos pos = this.getJunctionBlockPos();
 		BlockState state = level.getBlockState(pos);
-		if (state.getBlock() instanceof IElectricConnector connector) {
+		if (state.getBlock() instanceof IElectricBlock connector) {
 			return connector.getConnections(level, pos, state);
 		}
 		return new NodePos[] {};

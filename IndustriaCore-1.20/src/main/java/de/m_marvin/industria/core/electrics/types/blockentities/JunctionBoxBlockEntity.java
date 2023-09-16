@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
-import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
+import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.InternalNodeConstructor;
@@ -70,7 +70,7 @@ public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider,
 		Level level = this.getJunctionLevel();
 		BlockPos pos = this.getJunctionBlockPos();
 		BlockState state = level.getBlockState(pos);
-		if (state.getBlock() instanceof IElectricConnector) {
+		if (state.getBlock() instanceof IElectricBlock) {
 			
 			Map<Direction, NodePos> cableNodes = getBlockRelativeCableNodes(state, pos);
 			Axis blockAxis = Stream.of(Direction.values()).filter(d -> !cableNodes.containsKey(d)).findAny().orElseGet(() -> Direction.NORTH).getAxis();
@@ -133,7 +133,7 @@ public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider,
 	}
 	
 	public Map<Direction, NodePos> getBlockRelativeCableNodes(BlockState state, BlockPos position) {
-		if (state.getBlock() instanceof IElectricConnector connectorBlock) {
+		if (state.getBlock() instanceof IElectricBlock connectorBlock) {
 			Level level = this.getJunctionLevel();
 			NodePos[] nodes = connectorBlock.getConnections(level, position, state);
 			ConduitNode[] connections = connectorBlock.getConduitNodes(level, position, state);

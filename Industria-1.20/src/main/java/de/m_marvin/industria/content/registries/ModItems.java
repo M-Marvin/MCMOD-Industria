@@ -61,6 +61,8 @@ public class ModItems {
 	public static final RegistryObject<BlockItem> PORTABLE_COAL_GENERATOR				= ITEMS.register("portable_coal_generator", () -> new ElectricBlockItem(ModBlocks.PORTABLE_COAL_GENERATOR.get(), new Item.Properties()));
 	public static final RegistryObject<BlockItem> IONIC_THRUSTER						= ITEMS.register("ionic_thruster", () -> new ElectricBlockItem(ModBlocks.IONIC_THRUSTER.get(), new Item.Properties()));
 	
+	public static final RegistryObject<BlockItem> VOLTAGE_REGULATOR						= ITEMS.register("voltage_regulator", () -> new BlockItem(ModBlocks.VOLTAGE_REGULATOR.get(), new Item.Properties()));
+	
 	public static final RegistryObject<Item> ALUMINUM_INGOT								= ITEMS.register("aluminum_ingot", () -> new Item(new Item.Properties()));
 	public static final RegistryObject<Item> BRASS_INGOT								= ITEMS.register("brass_ingot", () -> new Item(new Item.Properties()));
 	public static final RegistryObject<Item> LEAD_INGOT									= ITEMS.register("lead_ingot", () -> new Item(new Item.Properties()));

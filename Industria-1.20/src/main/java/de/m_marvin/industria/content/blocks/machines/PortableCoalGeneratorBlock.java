@@ -15,7 +15,7 @@ import de.m_marvin.industria.core.electrics.circuits.Circuits;
 import de.m_marvin.industria.core.electrics.parametrics.DeviceParametrics;
 import de.m_marvin.industria.core.electrics.parametrics.DeviceParametricsManager;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
-import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
+import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
@@ -48,7 +48,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class PortableCoalGeneratorBlock extends BaseEntityMultiBlock implements IElectricConnector, IElectricInfoProvider {
+public class PortableCoalGeneratorBlock extends BaseEntityMultiBlock implements IElectricBlock, IElectricInfoProvider {
 
 	public static final IntegerProperty[] MBPOS = createMultiBlockProperties(2, 1, 1);
 	

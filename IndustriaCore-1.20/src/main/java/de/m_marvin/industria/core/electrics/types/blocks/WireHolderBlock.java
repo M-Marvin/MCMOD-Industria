@@ -32,7 +32,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class WireHolderBlock extends Block implements IElectricConnector {
+public class WireHolderBlock extends Block implements IElectricBlock {
 	
 	public static final NodePointSupplier NODES = NodePointSupplier.define()
 			.addNode(NodeTypes.ALL, 8, new Vec3i(8, 8, 5))

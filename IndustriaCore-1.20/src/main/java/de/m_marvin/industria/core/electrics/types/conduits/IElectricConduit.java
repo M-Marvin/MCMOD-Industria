@@ -57,4 +57,9 @@ public interface IElectricConduit extends IElectric<ConduitEntity, ConduitPos, C
 		return ConduitUtility.getConduit(level, pos);
 	}
 	
+	@Override
+	default boolean isInstanceValid(Level level, ConduitEntity instance) {
+		return true;
+	}
+	
 }

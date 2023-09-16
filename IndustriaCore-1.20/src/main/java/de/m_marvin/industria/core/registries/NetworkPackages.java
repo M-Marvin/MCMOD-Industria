@@ -8,6 +8,7 @@ import de.m_marvin.industria.core.conduits.engine.network.SSyncConduitPackage;
 import de.m_marvin.industria.core.electrics.engine.network.CEditPowerSourcePackage;
 import de.m_marvin.industria.core.electrics.engine.network.CUpdateJunctionLanesPackage;
 import de.m_marvin.industria.core.electrics.engine.network.SSyncComponentsPackage;
+import de.m_marvin.industria.core.electrics.engine.network.SUpdateNetworkPackage;
 import de.m_marvin.industria.core.scrollinput.engine.network.CScrollInputPackage;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -26,6 +27,7 @@ public class NetworkPackages {
 		network.registerMessage(id++, CUpdateJunctionLanesPackage.class, CUpdateJunctionLanesPackage::encode, CUpdateJunctionLanesPackage::decode, CUpdateJunctionLanesPackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		network.registerMessage(id++, SSyncComponentsPackage.class, SSyncComponentsPackage::encode, SSyncComponentsPackage::decode, SSyncComponentsPackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		network.registerMessage(id++, CEditPowerSourcePackage.class, CEditPowerSourcePackage::encode, CEditPowerSourcePackage::decode, CEditPowerSourcePackage::handle);
+		network.registerMessage(id++, SUpdateNetworkPackage.class, SUpdateNetworkPackage::encode, SUpdateNetworkPackage::decode, SUpdateNetworkPackage::handle);
 	}
 	
 }

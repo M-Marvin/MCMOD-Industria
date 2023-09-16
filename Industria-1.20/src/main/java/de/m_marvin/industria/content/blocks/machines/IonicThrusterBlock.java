@@ -17,7 +17,7 @@ import de.m_marvin.industria.core.electrics.circuits.Circuits;
 import de.m_marvin.industria.core.electrics.parametrics.DeviceParametrics;
 import de.m_marvin.industria.core.electrics.parametrics.DeviceParametricsManager;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
-import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
+import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider;
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.registries.NodeTypes;
@@ -26,6 +26,7 @@ import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -40,7 +41,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectricConnector, IElectricInfoProvider {
+public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectricBlock, IElectricInfoProvider {
 
 	public static final NodePointSupplier NODES = NodePointSupplier.define()
 			.addNode(NodeTypes.ALL, 2, new Vec3i(8, 16, 5))
@@ -140,20 +141,26 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 	
 	@Override
 	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {
-		if (level.getBlockEntity(position) instanceof IonicThrusterBlockEntity thruster) {
+		GameUtility.triggerClientSync(level, position);
+		level.scheduleTick(position, this, 1);
+	}
+	
+	@Override
+	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+		if (pLevel.getBlockEntity(pPos) instanceof IonicThrusterBlockEntity thruster) {
 			
-			if (!level.isClientSide()) {
+			if (!pLevel.isClientSide()) {
 				
-				double powerP = Math.max(0, DeviceParametricsManager.getInstance().getParametrics(this).getPowerPercentageV(getVoltage(instance, level, position)) - 1);
-				int maxThrust = getThrust(level, position, instance);
+				double powerP = Math.max(0, DeviceParametricsManager.getInstance().getParametrics(this).getPowerPercentageV(getVoltage(pState, pLevel, pPos)) - 1);
+				int maxThrust = getThrust(pLevel, pPos, pState);
 				double thrust = powerP * maxThrust;
 				
 				// TODO triggers force inducer setup
-				ServerShip contraption = (ServerShip) PhysicUtility.getContraptionOfBlock(level, position);
-				ThrusterInducer inducer = PhysicUtility.getOrCreateForceInducer((ServerLevel) level, contraption, ThrusterInducer.class);
+				ServerShip contraption = (ServerShip) PhysicUtility.getContraptionOfBlock(pLevel, pPos);
+				ThrusterInducer inducer = PhysicUtility.getOrCreateForceInducer(pLevel, contraption, ThrusterInducer.class);
 				
 				// TODO Force inducer gets not saved
-				inducer.setThruster(position, thrust);
+				inducer.setThruster(pPos, thrust);
 				
 			}
 			
@@ -182,7 +189,7 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 	
 	@Override
 	public int getThrust(Level level, BlockPos pos, BlockState state) {
-		return 500000;
+		return (int) getParametrics(state, level, pos).getConfig("maxThrust", 20000);
 	}
 	
 }

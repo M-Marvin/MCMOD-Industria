@@ -45,7 +45,11 @@ public interface IElectric<I, P, T> {
 	public boolean isWire();
 	public ChunkPos getAffectedChunk(Level level, P pos);
 	public Optional<I> getInstance(Level level, P pos);
-
+	public boolean isInstanceValid(Level level, I instance);
+	
+	/**
+	 * WARNING: Is called on an another thread, do not interact with the world to much, limit access to the level to triggering updates.
+	 */
 	public default void onNetworkNotify(Level level, I instance, P position) {}
 	
 	public static enum Type {

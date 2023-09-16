@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 import com.google.common.base.Objects;
@@ -26,7 +27,7 @@ import de.m_marvin.industria.core.electrics.engine.network.SSyncComponentsPackag
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.IElectric;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
-import de.m_marvin.industria.core.electrics.types.blocks.IElectricConnector;
+import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.conduits.IElectricConduit;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
@@ -182,9 +183,14 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	public static void onBlockStateChange(BlockEvent.NeighborNotifyEvent event) {
 		Level level = (Level) event.getLevel();
 		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-		if (event.getState().getBlock() instanceof IElectricConnector) {
-			IElectricConnector block = (IElectricConnector) event.getState().getBlock();
-			handler.addComponent(event.getPos(), block, event.getState());
+		if (event.getState().getBlock() instanceof IElectricBlock) {
+			if (handler.isInNetwork(event.getPos())) {
+				if (handler.getComponentAt(event.getPos()).instance(level).equals(event.getState())) return; // No real update, ignore
+				handler.getComponentAt(event.getPos()).setChanged();
+			} else {
+				IElectricBlock block = (IElectricBlock) event.getState().getBlock();
+				handler.addComponent(event.getPos(), block, event.getState());
+			}
 		} else {
 			handler.removeComponent(event.getPos(), event.getState());
 		}
@@ -196,8 +202,12 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 		if (event.getConduitState().getConduit() instanceof IElectricConduit) {
 			if (event instanceof ConduitPlaceEvent) {
-				IElectricConduit conduit = (IElectricConduit) event.getConduitState().getConduit();
-				handler.addComponent(event.getPosition(), conduit, event.getConduitState());
+				if (handler.isInNetwork(event.getPosition())) {
+					handler.getComponentAt(event.getPosition()).setChanged();
+				} else {
+					IElectricConduit conduit = (IElectricConduit) event.getConduitState().getConduit();
+					handler.addComponent(event.getPosition(), conduit, event.getConduitState());
+				}
 			} else if (event instanceof ConduitBreakEvent) {
 				handler.removeComponent(event.getPosition(), event.getConduitState());
 			}
@@ -240,7 +250,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	 */
 	public static class Component<I, P, T> {
 		protected P pos;
-		protected boolean preLoadedInstance;
+		protected boolean hasChanged;
 		protected I instance;
 		protected IElectric<I, P, T> type;
 		
@@ -248,7 +258,11 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			this.type = type;
 			this.instance = instance;
 			this.pos = pos;
-			this.preLoadedInstance = true;
+			this.hasChanged = true;
+		}
+		
+		public void setChanged() {
+			this.hasChanged = true;
 		}
 		
 		public P pos() {
@@ -260,11 +274,11 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		}
 		
 		public I instance(Level level) {
-			if (this.preLoadedInstance && level != null) {
+			if ((this.hasChanged || !this.type.isInstanceValid(level, instance)) && level != null) {
 				Optional<I> instanceLoaded = this.type.getInstance(level, this.pos);
 				if (instanceLoaded.isPresent()) {
 					this.instance = instanceLoaded.get();
-					this.preLoadedInstance = false;
+					this.hasChanged = false;
 				}
 			}
 			return instance;
@@ -327,6 +341,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			for (int i = 0; i < oldLanes.length && i < laneLabels.length; i++) {
 				if (!oldLanes[i].equals(laneLabels[i])) {
 					ElectricUtility.updateNetwork(level, pos);
+					return;
 				}
 			}
 		}
@@ -435,11 +450,14 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				}
 			});
 			
-			circuit.updateSimulation();
-			
-			circuit.getComponents().forEach((comp) -> { 
-				comp.onNetworkChange(level);
-			});
+			final ElectricNetwork network = circuit;
+			CompletableFuture
+				.runAsync(() -> network.updateSimulation())
+				.thenRun(() -> {
+					network.getComponents().forEach((comp) -> { 
+						comp.onNetworkChange(level);
+					});
+				});
 			
 		}
 		
@@ -502,6 +520,14 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	public boolean isInNetwork(Component<?, ?, ?> component) {
 		if (component.instance(level) == null) return false;
 		return this.component2circuitMap.containsKey(component) && this.pos2componentMap.containsKey(component.pos());
+	}
+
+	/**
+	 * Returns true if the component at the given position is already registered for an network
+	 */
+	public boolean isInNetwork(Object pos) {
+		if (!this.pos2componentMap.containsKey(pos)) return false;
+		return this.component2circuitMap.containsKey(this.pos2componentMap.get(pos));
 	}
 	
 	/**
@@ -577,5 +603,36 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			network.updateSimulation();
 		}
 	}
+	
+	/* SPICE worker thread */
+	
+//	protected static Queue<Runnable> spiceTasks = new ArrayDeque<>();
+//	protected static Thread spiceWorker;
+//	
+//	protected static void startWorkerIfNotRunning() {
+//		if (spiceWorker == null) {
+//			spiceWorker = new Thread("SPICE Worker") {
+//				public void run() {
+//					while (true) {
+//						try {
+//							Thread.sleep(1000);
+//						} catch (InterruptedException e) {} finally {
+//							if (spiceTasks.size() > 0) {
+//								spiceTasks.poll().run();
+//							}
+//						}
+//					}
+//				};
+//			};
+//			spiceWorker.setDaemon(true);
+//			spiceWorker.start();
+//		}
+//	}
+//	
+//	public static void queueSpiceTask(Runnable task) {
+//		startWorkerIfNotRunning();
+//		spiceTasks.add(task);
+//		spiceWorker.interrupt();
+//	}
 	
 }

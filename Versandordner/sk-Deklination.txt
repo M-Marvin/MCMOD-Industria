@@ -28,6 +28,10 @@ zliatina (Legierung) nach Schema FEM-1
 zliatina, zliatiny, zliatine, zliatinu, zliatine, zliatinou
 NOM       GEN       DAT       AKK       LOK       INSTR
 
+železo (Eisen) nach Schema NEUTR-1
+železo, železa, železu, železo, železe, železom
+NOM     GEN     DAT     AKK     LOK     INSTR
+
 zlato (Gold) nach Schema NEUTR-1
 zlato, zlata, zlatu, zlato, zlate, zlatom
 NOM    GEN    DAT    AKK    LOK    INSTR
@@ -55,6 +59,22 @@ NOM  GEN__ DAT   AKK  LOK   INSTR
 zinok (Zink) nach Schema MASK-3 mit Ausnahmen
 zinok, zinku, zinku, zinok, zinku, zinkom
 NOM    GEN__  DAT    AKK    LOK__  INSTR
+
+hliník (Aluminium) nach Schema MASK-3 mit Ausnahmen
+hliník, hliníka, hliníku, hliník, hliníku, hliníkom
+NOM     GEN      DAT      AKK     LOK__    INSTR
+
+oceľ (Stahl) nach Schema FEM-4
+oceľ, ocele, oceli, oceľ, oceli, oceľou
+NOM   GEN    DAT    AKK   LOK    INSTR
+
+volfrám (Wolfram) nach Schema MASK-3 mit Ausnahmen
+volfrám, volfrámu, volfrámu, volfrám, volfráme, volfrámom
+NOM      GEN__     DAT       AKK      LOK       INSTR
+
+mosadz (Messing) nach Schema FEM-4
+mosadz, mosadze, mosadzi, mosadz, mosadzi, mosadzou
+NOM     GEN      DAT      AKK     LOK      INSTR
 
 ruda (Erz) nach Schem FEM-1
 ruda, rudy, rude, rudu, rude, rudou

@@ -88,3 +88,8 @@ bauxit (Bauxit) nach Schema MASK-3 mit Ausnahmen
 bauxit, bauxitu, bauxitu, bauxit, bauxite, bauxitom
 NOM     GEN__    DAT      AKK     LOK      INSTR
 => genau so auch wolframit (Wolframit)
+
+platňa (Platte) nach Schema FEM-2
+platňa, platne, platni,   platňu, platni,    platňou
+platne, platní  platniam, platne  platniach, platňami
+NOM     GEN     DAT       AKK     LOK        INSTR

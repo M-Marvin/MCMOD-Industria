@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.content.blockentities.redstone.VoltageRegulatorBlockEntity;
+import de.m_marvin.industria.content.blockentities.redstone.TransistorBlockEntity;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
@@ -36,27 +36,30 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class VoltageRegulatorBlock extends DiodeLikeBlock implements EntityBlock, IElectricBlock {
+public class TransistorBlock extends DiodeLikeBlock implements EntityBlock, IElectricBlock {
 	
 	public static final NodePointSupplier NODES = NodePointSupplier.define()
-			.addNode(NodeTypes.ALL, 2, new Vec3i(8, 2, 2))
-			.addNode(NodeTypes.ALL, 2, new Vec3i(8, 2, 14))
+			.addNode(NodeTypes.ELECTRIC, 2, new Vec3i(8, 2, 2))
+			.addNode(NodeTypes.ELECTRIC, 2, new Vec3i(8, 2, 14))
 			.addModifier(BlockStateProperties.HORIZONTAL_FACING, NodePointSupplier.FACING_HORIZONTAL_MODIFIER_DEFAULT_NORTH);
 	public static final int NODE_COUNT = 2;
 	
-	public VoltageRegulatorBlock(Properties pProperties) {
+	public static final double RESISTANCE_ON = 0.001;
+	public static final double RESISTANCE_OFF = 20000000;
+	
+	public TransistorBlock(Properties pProperties) {
 		super(pProperties);
 	}
 
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-		return new VoltageRegulatorBlockEntity(pPos, pState);
+		return new TransistorBlockEntity(pPos, pState);
 	}
 	
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> pBuilder) {
 		super.createBlockStateDefinition(pBuilder);
-		pBuilder.add(BlockStateProperties.POWER);
+		pBuilder.add(BlockStateProperties.POWERED);
 	}
 	
 	@Override
@@ -66,8 +69,8 @@ public class VoltageRegulatorBlock extends DiodeLikeBlock implements EntityBlock
 	
 	@Override
 	public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, LivingEntity pPlacer, ItemStack pStack) {
-		int power = pLevel.getBestNeighborSignal(pPos);
-		pLevel.setBlockAndUpdate(pPos, pState.setValue(BlockStateProperties.POWER, power));
+		boolean power = pLevel.getBestNeighborSignal(pPos) > 0;
+		pLevel.setBlockAndUpdate(pPos, pState.setValue(BlockStateProperties.POWERED, power));
 	}
 	
 	@Override
@@ -82,18 +85,18 @@ public class VoltageRegulatorBlock extends DiodeLikeBlock implements EntityBlock
 	
 	@Override
 	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
-		if (level.getBlockEntity(position) instanceof VoltageRegulatorBlockEntity regulator && instance.getBlock() == this) {
+		if (level.getBlockEntity(position) instanceof TransistorBlockEntity regulator && instance.getBlock() == this) {
 			
 			String[] wireLanes = regulator.getNodeLanes();
 			ElectricUtility.plotConnectEquealNamed(plotter, level, this, position, instance);
 			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, wireLanes[0], 1, wireLanes[1]);
 			
-			boolean active = level.getBlockState(position).getValue(BlockStateProperties.POWER) > 0;
+			boolean active = level.getBlockState(position).getValue(BlockStateProperties.POWERED);
 			
 			CircuitTemplate resistor = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "resistor"));
 			resistor.setNetworkNode("NET1", new NodePos(position, 0), 0, wireLanes[0]);
 			resistor.setNetworkNode("NET2", new NodePos(position, 0), 1, wireLanes[1]);
-			resistor.setProperty("resistance", active ? 0.001 : 20000000);
+			resistor.setProperty("resistance", active ? RESISTANCE_ON : RESISTANCE_OFF);
 			plotter.accept(resistor);
 			
 		}
@@ -112,9 +115,9 @@ public class VoltageRegulatorBlock extends DiodeLikeBlock implements EntityBlock
 	@Override
 	public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
 		super.neighborChanged(pState, pLevel, pPos, pBlock, pFromPos, pIsMoving);
-		int power = pLevel.getBestNeighborSignal(pPos);
-		if (power != pState.getValue(BlockStateProperties.POWER)) {
-			pLevel.setBlockAndUpdate(pPos, pState.setValue(BlockStateProperties.POWER, power));
+		boolean power = pLevel.getBestNeighborSignal(pPos) > 0;
+		if (power != pState.getValue(BlockStateProperties.POWERED)) {
+			pLevel.setBlockAndUpdate(pPos, pState.setValue(BlockStateProperties.POWERED, power));
 			pLevel.scheduleTick(pPos, this, 2);
 		}
 	}
@@ -126,7 +129,7 @@ public class VoltageRegulatorBlock extends DiodeLikeBlock implements EntityBlock
 
 	@Override
 	public String[] getWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node) {
-		if (level.getBlockEntity(pos) instanceof VoltageRegulatorBlockEntity regulator) {
+		if (level.getBlockEntity(pos) instanceof TransistorBlockEntity regulator) {
 			return regulator.getNodeLanes();
 		}
 		return new String[0];
@@ -134,7 +137,7 @@ public class VoltageRegulatorBlock extends DiodeLikeBlock implements EntityBlock
 
 	@Override
 	public void setWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node, String[] laneLabels) {
-		if (level.getBlockEntity(pos) instanceof VoltageRegulatorBlockEntity regulator) {
+		if (level.getBlockEntity(pos) instanceof TransistorBlockEntity regulator) {
 			regulator.setNodeLanes(laneLabels);
 		}
 	}

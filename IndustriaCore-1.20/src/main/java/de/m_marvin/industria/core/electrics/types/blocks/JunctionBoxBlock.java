@@ -43,7 +43,7 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricBlock 
 	public static final VoxelShape BLOCK_SHAPE = Block.box(3, 0, 3, 13, 3, 13);
 	
 	public static final NodePointSupplier NODE_POINTS = NodePointSupplier.define()
-			.addNodesAround(Axis.Z, NodeTypes.ALL, 1, new Vec3i(8, 3, 1))
+			.addNodesAround(Axis.Z, NodeTypes.ELECTRIC, 1, new Vec3i(8, 3, 1))
 			.addModifier(BlockStateProperties.FACING, NodePointSupplier.FACING_MODIFIER_DEFAULT_NORTH);
 	public static final int NODE_COUNT = 4;
 	

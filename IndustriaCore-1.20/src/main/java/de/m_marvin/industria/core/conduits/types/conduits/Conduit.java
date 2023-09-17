@@ -14,6 +14,7 @@ import org.valkyrienskies.core.apigame.constraints.VSRopeConstraint;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.engine.particles.ConduitParticleOption;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
+import de.m_marvin.industria.core.conduits.types.ConduitNode.NodeType;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.ConduitType;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
@@ -56,16 +57,23 @@ public class Conduit {
 	private Item item;
 	private ResourceLocation texture;
 	private SoundType soundType;
+	private NodeType[] validNodeTypes;
 	
-	public Conduit(ConduitType type, Item item, ResourceLocation texture, SoundType sound) {
+	public Conduit(ConduitType type, Item item, ResourceLocation texture, SoundType sound, NodeType... validNodeTypes) {
 		this.conduitType = type;
 		this.item = item;
 		this.texture = texture;
 		this.soundType = sound;
+		this.validNodeTypes = validNodeTypes;
 	}
 	
 	public void appendHoverText(Level level, List<Component> tooltip, TooltipFlag flags) {
-		tooltip.add(Formatter.build().appand(Component.translatable("industriacore.tooltip.conduit.name", this.getName())).withStyle(ChatFormatting.GRAY).component());
+		ChatFormatting color = ChatFormatting.GRAY;
+		if (this.validNodeTypes.length > 0) {
+			color = this.validNodeTypes[0].getColor();	
+		}
+		
+		tooltip.add(Formatter.build().appand(Component.translatable("industriacore.tooltip.conduit.name", Formatter.build().appand(this.getName()).withStyle(color).component())).withStyle(ChatFormatting.GRAY).component());
 		tooltip.add(Formatter.build().appand(Component.translatable("industriacore.tooltip.conduit.maxClampDistance", this.getConduitType().getClampingLength())).withStyle(ChatFormatting.GRAY).component());
 	}
 	
@@ -403,6 +411,10 @@ public class Conduit {
 	public Component getName() {
 		ResourceLocation conduitKey = Conduits.CONDUITS_REGISTRY.get().getKey(this);
 		return Component.translatable("conduit." + conduitKey.getNamespace() + "." + conduitKey.getPath());
+	}
+
+	public NodeType[] getValidNodeTypes() {
+		return this.validNodeTypes;
 	}
 	
 }

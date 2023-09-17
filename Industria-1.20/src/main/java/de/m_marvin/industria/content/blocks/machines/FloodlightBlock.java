@@ -46,9 +46,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, IElectricInfoProvider {
 	
 	public static final NodePointSupplier NODES = NodePointSupplier.define()
-			.addNode(NodeTypes.ALL, 2, new Vec3i(0, 8, 13))
-			.addNode(NodeTypes.ALL, 2, new Vec3i(8, 8, 16))
-			.addNode(NodeTypes.ALL, 2, new Vec3i(16, 8, 13))
+			.addNode(NodeTypes.ELECTRIC, 2, new Vec3i(0, 8, 13))
+			.addNode(NodeTypes.ELECTRIC, 2, new Vec3i(8, 8, 16))
+			.addNode(NodeTypes.ELECTRIC, 2, new Vec3i(16, 8, 13))
 			.addModifier(BlockStateProperties.ATTACH_FACE, NodePointSupplier.ATTACH_FACE_MODIFIER_DEFAULT_WALL)
 			.addModifier(BlockStateProperties.HORIZONTAL_FACING, NodePointSupplier.FACING_MODIFIER_DEFAULT_NORTH);
 	public static final int NODE_COUNT = 3;

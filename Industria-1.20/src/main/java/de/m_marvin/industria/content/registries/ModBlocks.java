@@ -11,7 +11,7 @@ import de.m_marvin.industria.content.blocks.machines.FloodlightBlock;
 import de.m_marvin.industria.content.blocks.machines.IonicThrusterBlock;
 import de.m_marvin.industria.content.blocks.machines.PortableCoalGeneratorBlock;
 import de.m_marvin.industria.content.blocks.machines.PortableFuelGeneratorBlock;
-import de.m_marvin.industria.content.blocks.redstone.VoltageRegulatorBlock;
+import de.m_marvin.industria.content.blocks.redstone.TransistorBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.JunctionBoxBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.WireHolderBlock;
 import net.minecraft.world.level.block.Block;
@@ -56,7 +56,7 @@ public class ModBlocks {
 	public static final RegistryObject<Block> PORTABLE_COAL_GENERATOR			= BLOCKS.register("portable_coal_generator", () -> new PortableCoalGeneratorBlock(Properties.of().strength(3.5F, 3.5F)));
 	public static final RegistryObject<Block> IONIC_THRUSTER					= BLOCKS.register("ionic_thruster", () -> new IonicThrusterBlock(Properties.of().strength(2, 1.5F)));
 	
-	public static final RegistryObject<Block> VOLTAGE_REGULATOR					= BLOCKS.register("voltage_regulator", () -> new VoltageRegulatorBlock(Properties.of().strength(0, 12))); // TODO
+	public static final RegistryObject<Block> REDSTONE_TRANSISTOR				= BLOCKS.register("redstone_transistor", () -> new TransistorBlock(Properties.of().strength(0, 12))); // TODO
 	
 	public static final RegistryObject<Block> RAW_ZINC_BLOCK					= BLOCKS.register("raw_zinc_block", () -> new Block(Properties.of().strength(5, 6)));
 	public static final RegistryObject<Block> RAW_LEAD_BLOCK					= BLOCKS.register("raw_lead_block", () -> new Block(Properties.of().strength(5, 6)));

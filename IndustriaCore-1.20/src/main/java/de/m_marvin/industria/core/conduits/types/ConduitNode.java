@@ -1,14 +1,14 @@
 package de.m_marvin.industria.core.conduits.types;
 
-import java.util.List;
 import java.util.function.Predicate;
 
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3i;
-import de.m_marvin.univec.impl.Vec4f;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 
 public class ConduitNode {
@@ -63,28 +63,37 @@ public class ConduitNode {
 	
 	public static class NodeType {
 		
-		private final Predicate<Conduit> conduitPredicate;
-		private final Vec4f color;
+		private final Predicate<NodeType> typePredicate;
+		private final ChatFormatting color;
+		private final ResourceLocation symbolTexture;
 		
-		public boolean isValid(Conduit conduit) {
-			return this.conduitPredicate.test(conduit);
-		}
-		
-		protected NodeType(Predicate<Conduit> conduitPredicate, Vec4f color) {
-			this.conduitPredicate = conduitPredicate;
+		protected NodeType(Predicate<NodeType> typePredicate, ChatFormatting color, ResourceLocation symbolTexture) {
+			this.typePredicate = typePredicate;
 			this.color = color;
+			this.symbolTexture = symbolTexture;
 		}
 		
-		public static NodeType fromList(List<Conduit> validConduits, Vec4f color) {
-			return new NodeType(validConduits::contains, color);
-		}
-		
-		public static NodeType fromPredicate(Predicate<Conduit> predicate, Vec4f color) {
-			return new NodeType(predicate, color);
+		public static NodeType fromPredicate(ChatFormatting color, ResourceLocation symbolTexture, Predicate<NodeType> typePredicate) {
+			return new NodeType(typePredicate, color, symbolTexture);
 		}
 	
-		public Vec4f getColor() {
+		public ChatFormatting getColor() {
 			return color;
+		}
+		
+		public ResourceLocation getSymbolTexture() {
+			return symbolTexture;
+		}
+
+		public boolean canConnectWith(NodeType type) {
+			return this.typePredicate.test(type);
+		}
+		
+		public boolean canConnectWith(Conduit conduit) {
+			for (NodeType type : conduit.getValidNodeTypes()) {
+				if (canConnectWith(type)) return true;
+			}
+			return false;
 		}
 		
 	}

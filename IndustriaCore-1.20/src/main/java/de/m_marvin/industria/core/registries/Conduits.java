@@ -35,6 +35,6 @@ public class Conduits {
 	public static final RegistryObject<ConduitType> ELECTRIC_INSULATED_TYPE = CONDUIT_TYPES.register("electric_insulated_type", () -> new ConduitType(0.05F, 1F, 16, 3));
 	public static final RegistryObject<ConduitType> ELECTRIC_UNINSULATED_TYPE = CONDUIT_TYPES.register("electric_uninsulated_type", () -> new ConduitType(0.015F, 1F, 128, 1));
 	
-	public static final RegistryObject<Conduit> NONE = CONDUITS.register("none", () -> new Conduit(new ConduitType(0F, 1F, 0, 1), null, MissingTextureAtlasSprite.getLocation(), SoundType.STONE));
+	public static final RegistryObject<Conduit> NONE = CONDUITS.register("none", () -> new Conduit(new ConduitType(0F, 1F, 0, 1), null, MissingTextureAtlasSprite.getLocation(), SoundType.STONE, NodeTypes.ALL));
 	
 }

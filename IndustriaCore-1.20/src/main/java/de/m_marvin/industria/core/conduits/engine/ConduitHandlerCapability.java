@@ -191,7 +191,7 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 		
 		if (nodeA == null || nodeB == null || position.getNodeApos().equals(position.getNodeBpos())) return false;
 		
-		if (!nodeA.getType().isValid(conduit) || !nodeB.getType().isValid(conduit)) {
+		if (!nodeA.getType().canConnectWith(conduit) || !nodeB.getType().canConnectWith(conduit)) {
 			return false;
 		}
 		

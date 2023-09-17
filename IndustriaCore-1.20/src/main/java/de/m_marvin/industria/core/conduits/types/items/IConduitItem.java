@@ -52,14 +52,14 @@ public interface IConduitItem {
 		BlockState clickedState = level.getBlockState(clicked);
 		if (clickedState.getBlock() instanceof IConduitConnector) {
 			IConduitConnector nodeBlock = (IConduitConnector) clickedState.getBlock();
-			if (nodeBlock.hasFreeConduitNode(level, clicked, clickedState)) {
+			if (nodeBlock.hasFreeConduitNode(level, clicked, clickedState, type -> type.canConnectWith(this.getConduit()))) {
 				return clicked;
 			}
 		} else {
 			clickedState = level.getBlockState(clicked.relative(face.getOpposite()));
 			if (clickedState.getBlock() instanceof IConduitConnector) {
 				IConduitConnector nodeBlock = (IConduitConnector) clickedState.getBlock();
-				if (nodeBlock.hasFreeConduitNode(level, clicked.relative(face.getOpposite()), clickedState)) {
+				if (nodeBlock.hasFreeConduitNode(level, clicked.relative(face.getOpposite()), clickedState, type -> type.canConnectWith(this.getConduit()))) {
 					return clicked.relative(face.getOpposite());
 				}
 			}

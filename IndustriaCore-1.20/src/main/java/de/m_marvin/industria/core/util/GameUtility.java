@@ -1,5 +1,6 @@
 package de.m_marvin.industria.core.util;
 
+import java.awt.Color;
 import java.util.function.Supplier;
 
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
@@ -8,6 +9,7 @@ import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.registries.IndustriaTags;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
+import de.m_marvin.univec.impl.Vec4f;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -39,6 +41,23 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.network.NetworkHooks;
 
 public class GameUtility {
+	
+	public static int toIntegerColor(int r, int g, int b, int a) {
+		return new Color(r, g, b, a).getRGB();
+	}
+	
+	public static int toIntegerColor(float r, float g, float b, float a) {
+		return new Color(r, g, b, a).getRGB();
+	}
+	
+	public static int toIntegerColor(Vec4f color) {
+		return new Color(color.x, color.y, color.z, color.w).getRGB();
+	}
+	
+	public static Vec4f toVecColor(int color) {
+		Color colorc = new Color(color);
+		return new Vec4f(colorc.getRed() / 255F, colorc.getGreen() / 255F, colorc.getBlue() / 255F, colorc.getAlpha() / 255F);
+	}
 	
 	public static <T extends BlockEntity & IJunctionEdit> AbstractContainerMenu openJunctionScreenOr(T blockEntity, int containerId, Player player, Inventory inventory, Supplier<AbstractContainerMenu> container) {
 		return player.getItemInHand(InteractionHand.MAIN_HAND).is(IndustriaTags.Items.SCREW_DRIVERS) ? new JunctionBoxContainer<T>(containerId, inventory, blockEntity) : container.get();

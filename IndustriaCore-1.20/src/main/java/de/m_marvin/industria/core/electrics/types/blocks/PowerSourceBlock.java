@@ -36,7 +36,7 @@ import net.minecraft.world.phys.BlockHitResult;
 public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock, IElectricInfoProvider {
 	
 	public static final NodePointSupplier NODE_POINTS = NodePointSupplier.define()
-			.addNode(NodeTypes.ALL, 8, new Vec3i(8, 8, 0))
+			.addNode(NodeTypes.ELECTRIC, 8, new Vec3i(8, 8, 0))
 			.addModifier(BlockStateProperties.FACING, NodePointSupplier.FACING_MODIFIER_DEFAULT_NORTH);
 	public static final int NODE_COUNT = 1;
 

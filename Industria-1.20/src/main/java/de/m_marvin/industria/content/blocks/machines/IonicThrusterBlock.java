@@ -44,7 +44,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectricBlock, IElectricInfoProvider {
 
 	public static final NodePointSupplier NODES = NodePointSupplier.define()
-			.addNode(NodeTypes.ALL, 2, new Vec3i(8, 16, 5))
+			.addNode(NodeTypes.ELECTRIC, 2, new Vec3i(8, 16, 5))
 			.addModifier(BlockStateProperties.ATTACH_FACE, NodePointSupplier.ATTACH_FACE_MODIFIER_DEFAULT_WALL)
 			.addModifier(BlockStateProperties.HORIZONTAL_FACING, NodePointSupplier.FACING_MODIFIER_DEFAULT_NORTH);
 	public static final int NODE_COUNT = 1;
@@ -157,10 +157,12 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 				
 				// TODO triggers force inducer setup
 				ServerShip contraption = (ServerShip) PhysicUtility.getContraptionOfBlock(pLevel, pPos);
-				ThrusterInducer inducer = PhysicUtility.getOrCreateForceInducer(pLevel, contraption, ThrusterInducer.class);
-				
-				// TODO Force inducer gets not saved
-				inducer.setThruster(pPos, thrust);
+				if (contraption != null) {
+					ThrusterInducer inducer = PhysicUtility.getOrCreateForceInducer(pLevel, contraption, ThrusterInducer.class);
+					
+					// TODO Force inducer gets not saved
+					inducer.setThruster(pPos, thrust);
+				}
 				
 			}
 			

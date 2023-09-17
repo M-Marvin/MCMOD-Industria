@@ -23,12 +23,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class VoltageRegulatorBlockEntity extends BlockEntity implements MenuProvider, IJunctionEdit {
+public class TransistorBlockEntity extends BlockEntity implements MenuProvider, IJunctionEdit {
 	
 	protected String[] nodeLanes = new String[] {"1", "2"};
 	
-	public VoltageRegulatorBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(ModBlockEntityTypes.VOLTAGE_REGULATOR.get(), pPos, pBlockState);
+	public TransistorBlockEntity(BlockPos pPos, BlockState pBlockState) {
+		super(ModBlockEntityTypes.TRANSISTOR.get(), pPos, pBlockState);
 	}
 
 	@Override

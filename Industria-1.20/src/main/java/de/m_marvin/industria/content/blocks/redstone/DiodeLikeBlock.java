@@ -40,7 +40,7 @@ public abstract class DiodeLikeBlock extends HorizontalDirectionalBlock {
 
 	public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
 		if (!pState.canSurvive(pLevel, pPos)) {
-			pLevel.removeBlock(pPos, false);
+			pLevel.destroyBlock(pPos, true);
 
 			for(Direction direction : Direction.values()) {
 				pLevel.updateNeighborsAt(pPos.relative(direction), this);

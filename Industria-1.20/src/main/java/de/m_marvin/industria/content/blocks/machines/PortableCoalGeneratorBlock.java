@@ -53,7 +53,7 @@ public class PortableCoalGeneratorBlock extends BaseEntityMultiBlock implements 
 	public static final IntegerProperty[] MBPOS = createMultiBlockProperties(2, 1, 1);
 	
 	public static final NodePointSupplier NODES = NodePointSupplier.define()
-			.addNode(NodeTypes.ALL, 4, new Vec3i(8, 8, 16))
+			.addNode(NodeTypes.ELECTRIC, 4, new Vec3i(8, 8, 16))
 			.addModifier(BlockStateProperties.HORIZONTAL_FACING, NodePointSupplier.FACING_HORIZONTAL_MODIFIER_DEFAULT_NORTH);
 	public static final int NODE_COUNT = 1;
 	

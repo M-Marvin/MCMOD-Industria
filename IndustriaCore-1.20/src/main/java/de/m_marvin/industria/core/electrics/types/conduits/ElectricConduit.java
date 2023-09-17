@@ -12,6 +12,7 @@ import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
+import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.Formatter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -27,7 +28,7 @@ public abstract class ElectricConduit extends Conduit implements IElectricCondui
 	public final double resistance;
 	
 	public ElectricConduit(ConduitType type, Item item, ResourceLocation texture, SoundType sound, int wireCount, double resistance) {
-		super(type, item, texture, sound);
+		super(type, item, texture, sound, NodeTypes.ELECTRIC);
 		this.wireCount = wireCount;
 		this.resistance = resistance;
 	}

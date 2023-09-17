@@ -11,13 +11,15 @@ import com.mojang.math.Axis;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.client.util.GraphicsUtility;
+import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
+import de.m_marvin.industria.core.conduits.types.ConduitType;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitShape;
-import de.m_marvin.industria.core.conduits.types.ConduitType;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.registries.Capabilities;
+import de.m_marvin.industria.core.registries.IndustriaTags;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.unimat.impl.Quaternion;
@@ -49,12 +51,16 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.FORGE,modid=IndustriaCore.MODID, value=Dist.CLIENT)
 public class ConduitWorldRenderer {
-	
+
+	protected static float animationTicks;
+
 	@SuppressWarnings("resource")
 	@SubscribeEvent
 	public static void onWorldRender(RenderLevelStageEvent event) {
 		
 		if (event.getStage() == Stage.AFTER_PARTICLES) { // AFTER_SOLID_BLOCKS // TODO
+			
+			animationTicks += event.getPartialTick();
 
 			if (!Minecraft.getInstance().getEntityRenderDispatcher().shouldRenderHitBoxes()) {
 				
@@ -75,8 +81,6 @@ public class ConduitWorldRenderer {
 				
 			}
 			
-		//} else if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_CUTOUT_MIPPED_BLOCKS_BLOCKS) {
-			
 			if (Minecraft.getInstance().getEntityRenderDispatcher().shouldRenderHitBoxes()) {
 				
 				MultiBufferSource.BufferSource source = Minecraft.getInstance().renderBuffers().bufferSource();
@@ -95,6 +99,24 @@ public class ConduitWorldRenderer {
 				
 				RenderSystem.disableDepthTest();
 				
+			} else if (Minecraft.getInstance().player.getMainHandItem().is(IndustriaTags.Items.CONDUITS)) {
+
+				MultiBufferSource.BufferSource source = Minecraft.getInstance().renderBuffers().bufferSource();
+				PoseStack matrixStack = event.getPoseStack();
+				ClientLevel level = Minecraft.getInstance().level;
+				
+				RenderSystem.enableDepthTest();
+				
+				Vec3 offset = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+				matrixStack.pushPose();
+				matrixStack.translate(-offset.x, -offset.y, -offset.z);
+				drawConduitSymbols(matrixStack, source, level, event.getPartialTick());
+				drawNodesSymbols(matrixStack, source, level, Minecraft.getInstance().player, event.getPartialTick());
+				source.endBatch();
+				matrixStack.popPose();
+				
+				RenderSystem.disableDepthTest();
+				
 			}
 			
 		}
@@ -105,15 +127,22 @@ public class ConduitWorldRenderer {
 		
 		LazyOptional<ConduitHandlerCapability> optionalConduitHolder = clientLevel.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (optionalConduitHolder.isPresent()) {
-			
 			ConduitHandlerCapability conduitHolder = optionalConduitHolder.resolve().get();
-			
 			for (ConduitEntity conduit : conduitHolder.getConduits()) {
-				
 				drawConduitInfo(matrixStack, bufferSource, clientLevel, partialTicks, conduit);
-				
 			}
-			
+		}
+		
+	}
+
+	public static void drawConduitSymbols(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, float partialTicks) {
+		
+		LazyOptional<ConduitHandlerCapability> optionalConduitHolder = clientLevel.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
+		if (optionalConduitHolder.isPresent()) {
+			ConduitHandlerCapability conduitHolder = optionalConduitHolder.resolve().get();
+			for (ConduitEntity conduit : conduitHolder.getConduits()) {
+				drawConduitNodeSymbol(matrixStack, bufferSource, clientLevel, partialTicks, conduit);
+			}
 		}
 		
 	}
@@ -121,21 +150,31 @@ public class ConduitWorldRenderer {
 	public static void drawDebugNodes(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, LocalPlayer player, float partialTicks) {
 		
 		HitResult result = GameUtility.raycast(clientLevel, Vec3d.fromVec(player.getEyePosition()), Vec3d.fromVec(player.getViewVector(partialTicks)), player.getBlockReach());
-		
 		if (result.getType() == Type.BLOCK) {
-			
 			BlockPos targetBlock = ((BlockHitResult) result).getBlockPos();
 			BlockState blockState = clientLevel.getBlockState(targetBlock);
-			
 			if (blockState.getBlock() instanceof IConduitConnector connector) {
-				
 				int nodeId = 0;
 				for (ConduitNode node : connector.getConduitNodes(clientLevel, targetBlock, blockState)) {
 					drawNodeInfo(matrixStack, bufferSource, clientLevel, partialTicks, targetBlock, node, nodeId++);
 				}
-				
 			}
-			
+		}
+		
+	}
+	
+	public static void drawNodesSymbols(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, LocalPlayer player, float partialTicks) {
+		
+		HitResult result = GameUtility.raycast(clientLevel, Vec3d.fromVec(player.getEyePosition()), Vec3d.fromVec(player.getViewVector(partialTicks)), player.getBlockReach());
+		if (result.getType() == Type.BLOCK) {
+			BlockPos targetBlock = ((BlockHitResult) result).getBlockPos();
+			BlockState blockState = clientLevel.getBlockState(targetBlock);
+			if (blockState.getBlock() instanceof IConduitConnector connector) {
+				int nodeId = 0;
+				for (ConduitNode node : connector.getConduitNodes(clientLevel, targetBlock, blockState)) {
+					nodeSymbol(matrixStack, bufferSource, clientLevel, partialTicks, targetBlock, node, nodeId++);
+				}
+			}
 		}
 		
 	}
@@ -171,23 +210,24 @@ public class ConduitWorldRenderer {
 				vertexconsumer.vertex(matrixStack.last().pose(), (float) nodeBworldPosition.x, (float) nodeBworldPosition.y, (float) nodeBworldPosition.z).color(color.x, color.y, color.z, color.w).normal(matrixStack.last().normal(), normal.x, normal.y, normal.z).endVertex();
 				
 				drawNodeInfo(matrixStack, bufferSource, level, partialTick, conduit.getPosition().getNodeApos(), nodeA, conduit.getPosition().getNodeAid());
-				
-				color = new Vec4f(1.0F, 0.0F, 0.0F, 1F);
-				
-				// TODO
-//				Vec3d nodeAForceVecEnd = nodeAworldPosition.add(conduit.getShape().forceNodeA);
-//				vertexconsumer.vertex(matrixStack.last().pose(), (float) nodeAworldPosition.x, (float) nodeAworldPosition.y + 0.2F, (float) nodeAworldPosition.z).color(color.x, color.y, color.z, color.w).normal(matrixStack.last().normal(), normal.x, normal.y, normal.z).endVertex();
-//				vertexconsumer.vertex(matrixStack.last().pose(), (float) nodeAForceVecEnd.x, (float) nodeAForceVecEnd.y + 0.2F, (float) nodeAForceVecEnd.z).color(color.x, color.y, color.z, color.w).normal(matrixStack.last().normal(), normal.x, normal.y, normal.z).endVertex();
-				
 				drawNodeInfo(matrixStack, bufferSource, level, partialTick, conduit.getPosition().getNodeBpos(), nodeB, conduit.getPosition().getNodeBid());
-
-//				Vec3d nodeBForceVecEnd = nodeBworldPosition.add(conduit.getShape().forceNodeB);
-//				vertexconsumer.vertex(matrixStack.last().pose(), (float) nodeBworldPosition.x, (float) nodeBworldPosition.y + 0.2F, (float) nodeBworldPosition.z).color(color.x, color.y, color.z, color.w).normal(matrixStack.last().normal(), normal.x, normal.y, normal.z).endVertex();
-//				vertexconsumer.vertex(matrixStack.last().pose(), (float) nodeBForceVecEnd.x, (float) nodeBForceVecEnd.y + 0.2F, (float) nodeBForceVecEnd.z).color(color.x, color.y, color.z, color.w).normal(matrixStack.last().normal(), normal.x, normal.y, normal.z).endVertex();
 				
 			}
 		}
 		
+	}
+	
+	public static void drawConduitNodeSymbol(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel level, float partialTick, ConduitEntity conduit) {
+		BlockState nodeAstate = level.getBlockState(conduit.getPosition().getNodeApos());
+		BlockState nodeBstate = level.getBlockState(conduit.getPosition().getNodeBpos());
+		if (nodeAstate.getBlock() instanceof IConduitConnector nodeAconnector && nodeBstate.getBlock() instanceof IConduitConnector nodeBconnector) {
+			ConduitNode nodeA = nodeAconnector.getConduitNode(level, conduit.getPosition().getNodeApos(), nodeAstate, conduit.getPosition().getNodeAid());
+			ConduitNode nodeB = nodeBconnector.getConduitNode(level, conduit.getPosition().getNodeBpos(), nodeBstate, conduit.getPosition().getNodeBid());
+			if (nodeA != null && nodeB != null) {
+				nodeSymbol(matrixStack, bufferSource, level, partialTick, conduit.getPosition().getNodeApos(), nodeA, conduit.getPosition().getNodeAid());
+				nodeSymbol(matrixStack, bufferSource, level, partialTick, conduit.getPosition().getNodeBpos(), nodeB, conduit.getPosition().getNodeBid());
+			}
+		}
 	}
 	
 	@SuppressWarnings("resource")
@@ -195,7 +235,8 @@ public class ConduitWorldRenderer {
 		
 		
 		Vec3d position = node.getWorldRenderPosition(level, pos);
-		Vec4f color = node.getType().getColor();
+		int colori = node.getType().getColor().getColor();
+		Vec4f color = GameUtility.toVecColor(colori);
 		double halfSize = 1.5 / 16.0;
 		Vec3d boxMin = position.sub(halfSize, halfSize, halfSize);
 		Vec3d boxMax = position.add(halfSize, halfSize, halfSize);
@@ -301,7 +342,7 @@ public class ConduitWorldRenderer {
 				Vec3d nodeB = shape.nodes[i - 0];
 				
 				if (i == 1) {
-					BlockPos nodeBlockPos =  nodeA.add(nodeOrigin).writeTo(new BlockPos(0, 0, 0)); // new BlockPos(nodeA.x, nodeA.y + 0.1F, nodeA.z).offset(nodeOrigin);
+					BlockPos nodeBlockPos =  nodeA.add(nodeOrigin).writeTo(new BlockPos(0, 0, 0));
 					blockLight = (clientLevel.getLightEmission(nodeBlockPos) * 1 + blockLight * 2) / 3;
 					skyLight = (clientLevel.getBrightness(LightLayer.SKY, nodeBlockPos) * 1 + skyLight * 2) / 3;
 				}
@@ -421,6 +462,50 @@ public class ConduitWorldRenderer {
 		vertex(vertexConsumer, pose, normal, fwh, -fwh, 0, 			0, 0, -1, 	uvEXs1, uvEY0, packedLight, color);
 		vertex(vertexConsumer, pose, normal, -fwh, -fwh, 0, 		0, 0, -1, 	uvEXs0, uvEY0, packedLight, color);
 		vertex(vertexConsumer, pose, normal, -fwh, fwh, 0, 			0, 0, -1, 	uvEXs0, uvEY1, packedLight, color);
+		
+	}
+
+	@SuppressWarnings("resource")
+	public static void nodeSymbol(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel level, float partialTicks, BlockPos pos, ConduitNode node, int nodeId) {
+		
+		Vec3d position = node.getWorldRenderPosition(level, pos);
+		int colori = node.getType().getColor().getColor();
+		Vec4f color = GameUtility.toVecColor(colori);
+		double halfSize = 1.5 / 16.0;
+		Vec3d boxMin = position.sub(halfSize, halfSize, halfSize);
+		Vec3d boxMax = position.add(halfSize, halfSize, halfSize);
+		VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.lines());
+		LevelRenderer.renderLineBox(
+        		matrixStack, vertexconsumer, 
+        		boxMin.x, boxMin.y, boxMin.z, 
+        		boxMax.x, boxMax.y, boxMax.z, 
+        		color.x, color.y, color.z, color.w,
+        		color.x, color.y, color.z);
+		
+		float o = (float) Math.sin(animationTicks / 20F) * 0.1F + 0.2F;
+		
+		matrixStack.pushPose();
+		matrixStack.translate(position.x, position.y + 0.1 + o, position.z);
+		matrixStack.mulPose(Axis.YN.rotationDegrees(Minecraft.getInstance().player.yHeadRot + 180));
+		matrixStack.translate(0, 0, 4 * 0.0635F);
+		
+		Matrix4f pose = matrixStack.last().pose();
+		Matrix3f normal = matrixStack.last().normal();
+		float w = 6 / 16F;
+		
+		VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.entityCutout(node.getType().getSymbolTexture()));
+		vertex(vertexConsumer, pose, normal, w/2, 0, 0, 	0, 0, 1, 	1, 0, 15728880, colori);
+		vertex(vertexConsumer, pose, normal, w/2, w , 0, 	0, 0, 1, 	1, 1, 15728880, colori);
+		vertex(vertexConsumer, pose, normal, -w/2, w, 0, 	0, 0, 1, 	0, 1, 15728880, colori);
+		vertex(vertexConsumer, pose, normal, -w/2, 0, 0, 	0, 0, 1, 	0, 0, 15728880, colori);
+		vertexConsumer.endVertex();
+		
+		matrixStack.scale(0.01F, -0.01F, 0.01F);
+		
+		int conduitCount = ConduitUtility.getConduitsAtNode(level, pos, nodeId).size();
+		String info = conduitCount + "/" + node.getMaxConnections();
+		GraphicsUtility.drawStringCentered(matrixStack, bufferSource, info, 0, 0, color.x, color.y, color.z, color.w);
+		matrixStack.popPose();
 		
 	}
 	

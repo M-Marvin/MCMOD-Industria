@@ -35,7 +35,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class WireHolderBlock extends Block implements IElectricBlock {
 	
 	public static final NodePointSupplier NODES = NodePointSupplier.define()
-			.addNode(NodeTypes.ALL, 8, new Vec3i(8, 8, 5))
+			.addNode(NodeTypes.ELECTRIC, 8, new Vec3i(8, 8, 5))
 			.addModifier(BlockStateProperties.FACING, NodePointSupplier.FACING_MODIFIER_DEFAULT_NORTH);
 	public static final int NODE_COUNT = 1;
 	

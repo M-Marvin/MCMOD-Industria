@@ -1,0 +1,8 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "industria:block/redstone/redstone_transistor_on",
+		"particle": "industria:block/redstone/redstone_transistor_on"
+	},
+	"parent": "industria:block/redstone/redstone_transistor"
+}

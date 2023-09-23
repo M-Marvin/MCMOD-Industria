@@ -6,7 +6,8 @@
         "uvlock": true
       },
       "when": {
-        "core": "true"
+        "core": "true",
+        "axis": "y"
       }
     },
     {
@@ -15,7 +16,8 @@
         "uvlock": true
       },
       "when": {
-        "top": "true"
+        "up": "false",
+        "axis": "y"
       }
     },
     {
@@ -24,7 +26,8 @@
         "uvlock": true
       },
       "when": {
-        "bottom": "true"
+        "down": "false",
+        "axis": "y"
       }
     },
     {
@@ -33,7 +36,8 @@
         "uvlock": true
       },
       "when": {
-        "north": "true"
+        "north": "true",
+        "axis": "y"
       }
     },
     {
@@ -43,7 +47,8 @@
         "uvlock": true
       },
       "when": {
-        "south": "true"
+        "south": "true",
+        "axis": "y"
       }
     },
     {
@@ -53,7 +58,8 @@
         "uvlock": true
       },
       "when": {
-        "east": "true"
+        "east": "true",
+        "axis": "y"
       }
     },
     {
@@ -63,7 +69,174 @@
         "uvlock": true
       },
       "when": {
-        "west": "true"
+        "west": "true",
+        "axis": "y"
+      }
+    },
+    
+    
+    {
+      "apply": {
+        "model": "industria:block/machines/electro_magnetic_coil_core",
+        "uvlock": true,
+        "x": 90,
+        "y": 90
+      },
+      "when": {
+        "core": "true",
+        "axis": "x"
+      }
+    },
+    {
+      "apply": {
+        "model": "industria:block/machines/electro_magnetic_coil_top",
+        "uvlock": true,
+        "x": 90,
+        "y": 90
+      },
+      "when": {
+        "east": "false",
+        "axis": "x"
+      }
+    },
+    {
+      "apply": {
+        "model": "industria:block/machines/electro_magnetic_coil_bottom",
+        "uvlock": true,
+        "x": 90,
+        "y": 90
+      },
+      "when": {
+        "west": "false",
+        "axis": "x"
+      }
+    },
+    {
+      "apply": {
+        "model": "industria:block/machines/electro_magnetic_coil_side2",
+        "x": 90,
+        "y": 90,
+        "uvlock": true
+      },
+      "when": {
+        "north": "true",
+        "axis": "x"
+      }
+    },
+    {
+      "apply": {
+        "model": "industria:block/machines/electro_magnetic_coil_side2",
+        "x": 270,
+        "y": -90,
+        "uvlock": true
+      },
+      "when": {
+        "south": "true",
+        "axis": "x"
+      }
+    },
+    {
+      "apply": {
+        "model": "industria:block/machines/electro_magnetic_coil_side",
+        "y": 90,
+        "uvlock": true,
+        "x": 90
+      },
+      "when": {
+        "down": "true",
+        "axis": "x"
+      }
+    },
+    {
+      "apply": {
+        "model": "industria:block/machines/electro_magnetic_coil_side",
+        "y": -90,
+        "uvlock": true,
+        "x": -90
+      },
+      "when": {
+        "up": "true",
+        "axis": "x"
+      }
+    },
+    
+    
+    {
+      "apply": {
+        "model": "industria:block/machines/electro_magnetic_coil_core",
+        "uvlock": true,
+        "x": 90
+      },
+      "when": {
+        "core": "true",
+        "axis": "z"
+      }
+    },
+    {
+      "apply": {
+        "model": "industria:block/machines/electro_magnetic_coil_top",
+        "uvlock": true,
+        "x": 90
+      },
+      "when": {
+        "north": "false",
+        "axis": "z"
+      }
+    },
+    {
+      "apply": {
+        "model": "industria:block/machines/electro_magnetic_coil_bottom",
+        "uvlock": true,
+        "x": 90
+      },
+      "when": {
+        "south": "false",
+        "axis": "z"
+      }
+    },
+    {
+      "apply": {
+        "model": "industria:block/machines/electro_magnetic_coil_side",
+        "uvlock": true,
+        "x": 90
+      },
+      "when": {
+        "down": "true",
+        "axis": "z"
+      }
+    },
+    {
+      "apply": {
+        "model": "industria:block/machines/electro_magnetic_coil_side",
+        "uvlock": true,
+        "x": -90
+      },
+      "when": {
+        "up": "true",
+        "axis": "z"
+      }
+    },
+    {
+      "apply": {
+        "model": "industria:block/machines/electro_magnetic_coil_side2",
+        "x": -90,
+        "y": 180,
+        "uvlock": true
+      },
+      "when": {
+        "east": "true",
+        "axis": "z"
+      }
+    },
+    {
+      "apply": {
+        "model": "industria:block/machines/electro_magnetic_coil_side2",
+        "x": 90,
+        "uvlock": true
+      },
+      "when": {
+        "west": "true",
+        "axis": "z"
       }
     }
   ]

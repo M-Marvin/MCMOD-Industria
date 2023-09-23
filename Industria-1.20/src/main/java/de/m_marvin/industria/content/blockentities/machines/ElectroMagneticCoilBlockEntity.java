@@ -13,6 +13,7 @@ import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction.Axis;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -20,6 +21,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class ElectroMagneticCoilBlockEntity extends BlockEntity {
 	
@@ -108,6 +110,14 @@ public class ElectroMagneticCoilBlockEntity extends BlockEntity {
 		}
 	}
 	
+	public Axis getAxis() {
+		BlockState state = getBlockState();
+		if (state.getBlock() instanceof ElectroMagneticCoilBlock) {
+			return state.getValue(BlockStateProperties.AXIS);
+		}
+		return Axis.Y;
+	}
+	
 	public Conduit getWireConduit() {
 		if (this.wires.isEmpty()) return Conduits.NONE.get();
 		if (this.wires.getItem() instanceof IConduitItem conduitItem) return conduitItem.getConduit();
@@ -121,12 +131,22 @@ public class ElectroMagneticCoilBlockEntity extends BlockEntity {
 	}
 
 	public int getWiresPerWinding() {
-		int windingLength = (this.getMaxPos().getX() - this.getMinPos().getX() + 1) * 2 + (this.getMaxPos().getZ() - this.getMinPos().getZ() + 1) * 2;
+		int windingLength = 4;
+		switch (getAxis()) {
+		case Y: windingLength = (this.getMaxPos().getX() - this.getMinPos().getX() + 1) * 2 + (this.getMaxPos().getZ() - this.getMinPos().getZ() + 1) * 2; break;
+		case X: windingLength = (this.getMaxPos().getY() - this.getMinPos().getY() + 1) * 2 + (this.getMaxPos().getZ() - this.getMinPos().getZ() + 1) * 2; break;
+		case Z: windingLength = (this.getMaxPos().getX() - this.getMinPos().getX() + 1) * 2 + (this.getMaxPos().getY() - this.getMinPos().getY() + 1) * 2; break;
+		}
 		return windingLength / Conduit.BLOCKS_PER_WIRE_ITEM;
 	}
 	
 	public int getMaxWindings() {
-		return (this.getMaxPos().getY() - this.getMinPos().getY() + 1) * 6;
+		switch (getAxis()) {
+		default:
+		case Y: return (this.getMaxPos().getY() - this.getMinPos().getY() + 1) * 6;
+		case X: return (this.getMaxPos().getX() - this.getMinPos().getX() + 1) * 6;
+		case Z: return (this.getMaxPos().getZ() - this.getMinPos().getZ() + 1) * 6;
+		}
 	}
 	
 	public int getWindings() {

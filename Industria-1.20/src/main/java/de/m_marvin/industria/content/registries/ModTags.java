@@ -1,6 +1,6 @@
 package de.m_marvin.industria.content.registries;
 
-import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.content.Industria;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -15,7 +15,7 @@ public class ModTags {
 		public static final TagKey<Block> ELECTRO_MAGNETIC_COILS = createBlock("electro_magnetic_coils");
 		
 		private static TagKey<Block> createBlock(String name) {
-			return TagKey.create(Registries.BLOCK, new ResourceLocation(IndustriaCore.MODID, name));
+			return TagKey.create(Registries.BLOCK, new ResourceLocation(Industria.MODID, name));
 		}
 		
 	}
@@ -24,7 +24,7 @@ public class ModTags {
 
 		@SuppressWarnings("unused")
 		private static TagKey<Item> createItem(String name) {
-			return TagKey.create(Registries.ITEM, new ResourceLocation(IndustriaCore.MODID, name));
+			return TagKey.create(Registries.ITEM, new ResourceLocation(Industria.MODID, name));
 		}
 		
 	}

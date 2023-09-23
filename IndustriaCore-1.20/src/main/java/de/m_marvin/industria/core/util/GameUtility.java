@@ -28,6 +28,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -41,6 +42,23 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.network.NetworkHooks;
 
 public class GameUtility {
+	
+	public static Direction.Axis rotate(Rotation rotation, Direction.Axis axis) {
+		switch (rotation) {
+		  case COUNTERCLOCKWISE_90:
+		  case CLOCKWISE_90:
+			  switch (axis) {
+				  case X:
+					  return Direction.Axis.Z;
+				  case Z:
+					  return Direction.Axis.X;
+				  default:
+					  return axis;
+			  }
+		  default:
+			  return axis;
+		}
+	}
 	
 	public static int toIntegerColor(int r, int g, int b, int a) {
 		return new Color(r, g, b, a).getRGB();

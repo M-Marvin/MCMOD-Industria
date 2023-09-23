@@ -2,6 +2,7 @@ package de.m_marvin.industria.content.client.blockentityrenderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 
 import de.m_marvin.industria.content.blockentities.machines.ElectroMagneticCoilBlockEntity;
 import de.m_marvin.industria.core.client.conduits.ConduitRenderer;
@@ -33,12 +34,31 @@ public class ElectroMagneticCoilBlockEntityRenderer implements BlockEntityRender
 			Conduit type = pBlockEntity.getWireConduit();
 			
 			if (wires == 0) return;
+
+			pPoseStack.pushPose();
 			
 			float height = size.getY() - 4F * 0.0625F;
 			float width = size.getX() - 4F * 0.0625F;
 			float depth = size.getZ() - 4F * 0.0625F;
-			int windings = (wires * Conduit.BLOCKS_PER_WIRE_ITEM) / (size.getX() * 2 + size.getZ() * 2);
+			switch (pBlockEntity.getAxis()) {
+			case X:				
+				height = size.getX() - 4F * 0.0625F;
+				width = size.getY() - 4F * 0.0625F;
+				depth = size.getZ() - 4F * 0.0625F;
+				pPoseStack.rotateAround(Axis.ZP.rotationDegrees(90), 0F, 0F, 0F);
+				pPoseStack.translate(0, -size.getX(), 0);
+				break;
+			case Z:				
+				height = size.getZ() - 4F * 0.0625F;
+				width = size.getX() - 4F * 0.0625F;
+				depth = size.getY() - 4F * 0.0625F;
+				pPoseStack.rotateAround(Axis.XP.rotationDegrees(-90), 0F, 0F, 0F);
+				pPoseStack.translate(0, -size.getZ(), 0);
+				break;
+			default:
+			}
 			
+			int windings = pBlockEntity.getWindings();
 			float windingHeight = height / windings;
 			
 			VertexConsumer vertexBuffer = pBuffer.getBuffer(RenderType.entitySolid(ConduitTextureManager.LOCATION_CONDUITS));
@@ -59,6 +79,8 @@ public class ElectroMagneticCoilBlockEntityRenderer implements BlockEntityRender
 				ConduitRenderer.drawConduitSegment(vertexBuffer, pPoseStack, 0xFFFFFF, pPackedLight, p4, p5, thickness, 0, texture);
 				
 			}
+			
+			pPoseStack.popPose();
 			
 		}
 		

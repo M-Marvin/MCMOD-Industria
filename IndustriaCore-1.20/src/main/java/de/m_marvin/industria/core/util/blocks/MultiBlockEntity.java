@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class MultiBlockEntity<T extends BlockEntity> extends BlockEntity {
+public class MultiBlockEntity<T extends MultiBlockEntity<T>> extends BlockEntity {
 	
 	private final BlockEntityType<T> type;
 	
@@ -16,6 +16,7 @@ public class MultiBlockEntity<T extends BlockEntity> extends BlockEntity {
 		this.type = pType;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public T getMaster() {
 		BlockState state = getBlockState();
 		if (state.getBlock() instanceof BaseEntityMultiBlock multiBlock) {
@@ -23,7 +24,7 @@ public class MultiBlockEntity<T extends BlockEntity> extends BlockEntity {
 			Optional<T> blockEntity = this.level.getBlockEntity(masterPos, this.type);
 			if (blockEntity.isPresent()) return blockEntity.get();
 		}
-		return null;
+		return (T) this;
 	}
 	
 	public boolean isMaster() {

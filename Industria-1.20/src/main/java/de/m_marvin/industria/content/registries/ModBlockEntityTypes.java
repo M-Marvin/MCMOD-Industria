@@ -6,6 +6,7 @@ import de.m_marvin.industria.content.blockentities.machines.FloodlightBlockEntit
 import de.m_marvin.industria.content.blockentities.machines.IonicThrusterBlockEntity;
 import de.m_marvin.industria.content.blockentities.machines.PortableCoalGeneratorBlockEntity;
 import de.m_marvin.industria.content.blockentities.machines.PortableFuelGeneratorBlockEntity;
+import de.m_marvin.industria.content.blockentities.machines.TransformerCoilBlockEntity;
 import de.m_marvin.industria.content.blockentities.redstone.TransistorBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -26,5 +27,6 @@ public class ModBlockEntityTypes {
 	public static final RegistryObject<BlockEntityType<ConduitCoilBlockEntity>>				WIRE_COIL					= BLOCK_ENTITY_TYPES.register("wire_coil", () -> BlockEntityType.Builder.of(ConduitCoilBlockEntity::new).build(null));
 	public static final RegistryObject<BlockEntityType<IonicThrusterBlockEntity>>			IONIC_THRUSTER				= BLOCK_ENTITY_TYPES.register("ionic_thruster", () -> BlockEntityType.Builder.of(IonicThrusterBlockEntity::new, ModBlocks.IONIC_THRUSTER.get()).build(null));
 	public static final RegistryObject<BlockEntityType<TransistorBlockEntity>> 				TRANSISTOR					= BLOCK_ENTITY_TYPES.register("transistor", () -> BlockEntityType.Builder.of(TransistorBlockEntity::new, ModBlocks.REDSTONE_TRANSISTOR.get()).build(null));
+	public static final RegistryObject<BlockEntityType<TransformerCoilBlockEntity>> 		TRANSFORMER_COIL			= BLOCK_ENTITY_TYPES.register("transformer_coil", () -> BlockEntityType.Builder.of(TransformerCoilBlockEntity::new, ModBlocks.TRANSFORMER_COIL.get()).build(null));
 	
 }

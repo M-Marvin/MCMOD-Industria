@@ -36,7 +36,7 @@ public class ClientConduitPackageHandler {
 	
 	@SuppressWarnings("resource")
 	public static void handleSyncConduitsFromServer(SSyncConduitPackage msg, NetworkEvent.Context ctx) {
-		if (Minecraft.getInstance().level.isLoaded(msg.getChunkPos().getWorldPosition())) {
+		if (Minecraft.getInstance().level.isLoaded(msg.getChunkPos().getWorldPosition()) || msg.request == SyncRequestType.REMOVED) {
 			if (!handlePackageInLoadedChunk(msg)) receivedPackages.put(msg.getChunkPos(), msg);
 		} else {
 			synchronized (receivedPackages) {

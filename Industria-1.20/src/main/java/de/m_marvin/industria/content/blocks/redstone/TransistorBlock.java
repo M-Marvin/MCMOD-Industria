@@ -88,16 +88,16 @@ public class TransistorBlock extends DiodeLikeBlock implements EntityBlock, IEle
 		if (level.getBlockEntity(position) instanceof TransistorBlockEntity regulator && instance.getBlock() == this) {
 			
 			String[] wireLanes = regulator.getNodeLanes();
-			ElectricUtility.plotConnectEquealNamed(plotter, level, this, position, instance);
 			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, wireLanes[0], 1, wireLanes[1]);
 			
 			boolean active = level.getBlockState(position).getValue(BlockStateProperties.POWERED);
 			
-			CircuitTemplate resistor = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "resistor"));
-			resistor.setNetworkNode("NET1", new NodePos(position, 0), 0, wireLanes[0]);
-			resistor.setNetworkNode("NET2", new NodePos(position, 0), 1, wireLanes[1]);
-			resistor.setProperty("resistance", active ? RESISTANCE_ON : RESISTANCE_OFF);
-			plotter.accept(resistor);
+			if (active) {
+				CircuitTemplate resistor = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "junction_resistor"));
+				resistor.setNetworkNode("NET1", new NodePos(position, 0), 0, wireLanes[0]);
+				resistor.setNetworkNode("NET2", new NodePos(position, 0), 1, wireLanes[1]);
+				plotter.accept(resistor);
+			}
 			
 		}
 	}

@@ -35,7 +35,9 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -199,7 +201,7 @@ public class PortableCoalGeneratorBlock extends BaseEntityMultiBlock implements 
 	@Override
 	public double getVoltage(BlockState state, Level level, BlockPos pos) {
 		BlockPos connectorBlock = getBlockAtMBPos(getOriginBlock(pos, state), state, new Vec3i(1, 0, 0));
-		if (level.getBlockEntity(pos) instanceof PortableCoalGeneratorBlockEntity generator) {
+		if (level.getBlockEntity(pos) instanceof PortableCoalGeneratorBlockEntity generator && generator.getMaster() != null) {
 			String[] wireLanes = generator.getNodeLanes();
 			return ElectricUtility.getVoltageBetween(level, new NodePos(connectorBlock, 0), new NodePos(connectorBlock, 0), 0, 1, wireLanes[0], wireLanes[1]);
 		}
@@ -209,7 +211,7 @@ public class PortableCoalGeneratorBlock extends BaseEntityMultiBlock implements 
 	@Override
 	public double getPower(BlockState state, Level level, BlockPos pos) {
 		BlockPos connectorBlock = getBlockAtMBPos(getOriginBlock(pos, state), state, new Vec3i(1, 0, 0));
-		if (level.getBlockEntity(pos) instanceof PortableCoalGeneratorBlockEntity generator) {
+		if (level.getBlockEntity(pos) instanceof PortableCoalGeneratorBlockEntity generator && generator.getMaster() != null) {
 			String[] wireLanes = generator.getNodeLanes();
 			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(connectorBlock, 0), new NodePos(connectorBlock, 0), 2, 0, "power_shunt", wireLanes[0]);
 			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this);
@@ -243,6 +245,16 @@ public class PortableCoalGeneratorBlock extends BaseEntityMultiBlock implements 
 		if (level.getBlockEntity(pos) instanceof PortableCoalGeneratorBlockEntity generator) {
 			generator.setNodeLanes(laneLabels);
 		}
+	}
+	
+	@Override
+	public BlockState rotate(BlockState pState, Rotation pRotation) {
+		return pState.setValue(BlockStateProperties.HORIZONTAL_FACING, pRotation.rotate(pState.getValue(BlockStateProperties.HORIZONTAL_FACING)));
+	}
+	
+	@Override
+	public BlockState mirror(BlockState pState, Mirror pMirror) {
+		return pState.setValue(BlockStateProperties.HORIZONTAL_FACING, pMirror.mirror(pState.getValue(BlockStateProperties.HORIZONTAL_FACING)));
 	}
 	
 }

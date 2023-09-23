@@ -5,6 +5,7 @@ import java.util.List;
 
 import de.m_marvin.industria.content.blockentities.machines.TransformerCoilBlockEntity;
 import de.m_marvin.industria.content.registries.ModBlockStateProperties;
+import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import net.minecraft.core.BlockPos;
@@ -137,6 +138,7 @@ public class TransformerCoilBlock extends BaseEntityBlock {
 				if (level.getBlockEntity(pos2) instanceof TransformerCoilBlockEntity transformer) {
 					transformer.setMaster(false);
 					transformer.dropWires();
+					GameUtility.triggerClientSync(level, pos2);
 				}
 			}
 			
@@ -171,6 +173,7 @@ public class TransformerCoilBlock extends BaseEntityBlock {
 			// Set one block as master
 			if (level.getBlockEntity(min) instanceof TransformerCoilBlockEntity transformer) {
 				transformer.setMaster(true);
+				GameUtility.triggerClientSync(level, min);
 			}
 			
 		}
@@ -193,6 +196,7 @@ public class TransformerCoilBlock extends BaseEntityBlock {
 				// Set block as master (of it self)
 				if (level.getBlockEntity(pos2) instanceof TransformerCoilBlockEntity transformer) {
 					transformer.setMaster(true);
+					GameUtility.triggerClientSync(level, pos2);
 				}
 				
 			}
@@ -228,14 +232,16 @@ public class TransformerCoilBlock extends BaseEntityBlock {
 		if (pLevel.getBlockEntity(pPos) instanceof TransformerCoilBlockEntity transformer) {
 			TransformerCoilBlockEntity transformerMaster = transformer.getMaster();
 			ItemStack wireItem = pPlayer.getMainHandItem();
-			if (transformerMaster.isValidWireItem(wireItem)) {
+			int wiresPerWinding = transformerMaster.getWiresPerWinding();
+			
+			if (transformerMaster.isValidWireItem(wireItem) && wireItem.getCount() >= wiresPerWinding && transformerMaster.getWindings() < transformer.getMaxWindings()) {
 				
 				ItemStack wires = transformerMaster.getWires();
 				if (wires.isEmpty()) {
 					wires = wireItem.copy();
-					wires.setCount(1);
+					wires.setCount(wiresPerWinding);
 				} else {
-					wires.grow(1);
+					wires.grow(wiresPerWinding);
 				}
 				transformerMaster.setWires(wires);
 				
@@ -243,8 +249,10 @@ public class TransformerCoilBlock extends BaseEntityBlock {
 				pLevel.playLocalSound(pPos.getX(), pPos.getY(), pPos.getZ(), soundType.getBreakSound(), SoundSource.BLOCKS, soundType.getVolume(), soundType.getPitch(), false);
 				
 				if (!pPlayer.isCreative()) {
-					wireItem.shrink(1);
+					wireItem.shrink(wiresPerWinding);
 				}
+				
+				GameUtility.triggerClientSync(pLevel, transformerMaster.getBlockPos());
 				
 				return InteractionResult.SUCCESS;
 			}

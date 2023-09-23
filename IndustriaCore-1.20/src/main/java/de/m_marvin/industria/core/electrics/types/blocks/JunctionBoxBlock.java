@@ -123,7 +123,7 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricBlock 
 
 	private boolean canAttachTo(BlockGetter pBlockReader, BlockPos pPos, Direction pDirection) {
 		BlockState blockstate = pBlockReader.getBlockState(pPos);
-		return blockstate.isFaceSturdy(pBlockReader, pPos, pDirection);
+		return blockstate.isFaceSturdy(pBlockReader, pPos, pDirection.getOpposite());
 	}
 
 	@Override

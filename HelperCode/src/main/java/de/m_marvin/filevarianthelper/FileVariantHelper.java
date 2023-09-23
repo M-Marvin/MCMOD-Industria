@@ -1,4 +1,4 @@
-package de.m_marvin.filevarienthelper;
+package de.m_marvin.filevarianthelper;
 
 import java.io.File;
 

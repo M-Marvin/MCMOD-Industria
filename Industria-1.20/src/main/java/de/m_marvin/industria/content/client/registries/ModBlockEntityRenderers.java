@@ -1,6 +1,8 @@
 package de.m_marvin.industria.content.client.registries;
 
 import de.m_marvin.industria.content.Industria;
+import de.m_marvin.industria.content.client.blockentityrenderer.TransformerCoilBlockEntityRenderer;
+import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent.RegisterRenderers;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -11,6 +13,8 @@ public class ModBlockEntityRenderers {
 	
 	@SubscribeEvent
 	public static void onClientSetup(RegisterRenderers event) {
+		
+		event.registerBlockEntityRenderer(ModBlockEntityTypes.TRANSFORMER_COIL.get(), TransformerCoilBlockEntityRenderer::new);
 		
 		// TODO
 //		event.registerBlockEntityRenderer(ModBlockEntities.MOTOR.get(), MotorBlockEntityRenderer::new);
@@ -36,8 +40,8 @@ public class ModBlockEntityRenderers {
 //		}
 //	}
 
-	public static enum ShaftType {
-		FULL,HALF;
-	}
+//	public static enum ShaftType {
+//		FULL,HALF;
+//	}
 	
 }

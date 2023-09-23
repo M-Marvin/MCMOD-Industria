@@ -172,6 +172,7 @@ public class PortableCoalGeneratorBlockEntity extends MultiBlockEntity<PortableC
 	@Override
 	protected void saveAdditional(CompoundTag pTag) {
 		super.saveAdditional(pTag);
+		if (!this.isMaster()) return;
 		pTag.putString("LiveWireLane", this.nodeLanes[0]);
 		pTag.putString("NeutralWireLane", this.nodeLanes[1]);
 		ItemStack fuelStorage = this.container.getItem(this.container.getFirstAdditional() + 0);

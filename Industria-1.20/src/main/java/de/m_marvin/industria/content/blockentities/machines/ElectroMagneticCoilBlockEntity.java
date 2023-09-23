@@ -97,6 +97,7 @@ public class ElectroMagneticCoilBlockEntity extends BlockEntity {
 		BlockState state = getBlockState();
 		if (state.getBlock() instanceof ElectroMagneticCoilBlock block) {
 			List<BlockPos> transformerBlocks = block.findTransformerBlocks(this.level, this.worldPosition, state);
+			if (transformerBlocks.isEmpty()) return;
 			for (BlockPos pos : transformerBlocks) {
 				if (level.getBlockEntity(pos) instanceof ElectroMagneticCoilBlockEntity transformer && transformer.isMaster) this.masterPos = Optional.of(pos);
 			}

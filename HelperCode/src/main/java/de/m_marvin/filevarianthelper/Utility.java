@@ -43,8 +43,9 @@ public class Utility {
 						}
 					}
 					
-					image.setRGB(0, 0, image.getWidth(), image.getHeight(), colors, 0, image.getWidth());
-					ImageIO.write(image, "png", new File(outputFolder, imageFile.getName()));
+					BufferedImage image2 = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+					image2.setRGB(0, 0, image2.getWidth(), image2.getHeight(), colors, 0, image2.getWidth());
+					ImageIO.write(image2, "png", new File(outputFolder, imageFile.getName()));
 					
 					System.out.println("Colors replaced: " + colorsReplaced);
 					

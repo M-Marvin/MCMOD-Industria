@@ -17,7 +17,7 @@ public class FileVariantHelper {
 		
 		parser.addOption("replace_image_colors", "", "Replaces the colors in the images in the specified folder with the ones specified in the given file");
 		parser.addOption("image_folder", "", "Specifies the image folder");
-		parser.addOption("help", "", "Show help info");
+		parser.addOption("help", false, "Show help info");
 		
 		parser.parseInput(args);
 		

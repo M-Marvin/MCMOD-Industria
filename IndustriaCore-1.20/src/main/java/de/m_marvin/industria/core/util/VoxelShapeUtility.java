@@ -63,6 +63,14 @@ public class VoxelShapeUtility {
 			}
 		}
 		
+		public VoxelShapeRotationBuilder rotateFromAxisY(Axis axis) {
+			switch (axis) {
+			case X: return rotateZ(90);
+			case Z: return rotateX(90);
+			default: return this;
+			}
+		}
+		
 		public VoxelShapeRotationBuilder rotateX(int degrees) {
 			this.matrix = Matrix4f.rotationMatrixX((float) Math.toRadians(degrees)).mul(this.matrix);
 			return this;
@@ -84,6 +92,7 @@ public class VoxelShapeUtility {
 		}
 		
 		public VoxelShape transform(VoxelShape shape) {
+			if (shape.isEmpty()) return shape;
 			return shape.toAabbs().stream().map(aabb -> {
 				IVector4<Float> av = this.matrix.translate(new Vec4f((float) aabb.minX, (float) aabb.minY, (float) aabb.minZ, 1F));
 				IVector4<Float> bv = this.matrix.translate(new Vec4f((float) aabb.maxX, (float) aabb.maxY, (float) aabb.maxZ, 1F));

@@ -3,8 +3,7 @@ package de.m_marvin.industria.content.client.blockentityrenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import de.m_marvin.industria.content.blockentities.machines.TransformerCoilBlockEntity;
-import de.m_marvin.industria.content.registries.ModConduits;
+import de.m_marvin.industria.content.blockentities.machines.ElectroMagneticCoilBlockEntity;
 import de.m_marvin.industria.core.client.conduits.ConduitRenderer;
 import de.m_marvin.industria.core.client.conduits.ConduitTextureManager;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
@@ -16,14 +15,14 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Con
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 
-public class TransformerCoilBlockEntityRenderer implements BlockEntityRenderer<TransformerCoilBlockEntity> {
+public class ElectroMagneticCoilBlockEntityRenderer implements BlockEntityRenderer<ElectroMagneticCoilBlockEntity> {
 
-	public TransformerCoilBlockEntityRenderer(Context context) {
+	public ElectroMagneticCoilBlockEntityRenderer(Context context) {
 		
 	}
 	
 	@Override
-	public void render(TransformerCoilBlockEntity pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
+	public void render(ElectroMagneticCoilBlockEntity pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
 		
 		if (pBlockEntity.isMaster()) {
 			

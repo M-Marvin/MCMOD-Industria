@@ -20,7 +20,7 @@ public class ScrewDriverItem extends Item implements IScrollOverride {
 	}
 	
 	public boolean canScrewDriverPickup(BlockState state) {
-		return state.is(ModTags.BLOCK_SCREW_DRIVER_PICKUP);
+		return state.is(ModTags.Blocks.BLOCK_SCREW_DRIVER_PICKUP);
 	}
 	
 	@Override

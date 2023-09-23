@@ -54,7 +54,7 @@ public class ModItems {
 	public static final RegistryObject<BlockItem> ZINC_JUNCTION_BOX						= ITEMS.register("zinc_junction_box", () -> new BlockItem(ModBlocks.ZINC_JUNCTION_BOX.get(), new Item.Properties()));
 	public static final RegistryObject<BlockItem> BRASS_JUNCTION_BOX					= ITEMS.register("brass_junction_box", () -> new BlockItem(ModBlocks.BRASS_JUNCTION_BOX.get(), new Item.Properties()));
 	public static final RegistryObject<BlockItem> STEEL_JUNCTION_BOX					= ITEMS.register("steel_junction_box", () -> new BlockItem(ModBlocks.STEEL_JUNCTION_BOX.get(), new Item.Properties()));
-	public static final RegistryObject<BlockItem> TRANSFORMER_COIL						= ITEMS.register("transformer_coil", () -> new BlockItem(ModBlocks.TRANSFORMER_COIL.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> ELECTRO_MAGNETIC_COIL					= ITEMS.register("electro_magnetic_coil", () -> new BlockItem(ModBlocks.ELECTRO_MAGNETIC_COIL.get(), new Item.Properties()));
 	
 	public static final RegistryObject<BlockItem> BRASS_FLOODLIGHT						= ITEMS.register("brass_floodlight", () -> new ElectricBlockItem(ModBlocks.BRASS_FLOODLIGHT.get(), new Item.Properties()));
 	public static final RegistryObject<BlockItem> STEEL_FLOODLIGHT						= ITEMS.register("steel_floodlight", () -> new ElectricBlockItem(ModBlocks.STEEL_FLOOFLIGHT.get(), new Item.Properties()));
@@ -611,7 +611,7 @@ public class ModItems {
 				output.accept(BRASS_JUNCTION_BOX.get().getDefaultInstance());
 				output.accept(STEEL_JUNCTION_BOX.get().getDefaultInstance());
 				
-				output.accept(TRANSFORMER_COIL.get().getDefaultInstance());
+				output.accept(ELECTRO_MAGNETIC_COIL.get().getDefaultInstance());
 				
 				output.accept(BRASS_FLOODLIGHT.get().getDefaultInstance());
 				output.accept(STEEL_FLOODLIGHT.get().getDefaultInstance());

@@ -3,7 +3,7 @@ package de.m_marvin.industria.content.blockentities.machines;
 import java.util.List;
 import java.util.Optional;
 
-import de.m_marvin.industria.content.blocks.machines.TransformerCoilBlock;
+import de.m_marvin.industria.content.blocks.machines.ElectroMagneticCoilBlock;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.items.IConduitItem;
@@ -21,7 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class TransformerCoilBlockEntity extends BlockEntity {
+public class ElectroMagneticCoilBlockEntity extends BlockEntity {
 	
 	protected Optional<BlockPos> masterPos = Optional.empty();
 	protected Optional<BlockPos> maxPos = Optional.empty();
@@ -29,8 +29,8 @@ public class TransformerCoilBlockEntity extends BlockEntity {
 	protected boolean isMaster = false;
 	protected ItemStack wires = ItemStack.EMPTY;
 	
-	public TransformerCoilBlockEntity(BlockPos pPos, BlockState pBlockState) {
-		super(ModBlockEntityTypes.TRANSFORMER_COIL.get(), pPos, pBlockState);
+	public ElectroMagneticCoilBlockEntity(BlockPos pPos, BlockState pBlockState) {
+		super(ModBlockEntityTypes.ELECTRO_MAGNETIC_COIL.get(), pPos, pBlockState);
 	}
 	
 	public ItemStack getWires() {
@@ -67,7 +67,7 @@ public class TransformerCoilBlockEntity extends BlockEntity {
 			if (this.minPos.isPresent()) return this.minPos.get();
 			return this.worldPosition;
 		} else {
-			TransformerCoilBlockEntity master = this.getMaster();
+			ElectroMagneticCoilBlockEntity master = this.getMaster();
 			if (master.minPos.isEmpty()) master.findPositions();
 			if (master.minPos.isPresent()) return master.minPos.get();
 			return this.worldPosition;
@@ -80,25 +80,25 @@ public class TransformerCoilBlockEntity extends BlockEntity {
 			if (this.maxPos.isPresent()) return this.maxPos.get();
 			return this.worldPosition;
 		} else {
-			TransformerCoilBlockEntity master = this.getMaster();
+			ElectroMagneticCoilBlockEntity master = this.getMaster();
 			if (master.maxPos.isEmpty()) master.findPositions();
 			if (master.maxPos.isPresent()) return master.maxPos.get();
 			return this.worldPosition;
 		}
 	}
 	
-	public TransformerCoilBlockEntity getMaster() {
+	public ElectroMagneticCoilBlockEntity getMaster() {
 		BlockEntity masterBlockEntity = level.getBlockEntity(getMasterPos());
-		if (masterBlockEntity instanceof TransformerCoilBlockEntity transformerBlockEntity) return transformerBlockEntity;
+		if (masterBlockEntity instanceof ElectroMagneticCoilBlockEntity transformerBlockEntity) return transformerBlockEntity;
 		return this;
 	}
 	
 	public void findPositions() {
 		BlockState state = getBlockState();
-		if (state.getBlock() instanceof TransformerCoilBlock block) {
+		if (state.getBlock() instanceof ElectroMagneticCoilBlock block) {
 			List<BlockPos> transformerBlocks = block.findTransformerBlocks(this.level, this.worldPosition, state);
 			for (BlockPos pos : transformerBlocks) {
-				if (level.getBlockEntity(pos) instanceof TransformerCoilBlockEntity transformer && transformer.isMaster) this.masterPos = Optional.of(pos);
+				if (level.getBlockEntity(pos) instanceof ElectroMagneticCoilBlockEntity transformer && transformer.isMaster) this.masterPos = Optional.of(pos);
 			}
 			BlockPos minPos = transformerBlocks.stream().reduce(MathUtility::getMinCorner).get();
 			BlockPos maxPos = transformerBlocks.stream().reduce(MathUtility::getMaxCorner).get();

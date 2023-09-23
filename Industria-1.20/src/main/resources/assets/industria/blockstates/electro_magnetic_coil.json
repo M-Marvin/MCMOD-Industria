@@ -2,7 +2,7 @@
   "multipart": [
     {
       "apply": {
-        "model": "industria:block/machines/transformer_core",
+        "model": "industria:block/machines/electro_magnetic_coil_core",
         "uvlock": true
       },
       "when": {
@@ -11,7 +11,7 @@
     },
     {
       "apply": {
-        "model": "industria:block/machines/transformer_top",
+        "model": "industria:block/machines/electro_magnetic_coil_top",
         "uvlock": true
       },
       "when": {
@@ -20,7 +20,7 @@
     },
     {
       "apply": {
-        "model": "industria:block/machines/transformer_bottom",
+        "model": "industria:block/machines/electro_magnetic_coil_bottom",
         "uvlock": true
       },
       "when": {
@@ -29,7 +29,7 @@
     },
     {
       "apply": {
-        "model": "industria:block/machines/transformer_side",
+        "model": "industria:block/machines/electro_magnetic_coil_side",
         "uvlock": true
       },
       "when": {
@@ -38,7 +38,7 @@
     },
     {
       "apply": {
-        "model": "industria:block/machines/transformer_side",
+        "model": "industria:block/machines/electro_magnetic_coil_side",
         "y": 180,
         "uvlock": true
       },
@@ -48,7 +48,7 @@
     },
     {
       "apply": {
-        "model": "industria:block/machines/transformer_side",
+        "model": "industria:block/machines/electro_magnetic_coil_side",
         "y": 90,
         "uvlock": true
       },
@@ -58,7 +58,7 @@
     },
     {
       "apply": {
-        "model": "industria:block/machines/transformer_side",
+        "model": "industria:block/machines/electro_magnetic_coil_side",
         "y": -90,
         "uvlock": true
       },

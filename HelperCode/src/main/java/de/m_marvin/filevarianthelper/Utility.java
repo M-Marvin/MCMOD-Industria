@@ -33,14 +33,20 @@ public class Utility {
 					
 					System.out.println("processing " + imageFile.getName() + " ...");
 					BufferedImage image = ImageIO.read(imageFile);
+					int colorsReplaced = 0;
 					int[] colors = image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth());
 					
 					for (int i = 0; i < colors.length; i++) {
-						if (colorMap.containsKey(colors[i])) colors[i] = colorMap.get(colors[i]);
+						if (colorMap.containsKey(colors[i])) {
+							colors[i] = colorMap.get(colors[i]);
+							colorsReplaced++;
+						}
 					}
 					
 					image.setRGB(0, 0, image.getWidth(), image.getHeight(), colors, 0, image.getWidth());
 					ImageIO.write(image, "png", new File(outputFolder, imageFile.getName()));
+					
+					System.out.println("Colors replaced: " + colorsReplaced);
 					
 				}
 				

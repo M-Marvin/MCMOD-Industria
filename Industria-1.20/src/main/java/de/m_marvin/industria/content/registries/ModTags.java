@@ -9,15 +9,24 @@ import net.minecraft.world.level.block.Block;
 
 public class ModTags {
 	
-	public static final TagKey<Block> BLOCK_SCREW_DRIVER_PICKUP = createBlock("screw_driver_pickup");
-	
-	private static TagKey<Block> createBlock(String name) {
-		return TagKey.create(Registries.BLOCK, new ResourceLocation(IndustriaCore.MODID, name));
+	public static class Blocks {
+
+		public static final TagKey<Block> BLOCK_SCREW_DRIVER_PICKUP = createBlock("screw_driver_pickup");
+		public static final TagKey<Block> ELECTRO_MAGNETIC_COILS = createBlock("electro_magnetic_coils");
+		
+		private static TagKey<Block> createBlock(String name) {
+			return TagKey.create(Registries.BLOCK, new ResourceLocation(IndustriaCore.MODID, name));
+		}
+		
 	}
 	
-	@SuppressWarnings("unused")
-	private static TagKey<Item> createItem(String name) {
-		return TagKey.create(Registries.ITEM, new ResourceLocation(IndustriaCore.MODID, name));
+	public static class Items {
+
+		@SuppressWarnings("unused")
+		private static TagKey<Item> createItem(String name) {
+			return TagKey.create(Registries.ITEM, new ResourceLocation(IndustriaCore.MODID, name));
+		}
+		
 	}
 	
 }

@@ -1,7 +1,6 @@
 package de.m_marvin.industria.content.blocks.machines;
 
 import java.util.function.Consumer;
-import java.util.stream.IntStream;
 
 import de.m_marvin.industria.content.blockentities.machines.PortableCoalGeneratorBlockEntity;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
@@ -57,7 +56,6 @@ public class PortableCoalGeneratorBlock extends BaseEntityMultiBlock implements 
 	public static final NodePointSupplier NODES = NodePointSupplier.define()
 			.addNode(NodeTypes.ELECTRIC, 4, new Vec3i(8, 8, 16))
 			.addModifier(BlockStateProperties.HORIZONTAL_FACING, NodePointSupplier.FACING_HORIZONTAL_MODIFIER_DEFAULT_NORTH);
-	public static final int NODE_COUNT = 1;
 	
 	public static final VoxelShape SHAPE = Shapes.or(VoxelShapeUtility.box(0, 4, 3, 14, 14, 13), VoxelShapeUtility.box(0, 3, 0, 11, 12, 3), VoxelShapeUtility.box(7, 14, 5, 13, 17, 11));
 	
@@ -228,8 +226,7 @@ public class PortableCoalGeneratorBlock extends BaseEntityMultiBlock implements 
 	
 	@Override
 	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {
-		BlockPos connector = getBlockAtMBPos(getOriginBlock(pos, instance), instance, new Vec3i(1, 0, 0));
-		return IntStream.range(0, NODE_COUNT).mapToObj(i -> new NodePos(connector, i)).toArray(i -> new NodePos[i]);
+		return getMBPos(instance).equals(new Vec3i(1, 0, 0)) ? NODES.getNodePositions(pos) : new NodePos[0];
 	}
 
 	@Override

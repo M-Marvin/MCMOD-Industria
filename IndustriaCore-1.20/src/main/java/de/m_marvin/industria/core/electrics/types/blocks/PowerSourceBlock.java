@@ -1,7 +1,6 @@
 package de.m_marvin.industria.core.electrics.types.blocks;
 
 import java.util.function.Consumer;
-import java.util.stream.IntStream;
 
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
@@ -35,11 +34,10 @@ import net.minecraft.world.phys.BlockHitResult;
 
 public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock, IElectricInfoProvider {
 	
-	public static final NodePointSupplier NODE_POINTS = NodePointSupplier.define()
+	public static final NodePointSupplier NODES = NodePointSupplier.define()
 			.addNode(NodeTypes.ELECTRIC, 8, new Vec3i(8, 8, 0))
 			.addModifier(BlockStateProperties.FACING, NodePointSupplier.FACING_MODIFIER_DEFAULT_NORTH);
-	public static final int NODE_COUNT = 1;
-
+	
 	public PowerSourceBlock(Properties pProperties) {
 		super(pProperties);
 	}
@@ -56,7 +54,7 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock,
 	
 	@Override
 	public ConduitNode[] getConduitNodes(Level level, BlockPos pos, BlockState state) {
-		return NODE_POINTS.getNodes(state);
+		return NODES.getNodes(state);
 	}
 	
 	@Override
@@ -86,7 +84,7 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock,
 	
 	@Override
 	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {
-		return IntStream.range(0, NODE_COUNT).mapToObj(id -> new NodePos(pos, id)).toArray(i -> new NodePos[i]);
+		return NODES.getNodePositions(pos);
 	}
 	
 	@Override

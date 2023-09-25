@@ -1,7 +1,6 @@
 package de.m_marvin.industria.content.blocks.machines;
 
 import java.util.function.Consumer;
-import java.util.stream.IntStream;
 
 import de.m_marvin.industria.content.blockentities.machines.FloodlightBlockEntity;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
@@ -53,7 +52,6 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 			.addNode(NodeTypes.ELECTRIC, 2, new Vec3i(16, 8, 13))
 			.addModifier(BlockStateProperties.ATTACH_FACE, NodePointSupplier.ATTACH_FACE_MODIFIER_DEFAULT_WALL)
 			.addModifier(BlockStateProperties.HORIZONTAL_FACING, NodePointSupplier.FACING_MODIFIER_DEFAULT_NORTH);
-	public static final int NODE_COUNT = 3;
 	
 	public static final VoxelShape SHAPE = Shapes.or(VoxelShapeUtility.box(0, 1, 0, 16, 15, 6), VoxelShapeUtility.box(0, 0, 6, 16, 16, 10));
 	
@@ -170,7 +168,7 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 	
 	@Override
 	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {
-		return IntStream.range(0, NODE_COUNT).mapToObj(i -> new NodePos(pos, i)).toArray(i -> new NodePos[i]);
+		return NODES.getNodePositions(pos);
 	}
 	
 	@Override

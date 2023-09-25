@@ -192,7 +192,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements SimpleW
 						BlockPos pos2 = new BlockPos(x, y, z);
 						BlockState state2 = level.getBlockState(pos2);
 						
-						if (state2.getBlock() == this && connectedBlocks.contains(pos2)) {
+						if (state2.is(ModTags.Blocks.ELECTRO_MAGNETIC_COILS) && state2.getBlock() instanceof ElectroMagneticCoilBlock && connectedBlocks.contains(pos2)) {
 							
 							boolean outerBlock = false;;
 							switch (axis) {

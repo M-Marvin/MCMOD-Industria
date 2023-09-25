@@ -1,7 +1,6 @@
 package de.m_marvin.industria.content.blocks.machines;
 
 import java.util.function.Consumer;
-import java.util.stream.IntStream;
 
 import org.valkyrienskies.core.api.ships.ServerShip;
 
@@ -49,7 +48,6 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 			.addNode(NodeTypes.ELECTRIC, 2, new Vec3i(8, 16, 5))
 			.addModifier(BlockStateProperties.ATTACH_FACE, NodePointSupplier.ATTACH_FACE_MODIFIER_DEFAULT_WALL)
 			.addModifier(BlockStateProperties.HORIZONTAL_FACING, NodePointSupplier.FACING_MODIFIER_DEFAULT_NORTH);
-	public static final int NODE_COUNT = 1;
 	
 	public static final VoxelShape SHAPE = VoxelShapeUtility.box(1, 1, 0, 15, 15, 15);
 	
@@ -93,7 +91,7 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 
 	@Override
 	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {
-		return IntStream.range(0, NODE_COUNT).mapToObj(i -> new NodePos(pos, i)).toArray(i -> new NodePos[i]);
+		return NODES.getNodePositions(pos);
 	}
 	
 	@Override

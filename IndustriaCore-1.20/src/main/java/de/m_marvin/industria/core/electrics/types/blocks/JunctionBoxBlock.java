@@ -1,7 +1,6 @@
 package de.m_marvin.industria.core.electrics.types.blocks;
 
 import java.util.function.Consumer;
-import java.util.stream.IntStream;
 
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
@@ -42,10 +41,9 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricBlock 
 	
 	public static final VoxelShape BLOCK_SHAPE = Block.box(3, 0, 3, 13, 3, 13);
 	
-	public static final NodePointSupplier NODE_POINTS = NodePointSupplier.define()
+	public static final NodePointSupplier NODES = NodePointSupplier.define()
 			.addNodesAround(Axis.Z, NodeTypes.ELECTRIC, 1, new Vec3i(8, 3, 1))
 			.addModifier(BlockStateProperties.FACING, NodePointSupplier.FACING_MODIFIER_DEFAULT_NORTH);
-	public static final int NODE_COUNT = 4;
 	
 	public JunctionBoxBlock(Properties pProperties) {
 		super(pProperties);
@@ -80,12 +78,12 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricBlock 
 
 	@Override
 	public ConduitNode[] getConduitNodes(Level level, BlockPos pos, BlockState state) {
-		return NODE_POINTS.getNodes(state);
+		return NODES.getNodes(state);
 	}
 	
 	@Override
 	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {
-		return IntStream.range(0, NODE_COUNT).mapToObj(id -> new NodePos(pos, id)).toArray(i -> new NodePos[i]);
+		return NODES.getNodePositions(pos);
 	}
 	
 	@Override

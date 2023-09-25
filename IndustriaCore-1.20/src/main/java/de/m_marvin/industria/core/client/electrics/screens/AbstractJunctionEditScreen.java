@@ -306,6 +306,7 @@ public abstract class AbstractJunctionEditScreen<B extends BlockEntity & IJuncti
 	@Override
 	protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
 		
+		renderBackground(pGuiGraphics);
 		pGuiGraphics.blit(getJunctionBoxTexture(), this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 		
 		for (CableNode node : this.cableNodes) {

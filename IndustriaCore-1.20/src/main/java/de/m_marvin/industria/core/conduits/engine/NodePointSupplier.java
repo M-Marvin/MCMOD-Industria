@@ -5,11 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.stream.IntStream;
 
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitNode.NodeType;
+import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3i;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.level.block.state.BlockState;
@@ -65,6 +68,13 @@ public class NodePointSupplier {
 		default: return position;
 		}
 	};
+	public static final BiFunction<Vec3i, Object, Vec3i> AXIS_MODIFIER_DEFAULT_Y = (position, prop) -> {
+		switch ((Axis) prop) {
+		case X: return MathUtility.rotatePoint(position.sub(8, 8, 8), 90, true, Axis.Z).add(8, 8, 8);
+		case Z: return MathUtility.rotatePoint(position.sub(8, 8, 8), 90, true, Axis.X).add(8, 8, 8);
+		default: return position;
+		}
+	};
 	
 	public NodePointSupplier addModifier(Property<?> property, BiFunction<Vec3i, Object, Vec3i> modifier) {
 		this.modifiers.put(property, modifier);
@@ -96,6 +106,14 @@ public class NodePointSupplier {
 	
 	public ConduitNode[] getNodes() {
 		return this.nodes.toArray((l) -> new ConduitNode[l]);
+	}
+	
+	public int getNodeCount() {
+		return this.nodes.size();
+	}
+
+	public NodePos[] getNodePositions(BlockPos pos) {
+		return IntStream.range(0, getNodeCount()).mapToObj(i -> new NodePos(pos, i)).toArray(i -> new NodePos[i]);
 	}
 	
 }

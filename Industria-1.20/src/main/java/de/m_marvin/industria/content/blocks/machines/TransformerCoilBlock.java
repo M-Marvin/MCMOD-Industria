@@ -2,53 +2,86 @@ package de.m_marvin.industria.content.blocks.machines;
 
 import java.util.function.Consumer;
 
+import de.m_marvin.industria.content.blockentities.machines.TransformerCoilBlockEntity;
+import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
+import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
+import de.m_marvin.industria.core.registries.IndustriaTags;
+import de.m_marvin.industria.core.registries.NodeTypes;
+import de.m_marvin.industria.core.util.GameUtility;
+import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.BlockHitResult;
 
 public class TransformerCoilBlock extends ElectroMagneticCoilBlock implements IElectricBlock {
 	
-	
+	public static final NodePointSupplier NODES = NodePointSupplier.define()
+			.addNode(NodeTypes.ELECTRIC, 4, new Vec3i(8, 16, 8))
+			.addNode(NodeTypes.ELECTRIC, 4, new Vec3i(8, 0, 8))
+			.addModifier(BlockStateProperties.AXIS, NodePointSupplier.AXIS_MODIFIER_DEFAULT_Y);
 	
 	public TransformerCoilBlock(Properties pProperties) {
 		super(pProperties);
 	}
-
+	
 	@Override
-	public ConduitNode[] getConduitNodes(Level level, BlockPos pos, BlockState state) {
-		// TODO Auto-generated method stub
-		return null;
+	public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+		return new TransformerCoilBlockEntity(pPos, pState);
 	}
 
 	@Override
-	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit,
-			Consumer<ICircuitPlot> plotter) {
-		// TODO Auto-generated method stub
-		
+	public ConduitNode[] getConduitNodes(Level level, BlockPos pos, BlockState state) {
+		return NODES.getNodes(state);
 	}
 
 	@Override
 	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {
-		// TODO Auto-generated method stub
-		return null;
+		return NODES.getNodePositions(pos);
 	}
 
 	@Override
 	public String[] getWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node) {
-		// TODO Auto-generated method stub
-		return null;
+		if (level.getBlockEntity(pos) instanceof TransformerCoilBlockEntity transformer) {
+			return transformer.getNodeLanes();
+		}
+		return new String[0];
 	}
 
 	@Override
 	public void setWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node, String[] laneLabels) {
-		// TODO Auto-generated method stub
-		
+		if (level.getBlockEntity(pos) instanceof TransformerCoilBlockEntity transformer) {
+			transformer.setNodeLanes(laneLabels);
+		}
 	}
-	
-	
+
+	@Override
+	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
+		if (level.getBlockEntity(position) instanceof TransformerCoilBlockEntity transformer) {
+			
+			String[] nodeLanes = transformer.getNodeLanes();
+			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, nodeLanes[0], 1, nodeLanes[1]);
+			
+			
+			
+		}
+	}
+
+	@Override
+	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+		if (pPlayer.getItemInHand(pHand).is(IndustriaTags.Items.CONDUITS) && pHit.getDirection().getAxis() == pState.getValue(BlockStateProperties.AXIS)) return InteractionResult.PASS;
+		InteractionResult result = GameUtility.openJunctionBlockEntityUI(pLevel, pPos, pPlayer, pHand);
+		if (result == InteractionResult.SUCCESS) return InteractionResult.SUCCESS;
+		return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
+	}
 	
 }

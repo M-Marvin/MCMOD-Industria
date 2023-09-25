@@ -1,7 +1,6 @@
 package de.m_marvin.industria.content.blocks.machines;
 
 import java.util.function.Consumer;
-import java.util.stream.IntStream;
 
 import de.m_marvin.industria.content.blockentities.machines.PortableFuelGeneratorBlockEntity;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
@@ -47,7 +46,6 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 	public static final NodePointSupplier NODES = NodePointSupplier.define()
 			.addNode(NodeTypes.ELECTRIC, 4, new Vec3i(8, 8, 16))
 			.addModifier(BlockStateProperties.HORIZONTAL_FACING, NodePointSupplier.FACING_HORIZONTAL_MODIFIER_DEFAULT_NORTH);
-	public static final int NODE_COUNT = 1;
 	
 	public PortableFuelGeneratorBlock(Properties pProperties) {
 		super(pProperties);
@@ -176,7 +174,7 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 	
 	@Override
 	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {
-		return IntStream.range(0, NODE_COUNT).mapToObj(i -> new NodePos(pos, i)).toArray(i -> new NodePos[i]);
+		return NODES.getNodePositions(pos);
 	}
 
 	@Override

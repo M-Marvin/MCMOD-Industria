@@ -14,7 +14,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.github.johnrengelman.shadow'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'eclipse'
 }
 
@@ -137,9 +137,8 @@ dependencies {
  	implementation fg.deobf("curse.maven:kotlinforforge-351264:4630525")
  	implementation fg.deobf("curse.maven:valkyrienskies-258371:4654328")
 	implementation 'com.github.M-Marvin:LIBRARY-NGLink:v1.1'
-	implementation 'com.github.M-Marvin:LIBRARY-UnifiedVectors:25057d887b'
- 	implementation project(path: ":IndustriaCore-1.20", configuration: 'shadow')
- 	runtimeOnly "industria:industriacore:0.1-alpha"
+	implementation 'com.github.M-Marvin:LIBRARY-UnifiedVectors:d00f1712a2'
+ 	implementation "industria:industriacore:0.1-alpha"
  	
  	// Code Dependencies
 	

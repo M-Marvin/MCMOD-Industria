@@ -14,7 +14,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.github.johnrengelman.shadow'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'eclipse'
 }
 
@@ -142,7 +142,7 @@ dependencies {
  	
  	// Code Dependencies
 	shade 'com.github.M-Marvin:LIBRARY-NGLink:v1.1'
-	shade 'com.github.M-Marvin:LIBRARY-UnifiedVectors:25057d887b'
+	shade 'com.github.M-Marvin:LIBRARY-UnifiedVectors:d00f1712a2'
 	
 	// Mods used while testing
 	runtimeOnly fg.deobf("curse.maven:atlasviewer-633577:4597419")

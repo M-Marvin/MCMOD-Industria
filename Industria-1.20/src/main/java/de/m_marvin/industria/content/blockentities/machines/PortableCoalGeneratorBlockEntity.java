@@ -118,10 +118,10 @@ public class PortableCoalGeneratorBlockEntity extends MultiBlockEntity<PortableC
 				BlockPos second = multiBlock.getBlockAtMBPos(center, pBlockEntity.getBlockState(), new Vec3i(1, 0, 0));
 				pBlockEntity.level.setBlockAndUpdate(center, pBlockEntity.level.getBlockState(center).setValue(BlockStateProperties.LIT, pBlockEntity.canRun));
 				pBlockEntity.level.setBlockAndUpdate(second, pBlockEntity.level.getBlockState(second).setValue(BlockStateProperties.LIT, pBlockEntity.canRun));
+				ElectricUtility.updateNetwork(pLevel, second);
 			}
-			pBlockEntity.setChanged();
-			ElectricUtility.updateNetwork(pLevel, pPos);
 			GameUtility.triggerClientSync(pBlockEntity.level, pBlockEntity.worldPosition);
+			pBlockEntity.setChanged();
 		}
 
 		if (pBlockEntity.canRun && pState.getBlock() instanceof PortableCoalGeneratorBlock generatorBlock) {

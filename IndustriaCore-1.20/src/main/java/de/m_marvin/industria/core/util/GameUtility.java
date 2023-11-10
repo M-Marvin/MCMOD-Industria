@@ -113,7 +113,7 @@ public class GameUtility {
 	
 	public static <T extends Capability<C>, C extends ICapabilitySerializable<?>> C getLevelCapability(Level level, T cap) {
 		LazyOptional<C> conduitHolder = level.getCapability(cap);
-		if (!conduitHolder.isPresent()) throw new IllegalStateException("Capability " + cap + " not attached on level " + level);
+		if (!conduitHolder.isPresent()) throw new IllegalStateException("Capability " + cap.getName() + " not attached on level " + level);
 		return conduitHolder.resolve().get();
 	}
 	

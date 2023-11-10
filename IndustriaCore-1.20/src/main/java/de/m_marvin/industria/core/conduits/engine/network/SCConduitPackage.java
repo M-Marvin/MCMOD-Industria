@@ -14,7 +14,7 @@ import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 
 /**
- * Used to send placed/removed updated from server to client and from client to server (bi-directional package)
+ * Used to send placed/removed updates from server to client and from client to server (bi-directional package)
  **/
 public class SCConduitPackage {
 		

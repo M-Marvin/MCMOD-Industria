@@ -14,6 +14,7 @@ public class IndustriaTags {
 		
 		public static final TagKey<Block> MACHINERY = tag("machinery");
 		public static final TagKey<Block> ELECTRICS = tag("electrics");
+		public static final TagKey<Block> MAGNETIC = tag("magnetic");
 		
 		private static TagKey<Block> tag(String name) {
 			return BlockTags.create(new ResourceLocation(IndustriaCore.MODID, name));

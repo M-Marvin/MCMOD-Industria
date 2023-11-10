@@ -62,62 +62,38 @@ public class ConduitRenderer {
 			
 			animationTicks += event.getPartialTick();
 
+			MultiBufferSource.BufferSource source = Minecraft.getInstance().renderBuffers().bufferSource();
+			PoseStack matrixStack = event.getPoseStack();
+			ClientLevel level = Minecraft.getInstance().level;
+			
+			RenderSystem.enableDepthTest();
+			
+			Vec3 offset = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+			matrixStack.pushPose();
+			matrixStack.translate(-offset.x, -offset.y, -offset.z);
+			
 			if (!Minecraft.getInstance().getEntityRenderDispatcher().shouldRenderHitBoxes()) {
 				
-				MultiBufferSource.BufferSource source = Minecraft.getInstance().renderBuffers().bufferSource();
-				PoseStack matrixStack = event.getPoseStack();
-				ClientLevel level = Minecraft.getInstance().level;
-				
-				RenderSystem.enableDepthTest();
-				
-				Vec3 offset = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
-				matrixStack.pushPose();
-				matrixStack.translate(-offset.x, -offset.y, -offset.z);
 				drawConduits(matrixStack, source, level, event.getPartialTick());
-				source.endBatch();
-				matrixStack.popPose();
 				
-				RenderSystem.disableDepthTest();
+			} else {
+				
+				drawDebugConduits(matrixStack, source, level, event.getPartialTick());
+				drawPlayerFocusedDebugNodes(matrixStack, source, level, Minecraft.getInstance().player, event.getPartialTick());
+				
+			}
+
+			if (Minecraft.getInstance().player.getMainHandItem().is(IndustriaTags.Items.CONDUITS)) {
+
+				drawConduitSymbols(matrixStack, source, level, event.getPartialTick());
+				drawPlayerFocusedNodeSymbols(matrixStack, source, level, Minecraft.getInstance().player, event.getPartialTick());
 				
 			}
 			
-			if (Minecraft.getInstance().getEntityRenderDispatcher().shouldRenderHitBoxes()) {
-				
-				MultiBufferSource.BufferSource source = Minecraft.getInstance().renderBuffers().bufferSource();
-				PoseStack matrixStack = event.getPoseStack();
-				ClientLevel level = Minecraft.getInstance().level;
-				
-				RenderSystem.enableDepthTest();
-				
-				Vec3 offset = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
-				matrixStack.pushPose();
-				matrixStack.translate(-offset.x, -offset.y, -offset.z);
-				drawDebugConduits(matrixStack, source, level, event.getPartialTick());
-				drawPlayerFocusedDebugNodes(matrixStack, source, level, Minecraft.getInstance().player, event.getPartialTick());
-				source.endBatch();
-				matrixStack.popPose();
-				
-				RenderSystem.disableDepthTest();
-				
-			} else if (Minecraft.getInstance().player.getMainHandItem().is(IndustriaTags.Items.CONDUITS)) {
-
-				MultiBufferSource.BufferSource source = Minecraft.getInstance().renderBuffers().bufferSource();
-				PoseStack matrixStack = event.getPoseStack();
-				ClientLevel level = Minecraft.getInstance().level;
-				
-				RenderSystem.enableDepthTest();
-				
-				Vec3 offset = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
-				matrixStack.pushPose();
-				matrixStack.translate(-offset.x, -offset.y, -offset.z);
-				drawConduitSymbols(matrixStack, source, level, event.getPartialTick());
-				drawPlayerFocusedNodeSymbols(matrixStack, source, level, Minecraft.getInstance().player, event.getPartialTick());
-				source.endBatch();
-				matrixStack.popPose();
-				
-				RenderSystem.disableDepthTest();
-				
-			}
+			source.endBatch();
+			matrixStack.popPose();
+			
+			RenderSystem.disableDepthTest();
 			
 		}
 		
@@ -513,8 +489,8 @@ public class ConduitRenderer {
 		
 	}
 
-	protected static void vertex(VertexConsumer vertexBuilder, Matrix4f pose, Matrix3f normal, float x, float y, float z, float nx, float ny, float nz, float u, float v, int light, int value) {
-		vertexBuilder.vertex(pose, x, y, z).color(value).uv(u, v).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(normal, nx, ny, nz).endVertex();
+	protected static void vertex(VertexConsumer vertexBuilder, Matrix4f pose, Matrix3f normal, float x, float y, float z, float nx, float ny, float nz, float u, float v, int light, int color) {
+		vertexBuilder.vertex(pose, x, y, z).color(color).uv(u, v).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(normal, nx, ny, nz).endVertex();
 	}
 	
 }

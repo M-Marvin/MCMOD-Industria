@@ -5,6 +5,7 @@ import java.util.Set;
 
 import de.m_marvin.unimat.impl.Quaternion;
 import de.m_marvin.univec.impl.Vec3d;
+import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -30,8 +31,8 @@ public class MagneticField {
 	protected Vec3d linearForceAccumulated = new Vec3d();
 	protected Quaternion angularForceAccumulated = new Quaternion(1, 0, 0, 0);
 	
-	protected Vec3d minPos = new Vec3d();
-	protected Vec3d maxPos = new Vec3d();
+	protected BlockPos minPos = new BlockPos(0, 0, 0);
+	protected BlockPos maxPos = new BlockPos(0, 0, 0);
 	
 	public Set<MagneticFieldInfluence> getInfluences() {
 		return this.magneticInfluences;
@@ -75,8 +76,8 @@ public class MagneticField {
 	public void update() {
 		
 		if (this.magneticInfluences.isEmpty()) {
-			this.minPos = new Vec3d();
-			this.maxPos = new Vec3d();
+			this.minPos = new BlockPos(0, 0, 0);
+			this.maxPos = new BlockPos(0, 0, 0);
 		}
 		
 		for (MagneticFieldInfluence influence : this.magneticInfluences) {
@@ -85,25 +86,24 @@ public class MagneticField {
 			
 			BlockPos pos = influence.getPos();
 			
-			Vec3d posv = Vec3d.fromVec(pos);
 			if (minPos == null || maxPos == null) {
-				minPos = posv;
-				maxPos = posv;
+				minPos = pos;
+				maxPos = pos;
 			} else {
-				minPos = minPos.min(posv);
-				maxPos = maxPos.max(posv);
+				minPos = new BlockPos(Math.min(minPos.getX(), pos.getX()), Math.min(minPos.getY(), pos.getY()), Math.min(minPos.getZ(), pos.getZ()));
+				maxPos = new BlockPos(Math.max(maxPos.getX(), pos.getX()), Math.max(maxPos.getY(), pos.getY()), Math.max(maxPos.getZ(), pos.getZ()));
 			}
 			
 		}
 		
 	}
 	
-	public Vec3d getMinPos() {
+	public BlockPos getMinPos() {
 		if (this.minPos == null) update();
 		return minPos;
 	}
 	
-	public Vec3d getMaxPos() {
+	public BlockPos getMaxPos() {
 		if (this.maxPos == null) update();
 		return maxPos;
 	}

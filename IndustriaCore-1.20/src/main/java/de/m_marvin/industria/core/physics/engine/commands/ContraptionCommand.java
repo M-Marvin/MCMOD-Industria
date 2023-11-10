@@ -195,11 +195,11 @@ public class ContraptionCommand {
 			return 0;
 		}
 		
-		Ship contraption = PhysicUtility.convertToContraption(source.getSource().getLevel(), bounds, true, scale);
+		boolean success = PhysicUtility.convertToContraption(source.getSource().getLevel(), bounds, true, scale);
 		
 		BlockPos minCorner = MathUtility.getMinCorner(pos1, pos2);
 		
-		if (contraption != null) {
+		if (success) {
 			source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.contraption.create.success", (int) minCorner.getX(), (int) minCorner.getY(), (int) minCorner.getZ()), true);
 			return Command.SINGLE_SUCCESS;
 		}
@@ -220,9 +220,9 @@ public class ContraptionCommand {
 			
 		}
 		
-		ServerShip contraption = PhysicUtility.assembleToContraption(source.getSource().getLevel(), structureBlocks.get(), true, scale);
+		boolean success = PhysicUtility.assembleToContraption(source.getSource().getLevel(), structureBlocks.get(), true, scale);
 		
-		if (contraption != null) {
+		if (success) {
 			source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.contraption.assemble.success", startPos.getX(), startPos.getY(), startPos.getZ(), startPos), true);
 			return Command.SINGLE_SUCCESS;
 		}

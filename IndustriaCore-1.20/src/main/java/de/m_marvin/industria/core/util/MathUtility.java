@@ -46,6 +46,10 @@ public class MathUtility {
 		return toBlockPos(vec.x, vec.y, vec.z);
 	}
 
+	public static BlockPos toBlockPos(Vec3i vec) {
+		return new BlockPos(vec.x, vec.y, vec.z);
+	}
+
 	public static BlockPos toBlockPos(Vec3d vec) {
 		return toBlockPos(vec.x, vec.y, vec.z);
 	}
@@ -153,6 +157,13 @@ public class MathUtility {
 		double middleY = Math.min(pos1.getY(), pos2.getY()) + (Math.max(pos1.getY(), pos2.getY()) - Math.min(pos1.getY(), pos2.getY())) / 2.0;
 		double middleZ = Math.min(pos1.getZ(), pos2.getZ()) + (Math.max(pos1.getZ(), pos2.getZ()) - Math.min(pos1.getZ(), pos2.getZ())) / 2.0;
 		return new Vec3d(middleX, middleY, middleZ);
+	}
+
+	public static Vec3i getMiddle(Vec3i pos1, Vec3i pos2) {
+		int middleX = (int) (Math.min(pos1.getX(), pos2.getX()) + (Math.max(pos1.getX(), pos2.getX()) - Math.min(pos1.getX(), pos2.getX())) / 2.0);
+		int middleY = (int) (Math.min(pos1.getY(), pos2.getY()) + (Math.max(pos1.getY(), pos2.getY()) - Math.min(pos1.getY(), pos2.getY())) / 2.0);
+		int middleZ = (int) (Math.min(pos1.getZ(), pos2.getZ()) + (Math.max(pos1.getZ(), pos2.getZ()) - Math.min(pos1.getZ(), pos2.getZ())) / 2.0);
+		return new Vec3i(middleX, middleY, middleZ);
 	}
 	
 	public static double directionHoriziontalAngleDegrees(Direction direction) {

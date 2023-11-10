@@ -10,8 +10,6 @@ import java.util.OptionalLong;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.jetbrains.annotations.NotNull;
-import org.joml.Quaterniond;
-import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 import org.joml.primitives.AABBic;
@@ -19,9 +17,7 @@ import org.valkyrienskies.core.api.ships.LoadedShip;
 import org.valkyrienskies.core.api.ships.QueryableShipData;
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
-import org.valkyrienskies.core.apigame.ShipTeleportData;
 import org.valkyrienskies.core.apigame.constraints.VSConstraint;
-import org.valkyrienskies.core.impl.game.ShipTeleportDataImpl;
 import org.valkyrienskies.core.impl.game.ships.ShipObjectServerWorld;
 import org.valkyrienskies.core.impl.pipelines.VSGameFrame;
 import org.valkyrienskies.core.impl.pipelines.VSPhysicsPipelineStage;
@@ -179,11 +175,15 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 	}
 	
 	
-	@SuppressWarnings("unchecked")
 	public VSConstraint getConstraint(int constraintId) {
 		assert level instanceof ServerLevel : "Can't manage contraptions on client side!";
+		return getAllConstraints().get(constraintId);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Map<Integer, VSConstraint> getAllConstraints() {
 		
-		// FIXME This is horrible!!! hopefully VS2 adds a API for that soon ...
+		// FIXME This is horrible!!! hopefully VS2 adds an API for that soon ...
 		Map<Integer, VSConstraint> constraints = null;
 		try {
 			@NotNull Field constraintField = ObfuscationReflectionHelper.findField(ShipObjectServerWorld.class, "constraints");
@@ -195,11 +195,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 			constraints = new HashMap<>();
 		}
 		
-		return constraints.get(constraintId);
-	}
-	
-	public List<VSConstraint> getAllConstraints() {
-		throw new UnsupportedOperationException("Not implemented yet!"); // TODO
+		return constraints;
 	}
 	
 	/* Adding and removing attachments */
@@ -215,46 +211,32 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 	/* Translating/moving of contraptions */
 	
 	public static ContraptionPosition getPosition(ServerShip contraption, boolean massCenter) {
-		if (massCenter) {
-			Vec3d position = Vec3d.fromVec(contraption.getTransform().getPositionInWorld());
-			Quaterniondc jomlQuat = contraption.getTransform().getShipToWorldRotation();
-			Quaternion orientation = new Quaternion((float) jomlQuat.x(), (float) jomlQuat.y(), (float) jomlQuat.z(), (float) jomlQuat.w());
-			return new ContraptionPosition(orientation, position);		
-		} else {
+		ContraptionPosition position = new ContraptionPosition(contraption.getTransform());
+		
+		if (!massCenter) {
 			AABBic shipBounds = contraption.getShipAABB();
 			Vec3d shipCoordCenter = MathUtility.getMiddle(new Vec3d(shipBounds.minX(), shipBounds.minY(), shipBounds.minZ()), new Vec3d(shipBounds.maxX(), shipBounds.maxY(), shipBounds.maxZ()));
 			Vec3d shipCoordMassCenter = Vec3d.fromVec(contraption.getInertiaData().getCenterOfMassInShip()).add(new Vec3d(0.5, 0.5, 0.5));
-			Vec3d centerOfMassOffset = shipCoordMassCenter.sub(shipCoordCenter);
-			Vec3d position = Vec3d.fromVec(contraption.getTransform().getPositionInWorld()).sub(centerOfMassOffset);
-			Quaterniondc jomlQuat = contraption.getTransform().getShipToWorldRotation();
-			Quaternion orientation = new Quaternion((float) jomlQuat.x(), (float) jomlQuat.y(), (float) jomlQuat.z(), (float) jomlQuat.w());
-			return new ContraptionPosition(orientation, position);		
+			Vec3d centerOfMassOffset = PhysicUtility.toWorldPos(contraption.getTransform(), shipCoordMassCenter).sub(PhysicUtility.toWorldPos(contraption.getTransform(), shipCoordCenter));
+			
+			position.getPosition().subI(centerOfMassOffset);	
 		}
+		
+		return position;
 	}
 	
 	public void setPosition(ServerShip contraption, ContraptionPosition position, boolean massCenter) {
-		if (massCenter) {
-			ShipTeleportData teleportData = new ShipTeleportDataImpl(
-					position.getPosition().writeTo(new Vector3d()), 
-					new Quaterniond(position.getOrientation().i(), position.getOrientation().j(), position.getOrientation().k(), position.getOrientation().r()), 
-					new Vector3d(), 
-					new Vector3d()
-			);
-			VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).teleportShip(contraption, teleportData);
-		} else {
+		if (!massCenter) {
 			AABBic shipBounds = contraption.getShipAABB();
 			Vec3d shipCoordCenter = MathUtility.getMiddle(new Vec3d(shipBounds.minX(), shipBounds.minY(), shipBounds.minZ()), new Vec3d(shipBounds.maxX(), shipBounds.maxY(), shipBounds.maxZ()));
 			Vec3d shipCoordMassCenter = Vec3d.fromVec(contraption.getInertiaData().getCenterOfMassInShip()).add(new Vec3d(0.5, 0.5, 0.5));
-			Vec3d centerOfMassOffset = shipCoordMassCenter.sub(shipCoordCenter);
-
-			ShipTeleportData teleportData = new ShipTeleportDataImpl(
-					position.getPosition().add(centerOfMassOffset).writeTo(new Vector3d()), 
-					new Quaterniond(position.getOrientation().i(), position.getOrientation().j(), position.getOrientation().k(), position.getOrientation().r()), 
-					new Vector3d(), 
-					new Vector3d()
-			);
-			VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).teleportShip(contraption, teleportData);
+			Vec3d centerOfMassOffset = PhysicUtility.toWorldPos(contraption.getTransform(), shipCoordMassCenter).sub(PhysicUtility.toWorldPos(contraption.getTransform(), shipCoordCenter));
+			
+			position = new ContraptionPosition(position);
+			position.getPosition().addI(centerOfMassOffset);
 		}
+		
+		VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).teleportShip(contraption, position.toTeleport());
 	}
 	
 	/* Listing and creation contraptions in the world */
@@ -273,27 +255,31 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		return ships;
 	}
 	
-	public ServerShip createContraptionAt(Vec3d position, float scale) {
+	public BlockPos createContraptionAt(Vec3d position, float scale) {
 		assert level instanceof ServerLevel : "Can't manage contraptions on client side!";
+		
+		// Get parent ship (if existing)
 		Ship parentContraption = VSGameUtilsKt.getShipManagingPos(level, position.writeTo(new Vector3d()));
+		
+		// Apply parent ship translation if available
 		ContraptionPosition contraptionPosition = new ContraptionPosition(new Quaternion(new Vec3d(0, 1, 1), 0), position);
 		if (parentContraption != null) {
-			Quaterniondc jomlQuat = parentContraption.getTransform().getShipToWorldRotation();
-			Quaternion orientation = new Quaternion((float) jomlQuat.x(), (float) jomlQuat.y(), (float) jomlQuat.z(), (float) jomlQuat.w());
-			Vec3d pos = PhysicUtility.toWorldPos(parentContraption.getTransform(), position);
-			contraptionPosition = new ContraptionPosition(orientation, pos);
+			contraptionPosition = new ContraptionPosition(parentContraption.getTransform());
+			contraptionPosition.setPosition(PhysicUtility.toWorldPos(parentContraption.getTransform(), position));
 		}
-		String dimensionId = getDimensionId();
 		
+		// Create new contraption
+		String dimensionId = getDimensionId();
 		Ship newContraption = VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).createNewShipAtBlock(new Vector3i((int) Math.floor(position.x), (int) Math.floor(position.y), (int) Math.floor(position.z)), false, scale, dimensionId);
 		
 		// Stone for safety reasons
 		BlockPos pos2 = PhysicUtility.toContraptionBlockPos(newContraption.getTransform(), MathUtility.toBlockPos(position));
 		level.setBlock(pos2, Blocks.STONE.defaultBlockState(), 3);
 		
-		setPosition((ServerShip) newContraption, contraptionPosition, false);
+		// Teleport ship to final destination
+		VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).teleportShip((ServerShip) newContraption, contraptionPosition.toTeleport());
 		
-		return (ServerShip) newContraption;
+		return pos2;
 	}
 	
 	public boolean removeContraption(Ship contraption) {
@@ -316,20 +302,22 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		return false;
 	}
 	
-	public Ship convertToContraption(AABB areaBounds, boolean removeOriginal, float scale) {
+	public boolean convertToContraption(AABB areaBounds, boolean removeOriginal, float scale) {
 		assert level instanceof ServerLevel : "Can't manage contraptions on client side!";
 		
 		BlockPos structureCornerMin = null;
 		BlockPos structureCornerMax = null;
 		
+		// Floor bounds
 		int areaMinBlockX = (int) Math.floor(areaBounds.minX);
 		int areaMinBlockY = (int) Math.floor(areaBounds.minY);
 		int areaMinBlockZ = (int) Math.floor(areaBounds.minZ);
 		int areaMaxBlockX = (int) Math.floor(areaBounds.maxX);
 		int areaMaxBlockY = (int) Math.floor(areaBounds.maxY);
 		int areaMaxBlockZ = (int) Math.floor(areaBounds.maxZ);
-		boolean hasSolids = false;
 		
+		// Check for solid blocks and invalid blocks, shrink bounds to actual size
+		boolean hasSolids = false;
 		for (int x = areaMinBlockX; x <= areaMaxBlockX; x++) {
 			for (int z = areaMinBlockZ; z <= areaMaxBlockZ; z++) {
 				for (int y = areaMinBlockY; y <= areaMaxBlockY; y++) {
@@ -359,28 +347,31 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 			}
 		}
 		
-		if (!hasSolids) return null;
+		if (!hasSolids) return false;
 		
+		// Safety check, if (for what ever reason) no corners could be calculated, set center block as bounds
 		if (structureCornerMax == null) structureCornerMax = structureCornerMin = MathUtility.toBlockPos(areaBounds.getCenter().x(), areaBounds.getCenter().y(), areaBounds.getCenter().z());
 		
-		Vec3d contraptionPos = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
-		ServerShip contraption = createContraptionAt(contraptionPos, scale);
+		// Create new contraption at center of bounds
+		Vec3d contraptionWorldPos = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
+		BlockPos contraptionBlockPos = createContraptionAt(contraptionWorldPos, scale);
 		
-		Vec3d contraptionOrigin = PhysicUtility.toContraptionPos(contraption.getTransform(), contraptionPos);
-		
+		// Copy blocks to the new contraption
 		for (int x = areaMinBlockX; x <= areaMaxBlockX; x++) {
 			for (int z = areaMinBlockZ; z <= areaMaxBlockZ; z++) {
 				for (int y = areaMinBlockY; y <= areaMaxBlockY; y++) {
 					BlockPos itPos = new BlockPos(x, y, z);
-					Vec3d relativePosition = Vec3d.fromVec(itPos).sub(contraptionPos);
-					Vec3d shipPos = contraptionOrigin.add(relativePosition);
 					
-					GameUtility.copyBlock(level, itPos, MathUtility.toBlockPos(shipPos));
+					BlockPos relative = itPos.subtract(MathUtility.toBlockPos(contraptionWorldPos));
+					BlockPos shipPos = contraptionBlockPos.offset(relative);
+					
+					GameUtility.copyBlock(level, itPos, shipPos);
 					
 				}
 			}
 		}
 		
+		// Remove original blocks
 		if (removeOriginal) {
 			for (int x = structureCornerMin.getX(); x <= structureCornerMax.getX(); x++) {
 				for (int z = structureCornerMin.getZ(); z <= structureCornerMax.getZ(); z++) {
@@ -391,36 +382,37 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 			}
 		}
 
+		// Trigger updates both contraptions
 		for (int x = structureCornerMin.getX(); x <= structureCornerMax.getX(); x++) {
 			for (int z = structureCornerMin.getZ(); z <= structureCornerMax.getZ(); z++) {
 				for (int y = structureCornerMin.getY(); y <= structureCornerMax.getY(); y++) {
 					BlockPos itPos = new BlockPos(x, y, z);
-					Vec3d relativePosition = Vec3d.fromVec(itPos).sub(contraptionPos);
-					Vec3d shipPos = contraptionOrigin.add(relativePosition);
+
+					BlockPos relative = itPos.subtract(MathUtility.toBlockPos(contraptionWorldPos));
+					BlockPos shipPos = contraptionBlockPos.offset(relative);
 					
 					GameUtility.triggerUpdate(level, itPos);
-					GameUtility.triggerUpdate(level, MathUtility.toBlockPos(shipPos));
+					GameUtility.triggerUpdate(level, shipPos);
 				}
 			}
 		}
 		
-		//setPosition((ServerShip) contraption, new ContraptionPosition(new Quaternion(new Vec3i(0, 1, 1), 0), contraptionPos), false);
-		
-		return contraption;
+		return true;
 		
 	}
 	
-	public ServerShip assembleToContraption(List<BlockPos> blocks, boolean removeOriginal, float scale) {
+	public boolean assembleToContraption(List<BlockPos> blocks, boolean removeOriginal, float scale) {
 		assert level instanceof ServerLevel : "Can't manage contraptions on client side!";
 		
 		if (blocks.isEmpty()) {
-			return null;
+			return false;
 		}
 		
 		BlockPos structureCornerMin = blocks.get(0);
 		BlockPos structureCornerMax = blocks.get(0);
 		boolean hasSolids = false;
 		
+		// Calculate bounds of the area containing all blocks adn check for solids and invalid blocks
 		for (BlockPos itPos : blocks) {
 			if (PhysicUtility.isSolidContraptionBlock(level.getBlockState(itPos))) {
 				structureCornerMin = MathUtility.getMinCorner(structureCornerMin, itPos);
@@ -429,42 +421,45 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 			}
 		}
 		
-		if (!hasSolids) return null;
-		
-		Vec3d creationPos = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
-		ServerShip contraption = createContraptionAt(creationPos, scale);
-		
-		Vec3d contraptionOrigin = PhysicUtility.toContraptionPos(contraption.getTransform(), creationPos);
-		BlockPos centerBlockPos = MathUtility.toBlockPos(creationPos);
-		
-		for (BlockPos itPos : blocks) {
-			Vec3d relativePosition = Vec3d.fromVec(itPos).sub(creationPos);
-			Vec3d shipPos = contraptionOrigin.add(relativePosition);
-			
-			GameUtility.copyBlock(level, itPos, MathUtility.toBlockPos(shipPos));
+		if (!hasSolids) return false;
 
+		// Create new contraption at center of bounds
+		Vec3d contraptionWorldPos = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
+		BlockPos contraptionBlockPos = createContraptionAt(contraptionWorldPos, scale);
+		
+		// Copy blocks and check if the center block got replaced (is default a stone block)
+		boolean centerBlockReplaced = false;
+		for (BlockPos itPos : blocks) {
+			BlockPos relative = itPos.subtract(MathUtility.toBlockPos(contraptionWorldPos));
+			BlockPos shipPos = contraptionBlockPos.offset(relative);
+			
+			GameUtility.copyBlock(level, itPos, shipPos);
+			
+			if (relative.equals(BlockPos.ZERO)) centerBlockReplaced = true;
 		}
 		
-		if (!blocks.contains(centerBlockPos)) {
-			BlockPos centerShipPos = PhysicUtility.toContraptionBlockPos(contraption.getTransform(), centerBlockPos);
-			level.setBlock(centerShipPos, Blocks.AIR.defaultBlockState(), 3);
+		// If center block got not replaced, remove the stone block
+		if (!centerBlockReplaced) {
+			level.setBlock(contraptionBlockPos, Blocks.AIR.defaultBlockState(), 3);
 		}
 		
+		// Remove original blocks
 		if (removeOriginal) {
 			for (BlockPos itPos : blocks) {
 				GameUtility.removeBlock(level, itPos);
 			}
 		}
 		
+		// Trigger updates on both contraptions
 		for (BlockPos itPos : blocks) {
-			Vec3d relativePosition = Vec3d.fromVec(itPos).sub(creationPos);
-			Vec3d shipPos = contraptionOrigin.add(relativePosition);
+			BlockPos relative = itPos.subtract(MathUtility.toBlockPos(contraptionWorldPos));
+			BlockPos shipPos = contraptionBlockPos.offset(relative);
 			
 			GameUtility.triggerUpdate(level, itPos);
-			GameUtility.triggerUpdate(level, MathUtility.toBlockPos(shipPos));
+			GameUtility.triggerUpdate(level, shipPos);
 		}
 		
-		return contraption;
+		return true;
 		
 	}
 	

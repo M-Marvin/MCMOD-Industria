@@ -33,6 +33,7 @@ import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.unimat.impl.Quaternion;
 import de.m_marvin.univec.impl.Vec3d;
+import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -114,10 +115,9 @@ public class MagneticFieldRenderer {
 			
 			for (MagneticField field : magneticHolder.getMagneticFields()) {
 				
-				Vec3d posv = MathUtility.getMiddle(field.getMinPos(), field.getMaxPos());
-				BlockPos pos = MathUtility.toBlockPos(posv);
+				BlockPos pos = MathUtility.getMiddleBlock(field.getMinPos(), field.getMaxPos());
 				
-				double distance = playerPosition.dist(PhysicUtility.ensureWorldCoordinates(clientLevel, pos, posv));
+				double distance = playerPosition.dist(Vec3i.fromVec(PhysicUtility.ensureWorldBlockCoordinates(clientLevel, pos, pos)));
 				
 				try {
 					if (distance < renderDistance * renderDistance) drawMagneticField(clientLevel, bufferSource, matrixStack, field, partialTicks);
@@ -174,12 +174,12 @@ public class MagneticFieldRenderer {
 		
 		float f = 2 * 0.0625F + (float) Math.sin(animationTicks * 0.1F) * 0.03125F;
 		
-		float fxl = (float) field.getMinPos().x - pos.getX() - f;
-		float fyl = (float) field.getMinPos().y - pos.getY() - f;
-		float fzl = (float) field.getMinPos().z - pos.getZ() - f;
-		float fxh = (float) field.getMaxPos().x - pos.getX() + 1 + f;
-		float fyh = (float) field.getMaxPos().y - pos.getY() + 1 + f;
-		float fzh = (float) field.getMaxPos().z - pos.getZ() + 1 + f;
+		float fxl = (float) (field.getMinPos().getX() - pos.getX() - f);
+		float fyl = (float) (field.getMinPos().getY() - pos.getY() - f);
+		float fzl = (float) (field.getMinPos().getZ() - pos.getZ() - f);
+		float fxh = (float) (field.getMaxPos().getX() - pos.getX() + 1 + f);
+		float fyh = (float) (field.getMaxPos().getY() - pos.getY() + 1 + f);
+		float fzh = (float) (field.getMaxPos().getZ() - pos.getZ() + 1 + f);
 		
 		float r = 0F;
 		float g = 1F;

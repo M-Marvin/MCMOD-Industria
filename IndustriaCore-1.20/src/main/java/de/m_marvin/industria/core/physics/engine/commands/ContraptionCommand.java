@@ -16,7 +16,8 @@ import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.physics.types.ContraptionPosition;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.StructureFinder;
-import de.m_marvin.unimat.impl.Quaternion;
+import de.m_marvin.unimat.api.IQuaternionMath.EulerOrder;
+import de.m_marvin.unimat.impl.Quaterniond;
 import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
@@ -173,7 +174,7 @@ public class ContraptionCommand {
 		
 		ContraptionPosition contraptionPos = null;
 		if (rotate) {
-			contraptionPos = new ContraptionPosition(Quaternion.fromXYZDegrees(rotationX, rotationY, rotationZ), Vec3d.fromVec(position));
+			contraptionPos = new ContraptionPosition(new Quaterniond(new Vec3d(rotationX, rotationY, rotationZ), EulerOrder.XYZ, true), Vec3d.fromVec(position));
 		} else {
 			contraptionPos = PhysicUtility.getPosition((ServerShip) contraption, false);
 			contraptionPos.getPosition().setI(Vec3d.fromVec(position));

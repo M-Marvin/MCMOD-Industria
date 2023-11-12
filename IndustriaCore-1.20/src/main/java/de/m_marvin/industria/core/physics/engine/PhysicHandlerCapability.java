@@ -32,7 +32,7 @@ import de.m_marvin.industria.core.physics.types.ContraptionPosition;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
-import de.m_marvin.unimat.impl.Quaternion;
+import de.m_marvin.unimat.impl.Quaterniond;
 import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -351,7 +351,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		
 		// Create new contraption at center of bounds
 		Vec3d contraptionWorldPos = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
-		ContraptionPosition contraptionPosition = new ContraptionPosition(new Quaternion(new Vec3d(0, 1, 1), 0), contraptionWorldPos);
+		ContraptionPosition contraptionPosition = new ContraptionPosition(new Quaterniond(new Vec3d(0, 1, 1), 0), contraptionWorldPos);
 		BlockPos contraptionBlockPos = createContraptionAt(contraptionPosition, scale);
 		Ship contraption = PhysicUtility.getContraptionOfBlock(level, contraptionBlockPos);
 		
@@ -429,7 +429,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 
 		// Create new contraption at center of bounds
 		Vec3d contraptionWorldPos = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
-		ContraptionPosition contraptionPosition = new ContraptionPosition(new Quaternion(new Vec3d(0, 1, 1), 0), contraptionWorldPos);
+		ContraptionPosition contraptionPosition = new ContraptionPosition(new Quaterniond(new Vec3d(0, 1, 1), 0), contraptionWorldPos);
 		BlockPos contraptionBlockPos = createContraptionAt(contraptionPosition, scale);
 		Ship contraption = PhysicUtility.getContraptionOfBlock(level, contraptionBlockPos);
 		

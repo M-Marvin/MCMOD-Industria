@@ -7,7 +7,8 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import de.m_marvin.unimat.impl.Quaternion;
+import de.m_marvin.unimat.impl.Quaterniond;
+import de.m_marvin.unimat.impl.Quaternionf;
 import de.m_marvin.univec.impl.Vec2f;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
@@ -224,19 +225,19 @@ public class MathUtility {
 
 	public static Vec3d rotatePoint(Vec3d point, Vec3d axis, float angle, boolean degrees) {
 		if (degrees) angle = (float) Math.toRadians(angle);
-		Quaternion quat = new Quaternion(axis, angle);
+		Quaterniond quat = new Quaterniond(axis, angle);
 		return point.transform(quat);
 	}
 	
 	public static Vec3f rotatePoint(Vec3f point, Vec3f axis, float angle, boolean degrees) {
 		if (degrees) angle = (float) Math.toRadians(angle);
-		Quaternion quat = new Quaternion(axis, angle);
+		Quaternionf quat = new Quaternionf(axis, angle);
 		return point.transform(quat);
 	}
 	
 	public static Vec3i rotatePoint(Vec3i point, Vec3f axis, float angle, boolean degrees) {
 		if (degrees) angle = (float) Math.toRadians(angle);
-		Quaternion quat = new Quaternion(axis, angle);
+		Quaternionf quat = new Quaternionf(axis, angle);
 		Vec3f transform = new Vec3f(point).transform(quat);
 		return new Vec3i(Math.round(transform.x), Math.round(transform.y), Math.round(transform.z));
 	}

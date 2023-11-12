@@ -1,17 +1,12 @@
 package de.m_marvin.industria.core.magnetism.engine;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
-import org.joml.Quaterniond;
-import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.valkyrienskies.core.api.ships.PhysShip;
 
 import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.physics.engine.ForcesInducer;
-import de.m_marvin.unimat.impl.Quaternion;
 import de.m_marvin.univec.impl.Vec3d;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
@@ -20,14 +15,14 @@ public class MagneticForceInducer extends ForcesInducer {
 	
 	protected class ForceSet {
 		
-		ForceSet(Vec3d position, Vec3d linearForce, Quaternion angularForce) {
+		ForceSet(Vec3d position, Vec3d linearForce, Vec3d angularForce) {
 			this.position = new Vector3d(position.x, position.y, position.z);
-			this.angularForce = new Quaterniond(angularForce.i, angularForce.j, angularForce.k, angularForce.r);
+			this.angularForce = new Vector3d(angularForce.x, angularForce.y, angularForce.z);
 			this.linearForce = new Vector3d(linearForce.x, linearForce.y, linearForce.z);
 		}
 		
 		public Vector3d position;
-		public Quaterniond angularForce;
+		public Vector3d angularForce;
 		public Vector3d linearForce;
 		
 	}
@@ -48,12 +43,12 @@ public class MagneticForceInducer extends ForcesInducer {
 		return this.fields;
 	}
 
-	public void updateForces(long id, Vec3d position, Vec3d linearForceAccumulated, Quaternion angularForceAccumulated) {
-//		if (linearForceAccumulated.length() == 0) {
-//			this.forces.remove(id);
-//		} else {
+	public void updateForces(long id, Vec3d position, Vec3d linearForceAccumulated, Vec3d angularForceAccumulated) {
+		if (linearForceAccumulated.length() == 0 && angularForceAccumulated.length() == 0) {
+			this.forces.remove(id);
+		} else {
 			this.forces.put(id, new ForceSet(position, linearForceAccumulated, angularForceAccumulated));
-//		}
+		}
 	}
 	
 	@Override
@@ -63,8 +58,7 @@ public class MagneticForceInducer extends ForcesInducer {
 			
 			if (forces.linearForce.isFinite() && forces.angularForce.isFinite() && forces.position.isFinite()) {
 				//contraption.applyRotDependentForceToPos(forces.linearForce, forces.position);
-				System.out.println("\n\n\n\n\n" + forces.angularForce + " -> " + forces.angularForce.getEulerAnglesXYZ(new Vector3d()));
-				contraption.applyRotDependentTorque(forces.angularForce.getEulerAnglesXYZ(new Vector3d()).mul(50));
+				contraption.applyRotDependentTorque(forces.angularForce);
 			} else {
 				IndustriaCore.LOGGER.warn("Non finite value in MFI detected!");
 			}

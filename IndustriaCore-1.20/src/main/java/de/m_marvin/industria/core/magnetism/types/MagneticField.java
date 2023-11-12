@@ -3,7 +3,6 @@ package de.m_marvin.industria.core.magnetism.types;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.UUID;
 
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
@@ -12,7 +11,9 @@ import de.m_marvin.industria.core.magnetism.engine.MagneticForceInducer;
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.NBTUtility;
-import de.m_marvin.unimat.impl.Quaternion;
+import de.m_marvin.unimat.api.IQuaternionMath.EulerOrder;
+import de.m_marvin.unimat.impl.Quaterniond;
+import de.m_marvin.univec.impl.Vec2d;
 import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -35,7 +36,7 @@ public class MagneticField {
 	protected BlockPos minPos = new BlockPos(0, 0, 0);
 	protected BlockPos maxPos = new BlockPos(0, 0, 0);
 	protected Vec3d linearForceAccumulated = new Vec3d();
-	protected Quaternion angularForceAccumulated = new Quaternion(1, 0, 0, 0);
+	protected Vec3d angularForceAccumulated = new Vec3d(0, 0, 0);
 	
 	public MagneticField(long id) {
 		this.id = id;
@@ -246,7 +247,11 @@ public class MagneticField {
 		Vec3d otherFieldVector = PhysicUtility.ensureWorldVector(level, otherBlockPos, other.fieldVectorLinear);
 		
 		Vec3d offset = otherCenter.sub(thisCenter);
-		Quaternion angle = thisFieldVector.normalize().relativeRotationQuat(otherFieldVector.normalize());
+		//Quaterniond angle = thisFieldVector.normalize().relativeRotationQuat(otherFieldVector.normalize());
+
+//		double angle2 = Math.acos(thisFieldVector.normalize().dot(otherFieldVector.normalize()));
+//		Vec3d axis = this.fieldVectorLinear.cross(otherFieldVector).normalize();
+//		Quaterniond angle = new Quaterniond(axis, angle2);
 		
 		double thisStrength = this.fieldVectorLinear.length() * this.getIntensityLinearAt(offset.length());
 		double otherStrength = other.fieldVectorLinear.length() * other.getIntensityLinearAt(offset.length());
@@ -258,7 +263,53 @@ public class MagneticField {
 		
 		Vec3d linearForce2 = PhysicUtility.ensureContraptionVector(level, thisBlockPos, linearForce);
 		
-		Quaternion angular = angle.mul((float) strength * 20);
+		Vec3d targetVecWorld = PhysicUtility.ensureWorldVector(level, otherBlockPos, other.fieldVectorLinear);
+		Vec3d targetVecThis = PhysicUtility.ensureContraptionVector(level, thisBlockPos, targetVecWorld);
+		
+		double angle = Math.acos(this.fieldVectorLinear.normalize().dot(targetVecThis.normalize()));
+		Vec3d axis = this.fieldVectorLinear.cross(targetVecThis).normalize();
+		Quaterniond rot = new Quaterniond(axis, angle);
+		
+		double roll = Math.atan2(2*rot.j*rot.r - 2*rot.i*rot.k, 1 - 2*rot.j*rot.j - 2*rot.k*rot.k); 
+		double pitch = Math.atan2(2*rot.i*rot.r - 2*rot.j*rot.k, 1 - 2*rot.i*rot.i - 2*rot.k*rot.k); 
+		double yaw = Math.asin(2*rot.k*rot.j + 2*rot.k*rot.r);
+		
+		Vec3d angular = new Vec3d(0, 0, 0).mul(50.0);
+		
+//		Vec3d thisFieldVectorN = otherFieldVector.normalize();
+//		Vec3d otherFieldVectorN = thisFieldVector.normalize();
+//		double x_angle = 0; // Math.acos( new Vec2d( thisFieldVectorN.y, thisFieldVectorN.z).dot( new Vec2d( otherFieldVectorN.y, otherFieldVectorN.z ) ) );
+//		double y_angle = 0 ; //Math.acos( new Vec2d( thisFieldVectorN.x, thisFieldVectorN.z).dot( new Vec2d( otherFieldVectorN.x, otherFieldVectorN.z ) ) );
+//		double z_angle = 0; //Math.acos( new Vec2d( thisFieldVectorN.x, thisFieldVectorN.y).dot( new Vec2d( otherFieldVectorN.x, otherFieldVectorN.y ) ) );
+//		
+//		//Vec3d angular = new Vec3d(x_angle, y_angle, z_angle).mul(50.0);
+//		
+//		double angle2 = Math.acos(thisFieldVectorN.dot(otherFieldVectorN));
+//		Vec3d axis2 = thisFieldVectorN.cross(otherFieldVectorN).normalize();
+//		Quaterniond rot = new Quaterniond(axis2, angle2);
+//		Vec3d angular = rot.euler(EulerOrder.XYZ, false).mul(50.0);
+//		
+//		
+//		double roll = Math.atan2(2*rot.j*rot.r - 2*rot.i*rot.k, 1 - 2*rot.j*rot.j - 2*rot.k*rot.k); 
+//		double pitch = Math.atan2(2*rot.i*rot.r - 2*rot.j*rot.k, 1 - 2*rot.i*rot.i - 2*rot.k*rot.k); 
+//		double yaw = Math.asin(2*rot.k*rot.j + 2*rot.k*rot.r);
+//		
+//		Vec3d angularVec = new Vec3d(0, pitch, roll).mul(50.0);
+//		
+//		Vec3d targetVector = thisFieldVector.transform(rot);
+//		System.out.println("Target: " + angularVec);
+		
+		Ship contraption = PhysicUtility.getContraptionOfBlock(level, thisBlockPos);
+		if (contraption != null) {
+			
+//			org.joml.Quaterniondc q = contraption.getTransform().getShipToWorldRotation();
+//			Quaterniond quat = new Quaterniond(q.x(), q.y(), q.z(), q.w());
+//			
+//			angle = quat.mul(angle);
+			
+		}
+		
+		//Vec3d angular = angle.euler(EulerOrder.XYZ, false).mul(strength * 20);
 		
 //		other.linearForceAccumulated.addI(linearForce);
 //		other.angularForceAccumulated.addI(angular);
@@ -275,7 +326,7 @@ public class MagneticField {
 			forceInducer.updateForces(this.getId(), this.getGeometricCenter().add(this.magneticCenter).sub(massCenter), this.linearForceAccumulated.mul(MAGNETIC_FORCE_MODIFIER), this.angularForceAccumulated);
 		}
 		linearForceAccumulated = new Vec3d();
-		angularForceAccumulated = new Quaternion(1, 0, 0, 0);
+		angularForceAccumulated = new Vec3d(0, 0, 0);
 	}
 	
 }

@@ -2,7 +2,6 @@ package de.m_marvin.industria.core.client.conduits;
 
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -22,7 +21,7 @@ import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.registries.IndustriaTags;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
-import de.m_marvin.unimat.impl.Quaternion;
+import de.m_marvin.unimat.impl.Quaterniond;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
 import de.m_marvin.univec.impl.Vec4f;
@@ -396,11 +395,11 @@ public class ConduitRenderer {
 		Vec3d lineNormal = lineVec.normalize();
 		
 		double length = lineVec.length();
-		Quaternion rotation = lineNormal.relativeRotationQuat(new Vec3f(0, 0, 1)); // Default model orientation positive Z
+		Quaterniond rotation = lineNormal.relativeRotationQuat(new Vec3f(0, 0, 1)); // Default model orientation positive Z
 		
 		poseStack.pushPose();
 		poseStack.translate(start.x, start.y, start.z);
-		poseStack.mulPose(new Quaternionf(rotation.i(), rotation.j(), rotation.k(), rotation.r()));
+		poseStack.mulPose(new org.joml.Quaternionf(rotation.i(), rotation.j(), rotation.k(), rotation.r()));
 		
 		float textureOvershot = (lengthOffset + (float) length) % (ConduitTextureManager.TEXTURE_MAP_WIDTH / 16F) - (float) length;
 		

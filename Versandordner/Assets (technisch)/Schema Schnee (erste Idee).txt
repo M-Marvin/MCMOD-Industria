@@ -1,0 +1,19 @@
+Höhe der entstehenden Schneeschichten bei Schneefall in verschiedenen Fällen:
+
+
+Schnee lagert sich auf vollen Blockoberseiten an.
+
+Bei Blockoberseiten unter freien Himmel (also nur Luft oder durchlässige Blöcke darüber) immer mindestens Höhe 1.
+
++ 1 für jeden seitlich angrenzenden vollen Block (also insgesamt + 4, wenn es sich um ein 1x1-Loch handelt)
+- 1 für jeden seitlich angrenzenden Abhang
+
+
+Ist der Block selbst nicht unter freiem Himmel, aber mindestens ein Nachbarblock (nur orthogonal angrenzend), dann kann sich höchstens eine Lage Schnee ansammeln.
+
+Ist der Block unter Laub, dann verringert sich die Anzahl möglicher Schneeschichten für jeden zweiten darüberliegenden Laubblock um je 1 (Obergrenze, nicht Abzug vom berechneten Wert).
+Ab 16 darüberliegenden Laubschichten ist also keine Schneeansammlung mehr möglich.
+Liegt auf dem betreffenden Laub selbst Schnee, ändert dies die Berechnung nicht.
+
+
+Beispiele in beiliegenden Bildern

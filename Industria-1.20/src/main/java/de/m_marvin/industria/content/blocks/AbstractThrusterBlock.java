@@ -76,6 +76,7 @@ public abstract class AbstractThrusterBlock extends BaseEntityBlock {
 		if (contraption instanceof ServerShip serverContraption) {
 			ThrusterInducer forceInducer = PhysicUtility.getOrCreateForceInducer((ServerLevel) pLevel, serverContraption, ThrusterInducer.class);
 			forceInducer.removeThruster(pPos);
+			if (forceInducer.getThrusters().isEmpty()) PhysicUtility.removeAttachment(serverContraption, ThrusterInducer.class);
 		}
 	}
 	
@@ -93,6 +94,10 @@ public abstract class AbstractThrusterBlock extends BaseEntityBlock {
 		
 		public void removeThruster(BlockPos pos) {
 			this.thrusters.remove(pos.asLong());
+		}
+		
+		public HashMap<Long, Double> getThrusters() {
+			return thrusters;
 		}
 		
 		@Override

@@ -1,11 +1,11 @@
-package de.m_marvin.industria.content.magnetism.engine.network;
+package de.m_marvin.industria.core.magnetism.engine.network;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import de.m_marvin.industria.content.magnetism.engine.ClientMagnetismPackageHandler;
-import de.m_marvin.industria.content.magnetism.types.MagneticField;
+import de.m_marvin.industria.core.magnetism.engine.ClientMagnetismPackageHandler;
+import de.m_marvin.industria.core.magnetism.types.MagneticField;
 import de.m_marvin.industria.core.util.types.SyncRequestType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.ChunkPos;

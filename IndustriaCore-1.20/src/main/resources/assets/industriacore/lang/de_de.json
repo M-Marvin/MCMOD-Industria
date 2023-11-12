@@ -30,6 +30,7 @@
 "industriacore.argument.conduit.notfound":		"Unbekannte Leitung '%s'",
 
 "block.industriacore.power_source": 			"Spannungsquelle",
+"block.industriacore.magnet": 			"Magnet",
 
 "industriacore.tooltip.conduit.name":			"Leitung: %1$s",
 "industriacore.tooltip.conduit.maxClampDistance":	"Spannweite: %1$s m",

@@ -11,7 +11,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
-import org.joml.Vector3i;
 import org.joml.primitives.AABBic;
 import org.valkyrienskies.core.api.ships.LoadedShip;
 import org.valkyrienskies.core.api.ships.QueryableShipData;
@@ -255,25 +254,23 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		return ships;
 	}
 	
-	public BlockPos createContraptionAt(Vec3d position, float scale) {
+	public BlockPos createContraptionAt(ContraptionPosition contraptionPosition, float scale) {
 		assert level instanceof ServerLevel : "Can't manage contraptions on client side!";
 		
 		// Get parent ship (if existing)
-		Ship parentContraption = VSGameUtilsKt.getShipManagingPos(level, position.writeTo(new Vector3d()));
+		Ship parentContraption = VSGameUtilsKt.getShipManagingPos(level, contraptionPosition.getPosition().writeTo(new Vector3d()));
 		
 		// Apply parent ship translation if available
-		ContraptionPosition contraptionPosition = new ContraptionPosition(new Quaternion(new Vec3d(0, 1, 1), 0), position);
 		if (parentContraption != null) {
-			contraptionPosition = new ContraptionPosition(parentContraption.getTransform());
-			contraptionPosition.setPosition(PhysicUtility.toWorldPos(parentContraption.getTransform(), position));
+			contraptionPosition.toWorldPosition(parentContraption.getTransform());
 		}
 		
 		// Create new contraption
 		String dimensionId = getDimensionId();
-		Ship newContraption = VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).createNewShipAtBlock(new Vector3i((int) Math.floor(position.x), (int) Math.floor(position.y), (int) Math.floor(position.z)), false, scale, dimensionId);
+		Ship newContraption = VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).createNewShipAtBlock(contraptionPosition.getPositionJOMLi(), false, scale, dimensionId);
 		
 		// Stone for safety reasons
-		BlockPos pos2 = PhysicUtility.toContraptionBlockPos(newContraption.getTransform(), MathUtility.toBlockPos(position));
+		BlockPos pos2 = PhysicUtility.toContraptionBlockPos(newContraption.getTransform(), MathUtility.toBlockPos(contraptionPosition.getPosition()));
 		level.setBlock(pos2, Blocks.STONE.defaultBlockState(), 3);
 		
 		// Teleport ship to final destination
@@ -354,7 +351,9 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		
 		// Create new contraption at center of bounds
 		Vec3d contraptionWorldPos = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
-		BlockPos contraptionBlockPos = createContraptionAt(contraptionWorldPos, scale);
+		ContraptionPosition contraptionPosition = new ContraptionPosition(new Quaternion(new Vec3d(0, 1, 1), 0), contraptionWorldPos);
+		BlockPos contraptionBlockPos = createContraptionAt(contraptionPosition, scale);
+		Ship contraption = PhysicUtility.getContraptionOfBlock(level, contraptionBlockPos);
 		
 		// Copy blocks to the new contraption
 		for (int x = areaMinBlockX; x <= areaMaxBlockX; x++) {
@@ -396,6 +395,11 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 				}
 			}
 		}
+
+		// Set the final position gain, since the contraption moves slightly if blocks are added
+		if (contraption != null) {
+			PhysicUtility.setPosition((ServerLevel) level, (ServerShip) contraption, contraptionPosition, false);
+		}
 		
 		return true;
 		
@@ -425,7 +429,9 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 
 		// Create new contraption at center of bounds
 		Vec3d contraptionWorldPos = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
-		BlockPos contraptionBlockPos = createContraptionAt(contraptionWorldPos, scale);
+		ContraptionPosition contraptionPosition = new ContraptionPosition(new Quaternion(new Vec3d(0, 1, 1), 0), contraptionWorldPos);
+		BlockPos contraptionBlockPos = createContraptionAt(contraptionPosition, scale);
+		Ship contraption = PhysicUtility.getContraptionOfBlock(level, contraptionBlockPos);
 		
 		// Copy blocks and check if the center block got replaced (is default a stone block)
 		boolean centerBlockReplaced = false;
@@ -457,6 +463,11 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 			
 			GameUtility.triggerUpdate(level, itPos);
 			GameUtility.triggerUpdate(level, shipPos);
+		}
+
+		// Set the final position gain, since the contraption moves slightly if blocks are added
+		if (contraption != null) {
+			PhysicUtility.setPosition((ServerLevel) level, (ServerShip) contraption, contraptionPosition, false);
 		}
 		
 		return true;

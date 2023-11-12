@@ -5,8 +5,6 @@
 	"nominalPower": 2000,
 	"powerMax": 3000,
 	"powerMin": 100,
-	"configs": {
-		"wattsPerWaterMB": 100000,
-		"wattsPerFuelTick": 1000
-	}
+	"wattsPerWaterMB": 100000,
+	"wattsPerFuelTick": 1000
 }

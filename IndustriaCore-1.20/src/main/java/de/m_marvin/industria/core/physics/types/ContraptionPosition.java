@@ -4,10 +4,12 @@ import org.joml.Quaterniond;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
+import org.joml.Vector3i;
 import org.valkyrienskies.core.api.ships.properties.ShipTransform;
 import org.valkyrienskies.core.apigame.ShipTeleportData;
 import org.valkyrienskies.core.impl.game.ShipTeleportDataImpl;
 
+import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.unimat.impl.Quaternion;
 import de.m_marvin.univec.impl.Vec3d;
 
@@ -43,6 +45,12 @@ public class ContraptionPosition {
 		);
 	}
 	
+	public void toWorldPosition(ShipTransform transform) {
+		Quaterniondc quat = transform.getShipToWorldRotation();
+		this.orientation = new Quaternion((float) quat.x(), (float) quat.y(), (float) quat.z(), (float) quat.w()).mul(this.orientation);
+		this.position = PhysicUtility.toWorldPos(transform, this.position);
+	}
+	
 	public Quaternion getOrientation() {
 		return orientation;
 	}
@@ -53,6 +61,14 @@ public class ContraptionPosition {
 	
 	public Vec3d getPosition() {
 		return position;
+	}
+	
+	public Vector3d getPositionJOML() {
+		return new Vector3d(this.position.x, this.position.y, this.position.z);
+	}
+	
+	public Vector3i getPositionJOMLi() {
+		return new Vector3i((int) Math.floor(this.position.x), (int) Math.floor(this.position.y), (int) Math.floor(this.position.z));
 	}
 	
 	public void setPosition(Vec3d position) {

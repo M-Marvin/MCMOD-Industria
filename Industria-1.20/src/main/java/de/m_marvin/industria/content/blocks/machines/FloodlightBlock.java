@@ -10,11 +10,11 @@ import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.circuits.Circuits;
-import de.m_marvin.industria.core.electrics.parametrics.DeviceParametrics;
-import de.m_marvin.industria.core.electrics.parametrics.DeviceParametricsManager;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider;
+import de.m_marvin.industria.core.parametrics.BlockParametrics;
+import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
@@ -115,7 +115,7 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 			String[] lampLanes = lamp.getNodeLanes();
 			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, lampLanes[0], 1, lampLanes[1]);
 			
-			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this);
+			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			int targetVoltage = parametrics.getNominalVoltage();
 			int targetPower = parametrics.getNominalPower();
 			
@@ -129,8 +129,8 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 	}
 	
 	@Override
-	public DeviceParametrics getParametrics(BlockState state, Level level, BlockPos pos) {
-		return DeviceParametricsManager.getInstance().getParametrics(this);
+	public BlockParametrics getParametrics(BlockState state, Level level, BlockPos pos) {
+		return BlockParametricsManager.getInstance().getParametrics(this);
 	}
 	
 	@Override
@@ -146,7 +146,7 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 	public double getPower(BlockState state, Level level, BlockPos pos) {
 		if (level.getBlockEntity(pos) instanceof FloodlightBlockEntity floodlight) {
 			String[] wireLanes = floodlight.getNodeLanes();
-			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this);
+			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			double voltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]);
 			return voltage * (parametrics.getNominalPower() / parametrics.getNominalVoltage());
 		}

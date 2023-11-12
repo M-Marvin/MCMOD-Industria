@@ -5,7 +5,5 @@
 	"nominalPower": 400,
 	"powerMax": 500,
 	"powerMin": 0,
-	"configs": {
-		"maxThrust": 500000
-	}
+	"maxThrusterThrust": 500000
 }

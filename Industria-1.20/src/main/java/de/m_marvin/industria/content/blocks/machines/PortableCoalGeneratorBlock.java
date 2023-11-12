@@ -11,11 +11,12 @@ import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.circuits.Circuits;
-import de.m_marvin.industria.core.electrics.parametrics.DeviceParametrics;
-import de.m_marvin.industria.core.electrics.parametrics.DeviceParametricsManager;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider;
+import de.m_marvin.industria.core.parametrics.BlockParametrics;
+import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
+import de.m_marvin.industria.core.parametrics.properties.FloatParameter;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
@@ -58,6 +59,9 @@ public class PortableCoalGeneratorBlock extends BaseEntityMultiBlock implements 
 			.addModifier(BlockStateProperties.HORIZONTAL_FACING, NodePointSupplier.FACING_HORIZONTAL_MODIFIER_DEFAULT_NORTH);
 	
 	public static final VoxelShape SHAPE = Shapes.or(VoxelShapeUtility.box(0, 4, 3, 14, 14, 13), VoxelShapeUtility.box(0, 3, 0, 11, 12, 3), VoxelShapeUtility.box(7, 14, 5, 13, 17, 11));
+	
+	public static final FloatParameter PARAMETER_WATTS_PER_WATER_MB = new FloatParameter("wattsPerWaterMB", 100000);
+	public static final FloatParameter PARAMETER_WATTS_PER_FUEL_TICK = new FloatParameter("wattsPerFuelTick", 1000);
 	
 	public PortableCoalGeneratorBlock(Properties pProperties) {
 		super(pProperties, 2, 1, 1);
@@ -120,7 +124,7 @@ public class PortableCoalGeneratorBlock extends BaseEntityMultiBlock implements 
 			double d2 = (double)pPos.getZ() + 0.5D;
 			
 			double power = getPower(pState, pLevel, pPos);
-			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this);
+			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			double loadP = Math.max(0, parametrics.getPowerPercentageP(power) - 1);
 			
 			if (loadP < pRandom.nextFloat()) return;
@@ -175,7 +179,7 @@ public class PortableCoalGeneratorBlock extends BaseEntityMultiBlock implements 
 			String[] wireLanes = generator.getNodeLanes();
 			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, wireLanes[0], 1, wireLanes[1]);
 			
-			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this);
+			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			int targetPower = generator.canRun() ? parametrics.getNominalPower() : 0;
 			int targetVoltage = generator.canRun() ? parametrics.getNominalVoltage() : 0;
 			
@@ -212,7 +216,7 @@ public class PortableCoalGeneratorBlock extends BaseEntityMultiBlock implements 
 		if (level.getBlockEntity(pos) instanceof PortableCoalGeneratorBlockEntity generator && generator.getMaster() != null) {
 			String[] wireLanes = generator.getNodeLanes();
 			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(connectorBlock, 0), new NodePos(connectorBlock, 0), 2, 0, "power_shunt", wireLanes[0]);
-			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this);
+			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			double powerUsed = (shuntVoltage / Circuits.SHUNT_RESISTANCE) * parametrics.getNominalVoltage();
 			return Math.max(powerUsed > 1.0 ? parametrics.getPowerMin() : 0, powerUsed);
 		}
@@ -220,8 +224,8 @@ public class PortableCoalGeneratorBlock extends BaseEntityMultiBlock implements 
 	}
 	
 	@Override
-	public DeviceParametrics getParametrics(BlockState state, Level level, BlockPos pos) {
-		return DeviceParametricsManager.getInstance().getParametrics(this);
+	public BlockParametrics getParametrics(BlockState state, Level level, BlockPos pos) {
+		return BlockParametricsManager.getInstance().getParametrics(this);
 	}
 	
 	@Override

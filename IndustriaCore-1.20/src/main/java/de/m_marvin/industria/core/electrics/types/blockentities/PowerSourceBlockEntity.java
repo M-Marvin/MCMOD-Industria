@@ -2,11 +2,11 @@ package de.m_marvin.industria.core.electrics.types.blockentities;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.parametrics.DeviceParametrics;
-import de.m_marvin.industria.core.electrics.parametrics.DeviceParametricsManager;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.InternalNodeConstructor;
+import de.m_marvin.industria.core.parametrics.BlockParametrics;
+import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
 import de.m_marvin.industria.core.electrics.types.containers.PowerSourceContainer;
 import de.m_marvin.industria.core.registries.BlockEntityTypes;
 import de.m_marvin.industria.core.registries.Blocks;
@@ -32,7 +32,7 @@ public class PowerSourceBlockEntity extends BlockEntity implements MenuProvider,
 	
 	public PowerSourceBlockEntity(BlockPos pPos, BlockState pBlockState) {
 		super(BlockEntityTypes.POWER_SOURCE.get(), pPos, pBlockState);
-		DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(Blocks.POWER_SOURCE.get());
+		BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(Blocks.POWER_SOURCE.get());
 		this.voltage = parametrics.getNominalVoltage();
 		this.power = parametrics.getNominalPower();
 	}
@@ -58,7 +58,7 @@ public class PowerSourceBlockEntity extends BlockEntity implements MenuProvider,
 	}
 	
 	public void setVoltageAndPower(int voltage, int power) {
-		DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(Blocks.POWER_SOURCE.get());
+		BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(Blocks.POWER_SOURCE.get());
 		this.power = Math.max(parametrics.getPowerMin(), Math.min(parametrics.getPowerMax(), power));
 		this.voltage = Math.max(parametrics.getVoltageMin(), Math.min(parametrics.getVoltageMax(), voltage));
 		this.setChanged();

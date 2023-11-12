@@ -9,11 +9,10 @@ import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.circuits.Circuits;
-import de.m_marvin.industria.core.electrics.parametrics.DeviceParametrics;
-import de.m_marvin.industria.core.electrics.parametrics.DeviceParametricsManager;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blockentities.PowerSourceBlockEntity;
-import de.m_marvin.industria.core.registries.Blocks;
+import de.m_marvin.industria.core.parametrics.BlockParametrics;
+import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.univec.impl.Vec3i;
@@ -25,7 +24,9 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
@@ -44,7 +45,7 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock,
 
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-		return Blocks.POWER_SOURCE.get().defaultBlockState().setValue(BlockStateProperties.FACING, GameUtility.getFacingDirection(pContext.getPlayer()).getOpposite());
+		return defaultBlockState().setValue(BlockStateProperties.FACING, GameUtility.getFacingDirection(pContext.getPlayer()).getOpposite());
 	}
 	
 	@Override
@@ -101,7 +102,7 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock,
 		if (level.getBlockEntity(pos) instanceof PowerSourceBlockEntity source) {
 			String[] wireLanes = source.getNodeLanes();
 			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 2, 0, "power_shunt", wireLanes[0]);
-			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this);
+			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			double powerUsed = (shuntVoltage / Circuits.SHUNT_RESISTANCE) * parametrics.getNominalVoltage();
 			return Math.max(powerUsed > 1.0 ? parametrics.getPowerMin() : 0, powerUsed);
 		}
@@ -109,8 +110,8 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock,
 	}
 	
 	@Override
-	public DeviceParametrics getParametrics(BlockState state, Level level, BlockPos pos) {
-		return DeviceParametricsManager.getInstance().getParametrics(this);
+	public BlockParametrics getParametrics(BlockState state, Level level, BlockPos pos) {
+		return BlockParametricsManager.getInstance().getParametrics(this);
 	}
 	
 	@Override
@@ -141,6 +142,16 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock,
 	@Override
 	public RenderShape getRenderShape(BlockState pState) {
 		return RenderShape.MODEL;
+	}
+	
+	@Override
+	public BlockState mirror(BlockState pState, Mirror pMirror) {
+		return pState.setValue(BlockStateProperties.FACING, pMirror.mirror(pState.getValue(BlockStateProperties.FACING)));
+	}
+	
+	@Override
+	public BlockState rotate(BlockState pState, Rotation pRotation) {
+		return pState.setValue(BlockStateProperties.FACING, pRotation.rotate(pState.getValue(BlockStateProperties.FACING)));
 	}
 	
 }

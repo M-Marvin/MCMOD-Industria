@@ -1,5 +1,6 @@
-package de.m_marvin.industria.content.magnetism.types.blocks;
+package de.m_marvin.industria.core.magnetism.types.blocks;
 
+import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
 import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -10,5 +11,9 @@ public interface IMagneticBlock {
 	public Vec3d getFieldVector(Level level, BlockState state, BlockPos blockPos);
 
 	public boolean isAlternating(Level level, BlockState state, BlockPos blockPos);
+	
+	public default double getCoefficient(Level level, BlockState state, BlockPos pos) {
+		return BlockParametricsManager.getInstance().getParametrics(state.getBlock()).getMagneticCoefficient();
+	}
 
 }

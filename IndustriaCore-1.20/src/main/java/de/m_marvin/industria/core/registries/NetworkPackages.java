@@ -9,6 +9,8 @@ import de.m_marvin.industria.core.electrics.engine.network.CEditPowerSourcePacka
 import de.m_marvin.industria.core.electrics.engine.network.CUpdateJunctionLanesPackage;
 import de.m_marvin.industria.core.electrics.engine.network.SSyncComponentsPackage;
 import de.m_marvin.industria.core.electrics.engine.network.SUpdateNetworkPackage;
+import de.m_marvin.industria.core.magnetism.engine.network.SMagneticInfluencePackage;
+import de.m_marvin.industria.core.magnetism.engine.network.SSyncMagneticPackage;
 import de.m_marvin.industria.core.scrollinput.engine.network.CScrollInputPackage;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -28,6 +30,9 @@ public class NetworkPackages {
 		network.registerMessage(id++, SSyncComponentsPackage.class, SSyncComponentsPackage::encode, SSyncComponentsPackage::decode, SSyncComponentsPackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		network.registerMessage(id++, CEditPowerSourcePackage.class, CEditPowerSourcePackage::encode, CEditPowerSourcePackage::decode, CEditPowerSourcePackage::handle);
 		network.registerMessage(id++, SUpdateNetworkPackage.class, SUpdateNetworkPackage::encode, SUpdateNetworkPackage::decode, SUpdateNetworkPackage::handle);
+		network.registerMessage(id++, SSyncMagneticPackage.class, SSyncMagneticPackage::encode, SSyncMagneticPackage::decode, SSyncMagneticPackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+		network.registerMessage(id++, SMagneticInfluencePackage.SAddInfluencePackage.class, SMagneticInfluencePackage.SAddInfluencePackage::encode, SMagneticInfluencePackage.SAddInfluencePackage::decode, SMagneticInfluencePackage.SAddInfluencePackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+		network.registerMessage(id++, SMagneticInfluencePackage.SRemoveInfluencePackage.class, SMagneticInfluencePackage.SRemoveInfluencePackage::encode, SMagneticInfluencePackage.SRemoveInfluencePackage::decode, SMagneticInfluencePackage.SRemoveInfluencePackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 	}
 	
 }

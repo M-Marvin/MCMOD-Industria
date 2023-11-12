@@ -8,12 +8,12 @@ import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.parametrics.DeviceParametrics;
-import de.m_marvin.industria.core.electrics.parametrics.DeviceParametricsManager;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.InternalNodeConstructor;
+import de.m_marvin.industria.core.parametrics.BlockParametrics;
+import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.types.Direction2d;
 import de.m_marvin.univec.impl.Vec2i;
@@ -97,7 +97,7 @@ public class FloodlightBlockEntity extends BlockEntity implements MenuProvider, 
 	
 	public void updateLight() {
 		
-		DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this.getBlockState().getBlock());
+		BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this.getBlockState().getBlock());
 		
 		double voltage = ElectricUtility.getVoltageBetween(level, new NodePos(worldPosition, 0), new NodePos(worldPosition, 0), 0, 1, nodeLanes[0], nodeLanes[1]);
 		double voltageP = parametrics.getVoltageOvershoot(voltage);

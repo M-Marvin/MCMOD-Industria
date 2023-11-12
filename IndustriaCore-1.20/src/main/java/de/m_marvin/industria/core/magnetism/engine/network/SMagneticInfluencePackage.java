@@ -1,9 +1,9 @@
-package de.m_marvin.industria.content.magnetism.engine.network;
+package de.m_marvin.industria.core.magnetism.engine.network;
 
 import java.util.function.Supplier;
 
-import de.m_marvin.industria.content.magnetism.engine.ClientMagnetismPackageHandler;
-import de.m_marvin.industria.content.magnetism.types.MagneticFieldInfluence;
+import de.m_marvin.industria.core.magnetism.engine.ClientMagnetismPackageHandler;
+import de.m_marvin.industria.core.magnetism.types.MagneticFieldInfluence;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
@@ -13,11 +13,11 @@ import net.minecraftforge.network.NetworkEvent;
  **/
 public class SMagneticInfluencePackage {
 		
-	public static class SCAddInfluencePackage {
+	public static class SAddInfluencePackage {
 		
 		public final MagneticFieldInfluence influence;
 		
-		public SCAddInfluencePackage(MagneticFieldInfluence influence) {
+		public SAddInfluencePackage(MagneticFieldInfluence influence) {
 			this.influence = influence;
 		}
 		
@@ -25,18 +25,18 @@ public class SMagneticInfluencePackage {
 			return influence;
 		}
 		
-		public static void encode(SCAddInfluencePackage msg, FriendlyByteBuf buff) {
+		public static void encode(SAddInfluencePackage msg, FriendlyByteBuf buff) {
 			// TODO better serialization
 			buff.writeNbt(msg.influence.serialize());
 		}
 		
-		public static SCAddInfluencePackage decode(FriendlyByteBuf buff) {
+		public static SAddInfluencePackage decode(FriendlyByteBuf buff) {
 			// TODO better serialization
 			MagneticFieldInfluence influence = MagneticFieldInfluence.deserialize(buff.readNbt());
-			return new SCAddInfluencePackage(influence);
+			return new SAddInfluencePackage(influence);
 		}
 		
-		public static void handle(SCAddInfluencePackage msg, Supplier<NetworkEvent.Context> ctx) {
+		public static void handle(SAddInfluencePackage msg, Supplier<NetworkEvent.Context> ctx) {
 			ctx.get().enqueueWork(() -> {
 				ClientMagnetismPackageHandler.handleAddInfluence(msg, ctx.get());
 			});	
@@ -45,11 +45,11 @@ public class SMagneticInfluencePackage {
 		
 	}
 	
-	public static class SCRemoveInfluencePackage {
+	public static class SRemoveInfluencePackage {
 		
 		public final BlockPos position;
 		
-		public SCRemoveInfluencePackage(BlockPos position) {
+		public SRemoveInfluencePackage(BlockPos position) {
 			this.position = position;
 		}
 		
@@ -57,16 +57,16 @@ public class SMagneticInfluencePackage {
 			return this.position;
 		}
 		
-		public static void encode(SCRemoveInfluencePackage msg, FriendlyByteBuf buff) {
+		public static void encode(SRemoveInfluencePackage msg, FriendlyByteBuf buff) {
 			buff.writeBlockPos(msg.position);
 		}
 		
-		public static SCRemoveInfluencePackage decode(FriendlyByteBuf buff) {
+		public static SRemoveInfluencePackage decode(FriendlyByteBuf buff) {
 			BlockPos position = buff.readBlockPos();
-			return new SCRemoveInfluencePackage(position);
+			return new SRemoveInfluencePackage(position);
 		}
 		
-		public static void handle(SCRemoveInfluencePackage msg, Supplier<NetworkEvent.Context> ctx) {
+		public static void handle(SRemoveInfluencePackage msg, Supplier<NetworkEvent.Context> ctx) {
 			ctx.get().enqueueWork(() -> {
 				ClientMagnetismPackageHandler.handleRemoveInfluence(msg, ctx.get());
 			});

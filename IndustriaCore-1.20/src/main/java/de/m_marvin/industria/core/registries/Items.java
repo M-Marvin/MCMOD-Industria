@@ -16,6 +16,7 @@ public class Items {
 		ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 	
-	public static final RegistryObject<BlockItem> POWER_SOURCE = ITEMS.register("power_source", () -> new BlockItem(Blocks.POWER_SOURCE.get(), new Item.Properties().rarity(Rarity.EPIC)));
+	public static final RegistryObject<BlockItem> POWER_SOURCE = 	ITEMS.register("power_source", () -> new BlockItem(Blocks.POWER_SOURCE.get(), new Item.Properties().rarity(Rarity.EPIC)));
+	public static final RegistryObject<BlockItem> MAGNET =			ITEMS.register("magnet", () -> new BlockItem(Blocks.MAGNET.get(), new Item.Properties().rarity(Rarity.EPIC)));
 	
 }

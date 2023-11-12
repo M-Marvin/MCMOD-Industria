@@ -142,7 +142,7 @@ dependencies {
  	
  	// Code Dependencies
 	shade 'com.github.M-Marvin:LIBRARY-NGLink:v1.1'
-	shade 'com.github.M-Marvin:LIBRARY-UnifiedVectors:d00f1712a2'
+	shade 'com.github.M-Marvin:LIBRARY-UnifiedVectors:af7e377f87'
 	
 	// Mods used while testing
 	runtimeOnly fg.deobf("curse.maven:atlasviewer-633577:4597419")

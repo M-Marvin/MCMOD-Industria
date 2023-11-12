@@ -85,6 +85,8 @@ public class PhysicUtility {
 	}
 	
 	public static Vec3d toWorldVector(ShipTransform contraption, Vec3d vector) {
+		//return Vec3d.fromVec(contraption.getShipToWorldRotation().transform(vector.writeTo(new Vector3d())));
+		// TODO
 		Vector4d v = contraption.getShipToWorld().transform(new Vector4d(vector.x, vector.y, vector.z, 0));
 		return new Vec3d(v.x, v.y, v.z);
 	}
@@ -189,14 +191,9 @@ public class PhysicUtility {
 		return handler.getAllContraptions();
 	}
 	
-	public static Ship createNewContraptionAt(ServerLevel level, BlockPos position, float scale) {
-		return createContraptionAt(level, Vec3d.fromVec(position), scale);
-	}
-	
-	public static ServerShip createContraptionAt(ServerLevel level, Vec3d position, float scale) {
+	public static BlockPos createContraptionAt(ServerLevel level, ContraptionPosition position, float scale) {
 		PhysicHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
-		handler.createContraptionAt(position, scale);
-		return null;
+		return handler.createContraptionAt(position, scale);
 	}
 	
 	public static boolean removeContraption(ServerLevel level, Ship contraption) {

@@ -1,48 +1,29 @@
-package de.m_marvin.industria.content.client.magnetism;
+package de.m_marvin.industria.core.client.magnetism;
 
-import java.awt.Color;
-import java.util.Optional;
-
-import org.joml.Matrix3f;
-import org.joml.Matrix4d;
-import org.joml.Matrix4dc;
 import org.joml.Matrix4f;
-import org.joml.Matrix4fc;
-import org.joml.Quaterniondc;
-import org.joml.Quaternionf;
-import org.joml.Vector3d;
-import org.joml.Vector3f;
-import org.joml.Vector4d;
-import org.valkyrienskies.core.api.ships.ClientShip;
-import org.valkyrienskies.core.api.ships.Ship;
-import org.valkyrienskies.mod.common.VSClientGameUtils;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.PoseStack.Pose;
 
-import de.m_marvin.industria.content.Industria;
-import de.m_marvin.industria.content.magnetism.Capabilities;
-import de.m_marvin.industria.content.magnetism.engine.MagnetismHandlerCapability;
-import de.m_marvin.industria.content.magnetism.types.MagneticField;
-import de.m_marvin.industria.content.magnetism.types.MagneticFieldInfluence;
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.client.physics.ClientPhysicsUtility;
+import de.m_marvin.industria.core.client.util.GraphicsUtility;
+import de.m_marvin.industria.core.magnetism.engine.MagnetismHandlerCapability;
+import de.m_marvin.industria.core.magnetism.types.MagneticField;
+import de.m_marvin.industria.core.magnetism.types.MagneticFieldInfluence;
 import de.m_marvin.industria.core.physics.PhysicUtility;
-import de.m_marvin.industria.core.util.GameUtility;
+import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.MathUtility;
-import de.m_marvin.unimat.impl.Quaternion;
 import de.m_marvin.univec.impl.Vec3d;
+import de.m_marvin.univec.impl.Vec3f;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
@@ -51,7 +32,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.FORGE,modid=Industria.MODID, value=Dist.CLIENT)
+@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.FORGE,modid=IndustriaCore.MODID, value=Dist.CLIENT)
 public class MagneticFieldRenderer {
 
 	protected static float animationTicks;
@@ -95,6 +76,7 @@ public class MagneticFieldRenderer {
 	
 	/* protected render methods, called by the render event */
 	
+	@SuppressWarnings("resource")
 	protected static void drawDebugFields(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, float partialTicks) {
 		
 		LazyOptional<MagnetismHandlerCapability> optionalMagneticHolder = clientLevel.getCapability(Capabilities.MAGNETISM_HANDLER_CAPABILITY);
@@ -136,6 +118,9 @@ public class MagneticFieldRenderer {
 		matrixStack.pushPose();
 		
 		BlockPos pos = influence.getPos();
+		Vec3d fieldVector = influence.getVector();
+		Vec3d inducedVector = influence.getInducedVector();
+		boolean alternating = influence.isAlternating();
 		
 		ClientPhysicsUtility.ensureWorldTransformTo(clientLevel, matrixStack, pos);
 		
@@ -159,7 +144,19 @@ public class MagneticFieldRenderer {
         		fxh, fyh, fzh, 
         		r, g, b, 1F,
         		r, g, b);
+		
+		GraphicsUtility.renderVector(
+				vertexconsumer, matrixStack, 
+				new Vec3f(0.5F, 0.5F, 0.5F), 
+				new Vec3f(fieldVector),
+				alternating ? 0 : 255, 0, alternating ? 255 : 0, 255);
 
+		GraphicsUtility.renderVector(
+				vertexconsumer, matrixStack, 
+				new Vec3f(0.5F, 0.5F, 0.5F), 
+				new Vec3f(inducedVector),
+				0, 255, 0, 255);
+		
 		matrixStack.popPose();
 		
 	}
@@ -169,6 +166,9 @@ public class MagneticFieldRenderer {
 		matrixStack.pushPose();
 		
 		BlockPos pos = field.getInfluences().isEmpty() ? BlockPos.ZERO : field.getInfluences().iterator().next().getPos();
+		Vec3d fieldVectorLinear = field.getFieldVectorLinear();
+		Vec3d fieldVectorAlternating = field.getFieldVectorAlternating();
+		Vec3f magneticCenter = new Vec3f(field.getMagneticCenter().add(field.getGeometricCenter().sub(Vec3d.fromVec(pos))));
 		
 		ClientPhysicsUtility.ensureWorldTransformTo(clientLevel, matrixStack, pos);
 		
@@ -193,6 +193,18 @@ public class MagneticFieldRenderer {
         		fxh, fyh, fzh, 
         		r, g, b, 1F,
         		r, g, b);
+		
+		GraphicsUtility.renderVector(
+				vertexconsumer, matrixStack, 
+				magneticCenter, 
+				new Vec3f(fieldVectorLinear),
+				255, 0, 0, 255);
+		
+		GraphicsUtility.renderVector(
+				vertexconsumer, matrixStack, 
+				magneticCenter, 
+				new Vec3f(fieldVectorAlternating),
+				0, 0, 255, 255);
 		
 		Matrix4f pose = matrixStack.last().pose();
 

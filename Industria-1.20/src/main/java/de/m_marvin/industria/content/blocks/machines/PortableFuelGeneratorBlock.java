@@ -11,11 +11,11 @@ import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.circuits.Circuits;
-import de.m_marvin.industria.core.electrics.parametrics.DeviceParametrics;
-import de.m_marvin.industria.core.electrics.parametrics.DeviceParametricsManager;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider;
+import de.m_marvin.industria.core.parametrics.BlockParametrics;
+import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.univec.impl.Vec3i;
@@ -87,7 +87,7 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 			double d2 = (double)pPos.getZ() + 0.5D;
 			
 			double power = getPower(pState, pLevel, pPos);
-			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this);
+			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			double loadP = Math.max(0, parametrics.getPowerPercentageP(power) - 1);
 			
 			if (loadP < pRandom.nextFloat()) return;
@@ -125,7 +125,7 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 			String[] wireLanes = generator.getNodeLanes();
 			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, wireLanes[0], 1, wireLanes[1]);
 			
-			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this);
+			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			int targetPower = generator.canRun() ? parametrics.getNominalPower() : 0;
 			int targetVoltage = generator.canRun() ? parametrics.getNominalVoltage() : 0;
 			
@@ -160,7 +160,7 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 		if (level.getBlockEntity(pos) instanceof PortableFuelGeneratorBlockEntity generator) {
 			String[] wireLanes = generator.getNodeLanes();
 			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 2, 0, "power_shunt", wireLanes[0]);
-			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this);
+			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			double powerUsed = (shuntVoltage / Circuits.SHUNT_RESISTANCE) * parametrics.getNominalVoltage();
 			return Math.max(powerUsed > 1.0 ? parametrics.getPowerMin() : 0, powerUsed);
 		}
@@ -168,8 +168,8 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 	}
 	
 	@Override
-	public DeviceParametrics getParametrics(BlockState state, Level level, BlockPos pos) {
-		return DeviceParametricsManager.getInstance().getParametrics(this);
+	public BlockParametrics getParametrics(BlockState state, Level level, BlockPos pos) {
+		return BlockParametricsManager.getInstance().getParametrics(this);
 	}
 	
 	@Override

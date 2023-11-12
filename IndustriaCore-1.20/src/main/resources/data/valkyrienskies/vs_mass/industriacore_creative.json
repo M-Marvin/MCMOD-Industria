@@ -4,6 +4,10 @@
     "mass": 10.0
   },
   {
+    "block": "industriacore:magnet",
+    "mass": 10.0
+  },
+  {
     "block": "minecraft:command_block",
     "mass": 10.0
   },

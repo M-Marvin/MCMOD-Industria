@@ -8,12 +8,12 @@ import de.m_marvin.industria.content.container.PortableCoalGeneratorContainer;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.parametrics.DeviceParametrics;
-import de.m_marvin.industria.core.electrics.parametrics.DeviceParametricsManager;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.InternalNodeConstructor;
+import de.m_marvin.industria.core.parametrics.BlockParametrics;
+import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.blocks.BaseEntityMultiBlock;
 import de.m_marvin.industria.core.util.blocks.MultiBlockEntity;
@@ -127,9 +127,9 @@ public class PortableCoalGeneratorBlockEntity extends MultiBlockEntity<PortableC
 		if (pBlockEntity.canRun && pState.getBlock() instanceof PortableCoalGeneratorBlock generatorBlock) {
 			
 			double powerProduction = generatorBlock.getPower(pState, pLevel, pPos);
-			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(generatorBlock);
-			double waterConsumtionTick = powerProduction / parametrics.getConfig("wattsPerWaterMB", 100000);
-			double fuelConsumtionTick = powerProduction / parametrics.getConfig("wattsPerFuelTick", 1000);
+			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(generatorBlock);
+			double waterConsumtionTick = powerProduction / parametrics.getParameter(PortableCoalGeneratorBlock.PARAMETER_WATTS_PER_WATER_MB);
+			double fuelConsumtionTick = powerProduction / parametrics.getParameter(PortableCoalGeneratorBlock.PARAMETER_WATTS_PER_FUEL_TICK);
 			
 			if (fuelConsumtionTick < 1.0) {
 				pBlockEntity.fuelTimer += fuelConsumtionTick;

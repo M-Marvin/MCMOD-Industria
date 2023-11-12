@@ -29,7 +29,8 @@
 "industriacore.argument.contraption.notFound":		"Contraption '%s' not found!",
 "industriacore.argument.conduit.id.invalid":     	"Conduit '%s unknown'",
 
-"block.industriacorecore.power_source": 		"Voltage source",
+"block.industriacore.power_source": 		"Voltage source",
+"block.industriacore.magnet": 		"Magnet",
 
 "industriacore.tooltip.conduit.name":			"Conduit: %1$s",
 "industriacore.tooltip.conduit.maxClampDistance":	"Range: %1$s m",

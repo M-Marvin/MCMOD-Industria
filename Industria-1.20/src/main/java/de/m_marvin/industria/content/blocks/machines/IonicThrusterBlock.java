@@ -13,11 +13,12 @@ import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.circuits.Circuits;
-import de.m_marvin.industria.core.electrics.parametrics.DeviceParametrics;
-import de.m_marvin.industria.core.electrics.parametrics.DeviceParametricsManager;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider;
+import de.m_marvin.industria.core.parametrics.BlockParametrics;
+import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
+import de.m_marvin.industria.core.parametrics.properties.IntegerParameter;
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
@@ -50,6 +51,8 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 			.addModifier(BlockStateProperties.HORIZONTAL_FACING, NodePointSupplier.FACING_MODIFIER_DEFAULT_NORTH);
 	
 	public static final VoxelShape SHAPE = VoxelShapeUtility.box(1, 1, 0, 15, 15, 15);
+	
+	public static final IntegerParameter PARAMETER_MAX_THRUSTER_THRUST = new IntegerParameter("maxThrusterThrust", 1000);
 	
 	public IonicThrusterBlock(Properties pProperties) {
 		super(pProperties);
@@ -101,7 +104,7 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 			String[] thrusterLanes = thruster.getNodeLanes();
 			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, thrusterLanes[0], 1, thrusterLanes[1]);
 			
-			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this);
+			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			int targetVoltage = parametrics.getNominalVoltage();
 			int targetPower = parametrics.getNominalPower();
 			
@@ -115,8 +118,8 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 	}
 
 	@Override
-	public DeviceParametrics getParametrics(BlockState state, Level level, BlockPos pos) {
-		return DeviceParametricsManager.getInstance().getParametrics(this);
+	public BlockParametrics getParametrics(BlockState state, Level level, BlockPos pos) {
+		return BlockParametricsManager.getInstance().getParametrics(this);
 	}
 	
 	@Override
@@ -132,7 +135,7 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 	public double getPower(BlockState state, Level level, BlockPos pos) {
 		if (level.getBlockEntity(pos) instanceof IonicThrusterBlockEntity thruster) {
 			String[] wireLanes = thruster.getNodeLanes();
-			DeviceParametrics parametrics = DeviceParametricsManager.getInstance().getParametrics(this);
+			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			double voltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]);
 			return voltage * (parametrics.getNominalPower() / parametrics.getNominalVoltage());
 		}
@@ -151,7 +154,7 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 			
 			if (!pLevel.isClientSide()) {
 				
-				double powerP = Math.max(0, DeviceParametricsManager.getInstance().getParametrics(this).getPowerPercentageV(getVoltage(pState, pLevel, pPos)) - 1);
+				double powerP = Math.max(0, BlockParametricsManager.getInstance().getParametrics(this).getPowerPercentageV(getVoltage(pState, pLevel, pPos)) - 1);
 				int maxThrust = getThrust(pLevel, pPos, pState);
 				double thrust = powerP * maxThrust;
 				
@@ -191,7 +194,7 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 	
 	@Override
 	public int getThrust(Level level, BlockPos pos, BlockState state) {
-		return (int) getParametrics(state, level, pos).getConfig("maxThrust", 20000);
+		return getParametrics(state, level, pos).getParameter(PARAMETER_MAX_THRUSTER_THRUST);
 	}
 
 	@Override

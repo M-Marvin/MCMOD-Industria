@@ -1,8 +1,8 @@
 package de.m_marvin.industria.core.client.util.widgets;
 
 import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.core.electrics.parametrics.DeviceParametrics;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider.ElectricInfo;
+import de.m_marvin.industria.core.parametrics.BlockParametrics;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -26,7 +26,7 @@ public class PowerInfo extends AbstractWidget {
 		this(font, pX, pY, pWidth, electricInfo.parametrics().get());
 	}
 	
-	public PowerInfo(Font font, int pX, int pY, int pWidth, DeviceParametrics parametrics) {
+	public PowerInfo(Font font, int pX, int pY, int pWidth, BlockParametrics parametrics) {
 		super(pX, pY, pWidth, 44, Component.empty());
 		this.voltageBarMax = parametrics.getVoltageMax() * 1.2F;
 		this.voltageBar = new StatusBar(font, pX, pY + 8, pWidth, Component.empty(), parametrics.getVoltageMin() / voltageBarMax, parametrics.getVoltageMax() / voltageBarMax, parametrics.getNominalVoltage() / voltageBarMax);

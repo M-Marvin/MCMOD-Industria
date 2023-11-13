@@ -263,41 +263,31 @@ public class MagneticField {
 		
 		Vec3d linearForce2 = PhysicUtility.ensureContraptionVector(level, thisBlockPos, linearForce);
 		
-		Vec3d targetVecWorld = PhysicUtility.ensureWorldVector(level, otherBlockPos, other.fieldVectorLinear);
-		Vec3d targetVecThis = PhysicUtility.ensureContraptionVector(level, thisBlockPos, targetVecWorld);
+//		Vec3d targetVecWorld = PhysicUtility.ensureWorldVector(level, otherBlockPos, other.fieldVectorLinear);
+//		Vec3d targetVecThis = PhysicUtility.ensureContraptionVector(level, thisBlockPos, targetVecWorld);
 		
-		double angle = Math.acos(this.fieldVectorLinear.normalize().dot(targetVecThis.normalize()));
-		Vec3d axis = this.fieldVectorLinear.cross(targetVecThis).normalize();
-		Quaterniond rot = new Quaterniond(axis, angle);
+		Vec3d current = thisFieldVector;
+		Vec3d target = otherFieldVector;
 		
-		double roll = Math.atan2(2*rot.j*rot.r - 2*rot.i*rot.k, 1 - 2*rot.j*rot.j - 2*rot.k*rot.k); 
-		double pitch = Math.atan2(2*rot.i*rot.r - 2*rot.j*rot.k, 1 - 2*rot.i*rot.i - 2*rot.k*rot.k); 
-		double yaw = Math.asin(2*rot.k*rot.j + 2*rot.k*rot.r);
+		double angle = Math.acos(current.dot(target));
+		Vec3d axis = current.cross(target).normalize();
+		//Quaterniond rotation = new Quaterniond(axis, angle);
 		
-		Vec3d angular = new Vec3d(0, 0, 0).mul(50.0);
+		Quaterniond rotation = new Quaterniond(
+				axis.x * Math.sin(angle / 2),
+				axis.y * Math.sin(angle / 2),
+				axis.z * Math.sin(angle / 2),
+				Math.cos(angle / 2));
 		
-//		Vec3d thisFieldVectorN = otherFieldVector.normalize();
-//		Vec3d otherFieldVectorN = thisFieldVector.normalize();
-//		double x_angle = 0; // Math.acos( new Vec2d( thisFieldVectorN.y, thisFieldVectorN.z).dot( new Vec2d( otherFieldVectorN.y, otherFieldVectorN.z ) ) );
-//		double y_angle = 0 ; //Math.acos( new Vec2d( thisFieldVectorN.x, thisFieldVectorN.z).dot( new Vec2d( otherFieldVectorN.x, otherFieldVectorN.z ) ) );
-//		double z_angle = 0; //Math.acos( new Vec2d( thisFieldVectorN.x, thisFieldVectorN.y).dot( new Vec2d( otherFieldVectorN.x, otherFieldVectorN.y ) ) );
-//		
-//		//Vec3d angular = new Vec3d(x_angle, y_angle, z_angle).mul(50.0);
-//		
-//		double angle2 = Math.acos(thisFieldVectorN.dot(otherFieldVectorN));
-//		Vec3d axis2 = thisFieldVectorN.cross(otherFieldVectorN).normalize();
-//		Quaterniond rot = new Quaterniond(axis2, angle2);
-//		Vec3d angular = rot.euler(EulerOrder.XYZ, false).mul(50.0);
-//		
-//		
-//		double roll = Math.atan2(2*rot.j*rot.r - 2*rot.i*rot.k, 1 - 2*rot.j*rot.j - 2*rot.k*rot.k); 
-//		double pitch = Math.atan2(2*rot.i*rot.r - 2*rot.j*rot.k, 1 - 2*rot.i*rot.i - 2*rot.k*rot.k); 
-//		double yaw = Math.asin(2*rot.k*rot.j + 2*rot.k*rot.r);
-//		
-//		Vec3d angularVec = new Vec3d(0, pitch, roll).mul(50.0);
-//		
-//		Vec3d targetVector = thisFieldVector.transform(rot);
-//		System.out.println("Target: " + angularVec);
+		org.joml.Quaterniond d;
+		d.mul(angle)
+		
+		
+		double pitch = Math.atan2(2*rotation.i*rotation.r - 2*rotation.j*rotation.k, 1 - 2*rotation.i*rotation.i - 2*rotation.k*rotation.k); 
+		double roll = Math.atan2(2*rotation.j*rotation.r - 2*rotation.i*rotation.k, 1 - 2*rotation.j*rotation.j - 2*rotation.k*rotation.k); 
+		double yaw = Math.asin(2*rotation.k*rotation.j + 2*rotation.k*rotation.r);
+		
+		Vec3d angular = new Vec3d(pitch, roll, yaw).mul(50.0);
 		
 		Ship contraption = PhysicUtility.getContraptionOfBlock(level, thisBlockPos);
 		if (contraption != null) {

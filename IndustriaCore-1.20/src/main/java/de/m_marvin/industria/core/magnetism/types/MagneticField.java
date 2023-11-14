@@ -11,9 +11,6 @@ import de.m_marvin.industria.core.magnetism.engine.MagneticForceInducer;
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.NBTUtility;
-import de.m_marvin.unimat.api.IQuaternionMath.EulerOrder;
-import de.m_marvin.unimat.impl.Quaterniond;
-import de.m_marvin.univec.impl.Vec2d;
 import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -269,25 +266,36 @@ public class MagneticField {
 		Vec3d current = thisFieldVector;
 		Vec3d target = otherFieldVector;
 		
-		double angle = Math.acos(current.dot(target));
-		Vec3d axis = current.cross(target).normalize();
-		//Quaterniond rotation = new Quaterniond(axis, angle);
+		double angleX = Math.acos(new Vec3d(0.0, current.y, current.z).normalize().dot(new Vec3d(0.0, target.y, target.z).normalize()));
+		double angleY = Math.acos(new Vec3d(current.x, 0.0, current.z).normalize().dot(new Vec3d(target.x, 0.0, target.z).normalize()));
+		double angleZ = Math.acos(new Vec3d(current.x, current.y, 0.0).normalize().dot(new Vec3d(target.x, target.y, 0.0).normalize()));
 		
-		Quaterniond rotation = new Quaterniond(
-				axis.x * Math.sin(angle / 2),
-				axis.y * Math.sin(angle / 2),
-				axis.z * Math.sin(angle / 2),
-				Math.cos(angle / 2));
-		
-		org.joml.Quaterniond d;
-		d.mul(angle)
+		Vec3d angular = new Vec3d(
+				Double.isFinite(angleX) ? angleX : 0.0, 
+				Double.isFinite(angleY) ? angleY : 0.0, 
+				Double.isFinite(angleZ) ? angleZ : 0.0
+		);
 		
 		
-		double pitch = Math.atan2(2*rotation.i*rotation.r - 2*rotation.j*rotation.k, 1 - 2*rotation.i*rotation.i - 2*rotation.k*rotation.k); 
-		double roll = Math.atan2(2*rotation.j*rotation.r - 2*rotation.i*rotation.k, 1 - 2*rotation.j*rotation.j - 2*rotation.k*rotation.k); 
-		double yaw = Math.asin(2*rotation.k*rotation.j + 2*rotation.k*rotation.r);
-		
-		Vec3d angular = new Vec3d(pitch, roll, yaw).mul(50.0);
+//		double angle = Math.acos(current.dot(target));
+//		Vec3d axis = current.cross(target).normalize();
+//		//Quaterniond rotation = new Quaterniond(axis, angle);
+//		
+//		Quaterniond rotation = new Quaterniond(
+//				axis.x * Math.sin(angle / 2),
+//				axis.y * Math.sin(angle / 2),
+//				axis.z * Math.sin(angle / 2),
+//				Math.cos(angle / 2));
+//		
+//		org.joml.Quaterniond d;
+//		d.mul(angle)
+//		
+//		
+//		double pitch = Math.atan2(2*rotation.i*rotation.r - 2*rotation.j*rotation.k, 1 - 2*rotation.i*rotation.i - 2*rotation.k*rotation.k); 
+//		double roll = Math.atan2(2*rotation.j*rotation.r - 2*rotation.i*rotation.k, 1 - 2*rotation.j*rotation.j - 2*rotation.k*rotation.k); 
+//		double yaw = Math.asin(2*rotation.k*rotation.j + 2*rotation.k*rotation.r);
+//		
+//		Vec3d angular = new Vec3d(pitch, roll, yaw).mul(50.0);
 		
 		Ship contraption = PhysicUtility.getContraptionOfBlock(level, thisBlockPos);
 		if (contraption != null) {

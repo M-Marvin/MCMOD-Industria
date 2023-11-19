@@ -30,6 +30,7 @@
 "industriacore.argument.conduit.notfound":		"Onbekende lijn '%s'",
 
 "block.industriacore.power_source": 			"Voltage bron",
+"block.industriacore.magnet": 				"Magneet",
 
 "industriacore.tooltip.conduit.name":			"Lijn: %1$s",
 "industriacore.tooltip.conduit.maxClampDistance":	"Spanwijdte: %1$s m",

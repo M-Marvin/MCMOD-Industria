@@ -29,7 +29,8 @@
 "industriacore.argument.conduit.id.invalid":     	"\u00a1Cable '%s' desconocido!",
 "industriacore.argument.contraption.notFound":		"\u00a1Dispositivo '%s' no encontrado!",
 
-"block.industriacorecore.power_source": 		"Fuente de voltaje",
+"block.industriacore.power_source": 			"Fuente de voltaje",
+"block.industriacore.magnet": 				"Im\u00e1n",
 
 "industriacore.tooltip.conduit.name":			"Conducto: %1$s",
 "industriacore.tooltip.conduit.maxClampDistance":	"Luz: %1$s m",

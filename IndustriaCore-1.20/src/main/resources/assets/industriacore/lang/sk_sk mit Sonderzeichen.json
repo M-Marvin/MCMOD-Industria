@@ -29,7 +29,8 @@
 "industriacore.argument.conduit.id.invalid":     	"Neznáma linka '%s'",
 "industriacore.argument.contraption.notFound":		"Výstroj '%s' nebol nájdený!",
 
-"block.industriacorecore.power_source": 		"Zdroj napätia",
+"block.industriacore.power_source": 			"Zdroj napätia",
+"block.industriacore.magnet": 				"Magnet",
 
 "industriacore.tooltip.conduit.name":			"Linka: %1$s",
 "industriacore.tooltip.conduit.maxClampDistance":	"Rozpätie: %1$s m",

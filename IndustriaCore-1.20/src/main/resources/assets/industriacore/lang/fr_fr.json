@@ -29,7 +29,8 @@
 "industriacore.argument.conduit.id.invalid":		"Conduite '%s' inconnu",
 "industriacore.argument.contraption.notFound":		"Appareil '%s' introuvable!",
 
-"block.industriacorecore.power_source": 		"Source de voltage",
+"block.industriacore.power_source": 			"Source de voltage",
+"block.industriacore.magnet": 				"Aimant",
 
 "industriacore.tooltip.conduit.name":			"Conduite: %1$s",
 "industriacore.tooltip.conduit.maxClampDistance":	"Port\u00e9e: %1$s m",

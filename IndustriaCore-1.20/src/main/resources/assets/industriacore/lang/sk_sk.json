@@ -29,7 +29,8 @@
 "industriacore.argument.conduit.id.invalid":     	"Nezn\u00e1ma linka '%s'",
 "industriacore.argument.contraption.notFound":		"V\u00fdstroj '%s' nebol n\u00e1jden\u00fd!",
 
-"block.industriacorecore.power_source": 		"Zdroj nap\u00e4tia",
+"block.industriacore.power_source": 			"Zdroj nap\u00e4tia",
+"block.industriacore.magnet": 				"Magnet",
 
 "industriacore.tooltip.conduit.name":			"Linka: %1$s",
 "industriacore.tooltip.conduit.maxClampDistance":	"Rozp\u00e4tie: %1$s m",

@@ -12,7 +12,7 @@ FEM :  bola ("wurde") + [Verb]ná (Verb im Partizip Passiv) + [Adjektiv]á + [No
 
        daher auch etwa "NOVÁ" (von                           nová          väčšina) (Partei)
 
-NEUTR: bolo ("wurde)  + [Verb]né (Verb im Partizip Passiv) + [Adjektiv]á + [Nomen] (im Nominativ Sgl (WAS wurde xy?), also keine Endungen!)
+NEUTR: bolo ("wurde)  + [Verb]né (Verb im Partizip Passiv) + [Adjektiv]é + [Nomen] (im Nominativ Sgl (WAS wurde xy?), also keine Endungen!)
        bolo             zrušené                                            umiestnenie linky
        wurde            abgebrochen                                        Platzieren der Leitung
 
@@ -23,22 +23,47 @@ Alternativ (und eher): Adjekitiv-ý/á/é + Nomen + bol-/a/o + Verb-ný/ná/né
 Für Verben und entsprechende Nomen:
 
 Verben enden mit                      -ť   (zlyhať)   - fehlschlagen
-in der Vergangenheit mit              -l   (zlyhal)   - fehlgeschlagen, aber noch eine Endung für jweilige Person nötig (MASK zlyhal, FEM zlyhala, NEUTR zlyhalo, PLR zlyhali)
-Nominalisierungen werden gebikdet mit -nie (zlyhanie) - das Fehlschlagen
+in der Vergangenheit mit              -l   (zlyhal)   - fehlgeschlagen, aber noch eine Endung für jeweilige Person nötig (MASK zlyhal, FEM zlyhala, NEUTR zlyhalo, PLR zlyhali)
+Nominalisierungen werden gebildet mit -nie (zlyhanie) - das Fehlschlagen
 
 
 
 Für neutrale AKTIV-Aussagen, was passiert ist (etwa "xy schlug fehl", "xy starb", ...):
 
-NEUTR: [Nomen]        + [Verb]lo
+NEUTR: [Nomen]        + [Verb][Endung]
        Umiestnenie      zlyhalo (von zlyhať)
        Platzieren       schlug fehl
 
 
+Für neutrale PASSIV-Aussagen, was mit etwas gemacht wurde (etwa "xy wurde platziert", "xy wurde gelöscht", ...):
+
+MASK:  [Nomen]     + bol   + [Verb]ý
+       Výstroj       bol     odstrádený
+       Vorrichtung   wurde   entfernt
+
+FEM :  [Nomen]     + bola  + [Verb]á
+       Linka         bola    umiestnená
+       Leitung       wurde   platziert
+
+NEUTR: [Nomen]     + bolo  + [Verb]é
+       Umiestnenie   bolo    zrušené
+       Platzieren    wurde   abgebrochen
+
+PLR :  [Nomen]     + boli +  [Verb]é
+       Kocky         boli    aktualizované
+       Würfel        wurden  aktualisiert
+
+  bol/-a/-o/-i = "wurde"
+nebol/-a/-o/-i = "wurde nicht", Bsp:
+
+MASK:  [Nomen]     + nebol      + [Verb]ý
+       Výstroj       nebol        najdený
+       Vorrichtung   wurde nicht  gefunden
+
 
 Zusammengesetzte Nomen:
 
-Bildung [Nomen] + [Nomen]y/a/e
+Bildung [Nomen] + [Nomen] im Genitiv
         Dĺžka     linky
         Länge     der Verbindung
 
@@ -47,4 +72,4 @@ Bola umiestnená linka (Wurde platziert Leitung)
 Bola, weil linka FEM ist. umiestnená ist ein VERB, das an linka angeglichen ist.
 
 Bolo zrušené umiestnenie linky (Wurde abgebrochen Platzieren der Leitung)
-Bolo, weil umiestnienie linky MASK ist. zrušené ist ein VERB, das an umiestnenie linky angeglichen ist.
+Bolo, weil umiestnenie linky MASK ist. zrušené ist ein VERB, das an umiestnenie linky angeglichen ist.

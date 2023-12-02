@@ -198,7 +198,7 @@ public class BlockRecipeCreator extends BlockBase implements INamedContainerProv
 				writeToFile(dataPackJson, "{\r\n" + 
 						"  \"pack\": {\r\n" + 
 						"    \"pack_format\": 1,\r\n" + 
-						"    \"description\": \"Temporäres Datenpacket von Industria zur implementierung Ingame erstellter Rezepte.\"\r\n" + 
+						"    \"description\": \"Datenpacket von Industria zur implementierung Ingame erstellter Rezepte.\"\r\n" + 
 						"  }\r\n" + 
 						"}");
 			}

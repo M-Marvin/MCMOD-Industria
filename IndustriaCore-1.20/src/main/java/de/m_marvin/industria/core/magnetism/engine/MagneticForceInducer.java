@@ -57,13 +57,15 @@ public class MagneticForceInducer extends ForcesInducer {
 		for (ForceSet forces : this.forces.values()) {
 			
 			if (forces.linearForce.isFinite() && forces.angularForce.isFinite() && forces.position.isFinite()) {
-				//contraption.applyRotDependentForceToPos(forces.linearForce, forces.position);
-				contraption.applyInvariantTorque(forces.angularForce);
+				contraption.applyRotDependentForceToPos(forces.linearForce, forces.position);
+				contraption.applyRotDependentTorque(forces.angularForce);
 			} else {
 				IndustriaCore.LOGGER.warn("Non finite value in MFI detected!");
 			}
 			
 		}
+		
+		this.forces.clear();
 		
 	}
 

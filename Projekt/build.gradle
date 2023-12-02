@@ -153,7 +153,7 @@ dependencies {
 	
   	// compile against the JEI API but do not include it at runtime
   	compileOnly fg.deobf("curse.maven:jei-238222:3383214")
-  	//compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
+  	compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
  	// at runtime, use the full JEI jar
   	//runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
   	
@@ -209,7 +209,7 @@ jar {
 // This is the preferred method to reobfuscate your jar file
 jar.finalizedBy('reobfJar') 
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
-//publish.dependsOn('reobfJar')
+publish.dependsOn('reobfJar')
 
 publishing {
     publications {

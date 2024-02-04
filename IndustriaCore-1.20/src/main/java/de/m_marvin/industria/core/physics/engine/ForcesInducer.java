@@ -1,6 +1,6 @@
 package de.m_marvin.industria.core.physics.engine;
 
-import org.valkyrienskies.core.impl.api.ShipForcesInducer;
+import org.valkyrienskies.core.api.ships.ShipForcesInducer;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

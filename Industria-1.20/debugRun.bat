@@ -1,1 +1,0 @@
-./gradlew runClient --debug-jvm

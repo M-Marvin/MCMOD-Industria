@@ -6,6 +6,7 @@ import de.m_marvin.industria.core.util.container.AbstractBlockEntityFluidContain
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 public class PortableFuelGeneratorContainer extends AbstractBlockEntityFluidContainerBase<PortableFuelGeneratorBlockEntity> {
 	
@@ -40,6 +41,18 @@ public class PortableFuelGeneratorContainer extends AbstractBlockEntityFluidCont
 	public void removed(Player pPlayer) {
 		super.removed(pPlayer);
 		this.clearContainer(pPlayer, this.blockEntity.getFluidContainer());
+	}
+
+	@Override
+	public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean stillValid(Player pPlayer) {
+		// TODO Auto-generated method stub
+		return true;
 	}
 	
 }

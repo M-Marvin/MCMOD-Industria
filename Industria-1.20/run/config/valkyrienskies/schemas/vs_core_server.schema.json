@@ -24,6 +24,11 @@
           "format" : "double",
           "description" : "Limit the max collision de-penetration speed so that rigid bodies don't go flying apart when they overlap"
         },
+        "physicsSpeed" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "How fast the physics is running. 1.0 is full speed, 0.5 is 50% speed, etc."
+        },
         "solver" : {
           "type" : "string",
           "enum" : [ "GAUSS_SEIDEL", "JACOBI" ],
@@ -48,6 +53,26 @@
         "synchronizePhysics" : {
           "type" : "boolean",
           "description" : "Synchronize the physics thread and the game thread"
+        },
+        "terrainBakingThreadPriority" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Thread priority of terrain baking threads. 5 is default priority, higher is higher priority, lower is lower priority."
+        },
+        "terrainBakingThreads" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Number of terrain baking threads, more is good for preventing stutters when flying fast ships. However, too many will overload the cpu which will lag the game."
+        },
+        "terrainDeletionThreadPriority" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Thread priority of terrain deletion threads. These are used to clean up memory, so they can be lower priority than."
+        },
+        "terrainDeletionThreads" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Number of terrain deletion threads. Typically just 1 is fine."
         }
       },
       "additionalProperties" : false,

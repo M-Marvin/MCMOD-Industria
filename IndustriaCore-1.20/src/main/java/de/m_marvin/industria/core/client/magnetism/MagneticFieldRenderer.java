@@ -194,6 +194,7 @@ public class MagneticFieldRenderer {
         		r, g, b, 1F,
         		r, g, b);
 		
+		// FIXME Not rendering for some reason
 		GraphicsUtility.renderVector(
 				vertexconsumer, matrixStack, 
 				magneticCenter, 

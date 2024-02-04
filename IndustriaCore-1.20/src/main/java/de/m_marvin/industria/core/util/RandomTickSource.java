@@ -36,7 +36,7 @@ public class RandomTickSource {
 		tickConsumers.put(blockPredicate, consumer);
 	}
 	
-	@SuppressWarnings("resource")
+	//@SuppressWarnings("resource")
 	@SubscribeEvent
 	public static void onRandomTick(TickEvent.LevelTickEvent event) {
 		

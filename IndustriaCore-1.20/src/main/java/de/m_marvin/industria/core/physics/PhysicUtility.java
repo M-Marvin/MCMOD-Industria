@@ -296,7 +296,8 @@ public class PhysicUtility {
 	
 	public static boolean isSolidContraptionBlock(BlockState state) {
 		Pair<Double, BlockType> blockData = BlockStateInfo.INSTANCE.get(state);
-		return blockData.getSecond() == VSGameUtilsKt.getVsCore().getBlockTypes().getSolid() && blockData.getFirst() > 0;
+		
+		return blockData.getFirst() > 0; // FIXME hitbox check missing
 	}
 	
 	public static boolean isValidContraptionBlock(BlockState state) {

@@ -512,7 +512,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 //			return true;
 //		} catch (ReflectionException | IllegalAccessException | NullPointerException e) {
 //			return false;
-//		}
+//		} FIXME Is this even required any more ?
 		return true;
 	}
 	

@@ -4,11 +4,14 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import org.joml.Matrix3d;
+import org.joml.Matrix3dc;
 import org.joml.Vector3d;
 import org.valkyrienskies.core.api.ships.PhysShip;
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
 import org.valkyrienskies.core.api.ships.properties.ShipTransform;
+import org.valkyrienskies.core.impl.game.ships.PhysShipImpl;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.magnetism.engine.MagneticForceInducer;
@@ -16,6 +19,7 @@ import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.physics.types.ContraptionPosition;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.NBTUtility;
+import de.m_marvin.unimat.impl.Quaterniond;
 import de.m_marvin.univec.impl.Vec2d;
 import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.core.BlockPos;
@@ -27,8 +31,7 @@ import net.minecraft.world.level.Level;
 
 public class MagneticField {
 	
-	public static final double MAGNETIC_FIELD_RANGE_MODIFIER = 6.0;
-	public static final double MAGNETIC_FORCE_MODIFIER = 400.0;
+	public static final double MAGNETIC_FIELD_RANGE_PER_STRENGTH = 6.0;
 	
 	protected final long id;
 	protected HashSet<MagneticFieldInfluence> magneticInfluences = new HashSet<>();
@@ -38,8 +41,6 @@ public class MagneticField {
 	
 	protected BlockPos minPos = new BlockPos(0, 0, 0);
 	protected BlockPos maxPos = new BlockPos(0, 0, 0);
-	protected Vec3d linearForceAccumulated = new Vec3d();
-	protected Vec3d angularForceAccumulated = new Vec3d(0, 0, 0);
 	
 	public MagneticField(long id) {
 		this.id = id;
@@ -223,11 +224,11 @@ public class MagneticField {
 	}
 	
 	public double getEffectiveRangeLinear() {
-		return this.fieldVectorLinear.length() * MAGNETIC_FIELD_RANGE_MODIFIER;
+		return this.fieldVectorLinear.length() * MAGNETIC_FIELD_RANGE_PER_STRENGTH;
 	}
 
 	public double getEffectiveRangeAlternating() {
-		return this.fieldVectorAlternating.length() * MAGNETIC_FIELD_RANGE_MODIFIER;
+		return this.fieldVectorAlternating.length() * MAGNETIC_FIELD_RANGE_PER_STRENGTH;
 	}
 	
 	public double getIntensityLinearAt(double distance) {
@@ -263,9 +264,11 @@ public class MagneticField {
 		return thisFieldVector.mul(this.getIntensityLinearAt(offset.length()));	
 	}
 	
-	public static final double MAX_ANGULAR_VELOCITY = 4 * Math.PI;
+	public static final double OMEGA_COEFFICIENT = 30.0;
+	//public static final double OMEGA_RADIAL_FORCE_COEFFICIENT = 100.0;
+	//
 	
-	public void applyFieldForces(Level level, PhysShip contraptionPhysics, ServerShip contraption, Vec3d targetFieldVector) {
+	public void applyFieldForces(Level level, PhysShipImpl contraptionPhysics, ServerShip contraption, Vec3d targetFieldVector) {
 		
 		Vec3d currentFieldVector = getWorldFieldVector(level);													// World Vector of this field (length = strength)
 		Vec3d contraptionMassCenter = Vec3d.fromVec(contraptionPhysics.getTransform().getPositionInWorld());	// Center of mass position in world coordinates
@@ -274,152 +277,26 @@ public class MagneticField {
 		Vec3d angularVelocity = Vec3d.fromVec(contraption.getOmega());											// Angular velocity in rad/s
 		double mass = contraption.getInertiaData().getMass();													// Mass in g
 		
-		// Calculate angular error in rad
-		Vec3d current = currentFieldVector.normalize();
-		Vec3d target = targetFieldVector.normalize();
+		// TODO
+		double ANGULAR_FORCE_MULTIPLIER = 20000.0;
+		double LINEAR_FORCE_MULTIPLIER = 1.0;
 		
-		Vec2d cavX = new Vec2d(current.y, current.z);
-		Vec2d tavX = new Vec2d(target.y, target.z);
-		double factX = cavX.length() * tavX.length();
-		double dotX = cavX.dot(tavX);
-		double angleX = cavX.angle(tavX);
+		/* Angular force */
 		
-
-		Vec2d cavY = new Vec2d(current.x, current.z);
-		Vec2d tavY = new Vec2d(target.x, target.z);
-		double factY = cavY.length() * tavY.length();
-		double dotY = cavY.dot(tavY);
-		double angleY = cavY.angle(tavY);
+		double strengthAngular = targetFieldVector.length() * currentFieldVector.length() * ANGULAR_FORCE_MULTIPLIER;
+		Quaterniond angularError = currentFieldVector.relativeRotationQuat(targetFieldVector);
 		
-		Vec2d cavZ = new Vec2d(current.x, current.y);
-		Vec2d tavZ = new Vec2d(target.x, target.y);
-		double factZ = cavZ.length() * tavZ.length();
-		double dotZ = cavZ.dot(tavZ);
-		double angleZ = cavZ.angle(tavZ);
+		double torqueMultiplier = Math.min(mass * OMEGA_COEFFICIENT, strengthAngular);
+		Vector3d initialOmega = new Vector3d(angularError.i * OMEGA_COEFFICIENT, angularError.j * OMEGA_COEFFICIENT, angularError.k * OMEGA_COEFFICIENT); 
+		if (angularError.r > 0) initialOmega.mul(-1.0);
+		Vector3d torque = initialOmega.sub(contraptionPhysics.getPoseVel().getOmega()).mul(torqueMultiplier);
 		
-//		double dotY = new Vec3d(current.x, 0.0, current.z).dot(new Vec3d(target.x, 0.0, target.z));
-//		double dotZ = new Vec3d(current.x, current.y, 0.0).dot(new Vec3d(target.x, target.y, 0.0));
-		double crossX = new Vec3d(0.0, current.y, current.z).cross(new Vec3d(0.0, target.y, target.z)).normalize().x;
-		double crossY = new Vec3d(current.x, 0.0, current.z).cross(new Vec3d(target.x, 0.0, target.z)).normalize().y;
-		double crossZ = new Vec3d(current.x, current.y, 0.0).cross(new Vec3d(target.x, target.y, 0.0)).normalize().z;
-
-//		double crossX = cavX.cross(tavX);
-//		double crossY = cavY.cross(tavY);
-//		double crossZ = cavZ.cross(tavZ);
+		if (torque.isFinite()) contraptionPhysics.applyInvariantTorque(torque);
 		
-//		double angleX = Math.acos(dotX) * (dotX / (dotX + dotY + dotZ)) * crossX;
-//		double angleY = Math.acos(dotY) * (dotY / (dotX + dotY + dotZ)) * crossY;
-//		double angleZ = Math.acos(dotZ) * (dotZ / (dotX + dotY + dotZ)) * crossZ;
-		double angleX2 = angleX * (factX / (factX + factY + factZ));// * crossX;
-		double angleY2 = angleY * (factY / (factX + factY + factZ));// * crossY;
-		double angleZ2 = angleZ * (factZ / (factX + factY + factZ));// * crossZ;
+		/* Linear force */
 		
-		Vec3d angularError = new Vec3d(
-				Double.isFinite(angleX2) ? angleX2 : 0.0, 
-				Double.isFinite(angleY2) ? angleY2 : 0.0, 
-				Double.isFinite(angleZ2) ? angleZ2 : 0.0
-		);
 		
-		System.out.println("TEST");
-		
-
-		
-//		// Calculate resulting magnetic force applied
-//		Vec3d angularForce = angularError.mul(targetFieldVector.length() * currentFieldVector.length() * 50000);
-//		
-//		// Limit velocity
-////		Vec3d resultingVelocity = angularForce.div(mass).add(angularVelocity);
-////		Vec3d forceOvershot = resultingVelocity.sub(MAX_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY).max(0.0).mul(mass);
-////		angularForce.subI(forceOvershot);
-//		
-//		System.out.println(angularForce);
-//		
-//		if (angularForce.isFinite()) {
-//
-//			contraptionPhysics.applyInvariantTorque(new Vector3d(angularError.x, angularForce.y, angularForce.z));
-//				
-//		}
 		
 	}
-	
-	public void accumulate(Level level, MagneticField other, Vec3d angularVelocity, Vec3d linearVelocity, Vec3d linearForceVec, Vec3d angularForceVec) {
-		BlockPos thisBlockPos = this.getAnyInfluencePos();
-		
-		if (PhysicUtility.getContraptionOfBlock(level, thisBlockPos) == null) return;
-		
-		BlockPos otherBlockPos = other.getAnyInfluencePos();
-		Vec3d thisCenter = PhysicUtility.ensureWorldCoordinates(level, thisBlockPos, this.getMagneticCenter());
-		Vec3d otherCenter = PhysicUtility.ensureWorldCoordinates(level, otherBlockPos, other.getMagneticCenter());
-		Vec3d thisFieldVector = PhysicUtility.ensureWorldVector(level, thisBlockPos, this.fieldVectorLinear);
-		Vec3d otherFieldVector = PhysicUtility.ensureWorldVector(level, otherBlockPos, other.fieldVectorLinear);
-		
-		Vec3d offset = otherCenter.sub(thisCenter);
-		//Quaterniond angle = thisFieldVector.normalize().relativeRotationQuat(otherFieldVector.normalize());
-
-//		double angle2 = Math.acos(thisFieldVector.normalize().dot(otherFieldVector.normalize()));
-//		Vec3d axis = this.fieldVectorLinear.cross(otherFieldVector).normalize();
-//		Quaterniond angle = new Quaterniond(axis, angle2);
-		
-		double thisStrength = this.fieldVectorLinear.length() * this.getIntensityLinearAt(offset.length());
-		double otherStrength = other.fieldVectorLinear.length() * other.getIntensityLinearAt(offset.length());
-		double strength = thisStrength + otherStrength;
-		double strengthLinear = Math.cos(thisFieldVector.angle(otherFieldVector)) * (strength);
-		
-		Vec3d relativeForce = offset.normalize().mul(strengthLinear);//.transform(angle);
-		Vec3d linearForce = offset.normalize().mul(relativeForce.dot(offset));
-		
-		Vec3d linearForce2 = PhysicUtility.ensureContraptionVector(level, thisBlockPos, linearForce);
-		
-		Vec3d targetVecWorld = PhysicUtility.ensureWorldVector(level, otherBlockPos, other.fieldVectorLinear);
-		Vec3d targetVecThis = PhysicUtility.ensureContraptionVector(level, thisBlockPos, targetVecWorld);
-		
-		Vec3d current = this.fieldVectorLinear.normalize(); //thisFieldVector;
-		Vec3d target = targetVecThis.normalize(); //.normalize(); // otherFieldVector;
-		
-		double dotX = new Vec3d(0.0, current.y, current.z).dot(new Vec3d(0.0, target.y, target.z));
-		double dotY = new Vec3d(current.x, 0.0, current.z).dot(new Vec3d(target.x, 0.0, target.z));
-		double dotZ = new Vec3d(current.x, current.y, 0.0).dot(new Vec3d(target.x, target.y, 0.0));
-		double crossX = new Vec3d(0.0, current.y, current.z).cross(new Vec3d(0.0, target.y, target.z)).normalize().x;
-		double crossY = new Vec3d(current.x, 0.0, current.z).cross(new Vec3d(target.x, 0.0, target.z)).normalize().y;
-		double crossZ = new Vec3d(current.x, current.y, 0.0).cross(new Vec3d(target.x, target.y, 0.0)).normalize().z;
-		double angleX = Math.acos(dotX) * (dotX / (dotX + dotY + dotZ)) * crossX;
-		double angleY = Math.acos(dotY) * (dotY / (dotX + dotY + dotZ)) * crossY;
-		double angleZ = Math.acos(dotZ) * (dotZ / (dotX + dotY + dotZ)) * crossZ;
-		
-		//System.out.println(new Vec3d(current.x, current.y, 0.0).normalize() + "\n" + (new Vec3d(target.x, target.y, 0.0).normalize()) + "\n= " + Math.acos(dotZ));
-		
-		Vec3d angularError = new Vec3d(
-				Double.isFinite(angleX) ? angleX : 0.0, 
-				Double.isFinite(angleY) ? angleY : 0.0, 
-				Double.isFinite(angleZ) ? angleZ : 0.0
-		);//.mul(strengthLinear * 200);
-		
-		Vec3d angularForce = angularError.sub(angularVelocity);
-		
-//		Vec3d angular = new Vec3d(
-//				Double.isFinite(angleX) ? angleX : 0.0, 
-//				Double.isFinite(angleY) ? angleY : 0.0, 
-//				Double.isFinite(angleZ) ? angleZ : 0.0
-//		).mul(strengthLinear * 200);
-		
-//		other.linearForceAccumulated.addI(linearForce);
-		//other.angularForceAccumulated.addI(angular);
-		//this.linearForceAccumulated.addI(linearForce2);
-		//System.out.println("\n\n\n\n\n\n" + angular);
-		//angularForceVec.addI(angularForce);
-	}
-	
-//	public void applyAccumulated(PhysShip contraption) {
-////		BlockPos pos = getInfluences().isEmpty() ? BlockPos.ZERO : getInfluences().iterator().next().getPos();
-////		Ship contraption = PhysicUtility.getContraptionOfBlock(level, pos);
-////		if (contraption != null) {
-////			Vec3d massCenter = PhysicUtility.toContraptionPos(contraption.getTransform(), Vec3d.fromVec(contraption.getTransform().getPositionInWorld()));
-////			MagneticForceInducer forceInducer = PhysicUtility.getOrCreateForceInducer(level, (ServerShip) contraption, MagneticForceInducer.class);
-////			forceInducer.updateForces(this.getId(), this.getGeometricCenter().add(this.magneticCenter).sub(massCenter), this.linearForceAccumulated.mul(200.0), this.angularForceAccumulated.mul(200.0));
-////		}
-//		
-//		linearForceAccumulated = new Vec3d();
-//		angularForceAccumulated = new Vec3d(0, 0, 0);
-//	}
 	
 }

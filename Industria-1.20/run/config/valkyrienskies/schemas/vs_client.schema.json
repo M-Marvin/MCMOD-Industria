@@ -2,6 +2,16 @@
   "$schema" : "https://json-schema.org/draft/2019-09/schema",
   "type" : "object",
   "properties" : {
+    "BlockTinting" : {
+      "type" : "object",
+      "properties" : {
+        "fixBlockTinting" : {
+          "type" : "boolean",
+          "description" : "Partly fixes the block tinting issue with blocks on ships"
+        }
+      },
+      "additionalProperties" : false
+    },
     "Tooltip" : {
       "type" : "object",
       "properties" : {

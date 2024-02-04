@@ -1,10 +1,11 @@
 buildscript {
     repositories {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' } // For some reason required to use parchantment mappings ?
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' } // Required for VS2 (And for some reason required to use parchantment mappings ?)
         mavenCentral()
     }
     dependencies {
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT' // Required for VS2
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.parchmentmc:librarian:1.+'
 
@@ -27,6 +28,7 @@ apply plugin: 'java'
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'maven-publish'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
+apply plugin: 'org.spongepowered.mixin' // Required for VS2
 
 version = mod_version
 group = mod_group_id
@@ -167,7 +169,8 @@ dependencies {
  	implementation fg.deobf("curse.maven:kotlinforforge-351264:$forge_kotlin_version")
     implementation "com.fasterxml.jackson.core:jackson-annotations:2.13.3"
     
- 	implementation "industria:industriacore:1.0.0"
+    // Industria Core
+ 	implementation fg.deobf("industria:industriacore:1.0.0")
  	
  	// Lib Dependencies
 	implementation("com.github.M-Marvin:LIBRARY-NGLink:$nglink_version")

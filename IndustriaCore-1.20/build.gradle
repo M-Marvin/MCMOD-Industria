@@ -1,10 +1,11 @@
 buildscript {
     repositories {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' } // For some reason required to use parchantment mappings ?
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' } // Required for VS2 (And for some reason required to use parchantment mappings ?)
         mavenCentral()
     }
     dependencies {
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT' // Required for VS2
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.parchmentmc:librarian:1.+'
 
@@ -27,6 +28,7 @@ apply plugin: 'java'
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'maven-publish'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
+apply plugin: 'org.spongepowered.mixin' // Required for VS2
 
 version = mod_version
 group = mod_group_id
@@ -159,14 +161,19 @@ dependencies {
 	// Valkyrien Skies 2
     implementation fg.deobf("org.valkyrienskies:valkyrienskies-120-forge:${rootProject.vs2_version}") { transitive = false }
 	
-    annotationProcessor("io.github.llamalad7:mixinextras-common:$mixin_extras_version")
-    implementation("io.github.llamalad7:mixinextras-forge:$mixin_extras_version")
+    //annotationProcessor("io.github.llamalad7:mixinextras-common:$mixin_extras_version")
+    //implementation("io.github.llamalad7:mixinextras-forge:$mixin_extras_version")
+
+    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:$mixin_extras_version"))
+    implementation(jarJar("io.github.llamalad7:mixinextras-forge:$mixin_extras_version")) {
+        jarJar.ranged(it, "[$mixin_extras_version,)")
+    }
 
     implementation("org.valkyrienskies.core:api:$vs_core_version")
     implementation("org.valkyrienskies.core:api-game:$vs_core_version")
     implementation("org.valkyrienskies.core:util:$vs_core_version")
     implementation("org.valkyrienskies.core:impl:$vs_core_version")
- 	implementation fg.deobf("curse.maven:kotlinforforge-351264:$forge_kotlin_version")
+	implementation fg.deobf("curse.maven:kotlinforforge-351264:$forge_kotlin_version")
     implementation "com.fasterxml.jackson.core:jackson-annotations:2.13.3"
     
  	// Lib Dependencies

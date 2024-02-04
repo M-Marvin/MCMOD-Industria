@@ -1,57 +1,60 @@
 modLoader="javafml" #mandatory
-loaderVersion="[39,)" #mandatory
+loaderVersion="[47,)"
 
-license="All rights reserved"
+# The license for you mod. This is mandatory metadata and allows for easier comprehension of your redistributive properties.
+# Review your options at https://choosealicense.com/. All rights reserved is the default copyright stance, and is thus the default here.
+license="All Rights Reserved"
 
+# A URL to refer people to when problems occur with this mod
 #issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/" #optional
 
-[[mods]] #mandatory
-
+# A list of mods - how many allowed here is determined by the individual mod loader
+[[mods]]
 modId="industria" #mandatory
-
-version="${file.jarVersion}" #mandatory
-
+version="0.1" #mandatory
 displayName="Industria" #mandatory
-# A URL to query for updates for this mod. See the JSON update specification https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/
-
+# A URL to query for updates for this mod. See the JSON update specification https://docs.minecraftforge.net/en/latest/misc/updatechecker/
 #updateJSONURL="https://change.me.example.invalid/updates.json" #optional
-
+# A URL for the "homepage" for this mod, displayed in the mod UI
 #displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional
-
 logoFile="logo.png" #optional
 # A text field displayed in the mod UI
-
-# A text field displayed in the mod UI
-authors="M_Marvin(Code) and Hase_222(Textures)" #optional
-
-description='''
-Unique realistic conduits with physics, also with an realistic electricity system.
-Compatible with VS2 physics.
-'''
+#credits="" #optional
+authors="M_Marvin" #optional
+displayTest="MATCH_VERSION"
+description='''TODO'''
 
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-[[dependencies.industria]]#optional
+[[dependencies.industriacore]] #optional
     # the modid of the dependency
     modId="forge" #mandatory
     # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[39,)" #mandatory
-    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
+    versionRange="[47,)" #mandatory
+    # An ordering relationship for the dependency - BEFORE or AFTER required if the dependency is not mandatory
+    # BEFORE - This mod is loaded BEFORE the dependency
+    # AFTER - This mod is loaded AFTER the dependency
     ordering="NONE"
-    # Side this dependency is applied on - BOTH, CLIENT or SERVER
+    # Side this dependency is applied on - BOTH, CLIENT, or SERVER
     side="BOTH"
 # Here's another dependency
-[[dependencies.industria]]
+[[dependencies.industriacore]]
     modId="minecraft"
     mandatory=true
-# This version range declares a minimum of the current minecraft version up to but not including the next major version
+    # This version range declares a minimum of the current minecraft version up to but not including the next major version
     versionRange="[1.20.1,1.21)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.industria]]
     modId="industriacore"
     mandatory=true
-    versionRange="[v0.1-alpha,)"
+    versionRange="[0.1,)"
     ordering="NONE"
     side="BOTH"
+
+# Features are specific properties of the game environment, that you may want to declare you require. This example declares
+# that your mod requires GL version 3.2 or higher. Other features will be added. They are side aware so declaring this won't
+# stop your mod loading on the server for example.
+#[features.industriacore]
+#openGLVersion="[3.2,)"

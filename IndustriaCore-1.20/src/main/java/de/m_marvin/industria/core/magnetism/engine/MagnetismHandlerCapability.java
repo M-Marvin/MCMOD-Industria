@@ -28,11 +28,9 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.LevelEvent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.LevelTickEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.ChunkWatchEvent;
@@ -95,13 +93,13 @@ public class MagnetismHandlerCapability implements ICapabilitySerializable<ListT
  
 	/* Event handling */
 
-	@SubscribeEvent
-	public static void onWorldTick(LevelTickEvent event) {
-		Level level = event.level;
-		MagnetismHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.MAGNETISM_HANDLER_CAPABILITY);
-		
-		handler.updateFieldForces();
-	}
+//	@SubscribeEvent
+//	public static void onWorldTick(LevelTickEvent event) {
+//		Level level = event.level;
+//		MagnetismHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.MAGNETISM_HANDLER_CAPABILITY);
+//		
+//		handler.updateFieldForces();
+//	}
 	
 	@SubscribeEvent
 	public static void onClientLoadsChunk(ChunkWatchEvent.Watch event) {
@@ -264,25 +262,25 @@ public class MagnetismHandlerCapability implements ICapabilitySerializable<ListT
 		
 	}
 	
-	public void updateFieldForces() {
-		
-		if (!this.level.isClientSide()) {
-			
-			for (MagneticField field1 : this.fieldSet) {
-				for (MagneticField field2 : this.fieldSet) {
-					if (field2 != field1 && field1.isInEffectiveLinearRange(this.level, field2)) {
-						field1.accumulate(this.level, field2);
-					}
-				}
-			}
-			
-			for (MagneticField field : this.fieldSet) {
-				field.applyAccumulated((ServerLevel) this.level);
-			}
-			
-		}
-		
-	}
+//	public void updateFieldForces() {
+//		
+//		if (!this.level.isClientSide()) {
+//			
+//			for (MagneticField field1 : this.fieldSet) {
+//				for (MagneticField field2 : this.fieldSet) {
+//					if (field2 != field1 && field1.isInEffectiveLinearRange(this.level, field2)) {
+//						field1.accumulate(this.level, field2);
+//					}
+//				}
+//			}
+//			
+//			for (MagneticField field : this.fieldSet) {
+//				field.applyAccumulated((ServerLevel) this.level);
+//			}
+//			
+//		}
+//		
+//	}
 	
 	public List<MagneticField> getFieldsInChunk(ChunkPos chunk) {
 		List<MagneticField> fields = new ArrayList<MagneticField>();

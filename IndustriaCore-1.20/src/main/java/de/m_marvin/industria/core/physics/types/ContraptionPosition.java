@@ -40,7 +40,8 @@ public class ContraptionPosition {
 				new Vector3d(this.position.x, this.position.y, this.position.z),
 				new org.joml.Quaterniond(this.orientation.i, this.orientation.j, this.orientation.k, this.orientation.r),
 				new Vector3d(0, 0, 0),
-				new Vector3d(0, 0, 0)
+				new Vector3d(0, 0, 0),
+				null, null
 		);
 	}
 	

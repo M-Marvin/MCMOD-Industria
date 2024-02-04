@@ -1,119 +1,151 @@
 buildscript {
     repositories {
-        maven { url = 'https://maven.parchmentmc.org' }
-        maven { url = 'https://maven.minecraftforge.net' }
+        // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' } // For some reason required to use parchantment mappings ?
         mavenCentral()
-        gradlePluginPortal()
-	}
- 	
+    }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.parchmentmc:librarian:1.+'
-        classpath 'org.spongepowered:mixingradle:0.7.+'
+
     }
 }
 
 plugins {
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    
+    id 'org.jetbrains.kotlin.jvm' version '1.8.21'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.21'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'java'
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'maven-publish'
-apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
-version = '0.1-alpha'
-group = 'de.m_marvin.industria' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'industria'
- 
+version = mod_version
+group = mod_group_id
+
+base {
+    archivesName = mod_id
+}
+
+// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-//jarJar.enable()
-
-println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
- 
-    mappings channel: 'parchment', version: '2023.08.13-1.20.1'
- 	//mappings channel: 'official', version: '1.20.1'
- 	
+    // The mappings can be changed at any time and must be in the following format.
+    // Channel:   Version:
+    // official   MCVersion             Official field/method names from Mojang mapping files
+    // parchment  YYYY.MM.DD-MCVersion  Open community-sourced parameter names and javadocs layered on top of official
+    mappings channel: mapping_channel, version: mapping_version
+
  	accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
  	
+    // When true, this property will have all Eclipse/IntelliJ IDEA run configurations run the "prepareX" task for the given run configuration before launching the game.
+    // In most cases, it is not necessary to enable.
+    // enableEclipsePrepareRuns = true
+    // enableIdeaPrepareRuns = true
+
+    // This property allows configuring Gradle's ProcessResources task(s) to run on IDE output locations before launching the game.
+    // It is REQUIRED to be set to true for this template to function.
+    // See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
+    copyIdeResources = true
+
+    // When true, this property will add the folder name of all declared run configurations to generated IDE run configurations.
+    // The folder name can be set on a run configuration using the "folderName" property.
+    // By default, the folder name of a run configuration is the name of the Gradle project containing it.
+    // generateRunFolders = true
+
+    // Default run configurations.
+    // These can be tweaked, removed, or duplicated as needed.
     runs {
+        // applies to all the run configs below
+        configureEach {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            // The markers can be added/remove as needed separated by commas.
+            // "SCAN": For mods scan.
+            // "REGISTRIES": For firing of registry events.
+            // "REGISTRYDUMP": For getting the contents of all registries.
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            // Recommended logging level for the console
+            // You can set various levels here.
+            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                "${mod_id}" {
+                    source sourceSets.main
+                }
+            }
+        }
+
         client {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', 'examplemod'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            
-            mods {
-                examplemod {
-                    source sourceSets.main
-                }
-            }
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', mod_id
         }
- 
+
         server {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', 'examplemod'
-   			property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            
-            mods {
-                examplemod {
-                    source sourceSets.main
-                }
-            }
+            property 'forge.enabledGameTestNamespaces', mod_id
+            args '--nogui'
         }
- 
+
+        // This run config launches GameTestServer and runs all registered gametests, then exits.
+        // By default, the server will crash when no gametests are provided.
+        // The gametest system is also enabled by default for other run configs under the /test command.
         gameTestServer {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', 'examplemod'
-   			property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            
-            mods {
-                examplemod {
-                    source sourceSets.main
-                }
-            }
+            property 'forge.enabledGameTestNamespaces', mod_id
         }
- 		
+
         data {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-			property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
- 
-            mods {
-                examplemod {
-                    source sourceSets.main
-                }
-            }
+            // example of overriding the workingDirectory set in configureEach above
+            workingDirectory project.file('run-data')
+
+            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
         }
     }
 }
 
+// Include resources generated by data generators.
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-    maven { url 'https://maven.valkyrienskies.org' }
-	maven { url 'https://jitpack.io' }
+	mavenCentral()
+	maven {
+		url 'https://jitpack.io'
+	}
+	maven {
+		url 'https://modmaven.dev/'
+	}
     maven {
-    	url "https://cursemaven.com"
+        name = "Valkyrien Skies Internal"
+        url = 'https://maven.valkyrienskies.org'
+    }
+    maven {
+        url "https://cursemaven.com"
         content {
             includeGroup "curse.maven"
         }
     }
-    flatDir dirs: ["../IndustriaCore-1.20/build/libs"]
+    maven {
+        name = "ParchmentMC"
+        url = "https://maven.parchmentmc.org"
+    }
+    maven {
+        name = 'Kotlin for Forge'
+        url = 'https://thedarkcolour.github.io/KotlinForForge/'
+    }
+	flatDir dirs: ["../IndustriaCore-1.20/build/libs"]
 }
 
 configurations {
@@ -121,40 +153,68 @@ configurations {
     implementation.extendsFrom shade
 }
 
-minecraft.runs.all {
-    lazyToken('minecraft_classpath') {
-        configurations.shade.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
+dependencies {
+
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+	
+	// Valkyrien Skies 2
+    implementation fg.deobf("org.valkyrienskies:valkyrienskies-120-forge:${rootProject.vs2_version}") { transitive = false }
+
+    implementation("org.valkyrienskies.core:api:$vs_core_version")
+    implementation("org.valkyrienskies.core:api-game:$vs_core_version")
+    implementation("org.valkyrienskies.core:util:$vs_core_version")
+    implementation("org.valkyrienskies.core:impl:$vs_core_version")
+ 	implementation fg.deobf("curse.maven:kotlinforforge-351264:$forge_kotlin_version")
+    implementation "com.fasterxml.jackson.core:jackson-annotations:2.13.3"
+    
+ 	implementation "industria:industriacore:1.0.0"
+ 	
+ 	// Lib Dependencies
+	implementation("com.github.M-Marvin:LIBRARY-NGLink:$nglink_version")
+	implementation("com.github.M-Marvin:LIBRARY-UnifiedVectors:$univec_version")
+	
+}
+
+// This block of code expands all declared replace properties in the specified resource targets.
+// A missing property will result in an error. Properties are expanded using ${} Groovy notation.
+// When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
+// See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
+tasks.named('processResources', ProcessResources).configure {
+    var replaceProperties = [
+            minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
+            forge_version: forge_version, forge_version_range: forge_version_range,
+            loader_version_range: loader_version_range,
+            mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
+            mod_authors: mod_authors, // mod_description: mod_description,
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties + [project: project]
     }
 }
 
-dependencies {
- 
-    minecraft 'net.minecraftforge:forge:1.20.1-47.1.44'
- 	
- 	// Mod Dependencies
-    implementation "org.valkyrienskies.core:api:1.1.0+2b2f93f793"
-    implementation "org.valkyrienskies.core:impl:1.1.0+2b2f93f793"
- 	implementation fg.deobf("curse.maven:kotlinforforge-351264:4630525")
- 	implementation fg.deobf("curse.maven:valkyrienskies-258371:4654328")
-	implementation 'com.github.M-Marvin:LIBRARY-NGLink:v1.1'
-	implementation 'com.github.M-Marvin:LIBRARY-UnifiedVectors:af7e377f87'
- 	implementation "industria:industriacore:0.1-alpha"
- 	
- 	// Code Dependencies
-	
-	// Mods used while testing
-	runtimeOnly fg.deobf("curse.maven:jei-238222:4712868")
-	runtimeOnly fg.deobf("curse.maven:atlasviewer-633577:4597419")
-	//runtimeOnly fg.deobf("curse.maven:oculus-581495:4578741")
-	//runtimeOnly fg.deobf("curse.maven:rubidium-574856:4684247")
-	//runtimeOnly fg.deobf("curse.maven:flywheel-486392:3864518") outdated
-	//runtimeOnly fg.deobf("curse.maven:create-328085:3864525") outdated
-	
+// Example for how to get properties into the manifest for reading at runtime.
+tasks.named('jar', Jar).configure {
+    manifest {
+        attributes([
+                'Specification-Title'     : mod_id,
+                'Specification-Vendor'    : mod_authors,
+                'Specification-Version'   : '1', // We are version 1 of ourselves
+                'Implementation-Title'    : project.name,
+                'Implementation-Version'  : project.jar.archiveVersion,
+                'Implementation-Vendor'   : mod_authors,
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+
+	archiveClassifier = 'slim'
 }
 
 shadowJar {
     archiveClassifier = ''
     configurations = [project.configurations.shade]
+    //relocate 'com.example.example-thing', "${project.group}.relocated.example-thing"
     finalizedBy 'reobfShadowJar'
 }
 
@@ -164,25 +224,10 @@ reobf {
     shadowJar {}
 }
 
-jar {
-    manifest {
-        attributes([
-                "Specification-Title"     : "Industria",
-                "Specification-Vendor"    : "m_marvin",
-                "Specification-Version"   : version,
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "m_marvin",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-}
-
-jar.finalizedBy('reobfJar')
- 
+// Example configuration to allow publishing using the maven-publish plugin
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        register('mavenJava', MavenPublication) {
             artifact jar
         }
     }

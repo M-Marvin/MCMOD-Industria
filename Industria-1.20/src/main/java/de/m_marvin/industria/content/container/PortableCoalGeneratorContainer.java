@@ -79,5 +79,17 @@ public class PortableCoalGeneratorContainer extends AbstractBlockEntityFluidCont
 		}
 		
 	}
-	
+
+	@Override
+	public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean stillValid(Player pPlayer) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 }

@@ -18,9 +18,6 @@ import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
 import org.valkyrienskies.core.apigame.constraints.VSConstraint;
 import org.valkyrienskies.core.impl.game.ships.ShipObjectServerWorld;
-import org.valkyrienskies.core.impl.pipelines.VSGameFrame;
-import org.valkyrienskies.core.impl.pipelines.VSPhysicsPipelineStage;
-import org.valkyrienskies.core.impl.pipelines.VSPipelineImpl;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
 import com.electronwill.nightconfig.core.conversion.ReflectionException;
@@ -234,7 +231,6 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 			position = new ContraptionPosition(position);
 			position.getPosition().addI(centerOfMassOffset);
 		}
-		
 		VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).teleportShip(contraption, position.toTeleport());
 	}
 	
@@ -500,23 +496,24 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 	
 	@SuppressWarnings("unchecked")
 	public boolean resetFrameQueue() {
-		try {
-			VSPipelineImpl pipeline = (VSPipelineImpl) VSGameUtilsKt.getVsPipeline(this.level.getServer());
-			
-			Field physicsStageField = ObfuscationReflectionHelper.findField(VSPipelineImpl.class, "physicsStage");
-			Field gameFramesQueueField = ObfuscationReflectionHelper.findField(VSPhysicsPipelineStage.class, "gameFramesQueue");
-			
-			physicsStageField.setAccessible(true);
-			gameFramesQueueField.setAccessible(true);
-			
-			VSPhysicsPipelineStage pipelineStage = (VSPhysicsPipelineStage) physicsStageField.get(pipeline);
-			ConcurrentLinkedQueue<VSGameFrame> frameQueue = (ConcurrentLinkedQueue<VSGameFrame>) gameFramesQueueField.get(pipelineStage);
-			
-			frameQueue.clear();
-			return true;
-		} catch (ReflectionException | IllegalAccessException | NullPointerException e) {
-			return false;
-		}
+//		try {
+//			VSPipelineImpl pipeline = (VSPipelineImpl) VSGameUtilsKt.getVsPipeline(this.level.getServer());
+//			
+//			Field physicsStageField = ObfuscationReflectionHelper.findField(VSPipelineImpl.class, "physicsStage");
+//			Field gameFramesQueueField = ObfuscationReflectionHelper.findField(VSPhysicsPipelineStage.class, "gameFramesQueue");
+//			
+//			physicsStageField.setAccessible(true);
+//			gameFramesQueueField.setAccessible(true);
+//			
+//			VSPhysicsPipelineStage pipelineStage = (VSPhysicsPipelineStage) physicsStageField.get(pipeline);
+//			ConcurrentLinkedQueue<VSGameFrame> frameQueue = (ConcurrentLinkedQueue<VSGameFrame>) gameFramesQueueField.get(pipelineStage);
+//			
+//			frameQueue.clear();
+//			return true;
+//		} catch (ReflectionException | IllegalAccessException | NullPointerException e) {
+//			return false;
+//		}
+		return true;
 	}
 	
 }

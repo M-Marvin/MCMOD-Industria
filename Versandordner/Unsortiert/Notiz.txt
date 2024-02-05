@@ -37,3 +37,4 @@ Kleine Details, die man noch ergänzen könnte:
 	f) Extraktionsgerät verbraucht viel Energie.
 	g) Gibt es nicht für alle Erze (z.B. nicht für Dia, Smaragd oder Ancient Debris, sondern eher für Metalle wie Eisen, Zinn, Gold usw.)
 	h) Nicht verschiebbar.
+        i) Maschine zum Abbau muss mit nachwachsend erzeugbarem Rohstoff versorgt werden, um arbeiten zu können (etwa Schmieröl), also etwa "Fracking" (vgl. Lehm und Schmieröl für Helium in Anno 1800)

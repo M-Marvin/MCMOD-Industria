@@ -1,6 +1,7 @@
 package de.m_marvin.industria.core.magnetism.types;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 
@@ -21,10 +22,14 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class MagneticField {
 	
 	public static final double MAGNETIC_FIELD_RANGE_PER_STRENGTH = 6.0;
+	public static final double INITIAL_OMEGA_MULTIPLIER = 30.0;
+	public static final double ANGULAR_FORCE_MULTIPLIER = 20000.0;
+	//public static final double LINEAR_FORCE_MULTIPLIER = 1.0;
 	
 	protected final long id;
 	protected HashSet<MagneticFieldInfluence> magneticInfluences = new HashSet<>();
@@ -59,6 +64,16 @@ public class MagneticField {
 		this.magneticInfluences.remove(influence);
 		minPos = null;
 		maxPos = null;
+	}
+	
+	public boolean clearInvalidInfluences(Level level) {
+		Iterator<MagneticFieldInfluence> itr = this.magneticInfluences.iterator();
+		while (itr.hasNext()) {
+			MagneticFieldInfluence influence = itr.next();
+			BlockState state = level.getBlockState(influence.getPos());
+			if (state.isAir()) itr.remove();
+		}
+		return this.magneticInfluences.isEmpty();
 	}
 	
 	public CompoundTag serialize() {
@@ -255,33 +270,31 @@ public class MagneticField {
 		
 		Vec3d offset = otherCenter.sub(thisCenter);
 		
-		return thisFieldVector.mul(this.getIntensityLinearAt(offset.length()));	
+		double angle = offset.angle(thisFieldVector);
+		Vec3d angleVec = offset.cross(thisFieldVector).normalize();
+		Quaterniond interactionVecRot = new Quaterniond(angleVec, angle * -2.0);
+		
+		return  thisFieldVector.mul(this.getIntensityLinearAt(offset.length())).transform(interactionVecRot);
 	}
 	
-	public static final double OMEGA_COEFFICIENT = 30.0;
-	//public static final double OMEGA_RADIAL_FORCE_COEFFICIENT = 100.0;
-	//
-	
-	public void applyFieldForces(Level level, PhysShipImpl contraptionPhysics, ServerShip contraption, Vec3d targetFieldVector) {
+	public void applyFieldForces(Level level, PhysShipImpl contraptionPhysics, ServerShip contraption, Vec3d interactingFieldVector, Vec3d interactingMagneticCenter) {
 		
-		Vec3d currentFieldVector = getWorldFieldVector(level);													// World Vector of this field (length = strength)
-		Vec3d contraptionMassCenter = Vec3d.fromVec(contraptionPhysics.getTransform().getPositionInWorld());	// Center of mass position in world coordinates
-		Vec3d relativeMagneticCenter = getMagneticCenter().sub(contraptionMassCenter);							// Center of magnetic field relative to mass center
-		Vec3d linearVelocity = Vec3d.fromVec(contraption.getVelocity());										// Linear velocity in m/s
-		Vec3d angularVelocity = Vec3d.fromVec(contraption.getOmega());											// Angular velocity in rad/s
-		double mass = contraption.getInertiaData().getMass();													// Mass in g
+		Vec3d currentFieldVector = getWorldFieldVector(level);
+		Vec3d magneticCenter = PhysicUtility.toWorldPos(contraption.getTransform(), getMagneticCenter());
+		Vec3d relativeMagneticCenter = getMagneticCenter().sub(Vec3d.fromVec(contraption.getTransform().getPositionInShip()));
+		double mass = contraption.getInertiaData().getMass();
 		
 		// TODO
-		double ANGULAR_FORCE_MULTIPLIER = 20000.0;
-		double LINEAR_FORCE_MULTIPLIER = 1.0;
+		double ANGULAR_FORCE_MULTIPLIER = 100.0;
+		double LINEAR_FORCE_MULTIPLIER = 80000.0;
 		
 		/* Angular force */
 		
-		double strengthAngular = targetFieldVector.length() * currentFieldVector.length() * ANGULAR_FORCE_MULTIPLIER;
-		Quaterniond angularError = currentFieldVector.relativeRotationQuat(targetFieldVector);
+		double strengthAngular = Math.pow(interactingFieldVector.length() * currentFieldVector.length(), 2) * ANGULAR_FORCE_MULTIPLIER;
+		Quaterniond angularError = currentFieldVector.relativeRotationQuat(interactingFieldVector);
 		
-		double torqueMultiplier = Math.min(mass * OMEGA_COEFFICIENT, strengthAngular);
-		Vector3d initialOmega = new Vector3d(angularError.i * OMEGA_COEFFICIENT, angularError.j * OMEGA_COEFFICIENT, angularError.k * OMEGA_COEFFICIENT); 
+		double torqueMultiplier = Math.min(mass * INITIAL_OMEGA_MULTIPLIER, strengthAngular);
+		Vector3d initialOmega = new Vector3d(angularError.i * INITIAL_OMEGA_MULTIPLIER, angularError.j * INITIAL_OMEGA_MULTIPLIER, angularError.k * INITIAL_OMEGA_MULTIPLIER); 
 		if (angularError.r > 0) initialOmega.mul(-1.0);
 		Vector3d torque = initialOmega.sub(contraptionPhysics.getPoseVel().getOmega()).mul(torqueMultiplier);
 		
@@ -289,7 +302,14 @@ public class MagneticField {
 		
 		/* Linear force */
 		
+		double strengthLinear = interactingFieldVector.length() * currentFieldVector.length() * LINEAR_FORCE_MULTIPLIER;
 		
+		double alignmentAngle = interactingFieldVector.angle(currentFieldVector);
+		
+		Vec3d attractingVector = interactingMagneticCenter.sub(magneticCenter).normalize();
+		Vec3d attractionForce = attractingVector.mul(strengthLinear).mul(Math.cos(alignmentAngle));
+		
+		if (attractionForce.isFinite()) contraptionPhysics.applyInvariantForceToPos(attractionForce.writeTo(new Vector3d()), relativeMagneticCenter.writeTo(new Vector3d()));
 		
 	}
 	

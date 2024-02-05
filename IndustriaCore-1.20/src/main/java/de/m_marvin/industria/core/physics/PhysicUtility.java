@@ -129,8 +129,8 @@ public class PhysicUtility {
 		return new Vec3d(0, 0, 0);
 	}
 	
-	public static Vec3d toWorldPos(ShipTransform contaption, BlockPos pos) {
-		return toWorldPos(contaption, Vec3d.fromVec(pos).addI(0.5, 0.5, 0.5));
+	public static Vec3d toWorldPos(ShipTransform contraption, BlockPos pos) {
+		return toWorldPos(contraption, Vec3d.fromVec(pos).addI(0.5, 0.5, 0.5));
 	}
 
 	public static BlockPos toWorldBlockPos(ShipTransform contraption, BlockPos pos) {

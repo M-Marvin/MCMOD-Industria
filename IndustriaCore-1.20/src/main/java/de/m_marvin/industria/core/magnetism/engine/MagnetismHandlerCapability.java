@@ -2,9 +2,11 @@ package de.m_marvin.industria.core.magnetism.engine;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -53,10 +55,10 @@ public class MagnetismHandlerCapability implements ICapabilitySerializable<ListT
 	}
 	
 	protected final Level level;
-	protected final HashMap<BlockPos, MagneticFieldInfluence> pos2influenceMap = new HashMap<>();
-	protected final HashMap<BlockPos, MagneticField> pos2fieldMap = new HashMap<>();
-	protected final HashMap<Long, MagneticField> id2fieldMap = new HashMap<>();
-	protected final HashSet<MagneticField> fieldSet = new HashSet<>();
+	protected final Map<BlockPos, MagneticFieldInfluence> pos2influenceMap = new HashMap<>();
+	protected final Map<BlockPos, MagneticField> pos2fieldMap = new HashMap<>();
+	protected final Map<Long, MagneticField> id2fieldMap = new HashMap<>();
+	protected final Set<MagneticField> fieldSet = Collections.synchronizedSet(new HashSet<>());
 	protected long idCounter = 0;
 	
 	@Override
@@ -64,6 +66,12 @@ public class MagnetismHandlerCapability implements ICapabilitySerializable<ListT
 		ListTag tag = new ListTag();
 		for (MagneticField field : this.fieldSet) {
 			if (this.pos2fieldMap.containsValue(field)) {
+				
+				if (field.clearInvalidInfluences(this.level)) {
+					IndustriaCore.LOGGER.info("Removed invalid magnetic field!");
+					continue;
+				}
+				
 				tag.add(field.serialize());
 			}
 		}
@@ -272,7 +280,6 @@ public class MagnetismHandlerCapability implements ICapabilitySerializable<ListT
 	}
 	
 	public MagneticField getField(long id) {
-		System.out.println("get " + id + " from " + this.id2fieldMap.size() + " -> " +  this.id2fieldMap.get(id));
 		return this.id2fieldMap.get(id);
 	}
 	

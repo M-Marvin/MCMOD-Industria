@@ -254,5 +254,5 @@ public class MagneticFieldRenderer {
 		matrixStack.popPose();
 		
 	}
-		
+	
 }

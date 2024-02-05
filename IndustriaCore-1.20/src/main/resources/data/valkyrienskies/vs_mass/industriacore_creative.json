@@ -5,7 +5,7 @@
   },
   {
     "block": "industriacore:magnet",
-    "mass": 10.0
+    "mass": 500.0
   },
   {
     "block": "minecraft:command_block",

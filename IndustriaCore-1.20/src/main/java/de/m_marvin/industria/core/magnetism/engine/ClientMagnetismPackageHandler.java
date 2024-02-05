@@ -78,11 +78,13 @@ public class ClientMagnetismPackageHandler {
 	
 	@SuppressWarnings("resource")
 	public static void handleRemoveInfluence(SRemoveInfluencePackage msg, Context ctx) {
+		// TODO delay package
 		MagnetismUtility.removeFieldInfluence(Minecraft.getInstance().level, msg.getPosition());
 	}
 
 	@SuppressWarnings("resource")
 	public static void handleAddInfluence(SAddInfluencePackage msg, Context ctx) {
+		// TODO delay package
 		MagnetismUtility.setFieldInfluence(Minecraft.getInstance().level, msg.getInfluence());
 	}
 

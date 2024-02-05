@@ -29,6 +29,7 @@ import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.ClickEvent.Action;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -91,7 +92,13 @@ public class ContraptionCommand {
 						.then(
 								Commands.argument("position", Vec3Argument.vec3())
 								.executes((source) -> 
-										teleportContraption(source, ContraptionIdArgument.getContraption(source, "contraption"), Vec3Argument.getVec3(source, "position"), false, 0F, 0F, 0F)
+										teleportContraption(source, ContraptionIdArgument.getContraption(source, "contraption"), Vec3Argument.getVec3(source, "position"), Optional.empty())
+								)
+								.then(
+										Commands.argument("rotation", Vec3Argument.vec3())
+										.executes((source) -> 
+											teleportContraption(source, ContraptionIdArgument.getContraption(source, "contraption"), Vec3Argument.getVec3(source, "position"), Optional.of(Vec3Argument.getVec3(source, "rotation")))
+										)
 								)
 						)
 				)
@@ -170,15 +177,15 @@ public class ContraptionCommand {
 		
 	}
 	
-	public static int teleportContraption(CommandContext<CommandSourceStack> source, Ship contraption, Vec3 position, boolean rotate, float rotationX, float rotationY, float rotationZ) {
+	public static int teleportContraption(CommandContext<CommandSourceStack> source, Ship contraption, Vec3 position, Optional<Vec3> rotation) {
 		
-		ContraptionPosition contraptionPos = null;
-		if (rotate) {
-			contraptionPos = new ContraptionPosition(new Quaterniond(new Vec3d(rotationX, rotationY, rotationZ), EulerOrder.XYZ, true), Vec3d.fromVec(position));
-		} else {
-			contraptionPos = PhysicUtility.getPosition((ServerShip) contraption, false);
-			contraptionPos.getPosition().setI(Vec3d.fromVec(position));
-		}
+		ServerLevel level = source.getSource().getLevel();
+		String dimension = PhysicUtility.getDimensionId(level);
+		
+		ContraptionPosition contraptionPos = new ContraptionPosition(contraption.getTransform());
+		contraptionPos.setPosition(Vec3d.fromVec(position));
+		if (rotation.isPresent()) contraptionPos.setOrientation(new Quaterniond(Vec3d.fromVec(rotation.get()), EulerOrder.XYZ, true));
+		contraptionPos.setDimension(dimension);
 		
 		PhysicUtility.setPosition(source.getSource().getLevel(), (ServerShip) contraption, contraptionPos, false);
 		

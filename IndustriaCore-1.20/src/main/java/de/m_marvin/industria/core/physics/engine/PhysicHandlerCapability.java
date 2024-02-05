@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.OptionalLong;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
@@ -19,8 +18,6 @@ import org.valkyrienskies.core.api.ships.Ship;
 import org.valkyrienskies.core.apigame.constraints.VSConstraint;
 import org.valkyrienskies.core.impl.game.ships.ShipObjectServerWorld;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
-
-import com.electronwill.nightconfig.core.conversion.ReflectionException;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.physics.PhysicUtility;
@@ -347,7 +344,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		
 		// Create new contraption at center of bounds
 		Vec3d contraptionWorldPos = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
-		ContraptionPosition contraptionPosition = new ContraptionPosition(new Quaterniond(new Vec3d(0, 1, 1), 0), contraptionWorldPos);
+		ContraptionPosition contraptionPosition = new ContraptionPosition(new Quaterniond(new Vec3d(0, 1, 1), 0), contraptionWorldPos, null);
 		BlockPos contraptionBlockPos = createContraptionAt(contraptionPosition, scale);
 		Ship contraption = PhysicUtility.getContraptionOfBlock(level, contraptionBlockPos);
 		
@@ -425,7 +422,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 
 		// Create new contraption at center of bounds
 		Vec3d contraptionWorldPos = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
-		ContraptionPosition contraptionPosition = new ContraptionPosition(new Quaterniond(new Vec3d(0, 1, 1), 0), contraptionWorldPos);
+		ContraptionPosition contraptionPosition = new ContraptionPosition(new Quaterniond(new Vec3d(0, 1, 1), 0), contraptionWorldPos, null);
 		BlockPos contraptionBlockPos = createContraptionAt(contraptionPosition, scale);
 		Ship contraption = PhysicUtility.getContraptionOfBlock(level, contraptionBlockPos);
 		
@@ -492,28 +489,6 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 
 	public String getDimensionId() {
 		return VSGameUtilsKt.getDimensionId(level);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public boolean resetFrameQueue() {
-//		try {
-//			VSPipelineImpl pipeline = (VSPipelineImpl) VSGameUtilsKt.getVsPipeline(this.level.getServer());
-//			
-//			Field physicsStageField = ObfuscationReflectionHelper.findField(VSPipelineImpl.class, "physicsStage");
-//			Field gameFramesQueueField = ObfuscationReflectionHelper.findField(VSPhysicsPipelineStage.class, "gameFramesQueue");
-//			
-//			physicsStageField.setAccessible(true);
-//			gameFramesQueueField.setAccessible(true);
-//			
-//			VSPhysicsPipelineStage pipelineStage = (VSPhysicsPipelineStage) physicsStageField.get(pipeline);
-//			ConcurrentLinkedQueue<VSGameFrame> frameQueue = (ConcurrentLinkedQueue<VSGameFrame>) gameFramesQueueField.get(pipelineStage);
-//			
-//			frameQueue.clear();
-//			return true;
-//		} catch (ReflectionException | IllegalAccessException | NullPointerException e) {
-//			return false;
-//		} FIXME Is this even required any more ?
-		return true;
 	}
 	
 }

@@ -168,9 +168,7 @@ public class MagneticFieldRenderer {
 		BlockPos pos = field.getInfluences().isEmpty() ? BlockPos.ZERO : field.getInfluences().iterator().next().getPos();
 		Vec3d fieldVectorLinear = field.getFieldVectorLinear();
 		Vec3d fieldVectorAlternating = field.getFieldVectorAlternating();
-		Vec3f magneticCenter = new Vec3f(field.getMagneticCenter().add(field.getGeometricCenter().sub(Vec3d.fromVec(pos))));
-		
-		ClientPhysicsUtility.ensureWorldTransformTo(clientLevel, matrixStack, pos);
+		Vec3f magneticCenter = new Vec3f(field.getMagneticCenter().sub(Vec3d.fromVec(pos))) ;//new Vec3f(field.getMagneticCenter().add(field.getGeometricCenter().sub(Vec3d.fromVec(pos))));
 		
 		float f = 2 * 0.0625F + (float) Math.sin(animationTicks * 0.1F) * 0.03125F;
 		
@@ -187,14 +185,9 @@ public class MagneticFieldRenderer {
 		float a = 0.1F;
 
 		VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.lines());
-		LevelRenderer.renderLineBox(
-        		matrixStack, vertexconsumer, 
-        		fxl, fyl, fzl, 
-        		fxh, fyh, fzh, 
-        		r, g, b, 1F,
-        		r, g, b);
+
+		ClientPhysicsUtility.ensureWorldTransformTo(clientLevel, matrixStack, pos);
 		
-		// FIXME Not rendering for some reason
 		GraphicsUtility.renderVector(
 				vertexconsumer, matrixStack, 
 				magneticCenter, 
@@ -206,6 +199,13 @@ public class MagneticFieldRenderer {
 				magneticCenter, 
 				new Vec3f(fieldVectorAlternating),
 				0, 0, 255, 255);
+
+		LevelRenderer.renderLineBox(
+        		matrixStack, vertexconsumer, 
+        		fxl, fyl, fzl, 
+        		fxh, fyh, fzh, 
+        		r, g, b, 1F,
+        		r, g, b);
 		
 		Matrix4f pose = matrixStack.last().pose();
 

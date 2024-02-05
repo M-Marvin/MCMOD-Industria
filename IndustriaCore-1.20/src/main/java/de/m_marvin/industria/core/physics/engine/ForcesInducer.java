@@ -8,7 +8,7 @@ import net.minecraft.server.level.ServerLevel;
 
 @SuppressWarnings("deprecation")
 public abstract class ForcesInducer implements ShipForcesInducer {
-
+	
 	@JsonIgnore
 	protected ServerLevel level;
 	

@@ -304,11 +304,6 @@ public class PhysicUtility {
 		return !state.isAir();
 	}
 	
-	public static boolean resetFrameQueue(ServerLevel level) {
-		PhysicHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
-		return handler.resetFrameQueue();
-	}
-	
 	public static <T> T optionalContraptionTransform(Level level, BlockPos position, BiFunction<ShipTransform, T, T> optionalTransform, T input) {
 		Ship contraption = getContraptionOfBlock(level, position);
 		if (contraption != null) {

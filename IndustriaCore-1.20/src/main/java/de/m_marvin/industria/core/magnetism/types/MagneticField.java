@@ -4,23 +4,16 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import org.joml.Matrix3d;
-import org.joml.Matrix3dc;
 import org.joml.Vector3d;
-import org.valkyrienskies.core.api.ships.PhysShip;
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
-import org.valkyrienskies.core.api.ships.properties.ShipTransform;
 import org.valkyrienskies.core.impl.game.ships.PhysShipImpl;
 
-import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.magnetism.engine.MagneticForceInducer;
 import de.m_marvin.industria.core.physics.PhysicUtility;
-import de.m_marvin.industria.core.physics.types.ContraptionPosition;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.NBTUtility;
 import de.m_marvin.unimat.impl.Quaterniond;
-import de.m_marvin.univec.impl.Vec2d;
 import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -74,6 +67,7 @@ public class MagneticField {
 		for (MagneticFieldInfluence influence : this.magneticInfluences) {
 			influenceList.add(influence.serialize());
 		}
+		tag.putLong("Id", this.id);
 		tag.put("Influences", influenceList);
 		tag.put("LinearField", NBTUtility.writeVector3d(this.fieldVectorLinear));
 		tag.put("AlternatingField", NBTUtility.writeVector3d(this.fieldVectorAlternating));

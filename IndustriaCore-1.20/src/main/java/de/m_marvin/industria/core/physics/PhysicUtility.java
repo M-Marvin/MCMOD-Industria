@@ -3,6 +3,7 @@ package de.m_marvin.industria.core.physics;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.OptionalLong;
+import java.util.Set;
 import java.util.function.BiFunction;
 
 import org.joml.Matrix4dc;
@@ -85,8 +86,6 @@ public class PhysicUtility {
 	}
 	
 	public static Vec3d toWorldVector(ShipTransform contraption, Vec3d vector) {
-		//return Vec3d.fromVec(contraption.getShipToWorldRotation().transform(vector.writeTo(new Vector3d())));
-		// TODO
 		Vector4d v = contraption.getShipToWorld().transform(new Vector4d(vector.x, vector.y, vector.z, 0));
 		return new Vec3d(v.x, v.y, v.z);
 	}
@@ -234,10 +233,9 @@ public class PhysicUtility {
 		return handler.removeConstaint(constraint);
 	}
 
-	public static List<Integer> getAllConstraints(Level level) {
+	public static Set<Integer> getAllConstraints(Level level) {
 		PhysicHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
-		handler.getAllConstraints(); // TODO
-		return null;
+		return handler.getAllConstraints().keySet();
 	}
 	
 	public static VSConstraint getConstraintInstance(Level level, int constraint) {

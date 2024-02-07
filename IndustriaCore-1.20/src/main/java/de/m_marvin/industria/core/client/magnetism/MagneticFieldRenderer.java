@@ -41,7 +41,7 @@ public class MagneticFieldRenderer {
 	@SubscribeEvent
 	public static void onWorldRender(RenderLevelStageEvent event) {
 		
-		if (event.getStage() == Stage.AFTER_PARTICLES) { // AFTER_SOLID_BLOCKS // TODO
+		if (event.getStage() == Stage.AFTER_PARTICLES) {
 			
 			animationTicks += event.getPartialTick();
 

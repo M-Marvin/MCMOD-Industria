@@ -45,13 +45,8 @@ public class MagneticForceInducer extends ForcesInducer {
 			
 			synchronized (handler.getMagneticFields()) {
 				for (MagneticField field2 : handler.getMagneticFields()) {
-					
-					if (field2 != field1 && field1.isInEffectiveLinearRange(this.level, field2)) {
-						Vec3d interactingFieldVector = field2.getWorldFieldVectorInteracting(level, field1);
-						Vec3d interactingMagneticCenter = PhysicUtility.ensureWorldCoordinates(level, field2.getAnyInfluencePos(), field2.getMagneticCenter());
-						if (interactingFieldVector.length() > 0) field1.applyFieldForces(getLevel(), (PhysShipImpl) contraptionPhysics, contraption, interactingFieldVector, interactingMagneticCenter);
-					}
-					
+					if (field2 != field1 && field1.isInEffectiveLinearRange(this.level, field2))
+						field1.applyFieldForces(getLevel(), (PhysShipImpl) contraptionPhysics, contraption, field2);
 				}
 			}
 			

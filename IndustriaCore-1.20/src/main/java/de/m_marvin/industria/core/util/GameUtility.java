@@ -108,7 +108,7 @@ public class GameUtility {
 	}
 	
 	public static Vec3f getWorldGravity(BlockGetter level) {
-		return new Vec3f(0, 0.1F, 0); // TODO
+		return new Vec3f(0, 10, 0); // TODO gravity constant
 	}
 	
 	public static <T extends Capability<C>, C extends ICapabilitySerializable<?>> C getLevelCapability(Level level, T cap) {

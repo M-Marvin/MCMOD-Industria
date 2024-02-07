@@ -24,13 +24,6 @@ public class ConduitEntity {
 		this.conduit.onBuild(level, position, this);
 		this.shape = conduit.buildShape(level, this);
 		updateShape(level);
-		// TODO Remove if not able to fix
-//		if (!level.isClientSide) {
-//			ServerShip contraptionA = (ServerShip) PhysicUtility.getContraptionOfBlock(level, this.getPosition().getNodeApos());
-//			ServerShip contraptionB = (ServerShip) PhysicUtility.getContraptionOfBlock(level, this.getPosition().getNodeBpos());
-//			if (contraptionA != null) ContraptionAttachment.attachIfMissing(contraptionA).notifyNewConduit(level, this, 0);
-//			if (contraptionB != null) ContraptionAttachment.attachIfMissing(contraptionB).notifyNewConduit(level, this, 1);
-//		}
 		return this;
 	}
 	
@@ -45,13 +38,6 @@ public class ConduitEntity {
 		assert this.shape != null : "Can't update un-build conduit!";
 		this.conduit.updatePhysicalNodes(level, this);
 	}
-	
-	// TODO Remove if not able to fix
-//	public boolean updateContraptions(Level level, PhysShip contraption, int nodeId) {
-//		if (this.shape == null) return false;
-//		this.conduit.updateContraptionForces(level, contraption, this, nodeId);
-//		return true;
-//	}
 	
 	public CompoundTag save() {
 		CompoundTag tag = new CompoundTag();

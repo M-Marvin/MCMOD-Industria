@@ -16,7 +16,6 @@ public class MagnetismUtility {
 
 	public static void setFieldInfluence(Level level, MagneticFieldInfluence influence) {
 		MagnetismHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.MAGNETISM_HANDLER_CAPABILITY);
-		System.out.println("place influence at " + influence.getPos());
 		handler.setFieldInfluence(influence);
 	}
 	

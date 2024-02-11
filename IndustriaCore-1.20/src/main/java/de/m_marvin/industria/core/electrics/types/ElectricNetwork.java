@@ -87,7 +87,7 @@ public class ElectricNetwork implements INGCallback {
 	
 	public void plotTemplate(Component<?, ?, ?> component, ICircuitPlot template) {
 		template.prepare(templateCounter++);
-		this.circuitBuilder.append(template.plot()); // TODO Model filtering
+		this.circuitBuilder.append(template.plot()); // TODO model filtering
 		this.components.add(component);
 	}
 

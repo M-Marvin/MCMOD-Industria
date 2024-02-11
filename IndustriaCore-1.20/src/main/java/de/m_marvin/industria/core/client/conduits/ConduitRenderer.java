@@ -27,7 +27,6 @@ import de.m_marvin.univec.impl.Vec3f;
 import de.m_marvin.univec.impl.Vec4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -35,6 +34,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -48,7 +48,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.FORGE,modid=IndustriaCore.MODID, value=Dist.CLIENT)
+@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.FORGE, modid=IndustriaCore.MODID, value=Dist.CLIENT)
 public class ConduitRenderer {
 
 	protected static float animationTicks;
@@ -112,7 +112,7 @@ public class ConduitRenderer {
 		
 	}
 
-	protected static void drawPlayerFocusedDebugNodes(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, LocalPlayer player, float partialTicks) {
+	protected static void drawPlayerFocusedDebugNodes(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, Player player, float partialTicks) {
 		
 		HitResult result = GameUtility.raycast(clientLevel, Vec3d.fromVec(player.getEyePosition()), Vec3d.fromVec(player.getViewVector(partialTicks)), player.getBlockReach());
 		if (result.getType() == Type.BLOCK) {
@@ -140,7 +140,7 @@ public class ConduitRenderer {
 		
 	}
 	
-	protected static void drawPlayerFocusedNodeSymbols(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, LocalPlayer player, float partialTicks) {
+	protected static void drawPlayerFocusedNodeSymbols(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, Player player, float partialTicks) {
 		
 		HitResult result = GameUtility.raycast(clientLevel, Vec3d.fromVec(player.getEyePosition()), Vec3d.fromVec(player.getViewVector(partialTicks)), player.getBlockReach());
 		if (result.getType() == Type.BLOCK) {
@@ -212,7 +212,7 @@ public class ConduitRenderer {
 				Vec3d nodeAworldPosition = nodeA.getWorldRenderPosition(level, conduit.getPosition().getNodeApos());
 				Vec3d nodeBworldPosition = nodeB.getWorldRenderPosition(level, conduit.getPosition().getNodeBpos());
 				
-				Vec4f color = new Vec4f(0.5F, 1.0F, 0.5F, 1F); // TODO Color representing physic-mode
+				Vec4f color = new Vec4f(0.5F, 1.0F, 0.5F, 1F); // TODO physics behavior of conduits
 				
 				Vec3f normal = new Vec3f(nodeAworldPosition.sub(nodeBworldPosition)).normalize();
 				Vec3d nodeOrigin = MathUtility.getMinCorner(nodeAworldPosition, nodeBworldPosition).sub(0.5, 0.5, 0.5);

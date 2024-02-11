@@ -40,7 +40,6 @@ public class Config {
 		ModLoadingContext.get().registerConfig(Type.COMMON, CONFIG);
 	}
 	
-	// FIXME does not trigger for some reason
 	@SubscribeEvent
 	public static void onReload(ModConfigEvent.Reloading event) {
 		MagneticField.reloadConfig();

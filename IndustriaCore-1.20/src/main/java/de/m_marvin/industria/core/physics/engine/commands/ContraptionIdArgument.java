@@ -16,16 +16,9 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import de.m_marvin.industria.core.physics.PhysicUtility;
-import de.m_marvin.industria.core.physics.types.ContraptionHitResult;
-import de.m_marvin.univec.impl.Vec3d;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.HitResult.Type;
 
 public class ContraptionIdArgument implements ArgumentType<ContraptionIdArgument.ContraptionSelector> {
 	
@@ -90,26 +83,29 @@ public class ContraptionIdArgument implements ArgumentType<ContraptionIdArgument
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
 		
-		if (context.getSource() instanceof SharedSuggestionProvider) {
-			
-			ClientLevel level = Minecraft.getInstance().level;
-			Player player = Minecraft.getInstance().player;
-			Vec3d eyePos = Vec3d.fromVec(player.getEyePosition());
-			Vec3d direction = Vec3d.fromVec(player.getViewVector(0));
-			double range = player.getBlockReach();
-			
-			ContraptionHitResult result = PhysicUtility.clipForContraption(level, eyePos, direction, range);
-			
-			if (result.getType() != Type.MISS) {
-				long contraptionId = result.getContraption().getId();
-				builder.suggest(CONTRAPTION_PREFIX + contraptionId);
-			} else {
-				for (Ship contraption : PhysicUtility.getLoadedContraptions(level)) {
-					builder.suggest(CONTRAPTION_PREFIX + contraption.getId());
-				}
-			}
-			
-		}
+		// TODO fix suggestions
+//		if (context.getSource() instanceof ClientSuggestionProvider provider) {
+//			
+//			provider.minecraft;
+//			
+//			ClientLevel level = context.getSource();
+//			Player player = Minecraft.getInstance().player;
+//			Vec3d eyePos = Vec3d.fromVec(player.getEyePosition());
+//			Vec3d direction = Vec3d.fromVec(player.getViewVector(0));
+//			double range = player.getBlockReach();
+//			
+//			ContraptionHitResult result = PhysicUtility.clipForContraption(level, eyePos, direction, range);
+//			
+//			if (result.getType() != Type.MISS) {
+//				long contraptionId = result.getContraption().getId();
+//				builder.suggest(CONTRAPTION_PREFIX + contraptionId);
+//			} else {
+//				for (Ship contraption : PhysicUtility.getLoadedContraptions(level)) {
+//					builder.suggest(CONTRAPTION_PREFIX + contraption.getId());
+//				}
+//			}
+//			
+//		}
 		
 		return builder.buildFuture();
 	}

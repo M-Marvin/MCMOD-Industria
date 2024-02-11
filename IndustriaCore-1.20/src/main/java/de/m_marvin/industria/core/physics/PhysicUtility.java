@@ -14,13 +14,13 @@ import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
 import org.valkyrienskies.core.api.ships.properties.ShipTransform;
 import org.valkyrienskies.core.apigame.constraints.VSConstraint;
-import org.valkyrienskies.core.apigame.world.chunks.BlockType;
 import org.valkyrienskies.mod.common.BlockStateInfo;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.physics.engine.ForcesInducer;
 import de.m_marvin.industria.core.physics.engine.PhysicHandlerCapability;
+import de.m_marvin.industria.core.physics.engine.VS2MassSyncPatch;
 import de.m_marvin.industria.core.physics.types.ContraptionHitResult;
 import de.m_marvin.industria.core.physics.types.ContraptionPosition;
 import de.m_marvin.industria.core.registries.Capabilities;
@@ -28,7 +28,6 @@ import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3i;
-import kotlin.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -292,10 +291,13 @@ public class PhysicUtility {
 		BlockStateInfo.INSTANCE.onSetBlock(level, pos, prevState, newState);
 	}
 	
+	public static double getBlockMass(BlockState state) {
+		return VS2MassSyncPatch.getPatchedBlockMass(state);
+	}
+	
 	public static boolean isSolidContraptionBlock(BlockState state) {
-		Pair<Double, BlockType> blockData = BlockStateInfo.INSTANCE.get(state);
-		
-		return blockData.getFirst() > 0; // FIXME hitbox check missing
+		double mass = VS2MassSyncPatch.getPatchedBlockMass(state);
+		return mass > 0; // FIXME [VS2dep] hitbox check missing
 	}
 	
 	public static boolean isValidContraptionBlock(BlockState state) {

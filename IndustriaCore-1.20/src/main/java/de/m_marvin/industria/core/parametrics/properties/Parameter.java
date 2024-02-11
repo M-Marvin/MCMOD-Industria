@@ -6,6 +6,8 @@ import java.util.Map;
 import com.google.common.base.Objects;
 import com.google.gson.JsonElement;
 
+import net.minecraft.network.FriendlyByteBuf;
+
 public abstract class Parameter<T> {
 	
 	private static Map<String, Parameter<?>> name2parameterRegistry = new HashMap<>();
@@ -30,6 +32,10 @@ public abstract class Parameter<T> {
 		return this.name;
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Parameter<?> other) {
@@ -50,5 +56,8 @@ public abstract class Parameter<T> {
 	public abstract Class<T> getTypeClass();
 
 	public abstract T parseValue(JsonElement jsonElement);
+	
+	public abstract void writeValue(FriendlyByteBuf buff, Object value);
+	public abstract T readValue(FriendlyByteBuf buff);
 	
 }

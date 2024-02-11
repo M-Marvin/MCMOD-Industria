@@ -176,7 +176,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 	@SuppressWarnings("unchecked")
 	public Map<Integer, VSConstraint> getAllConstraints() {
 		
-		// FIXME This is horrible!!! hopefully VS2 adds an API for that soon ...
+		// FIXME [VS2dep] This is horrible!!! hopefully VS2 adds an API for that soon ...
 		Map<Integer, VSConstraint> constraints = null;
 		try {
 			@NotNull Field constraintField = ObfuscationReflectionHelper.findField(ShipObjectServerWorld.class, "constraints");

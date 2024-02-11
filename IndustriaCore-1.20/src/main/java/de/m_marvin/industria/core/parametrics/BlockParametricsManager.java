@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -19,16 +20,20 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.core.parametrics.engine.network.SSyncParametricsPackage;
 import de.m_marvin.industria.core.parametrics.properties.Parameter;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -41,12 +46,21 @@ public class BlockParametricsManager extends SimplePreparableReloadListener<Map<
 	private final String directory;
 	private Map<ResourceLocation, BlockParametrics> byLocation = new HashMap<>();
 	
-	private static BlockParametricsManager instance;
+	private static BlockParametricsManager instance = new BlockParametricsManager(new Gson(), "parametrics");
 	
 	@SubscribeEvent
 	public static void addReloadListenerEvent(AddReloadListenerEvent event) {
-		instance = new BlockParametricsManager(new Gson(), "parametrics");
 		event.addListener(instance);
+	}
+	
+	@SubscribeEvent
+	public static void onDatapackSync(OnDatapackSyncEvent event) {
+		ServerPlayer player = event.getPlayer();
+		if (player == null) {
+			IndustriaCore.NETWORK.send(PacketDistributor.ALL.noArg(), new SSyncParametricsPackage(instance.byLocation.values()));
+		} else {
+			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new SSyncParametricsPackage(instance.byLocation.values()));
+		}
 	}
 	
 	public static BlockParametricsManager getInstance() {
@@ -56,6 +70,11 @@ public class BlockParametricsManager extends SimplePreparableReloadListener<Map<
 	public BlockParametricsManager(Gson gson, String directory) {
 		this.gson = gson;
 		this.directory = directory;
+	}
+	
+	public void updateParametrics(Collection<BlockParametrics> params) {
+		this.byLocation.clear();
+		params.forEach(param -> this.byLocation.put(param.getBlock(), param));
 	}
 	
 	public BlockParametrics getParametrics(Block block) {

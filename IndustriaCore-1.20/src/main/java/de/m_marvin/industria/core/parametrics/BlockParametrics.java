@@ -9,6 +9,7 @@ import de.m_marvin.industria.core.parametrics.properties.IntegerParameter;
 import de.m_marvin.industria.core.parametrics.properties.Parameter;
 import de.m_marvin.industria.core.parametrics.properties.Vec3dParameter;
 import de.m_marvin.univec.impl.Vec3d;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public class BlockParametrics {
@@ -19,6 +20,34 @@ public class BlockParametrics {
 	public BlockParametrics(ResourceLocation block) {
 		this.block = block;
 		this.parameters = new HashMap<>();
+	}
+	
+	public void writeToBuffer(FriendlyByteBuf buff) {
+		buff.writeResourceLocation(this.block);
+		buff.writeInt(this.parameters.size());
+		for (Parameter<?> parameter : parameters.keySet()) {
+			buff.writeUtf(parameter.getName());
+			parameter.writeValue(buff, parameters.get(parameter));
+		}
+	}
+	
+	public static BlockParametrics readFromBuffer(FriendlyByteBuf buff) {
+		BlockParametrics parametrics = new BlockParametrics(buff.readResourceLocation());
+		int parameterCount = buff.readInt();
+		for (int i = 0; i < parameterCount; i++) {
+			Parameter<?> parameter = Parameter.getParameterByName(buff.readUtf());
+			Object value = parameter.readValue(buff);
+			parametrics.setParameter(parameter, value);
+		}
+		return parametrics;
+	}
+	
+	public ResourceLocation getBlock() {
+		return block;
+	}
+	
+	public boolean hasParameter(Parameter<?> parameter) {
+		return this.parameters.containsKey(parameter);
 	}
 	
 	public <T> T getParameter(Parameter<T> parameter) {

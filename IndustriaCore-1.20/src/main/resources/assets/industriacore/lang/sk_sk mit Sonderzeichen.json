@@ -36,6 +36,9 @@
 "industriacore.tooltip.conduit.maxClampDistance":	"Rozpätie: %1$s m",
 "industriacore.tooltip.electricconduit.resistance":	"Odpor: %1$s \u03a9/m",
 "industriacore.tooltip.electricblock.voltage":		"Napätie: %1$s V",
-"industriacore.tooltip.electricblock.power":		"Výkon: %1$s W"
+"industriacore.tooltip.electricblock.power":		"Výkon: %1$s W",
+"industriacore.tooltip.magneticblock.fieldstrength":	"Sila poľa: %1$s",
+"industriacore.tooltip.electricblock.coefficient":	"Magnetizovateľnosť: %1$s",
+"industriacore.tooltip.physics.mass":			"Hmotnosť: %1$s kg"
 
 }

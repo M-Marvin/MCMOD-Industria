@@ -36,6 +36,9 @@
 "industriacore.tooltip.conduit.maxClampDistance":	"Luz: %1$s m",
 "industriacore.tooltip.electricconduit.resistance":	"Resistencia: %1$s \u03a9/m",
 "industriacore.tooltip.electricblock.voltage":		"Tensi\u00f3n: %1$s V",
-"industriacore.tooltip.electricblock.power":		"Potencia: %1$s W"
+"industriacore.tooltip.electricblock.power":		"Potencia: %1$s W",
+"industriacore.tooltip.magneticblock.fieldstrength":	"Intensidad de campo: %1$s",
+"industriacore.tooltip.electricblock.coefficient":	"Magnetizabilidad: %1$s",
+"industriacore.tooltip.physics.mass":			"Masa: %1$s kg"
 
 }

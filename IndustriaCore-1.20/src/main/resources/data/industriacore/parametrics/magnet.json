@@ -1,3 +1,4 @@
 {
-	"magneticCoefficient": 1.0
+	"magneticCoefficient": 0.0,
+	"magneticVector": [0.0, 2.0, 0.0]
 }

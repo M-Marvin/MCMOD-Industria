@@ -9,7 +9,6 @@ import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.physics.engine.ForcesInducer;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
-import de.m_marvin.univec.impl.Vec3d;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 
@@ -37,7 +36,7 @@ public class MagneticForceInducer extends ForcesInducer {
 
 		ServerShip contraption = (ServerShip) PhysicUtility.getContraptionById(level, contraptionPhysics.getId());
 		if (contraption == null) return;
-
+		
 		for (Long field1id : this.fields) {
 
 			MagneticField field1 = handler.getField(field1id);
@@ -46,7 +45,7 @@ public class MagneticForceInducer extends ForcesInducer {
 			synchronized (handler.getMagneticFields()) {
 				for (MagneticField field2 : handler.getMagneticFields()) {
 					if (field2 != field1 && field1.isInEffectiveLinearRange(this.level, field2))
-						field1.applyFieldForces(getLevel(), (PhysShipImpl) contraptionPhysics, contraption, field2);
+						field1.accumulateForces(getLevel(), (PhysShipImpl) contraptionPhysics, contraption, field2);
 				}
 			}
 			

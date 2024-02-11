@@ -43,7 +43,7 @@ public class ContraptionPosition {
 	}
 	
 	public ContraptionPosition(Quaterniondc orientation, Vector3dc position, @Nullable String dimension) {
-		this(new Quaterniond(orientation.w(), orientation.x(), orientation.y(), orientation.z()), new Vec3d(position.x(), position.y(), position.z()), dimension);
+		this(new Quaterniond(orientation.x(), orientation.y(), orientation.z(), orientation.w()), new Vec3d(position.x(), position.y(), position.z()), dimension);
 	}
 	
 	public ContraptionPosition(ShipTransform transform) {

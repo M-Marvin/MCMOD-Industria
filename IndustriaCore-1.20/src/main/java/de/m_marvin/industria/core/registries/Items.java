@@ -1,6 +1,7 @@
 package de.m_marvin.industria.core.registries;
 
 import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.core.magnetism.types.items.MagneticBlockItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
@@ -17,6 +18,6 @@ public class Items {
 	}
 	
 	public static final RegistryObject<BlockItem> POWER_SOURCE = 	ITEMS.register("power_source", () -> new BlockItem(Blocks.POWER_SOURCE.get(), new Item.Properties().rarity(Rarity.EPIC)));
-	public static final RegistryObject<BlockItem> MAGNET =			ITEMS.register("magnet", () -> new BlockItem(Blocks.MAGNET.get(), new Item.Properties().rarity(Rarity.EPIC)));
+	public static final RegistryObject<BlockItem> MAGNET =			ITEMS.register("magnet", () -> new MagneticBlockItem(Blocks.MAGNET.get(), new Item.Properties().rarity(Rarity.EPIC)));
 	
 }

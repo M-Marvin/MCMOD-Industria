@@ -7,20 +7,22 @@ import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.parametrics.properties.DoubleParameter;
 import de.m_marvin.industria.core.parametrics.properties.IntegerParameter;
 import de.m_marvin.industria.core.parametrics.properties.Parameter;
+import de.m_marvin.industria.core.parametrics.properties.Vec3dParameter;
+import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.resources.ResourceLocation;
 
 public class BlockParametrics {
 	
 	private final ResourceLocation block;
-	private final Map<Parameter<?>, Comparable<?>> parameters;
+	private final Map<Parameter<?>, Object> parameters;
 	
 	public BlockParametrics(ResourceLocation block) {
 		this.block = block;
 		this.parameters = new HashMap<>();
 	}
 	
-	public <T extends Comparable<?>> T getParameter(Parameter<T> parameter) {
-		Comparable<?> comparable = this.parameters.get(parameter);
+	public <T> T getParameter(Parameter<T> parameter) {
+		Object comparable = this.parameters.get(parameter);
 		if (comparable == null) {
 			IndustriaCore.LOGGER.warn("Parameter " + parameter.toString() + " not set for block " + this.block.toString() + "!");
 			return parameter.defaultValue();
@@ -47,6 +49,7 @@ public class BlockParametrics {
 	public static final IntegerParameter PARAMETER_VOLTAGE_MIN = new IntegerParameter("voltageMin", 300);
 	public static final IntegerParameter PARAMETER_VOLTAGE_MAX = new IntegerParameter("voltageMax", 200);
 	public static final DoubleParameter PARAMETER_MAGNETIC_COEFFICIENT = new DoubleParameter("magneticCoefficient", 1.0);
+	public static final Vec3dParameter PARAMETER_MAGNETIC_VECTOR = new Vec3dParameter("magneticVector", new Vec3d(0, 1.0, 0));
 	
 	public int getNominalPower() {
 		return getParameter(PARAMETER_NOMINAL_POWER);
@@ -74,6 +77,10 @@ public class BlockParametrics {
 	
 	public double getMagneticCoefficient() {
 		return getParameter(PARAMETER_MAGNETIC_COEFFICIENT);
+	}
+
+	public Vec3d getMagneticVector() {
+		return getParameter(PARAMETER_MAGNETIC_VECTOR);
 	}
 
 	public double getPowerPercentageP(double power) {

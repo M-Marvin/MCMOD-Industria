@@ -17,7 +17,6 @@ public class MagneticFieldInfluence {
 	private final BlockPos pos;
 	private Vec3d fieldVector = new Vec3d();
 	private Vec3d inducedVector = new Vec3d();
-	private boolean isAlternating = false;
 	private double magneticCoefficient = 0.0;
 	
 	public MagneticFieldInfluence(BlockPos pos) {
@@ -28,7 +27,6 @@ public class MagneticFieldInfluence {
 		BlockState state = level.getBlockState(pos);
 		if (state.getBlock() instanceof IMagneticBlock magnetic) {
 			this.fieldVector = magnetic.getFieldVector(level, state, pos);
-			this.isAlternating = magnetic.isAlternating(level, state, pos);
 			this.magneticCoefficient = magnetic.getCoefficient(level, state, pos);
 		} else {
 			this.magneticCoefficient = BlockParametricsManager.getInstance().getParametrics(state.getBlock()).getMagneticCoefficient();
@@ -47,10 +45,6 @@ public class MagneticFieldInfluence {
 		return inducedVector;
 	}
 	
-	public boolean isAlternating() {
-		return this.isAlternating;
-	}
-	
 	public double getMagneticCoefficient() {
 		return magneticCoefficient;
 	}
@@ -60,7 +54,6 @@ public class MagneticFieldInfluence {
 		tag.put("Pos", NbtUtils.writeBlockPos(pos));
 		tag.put("FieldVector", NBTUtility.writeVector3d(fieldVector));
 		tag.put("InductionVector", NBTUtility.writeVector3d(inducedVector));
-		tag.putBoolean("Alternating", this.isAlternating);
 		tag.putDouble("Coefficient", this.magneticCoefficient);
 		return tag;
 	}
@@ -70,7 +63,6 @@ public class MagneticFieldInfluence {
 		MagneticFieldInfluence influence = new MagneticFieldInfluence(pos);
 		influence.fieldVector = NBTUtility.loadVector3d(tag.getCompound("FieldVector"));
 		influence.inducedVector = NBTUtility.loadVector3d(tag.getCompound("InductionVector"));
-		influence.isAlternating = tag.getBoolean("Alternating");
 		influence.magneticCoefficient = tag.getDouble("Coefficient");
 		return influence;
 	}
@@ -85,7 +77,7 @@ public class MagneticFieldInfluence {
 	
 	@Override
 	public int hashCode() {
-		// WARNING: Don't implement hashCode(), it undefined behavior in HashSet<> for some reason!
+		// WARNING: Don't implement hashCode(), it undefined behavior in HashSet<> because of an bug in the API!
 		return super.hashCode();
 	}
 	

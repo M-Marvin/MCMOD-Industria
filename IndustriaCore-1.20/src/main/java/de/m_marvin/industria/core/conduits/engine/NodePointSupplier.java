@@ -25,10 +25,6 @@ public class NodePointSupplier {
 	protected List<ConduitNode> nodes = new ArrayList<>();
 	protected Map<Property<?>, BiFunction<Vec3i, Object, Vec3i>> modifiers = new HashMap<>();
 	
-	private NodePointSupplier() {
-		// TODO Auto-generated constructor stub
-	}
-	
 	public static NodePointSupplier define() {
 		return new NodePointSupplier();
 	}

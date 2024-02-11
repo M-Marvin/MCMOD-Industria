@@ -6,7 +6,7 @@ import java.util.Map;
 import com.google.common.base.Objects;
 import com.google.gson.JsonElement;
 
-public abstract class Parameter<T extends Comparable<?>> {
+public abstract class Parameter<T> {
 	
 	private static Map<String, Parameter<?>> name2parameterRegistry = new HashMap<>();
 	

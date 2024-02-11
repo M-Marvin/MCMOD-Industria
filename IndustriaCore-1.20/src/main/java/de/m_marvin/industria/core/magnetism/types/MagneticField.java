@@ -1,5 +1,6 @@
 package de.m_marvin.industria.core.magnetism.types;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -9,6 +10,7 @@ import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
 import org.valkyrienskies.core.impl.game.ships.PhysShipImpl;
 
+import de.m_marvin.industria.core.Config;
 import de.m_marvin.industria.core.magnetism.engine.MagneticForceInducer;
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.util.MathUtility;
@@ -25,20 +27,33 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class MagneticField {
 	
-	public static final double MAGNETIC_FIELD_RANGE_PER_STRENGTH = 6.0;
-	public static final double INITIAL_OMEGA_MULTIPLIER = 30.0;
-	public static final double ANGULAR_FORCE_MULTIPLIER = 100.0;
-	public static final double LINEAR_FORCE_MULTIPLIER = 80000.0;
+	public static final double DEFAULT_ANGULAR_FORCE_MULTIPLIER = 100.0;
+	public static final double DEFAULT_LINEAR_FORCE_MULTIPLIER = 4000.0;
+	public static final double DEFAULT_MAGNETIC_FIELD_RANGE_PER_STRENGTH = 5.0;
+	
+	static double angularForceMultiplier = DEFAULT_ANGULAR_FORCE_MULTIPLIER;
+	static double linearForceMultiplier = DEFAULT_LINEAR_FORCE_MULTIPLIER;
+	static double fieldRangePerStrength = DEFAULT_MAGNETIC_FIELD_RANGE_PER_STRENGTH;
+	
+	public static void reloadConfig() {
+		angularForceMultiplier = Config.MAGNETIC_FORCE_MULTIPLIER_ANGULAR.get();
+		linearForceMultiplier = Config.MAGNETIC_FORCE_MULTIPLIER_LINEAR.get();
+		fieldRangePerStrength = Config.MAGNETIC_FIELD_RANGE.get();
+	}
 	
 	protected final long id;
 	protected HashSet<MagneticFieldInfluence> magneticInfluences = new HashSet<>();
-	protected Vec3d fieldVectorAlternating = new Vec3d();
-	protected Vec3d fieldVectorLinear = new Vec3d();
+
 	protected Vec3d magneticCenterOffset = new Vec3d();
 	protected double inductionCoefficient = 1.0;
-	
+	protected Vec3d inducedFieldVector = new Vec3d();
+	protected Vec3d fieldVectorLinear = new Vec3d();
 	protected BlockPos minPos = new BlockPos(0, 0, 0);
 	protected BlockPos maxPos = new BlockPos(0, 0, 0);
+	
+	public static enum FieldVectorType {
+		EMITTED, INDUCED;
+	}
 	
 	public MagneticField(long id) {
 		this.id = id;
@@ -85,8 +100,8 @@ public class MagneticField {
 		tag.putLong("Id", this.id);
 		tag.put("Influences", influenceList);
 		tag.put("LinearField", NBTUtility.writeVector3d(this.fieldVectorLinear));
-		tag.put("AlternatingField", NBTUtility.writeVector3d(this.fieldVectorAlternating));
 		tag.put("MagneticCenter", NBTUtility.writeVector3d(this.magneticCenterOffset));
+		tag.putDouble("InductionCoefficient", this.inductionCoefficient);
 		return tag;
 	}
 	
@@ -97,8 +112,8 @@ public class MagneticField {
 			field.addInfluence(MagneticFieldInfluence.deserialize(influenceList.getCompound(i)));
 		}
 		field.fieldVectorLinear = NBTUtility.loadVector3d(tag.getCompound("LinearField"));
-		field.fieldVectorAlternating = NBTUtility.loadVector3d(tag.getCompound("AlternatingField"));
 		field.magneticCenterOffset = NBTUtility.loadVector3d(tag.getCompound("MagneticCenter"));
+		field.inductionCoefficient = tag.getDouble("InductionCoefficient");
 		return field;
 	}
 	
@@ -150,54 +165,6 @@ public class MagneticField {
 		return Long.hashCode(this.id);
 	}
 
-	public void updateField(Level level) {
-		this.fieldVectorLinear = new Vec3d();
-		this.fieldVectorAlternating = new Vec3d();
-		this.magneticCenterOffset = new Vec3d();
-		
-		// Calculate field strength and direction
-		for (MagneticFieldInfluence influence : this.magneticInfluences) {
-			influence.update(level);
-			
-			if (influence.isAlternating()) {
-				this.fieldVectorAlternating.addI(influence.getVector());
-			} else {
-				this.fieldVectorLinear.addI(influence.getVector());
-			}
-		}
-		
-		// Calculate induced fields
-		for (MagneticFieldInfluence influence : this.magneticInfluences) {
-			Vec3d fieldApplied = influence.isAlternating() ? this.fieldVectorAlternating : this.fieldVectorLinear;
-			influence.getInducedVector().setI(fieldApplied.mul(influence.getMagneticCoefficient() - 1));
-		}
-		
-		// Calculate field center point and induction coefficient
-		double d = 0;
-		Vec3d geometricCenter = getGeometricCenter();
-		this.inductionCoefficient = 0;
-		for (MagneticFieldInfluence influence : this.magneticInfluences) {
-			double strength = influence.getVector().add(influence.getInducedVector()).length();
-			if (strength == 0) strength = influence.getMagneticCoefficient();
-			this.magneticCenterOffset.addI(Vec3d.fromVec(influence.getPos()).add(0.5, 0.5, 0.5).sub(geometricCenter).mul(strength));
-			this.inductionCoefficient += influence.getMagneticCoefficient();
-			d += strength;
-		}
-		this.magneticCenterOffset.divI(d);
-		this.inductionCoefficient /= this.magneticInfluences.size();
-		
-		// If part of contraption, create force inducer
-		if (!level.isClientSide()) {
-			BlockPos pos = getAnyInfluencePos();
-			Ship contraption = PhysicUtility.getContraptionOfBlock(level, pos);
-			if (contraption != null) {
-				MagneticForceInducer forceInducer = PhysicUtility.getOrCreateForceInducer((ServerLevel) level, (ServerShip) contraption, MagneticForceInducer.class);
-				forceInducer.addField(this.getId());
-			}
-		}
-		
-	}
-	
 	public void removeInducer(ServerLevel level) {
 		
 		// If part of contraption, remove from force inducer
@@ -219,10 +186,6 @@ public class MagneticField {
 		return fieldVectorLinear;
 	}
 	
-	public Vec3d getFieldVectorAlternating() {
-		return fieldVectorAlternating;
-	}
-	
 	public Vec3d getGeometricCenter() {
 		return MathUtility.getMiddle(getMinPos(), getMaxPos());
 	}
@@ -235,24 +198,20 @@ public class MagneticField {
 		return inductionCoefficient;
 	}
 	
+	public Vec3d getInducedFieldVector() {
+		return inducedFieldVector;
+	}
+	
 	public Vec3d getMagneticCenter() {
 		return this.getGeometricCenter().add(getMagneticCenterOffset());
 	}
 	
 	public double getEffectiveRangeLinear() {
-		return this.fieldVectorLinear.length() * MAGNETIC_FIELD_RANGE_PER_STRENGTH;
+		return Math.max(this.fieldVectorLinear.length(), this.inducedFieldVector.length()) * fieldRangePerStrength;
 	}
 
-	public double getEffectiveRangeAlternating() {
-		return this.fieldVectorAlternating.length() * MAGNETIC_FIELD_RANGE_PER_STRENGTH;
-	}
-	
 	public double getIntensityLinearAt(double distance) {
-		return Mth.clamp(Math.pow(getEffectiveRangeLinear() - distance, 2) / Math.pow(getEffectiveRangeLinear(), 2), 0, 1);
-	}
-
-	public double getIntensityAlternatingAt(double distance) {
-		return Mth.clamp(1 - distance / getEffectiveRangeLinear(), 0, 1);
+		return Mth.clamp(1 - (distance - getEffectiveRangeLinear()), 0, 1);
 	}
 	
 	public boolean isInEffectiveLinearRange(Level level, MagneticField other) {
@@ -262,13 +221,13 @@ public class MagneticField {
 		return centerDistance <= this.getEffectiveRangeLinear() || centerDistance <= other.getEffectiveRangeLinear();
 	}
 	
-	public Vec3d getWorldFieldVector(Level level) {
+	public Vec3d getWorldFieldVector(Level level, FieldVectorType type) {
 		BlockPos thisBlockPos = this.getAnyInfluencePos();
-		return PhysicUtility.ensureWorldVector(level, thisBlockPos, this.fieldVectorLinear);	
+		return PhysicUtility.ensureWorldVector(level, thisBlockPos, type == FieldVectorType.EMITTED ? this.fieldVectorLinear : this.inducedFieldVector);	
 	}
 	
-	public Vec3d getWorldFieldVectorInteracting(Level level, MagneticField other) {
-		Vec3d thisFieldVector = getWorldFieldVector(level);
+	public Vec3d getWorldFieldVectorInteracting(Level level, MagneticField other, FieldVectorType type) {
+		Vec3d thisFieldVector = getWorldFieldVector(level, type);
 		if (thisFieldVector.length() == 0) return new Vec3d(0, 0, 0);
 		
 		BlockPos thisBlockPos = this.getAnyInfluencePos();
@@ -283,64 +242,119 @@ public class MagneticField {
 		
 		return thisFieldVector.mul(this.getIntensityLinearAt(offset.length())).transform(interactionVecRot);
 	}
+
+	// Called when block state changes in the field occur
+	public void updateField(Level level) {
+		this.fieldVectorLinear = new Vec3d();
+		this.magneticCenterOffset = new Vec3d();
+		
+		// Calculate field strength and direction
+		for (MagneticFieldInfluence influence : this.magneticInfluences) {
+			influence.update(level);
+			
+			this.fieldVectorLinear.addI(influence.getVector());
+		}
+
+		// Calculate field center point and induction coefficient
+		double d = 0;
+		Vec3d geometricCenter = getGeometricCenter();
+		this.inductionCoefficient = 0;
+		for (MagneticFieldInfluence influence : this.magneticInfluences) {
+			double strength = influence.getMagneticCoefficient() + influence.getVector().length();
+			this.magneticCenterOffset.addI(Vec3d.fromVec(influence.getPos()).add(0.5, 0.5, 0.5).sub(geometricCenter).mul(strength));
+			this.inductionCoefficient += influence.getMagneticCoefficient();
+			d += strength;
+		}
+		this.magneticCenterOffset.divI(d);
+		this.inductionCoefficient /= this.magneticInfluences.size();
+		
+		// If part of contraption, create force inducer
+		if (!level.isClientSide()) {
+			BlockPos pos = getAnyInfluencePos();
+			Ship contraption = PhysicUtility.getContraptionOfBlock(level, pos);
+			if (contraption != null) {
+				MagneticForceInducer forceInducer = PhysicUtility.getOrCreateForceInducer((ServerLevel) level, (ServerShip) contraption, MagneticForceInducer.class);
+				forceInducer.addField(this.getId());
+			}
+		}
+		
+	}
 	
-	public void applyFieldForces(Level level, PhysShipImpl contraptionPhysics, ServerShip contraption, MagneticField field) {
+	// Called every game tick to update induction vectors
+	public void updateInduction(Level level, Collection<MagneticField> fields) {
+		
+		Vec3d newVector = new Vec3d(0, 0, 0);
+		
+		for (MagneticField field : fields) {
+			
+			if (field == this || !this.isInEffectiveLinearRange(level, field)) continue;
+			
+			Vec3d interactingFieldVector = PhysicUtility.ensureContraptionVector(level, this.getAnyInfluencePos(), field.getWorldFieldVectorInteracting(level, this, FieldVectorType.EMITTED));
+			newVector.addI(interactingFieldVector);
+			
+		}
+		
+		this.inducedFieldVector = (newVector.mul(this.inductionCoefficient));
+		
+		// Calculate individual induction vectors
+		for (MagneticFieldInfluence influence : this.magneticInfluences) {
+			influence.getInducedVector().setI(this.inducedFieldVector.mul(influence.getMagneticCoefficient() / this.inductionCoefficient / this.magneticInfluences.size()));	
+		}
+		
+	}
+	
+	// Called every physics tick to update applied forces if part of contraption
+	public void accumulateForces(Level level, PhysShipImpl contraptionPhysics, ServerShip contraption, MagneticField field) {
 		
 		Vec3d interactingMagneticCenter = PhysicUtility.ensureWorldCoordinates(level, field.getAnyInfluencePos(), field.getMagneticCenter());
 		Vec3d magneticCenter = PhysicUtility.toWorldPos(contraption.getTransform(), getMagneticCenter());
+		
 		Vec3d offset = interactingMagneticCenter.sub(magneticCenter);
 		double distance = offset.length();
 		
+		// Check if fields are on effective range
 		if (distance > this.getEffectiveRangeLinear() && distance > field.getEffectiveRangeLinear()) return;
 		
-		Vec3d interactingFieldVector = field.getWorldFieldVectorInteracting(level, this);
-		double interactingInductionCoefficient = field.getInductionCoefficient();
-		Vec3d currentFieldVector = getWorldFieldVector(level);
-		double inductionCoefficient = getInductionCoefficient();
-		double mass = contraption.getInertiaData().getMass();
-		
-		// TODO adjust magnetic field multipliers
-		double ANGULAR_FORCE_MULTIPLIER = 2000.0;
-		double LINEAR_FORCE_MULTIPLIER = 40000.0;
+		Vec3d interactingFieldVectorE = field.getWorldFieldVectorInteracting(level, this, FieldVectorType.EMITTED);
+		Vec3d interactingFieldVectorI = field.getWorldFieldVectorInteracting(level, this, FieldVectorType.INDUCED);
+		Vec3d currentFieldVectorE = getWorldFieldVector(level, FieldVectorType.EMITTED);
+		Vec3d currentFieldVectorI = getWorldFieldVector(level, FieldVectorType.INDUCED);
 		
 		/* Angular force */
 		
-		double strengthAngular = interactingFieldVector.length() * currentFieldVector.length() * ANGULAR_FORCE_MULTIPLIER;
-		Quaterniond angularError = currentFieldVector.relativeRotationQuat(interactingFieldVector);
+		// Calculate angular force applied
+		double strengthAngular = interactingFieldVectorE.length() * currentFieldVectorE.length() * angularForceMultiplier;
 		
-		double torqueMultiplier = Math.min(mass * INITIAL_OMEGA_MULTIPLIER, strengthAngular);
-		Vector3d initialOmega = new Vector3d(angularError.i * INITIAL_OMEGA_MULTIPLIER, angularError.j * INITIAL_OMEGA_MULTIPLIER, angularError.k * INITIAL_OMEGA_MULTIPLIER); 
-		if (angularError.r > 0) initialOmega.mul(-1.0);
-		Vector3d torque = initialOmega.sub(contraptionPhysics.getPoseVel().getOmega()).mul(torqueMultiplier);
+		Vec3d currentOmega = Vec3d.fromVec(contraption.getOmega());
+		Vec3d dampeningForce = currentOmega.mul(strengthAngular * 2.0);
 		
-		if (torque.isFinite()) contraptionPhysics.applyInvariantTorque(torque);
+		Vec3d axis = currentFieldVectorE.cross(interactingFieldVectorE);
+		Vec3d torque = axis.mul(strengthAngular).sub(dampeningForce);
+		
+		// Apply angular force
+		if (torque.isFinite()) contraptionPhysics.applyInvariantTorque(torque.writeTo(new Vector3d()));
 		
 		/* Linear force */
 		
-		double strengthLinear = interactingFieldVector.length() * currentFieldVector.length() * LINEAR_FORCE_MULTIPLIER;
-		double alignmentAngle = strengthLinear > 0 ? interactingFieldVector.angle(currentFieldVector) : 0;
+		// Calculate linear force applied between direct emitted fields (from magnets)
+		Vec3d v1 = interactingFieldVectorE; //.add(interactingFieldVectorI);
+		Vec3d v2 = currentFieldVectorE; //.add(currentFieldVectorI);
+		double strengthLinear = v1.length() * v2.length() * linearForceMultiplier;
+		double alignmentAngle = strengthLinear > 0 ? v1.angle(v2) : 0;
 		
 		Vec3d attractingVector = offset.normalize();
 		Vec3d attractionForce = attractingVector.mul(strengthLinear).mul(Math.cos(alignmentAngle));
 		
+		// Calculate linear force applied between induced fields
+		double strengthLinearInduced = (
+				(interactingFieldVectorE.length() * currentFieldVectorI.length()) +
+				(interactingFieldVectorI.length() * currentFieldVectorE.length())
+				)* linearForceMultiplier;
 		
-		// Force of vector induced on other field
-		Vec3d interactingInducedFieldVector = currentFieldVector.mul(this.getIntensityLinearAt(distance) * interactingInductionCoefficient);
-		double strengthProjected = Mth.clamp(Math.pow(interactingInducedFieldVector.length() * MAGNETIC_FIELD_RANGE_PER_STRENGTH - distance, 2) / Math.pow(interactingInducedFieldVector.length() * MAGNETIC_FIELD_RANGE_PER_STRENGTH, 2), 0, 1);
-		interactingInducedFieldVector.mulI(strengthProjected);
-		double strengthLinearInduced1 = interactingInducedFieldVector.length() * currentFieldVector.length() * LINEAR_FORCE_MULTIPLIER;
+		attractionForce.addI(attractingVector.mul(strengthLinearInduced));
 		
-		attractionForce.addI(attractingVector.mul(strengthLinearInduced1));
-		
-		// Force of vector induced in this field
-		Vec3d infucedFieldVectpr = interactingFieldVector.mul(inductionCoefficient);
-		double strengthLinearInduced2 = infucedFieldVectpr.length() * interactingFieldVector.length() * LINEAR_FORCE_MULTIPLIER;
-
-		attractionForce.addI(attractingVector.mul(strengthLinearInduced2));
-		
+		// Apply linear force on magnetic center
 		Vec3d relativeMagneticCenter = getMagneticCenter().sub(Vec3d.fromVec(contraption.getTransform().getPositionInShip()));
-		
-		// TODO 
 		
 		if (attractionForce.isFinite()) contraptionPhysics.applyInvariantForceToPos(attractionForce.writeTo(new Vector3d()), relativeMagneticCenter.writeTo(new Vector3d()));
 		

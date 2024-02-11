@@ -120,7 +120,6 @@ public class MagneticFieldRenderer {
 		BlockPos pos = influence.getPos();
 		Vec3d fieldVector = influence.getVector();
 		Vec3d inducedVector = influence.getInducedVector();
-		boolean alternating = influence.isAlternating();
 		
 		ClientPhysicsUtility.ensureWorldTransformTo(clientLevel, matrixStack, pos);
 		
@@ -149,7 +148,7 @@ public class MagneticFieldRenderer {
 				vertexconsumer, matrixStack, 
 				new Vec3f(0.5F, 0.5F, 0.5F), 
 				new Vec3f(fieldVector),
-				alternating ? 0 : 255, 0, alternating ? 255 : 0, 255);
+				255, 0, 0, 255);
 
 		GraphicsUtility.renderVector(
 				vertexconsumer, matrixStack, 
@@ -167,7 +166,7 @@ public class MagneticFieldRenderer {
 		
 		BlockPos pos = field.getInfluences().isEmpty() ? BlockPos.ZERO : field.getInfluences().iterator().next().getPos();
 		Vec3d fieldVectorLinear = field.getFieldVectorLinear();
-		Vec3d fieldVectorAlternating = field.getFieldVectorAlternating();
+		Vec3d fieldVectorInduced = field.getInducedFieldVector();
 		Vec3f magneticCenter = new Vec3f(field.getMagneticCenter().sub(Vec3d.fromVec(pos))) ;//new Vec3f(field.getMagneticCenter().add(field.getGeometricCenter().sub(Vec3d.fromVec(pos))));
 		
 		float f = 2 * 0.0625F + (float) Math.sin(animationTicks * 0.1F) * 0.03125F;
@@ -191,14 +190,14 @@ public class MagneticFieldRenderer {
 		GraphicsUtility.renderVector(
 				vertexconsumer, matrixStack, 
 				magneticCenter, 
-				new Vec3f(fieldVectorLinear),
+				new Vec3f(fieldVectorLinear).sub(new Vec3f(0.2F, 0.2F, 0.2F)),
 				255, 0, 0, 255);
 		
 		GraphicsUtility.renderVector(
 				vertexconsumer, matrixStack, 
-				magneticCenter, 
-				new Vec3f(fieldVectorAlternating),
-				0, 0, 255, 255);
+				magneticCenter.add(new Vec3f(0.2F, 0.2F, 0.2F)), 
+				new Vec3f(fieldVectorInduced),
+				0, 255, 0, 255);
 
 		LevelRenderer.renderLineBox(
         		matrixStack, vertexconsumer, 

@@ -33,6 +33,8 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.event.TickEvent.LevelTickEvent;
+import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -99,6 +101,16 @@ public class MagnetismHandlerCapability implements ICapabilitySerializable<ListT
  
 	/* Event handling */
 
+	@SubscribeEvent
+	public static void onLevelTick(LevelTickEvent event) {
+		if (event.phase == Phase.START) {
+			Level level = event.level;
+			MagnetismHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.MAGNETISM_HANDLER_CAPABILITY);
+			
+			handler.updateFieldInduction();
+		}
+	}
+	
 	@SubscribeEvent
 	public static void onClientLoadsChunk(ChunkWatchEvent.Watch event) {
 		ServerLevel level = event.getLevel();
@@ -281,6 +293,14 @@ public class MagnetismHandlerCapability implements ICapabilitySerializable<ListT
 	
 	public MagneticField getField(long id) {
 		return this.id2fieldMap.get(id);
+	}
+	
+	public void updateFieldInduction() {
+		
+		for (MagneticField field : this.fieldSet) {
+			field.updateInduction(this.level, this.fieldSet);
+		}
+		
 	}
 	
 }

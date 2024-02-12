@@ -36,6 +36,9 @@
 "industriacore.tooltip.conduit.maxClampDistance":	"Spanwijdte: %1$s m",
 "industriacore.tooltip.electricconduit.resistance":	"Weerstand: %1$s \u03a9/m",
 "industriacore.tooltip.electricblock.voltage":		"Spanning: %1$s V",
-"industriacore.tooltip.electricblock.power":		"Vermogen: %1$s W"
+"industriacore.tooltip.electricblock.power":		"Vermogen: %1$s W",
+"industriacore.tooltip.magneticblock.fieldstrength":	"Veldsterkte: %1$s",
+"industriacore.tooltip.electricblock.coefficient":	"Magnetiseerbaarheid: %1$s",
+"industriacore.tooltip.physics.mass":			"Massa: %1$s kg"
 
 }

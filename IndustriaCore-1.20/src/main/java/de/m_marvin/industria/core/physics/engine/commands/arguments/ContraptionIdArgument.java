@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core.physics.engine.commands;
+package de.m_marvin.industria.core.physics.engine.commands.arguments;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,6 +17,8 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 

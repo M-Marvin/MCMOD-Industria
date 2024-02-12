@@ -13,6 +13,9 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
 import de.m_marvin.industria.core.physics.PhysicUtility;
+import de.m_marvin.industria.core.physics.engine.commands.arguments.Contraption;
+import de.m_marvin.industria.core.physics.engine.commands.arguments.ContraptionIdArgument;
+import de.m_marvin.industria.core.physics.engine.commands.arguments.ContraptionIdArgument2;
 import de.m_marvin.industria.core.physics.types.ContraptionPosition;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.StructureFinder;
@@ -129,7 +132,23 @@ public class ContraptionCommand {
 								)
 						)
 				)
+		).then(
+				Commands.literal("test")
+				.then(
+						Commands.argument("contraption", ContraptionIdArgument2.entity())
+						.executes((source) -> 
+								test(source, ContraptionIdArgument2.getEntity(source, "contraption"))
+						)
+				)
 		));
+	}
+	
+	public static int test(CommandContext<CommandSourceStack> source, Contraption contraption) {
+		
+		System.out.println("Debug: " + contraption);
+		
+		return 1;
+		
 	}
 	
 	public static int setName(CommandContext<CommandSourceStack> source, Ship contraption, String name) {

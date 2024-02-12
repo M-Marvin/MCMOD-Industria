@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.m_marvin.industria.core.Config;
+import de.m_marvin.industria.core.physics.engine.commands.arguments.ContraptionSelectorOptions;
 import de.m_marvin.industria.core.registries.BlockEntityTypes;
 import de.m_marvin.industria.core.registries.Blocks;
 import de.m_marvin.industria.core.registries.CommandArguments;
@@ -57,6 +58,8 @@ public class IndustriaCore {
 		Items.register();
 		BlockEntityTypes.register();
 		CommandArguments.register();
+		
+		ContraptionSelectorOptions.bootStrap();
 		
 	}
 	

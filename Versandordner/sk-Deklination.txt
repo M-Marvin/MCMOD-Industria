@@ -93,3 +93,11 @@ platňa (Platte) nach Schema FEM-2
 platňa, platne, platni,   platňu, platni,    platňou
 platne, platní  platniam, platne  platniach, platňami
 NOM     GEN     DAT       AKK     LOK        INSTR
+
+súradnica (Koordinate) nach Schema FEM-2
+súradnica, súradnice, súradnici, súradnicu, súradnici, súradnicou
+NOM        GEN        DAT        AKK        LOK        INSTR
+
+os (Achse) nach Schema FEM-3
+os, osi, osi, os, osi, osou
+NUM GEN  DAT  AKK LOK  INSTR

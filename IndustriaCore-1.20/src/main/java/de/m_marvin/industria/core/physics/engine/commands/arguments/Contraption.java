@@ -5,13 +5,17 @@ import java.util.List;
 import java.util.OptionalLong;
 import java.util.Set;
 
+import org.joml.primitives.AABBic;
+import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
 
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.physics.types.ContraptionPosition;
 import de.m_marvin.unimat.api.IQuaternionMath.EulerOrder;
+import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 public class Contraption {
@@ -34,6 +38,14 @@ public class Contraption {
 	public static List<Contraption> fromShipList(Level level, List<Ship> ships) {
 		return ships.stream().map(s -> new Contraption(level, s)).toList();
 	}
+
+	public static List<Contraption> fromShipListLevelFiltered(Level level, List<Ship> ships) {
+		return ships.stream().filter(s -> {
+			String dim1 = s.getChunkClaimDimension();
+			String dim2 = level.dimension().registry().toString() + ":" + level.dimension().location().toString();
+			return dim1.equals(dim2);
+		}).map(s -> new Contraption(level, s)).toList();
+	}
 	
 	public Level getLevel() {
 		return level;
@@ -41,6 +53,10 @@ public class Contraption {
 	
 	public long getContraptionId() {
 		return contraptionId;
+	}
+	
+	public Ship getContraption() {
+		return PhysicUtility.getContraptionById(level, contraptionId);
 	}
 	
 	public ContraptionPosition getPosition() {
@@ -65,26 +81,68 @@ public class Contraption {
 		return this.getPosition().getOrientation().euler(EulerOrder.XYZ, false).z();
 	}
 
+	public double getVelocity() {
+		return this.getContraption().getVelocity().length();
+	}
+	
+	public Vec3d getVelocityVec() {
+		return Vec3d.fromVec(this.getContraption().getVelocity());
+	}
+	
+	public double getOmega() {
+		return this.getContraption().getOmega().length(); // TODO [ingame] check which unit this is (rad/s, Hz ?)
+	}
+	
+	public Vec3d getOmegaVec() {
+		return Vec3d.fromVec(this.getContraption().getOmega());
+	}
+
+	public AABB getBounds() {
+		AABBic aabb = this.getContraption().getShipAABB();
+		return new AABB(aabb.minX(), aabb.minY(), aabb.minZ(), aabb.maxX(), aabb.maxY(), aabb.maxZ());
+	}
+	
+	public double getMass() {
+		return ((ServerShip) getContraption()).getInertiaData().getMass();
+	}
+	
+	public double getSize() {
+		AABB aabb = getBounds();
+		return aabb.getSize();
+	}
+	
+	public boolean isStatic() {
+		return ((ServerShip) getContraption()).isStatic();
+	}
+	
 	public Set<String> getTags() {
-		// TODO Auto-generated method stub
-		return new HashSet<>();
+		Set<String> tags = PhysicUtility.getContraptionTags(this.level, getContraption());
+		if (tags == null) tags = new HashSet<>();
+		return tags;
 	}
 
 	public Component getName() {
-		// TODO Auto-generated method stub
-		return Component.literal("n/a");
+		return Component.literal(this.getContraption().getSlug());
 	}
 
+	public Component getDisplayString() {
+		if (this.getName().getString().isEmpty()) {
+			return Component.literal(this.getIdString());
+		} else {
+			return this.getName();
+		}
+	}
+	
 	public String getIdString() {
 		return "{" + this.contraptionId + "}";
 	}
 	
 	public static OptionalLong parseIdString(String idString) {
 		try {
-			return OptionalLong.of(Long.parseLong(idString.substring(1, idString.length() - 1)));
+			return OptionalLong.of(Long.parseLong(idString.substring(1, idString.length())));
 		} catch (Exception e) {
 			return OptionalLong.empty();
 		}
 	}
-	
+
 }

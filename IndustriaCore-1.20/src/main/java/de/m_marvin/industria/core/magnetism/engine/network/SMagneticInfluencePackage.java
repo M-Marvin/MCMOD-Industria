@@ -26,12 +26,10 @@ public class SMagneticInfluencePackage {
 		}
 		
 		public static void encode(SAddInfluencePackage msg, FriendlyByteBuf buff) {
-			// TODO better serialization
 			buff.writeNbt(msg.influence.serialize());
 		}
 		
 		public static SAddInfluencePackage decode(FriendlyByteBuf buff) {
-			// TODO better serialization
 			MagneticFieldInfluence influence = MagneticFieldInfluence.deserialize(buff.readNbt());
 			return new SAddInfluencePackage(influence);
 		}

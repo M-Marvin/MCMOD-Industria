@@ -14,6 +14,7 @@ import java.util.function.ToDoubleFunction;
 import javax.annotation.Nullable;
 
 import com.google.common.primitives.Doubles;
+import com.machinezoo.noexception.optional.OptionalBoolean;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
@@ -21,6 +22,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
+import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.WrappedMinMaxBounds;
 import net.minecraft.network.chat.Component;
@@ -36,32 +38,32 @@ public class ContraptionSelectorParser {
 	public static final char SELECTOR_SELF = 's';
 	
 	private static final SimpleCommandExceptionType ERROR_INVALID_NAME_OR_UUID = new SimpleCommandExceptionType(Component.translatable("industriacore.argument.contraption.invalid"));
-	private static final DynamicCommandExceptionType ERROR_UNKNOWN_SELECTOR_TYPE = new DynamicCommandExceptionType((p_121301_) -> {
-		return Component.translatable("industriacore.argument.contraption.selector.unknown", p_121301_);
+	private static final DynamicCommandExceptionType ERROR_UNKNOWN_SELECTOR_TYPE = new DynamicCommandExceptionType((obj) -> {
+		return Component.translatable("industriacore.argument.contraption.selector.unknown", obj);
 	});
 	private static final SimpleCommandExceptionType ERROR_SELECTORS_NOT_ALLOWED = new SimpleCommandExceptionType(Component.translatable("industriacore.argument.contraption.selector.not_allowed"));
 	private static final SimpleCommandExceptionType ERROR_MISSING_SELECTOR_TYPE = new SimpleCommandExceptionType(Component.translatable("industriacore.argument.contraption.selector.missing"));
 	private static final SimpleCommandExceptionType ERROR_EXPECTED_END_OF_OPTIONS = new SimpleCommandExceptionType(Component.translatable("industriacore.argument.contraption.options.unterminated"));
-	private static final DynamicCommandExceptionType ERROR_EXPECTED_OPTION_VALUE = new DynamicCommandExceptionType((p_121267_) -> {
-		return Component.translatable("industriacore.argument.contraption.options.valueless", p_121267_);
+	private static final DynamicCommandExceptionType ERROR_EXPECTED_OPTION_VALUE = new DynamicCommandExceptionType((obj) -> {
+		return Component.translatable("industriacore.argument.contraption.options.valueless", obj);
 	});
 	
-	public static final BiFunction<SuggestionsBuilder, Consumer<SuggestionsBuilder>, CompletableFuture<Suggestions>> SUGGEST_NOTHING = (p_121363_, p_121364_) -> {
-		return p_121363_.buildFuture();
+	public static final BiFunction<SuggestionsBuilder, Consumer<SuggestionsBuilder>, CompletableFuture<Suggestions>> SUGGEST_NOTHING = (builder, consumer) -> {
+		return builder.buildFuture();
 	};
 	
-	public static final BiConsumer<Vec3, List<? extends Contraption>> ORDER_NEAREST = (p_121313_, p_121314_) -> {
-		p_121314_.sort((p_175140_, p_175141_) -> {
-			return Doubles.compare(p_175140_.distanceToSqr(p_121313_), p_175141_.distanceToSqr(p_121313_));
+	public static final BiConsumer<Vec3, List<? extends Contraption>> ORDER_NEAREST = (pos, sort) -> {
+		sort.sort((a, b) -> {
+			return Doubles.compare(a.distanceToSqr(pos), b.distanceToSqr(pos));
 		});
 	};
-	public static final BiConsumer<Vec3, List<? extends Contraption>> ORDER_FURTHEST = (p_121298_, p_121299_) -> {
-		p_121299_.sort((p_175131_, p_175132_) -> {
-			return Doubles.compare(p_175132_.distanceToSqr(p_121298_), p_175131_.distanceToSqr(p_121298_));
+	public static final BiConsumer<Vec3, List<? extends Contraption>> ORDER_FURTHEST = (pos, sort) -> {
+		sort.sort((a, b) -> {
+			return Doubles.compare(b.distanceToSqr(pos), a.distanceToSqr(pos));
 		});
 	};
-	public static final BiConsumer<Vec3, List<? extends Contraption>> ORDER_RANDOM = (p_121264_, p_121265_) -> {
-		Collections.shuffle(p_121265_);
+	public static final BiConsumer<Vec3, List<? extends Contraption>> ORDER_RANDOM = (pos, sort) -> {
+		Collections.shuffle(sort);
 	};
 			
 	private final StringReader reader;
@@ -69,8 +71,22 @@ public class ContraptionSelectorParser {
 	
 	private int maxResults;
 	private boolean worldLimited;
+	
+	private MinMaxBounds.Doubles mass = MinMaxBounds.Doubles.ANY;
+	private MinMaxBounds.Doubles size = MinMaxBounds.Doubles.ANY;
+	private OptionalBoolean isStatic = OptionalBoolean.empty();
+	
+	private MinMaxBounds.Doubles velocity_x = MinMaxBounds.Doubles.ANY;
+	private MinMaxBounds.Doubles velocity_y = MinMaxBounds.Doubles.ANY;
+	private MinMaxBounds.Doubles velocity_z = MinMaxBounds.Doubles.ANY;
+	private MinMaxBounds.Doubles velocity = MinMaxBounds.Doubles.ANY;
+	
+	private MinMaxBounds.Doubles omega_x = MinMaxBounds.Doubles.ANY;
+	private MinMaxBounds.Doubles omega_y = MinMaxBounds.Doubles.ANY;
+	private MinMaxBounds.Doubles omega_z = MinMaxBounds.Doubles.ANY;
+	private MinMaxBounds.Doubles omega = MinMaxBounds.Doubles.ANY;
+	
 	private MinMaxBounds.Doubles distance = MinMaxBounds.Doubles.ANY;
-	private MinMaxBounds.Ints level = MinMaxBounds.Ints.ANY;
 	@Nullable
 	private Double x;
 	@Nullable
@@ -86,7 +102,7 @@ public class ContraptionSelectorParser {
 	private WrappedMinMaxBounds rotX = WrappedMinMaxBounds.ANY;
 	private WrappedMinMaxBounds rotY = WrappedMinMaxBounds.ANY;
 	private WrappedMinMaxBounds rotZ = WrappedMinMaxBounds.ANY;
-	private Predicate<Contraption> predicate = (p_121321_) -> {
+	private Predicate<Contraption> predicate = (contraption) -> {
 		return true;
 	};
 	private BiConsumer<Vec3, List<? extends Contraption>> order = ContraptionSelector.ORDER_ARBITRARY;
@@ -164,14 +180,30 @@ public class ContraptionSelectorParser {
 		this.distance = pDistance;
 	}
 
-	public MinMaxBounds.Ints getLevel() {
-		return this.level;
+	public void setMass(MinMaxBounds.Doubles mass) {
+		this.mass = mass;
 	}
-
-	public void setLevel(MinMaxBounds.Ints pLevel) {
-		this.level = pLevel;
+	
+	public void setSize(MinMaxBounds.Doubles size) {
+		this.size = size;
 	}
-
+	
+	public void setStatic(OptionalBoolean isStatic) {
+		this.isStatic = isStatic;
+	}
+	
+	public MinMaxBounds.Doubles getMass() {
+		return mass;
+	}
+	
+	public MinMaxBounds.Doubles getSize() {
+		return size;
+	}
+	
+	public OptionalBoolean getStatic() {
+		return isStatic;
+	}
+	
 	public WrappedMinMaxBounds getRotX() {
 		return this.rotX;
 	}
@@ -250,6 +282,70 @@ public class ContraptionSelectorParser {
 		return this.deltaZ;
 	}
 
+	public void setVelocityX(MinMaxBounds.Doubles velocity_x) {
+		this.velocity_x = velocity_x;
+	}
+	
+	public void setVelocityY(MinMaxBounds.Doubles velocity_y) {
+		this.velocity_y = velocity_y;
+	}
+	
+	public void setVelocityZ(MinMaxBounds.Doubles velocity_z) {
+		this.velocity_z = velocity_z;
+	}
+	
+	public void setVelocity(MinMaxBounds.Doubles velocity) {
+		this.velocity = velocity;
+	}
+	
+	public MinMaxBounds.Doubles getVelocityX() {
+		return velocity_x;
+	}
+	
+	public MinMaxBounds.Doubles getVelocityY() {
+		return velocity_y;
+	}
+	
+	public MinMaxBounds.Doubles getVelocityZ() {
+		return velocity_z;
+	}
+	
+	public MinMaxBounds.Doubles getVelocity() {
+		return velocity;
+	}
+	
+	public void setOmegaX(MinMaxBounds.Doubles omega_x) {
+		this.omega_x = omega_x;
+	}
+	
+	public void setOmegaY(MinMaxBounds.Doubles omega_y) {
+		this.omega_y = omega_y;
+	}
+	
+	public void setOmegaZ(MinMaxBounds.Doubles omega_z) {
+		this.omega_z = omega_z;
+	}
+	
+	public void setOmega(MinMaxBounds.Doubles omega) {
+		this.omega = omega;
+	}
+	
+	public MinMaxBounds.Doubles getOmegaX() {
+		return omega_x;
+	}
+	
+	public MinMaxBounds.Doubles getOmegaY() {
+		return omega_y;
+	}
+	
+	public MinMaxBounds.Doubles getOmegaZ() {
+		return omega_z;
+	}
+	
+	public MinMaxBounds.Doubles getOmega() {
+		return omega;
+	}
+	
 	public void setMaxResults(int pMaxResults) {
 		this.maxResults = pMaxResults;
 	}
@@ -304,18 +400,18 @@ public class ContraptionSelectorParser {
 			aabb = this.createAabb(this.deltaX == null ? 0.0D : this.deltaX, this.deltaY == null ? 0.0D : this.deltaY, this.deltaZ == null ? 0.0D : this.deltaZ);
 		}
 
-		Function<Vec3, Vec3> function;
+		Function<Vec3, Vec3> posFunc;
 		if (this.x == null && this.y == null && this.z == null) {
-			function = (p_121292_) -> {
-				return p_121292_;
+			posFunc = (pos) -> {
+				return pos;
 			};
 		} else {
-			function = (p_121258_) -> {
-				return new Vec3(this.x == null ? p_121258_.x : this.x, this.y == null ? p_121258_.y : this.y, this.z == null ? p_121258_.z : this.z);
+			posFunc = (pos) -> {
+				return new Vec3(this.x == null ? pos.x : this.x, this.y == null ? pos.y : this.y, this.z == null ? pos.z : this.z);
 			};
 		}
-
-		return new ContraptionSelector(this.maxResults, this.worldLimited, this.predicate, this.distance, function, aabb, this.order, this.currentContraption, this.contraptionName, this.contraptionID, this.usesSelectors);
+		
+		return new ContraptionSelector(this.maxResults, this.worldLimited, this.predicate, this.distance, this.mass, this.size, this.isStatic, posFunc, aabb, this.order, this.currentContraption, this.contraptionName, this.contraptionID, this.usesSelectors);
 		
 	}
 	
@@ -331,7 +427,7 @@ public class ContraptionSelectorParser {
 		double d5 = (flag2 ? 0.0D : pSizeZ) + 1.0D;
 		return new AABB(d0, d1, d2, d3, d4, d5);
 	}
-		
+	
 	public void finalizePredicates() {
 		if (this.rotX != WrappedMinMaxBounds.ANY) {
 			this.predicate = this.predicate.and(this.createRotationPredicate(this.rotX, Contraption::getXRot));
@@ -345,13 +441,43 @@ public class ContraptionSelectorParser {
 			this.predicate = this.predicate.and(this.createRotationPredicate(this.rotZ, Contraption::getZRot));
 		}
 
+		if (this.velocity != MinMaxBounds.Doubles.ANY) {
+			this.predicate = this.predicate.and(this.createVelocityPredicate(this.velocity, Contraption::getVelocity));
+		}
+
+		if (this.velocity_x != MinMaxBounds.Doubles.ANY || this.velocity_y != MinMaxBounds.Doubles.ANY || this.velocity_z != MinMaxBounds.Doubles.ANY) {
+			this.predicate = this.predicate.and(this.createVelocityPredicateXYZ(this.velocity_x, this.velocity_y, this.velocity_z, Contraption::getVelocityVec));
+		}
+
+		if (this.omega != MinMaxBounds.Doubles.ANY) {
+			this.predicate = this.predicate.and(this.createVelocityPredicate(this.omega, Contraption::getOmega));
+		}
+
+		if (this.omega_x != MinMaxBounds.Doubles.ANY || this.omega_y != MinMaxBounds.Doubles.ANY || this.omega_z != MinMaxBounds.Doubles.ANY) {
+			this.predicate = this.predicate.and(this.createVelocityPredicateXYZ(this.omega_x, this.omega_y, this.omega_z, Contraption::getOmegaVec));
+		}
 	}
-		
+	
+	private Predicate<Contraption> createVelocityPredicate(MinMaxBounds.Doubles velocityBounds, ToDoubleFunction<Contraption> velocityFunction) {
+		return (contraption) -> {
+			return velocityBounds.matches(velocityFunction.applyAsDouble(contraption));
+		};
+	}
+	
+	private Predicate<Contraption> createVelocityPredicateXYZ(MinMaxBounds.Doubles velocityBoundsX, MinMaxBounds.Doubles velocityBoundsY, MinMaxBounds.Doubles velocityBoundsZ, Function<Contraption, Vec3d> velocityFunction) {
+		return (contraption) -> {
+			Vec3d velocity = velocityFunction.apply(contraption);
+			return	velocityBoundsX.matches(velocity.x) &&
+					velocityBoundsX.matches(velocity.x) &&
+					velocityBoundsX.matches(velocity.x);
+		};
+	}
+	
 	private Predicate<Contraption> createRotationPredicate(WrappedMinMaxBounds pAngleBounds, ToDoubleFunction<Contraption> pAngleFunction) {
 		double d0 = (double)Mth.wrapDegrees(pAngleBounds.getMin() == null ? 0.0F : pAngleBounds.getMin());
 		double d1 = (double)Mth.wrapDegrees(pAngleBounds.getMax() == null ? 359.0F : pAngleBounds.getMax());
-		return (p_175137_) -> {
-			double d2 = Mth.wrapDegrees(pAngleFunction.applyAsDouble(p_175137_));
+		return (contraption) -> {
+			double d2 = Mth.wrapDegrees(pAngleFunction.applyAsDouble(contraption));
 			if (d0 > d1) {
 				return d2 >= d0 || d2 <= d1;
 			} else {
@@ -371,33 +497,33 @@ public class ContraptionSelectorParser {
 			this.reader.skip();
 			this.parseSelector();
 		} else {
-			this.parseNameOrUUID();
+			this.parseNameOrID();
 		}
 
 		this.finalizePredicates();
 		return this.getSelector();
 	}
 
-	protected void parseNameOrUUID() throws CommandSyntaxException {
+	protected void parseNameOrID() throws CommandSyntaxException {
 		if (this.reader.canRead()) {
 			this.suggestions = this::suggestName;
 		}
 
 		int i = this.reader.getCursor();
 		String s = this.reader.readString();
+		if (s.isEmpty()) s = this.reader.readStringUntil('}');
 		
-
 		this.contraptionID = Contraption.parseIdString(s);
 		if (this.contraptionID.isEmpty()) {
-			if (s.isEmpty() || s.length() > 16) {
+			if (s.isEmpty()) {
 				this.reader.setCursor(i);
 				throw ERROR_INVALID_NAME_OR_UUID.createWithContext(this.reader);
 			}
 
 			this.contraptionName = s;
+		} else {
+			this.maxResults = 1;
 		}
-		
-		this.maxResults = 1;
 	}
 
 	protected void parseSelector() throws CommandSyntaxException {
@@ -498,19 +624,18 @@ public class ContraptionSelectorParser {
 		return builder.buildFuture();
 	}
 
-	private CompletableFuture<Suggestions> suggestNameOrSelector(SuggestionsBuilder p_121287_, Consumer<SuggestionsBuilder> p_121288_) {
-		p_121288_.accept(p_121287_);
+	private CompletableFuture<Suggestions> suggestNameOrSelector(SuggestionsBuilder builder, Consumer<SuggestionsBuilder> consumer) {
+		consumer.accept(builder);
 		if (this.allowSelectors) {
-			fillSelectorSuggestions(p_121287_);
+			fillSelectorSuggestions(builder);
 		}
-
-		return p_121287_.buildFuture();
+		return builder.buildFuture();
 	}
 
-	private CompletableFuture<Suggestions> suggestName(SuggestionsBuilder p_121310_, Consumer<SuggestionsBuilder> p_121311_) {
-		SuggestionsBuilder suggestionsbuilder = p_121310_.createOffset(this.startPosition);
-		p_121311_.accept(suggestionsbuilder);
-		return p_121310_.add(suggestionsbuilder).buildFuture();
+	private CompletableFuture<Suggestions> suggestName(SuggestionsBuilder builder, Consumer<SuggestionsBuilder> consumer) {
+		SuggestionsBuilder suggestionsbuilder = builder.createOffset(this.startPosition);
+		consumer.accept(suggestionsbuilder);
+		return builder.add(suggestionsbuilder).buildFuture();
 	}
 
 	private CompletableFuture<Suggestions> suggestOpenOptions(SuggestionsBuilder builder, Consumer<SuggestionsBuilder> consumer) {

@@ -3,10 +3,11 @@ package de.m_marvin.industria.core.physics.engine;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.OptionalLong;
+import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
@@ -28,9 +29,13 @@ import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.unimat.impl.Quaterniond;
 import de.m_marvin.univec.impl.Vec3d;
+import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -60,29 +65,41 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 		return LazyOptional.empty();
 	}
 
-	private Map<String, Long> contraptionNames = new HashMap<>();
+	private Long2ObjectMap<Set<String>> contraptionTags = new Long2ObjectArrayMap<>();
 	private Level level;
 	
 	@Override
 	public CompoundTag serializeNBT() {
 		CompoundTag tag = new CompoundTag();
-		CompoundTag contraptionNamesTag = new CompoundTag();
-		for (Entry<String, Long> entry : this.contraptionNames.entrySet()) {
-			contraptionNamesTag.putLong(entry.getKey(), entry.getValue());
+		ListTag contraptionTagsList = new ListTag();
+		for (Entry<Long, Set<String>> entry : this.contraptionTags.long2ObjectEntrySet()) {
+			CompoundTag contraptionTags = new CompoundTag();
+			contraptionTags.putLong("Contraption", entry.getKey());
+			ListTag tagList = new ListTag();
+			for (String tags : entry.getValue()) {
+				tagList.add(StringTag.valueOf(tags));
+			}
+			contraptionTags.put("Tags", tagList);
+			contraptionTagsList.add(contraptionTags);
 		}
-		tag.put("ContraptionNames", contraptionNamesTag);
-		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Saved " + contraptionNamesTag.size() + " constraption names");
+		tag.put("ContraptionTags", contraptionTagsList);
+		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Saved " + contraptionTagsList.size() + "/" + this.contraptionTags.size() + " constraption tags");
 		return tag;
 	}
 
 	@Override
 	public void deserializeNBT(CompoundTag tag) {
-		CompoundTag contraptionNamesTag = tag.getCompound("ContraptionNames");
-		this.contraptionNames.clear();
-		for (String name : contraptionNamesTag.getAllKeys()) {
-			this.contraptionNames.put(name, contraptionNamesTag.getLong(name));
+		ListTag contraptionTagList = tag.getList("ContraptionTags", CompoundTag.TAG_COMPOUND);
+		this.contraptionTags.clear();
+		for (int i = 0; i < contraptionTagList.size(); i++) {
+			CompoundTag contraptionTags = contraptionTagList.getCompound(i);
+			long contraptionId = contraptionTags.getLong("Contraption");
+			ListTag tagList = contraptionTags.getList("Tags", StringTag.TAG_STRING);
+			Set<String> tags = new HashSet<>();
+			for (int i2 = 0; i2 < tagList.size(); i2++) tags.add(tagList.getString(i2));
+			this.contraptionTags.put(contraptionId, tags);
 		}
-		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Loaded " + this.contraptionNames.size() + " contraption names");
+		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Loaded " + this.contraptionTags.size() + "/" + contraptionTagList.size() + " contraption tags");
 	}
 	
 	public PhysicHandlerCapability(Level level) {
@@ -99,40 +116,42 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 	
 	/* Naming and finding of contraptions */
 	
-	public Map<String, Long> getContraptionNames() {
-		return contraptionNames;
+	private void filterShiplessTags() {
+		long[] tagsToDelete = this.contraptionTags.keySet().longStream().filter(id -> getContraptionById(id) == null).toArray();
+		for (long id : tagsToDelete) this.contraptionTags.remove((long) id);
 	}
 	
-	public void setContraptionName(long contraptionId, String name) {
-		this.contraptionNames.put(name, contraptionId);
+	public Long2ObjectMap<Set<String>> getContraptionTags() {
+		return this.contraptionTags;
 	}
 	
-	public OptionalLong getContraption(String name) {
-		if (this.contraptionNames.containsKey(name)) {
-			return OptionalLong.of(this.contraptionNames.get(name));
-		} else {
-			return OptionalLong.empty();
+	public void addContraptionTag(long contraptionId, String name) {
+		if (!this.contraptionTags.containsKey(contraptionId)) this.contraptionTags.put(contraptionId, new HashSet<>());
+		this.contraptionTags.get(contraptionId).add(name);
+		filterShiplessTags();
+	}
+
+	public void removeContraptionTag(long contraptionId, String name) {
+		if (this.contraptionTags.containsKey(contraptionId)) {
+			this.contraptionTags.get(contraptionId).remove(name);
+			if (this.contraptionTags.get(contraptionId).isEmpty()) this.contraptionTags.remove(contraptionId);
+			filterShiplessTags();
 		}
 	}
+
+	public Set<String> getContraptionTags(long id) {
+		return this.contraptionTags.get(id);
+	}
 	
-	public String getContraptionName(long id) {
-		for (Entry<String, Long> entry : this.contraptionNames.entrySet()) {
-			if (entry.getValue() == id) return entry.getKey();
+	public List<Long> getContraptionsWithTag(String name) {
+		List<Long> ids = new ArrayList<>();
+		for (Entry<Long, Set<String>> entry : this.contraptionTags.long2ObjectEntrySet()) {
+			if (entry.getValue().contains(name)) ids.add(entry.getKey());
 		}
-		return null;
+		return ids;
 	}
 	
-	public void removeContraptionName(String name) {
-		this.contraptionNames.remove(name);
-	}
-	
-	public void removeContraptionId(long id) {
-		String name = null;
-		for (Entry<String, Long> entry : this.contraptionNames.entrySet()) {
-			if (entry.getValue() == id) name = entry.getKey();
-		}
-		if (name != null) this.contraptionNames.remove(name);
-	}
+	/* Searching for contraptions */
 	
 	public Iterable<Ship> getContraptionIntersecting(BlockPos position)  {
 		return VSGameUtilsKt.getShipsIntersecting(level, new AABB(position, position));
@@ -286,7 +305,6 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 					}
 				}
 			}
-			dataHolder.resolve().get().removeContraptionId(contraption.getId());
 			return true;
 		}
 		return false;

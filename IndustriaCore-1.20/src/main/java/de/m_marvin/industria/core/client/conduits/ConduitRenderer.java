@@ -211,11 +211,9 @@ public class ConduitRenderer {
 			if (nodeA != null && nodeB != null) {
 				Vec3d nodeAworldPosition = nodeA.getWorldRenderPosition(level, conduit.getPosition().getNodeApos());
 				Vec3d nodeBworldPosition = nodeB.getWorldRenderPosition(level, conduit.getPosition().getNodeBpos());
-				
-				Vec4f color = new Vec4f(0.5F, 1.0F, 0.5F, 1F); // TODO physics behavior of conduits
-				
 				Vec3f normal = new Vec3f(nodeAworldPosition.sub(nodeBworldPosition)).normalize();
 				Vec3d nodeOrigin = MathUtility.getMinCorner(nodeAworldPosition, nodeBworldPosition).sub(0.5, 0.5, 0.5);
+				Vec4f color = new Vec4f(0.5F, 1.0F, 0.5F, 1F);
 				
 				VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.lines());
 				

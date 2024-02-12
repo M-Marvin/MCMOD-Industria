@@ -8,6 +8,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 import com.google.common.collect.Maps;
+import com.machinezoo.noexception.optional.OptionalBoolean;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
@@ -23,16 +24,17 @@ import net.minecraft.world.phys.Vec3;
 public class ContraptionSelectorOptions {
 	
 	private static final Map<String, ContraptionSelectorOptions.Option> OPTIONS = Maps.newHashMap();
-	public static final DynamicCommandExceptionType ERROR_UNKNOWN_OPTION = new DynamicCommandExceptionType((p_121520_) -> {
-		return Component.translatable("industriacore.argument.contraption.options.unknown", p_121520_);
+	public static final DynamicCommandExceptionType ERROR_UNKNOWN_OPTION = new DynamicCommandExceptionType((obj) -> {
+		return Component.translatable("industriacore.argument.contraption.options.unknown", obj);
 	});
-	public static final DynamicCommandExceptionType ERROR_INAPPLICABLE_OPTION = new DynamicCommandExceptionType((p_121516_) -> {
-		return Component.translatable("industriacore.argument.contraption.options.inapplicable", p_121516_);
+	public static final DynamicCommandExceptionType ERROR_INAPPLICABLE_OPTION = new DynamicCommandExceptionType((obj) -> {
+		return Component.translatable("industriacore.argument.contraption.options.inapplicable", obj);
 	});
 	public static final SimpleCommandExceptionType ERROR_RANGE_NEGATIVE = new SimpleCommandExceptionType(Component.translatable("industriacore.argument.contraption.options.distance.negative"));
+	public static final SimpleCommandExceptionType ERROR_SIZE_NEGATIVE = new SimpleCommandExceptionType(Component.translatable("industriacore.argument.contraption.options.size.negative"));
 	public static final SimpleCommandExceptionType ERROR_LIMIT_TOO_SMALL = new SimpleCommandExceptionType(Component.translatable("industriacore.argument.contraption.options.limit.toosmall"));
-	public static final DynamicCommandExceptionType ERROR_SORT_UNKNOWN = new DynamicCommandExceptionType((p_121508_) -> {
-		return Component.translatable("industriacore.argument.contraption.options.sort.irreversible", p_121508_);
+	public static final DynamicCommandExceptionType ERROR_SORT_UNKNOWN = new DynamicCommandExceptionType((obj) -> {
+		return Component.translatable("industriacore.argument.contraption.options.sort.irreversible", obj);
 	});
 
 	public static void register(String pId, ContraptionSelectorOptions.Modifier pHandler, Predicate<ContraptionSelectorParser> pPredicate, Component pTooltip) {
@@ -41,109 +43,202 @@ public class ContraptionSelectorOptions {
 
 	public static void bootStrap() {
 		if (OPTIONS.isEmpty()) {
-			register("name", (p_121425_) -> {
-				int i = p_121425_.getReader().getCursor();
-				boolean flag = p_121425_.shouldInvertValue();
-				String s = p_121425_.getReader().readString();
-				if (p_121425_.hasNameNotEquals() && !flag) {
-					p_121425_.getReader().setCursor(i);
-					throw ERROR_INAPPLICABLE_OPTION.createWithContext(p_121425_.getReader(), "name");
+			register("name", (parser) -> {
+				int i = parser.getReader().getCursor();
+				boolean flag = parser.shouldInvertValue();
+				String s = parser.getReader().readString();
+				if (parser.hasNameNotEquals() && !flag) {
+					parser.getReader().setCursor(i);
+					throw ERROR_INAPPLICABLE_OPTION.createWithContext(parser.getReader(), "name");
 				} else {
 					if (flag) {
-						p_121425_.setHasNameNotEquals(true);
+						parser.setHasNameNotEquals(true);
 					} else {
-						p_121425_.setHasNameEquals(true);
+						parser.setHasNameEquals(true);
 					}
 
-					p_121425_.addPredicate((p_175209_) -> {
-						return p_175209_.getName().getString().equals(s) != flag;
+					parser.addPredicate((contraption) -> {
+						return contraption.getName().getString().equals(s) != flag;
 					});
 				}
-			}, (p_121423_) -> {
-				return !p_121423_.hasNameEquals();
+			}, (parser) -> {
+				return !parser.hasNameEquals();
 			}, Component.translatable("industriacore.argument.contraption.options.name.description"));
-			register("distance", (p_121421_) -> {
-				int i = p_121421_.getReader().getCursor();
-				MinMaxBounds.Doubles minmaxbounds$doubles = MinMaxBounds.Doubles.fromReader(p_121421_.getReader());
+			register("distance", (parser) -> {
+				int i = parser.getReader().getCursor();
+				MinMaxBounds.Doubles minmaxbounds$doubles = MinMaxBounds.Doubles.fromReader(parser.getReader());
 				if ((minmaxbounds$doubles.getMin() == null || !(minmaxbounds$doubles.getMin() < 0.0D)) && (minmaxbounds$doubles.getMax() == null || !(minmaxbounds$doubles.getMax() < 0.0D))) {
-					p_121421_.setDistance(minmaxbounds$doubles);
-					p_121421_.setWorldLimited();
+					parser.setDistance(minmaxbounds$doubles);
+					parser.setWorldLimited();
 				} else {
-					p_121421_.getReader().setCursor(i);
-					throw ERROR_RANGE_NEGATIVE.createWithContext(p_121421_.getReader());
+					parser.getReader().setCursor(i);
+					throw ERROR_RANGE_NEGATIVE.createWithContext(parser.getReader());
 				}
-			}, (p_121419_) -> {
-				return p_121419_.getDistance().isAny();
+			}, (parser) -> {
+				return parser.getDistance().isAny();
 			}, Component.translatable("industriacore.argument.contraption.options.distance.description"));
-			register("x", (p_121413_) -> {
-				p_121413_.setWorldLimited();
-				p_121413_.setX(p_121413_.getReader().readDouble());
-			}, (p_121411_) -> {
-				return p_121411_.getX() == null;
+			register("x", (parser) -> {
+				parser.setWorldLimited();
+				parser.setX(parser.getReader().readDouble());
+			}, (parser) -> {
+				return parser.getX() == null;
 			}, Component.translatable("industriacore.argument.contraption.options.x.description"));
-			register("y", (p_121409_) -> {
-				p_121409_.setWorldLimited();
-				p_121409_.setY(p_121409_.getReader().readDouble());
-			}, (p_121407_) -> {
-				return p_121407_.getY() == null;
+			register("y", (parser) -> {
+				parser.setWorldLimited();
+				parser.setY(parser.getReader().readDouble());
+			}, (parser) -> {
+				return parser.getY() == null;
 			}, Component.translatable("industriacore.argument.contraption.options.y.description"));
-			register("z", (p_121405_) -> {
-				p_121405_.setWorldLimited();
-				p_121405_.setZ(p_121405_.getReader().readDouble());
-			}, (p_121403_) -> {
-				return p_121403_.getZ() == null;
+			register("z", (parser) -> {
+				parser.setWorldLimited();
+				parser.setZ(parser.getReader().readDouble());
+			}, (parser) -> {
+				return parser.getZ() == null;
 			}, Component.translatable("industriacore.argument.contraption.options.z.description"));
-			register("dx", (p_121401_) -> {
-				p_121401_.setWorldLimited();
-				p_121401_.setDeltaX(p_121401_.getReader().readDouble());
-			}, (p_121399_) -> {
-				return p_121399_.getDeltaX() == null;
+			register("dx", (parser) -> {
+				parser.setWorldLimited();
+				parser.setDeltaX(parser.getReader().readDouble());
+			}, (parser) -> {
+				return parser.getDeltaX() == null;
 			}, Component.translatable("industriacore.argument.contraption.options.dx.description"));
-			register("dy", (p_121397_) -> {
-				p_121397_.setWorldLimited();
-				p_121397_.setDeltaY(p_121397_.getReader().readDouble());
-			}, (p_121395_) -> {
-				return p_121395_.getDeltaY() == null;
+			register("dy", (parser) -> {
+				parser.setWorldLimited();
+				parser.setDeltaY(parser.getReader().readDouble());
+			}, (parser) -> {
+				return parser.getDeltaY() == null;
 			}, Component.translatable("industriacore.argument.contraption.options.dy.description"));
-			register("dz", (p_121562_) -> {
-				p_121562_.setWorldLimited();
-				p_121562_.setDeltaZ(p_121562_.getReader().readDouble());
-			}, (p_121560_) -> {
-				return p_121560_.getDeltaZ() == null;
+			register("dz", (parser) -> {
+				parser.setWorldLimited();
+				parser.setDeltaZ(parser.getReader().readDouble());
+			}, (parser) -> {
+				return parser.getDeltaZ() == null;
 			}, Component.translatable("industriacore.argument.contraption.options.dz.description"));
-			register("x_rotation", (p_121558_) -> {
-				p_121558_.setRotX(WrappedMinMaxBounds.fromReader(p_121558_.getReader(), true, Mth::wrapDegrees));
-			}, (p_121556_) -> {
-				return p_121556_.getRotX() == WrappedMinMaxBounds.ANY;
+			register("x_rotation", (parser) -> {
+				parser.setRotX(WrappedMinMaxBounds.fromReader(parser.getReader(), true, Mth::wrapDegrees));
+			}, (parser) -> {
+				return parser.getRotX() == WrappedMinMaxBounds.ANY;
 			}, Component.translatable("industriacore.argument.contraption.options.x_rotation.description"));
-			register("y_rotation", (p_121554_) -> {
-				p_121554_.setRotY(WrappedMinMaxBounds.fromReader(p_121554_.getReader(), true, Mth::wrapDegrees));
-			}, (p_121552_) -> {
-				return p_121552_.getRotY() == WrappedMinMaxBounds.ANY;
+			register("y_rotation", (parser) -> {
+				parser.setRotY(WrappedMinMaxBounds.fromReader(parser.getReader(), true, Mth::wrapDegrees));
+			}, (parser) -> {
+				return parser.getRotY() == WrappedMinMaxBounds.ANY;
 			}, Component.translatable("industriacore.argument.contraption.options.y_rotation.description"));
-			register("z_rotation", (p_121554_) -> {
-				 p_121554_.setRotZ(WrappedMinMaxBounds.fromReader(p_121554_.getReader(), true, Mth::wrapDegrees));
-			 }, (p_121552_) -> {
-				 return p_121552_.getRotZ() == WrappedMinMaxBounds.ANY;
-			 }, Component.translatable("industriacore.argument.contraption.options.z_rotation.description"));
-			register("limit", (p_121550_) -> {
-				int i = p_121550_.getReader().getCursor();
-				int j = p_121550_.getReader().readInt();
-				if (j < 1) {
-					p_121550_.getReader().setCursor(i);
-					throw ERROR_LIMIT_TOO_SMALL.createWithContext(p_121550_.getReader());
+			register("z_rotation", (parser) -> {
+				parser.setRotZ(WrappedMinMaxBounds.fromReader(parser.getReader(), true, Mth::wrapDegrees));
+			}, (parser) -> {
+				return parser.getRotZ() == WrappedMinMaxBounds.ANY;
+			}, Component.translatable("industriacore.argument.contraption.options.z_rotation.description"));
+			
+			register("x_velocity", (parser) -> {
+				MinMaxBounds.Doubles minmaxbounds$doubles = MinMaxBounds.Doubles.fromReader(parser.getReader());
+				parser.setVelocityX(minmaxbounds$doubles);
+			}, (parser) -> {
+				return parser.getVelocityX() == MinMaxBounds.Doubles.ANY;
+			}, Component.translatable("industriacore.argument.contraption.options.x_velocity.description"));
+			register("y_velocity", (parser) -> {
+				MinMaxBounds.Doubles minmaxbounds$doubles = MinMaxBounds.Doubles.fromReader(parser.getReader());
+				parser.setVelocityY(minmaxbounds$doubles);
+			}, (parser) -> {
+				return parser.getVelocityY() == MinMaxBounds.Doubles.ANY;
+			}, Component.translatable("industriacore.argument.contraption.options.y_velocity.description"));
+			register("z_velocity", (parser) -> {
+				MinMaxBounds.Doubles minmaxbounds$doubles = MinMaxBounds.Doubles.fromReader(parser.getReader());
+				parser.setVelocityZ(minmaxbounds$doubles);
+			}, (parser) -> {
+				return parser.getVelocityZ() == MinMaxBounds.Doubles.ANY;
+			}, Component.translatable("industriacore.argument.contraption.options.z_velocity.description"));
+			
+			register("velocity", (parser) -> {
+				int i = parser.getReader().getCursor();
+				MinMaxBounds.Doubles minmaxbounds$doubles = MinMaxBounds.Doubles.fromReader(parser.getReader());
+				if ((minmaxbounds$doubles.getMin() == null || (minmaxbounds$doubles.getMin() >= 0.0D)) && (minmaxbounds$doubles.getMax() == null || (minmaxbounds$doubles.getMax() >= 0.0D))) {
+					parser.setVelocity(minmaxbounds$doubles);
 				} else {
-					p_121550_.setMaxResults(j);
-					p_121550_.setLimited(true);
+					parser.getReader().setCursor(i);
+					throw ERROR_RANGE_NEGATIVE.createWithContext(parser.getReader());
 				}
-			}, (p_121548_) -> {
-				return !p_121548_.isCurrentContraption() && !p_121548_.isLimited();
+			}, (parser) -> {
+				return parser.getVelocity() == MinMaxBounds.Doubles.ANY;
+			}, Component.translatable("industriacore.argument.contraption.options.velocity.description"));
+			
+			register("x_omega", (parser) -> {
+				MinMaxBounds.Doubles minmaxbounds$doubles = MinMaxBounds.Doubles.fromReader(parser.getReader());
+				parser.setOmegaX(minmaxbounds$doubles);
+			}, (parser) -> {
+				return parser.getOmegaX() == MinMaxBounds.Doubles.ANY;
+			}, Component.translatable("industriacore.argument.contraption.options.x_omega.description"));
+			register("y_omega", (parser) -> {
+				MinMaxBounds.Doubles minmaxbounds$doubles = MinMaxBounds.Doubles.fromReader(parser.getReader());
+				parser.setOmegaY(minmaxbounds$doubles);
+			}, (parser) -> {
+				return parser.getOmegaY() == MinMaxBounds.Doubles.ANY;
+			}, Component.translatable("industriacore.argument.contraption.options.y_omega.description"));
+			register("z_omega", (parser) -> {
+				MinMaxBounds.Doubles minmaxbounds$doubles = MinMaxBounds.Doubles.fromReader(parser.getReader());
+				parser.setOmegaZ(minmaxbounds$doubles);
+			}, (parser) -> {
+				return parser.getOmegaZ() == MinMaxBounds.Doubles.ANY;
+			}, Component.translatable("industriacore.argument.contraption.options.z_omega.description"));
+
+			register("omega", (parser) -> {
+				int i = parser.getReader().getCursor();
+				MinMaxBounds.Doubles minmaxbounds$doubles = MinMaxBounds.Doubles.fromReader(parser.getReader());
+				if ((minmaxbounds$doubles.getMin() == null || (minmaxbounds$doubles.getMin() >= 0.0D)) && (minmaxbounds$doubles.getMax() == null || (minmaxbounds$doubles.getMax() >= 0.0D))) {
+					parser.setOmega(minmaxbounds$doubles);
+				} else {
+					parser.getReader().setCursor(i);
+					throw ERROR_RANGE_NEGATIVE.createWithContext(parser.getReader());
+				}
+			}, (parser) -> {
+				return parser.getOmega() == MinMaxBounds.Doubles.ANY;
+			}, Component.translatable("industriacore.argument.contraption.options.omega.description"));
+
+			register("size", (parser) -> {
+				int i = parser.getReader().getCursor();
+				MinMaxBounds.Doubles minmaxbounds$ints = MinMaxBounds.Doubles.fromReader(parser.getReader());
+				if ((minmaxbounds$ints.getMin() == null || (minmaxbounds$ints.getMin() >= 0)) && (minmaxbounds$ints.getMax() == null || (minmaxbounds$ints.getMax() >= 0))) {
+					parser.setSize(minmaxbounds$ints);
+				} else {
+					parser.getReader().setCursor(i);
+					throw ERROR_RANGE_NEGATIVE.createWithContext(parser.getReader());
+				}
+			}, (parser) -> {
+				return parser.getSize() == MinMaxBounds.Doubles.ANY;
+			}, Component.translatable("industriacore.argument.contraption.options.size.description"));
+			
+			register("static", (parser) -> {
+				boolean isStatic = parser.getReader().readBoolean();
+				parser.setStatic(OptionalBoolean.of(isStatic));
+			}, (parser) -> {
+				return !parser.getStatic().isPresent();
+			}, Component.translatable("industriacore.argument.contraption.option.static.description"));
+
+			register("mass", (parser) -> {
+				MinMaxBounds.Doubles minmaxbounds$doubles = MinMaxBounds.Doubles.fromReader(parser.getReader());
+				parser.setMass(minmaxbounds$doubles);
+			}, (parser) -> {
+				return parser.getMass() == MinMaxBounds.Doubles.ANY;
+			}, Component.translatable("industriacore.argument.contraption.options.mass.description"));
+			
+			
+			register("limit", (parser) -> {
+				int i = parser.getReader().getCursor();
+				int j = parser.getReader().readInt();
+				if (j < 1) {
+					parser.getReader().setCursor(i);
+					throw ERROR_LIMIT_TOO_SMALL.createWithContext(parser.getReader());
+				} else {
+					parser.setMaxResults(j);
+					parser.setLimited(true);
+				}
+			}, (parser) -> {
+				return !parser.isCurrentContraption() && !parser.isLimited();
 			}, Component.translatable("industriacore.argument.contraption.options.limit.description"));
-			register("sort", (p_247983_) -> {
-				int i = p_247983_.getReader().getCursor();
-				String s = p_247983_.getReader().readUnquotedString();
-				p_247983_.setSuggestions((p_175153_, p_175154_) -> {
-					return SharedSuggestionProvider.suggest(Arrays.asList("nearest", "furthest", "random", "arbitrary"), p_175153_);
+			register("sort", (parser) -> {
+				int i = parser.getReader().getCursor();
+				String s = parser.getReader().readUnquotedString();
+				parser.setSuggestions((builder, consumer) -> {
+					return SharedSuggestionProvider.suggest(Arrays.asList("nearest", "furthest", "random", "arbitrary"), builder);
 				});
 				BiConsumer<Vec3, List<? extends Contraption>> biconsumer;
 				switch (s) {
@@ -160,27 +255,27 @@ public class ContraptionSelectorOptions {
 						biconsumer = ContraptionSelector.ORDER_ARBITRARY;
 						break;
 					default:
-						p_247983_.getReader().setCursor(i);
-						throw ERROR_SORT_UNKNOWN.createWithContext(p_247983_.getReader(), s);
+						parser.getReader().setCursor(i);
+						throw ERROR_SORT_UNKNOWN.createWithContext(parser.getReader(), s);
 				}
 
-				p_247983_.setOrder(biconsumer);
-				p_247983_.setSorted(true);
-			}, (p_121544_) -> {
-				return !p_121544_.isCurrentContraption() && !p_121544_.isSorted();
+				parser.setOrder(biconsumer);
+				parser.setSorted(true);
+			}, (parser) -> {
+				return !parser.isCurrentContraption() && !parser.isSorted();
 			}, Component.translatable("industriacore.argument.contraption.options.sort.description"));
 			
-			register("tag", (p_121530_) -> {
-				boolean flag = p_121530_.shouldInvertValue();
-				String s = p_121530_.getReader().readUnquotedString();
-				p_121530_.addPredicate((p_175166_) -> {
+			register("tag", (parser) -> {
+				boolean flag = parser.shouldInvertValue();
+				String s = parser.getReader().readUnquotedString();
+				parser.addPredicate((contraption) -> {
 					if ("".equals(s)) {
-						return p_175166_.getTags().isEmpty() != flag;
+						return contraption.getTags().isEmpty() != flag;
 					} else {
-						return p_175166_.getTags().contains(s) != flag;
+						return contraption.getTags().contains(s) != flag;
 					}
 				});
-			}, (p_121528_) -> {
+			}, (parser) -> {
 				return true;
 			}, Component.translatable("industriacore.argument.contraption.options.tag.description"));
 			

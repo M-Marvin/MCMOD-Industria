@@ -2,7 +2,6 @@ package de.m_marvin.industria.core.physics;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.OptionalLong;
 import java.util.Set;
 import java.util.function.BiFunction;
 
@@ -28,6 +27,7 @@ import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3i;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -39,28 +39,40 @@ public class PhysicUtility {
 	
 	/* Naming and finding of contraptions */
 	
-	public static void setContraptionName(Level level, Ship contraption, String name) {
+	public static void addContraptionTag(Level level, Ship contraption, String name) {
 		PhysicHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
-		handler.setContraptionName(contraption.getId(), name);
-	}
-	
-	public static String getContraptionName(Level level, Ship contraption, String name) {
-		PhysicHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
-		return handler.getContraptionName(contraption.getId());
-	}
-	
-	public static OptionalLong getContraptionIdByName(Level level, String name) {
-		PhysicHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
-		return handler.getContraption(name);
+		handler.addContraptionTag(contraption.getId(), name);
 	}
 
-	public static Ship getContraptionByName(Level level, String name) {
+	public static void removeContraptionTag(Level level, Ship contraption, String name) {
 		PhysicHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
-		OptionalLong id = handler.getContraption(name);
-		if (id.isPresent()) return getContraptionById(level, id.getAsLong());
-		return null;
+		handler.removeContraptionTag(contraption.getId(), name);
+	}
+	
+	public static Set<String> getContraptionTags(Level level, Ship contraption) {
+		PhysicHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
+		return handler.getContraptionTags(contraption.getId());
+	}
+	
+	public static List<Long> getContraptionIdsWithTag(Level level, String name) {
+		PhysicHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
+		return handler.getContraptionsWithTag(name);
 	}
 
+	public static List<Ship> getContraptionsWithTag(Level level, String name) {
+		PhysicHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
+		return handler.getContraptionsWithTag(name).stream().map(handler::getContraptionById).filter(c -> c != null).toList();
+	}
+
+	public static List<Ship> getContraptionsWithName(Level level, String name) {
+		return getLoadedContraptions(level).stream().filter(c -> c.getSlug().equals(name)).toList();
+	}
+	
+	public static Long2ObjectMap<Set<String>> getContraptionTags(Level level) {
+		PhysicHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
+		return handler.getContraptionTags();
+	}
+	
 	public static Iterable<Ship> getContraptionIntersecting(Level level, BlockPos position)  {
 		PhysicHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		return handler.getContraptionIntersecting(position);
@@ -75,7 +87,7 @@ public class PhysicUtility {
 		PhysicHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
 		return handler.getContraptionById(id);
 	}
-	
+
 	/* Translating of positions and moving of contraptions */
 
 	public static Direction toWorldDirection(ShipTransform contraption, Direction direction) {

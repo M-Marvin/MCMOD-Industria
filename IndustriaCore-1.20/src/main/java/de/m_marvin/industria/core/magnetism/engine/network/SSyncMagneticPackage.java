@@ -47,7 +47,6 @@ public class SSyncMagneticPackage {
 		buff.writeChunkPos(msg.chunkPos);
 		buff.writeInt(msg.fields.size());
 		for (MagneticField field : msg.fields) {
-			// TODO better serialization
 			buff.writeNbt(field.serialize());
 		}
 	}
@@ -58,7 +57,6 @@ public class SSyncMagneticPackage {
 		int count = buff.readInt();
 		List<MagneticField> fields = new ArrayList<MagneticField>();
 		for (int i = 0; i < count; i++) {
-			// TODO better serialization
 			MagneticField field = MagneticField.deserialize(buff.readNbt());
 			fields.add(field);
 		}

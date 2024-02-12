@@ -12,10 +12,8 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class Config {
 	
-	// TODO separate configs to server client and common
-	
-	private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
-	public static ForgeConfigSpec CONFIG;
+	public static ForgeConfigSpec CONFIG_COMMON;
+	public static ForgeConfigSpec CONFIG_SERVER;
 	
 	public static final String CATEGORY_UTIL = "util";
 	public static ForgeConfigSpec.BooleanValue SPICE_DEBUG_LOGGING;
@@ -26,18 +24,23 @@ public class Config {
 	public static ForgeConfigSpec.DoubleValue MAGNETIC_FIELD_RANGE;
 	
 	static {
+		ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 		BUILDER.comment("Industria Core utility settings").push(CATEGORY_UTIL);
 		SPICE_DEBUG_LOGGING = BUILDER.comment("If true, the nglink native lib will print simmulation data (and some other things) from the electric networks into the logs.").define("spice_debug_logging", false);
 		BUILDER.pop();
+		CONFIG_COMMON = BUILDER.build();
+		
+		BUILDER = new ForgeConfigSpec.Builder();
 		BUILDER.comment("Physics related settings").push(CATEGORY_PHYSICS);
 		MAGNETIC_FORCE_MULTIPLIER_LINEAR = BUILDER.comment("The field strength of the magnets gets multiplied with this value for the linear force applied to the magnets (double this, double the strength of all magnets)").defineInRange("magnetic_force_multiplier_linear", MagneticField.DEFAULT_LINEAR_FORCE_MULTIPLIER, 0.0, Double.MAX_VALUE);
 		MAGNETIC_FORCE_MULTIPLIER_ANGULAR = BUILDER.comment("The field strength of the magnets gets multiplied with this value for the angular force applied to the magnets (double this, double the strength of all magnets)").defineInRange("magnetic_force_multiplier_angular", MagneticField.DEFAULT_ANGULAR_FORCE_MULTIPLIER, 0.0, Double.MAX_VALUE);
 		MAGNETIC_FIELD_RANGE = BUILDER.comment("The range of magnetic fields in blocks per field strength").defineInRange("magnetic_field_range", MagneticField.DEFAULT_MAGNETIC_FIELD_RANGE_PER_STRENGTH, 0.0, Double.MAX_VALUE);
-		CONFIG = BUILDER.build();
+		CONFIG_SERVER = BUILDER.build();
 	}
 	
 	public static void register() {
-		ModLoadingContext.get().registerConfig(Type.COMMON, CONFIG);
+		ModLoadingContext.get().registerConfig(Type.COMMON, CONFIG_COMMON);
+		ModLoadingContext.get().registerConfig(Type.SERVER, CONFIG_SERVER);
 	}
 	
 	@SubscribeEvent

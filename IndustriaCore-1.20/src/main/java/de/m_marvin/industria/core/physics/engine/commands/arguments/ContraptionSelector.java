@@ -16,6 +16,7 @@ import com.machinezoo.noexception.optional.OptionalBoolean;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import de.m_marvin.industria.core.physics.PhysicUtility;
+import de.m_marvin.industria.core.physics.types.Contraption;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;

@@ -22,6 +22,8 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
+import de.m_marvin.industria.core.physics.types.Contraption;
+import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.WrappedMinMaxBounds;
@@ -460,16 +462,16 @@ public class ContraptionSelectorParser {
 	
 	private Predicate<Contraption> createVelocityPredicate(MinMaxBounds.Doubles velocityBounds, ToDoubleFunction<Contraption> velocityFunction) {
 		return (contraption) -> {
-			return velocityBounds.matches(velocityFunction.applyAsDouble(contraption));
+			return velocityBounds.matches(Math.toDegrees(velocityFunction.applyAsDouble(contraption)));
 		};
 	}
 	
 	private Predicate<Contraption> createVelocityPredicateXYZ(MinMaxBounds.Doubles velocityBoundsX, MinMaxBounds.Doubles velocityBoundsY, MinMaxBounds.Doubles velocityBoundsZ, Function<Contraption, Vec3d> velocityFunction) {
 		return (contraption) -> {
 			Vec3d velocity = velocityFunction.apply(contraption);
-			return	velocityBoundsX.matches(velocity.x) &&
-					velocityBoundsX.matches(velocity.x) &&
-					velocityBoundsX.matches(velocity.x);
+			return	velocityBoundsX.matches(velocity.x * MathUtility.ANGULAR_VELOCITY_TO_ROTATIONS_PER_SECOND) &&
+					velocityBoundsY.matches(velocity.y * MathUtility.ANGULAR_VELOCITY_TO_ROTATIONS_PER_SECOND) &&
+					velocityBoundsZ.matches(velocity.z * MathUtility.ANGULAR_VELOCITY_TO_ROTATIONS_PER_SECOND);
 		};
 	}
 	

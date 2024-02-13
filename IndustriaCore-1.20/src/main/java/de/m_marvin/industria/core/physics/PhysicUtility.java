@@ -179,14 +179,15 @@ public class PhysicUtility {
 	public static Vec3d ensureContraptionVector(Level level, BlockPos referencePos, Vec3d vector) {
 		return optionalContraptionTransform(level, referencePos, PhysicUtility::toContraptionVector, vector);
 	}
-		
-	public static ContraptionPosition getPosition(ServerShip contraption, boolean massCenter) {
-		return PhysicHandlerCapability.getPosition(contraption, massCenter);
-	}
 	
-	public static void setPosition(ServerLevel level, ServerShip contraption, ContraptionPosition position, boolean massCenter) {
+	public static void teleportContraption(ServerLevel level, ServerShip contraption, ContraptionPosition position) {
 		PhysicHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
-		handler.setPosition(contraption, position, massCenter);
+		handler.teleportContraption(contraption, position);
+	}
+
+	public static void teleportContraption(ServerLevel level, ServerShip contraption, ContraptionPosition position, boolean useGeometricCenter) {
+		PhysicHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.PHYSIC_HANDLER_CAPABILITY);
+		handler.teleportContraption(contraption, position, useGeometricCenter);
 	}
 	
 	/* Listing and creation contraptions in the world */

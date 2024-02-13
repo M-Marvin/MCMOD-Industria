@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core.physics.engine.commands.arguments;
+package de.m_marvin.industria.core.physics.types;
 
 import java.util.HashSet;
 import java.util.List;
@@ -10,7 +10,6 @@ import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
 
 import de.m_marvin.industria.core.physics.PhysicUtility;
-import de.m_marvin.industria.core.physics.types.ContraptionPosition;
 import de.m_marvin.unimat.api.IQuaternionMath.EulerOrder;
 import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.network.chat.Component;
@@ -18,6 +17,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+/**
+ * Wrapper class for contraption (VS2 ships)
+ * @author marvi
+ *
+ */
 public class Contraption {
 	
 	public static final String CONTRAPTION_NAME_PATTERN = "[a-zA-Z0-9_-]*";
@@ -60,8 +64,7 @@ public class Contraption {
 	}
 	
 	public ContraptionPosition getPosition() {
-		Ship contraption = PhysicUtility.getContraptionById(this.level, this.contraptionId);
-		return new ContraptionPosition(contraption.getTransform());
+		return new ContraptionPosition(getContraption());
 	}
 	
 	public double distanceToSqr(Vec3 position) {
@@ -143,6 +146,19 @@ public class Contraption {
 		} catch (Exception e) {
 			return OptionalLong.empty();
 		}
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Contraption other) {
+			return other.contraptionId == this.contraptionId;
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Long.hashCode(this.contraptionId);
 	}
 
 }

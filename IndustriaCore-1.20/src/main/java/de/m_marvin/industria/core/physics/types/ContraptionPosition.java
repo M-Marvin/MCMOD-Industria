@@ -8,11 +8,15 @@ import org.joml.Quaterniondc;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.Vector3i;
+import org.joml.primitives.AABBic;
+import org.valkyrienskies.core.api.ships.ServerShip;
+import org.valkyrienskies.core.api.ships.Ship;
 import org.valkyrienskies.core.api.ships.properties.ShipTransform;
 import org.valkyrienskies.core.apigame.ShipTeleportData;
 import org.valkyrienskies.core.impl.game.ShipTeleportDataImpl;
 
 import de.m_marvin.industria.core.physics.PhysicUtility;
+import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.unimat.impl.Quaterniond;
 import de.m_marvin.univec.impl.Vec3d;
 
@@ -49,6 +53,25 @@ public class ContraptionPosition {
 	public ContraptionPosition(ShipTransform transform) {
 		this(transform.getShipToWorldRotation(), transform.getPositionInWorld(), null);
 	}
+
+	public ContraptionPosition(Ship contraption) {
+		this(contraption.getTransform());
+		this.velocity = Optional.of(Vec3d.fromVec(contraption.getVelocity()));
+		this.omega = Optional.of(Vec3d.fromVec(contraption.getOmega()));
+	}
+
+	public ContraptionPosition(ServerShip contraption, boolean useGeometricCenter) {
+		this(contraption);
+		
+		if (useGeometricCenter) {
+			AABBic shipBounds = contraption.getShipAABB();
+			Vec3d shipCoordCenter = MathUtility.getMiddle(new Vec3d(shipBounds.minX(), shipBounds.minY(), shipBounds.minZ()), new Vec3d(shipBounds.maxX(), shipBounds.maxY(), shipBounds.maxZ()));
+			Vec3d shipCoordMassCenter = Vec3d.fromVec(contraption.getInertiaData().getCenterOfMassInShip()).add(new Vec3d(0.5, 0.5, 0.5));
+			Vec3d centerOfMassOffset = PhysicUtility.toWorldPos(contraption.getTransform(), shipCoordMassCenter).sub(PhysicUtility.toWorldPos(contraption.getTransform(), shipCoordCenter));
+			
+			position.subI(centerOfMassOffset);	
+		}
+	}
 	
 	public ContraptionPosition(ContraptionPosition position) {
 		this(
@@ -61,6 +84,21 @@ public class ContraptionPosition {
 			);
 	}
 
+	public ShipTeleportData toTeleport(ServerShip contraption, boolean useGeometricCenter) {
+		if (useGeometricCenter) {
+			AABBic shipBounds = contraption.getShipAABB();
+			Vec3d shipCoordCenter = MathUtility.getMiddle(new Vec3d(shipBounds.minX(), shipBounds.minY(), shipBounds.minZ()), new Vec3d(shipBounds.maxX(), shipBounds.maxY(), shipBounds.maxZ()));
+			Vec3d shipCoordMassCenter = Vec3d.fromVec(contraption.getInertiaData().getCenterOfMassInShip()).add(new Vec3d(0.5, 0.5, 0.5));
+			Vec3d centerOfMassOffset = PhysicUtility.toWorldPos(contraption.getTransform(), shipCoordMassCenter).sub(PhysicUtility.toWorldPos(contraption.getTransform(), shipCoordCenter));
+			
+			ContraptionPosition temp = new ContraptionPosition(this);
+			temp.getPosition().addI(centerOfMassOffset);
+			
+			return temp.toTeleport();
+		}
+		return toTeleport();
+	}
+	
 	public ShipTeleportData toTeleport() {
 		return new ShipTeleportDataImpl(
 				this.getPositionJOML(),

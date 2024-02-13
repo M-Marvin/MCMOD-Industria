@@ -35,6 +35,9 @@ import net.minecraft.world.phys.Vec3;
 
 public class MathUtility {
 
+	public static final double ANGULAR_VELOCITY_TO_ROTATIONS_PER_SECOND = (180.0 / Math.PI) / 360.0;
+	public static final double ROTATIONS_PER_SECOND_TO_ANGULAR_VELOCITY = 360 / (180.0 / Math.PI);
+	
 	public static Direction getPosRelativeFacing(BlockPos pos1, Block pos2) {
 		return getVecDirection(Vec3i.fromVec(pos2).sub(Vec3i.fromVec(pos1)));
 	}

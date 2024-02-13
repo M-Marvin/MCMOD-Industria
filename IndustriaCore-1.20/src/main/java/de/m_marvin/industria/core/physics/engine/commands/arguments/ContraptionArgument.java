@@ -15,6 +15,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import de.m_marvin.industria.core.physics.PhysicUtility;
+import de.m_marvin.industria.core.physics.types.Contraption;
 import de.m_marvin.industria.core.physics.types.ContraptionHitResult;
 import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.client.multiplayer.ClientSuggestionProvider;

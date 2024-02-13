@@ -221,33 +221,13 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 	}
 	
 	/* Translating/moving of contraptions */
-	
-	public static ContraptionPosition getPosition(ServerShip contraption, boolean massCenter) {
-		ContraptionPosition position = new ContraptionPosition(contraption.getTransform());
 		
-		if (!massCenter) {
-			AABBic shipBounds = contraption.getShipAABB();
-			Vec3d shipCoordCenter = MathUtility.getMiddle(new Vec3d(shipBounds.minX(), shipBounds.minY(), shipBounds.minZ()), new Vec3d(shipBounds.maxX(), shipBounds.maxY(), shipBounds.maxZ()));
-			Vec3d shipCoordMassCenter = Vec3d.fromVec(contraption.getInertiaData().getCenterOfMassInShip()).add(new Vec3d(0.5, 0.5, 0.5));
-			Vec3d centerOfMassOffset = PhysicUtility.toWorldPos(contraption.getTransform(), shipCoordMassCenter).sub(PhysicUtility.toWorldPos(contraption.getTransform(), shipCoordCenter));
-			
-			position.getPosition().subI(centerOfMassOffset);	
-		}
-		
-		return position;
-	}
-	
-	public void setPosition(ServerShip contraption, ContraptionPosition position, boolean massCenter) {
-		if (!massCenter) {
-			AABBic shipBounds = contraption.getShipAABB();
-			Vec3d shipCoordCenter = MathUtility.getMiddle(new Vec3d(shipBounds.minX(), shipBounds.minY(), shipBounds.minZ()), new Vec3d(shipBounds.maxX(), shipBounds.maxY(), shipBounds.maxZ()));
-			Vec3d shipCoordMassCenter = Vec3d.fromVec(contraption.getInertiaData().getCenterOfMassInShip()).add(new Vec3d(0.5, 0.5, 0.5));
-			Vec3d centerOfMassOffset = PhysicUtility.toWorldPos(contraption.getTransform(), shipCoordMassCenter).sub(PhysicUtility.toWorldPos(contraption.getTransform(), shipCoordCenter));
-			
-			position = new ContraptionPosition(position);
-			position.getPosition().addI(centerOfMassOffset);
-		}
+	public void teleportContraption(ServerShip contraption, ContraptionPosition position) {
 		VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).teleportShip(contraption, position.toTeleport());
+	}
+
+	public void teleportContraption(ServerShip contraption, ContraptionPosition position, boolean useGeometricCenter) {
+		VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).teleportShip(contraption, position.toTeleport(contraption, useGeometricCenter));
 	}
 	
 	/* Listing and creation contraptions in the world */
@@ -409,7 +389,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 
 		// Set the final position gain, since the contraption moves slightly if blocks are added
 		if (contraption != null) {
-			PhysicUtility.setPosition((ServerLevel) level, (ServerShip) contraption, contraptionPosition, false);
+			PhysicUtility.teleportContraption((ServerLevel) level, (ServerShip) contraption, contraptionPosition, true);
 		}
 		
 		return true;
@@ -478,7 +458,7 @@ public class PhysicHandlerCapability implements ICapabilitySerializable<Compound
 
 		// Set the final position gain, since the contraption moves slightly if blocks are added
 		if (contraption != null) {
-			PhysicUtility.setPosition((ServerLevel) level, (ServerShip) contraption, contraptionPosition, false);
+			PhysicUtility.teleportContraption((ServerLevel) level, (ServerShip) contraption, contraptionPosition, true);
 		}
 		
 		return true;

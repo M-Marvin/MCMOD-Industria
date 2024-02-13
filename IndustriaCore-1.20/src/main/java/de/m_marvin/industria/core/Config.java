@@ -45,6 +45,7 @@ public class Config {
 	
 	@SubscribeEvent
 	public static void onReload(ModConfigEvent.Reloading event) {
+		// TODO what event for server config ???
 		MagneticField.reloadConfig();
 	}
 	

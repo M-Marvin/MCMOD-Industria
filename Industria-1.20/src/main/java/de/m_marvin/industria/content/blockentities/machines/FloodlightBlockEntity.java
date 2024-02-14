@@ -102,6 +102,7 @@ public class FloodlightBlockEntity extends BlockEntity implements MenuProvider, 
 		double voltage = ElectricUtility.getVoltageBetween(level, new NodePos(worldPosition, 0), new NodePos(worldPosition, 0), 0, 1, nodeLanes[0], nodeLanes[1]);
 		double voltageP = parametrics.getVoltageOvershoot(voltage);
 		double powerP = parametrics.getPowerPercentageV(voltage);
+		// TODO powerP not calculated correctly
 		
 		boolean shouldLit = powerP >= 1;
 		if (getBlockState().getValue(BlockStateProperties.LIT) != shouldLit) setLightState(shouldLit);

@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core.physics.engine.commands.arguments;
+package de.m_marvin.industria.core.physics.engine.commands.arguments.vec3relative;
 
 import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.commands.arguments.coordinates.Coordinates;

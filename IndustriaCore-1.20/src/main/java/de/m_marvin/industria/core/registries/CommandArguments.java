@@ -2,8 +2,8 @@ package de.m_marvin.industria.core.registries;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.engine.command.ConduitArgument;
-import de.m_marvin.industria.core.physics.engine.commands.arguments.ContraptionArgument;
-import de.m_marvin.industria.core.physics.engine.commands.arguments.Vec3RelativeArgument;
+import de.m_marvin.industria.core.physics.engine.commands.arguments.contraption.ContraptionArgument;
+import de.m_marvin.industria.core.physics.engine.commands.arguments.vec3relative.Vec3RelativeArgument;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;

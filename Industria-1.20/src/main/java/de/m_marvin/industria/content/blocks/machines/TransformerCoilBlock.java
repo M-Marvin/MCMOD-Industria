@@ -2,6 +2,7 @@ package de.m_marvin.industria.content.blocks.machines;
 
 import java.util.function.Consumer;
 
+import de.m_marvin.industria.content.blockentities.machines.ElectroMagneticCoilBlockEntity;
 import de.m_marvin.industria.content.blockentities.machines.TransformerCoilBlockEntity;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
@@ -74,6 +75,15 @@ public class TransformerCoilBlock extends ElectroMagneticCoilBlock implements IE
 			
 			
 		}
+	}
+	
+	@Override
+	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {
+		
+		if (level.getBlockEntity(position) instanceof ElectroMagneticCoilBlockEntity coil) {
+			coil.getMaster().updateCurrentField();
+		}
+		
 	}
 
 	@Override

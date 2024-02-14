@@ -17,9 +17,9 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
 import de.m_marvin.industria.core.physics.PhysicUtility;
-import de.m_marvin.industria.core.physics.engine.commands.arguments.ContraptionArgument;
-import de.m_marvin.industria.core.physics.engine.commands.arguments.Vec3Relative;
-import de.m_marvin.industria.core.physics.engine.commands.arguments.Vec3RelativeArgument;
+import de.m_marvin.industria.core.physics.engine.commands.arguments.contraption.ContraptionArgument;
+import de.m_marvin.industria.core.physics.engine.commands.arguments.vec3relative.Vec3Relative;
+import de.m_marvin.industria.core.physics.engine.commands.arguments.vec3relative.Vec3RelativeArgument;
 import de.m_marvin.industria.core.physics.types.Contraption;
 import de.m_marvin.industria.core.physics.types.ContraptionPosition;
 import de.m_marvin.industria.core.util.MathUtility;
@@ -48,22 +48,14 @@ public class ContraptionCommand {
 	
 	public static void offsetSourcePosAndRotationFromCommandSource(CommandSourceStack source, Vec3d sourcePosition, Vec3d sourceRotation) {
 		
-		Vec3d sourcePosition1 = Vec3d.fromVec(source.getPosition());
-		if (source.getEntity() != null) {
-			// TODO entity source totation
-			
-			//source.getEntity().get
-			
-		} else {
-			Vec3d sourceExecutorPos = Vec3d.fromVec(source.getPosition());
-			Ship sourceContraption = PhysicUtility.getContraptionOfBlock(source.getLevel(), MathUtility.toBlockPos(sourceExecutorPos));
-			if (sourceContraption != null) {
-				ContraptionPosition sourceContraptionPosition = new ContraptionPosition(sourceContraption);
-				sourceRotation.setI(sourceContraptionPosition.getOrientation().euler(EulerOrder.XYZ, true));
-				sourcePosition1 = PhysicUtility.toWorldPos(sourceContraption.getTransform(), sourceExecutorPos);
-			}
+		Vec3d sourceExecutorPos = Vec3d.fromVec(source.getPosition());
+		Ship sourceContraption = PhysicUtility.getContraptionOfBlock(source.getLevel(), MathUtility.toBlockPos(sourceExecutorPos));
+		if (sourceContraption != null) {
+			ContraptionPosition sourceContraptionPosition = new ContraptionPosition(sourceContraption);
+			sourceRotation.setI(sourceContraptionPosition.getOrientation().euler(EulerOrder.XYZ, true));
+			sourceExecutorPos = PhysicUtility.toWorldPos(sourceContraption.getTransform(), sourceExecutorPos);
 		}
-		sourcePosition.addI(sourcePosition1);
+		sourcePosition.addI(sourceExecutorPos);
 		
 	}
 	
@@ -418,9 +410,9 @@ public class ContraptionCommand {
 		}
 		
 		if (contraptions.size() == 1) {
-			source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.contraption.teleport.success", newPosition.x(), newPosition.y(), newPosition.z()), true);
+			source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.contraption.teleport.success", String.format("%.2f", newPosition.x()), String.format("%.2f", newPosition.y()), String.format("%.2f", newPosition.z())), true);
 		} else {
-			source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.contraption.teleport.success_multiple", contraptions.size(), newPosition.x(), newPosition.y(), newPosition.z()), true);
+			source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.contraption.teleport.success_multiple", contraptions.size(), String.format("%.2f", newPosition.x()), String.format("%.2f", newPosition.y()), String.format("%.2f", newPosition.z())), true);
 		}
 		return Command.SINGLE_SUCCESS;
 		

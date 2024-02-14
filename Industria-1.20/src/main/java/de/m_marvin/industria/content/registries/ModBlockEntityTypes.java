@@ -2,12 +2,12 @@ package de.m_marvin.industria.content.registries;
 
 import de.m_marvin.industria.content.Industria;
 import de.m_marvin.industria.content.blockentities.ConduitCoilBlockEntity;
+import de.m_marvin.industria.content.blockentities.machines.ElectroMagneticCoilBlockEntity;
 import de.m_marvin.industria.content.blockentities.machines.FloodlightBlockEntity;
 import de.m_marvin.industria.content.blockentities.machines.IonicThrusterBlockEntity;
 import de.m_marvin.industria.content.blockentities.machines.PortableCoalGeneratorBlockEntity;
 import de.m_marvin.industria.content.blockentities.machines.PortableFuelGeneratorBlockEntity;
 import de.m_marvin.industria.content.blockentities.machines.TransformerCoilBlockEntity;
-import de.m_marvin.industria.content.blockentities.machines.ElectroMagneticCoilBlockEntity;
 import de.m_marvin.industria.content.blockentities.redstone.TransistorBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;

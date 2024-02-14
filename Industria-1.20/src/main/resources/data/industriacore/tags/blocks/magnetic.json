@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+  	"industria:electro_magnetic_coil",
+  	"industria:transformer_coil"
+  ]
+}

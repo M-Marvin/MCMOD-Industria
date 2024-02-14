@@ -20,11 +20,12 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE, value=Dist.CLIENT)
 public class MagnetismItemTooltips {
 	
+	// TODO make other tooltips the same way
 	@SubscribeEvent
 	public static void onTooltip(ItemTooltipEvent event) {
 		
 		Item item = event.getItemStack().getItem();
-		if (item instanceof BlockItem blockItem) {
+		if (item instanceof BlockItem blockItem && event.getEntity() != null) {
 			Block block = blockItem.getBlock();
 			
 			if (block.defaultBlockState().is(IndustriaTags.Blocks.MAGNETIC)) {

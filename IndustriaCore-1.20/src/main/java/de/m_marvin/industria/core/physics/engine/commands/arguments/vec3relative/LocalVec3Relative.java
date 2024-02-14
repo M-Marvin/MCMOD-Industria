@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core.physics.engine.commands.arguments;
+package de.m_marvin.industria.core.physics.engine.commands.arguments.vec3relative;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;

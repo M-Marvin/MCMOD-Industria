@@ -93,7 +93,7 @@ public class Contraption {
 	}
 	
 	public double getOmega() {
-		return this.getContraption().getOmega().length(); // TODO [ingame] check which unit this is (rad/s, Hz ?)
+		return this.getContraption().getOmega().length();
 	}
 	
 	public Vec3d getOmegaVec() {

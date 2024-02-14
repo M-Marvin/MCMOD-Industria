@@ -5,10 +5,15 @@ import java.util.List;
 
 import de.m_marvin.industria.content.blockentities.machines.ElectroMagneticCoilBlockEntity;
 import de.m_marvin.industria.content.registries.ModBlockStateProperties;
+import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.content.registries.ModTags;
+import de.m_marvin.industria.core.magnetism.types.blocks.IMagneticBlock;
+import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
+import de.m_marvin.industria.core.parametrics.properties.DoubleParameter;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
+import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -37,7 +42,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class ElectroMagneticCoilBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
+public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IMagneticBlock, SimpleWaterloggedBlock {
+	
+	public static final DoubleParameter MAGNETIC_FIELD_STRENGTH = new DoubleParameter("magneticFieldStrength", 1.0);
 	
 	public static final VoxelShape CORE_SHAPE = VoxelShapeUtility.box(2, 0, 2, 14, 16, 14);
 	public static final VoxelShape DOWN_SHAPE =VoxelShapeUtility.box(0, 0, 0, 16, 2, 16);
@@ -49,6 +56,27 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements SimpleW
 	
 	public ElectroMagneticCoilBlock(Properties pProperties) {
 		super(pProperties);
+	}
+	
+	@Override
+	public Vec3d getFieldVector(Level level, BlockState state, BlockPos blockPos) {
+		Double fieldStength = BlockParametricsManager.getInstance().getParametrics(ModBlocks.ELECTRO_MAGNETIC_COIL.get()).getParameter(MAGNETIC_FIELD_STRENGTH);
+		
+		if (level.getBlockEntity(blockPos) instanceof ElectroMagneticCoilBlockEntity coil) {
+			fieldStength *= coil.getMaster().getCurrentFieldStrength();
+		}
+		
+		switch (state.getValue(BlockStateProperties.AXIS)) {
+		case X: return new Vec3d(fieldStength, 0, 0);
+		case Y: return new Vec3d(0, fieldStength, 0);
+		case Z: return new Vec3d(0, 0, fieldStength);
+		default: return new Vec3d();
+		}
+	}
+	
+	@Override
+	public double getCoefficient(Level level, BlockState state, BlockPos pos) {
+		return BlockParametricsManager.getInstance().getParametrics(ModBlocks.ELECTRO_MAGNETIC_COIL.get()).getMagneticCoefficient();
 	}
 	
 	@Override

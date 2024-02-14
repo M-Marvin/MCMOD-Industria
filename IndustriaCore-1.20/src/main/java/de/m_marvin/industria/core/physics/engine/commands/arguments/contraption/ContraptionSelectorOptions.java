@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core.physics.engine.commands.arguments;
+package de.m_marvin.industria.core.physics.engine.commands.arguments.contraption;
 
 import java.util.Arrays;
 import java.util.List;

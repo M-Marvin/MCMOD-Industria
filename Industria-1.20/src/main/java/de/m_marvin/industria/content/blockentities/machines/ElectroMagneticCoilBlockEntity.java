@@ -31,6 +31,7 @@ public class ElectroMagneticCoilBlockEntity extends BlockEntity {
 	protected Optional<BlockPos> minPos = Optional.empty();
 	protected boolean isMaster = false;
 	protected ItemStack wires = ItemStack.EMPTY;
+	protected double currentFieldStrength = 0.0;
 	
 	public ElectroMagneticCoilBlockEntity(BlockPos pPos, BlockState pBlockState) {
 		super(ModBlockEntityTypes.ELECTRO_MAGNETIC_COIL.get(), pPos, pBlockState);
@@ -42,6 +43,16 @@ public class ElectroMagneticCoilBlockEntity extends BlockEntity {
 	
 	public ItemStack getWires() {
 		return wires;
+	}
+	
+	public double getCurrentFieldStrength() {
+		return currentFieldStrength;
+	}
+	
+	public void updateCurrentField() {
+		
+		// TODO calculate field strength emitted
+		
 	}
 	
 	public void setWires(ItemStack wires) {
@@ -176,6 +187,7 @@ public class ElectroMagneticCoilBlockEntity extends BlockEntity {
 	@Override
 	public void load(CompoundTag pTag) {
 		super.load(pTag);
+		this.currentFieldStrength = pTag.getDouble("currentFieldStrength");
 		this.wires = ItemStack.of(pTag.getCompound("Wires"));
 		this.isMaster = pTag.getBoolean("IsMaster");
 		this.minPos = pTag.contains("minPos") ? Optional.of(BlockPos.of(pTag.getLong("minPos"))) : Optional.empty();
@@ -185,6 +197,7 @@ public class ElectroMagneticCoilBlockEntity extends BlockEntity {
 	@Override
 	public CompoundTag getUpdateTag() {
 		CompoundTag tag = super.getUpdateTag();
+		tag.putDouble("currentFieldStrength", this.currentFieldStrength);
 		tag.put("Wires", this.wires.serializeNBT());
 		tag.putBoolean("IsMaster", this.isMaster);
 		if (this.minPos.isPresent()) tag.putLong("minPos", this.minPos.get().asLong());

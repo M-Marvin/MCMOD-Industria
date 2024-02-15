@@ -13,6 +13,7 @@ import de.m_marvin.industria.core.parametrics.properties.DoubleParameter;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
+import de.m_marvin.industria.core.util.blocks.IBaseEntityDynamicMultiBlock;
 import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -42,9 +43,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IMagneticBlock, SimpleWaterloggedBlock {
+public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEntityDynamicMultiBlock, IMagneticBlock, SimpleWaterloggedBlock {
 	
-	public static final DoubleParameter MAGNETIC_FIELD_STRENGTH = new DoubleParameter("magneticFieldStrength", 1.0);
+	public static final DoubleParameter MAGNETIC_FIELD_STRENGTH = new DoubleParameter("magneticFieldStrengthPerVolt", 1.0);
 	
 	public static final VoxelShape CORE_SHAPE = VoxelShapeUtility.box(2, 0, 2, 14, 16, 14);
 	public static final VoxelShape DOWN_SHAPE =VoxelShapeUtility.box(0, 0, 0, 16, 2, 16);
@@ -60,10 +61,10 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IMagnet
 	
 	@Override
 	public Vec3d getFieldVector(Level level, BlockState state, BlockPos blockPos) {
-		Double fieldStength = BlockParametricsManager.getInstance().getParametrics(ModBlocks.ELECTRO_MAGNETIC_COIL.get()).getParameter(MAGNETIC_FIELD_STRENGTH);
+		Double fieldStength = 0.0;
 		
 		if (level.getBlockEntity(blockPos) instanceof ElectroMagneticCoilBlockEntity coil) {
-			fieldStength *= coil.getMaster().getCurrentFieldStrength();
+			fieldStength = BlockParametricsManager.getInstance().getParametrics(ModBlocks.ELECTRO_MAGNETIC_COIL.get()).getParameter(MAGNETIC_FIELD_STRENGTH) * coil.getMaster().getCurrentFieldStrength();
 		}
 		
 		switch (state.getValue(BlockStateProperties.AXIS)) {
@@ -191,7 +192,8 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IMagnet
 		return true;
 	}
 	
-	public List<BlockPos> findTransformerBlocks(Level level, BlockPos pos, BlockState state) {
+	@Override
+	public List<BlockPos> findMultiBlockEntityBlocks(Level level, BlockPos pos, BlockState state) {
 		List<BlockPos> connectedBlocks = new ArrayList<>();
 		boolean toLarge = !findConnectedBlocks(level, pos, state, null, true, 36, 0, connectedBlocks);
 		if (toLarge) {

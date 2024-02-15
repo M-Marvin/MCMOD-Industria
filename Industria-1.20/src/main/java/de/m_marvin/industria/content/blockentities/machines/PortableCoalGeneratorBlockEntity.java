@@ -15,8 +15,8 @@ import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContaine
 import de.m_marvin.industria.core.parametrics.BlockParametrics;
 import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
 import de.m_marvin.industria.core.util.GameUtility;
-import de.m_marvin.industria.core.util.blocks.BaseEntityMultiBlock;
-import de.m_marvin.industria.core.util.blocks.MultiBlockEntity;
+import de.m_marvin.industria.core.util.blocks.BaseEntityFixedMultiBlock;
+import de.m_marvin.industria.core.util.blocks.FixedMultiBlockEntity;
 import de.m_marvin.industria.core.util.container.IFluidSlotContainer.FluidContainer;
 import de.m_marvin.industria.core.util.types.Direction2d;
 import de.m_marvin.univec.impl.Vec2i;
@@ -47,7 +47,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 
-public class PortableCoalGeneratorBlockEntity extends MultiBlockEntity<PortableCoalGeneratorBlockEntity> implements IJunctionEdit, MenuProvider, IItemHandler, IFluidHandler {
+public class PortableCoalGeneratorBlockEntity extends FixedMultiBlockEntity<PortableCoalGeneratorBlockEntity> implements IJunctionEdit, MenuProvider, IItemHandler, IFluidHandler {
 	
 	protected FluidContainer container = new FluidContainer(1, 1);
 	protected String[] nodeLanes = new String[] {"L", "N"};
@@ -113,7 +113,7 @@ public class PortableCoalGeneratorBlockEntity extends MultiBlockEntity<PortableC
 		
 		if (pBlockEntity.canRun != pBlockEntity.canRun()) {
 			pBlockEntity.canRun = pBlockEntity.canRun();
-			if (pBlockEntity.getBlockState().getBlock() instanceof BaseEntityMultiBlock multiBlock) {
+			if (pBlockEntity.getBlockState().getBlock() instanceof BaseEntityFixedMultiBlock multiBlock) {
 				BlockPos center = multiBlock.getOriginBlock(pBlockEntity.worldPosition, pBlockEntity.getBlockState());
 				BlockPos second = multiBlock.getBlockAtMBPos(center, pBlockEntity.getBlockState(), new Vec3i(1, 0, 0));
 				pBlockEntity.level.setBlockAndUpdate(center, pBlockEntity.level.getBlockState(center).setValue(BlockStateProperties.LIT, pBlockEntity.canRun));
@@ -245,7 +245,7 @@ public class PortableCoalGeneratorBlockEntity extends MultiBlockEntity<PortableC
 
 	@Override
 	public BlockPos getJunctionBlockPos() {
-		if (this.getBlockState().getBlock() instanceof BaseEntityMultiBlock multiBlock) {
+		if (this.getBlockState().getBlock() instanceof BaseEntityFixedMultiBlock multiBlock) {
 			return multiBlock.getBlockAtMBPos(multiBlock.getOriginBlock(worldPosition, getBlockState()), getBlockState(), new Vec3i(1, 0, 0));
 		}
 		return this.worldPosition;

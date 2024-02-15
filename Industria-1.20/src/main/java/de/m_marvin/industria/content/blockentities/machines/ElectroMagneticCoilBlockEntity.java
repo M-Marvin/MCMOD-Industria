@@ -1,16 +1,15 @@
 package de.m_marvin.industria.content.blockentities.machines;
 
-import java.util.List;
-import java.util.Optional;
-
 import de.m_marvin.industria.content.blocks.machines.ElectroMagneticCoilBlock;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.items.IConduitItem;
 import de.m_marvin.industria.core.electrics.types.conduits.IElectricConduit;
+import de.m_marvin.industria.core.magnetism.MagnetismUtility;
 import de.m_marvin.industria.core.registries.Conduits;
+import de.m_marvin.industria.core.util.ConditionalExecutor;
 import de.m_marvin.industria.core.util.GameUtility;
-import de.m_marvin.industria.core.util.MathUtility;
+import de.m_marvin.industria.core.util.blocks.DynamicMultiBlockEntity;
 import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
@@ -19,17 +18,12 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
-public class ElectroMagneticCoilBlockEntity extends BlockEntity {
+public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<ElectroMagneticCoilBlockEntity> {
 	
-	protected Optional<BlockPos> masterPos = Optional.empty();
-	protected Optional<BlockPos> maxPos = Optional.empty();
-	protected Optional<BlockPos> minPos = Optional.empty();
-	protected boolean isMaster = false;
 	protected ItemStack wires = ItemStack.EMPTY;
 	protected double currentFieldStrength = 0.0;
 	
@@ -40,6 +34,11 @@ public class ElectroMagneticCoilBlockEntity extends BlockEntity {
 	protected ElectroMagneticCoilBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
 		super(pType, pPos, pBlockState);
 	}
+
+	@Override
+	public Class<ElectroMagneticCoilBlockEntity> getMultiBlockTypeClass() {
+		return ElectroMagneticCoilBlockEntity.class;
+	}
 	
 	public ItemStack getWires() {
 		return wires;
@@ -49,81 +48,44 @@ public class ElectroMagneticCoilBlockEntity extends BlockEntity {
 		return currentFieldStrength;
 	}
 	
+	public double getGeneratedFieldStrength() {
+		return 0.0;
+	}
+	
 	public void updateCurrentField() {
 		
-		// TODO calculate field strength emitted
+		if (this.level.isClientSide()) return;
+		
+		double generatedField = 0;
+		
+		for (int x = this.getMinPos().getX(); x <= this.getMaxPos().getX(); x++) {
+			for (int y = this.getMinPos().getY(); y <= this.getMaxPos().getY(); y++) {
+				for (int z = this.getMinPos().getZ(); z <= this.getMaxPos().getZ(); z++) {
+					
+					BlockPos pos = new BlockPos(x, y, z);
+					
+					if (level.getBlockEntity(pos) instanceof ElectroMagneticCoilBlockEntity coil) {
+						
+						generatedField += coil.getGeneratedFieldStrength();
+						
+					}
+					
+				}
+			}	
+		}
+		
+		System.out.println(this.isMaster);
+		this.currentFieldStrength = generatedField;
+		this.setChanged();
+		GameUtility.triggerClientSync(this.level, this.worldPosition);
+		ConditionalExecutor.SERVER_TICK_EXECUTOR.executeAfterDelay(() -> 
+			MagnetismUtility.updateField(this.level, this.worldPosition), 1);
 		
 	}
 	
 	public void setWires(ItemStack wires) {
 		this.wires = wires;
 		this.setChanged();
-	}
-	
-	public void setMaster(boolean isMaster) {
-		this.isMaster = isMaster;
-		this.masterPos = Optional.empty();
-		this.maxPos = Optional.empty();
-		this.minPos = Optional.empty();
-		this.setChanged();
-	}
-	
-	public boolean isMaster() {
-		return isMaster;
-	}
-	
-	public BlockPos getMasterPos() {
-		if (this.isMaster) return this.worldPosition;
-		if (this.masterPos.isEmpty()) findPositions();
-		if (this.masterPos.isPresent()) return this.masterPos.get();
-		return this.worldPosition;
-	}
-	
-	public BlockPos getMinPos() {
-		if (isMaster) {
-			if (this.minPos.isEmpty()) findPositions();
-			if (this.minPos.isPresent()) return this.minPos.get();
-			return this.worldPosition;
-		} else {
-			ElectroMagneticCoilBlockEntity master = this.getMaster();
-			if (master.minPos.isEmpty()) master.findPositions();
-			if (master.minPos.isPresent()) return master.minPos.get();
-			return this.worldPosition;
-		}
-	}
-	
-	public BlockPos getMaxPos() {
-		if (isMaster) {
-			if (this.maxPos.isEmpty()) findPositions();
-			if (this.maxPos.isPresent()) return this.maxPos.get();
-			return this.worldPosition;
-		} else {
-			ElectroMagneticCoilBlockEntity master = this.getMaster();
-			if (master.maxPos.isEmpty()) master.findPositions();
-			if (master.maxPos.isPresent()) return master.maxPos.get();
-			return this.worldPosition;
-		}
-	}
-	
-	public ElectroMagneticCoilBlockEntity getMaster() {
-		BlockEntity masterBlockEntity = level.getBlockEntity(getMasterPos());
-		if (masterBlockEntity instanceof ElectroMagneticCoilBlockEntity transformerBlockEntity) return transformerBlockEntity;
-		return this;
-	}
-	
-	public void findPositions() {
-		BlockState state = getBlockState();
-		if (state.getBlock() instanceof ElectroMagneticCoilBlock block) {
-			List<BlockPos> transformerBlocks = block.findTransformerBlocks(this.level, this.worldPosition, state);
-			if (transformerBlocks.isEmpty()) return;
-			for (BlockPos pos : transformerBlocks) {
-				if (level.getBlockEntity(pos) instanceof ElectroMagneticCoilBlockEntity transformer && transformer.isMaster) this.masterPos = Optional.of(pos);
-			}
-			BlockPos minPos = transformerBlocks.stream().reduce(MathUtility::getMinCorner).get();
-			BlockPos maxPos = transformerBlocks.stream().reduce(MathUtility::getMaxCorner).get();
-			this.minPos = Optional.of(minPos);
-			this.maxPos = Optional.of(maxPos);
-		}
 	}
 	
 	public Axis getAxis() {
@@ -177,11 +139,11 @@ public class ElectroMagneticCoilBlockEntity extends BlockEntity {
 	}
 	
 	@Override
-	protected void saveAdditional(CompoundTag pTag) {
+	public void saveAdditional(CompoundTag pTag) {
 		super.saveAdditional(pTag);
 		if (!this.isMaster()) return;
+		pTag.putDouble("currentFieldStrength", this.currentFieldStrength);
 		pTag.put("Wires", wires.serializeNBT());
-		pTag.putBoolean("IsMaster", this.isMaster);
 	}
 	
 	@Override
@@ -189,9 +151,6 @@ public class ElectroMagneticCoilBlockEntity extends BlockEntity {
 		super.load(pTag);
 		this.currentFieldStrength = pTag.getDouble("currentFieldStrength");
 		this.wires = ItemStack.of(pTag.getCompound("Wires"));
-		this.isMaster = pTag.getBoolean("IsMaster");
-		this.minPos = pTag.contains("minPos") ? Optional.of(BlockPos.of(pTag.getLong("minPos"))) : Optional.empty();
-		this.maxPos = pTag.contains("maxPos") ? Optional.of(BlockPos.of(pTag.getLong("maxPos"))) : Optional.empty();
 	}
 	
 	@Override
@@ -199,9 +158,6 @@ public class ElectroMagneticCoilBlockEntity extends BlockEntity {
 		CompoundTag tag = super.getUpdateTag();
 		tag.putDouble("currentFieldStrength", this.currentFieldStrength);
 		tag.put("Wires", this.wires.serializeNBT());
-		tag.putBoolean("IsMaster", this.isMaster);
-		if (this.minPos.isPresent()) tag.putLong("minPos", this.minPos.get().asLong());
-		if (this.maxPos.isPresent()) tag.putLong("maxPos", this.maxPos.get().asLong());
 		return tag;
 	}
 	
@@ -209,5 +165,5 @@ public class ElectroMagneticCoilBlockEntity extends BlockEntity {
 	public Packet<ClientGamePacketListener> getUpdatePacket() {
 		return ClientboundBlockEntityDataPacket.create(this);
 	}
-	
+
 }

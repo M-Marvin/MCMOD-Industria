@@ -32,7 +32,7 @@ public class ElectricUtility {
 		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 		if (!level.isClientSide() && position instanceof BlockPos blockPos) {
 			// Conduit updates normally caused trough block updates on both sides, so no sending to the client required in that case
-			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(blockPos)), new SUpdateNetworkPackage(blockPos)); 
+			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(blockPos)), new SUpdateNetworkPackage(blockPos));
 		}
 		handler.updateNetwork(position);
 	}

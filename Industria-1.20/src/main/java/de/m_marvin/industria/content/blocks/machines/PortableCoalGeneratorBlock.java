@@ -20,7 +20,7 @@ import de.m_marvin.industria.core.parametrics.properties.FloatParameter;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
-import de.m_marvin.industria.core.util.blocks.BaseEntityMultiBlock;
+import de.m_marvin.industria.core.util.blocks.BaseEntityFixedMultiBlock;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -50,7 +50,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class PortableCoalGeneratorBlock extends BaseEntityMultiBlock implements IElectricBlock, IElectricInfoProvider {
+public class PortableCoalGeneratorBlock extends BaseEntityFixedMultiBlock implements IElectricBlock, IElectricInfoProvider {
 
 	public static final IntegerProperty[] MBPOS = createMultiBlockProperties(2, 1, 1);
 	

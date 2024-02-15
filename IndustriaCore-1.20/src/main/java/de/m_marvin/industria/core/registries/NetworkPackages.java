@@ -11,6 +11,7 @@ import de.m_marvin.industria.core.electrics.engine.network.SSyncComponentsPackag
 import de.m_marvin.industria.core.electrics.engine.network.SUpdateNetworkPackage;
 import de.m_marvin.industria.core.magnetism.engine.network.SMagneticInfluencePackage;
 import de.m_marvin.industria.core.magnetism.engine.network.SSyncMagneticPackage;
+import de.m_marvin.industria.core.magnetism.engine.network.SUpdateMagneticFieldPackage;
 import de.m_marvin.industria.core.parametrics.engine.network.SSyncParametricsPackage;
 import de.m_marvin.industria.core.physics.engine.VS2MassSyncPatch.SSyncVS2BlockInfoPackage;
 import de.m_marvin.industria.core.scrollinput.engine.network.CScrollInputPackage;
@@ -35,6 +36,7 @@ public class NetworkPackages {
 		network.registerMessage(id++, SSyncMagneticPackage.class, SSyncMagneticPackage::encode, SSyncMagneticPackage::decode, SSyncMagneticPackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		network.registerMessage(id++, SMagneticInfluencePackage.SAddInfluencePackage.class, SMagneticInfluencePackage.SAddInfluencePackage::encode, SMagneticInfluencePackage.SAddInfluencePackage::decode, SMagneticInfluencePackage.SAddInfluencePackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		network.registerMessage(id++, SMagneticInfluencePackage.SRemoveInfluencePackage.class, SMagneticInfluencePackage.SRemoveInfluencePackage::encode, SMagneticInfluencePackage.SRemoveInfluencePackage::decode, SMagneticInfluencePackage.SRemoveInfluencePackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+		network.registerMessage(id++, SUpdateMagneticFieldPackage.class, SUpdateMagneticFieldPackage::encode, SUpdateMagneticFieldPackage::decode, SUpdateMagneticFieldPackage::handle);
 		network.registerMessage(id++, SSyncParametricsPackage.class, SSyncParametricsPackage::encode, SSyncParametricsPackage::decode, SSyncParametricsPackage::handle);
 		
 		network.registerMessage(id++, SSyncVS2BlockInfoPackage.class, SSyncVS2BlockInfoPackage::encode, SSyncVS2BlockInfoPackage::decode, SSyncVS2BlockInfoPackage::handle);

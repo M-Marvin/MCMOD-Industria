@@ -119,7 +119,7 @@ public class BlockParametrics {
 	}
 
 	public double getPowerPercentageV(double voltage) {
-		int nominalVoltage = getNominalPower();
+		int nominalVoltage = getNominalVoltage();
 		int nominalPower = getNominalPower();
 		int powerMin = getPowerMin();
 		int powerMax = getPowerMax();

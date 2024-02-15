@@ -2,6 +2,7 @@ package de.m_marvin.industria.content.blockentities.machines;
 
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
+import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
@@ -38,7 +39,7 @@ public class TransformerCoilBlockEntity extends ElectroMagneticCoilBlockEntity i
 	}
 	
 	@Override
-	protected void saveAdditional(CompoundTag pTag) {
+	public void saveAdditional(CompoundTag pTag) {
 		super.saveAdditional(pTag);
 		pTag.putString("LiveWireLane", this.nodeLanes[0]);
 		pTag.putString("NeutralWireLane", this.nodeLanes[1]);
@@ -57,6 +58,12 @@ public class TransformerCoilBlockEntity extends ElectroMagneticCoilBlockEntity i
 		tag.putString("LiveWireLane", this.nodeLanes[0]);
 		tag.putString("NeutralWireLane", this.nodeLanes[1]);
 		return tag;
+	}
+	
+	@Override
+	public double getGeneratedFieldStrength() {
+		double voltage = ElectricUtility.getVoltageBetween(level, new NodePos(this.worldPosition, 0), new NodePos(this.worldPosition, 0), 0, 1, this.nodeLanes[0], this.nodeLanes[1]);
+		return voltage;
 	}
 
 	@Override

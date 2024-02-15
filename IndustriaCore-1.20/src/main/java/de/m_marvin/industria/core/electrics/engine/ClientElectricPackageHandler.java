@@ -41,6 +41,8 @@ public class ClientElectricPackageHandler {
 		}
 	}
 
+	/* Handle SUpdateNetworkPackage */
+	
 	@SuppressWarnings("resource")
 	public static void handleUpdateNetwork(SUpdateNetworkPackage msg, Context context) {
 		

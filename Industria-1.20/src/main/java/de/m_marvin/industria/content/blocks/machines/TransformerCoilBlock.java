@@ -15,6 +15,8 @@ import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -78,12 +80,15 @@ public class TransformerCoilBlock extends ElectroMagneticCoilBlock implements IE
 	}
 	
 	@Override
-	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {
-		
-		if (level.getBlockEntity(position) instanceof ElectroMagneticCoilBlockEntity coil) {
+	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+		if (pLevel.getBlockEntity(pPos) instanceof ElectroMagneticCoilBlockEntity coil) {
 			coil.getMaster().updateCurrentField();
 		}
-		
+	}
+	
+	@Override
+	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {
+		level.scheduleTick(position, this, 1);
 	}
 
 	@Override

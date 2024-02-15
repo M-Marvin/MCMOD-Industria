@@ -26,7 +26,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.HitResult;
 
-public abstract class BaseEntityMultiBlock extends BaseEntityBlock {
+public abstract class BaseEntityFixedMultiBlock extends BaseEntityBlock {
 	
 	protected static IntegerProperty[] createMultiBlockProperties(int x, int y, int z) {
 		return new IntegerProperty[] {
@@ -42,7 +42,7 @@ public abstract class BaseEntityMultiBlock extends BaseEntityBlock {
 	
 	protected IntegerProperty[] mbposProperties;
 	
-	protected BaseEntityMultiBlock(Properties pProperties, int width, int height, int depth) {
+	protected BaseEntityFixedMultiBlock(Properties pProperties, int width, int height, int depth) {
 		super(pProperties);
 		if (width > 3 || height > 3 || depth > 3) throw new IllegalArgumentException("An multi-block canÄt be larger than 6x6x6!");
 		this.width = width;
@@ -152,7 +152,7 @@ public abstract class BaseEntityMultiBlock extends BaseEntityBlock {
 	}
 	
 	public BlockPos getOriginBlock(BlockPos pos, BlockState state) {
-		if (state.getBlock() instanceof BaseEntityMultiBlock) {
+		if (state.getBlock() instanceof BaseEntityFixedMultiBlock) {
 			Vec3i mbPos = getMBPos(state);
 			Direction orientation = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
 			Vec3i mbOffset = MathUtility.rotatePoint(mbPos, orientation.get2DDataValue() * -90, true, Axis.Y);
@@ -162,7 +162,7 @@ public abstract class BaseEntityMultiBlock extends BaseEntityBlock {
 	}
 
 	public BlockPos getBlockAtMBPos(BlockPos centerPos, BlockState state, Vec3i mbPos) {
-		if (state.getBlock() instanceof BaseEntityMultiBlock) {
+		if (state.getBlock() instanceof BaseEntityFixedMultiBlock) {
 			Direction orientation = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
 			Vec3i mbOffset = MathUtility.rotatePoint(mbPos, orientation.get2DDataValue() * -90, true, Axis.Y);
 			return new BlockPos(centerPos.getX() + mbOffset.x, centerPos.getY() + mbOffset.y, centerPos.getZ() + mbOffset.z);

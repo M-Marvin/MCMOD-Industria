@@ -225,6 +225,13 @@ public class MagnetismHandlerCapability implements ICapabilitySerializable<ListT
 		
 	}
 	
+	public void updateField(BlockPos influencePos) {
+		MagneticField field = this.pos2fieldMap.get(influencePos);
+		if (field != null) {
+			field.updateField(level);
+		}
+	}
+	
 	public void addToFields(Set<MagneticFieldInfluence> influences) {
 		
 		while (influences.size() > 0) {

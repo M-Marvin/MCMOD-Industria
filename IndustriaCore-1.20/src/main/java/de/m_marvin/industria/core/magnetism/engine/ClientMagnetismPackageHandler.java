@@ -4,6 +4,7 @@ import de.m_marvin.industria.core.magnetism.MagnetismUtility;
 import de.m_marvin.industria.core.magnetism.engine.network.SMagneticInfluencePackage.SAddInfluencePackage;
 import de.m_marvin.industria.core.magnetism.engine.network.SMagneticInfluencePackage.SRemoveInfluencePackage;
 import de.m_marvin.industria.core.magnetism.engine.network.SSyncMagneticPackage;
+import de.m_marvin.industria.core.magnetism.engine.network.SUpdateMagneticFieldPackage;
 import de.m_marvin.industria.core.magnetism.types.MagneticField;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.ConditionalExecutor;
@@ -57,6 +58,16 @@ public class ClientMagnetismPackageHandler {
 		}, 1);
 	}
 
+	/* Handle SUpdateMagneticFieldPackage */
+	
+	@SuppressWarnings("resource")
+	public static void handleUpdateMagneticField(SUpdateMagneticFieldPackage msg, Context context) {
+		
+		Level level = Minecraft.getInstance().level;
+		MagnetismUtility.updateField(level, msg.getPos());
+		
+	}
+	
 	/* End of package handling */
 	
 }

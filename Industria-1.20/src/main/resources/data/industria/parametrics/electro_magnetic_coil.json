@@ -1,4 +1,4 @@
 {
-	"magneticFieldStrength": 0.2,
+	"magneticFieldStrengthPerVolt": 0.004,
 	"magneticCoefficient": 1.0
 }

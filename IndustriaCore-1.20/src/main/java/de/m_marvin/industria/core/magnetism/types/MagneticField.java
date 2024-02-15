@@ -298,7 +298,10 @@ public class MagneticField {
 		
 		// Calculate individual induction vectors
 		for (MagneticFieldInfluence influence : this.magneticInfluences) {
-			influence.getInducedVector().setI(this.inducedFieldVector.mul(influence.getMagneticCoefficient() / this.inductionCoefficient / this.magneticInfluences.size()));	
+			double d = influence.getMagneticCoefficient() / this.inductionCoefficient / this.magneticInfluences.size();
+			Vec3d externalInduction = this.inducedFieldVector.mul(d);
+			//Vec3d internalInduction = this.fieldVectorLinear.mul(d); TODO internal induction
+			influence.getInducedVector().setI(externalInduction);	
 		}
 		
 	}

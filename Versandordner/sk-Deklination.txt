@@ -101,3 +101,11 @@ NOM        GEN        DAT        AKK        LOK        INSTR
 os (Achse) nach Schema FEM-3
 os, osi, osi, os, osi, osou
 NUM GEN  DAT  AKK LOK  INSTR
+
+škálovanie (Skalierung) nach Schema NEUTR-3
+škálovanie, škálovania, škálovaniu, škálovanie, škálovaní, škálovaním
+NOM         GEN         DAT         AKK         LOK        INSTR
+
+štítok (Etikett, = Tag) nach Schema MASK-3 mit Ausnahmen
+štítok, štítku, štítku, štítok, štítku, štítkom
+NOM     GEN     DAT     AKK     LOK     INSTR

@@ -11,6 +11,7 @@ import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.apigame.constraints.VSConstraint;
 import org.valkyrienskies.core.apigame.constraints.VSRopeConstraint;
 
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.engine.particles.ConduitParticleOption;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
@@ -199,6 +200,10 @@ public class Conduit {
 			
 			ConduitNode nodeA = ((IConduitConnector) nodeAstate.getBlock()).getConduitNode(level, nodeApos, nodeAstate, conduit.getPosition().getNodeAid());
 			ConduitNode nodeB = ((IConduitConnector) nodeBstate.getBlock()).getConduitNode(level, nodeBpos, nodeBstate, conduit.getPosition().getNodeBid());
+			if (nodeA == null || nodeB == null) {
+				IndustriaCore.LOGGER.warn("Invalid conduit at " + nodeApos + " - " + nodeBpos);
+				return;
+			}
 			Vec3d pointStart = nodeA.getWorldPosition(level, nodeApos);
 			Vec3d pointEnd = nodeB.getWorldPosition(level, nodeBpos);
 			Vec3d origin = new Vec3d(Math.min(pointStart.x, pointEnd.x), Math.min(pointStart.y, pointEnd.y), Math.min(pointStart.z, pointEnd.z)).sub(0.5, 0.5, 0.5);

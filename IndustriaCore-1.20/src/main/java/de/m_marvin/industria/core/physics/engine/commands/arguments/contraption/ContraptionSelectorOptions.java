@@ -212,7 +212,7 @@ public class ContraptionSelectorOptions {
 				parser.setStatic(OptionalBoolean.of(isStatic));
 			}, (parser) -> {
 				return !parser.getStatic().isPresent();
-			}, Component.translatable("industriacore.argument.contraption.option.static.description"));
+			}, Component.translatable("industriacore.argument.contraption.options.static.description"));
 
 			register("mass", (parser) -> {
 				MinMaxBounds.Doubles minmaxbounds$doubles = MinMaxBounds.Doubles.fromReader(parser.getReader());

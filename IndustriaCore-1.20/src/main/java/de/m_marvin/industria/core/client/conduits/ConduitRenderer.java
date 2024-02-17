@@ -119,6 +119,15 @@ public class ConduitRenderer {
 			BlockPos targetBlock = ((BlockHitResult) result).getBlockPos();
 			BlockState blockState = clientLevel.getBlockState(targetBlock);
 			if (blockState.getBlock() instanceof IConduitConnector connector) {
+				
+				BlockPos masterPos = connector.getConnectorMasterPos(clientLevel, targetBlock, blockState);
+				BlockState masterState = clientLevel.getBlockState(masterPos);
+				if (!masterPos.equals(targetBlock) && masterState.getBlock() instanceof IConduitConnector masterConnector) {
+					blockState = masterState;
+					targetBlock = masterPos;
+					connector = masterConnector;
+				}
+				
 				int nodeId = 0;
 				for (ConduitNode node : connector.getConduitNodes(clientLevel, targetBlock, blockState)) {
 					drawNodeDebug(matrixStack, bufferSource, clientLevel, partialTicks, targetBlock, node, nodeId++);
@@ -147,6 +156,15 @@ public class ConduitRenderer {
 			BlockPos targetBlock = ((BlockHitResult) result).getBlockPos();
 			BlockState blockState = clientLevel.getBlockState(targetBlock);
 			if (blockState.getBlock() instanceof IConduitConnector connector) {
+				
+				BlockPos masterPos = connector.getConnectorMasterPos(clientLevel, targetBlock, blockState);
+				BlockState masterState = clientLevel.getBlockState(masterPos);
+				if (!masterPos.equals(targetBlock) && masterState.getBlock() instanceof IConduitConnector masterConnector) {
+					blockState = masterState;
+					targetBlock = masterPos;
+					connector = masterConnector;
+				}
+				
 				int nodeId = 0;
 				for (ConduitNode node : connector.getConduitNodes(clientLevel, targetBlock, blockState)) {
 					drawNodeSymbol(matrixStack, bufferSource, clientLevel, partialTicks, targetBlock, node, nodeId++);

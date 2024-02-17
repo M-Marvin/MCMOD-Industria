@@ -2,11 +2,16 @@ package de.m_marvin.industria.content.blocks.machines;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import de.m_marvin.industria.content.blockentities.machines.ElectroMagneticCoilBlockEntity;
 import de.m_marvin.industria.content.registries.ModBlockStateProperties;
 import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.content.registries.ModTags;
+import de.m_marvin.industria.core.conduits.types.ConduitNode;
+import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
+import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
+import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.magnetism.types.blocks.IMagneticBlock;
 import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
 import de.m_marvin.industria.core.parametrics.properties.DoubleParameter;
@@ -43,7 +48,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEntityDynamicMultiBlock, IMagneticBlock, SimpleWaterloggedBlock {
+public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEntityDynamicMultiBlock, IElectricBlock, IMagneticBlock, SimpleWaterloggedBlock {
 	
 	public static final DoubleParameter MAGNETIC_FIELD_STRENGTH = new DoubleParameter("magneticFieldStrengthPerVolt", 1.0);
 	
@@ -168,8 +173,51 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 		default: return Shapes.empty();
 		}
 	}
+
+	@Override
+	public ConduitNode[] getConduitNodes(Level level, BlockPos position, BlockState instance) {
+		if (level.getBlockEntity(position) instanceof ElectroMagneticCoilBlockEntity coil) {
+			if (coil.isMaster()) return coil.getConduitNodes();
+		}
+		return new ConduitNode[0];
+	}
+
+	@Override
+	public NodePos[] getConnections(Level level, BlockPos position, BlockState instance) {
+		if (level.getBlockEntity(position) instanceof ElectroMagneticCoilBlockEntity coil) {
+			if (coil.isMaster()) return coil.getMaster().getConnections();
+		}
+		return new NodePos[0];
+	}
+
+	@Override
+	public BlockPos getConnectorMasterPos(Level level, BlockPos position, BlockState state) {
+		if (level.getBlockEntity(position) instanceof ElectroMagneticCoilBlockEntity coil) {
+			return coil.getMasterPos();
+		}
+		return position;
+	}
 	
-	public boolean findConnectedBlocks(Level level, BlockPos pos, BlockState state, Direction relative, boolean attached, int limit, int depth, List<BlockPos> connectedBlocks) {
+	@Override
+	public String[] getWireLanes(Level level, BlockPos position, BlockState instance, NodePos arg3) {
+		// TODO Auto-generated method stub
+		return new String[0];
+	}
+
+	@Override
+	public void plotCircuit(Level arg0, BlockState arg1, BlockPos arg2, ElectricNetwork arg3,
+			Consumer<ICircuitPlot> arg4) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setWireLanes(Level arg0, BlockPos arg1, BlockState arg2, NodePos arg3, String[] arg4) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	protected boolean findConnectedBlocks(Level level, BlockPos pos, BlockState state, Direction relative, boolean attached, int limit, int depth, List<BlockPos> connectedBlocks) {
 		if (!state.is(ModTags.Blocks.ELECTRO_MAGNETIC_COILS)) return true;
 		if (relative != null) {
 			BlockState originState = level.getBlockState(pos.relative(relative.getOpposite()));
@@ -203,7 +251,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 		return connectedBlocks;
 	}
 	
-	public void updateConnections(Level level, BlockPos pos, BlockState state) {
+	protected void updateConnections(Level level, BlockPos pos, BlockState state) {
 		
 		List<BlockPos> connectedBlocks = new ArrayList<>();
 		boolean toLarge = !findConnectedBlocks(level, pos, state, null, true, 36, 0, connectedBlocks);
@@ -324,7 +372,9 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 			ItemStack wireItem = pPlayer.getMainHandItem();
 			int wiresPerWinding = transformerMaster.getWiresPerWinding();
 			
-			if (transformerMaster.isValidWireItem(wireItem) && wireItem.getCount() >= wiresPerWinding && transformerMaster.getWindings() < transformer.getMaxWindings()) {
+			boolean hitSide = pState.getValue(BlockStateProperties.AXIS) != pHit.getDirection().getAxis();
+			
+			if (hitSide && transformerMaster.isValidWireItem(wireItem) && wireItem.getCount() >= wiresPerWinding && transformerMaster.getWindings() < transformer.getMaxWindings()) {
 				
 				ItemStack wires = transformerMaster.getWires();
 				if (wires.isEmpty()) {

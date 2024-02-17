@@ -13,6 +13,10 @@ public interface IConduitConnector {
 	
 	public ConduitNode[] getConduitNodes(Level level, BlockPos pos, BlockState state);
 	
+	public default BlockPos getConnectorMasterPos(Level level, BlockPos pos, BlockState state) {
+		return pos;
+	}
+	
 	public default ConduitNode getConduitNode(Level level, BlockPos pos, BlockState state, int id) {
 		ConduitNode[] nodes = getConduitNodes(level, pos, state);
 		if (nodes.length > id) {

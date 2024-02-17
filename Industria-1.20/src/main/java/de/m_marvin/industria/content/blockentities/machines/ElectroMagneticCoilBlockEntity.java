@@ -1,16 +1,24 @@
 package de.m_marvin.industria.content.blockentities.machines;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
+
 import de.m_marvin.industria.content.blocks.machines.ElectroMagneticCoilBlock;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
+import de.m_marvin.industria.core.conduits.types.ConduitNode;
+import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.items.IConduitItem;
 import de.m_marvin.industria.core.electrics.types.conduits.IElectricConduit;
 import de.m_marvin.industria.core.magnetism.MagnetismUtility;
 import de.m_marvin.industria.core.registries.Conduits;
+import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.ConditionalExecutor;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.blocks.DynamicMultiBlockEntity;
 import de.m_marvin.univec.impl.Vec3f;
+import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.nbt.CompoundTag;
@@ -81,6 +89,50 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 		ConditionalExecutor.SERVER_TICK_EXECUTOR.executeAfterDelay(() -> 
 			MagnetismUtility.updateField(this.level, this.worldPosition), 1);
 		
+	}
+	
+	private int getElectricalConnectionCount() {
+		Vec3i hp = Vec3i.fromVec(getMinPos());
+		Vec3i lp = Vec3i.fromVec(getMaxPos());
+		
+		switch (this.getBlockState().getValue(BlockStateProperties.AXIS)) {
+		case X: lp.setX(0); hp.setX(0); break;
+		case Y: lp.setY(0); hp.setY(0); break;
+		case Z: lp.setZ(0); hp.setZ(0); break;
+		}
+		
+		return (Math.abs(hp.x - lp.x) + 1) * (Math.abs(hp.y - lp.y) + 1) * (Math.abs(hp.z - lp.z) + 1) * 2;
+	}
+
+	public NodePos[] getConnections() {
+		return IntStream
+				.range(0, getElectricalConnectionCount())
+				.mapToObj(id -> new NodePos(this.worldPosition, id))
+				.toArray(i -> new NodePos[i]);
+	}
+
+	public ConduitNode[] getConduitNodes() {
+		Vec3i size = Vec3i.fromVec(getMaxPos()).sub(Vec3i.fromVec(getMinPos())).add(1, 1, 1);
+		
+		return IntStream
+				.range(0, getElectricalConnectionCount())
+				.mapToObj(id -> {
+					Vec3i pos;
+					Vec3i offset;
+					
+					switch (this.getBlockState().getValue(BlockStateProperties.AXIS)) {
+						case X: pos = new Vec3i(id, id, id); offset = new Vec3i(); break;
+						case Y: pos = new Vec3i(id % size.x, (id / size.x / size.z) > 0 ? size.y : 0, (id / size.x) % size.z); offset = new Vec3i(8, 0, 8);  break;
+						default:
+						case Z: pos = new Vec3i(id, id, id); offset = new Vec3i();  break;
+					}
+					
+					pos.subI(Vec3i.fromVec(this.worldPosition).sub(Vec3i.fromVec(getMinPos()).min(Vec3i.fromVec(getMaxPos()))));
+					pos.mulI(16).addI(offset);
+					
+					return new ConduitNode(NodeTypes.ELECTRIC, id, pos);
+				})
+				.toArray(i -> new ConduitNode[i]);
 	}
 	
 	public void setWires(ItemStack wires) {

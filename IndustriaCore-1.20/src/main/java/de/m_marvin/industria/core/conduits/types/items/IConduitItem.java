@@ -30,11 +30,21 @@ public interface IConduitItem {
 			BlockState nodeState = level.getBlockState(pos);
 			int nearestNode = -1;
 			double distance = 2;
-			ConduitNode[] nodes = ((IConduitConnector) nodeState.getBlock()).getConduitNodes(level, pos, nodeState);
+			
+			// TODO rework code
+			IConduitConnector connector = (IConduitConnector) nodeState.getBlock();
+			BlockPos masterPos = connector.getConnectorMasterPos(level, pos, nodeState);
+			BlockState masterState = level.getBlockState(masterPos);
+			if (!masterPos.equals(pos) && masterState.getBlock() instanceof IConduitConnector masterConnector) {
+				nodeState = masterState;
+				connector = masterConnector;
+			}
+			
+			ConduitNode[] nodes = connector.getConduitNodes(level, masterPos, nodeState);
 			for (int nodeId = 0; nodeId < nodes.length; nodeId++) {
-				double nodeDist = nodes[nodeId].getOffset().sub(Vec3d.fromVec(context.getClickLocation()).sub(Vec3d.fromVec(pos)).mul(16.0, 16.0, 16.0)).length() / 16D;
+				double nodeDist = nodes[nodeId].getOffset().sub(Vec3d.fromVec(context.getClickLocation()).sub(Vec3d.fromVec(masterPos)).mul(16.0, 16.0, 16.0)).length() / 16D;
 				if (nodeDist < distance) {
-					if (ConduitUtility.getConduitsAtNode(level, pos, nodeId).size() < nodes[nodeId].getMaxConnections()) {
+					if (ConduitUtility.getConduitsAtNode(level, masterPos, nodeId).size() < nodes[nodeId].getMaxConnections()) {
 						nearestNode = nodeId;
 						distance = nodeDist;
 					}
@@ -50,16 +60,34 @@ public interface IConduitItem {
 		BlockPos clicked = context.getClickedPos();
 		Direction face = context.getClickedFace();
 		BlockState clickedState = level.getBlockState(clicked);
-		if (clickedState.getBlock() instanceof IConduitConnector) {
-			IConduitConnector nodeBlock = (IConduitConnector) clickedState.getBlock();
-			if (nodeBlock.hasFreeConduitNode(level, clicked, clickedState, type -> type.canConnectWith(this.getConduit()))) {
+		if (clickedState.getBlock() instanceof IConduitConnector connector) {
+
+			// TODO rework code
+			BlockPos masterPos = connector.getConnectorMasterPos(level, clicked, clickedState);
+			BlockState masterState = level.getBlockState(masterPos);
+			if (!masterPos.equals(clicked) && masterState.getBlock() instanceof IConduitConnector masterConnector) {
+				clickedState = masterState;
+				clicked = masterPos;
+				connector = masterConnector;
+			}
+			
+			if (connector.hasFreeConduitNode(level, clicked, clickedState, type -> type.canConnectWith(this.getConduit()))) {
 				return clicked;
 			}
 		} else {
 			clickedState = level.getBlockState(clicked.relative(face.getOpposite()));
-			if (clickedState.getBlock() instanceof IConduitConnector) {
-				IConduitConnector nodeBlock = (IConduitConnector) clickedState.getBlock();
-				if (nodeBlock.hasFreeConduitNode(level, clicked.relative(face.getOpposite()), clickedState, type -> type.canConnectWith(this.getConduit()))) {
+			if (clickedState.getBlock() instanceof IConduitConnector connector) {
+
+				// TODO rework code
+				BlockPos masterPos = connector.getConnectorMasterPos(level, clicked, clickedState);
+				BlockState masterState = level.getBlockState(masterPos);
+				if (!masterPos.equals(clicked) && masterState.getBlock() instanceof IConduitConnector masterConnector) {
+					clickedState = masterState;
+					clicked = masterPos;
+					connector = masterConnector;
+				}
+				
+				if (connector.hasFreeConduitNode(level, clicked.relative(face.getOpposite()), clickedState, type -> type.canConnectWith(this.getConduit()))) {
 					return clicked.relative(face.getOpposite());
 				}
 			}

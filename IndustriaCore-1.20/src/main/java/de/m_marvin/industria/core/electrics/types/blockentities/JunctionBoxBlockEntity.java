@@ -135,6 +135,14 @@ public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider,
 	public Map<Direction, NodePos> getBlockRelativeCableNodes(BlockState state, BlockPos position) {
 		if (state.getBlock() instanceof IElectricBlock connectorBlock) {
 			Level level = this.getJunctionLevel();
+			
+			// TODO check if working
+			BlockPos masterPos = connectorBlock.getConnectorMasterPos(level, position, state);
+			if (!masterPos.equals(position) && level.getBlockState(masterPos).getBlock() instanceof IElectricBlock masterBlock) {
+				state = level.getBlockState(masterPos);
+				connectorBlock = masterBlock;
+			}
+			
 			NodePos[] nodes = connectorBlock.getConnections(level, position, state);
 			ConduitNode[] connections = connectorBlock.getConduitNodes(level, position, state);
 			Vec3i center = new Vec3i(8, 8, 8);

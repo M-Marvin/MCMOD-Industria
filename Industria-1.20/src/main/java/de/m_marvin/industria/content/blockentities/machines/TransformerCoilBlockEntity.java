@@ -62,6 +62,7 @@ public class TransformerCoilBlockEntity extends ElectroMagneticCoilBlockEntity i
 	
 	@Override
 	public double getGeneratedFieldStrength() {
+		// TODO
 		double voltage = ElectricUtility.getVoltageBetween(level, new NodePos(this.worldPosition, 0), new NodePos(this.worldPosition, 0), 0, 1, this.nodeLanes[0], this.nodeLanes[1]);
 		return voltage;
 	}

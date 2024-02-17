@@ -30,7 +30,7 @@
 "industriacore.commands.contraption.tags.set.success":		"Tag '%1$s' toegepast op %2$s apparaten",
 "industriacore.commands.contraption.tags.remove.success":	"Tag '%1$s' verwijderd van %2$s apparaten",
 "industriacore.commands.contraption.tags.tagempty":		"Tag kan niet leeg zijn!",
-"industriacore.commands.contraption.tags.listmultiple":		"Tags van meer dan één apparaat kunnen niet worden vermeld!",
+"industriacore.commands.contraption.tags.listmultiple":		"Tags van meer dan \u00e9\u00e9n apparaat kunnen niet worden vermeld!",
 "industriacore.commands.contraption.tags.listhead":		"Apparaat '%1$s' heeft %2$s tags:",
 "industriacore.commands.contraption.tags.listentry":		"- %1$s",
 
@@ -49,7 +49,7 @@
 "industriacore.argument.contraption.options.limit.toosmall":		"Limiet moet minimaal 1 zijn!",
 "industriacore.argument.contraption.selector.unknown":			"Onbekend selectortype '%s'!",
 "industriacore.argument.contraption.selector.not_allowed":		"Selector niet toegestaan!",
-"industriacore.argument.contraption.toomany":				"De opgegeven selector bevat meer dan één apparaat!",
+"industriacore.argument.contraption.toomany":				"De opgegeven selector bevat meer dan \u00e9\u00e9n apparaat!",
 "industriacore.argument.contraption.notfound.entity":			"Geen apparaat gevonden!",
 "industriacore.argument.contraption.selector.missing":			"Ontbrekend selectortype!",
 "industriacore.argument.contraption.invalid":				"Ongeldige naam of UUID!",

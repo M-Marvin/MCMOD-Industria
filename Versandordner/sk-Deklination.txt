@@ -109,3 +109,7 @@ NOM         GEN         DAT         AKK         LOK        INSTR
 štítok (Etikett, = Tag) nach Schema MASK-3 mit Ausnahmen
 štítok, štítku, štítku, štítok, štítku, štítkom
 NOM     GEN     DAT     AKK     LOK     INSTR
+
+selektor (Selektor) nach Schema MASK-1
+selektor, selektora, selektorovi, selektora, selektorovi, selektorom
+NOM       GEN        DAT          AKK        LOK          INSTR

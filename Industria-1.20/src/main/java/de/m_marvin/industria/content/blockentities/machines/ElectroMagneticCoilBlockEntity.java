@@ -10,8 +10,11 @@ import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.items.IConduitItem;
+import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.types.conduits.IElectricConduit;
 import de.m_marvin.industria.core.magnetism.MagnetismUtility;
+import de.m_marvin.industria.core.parametrics.BlockParametrics;
+import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
 import de.m_marvin.industria.core.registries.Conduits;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.ConditionalExecutor;
@@ -31,7 +34,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<ElectroMagneticCoilBlockEntity> {
-	
+
+	protected String[] nodeLanes = {"L", "N"};
 	protected ItemStack wires = ItemStack.EMPTY;
 	protected double currentFieldStrength = 0.0;
 	
@@ -64,7 +68,13 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 		
 		if (this.level.isClientSide()) return;
 		
-		double generatedField = 0;
+		BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this.getBlockState().getBlock());
+		
+		double voltage = getVoltage();
+		double fePerVolt = parametrics.getParameter(ElectroMagneticCoilBlock.MAGNETIC_FIELD_STRENGTH);
+		double windings = getWindings();
+		
+		this.currentFieldStrength = (voltage * fePerVolt) / windings;
 		
 		for (int x = this.getMinPos().getX(); x <= this.getMaxPos().getX(); x++) {
 			for (int y = this.getMinPos().getY(); y <= this.getMaxPos().getY(); y++) {
@@ -74,7 +84,7 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 					
 					if (level.getBlockEntity(pos) instanceof ElectroMagneticCoilBlockEntity coil) {
 						
-						generatedField += coil.getGeneratedFieldStrength();
+						//generatedField += coil.getGeneratedFieldStrength();
 						
 					}
 					
@@ -82,13 +92,24 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 			}	
 		}
 		
-		System.out.println(this.isMaster);
-		this.currentFieldStrength = generatedField;
 		this.setChanged();
 		GameUtility.triggerClientSync(this.level, this.worldPosition);
 		ConditionalExecutor.SERVER_TICK_EXECUTOR.executeAfterDelay(() -> 
 			MagnetismUtility.updateField(this.level, this.worldPosition), 1);
 		
+	}
+
+	public String[] getNodeLanes() {
+		return nodeLanes;
+	}
+	
+	public void setNodeLanes(String[] nodeLanes) {
+		this.nodeLanes = nodeLanes;
+		this.setChanged();
+	}
+	
+	public double getVoltage() {
+		return ElectricUtility.getVoltageBetween(this.level, new NodePos(this.worldPosition, 0), new NodePos(this.worldPosition, 0), 0, 1, this.nodeLanes[0], this.nodeLanes[1]);
 	}
 	
 	private int getElectricalConnectionCount() {
@@ -128,10 +149,9 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 					}
 					
 					pos.subI(Vec3i.fromVec(this.worldPosition).sub(Vec3i.fromVec(getMinPos()).min(Vec3i.fromVec(getMaxPos()))));
-					pos.mulI(16).addI(offset);
-					
-					return new ConduitNode(NodeTypes.ELECTRIC, id, pos);
+					return pos.mul(16).add(offset);
 				})
+				.map(pos -> new ConduitNode(NodeTypes.ELECTRIC, ElectroMagneticCoilBlock.CONNECTION_PER_NODE, pos))
 				.toArray(i -> new ConduitNode[i]);
 	}
 	
@@ -196,6 +216,8 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 		if (!this.isMaster()) return;
 		pTag.putDouble("currentFieldStrength", this.currentFieldStrength);
 		pTag.put("Wires", wires.serializeNBT());
+		pTag.putString("LiveWireLane", this.nodeLanes[0]);
+		pTag.putString("NeutralWireLane", this.nodeLanes[1]);
 	}
 	
 	@Override
@@ -203,6 +225,8 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 		super.load(pTag);
 		this.currentFieldStrength = pTag.getDouble("currentFieldStrength");
 		this.wires = ItemStack.of(pTag.getCompound("Wires"));
+		this.nodeLanes[0] = pTag.getString("LiveWireLane");
+		this.nodeLanes[1] = pTag.getString("NeutralWireLane");
 	}
 	
 	@Override
@@ -210,6 +234,8 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 		CompoundTag tag = super.getUpdateTag();
 		tag.putDouble("currentFieldStrength", this.currentFieldStrength);
 		tag.put("Wires", this.wires.serializeNBT());
+		tag.putString("LiveWireLane", this.nodeLanes[0]);
+		tag.putString("NeutralWireLane", this.nodeLanes[1]);
 		return tag;
 	}
 	

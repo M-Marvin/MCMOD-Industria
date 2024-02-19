@@ -10,6 +10,7 @@ import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.content.registries.ModTags;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
+import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.magnetism.types.blocks.IMagneticBlock;
@@ -23,7 +24,9 @@ import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -51,6 +54,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEntityDynamicMultiBlock, IElectricBlock, IMagneticBlock, SimpleWaterloggedBlock {
 	
 	public static final DoubleParameter MAGNETIC_FIELD_STRENGTH = new DoubleParameter("magneticFieldStrengthPerVolt", 1.0);
+	public static final int CONNECTION_PER_NODE = 1;
 	
 	public static final VoxelShape CORE_SHAPE = VoxelShapeUtility.box(2, 0, 2, 14, 16, 14);
 	public static final VoxelShape DOWN_SHAPE =VoxelShapeUtility.box(0, 0, 0, 16, 2, 16);
@@ -199,24 +203,56 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	}
 	
 	@Override
-	public String[] getWireLanes(Level level, BlockPos position, BlockState instance, NodePos arg3) {
-		// TODO Auto-generated method stub
+	public String[] getWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node) {
+		if (level.getBlockEntity(pos) instanceof ElectroMagneticCoilBlockEntity coil) {
+			return coil.getNodeLanes();
+		}
 		return new String[0];
 	}
 
 	@Override
-	public void plotCircuit(Level arg0, BlockState arg1, BlockPos arg2, ElectricNetwork arg3,
-			Consumer<ICircuitPlot> arg4) {
-		// TODO Auto-generated method stub
-		
+	public void setWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node, String[] laneLabels) {
+		if (level.getBlockEntity(pos) instanceof ElectroMagneticCoilBlockEntity coil) {
+			coil.setNodeLanes(laneLabels);
+		}
+	}
+	
+	@Override
+	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork network, Consumer<ICircuitPlot> plotter) {
+		if (level.getBlockEntity(position) instanceof ElectroMagneticCoilBlockEntity coil) {
+
+			String[] coilLanes = coil.getMaster().getNodeLanes();
+			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, coilLanes[0], 1, coilLanes[1]);
+			
+			// TODO circuit transformer
+//			String[] lampLanes = lamp.getNodeLanes();
+//			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, lampLanes[0], 1, lampLanes[1]);
+//			
+//			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
+//			int targetVoltage = parametrics.getNominalVoltage();
+//			int targetPower = parametrics.getNominalPower();
+//			
+//			CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_CURRENT_LOAD);
+//			templateSource.setProperty("nominal_current", targetPower / (double) targetVoltage);
+//			templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, lampLanes[0]);
+//			templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, lampLanes[1]);
+//			plotter.accept(templateSource);
+			
+		}
 	}
 
 	@Override
-	public void setWireLanes(Level arg0, BlockPos arg1, BlockState arg2, NodePos arg3, String[] arg4) {
-		// TODO Auto-generated method stub
-		
+	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+		if (pLevel.getBlockEntity(pPos) instanceof ElectroMagneticCoilBlockEntity coil) {
+			coil.getMaster().updateCurrentField();
+		}
 	}
 	
+	@Override
+	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {
+		level.scheduleTick(position, this, 1);
+	}
+
 	protected boolean findConnectedBlocks(Level level, BlockPos pos, BlockState state, Direction relative, boolean attached, int limit, int depth, List<BlockPos> connectedBlocks) {
 		if (!state.is(ModTags.Blocks.ELECTRO_MAGNETIC_COILS)) return true;
 		if (relative != null) {

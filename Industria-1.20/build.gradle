@@ -170,11 +170,11 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-annotations:2.13.3"
     
     // Industria Core
- 	implementation fg.deobf("industria:industriacore:1.0.0")
+ 	implementation "industria:industriacore:1.0.0-mojmap"
  	
  	// Lib Dependencies
-	implementation("com.github.M-Marvin:LIBRARY-NGLink:$nglink_version")
-	implementation("com.github.M-Marvin:LIBRARY-UnifiedVectors:$univec_version")
+	//implementation("com.github.M-Marvin:LIBRARY-NGLink:$nglink_version")
+	//implementation("com.github.M-Marvin:LIBRARY-UnifiedVectors:$univec_version")
 	
 }
 

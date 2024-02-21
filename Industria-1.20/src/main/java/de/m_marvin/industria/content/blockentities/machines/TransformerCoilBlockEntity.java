@@ -60,12 +60,12 @@ public class TransformerCoilBlockEntity extends ElectroMagneticCoilBlockEntity i
 		return tag;
 	}
 	
-	@Override
-	public double getGeneratedFieldStrength() {
-		// TODO
-		double voltage = ElectricUtility.getVoltageBetween(level, new NodePos(this.worldPosition, 0), new NodePos(this.worldPosition, 0), 0, 1, this.nodeLanes[0], this.nodeLanes[1]);
-		return voltage;
-	}
+//	@Override
+//	public double getGeneratedFieldStrength() {
+//		// TODO
+//		double voltage = ElectricUtility.getVoltageBetween(level, new NodePos(this.worldPosition, 0), new NodePos(this.worldPosition, 0), 0, 1, this.nodeLanes[0], this.nodeLanes[1]);
+//		return voltage;
+//	}
 
 	@Override
 	public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {

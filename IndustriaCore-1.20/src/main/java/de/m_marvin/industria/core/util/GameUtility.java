@@ -95,6 +95,7 @@ public class GameUtility {
 		if (!pLevel.isClientSide()) {
 			BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
 			if (blockEntity instanceof MenuProvider provider) {
+				triggerClientSync(pLevel, pPos);
 				NetworkHooks.openScreen((ServerPlayer) pPlayer, provider, pPos);
 			}
 			return InteractionResult.SUCCESS;

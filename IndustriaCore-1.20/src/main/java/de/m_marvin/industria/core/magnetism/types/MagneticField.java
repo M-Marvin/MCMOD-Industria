@@ -30,15 +30,18 @@ public class MagneticField {
 	public static final double DEFAULT_ANGULAR_FORCE_MULTIPLIER = 100.0;
 	public static final double DEFAULT_LINEAR_FORCE_MULTIPLIER = 4000.0;
 	public static final double DEFAULT_MAGNETIC_FIELD_RANGE_PER_STRENGTH = 5.0;
+	public static final double DEFAULT_FIELD_CHANGE_NOTIFY_LIMIT = 1.0;
 	
 	static double angularForceMultiplier = DEFAULT_ANGULAR_FORCE_MULTIPLIER;
 	static double linearForceMultiplier = DEFAULT_LINEAR_FORCE_MULTIPLIER;
 	static double fieldRangePerStrength = DEFAULT_MAGNETIC_FIELD_RANGE_PER_STRENGTH;
+	static double fieldChangeNotifyLimit = DEFAULT_FIELD_CHANGE_NOTIFY_LIMIT;
 	
 	public static void reloadConfig() {
 		angularForceMultiplier = Config.MAGNETIC_FORCE_MULTIPLIER_ANGULAR.get();
 		linearForceMultiplier = Config.MAGNETIC_FORCE_MULTIPLIER_LINEAR.get();
 		fieldRangePerStrength = Config.MAGNETIC_FIELD_RANGE.get();
+		fieldChangeNotifyLimit = Config.MAGNETIC_FIELD_CHANGE_NOTIFY_LIMIT.get();
 	}
 	
 	protected final long id;
@@ -46,8 +49,10 @@ public class MagneticField {
 
 	protected Vec3d magneticCenterOffset = new Vec3d();
 	protected double inductionCoefficient = 1.0;
+	protected Vec3d lastInducedFieldVector = new Vec3d();
 	protected Vec3d inducedFieldVector = new Vec3d();
 	protected Vec3d fieldVectorLinear = new Vec3d();
+	protected Vec3d lastFieldVectorLinear = new Vec3d();
 	protected BlockPos minPos = new BlockPos(0, 0, 0);
 	protected BlockPos maxPos = new BlockPos(0, 0, 0);
 	
@@ -99,9 +104,11 @@ public class MagneticField {
 		}
 		tag.putLong("Id", this.id);
 		tag.put("Influences", influenceList);
+		tag.put("LastLinearField", NBTUtility.writeVector3d(this.lastFieldVectorLinear));
 		tag.put("LinearField", NBTUtility.writeVector3d(this.fieldVectorLinear));
 		tag.put("MagneticCenter", NBTUtility.writeVector3d(this.magneticCenterOffset));
 		tag.putDouble("InductionCoefficient", this.inductionCoefficient);
+		tag.put("InducedFieldVector", NBTUtility.writeVector3d(this.lastInducedFieldVector));
 		return tag;
 	}
 	
@@ -111,9 +118,11 @@ public class MagneticField {
 		for (int i = 0; i < influenceList.size(); i++) {
 			field.addInfluence(MagneticFieldInfluence.deserialize(influenceList.getCompound(i)));
 		}
+		field.lastFieldVectorLinear = NBTUtility.loadVector3d(tag.getCompound("LastLinearField"));
 		field.fieldVectorLinear = NBTUtility.loadVector3d(tag.getCompound("LinearField"));
 		field.magneticCenterOffset = NBTUtility.loadVector3d(tag.getCompound("MagneticCenter"));
 		field.inductionCoefficient = tag.getDouble("InductionCoefficient");
+		field.lastInducedFieldVector = NBTUtility.loadVector3d(tag.getCompound("InducedFieldVector"));
 		return field;
 	}
 	
@@ -277,6 +286,16 @@ public class MagneticField {
 				forceInducer.addField(this.getId());
 			}
 		}
+
+		// Detect induction field change and notify blocks
+		double fieldChange = this.lastFieldVectorLinear.sub(this.fieldVectorLinear).length();
+		if (fieldChange > fieldChangeNotifyLimit) {
+			this.lastFieldVectorLinear = this.fieldVectorLinear;
+			
+			for (MagneticFieldInfluence influence : this.magneticInfluences) {
+				influence.notifyInductionChange(level);
+			}
+		}
 		
 	}
 	
@@ -302,6 +321,16 @@ public class MagneticField {
 			Vec3d externalInduction = this.inducedFieldVector.mul(d);
 			//Vec3d internalInduction = this.fieldVectorLinear.mul(d); TODO internal induction
 			influence.getInducedVector().setI(externalInduction);	
+		}
+		
+		// Detect induction field change and notify blocks
+		double fieldChange = this.lastInducedFieldVector.sub(this.inducedFieldVector).length();
+		if (fieldChange > fieldChangeNotifyLimit) {
+			this.lastInducedFieldVector = this.inducedFieldVector;
+			
+			for (MagneticFieldInfluence influence : this.magneticInfluences) {
+				influence.notifyInductionChange(level);
+			}
 		}
 		
 	}

@@ -298,8 +298,16 @@ public class MagnetismHandlerCapability implements ICapabilitySerializable<ListT
 		return this.fieldSet;
 	}
 	
+	public MagneticField getFieldAt(BlockPos pos) {
+		return this.pos2fieldMap.get(pos);
+	}
+	
 	public MagneticField getField(long id) {
 		return this.id2fieldMap.get(id);
+	}
+	
+	public MagneticFieldInfluence getInfluenceOf(BlockPos pos) {
+		return this.pos2influenceMap.get(pos);
 	}
 	
 	public void updateFieldInduction() {

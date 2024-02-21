@@ -179,8 +179,10 @@ dependencies {
  	// Lib Dependencies
 	shade("com.github.M-Marvin:LIBRARY-NGLink:$nglink_version")
 	minecraftLibrary("com.github.M-Marvin:LIBRARY-NGLink:$nglink_version")
+	api("com.github.M-Marvin:LIBRARY-NGLink:$nglink_version")
 	shade("com.github.M-Marvin:LIBRARY-UnifiedVectors:$univec_version")
 	minecraftLibrary("com.github.M-Marvin:LIBRARY-UnifiedVectors:$univec_version")
+	api("com.github.M-Marvin:LIBRARY-UnifiedVectors:$univec_version")
 	
 }
 
@@ -225,6 +227,14 @@ shadowJar {
     configurations = [project.configurations.shade]
     //relocate 'com.example.example-thing', "${project.group}.relocated.example-thing"
     finalizedBy 'reobfShadowJar'
+}
+
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+task mojmapJar(type: ShadowJar) {
+  archiveClassifier.set("mojmap")
+  from sourceSets.main.output
+  configurations = [project.configurations.shade]
 }
 
 assemble.dependsOn shadowJar

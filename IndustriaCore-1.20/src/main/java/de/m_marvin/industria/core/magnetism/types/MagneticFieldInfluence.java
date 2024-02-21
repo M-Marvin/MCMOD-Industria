@@ -33,6 +33,13 @@ public class MagneticFieldInfluence {
 		}
 	}
 	
+	public void notifyInductionChange(Level level) {
+		BlockState state = level.getBlockState(pos);
+		if (state.getBlock() instanceof IMagneticBlock magnetic) {
+			magnetic.onInductionNotify(level, state, pos, this.inducedVector);
+		}
+	}
+	
 	public BlockPos getPos() {
 		return pos;
 	}

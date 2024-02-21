@@ -1,7 +1,5 @@
 package de.m_marvin.industria.content.blockentities.machines;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.IntStream;
 
 import de.m_marvin.industria.content.blocks.machines.ElectroMagneticCoilBlock;
@@ -11,15 +9,19 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.items.IConduitItem;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
+import de.m_marvin.industria.core.electrics.circuits.Circuits;
 import de.m_marvin.industria.core.electrics.types.conduits.IElectricConduit;
 import de.m_marvin.industria.core.magnetism.MagnetismUtility;
+import de.m_marvin.industria.core.magnetism.types.MagneticFieldInfluence;
 import de.m_marvin.industria.core.parametrics.BlockParametrics;
 import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
 import de.m_marvin.industria.core.registries.Conduits;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.ConditionalExecutor;
 import de.m_marvin.industria.core.util.GameUtility;
+import de.m_marvin.industria.core.util.NBTUtility;
 import de.m_marvin.industria.core.util.blocks.DynamicMultiBlockEntity;
+import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
@@ -38,6 +40,10 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 	protected String[] nodeLanes = {"L", "N"};
 	protected ItemStack wires = ItemStack.EMPTY;
 	protected double currentFieldStrength = 0.0;
+	protected Vec3d oposingField = new Vec3d();
+	protected double inducedVoltage = 0.0;
+	protected double currentConsumtion = 0.0;
+	protected boolean isGenerator = false;
 	
 	public ElectroMagneticCoilBlockEntity(BlockPos pPos, BlockState pBlockState) {
 		super(ModBlockEntityTypes.ELECTRO_MAGNETIC_COIL.get(), pPos, pBlockState);
@@ -60,21 +66,47 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 		return currentFieldStrength;
 	}
 	
-	public double getGeneratedFieldStrength() {
-		return 0.0;
+	public Vec3d getOposingField() {
+		return oposingField;
 	}
 	
-	public void updateCurrentField() {
+	public double getInducedFieldStrength() {
+		return MagnetismUtility.getMagneticFieldAt(this.level, this.worldPosition).getInducedFieldVector().length();
+	}
+	
+	public double getInducedVoltage() {
+		return inducedVoltage;
+	}
+	
+	public double getCurrentConsumtion() {
+		return currentConsumtion;
+	}
+	
+	public int getCoreBlockCount() {
+		Vec3i size = Vec3i.fromVec(getMaxPos()).sub(Vec3i.fromVec(getMinPos())).abs().add(new Vec3i(1, 1, 1));
+		return size.x * size.y * size.z;
+	}
+	
+	public boolean isGenerator() {
+		return isGenerator;
+	}
+	
+	public void updateElectromagnetism() {
 		
-		if (this.level.isClientSide()) return;
+		//if (this.level.isClientSide()) return;
 		
 		BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this.getBlockState().getBlock());
 		
+		boolean magnetismHasChanged = false;
+		boolean electricHasChanged = false;
+
 		double voltage = getVoltage();
 		double fePerVolt = parametrics.getParameter(ElectroMagneticCoilBlock.MAGNETIC_FIELD_STRENGTH);
 		double windings = getWindings();
+		double coreBlocks = getCoreBlockCount();
 		
-		this.currentFieldStrength = (voltage * fePerVolt) / windings;
+		Vec3d emmitedVec = new Vec3d();
+		Vec3d inducedVec = new Vec3d();
 		
 		for (int x = this.getMinPos().getX(); x <= this.getMaxPos().getX(); x++) {
 			for (int y = this.getMinPos().getY(); y <= this.getMaxPos().getY(); y++) {
@@ -82,23 +114,113 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 					
 					BlockPos pos = new BlockPos(x, y, z);
 					
-					if (level.getBlockEntity(pos) instanceof ElectroMagneticCoilBlockEntity coil) {
-						
-						//generatedField += coil.getGeneratedFieldStrength();
-						
-					}
+					MagneticFieldInfluence fieldinf = MagnetismUtility.getMagneticInfluenceOf(level, pos);
+					if (fieldinf == null) continue;
+					emmitedVec.addI(fieldinf.getVector());
+					inducedVec.addI(fieldinf.getInducedVector());
 					
 				}
-			}	
+			}
+		}
+
+		System.out.println("\n\n\n " + this.worldPosition);
+		
+		System.out.println("Induced Vec: " + inducedVec.length());
+		System.out.println("SelfEmmited Vec: " + emmitedVec.length());
+		
+//		TODO internal induction
+//		Vec3d internalInduced = MagnetismUtility.getMagneticFieldAt(level, worldPosition).getFieldVectorLinear().sub(emmitedVec);
+//		inducedVec.addI(internalInduced);
+		
+		System.out.println("Generator: " + this.isGenerator());
+		
+		if (!isGenerator()) {
+			
+			System.out.println("Voltage In: " + voltage);
+			
+			double newFieldStrength = Math.max(windings == 0 ? 0 : (voltage * fePerVolt) / windings, 0);
+
+			Vec3d v1 = emmitedVec.add(inducedVec);
+			double diff = this.currentFieldStrength == 0 ? 1.0 : v1.length() / this.currentFieldStrength;
+			
+			if (Math.abs(this.currentFieldStrength - newFieldStrength) > 0.1) {
+				this.currentFieldStrength = newFieldStrength;
+				
+				magnetismHasChanged = true;
+			}
+			
+			System.out.println("Gen Field: " + this.currentFieldStrength);
+			
+			double powerConsumtion = (1.0 - diff) * (getCoreBlockCount() * 500);
+			
+			System.out.println("Diff: " + diff);
+			System.out.println("-> PowerCons: " + powerConsumtion);
+			
+			double consumtion = voltage == 0 ? 0 : powerConsumtion / voltage;
+			if (Math.abs(this.currentConsumtion - consumtion) > 1) {
+				this.currentConsumtion = consumtion;
+				
+				electricHasChanged = true;
+			}
+			
+			System.out.println("-> CurrentCons: " + consumtion);
+			
+		} else {
+			this.currentFieldStrength = 0;
 		}
 		
+		
+		if (isGenerator()) {
+
+			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(this.worldPosition, 0), new NodePos(this.worldPosition, 0), 2, 0, "power_shunt", this.nodeLanes[0]);
+			double powerDrained = (shuntVoltage / Circuits.SHUNT_RESISTANCE) * this.inducedVoltage;
+			
+			double usagePercentage = powerDrained / (getCoreBlockCount() * 500);
+			
+			Vec3d oposingField = inducedVec.mul(-usagePercentage);
+
+			System.out.println("Power Drain: " + usagePercentage);
+
+			if (Math.abs(this.oposingField.length() - oposingField.length()) > 1.0) {
+				this.oposingField = oposingField;
+				magnetismHasChanged = true;
+			}
+			
+			System.out.println("Oposing Vec: " + this.oposingField.length());
+			
+			double newVoltage = (inducedVec.length() * windings) / fePerVolt;
+			if (Math.abs(this.inducedVoltage - newVoltage) > 0.1) {
+				this.inducedVoltage = newVoltage;
+				
+				electricHasChanged = true;
+			}
+			
+			System.out.println("Induced: " + this.inducedVoltage);
+			
+		} else {
+			this.inducedVoltage = 0;
+		}
+		
+		
+		
+		
+		
 		this.setChanged();
+		
+		boolean fieldChangedF = magnetismHasChanged;
+		boolean voltageChangedF = electricHasChanged;
+
+		if (fieldChangedF) System.out.println(" -> Update field " + this.level.isClientSide);
+		if (voltageChangedF) System.out.println(" -> Update network " + this.level.isClientSide);
+		
 		GameUtility.triggerClientSync(this.level, this.worldPosition);
-		ConditionalExecutor.SERVER_TICK_EXECUTOR.executeAfterDelay(() -> 
-			MagnetismUtility.updateField(this.level, this.worldPosition), 1);
+		ConditionalExecutor.SERVER_TICK_EXECUTOR.executeAfterDelay(() -> {
+			if (fieldChangedF) MagnetismUtility.updateField(this.level, this.worldPosition);
+			if (voltageChangedF) ElectricUtility.updateNetwork(this.level, this.worldPosition);
+		}, 1);
 		
 	}
-
+	
 	public String[] getNodeLanes() {
 		return nodeLanes;
 	}
@@ -215,27 +337,36 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 		super.saveAdditional(pTag);
 		if (!this.isMaster()) return;
 		pTag.putDouble("currentFieldStrength", this.currentFieldStrength);
+		pTag.putDouble("currentConsumtion", this.currentConsumtion);
+		pTag.put("oposing", NBTUtility.writeVector3d(this.oposingField));
 		pTag.put("Wires", wires.serializeNBT());
 		pTag.putString("LiveWireLane", this.nodeLanes[0]);
 		pTag.putString("NeutralWireLane", this.nodeLanes[1]);
+		pTag.putBoolean("IsGen", this.isGenerator);
 	}
 	
 	@Override
 	public void load(CompoundTag pTag) {
 		super.load(pTag);
 		this.currentFieldStrength = pTag.getDouble("currentFieldStrength");
+		this.currentConsumtion = pTag.getDouble("currentConsumtion");
+		this.oposingField = NBTUtility.loadVector3d(pTag.getCompound("oposing"));
 		this.wires = ItemStack.of(pTag.getCompound("Wires"));
 		this.nodeLanes[0] = pTag.getString("LiveWireLane");
 		this.nodeLanes[1] = pTag.getString("NeutralWireLane");
+		this.isGenerator = pTag.getBoolean("IsGen");
 	}
 	
 	@Override
 	public CompoundTag getUpdateTag() {
 		CompoundTag tag = super.getUpdateTag();
 		tag.putDouble("currentFieldStrength", this.currentFieldStrength);
+		tag.putDouble("currentConsumtion", this.currentConsumtion);
+		tag.put("oposing", NBTUtility.writeVector3d(this.oposingField));
 		tag.put("Wires", this.wires.serializeNBT());
 		tag.putString("LiveWireLane", this.nodeLanes[0]);
 		tag.putString("NeutralWireLane", this.nodeLanes[1]);
+		tag.putBoolean("IsGen", this.isGenerator);
 		return tag;
 	}
 	

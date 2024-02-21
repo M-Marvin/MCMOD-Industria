@@ -25,4 +25,6 @@ public interface IMagneticBlock {
 		return BlockParametricsManager.getInstance().getParametrics(state.getBlock()).getMagneticCoefficient();
 	}
 	
+	public default void onInductionNotify(Level level, BlockState state, BlockPos pos, Vec3d inductionVector) {}
+	
 }

@@ -82,7 +82,7 @@ public class TransformerCoilBlock extends ElectroMagneticCoilBlock implements IE
 	@Override
 	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
 		if (pLevel.getBlockEntity(pPos) instanceof ElectroMagneticCoilBlockEntity coil) {
-			coil.getMaster().updateCurrentField();
+			coil.getMaster().updateElectromagnetism();
 		}
 	}
 	

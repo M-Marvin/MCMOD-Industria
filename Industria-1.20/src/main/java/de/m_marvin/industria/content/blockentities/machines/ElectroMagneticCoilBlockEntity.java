@@ -9,12 +9,12 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.items.IConduitItem;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.circuits.Circuits;
 import de.m_marvin.industria.core.electrics.types.conduits.IElectricConduit;
 import de.m_marvin.industria.core.magnetism.MagnetismUtility;
 import de.m_marvin.industria.core.magnetism.types.MagneticFieldInfluence;
 import de.m_marvin.industria.core.parametrics.BlockParametrics;
 import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
+import de.m_marvin.industria.core.registries.Circuits;
 import de.m_marvin.industria.core.registries.Conduits;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.ConditionalExecutor;
@@ -132,7 +132,7 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 //		Vec3d internalInduced = MagnetismUtility.getMagneticFieldAt(level, worldPosition).getFieldVectorLinear().sub(emmitedVec);
 //		inducedVec.addI(internalInduced);
 		
-		System.out.println("Generator: " + this.isGenerator());
+		System.out.println(" Generator: " + this.isGenerator());
 		
 		if (!isGenerator()) {
 			
@@ -156,14 +156,12 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 			System.out.println("Diff: " + diff);
 			System.out.println("-> PowerCons: " + powerConsumtion);
 			
-			double consumtion = voltage == 0 ? 0 : powerConsumtion / voltage;
-			if (Math.abs(this.currentConsumtion - consumtion) > 1) {
-				this.currentConsumtion = consumtion;
+			//double consumtion = voltage == 0 ? 0 : powerConsumtion / voltage;
+			if (Math.abs(this.currentConsumtion - powerConsumtion) > 1) {
+				this.currentConsumtion = powerConsumtion;
 				
 				electricHasChanged = true;
 			}
-			
-			System.out.println("-> CurrentCons: " + consumtion);
 			
 		} else {
 			this.currentFieldStrength = 0;

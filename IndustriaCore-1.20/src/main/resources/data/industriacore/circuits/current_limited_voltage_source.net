@@ -1,4 +1,4 @@
-* Current limited power source
+* Current limited power source [ i_nominal=P{nominal_current}, v_nominal=P{nominal_voltage} ]
 R1_P{id} N{SHUNT} N{VDC} 0.001
 I1_P{id} N003_P{id} N002_P{id} P{nominal_current}
 V1_P{id} N001_P{id} N002_P{id} P{nominal_voltage}

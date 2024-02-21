@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
 
 import com.google.common.collect.Maps;
 
@@ -14,6 +16,7 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
+import de.m_marvin.industria.core.util.ConditionalExecutor;
 import de.m_marvin.nglink.NativeNGLink;
 import de.m_marvin.nglink.NativeNGLink.INGCallback;
 import de.m_marvin.nglink.NativeNGLink.PlotDescription;
@@ -147,6 +150,7 @@ public class ElectricNetwork implements INGCallback {
 						IndustriaCore.LOGGER.warn("Failed to start electric simulation! Failed to init SPICE!");
 						return;
 					}
+					if (Config.SPICE_DEBUG_LOGGING.get()) IndustriaCore.LOGGER.debug("Load spice circuit:\n" + ElectricNetwork.this.netList);
 					if (!ElectricNetwork.this.nglink.loadCircuit(ElectricNetwork.this.netList)) {
 						IndustriaCore.LOGGER.warn("Failed to start electric simulation! Failed to load circuit!");
 						return;
@@ -173,7 +177,7 @@ public class ElectricNetwork implements INGCallback {
 	@Override
 	public void detacheNGSpice() {
 		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.WARN, "SPICE-Engine requested detachment, this could lead to undefined behavior!");
-		this.nglink.detachNGSpice();
+		// TODO detache ngspice
 	}
  
 	@Override

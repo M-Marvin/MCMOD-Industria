@@ -50,7 +50,7 @@
 "industriacore.argument.contraption.selector.unknown":			"Neznámy typ selektora '%s'!",
 "industriacore.argument.contraption.selector.not_allowed":		"Selektor nie je povolený!",
 "industriacore.argument.contraption.toomany":				"Zadaný selektor obsahuje viac ako jedno výstroj!",
-"industriacore.argument.contraption.notfound.entity":			"Nenašlo sa žiadne výstroj!", [Hinweis: žiadny statt žiadný, da -ia- ein langer Vokal ist]
+"industriacore.argument.contraption.notfound.entity":			"Nenašlo sa žiadny výstroj!", [Hinweis: žiadny statt žiadný, da -ia- ein langer Vokal ist]
 "industriacore.argument.contraption.selector.missing":			"Chýba typ selektora!",
 "industriacore.argument.contraption.invalid":				"Neplatný názov alebo UUID!",
 
@@ -90,7 +90,7 @@
 "industriacore.tooltip.electricblock.voltage":		"Napätie: %1$s V",
 "industriacore.tooltip.electricblock.power":		"Výkon: %1$s W",
 "industriacore.tooltip.magneticblock.fieldstrength":	"Sila poľa: %1$s",
-"industriacore.tooltip.electricblock.coefficient":	"Magnetizovateľnosť: %1$s",
+"industriacore.tooltip.magneticblock.coefficient":	"Magnetizovateľnosť: %1$s",
 "industriacore.tooltip.physics.mass":			"Hmotnosť: %1$s kg"
 
 }

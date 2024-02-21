@@ -50,7 +50,7 @@
 "industriacore.argument.contraption.selector.unknown":			"Nezn\u00e1my typ selektora '%s'!",
 "industriacore.argument.contraption.selector.not_allowed":		"Selektor nie je povolen\u00fd!",
 "industriacore.argument.contraption.toomany":				"Zadan\u00fd selektor obsahuje viac ako jedno v\u00fdstroj!",
-"industriacore.argument.contraption.notfound.entity":			"Nena\u0161lo sa \u017eiadne v\u00fdstroj!",
+"industriacore.argument.contraption.notfound.entity":			"Nena\u0161lo sa \u017eiadny v\u00fdstroj!",
 "industriacore.argument.contraption.selector.missing":			"Ch\u00fdba typ selektora!",
 "industriacore.argument.contraption.invalid":				"Neplatn\u00fd n\u00e1zov alebo UUID!",
 
@@ -90,7 +90,7 @@
 "industriacore.tooltip.electricblock.voltage":		"Nap\u00e4tie: %1$s V",
 "industriacore.tooltip.electricblock.power":		"V\u00fdkon: %1$s W",
 "industriacore.tooltip.magneticblock.fieldstrength":	"Sila po\u013ea: %1$s",
-"industriacore.tooltip.electricblock.coefficient":	"Magnetizovate\u013enos\u0165: %1$s",
+"industriacore.tooltip.magneticblock.coefficient":	"Magnetizovate\u013enos\u0165: %1$s",
 "industriacore.tooltip.physics.mass":			"Hmotnos\u0165: %1$s kg"
 
 }

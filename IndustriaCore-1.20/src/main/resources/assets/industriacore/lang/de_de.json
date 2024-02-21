@@ -90,7 +90,7 @@
 "industriacore.tooltip.electricblock.voltage":		"Spannung: %1$s V",
 "industriacore.tooltip.electricblock.power":		"Leistung: %1$s W",
 "industriacore.tooltip.magneticblock.fieldstrength":	"Feldst\u00e4rke: %1$s",
-"industriacore.tooltip.electricblock.coefficient":	"Magnetisierbarkeit: %1$s",
+"industriacore.tooltip.magneticblock.coefficient":	"Magnetisierbarkeit: %1$s",
 "industriacore.tooltip.physics.mass":			"Masse: %1$s kg"
 
 }

@@ -13,7 +13,7 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
-import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.magnetism.types.blocks.IMagneticBlock;
 import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
@@ -236,7 +236,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 			
 			String[] coilLanes = coil.getNodeLanes();
 			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, coilLanes[0], 1, coilLanes[1]);
-
+			
 			String[] wireLanes = coil.getNodeLanes();
 			
 			if (coil.isGenerator()) {
@@ -244,6 +244,8 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				double targetVoltage = coil.getInducedVoltage();
 				int targetPower = targetVoltage > 0 ? coil.getMaster().getCoreBlockCount() * 500 : 0;
 				double targetCurrent = targetVoltage > 0 ? targetPower / targetVoltage : 0; // TODO current limit
+				
+				System.out.println(level.isClientSide + " - Generator Side: " + targetPower + " with " + targetVoltage + " @ " + targetCurrent);
 				
 				CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CURRENT_LIMITED_VOLTAGE_SOURCE);
 				templateSource.setProperty("nominal_current", targetCurrent);
@@ -257,7 +259,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				double nominalPower = coil.getMaster().getCurrentConsumtion();
 				
 				if (nominalPower > 0.0) {
-					System.out.println("Plot on client: " + level.isClientSide + " current " + nominalPower);
+					System.out.println(level.isClientSide + " - Load Side: " + nominalPower);
 					
 					// TODO load circuit
 					
@@ -266,7 +268,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 					templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, wireLanes[0]);
 					templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, wireLanes[1]);
 					
-					System.out.println("--------- \n" + templateSource.plot());
+//					System.out.println("--------- \n" + templateSource.plot());
 					plotter.accept(templateSource);
 				}
 				

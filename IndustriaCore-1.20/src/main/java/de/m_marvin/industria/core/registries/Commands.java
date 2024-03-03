@@ -2,6 +2,7 @@ package de.m_marvin.industria.core.registries;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.engine.command.SetConduitCommand;
+import de.m_marvin.industria.core.electrics.engine.commands.DebugCommand;
 import de.m_marvin.industria.core.electrics.engine.commands.FixElectricsCommand;
 import de.m_marvin.industria.core.physics.engine.commands.ContraptionCommand;
 import de.m_marvin.industria.core.physics.engine.commands.arguments.contraption.ContraptionSelectorOptions;
@@ -21,6 +22,7 @@ public class Commands {
 		SetConduitCommand.register(event.getDispatcher());
 		ContraptionCommand.register(event.getDispatcher());
 		FixElectricsCommand.register(event.getDispatcher());
+		DebugCommand.register(event.getDispatcher());
 	}
 	
 }

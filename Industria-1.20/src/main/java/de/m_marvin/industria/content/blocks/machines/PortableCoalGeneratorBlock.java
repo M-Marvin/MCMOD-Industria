@@ -10,7 +10,7 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
-import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider;
 import de.m_marvin.industria.core.parametrics.BlockParametrics;

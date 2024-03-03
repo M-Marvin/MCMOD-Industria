@@ -422,4 +422,10 @@ public class Conduit {
 		return this.validNodeTypes;
 	}
 	
+	@Override
+	public String toString() {
+		ResourceLocation conduitKey = Conduits.CONDUITS_REGISTRY.get().getKey(this);
+		return "Conduit{" + conduitKey.toString() + "}";
+	}
+	
 }

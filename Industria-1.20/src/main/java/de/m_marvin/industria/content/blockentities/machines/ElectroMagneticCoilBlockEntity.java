@@ -123,20 +123,20 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 			}
 		}
 
-		System.out.println("\n\n\n " + this.worldPosition);
-		
-		System.out.println("Induced Vec: " + inducedVec.length());
-		System.out.println("SelfEmmited Vec: " + emmitedVec.length());
-		
-//		TODO internal induction
-//		Vec3d internalInduced = MagnetismUtility.getMagneticFieldAt(level, worldPosition).getFieldVectorLinear().sub(emmitedVec);
-//		inducedVec.addI(internalInduced);
-		
-		System.out.println(" Generator: " + this.isGenerator());
+//		System.out.println("\n\n\n " + this.worldPosition);
+//		
+//		System.out.println("Induced Vec: " + inducedVec.length());
+//		System.out.println("SelfEmmited Vec: " + emmitedVec.length());
+//		
+////		TODO internal induction
+////		Vec3d internalInduced = MagnetismUtility.getMagneticFieldAt(level, worldPosition).getFieldVectorLinear().sub(emmitedVec);
+////		inducedVec.addI(internalInduced);
+//		
+//		System.out.println(" Generator: " + this.isGenerator());
 		
 		if (!isGenerator()) {
 			
-			System.out.println("Voltage In: " + voltage);
+//			System.out.println("Voltage In: " + voltage);
 			
 			double newFieldStrength = Math.max(windings == 0 ? 0 : (voltage * fePerVolt) / windings, 0);
 
@@ -149,12 +149,12 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 				magnetismHasChanged = true;
 			}
 			
-			System.out.println("Gen Field: " + this.currentFieldStrength);
+//			System.out.println("Gen Field: " + this.currentFieldStrength);
 			
 			double powerConsumtion = (1.0 - diff) * (getCoreBlockCount() * 500);
 			
-			System.out.println("Diff: " + diff);
-			System.out.println("-> PowerCons: " + powerConsumtion);
+//			System.out.println("Diff: " + diff);
+//			System.out.println("-> PowerCons: " + powerConsumtion);
 			
 			//double consumtion = voltage == 0 ? 0 : powerConsumtion / voltage;
 			if (Math.abs(this.currentConsumtion - powerConsumtion) > 1) {
@@ -177,14 +177,14 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 			
 			Vec3d oposingField = inducedVec.mul(-usagePercentage);
 
-			System.out.println("Power Drain: " + usagePercentage);
+//			System.out.println("Power Drain: " + usagePercentage);
 
 			if (Math.abs(this.oposingField.length() - oposingField.length()) > 1.0) {
 				this.oposingField = oposingField;
 				magnetismHasChanged = true;
 			}
 			
-			System.out.println("Oposing Vec: " + this.oposingField.length());
+//			System.out.println("Oposing Vec: " + this.oposingField.length());
 			
 			double newVoltage = (inducedVec.length() * windings) / fePerVolt;
 			if (Math.abs(this.inducedVoltage - newVoltage) > 0.1) {
@@ -193,7 +193,7 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 				electricHasChanged = true;
 			}
 			
-			System.out.println("Induced: " + this.inducedVoltage);
+//			System.out.println("Induced: " + this.inducedVoltage);
 			
 		} else {
 			this.inducedVoltage = 0;

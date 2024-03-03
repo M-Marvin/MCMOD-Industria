@@ -8,7 +8,7 @@ import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.registries.IndustriaTags;
 import de.m_marvin.industria.core.registries.NodeTypes;

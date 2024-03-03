@@ -6,7 +6,7 @@ import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.blockentities.JunctionBoxBlockEntity;
 import de.m_marvin.industria.core.physics.PhysicUtility;

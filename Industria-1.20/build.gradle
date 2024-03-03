@@ -155,6 +155,10 @@ configurations {
     implementation.extendsFrom shade
 }
 
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
 dependencies {
 
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
@@ -166,7 +170,7 @@ dependencies {
     implementation("org.valkyrienskies.core:api-game:$vs_core_version")
     implementation("org.valkyrienskies.core:util:$vs_core_version")
     implementation("org.valkyrienskies.core:impl:$vs_core_version")
- 	implementation fg.deobf("curse.maven:kotlinforforge-351264:$forge_kotlin_version")
+ 	runtimeOnly fg.deobf("curse.maven:kotlinforforge-351264:$forge_kotlin_version")
     implementation "com.fasterxml.jackson.core:jackson-annotations:2.13.3"
     
     // Industria Core

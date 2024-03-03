@@ -33,14 +33,17 @@ public class ItemRemoteControll extends ItemBase {
 			ItemStack setItem = playerIn.getOffhandItem();
 			ItemStack stack = playerIn.getMainHandItem();
 			
-			if ((setItem != null ? !setItem.isEmpty() : false) && setItem.getCount() == 1 && playerIn.isShiftKeyDown()) {
+			if (setItem != null && !setItem.isEmpty() && playerIn.isShiftKeyDown()) {
+
+				ItemStack template = setItem.copy();
+				template.setCount(1);
 				
 				CompoundNBT tag = stack.getTag();
 				if (tag == null) {
 					tag = new CompoundNBT();
-					tag.put("ChanelItem", setItem.save(new CompoundNBT()));
+					tag.put("ChanelItem", template.save(new CompoundNBT()));
 				} else {
-					tag.put("ChanelItem", setItem.save(new CompoundNBT()));
+					tag.put("ChanelItem", template.save(new CompoundNBT()));
 				}
 				
 				stack.setTag(tag);
@@ -68,7 +71,7 @@ public class ItemRemoteControll extends ItemBase {
 			
 		}
 		
-		return ActionResult.success(playerIn.getMainHandItem());
+		return ActionResult.success(playerIn.getItemInHand(handIn));
 		
 	}
 	

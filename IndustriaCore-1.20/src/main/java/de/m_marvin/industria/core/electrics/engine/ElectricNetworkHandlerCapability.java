@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 import com.google.common.base.Objects;
@@ -24,7 +23,6 @@ import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitPlaceEvent
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.network.SSyncComponentsPackage;
-import de.m_marvin.industria.core.electrics.types.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.IElectric;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
@@ -45,7 +43,6 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.ChunkWatchEvent;
-import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
@@ -53,6 +50,7 @@ import net.minecraftforge.network.PacketDistributor;
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class ElectricNetworkHandlerCapability implements ICapabilitySerializable<ListTag> {
 	
+	public static final int NUM_SIMULATION_THREADS = 1; // There should be more than one, but there are some multithreading problems with NGLink
 	public static final String CIRCUIT_FILE_NAME = "circuit_";
 	public static final String CIRCUIT_FILE_EXTENSION = ".net";
 	
@@ -67,6 +65,8 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		}
 		return LazyOptional.empty();
 	}
+	
+	private static SimulationProcessor simulationProcessor;
 	
 	private final Level level;
 	private final HashMap<Object, Component<?, ?, ?>> pos2componentMap = new HashMap<Object, Component<?, ?, ?>>();
@@ -100,7 +100,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	
 	@Override
 	public void deserializeNBT(ListTag nbt) {
-		terminateNetworks();
 		this.pos2componentMap.clear();
 		this.node2componentMap.clear();
 		this.circuitNetworks.clear();
@@ -108,7 +107,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		
 		for (int i = 0; i < nbt.size(); i++) {
 			CompoundTag circuitTag = nbt.getCompound(i);
-			ElectricNetwork circuitNetwork = new ElectricNetwork("ingame-level-circuit");
+			ElectricNetwork circuitNetwork = new ElectricNetwork(() -> this.level, "ingame-level-circuit");
 			circuitNetwork.loadNBT(this, circuitTag);
 			if (!circuitNetwork.isEmpty()) {
 				this.circuitNetworks.add(circuitNetwork);
@@ -237,12 +236,28 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		}
 	}
 	
-	@SubscribeEvent
-	public static void onWorldUnloadEvent(LevelEvent.Unload event) {
-		if (!event.getLevel().isClientSide()) {
-			ElectricNetworkHandlerCapability electricHandler = GameUtility.getLevelCapability((ServerLevel) event.getLevel(), Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-			electricHandler.terminateNetworks();
+	/* SPICE worker thread */
+
+	public static SimulationProcessor getSimulationProcessor() {
+		if (!hasProcessor()) startupProcessor();
+		return simulationProcessor;
+	}
+	
+	public static boolean hasProcessor() {
+		return simulationProcessor != null && simulationProcessor.isRunning();
+	}
+	
+	public static void startupProcessor() {
+		if (hasProcessor()) {
+			IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.WARN, "Electric network processor already running, this is not right!");
 		}
+		simulationProcessor = new SimulationProcessor(NUM_SIMULATION_THREADS);
+		simulationProcessor.start();
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdownProcessor()));
+	}
+	
+	public static void shutdownProcessor() {
+		simulationProcessor.shutdown();
 	}
 	
 	/* ElectricNetwork handling */
@@ -356,7 +371,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	}
 	
 	/**
-	 * Returns the circuit which contains this components
+	 * Returns the circuit which contains this component
 	 */
 	public ElectricNetwork getCircuitWithComponent(Component<?, ?, ?> component) {
 		return this.component2circuitMap.get(component);
@@ -432,7 +447,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			
 			ElectricNetwork circuit = this.component2circuitMap.get(component);
 			
-			if (circuit == null || !circuit.getComponents().contains(component)) circuit = new ElectricNetwork("ingame-level-circuit");
+			if (circuit == null || !circuit.getComponents().contains(component)) circuit = new ElectricNetwork(() -> this.level, "ingame-level-circuit");
 			
 			circuit.reset();
 			buildCircuit(component, circuit);
@@ -446,20 +461,14 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				if (previousNetwork != null && previousNetwork != circuitFinalized) {
 					previousNetwork.getComponents().remove(comp);
 					if (previousNetwork.getComponents().isEmpty()) {
-						previousNetwork.terminateExecution();
 						this.circuitNetworks.remove(previousNetwork);
 					}
+					previousNetwork.reset();
+					getSimulationProcessor().processNetwork(previousNetwork);
 				}
 			});
 			
-			final ElectricNetwork network = circuit;
-			CompletableFuture
-				.runAsync(() -> network.updateSimulation())
-				.thenRun(() -> {
-					network.getComponents().forEach((comp) -> { 
-						comp.onNetworkChange(level);
-					});
-				});
+			getSimulationProcessor().processNetwork(circuit);
 			
 		}
 		
@@ -482,7 +491,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				if (componentsToUpdate.isEmpty()) {
 					ElectricNetwork emptyNetwork = this.component2circuitMap.remove(component);
 					if (emptyNetwork != null) {
-						emptyNetwork.terminateExecution();
+						//emptyNetwork.terminateExecution();
 						this.circuitNetworks.remove(emptyNetwork);
 					}
 				}
@@ -577,6 +586,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		if (circuit.getComponents().contains(component)) return;
 		
 		circuit.getComponents().add(component);
+		circuit.plotComponentDescriptor(component);
 		component.plotCircuit(level, circuit, template -> circuit.plotTemplate(component, template));
 		
 		for (NodePos node2 : component.getNodes(level)) {
@@ -589,52 +599,12 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	}
 	
 	/**
-	 * Terminates all running simulations and detaches all nglink instances
-	 */
-	private void terminateNetworks() {
-		for (ElectricNetwork network : this.circuitNetworks) {
-			network.terminateExecution();
-		}
-	}
-	
-	/**
-	 * Attaches nglink instances for all loaded networks and starts the initial simulation
+	 * Starts initial simulation of all networks after loading from NBT
 	 */
 	private void startNetworks() {
 		for (ElectricNetwork network : this.circuitNetworks) {
-			network.updateSimulation();
+			getSimulationProcessor().processNetwork(network);
 		}
 	}
-	
-	/* SPICE worker thread */
-	
-//	protected static Queue<Runnable> spiceTasks = new ArrayDeque<>();
-//	protected static Thread spiceWorker;
-//	
-//	protected static void startWorkerIfNotRunning() {
-//		if (spiceWorker == null) {
-//			spiceWorker = new Thread("SPICE Worker") {
-//				public void run() {
-//					while (true) {
-//						try {
-//							Thread.sleep(1000);
-//						} catch (InterruptedException e) {} finally {
-//							if (spiceTasks.size() > 0) {
-//								spiceTasks.poll().run();
-//							}
-//						}
-//					}
-//				};
-//			};
-//			spiceWorker.setDaemon(true);
-//			spiceWorker.start();
-//		}
-//	}
-//	
-//	public static void queueSpiceTask(Runnable task) {
-//		startWorkerIfNotRunning();
-//		spiceTasks.add(task);
-//		spiceWorker.interrupt();
-//	}
 	
 }

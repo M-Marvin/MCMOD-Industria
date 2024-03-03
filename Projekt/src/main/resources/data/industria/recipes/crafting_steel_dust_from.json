@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "steel_dust",
+  "pattern": [
+    " H ",
+    "EKE",
+    "KEK"
+  ],
+  "key": {
+    "H": {
+      "item": "industria:hammer"
+    },
+    "K": {
+      "item": "industria:coal_coke"
+    },
+    "E": {
+      "item": "industria:iron_dust"
+    }
+  },
+  "result": {
+    "item": "industria:steel_dust",
+    "count": 3
+  }
+}

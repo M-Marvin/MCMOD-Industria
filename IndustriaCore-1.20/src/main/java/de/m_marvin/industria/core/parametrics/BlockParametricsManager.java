@@ -137,7 +137,7 @@ public class BlockParametricsManager extends SimplePreparableReloadListener<Map<
 			}
 		}
 		
-		LOGGER.info("Loaded " + map.size() + " parametric");
+		LOGGER.info("Loaded " + map.size() + " parametrics");
 		
 		return map;
 	}

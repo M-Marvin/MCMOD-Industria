@@ -1,4 +1,5 @@
 {
 	"magneticFieldStrengthPerVolt": 0.04,
-	"magneticCoefficient": 1.0
+	"magneticCoefficient": 1.0,
+	"electricPowerPerBlock": 500
 }

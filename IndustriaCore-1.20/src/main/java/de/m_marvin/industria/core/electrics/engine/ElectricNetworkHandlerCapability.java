@@ -7,8 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
@@ -500,6 +502,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 					IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> this.level.getChunk(chunkPos.x, chunkPos.z)), new SSyncComponentsPackage(component, chunkPos, SyncRequestType.REMOVED));
 				}
 				for (Component<?, ?, ?> comp : componentsToUpdate) {
+					comp.onNetworkChange(this.level);
 					updateNetwork(comp.pos());
 				}
 			}
@@ -561,15 +564,22 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		@SuppressWarnings("unchecked")
 		Component<I, P, T> component = (Component<I, P, T>) this.pos2componentMap.remove(pos);
 		if (component != null) {
-			for (NodePos node : component.type().getConnections(this.level, component.pos, component.instance(level))) {
-				Set<Component<?, ?, ?>> componentSet = this.node2componentMap.getOrDefault(node, new HashSet<Component<?, ?, ?>>());
-				componentSet.remove(component);
-				if (componentSet.isEmpty()) {
-					this.node2componentMap.remove(node);
-				} else {
-					this.node2componentMap.put(node, componentSet);
-				}
+			List<NodePos> empty = new ArrayList<>();
+			for (Entry<NodePos, Set<Component<?, ?, ?>>> entry : this.node2componentMap.entrySet()) {
+				entry.getValue().remove(component);
+				if (entry.getValue().isEmpty()) empty.add(entry.getKey());
 			}
+			empty.forEach(c -> this.node2componentMap.remove(c));
+			// TODO test if works
+//			for (NodePos node : component.type().getConnections(this.level, component.pos, component.instance(level))) {
+//				Set<Component<?, ?, ?>> componentSet = this.node2componentMap.getOrDefault(node, new HashSet<Component<?, ?, ?>>());
+//				componentSet.remove(component);
+//				if (componentSet.isEmpty()) {
+//					this.node2componentMap.remove(node);
+//				} else {
+//					this.node2componentMap.put(node, componentSet);
+//				}
+//			}
 		}
 		return component;
 	}

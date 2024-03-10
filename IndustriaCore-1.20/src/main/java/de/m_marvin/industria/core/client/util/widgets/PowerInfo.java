@@ -1,6 +1,7 @@
 package de.m_marvin.industria.core.client.util.widgets;
 
 import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.core.client.util.GraphicsUtility;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider.ElectricInfo;
 import de.m_marvin.industria.core.parametrics.BlockParametrics;
 import net.minecraft.client.gui.Font;
@@ -12,7 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class PowerInfo extends AbstractWidget {
 	
-	protected ResourceLocation texture = IndustriaCore.UTILITY_WIDGETS_TEXTURE;
+	protected ResourceLocation texture = GraphicsUtility.UTILITY_WIDGETS_TEXTURE;
 	protected final float voltageBarMax;
 	protected final StatusBar voltageBar;
 	protected final float powerBarMax;

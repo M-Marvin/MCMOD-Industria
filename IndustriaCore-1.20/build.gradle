@@ -165,9 +165,6 @@ dependencies {
 	// Valkyrien Skies 2
     implementation fg.deobf("org.valkyrienskies:valkyrienskies-120-forge:${rootProject.vs2_version}") { transitive = false }
 	
-    //annotationProcessor("io.github.llamalad7:mixinextras-common:$mixin_extras_version")
-    //implementation("io.github.llamalad7:mixinextras-forge:$mixin_extras_version")
-
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:$mixin_extras_version"))
     implementation(jarJar("io.github.llamalad7:mixinextras-forge:$mixin_extras_version")) {
         jarJar.ranged(it, "[$mixin_extras_version,)")
@@ -180,13 +177,20 @@ dependencies {
 	implementation fg.deobf("curse.maven:kotlinforforge-351264:$forge_kotlin_version")
     implementation "com.fasterxml.jackson.core:jackson-annotations:2.13.3"
     
- 	// Lib Dependencies
+ 	// NG Link
 	shade("com.github.M-Marvin:LIBRARY-NGLink:$nglink_version")
 	minecraftLibrary("com.github.M-Marvin:LIBRARY-NGLink:$nglink_version")
 	api("com.github.M-Marvin:LIBRARY-NGLink:$nglink_version")
+	
+	// UnifiedVectors
 	shade("com.github.M-Marvin:LIBRARY-UnifiedVectors:$univec_version")
 	minecraftLibrary("com.github.M-Marvin:LIBRARY-UnifiedVectors:$univec_version")
 	api("com.github.M-Marvin:LIBRARY-UnifiedVectors:$univec_version")
+	
+	// ArchiveUtility
+	shade("com.github.M-Marvin:LIBRARY-ArchiveUtility:$archutil_version")
+	minecraftLibrary("com.github.M-Marvin:LIBRARY-ArchiveUtility:$archutil_version")
+	api("com.github.M-Marvin:LIBRARY-ArchiveUtility:$archutil_version")
 	
 }
 

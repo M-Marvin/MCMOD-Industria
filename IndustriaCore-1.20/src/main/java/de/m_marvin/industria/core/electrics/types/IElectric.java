@@ -23,6 +23,7 @@ public interface IElectric<I, P, T> {
 	public static interface ICircuitPlot {
 		public void prepare(int templateId);
 		public String plot();
+		public String getAnyNode();
 	}
 	
 	public default void updateNetwork(Level level, P position) {

@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import com.google.common.collect.Maps;
@@ -21,10 +22,11 @@ public class ElectricNetwork {
 	
 	protected String title;
 	protected final Supplier<Level> level;
-	protected Set<Component<?, ?, ?>> components = new HashSet<>();
+	protected Set<Component<?, ?, ?>> components = ConcurrentHashMap.newKeySet();
 	protected Set<Component<?, ?, ?>> componentsLast = new HashSet<>();
 	protected int templateCounter;
 	protected StringBuilder circuitBuilder;
+	protected String groundNode;
 	protected String netList = "";
 	protected Map<String, Double> nodeVoltages = Maps.newHashMap();
 	
@@ -78,9 +80,11 @@ public class ElectricNetwork {
 
 	public void reset() {
 		this.circuitBuilder = new StringBuilder();
-		this.netList = null;
+		this.netList = "";
+		this.groundNode = null;
 		this.componentsLast = components;
-		this.components = new HashSet<>();
+		this.components = ConcurrentHashMap.newKeySet();
+		this.templateCounter = 0;
 	}
 	
 	public void plotComponentDescriptor(Component<?, ?, ?> component) {
@@ -88,13 +92,15 @@ public class ElectricNetwork {
 	}
 	
 	public void plotTemplate(Component<?, ?, ?> component, ICircuitPlot template) {
-		template.prepare(templateCounter++);
+		template.prepare(templateCounter++); // TODO device duplication bug
 		this.circuitBuilder.append(template.plot());
+		if (this.groundNode == null) this.groundNode = template.getAnyNode();
 	}
 
 	public void complete(long frame) {
 		if (!this.circuitBuilder.isEmpty()) {
-			this.netList = title + "\n" + circuitBuilder.toString() + ".end\n";
+			String groundResistor = "R0GND " + groundNode + " 0 1";
+			this.netList = title + "\n" + circuitBuilder.toString() + "\n" + groundResistor + "\n.end\n";
 		} else {
 			this.netList = "";
 		}

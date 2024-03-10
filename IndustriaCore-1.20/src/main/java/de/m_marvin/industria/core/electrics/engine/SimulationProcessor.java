@@ -1,5 +1,9 @@
 package de.m_marvin.industria.core.electrics.engine;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Queue;
 
 import org.apache.logging.log4j.Level;
@@ -15,6 +19,29 @@ import de.m_marvin.nglink.NativeNGLink.VectorValue;
 import de.m_marvin.nglink.NativeNGLink.VectorValuesAll;
 
 public class SimulationProcessor {
+	
+//	public static final String SPICE_INIT = "* Standard ngspice init file\r\n"
+//			+ "alias exit quit\r\n"
+//			+ "alias acct rusage all\r\n"
+//			+ "** set the number of threads in openmp \r\n"
+//			+ "** default (if compiled with --enable-openmp) is: 2 \r\n"
+//			+ "set num_threads=4\r\n"
+//			+ "\r\n"
+//			+ "if $?sharedmode\r\n"
+//			+ "  unset interactive\r\n"
+//			+ "  unset moremode\r\n"
+//			+ "else\r\n"
+//			+ "  set interactive\r\n"
+//			+ "  set x11lineararcs\r\n"
+//			+ "end\r\n"
+//			+ "\r\n"
+//			+ "strcmp __flag $program \"ngspice\"\r\n"
+//			+ "set ngbehavior=lt\r\n"
+//			+ "\r\n"
+//			+ "unset __flag";
+	
+	private static final String SPICE_INIT_LOCATION = "../share/ngspice/scripts/spinit";
+	private static final String SPICE_CODEMODEL_LOC = "../share/spice/";
 	
 	private boolean shouldShutdown = true;
 	private Queue<ElectricNetwork> tasks = Queues.newArrayDeque();
@@ -94,10 +121,14 @@ public class SimulationProcessor {
 						}
 						this.currentTask = tasks.poll();
 					}
-					if (this.currentTask != null && isNetListValid(this.currentTask.getNetList())) {
-						processNetList(this.currentTask.getNetList());
-						this.currentTask.getComponents().forEach(c -> c.onNetworkChange(this.currentTask.getLevel()));
+					if (this.currentTask == null) continue;
+					String netList = this.currentTask.getNetList();
+					if (isNetListValid(netList)) {
+						processNetList(netList);
+					} else {
+						this.currentTask.getNodeVoltages().clear();
 					}
+					this.currentTask.getComponents().forEach(c -> c.onNetworkChange(this.currentTask.getLevel()));
 				}
 			} catch (InterruptedException e) {}
 		}
@@ -126,7 +157,8 @@ public class SimulationProcessor {
 		}
 		
 		protected boolean isNetListValid(String netList) {
-			return netList != null && netList.length() > 10;
+			if (netList == null || netList.length() < 10) return false;
+			return netList.lines().filter(l -> !l.startsWith("\\*")).toList().size() > 3;
 		}
 		
 		protected void processNetList(String netList) {
@@ -158,7 +190,68 @@ public class SimulationProcessor {
 		return false;
 	}
 	
+	public void writeInitFile() {
+		File workingDir = new File("").getAbsoluteFile();
+		File initFile = new File(workingDir, SPICE_INIT_LOCATION).getAbsoluteFile();
+		
+		IndustriaCore.LOGGER.log(Level.INFO, "write SPICE init file at " + initFile.getPath());
+		
+		if (!initFile.getParentFile().isDirectory() && !initFile.getParentFile().mkdirs()) {
+			IndustriaCore.LOGGER.log(Level.WARN, "Failed to create init file folder!");
+			IndustriaCore.LOGGER.log(Level.WARN, "WARNING: This will possibly break a lot of stuff!");
+			return;
+		}
+		
+		try {
+
+			InputStream spinitFileIn = IndustriaCore.ARCHIVE_ACCESS.openFile("spiceinit/spinit");
+			OutputStream spinitFileOut = new FileOutputStream(initFile);
+			spinitFileOut.write(spinitFileIn.readAllBytes());
+			spinitFileIn.close();
+			spinitFileOut.close();
+			
+		} catch (Exception e) {
+			IndustriaCore.LOGGER.log(Level.WARN, "Failed to create init file!");
+			IndustriaCore.LOGGER.log(Level.WARN, "WARNING: This will possibly break a lot of stuff!");
+			e.printStackTrace();
+		}
+		
+		File modelFolder = new File(workingDir, SPICE_CODEMODEL_LOC).getAbsoluteFile();
+
+		IndustriaCore.LOGGER.log(Level.INFO, "extract SPICE modules at " + modelFolder.getPath());
+		
+		if (!modelFolder.isDirectory() && !modelFolder.mkdirs()) {
+			IndustriaCore.LOGGER.log(Level.WARN, "Failed to create code module folder!");
+			IndustriaCore.LOGGER.log(Level.WARN, "WARNING: This will possibly break a lot of stuff!");
+			return;
+		}
+
+		String[] spiceModules = IndustriaCore.ARCHIVE_ACCESS.listFiles("spiceinit/codemodels");
+		
+		for (String module : spiceModules) {
+			
+			IndustriaCore.LOGGER.log(Level.DEBUG, "-> extract module '" + module + "' ...");
+			
+			try {
+
+				InputStream moduleIn = IndustriaCore.ARCHIVE_ACCESS.openFile("spiceinit/codemodels/" + module);
+				FileOutputStream moduleOut = new FileOutputStream(new File(modelFolder, module));
+				moduleOut.write(moduleIn.readAllBytes());
+				moduleIn.close();
+				moduleOut.close();
+				
+			} catch (Exception e) {
+				IndustriaCore.LOGGER.log(Level.WARN, "Failed to extract module file " + module + "!");
+				IndustriaCore.LOGGER.log(Level.WARN, "WARNING: This will possibly break a lot of stuff!");
+				e.printStackTrace();
+			}
+			
+		}
+		
+	}
+	
 	public void start() {
+		writeInitFile();
 		this.shouldShutdown = false;
 		IndustriaCore.LOGGER.log(Level.INFO, "Electric network procsssor startup");
 		for (int i = 0; i < this.processors.length; i++) {

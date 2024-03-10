@@ -1,0 +1,16 @@
+{
+  "type": "industria:schredder",
+  "ingredient": {
+    "item": "industria:crushed_stone",
+	"count": 4
+  },
+  "results": [
+    {
+      "item": "minecraft:gravel",
+      "count": 1
+    }
+  ],
+  "schreddertime": 200,
+  "schreddertool": "industria:schredder_crusher",
+  "schredderdamage": 12
+}

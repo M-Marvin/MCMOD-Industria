@@ -26,13 +26,13 @@ import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.client.model.data.IModelData;
 
 public class RecipeCategoryMultipartBuild implements IRecipeCategory<MultipartBuildRecipe> {
 	
@@ -74,7 +74,7 @@ public class RecipeCategoryMultipartBuild implements IRecipeCategory<MultipartBu
 	protected int timer;
 	protected int tickCounter;
 	
-	@SuppressWarnings({ "resource", "deprecation" })
+	@SuppressWarnings({ "resource" })
 	@Override
 	public void draw(MultipartBuildRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
 		
@@ -89,6 +89,8 @@ public class RecipeCategoryMultipartBuild implements IRecipeCategory<MultipartBu
 		float offsetY = (recipe.getStructureBuilder().getSizeY() / 2F - 1) * 12;
 		float offsetX = (recipe.getStructureBuilder().getSizeX() / 2F - 1) * 12;
 		float offsetZ = (recipe.getStructureBuilder().getSizeZ() / 2F - 1) * 12;
+
+		//matrixStack.translate(-180, -0, 0);
 		
 		matrixStack.translate(150 + offsetX, 45 + offsetY, 20 + offsetZ);
 		matrixStack.scale(12, 12, -12);
@@ -114,13 +116,12 @@ public class RecipeCategoryMultipartBuild implements IRecipeCategory<MultipartBu
 					
 					if (!block.isAir(block.defaultBlockState(), Minecraft.getInstance().level, BlockPos.ZERO)) {
 						BlockState renderState = block.defaultBlockState();
-						final IBakedModel model = blockRenderer.getBlockModel(renderState);
+						IBakedModel model = blockRenderer.getBlockModel(renderState);
+						IModelData modelData = model.getModelData(Minecraft.getInstance().level, blueprintPos, renderState, null);
 						
-						RenderType.chunkBufferLayers().forEach((type) -> {
-							if (!type.equals(RenderType.solid())) {
-								blockRenderer.getModelRenderer().tesselateBlock(Minecraft.getInstance().level, model, renderState, blueprintPos, matrixStack, bufferIn.getBuffer(type), false, Minecraft.getInstance().level.getRandom(), renderState.getSeed(BlockPos.ZERO), OverlayTexture.NO_OVERLAY);
-							}
-						});
+						for (RenderType type : RenderType.chunkBufferLayers()) {
+							blockRenderer.getModelRenderer().renderModelFlat(Minecraft.getInstance().level, model, renderState, new BlockPos(0, 256, 0), matrixStack, bufferIn.getBuffer(type), false, Minecraft.getInstance().level.getRandom(), renderState.getSeed(blueprintPos), 0, modelData);
+						}
 					}
 					
 					matrixStack.popPose();

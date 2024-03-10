@@ -16,6 +16,7 @@ import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.magnetism.types.blocks.IMagneticBlock;
+import de.m_marvin.industria.core.parametrics.BlockParametrics;
 import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
 import de.m_marvin.industria.core.parametrics.properties.DoubleParameter;
 import de.m_marvin.industria.core.registries.Circuits;
@@ -57,6 +58,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEntityDynamicMultiBlock, IElectricBlock, IMagneticBlock, SimpleWaterloggedBlock {
 	
 	public static final DoubleParameter MAGNETIC_FIELD_STRENGTH = new DoubleParameter("magneticFieldStrengthPerVolt", 1.0);
+	public static final DoubleParameter POWER_PER_BLOCK = new DoubleParameter("electricPowerPerBlock", 500.0);
 	public static final int CONNECTION_PER_NODE = 1;
 	
 	public static final VoxelShape CORE_SHAPE = VoxelShapeUtility.box(2, 0, 2, 14, 16, 14);
@@ -75,16 +77,14 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	public Vec3d getFieldVector(Level level, BlockState state, BlockPos blockPos) {
 		Double fieldStength = 0.0;
 		
-		Vec3d oposingField = new Vec3d();
 		if (level.getBlockEntity(blockPos) instanceof ElectroMagneticCoilBlockEntity coil) {
 			coil = coil.getMaster();
 			fieldStength = coil.getCurrentFieldStrength() / coil.getCoreBlockCount();
-			oposingField = coil.getOposingField().div((double) coil.getCoreBlockCount());
 		}
 		
 		switch (state.getValue(BlockStateProperties.AXIS)) {
 		case X: return new Vec3d(fieldStength, 0, 0);
-		case Y: return new Vec3d(0, fieldStength, 0).add(oposingField); // TODO field vec orientation
+		case Y: return new Vec3d(0, fieldStength, 0);
 		case Z: return new Vec3d(0, 0, fieldStength);
 		default: return new Vec3d();
 		}
@@ -234,18 +234,20 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork network, Consumer<ICircuitPlot> plotter) {
 		if (level.getBlockEntity(position) instanceof ElectroMagneticCoilBlockEntity coil) {
 			
+			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
+			
 			String[] coilLanes = coil.getNodeLanes();
 			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, coilLanes[0], 1, coilLanes[1]);
 			
 			String[] wireLanes = coil.getNodeLanes();
 			
+			double powerPerBlock = parametrics.getParameter(POWER_PER_BLOCK);
+			
 			if (coil.isGenerator()) {
 				
 				double targetVoltage = coil.getInducedVoltage();
-				int targetPower = targetVoltage > 0 ? coil.getMaster().getCoreBlockCount() * 500 : 0;
+				double targetPower = targetVoltage > 0 ? coil.getCoreBlockCount() * powerPerBlock : 0;
 				double targetCurrent = targetVoltage > 0 ? targetPower / targetVoltage : 0; // TODO current limit
-				
-				System.out.println(level.isClientSide + " - Generator Side: " + targetPower + " with " + targetVoltage + " @ " + targetCurrent);
 				
 				CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CURRENT_LIMITED_VOLTAGE_SOURCE);
 				templateSource.setProperty("nominal_current", targetCurrent);
@@ -254,23 +256,16 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, wireLanes[0]);
 				templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, wireLanes[1]);
 				plotter.accept(templateSource);
+				
 			} else {
 				
-				double nominalPower = coil.getMaster().getCurrentConsumtion();
+				double nominalPower = coil.getMaster().getCoreBlockCount() * powerPerBlock;
 				
-				if (nominalPower > 0.0) {
-					System.out.println(level.isClientSide + " - Load Side: " + nominalPower);
-					
-					// TODO load circuit
-					
-					CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_POWER_LOAD);
-					templateSource.setProperty("nominal_power", nominalPower);
-					templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, wireLanes[0]);
-					templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, wireLanes[1]);
-					
-//					System.out.println("--------- \n" + templateSource.plot());
-					plotter.accept(templateSource);
-				}
+				CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_POWER_LOAD);
+				templateSource.setProperty("nominal_power", nominalPower);
+				templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, wireLanes[0]);
+				templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, wireLanes[1]);
+				plotter.accept(templateSource);
 				
 			}
 			
@@ -465,6 +460,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				}
 				
 				GameUtility.triggerClientSync(pLevel, transformerMaster.getBlockPos());
+				transformerMaster.updateElectromagnetism();
 				
 				return InteractionResult.SUCCESS;
 			}

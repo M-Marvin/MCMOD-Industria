@@ -8,12 +8,16 @@ import org.joml.Matrix4f;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.resources.ResourceLocation;
 
 public class GraphicsUtility {
+
+	public static final ResourceLocation UTILITY_WIDGETS_TEXTURE = new ResourceLocation(IndustriaCore.MODID, "textures/gui/utility_widgets.png");
 	
 	public static void drawStringCentered(PoseStack matrixStack, MultiBufferSource bufferSource, String string, int posX, int posY, float r, float g, float b, float a) {
 		drawStringCentered(matrixStack, bufferSource, string, posX, posY, new Color(r, g, b, a).getRGB());

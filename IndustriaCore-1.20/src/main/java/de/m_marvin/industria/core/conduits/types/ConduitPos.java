@@ -217,7 +217,7 @@ public class ConduitPos {
 		}
 		
 		public String getKeyString(int laneId, String laneName) {
-			return ("Node[pos" + this.block.getX() + "_" + block.getY() + "_" + block.getZ() + "_id" + this.node + "_lid" + laneId + "_lnm" + laneName + "]").toLowerCase();
+			return ("Node|pos" + this.block.getX() + "_" + block.getY() + "_" + block.getZ() + "_id" + this.node + "_lid" + laneId + "_lnm" + laneName + "|").toLowerCase();
 		}
 		
 		public static String getLaneName(String keyString) {

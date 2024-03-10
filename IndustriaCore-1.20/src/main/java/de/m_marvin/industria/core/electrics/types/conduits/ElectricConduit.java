@@ -90,9 +90,11 @@ public abstract class ElectricConduit extends Conduit implements IElectricCondui
 		NodePos[] connections = getConnections(level, position, instance);
 		String[] wireLabels = this.getWireLanes(level, position, instance, null);
 		for (int i = 0; i < wireLabels.length; i++) {
-			template.setNetworkNode("NET1", connections[0], i, wireLabels[i]);
-			template.setNetworkNode("NET2", connections[1], i, wireLabels[i]);
-			plotter.accept(template);
+			if (!wireLabels[i].isBlank()) {
+				template.setNetworkNode("NET1", connections[0], i, wireLabels[i]);
+				template.setNetworkNode("NET2", connections[1], i, wireLabels[i]);
+				plotter.accept(template);
+			}
 		}
 	}
 	

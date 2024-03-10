@@ -3,7 +3,13 @@ R1_P{id} N{SHUNT} N{VDC} 0.001
 I1_P{id} N003_P{id} N002_P{id} P{nominal_current}
 V1_P{id} N001_P{id} N002_P{id} P{nominal_voltage}
 I2_P{id} N003_P{id} N{GND} P{nominal_current}
-S4_P{id} N{SHUNT} N001_P{id} N001_P{id} N{SHUNT} source_diosw
-S5_P{id} N003_P{id} N002_P{id} N002_P{id} N003_P{id} source_diosw
-S6_P{id} N003_P{id} N{GND} N{GND} N003_P{id} source_diosw
-.model source_diosw sw vt=0 vh=0.001 ron=0.001 roff=10e9
+*S4_P{id} N{SHUNT} N001_P{id} N001_P{id} N{SHUNT} source_diosw
+*S5_P{id} N003_P{id} N002_P{id} N002_P{id} N003_P{id} source_diosw
+*S6_P{id} N003_P{id} N{GND} N{GND} N003_P{id} source_diosw
+
+A1_P{id} N001_P{id} N{SHUNT} D_ideal
+A2_P{id} N002_P{id} N003_P{id} D_ideal
+A3_P{id} N{GND} N003_P{id} D_ideal
+
+.model D_ideal sidiode(Ron=0 Roff=1G Vfwd=0 Vrev=1G)
+*.model source_diosw sw vt=0 vh=0.001 ron=0.001 roff=10e9

@@ -127,7 +127,7 @@ public class LuaInterpreter {
 	/**
 	 * Stops the actually executed code an closes the Thread
 	 */
-	@SuppressWarnings("removal")
+	@SuppressWarnings("deprecation")
 	public void stopExecuting() {
 		if (this.executionThread != null) {
 			this.executionThread.interrupt();

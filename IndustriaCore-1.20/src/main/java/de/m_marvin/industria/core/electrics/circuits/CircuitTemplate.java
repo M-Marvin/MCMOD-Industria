@@ -53,6 +53,11 @@ public class CircuitTemplate implements ICircuitPlot {
 	}
 	
 	@Override
+	public String getAnyNode() {
+		return this.networks.values().stream().findAny().orElseGet(() -> null);
+	}
+	
+	@Override
 	public String plot() {
 		try {
 			Matcher matcher1 = PROPERTY_PATTERN.matcher(template);

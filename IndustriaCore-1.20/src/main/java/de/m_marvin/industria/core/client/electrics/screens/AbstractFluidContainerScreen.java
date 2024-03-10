@@ -12,6 +12,7 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 
 import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.core.client.util.GraphicsUtility;
 import de.m_marvin.industria.core.util.container.IFluidSlotContainer;
 import de.m_marvin.industria.core.util.container.IFluidSlotContainer.FluidSlot;
 import net.minecraft.client.Minecraft;
@@ -29,8 +30,8 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 
 public abstract class AbstractFluidContainerScreen<T extends AbstractContainerMenu & IFluidSlotContainer> extends AbstractContainerScreen<T> {
-	
-	protected ResourceLocation fluidSlotTexture = IndustriaCore.UTILITY_WIDGETS_TEXTURE;
+
+	protected ResourceLocation fluidSlotTexture = GraphicsUtility.UTILITY_WIDGETS_TEXTURE;
 	
 	public AbstractFluidContainerScreen(T pMenu, Inventory pPlayerInventory, Component pTitle) {
 		super(pMenu, pPlayerInventory, pTitle);

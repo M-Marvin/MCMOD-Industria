@@ -1,6 +1,7 @@
 package de.m_marvin.industria.core.client.util.widgets;
 
 import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.core.client.util.GraphicsUtility;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -11,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class StatusBar extends AbstractWidget {
 	
-	protected ResourceLocation texture = IndustriaCore.UTILITY_WIDGETS_TEXTURE;
+	protected ResourceLocation texture = GraphicsUtility.UTILITY_WIDGETS_TEXTURE;
 	protected final Font font;
 	protected float redRange;
 	protected float greenRange;

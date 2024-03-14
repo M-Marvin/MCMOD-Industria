@@ -1,23 +1,23 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "KSK",
-    "SAS",
-    "KSK"
+    "ABA",
+    "D D",
+    "ABA"
   ],
   "key": {
-    "K": {
+    "D": {
       "item": "industria:plastic_plate"
     },
     "A": {
-      "item": "industria:aluminium_plates"
-    },
-    "S": {
       "item": "industria:tin_plate"
+    },
+    "B": {
+      "item": "minecraft:white_dye"
     }
   },
   "result": {
     "item": "industria:clean_cladding_white",
-    "count": 4
+    "count": 16
   }
 }

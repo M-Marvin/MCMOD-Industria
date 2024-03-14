@@ -62,6 +62,8 @@ public class ItemWrench extends ItemToolBase {
 					
 				}
 				
+			} else {
+				
 			}
 
 			World world = context.getLevel();

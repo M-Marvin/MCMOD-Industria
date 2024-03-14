@@ -20,11 +20,11 @@ import minecraftnbt.NBTTagCompound;
 import minecraftnbt.NBTTagList;
 import minecraftnbt.NBTTagString;
 
-public class HelperCode {
+public class SaveModifConverter {
 	
 	public static void main(String... args) throws URISyntaxException, IOException {
 		
-		File runFolder = new File(HelperCode.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath().substring(1)).getParentFile();
+		File runFolder = new File(SaveModifConverter.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath().substring(1)).getParentFile();
 		File worldFolderInput = new File(runFolder, "run/Neue Weltdfghfh");
 		File worldFolderOutput = new File(runFolder, "run/RedTecWorld");
 		

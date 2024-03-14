@@ -1,0 +1,47 @@
+ingame-level-circuit
+* Component Block{industria:portable_fuel_generator} BlockPos{x=8, y=-59, z=-10}
+* Current limited power source [ i_nominal=8.695652173913043, v_nominal=230 ]
+R1_0 node|pos8_-59_-10_id0_lid2_lnmpower_shunt| node|pos8_-59_-10_id0_lid0_lnml| 0.001
+I1_0 N003_0 N002_0 8.695652173913043
+V1_0 N001_0 N002_0 230
+I2_0 N003_0 node|pos8_-59_-10_id0_lid1_lnmn| 8.695652173913043
+*S4_0 node|pos8_-59_-10_id0_lid2_lnmpower_shunt| N001_0 N001_0 node|pos8_-59_-10_id0_lid2_lnmpower_shunt| source_diosw
+*S5_0 N003_0 N002_0 N002_0 N003_0 source_diosw
+*S6_0 N003_0 node|pos8_-59_-10_id0_lid1_lnmn| node|pos8_-59_-10_id0_lid1_lnmn| N003_0 source_diosw
+
+A1_0 N001_0 node|pos8_-59_-10_id0_lid2_lnmpower_shunt| D_ideal
+A2_0 N002_0 N003_0 D_ideal
+A3_0 node|pos8_-59_-10_id0_lid1_lnmn| N003_0 D_ideal
+
+.model D_ideal sidiode(Ron=0 Roff=1G Vfwd=0 Vrev=1G)
+*.model source_diosw sw vt=0 vh=0.001 ron=0.001 roff=10e9
+* Component Conduit{industria:insulated_tin_wire} ConduitPos{A=NodePos{block=[8 -60 -10],node=0},B=NodePos{block=[8 -59 -10],node=0}}
+* Simple resistor for different uses [ r=0.001 ]
+R1_1 node|pos8_-60_-10_id0_lid0_lnml| node|pos8_-59_-10_id0_lid0_lnml| 0.001
+* Simple resistor for different uses [ r=0.001 ]
+R1_2 node|pos8_-60_-10_id0_lid1_lnmn| node|pos8_-59_-10_id0_lid1_lnmn| 0.001
+* Component Conduit{industria:insulated_tin_wire} ConduitPos{A=NodePos{block=[8 -60 -10],node=0},B=NodePos{block=[4 -60 -10],node=0}}
+* Simple resistor for different uses [ r=0.004 ]
+R1_3 node|pos8_-60_-10_id0_lid0_lnml| node|pos4_-60_-10_id0_lid0_lnml| 0.004
+* Simple resistor for different uses [ r=0.004 ]
+R1_4 node|pos8_-60_-10_id0_lid1_lnmn| node|pos4_-60_-10_id0_lid1_lnmn| 0.004
+* Component Block{industria:gold_wire_holder} BlockPos{x=4, y=-60, z=-10}
+* Component Block{industria:portable_fuel_generator} BlockPos{x=8, y=-60, z=-10}
+* Current limited power source [ i_nominal=8.695652173913043, v_nominal=230 ]
+R1_5 node|pos8_-60_-10_id0_lid2_lnmpower_shunt| node|pos8_-60_-10_id0_lid0_lnml| 0.001
+I1_5 N003_5 N002_5 8.695652173913043
+V1_5 N001_5 N002_5 230
+I2_5 N003_5 node|pos8_-60_-10_id0_lid1_lnmn| 8.695652173913043
+*S4_5 node|pos8_-60_-10_id0_lid2_lnmpower_shunt| N001_5 N001_5 node|pos8_-60_-10_id0_lid2_lnmpower_shunt| source_diosw
+*S5_5 N003_5 N002_5 N002_5 N003_5 source_diosw
+*S6_5 N003_5 node|pos8_-60_-10_id0_lid1_lnmn| node|pos8_-60_-10_id0_lid1_lnmn| N003_5 source_diosw
+
+A1_5 N001_5 node|pos8_-60_-10_id0_lid2_lnmpower_shunt| D_ideal
+A2_5 N002_5 N003_5 D_ideal
+A3_5 node|pos8_-60_-10_id0_lid1_lnmn| N003_5 D_ideal
+
+.model D_ideal sidiode(Ron=0 Roff=1G Vfwd=0 Vrev=1G)
+*.model source_diosw sw vt=0 vh=0.001 ron=0.001 roff=10e9
+
+R0GND node|pos8_-59_-10_id0_lid0_lnml| 0 1
+.end

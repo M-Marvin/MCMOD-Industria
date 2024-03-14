@@ -1,9 +1,35 @@
+import org.gradle.internal.os.OperatingSystem
 
 plugins {
 	id "com.github.johnrengelman.shadow" version "7.1.0"
 }
 
 apply plugin: 'java'
+
+switch (OperatingSystem.current()) {
+	case OperatingSystem.LINUX:
+		project.ext.lwjglNatives = "natives-linux"
+		def osArch = System.getProperty("os.arch")
+		if (osArch.startsWith("arm") || osArch.startsWith("aarch64")) {
+			project.ext.lwjglNatives += osArch.contains("64") || osArch.startsWith("armv8") ? "-arm64" : "-arm32"
+		} else if  (osArch.startsWith("ppc")) {
+			project.ext.lwjglNatives += "-ppc64le"
+		} else if  (osArch.startsWith("riscv")) {
+			project.ext.lwjglNatives += "-riscv64"
+		}
+		break
+	case OperatingSystem.MAC_OS:
+		project.ext.lwjglNatives = System.getProperty("os.arch").startsWith("aarch64") ? "natives-macos-arm64" : "natives-macos"
+		break
+	case OperatingSystem.WINDOWS:
+		def osArch = System.getProperty("os.arch")
+		project.ext.lwjglNatives = osArch.contains("64")
+			? "natives-windows${osArch.startsWith("aarch64") ? "-arm64" : ""}"
+			: "natives-windows-x86"
+		break
+}
+
+version = '0.1'
 
 repositories {
 	mavenCentral()
@@ -17,13 +43,25 @@ configurations {
 
 dependencies {
 	
+	// LWJGL
+	shade "org.lwjgl:lwjgl::$lwjglNatives"
+	shade "org.lwjgl:lwjgl-glfw::$lwjglNatives"
+	shade "org.lwjgl:lwjgl-opengl::$lwjglNatives"
+	
 	// CommandLineParser
-	shade 'com.github.M-Marvin:LIBRARY-CommandLineParser:d527412'
+	shade 'com.github.M-Marvin:LIBRARY-CommandLineParser:main-SNAPSHOT'
+	
+	// OpenUI
+	shade 'com.github.M-Marvin:LIBRARY-OpenUI:main-SNAPSHOT'
 	
 	// GSON
 	shade "com.google.code.gson:gson:2.9.1"
 	
-	implementation 'com.github.M-Marvin:LIBRARY-UnifiedVectors:0643cf0c82'
+	// UnifiedVectors
+	shade 'com.github.M-Marvin:LIBRARY-UnifiedVectors:main-SNAPSHOT'
+	
+	// NGLink
+	shade 'com.github.M-Marvin:LIBRARY-NGLink:main-SNAPSHOT'
 	
 }
 

@@ -1,8 +1,11 @@
 package de.industria.blocks;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import de.industria.tileentity.TileEntityAdvancedMovingBlock;
 import de.industria.tileentity.TileEntityRHarvester;
+import de.industria.typeregistys.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -14,11 +17,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tileentity.PistonTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -35,10 +40,11 @@ public class BlockRHarvester extends BlockContainerBase {
 	
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+	public static final BooleanProperty SILKTOUCH = BooleanProperty.create("silktouch");
 	
 	public BlockRHarvester() {
 		super("harvester", Material.STONE, 3.5F, SoundType.STONE);
-		this.registerDefaultState(this.stateDefinition.any().setValue(POWERED, false));
+		this.registerDefaultState(this.stateDefinition.any().setValue(POWERED, false).setValue(SILKTOUCH, false));
 	}
 	
 	@Override
@@ -48,16 +54,21 @@ public class BlockRHarvester extends BlockContainerBase {
 	
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
-		builder.add(FACING, POWERED);
+		builder.add(FACING, POWERED, SILKTOUCH);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite()).setValue(POWERED, false);
+		return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite()).setValue(POWERED, false).setValue(SILKTOUCH, false);
 	}
 	
 	@Override
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+		
+		if (player.getItemInHand(handIn).getItem() == ModItems.hammer) {
+			worldIn.setBlockAndUpdate(pos, state.setValue(SILKTOUCH, !state.getValue(SILKTOUCH)));
+			return ActionResultType.SUCCESS;
+		}
 		
 		TileEntity tileEntity = worldIn.getBlockEntity(pos);
 		
@@ -97,7 +108,7 @@ public class BlockRHarvester extends BlockContainerBase {
 			
 			if (power && tileEntity instanceof TileEntityRHarvester) {
 				
-				List<ItemStack> items = harvest(pos, pos.relative(state.getValue(FACING)), worldIn);
+				List<ItemStack> items = harvest(pos, pos.relative(state.getValue(FACING)), worldIn, state.getValue(SILKTOUCH));
 				
 				if (items != null) {
 					
@@ -119,9 +130,18 @@ public class BlockRHarvester extends BlockContainerBase {
 	}
 	
 	@SuppressWarnings({ "static-access", "deprecation" })
-	public List<ItemStack> harvest(BlockPos pos, BlockPos harvestPos, World world) {
+	public List<ItemStack> harvest(BlockPos pos, BlockPos harvestPos, World world, boolean useSilkTouch) {
 
 		BlockState harvestState = world.getBlockState(harvestPos);
+		
+		if (harvestState.getBlock() == Blocks.MOVING_PISTON || harvestState.getBlock() == ModItems.advanced_moving_block) {
+			TileEntity moving = world.getBlockEntity(harvestPos);
+			if (moving instanceof PistonTileEntity) {
+				harvestState = ((PistonTileEntity) moving).getMovedState();
+			} else if (moving instanceof TileEntityAdvancedMovingBlock) {
+				harvestState = ((TileEntityAdvancedMovingBlock) moving).getPistonState();
+			}
+		}
 		
 		if (harvestState.isAir()) {
 			return null;
@@ -129,12 +149,27 @@ public class BlockRHarvester extends BlockContainerBase {
 			return null;
 		} else {
 			
-			TileEntity tileEntity = world.getBlockEntity(harvestPos);
-			List<ItemStack> drops = harvestState.getBlock().getDrops(harvestState, (ServerWorld) world, harvestPos, tileEntity);
+			if (!harvestState.hasTileEntity() && useSilkTouch) {
+				
+				Item item = harvestState.getBlock().asItem();
+				List<ItemStack> drops = new ArrayList<>();
+				drops.add(new ItemStack(item, 1));
+
+				world.destroyBlock(harvestPos, false);
+				
+				return drops;
+				
+			} else {
+
+				TileEntity tileEntity = world.getBlockEntity(harvestPos);
+				List<ItemStack> drops = harvestState.getBlock().getDrops(harvestState, (ServerWorld) world, harvestPos, tileEntity);
+				
+				world.destroyBlock(harvestPos, false);
+				
+				return drops;
+				
+			}
 			
-			world.destroyBlock(harvestPos, false);
-			
-			return drops;
 		}
 		
 	}

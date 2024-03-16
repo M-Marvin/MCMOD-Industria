@@ -261,8 +261,14 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				
 				double nominalPower = coil.getMaster().getCoreBlockCount() * powerPerBlock;
 				
-				CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_POWER_LOAD);
-				templateSource.setProperty("nominal_power", nominalPower);
+//				CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_POWER_LOAD);
+//				templateSource.setProperty("nominal_power", nominalPower);
+//				templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, wireLanes[0]);
+//				templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, wireLanes[1]);
+//				plotter.accept(templateSource);
+				
+				CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_CURRENT_LOAD);
+				templateSource.setProperty("nominal_current", nominalPower / 230);
 				templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, wireLanes[0]);
 				templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, wireLanes[1]);
 				plotter.accept(templateSource);

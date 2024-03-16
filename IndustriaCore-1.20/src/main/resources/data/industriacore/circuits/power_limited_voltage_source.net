@@ -1,0 +1,5 @@
+
+* Power limited voltage source [ p_maxmimum=P{max_power}, v_nominal=P{nominal_voltage} ]
+V1_P{id} N001_P{id} N{GND} P{nominal_voltage}
+R2_P{id} N001_P{id} N{SHUNT} R={max((P{nominal_voltage}/P{max_power}) * V(N001_P{id}, N{SHUNT}), 1u)}
+R1_P{id} N{SHUNT} N{VDC} 0.001

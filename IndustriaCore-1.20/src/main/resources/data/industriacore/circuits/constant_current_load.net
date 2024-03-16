@@ -1,4 +1,6 @@
+
 * Load-Resistor with fixed current [ i_nominal=P{nominal_current} ]
-I1_P{id} N{VDC} N{GND} P{nominal_current}
-S1_P{id} N{VDC} N{GND} N{GND} N{VDC} current_load_diosw
-.model current_load_diosw sw vt=0 vh=0.001 ron=0.001 roff=10e9
+*I1_P{id} N{VDC} N{GND} P{nominal_current}
+*S1_P{id} N{VDC} N{GND} N{GND} N{VDC} current_load_diosw
+*.model current_load_diosw sw vt=0 vh=0.001 ron=0.001 roff=10e9
+R1_P{id} N{VDC} N{GND} R={max(V(N{VDC}, N{GND})/P{nominal_current}, 1u)}

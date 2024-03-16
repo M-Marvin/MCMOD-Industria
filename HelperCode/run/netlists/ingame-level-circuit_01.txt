@@ -21,9 +21,9 @@ R1_1 node|pos4_-60_-13_id1_lid0_lnml| node|pos6_-60_-13_id0_lid0_lnml| 0.002
 * Simple resistor for different uses [ r=0.002 ]
 R1_2 node|pos4_-60_-13_id1_lid1_lnmn| node|pos6_-60_-13_id0_lid1_lnmn| 0.002
 * Component Block{industria:electro_magnetic_coil} BlockPos{x=4, y=-60, z=-13}
-* Junction resistor
+* Junction resistor []
 R1_3 node|pos4_-60_-13_id1_lid0_lnml| node|pos4_-60_-13_id0_lid0_lnml| 0.015
-* Junction resistor
+* Junction resistor []
 R1_4 node|pos4_-60_-13_id1_lid1_lnmn| node|pos4_-60_-13_id0_lid1_lnmn| 0.015
 * Load-Resistor with fixed power consumtion [ p_nominal=500.0 ]
 * B1_5 node|pos4_-60_-13_id0_lid0_lnml| node|pos4_-60_-13_id0_lid1_lnmn| P=500.0

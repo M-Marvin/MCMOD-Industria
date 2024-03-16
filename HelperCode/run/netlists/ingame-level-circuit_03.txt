@@ -1,0 +1,41 @@
+ingame-level-circuit
+* Component Conduit{industria:insulated_tin_wire} ConduitPos{A=NodePos{block=[6 -60 -15],node=0},B=NodePos{block=[6 -60 -13],node=0}}
+
+* Simple resistor for different uses [ r=0.003 ]
+R1_0 node|pos6_-60_-15_id0_lid0_lnml| node|pos6_-60_-13_id0_lid0_lnml| 0.003
+
+* Simple resistor for different uses [ r=0.003 ]
+R1_1 node|pos6_-60_-15_id0_lid1_lnmn| node|pos6_-60_-13_id0_lid1_lnmn| 0.003
+
+* Component Block{industria:gold_wire_holder} BlockPos{x=6, y=-60, z=-15}
+
+* Component Conduit{industria:insulated_gold_wire} ConduitPos{A=NodePos{block=[6 -60 -15],node=0},B=NodePos{block=[4 -60 -13],node=1}}
+
+* Simple resistor for different uses [ r=0.003 ]
+R1_2 node|pos6_-60_-15_id0_lid0_lnml| node|pos4_-60_-13_id1_lid0_lnml| 0.003
+
+* Simple resistor for different uses [ r=0.003 ]
+R1_3 node|pos6_-60_-15_id0_lid1_lnmn| node|pos4_-60_-13_id1_lid1_lnmn| 0.003
+
+* Component Block{industria:electro_magnetic_coil} BlockPos{x=4, y=-60, z=-13}
+
+* Junction resistor [ r_fixed=0.015 ]
+R1_4 node|pos4_-60_-13_id1_lid0_lnml| node|pos4_-60_-13_id0_lid0_lnml| 0.015
+
+* Junction resistor [ r_fixed=0.015 ]
+R1_5 node|pos4_-60_-13_id1_lid1_lnmn| node|pos4_-60_-13_id0_lid1_lnmn| 0.015
+
+* Load-Resistor with fixed power consumtion [ p_nominal=500.0 ]
+
+* R1_6 node|pos4_-60_-13_id0_lid0_lnml| node|pos4_-60_-13_id0_lid1_lnmn| R={230.0/(2000.0/230.0)}
+R1_6 node|pos4_-60_-13_id0_lid0_lnml| node|pos4_-60_-13_id0_lid1_lnmn| R={max(V(node|pos4_-60_-13_id0_lid0_lnml|, node|pos4_-60_-13_id0_lid1_lnmn|)/8.695, 1u)}
+
+* Component Block{industria:portable_fuel_generator} BlockPos{x=6, y=-60, z=-13}
+
+* Power limited voltage source [ p_maxmimum=2000, v_nominal=230 ]
+V1_7 N001_7 node|pos6_-60_-13_id0_lid1_lnmn| 230
+R2_7 N001_7 node|pos6_-60_-13_id0_lid2_lnmpower_shunt| R={max((230/2000) * V(N001_7, node|pos6_-60_-13_id0_lid2_lnmpower_shunt|), 1u)}
+R1_7 node|pos6_-60_-13_id0_lid2_lnmpower_shunt| node|pos6_-60_-13_id0_lid0_lnml| 0.001
+
+R0GND node|pos6_-60_-15_id0_lid0_lnml| 0 1
+.end

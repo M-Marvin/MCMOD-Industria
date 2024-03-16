@@ -129,13 +129,23 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 			int targetPower = generator.canRun() ? parametrics.getNominalPower() : 0;
 			int targetVoltage = generator.canRun() ? parametrics.getNominalVoltage() : 0;
 			
-			CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CURRENT_LIMITED_VOLTAGE_SOURCE);
-			templateSource.setProperty("nominal_current", targetPower / (double) parametrics.getNominalVoltage());
-			templateSource.setProperty("nominal_voltage", targetVoltage);
-			templateSource.setNetworkNode("SHUNT", new NodePos(position, 0), 2, "power_shunt");
-			templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, wireLanes[0]);
-			templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, wireLanes[1]);
-			plotter.accept(templateSource);
+			if (targetPower > 0) {
+//				CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CURRENT_LIMITED_VOLTAGE_SOURCE);
+//				templateSource.setProperty("max_current", targetPower / (double) parametrics.getNominalVoltage());
+//				templateSource.setProperty("nominal_voltage", targetVoltage);
+//				templateSource.setNetworkNode("SHUNT", new NodePos(position, 0), 2, "power_shunt");
+//				templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, wireLanes[0]);
+//				templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, wireLanes[1]);
+//				plotter.accept(templateSource);
+				
+				CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.POWER_LIMITEED_VOLTAGE_SOURCE);
+				templateSource.setProperty("max_power", targetPower);
+				templateSource.setProperty("nominal_voltage", targetVoltage);
+				templateSource.setNetworkNode("SHUNT", new NodePos(position, 0), 2, "power_shunt");
+				templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, wireLanes[0]);
+				templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, wireLanes[1]);
+				plotter.accept(templateSource);
+			}
 			
 		}
 		

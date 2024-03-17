@@ -12,7 +12,6 @@ import de.m_marvin.industria.content.blocks.machines.FloodlightBlock;
 import de.m_marvin.industria.content.blocks.machines.IonicThrusterBlock;
 import de.m_marvin.industria.content.blocks.machines.PortableCoalGeneratorBlock;
 import de.m_marvin.industria.content.blocks.machines.PortableFuelGeneratorBlock;
-import de.m_marvin.industria.content.blocks.machines.TransformerCoilBlock;
 import de.m_marvin.industria.content.blocks.redstone.TransistorBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.JunctionBoxBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.WireHolderBlock;
@@ -52,7 +51,6 @@ public class ModBlocks {
 	public static final RegistryObject<Block> BRASS_JUNCTION_BOX 				= BLOCKS.register("brass_junction_box", () -> new JunctionBoxBlock(Properties.of().strength(3F, 3F)));
 	public static final RegistryObject<Block> STEEL_JUNCTION_BOX 				= BLOCKS.register("steel_junction_box", () -> new JunctionBoxBlock(Properties.of().strength(3F, 3F)));
 	public static final RegistryObject<Block> ELECTRO_MAGNETIC_COIL				= BLOCKS.register("electro_magnetic_coil", () -> new ElectroMagneticCoilBlock(Properties.of().strength(3, 2)));
-	public static final RegistryObject<Block> TRANSFORMER_COIL					= BLOCKS.register("transformer_coil", () -> new TransformerCoilBlock(Properties.of().strength(3, 2)));
 	
 	public static final RegistryObject<Block> BRASS_FLOODLIGHT 					= BLOCKS.register("brass_floodlight", () -> new FloodlightBlock(Properties.of().strength(2, 1.5F)));
 	public static final RegistryObject<Block> STEEL_FLOOFLIGHT 					= BLOCKS.register("steel_floodlight", () -> new FloodlightBlock(Properties.of().strength(2, 1.5F)));

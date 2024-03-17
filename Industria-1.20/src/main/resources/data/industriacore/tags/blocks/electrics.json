@@ -7,10 +7,11 @@
 		"industria:iron_junction_box",
 		"industria:steel_floodlight",
 		"industria:brass_junction_box",
-		"industria:portable_coal_generator",
 		"industria:aluminum_wire_holder",
 		"industria:gold_wire_holder",
 		"industria:zinc_junction_box",
-		"industria:portable_fuel_generator"
+		"industria:portable_fuel_generator",
+		"industria:portable_coal_generator",
+		"industria:electro_magnetic_coil"
 	]
 }

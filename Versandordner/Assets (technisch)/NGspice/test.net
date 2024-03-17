@@ -1,35 +1,26 @@
 ingame-level-circuit
-* Component Conduit{industria:insulated_tin_wire} ConduitPos{A=NodePos{block=[6 -60 -13],node=0},B=NodePos{block=[4 -60 -13],node=1}}
-* Simple resistor for different uses [ r=0.002 ]
-R1_0 node[pos6_-60_-13_id0_lid0_lnml] node[pos4_-60_-13_id1_lid0_lnml] 0.002
-* Simple resistor for different uses [ r=0.002 ]
-R1_1 node[pos6_-60_-13_id0_lid1_lnmn] node[pos4_-60_-13_id1_lid1_lnmn] 0.002
-* Component Block{industria:portable_fuel_generator} BlockPos{x=6, y=-60, z=-13}
-* Current limited power source [ i_nominal=8.695652173913043, v_nominal=230 ]
-R1_2 node[pos6_-60_-13_id0_lid2_lnmpower_shunt] node[pos6_-60_-13_id0_lid0_lnml] 0.001
-I1_2 N003_2 N002_2 8.695652173913043
-V1_2 N001_2 N002_2 230
-I2_2 N003_2 node[pos6_-60_-13_id0_lid1_lnmn] 8.695652173913043
-*S4_2 node[pos6_-60_-13_id0_lid2_lnmpower_shunt] N001_2 N001_2 node[pos6_-60_-13_id0_lid2_lnmpower_shunt] source_diosw
-*S5_2 N003_2 N002_2 N002_2 N003_2 source_diosw
-*S6_2 N003_2 node[pos6_-60_-13_id0_lid1_lnmn] node[pos6_-60_-13_id0_lid1_lnmn] N003_2 source_diosw
+* Component Block{industria:portable_fuel_generator} BlockPos{x=7, y=-60, z=-5}
 
-D1_2 N001_2 node[pos6_-60_-13_id0_lid2_lnmpower_shunt] D_ideal
-D2_2 N002_2 N003_2 D_ideal
-D3_2 node[pos6_-60_-13_id0_lid1_lnmn] N003_2 D_ideal
+* Power limited voltage source [ p_maxmimum=2000, v_nominal=230 ]
+V1_0 N001_0 GND_G1 230
+R2_0 N001_0 SHUNT_G1 R={max((230/2000) * V(N001_0, SHUNT_G1), 1u)}
+R1_0 SHUNT_G1 VDC_G1 0.001
+* Component Conduit{industria:insulated_gold_wire} ConduitPos{A=NodePos{block=[7 -60 -5],node=0},B=NodePos{block=[7 -58 -3],node=0}}
 
-.model D_ideal D(Ron=0 Roff=1G Vfwd=0 Vrev=1G)
-*.model source_diosw sw vt=0 vh=0.001 ron=0.001 roff=10e9
-* Component Block{industria:electro_magnetic_coil} BlockPos{x=4, y=-60, z=-13}
-* Junction resistor
-R1_3 node[pos4_-60_-13_id1_lid0_lnml] node[pos4_-60_-13_id0_lid0_lnml] 0.015
-* Junction resistor
-R1_4 node[pos4_-60_-13_id1_lid1_lnmn] node[pos4_-60_-13_id0_lid1_lnmn] 0.015
-* Load-Resistor with fixed power consumtion [ p_nominal=500.0 ]
-* B1_5 node[pos4_-60_-13_id0_lid0_lnml] node[pos4_-60_-13_id0_lid1_lnmn] P=500.0
-R1_5 node[pos4_-60_-13_id0_lid0_lnml] node[pos4_-60_-13_id0_lid1_lnmn] R=max(V(node[pos4_-60_-13_id0_lid0_lnml], node[pos4_-60_-13_id0_lid1_lnmn])**2/500.0, 0.1)
+* Simple resistor for different uses [ r=0.003 ]
+R1_1 VDC_G1 VDC_T1 0.003
 
-R0GND node[pos6_-60_-13_id0_lid0_lnml] 0 1
+* Simple resistor for different uses [ r=0.003 ]
+R1_2 GND_G1 GND_T1 0.003
+* Component Block{industria:electro_magnetic_coil} BlockPos{x=7, y=-58, z=-3}
 
+* DC Voltage converter [n_winding_ratio=0.5, p_maximum=500.0 ]
+R1_3 VDC_T1 GND_T1 R={V(VDC_T1, GND_T1)/-I(B1_3)/0.5}
+R2_3 VDC_T2 N001_3 R={max((V(N001_3, GND_T2)/500.0) * V(N001_3, VDC_T2), 1u)}
+B1_3 N001_3 GND_T2 V={V(VDC_T1, GND_T1)*0.5}
+
+R3_3 GND_T2 GND_T1 1G
+
+R0GND GND_T1 0 1
 .op
 .end

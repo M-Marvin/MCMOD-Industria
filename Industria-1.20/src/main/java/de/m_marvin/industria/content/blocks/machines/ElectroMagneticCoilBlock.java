@@ -1,6 +1,7 @@
 package de.m_marvin.industria.content.blocks.machines;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -77,10 +78,10 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	public Vec3d getFieldVector(Level level, BlockState state, BlockPos blockPos) {
 		Double fieldStength = 0.0;
 		
-		if (level.getBlockEntity(blockPos) instanceof ElectroMagneticCoilBlockEntity coil) {
-			coil = coil.getMaster();
-			fieldStength = coil.getCurrentFieldStrength() / coil.getCoreBlockCount();
-		}
+//		if (level.getBlockEntity(blockPos) instanceof ElectroMagneticCoilBlockEntity coil) {
+//			coil = coil.getMaster();
+//			fieldStength = coil.getCurrentFieldStrength() / coil.getCoreBlockCount();
+//		}
 		
 		switch (state.getValue(BlockStateProperties.AXIS)) {
 		case X: return new Vec3d(fieldStength, 0, 0);
@@ -237,43 +238,23 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			
 			String[] coilLanes = coil.getNodeLanes();
-			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, coilLanes[0], 1, coilLanes[1]);
+			NodePos[] nodes = coil.getConnections();
+			NodePos[] inputNodes = Arrays.copyOfRange(nodes, 0, nodes.length / 2);
+			NodePos[] outputNodes = Arrays.copyOfRange(nodes, nodes.length / 2, nodes.length);
 			
-			String[] wireLanes = coil.getNodeLanes();
+			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, inputNodes, 0, coilLanes[0], 1, coilLanes[1]);
+			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, outputNodes, 0, coilLanes[0], 1, coilLanes[1]);
 			
-			double powerPerBlock = parametrics.getParameter(POWER_PER_BLOCK);
+			double powerPerBlock = coil.getCoreBlockCount() * parametrics.getParameter(POWER_PER_BLOCK);
 			
-			if (coil.isGenerator()) {
-				
-				double targetVoltage = coil.getInducedVoltage();
-				double targetPower = targetVoltage > 0 ? coil.getCoreBlockCount() * powerPerBlock : 0;
-				double targetCurrent = targetVoltage > 0 ? targetPower / targetVoltage : 0; // TODO current limit
-				
-				CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CURRENT_LIMITED_VOLTAGE_SOURCE);
-				templateSource.setProperty("nominal_current", targetCurrent);
-				templateSource.setProperty("nominal_voltage", targetVoltage);
-				templateSource.setNetworkNode("SHUNT", new NodePos(position, 0), 2, "power_shunt");
-				templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, wireLanes[0]);
-				templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, wireLanes[1]);
-				plotter.accept(templateSource);
-				
-			} else {
-				
-				double nominalPower = coil.getMaster().getCoreBlockCount() * powerPerBlock;
-				
-//				CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_POWER_LOAD);
-//				templateSource.setProperty("nominal_power", nominalPower);
-//				templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, wireLanes[0]);
-//				templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, wireLanes[1]);
-//				plotter.accept(templateSource);
-				
-				CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_CURRENT_LOAD);
-				templateSource.setProperty("nominal_current", nominalPower / 230);
-				templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, wireLanes[0]);
-				templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, wireLanes[1]);
-				plotter.accept(templateSource);
-				
-			}
+			CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.TRANSFORMER);
+			templateSource.setProperty("winding_ratio", 0.5); // TODO winding ratio
+			templateSource.setProperty("max_power", powerPerBlock);
+			templateSource.setNetworkNode("VDC_IN", inputNodes[0], 0, coilLanes[0]);
+			templateSource.setNetworkNode("GND_IN", inputNodes[0], 1, coilLanes[1]);
+			templateSource.setNetworkNode("VDC_OUT", outputNodes[0], 0, coilLanes[0]);
+			templateSource.setNetworkNode("GND_OUT", outputNodes[0], 1, coilLanes[1]);
+			plotter.accept(templateSource);
 			
 		}
 	}
@@ -281,7 +262,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	@Override
 	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
 		if (pLevel.getBlockEntity(pPos) instanceof ElectroMagneticCoilBlockEntity coil) {
-			coil.getMaster().updateElectromagnetism();
+			//coil.getMaster().updateElectromagnetism();
 		}
 	}
 	
@@ -466,7 +447,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				}
 				
 				GameUtility.triggerClientSync(pLevel, transformerMaster.getBlockPos());
-				transformerMaster.updateElectromagnetism();
+				//transformerMaster.updateElectromagnetism();
 				
 				return InteractionResult.SUCCESS;
 			}

@@ -13,5 +13,6 @@ public class Circuits {
 	public static final ResourceLocation POWER_LIMITEED_VOLTAGE_SOURCE = new ResourceLocation(IndustriaCore.MODID, "power_limited_voltage_source");
 	public static final ResourceLocation JUNCTION_RESISTOR = new ResourceLocation(IndustriaCore.MODID, "junction_resistor");
 	public static final ResourceLocation RESISTOR = new ResourceLocation(IndustriaCore.MODID, "resistor");
+	public static final ResourceLocation TRANSFORMER = new ResourceLocation(IndustriaCore.MODID, "transformer");
 	
 }

@@ -1,0 +1,5 @@
+{
+	"Properties": [ "id", "winding_ratio", "max_power" ],
+	"Networks": [ "VDC_IN", "GND_IN", "VDC_OUT", "GND_OUT" ],
+	"IdProperty": "id"
+}

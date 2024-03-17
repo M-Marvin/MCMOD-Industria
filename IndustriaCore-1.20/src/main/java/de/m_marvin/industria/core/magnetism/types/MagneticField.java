@@ -319,8 +319,8 @@ public class MagneticField {
 		for (MagneticFieldInfluence influence : this.magneticInfluences) {
 			double d = influence.getMagneticCoefficient() / this.inductionCoefficient / this.magneticInfluences.size();
 			Vec3d externalInduction = this.inducedFieldVector.mul(d);
-			//Vec3d internalInduction = this.fieldVectorLinear.mul(d); TODO internal induction
-			influence.getInducedVector().setI(externalInduction);	
+			Vec3d internalInduction = this.fieldVectorLinear.mul(d);
+			influence.getInducedVector().setI(externalInduction.add(internalInduction));	
 		}
 		
 		// Detect induction field change and notify blocks

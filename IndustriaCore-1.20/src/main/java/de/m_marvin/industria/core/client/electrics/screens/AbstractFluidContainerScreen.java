@@ -11,7 +11,6 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 
-import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.client.util.GraphicsUtility;
 import de.m_marvin.industria.core.util.container.IFluidSlotContainer;
 import de.m_marvin.industria.core.util.container.IFluidSlotContainer.FluidSlot;

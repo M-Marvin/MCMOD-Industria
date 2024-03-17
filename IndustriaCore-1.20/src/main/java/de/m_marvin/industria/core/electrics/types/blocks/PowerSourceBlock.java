@@ -67,8 +67,8 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock,
 			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, sourceLanes[0], 1, sourceLanes[1]);
 			
 			if (source.getPower() > 0) {
-				CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CURRENT_LIMITED_VOLTAGE_SOURCE);
-				templateSource.setProperty("nominal_current", source.getPower() / (double) source.getVoltage());
+				CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.POWER_LIMITEED_VOLTAGE_SOURCE);
+				templateSource.setProperty("max_power", source.getPower());
 				templateSource.setProperty("nominal_voltage", source.getVoltage());
 				templateSource.setNetworkNode("SHUNT", new NodePos(position, 0), 2, "power_shunt");
 				templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, sourceLanes[0]);

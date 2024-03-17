@@ -31,8 +31,6 @@ public class IndustriaCore {
 	
 	public static ArchiveUtility ARCHIVE_ACCESS = null;
 	
-	///E:/GitHub/MCMOD-Industria/IndustriaCore-1.20/bin/main/%23202!/
-	///E:/GitHub/MCMOD-Industria/IndustriaCore-1.20/build/libs/industriacore-1.0.0-mojmap.jar%23199!/
 	static {
 		String codeSourcePath = IndustriaCore.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		Pattern filePathPattern = Pattern.compile("\\/([^\"*?<>|]*)[%#][0-9]{1,}!\\/");

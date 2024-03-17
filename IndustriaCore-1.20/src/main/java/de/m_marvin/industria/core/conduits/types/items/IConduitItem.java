@@ -31,7 +31,6 @@ public interface IConduitItem {
 			int nearestNode = -1;
 			double distance = 2;
 			
-			// TODO rework code
 			IConduitConnector connector = (IConduitConnector) nodeState.getBlock();
 			BlockPos masterPos = connector.getConnectorMasterPos(level, pos, nodeState);
 			BlockState masterState = level.getBlockState(masterPos);
@@ -61,8 +60,7 @@ public interface IConduitItem {
 		Direction face = context.getClickedFace();
 		BlockState clickedState = level.getBlockState(clicked);
 		if (clickedState.getBlock() instanceof IConduitConnector connector) {
-
-			// TODO rework code
+			
 			BlockPos masterPos = connector.getConnectorMasterPos(level, clicked, clickedState);
 			BlockState masterState = level.getBlockState(masterPos);
 			if (!masterPos.equals(clicked) && masterState.getBlock() instanceof IConduitConnector masterConnector) {
@@ -77,8 +75,7 @@ public interface IConduitItem {
 		} else {
 			clickedState = level.getBlockState(clicked.relative(face.getOpposite()));
 			if (clickedState.getBlock() instanceof IConduitConnector connector) {
-
-				// TODO rework code
+				
 				BlockPos masterPos = connector.getConnectorMasterPos(level, clicked, clickedState);
 				BlockState masterState = level.getBlockState(masterPos);
 				if (!masterPos.equals(clicked) && masterState.getBlock() instanceof IConduitConnector masterConnector) {

@@ -39,8 +39,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class BlockParametricsManager extends SimplePreparableReloadListener<Map<ResourceLocation, BlockParametrics>> {
 	
-	// TODO typo in load message
-	
 	private static final Logger LOGGER = IndustriaCore.LOGGER;
 	private static final String PATH_JSON_SUFIX = ".json";
 	

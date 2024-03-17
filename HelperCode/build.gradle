@@ -44,21 +44,21 @@ configurations {
 dependencies {
 	
 	// LWJGL
-	shade "org.lwjgl:lwjgl::$lwjglNatives"
-	shade "org.lwjgl:lwjgl-glfw::$lwjglNatives"
-	shade "org.lwjgl:lwjgl-opengl::$lwjglNatives"
+	//shade "org.lwjgl:lwjgl::$lwjglNatives"
+	//shade "org.lwjgl:lwjgl-glfw::$lwjglNatives"
+	//shade "org.lwjgl:lwjgl-opengl::$lwjglNatives"
 	
 	// CommandLineParser
 	shade 'com.github.M-Marvin:LIBRARY-CommandLineParser:main-SNAPSHOT'
 	
 	// OpenUI
-	shade 'com.github.M-Marvin:LIBRARY-OpenUI:main-SNAPSHOT'
+	//shade 'com.github.M-Marvin:LIBRARY-OpenUI:main-SNAPSHOT'
 	
 	// GSON
-	shade "com.google.code.gson:gson:2.9.1"
+	implementation "com.google.code.gson:gson:2.9.1"
 	
 	// UnifiedVectors
-	shade 'com.github.M-Marvin:LIBRARY-UnifiedVectors:main-SNAPSHOT'
+	//shade 'com.github.M-Marvin:LIBRARY-UnifiedVectors:main-SNAPSHOT'
 	
 	// NGLink
 	shade 'com.github.M-Marvin:LIBRARY-NGLink:main-SNAPSHOT'
@@ -67,9 +67,9 @@ dependencies {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'de.m_marvin.filevarianthelper.FileVariantHelper'
+        attributes 'Main-Class': 'de.m_marvin.UtilityTools'
         attributes 'Implementation-Version': '0.1 - alpha'
-        attributes 'Implementation-Title': 'File Variant Helper'
+        attributes 'Implementation-Title': 'Utility Tools'
         attributes 'Implementation-Vendor-Id': 'de.m_marvin'
     }
 }

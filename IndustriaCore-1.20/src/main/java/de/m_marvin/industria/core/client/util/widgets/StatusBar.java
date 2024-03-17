@@ -1,6 +1,5 @@
 package de.m_marvin.industria.core.client.util.widgets;
 
-import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.client.util.GraphicsUtility;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;

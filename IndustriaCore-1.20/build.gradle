@@ -245,17 +245,28 @@ task mojmapJar(type: ShadowJar) {
   configurations = [project.configurations.shade]
 }
 
+task sourcesJar(type: Jar, dependsOn: classes) {
+  archiveClassifier.set("sources")
+  from sourceSets.main.allSource
+}
+
 assemble.dependsOn shadowJar
 
 reobf {
     shadowJar {}
 }
 
+java {
+    withSourcesJar()
+}
+
 // Example configuration to allow publishing using the maven-publish plugin
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
-            artifact jar
+            artifact shadowJar
+            artifact mojmapJar
+            artifact sourcesJar
         }
     }
     repositories {

@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "industria:block/machines/transformer_core",
-		"particle": "industria:block/machines/transformer_core"
+		"0": "industria:block/machines/transformer_output",
+		"particle": "industria:block/machines/transformer_output"
 	},
 	"elements": [
 		{

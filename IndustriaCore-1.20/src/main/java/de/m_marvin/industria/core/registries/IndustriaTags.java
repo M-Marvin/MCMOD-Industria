@@ -26,6 +26,7 @@ public class IndustriaTags {
 
 		public static final TagKey<Item> CONDUITS = tag("conduits");
 		public static final TagKey<Item> SCREW_DRIVERS = tag("screw_drivers");
+		public static final TagKey<Item> CUTTERS = tag("cutters");
 		
 		private static TagKey<Item> tag(String name) {
 			return ItemTags.create(new ResourceLocation(IndustriaCore.MODID, name));

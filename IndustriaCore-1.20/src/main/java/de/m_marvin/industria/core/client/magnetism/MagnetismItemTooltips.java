@@ -35,7 +35,7 @@ public class MagnetismItemTooltips {
 					event.getToolTip().add(Formatter.build().appand(Component.translatable("industriacore.tooltip.magneticblock.coefficient", magnetic.getCoefficient(event.getEntity().level(), block.defaultBlockState(), BlockPos.ZERO))).withStyle(ChatFormatting.GRAY).component());
 				} else {
 					BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(block);	
-					event.getToolTip().add(Formatter.build().appand(Component.translatable("industriacore.tooltip.electricblock.coefficient", parametrics.getMagneticCoefficient())).withStyle(ChatFormatting.GRAY).component());
+					event.getToolTip().add(Formatter.build().appand(Component.translatable("industriacore.tooltip.magneticblock.coefficient", parametrics.getMagneticCoefficient())).withStyle(ChatFormatting.GRAY).component());
 				}
 				
 			}

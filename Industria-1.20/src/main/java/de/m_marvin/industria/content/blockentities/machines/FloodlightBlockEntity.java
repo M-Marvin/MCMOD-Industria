@@ -107,7 +107,7 @@ public class FloodlightBlockEntity extends BlockEntity implements MenuProvider, 
 		if (getBlockState().getValue(BlockStateProperties.LIT) != shouldLit) setLightState(shouldLit);
 		
 		if (this.level.random.nextFloat() < parametrics.getExplodeChance(voltageP, powerP)) {
-			System.err.println("BOOM!"); // TODO
+			System.err.println("BOOM!"); // TODO machine damage
 			
 		}
 		

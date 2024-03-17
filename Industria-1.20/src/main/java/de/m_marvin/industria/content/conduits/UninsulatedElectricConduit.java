@@ -10,7 +10,7 @@ public class UninsulatedElectricConduit extends ElectricConduit {
 
 	public UninsulatedElectricConduit(ConduitType type, double resistance, Item item, ResourceLocation texture, SoundType sound) {
 		super(type, item, texture, sound, 1, resistance);
-		// TODO Auto-generated constructor stub
+		// TODO behavior conduits
 	}
 	
 }

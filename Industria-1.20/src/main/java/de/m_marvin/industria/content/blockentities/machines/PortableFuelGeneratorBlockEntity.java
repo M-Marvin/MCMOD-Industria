@@ -129,7 +129,7 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 	
 	@Override
 	public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-		return GameUtility.openJunctionScreenOr(this, pContainerId, pPlayer, pPlayerInventory, () -> new PortableFuelGeneratorContainer(pContainerId, pPlayerInventory, this)); // TODO
+		return GameUtility.openJunctionScreenOr(this, pContainerId, pPlayer, pPlayerInventory, () -> new PortableFuelGeneratorContainer(pContainerId, pPlayerInventory, this));
 	}
 	
 	@Override

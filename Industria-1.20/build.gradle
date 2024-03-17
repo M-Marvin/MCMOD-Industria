@@ -147,7 +147,7 @@ repositories {
         name = 'Kotlin for Forge'
         url = 'https://thedarkcolour.github.io/KotlinForForge/'
     }
-	flatDir dirs: ["../IndustriaCore-1.20/build/libs"]
+    mavenLocal()
 }
 
 configurations {
@@ -174,7 +174,7 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-annotations:2.13.3"
     
     // Industria Core
- 	implementation "industria:industriacore:1.0.0-mojmap"
+ 	implementation "de.m_marvin.industria:IndustriaCore-1.20:1.0.0:mojmap"
  	
  	// Lib Dependencies
 	//implementation("com.github.M-Marvin:LIBRARY-NGLink:$nglink_version")

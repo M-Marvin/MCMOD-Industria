@@ -58,7 +58,7 @@ public class ModBlocks {
 	public static final RegistryObject<Block> PORTABLE_COAL_GENERATOR			= BLOCKS.register("portable_coal_generator", () -> new PortableCoalGeneratorBlock(Properties.of().strength(3.5F, 3.5F)));
 	public static final RegistryObject<Block> IONIC_THRUSTER					= BLOCKS.register("ionic_thruster", () -> new IonicThrusterBlock(Properties.of().strength(2, 1.5F)));
 	
-	public static final RegistryObject<Block> REDSTONE_TRANSISTOR				= BLOCKS.register("redstone_transistor", () -> new TransistorBlock(Properties.of().strength(0, 12))); // TODO
+	public static final RegistryObject<Block> REDSTONE_TRANSISTOR				= BLOCKS.register("redstone_transistor", () -> new TransistorBlock(Properties.of().strength(0, 12)));
 	
 	public static final RegistryObject<Block> RAW_ZINC_BLOCK					= BLOCKS.register("raw_zinc_block", () -> new Block(Properties.of().strength(5, 6)));
 	public static final RegistryObject<Block> RAW_LEAD_BLOCK					= BLOCKS.register("raw_lead_block", () -> new Block(Properties.of().strength(5, 6)));

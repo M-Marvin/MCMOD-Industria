@@ -44,7 +44,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectricBlock, IElectricInfoProvider {
-
+	
 	public static final NodePointSupplier NODES = NodePointSupplier.define()
 			.addNode(NodeTypes.ELECTRIC, 2, new Vec3i(8, 16, 5))
 			.addModifier(BlockStateProperties.ATTACH_FACE, NodePointSupplier.ATTACH_FACE_MODIFIER_DEFAULT_WALL)
@@ -99,7 +99,7 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 	
 	@Override
 	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
-		if (level.getBlockEntity(position) instanceof IonicThrusterBlockEntity thruster) { // TODO
+		if (level.getBlockEntity(position) instanceof IonicThrusterBlockEntity thruster) {
 			
 			String[] thrusterLanes = thruster.getNodeLanes();
 			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, thrusterLanes[0], 1, thrusterLanes[1]);
@@ -108,8 +108,9 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 			int targetVoltage = parametrics.getNominalVoltage();
 			int targetPower = parametrics.getNominalPower();
 			
-			CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_CURRENT_LOAD);
-			templateSource.setProperty("nominal_current", targetPower / (double) targetVoltage);
+			CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_POWER_LOAD);
+			templateSource.setProperty("nominal_power", targetPower);
+			templateSource.setProperty("min_resistance", targetVoltage / (targetPower / (double) targetVoltage) * 0.9);
 			templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, thrusterLanes[0]);
 			templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, thrusterLanes[1]);
 			plotter.accept(templateSource);
@@ -158,12 +159,9 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 				int maxThrust = getThrust(pLevel, pPos, pState);
 				double thrust = powerP * maxThrust;
 				
-				// TODO triggers force inducer setup
 				ServerShip contraption = (ServerShip) PhysicUtility.getContraptionOfBlock(pLevel, pPos);
 				if (contraption != null) {
 					ThrusterInducer inducer = PhysicUtility.getOrCreateForceInducer(pLevel, contraption, ThrusterInducer.class);
-					
-					// TODO Force inducer gets not saved
 					inducer.setThruster(pPos, thrust);
 				}
 				

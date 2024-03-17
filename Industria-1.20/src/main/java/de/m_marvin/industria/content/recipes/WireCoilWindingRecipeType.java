@@ -42,15 +42,15 @@ public class WireCoilWindingRecipeType implements CraftingRecipe {
 		Item wireCoil = ForgeRegistries.ITEMS.getValue(wireCoilName);
 		
 		if (conduitItem == null) {
-			Industria.LOGGER.warn("Could net deserialize recipe " + id + ", uknown conduit item: " + conduitItemName);
+			Industria.LOGGER.warn("Could not deserialize recipe " + id + ", uknown conduit item: " + conduitItemName);
 			return null;
 		}
 		if (emptyCoil == null) {
-			Industria.LOGGER.warn("Could net deserialize recipe " + id + ", uknown coil item: " + emptyCoilName);
+			Industria.LOGGER.warn("Could not deserialize recipe " + id + ", uknown coil item: " + emptyCoilName);
 			return null;
 		}
 		if (wireCoil == null) {
-			Industria.LOGGER.warn("Could net deserialize recipe " + id + ", uknown wire coil item: " + wireCoilName);
+			Industria.LOGGER.warn("Could not deserialize recipe " + id + ", uknown wire coil item: " + wireCoilName);
 			return null;
 		}
 		return new WireCoilWindingRecipeType(id, conduitItem, emptyCoil, wireCoil);
@@ -171,7 +171,6 @@ public class WireCoilWindingRecipeType implements CraftingRecipe {
 
 	@Override
 	public NonNullList<Ingredient> getIngredients() {
-		// TODO Auto-generated method stub
 		return CraftingRecipe.super.getIngredients();
 	}
 	

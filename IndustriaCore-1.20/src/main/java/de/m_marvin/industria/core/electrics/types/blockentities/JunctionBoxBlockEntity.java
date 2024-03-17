@@ -136,10 +136,10 @@ public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider,
 		if (state.getBlock() instanceof IElectricBlock connectorBlock) {
 			Level level = this.getJunctionLevel();
 			
-			// TODO check if working
 			BlockPos masterPos = connectorBlock.getConnectorMasterPos(level, position, state);
 			if (!masterPos.equals(position) && level.getBlockState(masterPos).getBlock() instanceof IElectricBlock masterBlock) {
 				state = level.getBlockState(masterPos);
+				position = masterPos;
 				connectorBlock = masterBlock;
 			}
 			

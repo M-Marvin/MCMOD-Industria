@@ -88,11 +88,11 @@ public class ElectricNetwork {
 	}
 	
 	public void plotComponentDescriptor(Component<?, ?, ?> component) {
-		this.circuitBuilder.append("* Component " + component.type().toString() + " " + component.pos().toString() + "\n");
+		this.circuitBuilder.append("\n* Component " + component.type().toString() + " " + component.pos().toString() + "\n");
 	}
 	
 	public void plotTemplate(Component<?, ?, ?> component, ICircuitPlot template) {
-		template.prepare(templateCounter++); // TODO device duplication bug
+		template.prepare(templateCounter++);
 		this.circuitBuilder.append(template.plot());
 		if (this.groundNode == null) this.groundNode = template.getAnyNode();
 	}

@@ -9,23 +9,28 @@ import de.m_marvin.industria.content.blockentities.machines.ElectroMagneticCoilB
 import de.m_marvin.industria.content.registries.ModBlockStateProperties;
 import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.content.registries.ModTags;
+import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
+import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
+import de.m_marvin.industria.core.magnetism.MagnetismUtility;
 import de.m_marvin.industria.core.magnetism.types.blocks.IMagneticBlock;
 import de.m_marvin.industria.core.parametrics.BlockParametrics;
 import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
 import de.m_marvin.industria.core.parametrics.properties.DoubleParameter;
 import de.m_marvin.industria.core.registries.Circuits;
+import de.m_marvin.industria.core.registries.IndustriaTags;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.industria.core.util.blocks.IBaseEntityDynamicMultiBlock;
 import de.m_marvin.univec.impl.Vec3d;
+import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -58,7 +63,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEntityDynamicMultiBlock, IElectricBlock, IMagneticBlock, SimpleWaterloggedBlock {
 	
-	public static final DoubleParameter MAGNETIC_FIELD_STRENGTH = new DoubleParameter("magneticFieldStrengthPerVolt", 1.0);
+	public static final DoubleParameter MAGNETIC_FIELD_STRENGTH = new DoubleParameter("magneticFieldStrengthPerWatt", 0.01);
+	public static final DoubleParameter MAGNET_CURRENT = new DoubleParameter("magnetCurrent", 10);
 	public static final DoubleParameter POWER_PER_BLOCK = new DoubleParameter("electricPowerPerBlock", 500.0);
 	public static final int CONNECTION_PER_NODE = 1;
 	
@@ -76,19 +82,24 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	
 	@Override
 	public Vec3d getFieldVector(Level level, BlockState state, BlockPos blockPos) {
-		Double fieldStength = 0.0;
-		
-//		if (level.getBlockEntity(blockPos) instanceof ElectroMagneticCoilBlockEntity coil) {
-//			coil = coil.getMaster();
-//			fieldStength = coil.getCurrentFieldStrength() / coil.getCoreBlockCount();
-//		}
-		
-		switch (state.getValue(BlockStateProperties.AXIS)) {
-		case X: return new Vec3d(fieldStength, 0, 0);
-		case Y: return new Vec3d(0, fieldStength, 0);
-		case Z: return new Vec3d(0, 0, fieldStength);
-		default: return new Vec3d();
+		if (level.getBlockEntity(blockPos) instanceof ElectroMagneticCoilBlockEntity coil) {
+			coil = coil.getMaster();
+			if (coil.getWindingsSecundary() == 0) {
+				
+				String[] coilLanes = coil.getNodeLanes();
+				NodePos nodeInput = coil.getConnections()[0];
+				BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
+				
+				double voltage = ElectricUtility.getVoltageBetween(level, nodeInput, nodeInput, 0, 1, coilLanes[0], coilLanes[1]);
+				double powerIn = voltage * parametrics.getParameter(MAGNET_CURRENT);
+				double fieldStrength = powerIn * parametrics.getParameter(MAGNETIC_FIELD_STRENGTH);
+				
+				Direction facing = state.getValue(BlockStateProperties.FACING);
+				return Vec3d.fromVec(facing.getNormal()).mul(fieldStrength);
+				
+			}
 		}
+		return new Vec3d(0, 0, 0);
 	}
 	
 	@Override
@@ -109,6 +120,15 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	}
 	
 	@Override
+	public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
+		if (pLevel.getBlockEntity(pPos) instanceof ElectroMagneticCoilBlockEntity coil) {
+			if (coil.isMaster()) {
+				coil.dropWires();
+			}
+		}
+	}
+	
+	@Override
 	public RenderShape getRenderShape(BlockState pState) {
 		return RenderShape.MODEL;
 	}
@@ -116,6 +136,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> pBuilder) {
 		super.createBlockStateDefinition(pBuilder);
+		pBuilder.add(BlockStateProperties.FACING);
 		pBuilder.add(BlockStateProperties.NORTH);
 		pBuilder.add(BlockStateProperties.SOUTH);
 		pBuilder.add(BlockStateProperties.EAST);
@@ -123,17 +144,16 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 		pBuilder.add(BlockStateProperties.DOWN);
 		pBuilder.add(BlockStateProperties.UP);
 		pBuilder.add(ModBlockStateProperties.CORE);
-		pBuilder.add(BlockStateProperties.FACING);
-		pBuilder.add(BlockStateProperties.AXIS);
+		pBuilder.add(ModBlockStateProperties.CONNECT);
 		pBuilder.add(BlockStateProperties.WATERLOGGED);
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext pContext) {
 		Direction attachFace = pContext.getClickedFace().getOpposite();
-		Axis axis = pContext.getNearestLookingDirection().getAxis();
+		Direction facing = pContext.getNearestLookingDirection();
 		BlockState attachState = pContext.getLevel().getBlockState(pContext.getClickedPos().relative(attachFace));
-		if (attachState.getBlock() instanceof ElectroMagneticCoilBlock) axis = attachState.getValue(BlockStateProperties.AXIS);
+		if (attachState.getBlock() instanceof ElectroMagneticCoilBlock) facing = attachState.getValue(BlockStateProperties.FACING);
 		return super.getStateForPlacement(pContext)
 				.setValue(BlockStateProperties.NORTH, false)
 				.setValue(BlockStateProperties.SOUTH, false)
@@ -142,16 +162,15 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				.setValue(BlockStateProperties.DOWN, false)
 				.setValue(BlockStateProperties.UP, false)
 				.setValue(ModBlockStateProperties.CORE, true)
-				.setValue(BlockStateProperties.FACING, attachFace)
-				.setValue(BlockStateProperties.AXIS, axis);
+				.setValue(BlockStateProperties.FACING, facing)
+				.setValue(ModBlockStateProperties.CONNECT, attachFace);
 	}
 	
 	@Override
 	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-		switch (pState.getValue(BlockStateProperties.AXIS)) {
+		switch (pState.getValue(BlockStateProperties.FACING).getAxis()) {
 		case Y:
 			return Shapes.or(
-					// TODO
 					pState.getValue(ModBlockStateProperties.CORE) ? CORE_SHAPE : Shapes.empty(),
 					!pState.getValue(BlockStateProperties.UP) ? UP_SHAPE : Shapes.empty(),
 					!pState.getValue(BlockStateProperties.DOWN) ? DOWN_SHAPE : Shapes.empty(),
@@ -242,19 +261,38 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 			NodePos[] inputNodes = Arrays.copyOfRange(nodes, 0, nodes.length / 2);
 			NodePos[] outputNodes = Arrays.copyOfRange(nodes, nodes.length / 2, nodes.length);
 			
-			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, inputNodes, 0, coilLanes[0], 1, coilLanes[1]);
-			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, outputNodes, 0, coilLanes[0], 1, coilLanes[1]);
 			
-			double powerPerBlock = coil.getCoreBlockCount() * parametrics.getParameter(POWER_PER_BLOCK);
-			
-			CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.TRANSFORMER);
-			templateSource.setProperty("winding_ratio", 0.5); // TODO winding ratio
-			templateSource.setProperty("max_power", powerPerBlock);
-			templateSource.setNetworkNode("VDC_IN", inputNodes[0], 0, coilLanes[0]);
-			templateSource.setNetworkNode("GND_IN", inputNodes[0], 1, coilLanes[1]);
-			templateSource.setNetworkNode("VDC_OUT", outputNodes[0], 0, coilLanes[0]);
-			templateSource.setNetworkNode("GND_OUT", outputNodes[0], 1, coilLanes[1]);
-			plotter.accept(templateSource);
+			if (coil.getWindingsPrimary() > 0 && coil.getWindingsSecundary() > 0) {
+				
+				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, inputNodes, 0, coilLanes[0], 1, coilLanes[1]);
+				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, outputNodes, 0, coilLanes[0], 1, coilLanes[1]);
+				
+				double maxPower = coil.getCoreBlockCount() * parametrics.getParameter(POWER_PER_BLOCK);
+				double windingRatio = coil.getWindingsSecundary() / (double) coil.getWindingsPrimary();
+				
+				CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.TRANSFORMER);
+				templateSource.setProperty("winding_ratio", windingRatio);
+				templateSource.setProperty("max_power", maxPower);
+				templateSource.setNetworkNode("VDC_IN", inputNodes[0], 0, coilLanes[0]);
+				templateSource.setNetworkNode("GND_IN", inputNodes[0], 1, coilLanes[1]);
+				templateSource.setNetworkNode("VDC_OUT", outputNodes[0], 0, coilLanes[0]);
+				templateSource.setNetworkNode("GND_OUT", outputNodes[0], 1, coilLanes[1]);
+				plotter.accept(templateSource);
+				
+			} else if (coil.getWindingsPrimary() > 0) {
+				
+				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, nodes, 0, coilLanes[0], 1, coilLanes[1]);
+				
+				double factor = coil.getWindingsPrimary() / (double) coil.getMaxWindings();
+				double current = parametrics.getParameter(MAGNET_CURRENT);
+				
+				CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_CURRENT_LOAD);
+				templateSource.setProperty("nominal_current", factor * current);
+				templateSource.setNetworkNode("VDC", inputNodes[0], 0, coilLanes[0]);
+				templateSource.setNetworkNode("GND", inputNodes[0], 1, coilLanes[1]);
+				plotter.accept(templateSource);
+				
+			}
 			
 		}
 	}
@@ -262,7 +300,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	@Override
 	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
 		if (pLevel.getBlockEntity(pPos) instanceof ElectroMagneticCoilBlockEntity coil) {
-			//coil.getMaster().updateElectromagnetism();
+			MagnetismUtility.updateField(pLevel, pPos);
 		}
 	}
 	
@@ -278,11 +316,11 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 			if (
 				state.getBlock() instanceof ElectroMagneticCoilBlock && 
 				originState.getBlock() instanceof ElectroMagneticCoilBlock && 
-				state.getValue(BlockStateProperties.AXIS) != originState.getValue(BlockStateProperties.AXIS)
+				state.getValue(BlockStateProperties.FACING) != originState.getValue(BlockStateProperties.FACING)
 					) return true;
 		}
 		if (depth >= limit || connectedBlocks.size() > limit) return false;
-		Direction attachFacing = state.getValue(BlockStateProperties.FACING);
+		Direction attachFacing = state.getValue(ModBlockStateProperties.CONNECT);
 		if (attachFacing.getOpposite() != relative && !attached) return true;
 		connectedBlocks.add(pos);
 		for (Direction d : Direction.values()) {
@@ -315,7 +353,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 
 			BlockPos min = connectedBlocks.stream().reduce(MathUtility::getMinCorner).get();
 			BlockPos max = connectedBlocks.stream().reduce(MathUtility::getMaxCorner).get();
-			Axis axis = state.getValue(BlockStateProperties.AXIS);
+			Axis axis = state.getValue(BlockStateProperties.FACING).getAxis();
 			
 			boolean hasChanged = false;
 			outer: for (int y = min.getY(); y <= max.getY(); y++) {
@@ -332,7 +370,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 							case Y: outerBlock = x == min.getX() || x == max.getX() || z == min.getZ() || z == max.getZ();
 							case Z: outerBlock = x == min.getX() || x == max.getX() || y == min.getY() || y == max.getY();
 							}
-							// TODO
+							
 							BlockState connectedState = state2
 									.setValue(BlockStateProperties.NORTH, z == min.getZ() ? false : outerBlock)
 									.setValue(BlockStateProperties.SOUTH, z == max.getZ() ? false : outerBlock)
@@ -360,6 +398,10 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				// Reset all masters and drop items
 				for (BlockPos pos2 : connectedBlocks) {
 					if (level.getBlockEntity(pos2) instanceof ElectroMagneticCoilBlockEntity transformer) {
+						if (transformer.isMaster()) {
+							List<ConduitEntity> conduits = ConduitUtility.getConduitsAtBlock(level, transformer.getBlockPos());
+							conduits.forEach(c -> ConduitUtility.removeConduit(level, c.getPosition(), true));
+						}
 						transformer.setMaster(false);
 						transformer.dropWires();
 						GameUtility.triggerClientSync(level, pos2);
@@ -423,33 +465,96 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
 		if (pLevel.getBlockEntity(pPos) instanceof ElectroMagneticCoilBlockEntity transformer) {
 			ElectroMagneticCoilBlockEntity transformerMaster = transformer.getMaster();
-			ItemStack wireItem = pPlayer.getMainHandItem();
+			ItemStack handItem = pPlayer.getItemInHand(pHand);
 			int wiresPerWinding = transformerMaster.getWiresPerWinding();
 			
-			boolean hitSide = pState.getValue(BlockStateProperties.AXIS) != pHit.getDirection().getAxis();
+			boolean hitSide = pState.getValue(BlockStateProperties.FACING).getAxis() != pHit.getDirection().getAxis();
 			
-			if (hitSide && transformerMaster.isValidWireItem(wireItem) && wireItem.getCount() >= wiresPerWinding && transformerMaster.getWindings() < transformer.getMaxWindings()) {
+			if (hitSide) {
 				
-				ItemStack wires = transformerMaster.getWires();
-				if (wires.isEmpty()) {
-					wires = wireItem.copy();
-					wires.setCount(wiresPerWinding);
-				} else {
-					wires.grow(wiresPerWinding);
+				if (handItem.is(IndustriaTags.Items.CUTTERS) && (transformerMaster.getWindingsPrimary() + transformerMaster.getWindingsSecundary()) > 0) {
+					
+					ItemStack drops = ItemStack.EMPTY;
+					if (transformerMaster.getWiresSecundary().getCount() > 0) {
+						ItemStack wires = transformerMaster.getWiresSecundary();
+						int removedCount = Math.min(wires.getCount(), transformerMaster.getWiresPerWinding());
+						drops = wires.copy();
+						drops.setCount(removedCount);
+						wires.shrink(removedCount);
+					} else if (transformerMaster.getWiresPrimary().getCount() > 0) {
+						ItemStack wires = transformerMaster.getWiresPrimary();
+						int removedCount = Math.min(wires.getCount(), transformerMaster.getWiresPerWinding());
+						drops = wires.copy();
+						drops.setCount(removedCount);
+						wires.shrink(removedCount);
+					}
+					
+					if (!drops.isEmpty()) {
+						
+						GameUtility.dropItem(pLevel, drops, Vec3f.fromVec(pPos.relative(pHit.getDirection())).add(0.5F, 0.5F, 0.5F), 0.5F, 0.5F);
+						
+						// TODO cutter sound
+//						SoundType soundType = transformerMaster.getWireConduitPrimary().getSoundType();
+//						pLevel.playLocalSound(pPos.getX(), pPos.getY(), pPos.getZ(), soundType.getBreakSound(), SoundSource.BLOCKS, soundType.getVolume(), soundType.getPitch(), false);
+						
+						if (!pPlayer.isCreative()) {
+							handItem.hurtAndBreak(1, pPlayer, (p) -> {});
+						}
+						
+						ElectricUtility.updateNetwork(pLevel, transformerMaster.getBlockPos());
+						GameUtility.triggerClientSync(pLevel, transformerMaster.getBlockPos());
+						
+						return InteractionResult.SUCCESS;
+						
+					}
+					
+				} else if (handItem.getCount() >= wiresPerWinding && (transformerMaster.getWindingsPrimary() + transformerMaster.getWindingsSecundary()) < transformer.getMaxWindings()) {
+					
+					boolean inserted = false;
+					if (transformerMaster.isValidWireItemPrimary(handItem)) {
+						ItemStack wires = transformerMaster.getWiresPrimary();
+						if (wires.isEmpty()) {
+							wires = handItem.copy();
+							wires.setCount(wiresPerWinding);
+						} else {
+							wires.grow(wiresPerWinding);
+						}
+						transformerMaster.setWiresPrimary(wires);
+						inserted = true;
+					} else if (transformerMaster.isValidWireItemSecundary(handItem)) {
+						ItemStack wires = transformerMaster.getWiresSecundary();
+						if (wires.isEmpty()) {
+							wires = handItem.copy();
+							wires.setCount(wiresPerWinding);
+						} else {
+							wires.grow(wiresPerWinding);
+						}
+						transformerMaster.setWiresSecundary(wires);
+						inserted = true;
+					}
+					
+					if (inserted) {
+						
+						SoundType soundType = transformerMaster.getWireConduitPrimary().getSoundType();
+						pLevel.playLocalSound(pPos.getX(), pPos.getY(), pPos.getZ(), soundType.getBreakSound(), SoundSource.BLOCKS, soundType.getVolume(), soundType.getPitch(), false);
+
+						// TODO cutter sound
+//						SoundType soundType = transformerMaster.getWireConduitPrimary().getSoundType();
+//						pLevel.playLocalSound(pPos.getX(), pPos.getY(), pPos.getZ(), soundType.getBreakSound(), SoundSource.BLOCKS, soundType.getVolume(), soundType.getPitch(), false);
+						
+						if (!pPlayer.isCreative()) {
+							handItem.shrink(wiresPerWinding);
+						}
+						
+						ElectricUtility.updateNetwork(pLevel, transformerMaster.getBlockPos());
+						GameUtility.triggerClientSync(pLevel, transformerMaster.getBlockPos());
+						
+						return InteractionResult.SUCCESS;
+						
+					}
+					
 				}
-				transformerMaster.setWires(wires);
 				
-				SoundType soundType = transformerMaster.getWireConduit().getSoundType();
-				pLevel.playLocalSound(pPos.getX(), pPos.getY(), pPos.getZ(), soundType.getBreakSound(), SoundSource.BLOCKS, soundType.getVolume(), soundType.getPitch(), false);
-				
-				if (!pPlayer.isCreative()) {
-					wireItem.shrink(wiresPerWinding);
-				}
-				
-				GameUtility.triggerClientSync(pLevel, transformerMaster.getBlockPos());
-				//transformerMaster.updateElectromagnetism();
-				
-				return InteractionResult.SUCCESS;
 			}
 		}
 		return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
@@ -461,15 +566,15 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 		 case CLOCKWISE_180:
 			return pState.setValue(BlockStateProperties.NORTH, pState.getValue(BlockStateProperties.SOUTH)).setValue(BlockStateProperties.EAST, pState.getValue(BlockStateProperties.WEST)).setValue(BlockStateProperties.SOUTH, pState.getValue(BlockStateProperties.NORTH)).setValue(BlockStateProperties.WEST, pState.getValue(BlockStateProperties.EAST))
 					.setValue(BlockStateProperties.FACING, pRotation.rotate(pState.getValue(BlockStateProperties.FACING)))
-					.setValue(BlockStateProperties.AXIS, GameUtility.rotate(pRotation, pState.getValue(BlockStateProperties.AXIS)));
+					.setValue(ModBlockStateProperties.CONNECT, pRotation.rotate(pState.getValue(ModBlockStateProperties.CONNECT)));
 		 case COUNTERCLOCKWISE_90:
 			return pState.setValue(BlockStateProperties.NORTH, pState.getValue(BlockStateProperties.EAST)).setValue(BlockStateProperties.EAST, pState.getValue(BlockStateProperties.SOUTH)).setValue(BlockStateProperties.SOUTH, pState.getValue(BlockStateProperties.WEST)).setValue(BlockStateProperties.WEST, pState.getValue(BlockStateProperties.NORTH))
 					.setValue(BlockStateProperties.FACING, pRotation.rotate(pState.getValue(BlockStateProperties.FACING)))
-					.setValue(BlockStateProperties.AXIS, GameUtility.rotate(pRotation, pState.getValue(BlockStateProperties.AXIS)));
+					.setValue(ModBlockStateProperties.CONNECT, pRotation.rotate(pState.getValue(ModBlockStateProperties.CONNECT)));
 		 case CLOCKWISE_90:
 			return pState.setValue(BlockStateProperties.NORTH, pState.getValue(BlockStateProperties.WEST)).setValue(BlockStateProperties.EAST, pState.getValue(BlockStateProperties.NORTH)).setValue(BlockStateProperties.SOUTH, pState.getValue(BlockStateProperties.EAST)).setValue(BlockStateProperties.WEST, pState.getValue(BlockStateProperties.SOUTH))
 					.setValue(BlockStateProperties.FACING, pRotation.rotate(pState.getValue(BlockStateProperties.FACING)))
-					.setValue(BlockStateProperties.AXIS, GameUtility.rotate(pRotation, pState.getValue(BlockStateProperties.AXIS)));
+					.setValue(ModBlockStateProperties.CONNECT, pRotation.rotate(pState.getValue(ModBlockStateProperties.CONNECT)));
 		 default:
 			return pState;
 		}
@@ -480,10 +585,12 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 		switch (pMirror) {
 			case LEFT_RIGHT:
 				return pState.setValue(BlockStateProperties.NORTH, pState.getValue(BlockStateProperties.SOUTH)).setValue(BlockStateProperties.SOUTH, pState.getValue(BlockStateProperties.NORTH))
-						.setValue(BlockStateProperties.FACING, pMirror.mirror(pState.getValue(BlockStateProperties.FACING)));
+						.setValue(BlockStateProperties.FACING, pMirror.mirror(pState.getValue(BlockStateProperties.FACING)))
+						.setValue(ModBlockStateProperties.CONNECT, pMirror.mirror(pState.getValue(ModBlockStateProperties.CONNECT)));
 			case FRONT_BACK:
 				return pState.setValue(BlockStateProperties.EAST, pState.getValue(BlockStateProperties.WEST)).setValue(BlockStateProperties.WEST, pState.getValue(BlockStateProperties.EAST))
-						.setValue(BlockStateProperties.FACING, pMirror.mirror(pState.getValue(BlockStateProperties.FACING)));
+						.setValue(BlockStateProperties.FACING, pMirror.mirror(pState.getValue(BlockStateProperties.FACING)))
+						.setValue(ModBlockStateProperties.CONNECT, pMirror.mirror(pState.getValue(ModBlockStateProperties.CONNECT)));
 			default:
 				return pState;
 		}

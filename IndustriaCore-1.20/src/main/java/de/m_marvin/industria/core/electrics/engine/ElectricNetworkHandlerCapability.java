@@ -253,7 +253,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		if (hasProcessor()) {
 			IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.WARN, "Electric network processor already running, this is not right!");
 		}
-		simulationProcessor = new SimulationProcessor(NUM_SIMULATION_THREADS);
+		if (simulationProcessor == null) simulationProcessor = new SimulationProcessor(NUM_SIMULATION_THREADS);
 		simulationProcessor.start();
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdownProcessor()));
 	}
@@ -465,8 +465,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 					if (previousNetwork.getComponents().isEmpty()) {
 						this.circuitNetworks.remove(previousNetwork);
 					}
-					previousNetwork.reset();
-					getSimulationProcessor().processNetwork(previousNetwork);
 				}
 			});
 			
@@ -488,12 +486,11 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				NodePos[] nodes = component.getNodes(level);
 				for (int i = 0; i < nodes.length; i++) {
 					Set<Component<?, ?, ?>> components = this.node2componentMap.get(nodes[i]);
-					if (components != null) componentsToUpdate.addAll(components);
+					if (components != null && !components.isEmpty()) componentsToUpdate.add(components.stream().findAny().get());
 				}
 				if (componentsToUpdate.isEmpty()) {
 					ElectricNetwork emptyNetwork = this.component2circuitMap.remove(component);
 					if (emptyNetwork != null) {
-						//emptyNetwork.terminateExecution();
 						this.circuitNetworks.remove(emptyNetwork);
 					}
 				}
@@ -502,9 +499,9 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 					IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> this.level.getChunk(chunkPos.x, chunkPos.z)), new SSyncComponentsPackage(component, chunkPos, SyncRequestType.REMOVED));
 				}
 				for (Component<?, ?, ?> comp : componentsToUpdate) {
-					comp.onNetworkChange(this.level);
 					updateNetwork(comp.pos());
 				}
+				component.onNetworkChange(level);
 			}
 		}
 	}
@@ -570,16 +567,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				if (entry.getValue().isEmpty()) empty.add(entry.getKey());
 			}
 			empty.forEach(c -> this.node2componentMap.remove(c));
-			// TODO test if works
-//			for (NodePos node : component.type().getConnections(this.level, component.pos, component.instance(level))) {
-//				Set<Component<?, ?, ?>> componentSet = this.node2componentMap.getOrDefault(node, new HashSet<Component<?, ?, ?>>());
-//				componentSet.remove(component);
-//				if (componentSet.isEmpty()) {
-//					this.node2componentMap.remove(node);
-//				} else {
-//					this.node2componentMap.put(node, componentSet);
-//				}
-//			}
 		}
 		return component;
 	}

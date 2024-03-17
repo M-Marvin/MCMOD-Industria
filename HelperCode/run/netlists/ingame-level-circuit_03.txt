@@ -1,52 +1,134 @@
 ingame-level-circuit
-* Component Conduit{industria:insulated_tin_wire} ConduitPos{A=NodePos{block=[6 -56 -2],node=2},B=NodePos{block=[6 -55 -2],node=2}}
 
-* Simple resistor for different uses [ r=0.001 ]
-R1_0 node|pos6_-56_-2_id2_lid0_lnml| node|pos6_-55_-2_id2_lid0_lnml| 0.001
+* Component Block{industria:portable_fuel_generator} BlockPos{x=7, y=-60, z=-5}
 
-* Simple resistor for different uses [ r=0.001 ]
-R1_1 node|pos6_-56_-2_id2_lid1_lnmn| node|pos6_-55_-2_id2_lid1_lnmn| 0.001
-* Component Block{industria:steel_floodlight} BlockPos{x=6, y=-56, z=-2}
+* Power limited voltage source [ p_maxmimum=2000, v_nominal=230 ]
+V1_0 N001_0 node|pos7_-60_-5_id0_lid1_lnmn| 230
+R2_0 N001_0 node|pos7_-60_-5_id0_lid2_lnmpower_shunt| R={max((230/2000) * V(N001_0, node|pos7_-60_-5_id0_lid2_lnmpower_shunt|), 1u)}
+R1_0 node|pos7_-60_-5_id0_lid2_lnmpower_shunt| node|pos7_-60_-5_id0_lid0_lnmn2| 0.001
 
-* Junction resistor [ r_fixed=0.015 ]
-R1_2 node|pos6_-56_-2_id2_lid0_lnml| node|pos6_-56_-2_id0_lid0_lnml| 0.015
-
-* Junction resistor [ r_fixed=0.015 ]
-R1_3 node|pos6_-56_-2_id2_lid1_lnmn| node|pos6_-56_-2_id0_lid1_lnmn| 0.015
-
-* Load-Resistor with fixed current [ i_nominal=1.7391304347826086 ]
-*I1_4 node|pos6_-56_-2_id0_lid0_lnml| node|pos6_-56_-2_id0_lid1_lnmn| 1.7391304347826086
-*S1_4 node|pos6_-56_-2_id0_lid0_lnml| node|pos6_-56_-2_id0_lid1_lnmn| node|pos6_-56_-2_id0_lid1_lnmn| node|pos6_-56_-2_id0_lid0_lnml| current_load_diosw
-*.model current_load_diosw sw vt=0 vh=0.001 ron=0.001 roff=10e9
-R1_4 node|pos6_-56_-2_id0_lid0_lnml| node|pos6_-56_-2_id0_lid1_lnmn| R={max(V(node|pos6_-56_-2_id0_lid0_lnml|, node|pos6_-56_-2_id0_lid1_lnmn|)/1.7391304347826086, 1u)}
-* Component Conduit{industria:insulated_tin_wire} ConduitPos{A=NodePos{block=[6 -56 -2],node=2},B=NodePos{block=[7 -55 -3],node=0}}
+* Component Conduit{industria:insulated_tin_wire} ConduitPos{A=NodePos{block=[7 -60 -5],node=0},B=NodePos{block=[6 -59 -4],node=0}}
 
 * Simple resistor for different uses [ r=0.002 ]
-R1_5 node|pos6_-56_-2_id2_lid0_lnml| node|pos7_-55_-3_id0_lid0_lnml| 0.002
+R1_1 node|pos7_-60_-5_id0_lid0_lnmn2| node|pos6_-59_-4_id0_lid0_lnmn2| 0.002
 
 * Simple resistor for different uses [ r=0.002 ]
-R1_6 node|pos6_-56_-2_id2_lid1_lnmn| node|pos7_-55_-3_id0_lid1_lnmn| 0.002
-* Component Block{industria:portable_fuel_generator} BlockPos{x=7, y=-55, z=-3}
-* Component Conduit{industria:insulated_tin_wire} ConduitPos{A=NodePos{block=[7 -58 -3],node=2},B=NodePos{block=[7 -55 -3],node=0}}
+R1_2 node|pos7_-60_-5_id0_lid1_lnmn| node|pos6_-59_-4_id0_lid1_lnmn| 0.002
+
+* Component Block{industria:steel_junction_box} BlockPos{x=6, y=-59, z=-4}
+
+* Junction resistor [ r_fixed=0.015 ]
+R1_3 node|pos6_-59_-4_id0_lid0_lnmn2| node|pos6_-59_-4_id0_lid0_lnmjunction_n2| 0.015
+
+* Junction resistor [ r_fixed=0.015 ]
+R1_4 node|pos6_-59_-4_id0_lid1_lnmn| node|pos6_-59_-4_id0_lid0_lnmjunction_n| 0.015
+
+* Junction resistor [ r_fixed=0.015 ]
+R1_5 node|pos6_-59_-4_id1_lid0_lnml| node|pos6_-59_-4_id0_lid0_lnmjunction_l| 0.015
+
+* Junction resistor [ r_fixed=0.015 ]
+R1_6 node|pos6_-59_-4_id1_lid1_lnmn| node|pos6_-59_-4_id0_lid0_lnmjunction_n| 0.015
+
+* Junction resistor [ r_fixed=0.015 ]
+R1_7 node|pos6_-59_-4_id2_lid0_lnml| node|pos6_-59_-4_id0_lid0_lnmjunction_l| 0.015
+
+* Junction resistor [ r_fixed=0.015 ]
+R1_8 node|pos6_-59_-4_id2_lid1_lnmn2| node|pos6_-59_-4_id0_lid0_lnmjunction_n2| 0.015
+
+* Component Conduit{industria:insulated_tin_wire} ConduitPos{A=NodePos{block=[6 -59 -4],node=1},B=NodePos{block=[6 -58 -4],node=0}}
+
+* Simple resistor for different uses [ r=0.002 ]
+R1_9 node|pos6_-59_-4_id1_lid0_lnml| node|pos6_-58_-4_id0_lid0_lnml| 0.002
+
+* Simple resistor for different uses [ r=0.002 ]
+R1_10 node|pos6_-59_-4_id1_lid1_lnmn| node|pos6_-58_-4_id0_lid1_lnmn| 0.002
+
+* Component Conduit{industria:insulated_tin_wire} ConduitPos{A=NodePos{block=[6 -58 -4],node=0},B=NodePos{block=[7 -58 -3],node=1}}
 
 * Simple resistor for different uses [ r=0.003 ]
-R1_7 node|pos7_-58_-3_id2_lid0_lnml| node|pos7_-55_-3_id0_lid0_lnml| 0.003
+R1_11 node|pos6_-58_-4_id0_lid0_lnml| node|pos7_-58_-3_id1_lid0_lnml| 0.003
 
 * Simple resistor for different uses [ r=0.003 ]
-R1_8 node|pos7_-58_-3_id2_lid1_lnmn| node|pos7_-55_-3_id0_lid1_lnmn| 0.003
+R1_12 node|pos6_-58_-4_id0_lid1_lnmn| node|pos7_-58_-3_id1_lid1_lnmn| 0.003
+
+* Component Block{industria:electro_magnetic_coil} BlockPos{x=7, y=-58, z=-3}
+
+* Junction resistor [ r_fixed=0.015 ]
+R1_13 node|pos7_-58_-3_id1_lid0_lnml| node|pos7_-58_-3_id0_lid0_lnml| 0.015
+
+* Junction resistor [ r_fixed=0.015 ]
+R1_14 node|pos7_-58_-3_id1_lid1_lnmn| node|pos7_-58_-3_id0_lid1_lnmn| 0.015
+
+* Junction resistor [ r_fixed=0.015 ]
+R1_15 node|pos7_-58_-3_id3_lid0_lnml| node|pos7_-58_-3_id2_lid0_lnml| 0.015
+
+* Junction resistor [ r_fixed=0.015 ]
+R1_16 node|pos7_-58_-3_id3_lid1_lnmn| node|pos7_-58_-3_id2_lid1_lnmn| 0.015
+
+* DC Voltage converter [n_winding_ratio=0.5, p_maximum=1000.0 ]
+R1_17 node|pos7_-58_-3_id0_lid0_lnml| node|pos7_-58_-3_id0_lid1_lnmn| R={V(node|pos7_-58_-3_id0_lid0_lnml|, node|pos7_-58_-3_id0_lid1_lnmn|)/-I(B1_17)/0.5}
+R2_17 node|pos7_-58_-3_id2_lid0_lnml| N001_17 R={max((V(N001_17, node|pos7_-58_-3_id2_lid1_lnmn|)/1000.0) * V(N001_17, node|pos7_-58_-3_id2_lid0_lnml|), 1u)}
+B1_17 N001_17 node|pos7_-58_-3_id2_lid1_lnmn| V={V(node|pos7_-58_-3_id0_lid0_lnml|, node|pos7_-58_-3_id0_lid1_lnmn|)*0.5}
+R3_17 node|pos7_-58_-3_id0_lid1_lnmn| node|pos7_-58_-3_id2_lid1_lnmn| 1G
+
+* Component Conduit{industria:insulated_tin_wire} ConduitPos{A=NodePos{block=[7 -58 -3],node=2},B=NodePos{block=[7 -57 -3],node=0}}
+
+* Simple resistor for different uses [ r=0.001 ]
+R1_18 node|pos7_-58_-3_id2_lid0_lnml| node|pos7_-57_-3_id0_lid0_lnml| 0.001
+
+* Simple resistor for different uses [ r=0.001 ]
+R1_19 node|pos7_-58_-3_id2_lid1_lnmn| node|pos7_-57_-3_id0_lid1_lnmn| 0.001
+
+* Component Block{industria:gold_wire_holder} BlockPos{x=7, y=-57, z=-3}
+
+* Component Conduit{industria:insulated_tin_wire} ConduitPos{A=NodePos{block=[7 -58 -3],node=3},B=NodePos{block=[8 -57 -3],node=0}}
+
+* Simple resistor for different uses [ r=0.001 ]
+R1_20 node|pos7_-58_-3_id3_lid0_lnml| node|pos8_-57_-3_id0_lid0_lnml| 0.001
+
+* Simple resistor for different uses [ r=0.001 ]
+R1_21 node|pos7_-58_-3_id3_lid1_lnmn| node|pos8_-57_-3_id0_lid1_lnmn| 0.001
+
+* Component Conduit{industria:insulated_tin_wire} ConduitPos{A=NodePos{block=[8 -57 -3],node=0},B=NodePos{block=[6 -55 -2],node=2}}
+
+* Simple resistor for different uses [ r=0.004 ]
+R1_22 node|pos8_-57_-3_id0_lid0_lnml| node|pos6_-55_-2_id2_lid0_lnml| 0.004
+
+* Simple resistor for different uses [ r=0.004 ]
+R1_23 node|pos8_-57_-3_id0_lid1_lnmn| node|pos6_-55_-2_id2_lid1_lnmn| 0.004
+
 * Component Block{industria:steel_floodlight} BlockPos{x=6, y=-55, z=-2}
 
 * Junction resistor [ r_fixed=0.015 ]
-R1_9 node|pos6_-55_-2_id2_lid0_lnml| node|pos6_-55_-2_id0_lid0_lnml| 0.015
+R1_24 node|pos6_-55_-2_id2_lid0_lnml| node|pos6_-55_-2_id0_lid0_lnml| 0.015
 
 * Junction resistor [ r_fixed=0.015 ]
-R1_10 node|pos6_-55_-2_id2_lid1_lnmn| node|pos6_-55_-2_id0_lid1_lnmn| 0.015
+R1_25 node|pos6_-55_-2_id2_lid1_lnmn| node|pos6_-55_-2_id0_lid1_lnmn| 0.015
 
 * Load-Resistor with fixed current [ i_nominal=1.7391304347826086 ]
-*I1_11 node|pos6_-55_-2_id0_lid0_lnml| node|pos6_-55_-2_id0_lid1_lnmn| 1.7391304347826086
-*S1_11 node|pos6_-55_-2_id0_lid0_lnml| node|pos6_-55_-2_id0_lid1_lnmn| node|pos6_-55_-2_id0_lid1_lnmn| node|pos6_-55_-2_id0_lid0_lnml| current_load_diosw
+*I1_26 node|pos6_-55_-2_id0_lid0_lnml| node|pos6_-55_-2_id0_lid1_lnmn| 1.7391304347826086
+*S1_26 node|pos6_-55_-2_id0_lid0_lnml| node|pos6_-55_-2_id0_lid1_lnmn| node|pos6_-55_-2_id0_lid1_lnmn| node|pos6_-55_-2_id0_lid0_lnml| current_load_diosw
 *.model current_load_diosw sw vt=0 vh=0.001 ron=0.001 roff=10e9
-R1_11 node|pos6_-55_-2_id0_lid0_lnml| node|pos6_-55_-2_id0_lid1_lnmn| R={max(V(node|pos6_-55_-2_id0_lid0_lnml|, node|pos6_-55_-2_id0_lid1_lnmn|)/1.7391304347826086, 1u)}
+R1_26 node|pos6_-55_-2_id0_lid0_lnml| node|pos6_-55_-2_id0_lid1_lnmn| R={max(V(node|pos6_-55_-2_id0_lid0_lnml|, node|pos6_-55_-2_id0_lid1_lnmn|)/1.7391304347826086, 1u)}
 
-R0GND node|pos6_-56_-2_id2_lid0_lnml| 0 1
+* Component Block{industria:gold_wire_holder} BlockPos{x=8, y=-57, z=-3}
+
+* Component Block{industria:gold_wire_holder} BlockPos{x=6, y=-58, z=-4}
+
+* Component Conduit{industria:insulated_tin_wire} ConduitPos{A=NodePos{block=[7 -59 -5],node=0},B=NodePos{block=[6 -59 -4],node=2}}
+
+* Simple resistor for different uses [ r=0.002 ]
+R1_27 node|pos7_-59_-5_id0_lid0_lnml| node|pos6_-59_-4_id2_lid0_lnml| 0.002
+
+* Simple resistor for different uses [ r=0.002 ]
+R1_28 node|pos7_-59_-5_id0_lid1_lnmn2| node|pos6_-59_-4_id2_lid1_lnmn2| 0.002
+
+* Component Block{industria:portable_fuel_generator} BlockPos{x=7, y=-59, z=-5}
+
+* Power limited voltage source [ p_maxmimum=2000, v_nominal=230 ]
+V1_29 N001_29 node|pos7_-59_-5_id0_lid1_lnmn2| 230
+R2_29 N001_29 node|pos7_-59_-5_id0_lid2_lnmpower_shunt| R={max((230/2000) * V(N001_29, node|pos7_-59_-5_id0_lid2_lnmpower_shunt|), 1u)}
+R1_29 node|pos7_-59_-5_id0_lid2_lnmpower_shunt| node|pos7_-59_-5_id0_lid0_lnml| 0.001
+
+R0GND node|pos7_-60_-5_id0_lid0_lnmn2| 0 1
 .end

@@ -1,6 +1,7 @@
 package de.m_marvin.industria.core.electrics.engine;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -19,26 +20,6 @@ import de.m_marvin.nglink.NativeNGLink.VectorValue;
 import de.m_marvin.nglink.NativeNGLink.VectorValuesAll;
 
 public class SimulationProcessor {
-	
-//	public static final String SPICE_INIT = "* Standard ngspice init file\r\n"
-//			+ "alias exit quit\r\n"
-//			+ "alias acct rusage all\r\n"
-//			+ "** set the number of threads in openmp \r\n"
-//			+ "** default (if compiled with --enable-openmp) is: 2 \r\n"
-//			+ "set num_threads=4\r\n"
-//			+ "\r\n"
-//			+ "if $?sharedmode\r\n"
-//			+ "  unset interactive\r\n"
-//			+ "  unset moremode\r\n"
-//			+ "else\r\n"
-//			+ "  set interactive\r\n"
-//			+ "  set x11lineararcs\r\n"
-//			+ "end\r\n"
-//			+ "\r\n"
-//			+ "strcmp __flag $program \"ngspice\"\r\n"
-//			+ "set ngbehavior=lt\r\n"
-//			+ "\r\n"
-//			+ "unset __flag";
 	
 	private static final String SPICE_INIT_LOCATION = "../share/ngspice/scripts/spinit";
 	private static final String SPICE_CODEMODEL_LOC = "../share/spice/";
@@ -204,6 +185,7 @@ public class SimulationProcessor {
 		
 		try {
 
+
 			InputStream spinitFileIn = IndustriaCore.ARCHIVE_ACCESS.openFile("spiceinit/spinit");
 			OutputStream spinitFileOut = new FileOutputStream(initFile);
 			spinitFileOut.write(spinitFileIn.readAllBytes());
@@ -211,9 +193,13 @@ public class SimulationProcessor {
 			spinitFileOut.close();
 			
 		} catch (Exception e) {
-			IndustriaCore.LOGGER.log(Level.WARN, "Failed to create init file!");
-			IndustriaCore.LOGGER.log(Level.WARN, "WARNING: This will possibly break a lot of stuff!");
-			e.printStackTrace();
+			if (e instanceof FileNotFoundException && initFile.isFile()) {
+				IndustriaCore.LOGGER.log(Level.INFO, "Access to init file denied, already used by another process!");
+			} else {
+				IndustriaCore.LOGGER.log(Level.WARN, "Failed to create init file!");
+				IndustriaCore.LOGGER.log(Level.WARN, "WARNING: This will possibly break a lot of stuff!");
+				e.printStackTrace();
+			}
 		}
 		
 		File modelFolder = new File(workingDir, SPICE_CODEMODEL_LOC).getAbsoluteFile();
@@ -232,18 +218,24 @@ public class SimulationProcessor {
 			
 			IndustriaCore.LOGGER.log(Level.DEBUG, "-> extract module '" + module + "' ...");
 			
+			File modelOutFile = new File(modelFolder, module);
+			
 			try {
 
 				InputStream moduleIn = IndustriaCore.ARCHIVE_ACCESS.openFile("spiceinit/codemodels/" + module);
-				FileOutputStream moduleOut = new FileOutputStream(new File(modelFolder, module));
+				FileOutputStream moduleOut = new FileOutputStream(modelOutFile);
 				moduleOut.write(moduleIn.readAllBytes());
 				moduleIn.close();
 				moduleOut.close();
 				
 			} catch (Exception e) {
-				IndustriaCore.LOGGER.log(Level.WARN, "Failed to extract module file " + module + "!");
-				IndustriaCore.LOGGER.log(Level.WARN, "WARNING: This will possibly break a lot of stuff!");
-				e.printStackTrace();
+				if (e instanceof FileNotFoundException && modelOutFile.isFile()) {
+					IndustriaCore.LOGGER.log(Level.INFO, "Access to model file denied, already used by another process!");
+				} else {
+					IndustriaCore.LOGGER.log(Level.WARN, "Failed to extract module file " + module + "!");
+					IndustriaCore.LOGGER.log(Level.WARN, "WARNING: This will possibly break a lot of stuff!");
+					e.printStackTrace();
+				}
 			}
 			
 		}

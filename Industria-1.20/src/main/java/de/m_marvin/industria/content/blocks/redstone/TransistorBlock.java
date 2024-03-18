@@ -5,6 +5,7 @@ import java.util.stream.IntStream;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.content.blockentities.redstone.TransistorBlockEntity;
+import de.m_marvin.industria.core.client.util.TooltipAdditions;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
@@ -15,6 +16,7 @@ import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
+import de.m_marvin.industria.core.util.items.ITooltipAdditionsModifier;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -36,7 +38,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class TransistorBlock extends DiodeLikeBlock implements EntityBlock, IElectricBlock {
+public class TransistorBlock extends DiodeLikeBlock implements EntityBlock, IElectricBlock, ITooltipAdditionsModifier {
 	
 	public static final NodePointSupplier NODES = NodePointSupplier.define()
 			.addNode(NodeTypes.ELECTRIC, 2, new Vec3i(8, 2, 2))
@@ -51,6 +53,11 @@ public class TransistorBlock extends DiodeLikeBlock implements EntityBlock, IEle
 		super(pProperties);
 	}
 
+	@Override
+	public boolean showTooltipType(String tooltipTypeName) {
+		return tooltipTypeName != TooltipAdditions.TOOLTIP_ELECTRICS;
+	}
+	
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
 		return new TransistorBlockEntity(pPos, pState);

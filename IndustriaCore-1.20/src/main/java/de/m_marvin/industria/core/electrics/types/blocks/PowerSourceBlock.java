@@ -2,6 +2,7 @@ package de.m_marvin.industria.core.electrics.types.blocks;
 
 import java.util.function.Consumer;
 
+import de.m_marvin.industria.core.client.util.TooltipAdditions;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
@@ -15,6 +16,7 @@ import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
 import de.m_marvin.industria.core.registries.Circuits;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
+import de.m_marvin.industria.core.util.items.ITooltipAdditionsModifier;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -33,7 +35,7 @@ import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock, IElectricInfoProvider {
+public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock, IElectricInfoProvider, ITooltipAdditionsModifier {
 	
 	public static final NodePointSupplier NODES = NodePointSupplier.define()
 			.addNode(NodeTypes.ELECTRIC, 8, new Vec3i(8, 8, 0))
@@ -43,6 +45,11 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock,
 		super(pProperties);
 	}
 
+	@Override
+	public boolean showTooltipType(String tooltipTypeName) {
+		return tooltipTypeName != TooltipAdditions.TOOLTIP_ELECTRICS;
+	}
+	
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext pContext) {
 		return defaultBlockState().setValue(BlockStateProperties.FACING, GameUtility.getFacingDirection(pContext.getPlayer()).getOpposite());
@@ -109,11 +116,6 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock,
 			return Math.max(powerUsed > 1.0 ? parametrics.getPowerMin() : 0, powerUsed);
 		}
 		return 0.0;
-	}
-	
-	@Override
-	public BlockParametrics getParametrics(BlockState state, Level level, BlockPos pos) {
-		return BlockParametricsManager.getInstance().getParametrics(this);
 	}
 	
 	@Override

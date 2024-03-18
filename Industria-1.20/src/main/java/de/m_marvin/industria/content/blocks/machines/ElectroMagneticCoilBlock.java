@@ -9,6 +9,7 @@ import de.m_marvin.industria.content.blockentities.machines.ElectroMagneticCoilB
 import de.m_marvin.industria.content.registries.ModBlockStateProperties;
 import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.content.registries.ModTags;
+import de.m_marvin.industria.core.client.util.TooltipAdditions;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
@@ -29,11 +30,13 @@ import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.industria.core.util.blocks.IBaseEntityDynamicMultiBlock;
+import de.m_marvin.industria.core.util.items.ITooltipAdditionsModifier;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -61,7 +64,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEntityDynamicMultiBlock, IElectricBlock, IMagneticBlock, SimpleWaterloggedBlock {
+public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEntityDynamicMultiBlock, IElectricBlock, IMagneticBlock, ITooltipAdditionsModifier, SimpleWaterloggedBlock {
 	
 	public static final DoubleParameter MAGNETIC_FIELD_STRENGTH = new DoubleParameter("magneticFieldStrengthPerWatt", 0.01);
 	public static final DoubleParameter MAGNET_CURRENT = new DoubleParameter("magnetCurrent", 10);
@@ -81,8 +84,22 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	}
 	
 	@Override
+	public boolean showTooltipType(String tooltipTypeName) {
+		return 	tooltipTypeName != TooltipAdditions.TOOLTIP_ELECTRICS &&
+				tooltipTypeName != TooltipAdditions.TOOLTIP_MAGNETICS;
+	}
+	
+	@Override
+	public void addAdditionsTooltip(List<Component> tooltips, ItemStack item) {
+		BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
+		TooltipAdditions.addTooltip(tooltips, Component.translatable("industria.tooltip.transformer.power", parametrics.getParameter(POWER_PER_BLOCK)));
+		TooltipAdditions.addTooltip(tooltips, Component.translatable("industria.tooltip.transformer.current", parametrics.getParameter(MAGNET_CURRENT))); // TODO magnet current
+		TooltipAdditions.addTooltip(tooltips, Component.translatable("industria.tooltip.transformer.fieldstrength", parametrics.getParameter(MAGNETIC_FIELD_STRENGTH)));
+	}
+	
+	@Override
 	public Vec3d getFieldVector(Level level, BlockState state, BlockPos blockPos) {
-		if (level.getBlockEntity(blockPos) instanceof ElectroMagneticCoilBlockEntity coil) {
+		if (level != null && level.getBlockEntity(blockPos) instanceof ElectroMagneticCoilBlockEntity coil) {
 			coil = coil.getMaster();
 			if (coil.getWindingsSecundary() == 0) {
 				

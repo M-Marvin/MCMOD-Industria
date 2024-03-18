@@ -2,6 +2,7 @@ package de.m_marvin.industria.core.electrics.types.blocks;
 
 import java.util.function.Consumer;
 
+import de.m_marvin.industria.core.client.util.TooltipAdditions;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
@@ -13,6 +14,7 @@ import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
+import de.m_marvin.industria.core.util.items.ITooltipAdditionsModifier;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,7 +39,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class JunctionBoxBlock extends BaseEntityBlock implements IElectricBlock {
+public class JunctionBoxBlock extends BaseEntityBlock implements IElectricBlock, ITooltipAdditionsModifier {
 	
 	public static final VoxelShape BLOCK_SHAPE = Block.box(3, 0, 3, 13, 3, 13);
 	
@@ -49,6 +51,11 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricBlock 
 		super(pProperties);
 	}
 
+	@Override
+	public boolean showTooltipType(String tooltipTypeName) {
+		return tooltipTypeName != TooltipAdditions.TOOLTIP_ELECTRICS;
+	}
+	
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
 		return new JunctionBoxBlockEntity(pPos, pState);

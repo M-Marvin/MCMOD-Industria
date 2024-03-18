@@ -129,11 +129,6 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 	}
 	
 	@Override
-	public BlockParametrics getParametrics(BlockState state, Level level, BlockPos pos) {
-		return BlockParametricsManager.getInstance().getParametrics(this);
-	}
-	
-	@Override
 	public double getVoltage(BlockState state, Level level, BlockPos pos) {
 		if (level.getBlockEntity(pos) instanceof FloodlightBlockEntity floodlight) {
 			String[] wireLanes = floodlight.getNodeLanes();

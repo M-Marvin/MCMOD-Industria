@@ -39,7 +39,7 @@ public abstract class AbstractConduitBlockItem extends BlockItem implements IAdj
 
 	@Override
 	public void appendHoverText(ItemStack pStack, Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-		this.conduit.get().appendHoverText(pLevel, pTooltipComponents, pIsAdvanced);
+		this.conduit.get().appendHoverText(pTooltipComponents, pIsAdvanced);
 		super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
 	}
 	

@@ -22,13 +22,11 @@ import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.registries.Conduits;
 import de.m_marvin.industria.core.registries.ParticleTypes;
-import de.m_marvin.industria.core.util.Formatter;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.NBTUtility;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -68,15 +66,7 @@ public class Conduit {
 		this.validNodeTypes = validNodeTypes;
 	}
 	
-	public void appendHoverText(Level level, List<Component> tooltip, TooltipFlag flags) {
-		ChatFormatting color = ChatFormatting.GRAY;
-		if (this.validNodeTypes.length > 0) {
-			color = this.validNodeTypes[0].getColor();	
-		}
-		
-		tooltip.add(Formatter.build().appand(Component.translatable("industriacore.tooltip.conduit.name", Formatter.build().appand(this.getName()).withStyle(color).component())).withStyle(ChatFormatting.GRAY).component());
-		tooltip.add(Formatter.build().appand(Component.translatable("industriacore.tooltip.conduit.maxClampDistance", this.getConduitType().getClampingLength())).withStyle(ChatFormatting.GRAY).component());
-	}
+	public void appendHoverText(List<Component> tooltip, TooltipFlag flags) {}
 	
 	public SoundType getSoundType() {
 		return soundType;

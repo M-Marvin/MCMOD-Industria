@@ -172,11 +172,6 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 	}
 	
 	@Override
-	public BlockParametrics getParametrics(BlockState state, Level level, BlockPos pos) {
-		return BlockParametricsManager.getInstance().getParametrics(this);
-	}
-	
-	@Override
 	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {
 		return NODES.getNodePositions(pos);
 	}

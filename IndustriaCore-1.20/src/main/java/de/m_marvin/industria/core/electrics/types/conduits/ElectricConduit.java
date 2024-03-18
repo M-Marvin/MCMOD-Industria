@@ -1,6 +1,5 @@
 package de.m_marvin.industria.core.electrics.types.conduits;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 import de.m_marvin.industria.IndustriaCore;
@@ -13,12 +12,8 @@ import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.registries.NodeTypes;
-import de.m_marvin.industria.core.util.Formatter;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 
@@ -31,12 +26,6 @@ public abstract class ElectricConduit extends Conduit implements IElectricCondui
 		super(type, item, texture, sound, NodeTypes.ELECTRIC);
 		this.wireCount = wireCount;
 		this.resistance = resistance;
-	}
-	
-	@Override
-	public void appendHoverText(Level level, List<Component> tooltip, TooltipFlag flags) {
-		super.appendHoverText(level, tooltip, flags);
-		tooltip.add(Formatter.build().appand(Component.translatable("industriacore.tooltip.electricconduit.resistance", this.getResistancePerBlock())).withStyle(ChatFormatting.GRAY).component());
 	}
 	
 	public double getResistancePerBlock() {

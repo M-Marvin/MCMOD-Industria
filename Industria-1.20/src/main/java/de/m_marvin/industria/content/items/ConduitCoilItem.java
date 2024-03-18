@@ -4,21 +4,19 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import de.m_marvin.industria.content.blockentities.ConduitCoilBlockEntity;
+import de.m_marvin.industria.core.client.util.TooltipAdditions;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.items.AbstractConduitBlockItem;
-import de.m_marvin.industria.core.util.Formatter;
-import net.minecraft.ChatFormatting;
+import de.m_marvin.industria.core.util.items.ITooltipAdditionsModifier;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class ConduitCoilItem extends AbstractConduitBlockItem {
+public class ConduitCoilItem extends AbstractConduitBlockItem implements ITooltipAdditionsModifier {
 	
 	public static final int MAX_WIRES_ON_COIL = 32;
 	
@@ -91,9 +89,13 @@ public class ConduitCoilItem extends AbstractConduitBlockItem {
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack pStack, Level pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
-		pTooltip.add(Formatter.build().appand(Component.translatable("industria.tooltip.wire_coil.wireOnCoil", pStack.getOrCreateTag().getInt("WireLength") * Conduit.BLOCKS_PER_WIRE_ITEM)).withStyle(ChatFormatting.GRAY).component());
-		super.appendHoverText(pStack, pLevel, pTooltip, pFlag);
+	public boolean showTooltipType(String tooltipTypeName) {
+		return true;
+	}
+	
+	@Override
+	public void addAdditionsTooltip(List<Component> tooltips, ItemStack state) {
+		TooltipAdditions.addTooltip(tooltips, Component.translatable("industria.tooltip.wire_coil.wireOnCoil", state.getOrCreateTag().getInt("WireLength") * Conduit.BLOCKS_PER_WIRE_ITEM));
 	}
 	
 }

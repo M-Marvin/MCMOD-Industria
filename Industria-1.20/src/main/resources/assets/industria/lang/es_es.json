@@ -20,6 +20,7 @@
 "block.industria.steel_floodlight":			"Luz de inundaci\u00f3n de acero",
 "block.industria.portable_fuel_generator":		"Generador port\u00e1til de carburante l\u00edquido",
 "block.industria.portable_coal_generator":		"Generador port\u00e1til de carburante s\u00f3lido",
+"block.industria.electro_magnetic_coil":		"N\u00facleo de bobina de ferrita",
 
 "block.industria.redstone_transistor":			"Transistor de redstone",
 
@@ -28,7 +29,7 @@
 "block.industria.waxed_iron_plates":			"Placas de hierro enceradas",
 "block.industria.copper_plates":			"Placas de cobre",
 "block.industria.waxed_copper_plates":			"Placas de cobre enceradas",
-"block.industria.gold_plates":				"Placas de oro enceradas",
+"block.industria.gold_plates":				"Placas de oro",
 "block.industria.netherite_plates":			"Placas de Netherita enceradas",
 "block.industria.aluminum_block":			"Bloque de aluminio",
 "block.industria.aluminum_plates":			"Placas de aluminio",

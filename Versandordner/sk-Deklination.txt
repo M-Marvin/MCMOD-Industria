@@ -113,3 +113,7 @@ NOM     GEN     DAT     AKK     LOK     INSTR
 selektor (Selektor) nach Schema MASK-1
 selektor, selektora, selektorovi, selektora, selektorovi, selektorom
 NOM       GEN        DAT          AKK        LOK          INSTR
+
+cievka (Spule) nach Schema FEM-1
+cievka, cievky, cievke, cievku, cievke, cievkou
+NOM     GEN     DAT     AKK     LOK     INSTR

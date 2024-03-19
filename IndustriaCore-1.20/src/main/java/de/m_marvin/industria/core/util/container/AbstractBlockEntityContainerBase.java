@@ -43,6 +43,11 @@ public abstract class AbstractBlockEntityContainerBase<T extends BlockEntity> ex
 		return this.slots.size() - getSlots();
 	}
 	
+	protected boolean moveItemStackTo(ItemStack pStack, int pIndex) {
+		return super.moveItemStackTo(pStack, pIndex, pIndex + 1, false);
+	}
+	
+	@Override
 	public ItemStack quickMoveStack(Player playerIn, int index) {
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(index);

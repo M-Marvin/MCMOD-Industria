@@ -18,8 +18,8 @@
 "block.industria.insulated_tin_wire_coil":		"Zinnkabelspule",
 "block.industria.brass_floodlight":			"Messing-Fluchtlicht",
 "block.industria.steel_floodlight":			"Stahl-Flutlicht",
-"block.industria.portable_fuel_generator":		"Tragbarer Fl\u00fcssigkraftstoff-Generator",
-"block.industria.portable_coal_generator":		"Tragbarer Brennstoff-Generator",
+"block.industria.portable_fuel_generator":		"Fl\u00fcssigkraftstoff-Generator",
+"block.industria.portable_coal_generator":		"Brennstoff-Generator",
 "block.industria.electro_magnetic_coil":		"Ferrit-Spulenkern",
 
 "block.industria.redstone_transistor":			"Redstone-Transistor",

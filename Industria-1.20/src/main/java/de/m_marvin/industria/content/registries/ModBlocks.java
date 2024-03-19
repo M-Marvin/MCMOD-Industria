@@ -41,7 +41,7 @@ public class ModBlocks {
 	public static final RegistryObject<Block> GOLD_WIRE_COIL					= BLOCKS.register("gold_wire_coil", () -> new ConduitCoilBlock(Properties.of().strength(4, 4), true));
 	public static final RegistryObject<Block> ALUMINUM_WIRE_COIL				= BLOCKS.register("aluminum_wire_coil", () -> new ConduitCoilBlock(Properties.of().strength(4, 4), true));
 	
-	public static final RegistryObject<Block> LIGHT_AIR 						= BLOCKS.register("light_air_block", () -> new LightBlock(Properties.of().replaceable().noCollission().air().strength(-1.0F, 3600000.8F).noLootTable().noOcclusion().lightLevel(LightBlock.LIGHT_EMISSION))); // TODO Fluids do not replace
+	public static final RegistryObject<Block> LIGHT_AIR 						= BLOCKS.register("light_air_block", () -> new LightBlock(Properties.of().replaceable().noCollission().air().strength(-1.0F, 3600000.8F).noLootTable().noOcclusion().lightLevel(LightBlock.LIGHT_EMISSION)));
 	public static final RegistryObject<Block> COPPER_WIRE_HOLDER 				= BLOCKS.register("copper_wire_holder", () -> new WireHolderBlock(Properties.of().strength(3, 3)));
 	public static final RegistryObject<Block> GOLD_WIRE_HOLDER 					= BLOCKS.register("gold_wire_holder", () -> new WireHolderBlock(Properties.of().strength(3, 3)));
 	public static final RegistryObject<Block> TIN_WIRE_HOLDER 					= BLOCKS.register("tin_wire_holder", () -> new WireHolderBlock(Properties.of().strength(3, 3)));

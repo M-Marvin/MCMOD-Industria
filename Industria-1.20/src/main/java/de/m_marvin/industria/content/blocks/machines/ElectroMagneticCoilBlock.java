@@ -17,14 +17,14 @@ import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
-import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
+import de.m_marvin.industria.core.electrics.engine.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
+import de.m_marvin.industria.core.electrics.types.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.magnetism.MagnetismUtility;
 import de.m_marvin.industria.core.magnetism.types.blocks.IMagneticBlock;
 import de.m_marvin.industria.core.parametrics.BlockParametrics;
-import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
+import de.m_marvin.industria.core.parametrics.engine.BlockParametricsManager;
 import de.m_marvin.industria.core.parametrics.properties.DoubleParameter;
 import de.m_marvin.industria.core.registries.Circuits;
 import de.m_marvin.industria.core.registries.IndustriaTags;
@@ -95,7 +95,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	public void addAdditionsTooltip(List<Component> tooltips, ItemStack item) {
 		BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 		TooltipAdditions.addTooltip(tooltips, Component.translatable("industria.tooltip.transformer.power", parametrics.getParameter(POWER_PER_BLOCK)));
-		TooltipAdditions.addTooltip(tooltips, Component.translatable("industria.tooltip.transformer.current", parametrics.getParameter(MAGNET_CURRENT))); // TODO magnet current
+		TooltipAdditions.addTooltip(tooltips, Component.translatable("industria.tooltip.transformer.current", parametrics.getParameter(MAGNET_CURRENT)));
 		TooltipAdditions.addTooltip(tooltips, Component.translatable("industria.tooltip.transformer.fieldstrength", parametrics.getParameter(MAGNETIC_FIELD_STRENGTH)));
 	}
 	
@@ -165,6 +165,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 		pBuilder.add(ModBlockStateProperties.CORE);
 		pBuilder.add(ModBlockStateProperties.CONNECT);
 		pBuilder.add(BlockStateProperties.WATERLOGGED);
+		// TODO reduce blockstates
 	}
 	
 	@Override

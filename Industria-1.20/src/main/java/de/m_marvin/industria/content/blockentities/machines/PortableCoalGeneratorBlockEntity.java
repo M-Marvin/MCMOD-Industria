@@ -13,7 +13,7 @@ import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContaine
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.InternalNodeConstructor;
 import de.m_marvin.industria.core.parametrics.BlockParametrics;
-import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
+import de.m_marvin.industria.core.parametrics.engine.BlockParametricsManager;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.blocks.BaseEntityFixedMultiBlock;
 import de.m_marvin.industria.core.util.blocks.FixedMultiBlockEntity;
@@ -308,7 +308,7 @@ public class PortableCoalGeneratorBlockEntity extends FixedMultiBlockEntity<Port
 		return false;
 	}
 
-	// TODO Fluid behavior gets implemented with pipes
+	// TODO fluid behavior gets implemented with pipes
 	
 	@Override
 	public int getTanks() {

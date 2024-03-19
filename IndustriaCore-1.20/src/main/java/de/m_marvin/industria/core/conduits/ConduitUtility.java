@@ -15,7 +15,6 @@ import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3d;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ClipContext;
@@ -27,7 +26,7 @@ import net.minecraftforge.network.PacketDistributor;
 
 public class ConduitUtility {
 	
-	public static boolean setConduitFromClient(ClientLevel level, ConduitPos position, Conduit conduit, double length) {
+	public static boolean setConduitFromClient(Level level, ConduitPos position, Conduit conduit, double length) {
 		IndustriaCore.NETWORK.sendToServer(new SCConduitPackage.SCPlaceConduitPackage(position, conduit, length));
 		return setConduit(level, position, conduit, length);
 	}

@@ -3,6 +3,7 @@ package de.m_marvin.industria.core.electrics.engine;
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
+import de.m_marvin.industria.core.electrics.engine.network.SSyncCircuitTemplatesPackage;
 import de.m_marvin.industria.core.electrics.engine.network.SSyncComponentsPackage;
 import de.m_marvin.industria.core.electrics.engine.network.SUpdateNetworkPackage;
 import de.m_marvin.industria.core.registries.Capabilities;
@@ -49,6 +50,12 @@ public class ClientElectricPackageHandler {
 		Level level = Minecraft.getInstance().level;
 		ElectricUtility.updateNetwork(level, msg.getPos());
 		
+	}
+	
+	/* Handle SSyncCircuitTemplatesPackage */
+	
+	public static void handleSyncCircuitTemplates(SSyncCircuitTemplatesPackage msg, Context context) {
+		CircuitTemplateManager.updateClientTemplates(msg.getCircuitTemplates());
 	}
 	
 	/* End of package handling */

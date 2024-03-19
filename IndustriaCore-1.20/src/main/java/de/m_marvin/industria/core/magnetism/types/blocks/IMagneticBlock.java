@@ -2,7 +2,7 @@ package de.m_marvin.industria.core.magnetism.types.blocks;
 
 import org.joml.Vector3f;
 
-import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
+import de.m_marvin.industria.core.parametrics.engine.BlockParametricsManager;
 import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

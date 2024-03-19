@@ -198,7 +198,7 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 		return super.getCapability(cap, side);
 	}
 
-	// TODO Fluid behavior gets implemented with pipes
+	// TODO fluid behavior gets implemented with pipes
 	
 	@Override
 	public int getTanks() {

@@ -34,10 +34,12 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 	
 	public ElectroMagneticCoilBlockEntity(BlockPos pPos, BlockState pBlockState) {
 		super(ModBlockEntityTypes.ELECTRO_MAGNETIC_COIL.get(), pPos, pBlockState);
+		this.isMaster = true;
 	}
 	
 	protected ElectroMagneticCoilBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
 		super(pType, pPos, pBlockState);
+		this.isMaster = true;
 	}
 
 	@Override

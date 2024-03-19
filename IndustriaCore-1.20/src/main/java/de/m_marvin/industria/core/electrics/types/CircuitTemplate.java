@@ -1,7 +1,8 @@
-package de.m_marvin.industria.core.electrics.circuits;
+package de.m_marvin.industria.core.electrics.types;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,6 +25,22 @@ public class CircuitTemplate implements ICircuitPlot {
 		for (String network : networks) this.networks.put(network, "NONE");
 		for (String property : properties) this.properties.put(property, "NONE");
 		this.idProperty = idProperty;
+	}
+	
+	public Set<String> getNetworks() {
+		return networks.keySet();
+	}
+	
+	public Set<String> getProperties() {
+		return properties.keySet();
+	}
+	
+	public String getIdProperty() {
+		return idProperty;
+	}
+	
+	public String getTemplate() {
+		return template;
 	}
 	
 	public void setProperty(String name, double value) {

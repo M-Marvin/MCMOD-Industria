@@ -7,6 +7,7 @@ import de.m_marvin.industria.core.conduits.engine.network.SCConduitPackage;
 import de.m_marvin.industria.core.conduits.engine.network.SSyncConduitPackage;
 import de.m_marvin.industria.core.electrics.engine.network.CEditPowerSourcePackage;
 import de.m_marvin.industria.core.electrics.engine.network.CUpdateJunctionLanesPackage;
+import de.m_marvin.industria.core.electrics.engine.network.SSyncCircuitTemplatesPackage;
 import de.m_marvin.industria.core.electrics.engine.network.SSyncComponentsPackage;
 import de.m_marvin.industria.core.electrics.engine.network.SUpdateNetworkPackage;
 import de.m_marvin.industria.core.magnetism.engine.network.SMagneticInfluencePackage;
@@ -38,6 +39,7 @@ public class NetworkPackages {
 		network.registerMessage(id++, SMagneticInfluencePackage.SRemoveInfluencePackage.class, SMagneticInfluencePackage.SRemoveInfluencePackage::encode, SMagneticInfluencePackage.SRemoveInfluencePackage::decode, SMagneticInfluencePackage.SRemoveInfluencePackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		network.registerMessage(id++, SUpdateMagneticFieldPackage.class, SUpdateMagneticFieldPackage::encode, SUpdateMagneticFieldPackage::decode, SUpdateMagneticFieldPackage::handle);
 		network.registerMessage(id++, SSyncParametricsPackage.class, SSyncParametricsPackage::encode, SSyncParametricsPackage::decode, SSyncParametricsPackage::handle);
+		network.registerMessage(id++, SSyncCircuitTemplatesPackage.class, SSyncCircuitTemplatesPackage::encode, SSyncCircuitTemplatesPackage::decode, SSyncCircuitTemplatesPackage::handle);
 		
 		network.registerMessage(id++, SSyncVS2BlockInfoPackage.class, SSyncVS2BlockInfoPackage::encode, SSyncVS2BlockInfoPackage::decode, SSyncVS2BlockInfoPackage::handle);
 	}

@@ -42,7 +42,7 @@ public class GenricConduitEventListener {
 				
 				ItemStack toolItem = event.getEntity().getMainHandItem();
 				if (!toolItem.isEmpty() && toolItem.getMaxDamage() != 0) {
-					toolItem.hurtAndBreak(1, player, (p) -> {}); // TODO [ingame] test if damage is visible on client side
+					toolItem.hurtAndBreak(1, player, (p) -> {});
 				}
 				
 				// TODO cutter sound

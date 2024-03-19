@@ -13,7 +13,7 @@ import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContaine
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.InternalNodeConstructor;
 import de.m_marvin.industria.core.parametrics.BlockParametrics;
-import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
+import de.m_marvin.industria.core.parametrics.engine.BlockParametricsManager;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.types.Direction2d;
 import de.m_marvin.univec.impl.Vec2i;

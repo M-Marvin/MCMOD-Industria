@@ -8,13 +8,13 @@ import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
-import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
+import de.m_marvin.industria.core.electrics.engine.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
+import de.m_marvin.industria.core.electrics.types.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider;
 import de.m_marvin.industria.core.parametrics.BlockParametrics;
-import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
+import de.m_marvin.industria.core.parametrics.engine.BlockParametricsManager;
 import de.m_marvin.industria.core.registries.Circuits;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
@@ -92,7 +92,7 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 			
 			if (loadP < pRandom.nextFloat()) return;
 
-			// TODO Sound
+			// TODO fuel generator sound
 			//pLevel.playLocalSound(d0, d1, d2, SoundEvents.FURNACE_FIRE_CRACKLE, SoundSource.BLOCKS, 1.0F, 1.0F, false);
 			
 			Direction direction = pState.getValue(BlockStateProperties.HORIZONTAL_FACING);

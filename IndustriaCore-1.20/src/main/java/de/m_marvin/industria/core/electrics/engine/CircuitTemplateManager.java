@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core.electrics.circuits;
+package de.m_marvin.industria.core.electrics.engine;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,14 +19,19 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.core.electrics.engine.network.SSyncCircuitTemplatesPackage;
+import de.m_marvin.industria.core.electrics.types.CircuitTemplate;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.network.PacketDistributor;
 
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CircuitTemplateManager extends SimplePreparableReloadListener<Map<ResourceLocation, CircuitTemplate>> {
@@ -141,6 +146,21 @@ public class CircuitTemplateManager extends SimplePreparableReloadListener<Map<R
 	@Override
 	protected void apply(Map<ResourceLocation, CircuitTemplate> map, ResourceManager pResourceManager, ProfilerFiller pProfiler) {
 		this.byLocation = map;
+	}
+
+	@SubscribeEvent
+	public static void onDatapackSync(OnDatapackSyncEvent event) {
+		ServerPlayer player = event.getPlayer();
+		if (player == null) {
+			IndustriaCore.NETWORK.send(PacketDistributor.ALL.noArg(), new SSyncCircuitTemplatesPackage(getInstance().byLocation));
+		} else {
+			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new SSyncCircuitTemplatesPackage(getInstance().byLocation));
+		}
+	}
+	
+	public static void updateClientTemplates(Map<ResourceLocation, CircuitTemplate> templates) {
+		if (instance == null) instance = new CircuitTemplateManager(null, null);
+		instance.byLocation = templates;
 	}
 	
 }

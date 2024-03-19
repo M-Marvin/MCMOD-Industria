@@ -8,13 +8,13 @@ import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.circuits.CircuitTemplate;
-import de.m_marvin.industria.core.electrics.circuits.CircuitTemplateManager;
+import de.m_marvin.industria.core.electrics.engine.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
+import de.m_marvin.industria.core.electrics.types.CircuitTemplate;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider;
 import de.m_marvin.industria.core.parametrics.BlockParametrics;
-import de.m_marvin.industria.core.parametrics.BlockParametricsManager;
+import de.m_marvin.industria.core.parametrics.engine.BlockParametricsManager;
 import de.m_marvin.industria.core.parametrics.properties.FloatParameter;
 import de.m_marvin.industria.core.registries.Circuits;
 import de.m_marvin.industria.core.registries.NodeTypes;
@@ -144,7 +144,7 @@ public class PortableCoalGeneratorBlock extends BaseEntityFixedMultiBlock implem
 				
 			} else {
 				
-				// TODO Sound
+				// TODO coal generator sound
 				
 				for (int i = 0; i < 10; i++) {
 					Direction direction = pState.getValue(BlockStateProperties.HORIZONTAL_FACING);
@@ -205,21 +205,24 @@ public class PortableCoalGeneratorBlock extends BaseEntityFixedMultiBlock implem
 	}
 	
 	@Override
+	public BlockPos getConnectorMasterPos(Level level, BlockPos pos, BlockState state) {
+		return getBlockAtMBPos(getOriginBlock(pos, state), state, new Vec3i(1, 0, 0));
+	}
+	
+	@Override
 	public double getVoltage(BlockState state, Level level, BlockPos pos) {
-		BlockPos connectorBlock = getBlockAtMBPos(getOriginBlock(pos, state), state, new Vec3i(1, 0, 0));
 		if (level.getBlockEntity(pos) instanceof PortableCoalGeneratorBlockEntity generator && generator.getMaster() != null) {
 			String[] wireLanes = generator.getNodeLanes();
-			return ElectricUtility.getVoltageBetween(level, new NodePos(connectorBlock, 0), new NodePos(connectorBlock, 0), 0, 1, wireLanes[0], wireLanes[1]);
+			return ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]);
 		}
 		return 0.0;
 	}
 	
 	@Override
 	public double getPower(BlockState state, Level level, BlockPos pos) {
-		BlockPos connectorBlock = getBlockAtMBPos(getOriginBlock(pos, state), state, new Vec3i(1, 0, 0));
 		if (level.getBlockEntity(pos) instanceof PortableCoalGeneratorBlockEntity generator && generator.getMaster() != null) {
 			String[] wireLanes = generator.getNodeLanes();
-			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(connectorBlock, 0), new NodePos(connectorBlock, 0), 2, 0, "power_shunt", wireLanes[0]);
+			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 2, 0, "power_shunt", wireLanes[0]);
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			double powerUsed = (shuntVoltage / Circuits.SHUNT_RESISTANCE) * parametrics.getNominalVoltage();
 			return Math.max(powerUsed > 1.0 ? parametrics.getPowerMin() : 0, powerUsed);

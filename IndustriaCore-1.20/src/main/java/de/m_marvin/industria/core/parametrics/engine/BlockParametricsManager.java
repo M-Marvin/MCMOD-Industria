@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core.parametrics;
+package de.m_marvin.industria.core.parametrics.engine;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,6 +20,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.core.parametrics.BlockParametrics;
 import de.m_marvin.industria.core.parametrics.engine.network.SSyncParametricsPackage;
 import de.m_marvin.industria.core.parametrics.properties.Parameter;
 import net.minecraft.resources.ResourceLocation;

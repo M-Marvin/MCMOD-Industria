@@ -2,6 +2,7 @@ package de.m_marvin.industria.content.container;
 
 import de.m_marvin.industria.content.blockentities.machines.PortableCoalGeneratorBlockEntity;
 import de.m_marvin.industria.content.registries.ModMenuTypes;
+import de.m_marvin.industria.core.util.ItemFluidExchangeHelper;
 import de.m_marvin.industria.core.util.container.AbstractBlockEntityFluidContainerBase;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.tags.FluidTags;
@@ -36,11 +37,11 @@ public class PortableCoalGeneratorContainer extends AbstractBlockEntityFluidCont
 		
 		FluidContainer container = this.blockEntity.getContainer();
 		
+		addSlot(new FuelSlot(container, container.getFirstAdditional(), 53, 54));
+		
 		FluidSlot fluidSlot = addFluidSlot(new WaterFluidSlot(container, 0, 17, 18));
 		addSlot(fluidSlot.makeFillSlot(container));
 		addSlot(fluidSlot.makeDrainSlot(container));
-		
-		addSlot(new FuelSlot(container, container.getFirstAdditional(), 53, 54));
 		
 		this.blockEntity.getContainer().addFillListener(this::playFillSound);
 		this.blockEntity.getContainer().addDrainListener(this::playDrainSound);
@@ -80,17 +81,42 @@ public class PortableCoalGeneratorContainer extends AbstractBlockEntityFluidCont
 		
 	}
 
+	protected boolean isFuel(ItemStack itemStack) {
+		return net.minecraftforge.common.ForgeHooks.getBurnTime(itemStack, RecipeType.SMELTING) > 0;
+	}
+	
 	@Override
 	public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
-
+		Slot slot = this.slots.get(pIndex);
+		if (slot != null && slot.hasItem()) {
+			ItemStack itemStack = slot.getItem();
+			if (pIndex < getFirstNonPlayerSlot()) {
+				FluidSlot fluidSlot = this.getFluidSlots().get(0);
+				if (isFuel(itemStack)) {
+					if (!this.moveItemStackTo(itemStack, getFirstNonPlayerSlot() + 0)) {
+						return ItemStack.EMPTY;
+					}
+				} else if (ItemFluidExchangeHelper.canBeDrained(itemStack, fluidSlot.getFluid()) && fluidSlot.getCapacity() > fluidSlot.getFluid().getAmount()) {
+					if (!this.moveItemStackTo(itemStack, getFirstNonPlayerSlot() + 1)) {
+						return ItemStack.EMPTY;
+					}
+				} else if (ItemFluidExchangeHelper.canBeFilled(itemStack, fluidSlot.getFluid()) && fluidSlot.getFluid().getAmount() > 0) {
+					if (!this.moveItemStackTo(itemStack, getFirstNonPlayerSlot() + 2)) {
+						return ItemStack.EMPTY;
+					}
+				}
+			} else {
+				if (!this.moveItemStackTo(itemStack, 0, getFirstNonPlayerSlot(), true)) {
+					return ItemStack.EMPTY;
+				}
+			}
+		}
 		return ItemStack.EMPTY;
-		
 	}
 
 	@Override
 	public boolean stillValid(Player pPlayer) {
-		// TODO inventory still valid
-		return true;
+		return Container.stillValidBlockEntity(this.blockEntity, pPlayer);
 	}
-
+	
 }

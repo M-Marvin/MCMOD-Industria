@@ -91,6 +91,11 @@ public interface IFluidSlotContainer {
 			}
 		}
 		
+		@Override
+		public int getMaxStackSize() {
+			return 1;
+		}
+		
 	}
 	
 	public static class FluidContainer implements Container {

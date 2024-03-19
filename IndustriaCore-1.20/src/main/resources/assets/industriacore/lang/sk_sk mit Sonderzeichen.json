@@ -32,7 +32,7 @@
 "industriacore.commands.contraption.tags.tagempty":		"Štítok nemôže byť prázdny!",
 "industriacore.commands.contraption.tags.listmultiple":		"Štítky z viac ako jedného výstroja nemôžu byť uvedené!",
 "industriacore.commands.contraption.tags.listhead":		"Výstroj '%1$s' má %2$s štítky/štítkov:",
-"industriacore.commands.contraption.tags.listentry":		"- %1$s",
+"industriacore.commands.contraption.tags.listentry":		"→ %1$s",
 
 "industriacore.commands.coordinates":			"[%1$s %2$s %3$s]",
 "industriacore.command.fixelectrics.noelectric":	"Žiadna kocka alebo linka s elektrickými vlastnosťami!",

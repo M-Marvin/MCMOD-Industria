@@ -32,7 +32,7 @@
 "industriacore.commands.contraption.tags.tagempty":		"\u00a1Etiqueta no puede estar en blanco!",
 "industriacore.commands.contraption.tags.listmultiple":		"\u00a1No se pueden enumerar etiquetas de m\u00e1s de un dispositivo!",
 "industriacore.commands.contraption.tags.listhead":		"Dispositivo %1$s tiene %2$s etiquetas:",
-"industriacore.commands.contraption.tags.listentry":		"- %1$s",
+"industriacore.commands.contraption.tags.listentry":		"\u2192 %1$s",
 
 "industriacore.commands.coordinates":				"[%1$s %2$s %3$s]",
 "industriacore.commands.fixelectrics.noelectric":		"\u00a1Sin bloque o conducto con propriedades el\u00e9ctricas!",

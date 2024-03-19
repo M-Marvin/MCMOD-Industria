@@ -32,7 +32,7 @@
 "industriacore.commands.contraption.tags.tagempty":		"\u00c9tiquette ne peut pas \u00eatre vide!",
 "industriacore.commands.contraption.tags.listmultiple":		"\u00c9tiquettes de plus d'un appareil ne peuvent pas \u00eatre \u00e8num\u00e8r\u00e8es!",
 "industriacore.commands.contraption.tags.listhead":		"Appareil '%1$s' a %2$s \u00e8tiquettes:",
-"industriacore.commands.contraption.tags.listentry":		"- %1$s",
+"industriacore.commands.contraption.tags.listentry":		"\u2192 %1$s",
 
 "industriacore.commands.coordinates":				"[%1$s %2$s %3$s]",
 "industriacore.commands.fixelectrics.noelectric":		"Pas un bloc ou une conduite avec des propri\u00e9t\u00e9s \u00e9lectriques!",

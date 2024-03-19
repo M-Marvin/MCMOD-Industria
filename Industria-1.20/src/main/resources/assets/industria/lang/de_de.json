@@ -250,14 +250,13 @@
 "conduit.industria.insulated_tin_wire":			"Zinnkabel",
 
 "industria.tooltip.wire_coil.wireOnCoil":		"Verbleibend: %1$s m",
-"industria.tooltip.transformer.power":		"Leistung (Übertrager): %1$s W",
-"industria.tooltip.transformer.current":		"Strom (Magnet): %1$s A",
-"industria.tooltip.transformer.fieldstrength":		"Feldstärke (Magnet): %1$s 1/W",
+"industria.tooltip.transformer.power":			"Leistung (als \u00dcbertrager): %1$s W",
+"industria.tooltip.transformer.current":		"Strom (als Magnet): %1$s A",
+"industria.tooltip.transformer.fieldstrength":		"Feldst\u00e4rke (als Magnet): %1$s 1/W",
 
 "industria.creative_tab.tools":				"Werkzeuge",
 "industria.creative_tab.machines":			"Maschinen",
 "industria.creative_tab.building_blocks":		"Baubl\u00f6cke (Industria)",
 "industria.creative_tab.nature_blocks":			"Naturbl\u00f6cke (Industria)",
 "industria.creative_tab.materials":			"Werkstoffe (Industria)"
-
 }

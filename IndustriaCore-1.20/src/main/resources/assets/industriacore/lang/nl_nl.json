@@ -32,7 +32,7 @@
 "industriacore.commands.contraption.tags.tagempty":		"Tag kan niet leeg zijn!",
 "industriacore.commands.contraption.tags.listmultiple":		"Tags van meer dan \u00e9\u00e9n apparaat kunnen niet worden vermeld!",
 "industriacore.commands.contraption.tags.listhead":		"Apparaat '%1$s' heeft %2$s tags:",
-"industriacore.commands.contraption.tags.listentry":		"- %1$s",
+"industriacore.commands.contraption.tags.listentry":		"\u2192 %1$s",
 
 "industriacore.commands.coordinates":				"[%1$s %2$s %3$s]",
 "industriacore.commands.fixelectrics.noelectric":		"Geen block of lijn met elektrische eigenschappen!",

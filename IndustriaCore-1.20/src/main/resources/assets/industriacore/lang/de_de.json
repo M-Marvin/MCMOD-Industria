@@ -32,7 +32,7 @@
 "industriacore.commands.contraption.tags.tagempty":		"Tag darf nicht leer sein!",
 "industriacore.commands.contraption.tags.listmultiple":		"Tags von mehr als einer Vorrichtung k\u00f6nnen nicht aufgelistet werden!",
 "industriacore.commands.contraption.tags.listhead":		"Vorrichtung '%1$s' hat %2$s Tags:",
-"industriacore.commands.contraption.tags.listentry":		"- %1$s",
+"industriacore.commands.contraption.tags.listentry":		"\u2192 %1$s",
 
 "industriacore.commands.coordinates":				"[%1$s %2$s %3$s]",
 "industriacore.commands.fixelectrics.noelectric":		"Kein/e Block oder Leitung mit elektrischen Eigenschaften!",

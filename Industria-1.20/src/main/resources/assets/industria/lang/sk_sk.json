@@ -250,6 +250,9 @@
 "conduit.industria.insulated_tin_wire":			"C\u00ednov\u00fd k\u00e1bel",
 
 "industria.tooltip.wire_coil.wireOnCoil":		"Zost\u00e1va: %1$s m",
+"industria.tooltip.transformer.power":			"V\u00fdkon (ako transform\u00e1tor): %1$s W",
+"industria.tooltip.transformer.current":		"Pr\u00fad (ako magnet): %1$s A",
+"industria.tooltip.transformer.fieldstrength":		"Sila po\u013ea (ako magnet): %1$s 1/W",
 
 "industria.creative_tab.tools":				"N\u00e1stroje",
 "industria.creative_tab.machines":			"Stroje",

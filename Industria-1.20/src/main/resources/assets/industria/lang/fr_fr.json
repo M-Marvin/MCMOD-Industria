@@ -250,6 +250,9 @@
 "conduit.industria.insulated_tin_wire":			"C\u00e2ble d'\u00e9tain",
 
 "industria.tooltip.wire_coil.wireOnCoil":		"Restant: %1$s m",
+"industria.tooltip.transformer.power":			"Puissance (comme transformateur): %1$s W",
+"industria.tooltip.transformer.current":		"Courant (comme aimant): %1$s A",
+"industria.tooltip.transformer.fieldstrength":		"Intensit\u00e9 du champ (comme aimant): %1$s 1/W",
 
 "industria.creative_tab.tools":				"Outils",
 "industria.creative_tab.machines":			"Machines",

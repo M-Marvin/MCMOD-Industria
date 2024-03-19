@@ -32,7 +32,7 @@
 "industriacore.commands.contraption.tags.tagempty":						"Tag can not be empty!",
 "industriacore.commands.contraption.tags.listmultiple":					"Cannot list tags of more than one contraption!",
 "industriacore.commands.contraption.tags.listhead":						"The contraption '%1$s' has %2$s tags:",
-"industriacore.commands.contraption.tags.listentry":					"- %1$s",
+"industriacore.commands.contraption.tags.listentry":					"\u2192 %1$s",
 
 "industriacore.commands.coordinates":									"[%1$s %2$s %3$s]",
 "industriacore.commands.fixelectrics.noelectric":						"Not a block or conduit with electric properties!",

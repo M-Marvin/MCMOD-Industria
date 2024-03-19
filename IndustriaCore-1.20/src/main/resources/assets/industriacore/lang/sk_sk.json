@@ -32,7 +32,7 @@
 "industriacore.commands.contraption.tags.tagempty":		"\u0160t\u00edtok nem\u00f4\u017ee by\u0165 pr\u00e1zdny!",
 "industriacore.commands.contraption.tags.listmultiple":		"\u0160t\u00edtky z viac ako jedn\u00e9ho v\u00fdstroja nem\u00f4\u017eu by\u0165 uveden\u00e9!",
 "industriacore.commands.contraption.tags.listhead":		"V\u00fdstroj '%1$s' m\u00e1 %2$s \u0161t\u00edtky/\u0161t\u00edtkov:",
-"industriacore.commands.contraption.tags.listentry":		"- %1$s",
+"industriacore.commands.contraption.tags.listentry":		"\u2192 %1$s",
 
 "industriacore.commands.coordinates":				"[%1$s %2$s %3$s]",
 "industriacore.commands.fixelectrics.noelectric":		"\u017diadna kocka alebo linka s elektrick\u00fdmi vlastnos\u0165ami!",

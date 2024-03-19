@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -32,7 +33,6 @@ import de.m_marvin.industria.core.electrics.types.conduits.IElectricConduit;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.types.SyncRequestType;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -185,14 +185,14 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	public static void onBlockStateChange(BlockEvent.NeighborNotifyEvent event) {
 		Level level = (Level) event.getLevel();
 		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-		if (event.getState().getBlock() instanceof IElectricBlock electric) {
-			BlockPos masterPos = electric.getConnectorMasterPos(level, event.getPos(), event.getState());
-			if (handler.isInNetwork(masterPos)) {
-				if (handler.getComponentAt(masterPos).instance(level).equals(event.getState())) return; // No real update, ignore
-				handler.getComponentAt(masterPos).setChanged();
+		
+		if (event.getState().getBlock() instanceof IElectricBlock electric && electric.getConnectorMasterPos(level, event.getPos(), event.getState()).equals(event.getPos())) {
+			if (handler.isInNetwork(event.getPos())) {
+				if (handler.getComponentAt(event.getPos()).instance(level).equals(event.getState())) return; // No real update, ignore
+				handler.getComponentAt(event.getPos()).setChanged();
 			} else {
 				IElectricBlock block = (IElectricBlock) event.getState().getBlock();
-				handler.addComponent(masterPos, block, event.getState());
+				handler.addComponent(event.getPos(), block, event.getState());
 			}
 		} else {
 			handler.removeComponent(event.getPos(), event.getState());
@@ -539,6 +539,13 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	public boolean isInNetwork(Object pos) {
 		if (!this.pos2componentMap.containsKey(pos)) return false;
 		return this.component2circuitMap.containsKey(this.pos2componentMap.get(pos));
+	}
+	
+	/**
+	 * Returns the internal collection of all electric components
+	 */
+	public Collection<Component<?, ?, ?>> getComponents() {
+		return this.pos2componentMap.values();
 	}
 	
 	/**

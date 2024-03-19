@@ -22,6 +22,7 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
+// TODO is this still required ?
 @EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class RandomTickSource {
 	
@@ -36,7 +37,6 @@ public class RandomTickSource {
 		tickConsumers.put(blockPredicate, consumer);
 	}
 	
-	//@SuppressWarnings("resource")
 	@SubscribeEvent
 	public static void onRandomTick(TickEvent.LevelTickEvent event) {
 		

@@ -154,6 +154,7 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 				int maxThrust = getThrust(pLevel, pPos, pState);
 				double thrust = powerP * maxThrust;
 				
+				// TODO finsish thruster
 				ServerShip contraption = (ServerShip) PhysicUtility.getContraptionOfBlock(pLevel, pPos);
 				if (contraption != null) {
 					ThrusterInducer inducer = PhysicUtility.getOrCreateForceInducer(pLevel, contraption, ThrusterInducer.class);

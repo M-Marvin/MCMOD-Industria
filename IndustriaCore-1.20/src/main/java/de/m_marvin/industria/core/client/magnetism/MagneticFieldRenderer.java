@@ -1,7 +1,5 @@
 package de.m_marvin.industria.core.client.magnetism;
 
-import org.joml.Matrix4f;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -74,10 +72,10 @@ public class MagneticFieldRenderer {
 		
 	}
 	
-	/* protected render methods, called by the render event */
+	/* private render methods, called by the render event */
 	
 	@SuppressWarnings("resource")
-	protected static void drawDebugFields(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, float partialTicks) {
+	private static void drawDebugFields(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, float partialTicks) {
 		
 		LazyOptional<MagnetismHandlerCapability> optionalMagneticHolder = clientLevel.getCapability(Capabilities.MAGNETISM_HANDLER_CAPABILITY);
 		if (optionalMagneticHolder.isPresent()) {
@@ -113,7 +111,7 @@ public class MagneticFieldRenderer {
 		
 	}
 	
-	protected static void drawMangeticInfluence(ClientLevel clientLevel, MultiBufferSource bufferSource, PoseStack matrixStack, MagneticFieldInfluence influence, float partialTicks) {
+	private static void drawMangeticInfluence(ClientLevel clientLevel, MultiBufferSource bufferSource, PoseStack matrixStack, MagneticFieldInfluence influence, float partialTicks) {
 		
 		matrixStack.pushPose();
 		
@@ -160,7 +158,7 @@ public class MagneticFieldRenderer {
 		
 	}
 	
-	protected static void drawMagneticField(ClientLevel clientLevel, MultiBufferSource bufferSource, PoseStack matrixStack, MagneticField field, float partialTicks) {
+	private static void drawMagneticField(ClientLevel clientLevel, MultiBufferSource bufferSource, PoseStack matrixStack, MagneticField field, float partialTicks) {
 		
 		matrixStack.pushPose();
 		
@@ -181,8 +179,7 @@ public class MagneticFieldRenderer {
 		float r = 0F;
 		float g = 1F;
 		float b = 1F;
-		float a = 0.1F;
-
+		
 		VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.lines());
 
 		ClientPhysicsUtility.ensureWorldTransformTo(clientLevel, matrixStack, pos);
@@ -205,50 +202,6 @@ public class MagneticFieldRenderer {
         		fxh, fyh, fzh, 
         		r, g, b, 1F,
         		r, g, b);
-		
-		Matrix4f pose = matrixStack.last().pose();
-
-		VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.debugFilledBox());
-
-		vertexConsumer.vertex(pose, fxl, fyh, fzl).color(r, g, b, a).endVertex();
-		vertexConsumer.vertex(pose, fxl, fyh, fzh).color(r, g, b, a).endVertex();
-		vertexConsumer.vertex(pose, fxh, fyh, fzl).color(r, g, b, a).endVertex();
-		vertexConsumer.vertex(pose, fxh, fyh, fzh).color(r, g, b, a).endVertex();
-		
-		vertexConsumer = bufferSource.getBuffer(RenderType.debugFilledBox());
-		
-		vertexConsumer.vertex(pose, fxl, fyl, fzl).color(r, g, b, a).endVertex();
-		vertexConsumer.vertex(pose, fxl, fyh, fzl).color(r, g, b, a).endVertex();
-		vertexConsumer.vertex(pose, fxh, fyl, fzl).color(r, g, b, a).endVertex();
-		vertexConsumer.vertex(pose, fxh, fyh, fzl).color(r, g, b, a).endVertex();
-
-		vertexConsumer = bufferSource.getBuffer(RenderType.debugFilledBox());
-		
-		vertexConsumer.vertex(pose, fxl, fyl, fzl).color(r, g, b, a).endVertex();
-		vertexConsumer.vertex(pose, fxl, fyl, fzh).color(r, g, b, a).endVertex();
-		vertexConsumer.vertex(pose, fxl, fyh, fzl).color(r, g, b, a).endVertex();
-		vertexConsumer.vertex(pose, fxl, fyh, fzh).color(r, g, b, a).endVertex();
-		
-		vertexConsumer = bufferSource.getBuffer(RenderType.debugFilledBox());
-		
-		vertexConsumer.vertex(pose, fxh, fyl, fzl).color(r, g, b, a).endVertex();
-		vertexConsumer.vertex(pose, fxh, fyl, fzh).color(r, g, b, a).endVertex();
-		vertexConsumer.vertex(pose, fxl, fyl, fzl).color(r, g, b, a).endVertex();
-		vertexConsumer.vertex(pose, fxl, fyl, fzh).color(r, g, b, a).endVertex();
-		
-		vertexConsumer = bufferSource.getBuffer(RenderType.debugFilledBox());
-		
-		vertexConsumer.vertex(pose, fxh, fyl, fzh).color(r, g, b, a).endVertex();
-		vertexConsumer.vertex(pose, fxh, fyh, fzh).color(r, g, b, a).endVertex();
-		vertexConsumer.vertex(pose, fxl, fyl, fzh).color(r, g, b, a).endVertex();
-		vertexConsumer.vertex(pose, fxl, fyh, fzh).color(r, g, b, a).endVertex();
-		
-		vertexConsumer = bufferSource.getBuffer(RenderType.debugFilledBox());
-		
-		vertexConsumer.vertex(pose, fxh, fyh, fzl).color(r, g, b, a).endVertex();
-		vertexConsumer.vertex(pose, fxh, fyh, fzh).color(r, g, b, a).endVertex();
-		vertexConsumer.vertex(pose, fxh, fyl, fzl).color(r, g, b, a).endVertex();
-		vertexConsumer.vertex(pose, fxh, fyl, fzh).color(r, g, b, a).endVertex();
 		
 		matrixStack.popPose();
 		

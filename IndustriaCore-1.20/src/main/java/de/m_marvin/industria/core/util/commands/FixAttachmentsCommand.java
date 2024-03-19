@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core.electrics.engine.commands;
+package de.m_marvin.industria.core.util.commands;
 
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -15,6 +15,7 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.conduits.IElectricConduit;
+import de.m_marvin.industria.core.registries.IndustriaTags;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
@@ -28,30 +29,30 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 
-public class FixElectricsCommand {
+public class FixAttachmentsCommand {
 	
 	public static final int MAX_AREA_SIZE = 110592;
 	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-		dispatcher.register(Commands.literal("fixelectrics").requires((source) -> 
+		dispatcher.register(Commands.literal("fixattachments").requires((source) -> 
 			source.hasPermission(2)
 		)
 		.then(
 				Commands.argument("pos", BlockPosArgument.blockPos())
 				.executes((source) -> 
-						fixElectrics(source, BlockPosArgument.getLoadedBlockPos(source, "pos"))
+						fixAttachments(source, BlockPosArgument.getLoadedBlockPos(source, "pos"))
 				)
 				.then(
 						Commands.argument("range", IntegerArgumentType.integer(0, 48))
 						.executes((source) ->
-								fixElectricsRange(source, BlockPosArgument.getLoadedBlockPos(source, "pos"), IntegerArgumentType.getInteger(source, "range"))
+								fixAttachmentsRange(source, BlockPosArgument.getLoadedBlockPos(source, "pos"), IntegerArgumentType.getInteger(source, "range"))
 						)
 				)
 				
 		));
 	}
 	
-	public static int fixElectricsRange(CommandContext<CommandSourceStack> source, BlockPos position, int range) {
+	public static int fixAttachmentsRange(CommandContext<CommandSourceStack> source, BlockPos position, int range) {
 		ServerLevel level = source.getSource().getLevel();
 		int areaBlocks = (int) Math.pow(range, 3);
 		
@@ -75,7 +76,7 @@ public class FixElectricsCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	public static int fixElectrics(CommandContext<CommandSourceStack> source, BlockPos position) {
+	public static int fixAttachments(CommandContext<CommandSourceStack> source, BlockPos position) {
 		ServerLevel level = source.getSource().getLevel();
 		Set<ConduitPos> fixedConduits = new HashSet<>();
 		Set<BlockPos> fixedBlocks = new HashSet<>();
@@ -91,7 +92,7 @@ public class FixElectricsCommand {
 	public static void fixBlockAndConduitsAt(Level level, BlockPos pos, Set<BlockPos> fixedBlocks, Set<ConduitPos> fixedConduits) {
 		
 		BlockState state = level.getBlockState(pos);
-		if (state.getBlock() instanceof IElectricBlock connector) {
+		if (state.getBlock() instanceof IElectricBlock || state.is(IndustriaTags.Blocks.MAGNETIC)) {
 			
 			if (!fixedBlocks.contains(pos)) {
 				

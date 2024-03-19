@@ -29,8 +29,13 @@ import net.minecraftforge.network.simple.SimpleChannel;
 @Mod("industriacore")
 public class IndustriaCore {
 	
+	public static final String MODID = "industriacore";
+	public static final Logger LOGGER = LogManager.getLogger();
+	public static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(new ResourceLocation(MODID, "main"), () -> NetworkPackages.PROTOCOL_VERSION, NetworkPackages.PROTOCOL_VERSION::equals, NetworkPackages.PROTOCOL_VERSION::equals);
+	
 	public static ArchiveUtility ARCHIVE_ACCESS = null;
 	
+	// Initialize mod-jar access for extracting additional files (like SPICE init files)
 	static {
 		String codeSourcePath = IndustriaCore.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		Pattern filePathPattern = Pattern.compile("\\/([^\"*?<>|]*)[%#][0-9]{1,}!\\/");
@@ -38,15 +43,11 @@ public class IndustriaCore {
 		if (!m.find()) throw new RuntimeException("Could not resolve mod file location: " + codeSourcePath);
 		String codeSourceLoc = m.group(1);
 		if (!codeSourceLoc.endsWith(".jar")) {
-			// TODO running in ide gets not set from forge for some reason ?
+			// FIXME [Forge] running in ide gets not set from forge for some reason ?
 			//SharedConstants.IS_RUNNING_IN_IDE = true;
 		}
 		ARCHIVE_ACCESS = new ArchiveUtility(new File(codeSourceLoc));
 	}
-	
-	public static final String MODID = "industriacore";
-	public static final Logger LOGGER = LogManager.getLogger();
-	public static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(new ResourceLocation(MODID, "main"), () -> NetworkPackages.PROTOCOL_VERSION, NetworkPackages.PROTOCOL_VERSION::equals, NetworkPackages.PROTOCOL_VERSION::equals);
 	
 	public IndustriaCore() {
 				

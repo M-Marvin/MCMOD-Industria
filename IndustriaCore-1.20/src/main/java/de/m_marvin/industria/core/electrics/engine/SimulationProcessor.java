@@ -137,12 +137,14 @@ public class SimulationProcessor {
 			}
 		}
 		
-		protected boolean isNetListValid(String netList) {
+		private boolean isNetListValid(String netList) {
+			// Quick check if null or under limit 10 (net lists as short as 10 can't be valid)
 			if (netList == null || netList.length() < 10) return false;
-			return netList.lines().filter(l -> !l.startsWith("\\*")).toList().size() > 3;
+			// Filter out any comments and empty lines, check if at least two components are defined (title + component 1 + component 2 + end line)
+			return netList.lines().filter(l -> !l.startsWith("*") && !l.isBlank()).toList().size() > 3;
 		}
 		
-		protected void processNetList(String netList) {
+		private void processNetList(String netList) {
 			if (Config.SPICE_DEBUG_LOGGING.get()) IndustriaCore.LOGGER.debug("Load spice circuit:\n" + netList);
 			if (!this.nglink.loadCircuit(netList)) {
 				IndustriaCore.LOGGER.warn("Failed to start electric simulation! Failed to load circuit!");
@@ -171,7 +173,7 @@ public class SimulationProcessor {
 		return false;
 	}
 	
-	public void writeInitFile() {
+	private void writeInitFile() {
 		File workingDir = new File("").getAbsoluteFile();
 		File initFile = new File(workingDir, SPICE_INIT_LOCATION).getAbsoluteFile();
 		

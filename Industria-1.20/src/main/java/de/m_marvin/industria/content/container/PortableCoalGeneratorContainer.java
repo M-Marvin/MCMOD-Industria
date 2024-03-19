@@ -82,8 +82,9 @@ public class PortableCoalGeneratorContainer extends AbstractBlockEntityFluidCont
 
 	@Override
 	public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
-		// TODO quick swap inventory
-		return null;
+
+		return ItemStack.EMPTY;
+		
 	}
 
 	@Override

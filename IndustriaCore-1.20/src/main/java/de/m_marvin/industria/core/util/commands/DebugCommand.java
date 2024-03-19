@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core.electrics.engine.commands;
+package de.m_marvin.industria.core.util.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -22,26 +22,26 @@ public class DebugCommand {
 	public static final int MAX_AREA_SIZE = 110592;
 	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-		dispatcher.register(Commands.literal("debug_industria").requires((source) -> 
+		dispatcher.register(Commands.literal("industria").requires((source) -> 
 			source.hasPermission(2)
-		)
+		)	
 		.then(
-				Commands.literal("circuit")
+				Commands.literal("dump_circuit")
 				.then(
 						Commands.argument("pos", BlockPosArgument.blockPos())
 						.executes((source) -> 
-								debugCircuit(source, BlockPosArgument.getLoadedBlockPos(source, "pos"))
+								dumpCircuit(source, BlockPosArgument.getLoadedBlockPos(source, "pos"))
 						)
 				)
 		)
 		.then(
-				Commands.literal("node")
+				Commands.literal("print_node")
 				.then(
 						Commands.argument("pos", BlockPosArgument.blockPos())
 						.then(
 								Commands.argument("node", IntegerArgumentType.integer())
 								.executes((source) ->
-										printNodeInfo(source, BlockPosArgument.getBlockPos(source, "pos"), IntegerArgumentType.getInteger(source, "node"))
+										printNode(source, BlockPosArgument.getBlockPos(source, "pos"), IntegerArgumentType.getInteger(source, "node"))
 								)
 						)
 				)
@@ -49,7 +49,7 @@ public class DebugCommand {
 	}
 	
 	@SuppressWarnings("resource")
-	public static int debugCircuit(CommandContext<CommandSourceStack> source, BlockPos position) {
+	public static int dumpCircuit(CommandContext<CommandSourceStack> source, BlockPos position) {
 		ServerLevel level = source.getSource().getLevel();
 		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 		ElectricNetworkHandlerCapability.Component<Object, BlockPos, Object> component = handler.getComponentAt(position);
@@ -64,7 +64,7 @@ public class DebugCommand {
 		return 1;
 	}
 	
-	public static int printNodeInfo(CommandContext<CommandSourceStack> source, BlockPos position, int node) {
+	public static int printNode(CommandContext<CommandSourceStack> source, BlockPos position, int node) {
 		ServerLevel level = source.getSource().getLevel();
 		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 		ElectricNetworkHandlerCapability.Component<Object, BlockPos, Object> component = handler.getComponentAt(position);

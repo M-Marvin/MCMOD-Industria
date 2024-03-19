@@ -2,7 +2,9 @@ package de.m_marvin.industria.content.blocks.machines;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import de.m_marvin.industria.content.blockentities.machines.ElectroMagneticCoilBlockEntity;
@@ -326,7 +328,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 		level.scheduleTick(position, this, 1);
 	}
 
-	protected boolean findConnectedBlocks(Level level, BlockPos pos, BlockState state, Direction relative, boolean attached, int limit, int depth, List<BlockPos> connectedBlocks) {
+	protected boolean findConnectableBlocks(Level level, BlockPos pos, BlockState state, Direction relative, boolean attached, int limit, int depth, List<BlockPos> connectedBlocks) {
 		if (!state.is(ModTags.Blocks.ELECTRO_MAGNETIC_COILS)) return true;
 		if (relative != null) {
 			BlockState originState = level.getBlockState(pos.relative(relative.getOpposite()));
@@ -344,7 +346,29 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 			BlockPos attachedPos = pos.relative(d);
 			BlockState attachState = level.getBlockState(attachedPos);
 			if (connectedBlocks.contains(attachedPos)) continue;
-			if (!findConnectedBlocks(level, attachedPos, attachState, d, d == attachFacing, limit, depth + 1, connectedBlocks)) return false;
+			if (!findConnectableBlocks(level, attachedPos, attachState, d, d == attachFacing, limit, depth + 1, connectedBlocks)) return false;
+		}
+		return true;
+	}
+	
+	public boolean isStructureValid(Level level, BlockState state, List<BlockPos> connectedBlocks) {
+		if (connectedBlocks.isEmpty()) return false;
+		
+		BlockPos min = connectedBlocks.stream().reduce(MathUtility::getMinCorner).get();
+		BlockPos max = connectedBlocks.stream().reduce(MathUtility::getMaxCorner).get();
+		Direction facing = state.getValue(BlockStateProperties.FACING);
+		
+		for (int y = min.getY(); y <= max.getY(); y++) {
+			for (int z = min.getZ(); z <= max.getZ(); z++) {
+				for (int x = min.getX(); x <= max.getX(); x++) {
+					BlockPos pos2 = new BlockPos(x, y, z);
+					BlockState state2 = level.getBlockState(pos2);
+					
+					if (state2.getBlock() != this || !connectedBlocks.contains(pos2) || state2.getValue(BlockStateProperties.FACING) != facing) {
+						return false;
+					}
+				}
+			}
 		}
 		return true;
 	}
@@ -352,8 +376,8 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	@Override
 	public List<BlockPos> findMultiBlockEntityBlocks(Level level, BlockPos pos, BlockState state) {
 		List<BlockPos> connectedBlocks = new ArrayList<>();
-		boolean toLarge = !findConnectedBlocks(level, pos, state, null, true, 36, 0, connectedBlocks);
-		if (toLarge) {
+		boolean toLarge = !findConnectableBlocks(level, pos, state, null, true, 36, 0, connectedBlocks);
+		if (toLarge || !isStructureValid(level, state, connectedBlocks)) {
 			connectedBlocks.clear();
 			connectedBlocks.add(pos);
 		}
@@ -363,23 +387,25 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	protected void updateConnections(Level level, BlockPos pos, BlockState state) {
 		
 		List<BlockPos> connectedBlocks = new ArrayList<>();
-		boolean toLarge = !findConnectedBlocks(level, pos, state, null, true, 36, 0, connectedBlocks);
+		boolean toLarge = !findConnectableBlocks(level, pos, state, null, true, 36, 0, connectedBlocks);
+		boolean isValid = !toLarge && isStructureValid(level, state, connectedBlocks);
 		
-		boolean hasInvalid = toLarge;
-		if (!toLarge && connectedBlocks.size() > 0) {
+		if (isValid) {
 
 			BlockPos min = connectedBlocks.stream().reduce(MathUtility::getMinCorner).get();
 			BlockPos max = connectedBlocks.stream().reduce(MathUtility::getMaxCorner).get();
 			Axis axis = state.getValue(BlockStateProperties.FACING).getAxis();
 			
+			Map<BlockPos, BlockState> newStates = new HashMap<>();
+			
 			boolean hasChanged = false;
-			outer: for (int y = min.getY(); y <= max.getY(); y++) {
+			for (int y = min.getY(); y <= max.getY(); y++) {
 				for (int z = min.getZ(); z <= max.getZ(); z++) {
 					for (int x = min.getX(); x <= max.getX(); x++) {
 						BlockPos pos2 = new BlockPos(x, y, z);
 						BlockState state2 = level.getBlockState(pos2);
 						
-						if (state2.is(ModTags.Blocks.ELECTRO_MAGNETIC_COILS) && state2.getBlock() instanceof ElectroMagneticCoilBlock && connectedBlocks.contains(pos2)) {
+						if (state2.getBlock() == this && connectedBlocks.contains(pos2)) {
 							
 							boolean outerBlock = false;;
 							switch (axis) {
@@ -396,20 +422,18 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 									.setValue(BlockStateProperties.UP, y == max.getY() ? false : outerBlock)
 									.setValue(BlockStateProperties.DOWN, y == min.getY() ? false : outerBlock)
 									.setValue(ModBlockStateProperties.CORE, outerBlock);
+							
 							if (!connectedState.equals(state2)) {
 								hasChanged = true;
-								level.setBlock(pos2, connectedState, 2);
+								newStates.put(pos2, connectedState);
 							}
 							
-						} else {
-							hasInvalid = true;
-							break outer;
 						}
 						
 					}
 				}
 			}
-
+			
 			if (hasChanged) {
 				
 				// Reset all masters and drop items
@@ -421,21 +445,22 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 						}
 						transformer.setMaster(false);
 						transformer.dropWires();
-						GameUtility.triggerClientSync(level, pos2);
 					}
+				}
+
+				// Set one block as master (no additional update required, the ones from above are still effective)
+				if (level.getBlockEntity(min) instanceof ElectroMagneticCoilBlockEntity transformer) {
+					transformer.setMaster(true);
+				}
+				
+				// Set new states
+				for (BlockPos pos1 : newStates.keySet()) {
+					level.setBlockAndUpdate(pos1, newStates.get(pos1));
 				}
 				
 			}
 			
-			// Set one block as master
-			if (level.getBlockEntity(min) instanceof ElectroMagneticCoilBlockEntity transformer) {
-				transformer.setMaster(true);
-				GameUtility.triggerClientSync(level, min);
-			}
-			
-		}
-		
-		if (hasInvalid) {
+		} else {
 			
 			for (BlockPos pos2 : connectedBlocks) {
 				
@@ -448,12 +473,14 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 						.setValue(BlockStateProperties.UP, false)
 						.setValue(BlockStateProperties.DOWN, false)
 						.setValue(ModBlockStateProperties.CORE, true);
-				if (!unconnectedState.equals(state2)) level.setBlock(pos2, unconnectedState, 2);
 
 				// Set block as master (of it self)
 				if (level.getBlockEntity(pos2) instanceof ElectroMagneticCoilBlockEntity transformer) {
 					transformer.setMaster(true);
-					GameUtility.triggerClientSync(level, pos2);
+				}
+				
+				if (!unconnectedState.equals(state2)) {
+					level.setBlockAndUpdate(pos2, unconnectedState);
 				}
 				
 			}
@@ -473,7 +500,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pNeighborBlock, BlockPos pNeighborPos, boolean pMovedByPiston) {
 		super.neighborChanged(pState, pLevel, pPos, pNeighborBlock, pNeighborPos, pMovedByPiston);
 		BlockState neighborState = pLevel.getBlockState(pPos);
-		if (!neighborState.is(ModTags.Blocks.ELECTRO_MAGNETIC_COILS) && !pNeighborBlock.builtInRegistryHolder().is(ModTags.Blocks.ELECTRO_MAGNETIC_COILS)) return;
+		if (neighborState.getBlock() != this) return;
 		updateConnections(pLevel, pPos, pState);
 	}
 	

@@ -9,7 +9,6 @@ import java.util.function.Consumer;
 
 import de.m_marvin.industria.content.blockentities.machines.ElectroMagneticCoilBlockEntity;
 import de.m_marvin.industria.content.registries.ModBlockStateProperties;
-import de.m_marvin.industria.content.registries.ModBlockStateProperties.HorizontalConnection;
 import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.content.registries.ModTags;
 import de.m_marvin.industria.core.client.util.TooltipAdditions;
@@ -157,12 +156,14 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	protected void createBlockStateDefinition(Builder<Block, BlockState> pBuilder) {
 		super.createBlockStateDefinition(pBuilder);
 		pBuilder.add(BlockStateProperties.FACING);
+		pBuilder.add(BlockStateProperties.NORTH);
+		pBuilder.add(BlockStateProperties.SOUTH);
+		pBuilder.add(BlockStateProperties.EAST);
+		pBuilder.add(BlockStateProperties.WEST);
 		pBuilder.add(BlockStateProperties.DOWN);
 		pBuilder.add(BlockStateProperties.UP);
-		pBuilder.add(ModBlockStateProperties.SHAPE);
 		pBuilder.add(ModBlockStateProperties.CONNECT);
 		pBuilder.add(BlockStateProperties.WATERLOGGED);
-		// TODO reduce blockstates
 	}
 	
 	@Override
@@ -172,11 +173,20 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 		BlockState attachState = pContext.getLevel().getBlockState(pContext.getClickedPos().relative(attachFace));
 		if (attachState.getBlock() instanceof ElectroMagneticCoilBlock) facing = attachState.getValue(BlockStateProperties.FACING);
 		return super.getStateForPlacement(pContext)
-				.setValue(ModBlockStateProperties.SHAPE, HorizontalConnection.NONE)
+				.setValue(BlockStateProperties.NORTH, false)
+				.setValue(BlockStateProperties.SOUTH, false)
+				.setValue(BlockStateProperties.EAST, false)
+				.setValue(BlockStateProperties.WEST, false)
 				.setValue(BlockStateProperties.DOWN, false)
 				.setValue(BlockStateProperties.UP, false)
 				.setValue(BlockStateProperties.FACING, facing)
 				.setValue(ModBlockStateProperties.CONNECT, attachFace);
+	}
+	
+	private VoxelShape makeCenterShape(boolean north, boolean south, boolean east, boolean west) {
+		float f1 = 14 * 0.0625F;
+		float f0 = 2 * 0.0625F;
+		return Shapes.box(west ? 0 : f0, 0, north ? 0 : f0, east ? 1 : f1, 1, south ? 1 : f1);
 	}
 	
 	@Override
@@ -184,13 +194,14 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 		switch (pState.getValue(BlockStateProperties.FACING).getAxis()) {
 		case Y:
 			return Shapes.or(
-					pState.getValue(ModBlockStateProperties.SHAPE) != HorizontalConnection.ALL ? CORE_SHAPE : Shapes.empty(),
+					makeCenterShape(
+						pState.getValue(BlockStateProperties.NORTH),
+						pState.getValue(BlockStateProperties.SOUTH),
+						pState.getValue(BlockStateProperties.EAST),
+						pState.getValue(BlockStateProperties.WEST)
+					),
 					!pState.getValue(BlockStateProperties.UP) ? UP_SHAPE : Shapes.empty(),
-					!pState.getValue(BlockStateProperties.DOWN) ? DOWN_SHAPE : Shapes.empty(),
-					pState.getValue(ModBlockStateProperties.SHAPE).hasNorth() ? NORTH_SHAPE : Shapes.empty(),
-					pState.getValue(ModBlockStateProperties.SHAPE).hasSouth() ? SOUTH_SHAPE : Shapes.empty(),
-					pState.getValue(ModBlockStateProperties.SHAPE).hasEast() ? EAST_SHAPE : Shapes.empty(),
-					pState.getValue(ModBlockStateProperties.SHAPE).hasWest() ? WEST_SHAPE : Shapes.empty()
+					!pState.getValue(BlockStateProperties.DOWN) ? DOWN_SHAPE : Shapes.empty()
 					);
 		case X:
 			return VoxelShapeUtility.transformation()
@@ -198,13 +209,14 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 					.rotateZ(-90)
 					.uncentered()
 					.transform(Shapes.or(
-						pState.getValue(ModBlockStateProperties.SHAPE) != HorizontalConnection.ALL ? CORE_SHAPE : Shapes.empty(),
-						!pState.getValue(ModBlockStateProperties.SHAPE).hasEast() ? UP_SHAPE : Shapes.empty(),
-						!pState.getValue(ModBlockStateProperties.SHAPE).hasWest() ? DOWN_SHAPE : Shapes.empty(),
-						pState.getValue(ModBlockStateProperties.SHAPE).hasNorth() ? NORTH_SHAPE : Shapes.empty(),
-						pState.getValue(ModBlockStateProperties.SHAPE).hasSouth() ? SOUTH_SHAPE : Shapes.empty(),
-						pState.getValue(BlockStateProperties.DOWN) ? EAST_SHAPE : Shapes.empty(),
-						pState.getValue(BlockStateProperties.UP) ? WEST_SHAPE : Shapes.empty()
+						makeCenterShape(
+							pState.getValue(BlockStateProperties.NORTH),
+							pState.getValue(BlockStateProperties.SOUTH),
+							pState.getValue(BlockStateProperties.DOWN),
+							pState.getValue(BlockStateProperties.UP)
+						),
+						!pState.getValue(BlockStateProperties.EAST) ? UP_SHAPE : Shapes.empty(),
+						!pState.getValue(BlockStateProperties.WEST) ? DOWN_SHAPE : Shapes.empty()
 					));
 		case Z:
 			return VoxelShapeUtility.transformation()
@@ -212,13 +224,14 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 			.rotateX(-90)
 			.uncentered()
 			.transform(Shapes.or(
-				pState.getValue(ModBlockStateProperties.SHAPE) != HorizontalConnection.ALL ? CORE_SHAPE : Shapes.empty(),
-				!pState.getValue(ModBlockStateProperties.SHAPE).hasSouth() ? UP_SHAPE : Shapes.empty(),
-				!pState.getValue(ModBlockStateProperties.SHAPE).hasNorth() ? DOWN_SHAPE : Shapes.empty(),
-				pState.getValue(BlockStateProperties.UP) ? NORTH_SHAPE : Shapes.empty(),
-				pState.getValue(BlockStateProperties.DOWN) ? SOUTH_SHAPE : Shapes.empty(),
-				pState.getValue(ModBlockStateProperties.SHAPE).hasEast() ? EAST_SHAPE : Shapes.empty(),
-				pState.getValue(ModBlockStateProperties.SHAPE).hasWest() ? WEST_SHAPE : Shapes.empty()
+				makeCenterShape(
+					pState.getValue(BlockStateProperties.UP),
+					pState.getValue(BlockStateProperties.DOWN),
+					pState.getValue(BlockStateProperties.EAST),
+					pState.getValue(BlockStateProperties.WEST)
+				),
+				!pState.getValue(BlockStateProperties.SOUTH) ? UP_SHAPE : Shapes.empty(),
+				!pState.getValue(BlockStateProperties.NORTH) ? DOWN_SHAPE : Shapes.empty()
 			));
 		default: return Shapes.empty();
 		}
@@ -273,7 +286,6 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 			NodePos[] nodes = coil.getConnections();
 			NodePos[] inputNodes = Arrays.copyOfRange(nodes, 0, nodes.length / 2);
 			NodePos[] outputNodes = Arrays.copyOfRange(nodes, nodes.length / 2, nodes.length);
-			
 			
 			if (coil.getWindingsPrimary() > 0 && coil.getWindingsSecundary() > 0) {
 				
@@ -411,12 +423,16 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 							
 							
 							BlockState connectedState = state2
-									.setValue(ModBlockStateProperties.SHAPE, HorizontalConnection.fromFaces(
-											z == min.getZ() ? false : outerBlock,
-											z == max.getZ() ? false : outerBlock,
-											x == max.getX() ? false : outerBlock,
-											x == min.getX() ? false : outerBlock
-										))
+//									.setValue(ModBlockStateProperties.SHAPE, HorizontalConnection.fromFaces(
+//											z == min.getZ() ? false : outerBlock,
+//											z == max.getZ() ? false : outerBlock,
+//											x == max.getX() ? false : outerBlock,
+//											x == min.getX() ? false : outerBlock
+//										))
+									.setValue(BlockStateProperties.NORTH, z == min.getZ() ? false : outerBlock)
+									.setValue(BlockStateProperties.SOUTH, z == max.getZ() ? false : outerBlock)
+									.setValue(BlockStateProperties.EAST, x == max.getX() ? false : outerBlock)
+									.setValue(BlockStateProperties.WEST, x == min.getX() ? false : outerBlock)
 									.setValue(BlockStateProperties.UP, y == max.getY() ? false : outerBlock)
 									.setValue(BlockStateProperties.DOWN, y == min.getY() ? false : outerBlock);
 							
@@ -463,7 +479,11 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				
 				BlockState state2 = level.getBlockState(pos2);
 				BlockState unconnectedState = state2
-						.setValue(ModBlockStateProperties.SHAPE, HorizontalConnection.NONE)
+//						.setValue(ModBlockStateProperties.SHAPE, HorizontalConnection.NONE)
+						.setValue(BlockStateProperties.NORTH, false)
+						.setValue(BlockStateProperties.SOUTH, false)
+						.setValue(BlockStateProperties.EAST, false)
+						.setValue(BlockStateProperties.WEST, false)
 						.setValue(BlockStateProperties.UP, false)
 						.setValue(BlockStateProperties.DOWN, false);
 

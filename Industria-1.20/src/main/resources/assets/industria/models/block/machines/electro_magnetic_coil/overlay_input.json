@@ -1,0 +1,15 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "industria:block/machines/electro_magnetic_coil_input"
+	},
+	"elements": [
+		{
+			"from": [5, 16.1, 5],
+			"to": [11, 16.1, 11],
+			"faces": {
+				"up": {"uv": [5, 5, 11, 11], "texture": "#0"}
+			}
+		}
+	]
+}

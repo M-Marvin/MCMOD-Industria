@@ -23,7 +23,6 @@ public abstract class DynamicMultiBlockEntity<T extends DynamicMultiBlockEntity<
 	
 	public abstract Class<T> getMultiBlockTypeClass();
 	
-	@SuppressWarnings("rawtypes")
 	protected void findPositions() {
 		BlockState state = getBlockState();
 		if (state.getBlock() instanceof IBaseEntityDynamicMultiBlock block) {

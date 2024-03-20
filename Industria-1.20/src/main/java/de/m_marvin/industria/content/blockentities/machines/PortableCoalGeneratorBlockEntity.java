@@ -126,7 +126,8 @@ public class PortableCoalGeneratorBlockEntity extends FixedMultiBlockEntity<Port
 
 		if (pBlockEntity.canRun && pState.getBlock() instanceof PortableCoalGeneratorBlock generatorBlock) {
 			
-			double powerProduction = generatorBlock.getPower(pState, pLevel, pPos);
+			BlockPos connectorBlock = generatorBlock.getBlockAtMBPos(generatorBlock.getOriginBlock(pPos, pState), pState, new Vec3i(1, 0, 0));
+			double powerProduction = generatorBlock.getPower(pState, pLevel, connectorBlock);
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(generatorBlock);
 			double waterConsumtionTick = powerProduction / parametrics.getParameter(PortableCoalGeneratorBlock.PARAMETER_WATTS_PER_WATER_MB);
 			double fuelConsumtionTick = powerProduction / parametrics.getParameter(PortableCoalGeneratorBlock.PARAMETER_WATTS_PER_FUEL_TICK);

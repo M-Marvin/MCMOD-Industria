@@ -2,483 +2,443 @@
   "multipart": [
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_core",
-        "uvlock": true
+        "model": "industria:block/machines/electro_magnetic_coil/core_none"
       },
       "when": {
-        "core": "true",
-        "facing": "up"
+        "shape": "none",
+        "facing": "up|down"
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_top_output",
-        "uvlock": true
+        "model": "industria:block/machines/electro_magnetic_coil/core_north"
       },
       "when": {
-        "up": "false",
-        "facing": "up"
+        "shape": "north",
+        "facing": "up|down"
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_bottom_input",
-        "uvlock": true
+        "model": "industria:block/machines/electro_magnetic_coil/core_south"
       },
       "when": {
-        "down": "false",
-        "facing": "up"
+        "shape": "south",
+        "facing": "up|down"
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side",
-        "uvlock": true
+        "model": "industria:block/machines/electro_magnetic_coil/core_east"
       },
       "when": {
-        "north": "true",
-        "facing": "up"
+        "shape": "east",
+        "facing": "up|down"
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side",
-        "y": 180,
-        "uvlock": true
+        "model": "industria:block/machines/electro_magnetic_coil/core_west"
       },
       "when": {
-        "south": "true",
-        "facing": "up"
+        "shape": "west",
+        "facing": "up|down"
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side",
-        "y": 90,
-        "uvlock": true
+        "model": "industria:block/machines/electro_magnetic_coil/core_north_south"
       },
       "when": {
-        "east": "true",
-        "facing": "up"
+        "shape": "north_south",
+        "facing": "up|down"
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side",
-        "y": -90,
-        "uvlock": true
+        "model": "industria:block/machines/electro_magnetic_coil/core_east_west"
       },
       "when": {
-        "west": "true",
-        "facing": "up"
-      }
-    },
-    
-    
-    {
-      "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_core",
-        "uvlock": true,
-        "x": 90,
-        "y": 90
-      },
-      "when": {
-        "core": "true",
-        "facing": "east"
+        "shape": "east_west",
+        "facing": "up|down"
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_top_output",
-        "uvlock": true,
-        "x": 90,
-        "y": 90
+        "model": "industria:block/machines/electro_magnetic_coil/core_north_east"
       },
       "when": {
-        "east": "false",
-        "facing": "east"
+        "shape": "north_east",
+        "facing": "up|down"
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_bottom_input",
-        "uvlock": true,
-        "x": 90,
-        "y": 90
+        "model": "industria:block/machines/electro_magnetic_coil/core_north_west"
       },
       "when": {
-        "west": "false",
-        "facing": "east"
+        "shape": "north_west",
+        "facing": "up|down"
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side2",
-        "x": 90,
-        "y": 90,
-        "uvlock": true
+        "model": "industria:block/machines/electro_magnetic_coil/core_south_east"
       },
       "when": {
-        "north": "true",
-        "facing": "east"
+        "shape": "south_east",
+        "facing": "up|down"
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side2",
-        "x": 270,
-        "y": -90,
-        "uvlock": true
+        "model": "industria:block/machines/electro_magnetic_coil/core_south_west"
       },
       "when": {
-        "south": "true",
-        "facing": "east"
+        "shape": "south_west",
+        "facing": "up|down"
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side",
-        "y": 90,
-        "uvlock": true,
-        "x": 90
+        "model": "industria:block/machines/electro_magnetic_coil/core_north_south_east"
       },
       "when": {
-        "down": "true",
-        "facing": "east"
+        "shape": "north_south_east",
+        "facing": "up|down"
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side",
-        "y": -90,
-        "uvlock": true,
-        "x": -90
+        "model": "industria:block/machines/electro_magnetic_coil/core_north_south_west"
       },
       "when": {
-        "up": "true",
-        "facing": "east"
+        "shape": "north_south_west",
+        "facing": "up|down"
+      }
+    },
+    {
+      "apply": {
+        "model": "industria:block/machines/electro_magnetic_coil/core_north_east_west"
+      },
+      "when": {
+        "shape": "north_east_west",
+        "facing": "up|down"
+      }
+    },
+    {
+      "apply": {
+        "model": "industria:block/machines/electro_magnetic_coil/core_south_east_west"
+      },
+      "when": {
+        "shape": "south_east_west",
+        "facing": "up|down"
       }
     },
     
     
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_core",
-        "uvlock": true,
-        "x": 90
+        "model": "industria:block/machines/electro_magnetic_coil/upper_edge_none"
       },
       "when": {
-        "core": "true",
-        "facing": "south"
+        "shape": "none",
+        "facing": "up|down",
+        "up": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_top_output",
-        "uvlock": true,
-        "x": 90
+        "model": "industria:block/machines/electro_magnetic_coil/upper_edge_north"
       },
       "when": {
-        "north": "false",
-        "facing": "south"
+        "shape": "north",
+        "facing": "up|down",
+        "up": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_bottom_input",
-        "uvlock": true,
-        "x": 90
+        "model": "industria:block/machines/electro_magnetic_coil/upper_edge_south"
       },
       "when": {
-        "south": "false",
-        "facing": "south"
+        "shape": "south",
+        "facing": "up|down",
+        "up": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side",
-        "uvlock": true,
-        "x": 90
+        "model": "industria:block/machines/electro_magnetic_coil/upper_edge_east"
       },
       "when": {
-        "down": "true",
-        "facing": "south"
+        "shape": "east",
+        "facing": "up|down",
+        "up": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side",
-        "uvlock": true,
-        "x": -90
+        "model": "industria:block/machines/electro_magnetic_coil/upper_edge_west"
       },
       "when": {
-        "up": "true",
-        "facing": "south"
+        "shape": "west",
+        "facing": "up|down",
+        "up": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side2",
-        "x": -90,
-        "y": 180,
-        "uvlock": true
+        "model": "industria:block/machines/electro_magnetic_coil/upper_edge_north_south"
       },
       "when": {
-        "east": "true",
-        "facing": "south"
+        "shape": "north_south",
+        "facing": "up|down",
+        "up": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side2",
-        "x": 90,
-        "uvlock": true
+        "model": "industria:block/machines/electro_magnetic_coil/upper_edge_east_west"
       },
       "when": {
-        "west": "true",
-        "facing": "south"
-      }
-    },
-    
-    
-    {
-      "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_core",
-        "uvlock": true
-      },
-      "when": {
-        "core": "true",
-        "facing": "down"
+        "shape": "east_west",
+        "facing": "up|down",
+        "up": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_top_input",
-        "uvlock": true
+        "model": "industria:block/machines/electro_magnetic_coil/upper_edge_north_east"
       },
       "when": {
-        "up": "false",
-        "facing": "down"
+        "shape": "north_east",
+        "facing": "up|down",
+        "up": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_bottom_output",
-        "uvlock": true
+        "model": "industria:block/machines/electro_magnetic_coil/upper_edge_north_west"
       },
       "when": {
-        "down": "false",
-        "facing": "down"
+        "shape": "north_west",
+        "facing": "up|down",
+        "up": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side",
-        "uvlock": true
+        "model": "industria:block/machines/electro_magnetic_coil/upper_edge_south_east"
       },
       "when": {
-        "north": "true",
-        "facing": "down"
+        "shape": "south_east",
+        "facing": "up|down",
+        "up": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side",
-        "y": 180,
-        "uvlock": true
+        "model": "industria:block/machines/electro_magnetic_coil/upper_edge_south_west"
       },
       "when": {
-        "south": "true",
-        "facing": "down"
+        "shape": "south_west",
+        "facing": "up|down",
+        "up": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side",
-        "y": 90,
-        "uvlock": true
+        "model": "industria:block/machines/electro_magnetic_coil/upper_edge_north_south_east"
       },
       "when": {
-        "east": "true",
-        "facing": "down"
+        "shape": "north_south_east",
+        "facing": "up|down",
+        "up": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side",
-        "y": -90,
-        "uvlock": true
+        "model": "industria:block/machines/electro_magnetic_coil/upper_edge_north_south_west"
       },
       "when": {
-        "west": "true",
-        "facing": "down"
+        "shape": "north_south_west",
+        "facing": "up|down",
+        "up": false
+      }
+    },
+    {
+      "apply": {
+        "model": "industria:block/machines/electro_magnetic_coil/upper_edge_north_east_west"
+      },
+      "when": {
+        "shape": "north_east_west",
+        "facing": "up|down",
+        "up": false
+      }
+    },
+    {
+      "apply": {
+        "model": "industria:block/machines/electro_magnetic_coil/upper_edge_south_east_west"
+      },
+      "when": {
+        "shape": "south_east_west",
+        "facing": "up|down",
+        "up": false
       }
     },
     
     
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_core",
-        "uvlock": true,
-        "x": 90,
-        "y": 90
+        "model": "industria:block/machines/electro_magnetic_coil/lower_edge_none"
       },
       "when": {
-        "core": "true",
-        "facing": "west"
+        "shape": "none",
+        "facing": "up|down",
+        "down": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_top_input",
-        "uvlock": true,
-        "x": 90,
-        "y": 90
+        "model": "industria:block/machines/electro_magnetic_coil/lower_edge_north"
       },
       "when": {
-        "east": "false",
-        "facing": "west"
+        "shape": "north",
+        "facing": "up|down",
+        "down": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_bottom_output",
-        "uvlock": true,
-        "x": 90,
-        "y": 90
+        "model": "industria:block/machines/electro_magnetic_coil/lower_edge_south"
       },
       "when": {
-        "west": "false",
-        "facing": "west"
+        "shape": "south",
+        "facing": "up|down",
+        "down": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side2",
-        "x": 90,
-        "y": 90,
-        "uvlock": true
+        "model": "industria:block/machines/electro_magnetic_coil/lower_edge_east"
       },
       "when": {
-        "north": "true",
-        "facing": "west"
+        "shape": "east",
+        "facing": "up|down",
+        "down": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side2",
-        "x": 270,
-        "y": -90,
-        "uvlock": true
+        "model": "industria:block/machines/electro_magnetic_coil/lower_edge_west"
       },
       "when": {
-        "south": "true",
-        "facing": "west"
+        "shape": "west",
+        "facing": "up|down",
+        "down": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side",
-        "y": 90,
-        "uvlock": true,
-        "x": 90
+        "model": "industria:block/machines/electro_magnetic_coil/lower_edge_north_south"
       },
       "when": {
-        "down": "true",
-        "facing": "west"
+        "shape": "north_south",
+        "facing": "up|down",
+        "down": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side",
-        "y": -90,
-        "uvlock": true,
-        "x": -90
+        "model": "industria:block/machines/electro_magnetic_coil/lower_edge_east_west"
       },
       "when": {
-        "up": "true",
-        "facing": "west"
-      }
-    },
-    
-    
-    {
-      "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_core",
-        "uvlock": true,
-        "x": 90
-      },
-      "when": {
-        "core": "true",
-        "facing": "north"
+        "shape": "east_west",
+        "facing": "up|down",
+        "down": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_top_input",
-        "uvlock": true,
-        "x": 90
+        "model": "industria:block/machines/electro_magnetic_coil/lower_edge_north_east"
       },
       "when": {
-        "north": "false",
-        "facing": "north"
+        "shape": "north_east",
+        "facing": "up|down",
+        "down": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_bottom_output",
-        "uvlock": true,
-        "x": 90
+        "model": "industria:block/machines/electro_magnetic_coil/lower_edge_north_west"
       },
       "when": {
-        "south": "false",
-        "facing": "north"
+        "shape": "north_west",
+        "facing": "up|down",
+        "down": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side",
-        "uvlock": true,
-        "x": 90
+        "model": "industria:block/machines/electro_magnetic_coil/lower_edge_south_east"
       },
       "when": {
-        "down": "true",
-        "facing": "north"
+        "shape": "south_east",
+        "facing": "up|down",
+        "down": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side",
-        "uvlock": true,
-        "x": -90
+        "model": "industria:block/machines/electro_magnetic_coil/lower_edge_south_west"
       },
       "when": {
-        "up": "true",
-        "facing": "north"
+        "shape": "south_west",
+        "facing": "up|down",
+        "down": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side2",
-        "x": -90,
-        "y": 180,
-        "uvlock": true
+        "model": "industria:block/machines/electro_magnetic_coil/lower_edge_north_south_east"
       },
       "when": {
-        "west": "true",
-        "facing": "north"
+        "shape": "north_south_east",
+        "facing": "up|down",
+        "down": false
       }
     },
     {
       "apply": {
-        "model": "industria:block/machines/electro_magnetic_coil_side2",
-        "x": 90,
-        "uvlock": true
+        "model": "industria:block/machines/electro_magnetic_coil/lower_edge_north_south_west"
       },
       "when": {
-        "west": "true",
-        "facing": "north"
+        "shape": "north_south_west",
+        "facing": "up|down",
+        "down": false
+      }
+    },
+    {
+      "apply": {
+        "model": "industria:block/machines/electro_magnetic_coil/lower_edge_north_east_west"
+      },
+      "when": {
+        "shape": "north_east_west",
+        "facing": "up|down",
+        "down": false
+      }
+    },
+    {
+      "apply": {
+        "model": "industria:block/machines/electro_magnetic_coil/lower_edge_south_east_west"
+      },
+      "when": {
+        "shape": "south_east_west",
+        "facing": "up|down",
+        "down": false
       }
     }
+    
   ]
 }

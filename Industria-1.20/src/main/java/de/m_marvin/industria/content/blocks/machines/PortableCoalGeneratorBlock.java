@@ -123,7 +123,8 @@ public class PortableCoalGeneratorBlock extends BaseEntityFixedMultiBlock implem
 			double d1 = (double)pPos.getY();
 			double d2 = (double)pPos.getZ() + 0.5D;
 			
-			double power = getPower(pState, pLevel, pPos);
+			BlockPos connectorBlock = getBlockAtMBPos(getOriginBlock(pPos, pState), pState, new Vec3i(1, 0, 0));
+			double power = getPower(pState, pLevel, connectorBlock);
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			double loadP = Math.max(0, parametrics.getPowerPercentageP(power) - 1);
 			

@@ -2,7 +2,6 @@ package de.m_marvin.industria.core.electrics.types.conduits;
 
 import java.util.function.Consumer;
 
-import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.ConduitType;
@@ -10,7 +9,8 @@ import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.electrics.engine.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
-import de.m_marvin.industria.core.electrics.types.CircuitTemplate;
+import de.m_marvin.industria.core.electrics.types.CircuitTemplate.Plotter;
+import de.m_marvin.industria.core.registries.Circuits;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -73,12 +73,13 @@ public abstract class ElectricConduit extends Conduit implements IElectricCondui
 	
 	@Override
 	public void plotCircuit(Level level, ConduitEntity instance, ConduitPos position, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
-		CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "resistor"));
+		Plotter template = CircuitTemplateManager.getInstance().getTemplate(Circuits.RESISTOR).plotter();
 		template.setProperty("resistance", this.resistance * instance.getLength());
 		
 		NodePos[] connections = getConnections(level, position, instance);
 		String[] wireLabels = this.getWireLanes(level, position, instance, null);
 		for (int i = 0; i < wireLabels.length; i++) {
+			// TODO maybe add some sort of filter to preven "singular matrix" warning ?
 			if (!wireLabels[i].isBlank()) {
 				template.setNetworkNode("NET1", connections[0], i, wireLabels[i]);
 				template.setNetworkNode("NET2", connections[1], i, wireLabels[i]);

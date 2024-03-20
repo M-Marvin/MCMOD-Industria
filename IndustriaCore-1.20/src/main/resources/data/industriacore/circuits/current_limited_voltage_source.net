@@ -1,6 +1,6 @@
 
 * Current limited voltage source [ i_maximum=P{max_current}, v_nominal=P{nominal_voltage} ]
 V1_P{id} N001_P{id} N{GND} P{nominal_voltage}
-A1_P{id} N001_P{id} N{SHUNT} current_limiter
+A1_P{id} N001_P{id} N{SHUNT} current_limiter_P{id}
 R1_P{id} N{SHUNT} N{VDC} 0.001
-.model current_limiter sidiode(Ron=1u Vfwd=0 Roff=1G ilimit=P{max_current})
+.model current_limiter_P{id} sidiode(Ron=1u Vfwd=0 Roff=1G ilimit=P{max_current})

@@ -1987,7 +1987,7 @@
       },
       "when": {
         "facing": "up",
-        "up": false
+        "down": false
       }
     },
     {
@@ -1998,7 +1998,7 @@
       },
       "when": {
         "facing": "north",
-        "north": false
+        "south": false
       }
     },
     {
@@ -2009,7 +2009,7 @@
       },
       "when": {
         "facing": "east",
-        "east": false
+        "west": false
       }
     },
     
@@ -2052,7 +2052,7 @@
       },
       "when": {
         "facing": "down",
-        "up": false
+        "down": false
       }
     },
     {
@@ -2063,7 +2063,7 @@
       },
       "when": {
         "facing": "south",
-        "north": false
+        "south": false
       }
     },
     {
@@ -2074,7 +2074,7 @@
       },
       "when": {
         "facing": "west",
-        "east": false
+        "west": false
       }
     }
   ]

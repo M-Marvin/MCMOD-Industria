@@ -9,7 +9,7 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
-import de.m_marvin.industria.core.electrics.types.CircuitTemplate;
+import de.m_marvin.industria.core.electrics.types.CircuitTemplate.Plotter;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider;
 import de.m_marvin.industria.core.parametrics.BlockParametrics;
@@ -117,10 +117,12 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 			
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			int targetVoltage = parametrics.getNominalVoltage();
+			int minVoltage = parametrics.getVoltageMin();
 			int targetPower = parametrics.getNominalPower();
 			
-			CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_CURRENT_LOAD);
+			Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_CURRENT_LOAD).plotter();
 			templateSource.setProperty("nominal_current", targetPower / (double) targetVoltage);
+			templateSource.setProperty("min_resistance", minVoltage / (targetPower / (double) minVoltage));
 			templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, lampLanes[0]);
 			templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, lampLanes[1]);
 			plotter.accept(templateSource);

@@ -364,11 +364,11 @@ public class ConduitRenderer {
 				
 				if (i == shape.nodes.length - 1) {
 					BlockPos nodeBlockPos =  nodeA.add(nodeOrigin).writeTo(new BlockPos(0, 0, 0)); // new BlockPos(nodeA.x, nodeA.y + 0.1F, nodeA.z).offset(nodeOrigin);
-					blockLight = clientLevel.getLightEmission(nodeBlockPos);
+					blockLight = clientLevel.getBrightness(LightLayer.BLOCK, nodeBlockPos);
 					skyLight = clientLevel.getBrightness(LightLayer.SKY, nodeBlockPos);
 				}
 				BlockPos nodeBlockPos =  nodeB.add(nodeOrigin).writeTo(new BlockPos(0, 0, 0));
-				blockLight = (clientLevel.getLightEmission(nodeBlockPos) * 1 + blockLight * 1) / 2;
+				blockLight = (clientLevel.getBrightness(LightLayer.BLOCK, nodeBlockPos) * 1 + blockLight * 1) / 2;
 				skyLight = (clientLevel.getBrightness(LightLayer.SKY, nodeBlockPos) * 1 + skyLight * 1) / 2;
 				
 			}
@@ -382,11 +382,11 @@ public class ConduitRenderer {
 				
 				if (i == 1) {
 					BlockPos nodeBlockPos =  nodeA.add(nodeOrigin).writeTo(new BlockPos(0, 0, 0));
-					blockLight = (clientLevel.getLightEmission(nodeBlockPos) * 1 + blockLight * 2) / 3;
+					blockLight = (clientLevel.getBrightness(LightLayer.BLOCK, nodeBlockPos) * 1 + blockLight * 2) / 3;
 					skyLight = (clientLevel.getBrightness(LightLayer.SKY, nodeBlockPos) * 1 + skyLight * 2) / 3;
 				}
 				BlockPos nodeBlockPos =  nodeB.add(nodeOrigin).writeTo(new BlockPos(0, 0, 0));
-				blockLight = (clientLevel.getLightEmission(nodeBlockPos) * 1 + blockLight * 2) / 3;
+				blockLight = (clientLevel.getBrightness(LightLayer.BLOCK, nodeBlockPos) * 1 + blockLight * 2) / 3;
 				skyLight = (clientLevel.getBrightness(LightLayer.SKY, nodeBlockPos) * 1 + skyLight * 2) / 3;
 				
 				int packedLight = LightTexture.pack(blockLight, skyLight);

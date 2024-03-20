@@ -14,7 +14,7 @@ import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
 import de.m_marvin.industria.core.electrics.engine.network.SUpdateNetworkPackage;
-import de.m_marvin.industria.core.electrics.types.CircuitTemplate;
+import de.m_marvin.industria.core.electrics.types.CircuitTemplate.Plotter;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.registries.Capabilities;
@@ -183,7 +183,7 @@ public class ElectricUtility {
 	public static void plotJoinTogether(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, BlockPos position, BlockState instance, NodePos[] nodes, NodePos jointNode, int innerLaneId, String innerLane) {
 		List<String[]> lanes = Stream.of(nodes).map(node -> getLaneLabelsSummarized(level, node)).toList();
 		
-		CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR);
+		Plotter template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR).plotter();
 		
 		for (int i = 0; i < nodes.length; i++) {
 			if (nodes[i].equals(jointNode)) continue;
@@ -202,7 +202,7 @@ public class ElectricUtility {
 		NodePos[] nodes = block.getConnections(level, position, instance);
 		List<String[]> lanes = Stream.of(nodes).map(node -> ElectricUtility.getLaneLabelsSummarized(level, node)).toList();
 		
-		CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR);
+		Plotter template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR).plotter();
 		
 		for (int i = 0; i < nodes.length; i++) {
 			String[] wireLanes = lanes.get(i);

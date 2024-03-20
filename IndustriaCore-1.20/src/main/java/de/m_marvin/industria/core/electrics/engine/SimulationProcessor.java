@@ -160,15 +160,12 @@ public class SimulationProcessor {
 	
 	public SimulationProcessor(int numProcessors) {
 		this.processors = new Processor[numProcessors];
-		for (int i = 0; i < numProcessors; i++) {
-			this.processors[i] = new Processor(i);
-		}
 	}
 	
 	public boolean isRunning() {
 		if (this.shouldShutdown) return false;
 		for (Processor proc : this.processors) {
-			if (!proc.errorFlag && proc.isAlive()) return true;
+			if (proc != null && !proc.errorFlag && proc.isAlive()) return true;
 		}
 		return false;
 	}
@@ -249,6 +246,7 @@ public class SimulationProcessor {
 		this.shouldShutdown = false;
 		IndustriaCore.LOGGER.log(Level.INFO, "Electric network procsssor startup");
 		for (int i = 0; i < this.processors.length; i++) {
+			this.processors[i] = new Processor(i);
 			this.processors[i].start();
 		}
 	}

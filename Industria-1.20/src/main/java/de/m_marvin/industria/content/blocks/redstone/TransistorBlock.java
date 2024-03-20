@@ -3,7 +3,6 @@ package de.m_marvin.industria.content.blocks.redstone;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
-import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.content.blockentities.redstone.TransistorBlockEntity;
 import de.m_marvin.industria.core.client.util.TooltipAdditions;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
@@ -12,14 +11,14 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
-import de.m_marvin.industria.core.electrics.types.CircuitTemplate;
+import de.m_marvin.industria.core.electrics.types.CircuitTemplate.Plotter;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
+import de.m_marvin.industria.core.registries.Circuits;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.items.ITooltipAdditionsModifier;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -100,7 +99,7 @@ public class TransistorBlock extends DiodeLikeBlock implements EntityBlock, IEle
 			boolean active = level.getBlockState(position).getValue(BlockStateProperties.POWERED);
 			
 			if (active) {
-				CircuitTemplate resistor = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "junction_resistor"));
+				Plotter resistor = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR).plotter();
 				resistor.setNetworkNode("NET1", new NodePos(position, 0), 0, wireLanes[0]);
 				resistor.setNetworkNode("NET2", new NodePos(position, 0), 1, wireLanes[1]);
 				plotter.accept(resistor);

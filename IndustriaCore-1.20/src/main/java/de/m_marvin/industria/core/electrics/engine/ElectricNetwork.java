@@ -24,7 +24,7 @@ public class ElectricNetwork {
 	protected final Supplier<Level> level;
 	protected Set<Component<?, ?, ?>> components = ConcurrentHashMap.newKeySet();
 	protected Set<Component<?, ?, ?>> componentsLast = new HashSet<>();
-	protected int templateCounter;
+	protected long templateCounter;
 	protected StringBuilder circuitBuilder;
 	protected String groundNode;
 	protected String netList = "";
@@ -84,7 +84,6 @@ public class ElectricNetwork {
 		this.groundNode = null;
 		this.componentsLast = components;
 		this.components = ConcurrentHashMap.newKeySet();
-		this.templateCounter = 0;
 	}
 	
 	public void plotComponentDescriptor(Component<?, ?, ?> component) {

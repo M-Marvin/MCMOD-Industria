@@ -10,7 +10,7 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
-import de.m_marvin.industria.core.electrics.types.CircuitTemplate;
+import de.m_marvin.industria.core.electrics.types.CircuitTemplate.Plotter;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider;
 import de.m_marvin.industria.core.parametrics.BlockParametrics;
@@ -131,7 +131,7 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 			
 			if (targetPower > 0) {
 
-				CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.POWER_LIMITEED_VOLTAGE_SOURCE);
+				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.POWER_LIMITEED_VOLTAGE_SOURCE).plotter();
 				templateSource.setProperty("max_power", targetPower);
 				templateSource.setProperty("nominal_voltage", targetVoltage);
 				templateSource.setNetworkNode("SHUNT", new NodePos(position, 0), 2, "power_shunt");

@@ -19,7 +19,7 @@ import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
-import de.m_marvin.industria.core.electrics.types.CircuitTemplate;
+import de.m_marvin.industria.core.electrics.types.CircuitTemplate.Plotter;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.magnetism.MagnetismUtility;
 import de.m_marvin.industria.core.magnetism.types.blocks.IMagneticBlock;
@@ -73,13 +73,8 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	public static final DoubleParameter POWER_PER_BLOCK = new DoubleParameter("electricPowerPerBlock", 500.0);
 	public static final int CONNECTION_PER_NODE = 1;
 	
-	public static final VoxelShape CORE_SHAPE = VoxelShapeUtility.box(2, 0, 2, 14, 16, 14);
 	public static final VoxelShape DOWN_SHAPE =VoxelShapeUtility.box(0, 0, 0, 16, 2, 16);
 	public static final VoxelShape UP_SHAPE = VoxelShapeUtility.box(0, 14, 0, 16, 16, 16);
-	public static final VoxelShape NORTH_SHAPE = VoxelShapeUtility.box(2, 0, 0, 14, 16, 2);
-	public static final VoxelShape SOUTH_SHAPE = VoxelShapeUtility.box(2, 0, 14, 14, 16, 16);
-	public static final VoxelShape WEST_SHAPE = VoxelShapeUtility.box(0, 0, 2, 2, 16, 14);
-	public static final VoxelShape EAST_SHAPE = VoxelShapeUtility.box(14, 0, 2, 16, 16, 14);
 	
 	public ElectroMagneticCoilBlock(Properties pProperties) {
 		super(pProperties);
@@ -295,7 +290,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				double maxPower = coil.getCoreBlockCount() * parametrics.getParameter(POWER_PER_BLOCK);
 				double windingRatio = coil.getWindingsSecundary() / (double) coil.getWindingsPrimary();
 				
-				CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.TRANSFORMER);
+				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.TRANSFORMER).plotter();
 				templateSource.setProperty("winding_ratio", windingRatio);
 				templateSource.setProperty("max_power", maxPower);
 				templateSource.setNetworkNode("VDC_IN", inputNodes[0], 0, coilLanes[0]);
@@ -311,7 +306,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				double factor = coil.getWindingsPrimary() / (double) coil.getMaxWindings();
 				double current = parametrics.getParameter(MAGNET_CURRENT);
 				
-				CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_CURRENT_LOAD);
+				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_CURRENT_LOAD).plotter();
 				templateSource.setProperty("nominal_current", factor * current);
 				templateSource.setNetworkNode("VDC", inputNodes[0], 0, coilLanes[0]);
 				templateSource.setNetworkNode("GND", inputNodes[0], 1, coilLanes[1]);

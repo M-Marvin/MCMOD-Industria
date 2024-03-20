@@ -21,7 +21,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 public interface IElectric<I, P, T> {
 	
 	public static interface ICircuitPlot {
-		public void prepare(int templateId);
+		public void prepare(long templateId);
 		public String plot();
 		public String getAnyNode();
 	}

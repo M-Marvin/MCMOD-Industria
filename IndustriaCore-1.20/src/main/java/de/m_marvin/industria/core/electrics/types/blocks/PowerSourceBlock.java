@@ -9,7 +9,7 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
-import de.m_marvin.industria.core.electrics.types.CircuitTemplate;
+import de.m_marvin.industria.core.electrics.types.CircuitTemplate.Plotter;
 import de.m_marvin.industria.core.electrics.types.blockentities.PowerSourceBlockEntity;
 import de.m_marvin.industria.core.parametrics.BlockParametrics;
 import de.m_marvin.industria.core.parametrics.engine.BlockParametricsManager;
@@ -74,7 +74,7 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock,
 			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, sourceLanes[0], 1, sourceLanes[1]);
 			
 			if (source.getPower() > 0) {
-				CircuitTemplate templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.POWER_LIMITEED_VOLTAGE_SOURCE);
+				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.POWER_LIMITEED_VOLTAGE_SOURCE).plotter();
 				templateSource.setProperty("max_power", source.getPower());
 				templateSource.setProperty("nominal_voltage", source.getVoltage());
 				templateSource.setNetworkNode("SHUNT", new NodePos(position, 0), 2, "power_shunt");

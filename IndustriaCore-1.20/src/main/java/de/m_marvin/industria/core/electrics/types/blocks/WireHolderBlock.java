@@ -12,7 +12,7 @@ import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
-import de.m_marvin.industria.core.electrics.types.CircuitTemplate;
+import de.m_marvin.industria.core.electrics.types.CircuitTemplate.Plotter;
 import de.m_marvin.industria.core.registries.Circuits;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
@@ -84,7 +84,7 @@ public class WireHolderBlock extends Block implements IElectricBlock, ITooltipAd
 		List<String[]> cableLanes = ElectricUtility.getLaneLabels(level, node, Component::isWire);
 		int laneCount = cableLanes.stream().mapToInt(l -> l.length).max().orElse(0);
 
-		CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR);
+		Plotter template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR).plotter();
 		
 		String[] lt = new String[laneCount];
 		for (int i = 0; i < laneCount; i++) {

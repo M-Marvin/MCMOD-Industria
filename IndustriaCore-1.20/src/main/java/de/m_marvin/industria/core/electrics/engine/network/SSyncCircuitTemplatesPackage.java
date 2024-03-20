@@ -29,9 +29,9 @@ public class SSyncCircuitTemplatesPackage {
 			buff.writeResourceLocation(template.getKey());
 			buff.writeUtf(template.getValue().getTemplate());
 			buff.writeUtf(template.getValue().getIdProperty());
-			buff.writeInt(template.getValue().getNetworks().size());
+			buff.writeInt(template.getValue().getNetworks().length);
 			for (String s : template.getValue().getNetworks()) buff.writeUtf(s);
-			buff.writeInt(template.getValue().getProperties().size());
+			buff.writeInt(template.getValue().getProperties().length);
 			for (String s : template.getValue().getProperties()) buff.writeUtf(s);
 		}
 	}

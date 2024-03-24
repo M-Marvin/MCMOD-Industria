@@ -316,7 +316,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		@Override
 		public boolean equals(Object obj) {
 			if (obj == this) return true;
-			if (obj instanceof Component other) {
+			if (obj instanceof @SuppressWarnings("rawtypes") Component other) {
 				return this.type.equals(other.type) && this.pos.equals(other.pos);
 			}
 			return false;

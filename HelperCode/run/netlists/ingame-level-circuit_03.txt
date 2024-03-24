@@ -1,124 +1,150 @@
 ingame-level-circuit
 
-* Component Block{industria:electro_magnetic_coil} BlockPos{x=-3, y=-60, z=6}
-
-* Junction resistor [ r_fixed=0.015 ]
-R1_55 node|pos-3_-60_6_id3_lid0_lnml| node|pos-3_-60_6_id2_lid0_lnml| 0.015
-
-* Junction resistor [ r_fixed=0.015 ]
-R1_56 node|pos-3_-60_6_id3_lid1_lnmn| node|pos-3_-60_6_id2_lid1_lnmn| 0.015
-
-* DC Voltage converter [n_winding_ratio=11.0, p_maximum=2000.0 ]
-R1_57 node|pos-3_-60_6_id0_lid0_lnml| node|pos-3_-60_6_id0_lid1_lnmn| R={V(node|pos-3_-60_6_id0_lid0_lnml|, node|pos-3_-60_6_id0_lid1_lnmn|)/-I(B1_57)/11.0}
-R2_57 node|pos-3_-60_6_id2_lid0_lnml| N001_57 R={max((V(N001_57, node|pos-3_-60_6_id2_lid1_lnmn|)/2000.0) * V(N001_57, node|pos-3_-60_6_id2_lid0_lnml|), 1u)}
-B1_57 N001_57 node|pos-3_-60_6_id2_lid1_lnmn| V={V(node|pos-3_-60_6_id0_lid0_lnml|, node|pos-3_-60_6_id0_lid1_lnmn|)*11.0}
-R3_57 node|pos-3_-60_6_id0_lid1_lnmn| node|pos-3_-60_6_id2_lid1_lnmn| 1G
-
-* Component Conduit{industria:insulated_aluminum_wire} ConduitPos{A=NodePos{block=[1 -60 5],node=0},B=NodePos{block=[-3 -60 6],node=0}}
-
-* Simple resistor for different applications [ r=0.004 ]
-R1_58 node|pos1_-60_5_id0_lid0_lnml| node|pos-3_-60_6_id0_lid0_lnml| 0.004
-
-* Simple resistor for different applications [ r=0.004 ]
-R1_59 node|pos1_-60_5_id0_lid1_lnmn| node|pos-3_-60_6_id0_lid1_lnmn| 0.004
-
 * Component Block{industria:portable_coal_generator} BlockPos{x=1, y=-60, z=5}
 
 * Power limited voltage source [ p_maxmimum=2000, v_nominal=230 ]
-V1_60 N001_60 node|pos1_-60_5_id0_lid1_lnmn| 230
-R2_60 N001_60 node|pos1_-60_5_id0_lid2_lnmpower_shunt| R={max((230/2000) * V(N001_60, node|pos1_-60_5_id0_lid2_lnmpower_shunt|), 1u)}
-R1_60 node|pos1_-60_5_id0_lid2_lnmpower_shunt| N002_60 0.001
-A1_60 N002_60 node|pos1_-60_5_id0_lid0_lnml| ideal_diode
+V1_0 N001_0 node|pos1_-60_5_id0_lid1_lnmn| 230
+R2_0 N001_0 node|pos1_-60_5_id0_lid2_lnmpower_shunt| R={max((230/2000) * V(N001_0, node|pos1_-60_5_id0_lid2_lnmpower_shunt|), 1u)}
+R1_0 node|pos1_-60_5_id0_lid2_lnmpower_shunt| N002_0 0.001
+A1_0 N002_0 node|pos1_-60_5_id0_lid0_lnml| ideal_diode
 .model ideal_diode sidiode(Ron=1u Vfwd=0 Roff=1G)
 
-* Component Conduit{industria:insulated_aluminum_wire} ConduitPos{A=NodePos{block=[-3 -60 6],node=3},B=NodePos{block=[-1 -60 10],node=0}}
+* Component Conduit{industria:insulated_aluminum_wire} ConduitPos{A=NodePos{block=[1 -60 5],node=0},B=NodePos{block=[-1 -60 4],node=0}}
+
+* Simple resistor for different applications [ r=0.002 ]
+R1_1 node|pos1_-60_5_id0_lid0_lnml| node|pos-1_-60_4_id0_lid0_lnml| 0.002
+
+* Simple resistor for different applications [ r=0.002 ]
+R1_2 node|pos1_-60_5_id0_lid1_lnmn| node|pos-1_-60_4_id0_lid1_lnmn| 0.002
+
+* Simple resistor for different applications [ r=0.002 ]
+R1_3 node|pos1_-60_5_id0_lid2_lnm| node|pos-1_-60_4_id0_lid2_lnm| 0.002
+
+* Simple resistor for different applications [ r=0.002 ]
+R1_4 node|pos1_-60_5_id0_lid3_lnm| node|pos-1_-60_4_id0_lid3_lnm| 0.002
+
+* Simple resistor for different applications [ r=0.002 ]
+R1_5 node|pos1_-60_5_id0_lid4_lnm2| node|pos-1_-60_4_id0_lid4_lnm2| 0.002
+
+* Simple resistor for different applications [ r=0.002 ]
+R1_6 node|pos1_-60_5_id0_lid5_lnm| node|pos-1_-60_4_id0_lid5_lnm| 0.002
+
+* Component Block{industria:copper_wire_holder} BlockPos{x=-1, y=-60, z=4}
+
+* Junction resistor [ r_fixed=0.015 ]
+R1_7 node|pos-1_-60_4_id0_lid4_lnm| node|pos-1_-60_4_id0_lid4_lnm2| 0.015
+
+* Component Conduit{industria:insulated_aluminum_wire} ConduitPos{A=NodePos{block=[-1 -60 4],node=0},B=NodePos{block=[-3 -60 6],node=0}}
 
 * Simple resistor for different applications [ r=0.004 ]
-R1_61 node|pos-3_-60_6_id3_lid0_lnml| node|pos-1_-60_10_id0_lid0_lnml| 0.004
+R1_8 node|pos-1_-60_4_id0_lid0_lnml| node|pos-3_-60_6_id0_lid0_lnml| 0.004
 
 * Simple resistor for different applications [ r=0.004 ]
-R1_62 node|pos-3_-60_6_id3_lid1_lnmn| node|pos-1_-60_10_id0_lid1_lnmn| 0.004
+R1_9 node|pos-1_-60_4_id0_lid1_lnmn| node|pos-3_-60_6_id0_lid1_lnmn| 0.004
 
-* Component Block{industria:copper_wire_holder} BlockPos{x=-1, y=-60, z=10}
+* Simple resistor for different applications [ r=0.004 ]
+R1_10 node|pos-1_-60_4_id0_lid2_lnm| node|pos-3_-60_6_id0_lid2_lnm| 0.004
 
-* Component Conduit{industria:insulated_aluminum_wire} ConduitPos{A=NodePos{block=[1 -60 8],node=0},B=NodePos{block=[-1 -60 10],node=0}}
+* Simple resistor for different applications [ r=0.004 ]
+R1_11 node|pos-1_-60_4_id0_lid3_lnm| node|pos-3_-60_6_id0_lid3_lnm| 0.004
 
-* Simple resistor for different applications [ r=0.003 ]
-R1_63 node|pos1_-60_8_id0_lid0_lnml| node|pos-1_-60_10_id0_lid0_lnml| 0.003
+* Simple resistor for different applications [ r=0.004 ]
+R1_12 node|pos-1_-60_4_id0_lid4_lnm| node|pos-3_-60_6_id0_lid4_lnm| 0.004
 
-* Simple resistor for different applications [ r=0.003 ]
-R1_64 node|pos1_-60_8_id0_lid1_lnmn| node|pos-1_-60_10_id0_lid1_lnmn| 0.003
-
-* Component Block{industria:portable_fuel_generator} BlockPos{x=1, y=-60, z=8}
-
-* Power limited voltage source [ p_maxmimum=2000, v_nominal=230 ]
-V1_65 N001_65 node|pos1_-60_8_id0_lid1_lnmn| 230
-R2_65 N001_65 node|pos1_-60_8_id0_lid2_lnmpower_shunt| R={max((230/2000) * V(N001_65, node|pos1_-60_8_id0_lid2_lnmpower_shunt|), 1u)}
-R1_65 node|pos1_-60_8_id0_lid2_lnmpower_shunt| N002_65 0.001
-A1_65 N002_65 node|pos1_-60_8_id0_lid0_lnml| ideal_diode
-.model ideal_diode sidiode(Ron=1u Vfwd=0 Roff=1G)
-
-R0GND node|pos-3_-60_6_id3_lid0_lnml| 0 1
-.end
-ingame-level-circuit
+* Simple resistor for different applications [ r=0.004 ]
+R1_13 node|pos-1_-60_4_id0_lid5_lnm| node|pos-3_-60_6_id0_lid5_lnm| 0.004
 
 * Component Block{industria:electro_magnetic_coil} BlockPos{x=-3, y=-60, z=6}
 
 * Junction resistor [ r_fixed=0.015 ]
-R1_55 node|pos-3_-60_6_id3_lid0_lnml| node|pos-3_-60_6_id2_lid0_lnml| 0.015
+R1_14 node|pos-3_-60_6_id3_lid0_lnml| node|pos-3_-60_6_id2_lid0_lnml| 0.015
 
 * Junction resistor [ r_fixed=0.015 ]
-R1_56 node|pos-3_-60_6_id3_lid1_lnmn| node|pos-3_-60_6_id2_lid1_lnmn| 0.015
+R1_15 node|pos-3_-60_6_id3_lid1_lnmn| node|pos-3_-60_6_id2_lid1_lnmn| 0.015
 
-* DC Voltage converter [n_winding_ratio=11.0, p_maximum=2000.0 ]
-R1_57 node|pos-3_-60_6_id0_lid0_lnml| node|pos-3_-60_6_id0_lid1_lnmn| R={V(node|pos-3_-60_6_id0_lid0_lnml|, node|pos-3_-60_6_id0_lid1_lnmn|)/-I(B1_57)/11.0}
-R2_57 node|pos-3_-60_6_id2_lid0_lnml| N001_57 R={max((V(N001_57, node|pos-3_-60_6_id2_lid1_lnmn|)/2000.0) * V(N001_57, node|pos-3_-60_6_id2_lid0_lnml|), 1u)}
-B1_57 N001_57 node|pos-3_-60_6_id2_lid1_lnmn| V={V(node|pos-3_-60_6_id0_lid0_lnml|, node|pos-3_-60_6_id0_lid1_lnmn|)*11.0}
-R3_57 node|pos-3_-60_6_id0_lid1_lnmn| node|pos-3_-60_6_id2_lid1_lnmn| 1G
-
-* Component Conduit{industria:insulated_aluminum_wire} ConduitPos{A=NodePos{block=[1 -60 5],node=0},B=NodePos{block=[-3 -60 6],node=0}}
-
-* Simple resistor for different applications [ r=0.004 ]
-R1_58 node|pos1_-60_5_id0_lid0_lnml| node|pos-3_-60_6_id0_lid0_lnml| 0.004
-
-* Simple resistor for different applications [ r=0.004 ]
-R1_59 node|pos1_-60_5_id0_lid1_lnmn| node|pos-3_-60_6_id0_lid1_lnmn| 0.004
-
-* Component Block{industria:portable_coal_generator} BlockPos{x=1, y=-60, z=5}
-
-* Power limited voltage source [ p_maxmimum=2000, v_nominal=230 ]
-V1_60 N001_60 node|pos1_-60_5_id0_lid1_lnmn| 230
-R2_60 N001_60 node|pos1_-60_5_id0_lid2_lnmpower_shunt| R={max((230/2000) * V(N001_60, node|pos1_-60_5_id0_lid2_lnmpower_shunt|), 1u)}
-R1_60 node|pos1_-60_5_id0_lid2_lnmpower_shunt| N002_60 0.001
-A1_60 N002_60 node|pos1_-60_5_id0_lid0_lnml| ideal_diode
-.model ideal_diode sidiode(Ron=1u Vfwd=0 Roff=1G)
+* DC Voltage converter [n_winding_ratio=8.0, p_maximum=2000.0 ]
+R1_16 node|pos-3_-60_6_id0_lid0_lnml| node|pos-3_-60_6_id0_lid1_lnmn| R={V(node|pos-3_-60_6_id0_lid0_lnml|, node|pos-3_-60_6_id0_lid1_lnmn|)/-I(B1_16)/8.0}
+R2_16 node|pos-3_-60_6_id2_lid0_lnml| N001_16 R={max((V(N001_16, node|pos-3_-60_6_id2_lid1_lnmn|)/2000.0) * V(N001_16, node|pos-3_-60_6_id2_lid0_lnml|), 1u)}
+B1_16 N001_16 node|pos-3_-60_6_id2_lid1_lnmn| V={V(node|pos-3_-60_6_id0_lid0_lnml|, node|pos-3_-60_6_id0_lid1_lnmn|)*8.0}
+R3_16 node|pos-3_-60_6_id0_lid1_lnmn| node|pos-3_-60_6_id2_lid1_lnmn| 1G
 
 * Component Conduit{industria:insulated_aluminum_wire} ConduitPos{A=NodePos{block=[-3 -60 6],node=3},B=NodePos{block=[-1 -60 10],node=0}}
 
 * Simple resistor for different applications [ r=0.004 ]
-R1_61 node|pos-3_-60_6_id3_lid0_lnml| node|pos-1_-60_10_id0_lid0_lnml| 0.004
+R1_17 node|pos-3_-60_6_id3_lid0_lnml| node|pos-1_-60_10_id0_lid0_lnml| 0.004
 
 * Simple resistor for different applications [ r=0.004 ]
-R1_62 node|pos-3_-60_6_id3_lid1_lnmn| node|pos-1_-60_10_id0_lid1_lnmn| 0.004
+R1_18 node|pos-3_-60_6_id3_lid1_lnmn| node|pos-1_-60_10_id0_lid1_lnmn| 0.004
+
+* Simple resistor for different applications [ r=0.004 ]
+R1_19 node|pos-3_-60_6_id3_lid2_lnm| node|pos-1_-60_10_id0_lid2_lnm| 0.004
+
+* Simple resistor for different applications [ r=0.004 ]
+R1_20 node|pos-3_-60_6_id3_lid3_lnm| node|pos-1_-60_10_id0_lid3_lnm| 0.004
+
+* Simple resistor for different applications [ r=0.004 ]
+R1_21 node|pos-3_-60_6_id3_lid4_lnm| node|pos-1_-60_10_id0_lid4_lnm| 0.004
+
+* Simple resistor for different applications [ r=0.004 ]
+R1_22 node|pos-3_-60_6_id3_lid5_lnm| node|pos-1_-60_10_id0_lid5_lnm| 0.004
 
 * Component Block{industria:copper_wire_holder} BlockPos{x=-1, y=-60, z=10}
 
-* Component Conduit{industria:insulated_aluminum_wire} ConduitPos{A=NodePos{block=[1 -60 8],node=0},B=NodePos{block=[-1 -60 10],node=0}}
+* Component Conduit{industria:insulated_aluminum_wire} ConduitPos{A=NodePos{block=[-1 -60 10],node=0},B=NodePos{block=[-2 -60 14],node=0}}
+
+* Simple resistor for different applications [ r=0.005 ]
+R1_23 node|pos-1_-60_10_id0_lid0_lnml| node|pos-2_-60_14_id0_lid0_lnml| 0.005
+
+* Simple resistor for different applications [ r=0.005 ]
+R1_24 node|pos-1_-60_10_id0_lid1_lnmn| node|pos-2_-60_14_id0_lid1_lnmn| 0.005
+
+* Simple resistor for different applications [ r=0.005 ]
+R1_25 node|pos-1_-60_10_id0_lid2_lnm| node|pos-2_-60_14_id0_lid2_lnm| 0.005
+
+* Simple resistor for different applications [ r=0.005 ]
+R1_26 node|pos-1_-60_10_id0_lid3_lnm| node|pos-2_-60_14_id0_lid3_lnm| 0.005
+
+* Simple resistor for different applications [ r=0.005 ]
+R1_27 node|pos-1_-60_10_id0_lid4_lnm| node|pos-2_-60_14_id0_lid4_lnm| 0.005
+
+* Simple resistor for different applications [ r=0.005 ]
+R1_28 node|pos-1_-60_10_id0_lid5_lnm| node|pos-2_-60_14_id0_lid5_lnm| 0.005
+
+* Component Block{industria:electro_magnetic_coil} BlockPos{x=-2, y=-60, z=14}
+
+* DC Voltage converter [n_winding_ratio=10.0, p_maximum=1000.0 ]
+R1_29 node|pos-2_-60_14_id0_lid0_lnml| node|pos-2_-60_14_id0_lid1_lnmn| R={V(node|pos-2_-60_14_id0_lid0_lnml|, node|pos-2_-60_14_id0_lid1_lnmn|)/-I(B1_29)/10.0}
+R2_29 node|pos-2_-60_14_id1_lid0_lnml| N001_29 R={max((V(N001_29, node|pos-2_-60_14_id1_lid1_lnmn|)/1000.0) * V(N001_29, node|pos-2_-60_14_id1_lid0_lnml|), 1u)}
+B1_29 N001_29 node|pos-2_-60_14_id1_lid1_lnmn| V={V(node|pos-2_-60_14_id0_lid0_lnml|, node|pos-2_-60_14_id0_lid1_lnmn|)*10.0}
+R3_29 node|pos-2_-60_14_id0_lid1_lnmn| node|pos-2_-60_14_id1_lid1_lnmn| 1G
+
+* Component Conduit{industria:insulated_aluminum_wire} ConduitPos{A=NodePos{block=[-1 -60 17],node=0},B=NodePos{block=[-2 -60 14],node=1}}
 
 * Simple resistor for different applications [ r=0.003 ]
-R1_63 node|pos1_-60_8_id0_lid0_lnml| node|pos-1_-60_10_id0_lid0_lnml| 0.003
+R1_30 node|pos-1_-60_17_id0_lid0_lnml| node|pos-2_-60_14_id1_lid0_lnml| 0.003
 
 * Simple resistor for different applications [ r=0.003 ]
-R1_64 node|pos1_-60_8_id0_lid1_lnmn| node|pos-1_-60_10_id0_lid1_lnmn| 0.003
+R1_31 node|pos-1_-60_17_id0_lid1_lnmn| node|pos-2_-60_14_id1_lid1_lnmn| 0.003
 
-* Component Block{industria:portable_fuel_generator} BlockPos{x=1, y=-60, z=8}
+* Simple resistor for different applications [ r=0.003 ]
+R1_32 node|pos-1_-60_17_id0_lid2_lnm| node|pos-2_-60_14_id1_lid2_lnm| 0.003
 
-* Power limited voltage source [ p_maxmimum=2000, v_nominal=230 ]
-V1_65 N001_65 node|pos1_-60_8_id0_lid1_lnmn| 230
-R2_65 N001_65 node|pos1_-60_8_id0_lid2_lnmpower_shunt| R={max((230/2000) * V(N001_65, node|pos1_-60_8_id0_lid2_lnmpower_shunt|), 1u)}
-R1_65 node|pos1_-60_8_id0_lid2_lnmpower_shunt| N002_65 0.001
-A1_65 N002_65 node|pos1_-60_8_id0_lid0_lnml| ideal_diode
-.model ideal_diode sidiode(Ron=1u Vfwd=0 Roff=1G)
+* Simple resistor for different applications [ r=0.003 ]
+R1_33 node|pos-1_-60_17_id0_lid3_lnm| node|pos-2_-60_14_id1_lid3_lnm| 0.003
 
-R0GND node|pos-3_-60_6_id3_lid0_lnml| 0 1
+* Simple resistor for different applications [ r=0.003 ]
+R1_34 node|pos-1_-60_17_id0_lid4_lnm| node|pos-2_-60_14_id1_lid4_lnm| 0.003
+
+* Simple resistor for different applications [ r=0.003 ]
+R1_35 node|pos-1_-60_17_id0_lid5_lnm| node|pos-2_-60_14_id1_lid5_lnm| 0.003
+
+* Component Block{industria:brass_floodlight} BlockPos{x=-1, y=-60, z=17}
+
+* Load-Resistor with fixed current [ i_nominal=1.7391304347826086, r_minimal=100.0 ]
+*I1_36 node|pos-1_-60_17_id0_lid0_lnml| node|pos-1_-60_17_id0_lid1_lnmn| 1.7391304347826086
+*S1_36 node|pos-1_-60_17_id0_lid0_lnml| node|pos-1_-60_17_id0_lid1_lnmn| node|pos-1_-60_17_id0_lid1_lnmn| node|pos-1_-60_17_id0_lid0_lnml| current_load_diosw
+*.model current_load_diosw sw vt=0 vh=0.001 ron=0.001 roff=10e9
+R1_36 node|pos-1_-60_17_id0_lid0_lnml| node|pos-1_-60_17_id0_lid1_lnmn| R={max(V(node|pos-1_-60_17_id0_lid0_lnml|, node|pos-1_-60_17_id0_lid1_lnmn|)/1.7391304347826086, 100.0)}
+
+R0GND node|pos1_-60_5_id0_lid0_lnml| 0 1
 .end

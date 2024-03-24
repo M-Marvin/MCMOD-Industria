@@ -5,7 +5,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Queue;
+import java.util.Set;
+import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.Level;
 
@@ -145,6 +153,7 @@ public class SimulationProcessor {
 		}
 		
 		private void processNetList(String netList) {
+			netList = filterSingularMatrixNodes(netList);
 			if (Config.SPICE_DEBUG_LOGGING.get()) IndustriaCore.LOGGER.debug("Load spice circuit:\n" + netList);
 			if (!this.nglink.loadCircuit(netList)) {
 				IndustriaCore.LOGGER.warn("Failed to start electric simulation! Failed to load circuit!");
@@ -153,6 +162,49 @@ public class SimulationProcessor {
 			if (!this.nglink.execCommand("op")) {
 				IndustriaCore.LOGGER.warn("Failed to start electric simulation! Failed run op command!");
 				return;
+			}
+		}
+
+		private static final Pattern FILTER_NODE_PATTERN = Pattern.compile("(?:N[0-9_]{5,})|(?:node\\|[A-Za-z0-9_\\-]{1,}\\|)");
+		private static final Pattern FILTER_GROUND_PATTERN = Pattern.compile("R0GND (node\\|[A-Za-z0-9_\\-]{1,}\\|) 0 1");
+		
+		private String filterSingularMatrixNodes(String netlist) {
+			
+			Optional<String> groundNode = netlist.lines().map(line -> {
+				Matcher nodeMatcher = FILTER_GROUND_PATTERN.matcher(line);
+				return nodeMatcher.find() ? nodeMatcher.group(1) : null;
+			}).filter(s -> s != null).findAny();
+			
+			if (groundNode.isEmpty()) return null;
+			
+			List<List<String>> lineNodes = netlist.lines().map(line -> {
+				Matcher nodeMatcher = FILTER_NODE_PATTERN.matcher(line);
+				return nodeMatcher.results().map(MatchResult::group).toList();
+			}).toList();
+			
+			List<String> connectedNodes = new ArrayList<>();
+			findConnected(connectedNodes, groundNode.get(), lineNodes);
+
+			StringBuilder filterList = new StringBuilder();
+			List<String> lines = netlist.lines().toList();
+			for (int i = 0; i < lineNodes.size(); i++) {
+				boolean isSingular = lineNodes.get(i).size() > 0 && lineNodes.get(i).stream().filter(node -> connectedNodes.contains(node)).count() == 0;
+				if (isSingular) continue;
+				filterList.append(lines.get(i) + "\n");
+			}
+			
+			return filterList.toString();
+			
+		}
+		
+		private void findConnected(List<String> connectedList, String current, List<List<String>> nodeGroups) {
+			Set<String> foundNodes = new HashSet<>();
+			nodeGroups.stream().filter(group -> group.contains(current)).forEach(group -> group.stream().filter(node -> !connectedList.contains(node)).forEach(foundNodes::add));
+			if (!foundNodes.isEmpty()) {
+				connectedList.addAll(foundNodes);
+				for (String node : foundNodes) {
+					findConnected(connectedList, node, nodeGroups);
+				}
 			}
 		}
 		

@@ -6,8 +6,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -96,7 +100,7 @@ public class SpiceDebugger implements INGCallback {
 	protected static final Pattern CIRCUIT_PATTERN = Pattern.compile("\\* (?<type>[A-Za-z\\- ]{1,}) \\[(?<props>[a-z_ =0-9\\.,]*)\\]");
 	protected static final Pattern PROPERTY_PATTERN = Pattern.compile(" {0,1}(?<key>[a-z_]+)=(?<value>[a-z0-9\\.\\-]+)0{0,1},{0,1}");
 	protected static final Pattern NODE_PATTERN = Pattern.compile("(node\\|[A-Za-z0-9\\-_]{1,}\\|)");
-	protected static final Pattern LANE_PATTERN = Pattern.compile("node\\|[A-Za-z0-9\\-_]{1,}_lid(?<lid>[0-9]{1,})_lnm(?<lnm>[A-Za-z0-9\\-_]{1,})\\|");
+	protected static final Pattern LANE_PATTERN = Pattern.compile("node\\|[A-Za-z0-9\\-_]{1,}_lid(?<lid>[0-9]{1,})_lnm(?<lnm>[A-Za-z0-9\\-_]{0,})\\|");
 	
 	public void mapNetlist(String netlist) {
 		
@@ -136,7 +140,7 @@ public class SpiceDebugger implements INGCallback {
 						String lane = laneMatch.group("lid") + "_" + laneMatch.group("lnm");
 						component.node2lane.put(node, lane);
 					} else {
-						System.err.println("Invalid nod: " + node);
+						System.err.println("Invalid node: " + node);
 					}
 				});
 				
@@ -187,8 +191,54 @@ public class SpiceDebugger implements INGCallback {
 		System.out.println("\n");
 		
 	}
+
+	private static final Pattern FILTER_NODE_PATTERN = Pattern.compile("(?:N[0-9_]{5,})|(?:node\\|[A-Za-z0-9_\\-]{1,}\\|)");
+	private static final Pattern FILTER_GROUND_PATTERN = Pattern.compile("R0GND (node\\|[A-Za-z0-9_\\-]{1,}\\|) 0 1");
+	
+	private String filterSingularMatrixNodes(String netlist) {
+		
+		Optional<String> groundNode = netlist.lines().map(line -> {
+			Matcher nodeMatcher = FILTER_GROUND_PATTERN.matcher(line);
+			return nodeMatcher.find() ? nodeMatcher.group(1) : null;
+		}).filter(s -> s != null).findAny();
+		
+		if (groundNode.isEmpty()) return null;
+		
+		List<List<String>> lineNodes = netlist.lines().map(line -> {
+			Matcher nodeMatcher = FILTER_NODE_PATTERN.matcher(line);
+			return nodeMatcher.results().map(MatchResult::group).toList();
+		}).toList();
+		
+		List<String> connectedNodes = new ArrayList<>();
+		findConnected(connectedNodes, groundNode.get(), lineNodes);
+
+		StringBuilder filterList = new StringBuilder();
+		List<String> lines = netlist.lines().toList();
+		for (int i = 0; i < lineNodes.size(); i++) {
+			boolean isSingular = lineNodes.get(i).size() > 0 && lineNodes.get(i).stream().filter(node -> connectedNodes.contains(node)).count() == 0;
+			if (isSingular) continue;
+			filterList.append(lines.get(i) + "\n");
+		}
+		
+		return filterList.toString();
+		
+	}
+	
+	private void findConnected(List<String> connectedList, String current, List<List<String>> nodeGroups) {
+		Set<String> foundNodes = new HashSet<>();
+		nodeGroups.stream().filter(group -> group.contains(current)).forEach(group -> group.stream().filter(node -> !connectedList.contains(node)).forEach(foundNodes::add));
+		if (!foundNodes.isEmpty()) {
+			connectedList.addAll(foundNodes);
+			for (String node : foundNodes) {
+				findConnected(connectedList, node, nodeGroups);
+			}
+		}
+	}
 	
 	public void runNetlist(String netlist, String cmd) {
+		
+		netlist = filterSingularMatrixNodes(netlist);
+		
 		if (!this.nglink.isNGSpiceAttached()) {
 			if (!this.nglink.initNGSpice()) {
 				System.err.println("Failed to init ngspice!");

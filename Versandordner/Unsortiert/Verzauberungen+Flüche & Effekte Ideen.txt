@@ -16,6 +16,13 @@ FLUCH DES VERFALLS
 
 => Schwert(, Dreizack)
 
+BAUMFÄLLER
+-Axt kann gesamten Baum auf einmal Fällen
+-Axt verliert 1/2 des Schadens, den der Abbau aller abgebauten Holzblöcke einzeln zusammen ausgelöst hätten.
+- nicht kombinierbar mit Reparatur
+
+=> Axt
+
 
 EFFEKTE:
 ========
@@ -26,3 +33,12 @@ TAUBHEIT
 
 DRÖHNEN
 -Spieler hört metallisches klangschalenähnliches Dröhnen in gewissen Zeitabständen, lauter werdend, nervtötend wie das alte Netherportal. D:
+
+
+ERFOLGE:
+========
+SCHEITERHAUFEN 2.0
+-Bekämpfe eine Hexe mit einem Flammenwerfer.
+
+THADDÄUS KOMMT IN GENUSS... MEINES FLAMMENWERFERS!
+-Bekämpfe einen Tintenfisch mit einem Flammenwerfer.

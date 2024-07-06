@@ -6,23 +6,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.m_marvin.commandlineparser.CommandLineParser;
-import de.m_marvin.nglink.NativeNGLink;
-import de.m_marvin.nglink.NativeNGLink.INGCallback;
-import de.m_marvin.nglink.NativeNGLink.PlotDescription;
-import de.m_marvin.nglink.NativeNGLink.VectorValue;
-import de.m_marvin.nglink.NativeNGLink.VectorValuesAll;
 
-public class SpiceDebugger implements INGCallback {
+public class SpiceDebugger {
 	
 	public static void main(String[] args) {
 		
@@ -85,14 +76,9 @@ public class SpiceDebugger implements INGCallback {
 	}
 	
 	public SpiceDebugger() {
-		this.nglink = new NativeNGLink();
-		if (!this.nglink.initNGLink(this)) {
-			System.err.println("Failed to init NGLink!");
-			return;
-		}
+		
 	}
 	
-	protected NativeNGLink nglink;
 	protected List<Component> components = new ArrayList<>();
 	protected Map<String, Double> node2voltage = new HashMap<>();
 	
@@ -192,94 +178,64 @@ public class SpiceDebugger implements INGCallback {
 		
 	}
 
-	private static final Pattern FILTER_NODE_PATTERN = Pattern.compile("(?:N[0-9_]{5,})|(?:node\\|[A-Za-z0-9_\\-]{1,}\\|)");
-	private static final Pattern FILTER_GROUND_PATTERN = Pattern.compile("R0GND (node\\|[A-Za-z0-9_\\-]{1,}\\|) 0 1");
+//	private static final Pattern FILTER_NODE_PATTERN = Pattern.compile("(?:N[0-9_]{5,})|(?:node\\|[A-Za-z0-9_\\-]{1,}\\|)");
+//	private static final Pattern FILTER_GROUND_PATTERN = Pattern.compile("R0GND (node\\|[A-Za-z0-9_\\-]{1,}\\|) 0 1");
+//	
+//	private String filterSingularMatrixNodes(String netlist) {
+//		
+//		Optional<String> groundNode = netlist.lines().map(line -> {
+//			Matcher nodeMatcher = FILTER_GROUND_PATTERN.matcher(line);
+//			return nodeMatcher.find() ? nodeMatcher.group(1) : null;
+//		}).filter(s -> s != null).findAny();
+//		
+//		if (groundNode.isEmpty()) return null;
+//		
+//		List<List<String>> lineNodes = netlist.lines().map(line -> {
+//			Matcher nodeMatcher = FILTER_NODE_PATTERN.matcher(line);
+//			return nodeMatcher.results().map(MatchResult::group).toList();
+//		}).toList();
+//		
+//		List<String> connectedNodes = new ArrayList<>();
+//		findConnected(connectedNodes, groundNode.get(), lineNodes);
+//
+//		StringBuilder filterList = new StringBuilder();
+//		List<String> lines = netlist.lines().toList();
+//		for (int i = 0; i < lineNodes.size(); i++) {
+//			boolean isSingular = lineNodes.get(i).size() > 0 && lineNodes.get(i).stream().filter(node -> connectedNodes.contains(node)).count() == 0;
+//			if (isSingular) continue;
+//			filterList.append(lines.get(i) + "\n");
+//		}
+//		
+//		return filterList.toString();
+//		
+//	}
+//	
+//	private void findConnected(List<String> connectedList, String current, List<List<String>> nodeGroups) {
+//		Set<String> foundNodes = new HashSet<>();
+//		nodeGroups.stream().filter(group -> group.contains(current)).forEach(group -> group.stream().filter(node -> !connectedList.contains(node)).forEach(foundNodes::add));
+//		if (!foundNodes.isEmpty()) {
+//			connectedList.addAll(foundNodes);
+//			for (String node : foundNodes) {
+//				findConnected(connectedList, node, nodeGroups);
+//			}
+//		}
+//	}
 	
-	private String filterSingularMatrixNodes(String netlist) {
+	protected static class Element {
 		
-		Optional<String> groundNode = netlist.lines().map(line -> {
-			Matcher nodeMatcher = FILTER_GROUND_PATTERN.matcher(line);
-			return nodeMatcher.find() ? nodeMatcher.group(1) : null;
-		}).filter(s -> s != null).findAny();
 		
-		if (groundNode.isEmpty()) return null;
 		
-		List<List<String>> lineNodes = netlist.lines().map(line -> {
-			Matcher nodeMatcher = FILTER_NODE_PATTERN.matcher(line);
-			return nodeMatcher.results().map(MatchResult::group).toList();
-		}).toList();
-		
-		List<String> connectedNodes = new ArrayList<>();
-		findConnected(connectedNodes, groundNode.get(), lineNodes);
-
-		StringBuilder filterList = new StringBuilder();
-		List<String> lines = netlist.lines().toList();
-		for (int i = 0; i < lineNodes.size(); i++) {
-			boolean isSingular = lineNodes.get(i).size() > 0 && lineNodes.get(i).stream().filter(node -> connectedNodes.contains(node)).count() == 0;
-			if (isSingular) continue;
-			filterList.append(lines.get(i) + "\n");
-		}
-		
-		return filterList.toString();
-		
-	}
-	
-	private void findConnected(List<String> connectedList, String current, List<List<String>> nodeGroups) {
-		Set<String> foundNodes = new HashSet<>();
-		nodeGroups.stream().filter(group -> group.contains(current)).forEach(group -> group.stream().filter(node -> !connectedList.contains(node)).forEach(foundNodes::add));
-		if (!foundNodes.isEmpty()) {
-			connectedList.addAll(foundNodes);
-			for (String node : foundNodes) {
-				findConnected(connectedList, node, nodeGroups);
-			}
-		}
 	}
 	
 	public void runNetlist(String netlist, String cmd) {
 		
-		netlist = filterSingularMatrixNodes(netlist);
+		System.out.println(netlist);
 		
-		if (!this.nglink.isNGSpiceAttached()) {
-			if (!this.nglink.initNGSpice()) {
-				System.err.println("Failed to init ngspice!");
-				return;
-			}
-			System.out.println("SPICE initialized");
-		}
+		netlist.lines()
+			.filter(line -> !line.startsWith("*") && !line.isBlank())
+			
+			.forEach(System.out::println);
 		
-		if (!this.nglink.loadCircuit(netlist)) {
-			System.err.println("Failed to load netlist!");
-			return;
-		}
-		
-		if (!this.nglink.execCommand(cmd)) {
-			System.err.println("Failed to execute '" + cmd + "' command!");
-			return;
-		}
-		
-		this.nglink.execCommand("quit");
 	}
-	
-	@Override
-	public void log(String s) {
-		System.out.println("[SPICE] " + s);
-	}
-
-	@Override
-	public void detacheNGSpice() {
-		System.out.println("Spice terminated");
-	}
-	
-	@Override
-	public void reciveVecData(VectorValuesAll vecData, int vectorCount) {
-		System.out.println("Received data: " + vectorCount + " items");
-		
-		for (VectorValue value : vecData.values()) {
-			this.node2voltage.put(value.name(), value.realdata());
-		}
-	}
-
-	@Override
-	public void reciveInitData(PlotDescription plotInfo) {}
 	
 }

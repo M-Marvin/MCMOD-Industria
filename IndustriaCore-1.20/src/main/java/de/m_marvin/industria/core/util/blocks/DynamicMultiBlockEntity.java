@@ -29,7 +29,7 @@ public abstract class DynamicMultiBlockEntity<T extends DynamicMultiBlockEntity<
 			List<BlockPos> blockentityBlocks = block.findMultiBlockEntityBlocks(this.level, this.worldPosition, state);
 			if (blockentityBlocks.isEmpty()) return;
 			for (BlockPos pos : blockentityBlocks) {
-				if (level.getBlockEntity(pos) instanceof @SuppressWarnings("rawtypes") DynamicMultiBlockEntity multiblockentity && multiblockentity.isMaster) this.masterPos = Optional.of(pos);
+				if (level.getBlockEntity(pos) instanceof DynamicMultiBlockEntity multiblockentity && multiblockentity.isMaster) this.masterPos = Optional.of(pos);
 			}
 			BlockPos minPos = blockentityBlocks.stream().reduce(MathUtility::getMinCorner).get();
 			BlockPos maxPos = blockentityBlocks.stream().reduce(MathUtility::getMaxCorner).get();

@@ -1,5 +1,0 @@
-{
-	"Properties": [ "id", "nominal_current", "min_resistance" ],
-	"Networks": [ "VDC", "GND" ],
-	"IdProperty": "id"
-}

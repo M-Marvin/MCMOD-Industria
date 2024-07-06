@@ -7,9 +7,7 @@ public class Circuits {
 	
 	public static final double SHUNT_RESISTANCE = 0.001;
 	
-	public static final ResourceLocation CONSTANT_CURRENT_LOAD = new ResourceLocation(IndustriaCore.MODID, "constant_current_load");
 	public static final ResourceLocation CONSTANT_POWER_LOAD = new ResourceLocation(IndustriaCore.MODID, "constant_power_load");
-	public static final ResourceLocation CURRENT_LIMITED_VOLTAGE_SOURCE = new ResourceLocation(IndustriaCore.MODID, "current_limited_voltage_source");
 	public static final ResourceLocation POWER_LIMITEED_VOLTAGE_SOURCE = new ResourceLocation(IndustriaCore.MODID, "power_limited_voltage_source");
 	public static final ResourceLocation JUNCTION_RESISTOR = new ResourceLocation(IndustriaCore.MODID, "junction_resistor");
 	public static final ResourceLocation RESISTOR = new ResourceLocation(IndustriaCore.MODID, "resistor");

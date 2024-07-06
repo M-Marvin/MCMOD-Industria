@@ -178,9 +178,9 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-annotations:2.13.3"
     
  	// NG Link
-	shade("com.github.M-Marvin:LIBRARY-NGLink:$nglink_version")
-	minecraftLibrary("com.github.M-Marvin:LIBRARY-NGLink:$nglink_version")
-	api("com.github.M-Marvin:LIBRARY-NGLink:$nglink_version")
+	shade("com.github.M-Marvin:LIBRARY-ElectronFlow:$electronflow_version")
+	minecraftLibrary("com.github.M-Marvin:LIBRARY-ElectronFlow:$electronflow_version")
+	api("com.github.M-Marvin:LIBRARY-ElectronFlow:$electronflow_version")
 	
 	// UnifiedVectors
 	shade("com.github.M-Marvin:LIBRARY-UnifiedVectors:$univec_version")

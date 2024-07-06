@@ -304,10 +304,10 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, nodes, 0, coilLanes[0], 1, coilLanes[1]);
 				
 				double factor = coil.getWindingsPrimary() / (double) coil.getMaxWindings();
-				double current = parametrics.getParameter(MAGNET_CURRENT);
+				double power = parametrics.getParameter(MAGNET_CURRENT); // TODO magnet power
 				
-				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_CURRENT_LOAD).plotter();
-				templateSource.setProperty("nominal_current", factor * current);
+				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_POWER_LOAD).plotter();
+				templateSource.setProperty("nominal_power", factor * power);
 				templateSource.setNetworkNode("VDC", inputNodes[0], 0, coilLanes[0]);
 				templateSource.setNetworkNode("GND", inputNodes[0], 1, coilLanes[1]);
 				plotter.accept(templateSource);

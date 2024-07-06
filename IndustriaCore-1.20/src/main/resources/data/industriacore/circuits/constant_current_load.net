@@ -1,3 +1,0 @@
-
-* Load-Resistor with fixed current [ i_nominal=P{nominal_current}, r_minimal=P{min_resistance} ]
-R1_P{id} N{VDC} N{GND} R={max(V(N{VDC}, N{GND})/P{nominal_current}, P{min_resistance})}

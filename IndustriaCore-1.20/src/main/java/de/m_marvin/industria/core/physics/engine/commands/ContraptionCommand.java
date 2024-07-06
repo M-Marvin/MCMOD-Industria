@@ -355,7 +355,7 @@ public class ContraptionCommand {
 		
 		if (entityToTeleport != null) {
 						
-			if (source.getSource().getEntity() instanceof Player player) {
+			if (source.getSource().getEntity() instanceof Player) {
 				
 				entityToTeleport.teleportTo(contraptionPosition.x, contraptionPosition.y, contraptionPosition.z);
 				

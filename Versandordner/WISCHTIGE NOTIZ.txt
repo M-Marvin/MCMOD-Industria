@@ -1,0 +1,3 @@
+electronflow.exe nicht Verschieben!
+
+Anwendung ist im lokalen PATH hinterlegt, später noch entfernen

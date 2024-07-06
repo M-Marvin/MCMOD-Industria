@@ -1,7 +1,4 @@
 
 * Power limited voltage source [ p_maxmimum=P{max_power}, v_nominal=P{nominal_voltage} ]
-V1_P{id} N001_P{id} N{GND} P{nominal_voltage}
-R2_P{id} N001_P{id} N{SHUNT} R={max((P{nominal_voltage}/P{max_power}) * V(N001_P{id}, N{SHUNT}), 1u)}
-R1_P{id} N{SHUNT} N002_P{id} 0.001
-A1_P{id} N002_P{id} N{VDC} ideal_diode
-.model ideal_diode sidiode(Ron=1u Vfwd=0 Roff=1G)
+V1_P{id} N{SHUNT} N{GND} P{nominal_voltage} P{max_power}
+R2_P{id} N{SHUNT} N{VDC} 0.001

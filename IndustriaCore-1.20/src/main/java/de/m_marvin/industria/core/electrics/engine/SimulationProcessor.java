@@ -1,42 +1,25 @@
 package de.m_marvin.industria.core.electrics.engine;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
 import java.util.Queue;
-import java.util.Set;
-import java.util.regex.MatchResult;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.Level;
 
 import com.google.common.collect.Queues;
 
+import de.m_marvin.electronflow.ElectronFlow;
+import de.m_marvin.electronflow.NativeElectronFlow;
+import de.m_marvin.electronflow.NativeElectronFlow.Node;
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.Config;
-import de.m_marvin.nglink.NativeNGLink;
-import de.m_marvin.nglink.NativeNGLink.INGCallback;
-import de.m_marvin.nglink.NativeNGLink.PlotDescription;
-import de.m_marvin.nglink.NativeNGLink.VectorValue;
-import de.m_marvin.nglink.NativeNGLink.VectorValuesAll;
 
+// TODO optimize for new engine
 public class SimulationProcessor {
-	
-	private static final String SPICE_INIT_LOCATION = "../share/ngspice/scripts/spinit";
-	private static final String SPICE_CODEMODEL_LOC = "../share/spice/";
 	
 	private boolean shouldShutdown = true;
 	private Queue<ElectricNetwork> tasks = Queues.newArrayDeque();
 	private Processor[] processors;
 	
-	private class Processor extends Thread implements INGCallback {
+	private class Processor extends Thread implements NativeElectronFlow.FinalCallback {
 		
 		public Processor(int id) {
 			this.id = id;
@@ -45,33 +28,22 @@ public class SimulationProcessor {
 		
 		private final int id;
 		private boolean errorFlag = false;
-		private NativeNGLink nglink;
+		private ElectronFlow engine;
 		private ElectricNetwork currentTask = null;
 		
 		private boolean init() {
-			this.nglink = new NativeNGLink();
-			if (!this.nglink.initNGLink(this)) {
-				if (Config.SPICE_DEBUG_LOGGING.get()) IndustriaCore.LOGGER.log(Level.DEBUG, "Failed to init nglink native!");
-				return false;
-			}
-			if (!this.nglink.initNGSpice()) {
-				if (Config.SPICE_DEBUG_LOGGING.get()) IndustriaCore.LOGGER.log(Level.DEBUG, "Failed to init ngspice native!");
-				return false;
-			}
+			engine = new ElectronFlow();
+			engine.printVersionInfo();
+			engine.setCallbacks(null, this);
 			return true;
 		}
 		
 		private boolean cleanup() {
-			boolean flag = true;
-			if (this.nglink.isNGSpiceAttached()) {
-				this.nglink.execCommand("quit"); // quit command never return "ok" for some reason, therefore unable to detect if executed successful
-				if (!this.nglink.detachNGLink()) {
-					if (Config.SPICE_DEBUG_LOGGING.get()) IndustriaCore.LOGGER.log(Level.DEBUG, "Failed to detache nglink!");
-					flag = false;
-				}
-				this.nglink = null;
+			if (this.engine != null) {
+				this.engine.destroy();
+				this.engine = null;
 			}
-			return flag;
+			return true;
 		}
 		
 		@Override
@@ -103,7 +75,7 @@ public class SimulationProcessor {
 		
 		private void process() {
 			try {
-				while (this.nglink.isNGSpiceAttached() && !shouldShutdown && !errorFlag) {
+				while (!shouldShutdown && !errorFlag) {
 					synchronized (tasks) {
 						if (tasks.isEmpty()) {
 							tasks.wait();
@@ -123,25 +95,10 @@ public class SimulationProcessor {
 		}
 		
 		@Override
-		public void log(String s) {
-			if (Config.SPICE_DEBUG_LOGGING.get()) IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG, s);
-		}
-
-		@Override
-		public void detacheNGSpice() {
-			IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.WARN, "SPICE-Engine detached!");
-			this.errorFlag = true;
-		}
-		
-		@Override
-		public void reciveInitData(PlotDescription plotInfo) {}
-		
-		@Override
-		public void reciveVecData(VectorValuesAll vecData, int vectorCount) {
+		public void finalData(Node[] nodes, double nodecharge) {
 			this.currentTask.getNodeVoltages().clear();
-			for (int i = 0; i < vectorCount; i++) {
-				VectorValue value = vecData.values()[i];
-				this.currentTask.getNodeVoltages().put(value.name(), value.realdata());
+			for (Node node : nodes) {
+				this.currentTask.getNodeVoltages().put(node.name, node.charge / nodecharge);
 			}
 		}
 		
@@ -153,59 +110,14 @@ public class SimulationProcessor {
 		}
 		
 		private void processNetList(String netList) {
-			netList = filterSingularMatrixNodes(netList);
 			if (Config.SPICE_DEBUG_LOGGING.get()) IndustriaCore.LOGGER.debug("Load spice circuit:\n" + netList);
-			if (!this.nglink.loadCircuit(netList)) {
+			
+			if (!this.engine.loadNetList(netList)) {
 				IndustriaCore.LOGGER.warn("Failed to start electric simulation! Failed to load circuit!");
 				return;
 			}
-			if (!this.nglink.execCommand("op")) {
-				IndustriaCore.LOGGER.warn("Failed to start electric simulation! Failed run op command!");
-				return;
-			}
-		}
-
-		private static final Pattern FILTER_NODE_PATTERN = Pattern.compile("(?:N[0-9_]{5,})|(?:node\\|[A-Za-z0-9_\\-]{1,}\\|)");
-		private static final Pattern FILTER_GROUND_PATTERN = Pattern.compile("R0GND (node\\|[A-Za-z0-9_\\-]{1,}\\|) 0 1");
-		
-		private String filterSingularMatrixNodes(String netlist) {
-			
-			Optional<String> groundNode = netlist.lines().map(line -> {
-				Matcher nodeMatcher = FILTER_GROUND_PATTERN.matcher(line);
-				return nodeMatcher.find() ? nodeMatcher.group(1) : null;
-			}).filter(s -> s != null).findAny();
-			
-			if (groundNode.isEmpty()) return null;
-			
-			List<List<String>> lineNodes = netlist.lines().map(line -> {
-				Matcher nodeMatcher = FILTER_NODE_PATTERN.matcher(line);
-				return nodeMatcher.results().map(MatchResult::group).toList();
-			}).toList();
-			
-			List<String> connectedNodes = new ArrayList<>();
-			findConnected(connectedNodes, groundNode.get(), lineNodes);
-
-			StringBuilder filterList = new StringBuilder();
-			List<String> lines = netlist.lines().toList();
-			for (int i = 0; i < lineNodes.size(); i++) {
-				boolean isSingular = lineNodes.get(i).size() > 0 && lineNodes.get(i).stream().filter(node -> connectedNodes.contains(node)).count() == 0;
-				if (isSingular) continue;
-				filterList.append(lines.get(i) + "\n");
-			}
-			
-			return filterList.toString();
-			
-		}
-		
-		private void findConnected(List<String> connectedList, String current, List<List<String>> nodeGroups) {
-			Set<String> foundNodes = new HashSet<>();
-			nodeGroups.stream().filter(group -> group.contains(current)).forEach(group -> group.stream().filter(node -> !connectedList.contains(node)).forEach(foundNodes::add));
-			if (!foundNodes.isEmpty()) {
-				connectedList.addAll(foundNodes);
-				for (String node : foundNodes) {
-					findConnected(connectedList, node, nodeGroups);
-				}
-			}
+			this.engine.controllCommand("step", "2m", "600", "30"); // TODO electron flow
+			this.engine.controllCommand("printv", "0");
 		}
 		
 	}
@@ -222,79 +134,7 @@ public class SimulationProcessor {
 		return false;
 	}
 	
-	private void writeInitFile() {
-		File workingDir = new File("").getAbsoluteFile();
-		File initFile = new File(workingDir, SPICE_INIT_LOCATION).getAbsoluteFile();
-		
-		IndustriaCore.LOGGER.log(Level.INFO, "write SPICE init file at " + initFile.getPath());
-		
-		if (!initFile.getParentFile().isDirectory() && !initFile.getParentFile().mkdirs()) {
-			IndustriaCore.LOGGER.log(Level.WARN, "Failed to create init file folder!");
-			IndustriaCore.LOGGER.log(Level.WARN, "WARNING: This will possibly break a lot of stuff!");
-			return;
-		}
-		
-		try {
-
-
-			InputStream spinitFileIn = IndustriaCore.ARCHIVE_ACCESS.openFile("spiceinit/spinit");
-			OutputStream spinitFileOut = new FileOutputStream(initFile);
-			spinitFileOut.write(spinitFileIn.readAllBytes());
-			spinitFileIn.close();
-			spinitFileOut.close();
-			
-		} catch (Exception e) {
-			if (e instanceof FileNotFoundException && initFile.isFile()) {
-				IndustriaCore.LOGGER.log(Level.INFO, "Access to init file denied, already used by another process!");
-			} else {
-				IndustriaCore.LOGGER.log(Level.WARN, "Failed to create init file!");
-				IndustriaCore.LOGGER.log(Level.WARN, "WARNING: This will possibly break a lot of stuff!");
-				e.printStackTrace();
-			}
-		}
-		
-		File modelFolder = new File(workingDir, SPICE_CODEMODEL_LOC).getAbsoluteFile();
-
-		IndustriaCore.LOGGER.log(Level.INFO, "extract SPICE modules at " + modelFolder.getPath());
-		
-		if (!modelFolder.isDirectory() && !modelFolder.mkdirs()) {
-			IndustriaCore.LOGGER.log(Level.WARN, "Failed to create code module folder!");
-			IndustriaCore.LOGGER.log(Level.WARN, "WARNING: This will possibly break a lot of stuff!");
-			return;
-		}
-
-		String[] spiceModules = IndustriaCore.ARCHIVE_ACCESS.listFiles("spiceinit/codemodels");
-		
-		for (String module : spiceModules) {
-			
-			IndustriaCore.LOGGER.log(Level.DEBUG, "-> extract module '" + module + "' ...");
-			
-			File modelOutFile = new File(modelFolder, module);
-			
-			try {
-
-				InputStream moduleIn = IndustriaCore.ARCHIVE_ACCESS.openFile("spiceinit/codemodels/" + module);
-				FileOutputStream moduleOut = new FileOutputStream(modelOutFile);
-				moduleOut.write(moduleIn.readAllBytes());
-				moduleIn.close();
-				moduleOut.close();
-				
-			} catch (Exception e) {
-				if (e instanceof FileNotFoundException && modelOutFile.isFile()) {
-					IndustriaCore.LOGGER.log(Level.INFO, "Access to model file denied, already used by another process!");
-				} else {
-					IndustriaCore.LOGGER.log(Level.WARN, "Failed to extract module file " + module + "!");
-					IndustriaCore.LOGGER.log(Level.WARN, "WARNING: This will possibly break a lot of stuff!");
-					e.printStackTrace();
-				}
-			}
-			
-		}
-		
-	}
-	
 	public void start() {
-		writeInitFile();
 		this.shouldShutdown = false;
 		IndustriaCore.LOGGER.log(Level.INFO, "Electric network procsssor startup");
 		for (int i = 0; i < this.processors.length; i++) {

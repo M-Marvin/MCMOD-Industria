@@ -77,7 +77,7 @@ public class ElectricComponentRenderer {
 			
 			for (ElectricNetworkHandlerCapability.Component<?, ?, ?> component : electricHolder.getComponents()) {
 				
-				if (component.type() instanceof Block block) {
+				if (component.type() instanceof Block) {
 					
 					BlockPos pos = (BlockPos) component.pos();
 					

@@ -1,6 +1,3 @@
 
-* DC Voltage converter [n_winding_ratio=P{winding_ratio}, p_maximum=P{max_power} ]
-R1_P{id} N{VDC_IN} N{GND_IN} R={V(N{VDC_IN}, N{GND_IN})/-I(B1_P{id})/P{winding_ratio}}
-R2_P{id} N{VDC_OUT} N001_P{id} R={max((V(N001_P{id}, N{GND_OUT})/P{max_power}) * V(N001_P{id}, N{VDC_OUT}), 1u)}
-B1_P{id} N001_P{id} N{GND_OUT} V={V(N{VDC_IN}, N{GND_IN})*P{winding_ratio}}
-R3_P{id} N{GND_IN} N{GND_OUT} 1G
+* DC Voltage converter [ n_winding_ratio=P{winding_ratio}, p_maximum=P{max_power} ]
+T1_P{id} N{VDC_IN} N{GND_IN} N{VDC_OUT} N{GND_OUT} P{winding_ratio} P{max_power}

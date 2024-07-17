@@ -439,6 +439,19 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	}
 	
 	/**
+	 * Returns the current flowing trough the first element found, containing the tag in its name
+	 */
+	public double getCurrentAtElementTagged(Object componentPos, String elementTag) {
+		Component<?, ?, ?> component = this.pos2componentMap.get(componentPos);
+		if (component == null) return 0.0;
+		ElectricNetwork network = this.component2circuitMap.get(component);
+		if (network != null) {
+			return network.getCurrentAtElementTagged(elementTag);
+		}
+		return 0.0;
+	}
+	
+	/**
 	 * Updates the network which has a component at the given position
 	 */
 	public <P> void updateNetwork(P position) {

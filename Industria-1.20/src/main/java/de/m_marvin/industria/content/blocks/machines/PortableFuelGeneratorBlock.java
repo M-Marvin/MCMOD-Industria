@@ -134,6 +134,7 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.POWER_LIMITEED_VOLTAGE_SOURCE).plotter();
 				templateSource.setProperty("max_power", targetPower);
 				templateSource.setProperty("nominal_voltage", targetVoltage);
+				templateSource.setProperty("source_identifier", ElectricNetwork.getPositionKeyString(position));
 				templateSource.setNetworkNode("SHUNT", new NodePos(position, 0), 2, "power_shunt");
 				templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, wireLanes[0]);
 				templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, wireLanes[1]);
@@ -162,10 +163,15 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 	@Override
 	public double getPower(BlockState state, Level level, BlockPos pos) {
 		if (level.getBlockEntity(pos) instanceof PortableFuelGeneratorBlockEntity generator) {
+
 			String[] wireLanes = generator.getNodeLanes();
-			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 2, 0, "power_shunt", wireLanes[0]);
+			double sourceVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]);
+			double sourceCurrent = ElectricUtility.getCurrentAtElementTagged(level, pos, ElectricNetwork.getPositionKeyString(pos));
+			double powerUsed = sourceVoltage * sourceCurrent;
+			
+//			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 2, 0, "power_shunt", wireLanes[0]);
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
-			double powerUsed = (shuntVoltage / Circuits.SHUNT_RESISTANCE) * parametrics.getNominalVoltage();
+//			double powerUsed = (shuntVoltage / Circuits.SHUNT_RESISTANCE) * parametrics.getNominalVoltage();
 			return Math.max(powerUsed > 1.0 ? parametrics.getPowerMin() : 0, powerUsed);
 		}
 		return 0.0;

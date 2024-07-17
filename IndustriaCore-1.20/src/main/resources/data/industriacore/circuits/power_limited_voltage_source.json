@@ -1,5 +1,5 @@
 {
-	"Properties": [ "id", "max_power", "nominal_voltage" ],
+	"Properties": [ "id", "max_power", "nominal_voltage" , "source_identifier" ],
 	"Networks": [ "VDC", "GND", "SHUNT" ],
 	"IdProperty": "id"
 }

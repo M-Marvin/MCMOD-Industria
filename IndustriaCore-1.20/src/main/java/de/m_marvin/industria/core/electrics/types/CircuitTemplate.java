@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
 
 public class CircuitTemplate {
@@ -43,7 +44,7 @@ public class CircuitTemplate {
 		}
 		
 		public void setNetworkNode(String name, NodePos node, int laneId, String lane) {
-			setNetwork(name, node.getKeyString(laneId, lane));
+			setNetwork(name, ElectricNetwork.getNodeKeyString(node, laneId, lane));
 		}
 		
 		public void setNetwork(String name, String net) {

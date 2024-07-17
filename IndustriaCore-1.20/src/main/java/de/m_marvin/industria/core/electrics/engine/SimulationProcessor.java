@@ -8,6 +8,7 @@ import com.google.common.collect.Queues;
 
 import de.m_marvin.electronflow.ElectronFlow;
 import de.m_marvin.electronflow.NativeElectronFlow;
+import de.m_marvin.electronflow.NativeElectronFlow.Element;
 import de.m_marvin.electronflow.NativeElectronFlow.Node;
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.Config;
@@ -95,10 +96,13 @@ public class SimulationProcessor {
 		}
 		
 		@Override
-		public void finalData(Node[] nodes, double nodecharge) {
+		public void finalData(Node[] nodes, Element[] elements, double nodecharge, double timestep) {
 			this.currentTask.getNodeVoltages().clear();
 			for (Node node : nodes) {
 				this.currentTask.getNodeVoltages().put(node.name, node.charge / nodecharge);
+			}
+			for (Element element : elements) {
+				this.currentTask.getElementCurrents().put(element.name, element.transferCharge / timestep);
 			}
 		}
 		
@@ -116,8 +120,14 @@ public class SimulationProcessor {
 				IndustriaCore.LOGGER.warn("Failed to start electric simulation! Failed to load circuit!");
 				return;
 			}
-			this.engine.controllCommand("step", "2m", "600", "30"); // TODO electron flow
+			
+			String execCommand = Config.ELECTRIC_SIMULATION_EXEC_COMMAND.get();
+			String[] execArgs = execCommand.split(" ");
+			this.engine.controllCommand(execArgs);
+			
+			//this.engine.controllCommand("step", "2u", "6m", "1m"); // TODO electron flow
 			this.engine.controllCommand("printv", "0");
+			this.engine.controllCommand("printi");
 		}
 		
 	}

@@ -128,6 +128,11 @@ public class ElectricUtility {
 		return v2 - v1;
 	}
 	
+	public static double getCurrentAtElementTagged(Level level, Object componentPos, String elementTag) {
+		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		return handler.getCurrentAtElementTagged(componentPos, elementTag);
+	}
+	
 	public static double getPowerPercentage(double power, double targetPower) {
 		return power / targetPower;
 	}

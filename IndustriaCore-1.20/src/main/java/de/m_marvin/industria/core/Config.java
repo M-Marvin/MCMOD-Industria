@@ -24,11 +24,16 @@ public class Config {
 	public static ForgeConfigSpec.DoubleValue MAGNETIC_FIELD_RANGE;
 	public static ForgeConfigSpec.DoubleValue MAGNETIC_FIELD_CHANGE_NOTIFY_LIMIT;
 	
+	public static final String CATEGORY_ELECTIRCS = "electrics";
+	public static ForgeConfigSpec.ConfigValue<String> ELECTRIC_SIMULATION_EXEC_COMMAND;
+	
 	static {
 		ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 		BUILDER.comment("Industria Core utility settings").push(CATEGORY_UTIL);
-		SPICE_DEBUG_LOGGING = BUILDER.comment("If true, the nglink native lib will print simmulation data (and some other things) from the electric networks into the logs.").define("spice_debug_logging", false);
+		SPICE_DEBUG_LOGGING = BUILDER.comment("If true, the native lib will print simmulation data (and some other things) from the electric networks into the logs.").define("simulation_debug_logging", false);
 		BUILDER.pop();
+		BUILDER.comment("Industria Core electrics settings").push(CATEGORY_ELECTIRCS);
+		ELECTRIC_SIMULATION_EXEC_COMMAND = BUILDER.comment("Simulation engine execution command.").define("simulation_exec_command", "step 1 1 1");
 		CONFIG_COMMON = BUILDER.build();
 		
 		BUILDER = new ForgeConfigSpec.Builder();

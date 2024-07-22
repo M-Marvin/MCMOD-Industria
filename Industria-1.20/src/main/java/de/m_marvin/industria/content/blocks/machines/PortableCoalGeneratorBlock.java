@@ -186,10 +186,8 @@ public class PortableCoalGeneratorBlock extends BaseEntityFixedMultiBlock implem
 			
 			if (targetPower > 0) {
 
-				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.POWER_LIMITEED_VOLTAGE_SOURCE).plotter();
-				templateSource.setProperty("max_power", targetPower);
+				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.VOLTAGE_SOURCE).plotter();
 				templateSource.setProperty("nominal_voltage", targetVoltage);
-				templateSource.setNetworkNode("SHUNT", new NodePos(position, 0), 2, "power_shunt");
 				templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, wireLanes[0]);
 				templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, wireLanes[1]);
 				plotter.accept(templateSource);
@@ -227,6 +225,7 @@ public class PortableCoalGeneratorBlock extends BaseEntityFixedMultiBlock implem
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			double powerUsed = (shuntVoltage / Circuits.SHUNT_RESISTANCE) * parametrics.getNominalVoltage();
 			return Math.max(powerUsed > 1.0 ? parametrics.getPowerMin() : 0, powerUsed);
+			// TODO fix generator
 		}
 		return 0.0;
 	}

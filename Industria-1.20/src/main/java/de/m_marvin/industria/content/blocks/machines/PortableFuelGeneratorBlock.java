@@ -131,11 +131,10 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 			
 			if (targetPower > 0) {
 
-				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.POWER_LIMITEED_VOLTAGE_SOURCE).plotter();
-				templateSource.setProperty("max_power", targetPower);
+				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.VOLTAGE_SOURCE).plotter();
 				templateSource.setProperty("nominal_voltage", targetVoltage);
+				templateSource.setProperty("current_limit", targetVoltage > 0 ? targetPower / targetVoltage : 0);
 				templateSource.setProperty("source_identifier", ElectricNetwork.getPositionKeyString(position));
-				templateSource.setNetworkNode("SHUNT", new NodePos(position, 0), 2, "power_shunt");
 				templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, wireLanes[0]);
 				templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, wireLanes[1]);
 				plotter.accept(templateSource);
@@ -168,7 +167,7 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 			double sourceVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]);
 			double sourceCurrent = ElectricUtility.getCurrentAtElementTagged(level, pos, ElectricNetwork.getPositionKeyString(pos));
 			double powerUsed = sourceVoltage * sourceCurrent;
-			
+			// TODO fix generator
 //			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 2, 0, "power_shunt", wireLanes[0]);
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 //			double powerUsed = (shuntVoltage / Circuits.SHUNT_RESISTANCE) * parametrics.getNominalVoltage();

@@ -116,15 +116,14 @@ public class SimulationProcessor {
 		private void processNetList(String netList) {
 			if (Config.SPICE_DEBUG_LOGGING.get()) IndustriaCore.LOGGER.debug("Load spice circuit:\n" + netList);
 			
-			if (!this.engine.loadNetList(netList)) {
+			if (!this.engine.loadAndRunNetList(netList)) {
 				IndustriaCore.LOGGER.warn("Failed to start electric simulation! Failed to load circuit!");
 				return;
 			}
 			
-			String execCommand = Config.ELECTRIC_SIMULATION_EXEC_COMMAND.get();
-			String[] execArgs = execCommand.split(" ");
-			this.engine.controllCommand(execArgs);
-			
+//			String execCommand = Config.ELECTRIC_SIMULATION_COMMANDS.get();
+//			String[] execArgs = execCommand.split(" ");
+//			this.engine.controllCommand(execArgs);
 			//this.engine.controllCommand("step", "2u", "6m", "1m"); // TODO electron flow
 			this.engine.controllCommand("printv", "0");
 			this.engine.controllCommand("printi");

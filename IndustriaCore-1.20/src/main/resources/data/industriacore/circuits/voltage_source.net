@@ -1,0 +1,3 @@
+
+* Voltage source [ v_nominal=P{nominal_voltage}, i_max=P{current_limit} ]
+V1_P{id}_P{source_identifier} N{VDC} N{GND} P{nominal_voltage} P{current_limit}

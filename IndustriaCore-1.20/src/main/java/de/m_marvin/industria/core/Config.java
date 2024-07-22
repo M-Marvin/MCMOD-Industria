@@ -25,7 +25,7 @@ public class Config {
 	public static ForgeConfigSpec.DoubleValue MAGNETIC_FIELD_CHANGE_NOTIFY_LIMIT;
 	
 	public static final String CATEGORY_ELECTIRCS = "electrics";
-	public static ForgeConfigSpec.ConfigValue<String> ELECTRIC_SIMULATION_EXEC_COMMAND;
+	public static ForgeConfigSpec.ConfigValue<String> ELECTRIC_SIMULATION_COMMANDS;
 	
 	static {
 		ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
@@ -33,7 +33,12 @@ public class Config {
 		SPICE_DEBUG_LOGGING = BUILDER.comment("If true, the native lib will print simmulation data (and some other things) from the electric networks into the logs.").define("simulation_debug_logging", false);
 		BUILDER.pop();
 		BUILDER.comment("Industria Core electrics settings").push(CATEGORY_ELECTIRCS);
-		ELECTRIC_SIMULATION_EXEC_COMMAND = BUILDER.comment("Simulation engine execution command.").define("simulation_exec_command", "step 1 1 1");
+		ELECTRIC_SIMULATION_COMMANDS = BUILDER.comment("Simulation engine execution commands.").define("simulation_exec_commands", 
+				".reset\n" +
+				".profile 0.12m false false\n" +
+				".step 1u 1m\n" +
+				".profile 0.12m true true\n" +
+				".step 1u 40m");
 		CONFIG_COMMON = BUILDER.build();
 		
 		BUILDER = new ForgeConfigSpec.Builder();

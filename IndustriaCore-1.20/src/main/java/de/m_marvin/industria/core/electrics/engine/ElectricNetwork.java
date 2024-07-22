@@ -11,6 +11,7 @@ import java.util.function.Supplier;
 import com.google.common.collect.Maps;
 
 import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.core.Config;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
@@ -101,7 +102,9 @@ public class ElectricNetwork {
 	public void complete(long frame) {
 		if (!this.circuitBuilder.isEmpty()) {
 			String groundResistor = "R0GND " + groundNode + " 0 1";
-			this.netList = title + "\n" + circuitBuilder.toString() + "\n" + groundResistor + "\n.end\n";
+			String execCommand = Config.ELECTRIC_SIMULATION_COMMANDS.get();
+			this.netList = String.format("%s\n%s\n\n%s\n\n%s\n", title, circuitBuilder.toString(), groundResistor, execCommand);
+//			this.netList = title + "\n" + circuitBuilder.toString() + "\n" + groundResistor + "\n.end\n";
 		} else {
 			this.netList = "";
 		}

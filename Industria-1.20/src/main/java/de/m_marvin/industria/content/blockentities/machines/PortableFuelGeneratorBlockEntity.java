@@ -2,6 +2,7 @@ package de.m_marvin.industria.content.blockentities.machines;
 
 import java.util.Optional;
 
+import org.checkerframework.common.returnsreceiver.qual.This;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,6 +17,8 @@ import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.InternalNodeConstructor;
+import de.m_marvin.industria.core.parametrics.BlockParametrics;
+import de.m_marvin.industria.core.parametrics.engine.BlockParametricsManager;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.container.IFluidSlotContainer.FluidContainer;
 import de.m_marvin.industria.core.util.types.Direction2d;
@@ -48,6 +51,7 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 	protected FluidContainer container = new FluidContainer(1);
 	protected String[] nodeLanes = new String[] {"L", "N"};
 	protected boolean canRun = false;
+	protected boolean fuseBlown = false;
 	protected float fuelTimer;
 	protected GeneratorFuelRecipeType recipe;
 	
@@ -105,10 +109,18 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 		}
 		
 		if (pBlockEntity.canRun && pState.getBlock() instanceof PortableFuelGeneratorBlock generatorBlock) {
+
+			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(pState.getBlock());
+			double powerProduction = generatorBlock.getPower(pState, pLevel, pPos);
+			double powerPct = powerProduction / parametrics.getPowerMax();
+			
+			if (powerPct > 1.1) {
+				// TODO
+				System.out.println("XXXXXXXXXXXXXXX");
+			}
 			
 			FluidStack fuel = pBlockEntity.getFuelStorage();
 			if (!fuel.isEmpty() && pBlockEntity.recipe != null) {	
-				double powerProduction = generatorBlock.getPower(pState, pLevel, pPos);
 				int wattsPerMB = pBlockEntity.recipe.getWattsPerMb();
 				double consumtionTick = powerProduction / wattsPerMB;
 				

@@ -2,7 +2,7 @@ package de.m_marvin.industria.content.client.screens;
 
 import de.m_marvin.industria.content.Industria;
 import de.m_marvin.industria.content.container.PortableCoalGeneratorContainer;
-import de.m_marvin.industria.core.client.electrics.screens.AbstractFluidContainerScreen;
+import de.m_marvin.industria.core.client.util.screens.AbstractFluidContainerScreen;
 import de.m_marvin.industria.core.client.util.widgets.PowerInfo;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider.ElectricInfo;

@@ -1,3 +1,3 @@
 
 * Load-Resistor with fixed power consumption [ power_nominal=P{nominal_power} ]   V(N{VDC},N{GND})(P{nominal_power}/V(N{VDC},N{GND}))
-R1_P{id} N{VDC} N{GND} 100
+R1_P{id} N{VDC} N{GND} max(2m,V(N{VDC},N{GND})/(P{nominal_power}/V(N{VDC},N{GND})))

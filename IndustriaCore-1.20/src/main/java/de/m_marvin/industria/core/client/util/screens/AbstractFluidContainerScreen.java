@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core.client.electrics.screens;
+package de.m_marvin.industria.core.client.util.screens;
 
 import java.awt.Color;
 

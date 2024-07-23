@@ -104,6 +104,10 @@ public class FloodlightBlockEntity extends BlockEntity implements MenuProvider, 
 		double powerP = parametrics.getPowerPercentageV(voltage);
 		
 		boolean shouldLit = powerP >= 1;
+		
+		// TODO debuzg print
+		System.out.println("=======================  " + powerP + " " + voltage);
+		
 		if (getBlockState().getValue(BlockStateProperties.LIT) != shouldLit) setLightState(shouldLit);
 		
 		if (this.level.random.nextFloat() < parametrics.getExplodeChance(voltageP, powerP)) {

@@ -2,7 +2,6 @@ package de.m_marvin.industria.content.blockentities.machines;
 
 import java.util.Optional;
 
-import org.checkerframework.common.returnsreceiver.qual.This;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -100,7 +99,7 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 	
 	public static void tick(Level pLevel, BlockPos pPos, BlockState pState, PortableFuelGeneratorBlockEntity pBlockEntity) {
 		
-		if (pBlockEntity.canRun != pBlockEntity.canRun()) {
+		if (pBlockEntity.canRun != pBlockEntity.canRun() && !pLevel.isClientSide()) {
 			pBlockEntity.canRun = pBlockEntity.canRun();
 			pBlockEntity.level.setBlockAndUpdate(pPos, pState.setValue(BlockStateProperties.LIT, pBlockEntity.canRun));
 			pBlockEntity.setChanged();
@@ -116,7 +115,7 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 			
 			if (powerPct > 1.1) {
 				// TODO
-				System.out.println("XXXXXXXXXXXXXXX");
+				//System.out.println("XXXXXXXXXXXXXXX");
 			}
 			
 			FluidStack fuel = pBlockEntity.getFuelStorage();

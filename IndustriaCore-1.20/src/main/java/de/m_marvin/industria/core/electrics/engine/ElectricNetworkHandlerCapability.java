@@ -20,6 +20,7 @@ import java.util.function.Consumer;
 import com.google.common.base.Objects;
 
 import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.core.Config;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitBreakEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitPlaceEvent;
@@ -52,7 +53,6 @@ import net.minecraftforge.network.PacketDistributor;
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class ElectricNetworkHandlerCapability implements ICapabilitySerializable<ListTag> {
 	
-	public static final int NUM_SIMULATION_THREADS = 1; // There should be more than one, but there are some multithreading problems with NGLink
 	public static final String CIRCUIT_FILE_NAME = "circuit_";
 	public static final String CIRCUIT_FILE_EXTENSION = ".net";
 	
@@ -253,7 +253,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		if (hasProcessor()) {
 			IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.WARN, "Electric network processor already running, this is not right!");
 		}
-		if (simulationProcessor == null) simulationProcessor = new SimulationProcessor(NUM_SIMULATION_THREADS);
+		if (simulationProcessor == null) simulationProcessor = new SimulationProcessor(Config.ELECTIRC_SIMULATION_THREADS.get());
 		simulationProcessor.start();
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdownProcessor()));
 	}

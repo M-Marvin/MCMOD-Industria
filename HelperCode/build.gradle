@@ -34,6 +34,7 @@ version = '0.1'
 repositories {
 	mavenCentral()
 	maven { url 'https://jitpack.io' }
+	mavenLocal()
 }
 
 configurations {
@@ -62,6 +63,8 @@ dependencies {
 	
 	// NGLink
 	shade 'com.github.M-Marvin:LIBRARY-NGLink:main-SNAPSHOT'
+	
+	shade 'de.m_marvin.electronflow:ElectronFlowJNI:0.3_alpha_2'
 	
 }
 

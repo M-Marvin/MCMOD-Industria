@@ -147,6 +147,7 @@ repositories {
         name = 'Kotlin for Forge'
         url = 'https://thedarkcolour.github.io/KotlinForForge/'
     }
+    mavenLocal()
 }
 
 configurations {
@@ -178,9 +179,12 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-annotations:2.13.3"
     
  	// NG Link
-	shade("com.github.M-Marvin:LIBRARY-ElectronFlow:$electronflow_version")
-	minecraftLibrary("com.github.M-Marvin:LIBRARY-ElectronFlow:$electronflow_version")
-	api("com.github.M-Marvin:LIBRARY-ElectronFlow:$electronflow_version")
+	//shade("com.github.M-Marvin:LIBRARY-ElectronFlow:$electronflow_version")
+	//minecraftLibrary("com.github.M-Marvin:LIBRARY-ElectronFlow:$electronflow_version")
+	//api("com.github.M-Marvin:LIBRARY-ElectronFlow:$electronflow_version")
+	shade("de.m_marvin.electronflow:ElectronFlowJNI:0.3_alpha_2")
+	minecraftLibrary("de.m_marvin.electronflow:ElectronFlowJNI:0.3_alpha_2")
+	api("de.m_marvin.electronflow:ElectronFlowJNI:0.3_alpha_2")
 	
 	// UnifiedVectors
 	shade("com.github.M-Marvin:LIBRARY-UnifiedVectors:$univec_version")

@@ -89,6 +89,7 @@ public class SimulationProcessor {
 						processNetList(netList);
 					} else {
 						this.currentTask.getNodeVoltages().clear();
+						this.currentTask.getElementCurrents().clear();
 					}
 					this.currentTask.getComponents().forEach(c -> c.onNetworkChange(this.currentTask.getLevel()));
 				}
@@ -98,6 +99,7 @@ public class SimulationProcessor {
 		@Override
 		public void finalData(Node[] nodes, Element[] elements, double nodecharge, double timestep) {
 			this.currentTask.getNodeVoltages().clear();
+			this.currentTask.getElementCurrents().clear();
 			for (Node node : nodes) {
 				this.currentTask.getNodeVoltages().put(node.name, node.charge / nodecharge);
 			}
@@ -107,7 +109,7 @@ public class SimulationProcessor {
 		}
 		
 		private boolean isNetListValid(String netList) {
-			// Quick check if null or under limit 10 (net lists as short as 10 can't be valid)
+			// Quick check if null or under limit 10 (net lists as short as 10 can't be valid) TODO remove outdated validation checks
 			if (netList == null || netList.length() < 10) return false;
 			// Filter out any comments and empty lines, check if at least two components are defined (title + component 1 + component 2 + end line)
 			return netList.lines().filter(l -> !l.startsWith("*") && !l.isBlank()).toList().size() > 3;
@@ -164,6 +166,7 @@ public class SimulationProcessor {
 	public void processNetwork(ElectricNetwork network) {
 		if (this.shouldShutdown) return;
 		synchronized (tasks) {
+			if (this.tasks.contains(network)) return;
 			this.tasks.add(network);	
 			this.tasks.notify();
 		}

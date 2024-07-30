@@ -117,3 +117,7 @@ NOM       GEN        DAT          AKK        LOK          INSTR
 cievka (Spule) nach Schema FEM-1
 cievka, cievky, cievke, cievku, cievke, cievkou
 NOM     GEN     DAT     AKK     LOK     INSTR
+
+xéra (Xera) nach Schema NEUTR-4
+xéra, xéraťa, xéraťu, xéra, xérati, xéraťom
+NOM   GEN     DAT     AKK   LOK     INSTR

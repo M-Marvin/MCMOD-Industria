@@ -13,7 +13,7 @@
 "industriacore.commands.contraption.remove.success_multiple":	"%1$s Vorrichtungen entfernt",
 "industriacore.commands.contraption.create.failed":		"Erzeugen der Vorrichtung fehlgeschlagen!",
 "industriacore.commands.contraption.create.success": 		"Vorrichtung aus Bl\u00f6cken bei %1$s %2$s %3$s erzeugt",
-"industriacore.commands.contraption.create.toLarge": 		"Ausgew\u00e4hlter Bereich zu gro\u00df: %1$sx%2$sx%3$s (max. %4$sx%5$sx%6$s)!",
+"industriacore.commands.contraption.create.toLarge": 		"Ausgew\u00e4hlter Bereich Zu gro\u00df: %1$sx%2$sx%3$s (max. %4$sx%5$sx%6$s)!",
 "industriacore.commands.contraption.teleport.success":		"Vorrichtung nach %1$s %2$s %3$s teleportiert",
 "industriacore.commands.contraption.teleport.success_multiple":	"%1$s Vorrichtungen nach %2$s %3$s %4$s teleportiert",
 "industriacore.commands.contraption.assemble.failed":		"Bau der Vorrichtung fehlgeschlagen!",

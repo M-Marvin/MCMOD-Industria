@@ -1,5 +1,10 @@
 Nomendeklinationen spezifischer Wörter:
 
+zariadenie (Vorrichtung) nach Schema NEUTR-3
+zariadenie, zariadenia, zariadeniu , zariadenie, zariadení   , zariadením
+zariadenia, zariadení , zariadeniam, zariadenia, zariadeniach, zariadeniami
+NOM         GEN         DAT          AKK         LOK           INSTR
+
 linka (Leitung) nach Schema FEM-1
 linka, linky, linke, linku, linke, linkou
 NOM    GEN    DAT    AKK    LOK    INSTR
@@ -9,8 +14,9 @@ kliknutie, kliknutia, kliknutiu, kliknutie, kliknutí, kliknutím
 NOM        GEN        DAT        AKK        LOK       INSTR
 
 kocka (Würfel/Block) nach Schema FEM-1
-kocka, kocky, kocke, kocku, kocke, kockou
-NOM   GEN     DAT    AKK    LOK    INSTR
+kocka, kocky , kocke , kocku, kocke  , kockou
+kocky, kociek, kockám, kocky, kockách, kockami
+NOM   GEN      DAT     AKK    LOK      INSTR
 
 oblasť (Bereich) nach Schema FEM-3
 oblasť, oblasti, oblasti, oblasť, oblasti, oblasťou

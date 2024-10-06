@@ -193,7 +193,7 @@
 "item.industria.tin_ingot":				"Tinstaaf",
 "item.industria.tin_nugget":				"Tinklompje",
 "item.industria.tin_plate":				"Tinplaat",
-"item.industria.raw_tin":				"\u00a7cXXX",
+"item.industria.raw_tin":				"§cXXX",
 "item.industria.crushed_tin_ore":			"Verpletterd tinerts",
 "item.industria.purified_crushed_tin_ore":		"Gewasen verpletterd tinerts",
 "item.industria.spo_tin_dust":				"Klein stapeltje tinpoeder",
@@ -258,5 +258,5 @@
 "industria.creative_tab.machines":			"Machines",
 "industria.creative_tab.building_blocks":		"Bouwblokken (Industria)",
 "industria.creative_tab.nature_blocks":			"Natuurlijke blokken (Industria)",
-"industria.creative_tab.materials":			"Ingredi\u00ebnten (Industria)"
+"industria.creative_tab.materials":			"Ingrediënten (Industria)"
 }

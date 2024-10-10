@@ -119,7 +119,8 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 			int targetPower = parametrics.getNominalPower();
 			
 			Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_POWER_LOAD).plotter();
-			templateSource.setProperty("nominal_power", targetPower);
+//			templateSource.setProperty("nominal_power", targetPower);
+			templateSource.setProperty("resistance", 100);
 			templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, lampLanes[0]);
 			templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, lampLanes[1]);
 			plotter.accept(templateSource);

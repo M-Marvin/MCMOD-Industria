@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.content.blockentities.machines.ElectroMagneticCoilBlockEntity;
 import de.m_marvin.industria.content.registries.ModBlockStateProperties;
 import de.m_marvin.industria.content.registries.ModBlocks;
@@ -39,6 +40,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -290,7 +292,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				double maxPower = coil.getCoreBlockCount() * parametrics.getParameter(POWER_PER_BLOCK);
 				double windingRatio = coil.getWindingsSecundary() / (double) coil.getWindingsPrimary();
 				
-				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.TRANSFORMER).plotter();
+				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(new ResourceLocation(IndustriaCore.MODID, "transformer")).plotter();
 				templateSource.setProperty("winding_ratio", windingRatio);
 				templateSource.setProperty("max_power", maxPower);
 				templateSource.setNetworkNode("VDC_IN", inputNodes[0], 0, coilLanes[0]);

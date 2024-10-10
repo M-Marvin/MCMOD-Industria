@@ -1,3 +1,3 @@
 
-* Load-Resistor with fixed power consumption [ power_nominal=P{nominal_power} ]
-L1_P{id} N{VDC} N{GND} P{nominal_power}
+* Load-Resistor with fixed power consumption [ resistance=P{resistance} ]
+R1_P{id} N{VDC} N{GND} P{resistance}

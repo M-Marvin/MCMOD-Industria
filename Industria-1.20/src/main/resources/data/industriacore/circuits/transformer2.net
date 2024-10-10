@@ -1,0 +1,5 @@
+
+* DC Voltage converter [ n_winding_ratio=P{winding_ratio}, p_maximum=P{max_power} ]
+B1_P{id} N{VDC_IN} N{GND_IN} V=-I(B1_P{id})*-1.05+I(B2_P{id})*2.5
+B2_P{id} N{VDC_OUT} N{GND_OUT} V=-I(B1_P{id})*-2.5+I(B2_P{id})*5
+R1_P{id} N{GND_IN} N{GND_OUT} 1G

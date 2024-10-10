@@ -1,4 +1,4 @@
 
 * Power limited voltage source [ p_maxmimum=P{max_power}, v_nominal=P{nominal_voltage} ]
-V1_P{id} N{SHUNT} N{GND} P{nominal_voltage} P{max_power}
+V1_P{id} N{SHUNT} N{GND} P{nominal_voltage}
 R1_P{id} N{SHUNT} N{VDC} 0.001

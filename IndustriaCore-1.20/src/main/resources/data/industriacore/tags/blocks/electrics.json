@@ -1,6 +1,7 @@
 {
-  "replace": false,
-  "values": [
-  	"industriacore:power_source"
-  ]
+	"replace": false,
+	"values": [
+		"industriacore:wire_holder",
+		"industriacore:power_source"
+	]
 }

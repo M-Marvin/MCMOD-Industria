@@ -128,11 +128,6 @@ public class ElectricUtility {
 		return v2 - v1;
 	}
 	
-//	public static double getCurrentAtElementTagged(Level level, Object componentPos, String elementTag) {
-//		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-//		return handler.getCurrentAtElementTagged(componentPos, elementTag);
-//	}
-	
 	public static double getPowerPercentage(double power, double targetPower) {
 		return power / targetPower;
 	}
@@ -140,27 +135,6 @@ public class ElectricUtility {
 	public static double getPowerOvershoot(double voltage, double targetVoltage) {
 		return Math.max(voltage - targetVoltage, 0) / targetVoltage;
 	}
-
-//	public static void plotJoinTogether(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, BlockPos position, BlockState instance, NodePos[] nodes, int innerLaneIdP, String innerLaneP, int innerLaneIdN, String innerLaneN) {
-//		List<String[]> lanes = Stream.of(nodes).map(node -> getLaneLabelsSummarized(level, node)).toList();
-//		
-////		CircuitTemplate template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR);
-////		
-////		for (int i = 0; i < nodes.length; i++) {
-////			String[] wireLanes = lanes.get(i);
-////			for (int i1 = 0; i1 < wireLanes.length; i1++) {
-////				if (wireLanes[i1].equals(innerLaneP) && (i1 != innerLaneIdP || nodes[i].getNode() != 0)) {
-////					template.setNetworkNode("NET1", nodes[i], i1, wireLanes[i1]);
-////					template.setNetworkNode("NET2", new NodePos(position, 0), innerLaneIdP, innerLaneP);
-////					plotter.accept(template);
-////				} else if (wireLanes[i1].equals(innerLaneN) && (i1 != innerLaneIdN || nodes[i].getNode() != 0)) {
-////					template.setNetworkNode("NET1", nodes[i], i1, wireLanes[i1]);
-////					template.setNetworkNode("NET2", new NodePos(position, 0), innerLaneIdN, innerLaneN);
-////					plotter.accept(template);
-////				}
-////			}
-////		}
-//	}
 
 	public static void plotJoinTogether(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, BlockPos position, BlockState instance, int innerLaneId, String innerLane) {
 		NodePos[] nodes = block.getConnections(level, position, instance);

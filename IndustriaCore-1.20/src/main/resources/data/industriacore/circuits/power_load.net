@@ -1,0 +1,3 @@
+
+* Load-Resistor with fixed power consumption [ power_nominal=P{nominal_power}, voltage_nominal=P{nominal_voltage} ]
+R1_P{id} N{VDC} N{GND} P{nominal_voltage}/(P{nominal_power}/P{nominal_voltage})

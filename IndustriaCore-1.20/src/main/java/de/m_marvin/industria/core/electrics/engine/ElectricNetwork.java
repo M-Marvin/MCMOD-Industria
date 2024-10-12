@@ -32,8 +32,7 @@ public class ElectricNetwork {
 	protected String groundNode;
 	protected String netList = "";
 	protected Map<String, Double> nodeVoltages = Maps.newHashMap();
-//	protected Map<String, Double> elementCurrents = Maps.newHashMap();
-	
+
 	protected static Object ngLinkLock = new Object();
 	
 	public ElectricNetwork(Supplier<Level> level, String titleInfo) {
@@ -140,12 +139,8 @@ public class ElectricNetwork {
 		Stream.of(dataList.split("\n"))
 			.map(s -> s.split("\t"))
 			.filter(s -> s.length == 2)
-			.forEach(s -> this.nodeVoltages.put(s[0], Double.valueOf(s[1])));
+			.forEach(s -> this.nodeVoltages.put(s[0], Double.valueOf(s[1].split(" V")[0])));
 	}
-	
-//	public Map<String, Double> getElementCurrents() {
-//		return elementCurrents;
-//	}
 	
 	public String getNetList() {
 		return netList == null ? "" : this.netList;
@@ -162,15 +157,6 @@ public class ElectricNetwork {
 	public synchronized double getFloatingNodeVoltage(NodePos node, int laneId, String lane) {
 		return this.nodeVoltages.getOrDefault(getNodeKeyString(node, laneId, lane), 0.0);
 	}
-
-//	public synchronized double getCurrentAtElementTagged(String elementTag) {
-//		for (String elementName : this.elementCurrents.keySet()) {
-//			if (elementName.contains(elementTag)) {
-//				return this.elementCurrents.get(elementName);
-//			}
-//		}
-//		return 0.0;
-//	}
 	
 	public static String getNodeKeyString(NodePos node, int laneId, String laneName) {
 		return ("Node|pos" + node.getBlock().getX() + "_" + node.getBlock().getY() + "_" + node.getBlock().getZ() + "_id" + node.getNode() + "_lid" + laneId + "_lnm" + laneName + "|")

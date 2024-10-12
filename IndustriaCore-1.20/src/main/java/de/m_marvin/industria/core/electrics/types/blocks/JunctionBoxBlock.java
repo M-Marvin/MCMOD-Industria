@@ -103,13 +103,9 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricBlock,
 	
 	@Override
 	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
-		
-		if (level.getBlockEntity(position) instanceof IJunctionEdit junction) {
-
+		if (level.getBlockEntity(position) instanceof IJunctionEdit) {
 			ElectricUtility.plotConnectEquealNamed(plotter, level, this, position, instance);
-			
 		}
-		
 	}
 	
 	public Direction getBlockFacing(Level level, BlockState state, BlockPos position) {

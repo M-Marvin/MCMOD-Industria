@@ -1,3 +1,4 @@
 
-* Voltage source [ v_nominal=P{nominal_voltage}, i_max=P{current_limit} ]
-V1_P{id}_P{source_identifier} N{VDC} N{GND} P{nominal_voltage} P{current_limit}
+* Voltage source [ v_nominal=P{nominal_voltage}, P_max=P{power_limit} ]
+R1_P{id} N{SHUNT} N{VDC} 1m
+B1_P{id} N{SHUNT} N{GND} V=min(P{nominal_voltage},P{power_limit}/max(1m,+I(R1_P{id})))

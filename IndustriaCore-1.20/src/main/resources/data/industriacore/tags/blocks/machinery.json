@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-  	"industriacore:power_source"
-  ]
+	"replace": false,
+	"values": [
+		"industriacore:power_source"
+	]
 }

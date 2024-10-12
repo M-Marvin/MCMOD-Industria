@@ -108,7 +108,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		this.circuitNetworks.clear();
 		this.component2circuitMap.clear();
 		
-		// TODO loat network data
 		for (int i = 0; i < nbt.size(); i++) {
 			CompoundTag circuitTag = nbt.getCompound(i);
 			ElectricNetwork circuitNetwork = new ElectricNetwork(() -> this.level, "ingame-level-circuit");
@@ -124,7 +123,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			}
 		}
 		
-		startNetworks();
 		IndustriaCore.LOGGER.info("Loaded " + this.circuitNetworks.size() + "/" + nbt.size() + " electric networks");
 		IndustriaCore.LOGGER.info("Loaded " + this.pos2componentMap.size() + " electric components");
 	}
@@ -461,19 +459,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		return 0.0;
 	}
 	
-//	/**
-//	 * Returns the current flowing trough the first element found, containing the tag in its name
-//	 */
-//	public double getCurrentAtElementTagged(Object componentPos, String elementTag) {
-//		Component<?, ?, ?> component = this.pos2componentMap.get(componentPos);
-//		if (component == null) return 0.0;
-//		ElectricNetwork network = this.component2circuitMap.get(component);
-//		if (network != null) {
-//			return network.getCurrentAtElementTagged(elementTag);
-//		}
-//		return 0.0;
-//	}
-	
 	/**
 	 * Updates the network which has a component at the given position
 	 */
@@ -504,7 +489,9 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				}
 			});
 			
-			getSimulationProcessor().processNetwork(circuit);
+			if (circuit.components.size() > 1) {
+				getSimulationProcessor().processNetwork(circuit);
+			}
 			
 		}
 		
@@ -636,15 +623,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			}
 		}
 		
-	}
-	
-	/**
-	 * Starts initial simulation of all networks after loading from NBT
-	 */
-	private void startNetworks() {
-//		for (ElectricNetwork network : this.circuitNetworks) {
-//			getSimulationProcessor().processNetwork(network);
-//		}
 	}
 	
 }

@@ -124,9 +124,6 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {
 	mavenCentral()
 	maven {
-		url 'https://jitpack.io'
-	}
-	maven {
 		url 'https://modmaven.dev/'
 	}
     maven {

@@ -11,6 +11,7 @@ import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.CircuitTemplate.Plotter;
+import de.m_marvin.industria.core.electrics.types.blockentities.PowerSourceBlockEntity;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricInfoProvider;
 import de.m_marvin.industria.core.parametrics.BlockParametrics;
@@ -130,15 +131,13 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 			int targetVoltage = generator.canRun() ? parametrics.getNominalVoltage() : 0;
 			
 			if (targetPower > 0) {
-
 				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.VOLTAGE_SOURCE).plotter();
 				templateSource.setProperty("nominal_voltage", targetVoltage);
-				templateSource.setProperty("current_limit", targetVoltage > 0 ? targetPower / targetVoltage : 0);
-				templateSource.setProperty("source_identifier", ElectricNetwork.getPositionKeyString(position));
+				templateSource.setProperty("power_limit", targetVoltage > 0 ? targetPower : 0);
 				templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, wireLanes[0]);
 				templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, wireLanes[1]);
+				templateSource.setNetworkNode("SHUNT", new NodePos(position, 0), 2, "SHUNT");
 				plotter.accept(templateSource);
-				
 			}
 			
 		}
@@ -162,15 +161,14 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 	@Override
 	public double getPower(BlockState state, Level level, BlockPos pos) {
 		if (level.getBlockEntity(pos) instanceof PortableFuelGeneratorBlockEntity generator) {
-
 			String[] wireLanes = generator.getNodeLanes();
+			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 2, 0, "SHUNT", wireLanes[0]); // TODO may be negative ?
 			double sourceVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]);
-			double sourceCurrent = ElectricUtility.getCurrentAtElementTagged(level, pos, ElectricNetwork.getPositionKeyString(pos));
+			double sourceCurrent = shuntVoltage * Circuits.SHUNT_RESISTANCE;
 			double powerUsed = sourceVoltage * sourceCurrent;
-			// TODO fix generator
-//			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 2, 0, "power_shunt", wireLanes[0]);
+			// TODO fix power source
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
-//			double powerUsed = (shuntVoltage / Circuits.SHUNT_RESISTANCE) * parametrics.getNominalVoltage();
+			//double powerUsed = (shuntVoltage / Circuits.SHUNT_RESISTANCE) * parametrics.getNominalVoltage();
 			return Math.max(powerUsed > 1.0 ? parametrics.getPowerMin() : 0, powerUsed);
 		}
 		return 0.0;

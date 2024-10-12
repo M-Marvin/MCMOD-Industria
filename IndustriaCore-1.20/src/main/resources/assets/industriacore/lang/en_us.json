@@ -83,6 +83,9 @@
 
 "block.industriacore.power_source":										"Voltage source",
 "block.industriacore.magnet":											"Magnet",
+"block.industriacore.wire_holder":										"Wire holder",
+"item.industriacore.electric_wire":										"Cable",
+"conduit.industriacore.electric_conduit":								"Cable",
 
 "industriacore.tooltip.conduit.name":									"Conduit: %1$s",
 "industriacore.tooltip.conduit.maxClampDistance":						"Range: %1$s m",

@@ -36,6 +36,6 @@ public class Conduits {
 	public static final RegistryObject<ConduitType> ELECTRIC_UNINSULATED_TYPE = CONDUIT_TYPES.register("electric_uninsulated_type", () -> new ConduitType(0.00015F, 1F, 128, 1));
 	
 	public static final RegistryObject<Conduit> NONE = 				CONDUITS.register("none", () -> new Conduit(new ConduitType(0F, 1F, 0, 1), null, new ResourceLocation("missingno"), SoundType.STONE, NodeTypes.ALL));
-	public static final RegistryObject<Conduit> ELECTRIC_CONDUIT =	CONDUITS.register("electric_conduit", () -> new ElectricConduit(ELECTRIC_INSULATED_TYPE.get(), Items.ELECTRIC_WIRE.get(), new ResourceLocation("missingno"), SoundType.STONE, 2, 0.1));
+	public static final RegistryObject<Conduit> ELECTRIC_CONDUIT =	CONDUITS.register("electric_conduit", () -> new ElectricConduit(ELECTRIC_INSULATED_TYPE.get(), Items.ELECTRIC_WIRE.get(), new ResourceLocation(IndustriaCore.MODID, "electric_wire"), SoundType.STONE, 2, 0.1));
 	
 }

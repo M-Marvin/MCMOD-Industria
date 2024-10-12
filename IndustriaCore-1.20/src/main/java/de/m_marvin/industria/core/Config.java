@@ -35,13 +35,7 @@ public class Config {
 		BUILDER.pop();
 		BUILDER.comment("Industria Core electrics settings").push(CATEGORY_ELECTIRCS);
 		ELECTIRC_SIMULATION_THREADS = BUILDER.comment("Number of paralell running EPT's").defineInRange("simulation_threads", 2, 1, 16);
-		ELECTRIC_SIMULATION_COMMANDS = BUILDER.comment("Simulation engine execution commands.").define("simulation_exec_commands", 
-				".reset\n" +
-				".profile 0.12m false false\n" +
-				".step 1u 1m\n" +
-				".profile 0.12m true true\n" +
-				".step 1u 40m\n" +
-				".end");
+		ELECTRIC_SIMULATION_COMMANDS = BUILDER.comment("Simulation engine execution commands.").define("simulation_exec_commands", "op");
 		CONFIG_COMMON = BUILDER.build();
 		
 		BUILDER = new ForgeConfigSpec.Builder();

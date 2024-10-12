@@ -1,0 +1,5 @@
+{
+	"Properties": [ "id", "nominal_power", "nominal_voltage" ],
+	"Networks": [ "VDC", "GND" ],
+	"IdProperty": "id"
+}

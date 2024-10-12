@@ -76,9 +76,10 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock,
 			if (source.getPower() > 0) {
 				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.VOLTAGE_SOURCE).plotter();
 				templateSource.setProperty("nominal_voltage", source.getVoltage());
-				templateSource.setProperty("source_identifier", ElectricNetwork.getPositionKeyString(position));
+				templateSource.setProperty("power_limit", source.getPower());
 				templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, sourceLanes[0]);
 				templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, sourceLanes[1]);
+				templateSource.setNetworkNode("SHUNT", new NodePos(position, 0), 2, "SHUNT");
 				plotter.accept(templateSource);
 			}
 			
@@ -109,7 +110,7 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock,
 	public double getPower(BlockState state, Level level, BlockPos pos) {
 		if (level.getBlockEntity(pos) instanceof PowerSourceBlockEntity source) {
 			String[] wireLanes = source.getNodeLanes();
-			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 2, 0, "power_shunt", wireLanes[0]);
+			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 2, 0, "SHUNT", wireLanes[0]); // TODO may be negative ?
 			double sourceVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]);
 			double sourceCurrent = shuntVoltage * Circuits.SHUNT_RESISTANCE;
 			double powerUsed = sourceVoltage * sourceCurrent;

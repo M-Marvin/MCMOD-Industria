@@ -1,3 +1,4 @@
 
-* DC Voltage converter [ n_winding_ratio=P{winding_ratio}, p_maximum=P{max_power} ]
+* DC Voltage converter [ n_winding_ratio=P{winding_ratio} ]
+ZT1_P{id} N{VDC_A} N{GND_A} N{VDC_B} N{GND_B} H[ 0.0 P{winding_ratio} P{winding_ratio} 0.0 ]
 T1_P{id} N{VDC_IN} N{GND_IN} N{VDC_OUT} N{GND_OUT} P{winding_ratio} P{max_power}

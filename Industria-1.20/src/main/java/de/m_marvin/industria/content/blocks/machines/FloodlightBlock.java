@@ -133,7 +133,7 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 	public double getVoltage(BlockState state, Level level, BlockPos pos) {
 		if (level.getBlockEntity(pos) instanceof FloodlightBlockEntity floodlight) {
 			String[] wireLanes = floodlight.getNodeLanes();
-			return ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]);
+			return ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]).orElse(0.0);
 		}
 		return 0.0;
 	}
@@ -143,8 +143,8 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 		if (level.getBlockEntity(pos) instanceof FloodlightBlockEntity floodlight) {
 			String[] wireLanes = floodlight.getNodeLanes();
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
-			double voltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]);
-			return voltage * (parametrics.getNominalPower() / parametrics.getNominalVoltage());
+			double voltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]).orElse(0.0);
+			return voltage * voltage * parametrics.getNominalResistance();
 		}
 		return 0.0;
 	}

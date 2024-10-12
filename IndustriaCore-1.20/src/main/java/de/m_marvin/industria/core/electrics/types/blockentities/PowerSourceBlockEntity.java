@@ -62,6 +62,7 @@ public class PowerSourceBlockEntity extends BlockEntity implements MenuProvider,
 		this.power = Math.max(parametrics.getPowerMin(), Math.min(parametrics.getPowerMax(), power));
 		this.voltage = Math.max(parametrics.getVoltageMin(), Math.min(parametrics.getVoltageMax(), voltage));
 		this.setChanged();
+		System.out.println("--------------------------------------------");
 		ElectricUtility.updateNetwork(level, worldPosition);
 	}
 	

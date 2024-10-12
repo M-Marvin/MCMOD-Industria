@@ -155,8 +155,8 @@ public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider,
 			Map<Direction, NodePos> cables = new HashMap<>();
 			for (int i = 0; i < connections.length; i++) {
 				Vec3d blockPos = Vec3d.fromVec(position);
-				Vec3d centerPos = PhysicUtility.ensureWorldCoordinates(level, position, blockPos.add(new Vec3d(center).div(16D)));
-				Vec3d nodePos = PhysicUtility.ensureWorldCoordinates(level, position, blockPos.add(new Vec3d(connections[i].getOffset()).div(16D)));
+				Vec3d centerPos = blockPos.add(new Vec3d(center).div(16D));
+				Vec3d nodePos = blockPos.add(new Vec3d(connections[i].getOffset()).div(16D));
 				Vec3d dVf = nodePos.sub(centerPos);
 				Direction d = MathUtility.getVecDirection(dVf);
 				cables.put(d, nodes[i]);

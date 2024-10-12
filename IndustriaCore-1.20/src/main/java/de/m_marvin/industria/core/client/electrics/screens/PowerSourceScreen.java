@@ -88,7 +88,8 @@ public class PowerSourceScreen extends AbstractContainerScreen<PowerSourceContai
 	@Override
 	public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
 		if (pKeyCode == 256) {
-			onClose();
+			this.voltageField.setFocused(false);
+			this.voltageField.setFocused(false);
 		}
 		if (this.voltageField.keyPressed(pKeyCode, pScanCode, pModifiers) || this.voltageField.canConsumeInput()) return true;
 		if (this.powerField.keyPressed(pKeyCode, pScanCode, pModifiers) || this.powerField.canConsumeInput()) return true;

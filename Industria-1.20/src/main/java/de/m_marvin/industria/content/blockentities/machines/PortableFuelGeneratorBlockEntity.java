@@ -123,15 +123,18 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 				int wattsPerMB = pBlockEntity.recipe.getWattsPerMb();
 				double consumtionTick = powerProduction / wattsPerMB;
 				
-//				if (consumtionTick < 1.0) {
-//					pBlockEntity.fuelTimer += consumtionTick;
-//					if (pBlockEntity.fuelTimer >= 1) {
-//						pBlockEntity.fuelTimer--;
-//						fuel.shrink(1);
-//					}
-//				} else {
-//					fuel.shrink((int) Math.ceil(consumtionTick));
-//				}
+				if (consumtionTick < 1.0) {
+					pBlockEntity.fuelTimer += consumtionTick;
+					if (pBlockEntity.fuelTimer >= 1) {
+						pBlockEntity.fuelTimer--;
+						fuel.shrink(1);
+						
+						GameUtility.triggerClientSync(pLevel, pPos);
+					}
+				} else {
+					fuel.shrink((int) Math.ceil(consumtionTick));
+					GameUtility.triggerClientSync(pLevel, pPos);
+				}
 			}
 			
 		}

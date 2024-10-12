@@ -1,7 +1,6 @@
 package de.m_marvin.industria.core.electrics.engine;
 
 import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
 import de.m_marvin.industria.core.electrics.engine.network.SSyncCircuitTemplatesPackage;
 import de.m_marvin.industria.core.electrics.engine.network.SSyncComponentsPackage;
@@ -18,6 +17,32 @@ import net.minecraftforge.network.NetworkEvent.Context;
 
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE, value=Dist.CLIENT)
 public class ClientElectricPackageHandler {
+
+	/* Handle SSyncNodeVoltagesPackage package */
+	
+//	@SuppressWarnings("resource")
+//	public static void handleSyncNodeVoltagesServer(SSyncNodeVoltagesPackage msg, NetworkEvent.Context ctx) {
+//		Level level = Minecraft.getInstance().level;
+//		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+//		
+//		if (msg.request == SyncRequestType.ADDED) {
+//			Object position = null;
+//			for (Component<?, ?, ?> component : msg.components) {
+//				if (component.instance(null) == null) continue;
+//				if (!handler.isInNetwork(component)) {
+//					handler.addToNetwork(component);
+//					if (position == null) position = component.pos();
+//				}
+//			}
+//			
+//			// TODO inject node voltages
+//			
+//		} else {
+//			for (Component<?, ?, ?> component : msg.components) {
+//				handler.removeFromNetwork(component.pos());
+//			}
+//		}
+//	}
 	
 	/* Handle SSyncComponentsPackage package */
 	
@@ -35,9 +60,13 @@ public class ClientElectricPackageHandler {
 					if (position == null) position = component.pos();
 				}
 			}
+			
+			// TODO inject node voltages
+			
 		} else {
 			for (Component<?, ?, ?> component : msg.components) {
-				handler.removeFromNetwork(component.pos());
+				handler.removeComponent(component.pos);
+//				handler.removeFromNetwork(component.pos());
 			}
 		}
 	}
@@ -48,7 +77,11 @@ public class ClientElectricPackageHandler {
 	public static void handleUpdateNetwork(SUpdateNetworkPackage msg, Context context) {
 		
 		Level level = Minecraft.getInstance().level;
-		ElectricUtility.updateNetwork(level, msg.getPos());
+		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		
+		handler.injectNodeVoltages(msg.getComponents(), msg.getDataList());
+		
+//		ElectricUtility.updateNetwork(level, msg.getPos());
 		
 	}
 	

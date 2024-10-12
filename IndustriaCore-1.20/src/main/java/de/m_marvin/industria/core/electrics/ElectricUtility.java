@@ -1,19 +1,19 @@
 package de.m_marvin.industria.core.electrics;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import com.google.common.base.Predicate;
 
-import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.engine.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
-import de.m_marvin.industria.core.electrics.engine.network.SUpdateNetworkPackage;
 import de.m_marvin.industria.core.electrics.types.CircuitTemplate.Plotter;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
@@ -21,19 +21,18 @@ import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.registries.Circuits;
 import de.m_marvin.industria.core.util.GameUtility;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor;
 
 public class ElectricUtility {
 	
 	public static <P> void updateNetwork(Level level, P position) {
 		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-		if (!level.isClientSide() && position instanceof BlockPos blockPos) {
-			// Conduit updates normally caused trough block updates on both sides, so no sending to the client required in that case
-			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(blockPos)), new SUpdateNetworkPackage(blockPos));
-		}
 		handler.updateNetwork(position);
 	}
 	
@@ -117,15 +116,16 @@ public class ElectricUtility {
 		}
 	}
 	
-	public static double getFloatingNodeVoltage(Level level, NodePos node, int laneId, String lane) {
+	public static Optional<Double> getFloatingNodeVoltage(Level level, NodePos node, int laneId, String lane) {
 		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 		return handler.getFloatingNodeVoltage(node, laneId, lane);
 	}
 	
-	public static double getVoltageBetween(Level level, NodePos nodeP, NodePos nodeN, int laneIdP, int laneIdN, String laneP, String laneN) {
-		double v1 = ElectricUtility.getFloatingNodeVoltage(level, nodeN, laneIdN, laneN);
-		double v2 = ElectricUtility.getFloatingNodeVoltage(level, nodeP, laneIdP, laneP);
-		return v2 - v1;
+	public static Optional<Double> getVoltageBetween(Level level, NodePos nodeP, NodePos nodeN, int laneIdP, int laneIdN, String laneP, String laneN) {
+		Optional<Double> v1 = ElectricUtility.getFloatingNodeVoltage(level, nodeN, laneIdN, laneN);
+		Optional<Double> v2 = ElectricUtility.getFloatingNodeVoltage(level, nodeP, laneIdP, laneP);
+		if (v1.isEmpty() || v2.isEmpty()) return Optional.empty();
+		return Optional.of(v2.get() - v1.get());
 	}
 	
 	public static double getPowerPercentage(double power, double targetPower) {
@@ -194,6 +194,27 @@ public class ElectricUtility {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Send to all tracking the ElectricNetwork in the Supplier
+	 * <br/>
+	 * {@link #with(Supplier)} ElectricNetwork
+	 */
+	public static final PacketDistributor<ElectricNetwork> TRACKING_NETWORK = new PacketDistributor<>(ElectricUtility::trackingNetwork, NetworkDirection.PLAY_TO_CLIENT);
+	
+	private static Consumer<Packet<?>> trackingNetwork(final PacketDistributor<ElectricNetwork> distributor, final Supplier<ElectricNetwork> networkSupplier) {
+		return p -> {
+			ElectricNetwork network = networkSupplier.get();
+			network.getComponents().stream()
+					.map(Component::pos)
+					.filter(b -> b instanceof BlockPos)
+					.map(pos -> network.getLevel().getChunkAt((BlockPos) pos))
+					.distinct()
+					.flatMap(chunk -> ((ServerChunkCache)chunk.getLevel().getChunkSource()).chunkMap.getPlayers(chunk.getPos(), false).stream())
+					.distinct()
+					.forEach(e -> e.connection.send(p));
+		};
 	}
 	
 }

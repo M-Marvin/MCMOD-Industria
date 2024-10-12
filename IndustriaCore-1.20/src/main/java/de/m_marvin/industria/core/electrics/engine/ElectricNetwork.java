@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
@@ -135,11 +136,13 @@ public class ElectricNetwork {
 		return nodeVoltages;
 	}
 	
-	public synchronized void parseDataList(String dataList) {
+	public synchronized boolean parseDataList(String dataList) {
+		this.nodeVoltages.clear();
 		Stream.of(dataList.split("\n"))
 			.map(s -> s.split("\t"))
 			.filter(s -> s.length == 2)
 			.forEach(s -> this.nodeVoltages.put(s[0], Double.valueOf(s[1].split(" V")[0])));
+		return this.nodeVoltages.size() > 0;
 	}
 	
 	public String getNetList() {
@@ -154,8 +157,10 @@ public class ElectricNetwork {
 		return sb.toString();
 	}
 	
-	public synchronized double getFloatingNodeVoltage(NodePos node, int laneId, String lane) {
-		return this.nodeVoltages.getOrDefault(getNodeKeyString(node, laneId, lane), 0.0);
+	public synchronized Optional<Double> getFloatingNodeVoltage(NodePos node, int laneId, String lane) {
+		String nodeName = getNodeKeyString(node, laneId, lane);
+		if (!this.nodeVoltages.containsKey(nodeName)) return Optional.empty();
+		return Optional.of(this.nodeVoltages.get(nodeName));
 	}
 	
 	public static String getNodeKeyString(NodePos node, int laneId, String laneName) {

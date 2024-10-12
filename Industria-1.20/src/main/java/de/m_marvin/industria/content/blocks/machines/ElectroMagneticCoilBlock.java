@@ -104,7 +104,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				NodePos nodeInput = coil.getConnections()[0];
 				BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 				
-				double voltage = ElectricUtility.getVoltageBetween(level, nodeInput, nodeInput, 0, 1, coilLanes[0], coilLanes[1]);
+				double voltage = ElectricUtility.getVoltageBetween(level, nodeInput, nodeInput, 0, 1, coilLanes[0], coilLanes[1]).orElseGet(() -> 0.0);
 				double powerIn = voltage * parametrics.getParameter(MAGNET_CURRENT);
 				double fieldStrength = powerIn * parametrics.getParameter(MAGNETIC_FIELD_STRENGTH);
 				

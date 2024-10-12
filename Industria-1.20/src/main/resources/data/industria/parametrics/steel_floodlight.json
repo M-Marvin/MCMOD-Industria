@@ -1,8 +1,8 @@
 {
 	"nominalVoltage": 230,
 	"voltageMax": 300,
-	"voltageMin": 200,
+	"voltageMin": 210,
 	"nominalPower": 400,
 	"powerMax": 500,
-	"powerMin": 300
+	"powerMin": 390
 }

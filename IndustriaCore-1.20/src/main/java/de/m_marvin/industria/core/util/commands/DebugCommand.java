@@ -78,7 +78,7 @@ public class DebugCommand {
 		source.getSource().sendSuccess(() -> Component.literal("List " + lanes.length + " available lane voltages"), false);
 		for (int laneId = 0; laneId < lanes.length; laneId++) {
 			String lane = lanes[laneId];
-			double floatVolatage = network.getFloatingNodeVoltage(nodePos, laneId, lane);
+			double floatVolatage = network.getFloatingNodeVoltage(nodePos, laneId, lane).orElseGet(() -> 0.0);
 			
 			source.getSource().sendSuccess(() -> Component.literal(String.format("Node '%s' FV: %f", lane, floatVolatage)), false);
 		}

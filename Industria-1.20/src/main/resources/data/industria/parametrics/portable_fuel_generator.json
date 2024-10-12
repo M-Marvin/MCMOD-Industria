@@ -3,6 +3,6 @@
 	"voltageMax": 300,
 	"voltageMin": 200,
 	"nominalPower": 2000,
-	"powerMax": 3000,
-	"powerMin": 100
+	"powerMax": 2000,
+	"powerMin": 0
 }

@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import com.google.common.base.Objects;
+import com.google.common.graph.Network;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.Config;
@@ -27,6 +28,7 @@ import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitPlaceEvent
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.network.SSyncComponentsPackage;
+import de.m_marvin.industria.core.electrics.engine.network.SUpdateNetworkPackage;
 import de.m_marvin.industria.core.electrics.types.IElectric;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
@@ -34,6 +36,7 @@ import de.m_marvin.industria.core.electrics.types.conduits.IElectricConduit;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.types.SyncRequestType;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -216,7 +219,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				handler.addComponent(event.getPos(), block, event.getState());
 			}
 		} else {
-			handler.removeComponent(event.getPos(), event.getState());
+			handler.removeComponent(event.getPos());
 		}
 	}
 	
@@ -233,7 +236,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 					handler.addComponent(event.getPosition(), conduit, event.getConduitState());
 				}
 			} else if (event instanceof ConduitBreakEvent) {
-				handler.removeComponent(event.getPosition(), event.getConduitState());
+				handler.removeComponent(event.getPosition());
 			}
 		}
 	}
@@ -244,8 +247,13 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		ElectricNetworkHandlerCapability electricHandler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 		Set<Component<?, ?, ?>> componentsInChunk = electricHandler.findComponentsInChunk(event.getPos());
 		Set<Component<?, ?, ?>> components = electricHandler.findComponentsConnectedWith(componentsInChunk.toArray(i -> new Component[i]));
+		
 		if (!components.isEmpty()) {
-			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> event.getChunk()), new SSyncComponentsPackage(components, event.getChunk().getPos(), SyncRequestType.ADDED));
+			List<ElectricNetwork> networks = components.stream().map(electricHandler.component2circuitMap::get).distinct().toList();
+			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(event::getPlayer), new SSyncComponentsPackage(components, event.getChunk().getPos(), SyncRequestType.ADDED));
+			for (ElectricNetwork network : networks) {
+				IndustriaCore.NETWORK.send(ElectricUtility.TRACKING_NETWORK.with(() -> network), new SUpdateNetworkPackage(network.getComponents(), network.printDataList()));
+			}
 		}
 	}
 	
@@ -255,7 +263,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		ElectricNetworkHandlerCapability electricHandler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
 		Set<Component<?, ?, ?>> components = electricHandler.findComponentsInChunk(event.getPos());
 		if (!components.isEmpty()) {
-			 IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunk(event.getPos().x, event.getPos().z)), new SSyncComponentsPackage(components, event.getPos(), SyncRequestType.REMOVED));
+			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(event::getPlayer), new SSyncComponentsPackage(components, event.getPos(), SyncRequestType.REMOVED));
 		}
 	}
 	
@@ -446,9 +454,9 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	 * Returns the floating voltage currently available on the given node.
 	 * NOTE: Floating means that the voltage is referenced to "global ground", meaning a second voltage is required to calculate the actual difference (the voltage) between the two nodes.
 	 */
-	public double getFloatingNodeVoltage(NodePos node, int laneId, String lane) {
+	public Optional<Double> getFloatingNodeVoltage(NodePos node, int laneId, String lane) {
 		Set<Component<?, ?, ?>> components = this.node2componentMap.get(node);
-		if (components == null) return 0.0;
+		if (components == null) return Optional.empty();
 		Component<?, ?, ?> component = components.stream().findAny().orElseGet(() -> this.pos2componentMap.get(node.getBlock()));
 		if (component != null) {
 			ElectricNetwork network = this.component2circuitMap.get(component);
@@ -456,13 +464,35 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				return network.getFloatingNodeVoltage(node, laneId, lane);
 			}
 		}
-		return 0.0;
+		return Optional.empty();
+	}
+
+	/**
+	 * Injects node voltages without recalculating the network.
+	 * Used to update the node voltages on the client side, were no simulation occurs.
+	 */
+	public void injectNodeVoltages(Set<Component<?, ?, ?>> components, String dataList) {
+		ElectricNetwork network = new ElectricNetwork(this::getLevel, "ingame-dummy-level-circuit");
+		network.getComponents().addAll(components);
+		network.parseDataList(dataList);
+		for (Component<?, ?, ?> component : components) {
+			ElectricNetwork emptyNetwork = this.component2circuitMap.remove(component);
+			if (emptyNetwork != null) {
+				this.circuitNetworks.remove(emptyNetwork);
+				emptyNetwork.getNodeVoltages().clear();
+				emptyNetwork.getComponents().clear();
+			}
+			this.component2circuitMap.put(component, network);
+		}
+		this.circuitNetworks.add(network);
 	}
 	
 	/**
 	 * Updates the network which has a component at the given position
 	 */
 	public <P> void updateNetwork(P position) {
+		
+		if (this.level.isClientSide) return;
 		
 		Component<?, ?, ?> component = this.pos2componentMap.get(position);
 		
@@ -490,7 +520,11 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			});
 			
 			if (circuit.components.size() > 1) {
-				getSimulationProcessor().processNetwork(circuit);
+				final var circuitF = circuit;
+				getSimulationProcessor().processNetwork(circuit).thenAccept(state -> {
+					if (state)
+						IndustriaCore.NETWORK.send(ElectricUtility.TRACKING_NETWORK.with(() -> circuitF), new SUpdateNetworkPackage(circuitF.getComponents(), circuitF.printDataList()));
+				});
 			}
 			
 		}
@@ -500,7 +534,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	/**
 	 * Removes a component from the network and updates it and its components
 	 */
-	public <I, P, T> void removeComponent(P pos, I state) {
+	public <I, P, T> void removeComponent(P pos) {
 		if (this.pos2componentMap.containsKey(pos)) {
 			Component<?, ?, ?> component = removeFromNetwork(pos);
 			

@@ -1,6 +1,7 @@
 package de.m_marvin.industria.core.electrics.engine;
 
 import java.util.Queue;
+import java.util.concurrent.CompletableFuture;
 
 import org.apache.logging.log4j.Level;
 
@@ -12,8 +13,10 @@ import de.m_marvin.industria.core.Config;
 
 public class SimulationProcessor {
 	
+	private static record SimTask(CompletableFuture<Boolean> completable, ElectricNetwork network) {}
+	
 	private boolean shouldShutdown = true;
-	private Queue<ElectricNetwork> tasks = Queues.newArrayDeque();
+	private Queue<SimTask> tasks = Queues.newArrayDeque();
 	private Processor[] processors;
 	
 	private class Processor extends Thread {
@@ -26,7 +29,7 @@ public class SimulationProcessor {
 		private final int id;
 		private boolean errorFlag = false;
 		private Solver solver;
-		private ElectricNetwork currentTask = null;
+		private SimTask currentTask = null;
 		
 		private boolean init() {
 			try {
@@ -88,25 +91,32 @@ public class SimulationProcessor {
 						this.currentTask = tasks.poll();
 					}
 					if (this.currentTask == null) continue;
-					String netList = this.currentTask.getNetList();
-					processNetList(netList);
-					this.currentTask.getComponents().forEach(c -> c.onNetworkChange(this.currentTask.getLevel()));
+					String netList = this.currentTask.network.getNetList();
+					if (!processNetList(netList)) {
+						// TODO make fuse blow/ingame message
+					}
+					this.currentTask.network.getComponents().forEach(c -> c.onNetworkChange(this.currentTask.network.getLevel()));
+					this.currentTask.completable.complete(true);
 				}
 			} catch (InterruptedException e) {}
 		}
 		
-		private void processNetList(String netList) {
+		private boolean processNetList(String netList) {
 			if (Config.SPICE_DEBUG_LOGGING.get()) IndustriaCore.LOGGER.debug("Load spice circuit:\n" + netList);
 			
 			if (!this.solver.upload(netList)) {
 				IndustriaCore.LOGGER.warn("Failed to upload network to solver!");
-				return;
+				return false;
 			}
 			if (!this.solver.execute(Config.ELECTRIC_SIMULATION_COMMANDS.get())) {
 				IndustriaCore.LOGGER.warn("Failed to start electric simulation!");
-				return;
+				return false;
 			}
-			this.currentTask.parseDataList(this.solver.printData());
+			if (!this.currentTask.network.parseDataList(this.solver.printData())) {
+				IndustriaCore.LOGGER.warn("Failed to get simulation data, simulation probably failed!");
+				return false;
+			}
+			return true;
 		}
 		
 	}
@@ -141,12 +151,18 @@ public class SimulationProcessor {
 		}
 	}
 	
-	public void processNetwork(ElectricNetwork network) {
-		if (this.shouldShutdown) return;
+	public CompletableFuture<Boolean> processNetwork(ElectricNetwork network) {
+		if (this.shouldShutdown) return CompletableFuture.completedFuture(false);
 		synchronized (tasks) {
-			if (this.tasks.contains(network)) return;
-			this.tasks.add(network);	
-			this.tasks.notify();
+			for (SimTask task : this.tasks) {
+				if (task.network == network) {
+					return task.completable;
+				}
+			}
+			CompletableFuture<Boolean> completable = new CompletableFuture<>();
+			this.tasks.add(new SimTask(completable, network));
+			this.tasks.notify();	
+			return completable;
 		}
 	}
 	

@@ -80,6 +80,10 @@ public class BlockParametrics {
 	public static final DoubleParameter PARAMETER_MAGNETIC_COEFFICIENT = new DoubleParameter("magneticCoefficient", 1.0);
 	public static final Vec3dParameter PARAMETER_MAGNETIC_VECTOR = new Vec3dParameter("magneticVector", new Vec3d(0, 1.0, 0));
 	
+	public double getNominalResistance() {
+		return getNominalVoltage() / (getNominalPower() / (double) getNominalVoltage());
+	}
+	
 	public int getNominalPower() {
 		return getParameter(PARAMETER_NOMINAL_POWER);
 	}
@@ -121,10 +125,9 @@ public class BlockParametrics {
 	public double getPowerPercentageV(double voltage) {
 		int nominalVoltage = getNominalVoltage();
 		int nominalPower = getNominalPower();
-		int powerMin = getPowerMin();
-		int powerMax = getPowerMax();
-		double power = voltage * (nominalPower / (double) nominalVoltage);
-		return Math.min(power / powerMin, 1) + Math.max((power - powerMin) / (powerMax - powerMin), 0);
+		double loadResistance = nominalVoltage / (nominalPower / (double) nominalVoltage);
+		double power = (voltage / loadResistance) * voltage;
+		return getPowerPercentageP(power);
 	}
 
 	public double getVoltageOvershoot(double voltage) {

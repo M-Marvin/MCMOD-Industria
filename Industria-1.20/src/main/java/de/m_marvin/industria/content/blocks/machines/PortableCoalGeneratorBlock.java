@@ -3,7 +3,6 @@ package de.m_marvin.industria.content.blocks.machines;
 import java.util.function.Consumer;
 
 import de.m_marvin.industria.content.blockentities.machines.PortableCoalGeneratorBlockEntity;
-import de.m_marvin.industria.content.blockentities.machines.PortableFuelGeneratorBlockEntity;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
@@ -213,7 +212,7 @@ public class PortableCoalGeneratorBlock extends BaseEntityFixedMultiBlock implem
 	public double getVoltage(BlockState state, Level level, BlockPos pos) {
 		if (level.getBlockEntity(pos) instanceof PortableCoalGeneratorBlockEntity generator && generator.getMaster() != null) {
 			String[] wireLanes = generator.getNodeLanes();
-			return ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]);
+			return ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]).orElse(0.0);
 		}
 		return 0.0;
 	}
@@ -222,13 +221,12 @@ public class PortableCoalGeneratorBlock extends BaseEntityFixedMultiBlock implem
 	public double getPower(BlockState state, Level level, BlockPos pos) {
 		if (level.getBlockEntity(pos) instanceof PortableCoalGeneratorBlockEntity generator && generator.getMaster() != null) {
 			String[] wireLanes = generator.getNodeLanes();
-			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 2, 0, "SHUNT", wireLanes[0]); // TODO may be negative ?
-			double sourceVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]);
-			double sourceCurrent = shuntVoltage * Circuits.SHUNT_RESISTANCE;
+			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 2, 0, "SHUNT", wireLanes[0]).orElse(0.0);
+			double sourceVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]).orElse(0.0);
+			double sourceCurrent = shuntVoltage / Circuits.SHUNT_RESISTANCE;
 			double powerUsed = sourceVoltage * sourceCurrent;
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			return Math.max(powerUsed > 1.0 ? parametrics.getPowerMin() : 0, powerUsed);
-			// TODO fix generator
 		}
 		return 0.0;
 	}

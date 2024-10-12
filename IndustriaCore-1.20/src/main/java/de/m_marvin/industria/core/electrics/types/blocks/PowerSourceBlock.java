@@ -101,7 +101,7 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock,
 	public double getVoltage(BlockState state, Level level, BlockPos pos) {
 		if (level.getBlockEntity(pos) instanceof PowerSourceBlockEntity source) {
 			String[] wireLanes = source.getNodeLanes();
-			return ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]);
+			return ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]).orElseGet(() -> 0.0);
 		}
 		return 0.0;
 	}
@@ -110,13 +110,11 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock,
 	public double getPower(BlockState state, Level level, BlockPos pos) {
 		if (level.getBlockEntity(pos) instanceof PowerSourceBlockEntity source) {
 			String[] wireLanes = source.getNodeLanes();
-			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 2, 0, "SHUNT", wireLanes[0]); // TODO may be negative ?
-			double sourceVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]);
-			double sourceCurrent = shuntVoltage * Circuits.SHUNT_RESISTANCE;
+			double shuntVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 2, 0, "SHUNT", wireLanes[0]).orElse(0.0); // TODO may be negative ?
+			double sourceVoltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]).orElse(0.0);
+			double sourceCurrent = shuntVoltage / Circuits.SHUNT_RESISTANCE;
 			double powerUsed = sourceVoltage * sourceCurrent;
-			// TODO fix power source
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
-			//double powerUsed = (shuntVoltage / Circuits.SHUNT_RESISTANCE) * parametrics.getNominalVoltage();
 			return Math.max(powerUsed > 1.0 ? parametrics.getPowerMin() : 0, powerUsed);
 		}
 		return 0.0;

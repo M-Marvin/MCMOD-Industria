@@ -75,7 +75,7 @@ public class StatusBar extends AbstractWidget {
 			pGuiGraphics.blit(texture, this.getX() + 1 + lg, this.getY() + 2, 2, 25, Math.min(lr, l) - lg, 10);
 			color = 0x009F00;
 		}
-		if (l >= lr) {
+		if (l > lr) {
 			pGuiGraphics.blit(texture, this.getX() + 1 + lr, this.getY() + 2, 2, 1, l - lr, 10);
 			color = 0xFF0000;
 		}

@@ -10,7 +10,6 @@ import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.InternalNodeConstructor;
-import de.m_marvin.industria.core.physics.PhysicUtility;
 import de.m_marvin.industria.core.registries.BlockEntityTypes;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;

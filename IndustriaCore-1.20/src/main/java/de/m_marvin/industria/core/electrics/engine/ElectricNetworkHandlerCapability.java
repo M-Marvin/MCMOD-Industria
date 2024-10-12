@@ -18,7 +18,6 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import com.google.common.base.Objects;
-import com.google.common.graph.Network;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.Config;
@@ -36,7 +35,6 @@ import de.m_marvin.industria.core.electrics.types.conduits.IElectricConduit;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.types.SyncRequestType;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -518,14 +516,12 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 					}
 				}
 			});
-			
-			if (circuit.components.size() > 1) {
-				final var circuitF = circuit;
-				getSimulationProcessor().processNetwork(circuit).thenAccept(state -> {
-					if (state)
-						IndustriaCore.NETWORK.send(ElectricUtility.TRACKING_NETWORK.with(() -> circuitF), new SUpdateNetworkPackage(circuitF.getComponents(), circuitF.printDataList()));
-				});
-			}
+
+			final var circuitF = circuit;
+			getSimulationProcessor().processNetwork(circuit).thenAccept(state -> {
+				if (state)
+					IndustriaCore.NETWORK.send(ElectricUtility.TRACKING_NETWORK.with(() -> circuitF), new SUpdateNetworkPackage(circuitF.getComponents(), circuitF.printDataList()));
+			});
 			
 		}
 		

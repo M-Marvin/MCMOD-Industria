@@ -6,15 +6,12 @@ import java.util.function.Supplier;
 
 import de.m_marvin.industria.core.electrics.engine.ClientElectricPackageHandler;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
-import de.m_marvin.industria.core.util.types.SyncRequestType;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraftforge.network.NetworkEvent;
 
 /*
- * Tells the client that a networks needs to be updated
+ * Tells the client that a networks needs to be updated with new node voltages
  */
 public class SUpdateNetworkPackage {
 	

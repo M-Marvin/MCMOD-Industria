@@ -287,16 +287,15 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, inputNodes, 0, coilLanes[0], 1, coilLanes[1]);
 				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, outputNodes, 0, coilLanes[0], 1, coilLanes[1]);
 				
-				double maxPower = coil.getCoreBlockCount() * parametrics.getParameter(POWER_PER_BLOCK);
+//				double maxPower = coil.getCoreBlockCount() * parametrics.getParameter(POWER_PER_BLOCK);
 				double windingRatio = coil.getWindingsSecundary() / (double) coil.getWindingsPrimary();
 				
 				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.TRANSFORMER).plotter();
-				templateSource.setProperty("winding_ratio", windingRatio);
-				templateSource.setProperty("max_power", maxPower);
-				templateSource.setNetworkNode("VDC_IN", inputNodes[0], 0, coilLanes[0]);
-				templateSource.setNetworkNode("GND_IN", inputNodes[0], 1, coilLanes[1]);
-				templateSource.setNetworkNode("VDC_OUT", outputNodes[0], 0, coilLanes[0]);
-				templateSource.setNetworkNode("GND_OUT", outputNodes[0], 1, coilLanes[1]);
+				templateSource.setProperty("winding_ratio", 1 / windingRatio);
+				templateSource.setNetworkNode("VDC_A", inputNodes[0], 0, coilLanes[0]);
+				templateSource.setNetworkNode("GND_A", inputNodes[0], 1, coilLanes[1]);
+				templateSource.setNetworkNode("VDC_B", outputNodes[0], 0, coilLanes[0]);
+				templateSource.setNetworkNode("GND_B", outputNodes[0], 1, coilLanes[1]);
 				plotter.accept(templateSource);
 				
 			} else if (coil.getWindingsPrimary() > 0) {
@@ -418,12 +417,6 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 							
 							
 							BlockState connectedState = state2
-//									.setValue(ModBlockStateProperties.SHAPE, HorizontalConnection.fromFaces(
-//											z == min.getZ() ? false : outerBlock,
-//											z == max.getZ() ? false : outerBlock,
-//											x == max.getX() ? false : outerBlock,
-//											x == min.getX() ? false : outerBlock
-//										))
 									.setValue(BlockStateProperties.NORTH, z == min.getZ() ? false : outerBlock)
 									.setValue(BlockStateProperties.SOUTH, z == max.getZ() ? false : outerBlock)
 									.setValue(BlockStateProperties.EAST, x == max.getX() ? false : outerBlock)

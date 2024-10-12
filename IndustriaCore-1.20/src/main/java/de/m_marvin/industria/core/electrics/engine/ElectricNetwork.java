@@ -9,6 +9,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
+import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import com.google.common.collect.Maps;
@@ -105,9 +108,52 @@ public class ElectricNetwork {
 	public void complete(long frame) {
 		if (!this.circuitBuilder.isEmpty()) {
 			String groundResistor = "R0GND " + groundNode + " 0 1";
-			this.netList = String.format("%s\n%s\n\n%s", title, circuitBuilder.toString(), groundResistor);
+			this.netList = filterSingularMatrixNodes(String.format("%s\n%s\n\n%s", title, circuitBuilder.toString(), groundResistor));
 		} else {
 			this.netList = "";
+		}
+	}
+
+	private static final Pattern FILTER_NODE_PATTERN = Pattern.compile("(?:N[0-9_]{5,})|(?:node\\|[A-Za-z0-9_~]+\\|)");
+	private static final Pattern FILTER_GROUND_PATTERN = Pattern.compile("R0GND ([^ ]+) 0 1");
+	
+	private String filterSingularMatrixNodes(String netlist) {
+		
+		Optional<String> groundNode = netlist.lines().map(line -> {
+			Matcher nodeMatcher = FILTER_GROUND_PATTERN.matcher(line);
+			return nodeMatcher.find() ? nodeMatcher.group(1) : null;
+		}).filter(s -> s != null).findAny();
+		
+		if (groundNode.isEmpty()) return null;
+		
+		List<List<String>> lineNodes = netlist.lines().map(line -> {
+			Matcher nodeMatcher = FILTER_NODE_PATTERN.matcher(line);
+			return nodeMatcher.results().map(MatchResult::group).toList();
+		}).toList();
+		
+		List<String> connectedNodes = new ArrayList<>();
+		findConnected(connectedNodes, groundNode.get(), lineNodes);
+
+		StringBuilder filterList = new StringBuilder();
+		List<String> lines = netlist.lines().toList();
+		for (int i = 0; i < lineNodes.size(); i++) {
+			boolean isSingular = lineNodes.get(i).size() > 0 && lineNodes.get(i).stream().filter(node -> connectedNodes.contains(node)).count() == 0;
+			if (isSingular) continue;
+			filterList.append(lines.get(i) + "\n");
+		}
+		
+		return filterList.toString();
+		
+	}
+	
+	private void findConnected(List<String> connectedList, String current, List<List<String>> nodeGroups) {
+		Set<String> foundNodes = new HashSet<>();
+		nodeGroups.stream().filter(group -> group.contains(current)).forEach(group -> group.stream().filter(node -> !connectedList.contains(node)).forEach(foundNodes::add));
+		if (!foundNodes.isEmpty()) {
+			connectedList.addAll(foundNodes);
+			for (String node : foundNodes) {
+				findConnected(connectedList, node, nodeGroups);
+			}
 		}
 	}
 	

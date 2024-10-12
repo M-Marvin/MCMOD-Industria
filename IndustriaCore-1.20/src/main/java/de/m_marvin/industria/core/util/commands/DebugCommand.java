@@ -22,7 +22,7 @@ public class DebugCommand {
 	public static final int MAX_AREA_SIZE = 110592;
 	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-		dispatcher.register(Commands.literal("industria").requires((source) -> 
+		dispatcher.register(Commands.literal("debug").requires((source) -> 
 			source.hasPermission(2)
 		)	
 		.then(
@@ -60,7 +60,7 @@ public class DebugCommand {
 		
 		Minecraft.getInstance().keyboardHandler.setClipboard(circuit);
 		
-		source.getSource().sendSuccess(() -> Component.literal("Circuit net copied"), false);
+		source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.circuit_copied"), false);
 		return 1;
 	}
 	
@@ -75,12 +75,12 @@ public class DebugCommand {
 		NodePos nodePos = new NodePos(position, node);
 		String[] lanes = component.getWireLanes(level, nodePos);
 		
-		source.getSource().sendSuccess(() -> Component.literal("List " + lanes.length + " available lane voltages"), false);
+		source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.lane_voltages.title", lanes.length), false);
 		for (int laneId = 0; laneId < lanes.length; laneId++) {
 			String lane = lanes[laneId];
 			double floatVolatage = network.getFloatingNodeVoltage(nodePos, laneId, lane).orElseGet(() -> 0.0);
 			
-			source.getSource().sendSuccess(() -> Component.literal(String.format("Node '%s' FV: %f", lane, floatVolatage)), false);
+			source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.lane_voltages.entry", lane, floatVolatage), false);
 		}
 		return 1;
 	}

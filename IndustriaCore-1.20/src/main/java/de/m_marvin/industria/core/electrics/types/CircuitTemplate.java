@@ -67,7 +67,7 @@ public class CircuitTemplate {
 				Matcher matcher1 = PROPERTY_PATTERN.matcher(this.template.template);
 				String plot = matcher1.replaceAll(match -> this.properties.getOrDefault(match.group(1), "N/A"));
 				Matcher matcher2 = NETWORK_PATTERN.matcher(plot);
-				return matcher2.replaceAll(match -> this.networks.get(match.group(1)));
+				return matcher2.replaceAll(match -> this.networks.getOrDefault(match.group(1), "NA"));
 			} catch (Exception e) {
 				IndustriaCore.LOGGER.error("Could't plot circuit template!");
 				e.printStackTrace();

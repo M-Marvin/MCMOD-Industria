@@ -284,10 +284,10 @@ public abstract class AbstractJunctionEditScreen<B extends BlockEntity & IJuncti
 	
 	public void sendNewNames() {
 		for (CableNode node : this.cableNodes) {
-			if (node.cableNode == null) continue;
 			if (node instanceof InternalNode) {
 				this.menu.setInternalWireLabels(node.getNodeId(), node.getLanes());
 			} else {
+				if (node.cableNode == null) continue;
 				this.menu.setWireLabels(node.getNode(), node.getLanes());
 			}
 		}

@@ -4,14 +4,15 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import com.google.common.collect.Maps;
 
 import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.core.Config;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability.Component;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
@@ -31,7 +32,7 @@ public class ElectricNetwork {
 	protected String groundNode;
 	protected String netList = "";
 	protected Map<String, Double> nodeVoltages = Maps.newHashMap();
-	protected Map<String, Double> elementCurrents = Maps.newHashMap();
+//	protected Map<String, Double> elementCurrents = Maps.newHashMap();
 	
 	protected static Object ngLinkLock = new Object();
 	
@@ -60,7 +61,7 @@ public class ElectricNetwork {
 		}
 		tag.put("Components", componentsTag);
 		if (!this.isEmpty() && !this.isPlotEmpty() && this.components.size() > 1) {
-			String circuitName = handler.saveCircuit(this.netList);
+			String circuitName = handler.saveCircuit(this.netList, printDataList());
 			tag.putString("Circuit", circuitName);
 		}
 		return tag;
@@ -73,7 +74,9 @@ public class ElectricNetwork {
 		});
 		if (tag.contains("Circuit")) {
 			String circuitName = tag.getString("Circuit");
-			this.netList = handler.loadCircuit(circuitName);
+			String[] lists = handler.loadCircuit(circuitName);
+			this.netList = lists[0];
+			this.parseDataList(lists[1]);
 		}
 	}
 	
@@ -102,9 +105,7 @@ public class ElectricNetwork {
 	public void complete(long frame) {
 		if (!this.circuitBuilder.isEmpty()) {
 			String groundResistor = "R0GND " + groundNode + " 0 1";
-			String execCommand = Config.ELECTRIC_SIMULATION_COMMANDS.get();
-			this.netList = String.format("%s\n%s\n\n%s\n\n%s\n", title, circuitBuilder.toString(), groundResistor, execCommand);
-//			this.netList = title + "\n" + circuitBuilder.toString() + "\n" + groundResistor + "\n.end\n";
+			this.netList = String.format("%s\n%s\n\n%s", title, circuitBuilder.toString(), groundResistor);
 		} else {
 			this.netList = "";
 		}
@@ -135,26 +136,41 @@ public class ElectricNetwork {
 		return nodeVoltages;
 	}
 	
-	public Map<String, Double> getElementCurrents() {
-		return elementCurrents;
+	public synchronized void parseDataList(String dataList) {
+		Stream.of(dataList.split("\n"))
+			.map(s -> s.split("\t"))
+			.filter(s -> s.length == 2)
+			.forEach(s -> this.nodeVoltages.put(s[0], Double.valueOf(s[1])));
 	}
+	
+//	public Map<String, Double> getElementCurrents() {
+//		return elementCurrents;
+//	}
 	
 	public String getNetList() {
 		return netList == null ? "" : this.netList;
+	}
+	
+	public String printDataList() {
+		StringBuffer sb = new StringBuffer();
+		for (Entry<String, Double> e : this.nodeVoltages.entrySet()) {
+			sb.append(e.getKey()).append("\t").append(e.getValue()).append("\n");
+		}
+		return sb.toString();
 	}
 	
 	public synchronized double getFloatingNodeVoltage(NodePos node, int laneId, String lane) {
 		return this.nodeVoltages.getOrDefault(getNodeKeyString(node, laneId, lane), 0.0);
 	}
 
-	public synchronized double getCurrentAtElementTagged(String elementTag) {
-		for (String elementName : this.elementCurrents.keySet()) {
-			if (elementName.contains(elementTag)) {
-				return this.elementCurrents.get(elementName);
-			}
-		}
-		return 0.0;
-	}
+//	public synchronized double getCurrentAtElementTagged(String elementTag) {
+//		for (String elementName : this.elementCurrents.keySet()) {
+//			if (elementName.contains(elementTag)) {
+//				return this.elementCurrents.get(elementName);
+//			}
+//		}
+//		return 0.0;
+//	}
 	
 	public static String getNodeKeyString(NodePos node, int laneId, String laneName) {
 		return ("Node|pos" + node.getBlock().getX() + "_" + node.getBlock().getY() + "_" + node.getBlock().getZ() + "_id" + node.getNode() + "_lid" + laneId + "_lnm" + laneName + "|")

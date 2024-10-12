@@ -55,6 +55,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	
 	public static final String CIRCUIT_FILE_NAME = "circuit_";
 	public static final String CIRCUIT_FILE_EXTENSION = ".net";
+	public static final String DATALIST_FILE_EXTENSION = ".dat";
 	
 	/* Capability handling */
 	
@@ -85,19 +86,19 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	public ListTag serializeNBT() {
 		this.circuitFileCounter = 0;
 		
-		ListTag nbt2 = new ListTag();
+		ListTag networksNbt = new ListTag();
 		int componentCount = 0;
 		for (ElectricNetwork circuitNetwork : this.circuitNetworks) {
 			circuitNetwork.removeInvalidComponents();
 			if (circuitNetwork.isEmpty()) continue;
-			nbt2.add(circuitNetwork.saveNBT(this));
+			networksNbt.add(circuitNetwork.saveNBT(this));
 			componentCount += circuitNetwork.getComponents().size();
 		}
 		cleanupUnusedCircuitFiles();
 		
-		IndustriaCore.LOGGER.info("Saved " + nbt2.size() + " electric networks");
+		IndustriaCore.LOGGER.info("Saved " + networksNbt.size() + " electric networks");
 		IndustriaCore.LOGGER.info("Saved " + componentCount + " electric components");
-		return nbt2;
+		return networksNbt;
 	}
 	
 	@Override
@@ -107,6 +108,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		this.circuitNetworks.clear();
 		this.component2circuitMap.clear();
 		
+		// TODO loat network data
 		for (int i = 0; i < nbt.size(); i++) {
 			CompoundTag circuitTag = nbt.getCompound(i);
 			ElectricNetwork circuitNetwork = new ElectricNetwork(() -> this.level, "ingame-level-circuit");
@@ -127,24 +129,62 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		IndustriaCore.LOGGER.info("Loaded " + this.pos2componentMap.size() + " electric components");
 	}
 	
-	public String saveCircuit(String netList) {
+	public String saveCircuit(String netList, String dataList) {
 		if (this.level instanceof ServerLevel serverLevel) {
 			String circuit = CIRCUIT_FILE_NAME + circuitFileCounter++;
-			File file = new File(((ServerLevel) this.level).getDataStorage().dataFolder, circuit + CIRCUIT_FILE_EXTENSION);
+			File fileNetList = new File(serverLevel.getDataStorage().dataFolder, circuit + CIRCUIT_FILE_EXTENSION);
+			File fileDatList = new File(serverLevel.getDataStorage().dataFolder, circuit + DATALIST_FILE_EXTENSION);
 			
 			try {
-				OutputStream outputStream = new FileOutputStream(file);
+				OutputStream outputStream = new FileOutputStream(fileNetList);
 				outputStream.write(netList.getBytes());
 				outputStream.close();
-				return circuit;
 			} catch (IOException e) {
 				IndustriaCore.LOGGER.error("Could not save circuit net '" + circuit + "' to file!");
 				e.printStackTrace();
 			}
+			
+			try {
+				OutputStream outputStream = new FileOutputStream(fileDatList);
+				outputStream.write(dataList.getBytes());
+				outputStream.close();
+			} catch (IOException e) {
+				IndustriaCore.LOGGER.error("Could not save data list '" + circuit + "' to file!");
+				e.printStackTrace();
+			}
+			return circuit;
 		}
-		return "";
+		return null;
 	}
 	
+	public String[] loadCircuit(String circuit) {
+		if (this.level instanceof ServerLevel serverLevel) {
+			File fileNetList = new File(serverLevel.getDataStorage().dataFolder, circuit + CIRCUIT_FILE_EXTENSION);
+			File fileDatList = new File(serverLevel.getDataStorage().dataFolder, circuit + DATALIST_FILE_EXTENSION);
+			
+			String netList = "";
+			String dataList = "";
+			try {
+				InputStream inputStream = new FileInputStream(fileNetList);
+				netList = new String(inputStream.readAllBytes());
+				inputStream.close();
+			} catch (IOException e) {
+				IndustriaCore.LOGGER.error("Could not load circuit net '" + circuit + "' from file!");
+				e.printStackTrace();
+			}
+			try {
+				InputStream inputStream = new FileInputStream(fileDatList);
+				dataList = new String(inputStream.readAllBytes());
+				inputStream.close();
+			} catch (IOException e) {
+				IndustriaCore.LOGGER.error("Could not load data list '" + circuit + "' from file!");
+				e.printStackTrace();
+			}
+			return new String[] {netList, dataList};
+		}
+		return null;
+	}
+
 	public void cleanupUnusedCircuitFiles() {
 		File dataFolder = ((ServerLevel) this.level).getDataStorage().dataFolder;
 		File circuitFile;
@@ -156,23 +196,6 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	public String loadCircuit(String circuit) {
-		if (this.level instanceof ServerLevel serverLevel) {
-			File file = new File(((ServerLevel) this.level).getDataStorage().dataFolder, circuit + CIRCUIT_FILE_EXTENSION);
-			
-			try {
-				InputStream inputStream = new FileInputStream(file);
-				String netList = new String(inputStream.readAllBytes());
-				inputStream.close();
-				return netList;
-			} catch (IOException e) {
-				IndustriaCore.LOGGER.error("Could not load circuit net '" + circuit + "' from file!");
-				e.printStackTrace();
-			}
-		}
-		return "";
 	}
 	
 	public ElectricNetworkHandlerCapability(Level level) {
@@ -316,7 +339,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		@Override
 		public boolean equals(Object obj) {
 			if (obj == this) return true;
-			if (obj instanceof @SuppressWarnings("rawtypes") Component other) {
+			if (obj instanceof Component other) {
 				return this.type.equals(other.type) && this.pos.equals(other.pos);
 			}
 			return false;
@@ -438,18 +461,18 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		return 0.0;
 	}
 	
-	/**
-	 * Returns the current flowing trough the first element found, containing the tag in its name
-	 */
-	public double getCurrentAtElementTagged(Object componentPos, String elementTag) {
-		Component<?, ?, ?> component = this.pos2componentMap.get(componentPos);
-		if (component == null) return 0.0;
-		ElectricNetwork network = this.component2circuitMap.get(component);
-		if (network != null) {
-			return network.getCurrentAtElementTagged(elementTag);
-		}
-		return 0.0;
-	}
+//	/**
+//	 * Returns the current flowing trough the first element found, containing the tag in its name
+//	 */
+//	public double getCurrentAtElementTagged(Object componentPos, String elementTag) {
+//		Component<?, ?, ?> component = this.pos2componentMap.get(componentPos);
+//		if (component == null) return 0.0;
+//		ElectricNetwork network = this.component2circuitMap.get(component);
+//		if (network != null) {
+//			return network.getCurrentAtElementTagged(elementTag);
+//		}
+//		return 0.0;
+//	}
 	
 	/**
 	 * Updates the network which has a component at the given position
@@ -619,9 +642,9 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	 * Starts initial simulation of all networks after loading from NBT
 	 */
 	private void startNetworks() {
-		for (ElectricNetwork network : this.circuitNetworks) {
-			getSimulationProcessor().processNetwork(network);
-		}
+//		for (ElectricNetwork network : this.circuitNetworks) {
+//			getSimulationProcessor().processNetwork(network);
+//		}
 	}
 	
 }

@@ -17,7 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 
-public abstract class ElectricConduit extends Conduit implements IElectricConduit {
+public class ElectricConduit extends Conduit implements IElectricConduit {
 	
 	public final int wireCount;
 	public final double resistance;

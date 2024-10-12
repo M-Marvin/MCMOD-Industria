@@ -124,7 +124,25 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {
 	mavenCentral()
 	maven {
-		url 'https://jitpack.io'
+		url 'https://maven.pkg.github.com/m-marvin/library-electronflow'
+		credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+        }
+	}
+	maven {
+		url 'https://maven.pkg.github.com/m-marvin/library-archiveutility'
+		credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+        }
+	}
+	maven {
+		url 'https://maven.pkg.github.com/m-marvin/library-unifiedvectors'
+		credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+        }
 	}
 	maven {
 		url 'https://modmaven.dev/'
@@ -182,19 +200,19 @@ dependencies {
 	//shade("com.github.M-Marvin:LIBRARY-ElectronFlow:$electronflow_version")
 	//minecraftLibrary("com.github.M-Marvin:LIBRARY-ElectronFlow:$electronflow_version")
 	//api("com.github.M-Marvin:LIBRARY-ElectronFlow:$electronflow_version")
-	shade("de.m_marvin.electronflow:ElectronFlowJNI:0.3_alpha_2")
-	minecraftLibrary("de.m_marvin.electronflow:ElectronFlowJNI:0.3_alpha_2")
-	api("de.m_marvin.electronflow:ElectronFlowJNI:0.3_alpha_2")
+	shade("de.m_marvin.electronflow:jelectronflow:${electronflow_version}")
+	minecraftLibrary("de.m_marvin.electronflow:jelectronflow:${electronflow_version}")
+	api("de.m_marvin.electronflow:jelectronflow:${electronflow_version}")
 	
 	// UnifiedVectors
-	shade("com.github.M-Marvin:LIBRARY-UnifiedVectors:$univec_version")
-	minecraftLibrary("com.github.M-Marvin:LIBRARY-UnifiedVectors:$univec_version")
-	api("com.github.M-Marvin:LIBRARY-UnifiedVectors:$univec_version")
+	shade("de.m_marvin.univec:univec:${univec_version}")
+	minecraftLibrary("de.m_marvin.univec:univec:${univec_version}")
+	api("de.m_marvin.univec:univec:${univec_version}")
 	
 	// ArchiveUtility
-	shade("com.github.M-Marvin:LIBRARY-ArchiveUtility:$archutil_version")
-	minecraftLibrary("com.github.M-Marvin:LIBRARY-ArchiveUtility:$archutil_version")
-	api("com.github.M-Marvin:LIBRARY-ArchiveUtility:$archutil_version")
+	shade("de.m_marvin.archiveutility:archiveutility:${archutil_version}")
+	minecraftLibrary("de.m_marvin.archiveutility:archiveutility:${archutil_version}")
+	api("de.m_marvin.archiveutility:archiveutility:${archutil_version}")
 	
 }
 
@@ -245,6 +263,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 task mojmapJar(type: ShadowJar) {
   archiveClassifier.set("mojmap")
+  group = 'build'
   from sourceSets.main.output
   configurations = [project.configurations.shade]
 }

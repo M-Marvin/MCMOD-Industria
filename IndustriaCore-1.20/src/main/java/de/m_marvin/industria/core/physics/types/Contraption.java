@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.OptionalLong;
 import java.util.Set;
 
+import org.joml.primitives.AABBdc;
 import org.joml.primitives.AABBic;
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
@@ -102,6 +103,11 @@ public class Contraption {
 
 	public AABB getBounds() {
 		AABBic aabb = this.getContraption().getShipAABB();
+		return new AABB(aabb.minX(), aabb.minY(), aabb.minZ(), aabb.maxX(), aabb.maxY(), aabb.maxZ());
+	}
+
+	public AABB getWorldBounds() {
+		AABBdc aabb = this.getContraption().getWorldAABB();
 		return new AABB(aabb.minX(), aabb.minY(), aabb.minZ(), aabb.maxX(), aabb.maxY(), aabb.maxZ());
 	}
 	

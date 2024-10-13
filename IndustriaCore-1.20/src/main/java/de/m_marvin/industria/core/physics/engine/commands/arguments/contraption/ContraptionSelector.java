@@ -126,7 +126,7 @@ public class ContraptionSelector {
 		if (this.aabb != null) {
 			AABB aabb = this.aabb.move(position);
 			predicate = predicate.and((contraption) -> {
-				return aabb.intersects(contraption.getBounds());
+				return aabb.intersects(contraption.getWorldBounds());
 			});
 		}
 		

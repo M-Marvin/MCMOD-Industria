@@ -250,8 +250,7 @@
 "conduit.industria.insulated_tin_wire":			"Cablu de staniu",
 
 "industria.tooltip.wire_coil.wireOnCoil":		"Rămas: %1$s m",
-"industria.tooltip.transformer.power":			"Putere (ca transmițător): %1$s W",
-"industria.tooltip.transformer.current":		"Curent (ca magnet): %1$s A",
+"industria.tooltip.transformer.resistance":		"Rezistență (ca magnet): %1$s Ω",
 "industria.tooltip.transformer.fieldstrength":		"Intensitate a câmpului (ca magnet): %1$s 1/W",
 
 "industria.creative_tab.tools":				"Instrumente",

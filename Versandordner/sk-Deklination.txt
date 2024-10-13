@@ -127,3 +127,17 @@ NOM     GEN     DAT     AKK     LOK     INSTR
 xéra (Xera) nach Schema NEUTR-4
 xéra, xéraťa, xéraťu, xéra, xérati, xéraťom
 NOM   GEN     DAT     AKK   LOK     INSTR
+
+stopa (Spur (in einer elektrischen Leitung)) nach Schema FEM-1
+stopa, stopy, stope,  stopu, stope,   stopou
+stopy,  stôp, stopám, stopy, stopach, stopámi
+NOM    GEN    DAT     AKK    LOK      INSTR
+
+sieť (Netz) nach Schema FEM-4 mit Ausnahmen
+sieť,  siete, sieti,  sieť,  sieti,   sietou
+siete, sietí, sieťam, siete, sieťach, sietami  => DAT un LOK -ťa- statt -tia- wegen rhythmischer Kürzung nach sie-
+NOM    GEN    DAT     AKK    LOK      INSTR
+
+zoznam (Liste) nach Schema MASK-3 mit Ausnahmen
+zoznam,  zoznamu,  zoznamu,  zoznam,  zozname,   zoznamom   => GEN -u statt - a wegen Endung -m-
+zoznamy, zoznamov, zoznamom, zoznamy, zoznamoch, zozmamami  => INSTR -ami statt -mi

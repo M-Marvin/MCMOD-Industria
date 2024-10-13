@@ -38,6 +38,9 @@
 "industriacore.commands.fixelectrics.noelectric":		"Aucun/e bloc ou conduite avec des propriétés électriques!",
 "industriacore.commands.fixelectrics.success":			"%1$s blocs et %2$s conduites actualisé(e)s",
 "industriacore.commands.fixelectrics.areatolarge":		"Espace trop grand! %1$s > %2$s",
+"industriacore.commands.debug.lane_voltages.title":		"Tensions de voie internes disponibles: %d",
+"industriacore.commands.debug.lane_voltages.entry":		"Nœud '%s': %d V",
+"industriacore.commands.debug.circuit_copied":			"Liste des réseaux de circuits copiée dans le presse-papiers",
 
 "industriacore.argument.contraption.options.unknown":			"Option inconnue : \"%s\"",
 "industriacore.argument.contraption.options.inapplicable":		"L'option \"%s\" n'est pas applicable ici",
@@ -83,6 +86,9 @@
 
 "block.industriacore.power_source": 			"Source de voltage",
 "block.industriacore.magnet": 				"Aimant",
+"block.industriacore.wire_holder":			"Support de câble",
+"item.industriacore.electric_wire":			"Câble",
+"conduit.industriacore.electric_conduit":		"Câble",
 
 "industriacore.tooltip.conduit.name":			"Conduite : %1$s",
 "industriacore.tooltip.conduit.maxClampDistance":	"Portée : %1$s m",

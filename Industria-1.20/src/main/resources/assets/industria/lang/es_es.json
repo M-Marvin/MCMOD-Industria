@@ -250,8 +250,7 @@
 "conduit.industria.insulated_tin_wire":			"Cable de acero",
 
 "industria.tooltip.wire_coil.wireOnCoil":		"Restante: %1$s m",
-"industria.tooltip.transformer.power":			"Potencia (como transformador): %1$s W",
-"industria.tooltip.transformer.current":		"Corriente (como imán): %1$s A",
+"industria.tooltip.transformer.current":		"Resistencia (como imán): %1$s Ω",
 "industria.tooltip.transformer.fieldstrength":		"Intensidad de campo (como imán): %1$s 1/W",
 
 "industria.creative_tab.tools":				"Herramientas",

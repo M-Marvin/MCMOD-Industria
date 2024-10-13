@@ -250,8 +250,7 @@
 "conduit.industria.insulated_tin_wire":			"Blikken kabel",
 
 "industria.tooltip.wire_coil.wireOnCoil":		"Resterend: %1$s m",
-"industria.tooltip.transformer.power":			"Vermogen (als transformator): %1$s W",
-"industria.tooltip.transformer.current":		"Stroom (als magneet): %1$s A",
+"industria.tooltip.transformer.resistance":		"Weerstand (als magneet): %1$s Ω",
 "industria.tooltip.transformer.fieldstrength":		"Veldsterkte (als magneet): %1$s 1/W",
 
 "industria.creative_tab.tools":				"Hulpmiddeln",

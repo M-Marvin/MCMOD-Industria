@@ -38,9 +38,9 @@
 "industriacore.commands.fixelectrics.noelectric":		"Kein/e Block oder Leitung mit elektrischen Eigenschaften!",
 "industriacore.commands.fixelectrics.success":			"%1$s Blöcke und %2$s Leitungen aktualisiert",
 "industriacore.commands.fixelectrics.areatolarge":		"Bereich zu groß! %1$s > %2$s",
-"industriacore.commands.debug.lane_voltages.title":						"Verfügbare interne Leitungs-Spuren: %d",
-"industriacore.commands.debug.lane_voltages.entry":						"Spur '%s': %d V",
-"industriacore.commands.debug.circuit_copied":							"Schaltungs Netzliste in zwischenablage kopiert",
+"industriacore.commands.debug.lane_voltages.title":		"Verfügbare interne Spurspannungen: %d",
+"industriacore.commands.debug.lane_voltages.entry":		"Spur '%s': %d V",
+"industriacore.commands.debug.circuit_copied":			"Schaltungsnetzliste in Zwischenablage kopiert",
 
 "industriacore.argument.contraption.options.unknown":			"Unbekannte Option '%s'!",
 "industriacore.argument.contraption.options.inapplicable":		"Filter ‚%s‘ ist hier nicht anwendbar",
@@ -86,9 +86,9 @@
 
 "block.industriacore.power_source": 			"Spannungsquelle",
 "block.industriacore.magnet": 				"Magnet",
-"block.industriacore.wire_holder":										"Kabelhalter",
-"item.industriacore.electric_wire":										"Kabel",
-"conduit.industriacore.electric_conduit":								"Kabel",
+"block.industriacore.wire_holder":			"Kabelhalter",
+"item.industriacore.electric_wire":			"Kabel",
+"conduit.industriacore.electric_conduit":		"Kabel",
 
 "industriacore.tooltip.conduit.name":			"Leitung: %1$s",
 "industriacore.tooltip.conduit.maxClampDistance":	"Spannweite: %1$s m",

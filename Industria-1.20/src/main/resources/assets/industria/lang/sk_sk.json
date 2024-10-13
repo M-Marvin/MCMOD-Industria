@@ -250,8 +250,7 @@
 "conduit.industria.insulated_tin_wire":			"Cínový kábel",
 
 "industria.tooltip.wire_coil.wireOnCoil":		"Zostáva: %1$s m",
-"industria.tooltip.transformer.power":			"Výkon (ako transformátor): %1$s W",
-"industria.tooltip.transformer.current":		"Prúd (ako magnet): %1$s A",
+"industria.tooltip.transformer.resistance":		"Odpor (ako magnet): %1$s Ω",
 "industria.tooltip.transformer.fieldstrength":		"Sila poľa (ako magnet): %1$s 1/W",
 
 "industria.creative_tab.tools":				"Nástroje (Industria)",

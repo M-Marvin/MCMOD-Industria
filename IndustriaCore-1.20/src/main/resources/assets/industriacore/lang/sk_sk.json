@@ -38,6 +38,9 @@
 "industriacore.commands.fixelectrics.noelectric":		"Žiadna kocka alebo linka s elektrickými vlastnosťami!",
 "industriacore.commands.fixelectrics.success":			"%1$s kocky a %2$s linky boli aktualizované",	
 "industriacore.commands.fixelectrics.areatolarge":		"Príliš veľka oblasť! %1$s > %2$s",
+"industriacore.commands.debug.lane_voltages.title":		"Dostupné vnútoré napätia stôp: %d",
+"industriacore.commands.debug.lane_voltages.entry":		"Stopa '%s': %d V",
+"industriacore.commands.debug.circuit_copied":			"Zoznam obvodových sietí bol skopírovaný do schránky",
 
 "industriacore.argument.contraption.options.unknown":			"Neznáma možnosť \"%s\"",
 "industriacore.argument.contraption.options.inapplicable":		"Možnosť \"%s\" sa v tomto prípade nedá použiť",
@@ -83,6 +86,9 @@
 
 "block.industriacore.power_source": 			"Zdroj napätia",
 "block.industriacore.magnet": 				"Magnet",
+"block.industriacore.wire_holder":			"Držiak kábla",
+"item.industriacore.electric_wire":			"Kábel",
+"conduit.industriacore.electric_conduit":		"Kábel",
 
 "industriacore.tooltip.conduit.name":			"Linka: %1$s",
 "industriacore.tooltip.conduit.maxClampDistance":	"Rozpätie: %1$s m",

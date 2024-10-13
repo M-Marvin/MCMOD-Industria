@@ -38,6 +38,9 @@
 "industriacore.commands.fixelectrics.noelectric":		"¡Sin bloque o conducto con propriedades eléctricas!",
 "industriacore.commands.fixelectrics.success":			"%1$s bloques y %2$s conductos actualizados",
 "industriacore.commands.fixelectrics.areatolarge":		"¡Espaco demasiado largo! %1$s > %2$s",
+"industriacore.commands.debug.lane_voltages.title":		"Voltajes de rastro internos disponibles: %d",
+"industriacore.commands.debug.lane_voltages.entry":		"Nodo '%s': %d V",
+"industriacore.commands.debug.circuit_copied":			"Lista de conexiones del circuito copiada al portapapeles",
 
 "industriacore.argument.contraption.options.unknown":			"Opción desconocida: «%s»",
 "industriacore.argument.contraption.options.inapplicable":		"La opción «%s» no se puede utilizar aquí",
@@ -83,6 +86,9 @@
 
 "block.industriacore.power_source": 			"Fuente de voltaje",
 "block.industriacore.magnet": 				"Imán",
+"block.industriacore.wire_holder":			"Colgador de cables",
+"item.industriacore.electric_wire":			"Cable",
+"conduit.industriacore.electric_conduit":		"Cable",
 
 "industriacore.tooltip.conduit.name":			"Conducto: %1$s",
 "industriacore.tooltip.conduit.maxClampDistance":	"Luz: %1$s m",

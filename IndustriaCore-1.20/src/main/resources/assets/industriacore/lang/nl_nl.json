@@ -38,6 +38,9 @@
 "industriacore.commands.fixelectrics.noelectric":		"Geen block of lijn met elektrische eigenschappen!",
 "industriacore.commands.fixelectrics.success":			"%1$s blokken en %2$s lijnen bijgewerkt",
 "industriacore.commands.fixelectrics.areatolarge":		"Gebied te groot! %1$s > %2$s",
+"industriacore.commands.debug.lane_voltages.title":		"Beschikbare interne spoorspanningen: %d",
+"industriacore.commands.debug.lane_voltages.entry":		"Spoor '%s': %d V",
+"industriacore.commands.debug.circuit_copied":			"Circuitnetlijst gekopieerd naar klembord",
 
 "industriacore.argument.contraption.options.unknown":			"Optie '%s' is onbekend",
 "industriacore.argument.contraption.options.inapplicable":		"Optie '%s' is hier niet van toepassing",
@@ -83,6 +86,9 @@
 
 "block.industriacore.power_source": 			"Voltage bron",
 "block.industriacore.magnet": 				"Magneet",
+"block.industriacore.wire_holder":			"Kabelhouder",
+"item.industriacore.electric_wire":			"Kabel",
+"conduit.industriacore.electric_conduit":		"Kabel",
 
 "industriacore.tooltip.conduit.name":			"Lijn: %1$s",
 "industriacore.tooltip.conduit.maxClampDistance":	"Spanwijdte: %1$s m",

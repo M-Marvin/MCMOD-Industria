@@ -38,6 +38,9 @@
 "industriacore.commands.fixelectrics.noelectric":		"Fără bloc sau linie cu proprietăți electrice!",
 "industriacore.commands.fixelectrics.success":			"Au fost actualizate %1$s blocuri și %2$s linii",
 "industriacore.commands.fixelectrics.areatolarge":		"Zona prea mare! %1$s > %2$s",
+"industriacore.commands.debug.lane_voltages.title":		"Tensiuni interne disponibile pe calea: %d",
+"industriacore.commands.debug.lane_voltages.entry":		"Calea '%s': %d V",
+"industriacore.commands.debug.circuit_copied":			"Lista rețelelor de circuite a fost copiată în clipboard",
 
 "industriacore.argument.contraption.options.unknown":			"Opțiune necunoscută: \"%s\"",
 "industriacore.argument.contraption.options.inapplicable":		"Opțiunea \"%s\" nu se aplică aici",
@@ -83,6 +86,9 @@
 
 "block.industriacore.power_source": 			"Sursa de tensiune",
 "block.industriacore.magnet": 				"Magnet",
+"block.industriacore.wire_holder":			"Suport cablu",
+"item.industriacore.electric_wire":			"Cablu",
+"conduit.industriacore.electric_conduit":		"Cablu",
 
 "industriacore.tooltip.conduit.name":			"Linia: %1$s",
 "industriacore.tooltip.conduit.maxClampDistance":	"Span: %1$s m",

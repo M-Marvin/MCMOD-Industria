@@ -122,11 +122,13 @@ public interface IConduitItem {
 							
 							itemTag.remove("FirstNode");
 							context.getItemInHand().setTag(itemTag);
-							if (ConduitUtility.setConduit(context.getLevel(), conduitPos, this.getConduit(), conduitLengthBlocks)) {
-								context.getPlayer().displayClientMessage(Component.translatable("industriacore.item.info.conduit.placed"), true);
-								onPlaced(context, conduitLengthBlocks);
-							} else {
-								context.getPlayer().displayClientMessage(Component.translatable("industriacore.item.info.conduit.failed"), true);
+							if (!context.getLevel().isClientSide()) {
+								if (ConduitUtility.setConduit(context.getLevel(), conduitPos, this.getConduit(), conduitLengthBlocks)) {
+									context.getPlayer().displayClientMessage(Component.translatable("industriacore.item.info.conduit.placed"), true);
+									onPlaced(context, conduitLengthBlocks);
+								} else {
+									context.getPlayer().displayClientMessage(Component.translatable("industriacore.item.info.conduit.failed"), true);
+								}
 							}
 							return InteractionResult.SUCCESS;
 							

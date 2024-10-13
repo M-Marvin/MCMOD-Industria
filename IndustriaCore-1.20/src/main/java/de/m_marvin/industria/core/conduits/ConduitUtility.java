@@ -26,10 +26,10 @@ import net.minecraftforge.network.PacketDistributor;
 
 public class ConduitUtility {
 	
-	public static boolean setConduitFromClient(Level level, ConduitPos position, Conduit conduit, double length) {
-		IndustriaCore.NETWORK.sendToServer(new SCConduitPackage.SCPlaceConduitPackage(position, conduit, length));
-		return setConduit(level, position, conduit, length);
-	}
+//	public static boolean setConduitFromClient(Level level, ConduitPos position, Conduit conduit, double length) {
+//		IndustriaCore.NETWORK.sendToServer(new SCConduitPackage.SCPlaceConduitPackage(position, conduit, length));
+//		return setConduit(level, position, conduit, length);
+//	}
 	
 	public static boolean setConduit(Level level, ConduitPos position, Conduit conduit, double length) {
 		if (!level.isClientSide()) {

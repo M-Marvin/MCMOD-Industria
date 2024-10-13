@@ -250,8 +250,7 @@
 "conduit.industria.insulated_tin_wire":			"Tin Cable",
 
 "industria.tooltip.wire_coil.wireOnCoil":		"Remaining: %1$s m",
-"industria.tooltip.transformer.power":			"Power (as Transformer): %1$s W",
-"industria.tooltip.transformer.current":		"Current (as Magnet): %1$s A",
+"industria.tooltip.transformer.resistance":		"Resistance (as Magnet): %1$s Ω",
 "industria.tooltip.transformer.fieldstrength":		"Field Strength (as Magnet): %1$s 1/W",
 
 "industria.creative_tab.tools":				"Tools",

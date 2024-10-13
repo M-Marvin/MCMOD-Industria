@@ -250,8 +250,7 @@
 "conduit.industria.insulated_tin_wire":			"Zinnkabel",
 
 "industria.tooltip.wire_coil.wireOnCoil":		"Verbleibend: %1$s m",
-"industria.tooltip.transformer.power":			"Leistung (als Übertrager): %1$s W",
-"industria.tooltip.transformer.current":		"Strom (als Magnet): %1$s A",
+"industria.tooltip.transformer.current":		"Widerstand (als Magnet): %1$s Ω",
 "industria.tooltip.transformer.fieldstrength":		"Feldstärke (als Magnet): %1$s 1/W",
 
 "industria.creative_tab.tools":				"Werkzeuge",

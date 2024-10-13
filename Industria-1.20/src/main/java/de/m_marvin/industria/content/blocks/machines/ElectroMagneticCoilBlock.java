@@ -69,8 +69,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEntityDynamicMultiBlock, IElectricBlock, IMagneticBlock, ITooltipAdditionsModifier, SimpleWaterloggedBlock {
 	
 	public static final DoubleParameter MAGNETIC_FIELD_STRENGTH = new DoubleParameter("magneticFieldStrengthPerWatt", 0.01);
-	public static final DoubleParameter MAGNET_CURRENT = new DoubleParameter("magnetCurrent", 10);
-	public static final DoubleParameter POWER_PER_BLOCK = new DoubleParameter("electricPowerPerBlock", 500.0);
+	public static final DoubleParameter MAGNET_RESISTANCE = new DoubleParameter("magnetResistance", 10);
 	public static final int CONNECTION_PER_NODE = 1;
 	
 	public static final VoxelShape DOWN_SHAPE =VoxelShapeUtility.box(0, 0, 0, 16, 2, 16);
@@ -89,8 +88,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	@Override
 	public void addAdditionsTooltip(List<Component> tooltips, ItemStack item) {
 		BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
-		TooltipAdditions.addTooltip(tooltips, Component.translatable("industria.tooltip.transformer.power", parametrics.getParameter(POWER_PER_BLOCK)));
-		TooltipAdditions.addTooltip(tooltips, Component.translatable("industria.tooltip.transformer.current", parametrics.getParameter(MAGNET_CURRENT)));
+		TooltipAdditions.addTooltip(tooltips, Component.translatable("industria.tooltip.transformer.resistance", parametrics.getParameter(MAGNET_RESISTANCE)));
 		TooltipAdditions.addTooltip(tooltips, Component.translatable("industria.tooltip.transformer.fieldstrength", parametrics.getParameter(MAGNETIC_FIELD_STRENGTH)));
 	}
 	
@@ -103,10 +101,11 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				String[] coilLanes = coil.getNodeLanes();
 				NodePos nodeInput = coil.getConnections()[0];
 				BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
-				
+
+				double factor = coil.getWindingsPrimary() / (double) coil.getMaxWindings();
 				double voltage = ElectricUtility.getVoltageBetween(level, nodeInput, nodeInput, 0, 1, coilLanes[0], coilLanes[1]).orElseGet(() -> 0.0);
-				double powerIn = voltage * parametrics.getParameter(MAGNET_CURRENT);
-				double fieldStrength = powerIn * parametrics.getParameter(MAGNETIC_FIELD_STRENGTH);
+				double powerIn = voltage * (voltage / parametrics.getParameter(MAGNET_RESISTANCE));
+				double fieldStrength = powerIn * parametrics.getParameter(MAGNETIC_FIELD_STRENGTH) * factor;
 				
 				Direction facing = state.getValue(BlockStateProperties.FACING);
 				return Vec3d.fromVec(facing.getNormal()).mul(fieldStrength);
@@ -287,7 +286,6 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, inputNodes, 0, coilLanes[0], 1, coilLanes[1]);
 				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, outputNodes, 0, coilLanes[0], 1, coilLanes[1]);
 				
-//				double maxPower = coil.getCoreBlockCount() * parametrics.getParameter(POWER_PER_BLOCK);
 				double windingRatio = coil.getWindingsSecundary() / (double) coil.getWindingsPrimary();
 				
 				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.TRANSFORMER).plotter();
@@ -302,13 +300,12 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				
 				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, nodes, 0, coilLanes[0], 1, coilLanes[1]);
 				
-				double factor = coil.getWindingsPrimary() / (double) coil.getMaxWindings();
-				double power = parametrics.getParameter(MAGNET_CURRENT); // TODO magnet power
+				double resistance = parametrics.getParameter(MAGNET_RESISTANCE);
 				
-				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_POWER_LOAD).plotter();
-				templateSource.setProperty("nominal_power", factor * power);
-				templateSource.setNetworkNode("VDC", inputNodes[0], 0, coilLanes[0]);
-				templateSource.setNetworkNode("GND", inputNodes[0], 1, coilLanes[1]);
+				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.RESISTOR).plotter();
+				templateSource.setProperty("resistance", resistance);
+				templateSource.setNetworkNode("NET1", inputNodes[0], 0, coilLanes[0]);
+				templateSource.setNetworkNode("NET2", inputNodes[0], 1, coilLanes[1]);
 				plotter.accept(templateSource);
 				
 			}
@@ -318,7 +315,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	
 	@Override
 	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-		if (pLevel.getBlockEntity(pPos) instanceof ElectroMagneticCoilBlockEntity coil) {
+		if (pLevel.getBlockEntity(pPos) instanceof ElectroMagneticCoilBlockEntity) {
 			MagnetismUtility.updateField(pLevel, pPos);
 		}
 	}

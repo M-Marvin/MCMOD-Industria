@@ -1,6 +1,5 @@
 {
 	"magneticFieldStrengthPerWatt": 0.01,
-	"magnetCurrent": 10.0,
-	"magneticCoefficient": 1.0,
-	"electricPowerPerBlock": 500
+	"magnetResistance": 100.0,
+	"magneticCoefficient": 1.0
 }

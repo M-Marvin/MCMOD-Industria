@@ -36,7 +36,7 @@ public class ClientElectricPackageHandler {
 			}
 		} else {
 			for (Component<?, ?, ?> component : msg.components) {
-				handler.removeComponent(component.pos);
+				handler.removeFromNetwork(component.pos);
 			}
 		}
 	}

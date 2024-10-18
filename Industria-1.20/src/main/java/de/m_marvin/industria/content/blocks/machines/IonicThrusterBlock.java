@@ -105,12 +105,12 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, thrusterLanes[0], 1, thrusterLanes[1]);
 			
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
-			int minVoltage = parametrics.getVoltageMin();
+			int targetVoltage = parametrics.getNominalVoltage();
 			int targetPower = parametrics.getNominalPower();
 			
 			Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_POWER_LOAD).plotter();
 			templateSource.setProperty("nominal_power", targetPower);
-			templateSource.setProperty("min_resistance", minVoltage / (targetPower / (double) minVoltage));
+			templateSource.setProperty("nominal_voltage", targetVoltage);
 			templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, thrusterLanes[0]);
 			templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, thrusterLanes[1]);
 			plotter.accept(templateSource);
@@ -133,7 +133,7 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 			String[] wireLanes = thruster.getNodeLanes();
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			double voltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]).orElse(0.0);
-			return voltage * voltage * parametrics.getNominalResistance();
+			return parametrics.getPowerV(voltage);
 		}
 		return 0.0;
 	}
@@ -146,11 +146,11 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 	
 	@Override
 	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-		if (pLevel.getBlockEntity(pPos) instanceof IonicThrusterBlockEntity thruster) {
+		if (pLevel.getBlockEntity(pPos) instanceof IonicThrusterBlockEntity) {
 			
 			if (!pLevel.isClientSide()) {
 				
-				double powerP = Math.max(0, BlockParametricsManager.getInstance().getParametrics(this).getPowerPercentageV(getVoltage(pState, pLevel, pPos)) - 1);
+				double powerP = Math.max(0, BlockParametricsManager.getInstance().getParametrics(this).getPowerPercentageP(getPower(pState, pLevel, pPos)));
 				int maxThrust = getThrust(pLevel, pPos, pState);
 				double thrust = powerP * maxThrust;
 				

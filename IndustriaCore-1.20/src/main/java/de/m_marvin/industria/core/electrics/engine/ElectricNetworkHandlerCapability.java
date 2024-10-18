@@ -539,6 +539,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				NodePos[] nodes = component.getNodes(level);
 				for (int i = 0; i < nodes.length; i++) {
 					Set<Component<?, ?, ?>> components = this.node2componentMap.get(nodes[i]);
+					components.remove(component);
 					if (components != null && !components.isEmpty()) componentsToUpdate.add(components.stream().findAny().get());
 				}
 				if (componentsToUpdate.isEmpty()) {

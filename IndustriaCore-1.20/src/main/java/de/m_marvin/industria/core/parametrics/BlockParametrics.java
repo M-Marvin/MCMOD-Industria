@@ -115,25 +115,28 @@ public class BlockParametrics {
 	public Vec3d getMagneticVector() {
 		return getParameter(PARAMETER_MAGNETIC_VECTOR);
 	}
-
+	
+	public double getPowerV(double voltage) {
+		double loadResistance = getNominalResistance();
+		return (voltage / loadResistance) * voltage;
+	}
+	
 	public double getPowerPercentageP(double power) {
 		int powerMin = getPowerMin();
 		int powerMax = getPowerMax();
-		return Math.min(power / powerMin, 1) + Math.max((power - powerMin) / (powerMax - powerMin), 0);
+		int d = powerMax - powerMin;
+		return (powerMin <= 0 ? 0.0 : Math.min(power / (double) powerMin, 1)) + (d <= 0 ? 0.0 : Math.max((power - powerMin) / (double) d, 0));
 	}
 
 	public double getPowerPercentageV(double voltage) {
-		int nominalVoltage = getNominalVoltage();
-		int nominalPower = getNominalPower();
-		double loadResistance = nominalVoltage / (nominalPower / (double) nominalVoltage);
-		double power = (voltage / loadResistance) * voltage;
-		return getPowerPercentageP(power);
+		return getPowerPercentageP(getPowerV(voltage));
 	}
 
 	public double getVoltageOvershoot(double voltage) {
 		int voltageMin = getVoltageMin();
 		int voltageMax = getVoltageMax();
-		return Math.min((voltage / (double) voltageMin), 1) + Math.max((voltage - voltageMin) / (double) (voltageMax - voltageMin), 0);
+		int d = voltageMax - voltageMin;
+		return (voltageMin <= 0 ? 0.0 : Math.min(voltage / (double) voltageMin, 1)) + (d <= 0 ? 0.0 : Math.max((voltage - voltageMin) / d, 0));
 	}
 	
 	public double getExplodeChance(double voltagePercentage, double powerPercentage) {

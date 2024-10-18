@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 import com.google.common.base.Predicate;
 
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.engine.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
@@ -98,6 +99,10 @@ public class ElectricUtility {
 	public static void setLaneLabels(Level level, NodePos node, Predicate<Component<?, ?, ?>> componentPredicate, List<String[]> laneLabels) {
 		List<Component<?, ?, ?>> cables = findComponentsOnNode(level, node).stream().filter(componentPredicate).toList();
 		for (int i = 0; i < Math.min(cables.size(), laneLabels.size()); i++) {
+			if (cables.get(i).getWireLanes(level, node).length != laneLabels.get(i).length) {
+				IndustriaCore.LOGGER.warn("Invalid ElectricUtility#setLaneLabels, length mismatch!");
+				continue;
+			}
 			cables.get(i).setWireLanes(level, node, laneLabels.get(i));
 		}
 	}
@@ -105,6 +110,10 @@ public class ElectricUtility {
 	public static void setLaneLabels(Level level, NodePos node, Predicate<Component<?, ?, ?>> componentPredicate, String[]... laneLabels) {
 		List<Component<?, ?, ?>> cables = findComponentsOnNode(level, node).stream().filter(componentPredicate).toList();
 		for (int i = 0; i < Math.min(cables.size(), laneLabels.length); i++) {
+			if (cables.get(i).getWireLanes(level, node).length != laneLabels[i].length) {
+				IndustriaCore.LOGGER.warn("Invalid ElectricUtility#setLaneLabels, length mismatch!");
+				continue;
+			}
 			cables.get(i).setWireLanes(level, node, laneLabels[i]);
 		}
 	}
@@ -112,6 +121,10 @@ public class ElectricUtility {
 	public static void setLaneLabelsEqueal(Level level, NodePos node, Predicate<Component<?, ?, ?>> componentPredicate, String[] laneLabels) {
 		List<Component<?, ?, ?>> cables = findComponentsOnNode(level, node).stream().filter(componentPredicate).toList();
 		for (int i = 0; i < cables.size(); i++) {
+			if (cables.get(i).getWireLanes(level, node).length != laneLabels.length) {
+				IndustriaCore.LOGGER.warn("Invalid ElectricUtility#setLaneLabels, length mismatch!");
+				continue;
+			}
 			cables.get(i).setWireLanes(level, node, laneLabels);
 		}
 	}

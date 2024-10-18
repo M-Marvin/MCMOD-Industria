@@ -113,7 +113,7 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 		if (level.getBlockEntity(position) instanceof FloodlightBlockEntity lamp) {
 			
 			String[] lampLanes = lamp.getNodeLanes();
-			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, lampLanes[0], 1, lampLanes[1]);
+//			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, lampLanes[0], 1, lampLanes[1]);
 			
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			int targetPower = parametrics.getNominalPower();
@@ -122,7 +122,7 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 			Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_POWER_LOAD).plotter();
 			templateSource.setProperty("nominal_voltage", targetVoltage);
 			templateSource.setProperty("nominal_power", targetPower);
-			templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, lampLanes[0]);
+			templateSource.setNetworkNode("VDC", new NodePos(position, 0), 0, lampLanes[0]); // FIXME lane ID of correct lane
 			templateSource.setNetworkNode("GND", new NodePos(position, 0), 1, lampLanes[1]);
 			plotter.accept(templateSource);
 			
@@ -144,7 +144,7 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 			String[] wireLanes = floodlight.getNodeLanes();
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			double voltage = ElectricUtility.getVoltageBetween(level, new NodePos(pos, 0), new NodePos(pos, 0), 0, 1, wireLanes[0], wireLanes[1]).orElse(0.0);
-			return voltage * voltage * parametrics.getNominalResistance();
+			return parametrics.getPowerV(voltage);
 		}
 		return 0.0;
 	}

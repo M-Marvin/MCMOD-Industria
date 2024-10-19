@@ -99,21 +99,21 @@ public class FloodlightBlockEntity extends BlockEntity implements MenuProvider, 
 		
 		BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this.getBlockState().getBlock());
 		
-		double voltage = ElectricUtility.getVoltageBetween(level, new NodePos(worldPosition, 0), new NodePos(worldPosition, 0), 0, 1, nodeLanes[0], nodeLanes[1]).orElseGet(() -> 0.0);
-		double voltageP = parametrics.getVoltageOvershoot(voltage);
+		double voltage = ElectricUtility.getVoltageBetweenLocal(level, worldPosition, nodeLanes[0], false, nodeLanes[1], false).orElseGet(() -> 0.0);
+//		double voltageP = parametrics.getVoltageOvershoot(voltage);
 		double powerP = parametrics.getPowerPercentageV(voltage);
 		
 		boolean shouldLit = powerP >= 1;
 		
 		// TODO debug print
-		System.out.println(this.level.isClientSide() +  "=======================  " + powerP + " " + voltage);
+//		System.out.println(this.level.isClientSide() +  "=======================  " + powerP + " " + voltage);
 		
 		if (getBlockState().getValue(BlockStateProperties.LIT) != shouldLit) setLightState(shouldLit);
 		
-		if (this.level.random.nextFloat() < parametrics.getExplodeChance(voltageP, powerP)) {
-			System.err.println("BOOM!"); // TODO machine damage
-			
-		}
+//		if (this.level.random.nextFloat() < parametrics.getExplodeChance(voltageP, powerP)) {
+//			System.err.println("BOOM!"); // TODO machine damage
+//			
+//		}
 		
 	}
 	

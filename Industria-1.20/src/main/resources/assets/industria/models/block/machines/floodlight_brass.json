@@ -1,5 +1,5 @@
 {
-	"render_type": "translucent",
+	"render_type": "cutout",
 	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "industria:block/machines/floodlight_brass",

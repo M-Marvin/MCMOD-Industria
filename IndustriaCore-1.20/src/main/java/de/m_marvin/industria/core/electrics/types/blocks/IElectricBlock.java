@@ -49,7 +49,7 @@ public interface IElectricBlock extends IConduitConnector, IElectric<BlockState,
 	@Override
 	default Optional<BlockState> getInstance(Level level, BlockPos pos) {
 		BlockState state = level.getBlockState(pos);
-		if (state.isAir()) Optional.empty();
+		if (state.isAir()) return Optional.empty();
 		return Optional.of(level.getBlockState(pos));
 	}
 	

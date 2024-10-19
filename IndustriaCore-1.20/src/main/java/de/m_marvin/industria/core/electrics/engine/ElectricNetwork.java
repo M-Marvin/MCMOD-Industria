@@ -208,15 +208,21 @@ public class ElectricNetwork {
 		if (!this.nodeVoltages.containsKey(nodeName)) return Optional.empty();
 		return Optional.of(this.nodeVoltages.get(nodeName));
 	}
+
+	public synchronized Optional<Double> getFloatingLocalNodeVoltage(BlockPos position, String lane, boolean prot) {
+		String nodeName = getLocalNodeKeyString(position, lane, prot);
+		if (!this.nodeVoltages.containsKey(nodeName)) return Optional.empty();
+		return Optional.of(this.nodeVoltages.get(nodeName));
+	}
 	
-	public static String getNodeKeyString(NodePos node, int laneId, String laneName) {
-		return ("Node|pos" + node.getBlock().getX() + "_" + node.getBlock().getY() + "_" + node.getBlock().getZ() + "_id" + node.getNode() + "_lid" + laneId + "_lnm" + laneName + "|")
+	public static String getLocalNodeKeyString(BlockPos position, String laneName, boolean prot) {
+		return ("IntNode|pos" + position.getX() + "_" + position.getY() + "_" + position.getZ() + "_lnm" + laneName + "|" + (prot ? "_P" : "_I"))
 				.toLowerCase()
 				.replace('-', '~'); // '-' would be interpreted as mathematical operator, '~' not
 	}
 	
-	public static String getPositionKeyString(BlockPos position) {
-		return ("pos" + position.getX() + "_" + position.getY() + "_" + position.getZ())
+	public static String getNodeKeyString(NodePos node, int laneId, String laneName) {
+		return ("Node|pos" + node.getBlock().getX() + "_" + node.getBlock().getY() + "_" + node.getBlock().getZ() + "_id" + node.getNode() + "_lid" + laneId + "_lnm" + laneName + "|")
 				.toLowerCase()
 				.replace('-', '~'); // '-' would be interpreted as mathematical operator, '~' not
 	}

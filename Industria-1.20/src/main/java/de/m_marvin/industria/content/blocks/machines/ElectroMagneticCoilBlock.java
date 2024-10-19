@@ -98,12 +98,10 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 			coil = coil.getMaster();
 			if (coil.getWindingsSecundary() == 0) {
 				
-				String[] coilLanes = coil.getNodeLanes();
-				NodePos nodeInput = coil.getConnections()[0];
 				BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 
 				double factor = coil.getWindingsPrimary() / (double) coil.getMaxWindings();
-				double voltage = ElectricUtility.getVoltageBetween(level, nodeInput, nodeInput, 0, 1, coilLanes[0], coilLanes[1]).orElseGet(() -> 0.0);
+				double voltage = ElectricUtility.getVoltageBetweenLocal(level, blockPos, "L", true, "N", true).orElseGet(() -> 0.0);
 				double powerIn = voltage * (voltage / parametrics.getParameter(MAGNET_RESISTANCE));
 				double fieldStrength = powerIn * parametrics.getParameter(MAGNETIC_FIELD_STRENGTH) * factor;
 				
@@ -257,18 +255,11 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	
 	@Override
 	public String[] getWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node) {
-		if (level.getBlockEntity(pos) instanceof ElectroMagneticCoilBlockEntity coil) {
-			return coil.getNodeLanes();
-		}
 		return new String[0];
 	}
 
 	@Override
-	public void setWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node, String[] laneLabels) {
-		if (level.getBlockEntity(pos) instanceof ElectroMagneticCoilBlockEntity coil) {
-			coil.setNodeLanes(laneLabels);
-		}
-	}
+	public void setWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node, String[] laneLabels) {}
 	
 	@Override
 	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork network, Consumer<ICircuitPlot> plotter) {
@@ -276,36 +267,35 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 			
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			
-			String[] coilLanes = coil.getNodeLanes();
 			NodePos[] nodes = coil.getConnections();
 			NodePos[] inputNodes = Arrays.copyOfRange(nodes, 0, nodes.length / 2);
 			NodePos[] outputNodes = Arrays.copyOfRange(nodes, nodes.length / 2, nodes.length);
 			
 			if (coil.getWindingsPrimary() > 0 && coil.getWindingsSecundary() > 0) {
 				
-				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, inputNodes, 0, coilLanes[0], 1, coilLanes[1]);
-				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, outputNodes, 0, coilLanes[0], 1, coilLanes[1]);
+				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, inputNodes, true, "L1", "N1");
+				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, outputNodes, true, "L2", "N2");
 				
 				double windingRatio = coil.getWindingsSecundary() / (double) coil.getWindingsPrimary();
 				
 				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.TRANSFORMER).plotter();
 				templateSource.setProperty("winding_ratio", 1 / windingRatio);
-				templateSource.setNetworkNode("VDC_A", inputNodes[0], 0, coilLanes[0]);
-				templateSource.setNetworkNode("GND_A", inputNodes[0], 1, coilLanes[1]);
-				templateSource.setNetworkNode("VDC_B", outputNodes[0], 0, coilLanes[0]);
-				templateSource.setNetworkNode("GND_B", outputNodes[0], 1, coilLanes[1]);
+				templateSource.setNetworkLocalNode("VDC_A", position, "L1", true);
+				templateSource.setNetworkLocalNode("GND_A", position, "N1", true);
+				templateSource.setNetworkLocalNode("VDC_B", position, "L2", true);
+				templateSource.setNetworkLocalNode("GND_B", position, "N2", true);
 				plotter.accept(templateSource);
 				
 			} else if (coil.getWindingsPrimary() > 0) {
 				
-				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, nodes, 0, coilLanes[0], 1, coilLanes[1]);
+				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, true, "L", "N");
 				
 				double resistance = parametrics.getParameter(MAGNET_RESISTANCE);
 				
 				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.RESISTOR).plotter();
 				templateSource.setProperty("resistance", resistance);
-				templateSource.setNetworkNode("NET1", inputNodes[0], 0, coilLanes[0]);
-				templateSource.setNetworkNode("NET2", inputNodes[0], 1, coilLanes[1]);
+				templateSource.setNetworkLocalNode("NET1", position, "L", true);
+				templateSource.setNetworkLocalNode("NET2", position, "N", true);
 				plotter.accept(templateSource);
 				
 			}
@@ -411,8 +401,6 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 							case Z: outerBlock = x == min.getX() || x == max.getX() || y == min.getY() || y == max.getY();
 							}
 							
-							
-							
 							BlockState connectedState = state2
 									.setValue(BlockStateProperties.NORTH, z == min.getZ() ? false : outerBlock)
 									.setValue(BlockStateProperties.SOUTH, z == max.getZ() ? false : outerBlock)
@@ -464,7 +452,6 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				
 				BlockState state2 = level.getBlockState(pos2);
 				BlockState unconnectedState = state2
-//						.setValue(ModBlockStateProperties.SHAPE, HorizontalConnection.NONE)
 						.setValue(BlockStateProperties.NORTH, false)
 						.setValue(BlockStateProperties.SOUTH, false)
 						.setValue(BlockStateProperties.EAST, false)
@@ -505,6 +492,10 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	@SuppressWarnings("deprecation")
 	@Override
 	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+		
+		InteractionResult r = GameUtility.openJunctionBlockEntityUI(pLevel, pPos, pPlayer, pHand);
+		if (r != InteractionResult.PASS) return r;
+		
 		if (pLevel.getBlockEntity(pPos) instanceof ElectroMagneticCoilBlockEntity transformer) {
 			ElectroMagneticCoilBlockEntity transformerMaster = transformer.getMaster();
 			ItemStack handItem = pPlayer.getItemInHand(pHand);

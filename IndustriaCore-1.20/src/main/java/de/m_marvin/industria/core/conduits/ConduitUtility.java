@@ -26,14 +26,11 @@ import net.minecraftforge.network.PacketDistributor;
 
 public class ConduitUtility {
 	
-//	public static boolean setConduitFromClient(Level level, ConduitPos position, Conduit conduit, double length) {
-//		IndustriaCore.NETWORK.sendToServer(new SCConduitPackage.SCPlaceConduitPackage(position, conduit, length));
-//		return setConduit(level, position, conduit, length);
-//	}
-	
 	public static boolean setConduit(Level level, ConduitPos position, Conduit conduit, double length) {
 		if (!level.isClientSide()) {
-			BlockPos middlePos = MathUtility.getMiddleBlock(position.getNodeApos(), position.getNodeBpos());
+			BlockPos middlePos = MathUtility.getMiddleBlock(
+					PhysicUtility.ensureWorldBlockCoordinates(level, position.getNodeApos(), position.getNodeApos()), 
+					PhysicUtility.ensureWorldBlockCoordinates(level, position.getNodeBpos(), position.getNodeBpos()));
 			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middlePos)), new SCConduitPackage.SCPlaceConduitPackage(position, conduit, length));
 		}
 		ConduitHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);

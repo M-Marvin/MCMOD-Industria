@@ -35,6 +35,7 @@ import de.m_marvin.industria.core.electrics.types.conduits.IElectricConduit;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.types.SyncRequestType;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -466,6 +467,21 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	}
 
 	/**
+	 * Returns the floating voltage currently available on the given node.
+	 * NOTE: Floating means that the voltage is referenced to "global ground", meaning a second voltage is required to calculate the actual difference (the voltage) between the two nodes.
+	 */
+	public Optional<Double> getFloatingLocalNodeVoltage(BlockPos position, String lane, boolean prot) {
+		Component<?, ?, ?> component = this.pos2componentMap.get(position);
+		if (component != null) {
+			ElectricNetwork network = this.component2circuitMap.get(component);
+			if (network != null) {
+				return network.getFloatingLocalNodeVoltage(position, lane, prot);
+			}
+		}
+		return Optional.empty();
+	}
+
+	/**
 	 * Injects node voltages without recalculating the network.
 	 * Used to update the node voltages on the client side, were no simulation occurs.
 	 */
@@ -539,8 +555,10 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				NodePos[] nodes = component.getNodes(level);
 				for (int i = 0; i < nodes.length; i++) {
 					Set<Component<?, ?, ?>> components = this.node2componentMap.get(nodes[i]);
-					components.remove(component);
-					if (components != null && !components.isEmpty()) componentsToUpdate.add(components.stream().findAny().get());
+					if (components != null && !components.isEmpty()) {
+						components.remove(component);
+						componentsToUpdate.add(components.stream().findAny().get());
+					}
 				}
 				if (componentsToUpdate.isEmpty()) {
 					ElectricNetwork emptyNetwork = this.component2circuitMap.remove(component);

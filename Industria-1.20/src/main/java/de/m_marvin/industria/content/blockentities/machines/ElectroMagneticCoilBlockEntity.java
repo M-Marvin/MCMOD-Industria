@@ -28,9 +28,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<ElectroMagneticCoilBlockEntity> {
 
-	protected String[] nodeLanes = {"L", "N"};
 	protected ItemStack wiresPrimary = ItemStack.EMPTY;
-	protected ItemStack wiresSecundary = ItemStack.EMPTY;
+	protected ItemStack wiresSecondary = ItemStack.EMPTY;
 	
 	public ElectroMagneticCoilBlockEntity(BlockPos pPos, BlockState pBlockState) {
 		super(ModBlockEntityTypes.ELECTRO_MAGNETIC_COIL.get(), pPos, pBlockState);
@@ -52,7 +51,7 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 	}
 	
 	public ItemStack getWiresSecundary() {
-		return wiresSecundary;
+		return wiresSecondary;
 	}
 
 	public void setWiresPrimary(ItemStack wires) {
@@ -60,7 +59,7 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 	}
 	
 	public void setWiresSecundary(ItemStack wires) {
-		this.wiresSecundary = wires;
+		this.wiresSecondary = wires;
 		this.setChanged();
 	}
 	
@@ -75,15 +74,6 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 	public int getCoreBlockCount() {
 		Vec3i size = Vec3i.fromVec(getMaxPos()).sub(Vec3i.fromVec(getMinPos())).abs().add(new Vec3i(1, 1, 1));
 		return size.x * size.y * size.z;
-	}
-	
-	public String[] getNodeLanes() {
-		return nodeLanes;
-	}
-	
-	public void setNodeLanes(String[] nodeLanes) {
-		this.nodeLanes = nodeLanes;
-		this.setChanged();
 	}
 	
 	private int getElectricalConnectionCount() {
@@ -137,8 +127,8 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 	}
 
 	public Conduit getWireConduitSecundary() {
-		if (this.wiresSecundary.isEmpty()) return Conduits.NONE.get();
-		if (this.wiresSecundary.getItem() instanceof IConduitItem conduitItem) return conduitItem.getConduit();
+		if (this.wiresSecondary.isEmpty()) return Conduits.NONE.get();
+		if (this.wiresSecondary.getItem() instanceof IConduitItem conduitItem) return conduitItem.getConduit();
 		return Conduits.NONE.get();
 	}
 	
@@ -152,8 +142,8 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 	
 	public boolean isValidWireItemSecundary(ItemStack stack) {
 		if (stack.getItem() instanceof IConduitItem conduitItem && conduitItem.getConduit() instanceof IElectricConduit) {
-			if (this.wiresSecundary.isEmpty()) return true;
-			if (this.wiresSecundary.getItem() == conduitItem) return true;
+			if (this.wiresSecondary.isEmpty()) return true;
+			if (this.wiresSecondary.getItem() == conduitItem) return true;
 		}
 		return false;
 	}
@@ -182,7 +172,7 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 	}
 
 	public int getWindingsSecundary() {
-		return this.wiresSecundary.getCount() / getWiresPerWinding();
+		return this.wiresSecondary.getCount() / getWiresPerWinding();
 	}
 	
 	public void dropWires() {
@@ -190,9 +180,9 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 			GameUtility.dropItem(level, wiresPrimary, Vec3f.fromVec(this.worldPosition).add(0.5F, 0.5F, 0.5F), 0.5F, 1F);
 			this.wiresPrimary = ItemStack.EMPTY;
 		}
-		if (!this.wiresSecundary.isEmpty()) {
-			GameUtility.dropItem(level, wiresSecundary, Vec3f.fromVec(this.worldPosition).add(0.5F, 0.5F, 0.5F), 0.5F, 1F);
-			this.wiresSecundary = ItemStack.EMPTY;
+		if (!this.wiresSecondary.isEmpty()) {
+			GameUtility.dropItem(level, wiresSecondary, Vec3f.fromVec(this.worldPosition).add(0.5F, 0.5F, 0.5F), 0.5F, 1F);
+			this.wiresSecondary = ItemStack.EMPTY;
 		}
 	}
 	
@@ -201,27 +191,21 @@ public class ElectroMagneticCoilBlockEntity extends DynamicMultiBlockEntity<Elec
 		super.saveAdditional(pTag);
 		if (!this.isMaster()) return;
 		pTag.put("WiresPrimary", wiresPrimary.serializeNBT());
-		pTag.put("WiresSecundary", wiresSecundary.serializeNBT());
-		pTag.putString("LiveWireLane", this.nodeLanes[0]);
-		pTag.putString("NeutralWireLane", this.nodeLanes[1]);
+		pTag.put("WiresSecondary", wiresSecondary.serializeNBT());
 	}
 	
 	@Override
 	public void load(CompoundTag pTag) {
 		super.load(pTag);
 		this.wiresPrimary = ItemStack.of(pTag.getCompound("WiresPrimary"));
-		this.wiresSecundary = ItemStack.of(pTag.getCompound("WiresSecundary"));
-		this.nodeLanes[0] = pTag.getString("LiveWireLane");
-		this.nodeLanes[1] = pTag.getString("NeutralWireLane");
+		this.wiresSecondary = ItemStack.of(pTag.getCompound("WiresSecondary"));
 	}
 	
 	@Override
 	public CompoundTag getUpdateTag() {
 		CompoundTag tag = super.getUpdateTag();
 		tag.put("WiresPrimary", this.wiresPrimary.serializeNBT());
-		tag.put("WiresSecundary", this.wiresSecundary.serializeNBT());
-		tag.putString("LiveWireLane", this.nodeLanes[0]);
-		tag.putString("NeutralWireLane", this.nodeLanes[1]);
+		tag.put("WiresSecondary", this.wiresSecondary.serializeNBT());
 		return tag;
 	}
 	

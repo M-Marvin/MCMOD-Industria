@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public interface IJunctionEdit {
 	
 	public default void setCableWireLabels(NodePos node, String[] laneLabels) {
-		ElectricUtility.setLaneLabelsEqueal(this.getJunctionLevel(), node, Component::isWire, laneLabels);
+		ElectricUtility.setLaneLabels(this.getJunctionLevel(), node, Component::isWire, laneLabels);
 	}
 	
 	public default String[] getInternalWireLabels(NodePos node) {

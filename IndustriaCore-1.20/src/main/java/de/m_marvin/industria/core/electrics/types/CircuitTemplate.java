@@ -9,6 +9,7 @@ import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
+import net.minecraft.core.BlockPos;
 
 public class CircuitTemplate {
 
@@ -46,7 +47,11 @@ public class CircuitTemplate {
 		public void setNetworkNode(String name, NodePos node, int laneId, String lane) {
 			setNetwork(name, ElectricNetwork.getNodeKeyString(node, laneId, lane));
 		}
-		
+
+		public void setNetworkLocalNode(String name, BlockPos position, String lane, boolean prot) {
+			setNetwork(name, ElectricNetwork.getLocalNodeKeyString(position, lane, prot));
+		}
+
 		public void setNetwork(String name, String net) {
 			if (this.networks.containsKey(name)) this.networks.put(name, net);
 		}

@@ -5,5 +5,5 @@
 	"nominalPower": 400,
 	"powerMax": 500,
 	"powerMin": 0,
-	"maxThrusterThrust": 500000
+	"maxThrusterThrust": 1000000
 }

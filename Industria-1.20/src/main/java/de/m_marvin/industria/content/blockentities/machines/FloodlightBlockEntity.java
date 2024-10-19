@@ -24,6 +24,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -64,6 +67,19 @@ public class FloodlightBlockEntity extends BlockEntity implements MenuProvider, 
 		for (int i = 0; i < lightBlockTags.size(); i++) {
 			this.lightBlocks.add(NbtUtils.readBlockPos(lightBlockTags.getCompound(i)));
 		}
+	}
+	
+	@Override
+	public CompoundTag getUpdateTag() {
+		CompoundTag tag = super.getUpdateTag();
+		tag.putString("PositiveLane", this.nodeLanes[0]);
+		tag.putString("NegativeLane", this.nodeLanes[1]);
+		return tag;
+	}
+	
+	@Override
+	public Packet<ClientGamePacketListener> getUpdatePacket() {
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 	
 	public String[] getNodeLanes() {

@@ -288,7 +288,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				
 			} else if (coil.getWindingsPrimary() > 0) {
 				
-				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, true, "L", "N");
+				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, nodes, true, "L", "N");
 				
 				double resistance = parametrics.getParameter(MAGNET_RESISTANCE);
 				

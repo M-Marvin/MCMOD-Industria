@@ -48,8 +48,8 @@ public class CircuitTemplate {
 			setNetwork(name, ElectricNetwork.getNodeKeyString(node, laneId, lane));
 		}
 
-		public void setNetworkLocalNode(String name, BlockPos position, String lane, boolean prot) {
-			setNetwork(name, ElectricNetwork.getLocalNodeKeyString(position, lane, prot));
+		public void setNetworkLocalNode(String name, BlockPos position, String lane, int group) {
+			setNetwork(name, ElectricNetwork.getLocalNodeKeyString(position, lane, group));
 		}
 
 		public void setNetwork(String name, String net) {

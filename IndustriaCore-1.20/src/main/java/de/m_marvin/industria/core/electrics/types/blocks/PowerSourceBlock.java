@@ -71,15 +71,15 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock,
 		if (level.getBlockEntity(position) instanceof PowerSourceBlockEntity source) {
 
 			String[] sourceLanes = source.getNodeLanes();
-			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, false, sourceLanes[0], sourceLanes[1]);
+			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, sourceLanes[0], sourceLanes[1]);
 			
 			if (source.getPower() > 0) {
 				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.VOLTAGE_SOURCE).plotter();
 				templateSource.setProperty("nominal_voltage", source.getVoltage());
 				templateSource.setProperty("power_limit", source.getPower());
-				templateSource.setNetworkLocalNode("VDC", position, sourceLanes[0], false);
-				templateSource.setNetworkLocalNode("GND", position, sourceLanes[1], false);
-				templateSource.setNetworkLocalNode("SHUNT", position, "SHUNT", true);
+				templateSource.setNetworkLocalNode("VDC", position, sourceLanes[0], 0);
+				templateSource.setNetworkLocalNode("GND", position, sourceLanes[1], 0);
+				templateSource.setNetworkLocalNode("SHUNT", position, "SHUNT", 1);
 				plotter.accept(templateSource);
 			}
 			
@@ -101,7 +101,7 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock,
 	public double getVoltage(BlockState state, Level level, BlockPos pos) {
 		if (level.getBlockEntity(pos) instanceof PowerSourceBlockEntity source) {
 			String[] wireLanes = source.getNodeLanes();
-			return ElectricUtility.getVoltageBetweenLocal(level, pos, wireLanes[0], false, wireLanes[1], false).orElseGet(() -> 0.0);
+			return ElectricUtility.getVoltageBetweenLocal(level, pos, wireLanes[0], 0, wireLanes[1], 0).orElseGet(() -> 0.0);
 		}
 		return 0.0;
 	}
@@ -110,8 +110,8 @@ public class PowerSourceBlock extends BaseEntityBlock implements IElectricBlock,
 	public double getPower(BlockState state, Level level, BlockPos pos) {
 		if (level.getBlockEntity(pos) instanceof PowerSourceBlockEntity source) {
 			String[] wireLanes = source.getNodeLanes();
-			double shuntVoltage = ElectricUtility.getVoltageBetweenLocal(level, pos, "SHUNT", true, wireLanes[0], false).orElse(0.0);
-			double sourceVoltage = ElectricUtility.getVoltageBetweenLocal(level, pos, wireLanes[0], false, wireLanes[1], false).orElse(0.0);
+			double shuntVoltage = ElectricUtility.getVoltageBetweenLocal(level, pos, "SHUNT", 1, wireLanes[0], 0).orElse(0.0);
+			double sourceVoltage = ElectricUtility.getVoltageBetweenLocal(level, pos, wireLanes[0], 0, wireLanes[1], 0).orElse(0.0);
 			double sourceCurrent = shuntVoltage / Circuits.SHUNT_RESISTANCE;
 			double powerUsed = sourceVoltage * sourceCurrent;
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);

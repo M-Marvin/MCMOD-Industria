@@ -115,7 +115,7 @@ public class FloodlightBlockEntity extends BlockEntity implements MenuProvider, 
 		
 		BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this.getBlockState().getBlock());
 		
-		double voltage = ElectricUtility.getVoltageBetweenLocal(level, worldPosition, nodeLanes[0], false, nodeLanes[1], false).orElseGet(() -> 0.0);
+		double voltage = ElectricUtility.getVoltageBetweenLocal(level, worldPosition, nodeLanes[0], 0, nodeLanes[1], 0).orElseGet(() -> 0.0);
 //		double voltageP = parametrics.getVoltageOvershoot(voltage);
 		double powerP = parametrics.getPowerPercentageV(voltage);
 		

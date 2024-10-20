@@ -178,7 +178,7 @@ public class PortableCoalGeneratorBlock extends BaseEntityFixedMultiBlock implem
 		if (level.getBlockEntity(position) instanceof PortableCoalGeneratorBlockEntity generator && generator.getMaster() != null) {
 			
 			String[] wireLanes = generator.getNodeLanes();
-			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, false, wireLanes[0], wireLanes[1]);
+			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, wireLanes[0], wireLanes[1]);
 			
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			int targetPower = generator.canRun() ? parametrics.getNominalPower() : 0;
@@ -188,9 +188,9 @@ public class PortableCoalGeneratorBlock extends BaseEntityFixedMultiBlock implem
 				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.VOLTAGE_SOURCE).plotter();
 				templateSource.setProperty("nominal_voltage", targetVoltage);
 				templateSource.setProperty("power_limit", targetVoltage > 0 ? targetPower : 0);
-				templateSource.setNetworkLocalNode("VDC", position, wireLanes[0], false);
-				templateSource.setNetworkLocalNode("GND", position, wireLanes[1], false);
-				templateSource.setNetworkLocalNode("SHUNT", position, "SHUNT", true);
+				templateSource.setNetworkLocalNode("VDC", position, wireLanes[0], 0);
+				templateSource.setNetworkLocalNode("GND", position, wireLanes[1], 0);
+				templateSource.setNetworkLocalNode("SHUNT", position, "SHUNT", 1);
 				plotter.accept(templateSource);
 			}
 			
@@ -212,7 +212,7 @@ public class PortableCoalGeneratorBlock extends BaseEntityFixedMultiBlock implem
 	public double getVoltage(BlockState state, Level level, BlockPos pos) {
 		if (level.getBlockEntity(pos) instanceof PortableCoalGeneratorBlockEntity generator && generator.getMaster() != null) {
 			String[] wireLanes = generator.getNodeLanes();
-			return ElectricUtility.getVoltageBetweenLocal(level, pos, wireLanes[0], false, wireLanes[1], false).orElse(0.0);
+			return ElectricUtility.getVoltageBetweenLocal(level, pos, wireLanes[0], 0, wireLanes[1], 0).orElse(0.0);
 		}
 		return 0.0;
 	}
@@ -221,8 +221,8 @@ public class PortableCoalGeneratorBlock extends BaseEntityFixedMultiBlock implem
 	public double getPower(BlockState state, Level level, BlockPos pos) {
 		if (level.getBlockEntity(pos) instanceof PortableCoalGeneratorBlockEntity generator && generator.getMaster() != null) {
 			String[] wireLanes = generator.getNodeLanes();
-			double shuntVoltage = ElectricUtility.getVoltageBetweenLocal(level, pos, "SHUNT", true, wireLanes[0], false).orElse(0.0);
-			double sourceVoltage = ElectricUtility.getVoltageBetweenLocal(level, pos, wireLanes[0], false, wireLanes[1], false).orElse(0.0);
+			double shuntVoltage = ElectricUtility.getVoltageBetweenLocal(level, pos, "SHUNT", 1, wireLanes[0], 0).orElse(0.0);
+			double sourceVoltage = ElectricUtility.getVoltageBetweenLocal(level, pos, wireLanes[0], 0, wireLanes[1], 0).orElse(0.0);
 			double sourceCurrent = shuntVoltage / Circuits.SHUNT_RESISTANCE;
 			double powerUsed = sourceVoltage * sourceCurrent;
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);

@@ -114,9 +114,6 @@ public class ElectricNetwork {
 		}
 	}
 
-	private static final Pattern FILTER_NODE_PATTERN = Pattern.compile("(?:N[0-9_]{5,})|(?:node\\|[A-Za-z0-9_~]+\\|)");
-	private static final Pattern FILTER_GROUND_PATTERN = Pattern.compile("R0GND ([^ ]+) 0 1");
-	
 	private String filterSingularMatrixNodes(String netlist) {
 		
 		Optional<String> groundNode = netlist.lines().map(line -> {
@@ -209,14 +206,17 @@ public class ElectricNetwork {
 		return Optional.of(this.nodeVoltages.get(nodeName));
 	}
 
-	public synchronized Optional<Double> getFloatingLocalNodeVoltage(BlockPos position, String lane, boolean prot) {
-		String nodeName = getLocalNodeKeyString(position, lane, prot);
+	public synchronized Optional<Double> getFloatingLocalNodeVoltage(BlockPos position, String lane, int group) {
+		String nodeName = getLocalNodeKeyString(position, lane, group);
 		if (!this.nodeVoltages.containsKey(nodeName)) return Optional.empty();
 		return Optional.of(this.nodeVoltages.get(nodeName));
 	}
+
+	private static final Pattern FILTER_NODE_PATTERN = Pattern.compile("(?:N[0-9_]{5,})|(?:node\\|[A-Za-z0-9_~]+\\|)|(?:intnode\\|[A-Za-z0-9_~]+\\|_[0-9])");
+	private static final Pattern FILTER_GROUND_PATTERN = Pattern.compile("R0GND ([^ ]+) 0 1");
 	
-	public static String getLocalNodeKeyString(BlockPos position, String laneName, boolean prot) {
-		return ("IntNode|pos" + position.getX() + "_" + position.getY() + "_" + position.getZ() + "_lnm" + laneName + "|" + (prot ? "_P" : "_I"))
+	public static String getLocalNodeKeyString(BlockPos position, String laneName, int group) {
+		return ("IntNode|pos" + position.getX() + "_" + position.getY() + "_" + position.getZ() + "_lnm" + laneName + "|_" + group)
 				.toLowerCase()
 				.replace('-', '~'); // '-' would be interpreted as mathematical operator, '~' not
 	}

@@ -113,7 +113,7 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 		if (level.getBlockEntity(position) instanceof FloodlightBlockEntity lamp) {
 			
 			String[] lampLanes = lamp.getNodeLanes();
-			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, false, lampLanes[0], lampLanes[1]);
+			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, lampLanes[0], lampLanes[1]);
 			
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			int targetPower = parametrics.getNominalPower();
@@ -122,8 +122,8 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 			Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_POWER_LOAD).plotter();
 			templateSource.setProperty("nominal_voltage", targetVoltage);
 			templateSource.setProperty("nominal_power", targetPower);
-			templateSource.setNetworkLocalNode("VDC", position, lampLanes[0], false);
-			templateSource.setNetworkLocalNode("GND", position, lampLanes[1], false);
+			templateSource.setNetworkLocalNode("VDC", position, lampLanes[0], 0);
+			templateSource.setNetworkLocalNode("GND", position, lampLanes[1], 0);
 			plotter.accept(templateSource);
 			
 		}
@@ -133,7 +133,7 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 	public double getVoltage(BlockState state, Level level, BlockPos pos) {
 		if (level.getBlockEntity(pos) instanceof FloodlightBlockEntity floodlight) {
 			String[] wireLanes = floodlight.getNodeLanes();
-			return ElectricUtility.getVoltageBetweenLocal(level, pos, wireLanes[0], false, wireLanes[1], false).orElse(0.0);
+			return ElectricUtility.getVoltageBetweenLocal(level, pos, wireLanes[0], 0, wireLanes[1], 0).orElse(0.0);
 		}
 		return 0.0;
 	}
@@ -143,7 +143,7 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 		if (level.getBlockEntity(pos) instanceof FloodlightBlockEntity floodlight) {
 			String[] wireLanes = floodlight.getNodeLanes();
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
-			double voltage = ElectricUtility.getVoltageBetweenLocal(level, pos, wireLanes[0], false, wireLanes[1], false).orElse(0.0);
+			double voltage = ElectricUtility.getVoltageBetweenLocal(level, pos, wireLanes[0], 0, wireLanes[1], 0).orElse(0.0);
 			return parametrics.getPowerV(voltage);
 		}
 		return 0.0;

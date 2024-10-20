@@ -470,12 +470,12 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	 * Returns the floating voltage currently available on the given node.
 	 * NOTE: Floating means that the voltage is referenced to "global ground", meaning a second voltage is required to calculate the actual difference (the voltage) between the two nodes.
 	 */
-	public Optional<Double> getFloatingLocalNodeVoltage(BlockPos position, String lane, boolean prot) {
+	public Optional<Double> getFloatingLocalNodeVoltage(BlockPos position, String lane, int group) {
 		Component<?, ?, ?> component = this.pos2componentMap.get(position);
 		if (component != null) {
 			ElectricNetwork network = this.component2circuitMap.get(component);
 			if (network != null) {
-				return network.getFloatingLocalNodeVoltage(position, lane, prot);
+				return network.getFloatingLocalNodeVoltage(position, lane, group);
 			}
 		}
 		return Optional.empty();

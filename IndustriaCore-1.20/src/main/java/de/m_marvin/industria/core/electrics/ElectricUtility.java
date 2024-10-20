@@ -166,12 +166,12 @@ public class ElectricUtility {
 	 * @param level The level of the node
 	 * @param position The position of the component
 	 * @param lane The lane name of the local node
-	 * @param prot If the lane is protected
+	 * @param group Group id of the local node
 	 * @return The potential of the node relative to the network ground potential
 	 */
-	public static Optional<Double> getFloatingLocalNodeVoltage(Level level, BlockPos position, String lane, boolean prot) {
+	public static Optional<Double> getFloatingLocalNodeVoltage(Level level, BlockPos position, String lane, int group) {
 		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
-		return handler.getFloatingLocalNodeVoltage(position, lane, prot);
+		return handler.getFloatingLocalNodeVoltage(position, lane, group);
 	}
 	
 	/**
@@ -198,13 +198,13 @@ public class ElectricUtility {
 	 * @param position The position of the component
 	 * @param laneP The first lane name of the local node
 	 * @param laneN The second lane name of the local node
-	 * @param protP If the first lane is protected
-	 * @param protN If the second lane is protected
+	 * @param groupP Group id of the first local node
+	 * @param groupN Group id of the second local node
 	 * @return The voltage between the two nodes (first node potential - second node potential)
 	 */
-	public static Optional<Double> getVoltageBetweenLocal(Level level, BlockPos position, String laneP, boolean protP, String laneN, boolean protN) {
-		Optional<Double> v1 = ElectricUtility.getFloatingLocalNodeVoltage(level, position, laneN, protN);
-		Optional<Double> v2 = ElectricUtility.getFloatingLocalNodeVoltage(level, position, laneP, protP);
+	public static Optional<Double> getVoltageBetweenLocal(Level level, BlockPos position, String laneP, int groupP, String laneN, int groupN) {
+		Optional<Double> v1 = ElectricUtility.getFloatingLocalNodeVoltage(level, position, laneN, groupN);
+		Optional<Double> v2 = ElectricUtility.getFloatingLocalNodeVoltage(level, position, laneP, groupP);
 		if (v1.isEmpty() || v2.isEmpty()) return Optional.empty();
 		return Optional.of(v2.get() - v1.get());
 	}
@@ -216,12 +216,12 @@ public class ElectricUtility {
 	 * @param block Block of the electric component
 	 * @param position Position of the electric component
 	 * @param instance State of the electric component
-	 * @param prot If the internal nodes are protected
+	 * @param group Group id of the local node
 	 * @param localLanes The internal node lane names
 	 */
-	public static void plotJoinTogether(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, BlockPos position, BlockState instance, boolean prot, String... localLanes) {
+	public static void plotJoinTogether(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, BlockPos position, BlockState instance, int group, String... localLanes) {
 		NodePos[] nodes = block.getConnections(level, position, instance);
-		plotJoinTogether(plotter, level, block, position, instance, nodes, prot, localLanes);
+		plotJoinTogether(plotter, level, block, position, instance, nodes, group, localLanes);
 	}
 	
 	/**
@@ -232,10 +232,10 @@ public class ElectricUtility {
 	 * @param position Position of the electric component
 	 * @param instance State of the electric component
 	 * @param nodes Nodes to connect with inner lane
-	 * @param prot If the internal nodes are protected
+	 * @param group Group id of the local node
 	 * @param localLanes The internal node lane names
 	 */
-	public static void plotJoinTogether(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, BlockPos position, BlockState instance, NodePos[] nodes, boolean prot, String... localLanes) {
+	public static void plotJoinTogether(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, BlockPos position, BlockState instance, NodePos[] nodes, int group, String... localLanes) {
 		List<String[]> lanes = Stream.of(nodes).map(node -> getLaneLabelsSummarized(level, node)).toList();
 		
 		Plotter template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR).plotter();
@@ -246,7 +246,7 @@ public class ElectricUtility {
 				for (String localLaneName : localLanes) {
 					if (wireLanes[i1].equals(localLaneName)) {
 						template.setNetworkNode("NET1", nodes[i], i1, wireLanes[i1]);
-						template.setNetworkLocalNode("NET2", position, localLaneName, prot);
+						template.setNetworkLocalNode("NET2", position, localLaneName, group);
 						plotter.accept(template);
 					}
 				}

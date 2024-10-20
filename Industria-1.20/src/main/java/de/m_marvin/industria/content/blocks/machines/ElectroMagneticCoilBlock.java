@@ -101,7 +101,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 
 				double factor = coil.getWindingsPrimary() / (double) coil.getMaxWindings();
-				double voltage = ElectricUtility.getVoltageBetweenLocal(level, blockPos, "L", true, "N", true).orElseGet(() -> 0.0);
+				double voltage = ElectricUtility.getVoltageBetweenLocal(level, blockPos, "L", 1, "N", 1).orElseGet(() -> 0.0);
 				double powerIn = voltage * (voltage / parametrics.getParameter(MAGNET_RESISTANCE));
 				double fieldStrength = powerIn * parametrics.getParameter(MAGNETIC_FIELD_STRENGTH) * factor;
 				
@@ -273,29 +273,29 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 			
 			if (coil.getWindingsPrimary() > 0 && coil.getWindingsSecundary() > 0) {
 				
-				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, inputNodes, true, "L1", "N1");
-				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, outputNodes, true, "L2", "N2");
+				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, inputNodes, 0, "L", "N");
+				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, outputNodes, 1, "L", "N");
 				
 				double windingRatio = coil.getWindingsSecundary() / (double) coil.getWindingsPrimary();
 				
 				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.TRANSFORMER).plotter();
 				templateSource.setProperty("winding_ratio", 1 / windingRatio);
-				templateSource.setNetworkLocalNode("VDC_A", position, "L1", true);
-				templateSource.setNetworkLocalNode("GND_A", position, "N1", true);
-				templateSource.setNetworkLocalNode("VDC_B", position, "L2", true);
-				templateSource.setNetworkLocalNode("GND_B", position, "N2", true);
+				templateSource.setNetworkLocalNode("VDC_A", position, "L", 0);
+				templateSource.setNetworkLocalNode("GND_A", position, "N", 0);
+				templateSource.setNetworkLocalNode("VDC_B", position, "L", 1);
+				templateSource.setNetworkLocalNode("GND_B", position, "N", 1);
 				plotter.accept(templateSource);
 				
 			} else if (coil.getWindingsPrimary() > 0) {
 				
-				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, nodes, true, "L", "N");
+				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, nodes, 1, "L", "N");
 				
 				double resistance = parametrics.getParameter(MAGNET_RESISTANCE);
 				
 				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.RESISTOR).plotter();
 				templateSource.setProperty("resistance", resistance);
-				templateSource.setNetworkLocalNode("NET1", position, "L", true);
-				templateSource.setNetworkLocalNode("NET2", position, "N", true);
+				templateSource.setNetworkLocalNode("NET1", position, "L", 1);
+				templateSource.setNetworkLocalNode("NET2", position, "N", 1);
 				plotter.accept(templateSource);
 				
 			}

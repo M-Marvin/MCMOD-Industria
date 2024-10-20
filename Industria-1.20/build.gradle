@@ -232,12 +232,20 @@ reobf {
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
-            artifact jar
+            artifact shadowJar
         }
     }
     repositories {
         maven {
             url "file://${project.projectDir}/mcmodsrepo"
+        }
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/m-marvin/mcmod-industria")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+            }
         }
     }
 }

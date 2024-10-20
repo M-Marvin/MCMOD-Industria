@@ -34,7 +34,7 @@ public class Config {
 		EF_DEBUG_LOGGING = BUILDER.comment("If true, the native lib will print simmulation data (and some other things) from the electric networks into the logs.").define("simulation_debug_logging", false);
 		BUILDER.pop();
 		BUILDER.comment("Industria Core electrics settings").push(CATEGORY_ELECTIRCS);
-		ELECTIRC_SIMULATION_THREADS = BUILDER.comment("Number of paralell running EPT's").defineInRange("simulation_threads", 2, 1, 16);
+		ELECTIRC_SIMULATION_THREADS = BUILDER.comment("Number of paralell running EPT's").defineInRange("simulation_threads", 1, 1, 16);
 		ELECTRIC_SIMULATION_COMMAND = BUILDER.comment("Simulation engine execution command.").define("simulation_exec_command", "op");
 		CONFIG_COMMON = BUILDER.build();
 		

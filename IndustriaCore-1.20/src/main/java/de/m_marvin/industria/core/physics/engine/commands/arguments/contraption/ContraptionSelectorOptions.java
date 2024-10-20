@@ -4,11 +4,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 import com.google.common.collect.Maps;
-import com.machinezoo.noexception.optional.OptionalBoolean;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
@@ -209,7 +209,7 @@ public class ContraptionSelectorOptions {
 			
 			register("static", (parser) -> {
 				boolean isStatic = parser.getReader().readBoolean();
-				parser.setStatic(OptionalBoolean.of(isStatic));
+				parser.setStatic(Optional.of(isStatic));
 			}, (parser) -> {
 				return !parser.getStatic().isPresent();
 			}, Component.translatable("industriacore.argument.contraption.options.static.description"));

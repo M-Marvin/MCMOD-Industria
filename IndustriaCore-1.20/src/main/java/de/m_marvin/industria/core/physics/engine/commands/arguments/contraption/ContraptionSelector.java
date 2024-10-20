@@ -2,6 +2,7 @@ package de.m_marvin.industria.core.physics.engine.commands.arguments.contraption
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.OptionalLong;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -12,7 +13,6 @@ import javax.annotation.Nullable;
 import org.valkyrienskies.core.api.ships.Ship;
 
 import com.google.common.collect.Lists;
-import com.machinezoo.noexception.optional.OptionalBoolean;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import de.m_marvin.industria.core.physics.PhysicUtility;
@@ -36,7 +36,7 @@ public class ContraptionSelector {
 	private final MinMaxBounds.Doubles range;
 	private final MinMaxBounds.Doubles mass;
 	private final MinMaxBounds.Doubles size;
-	private final OptionalBoolean isStatic;
+	private final Optional<Boolean> isStatic;
 	private final Function<Vec3, Vec3> position;
 	@Nullable
 	private final AABB aabb;
@@ -48,7 +48,7 @@ public class ContraptionSelector {
 	private final OptionalLong contraptionId;
 	private final boolean usesSelector;
 	 
-	public ContraptionSelector(int pMaxResults, boolean pWorldLimited, Predicate<Contraption> predicate, MinMaxBounds.Doubles pRange, MinMaxBounds.Doubles pMass, MinMaxBounds.Doubles pSize, OptionalBoolean pStatic, Function<Vec3, Vec3> pPositions, @Nullable AABB pAabb, BiConsumer<Vec3, List<? extends Contraption>> order, boolean pCurrentContraption, @Nullable String pContraptionName, @Nullable OptionalLong contraptionId, boolean pUsesSelector) {
+	public ContraptionSelector(int pMaxResults, boolean pWorldLimited, Predicate<Contraption> predicate, MinMaxBounds.Doubles pRange, MinMaxBounds.Doubles pMass, MinMaxBounds.Doubles pSize, Optional<Boolean> pStatic, Function<Vec3, Vec3> pPositions, @Nullable AABB pAabb, BiConsumer<Vec3, List<? extends Contraption>> order, boolean pCurrentContraption, @Nullable String pContraptionName, @Nullable OptionalLong contraptionId, boolean pUsesSelector) {
 		this.maxResults = pMaxResults;
 		this.worldLimited = pWorldLimited;
 		this.predicate = predicate;
@@ -89,7 +89,7 @@ public class ContraptionSelector {
 		return size;
 	}
 
-	public OptionalBoolean getIsStatic() {
+	public Optional<Boolean> getIsStatic() {
 		return isStatic;
 	}
 
@@ -150,7 +150,7 @@ public class ContraptionSelector {
 
 		if (this.isStatic.isPresent()) {
 			predicate = predicate.and((contraption) -> {
-				return this.isStatic.getAsBoolean() == contraption.isStatic();
+				return this.isStatic.get() == contraption.isStatic();
 			});
 		}
 		

@@ -2,6 +2,7 @@ package de.m_marvin.industria.core.physics.engine.commands.arguments.contraption
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.OptionalLong;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
@@ -14,7 +15,6 @@ import java.util.function.ToDoubleFunction;
 import javax.annotation.Nullable;
 
 import com.google.common.primitives.Doubles;
-import com.machinezoo.noexception.optional.OptionalBoolean;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
@@ -76,7 +76,7 @@ public class ContraptionSelectorParser {
 	
 	private MinMaxBounds.Doubles mass = MinMaxBounds.Doubles.ANY;
 	private MinMaxBounds.Doubles size = MinMaxBounds.Doubles.ANY;
-	private OptionalBoolean isStatic = OptionalBoolean.empty();
+	private Optional<Boolean> isStatic = Optional.empty();
 	
 	private MinMaxBounds.Doubles velocity_x = MinMaxBounds.Doubles.ANY;
 	private MinMaxBounds.Doubles velocity_y = MinMaxBounds.Doubles.ANY;
@@ -190,7 +190,7 @@ public class ContraptionSelectorParser {
 		this.size = size;
 	}
 	
-	public void setStatic(OptionalBoolean isStatic) {
+	public void setStatic(Optional<Boolean> isStatic) {
 		this.isStatic = isStatic;
 	}
 	
@@ -202,7 +202,7 @@ public class ContraptionSelectorParser {
 		return size;
 	}
 	
-	public OptionalBoolean getStatic() {
+	public Optional<Boolean> getStatic() {
 		return isStatic;
 	}
 	

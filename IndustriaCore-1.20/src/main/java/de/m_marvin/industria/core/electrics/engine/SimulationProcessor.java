@@ -82,23 +82,23 @@ public class SimulationProcessor {
 		}
 		
 		private void process() {
-			try {
-				while (!shouldShutdown && !errorFlag) {
-					synchronized (tasks) {
-						if (tasks.isEmpty()) {
+			while (!shouldShutdown && !errorFlag) {
+				synchronized (tasks) {
+					if (tasks.isEmpty()) {
+						try {
 							tasks.wait();
-						}
-						this.currentTask = tasks.poll();
+						} catch (InterruptedException e) {}
 					}
-					if (this.currentTask == null) continue;
-					String netList = this.currentTask.network.getNetList();
-					if (!processNetList(netList)) {
-						// TODO make fuse blow/ingame message
-					}
-					this.currentTask.network.getComponents().forEach(c -> c.onNetworkChange(this.currentTask.network.getLevel()));
-					this.currentTask.completable.complete(true);
+					this.currentTask = tasks.poll();
 				}
-			} catch (InterruptedException e) {}
+				if (this.currentTask == null) continue;
+				String netList = this.currentTask.network.getNetList();
+				if (!processNetList(netList)) {
+					// TODO make fuse blow/ingame message
+				}
+				this.currentTask.network.getComponents().forEach(c -> c.onNetworkChange(this.currentTask.network.getLevel()));
+				this.currentTask.completable.complete(true);
+			}
 		}
 		
 		private boolean processNetList(String netList) {

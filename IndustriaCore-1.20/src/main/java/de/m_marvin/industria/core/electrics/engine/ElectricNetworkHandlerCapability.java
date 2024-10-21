@@ -540,10 +540,9 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				}
 			});
 
-			final var circuitF = circuit;
 			getSimulationProcessor().processNetwork(circuit).thenAccept(state -> {
 				if (state)
-					IndustriaCore.NETWORK.send(ElectricUtility.TRACKING_NETWORK.with(() -> circuitF), new SUpdateNetworkPackage(circuitF.getComponents(), circuitF.printDataList()));
+					IndustriaCore.NETWORK.send(ElectricUtility.TRACKING_NETWORK.with(() -> circuitFinalized), new SUpdateNetworkPackage(circuitFinalized.getComponents(), circuitFinalized.printDataList()));
 			});
 			
 		}

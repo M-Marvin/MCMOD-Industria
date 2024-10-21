@@ -213,6 +213,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		if (event.getState().getBlock() instanceof IElectricBlock electric && electric.getConnectorMasterPos(level, event.getPos(), event.getState()).equals(event.getPos())) {
 			if (handler.isInNetwork(event.getPos())) {
 				Component<Object, BlockPos, Object> component = handler.getComponentAt(event.getPos());
+				if (component.instance(level).equals(event.getState())) return; // No real update, ignore
 				handler.addToNetwork(component); // The component is already added to the network at this point, this call just ensures that the node maps are up to date
 				component.setChanged();
 				handler.updateNetwork(component.pos());

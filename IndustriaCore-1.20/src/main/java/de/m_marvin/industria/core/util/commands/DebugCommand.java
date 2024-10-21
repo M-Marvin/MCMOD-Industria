@@ -1,10 +1,12 @@
 package de.m_marvin.industria.core.util.commands;
 
+import java.util.Optional;
+
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
+import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkHandlerCapability;
 import de.m_marvin.industria.core.registries.Capabilities;
@@ -35,14 +37,11 @@ public class DebugCommand {
 				)
 		)
 		.then(
-				Commands.literal("print_node")
+				Commands.literal("print_nodes")
 				.then(
 						Commands.argument("pos", BlockPosArgument.blockPos())
-						.then(
-								Commands.argument("node", IntegerArgumentType.integer())
-								.executes((source) ->
-										printNode(source, BlockPosArgument.getBlockPos(source, "pos"), IntegerArgumentType.getInteger(source, "node"))
-								)
+						.executes((source) ->
+								printNodes(source, BlockPosArgument.getBlockPos(source, "pos"))
 						)
 				)
 		));
@@ -64,23 +63,23 @@ public class DebugCommand {
 		return 1;
 	}
 	
-	public static int printNode(CommandContext<CommandSourceStack> source, BlockPos position, int node) {
+	public static int printNodes(CommandContext<CommandSourceStack> source, BlockPos position) {
 		ServerLevel level = source.getSource().getLevel();
 		ElectricNetworkHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_HANDLER_CAPABILITY);
+		
 		ElectricNetworkHandlerCapability.Component<Object, BlockPos, Object> component = handler.getComponentAt(position);
 		if (component == null) return 0;
-		ElectricNetwork network = handler.getCircuitWithComponent(component);
-		if (network == null) return 0;
+		NodePos[] nodes = component.getNodes(level);
 		
-		NodePos nodePos = new NodePos(position, node);
-		String[] lanes = component.getWireLanes(level, nodePos);
-		
-		source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.lane_voltages.title", lanes.length), false);
-		for (int laneId = 0; laneId < lanes.length; laneId++) {
-			String lane = lanes[laneId];
-			double floatVolatage = network.getFloatingNodeVoltage(nodePos, laneId, lane).orElseGet(() -> 0.0);
-			
-			source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.lane_voltages.entry", lane, floatVolatage), false);
+		source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.node_voltages.title", nodes.length), false);
+		for (NodePos node : nodes) {
+			source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.node_voltages.node", node.getNode()), false);
+			String[] lanes = ElectricUtility.getLaneLabelsSummarized(level, node);
+			for (int i = 0; i < lanes.length; i++) {
+				Optional<Double> potential = handler.getFloatingNodeVoltage(node, i, lanes[i]);
+				final int id = i;
+				source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.node_voltages.lane", id, lanes[id], potential.isPresent() ? Double.toString(potential.get()) : "N/A"), false);
+			}
 		}
 		return 1;
 	}

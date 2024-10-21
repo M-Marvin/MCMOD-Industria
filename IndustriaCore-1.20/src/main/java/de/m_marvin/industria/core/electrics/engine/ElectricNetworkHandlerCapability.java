@@ -24,6 +24,7 @@ import de.m_marvin.industria.core.Config;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitBreakEvent;
 import de.m_marvin.industria.core.conduits.engine.ConduitEvent.ConduitPlaceEvent;
+import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.network.SSyncComponentsPackage;
@@ -211,8 +212,10 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		
 		if (event.getState().getBlock() instanceof IElectricBlock electric && electric.getConnectorMasterPos(level, event.getPos(), event.getState()).equals(event.getPos())) {
 			if (handler.isInNetwork(event.getPos())) {
-				if (handler.getComponentAt(event.getPos()).instance(level).equals(event.getState())) return; // No real update, ignore
-				handler.getComponentAt(event.getPos()).setChanged();
+				Component<Object, BlockPos, Object> component = handler.getComponentAt(event.getPos());
+				handler.addToNetwork(component); // The component is already added to the network at this point, this call just ensures that the node maps are up to date
+				component.setChanged();
+				handler.updateNetwork(component.pos());
 			} else {
 				IElectricBlock block = (IElectricBlock) event.getState().getBlock();
 				handler.addComponent(event.getPos(), block, event.getState());
@@ -229,7 +232,10 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 		if (event.getConduitState().getConduit() instanceof IElectricConduit) {
 			if (event instanceof ConduitPlaceEvent) {
 				if (handler.isInNetwork(event.getPosition())) {
-					handler.getComponentAt(event.getPosition()).setChanged();
+					Component<Object, ConduitPos, Object> component = handler.getComponentAt(event.getPosition());
+					handler.addToNetwork(component); // The component is already added to the network at this point, this call just ensures that the node maps are up to date
+					component.setChanged();
+					handler.updateNetwork(component.pos());
 				} else {
 					IElectricConduit conduit = (IElectricConduit) event.getConduitState().getConduit();
 					handler.addComponent(event.getPosition(), conduit, event.getConduitState());
@@ -582,6 +588,7 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 	 * Adds a component to the network and updates it and its components
 	 */
 	public <I, P, T> void addComponent(P pos, IElectric<I, P, T> type, I instance) {
+		
 		Component<?, ?, ?> component = this.pos2componentMap.get(pos);
 		if (component != null) {
 			if (!component.type.equals(type)) {
@@ -594,7 +601,9 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 			ChunkPos chunkPos = component2.getAffectedChunk(level);
 			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> this.level.getChunk(chunkPos.x, chunkPos.z)), new SSyncComponentsPackage(component2, chunkPos, SyncRequestType.ADDED));
 		}
+
 		updateNetwork(pos);
+
 	}
 	
 	/**

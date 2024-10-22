@@ -38,8 +38,9 @@
 "industriacore.commands.fixelectrics.noelectric":		"Žiadna kocka alebo linka s elektrickými vlastnosťami!",
 "industriacore.commands.fixelectrics.success":			"%1$s kocky a %2$s linky boli aktualizované",	
 "industriacore.commands.fixelectrics.areatolarge":		"Príliš veľka oblasť! %1$s > %2$s",
-"industriacore.commands.debug.lane_voltages.title":		"Dostupné vnútoré napätia stôp: %d",
-"industriacore.commands.debug.lane_voltages.entry":		"Stopa '%s': %d V",
+"industriacore.commands.debug.node_voltages.title":		"Dostupné uzly: %d",
+"industriacore.commands.debug.node_voltages.node":		"ID: %d",
+"industriacore.commands.debug.node_voltages.lane":		"→ %d \"%s\": %d V",
 "industriacore.commands.debug.circuit_copied":			"Zoznam obvodových sietí bol skopírovaný do schránky",
 
 "industriacore.argument.contraption.options.unknown":			"Neznáma možnosť \"%s\"",

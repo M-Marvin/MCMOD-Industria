@@ -38,8 +38,9 @@
 "industriacore.commands.fixelectrics.noelectric":		"Aucun/e bloc ou conduite avec des propriétés électriques!",
 "industriacore.commands.fixelectrics.success":			"%1$s blocs et %2$s conduites actualisé(e)s",
 "industriacore.commands.fixelectrics.areatolarge":		"Espace trop grand! %1$s > %2$s",
-"industriacore.commands.debug.lane_voltages.title":		"Tensions de voie internes disponibles: %d",
-"industriacore.commands.debug.lane_voltages.entry":		"Nœud '%s': %d V",
+"industriacore.commands.debug.node_voltages.title":		"Nœuds disponibles: %d",
+"industriacore.commands.debug.node_voltages.node":		"ID: %d",
+"industriacore.commands.debug.node_voltages.lane":		"→ %d \"%s\": %d V",
 "industriacore.commands.debug.circuit_copied":			"Liste des réseaux de circuits copiée dans le presse-papiers",
 
 "industriacore.argument.contraption.options.unknown":			"Option inconnue : \"%s\"",

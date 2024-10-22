@@ -1,6 +1,6 @@
 {
 
-"industriacore.item.info.conduit.nodeSelect":		"A fost selectat primul punct (Anulați cu Shift + clic dreapta)",
+"industriacore.item.info.conduit.nodeSelect":		"A fost selectat primul nod (Anulați cu Shift + clic dreapta)",
 "industriacore.item.info.conduit.changeLength":		"Lungimea liniei: x%1$s (Anulați cu Shift + clic dreapta)",
 "industriacore.item.info.conduit.placed":		"A fost plasată linia",
 "industriacore.item.info.conduit.abbort":		"A fost anulată plasarea liniei",
@@ -38,8 +38,9 @@
 "industriacore.commands.fixelectrics.noelectric":		"Fără bloc sau linie cu proprietăți electrice!",
 "industriacore.commands.fixelectrics.success":			"Au fost actualizate %1$s blocuri și %2$s linii",
 "industriacore.commands.fixelectrics.areatolarge":		"Zona prea mare! %1$s > %2$s",
-"industriacore.commands.debug.lane_voltages.title":		"Tensiuni interne disponibile pe calea: %d",
-"industriacore.commands.debug.lane_voltages.entry":		"Calea '%s': %d V",
+"industriacore.commands.debug.node_voltages.title":		"Nodurile disponibile: %d",
+"industriacore.commands.debug.node_voltages.node":		"ID: %d",
+"industriacore.commands.debug.node_voltages.lane":		"→ %d \"%s\": %d V",
 "industriacore.commands.debug.circuit_copied":			"Lista rețelelor de circuite a fost copiată în clipboard",
 
 "industriacore.argument.contraption.options.unknown":			"Opțiune necunoscută: \"%s\"",

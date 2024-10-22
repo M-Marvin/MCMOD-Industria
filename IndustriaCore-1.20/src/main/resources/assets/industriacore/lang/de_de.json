@@ -1,6 +1,6 @@
 {
 
-"industriacore.item.info.conduit.nodeSelect":		"Erster Punkt ausgewählt (Abbrechen mit Umschalt + Rechtsklick)",
+"industriacore.item.info.conduit.nodeSelect":		"Erster Knoten ausgewählt (Abbrechen mit Umschalt + Rechtsklick)",
 "industriacore.item.info.conduit.changeLength":		"Länge der Leitung: x%1$s (Abbrechen mit Umschalt + Rechtsklick)",
 "industriacore.item.info.conduit.placed":		"Leitung platziert",
 "industriacore.item.info.conduit.abbort":		"Platzieren der Leitung abgebrochen",
@@ -39,8 +39,8 @@
 "industriacore.commands.fixelectrics.success":			"%1$s Blöcke und %2$s Leitungen aktualisiert",
 "industriacore.commands.fixelectrics.areatolarge":		"Bereich zu groß! %1$s > %2$s",
 "industriacore.commands.debug.node_voltages.title":		"Verfügbare Knoten: %d",
-"industriacore.commands.debug.node_voltages.node":		" Id:%d",
-"industriacore.commands.debug.node_voltages.lane":		" - %d '%s': %d V",
+"industriacore.commands.debug.node_voltages.node":		"ID: %d",
+"industriacore.commands.debug.node_voltages.lane":		"→ %d '%s': %d V",
 "industriacore.commands.debug.circuit_copied":			"Schaltungsnetzliste in Zwischenablage kopiert",
 
 "industriacore.argument.contraption.options.unknown":			"Unbekannte Option '%s'!",

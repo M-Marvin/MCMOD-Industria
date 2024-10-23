@@ -1,11 +1,18 @@
 package de.m_marvin.industria.core.client.electrics.screens;
 
-import com.mojang.blaze3d.systems.RenderSystem;
+import java.util.List;
+import java.util.stream.Stream;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.math.Axis;
+
+import de.m_marvin.industria.core.client.electrics.screens.AbstractJunctionEditScreen.CableNode.WireNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.containers.AbstractJunctionEditContainer;
+import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.types.Direction2d;
+import de.m_marvin.univec.impl.Vec2f;
 import de.m_marvin.univec.impl.Vec2i;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
@@ -160,9 +167,9 @@ public abstract class AbstractJunctionEditScreen<B extends BlockEntity & IJuncti
 			if (this.cableNode != null) {
 				String[] lanes = screen.menu.getWireLabels(this.cableNode);
 				this.wireNodes = new WireNode[lanes.length];
-				int offset1 = -this.wireNodes.length * 10 / 2;
+				int offset1 = -this.wireNodes.length * WireNode.WIRE_NODE_WIDTH / 2;
 				for (int i = 0; i < lanes.length; i++) {
-					this.wireNodes[i] = new WireNode(this, i, i * 10 + offset1, lanes[i]);
+					this.wireNodes[i] = new WireNode(this, i, i * WireNode.WIRE_NODE_WIDTH + offset1, lanes[i]);
 					this.screen.addWidget(this.wireNodes[i]);
 				}
 				this.screen.addWidget(this);
@@ -227,9 +234,9 @@ public abstract class AbstractJunctionEditScreen<B extends BlockEntity & IJuncti
 			
 			String[] lanes = this.screen.menu.getInternalLabels(this.id);
 			this.wireNodes = new WireNode[lanes.length];
-			int offset1 = -this.wireNodes.length * 10 / 2;
+			int offset1 = -this.wireNodes.length * WireNode.WIRE_NODE_WIDTH / 2;
 			for (int i = 0; i < lanes.length; i++) {
-				this.wireNodes[i] = new WireNode(this, i, i * 10 + offset1, lanes[i]);
+				this.wireNodes[i] = new WireNode(this, i, i * WireNode.WIRE_NODE_WIDTH + offset1, lanes[i]);
 				this.screen.addWidget(this.wireNodes[i]);
 			}
 			this.screen.addWidget(this);
@@ -244,6 +251,7 @@ public abstract class AbstractJunctionEditScreen<B extends BlockEntity & IJuncti
 	
 	protected NodePos[] conduitNodes;
 	protected CableNode[] cableNodes;
+	protected boolean connectsOnlyToInternal;
 	
 	protected EditBox namingField;
 	protected CableNode.WireNode selectedNode = null;
@@ -304,11 +312,78 @@ public abstract class AbstractJunctionEditScreen<B extends BlockEntity & IJuncti
 	
 	public abstract ResourceLocation getJunctionBoxTexture();
 	
+	public void renderConnection(GuiGraphics graphics, WireNode nodeA, WireNode nodeB, int color) {
+		
+		Vec2f p1 = new Vec2f(nodeA.getPosition()).add(WireNode.WIRE_NODE_WIDTH / 2F, WireNode.WIRE_NODE_WIDTH / 2F);
+		Vec2f p2 = new Vec2f(nodeB.getPosition()).add(WireNode.WIRE_NODE_WIDTH / 2F, WireNode.WIRE_NODE_WIDTH / 2F);
+		Vec2f v1 = new Vec2f(MathUtility.getDirectionVec2D(nodeA.getNode().orientation));
+		Vec2f v2 = new Vec2f(MathUtility.getDirectionVec2D(nodeB.getNode().orientation));
+		Vec2f[] va = MathUtility.makeBezierVectors2D(p1, v1, p2, v2, 10F);
+
+		Vec2f p = p1.add((float) this.leftPos, (float) this.topPos);
+		for (Vec2f v : va) {
+			float a = (float) v.angle(new Vec2f(0, 1));
+			
+			graphics.pose().pushPose();
+			graphics.pose().translate(p.x, p.y, 0);
+			graphics.pose().mulPose(Axis.ZP.rotation(a));
+			RenderSystem.setShaderColor(0.5F, 0.5F, 0.5F, 1F);
+			graphics.fill(-2, 0, 0, (int) Math.ceil(v.length()), color | 0xFF000000);
+			RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
+			graphics.fill(-1, 0, 0, (int) Math.ceil(v.length()), color | 0xFF000000);
+			graphics.pose().popPose();
+
+			p.addI(v);
+		}
+
+	}
+	
 	@Override
 	protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
 		
 		renderBackground(pGuiGraphics);
 		pGuiGraphics.blit(getJunctionBoxTexture(), this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+		
+	}
+	
+	@Override
+	public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+		super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+		
+		List<String> labels = Stream.of(this.cableNodes).flatMap(cn -> Stream.of(cn.wireNodes)).map(wn -> wn.label).distinct().filter(s -> !s.isBlank()).toList();
+		
+		if (!this.connectsOnlyToInternal) {
+			for (int i = 0; i < this.cableNodes.length; i++) {
+				for (WireNode wire1 : this.cableNodes[i].wireNodes) {
+					if (wire1.label.isBlank()) continue;
+					for (int i2 = i + 1; i2 < this.cableNodes.length; i2++) {
+						for (WireNode wire2 : this.cableNodes[i2].wireNodes) {
+							if (wire1.label.equals(wire2.label)) {
+								int index = labels.indexOf(wire1.label);
+								int color = WIRE_COLORS[index % WIRE_COLORS.length];
+								renderConnection(pGuiGraphics, wire1, wire2, color);
+							}
+						}
+					}
+				}
+			}
+		} else {
+			for (int i = 0; i < this.cableNodes.length; i++) {
+				if (!(this.cableNodes[i] instanceof InternalNode)) continue;
+				for (WireNode wire1 : this.cableNodes[i].wireNodes) {
+					if (wire1.label.isBlank()) continue;
+					for (int i2 = 0; i2 < this.cableNodes.length; i2++) {
+						for (WireNode wire2 : this.cableNodes[i2].wireNodes) {
+							if (wire1.label.equals(wire2.label)) {
+								int index = labels.indexOf(wire1.label);
+								int color = WIRE_COLORS[index % WIRE_COLORS.length];
+								renderConnection(pGuiGraphics, wire1, wire2, color);
+							}
+						}
+					}
+				}
+			}
+		}
 		
 		for (CableNode node : this.cableNodes) {
 			if (node != null) node.renderBg(pGuiGraphics, pPartialTick, pMouseX, pMouseY);

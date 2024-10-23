@@ -8,7 +8,6 @@ buildscript {
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT' // Required for VS2
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.parchmentmc:librarian:1.+'
-
     }
 }
 

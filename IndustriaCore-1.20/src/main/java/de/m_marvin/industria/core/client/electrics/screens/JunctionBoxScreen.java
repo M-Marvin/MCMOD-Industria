@@ -34,6 +34,7 @@ public class JunctionBoxScreen<B extends BlockEntity & IJunctionEdit, C extends 
 					(position, orientation, internalId) -> nodes.add(new InternalNode(this, position, orientation, internalId))
 			);
 			this.cableNodes = nodes.toArray(i -> new CableNode[i]);
+			this.connectsOnlyToInternal = this.menu.connectsOnlyToInternal();
 		} catch (Throwable e) {
 			e.printStackTrace();
 			this.cableNodes = new CableNode[0];

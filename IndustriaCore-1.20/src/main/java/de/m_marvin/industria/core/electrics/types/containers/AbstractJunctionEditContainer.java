@@ -48,6 +48,10 @@ public abstract class AbstractJunctionEditContainer<T extends BlockEntity & IJun
 		return this.blockEntity.getInternalWireLabels(new NodePos(this.blockEntity.getJunctionBlockPos(), id));
 	}
 
+	public boolean connectsOnlyToInternal() {
+		return this.blockEntity.connectsOnlyToInternal();
+	}
+	
 	public void setInternalWireLabels(int id, String[] lanes) {
 		NodePos node = new NodePos(this.blockEntity.getJunctionBlockPos(), id);
 		this.blockEntity.setInternalWireLabels(node, lanes);

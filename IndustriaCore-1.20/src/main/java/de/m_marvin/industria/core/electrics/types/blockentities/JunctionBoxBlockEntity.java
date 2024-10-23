@@ -167,10 +167,15 @@ public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider,
 
 	@Override
 	public <B extends BlockEntity & IJunctionEdit> void setupScreenConduitNodes(JunctionBoxContainer<B> junctionBoxContainer, NodePos[] conduitNodes, ExternalNodeConstructor externalNodeConstructor, InternalNodeConstructor internalNodeConstructor) {
-		externalNodeConstructor.construct(new Vec2i(70, 8), 	Direction2d.UP, 	conduitNodes[0]);
-		externalNodeConstructor.construct(new Vec2i(70, 112), 	Direction2d.DOWN, 	conduitNodes[1]);
-		externalNodeConstructor.construct(new Vec2i(8, 70), 	Direction2d.LEFT, 	conduitNodes[2]);
-		externalNodeConstructor.construct(new Vec2i(112, 70), 	Direction2d.RIGHT, 	conduitNodes[3]);
+		externalNodeConstructor.construct(new Vec2i(69, 8), 	Direction2d.UP, 	conduitNodes[0]);
+		externalNodeConstructor.construct(new Vec2i(69, 112), 	Direction2d.DOWN, 	conduitNodes[1]);
+		externalNodeConstructor.construct(new Vec2i(8, 69), 	Direction2d.LEFT, 	conduitNodes[2]);
+		externalNodeConstructor.construct(new Vec2i(112, 69), 	Direction2d.RIGHT, 	conduitNodes[3]);
+	}
+	
+	@Override
+	public boolean connectsOnlyToInternal() {
+		return false;
 	}
 
 	@Override

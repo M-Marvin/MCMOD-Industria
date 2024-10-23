@@ -183,10 +183,15 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 	public <B extends BlockEntity & IJunctionEdit> void setupScreenConduitNodes(
 			JunctionBoxContainer<B> abstractJunctionBoxScreen, NodePos[] conduitNodes,
 			ExternalNodeConstructor externalNodeConstructor, InternalNodeConstructor internalNodeConstructor) {
-		externalNodeConstructor.construct(new Vec2i(70, 8), 	Direction2d.UP, 	conduitNodes[0]);
-		internalNodeConstructor.construct(new Vec2i(70, 112), 	Direction2d.DOWN, 	0);
+		externalNodeConstructor.construct(new Vec2i(69, 8), 	Direction2d.UP, 	conduitNodes[0]);
+		internalNodeConstructor.construct(new Vec2i(69, 112), 	Direction2d.DOWN, 	0);
 	}
 
+	@Override
+	public boolean connectsOnlyToInternal() {
+		return true;
+	}
+	
 	@Override
 	public Level getJunctionLevel() {
 		return this.level;

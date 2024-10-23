@@ -35,6 +35,13 @@ repositories {
 	mavenCentral()
 	maven { url 'https://jitpack.io' }
 	mavenLocal()
+	maven {
+		url 'https://maven.pkg.github.com/m-marvin/library-unifiedvectors'
+		credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+        }
+	}
 }
 
 configurations {
@@ -52,19 +59,11 @@ dependencies {
 	// CommandLineParser
 	shade 'com.github.M-Marvin:LIBRARY-CommandLineParser:main-SNAPSHOT'
 	
-	// OpenUI
-	//shade 'com.github.M-Marvin:LIBRARY-OpenUI:main-SNAPSHOT'
-	
 	// GSON
 	implementation "com.google.code.gson:gson:2.9.1"
 	
 	// UnifiedVectors
-	//shade 'com.github.M-Marvin:LIBRARY-UnifiedVectors:main-SNAPSHOT'
-	
-	// NGLink
-	shade 'com.github.M-Marvin:LIBRARY-NGLink:main-SNAPSHOT'
-	
-	shade 'de.m_marvin.electronflow:ElectronFlowJNI:0.3_alpha_2'
+	shade "de.m_marvin.univec:univec:1.4.1"
 	
 }
 

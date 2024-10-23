@@ -33,9 +33,7 @@ public interface IJunctionEdit {
 	public default void setInternalWireLabels(NodePos node, String[] laneLabels) {
 		ElectricUtility.setLaneLabels(getJunctionLevel(), node, c -> !c.isWire(), laneLabels);
 	}
-	
-	public Level getJunctionLevel();
-	public BlockPos getJunctionBlockPos();
+
 	public default NodePos[] getEditCableNodes(Direction playerFacing, Direction playerHorizontalFacing) {
 		Level level = this.getJunctionLevel();
 		BlockPos pos = this.getJunctionBlockPos();
@@ -45,6 +43,10 @@ public interface IJunctionEdit {
 		}
 		return new NodePos[] {};
 	}
+	
+	public boolean connectsOnlyToInternal();
+	public Level getJunctionLevel();
+	public BlockPos getJunctionBlockPos();
 	public <B extends BlockEntity & IJunctionEdit> void setupScreenConduitNodes(JunctionBoxContainer<B> abstractJunctionBoxScreen, NodePos[] conduitNodes, ExternalNodeConstructor externalNodeConstructor, InternalNodeConstructor internalNodeConstructor);
 	
 }

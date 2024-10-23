@@ -38,8 +38,9 @@
 "industriacore.commands.fixelectrics.success":							"",
 "industriacore.commands.fixelectrics.areatolarge":						"",
 "industriacore.commands.fixelectrics.noelectric":						"",
-"industriacore.commands.debug.lane_voltages.title":						"",
-"industriacore.commands.debug.lane_voltages.entry":						"",
+"industriacore.commands.debug.node_voltages.title":						"",
+"industriacore.commands.debug.node_voltages.node":						"",
+"industriacore.commands.debug.node_voltages.lane":						"",
 "industriacore.commands.debug.circuit_copied":							"",
 
 "industriacore.argument.contraption.options.unknown":					"",

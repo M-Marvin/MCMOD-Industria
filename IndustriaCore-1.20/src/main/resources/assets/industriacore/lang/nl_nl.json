@@ -1,6 +1,6 @@
 {
 
-"industriacore.item.info.conduit.nodeSelect":		"Erste punkt geselecteerd (Annuleer met Shift + klik met de rechtermuisknop)",
+"industriacore.item.info.conduit.nodeSelect":		"Erste knooppunt geselecteerd (Annuleer met Shift + klik met de rechtermuisknop)",
 "industriacore.item.info.conduit.changeLength":		"Lengte van de lijn: x%1$s (Annuleer met Shift + klik met de rechtermuisknop)",
 "industriacore.item.info.conduit.placed":		"Lijn geplaatst",
 "industriacore.item.info.conduit.abbort":		"Plaatsing van de lijn geannuleerd",
@@ -38,8 +38,9 @@
 "industriacore.commands.fixelectrics.noelectric":		"Geen block of lijn met elektrische eigenschappen!",
 "industriacore.commands.fixelectrics.success":			"%1$s blokken en %2$s lijnen bijgewerkt",
 "industriacore.commands.fixelectrics.areatolarge":		"Gebied te groot! %1$s > %2$s",
-"industriacore.commands.debug.lane_voltages.title":		"Beschikbare interne spoorspanningen: %d",
-"industriacore.commands.debug.lane_voltages.entry":		"Spoor '%s': %d V",
+"industriacore.commands.debug.node_voltages.title":		"Beschikbare knooppunten: %d",
+"industriacore.commands.debug.node_voltages.node":		"ID: %d",
+"industriacore.commands.debug.node_voltages.lane":		"→ %d '%s': %d V",
 "industriacore.commands.debug.circuit_copied":			"Circuitnetlijst gekopieerd naar klembord",
 
 "industriacore.argument.contraption.options.unknown":			"Optie '%s' is onbekend",

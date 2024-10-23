@@ -10,6 +10,6 @@ Leitung (alle)				Leitung			Conduit			Conduite		Conducto
 Draht (unisoliert)			Draht			Wire			Fil			Alambre
 Draht (isoliert) / Kabel		Kabel			Cable			Câble			Cable
 
-Einige Items sollten evtl auch im Code entspr. der engl. Übersetzungen abgepasst werden, falls das kein Problem darstellt. (siehe en_us.json)
+Einige Items sollten evtl auch im Code entspr. der engl. Übersetzungen angepasst werden, falls das kein Problem darstellt. (siehe en_us.json)
 
 SK: Unterscheidung metallischer Erze und nichtmetallischer "Erze"!

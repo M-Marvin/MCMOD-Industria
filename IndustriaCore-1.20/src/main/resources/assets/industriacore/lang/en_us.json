@@ -39,8 +39,8 @@
 "industriacore.commands.fixelectrics.success":							"Updated %1$s blocks and %2$s conduits",
 "industriacore.commands.fixelectrics.areatolarge":						"Space too large! %1$s > %2$s",
 "industriacore.commands.debug.node_voltages.title":						"Available nodes: %d",
-"industriacore.commands.debug.node_voltages.node":						" Id:%d",
-"industriacore.commands.debug.node_voltages.lane":						" - %d '%s': %d V",
+"industriacore.commands.debug.node_voltages.node":						"ID: %d",
+"industriacore.commands.debug.node_voltages.lane":						"→ %d '%s': %d V",
 "industriacore.commands.debug.circuit_copied":							"Circuit netlist copied to clipboard",
 
 "industriacore.argument.contraption.options.unknown":					"Unknown option '%s'",

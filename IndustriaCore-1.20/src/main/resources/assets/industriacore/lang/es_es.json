@@ -38,8 +38,9 @@
 "industriacore.commands.fixelectrics.noelectric":		"¡Sin bloque o conducto con propriedades eléctricas!",
 "industriacore.commands.fixelectrics.success":			"%1$s bloques y %2$s conductos actualizados",
 "industriacore.commands.fixelectrics.areatolarge":		"¡Espaco demasiado largo! %1$s > %2$s",
-"industriacore.commands.debug.lane_voltages.title":		"Voltajes de rastro internos disponibles: %d",
-"industriacore.commands.debug.lane_voltages.entry":		"Nodo '%s': %d V",
+"industriacore.commands.debug.node_voltages.title":		"Nodos disponibles: %d",
+"industriacore.commands.debug.node_voltages.node":		"ID: %d",
+"industriacore.commands.debug.node_voltages.lane":		"→ %d «%s»: %d V",
 "industriacore.commands.debug.circuit_copied":			"Lista de conexiones del circuito copiada al portapapeles",
 
 "industriacore.argument.contraption.options.unknown":			"Opción desconocida: «%s»",

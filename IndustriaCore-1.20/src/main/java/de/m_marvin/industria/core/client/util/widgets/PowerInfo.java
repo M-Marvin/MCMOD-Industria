@@ -53,10 +53,8 @@ public class PowerInfo extends AbstractWidget {
 	
 	@Override
 	protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-		
 		this.voltageBar.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
 		this.powerBar.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
-		
 	}
 	
 	@Override

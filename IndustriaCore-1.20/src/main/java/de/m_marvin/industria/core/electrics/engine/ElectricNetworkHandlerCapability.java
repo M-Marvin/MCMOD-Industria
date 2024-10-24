@@ -197,6 +197,14 @@ public class ElectricNetworkHandlerCapability implements ICapabilitySerializable
 				e.printStackTrace();
 			}
 		}
+		counter = this.circuitFileCounter;
+		while ((circuitFile = new File(dataFolder, CIRCUIT_FILE_NAME + counter++ + DATALIST_FILE_EXTENSION)).isFile()) {
+			try {
+				Files.delete(circuitFile.toPath());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public ElectricNetworkHandlerCapability(Level level) {

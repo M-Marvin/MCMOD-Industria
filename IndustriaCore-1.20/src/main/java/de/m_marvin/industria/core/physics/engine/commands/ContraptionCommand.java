@@ -32,7 +32,6 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
-import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.ClickEvent.Action;
@@ -42,7 +41,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 
 public class ContraptionCommand {
 	
@@ -224,22 +222,7 @@ public class ContraptionCommand {
 								)
 						)
 				)
-		).then(
-				Commands.literal("test")
-				.then(
-						Commands.argument("vec", Vec3Argument.vec3())
-						.executes((source) -> 
-								test(source, Vec3Argument.getVec3(source, "vec"))
-						)
-				)
 		));
-	}
-	
-	public static int test(CommandContext<CommandSourceStack> source, Vec3 vec) {
-		
-		
-		
-		return 1;
 	}
 	
 	public static int setVelocity(CommandContext<CommandSourceStack> source, Collection<Contraption> contraptions, Vec3Relative velocity, Vec3Relative omega) {

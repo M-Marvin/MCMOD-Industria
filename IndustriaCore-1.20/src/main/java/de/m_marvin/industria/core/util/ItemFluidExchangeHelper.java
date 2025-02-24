@@ -15,6 +15,8 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 public class ItemFluidExchangeHelper {
 	
+	private ItemFluidExchangeHelper() {}
+	
 	public static ItemStack drainFluid(ItemStack sourceStack, FluidStack fluidStack, int maxCapacity, Consumer<FluidStack> fluidStackConsumer) {
 		@NotNull LazyOptional<IFluidHandlerItem> fluidHandlerCap = sourceStack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM);
 		if (fluidHandlerCap.isPresent()) {

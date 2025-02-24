@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "industria:block/materials/weathered_brass_plates"
-    }
-  }
+	"variants": {
+		"": {
+			"model": "industria:block/materials/weathered_brass_plates"
+		}
+	}
 }

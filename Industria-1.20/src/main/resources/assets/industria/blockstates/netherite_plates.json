@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "industria:block/materials/netherite_plates"
-    }
-  }
+	"variants": {
+		"": {
+			"model": "industria:block/materials/netherite_plates"
+		}
+	}
 }

@@ -1,35 +1,35 @@
 {
-  "variants": {
-    "facing=east,powered=false": {
-      "model": "industria:block/redstone/redstone_transistor",
-      "y": 270
-    },
-    "facing=north,powered=false": {
-      "model": "industria:block/redstone/redstone_transistor",
-      "y": 180
-    },
-    "facing=south,powered=false": {
-      "model": "industria:block/redstone/redstone_transistor"
-    },
-    "facing=west,powered=false": {
-      "model": "industria:block/redstone/redstone_transistor",
-      "y": 90
-    },
-    
-    "facing=east,powered=true": {
-      "model": "industria:block/redstone/redstone_transistor_on",
-      "y": 270
-    },
-    "facing=north,powered=true": {
-      "model": "industria:block/redstone/redstone_transistor_on",
-      "y": 180
-    },
-    "facing=south,powered=true": {
-      "model": "industria:block/redstone/redstone_transistor_on"
-    },
-    "facing=west,powered=true": {
-      "model": "industria:block/redstone/redstone_transistor_on",
-      "y": 90
-    }
-  }
+	"variants": {
+		"facing=east,powered=false": {
+			"model": "industria:block/redstone/redstone_transistor",
+			"y": 270
+		},
+		"facing=north,powered=false": {
+			"model": "industria:block/redstone/redstone_transistor",
+			"y": 180
+		},
+		"facing=south,powered=false": {
+			"model": "industria:block/redstone/redstone_transistor"
+		},
+		"facing=west,powered=false": {
+			"model": "industria:block/redstone/redstone_transistor",
+			"y": 90
+		},
+		
+		"facing=east,powered=true": {
+			"model": "industria:block/redstone/redstone_transistor_on",
+			"y": 270
+		},
+		"facing=north,powered=true": {
+			"model": "industria:block/redstone/redstone_transistor_on",
+			"y": 180
+		},
+		"facing=south,powered=true": {
+			"model": "industria:block/redstone/redstone_transistor_on"
+		},
+		"facing=west,powered=true": {
+			"model": "industria:block/redstone/redstone_transistor_on",
+			"y": 90
+		}
+	}
 }

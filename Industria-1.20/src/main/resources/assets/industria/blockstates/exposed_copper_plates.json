@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "industria:block/materials/exposed_copper_plates"
-    }
-  }
+	"variants": {
+		"": {
+			"model": "industria:block/materials/exposed_copper_plates"
+		}
+	}
 }

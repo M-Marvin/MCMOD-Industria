@@ -1,5 +1,5 @@
 {
-  "type": "industria:generator_fuel",
-  "fluid": "minecraft:lava",
-  "wattsPerMB": 100000
+	"type": "industria:generator_fuel",
+	"fluid": "minecraft:lava",
+	"wattsPerMB": 100000
 }

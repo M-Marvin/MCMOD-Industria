@@ -17,7 +17,7 @@ import net.minecraftforge.client.model.data.ModelData;
 
 public class SimpleKineticBlockEntityRenderer<T extends BlockEntity & IKineticBlockEntity> implements BlockEntityRenderer<T> {
 	
-	protected BlockRenderDispatcher dispatcher;
+	protected final BlockRenderDispatcher dispatcher;
 	
 	public SimpleKineticBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
 		this.dispatcher = context.getBlockRenderDispatcher();

@@ -53,18 +53,18 @@ public class CompoundBlockEntity extends BlockEntity implements IKineticBlockEnt
 		return parts;
 	}
 	
-	public int coundParts() {
+	public int countParts() {
 		return (int) parts.values().stream()
 			.filter(v -> !v.getState().isAir())
 			.count();
 	}
 	
 	public boolean isEmpty() {
-		return coundParts() == 0;
+		return countParts() == 0;
 	}
 	
 	public void checkCompound() {
-		int i = coundParts();
+		int i = countParts();
 		if (i == 0) {
 			level.setBlockAndUpdate(worldPosition, Blocks.AIR.defaultBlockState());
 		} else if (i == 1) {
@@ -76,9 +76,10 @@ public class CompoundBlockEntity extends BlockEntity implements IKineticBlockEnt
 			} else {
 				level.removeBlockEntity(worldPosition);
 			}
+		} else {
+			setChanged();
+			GameUtility.triggerClientSync(level, worldPosition);
 		}
-		setChanged();
-		GameUtility.triggerClientSync(level, worldPosition);
 	}
 	
 	@Override

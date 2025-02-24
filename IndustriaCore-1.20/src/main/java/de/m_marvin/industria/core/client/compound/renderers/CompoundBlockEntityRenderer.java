@@ -18,8 +18,8 @@ import net.minecraftforge.client.model.data.ModelData;
 
 public class CompoundBlockEntityRenderer<T extends CompoundBlockEntity> implements BlockEntityRenderer<T> {
 
-	protected BlockRenderDispatcher blockDispatcher;
-	protected BlockEntityRenderDispatcher blockEntityDispatcher;
+	protected final BlockRenderDispatcher blockDispatcher;
+	protected final BlockEntityRenderDispatcher blockEntityDispatcher;
 	
 	public CompoundBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
 		this.blockDispatcher = context.getBlockRenderDispatcher();

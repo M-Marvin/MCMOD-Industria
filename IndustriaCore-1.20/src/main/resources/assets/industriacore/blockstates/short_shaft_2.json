@@ -1,10 +1,10 @@
 {
-  "variants": {
-  	"facing=north": { "model": "industriacore:block/short_shaft_2" },
-  	"facing=south": { "model": "industriacore:block/short_shaft_2", "y": -180 },
-  	"facing=east": { "model": "industriacore:block/short_shaft_2", "y": 90 },
-  	"facing=west": { "model": "industriacore:block/short_shaft_2", "y": -90 },
-  	"facing=up": { "model": "industriacore:block/short_shaft_2", "x": -90 },
-  	"facing=down": { "model": "industriacore:block/short_shaft_2", "x": 90 }
-  }
+	"variants": {
+		"facing=north": { "model": "industriacore:block/short_shaft_2" },
+		"facing=south": { "model": "industriacore:block/short_shaft_2", "y": -180 },
+		"facing=east": { "model": "industriacore:block/short_shaft_2", "y": 90 },
+		"facing=west": { "model": "industriacore:block/short_shaft_2", "y": -90 },
+		"facing=up": { "model": "industriacore:block/short_shaft_2", "x": -90 },
+		"facing=down": { "model": "industriacore:block/short_shaft_2", "x": 90 }
+	}
 }

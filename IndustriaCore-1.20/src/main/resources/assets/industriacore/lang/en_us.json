@@ -103,6 +103,8 @@
 "block.industriacore.short_shaft_2":									"Small Shaft",
 "block.industriacore.motor":											"Rotation source",
 "block.industriacore.compound_block":									"Compound Block",
+"block.industriacore.belt_shaft":										"Riemen Aufsatz",
+"block.industriacore.belt":												"Riemen",
 "item.industriacore.electric_wire":										"Cable",
 "conduit.industriacore.electric_conduit":								"Cable",
 

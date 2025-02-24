@@ -1,19 +1,19 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "group": "iron_ingot",
-  "key": {
-    "#": {
-      "item": "industria:brass_nugget"
-    }
-  },
-  "pattern": [
-    "###",
-    "###",
-    "###"
-  ],
-  "result": {
-    "item": "industria:brass_ingot"
-  },
-  "show_notification": true
+	"type": "minecraft:crafting_shaped",
+	"category": "misc",
+	"group": "iron_ingot",
+	"key": {
+		"#": {
+			"item": "industria:brass_nugget"
+		}
+	},
+	"pattern": [
+		"###",
+		"###",
+		"###"
+	],
+	"result": {
+		"item": "industria:brass_ingot"
+	},
+	"show_notification": true
 }

@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "industria:item/materials/crushed_nether_gold_ore"
-  }
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"layer0": "industria:item/materials/crushed_nether_gold_ore"
+	}
 }

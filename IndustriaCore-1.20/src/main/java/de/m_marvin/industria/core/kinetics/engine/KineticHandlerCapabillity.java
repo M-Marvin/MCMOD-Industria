@@ -528,6 +528,9 @@ public class KineticHandlerCapabillity implements ICapabilitySerializable<ListTa
 			
 			KineticReference ref = neighbors.poll();
 			
+			// TODO kinetic update optimization
+			//System.out.println(neighbors.size() + " " + tnd.size());
+			
 			// Get block at reference
 			BlockPos pos1a = ref.pos();
 			BlockState state1a = this.level.getBlockState(pos1a);

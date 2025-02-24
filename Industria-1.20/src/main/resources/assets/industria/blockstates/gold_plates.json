@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "industria:block/materials/gold_plates"
-    }
-  }
+	"variants": {
+		"": {
+			"model": "industria:block/materials/gold_plates"
+		}
+	}
 }

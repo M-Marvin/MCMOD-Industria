@@ -4,6 +4,7 @@ import de.m_marvin.industria.core.compound.types.blocks.CompoundBlock;
 import de.m_marvin.industria.core.compound.types.items.CompoundableBlockItem;
 import de.m_marvin.industria.core.kinetics.types.blocks.BeltBlock;
 import de.m_marvin.industria.core.registries.Tags;
+import de.m_marvin.industria.core.scrollinput.engine.ScrollInputListener.ScrollContext;
 import de.m_marvin.industria.core.scrollinput.type.items.IScrollOverride;
 import de.m_marvin.industria.core.util.types.DiagonalDirection;
 import de.m_marvin.industria.core.util.types.DiagonalPlanarDirection;
@@ -128,7 +129,7 @@ public class BeltItem<T extends BeltBlock> extends CompoundableBlockItem impleme
 		BlockState endState2 = endState1.setValue(BeltBlock.ORIENTATION, orientation.getOposite());
 		if (!tryPlaceCompound(context.getLevel(), pos1, endState1, true)) return InteractionResult.FAIL;
 		if (!tryPlaceCompound(context.getLevel(), pos2, endState2, true)) return InteractionResult.FAIL;
-				
+		
 		// Place middle blocks
 		for (int i = 1; i < blocks - 1; i++) {
 			BlockPos pos = pos1.offset(direction.getNormal().x * i, direction.getNormal().y * i, direction.getNormal().z * i);
@@ -139,17 +140,22 @@ public class BeltItem<T extends BeltBlock> extends CompoundableBlockItem impleme
 		// Place end blocks
 		tryPlaceCompound(context.getLevel(), pos1, endState1, false);
 		tryPlaceCompound(context.getLevel(), pos2, endState2, false);
+		
+		// Consume items
+		if (!context.getPlayer().isCreative())
+			context.getItemInHand().shrink(blocks);
+		
 		return InteractionResult.sidedSuccess(context.getLevel().isClientSide());
 		
 	}
 	
 	@Override
-	public boolean overridesScroll(UseOnContext context, ItemStack stack) {
+	public boolean overridesScroll(ScrollContext context) {
 		CompoundTag tag =  context.getItemInHand().getTag();
 		return tag != null && tag.contains("FirstPos");
 	}
 
 	@Override
-	public void onScroll(UseOnContext context, double delta) {}
+	public void onScroll(ScrollContext context) {}
 	
 }

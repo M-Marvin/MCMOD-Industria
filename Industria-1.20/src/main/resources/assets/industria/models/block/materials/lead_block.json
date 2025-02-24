@@ -1,7 +1,7 @@
 {
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "end": "industria:block/materials/lead_block_top",
-    "side": "industria:block/materials/lead_block"
-  }
+	"parent": "minecraft:block/cube_column",
+	"textures": {
+		"end": "industria:block/materials/lead_block_top",
+		"side": "industria:block/materials/lead_block"
+	}
 }

@@ -1,14 +1,14 @@
 {
 	"replace": false,
 	"values": [
-	  	"industria:copper_wire_coil",
-	  	"industria:tin_wire_coil",
-	  	"industria:gold_wire_coil",
-	  	"industria:aluminum_wire_coil",
+			"industria:copper_wire_coil",
+			"industria:tin_wire_coil",
+			"industria:gold_wire_coil",
+			"industria:aluminum_wire_coil",
 		"industria:insulated_copper_wire_coil",
-	  	"industria:insulated_tin_wire_coil",
-	  	"industria:insulated_gold_wire_coil",
-	  	"industria:insulated_aluminum_wire_coil",
-	  	"industria:empty_wire_coil"
+			"industria:insulated_tin_wire_coil",
+			"industria:insulated_gold_wire_coil",
+			"industria:insulated_aluminum_wire_coil",
+			"industria:empty_wire_coil"
 	]
 }

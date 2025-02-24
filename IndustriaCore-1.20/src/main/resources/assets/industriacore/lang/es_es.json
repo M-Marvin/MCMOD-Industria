@@ -1,14 +1,14 @@
 {
 
-"industriacore.item.info.conduit.nodeSelect":   	"Primer nodo seleccionado (Cancelar con Mayús + clic derecho)",
-"industriacore.item.info.conduit.changeLength":  	"Longitud del conducto: x%1$s (Cancelar con Mayús + clic derecho)",
-"industriacore.item.info.conduit.placed":     		"Conducto colocado",
-"industriacore.item.info.conduit.abbort":     		"Colocación de conducto abortada",
-"industriacore.item.info.conduit.failed":     		"¡Colocación de conducto falló!",
+"industriacore.item.info.conduit.nodeSelect":	 	"Primer nodo seleccionado (Cancelar con Mayús + clic derecho)",
+"industriacore.item.info.conduit.changeLength":		"Longitud del conducto: x%1$s (Cancelar con Mayús + clic derecho)",
+"industriacore.item.info.conduit.placed":		 		"Conducto colocado",
+"industriacore.item.info.conduit.abbort":		 		"Colocación de conducto abortada",
+"industriacore.item.info.conduit.failed":		 		"¡Colocación de conducto falló!",
 "industriacore.item.info.conduit.toFarNodes":		"Conducto demasiado largo: %1$s > máx. %2$s",
 
-"industriacore.commands.setconduit.success":    		"Cambió el conducto a partir de %1$s %2$s %3$s",
-"industriacore.commands.setconduit.failure":    		"¡Colocación de conducto no posible!",
+"industriacore.commands.setconduit.success":				"Cambió el conducto a partir de %1$s %2$s %3$s",
+"industriacore.commands.setconduit.failure":				"¡Colocación de conducto no posible!",
 "industriacore.commands.contraption.remove.success":		"%s Dispositivos eliminados",
 "industriacore.commands.contraption.create.failed":		"Creación de dispositivo falló",
 "industriacore.commands.contraption.create.success": 		"Dispositivo creado a partir de %1$s bloques",

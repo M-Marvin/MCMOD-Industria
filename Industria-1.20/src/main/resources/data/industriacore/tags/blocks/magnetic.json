@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-  	"industria:electro_magnetic_coil"
-  ]
+	"replace": false,
+	"values": [
+		"industria:electro_magnetic_coil"
+	]
 }

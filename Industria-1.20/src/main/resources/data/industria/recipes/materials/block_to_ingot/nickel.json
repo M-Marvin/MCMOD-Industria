@@ -1,14 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "group": "iron_ingot",
-  "ingredients": [
-    {
-      "item": "industria:nickel_block"
-    }
-  ],
-  "result": {
-    "count": 9,
-    "item": "industria:nickel_ingot"
-  }
+	"type": "minecraft:crafting_shapeless",
+	"category": "misc",
+	"group": "iron_ingot",
+	"ingredients": [
+		{
+			"item": "industria:nickel_block"
+		}
+	],
+	"result": {
+		"count": 9,
+		"item": "industria:nickel_ingot"
+	}
 }

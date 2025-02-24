@@ -4,6 +4,8 @@ import net.minecraft.client.Minecraft;
 
 public class ClientTimer {
 	
+	private ClientTimer() {}
+	
 	@SuppressWarnings("resource")
 	public static int getTicks() {
 		return Minecraft.getInstance().levelRenderer.getTicks();

@@ -30,6 +30,8 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE, value=Dist.CLIENT)
 public class TooltipAdditions {
 
+	private TooltipAdditions() {}
+	
 	public static final String TOOLTIP_PHYSICS = "physics";
 	public static final String TOOLTIP_ELECTRICS = "electrics";
 	public static final String TOOLTIP_MAGNETICS = "magnetics";

@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "industria:block/materials/redstone_alloy_plates"
-    }
-  }
+	"variants": {
+		"": {
+			"model": "industria:block/materials/redstone_alloy_plates"
+		}
+	}
 }

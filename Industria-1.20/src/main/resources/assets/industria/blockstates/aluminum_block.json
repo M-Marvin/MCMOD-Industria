@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "industria:block/materials/aluminum_block"
-    }
-  }
+	"variants": {
+		"": {
+			"model": "industria:block/materials/aluminum_block"
+		}
+	}
 }

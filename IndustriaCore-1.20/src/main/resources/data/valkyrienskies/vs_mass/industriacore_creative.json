@@ -1,62 +1,62 @@
 [
-  {
-    "block": "industriacore:gear",
-    "mass": 200.0
-  },
-  {
-    "block": "industriacore:large_gear",
-    "mass": 200.0
-  },
-  {
-    "block": "industriacore:shaft",
-    "mass": 200.0
-  },
-  {
-    "block": "industriacore:short_shaft_1",
-    "mass": 200.0
-  },
-  {
-    "block": "industriacore:short_shaft_2",
-    "mass": 200.0
-  },
-  {
-    "block": "industriacore:compound_block",
-    "mass": 500.0
-  },
-  {
-    "block": "industriacore:error_block",
-    "mass": 500.0
-  },
-  {
-    "block": "industriacore:power_source",
-    "mass": 10.0
-  },
-  {
-    "block": "industriacore:wire_holder",
-    "mass": 10.0
-  },
-  {
-    "block": "industriacore:magnet",
-    "mass": 500.0
-  },
-  {
-    "block": "minecraft:command_block",
-    "mass": 10.0
-  },
-  {
-    "block": "minecraft:chain_command_block",
-    "mass": 10.0
-  },
-  {
-    "block": "minecraft:repeating_command_block",
-    "mass": 10.0
-  },
-  {
-    "block": "minecraft:jigsaw",
-    "mass": 10.0
-  },
-  {
-    "block": "minecraft:structure_block",
-    "mass": 10.0
-  }
+	{
+		"block": "industriacore:gear",
+		"mass": 200.0
+	},
+	{
+		"block": "industriacore:large_gear",
+		"mass": 200.0
+	},
+	{
+		"block": "industriacore:shaft",
+		"mass": 200.0
+	},
+	{
+		"block": "industriacore:short_shaft_1",
+		"mass": 200.0
+	},
+	{
+		"block": "industriacore:short_shaft_2",
+		"mass": 200.0
+	},
+	{
+		"block": "industriacore:compound_block",
+		"mass": 500.0
+	},
+	{
+		"block": "industriacore:error_block",
+		"mass": 500.0
+	},
+	{
+		"block": "industriacore:power_source",
+		"mass": 10.0
+	},
+	{
+		"block": "industriacore:wire_holder",
+		"mass": 10.0
+	},
+	{
+		"block": "industriacore:magnet",
+		"mass": 500.0
+	},
+	{
+		"block": "minecraft:command_block",
+		"mass": 10.0
+	},
+	{
+		"block": "minecraft:chain_command_block",
+		"mass": 10.0
+	},
+	{
+		"block": "minecraft:repeating_command_block",
+		"mass": 10.0
+	},
+	{
+		"block": "minecraft:jigsaw",
+		"mass": 10.0
+	},
+	{
+		"block": "minecraft:structure_block",
+		"mass": 10.0
+	}
 ]

@@ -1,13 +1,13 @@
 {
-  "variants": {
-    "axis=y,pos=back": { "model": "industriacore:block/large_gear_back", "x": 90 },
-    "axis=x,pos=back": { "model": "industriacore:block/large_gear_back", "y": -90 },
-    "axis=z,pos=back": { "model": "industriacore:block/large_gear_back" },
-    "axis=y,pos=center": { "model": "industriacore:block/large_gear_center", "x": 90 },
-    "axis=x,pos=center": { "model": "industriacore:block/large_gear_center", "y": -90 },
-    "axis=z,pos=center": { "model": "industriacore:block/large_gear_center" },
-    "axis=y,pos=front": { "model": "industriacore:block/large_gear_front", "x": 90 },
-    "axis=x,pos=front": { "model": "industriacore:block/large_gear_front", "y": -90 },
-    "axis=z,pos=front": { "model": "industriacore:block/large_gear_front" }
-  }
+	"variants": {
+		"axis=y,pos=back": { "model": "industriacore:block/large_gear_back", "x": 90 },
+		"axis=x,pos=back": { "model": "industriacore:block/large_gear_back", "y": -90 },
+		"axis=z,pos=back": { "model": "industriacore:block/large_gear_back" },
+		"axis=y,pos=center": { "model": "industriacore:block/large_gear_center", "x": 90 },
+		"axis=x,pos=center": { "model": "industriacore:block/large_gear_center", "y": -90 },
+		"axis=z,pos=center": { "model": "industriacore:block/large_gear_center" },
+		"axis=y,pos=front": { "model": "industriacore:block/large_gear_front", "x": 90 },
+		"axis=x,pos=front": { "model": "industriacore:block/large_gear_front", "y": -90 },
+		"axis=z,pos=front": { "model": "industriacore:block/large_gear_front" }
+	}
 }

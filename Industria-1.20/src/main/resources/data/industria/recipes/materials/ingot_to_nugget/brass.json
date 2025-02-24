@@ -1,13 +1,13 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "ingredients": [
-    {
-      "item": "industria:brass_ingot"
-    }
-  ],
-  "result": {
-    "count": 9,
-    "item": "industria:brass_nugget"
-  }
+	"type": "minecraft:crafting_shapeless",
+	"category": "misc",
+	"ingredients": [
+		{
+			"item": "industria:brass_ingot"
+		}
+	],
+	"result": {
+		"count": 9,
+		"item": "industria:brass_nugget"
+	}
 }

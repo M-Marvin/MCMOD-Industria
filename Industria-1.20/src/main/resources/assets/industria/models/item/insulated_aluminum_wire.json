@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "industria:item/insulated_aluminum_wire"
-  }
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"layer0": "industria:item/insulated_aluminum_wire"
+	}
 }

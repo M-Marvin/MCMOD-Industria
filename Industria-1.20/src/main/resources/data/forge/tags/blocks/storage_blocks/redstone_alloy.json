@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
+	"replace": false,
+	"values": [
 	"industria:redstone_alloy_block"
-  ]
+	]
 }

@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "industria:block/materials/nickel_block"
-    }
-  }
+	"variants": {
+		"": {
+			"model": "industria:block/materials/nickel_block"
+		}
+	}
 }

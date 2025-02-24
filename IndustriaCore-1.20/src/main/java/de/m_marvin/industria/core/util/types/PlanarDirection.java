@@ -10,31 +10,37 @@ import net.minecraft.util.StringRepresentable;
 
 public enum PlanarDirection implements StringRepresentable {
 	
-	Y_POS(	"y_positive",	PlanarDirection.PlanarAxis.Y,	new Vec2i(+1, 0),	1,	1),
-	Y_NEG(	"y_negative",	PlanarDirection.PlanarAxis.Y,	new Vec2i(-1, 0),	0,	0),
-	X_POS(	"x_positive",	PlanarDirection.PlanarAxis.X,	new Vec2i(0, +1),	3,	2),
-	X_NEG(	"x_negative",	PlanarDirection.PlanarAxis.X,	new Vec2i(0, -1),	2,	3);
+	Y_POS(	"y_positive",	PlanarDirection.PlanarAxis.Y,	new Vec2i(+1, 0),	1,	1, 90),
+	Y_NEG(	"y_negative",	PlanarDirection.PlanarAxis.Y,	new Vec2i(-1, 0),	0,	0, -90),
+	X_POS(	"x_positive",	PlanarDirection.PlanarAxis.X,	new Vec2i(0, +1),	3,	2, 0),
+	X_NEG(	"x_negative",	PlanarDirection.PlanarAxis.X,	new Vec2i(0, -1),	2,	3, 180);
 	
 	private final String name;
 	private final Vec2i normal;
 	private final int data2d;
 	private final int oposite;
 	private final PlanarDirection.PlanarAxis axis;
+	private final int angle;
 
 	private static final PlanarDirection[] BY_2D_DATA = Stream.of(values())
 			.sorted(Comparator.comparingInt(PlanarDirection::get2DDataValue))
 			.toArray(PlanarDirection[]::new);
 	
-	private PlanarDirection(String name, PlanarDirection.PlanarAxis axis, Vec2i normal, int data2d, int oposite) {
+	private PlanarDirection(String name, PlanarDirection.PlanarAxis axis, Vec2i normal, int data2d, int oposite, int angle) {
 		this.name = name;
 		this.normal = normal;
 		this.data2d = data2d;
 		this.oposite = oposite;
 		this.axis = axis;
+		this.angle = angle;
 	}
 	
 	public int get2DDataValue() {
 		return data2d;
+	}
+	
+	int getAngleFromPositiveX() {
+		return this.angle;
 	}
 	
 	public static PlanarDirection from2DDataValue(int value) {

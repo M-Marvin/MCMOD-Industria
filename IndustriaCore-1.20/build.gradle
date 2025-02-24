@@ -17,14 +17,14 @@ plugins {
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     
-    id 'org.jetbrains.kotlin.jvm' version '1.8.21'
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.21'
+   // id 'org.jetbrains.kotlin.jvm' version '1.8.21'
+   // id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.21'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'org.spongepowered.mixin' version '0.7.+' // Required for VS2 and mixins
 }
 
 apply plugin: 'com.github.johnrengelman.shadow'
-apply plugin: 'java'
+apply plugin: 'java-library'
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'maven-publish'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'

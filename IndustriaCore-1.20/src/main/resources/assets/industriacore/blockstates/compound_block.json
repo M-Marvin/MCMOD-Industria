@@ -1,5 +1,5 @@
 {
-  "variants": {
-    "": { "model": "industriacore:block/compound_block" }
-  }
+	"variants": {
+		"": { "model": "industriacore:block/compound_block" }
+	}
 }

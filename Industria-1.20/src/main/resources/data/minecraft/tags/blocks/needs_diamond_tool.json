@@ -1,8 +1,8 @@
 {
-  "replace": false,
-  "values": [
+	"replace": false,
+	"values": [
 	"industria:palladium_block",
 	"industria:netherite_plates",
 	"industria:palladium_plates"
-  ]
+	]
 }

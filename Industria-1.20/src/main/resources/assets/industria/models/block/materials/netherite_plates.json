@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "industria:block/materials/netherite_plates"
-  }
+	"parent": "minecraft:block/cube_all",
+	"textures": {
+		"all": "industria:block/materials/netherite_plates"
+	}
 }

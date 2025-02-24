@@ -4,6 +4,7 @@ import java.util.function.Function;
 
 import de.m_marvin.industria.core.kinetics.types.blockentities.SimpleKineticBlockEntity;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
+import de.m_marvin.industria.core.util.VoxelShapeUtility.ShapeType;
 import de.m_marvin.industria.core.util.types.AxisOffset;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -50,11 +51,13 @@ public class ShortShaftBlock extends BaseEntityBlock implements IKineticBlock {
 	
 	@Override
 	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-		return VoxelShapeUtility.transformation()
-				.centered()
-				.rotateFromNorth(pState.getValue(FACING))
-				.uncentered()
-				.transform(SHAPE.apply(this.isLong));
+		return VoxelShapeUtility.stateCachedShape(ShapeType.MISC, pState, () -> {
+			return VoxelShapeUtility.transformation()
+					.centered()
+					.rotateFromNorth(pState.getValue(FACING))
+					.uncentered()
+					.transform(SHAPE.apply(this.isLong));
+		});
 	}
 	
 	@Override

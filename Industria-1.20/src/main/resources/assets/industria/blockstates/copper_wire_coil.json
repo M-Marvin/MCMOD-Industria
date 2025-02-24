@@ -1,55 +1,55 @@
 {
-  "variants": {
-    "axis=x,layers=1": {
-      "model": "industria:block/util/copper_wire_coil_1",
-      "y": 90
-    },
-    "axis=y,layers=1": {
-      "model": "industria:block/util/copper_wire_coil_1",
-      "x": 90,
-      "y": 90
-    },
-    "axis=z,layers=1": {
-      "model": "industria:block/util/copper_wire_coil_1"
-    },
-    
-    "axis=x,layers=2": {
-      "model": "industria:block/util/copper_wire_coil_2",
-      "y": 90
-    },
-    "axis=y,layers=2": {
-      "model": "industria:block/util/copper_wire_coil_2",
-      "x": 90,
-      "y": 90
-    },
-    "axis=z,layers=2": {
-      "model": "industria:block/util/copper_wire_coil_2"
-    },
-    
-    "axis=x,layers=3": {
-      "model": "industria:block/util/copper_wire_coil_3",
-      "y": 90
-    },
-    "axis=y,layers=3": {
-      "model": "industria:block/util/copper_wire_coil_3",
-      "x": 90,
-      "y": 90
-    },
-    "axis=z,layers=3": {
-      "model": "industria:block/util/copper_wire_coil_3"
-    },
-    
-    "axis=x,layers=4": {
-      "model": "industria:block/util/copper_wire_coil_4",
-      "y": 90
-    },
-    "axis=y,layers=4": {
-      "model": "industria:block/util/copper_wire_coil_4",
-      "x": 90,
-      "y": 90
-    },
-    "axis=z,layers=4": {
-      "model": "industria:block/util/copper_wire_coil_4"
-    }
-  }
+	"variants": {
+		"axis=x,layers=1": {
+			"model": "industria:block/util/copper_wire_coil_1",
+			"y": 90
+		},
+		"axis=y,layers=1": {
+			"model": "industria:block/util/copper_wire_coil_1",
+			"x": 90,
+			"y": 90
+		},
+		"axis=z,layers=1": {
+			"model": "industria:block/util/copper_wire_coil_1"
+		},
+		
+		"axis=x,layers=2": {
+			"model": "industria:block/util/copper_wire_coil_2",
+			"y": 90
+		},
+		"axis=y,layers=2": {
+			"model": "industria:block/util/copper_wire_coil_2",
+			"x": 90,
+			"y": 90
+		},
+		"axis=z,layers=2": {
+			"model": "industria:block/util/copper_wire_coil_2"
+		},
+		
+		"axis=x,layers=3": {
+			"model": "industria:block/util/copper_wire_coil_3",
+			"y": 90
+		},
+		"axis=y,layers=3": {
+			"model": "industria:block/util/copper_wire_coil_3",
+			"x": 90,
+			"y": 90
+		},
+		"axis=z,layers=3": {
+			"model": "industria:block/util/copper_wire_coil_3"
+		},
+		
+		"axis=x,layers=4": {
+			"model": "industria:block/util/copper_wire_coil_4",
+			"y": 90
+		},
+		"axis=y,layers=4": {
+			"model": "industria:block/util/copper_wire_coil_4",
+			"x": 90,
+			"y": 90
+		},
+		"axis=z,layers=4": {
+			"model": "industria:block/util/copper_wire_coil_4"
+		}
+	}
 }

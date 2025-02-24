@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "industria:block/materials/brass_block"
-  }
+	"parent": "minecraft:block/cube_all",
+	"textures": {
+		"all": "industria:block/materials/brass_block"
+	}
 }

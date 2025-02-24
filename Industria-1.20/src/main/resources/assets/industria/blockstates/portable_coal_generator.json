@@ -1,50 +1,50 @@
 {
-  "variants": {
-    "mbpos_x=1,facing=east,lit=false": {
-      "model": "industria:block/machines/portable_coal_generator_x1",
-      "y": 90
-    },
-    "mbpos_x=1,facing=east,lit=true": {
-      "model": "industria:block/machines/portable_coal_generator_x1_lit",
-      "y": 90
-    },
-    "mbpos_x=1,facing=north,lit=false": {
-      "model": "industria:block/machines/portable_coal_generator_x1"
-    },
-    "mbpos_x=1,facing=north,lit=true": {
-      "model": "industria:block/machines/portable_coal_generator_x1_lit"
-    },
-    "mbpos_x=1,facing=south,lit=false": {
-      "model": "industria:block/machines/portable_coal_generator_x1",
-      "y": 180
-    },
-    "mbpos_x=1,facing=south,lit=true": {
-      "model": "industria:block/machines/portable_coal_generator_x1_lit",
-      "y": 180
-    },
-    "mbpos_x=1,facing=west,lit=false": {
-      "model": "industria:block/machines/portable_coal_generator_x1",
-      "y": 270
-    },
-    "mbpos_x=1,facing=west,lit=true": {
-      "model": "industria:block/machines/portable_coal_generator_x1_lit",
-      "y": 270
-    },
-    
-    "mbpos_x=0,facing=east": {
-      "model": "industria:block/machines/portable_coal_generator_x0",
-      "y": 90
-    },
-    "mbpos_x=0,facing=north": {
-      "model": "industria:block/machines/portable_coal_generator_x0"
-    },
-    "mbpos_x=0,facing=south": {
-      "model": "industria:block/machines/portable_coal_generator_x0",
-      "y": 180
-    },
-    "mbpos_x=0,facing=west": {
-      "model": "industria:block/machines/portable_coal_generator_x0",
-      "y": 270
-    }
-  }
+	"variants": {
+		"mbpos_x=1,facing=east,lit=false": {
+			"model": "industria:block/machines/portable_coal_generator_x1",
+			"y": 90
+		},
+		"mbpos_x=1,facing=east,lit=true": {
+			"model": "industria:block/machines/portable_coal_generator_x1_lit",
+			"y": 90
+		},
+		"mbpos_x=1,facing=north,lit=false": {
+			"model": "industria:block/machines/portable_coal_generator_x1"
+		},
+		"mbpos_x=1,facing=north,lit=true": {
+			"model": "industria:block/machines/portable_coal_generator_x1_lit"
+		},
+		"mbpos_x=1,facing=south,lit=false": {
+			"model": "industria:block/machines/portable_coal_generator_x1",
+			"y": 180
+		},
+		"mbpos_x=1,facing=south,lit=true": {
+			"model": "industria:block/machines/portable_coal_generator_x1_lit",
+			"y": 180
+		},
+		"mbpos_x=1,facing=west,lit=false": {
+			"model": "industria:block/machines/portable_coal_generator_x1",
+			"y": 270
+		},
+		"mbpos_x=1,facing=west,lit=true": {
+			"model": "industria:block/machines/portable_coal_generator_x1_lit",
+			"y": 270
+		},
+		
+		"mbpos_x=0,facing=east": {
+			"model": "industria:block/machines/portable_coal_generator_x0",
+			"y": 90
+		},
+		"mbpos_x=0,facing=north": {
+			"model": "industria:block/machines/portable_coal_generator_x0"
+		},
+		"mbpos_x=0,facing=south": {
+			"model": "industria:block/machines/portable_coal_generator_x0",
+			"y": 180
+		},
+		"mbpos_x=0,facing=west": {
+			"model": "industria:block/machines/portable_coal_generator_x0",
+			"y": 270
+		}
+	}
 }

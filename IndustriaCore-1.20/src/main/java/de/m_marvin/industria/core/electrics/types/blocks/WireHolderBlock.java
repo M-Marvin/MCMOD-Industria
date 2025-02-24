@@ -16,6 +16,7 @@ import de.m_marvin.industria.core.electrics.types.CircuitTemplate.Plotter;
 import de.m_marvin.industria.core.registries.Circuits;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
+import de.m_marvin.industria.core.util.VoxelShapeUtility.ShapeType;
 import de.m_marvin.industria.core.util.items.ITooltipAdditionsModifier;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
@@ -64,12 +65,14 @@ public class WireHolderBlock extends Block implements IElectricBlock, ITooltipAd
 	
 	@Override
 	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-		return VoxelShapeUtility.transformation()
-				.centered()
-				.rotateX(-90)
-				.rotateFromNorth(pState.getValue(BlockStateProperties.FACING))
-				.uncentered()
-				.transform(SHAPE);
+		return VoxelShapeUtility.stateCachedShape(ShapeType.MISC, pState, () -> {
+			return VoxelShapeUtility.transformation()
+					.centered()
+					.rotateX(-90)
+					.rotateFromNorth(pState.getValue(BlockStateProperties.FACING))
+					.uncentered()
+					.transform(SHAPE);
+		});
 	}
 	
 	@Override

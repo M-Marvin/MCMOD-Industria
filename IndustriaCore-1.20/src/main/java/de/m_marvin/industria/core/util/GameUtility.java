@@ -41,6 +41,8 @@ import net.minecraftforge.network.NetworkHooks;
 
 public class GameUtility {
 	
+	private GameUtility() {}
+	
 	public static <T extends BlockEntity & IJunctionEdit> AbstractContainerMenu openJunctionScreenOr(T blockEntity, int containerId, Player player, Inventory inventory, Supplier<AbstractContainerMenu> container) {
 		return player.getItemInHand(InteractionHand.MAIN_HAND).is(Tags.Items.SCREW_DRIVERS) ? new JunctionBoxContainer<T>(containerId, inventory, blockEntity) : container.get();
 	}

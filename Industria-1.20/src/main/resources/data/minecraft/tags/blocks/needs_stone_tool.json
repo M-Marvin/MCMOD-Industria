@@ -1,13 +1,13 @@
 {
-  "replace": false,
-  "values": [
-  	"industria:brass_floodlight",
-  	"industria:steel_floodlight",
-  	"industria:iron_junction_box",
-  	"industria:zinc_junction_box",
-  	"industria:brass_junction_box",
-  	"industria:steel_junction_box",
-  	
+	"replace": false,
+	"values": [
+		"industria:brass_floodlight",
+		"industria:steel_floodlight",
+		"industria:iron_junction_box",
+		"industria:zinc_junction_box",
+		"industria:brass_junction_box",
+		"industria:steel_junction_box",
+		
 	"industria:aluminum_block",
 	"industria:weathered_iron_block",
 	"industria:exposed_iron_block",
@@ -50,5 +50,5 @@
 	"industria:waxed_exposed_copper_plates",
 	"industria:waxed_weathered_copper_plates",
 	"industria:waxed_oxidized_copper_plates"
-  ]
+	]
 }

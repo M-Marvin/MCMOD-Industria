@@ -1,13 +1,13 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "ingredients": [
-    {
-      "item": "industria:nickel_ingot"
-    }
-  ],
-  "result": {
-    "count": 9,
-    "item": "industria:nickel_nugget"
-  }
+	"type": "minecraft:crafting_shapeless",
+	"category": "misc",
+	"ingredients": [
+		{
+			"item": "industria:nickel_ingot"
+		}
+	],
+	"result": {
+		"count": 9,
+		"item": "industria:nickel_nugget"
+	}
 }

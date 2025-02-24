@@ -1,10 +1,10 @@
 {
-  "variants": {
-    "facing=north": { "model": "industria:block/util/steel_junction_box", "x": -90 },
-    "facing=south": { "model": "industria:block/util/steel_junction_box", "x": 90 },
-    "facing=east": { "model": "industria:block/util/steel_junction_box", "y": 90, "x": -90 },
-    "facing=west": { "model": "industria:block/util/steel_junction_box", "y": 90, "x": 90 },
-    "facing=down": { "model": "industria:block/util/steel_junction_box" },
-    "facing=up": { "model": "industria:block/util/steel_junction_box", "x": 180 }
-  }
+	"variants": {
+		"facing=north": { "model": "industria:block/util/steel_junction_box", "x": -90 },
+		"facing=south": { "model": "industria:block/util/steel_junction_box", "x": 90 },
+		"facing=east": { "model": "industria:block/util/steel_junction_box", "y": 90, "x": -90 },
+		"facing=west": { "model": "industria:block/util/steel_junction_box", "y": 90, "x": 90 },
+		"facing=down": { "model": "industria:block/util/steel_junction_box" },
+		"facing=up": { "model": "industria:block/util/steel_junction_box", "x": 180 }
+	}
 }

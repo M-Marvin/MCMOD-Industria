@@ -12,6 +12,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class StructureFinder {
 	
+	private StructureFinder() {}
+	
 	public static Optional<List<BlockPos>> findStructureInRange(Level level, BlockPos origin, int maxRange, int maxBlocks, Predicate<BlockState> blockPredicate) {
 		List<BlockPos> posList = new ArrayList<>();
 		if (checkBlockRange(level, origin, origin, maxBlocks, maxRange, posList, blockPredicate)) {

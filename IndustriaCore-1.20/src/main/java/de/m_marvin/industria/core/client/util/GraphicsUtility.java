@@ -17,6 +17,8 @@ import net.minecraft.resources.ResourceLocation;
 
 public class GraphicsUtility {
 
+	private GraphicsUtility() {}
+	
 	public static final ResourceLocation UTILITY_WIDGETS_TEXTURE = new ResourceLocation(IndustriaCore.MODID, "textures/gui/utility_widgets.png");
 	
 	public static void drawStringCentered(PoseStack matrixStack, MultiBufferSource bufferSource, String string, int posX, int posY, float r, float g, float b, float a) {

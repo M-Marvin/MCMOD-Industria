@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "industria:block/materials/monel_block"
-    }
-  }
+	"variants": {
+		"": {
+			"model": "industria:block/materials/monel_block"
+		}
+	}
 }

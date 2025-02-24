@@ -1,102 +1,102 @@
 {
-  "variants": {
-    "face=ceiling,facing=east,lit=false": {
-      "model": "industria:block/machines/floodlight_steel",
-      "y": 270
-    },
-    "face=ceiling,facing=east,lit=true": {
-      "model": "industria:block/machines/floodlight_steel_lit",
-      "y": 270
-    },
-    "face=ceiling,facing=north,lit=false": {
-      "model": "industria:block/machines/floodlight_steel",
-      "y": 180
-    },
-    "face=ceiling,facing=north,lit=true": {
-      "model": "industria:block/machines/floodlight_steel_lit",
-      "y": 180
-    },
-    "face=ceiling,facing=south,lit=false": {
-      "model": "industria:block/machines/floodlight_steel"
-    },
-    "face=ceiling,facing=south,lit=true": {
-      "model": "industria:block/machines/floodlight_steel_lit"
-    },
-    "face=ceiling,facing=west,lit=false": {
-      "model": "industria:block/machines/floodlight_steel",
-      "y": 90
-    },
-    "face=ceiling,facing=west,lit=true": {
-      "model": "industria:block/machines/floodlight_steel_lit",
-      "y": 90
-    },
-    "face=floor,facing=east,lit=false": {
-      "model": "industria:block/machines/floodlight_steel",
-      "y": 90, "x": 180
-    },
-    "face=floor,facing=east,lit=true": {
-      "model": "industria:block/machines/floodlight_steel_lit",
-      "y": 90, "x": 180
-    },
-    "face=floor,facing=north,lit=false": {
-      "model": "industria:block/machines/floodlight_steel", "x": 180
-    },
-    "face=floor,facing=north,lit=true": {
-      "model": "industria:block/machines/floodlight_steel_lit", "x": 180
-    },
-    "face=floor,facing=south,lit=false": {
-      "model": "industria:block/machines/floodlight_steel",
-      "y": 180, "x": 180
-    },
-    "face=floor,facing=south,lit=true": {
-      "model": "industria:block/machines/floodlight_steel_lit",
-      "y": 180, "x": 180
-    },
-    "face=floor,facing=west,lit=false": {
-      "model": "industria:block/machines/floodlight_steel",
-      "y": 270, "x": 180
-    },
-    "face=floor,facing=west,lit=true": {
-      "model": "industria:block/machines/floodlight_steel_lit",
-      "y": 270, "x": 180
-    },
-    "face=wall,facing=west,lit=false": {
-      "model": "industria:block/machines/floodlight_steel",
-      "x": 90,
-      "y": 90
-    },
-    "face=wall,facing=west,lit=true": {
-      "model": "industria:block/machines/floodlight_steel_lit",
-      "x": 90,
-      "y": 90
-    },
-    "face=wall,facing=south,lit=false": {
-      "model": "industria:block/machines/floodlight_steel",
-      "x": 90
-    },
-    "face=wall,facing=south,lit=true": {
-      "model": "industria:block/machines/floodlight_steel_lit",
-      "x": 90
-    },
-    "face=wall,facing=north,lit=false": {
-      "model": "industria:block/machines/floodlight_steel",
-      "x": 90,
-      "y": 180
-    },
-    "face=wall,facing=north,lit=true": {
-      "model": "industria:block/machines/floodlight_steel_lit",
-      "x": 90,
-      "y": 180
-    },
-    "face=wall,facing=east,lit=false": {
-      "model": "industria:block/machines/floodlight_steel",
-      "x": 90,
-      "y": 270
-    },
-    "face=wall,facing=east,lit=true": {
-      "model": "industria:block/machines/floodlight_steel_lit",
-      "x": 90,
-      "y": 270
-    }
-  }
+	"variants": {
+		"face=ceiling,facing=east,lit=false": {
+			"model": "industria:block/machines/floodlight_steel",
+			"y": 270
+		},
+		"face=ceiling,facing=east,lit=true": {
+			"model": "industria:block/machines/floodlight_steel_lit",
+			"y": 270
+		},
+		"face=ceiling,facing=north,lit=false": {
+			"model": "industria:block/machines/floodlight_steel",
+			"y": 180
+		},
+		"face=ceiling,facing=north,lit=true": {
+			"model": "industria:block/machines/floodlight_steel_lit",
+			"y": 180
+		},
+		"face=ceiling,facing=south,lit=false": {
+			"model": "industria:block/machines/floodlight_steel"
+		},
+		"face=ceiling,facing=south,lit=true": {
+			"model": "industria:block/machines/floodlight_steel_lit"
+		},
+		"face=ceiling,facing=west,lit=false": {
+			"model": "industria:block/machines/floodlight_steel",
+			"y": 90
+		},
+		"face=ceiling,facing=west,lit=true": {
+			"model": "industria:block/machines/floodlight_steel_lit",
+			"y": 90
+		},
+		"face=floor,facing=east,lit=false": {
+			"model": "industria:block/machines/floodlight_steel",
+			"y": 90, "x": 180
+		},
+		"face=floor,facing=east,lit=true": {
+			"model": "industria:block/machines/floodlight_steel_lit",
+			"y": 90, "x": 180
+		},
+		"face=floor,facing=north,lit=false": {
+			"model": "industria:block/machines/floodlight_steel", "x": 180
+		},
+		"face=floor,facing=north,lit=true": {
+			"model": "industria:block/machines/floodlight_steel_lit", "x": 180
+		},
+		"face=floor,facing=south,lit=false": {
+			"model": "industria:block/machines/floodlight_steel",
+			"y": 180, "x": 180
+		},
+		"face=floor,facing=south,lit=true": {
+			"model": "industria:block/machines/floodlight_steel_lit",
+			"y": 180, "x": 180
+		},
+		"face=floor,facing=west,lit=false": {
+			"model": "industria:block/machines/floodlight_steel",
+			"y": 270, "x": 180
+		},
+		"face=floor,facing=west,lit=true": {
+			"model": "industria:block/machines/floodlight_steel_lit",
+			"y": 270, "x": 180
+		},
+		"face=wall,facing=west,lit=false": {
+			"model": "industria:block/machines/floodlight_steel",
+			"x": 90,
+			"y": 90
+		},
+		"face=wall,facing=west,lit=true": {
+			"model": "industria:block/machines/floodlight_steel_lit",
+			"x": 90,
+			"y": 90
+		},
+		"face=wall,facing=south,lit=false": {
+			"model": "industria:block/machines/floodlight_steel",
+			"x": 90
+		},
+		"face=wall,facing=south,lit=true": {
+			"model": "industria:block/machines/floodlight_steel_lit",
+			"x": 90
+		},
+		"face=wall,facing=north,lit=false": {
+			"model": "industria:block/machines/floodlight_steel",
+			"x": 90,
+			"y": 180
+		},
+		"face=wall,facing=north,lit=true": {
+			"model": "industria:block/machines/floodlight_steel_lit",
+			"x": 90,
+			"y": 180
+		},
+		"face=wall,facing=east,lit=false": {
+			"model": "industria:block/machines/floodlight_steel",
+			"x": 90,
+			"y": 270
+		},
+		"face=wall,facing=east,lit=true": {
+			"model": "industria:block/machines/floodlight_steel_lit",
+			"x": 90,
+			"y": 270
+		}
+	}
 }

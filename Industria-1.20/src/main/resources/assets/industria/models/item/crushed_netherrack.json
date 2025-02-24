@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "industria:item/materials/crushed_netherrack"
-  }
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"layer0": "industria:item/materials/crushed_netherrack"
+	}
 }

@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "industria:block/materials/weathered_iron_block"
-    }
-  }
+	"variants": {
+		"": {
+			"model": "industria:block/materials/weathered_iron_block"
+		}
+	}
 }

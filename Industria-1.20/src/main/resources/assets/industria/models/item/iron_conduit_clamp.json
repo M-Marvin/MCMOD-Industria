@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "industria:itemblock/iron_conduit_clamp"
-  }
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"layer0": "industria:itemblock/iron_conduit_clamp"
+	}
 }

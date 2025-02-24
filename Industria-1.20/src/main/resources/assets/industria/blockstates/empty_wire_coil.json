@@ -1,16 +1,16 @@
 {
-  "variants": {
-    "axis=x": {
-      "model": "industria:block/util/empty_wire_coil",
-      "y": 90
-    },
-    "axis=y": {
-      "model": "industria:block/util/empty_wire_coil",
-      "x": 90,
-      "y": 90
-    },
-    "axis=z": {
-      "model": "industria:block/util/empty_wire_coil"
-    }
-  }
+	"variants": {
+		"axis=x": {
+			"model": "industria:block/util/empty_wire_coil",
+			"y": 90
+		},
+		"axis=y": {
+			"model": "industria:block/util/empty_wire_coil",
+			"x": 90,
+			"y": 90
+		},
+		"axis=z": {
+			"model": "industria:block/util/empty_wire_coil"
+		}
+	}
 }

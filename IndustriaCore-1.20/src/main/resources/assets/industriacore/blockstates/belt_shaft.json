@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "axis=y": { "model": "industriacore:block/belt_shaft", "x": -90 },
-    "axis=x": { "model": "industriacore:block/belt_shaft", "y": 90 },
-    "axis=z": { "model": "industriacore:block/belt_shaft" }
-  }
+	"variants": {
+		"axis=y": { "model": "industriacore:block/belt_shaft", "x": -90 },
+		"axis=x": { "model": "industriacore:block/belt_shaft", "y": 90 },
+		"axis=z": { "model": "industriacore:block/belt_shaft" }
+	}
 }

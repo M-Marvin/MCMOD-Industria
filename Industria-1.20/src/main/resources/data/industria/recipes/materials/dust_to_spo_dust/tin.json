@@ -1,14 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "group": "iron_ingot",
-  "ingredients": [
-    {
-      "item": "industria:tin_dust"
-    }
-  ],
-  "result": {
-    "count": 9,
-    "item": "industria:spo_tin_dust"
-  }
+	"type": "minecraft:crafting_shapeless",
+	"category": "misc",
+	"group": "iron_ingot",
+	"ingredients": [
+		{
+			"item": "industria:tin_dust"
+		}
+	],
+	"result": {
+		"count": 9,
+		"item": "industria:spo_tin_dust"
+	}
 }

@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "industria:block/materials/weathered_copper_plates"
-  }
+	"parent": "minecraft:block/cube_all",
+	"textures": {
+		"all": "industria:block/materials/weathered_copper_plates"
+	}
 }

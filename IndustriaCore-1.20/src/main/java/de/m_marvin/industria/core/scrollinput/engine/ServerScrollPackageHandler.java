@@ -1,26 +1,24 @@
 package de.m_marvin.industria.core.scrollinput.engine;
 
+import de.m_marvin.industria.core.scrollinput.engine.ScrollInputListener.ScrollContext;
 import de.m_marvin.industria.core.scrollinput.engine.network.CScrollInputPackage;
 import de.m_marvin.industria.core.scrollinput.type.items.IScrollOverride;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraftforge.network.NetworkEvent.Context;
 
 public class ServerScrollPackageHandler {
 	
-	public static void handleScrollPackage(CScrollInputPackage msg, Context context) {
+	public static void handleScrollPackage(CScrollInputPackage msg, Context ctx) {
 
-		ServerPlayer player = context.getSender();
+		ServerPlayer player = ctx.getSender();
 		ServerLevel level = player.serverLevel();
 		ItemStack heldItem = player.getItemInHand(msg.getHand());
-		UseOnContext ctx = new UseOnContext(level, player, msg.getHand(), heldItem, msg.getHitResult());
+		ScrollContext context = new ScrollContext(level, player, msg.getHand(), heldItem, msg.getHitResult(), msg.getScrollDelta());
 		
-		if (!heldItem.isEmpty() && heldItem.getItem() instanceof IScrollOverride && ((IScrollOverride) heldItem.getItem()).overridesScroll(ctx, heldItem)) {
-			
-			((IScrollOverride) heldItem.getItem()).onScroll(ctx, msg.getScrollDelta());
-			
+		if (!heldItem.isEmpty() && heldItem.getItem() instanceof IScrollOverride && ((IScrollOverride) heldItem.getItem()).overridesScroll(context)) {
+			((IScrollOverride) heldItem.getItem()).onScroll(context);
 		}
 		
 	}

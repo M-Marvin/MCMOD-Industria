@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "industria:block/materials/raw_palladium_block"
-    }
-  }
+	"variants": {
+		"": {
+			"model": "industria:block/materials/raw_palladium_block"
+		}
+	}
 }

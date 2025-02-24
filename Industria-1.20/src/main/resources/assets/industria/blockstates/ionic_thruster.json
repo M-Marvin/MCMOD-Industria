@@ -1,51 +1,51 @@
 {
-  "variants": {
-    "face=ceiling,facing=east": {
-      "model": "industria:block/machines/ionic_thruster",
-      "y": 270, "x": -90
-    },
-    "face=ceiling,facing=north": {
-      "model": "industria:block/machines/ionic_thruster",
-      "y": 180, "x": -90
-    },
-    "face=ceiling,facing=south": {
-      "model": "industria:block/machines/ionic_thruster",
-      "x": -90
-    },
-    "face=ceiling,facing=west": {
-      "model": "industria:block/machines/ionic_thruster",
-      "y": 90, "x": -90
-    },
-    "face=floor,facing=east": {
-      "model": "industria:block/machines/ionic_thruster",
-      "y": 270, "x": 90
-    },
-    "face=floor,facing=north": {
-      "model": "industria:block/machines/ionic_thruster",
-      "y": 180,"x": 90
-    },
-    "face=floor,facing=south": {
-      "model": "industria:block/machines/ionic_thruster",
-      "x": 90
-    },
-    "face=floor,facing=west": {
-      "model": "industria:block/machines/ionic_thruster",
-      "y": 90, "x": 90
-    },
-    "face=wall,facing=west": {
-      "model": "industria:block/machines/ionic_thruster",
-      "y": 90
-    },
-    "face=wall,facing=north": {
-      "model": "industria:block/machines/ionic_thruster",
-      "y": 180
-    },
-    "face=wall,facing=south": {
-      "model": "industria:block/machines/ionic_thruster"
-    },
-    "face=wall,facing=east": {
-      "model": "industria:block/machines/ionic_thruster",
-      "y": 270
-    }
-  }
+	"variants": {
+		"face=ceiling,facing=east": {
+			"model": "industria:block/machines/ionic_thruster",
+			"y": 270, "x": -90
+		},
+		"face=ceiling,facing=north": {
+			"model": "industria:block/machines/ionic_thruster",
+			"y": 180, "x": -90
+		},
+		"face=ceiling,facing=south": {
+			"model": "industria:block/machines/ionic_thruster",
+			"x": -90
+		},
+		"face=ceiling,facing=west": {
+			"model": "industria:block/machines/ionic_thruster",
+			"y": 90, "x": -90
+		},
+		"face=floor,facing=east": {
+			"model": "industria:block/machines/ionic_thruster",
+			"y": 270, "x": 90
+		},
+		"face=floor,facing=north": {
+			"model": "industria:block/machines/ionic_thruster",
+			"y": 180,"x": 90
+		},
+		"face=floor,facing=south": {
+			"model": "industria:block/machines/ionic_thruster",
+			"x": 90
+		},
+		"face=floor,facing=west": {
+			"model": "industria:block/machines/ionic_thruster",
+			"y": 90, "x": 90
+		},
+		"face=wall,facing=west": {
+			"model": "industria:block/machines/ionic_thruster",
+			"y": 90
+		},
+		"face=wall,facing=north": {
+			"model": "industria:block/machines/ionic_thruster",
+			"y": 180
+		},
+		"face=wall,facing=south": {
+			"model": "industria:block/machines/ionic_thruster"
+		},
+		"face=wall,facing=east": {
+			"model": "industria:block/machines/ionic_thruster",
+			"y": 270
+		}
+	}
 }

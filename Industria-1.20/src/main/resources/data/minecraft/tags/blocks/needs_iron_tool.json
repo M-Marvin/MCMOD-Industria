@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
+	"replace": false,
+	"values": [
 	"industria:lead_block",
 	"industria:steel_block",
 	"industria:weathered_steel_block",
@@ -46,5 +46,5 @@
 	"industria:waxed_oxidized_steel_plates",
 	"industria:tungsten_block",
 	"industria:tungsten_plates"
-  ]
+	]
 }

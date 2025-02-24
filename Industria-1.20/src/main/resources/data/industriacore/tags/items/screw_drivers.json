@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-    "industria:screw_driver"
-  ]
+	"replace": false,
+	"values": [
+		"industria:screw_driver"
+	]
 }

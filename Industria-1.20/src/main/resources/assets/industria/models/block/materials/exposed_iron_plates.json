@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "industria:block/materials/exposed_iron_plates"
-  }
+	"parent": "minecraft:block/cube_all",
+	"textures": {
+		"all": "industria:block/materials/exposed_iron_plates"
+	}
 }

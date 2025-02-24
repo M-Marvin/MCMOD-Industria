@@ -1,10 +1,10 @@
 {
-  "variants": {
-    "facing=north": { "model": "industriacore:block/motor" },
-    "facing=south": { "model": "industriacore:block/motor", "y": 180 },
-    "facing=east": { "model": "industriacore:block/motor", "y": -90 },
-    "facing=west": { "model": "industriacore:block/motor", "y": 90 },
-    "facing=up": { "model": "industriacore:block/motor_vertical"},
-    "facing=down": { "model": "industriacore:block/motor_vertical", "x": 180 }
-  }
+	"variants": {
+		"facing=north": { "model": "industriacore:block/motor" },
+		"facing=south": { "model": "industriacore:block/motor", "y": 180 },
+		"facing=east": { "model": "industriacore:block/motor", "y": -90 },
+		"facing=west": { "model": "industriacore:block/motor", "y": 90 },
+		"facing=up": { "model": "industriacore:block/motor_vertical"},
+		"facing=down": { "model": "industriacore:block/motor_vertical", "x": 180 }
+	}
 }

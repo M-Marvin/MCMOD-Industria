@@ -21,24 +21,25 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.ClipContext.Fluid;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 public class MathUtility {
 
+	private MathUtility() {}
+	
 	public static final double ANGULAR_VELOCITY_TO_ROTATIONS_PER_SECOND = (180.0 / Math.PI) / 360.0;
 	public static final double ROTATIONS_PER_SECOND_TO_ANGULAR_VELOCITY = 360 / (180.0 / Math.PI);
 
@@ -416,6 +417,28 @@ public class MathUtility {
 		return false;
 	}
 	
+	private static final Predicate<Entity> ENTITY_PREDICATE_CLICKEABLE = EntitySelector.NO_SPECTATORS.and(Entity::isPickable);
+	
+	public static HitResult getPlayerPOVHitResultWithEntitites(Level level, Player player, Fluid fluidMode, double reachDistance) {
+		HitResult hitresult = getPlayerPOVHitResult(level, player, fluidMode, reachDistance);
+		
+		if (hitresult.getType() != HitResult.Type.MISS) {
+			Vec3 vec3 = player.getViewVector(1.0F);
+			List<Entity> list = level.getEntities(player,  player.getBoundingBox().expandTowards(vec3.scale(reachDistance)).inflate(1.0), ENTITY_PREDICATE_CLICKEABLE);
+			if (!list.isEmpty()) {
+				Vec3 eyePos = player.getEyePosition();
+				
+				for (Entity entity : list) {
+					AABB aabb = entity.getBoundingBox().inflate((double) entity.getPickRadius());
+					if (aabb.contains(eyePos)) {
+						return new EntityHitResult(entity);
+					}
+				}
+			}
+		}
+		return hitresult;
+	}
+	
 	public static BlockHitResult getPlayerPOVHitResult(BlockGetter pLevel, Player pPlayer, ClipContext.Fluid pFluidMode, double reachDistance) {
 		return pLevel.clip(getPlayerPOVClipContext(pLevel, pPlayer, pFluidMode, reachDistance));
 	}
@@ -435,33 +458,6 @@ public class MathUtility {
 		return new ClipContext(vec3, vec31, ClipContext.Block.OUTLINE, pFluidMode, pPlayer);
 	}
 	
-	private static final Predicate<Entity> ENTITY_PREDICATE_CLICKEABLE = EntitySelector.NO_SPECTATORS.and(Entity::isPickable);
-	
-	public static UseOnContext getPlayerPOVUseContext(Level level, Player player, InteractionHand hand, double reachDistance) {
-		ItemStack stack = player.getItemInHand(hand);
-		HitResult hitresult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY, reachDistance);
-		
-		if (hitresult.getType() == HitResult.Type.MISS) {
-			return null;
-		} else {
-			Vec3 vec3 = player.getViewVector(1.0F);
-			List<Entity> list = level.getEntities(player,  player.getBoundingBox().expandTowards(vec3.scale(reachDistance)).inflate(1.0), ENTITY_PREDICATE_CLICKEABLE);
-			if (!list.isEmpty()) {
-				Vec3 eyePos = player.getEyePosition();
-				
-				for (Entity entity : list) {
-					AABB aabb = entity.getBoundingBox().inflate((double) entity.getPickRadius());
-					if (aabb.contains(eyePos)) {
-						return null;
-					}
-				}
-			}
-			if (hitresult.getType() == HitResult.Type.BLOCK) {
-				return new UseOnContext(level, player, hand, stack, (BlockHitResult) hitresult);
-			}
-		}
-		return null;
-	}
 	public static Vec2f calculateBezier2D(Vec2f[] points, float s) {
 		while (points.length > 1) {
 			Vec2f[] p = new Vec2f[points.length - 1];

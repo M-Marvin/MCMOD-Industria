@@ -340,9 +340,10 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 	@SuppressWarnings({ "deprecation", "resource" })
 	@Override
 	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+		if (pState.getValue(TRANSFORM) != StateTransform.NONE)
+			pLevel.setBlockAndUpdate(pPos, pState.setValue(TRANSFORM, StateTransform.NONE));
 		performOnAll(pLevel, pPos, 
 				(compound, p) -> p.getBlock().tick(p.getState(), (ServerLevel) p.getLevel(), p.getPos(), pRandom));
-		pLevel.setBlock(pPos, pState.setValue(TRANSFORM, StateTransform.NONE), 3);
 	}
 
 	@SuppressWarnings("resource")

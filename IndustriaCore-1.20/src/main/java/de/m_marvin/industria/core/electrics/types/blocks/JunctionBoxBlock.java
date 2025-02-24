@@ -14,6 +14,7 @@ import de.m_marvin.industria.core.electrics.types.blockentities.JunctionBoxBlock
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
+import de.m_marvin.industria.core.util.VoxelShapeUtility.ShapeType;
 import de.m_marvin.industria.core.util.items.ITooltipAdditionsModifier;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
@@ -68,13 +69,15 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricBlock,
 	
 	@Override
 	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-		Direction facing = pState.getValue(BlockStateProperties.FACING);
-		return VoxelShapeUtility.transformation()
-				.centered()
-				.rotateX(-90)
-				.rotateFromNorth(facing)
-				.uncentered()
-				.transform(BLOCK_SHAPE);
+		return VoxelShapeUtility.stateCachedShape(ShapeType.MISC, pState, () -> {
+			Direction facing = pState.getValue(BlockStateProperties.FACING);
+			return VoxelShapeUtility.transformation()
+					.centered()
+					.rotateX(-90)
+					.rotateFromNorth(facing)
+					.uncentered()
+					.transform(BLOCK_SHAPE);
+		});
 	}
 	
 	@Override

@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "industria:block/materials/monel_plates"
-  }
+	"parent": "minecraft:block/cube_all",
+	"textures": {
+		"all": "industria:block/materials/monel_plates"
+	}
 }

@@ -8,6 +8,8 @@ import net.minecraft.network.FriendlyByteBuf;
 
 public class NBTUtility {
 
+	private NBTUtility() {}
+	
 	public static CompoundTag writeVector3i(Vec3i vec) {
 		CompoundTag tag = new CompoundTag();
 		tag.putInt("x", vec.x());

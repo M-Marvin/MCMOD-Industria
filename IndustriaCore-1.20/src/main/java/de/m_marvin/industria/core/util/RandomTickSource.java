@@ -25,6 +25,8 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 @EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class RandomTickSource {
 	
+	private RandomTickSource() {}
+	
 	@FunctionalInterface
 	public static interface RandomTickConsumer {
 		public void onRandomTick(ServerLevel level, BlockPos pos, BlockState state);

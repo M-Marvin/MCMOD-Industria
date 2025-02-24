@@ -1,10 +1,10 @@
 {
-  "variants": {
-    "facing=south": { "model": "industriacore:block/voltage_source", "x": -90 },
-    "facing=north": { "model": "industriacore:block/voltage_source", "x": 90 },
-    "facing=west": { "model": "industriacore:block/voltage_source", "y": 90, "x": -90 },
-    "facing=east": { "model": "industriacore:block/voltage_source", "y": 90, "x": 90 },
-    "facing=up": { "model": "industriacore:block/voltage_source" },
-    "facing=down": { "model": "industriacore:block/voltage_source", "x": 180 }
-  }
+	"variants": {
+		"facing=south": { "model": "industriacore:block/voltage_source", "x": -90 },
+		"facing=north": { "model": "industriacore:block/voltage_source", "x": 90 },
+		"facing=west": { "model": "industriacore:block/voltage_source", "y": 90, "x": -90 },
+		"facing=east": { "model": "industriacore:block/voltage_source", "y": 90, "x": 90 },
+		"facing=up": { "model": "industriacore:block/voltage_source" },
+		"facing=down": { "model": "industriacore:block/voltage_source", "x": 180 }
+	}
 }

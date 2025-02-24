@@ -1,14 +1,14 @@
 {
 
-"industriacore.item.info.conduit.nodeSelect":   	"Prvý uzol bol vybraný (Stlač Ľavý Shift a kliknite pravým pre zrušenie)",
-"industriacore.item.info.conduit.changeLength":  	"Dĺžka linky: x%1$s (Stlač Ľavý Shift a kliknite pravým pre zrušenie)",
-"industriacore.item.info.conduit.placed":     		"Linka bola umiestnená",
-"industriacore.item.info.conduit.abbort":     		"Umiestnenie linky bolo zrušené",
-"industriacore.item.info.conduit.failed":     		"Umiestnenie linky zlyhalo!",
+"industriacore.item.info.conduit.nodeSelect":	 	"Prvý uzol bol vybraný (Stlač Ľavý Shift a kliknite pravým pre zrušenie)",
+"industriacore.item.info.conduit.changeLength":		"Dĺžka linky: x%1$s (Stlač Ľavý Shift a kliknite pravým pre zrušenie)",
+"industriacore.item.info.conduit.placed":		 		"Linka bola umiestnená",
+"industriacore.item.info.conduit.abbort":		 		"Umiestnenie linky bolo zrušené",
+"industriacore.item.info.conduit.failed":		 		"Umiestnenie linky zlyhalo!",
 "industriacore.item.info.conduit.toFarNodes":		"Príliš dlhá linka: %1$s > max. %2$s",
 
-"industriacore.commands.setconduit.success":    		"Linka na %1$s %2$s %3$s bola zmenená",
-"industriacore.commands.setconduit.failure":    		"Linka nebola možná umiestniť!",
+"industriacore.commands.setconduit.success":				"Linka na %1$s %2$s %3$s bola zmenená",
+"industriacore.commands.setconduit.failure":				"Linka nebola možná umiestniť!",
 "industriacore.commands.contraption.remove.success":		"%s zariadenia/í boli/o odstránené/ých",
 "industriacore.commands.contraption.create.failed":		"Vytvorenie zariadenia zlyhalo",
 "industriacore.commands.contraption.create.success": 		"Zariadenie bolo vytvorené z %1$s kociek",

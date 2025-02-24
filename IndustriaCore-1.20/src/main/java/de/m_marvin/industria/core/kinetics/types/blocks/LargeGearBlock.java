@@ -4,6 +4,7 @@ import de.m_marvin.industria.core.kinetics.types.blockentities.SimpleKineticBloc
 import de.m_marvin.industria.core.registries.Blocks;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
+import de.m_marvin.industria.core.util.VoxelShapeUtility.ShapeType;
 import de.m_marvin.industria.core.util.types.AxisOffset;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -44,13 +45,15 @@ public class LargeGearBlock extends BaseEntityBlock implements IKineticBlock {
 
 	@Override
 	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-		int offset = pState.getValue(POS) == AxisOffset.CENTER ? 0 : pState.getValue(POS) == AxisOffset.FRONT ? +5 : -5;
-		return VoxelShapeUtility.transformation()
-				.centered()
-				.offset(0, offset, 0)
-				.rotateFromAxisY(pState.getValue(AXIS))
-				.uncentered()
-				.transform(SHAPE);
+		return VoxelShapeUtility.stateCachedShape(ShapeType.MISC, pState, () -> {
+			int offset = pState.getValue(POS) == AxisOffset.CENTER ? 0 : pState.getValue(POS) == AxisOffset.FRONT ? +5 : -5;
+			return VoxelShapeUtility.transformation()
+					.centered()
+					.offset(0, offset, 0)
+					.rotateFromAxisY(pState.getValue(AXIS))
+					.uncentered()
+					.transform(SHAPE);
+		});
 	}
 
 	@Override

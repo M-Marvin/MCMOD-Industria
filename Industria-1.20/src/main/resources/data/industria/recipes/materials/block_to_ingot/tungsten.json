@@ -1,14 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "group": "iron_ingot",
-  "ingredients": [
-    {
-      "item": "industria:tungsten_block"
-    }
-  ],
-  "result": {
-    "count": 9,
-    "item": "industria:tungsten_ingot"
-  }
+	"type": "minecraft:crafting_shapeless",
+	"category": "misc",
+	"group": "iron_ingot",
+	"ingredients": [
+		{
+			"item": "industria:tungsten_block"
+		}
+	],
+	"result": {
+		"count": 9,
+		"item": "industria:tungsten_ingot"
+	}
 }

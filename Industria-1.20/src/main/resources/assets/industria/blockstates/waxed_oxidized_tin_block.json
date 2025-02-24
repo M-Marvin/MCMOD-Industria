@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "": {
-      "model": "industria:block/materials/oxidized_tin_block"
-    }
-  }
+	"variants": {
+		"": {
+			"model": "industria:block/materials/oxidized_tin_block"
+		}
+	}
 }

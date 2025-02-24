@@ -1,19 +1,19 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "group": "iron_ingot",
-  "key": {
-    "#": {
-      "item": "industria:lead_nugget"
-    }
-  },
-  "pattern": [
-    "###",
-    "###",
-    "###"
-  ],
-  "result": {
-    "item": "industria:lead_ingot"
-  },
-  "show_notification": true
+	"type": "minecraft:crafting_shaped",
+	"category": "misc",
+	"group": "iron_ingot",
+	"key": {
+		"#": {
+			"item": "industria:lead_nugget"
+		}
+	},
+	"pattern": [
+		"###",
+		"###",
+		"###"
+	],
+	"result": {
+		"item": "industria:lead_ingot"
+	},
+	"show_notification": true
 }

@@ -1,14 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "group": "iron_ingot",
-  "ingredients": [
-    {
-      "item": "industria:redstone_alloy_block"
-    }
-  ],
-  "result": {
-    "count": 9,
-    "item": "industria:redstone_alloy_ingot"
-  }
+	"type": "minecraft:crafting_shapeless",
+	"category": "misc",
+	"group": "iron_ingot",
+	"ingredients": [
+		{
+			"item": "industria:redstone_alloy_block"
+		}
+	],
+	"result": {
+		"count": 9,
+		"item": "industria:redstone_alloy_ingot"
+	}
 }

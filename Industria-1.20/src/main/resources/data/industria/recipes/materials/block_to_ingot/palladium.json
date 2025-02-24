@@ -1,14 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "group": "iron_ingot",
-  "ingredients": [
-    {
-      "item": "industria:palladium_block"
-    }
-  ],
-  "result": {
-    "count": 9,
-    "item": "industria:palladium_ingot"
-  }
+	"type": "minecraft:crafting_shapeless",
+	"category": "misc",
+	"group": "iron_ingot",
+	"ingredients": [
+		{
+			"item": "industria:palladium_block"
+		}
+	],
+	"result": {
+		"count": 9,
+		"item": "industria:palladium_ingot"
+	}
 }

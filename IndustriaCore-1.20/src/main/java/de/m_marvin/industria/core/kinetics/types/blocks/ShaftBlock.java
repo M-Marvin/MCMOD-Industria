@@ -3,6 +3,7 @@
 import de.m_marvin.industria.core.kinetics.types.blockentities.SimpleKineticBlockEntity;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
+import de.m_marvin.industria.core.util.VoxelShapeUtility.ShapeType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -43,11 +44,13 @@ public class ShaftBlock extends BaseEntityBlock implements IKineticBlock {
 	
 	@Override
 	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-		return VoxelShapeUtility.transformation()
-				.centered()
-				.rotateFromAxisY(pState.getValue(AXIS))
-				.uncentered()
-				.transform(SHAPE);
+		return VoxelShapeUtility.stateCachedShape(ShapeType.MISC, pState, () -> {
+			return VoxelShapeUtility.transformation()
+					.centered()
+					.rotateFromAxisY(pState.getValue(AXIS))
+					.uncentered()
+					.transform(SHAPE);
+		});
 	}
 	
 	@Override

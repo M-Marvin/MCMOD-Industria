@@ -1,14 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
-  "group": "iron_ingot",
-  "ingredients": [
-    {
-      "item": "industria:aluminum_dust"
-    }
-  ],
-  "result": {
-    "count": 9,
-    "item": "industria:spo_aluminum_dust"
-  }
+	"type": "minecraft:crafting_shapeless",
+	"category": "misc",
+	"group": "iron_ingot",
+	"ingredients": [
+		{
+			"item": "industria:aluminum_dust"
+		}
+	],
+	"result": {
+		"count": 9,
+		"item": "industria:spo_aluminum_dust"
+	}
 }

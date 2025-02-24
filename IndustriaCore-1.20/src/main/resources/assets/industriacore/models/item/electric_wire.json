@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "industriacore:item/electric_wire"
-  }
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"layer0": "industriacore:item/electric_wire"
+	}
 }

@@ -57,3 +57,15 @@ Laubhaufen, die vom Spieler platziert wurden, werden nicht weggeweht.
 
     Zudem können auch minderqualitative Zutaten verwendet werden, die die Qualität absenken.
 	Darunter fallen etwa Spinnenaugen und Gammelfleisch.
+
+19. Das komische neue System mit dem Getrockneten Ghast überarbeiten.
+    Passend zu verdächtigem Sand und verdächtigem Kies, den man durchsuchen kann: verdächtiger Seelensand, der zwischen den Nethergerippen generiert.
+    In ihm kann man getrocknete Ghast-Hautfetzen finden sowie Ghast-Eier. Anders als bei verdächtigem Sand oder Kies gibt es hier jedoch eine Gefahr: Beim Abpinseln kann man nicht nur Items finden, sondern auch die "Seelen" im Sand freilegen. Dann wandern bläuliche Seelen- und Flammenpartikel zum Spieler und er erhält Schaden.
+    Andere zu findende Items sind Knochen.
+    Da die Nethergerippe sehr häufig sind, generiert verdächtiger Seelensand nur an wenigen von ihnen und nur wenige Blöcke pro Nethergerippe-Struktur.
+
+    Aus den Ghast-Hautfetzen kann man, wenn sie rehydriert wurden, Ghast-Leder machen, aus welchem man Ballons (also zum Fliegen. Keine Kinder-Luftballons) herstellen kann.
+
+    Den Ghastling (und damit auch den fröhlichen Ghast) erhält man, wenn man die Ghast-Eier in Wasser schlüpfen lässt. Außerhalb des Wassers schlüpfen sie nicht.
+
+    Den getrockneten Ghast-Block kann man dann... ja, KA. Der ist komisch. Braucht man den? Nur noch als reine Deko aus Bastions-Truhen?

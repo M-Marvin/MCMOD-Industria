@@ -29,7 +29,7 @@ public class TheUnsafeUtility {
 			theUnsafeField.setAccessible(true);
 			theUnsafe = (Unsafe) theUnsafeField.get(null);
 		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-			throw new RuntimeException("UNSAFE ACCESS ERROR :(", e);
+			throw new RuntimeException("Your java seems to be to safe :(", e);
 		}
 	}
 	

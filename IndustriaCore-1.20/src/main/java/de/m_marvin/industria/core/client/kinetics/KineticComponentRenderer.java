@@ -78,7 +78,7 @@ public class KineticComponentRenderer {
 			Vec3d playerPosition = Vec3d.fromVec(Minecraft.getInstance().player.position());
 			int renderDistance = Minecraft.getInstance().options.renderDistance().get() * 16;
 			
-			for (KineticHandlerCapabillity.Component component : kineticHolder.getComponents()) {
+			for (KineticHandlerCapabillity.KineticComponent component : kineticHolder.listComponents()) {
 				
 				BlockPos pos = component.reference().pos();
 				

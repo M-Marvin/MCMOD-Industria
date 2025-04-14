@@ -10,10 +10,10 @@ import net.minecraft.util.StringRepresentable;
 
 public enum PlanarDirection implements StringRepresentable {
 	
-	Y_POS(	"y_positive",	PlanarDirection.PlanarAxis.Y,	new Vec2i(+1, 0),	1,	1, 90),
-	Y_NEG(	"y_negative",	PlanarDirection.PlanarAxis.Y,	new Vec2i(-1, 0),	0,	0, -90),
-	X_POS(	"x_positive",	PlanarDirection.PlanarAxis.X,	new Vec2i(0, +1),	3,	2, 0),
-	X_NEG(	"x_negative",	PlanarDirection.PlanarAxis.X,	new Vec2i(0, -1),	2,	3, 180);
+	Y_POS(	"y_positive",	PlanarDirection.PlanarAxis.Y,	new Vec2i(0, +1),	1,	1, 90),
+	Y_NEG(	"y_negative",	PlanarDirection.PlanarAxis.Y,	new Vec2i(0, -1),	0,	0, -90),
+	X_POS(	"x_positive",	PlanarDirection.PlanarAxis.X,	new Vec2i(+1, 0),	3,	2, 0),
+	X_NEG(	"x_negative",	PlanarDirection.PlanarAxis.X,	new Vec2i(-1, 0),	2,	3, 180);
 	
 	private final String name;
 	private final Vec2i normal;

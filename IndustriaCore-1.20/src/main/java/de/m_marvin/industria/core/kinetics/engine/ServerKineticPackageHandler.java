@@ -17,7 +17,7 @@ public class ServerKineticPackageHandler {
 		if (powerSource.isPresent()) {
 			powerSource.get().setSourceRPM(msg.getRPM());
 			powerSource.get().setSourceTorque(msg.getTorque());
-			KineticUtility.recalculateNetwork(powerSource.get().getLevel(), KineticReference.simple(powerSource.get().getBlockPos()));
+//			KineticUtility.recalculateNetwork(powerSource.get().getLevel(), KineticReference.simple(powerSource.get().getBlockPos()));
 		}
 		
 	}

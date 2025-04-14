@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 import de.m_marvin.industria.core.kinetics.engine.ClientKineticPackageHandler;
-import de.m_marvin.industria.core.kinetics.engine.KineticHandlerCapabillity.Component;
+import de.m_marvin.industria.core.kinetics.engine.KineticHandlerCapabillity.KineticComponent;
 import de.m_marvin.industria.core.util.types.SyncRequestType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -18,16 +18,16 @@ import net.minecraftforge.network.NetworkEvent.Context;
 public class SSyncKineticComponentsPackage {
 	
 	public final ChunkPos chunkPos;
-	public final Set<Component> components;
+	public final Set<KineticComponent> components;
 	public final SyncRequestType request;
 	
-	public SSyncKineticComponentsPackage(Set<Component> components, ChunkPos targetChunk, SyncRequestType request) {
+	public SSyncKineticComponentsPackage(Set<KineticComponent> components, ChunkPos targetChunk, SyncRequestType request) {
 		this.chunkPos = targetChunk;
 		this.components = components;
 		this.request = request;
 	}
 	
-	public SSyncKineticComponentsPackage(Component component, ChunkPos targetChunk, SyncRequestType request) {
+	public SSyncKineticComponentsPackage(KineticComponent component, ChunkPos targetChunk, SyncRequestType request) {
 		this.chunkPos = targetChunk;
 		this.components = new HashSet<>();
 		this.components.add(component);
@@ -38,7 +38,7 @@ public class SSyncKineticComponentsPackage {
 		return chunkPos;
 	}
 	
-	public Set<Component> getComponents() {
+	public Set<KineticComponent> getComponents() {
 		return components;
 	}
 	
@@ -48,10 +48,10 @@ public class SSyncKineticComponentsPackage {
 	
 	public static void encode(SSyncKineticComponentsPackage msg, FriendlyByteBuf buff) {
 		buff.writeInt(msg.components.size());
-		for (Component component : msg.components) {
-			CompoundTag componentTag = new CompoundTag();
-			component.serializeNbt(componentTag);
-			buff.writeNbt(componentTag);
+		for (KineticComponent component : msg.components) {
+//			CompoundTag componentTag = new CompoundTag();
+//			component.serializeNbt(componentTag);
+//			buff.writeNbt(componentTag);
 		}
 		buff.writeChunkPos(msg.chunkPos);
 		buff.writeEnum(msg.request);
@@ -59,11 +59,11 @@ public class SSyncKineticComponentsPackage {
 	
 	public static SSyncKineticComponentsPackage decode(FriendlyByteBuf buff) {
 		int componentCount = buff.readInt();
-		Set<Component> components = new HashSet<>();
+		Set<KineticComponent> components = new HashSet<>();
 		for (int i = 0; i < componentCount; i++) {
-			CompoundTag componentTag = buff.readNbt();
-			Component component = Component.deserializeNbt(componentTag);
-			components.add(component);
+//			CompoundTag componentTag = buff.readNbt();
+//			KineticComponent component = KineticComponent.deserializeNbt(componentTag);
+//			components.add(component);
 		}
 		ChunkPos chunkPos = buff.readChunkPos();
 		SyncRequestType request = buff.readEnum(SyncRequestType.class);

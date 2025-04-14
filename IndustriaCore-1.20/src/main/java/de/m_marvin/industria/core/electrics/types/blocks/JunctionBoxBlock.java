@@ -73,7 +73,7 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricBlock,
 			Direction facing = pState.getValue(BlockStateProperties.FACING);
 			return VoxelShapeUtility.transformation()
 					.centered()
-					.rotateX(-90)
+					.rotateX(90)
 					.rotateFromNorth(facing)
 					.uncentered()
 					.transform(BLOCK_SHAPE);

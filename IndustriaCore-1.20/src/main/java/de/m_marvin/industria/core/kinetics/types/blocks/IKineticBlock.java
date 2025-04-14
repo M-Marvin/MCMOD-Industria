@@ -7,6 +7,7 @@ import de.m_marvin.industria.core.kinetics.engine.transmission.BeltTransmissions
 import de.m_marvin.industria.core.kinetics.engine.transmission.GearTransmissions;
 import de.m_marvin.industria.core.kinetics.engine.transmission.ShaftTransmission;
 import de.m_marvin.industria.core.kinetics.types.blockentities.IKineticBlockEntity;
+import de.m_marvin.industria.core.registries.Blocks;
 import de.m_marvin.industria.core.util.types.AxisOffset;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
@@ -105,7 +106,7 @@ public interface IKineticBlock {
 	public TransmissionNode[] getTransmissionNodes(LevelAccessor level, BlockPos pos, BlockState state);
 
 	public default BlockState getPartState(LevelAccessor level, BlockPos pos, int partId, BlockState state) {
-		return level.getBlockState(pos);
+		return partId == 0 ? level.getBlockState(pos) : Blocks.ERROR_BLOCK.get().defaultBlockState();
 	}
 	
 	public default double getSourceSpeed(LevelAccessor level, BlockPos pos, int partId, BlockState state) {

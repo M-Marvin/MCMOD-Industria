@@ -316,8 +316,8 @@ public abstract class AbstractJunctionEditScreen<B extends BlockEntity & IJuncti
 		
 		Vec2f p1 = new Vec2f(nodeA.getPosition()).add(WireNode.WIRE_NODE_WIDTH / 2F, WireNode.WIRE_NODE_WIDTH / 2F);
 		Vec2f p2 = new Vec2f(nodeB.getPosition()).add(WireNode.WIRE_NODE_WIDTH / 2F, WireNode.WIRE_NODE_WIDTH / 2F);
-		Vec2f v1 = new Vec2f(nodeA.getNode().orientation.getNormal());
-		Vec2f v2 = new Vec2f(nodeB.getNode().orientation.getNormal());
+		Vec2f v1 = new Vec2f(nodeA.getNode().orientation.getNormal().mul(-1, 1));
+		Vec2f v2 = new Vec2f(nodeB.getNode().orientation.getNormal().mul(-1, 1));
 		Vec2f[] va = MathUtility.makeBezierVectors2D(p1, v1, p2, v2, 10F);
 
 		Vec2f p = p1.add((float) this.leftPos, (float) this.topPos);

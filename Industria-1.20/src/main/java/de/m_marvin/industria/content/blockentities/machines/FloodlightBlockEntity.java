@@ -15,7 +15,7 @@ import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContaine
 import de.m_marvin.industria.core.parametrics.BlockParametrics;
 import de.m_marvin.industria.core.parametrics.engine.BlockParametricsManager;
 import de.m_marvin.industria.core.util.GameUtility;
-import de.m_marvin.industria.core.util.types.Direction2d;
+import de.m_marvin.industria.core.util.types.PlanarDirection;
 import de.m_marvin.univec.impl.Vec2i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -95,10 +95,10 @@ public class FloodlightBlockEntity extends BlockEntity implements MenuProvider, 
 	public <B extends BlockEntity & IJunctionEdit> void setupScreenConduitNodes(
 			JunctionBoxContainer<B> abstractJunctionBoxScreen, NodePos[] conduitNodes,
 			ExternalNodeConstructor externalNodeConstructor, InternalNodeConstructor internalNodeConstructor) {
-		externalNodeConstructor.construct(new Vec2i(69, 8), 	Direction2d.UP, 	conduitNodes[1]);
-		externalNodeConstructor.construct(new Vec2i(8, 69), 	Direction2d.LEFT, 	conduitNodes[2]);
-		externalNodeConstructor.construct(new Vec2i(112, 69), 	Direction2d.RIGHT, 	conduitNodes[0]);
-		internalNodeConstructor.construct(new Vec2i(69, 112), 	Direction2d.DOWN, 	0);
+		externalNodeConstructor.construct(new Vec2i(69, 8), 	PlanarDirection.Y_POS, 	conduitNodes[1]);
+		externalNodeConstructor.construct(new Vec2i(8, 69), 	PlanarDirection.X_NEG, 	conduitNodes[2]);
+		externalNodeConstructor.construct(new Vec2i(112, 69), 	PlanarDirection.X_POS, 	conduitNodes[0]);
+		internalNodeConstructor.construct(new Vec2i(69, 112), 	PlanarDirection.Y_NEG, 	0);
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 package de.m_marvin.industria.core.kinetics.engine;
 
 import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.core.kinetics.engine.KineticHandlerCapabillity.Component;
+import de.m_marvin.industria.core.kinetics.engine.KineticHandlerCapabillity.KineticComponent;
 import de.m_marvin.industria.core.kinetics.engine.network.SSyncKineticComponentsPackage;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
@@ -22,18 +22,18 @@ public class ClientKineticPackageHandler {
 		Level level = Minecraft.getInstance().level;
 		KineticHandlerCapabillity handler = GameUtility.getLevelCapability(level, Capabilities.KINETIC_HANDLER_CAPABILITY);
 		
-		if (msg.request == SyncRequestType.ADDED) {
-			for (Component component : msg.components) {
-				if (component.instance(null) == null) continue;
-				if (!handler.isInNetwork(component)) {
-					handler.addToNetwork(component);
-				}
-			}
-		} else {
-			for (Component component : msg.components) {
-				handler.removeFromNetwork(component.reference());
-			}
-		}
+//		if (msg.request == SyncRequestType.ADDED) {
+//			for (KineticComponent component : msg.components) {
+//				if (component.instance(null) == null) continue;
+//				if (!handler.isInNetwork(component)) {
+//					handler.addToNetwork(component);
+//				}
+//			}
+//		} else {
+//			for (KineticComponent component : msg.components) {
+//				handler.removeFromNetwork(component.reference());
+//			}
+//		}
 	}
 
 	/* Handle SUpdateNetworkPackage */

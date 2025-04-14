@@ -116,7 +116,7 @@ public abstract class AbstractThrusterBlock extends BaseEntityBlock {
 						double thrust = thruster.getValue();
 						if (Math.abs(thrust) >= 1) {
 							Direction direction = thrusterBlock.getThrustDirection(state);
-							Vec3d forceVec = new Vec3d(MathUtility.getDirectionVec(direction)).mul(thrust);
+							Vec3d forceVec = new Vec3d(direction.getStepX(), direction.getStepY(), direction.getStepZ()).mul(thrust);
 							Vector3d forcePos = Vec3d.fromVec(thrusterPos).add(0.5, 0.5, 0.5).sub(massCenter).writeTo(new Vector3d());
 							contraption.applyRotDependentForceToPos(new Vector3d(forceVec.x, forceVec.y, forceVec.z), forcePos);
 						}

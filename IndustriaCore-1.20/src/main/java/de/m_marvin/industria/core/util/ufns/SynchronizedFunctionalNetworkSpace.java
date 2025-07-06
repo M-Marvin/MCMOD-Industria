@@ -1,7 +1,6 @@
 package de.m_marvin.industria.core.util.ufns;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,9 +8,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.function.Supplier;
-
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Multimap;
 
 public abstract class SynchronizedFunctionalNetworkSpace<R, C extends FunctionalNetworkSpace.Component<R>, N extends SynchronizedFunctionalNetworkSpace.SynchronizedFunctionalNetwork<N, R, C, A>, A> extends FunctionalNetworkSpace<R, C, N, A> {
 	

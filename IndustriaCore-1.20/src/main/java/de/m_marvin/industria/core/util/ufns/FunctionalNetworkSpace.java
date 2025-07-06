@@ -1,5 +1,6 @@
 package de.m_marvin.industria.core.util.ufns;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.function.Supplier;
 
 import com.google.common.collect.Queues;
 
+import de.m_marvin.industria.IndustriaCore;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
@@ -60,7 +62,9 @@ public class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace.Componen
 		
 		protected void integrateNetwork(IntSet references, N other) {
 			references.forEach(ref -> {
-				this.components.put(ref, other.components.get(ref));
+				C component = other.components.get(ref);
+				if (component != null)
+					this.components.put(ref, component);
 			});
 			afterIntegrateNetwork(references, other);
 		}
@@ -85,7 +89,7 @@ public class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace.Componen
 		
 		protected abstract void afterPutComponent(int refId);
 		protected abstract void afterRemoveComponent(int refId);
-		protected abstract void afterParametrizedConnection(int refId1, int refId2, A parameter);
+		protected abstract boolean afterParametrizedConnection(int refId1, int refId2, A parameter);
 		protected abstract void afterIntegrateNetwork(IntSet refIds, N other);
 		
 	}
@@ -145,13 +149,14 @@ public class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace.Componen
 			}
 		}
 		
-		// Register components in network space, collect replaced components
+		// Register components in network space, collect replaced components and remove them from other components references
 		List<C> replacedComponents = newComponents.int2ObjectEntrySet().stream().map(e -> this.components.put(e.getIntKey(), e.getValue())).filter(Objects::nonNull).toList();
 		
 		for (var entry : newComponents.int2ObjectEntrySet()) {
 			// Register references in new component
 			components.get(entry.getValue()).forEach(ref -> {
-				entry.getValue().referencedComponents.add(this.referenceIds.getInt(ref.reference()));
+				if (this.referenceIds.containsKey(ref.reference()))
+					entry.getValue().referencedComponents.add(this.referenceIds.getInt(ref.reference()));
 			});
 
 			// Register references in other components
@@ -180,9 +185,24 @@ public class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace.Componen
 		newComponents.keySet().forEach(combinedNetwork::afterPutComponent);
 		
 		// Trigger new connection event
-		for (var entry : components.entrySet()) {
-			for (var pref : entry.getValue())
-				combinedNetwork.afterParametrizedConnection(this.referenceIds.getInt(entry.getKey().reference), this.referenceIds.getInt(pref.reference()), pref.paramter());
+		int toAdd = (int) components.values().stream().flatMap(Collection::stream).distinct().count();
+		if (toAdd > 0) {
+			List<ParametrizedReference<R, A>> addedRefs = new ArrayList<>();
+			int attempts = toAdd + 1;
+			while (toAdd > addedRefs.size() && attempts > 0) {
+				for (var entry : components.entrySet()) {
+					for (var pref : entry.getValue())
+						if (!addedRefs.contains(pref))
+							if (combinedNetwork.afterParametrizedConnection(this.referenceIds.getInt(entry.getKey().reference), this.referenceIds.getInt(pref.reference()), pref.paramter()))
+								addedRefs.add(pref);
+				}
+				attempts--;
+			}
+			if (attempts == 0) {
+				IndustriaCore.LOGGER.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				IndustriaCore.LOGGER.warn("Unable to insert all parametrized references, reached itterator limit!");
+				IndustriaCore.LOGGER.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			}
 		}
 
 		// Get a list of all new references and all potentially disconnected references

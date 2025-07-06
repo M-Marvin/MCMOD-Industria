@@ -2,10 +2,14 @@ package de.m_marvin.industria.core.kinetics.engine;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.OptionalDouble;
 import java.util.function.Supplier;
+import java.util.stream.DoubleStream;
 
 import de.m_marvin.industria.core.kinetics.engine.KineticHandlerCapabillity.KineticComponent;
 import de.m_marvin.industria.core.kinetics.types.blocks.IKineticBlock.KineticReference;
+import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.types.PowerNetState;
 import de.m_marvin.industria.core.util.ufns.SynchronizedFunctionalNetworkSpace.SynchronizedFunctionalNetwork;
 import it.unimi.dsi.fastutil.ints.IntSet;
@@ -70,8 +74,8 @@ public class KineticNetwork extends SynchronizedFunctionalNetwork<KineticNetwork
 	}
 
 	@Override
-	protected void afterParametrizedConnection(int refId1, int refId2, Double ratio) {
-		if (ratio == 0.0) return;
+	protected boolean afterParametrizedConnection(int refId1, int refId2, Double ratio) {
+		if (ratio == 0.0) return true;
 		Double ratio1 = this.component2ratioMap.get(refId1);
 		if (ratio1 != null) {
 			Double r = this.component2ratioMap.put(refId2, ratio1 / ratio);
@@ -79,36 +83,119 @@ public class KineticNetwork extends SynchronizedFunctionalNetwork<KineticNetwork
 		} else {
 			Double ratio2 = this.component2ratioMap.get(refId2);
 			if (ratio2 == null) {
+				if (!this.component2ratioMap.isEmpty())
+					return false;
 				ratio2 = 1.0;
 				this.component2ratioMap.put(refId2, ratio2);
 			}
 			this.component2ratioMap.put(refId1, ratio2 * ratio);
 		}
+		return true;
 	}
 
 	@Override
 	protected void afterIntegrateNetwork(IntSet refIds, KineticNetwork other) {
 		for (int refId : refIds) {
-			this.component2ratioMap.put(refId, other.component2ratioMap.get(refId));
+			Double ratio = other.component2ratioMap.get(refId);
+			if (ratio != null)
+				this.component2ratioMap.put(refId, ratio);
 		}
 		this.state = PowerNetState.INACTIVE;
 	}
 
 	@Override
 	public void afterChange() {
-		// TODO Auto-generated method stub
-		
 		System.out.println("KineticNetwork size: " + this.components.size());
+		recalculateKinetics();
 	}
 
 	@Override
 	public void onUpdate() {
-		// TODO Auto-generated method stub
+		System.out.println("Update KineticNetwork with size: " + this.components.size());
+		
+		recalculateKinetics();
+	}
+	
+	public void recalculateKinetics() {
+		
+		// Check for opposite rotations, if so, skip calculations
+		if (isLocked()) {
+			setNetworkSpeed(0.0);
+		} else {
+			
+			// Calculate source speeds
+			double[] sources = this.components.int2ObjectEntrySet().stream()
+				.mapToDouble(c -> c.getValue().getSourceSpeed(getLevel()) * getTransmission(c.getIntKey()))
+				.distinct()
+				.toArray();
+			
+			// Find fastest source-speed in network (in both directions)
+			OptionalDouble maxSpeedH = DoubleStream.of(sources).filter(s -> s > 0).max();
+			OptionalDouble maxSpeedL = DoubleStream.of(sources).filter(s -> s < 0).min();
+			
+			// Check if any source available
+			if (maxSpeedH.isEmpty() && maxSpeedL.isEmpty()) {
+				setNetworkSpeed(0.0);
+				setState(PowerNetState.INACTIVE);
+			} 
+			
+			// Check for reversed sources
+			else if (maxSpeedH.isPresent() && maxSpeedL.isPresent()) {
+				setNetworkSpeed(0.0);
+				setState(PowerNetState.INACTIVE);
+			}
+			
+			else {
+				
+				double speed = maxSpeedL.orElseGet(() -> maxSpeedH.getAsDouble());
+				
+				// Calculate available torque
+				double torque = this.components.int2ObjectEntrySet().stream()
+					.filter(c -> c.getValue().getSourceSpeed(getLevel()) == 0)
+					.mapToDouble(c -> c.getValue().getTorque(getLevel()) / getTransmission(c.getIntKey()))
+					.sum();
+				
+				// Calculate total load
+				double load = this.components.int2ObjectEntrySet().stream()
+						.filter(c -> c.getValue().getSourceSpeed(getLevel()) == 0)
+						.mapToDouble(c -> c.getValue().getTorque(getLevel()) / getTransmission(c.getIntKey()))
+						.sum();
+				
+				// Check for overload
+				if (load > torque) {
+					setNetworkSpeed(0.0);
+					setState(PowerNetState.INACTIVE);
+				} 
+				
+				else {
+					
+					// Set network rotation speed
+					setNetworkSpeed(speed);
+					setState(PowerNetState.ACTIVE);
+					
+				}
+				
+			}
+			
+		}
+		
+		// Update rotation speeds
+		for (Entry<Integer, KineticComponent> c : this.components.int2ObjectEntrySet()) {
+			double ratio = getTransmission(c.getKey());
+			double cspeed = ratio == 0.0 ? 0.0 : (getSpeed() / ratio);
+			c.getValue().setRPM(getLevel(), cspeed);
+		}
+		
+		// Trigger updates
+		listComponents().stream()
+			.map(c -> c.reference().pos())
+			.distinct()
+			.forEach(pos -> GameUtility.triggerClientSync(getLevel(), pos));
 		
 	}
 
-	public double getTransmission(KineticComponent component) {
-		return this.component2ratioMap.getOrDefault(component, 0.0);
+	public double getTransmission(int refId) {
+		return this.component2ratioMap.getOrDefault(refId, 0.0);
 	}
 	
 	public void setNetworkSpeed(double speed) {

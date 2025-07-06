@@ -115,16 +115,17 @@ public class KineticHandlerCapabillity extends SynchronizedFunctionalNetworkSpac
 		Level level = (Level) event.getLevel();
 		KineticHandlerCapabillity handler = GameUtility.getLevelCapability(level, Capabilities.KINETIC_HANDLER_CAPABILITY);
 		
+		// Always remove components at this block pos, this prevents wrong connections from things like assembly to an compound
+		for (KineticReference reference : handler.listReferences()) {
+			if (reference.pos().equals(event.getPos()))
+				handler.updateTicket(reference, UpdateType.COMPONENT_REMOVE);
+		}
+		
 		if (event.getState().getBlock() instanceof IKineticBlock kinetic) {
 			Stream.of(kinetic.getTransmissionNodes(level, event.getPos(), event.getState()))
 				.map(TransmissionNode::reference)
 				.distinct()
 				.forEach(ref -> handler.updateTicket(ref, UpdateType.COMPONENT_PUT));;
-		} else {
-			for (KineticReference reference : handler.listReferences()) {
-				if (reference.pos().equals(event.getPos()))
-					handler.updateTicket(reference, UpdateType.COMPONENT_REMOVE);
-			}
 		}
 	}
 	

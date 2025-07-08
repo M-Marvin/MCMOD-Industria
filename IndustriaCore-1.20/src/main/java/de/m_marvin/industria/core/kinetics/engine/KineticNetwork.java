@@ -1,9 +1,13 @@
 package de.m_marvin.industria.core.kinetics.engine;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.OptionalDouble;
+import java.util.Queue;
 import java.util.function.Supplier;
 import java.util.stream.DoubleStream;
 
@@ -17,8 +21,15 @@ import net.minecraft.world.level.Level;
 
 public class KineticNetwork extends SynchronizedFunctionalNetwork<KineticNetwork, KineticReference, KineticHandlerCapabillity.KineticComponent, Double> {
 	
+	private static record RefPair(int refId1, int refId2) {
+		public boolean has(int refId) {
+			return refId1 == refId || refId2 == refId;
+		}
+	}
+	
 	protected final Supplier<Level> level;
-	protected Map<Integer, Double> component2ratioMap = new HashMap<>();
+	protected Map<RefPair, Double> components2ratioMap = new HashMap<>();
+	protected Map<Integer, Double> component2speedMap = new HashMap<>();
 	protected double speed = 0;
 	
 	protected PowerNetState state = PowerNetState.ACTIVE;
@@ -60,118 +71,158 @@ public class KineticNetwork extends SynchronizedFunctionalNetwork<KineticNetwork
 //		});
 //		this.state = PowerNetState.valueOf(tag.getString("State").toUpperCase());
 //	}
+	
+	private void resetSpeedMap() {
+		this.component2speedMap.clear();
+		setState(PowerNetState.INACTIVE);
+	}
 
+	private void clearEntries(int refId) {
+		
+		this.components2ratioMap.keySet().stream().filter(p -> p.has(refId)).toList().forEach(this.components2ratioMap::remove);
+		resetSpeedMap();
+	}
+	
 	@Override
 	protected void afterPutComponent(int refId) {
-		this.component2ratioMap.remove(refId);
-		this.state = PowerNetState.INACTIVE;
+		clearEntries(refId);
 	}
 
 	@Override
 	protected void afterRemoveComponent(int refId) {
-		this.component2ratioMap.remove(refId);
-		this.state = PowerNetState.INACTIVE;
-	}
-
-	@Override
-	protected boolean afterParametrizedConnection(int refId1, int refId2, Double ratio) {
-		if (ratio == 0.0) return true;
-		Double ratio1 = this.component2ratioMap.get(refId1);
-		if (ratio1 != null) {
-			Double r = this.component2ratioMap.put(refId2, ratio1 / ratio);
-			if (r != null && Double.compare(r, ratio1 / ratio) != 0) setLocked();
-		} else {
-			Double ratio2 = this.component2ratioMap.get(refId2);
-			if (ratio2 == null) {
-				if (!this.component2ratioMap.isEmpty())
-					return false;
-				ratio2 = 1.0;
-				this.component2ratioMap.put(refId2, ratio2);
-			}
-			this.component2ratioMap.put(refId1, ratio2 * ratio);
-		}
-		return true;
+		clearEntries(refId);
 	}
 
 	@Override
 	protected void afterIntegrateNetwork(IntSet refIds, KineticNetwork other) {
-		for (int refId : refIds) {
-			Double ratio = other.component2ratioMap.get(refId);
-			if (ratio != null)
-				this.component2ratioMap.put(refId, ratio);
+		for (Entry<RefPair, Double> e : other.components2ratioMap.entrySet()) {
+			if (refIds.contains(e.getKey().refId1) && refIds.contains(e.getKey().refId2))
+				this.components2ratioMap.put(e.getKey(), e.getValue());
 		}
-		this.state = PowerNetState.INACTIVE;
+		resetSpeedMap();
 	}
 
 	@Override
-	public void afterChange() {
-		System.out.println("KineticNetwork size: " + this.components.size());
-		recalculateKinetics();
+	protected void afterParametrizedConnection(int refId1, int refId2, Double ratio) {
+		if (refId1 < refId2)
+			this.components2ratioMap.put(new RefPair(refId1, refId2), ratio);
+		else
+			this.components2ratioMap.put(new RefPair(refId2, refId1), 1 / ratio);
+		resetSpeedMap();
 	}
 
-	@Override
-	public void onUpdate() {
-		System.out.println("Update KineticNetwork with size: " + this.components.size());
+	private boolean computeSpeeds(int refId1, int refId2, double ratio) {
+		if (ratio == 0.0) return true;
 		
-		recalculateKinetics();
+		Double speed1 = this.component2speedMap.get(refId1);
+		Double speed2 = this.component2speedMap.get(refId2);
+		
+		if (speed1 == null && speed2 == null && !this.component2speedMap.isEmpty()) {
+			setLocked();
+			return false;
+		}
+		
+		if (speed1 != null && speed2 != null && speed2 / speed1 != ratio) {
+			setLocked();
+			return false;
+		}
+		
+		if (speed1 == null) {
+			if (speed2 == null)
+				this.component2speedMap.put(refId2, speed2 = 1.0);
+			this.component2speedMap.put(refId1, speed1 = speed2 * ratio);
+		} else {
+			this.component2speedMap.put(refId2, speed2 = speed1 / ratio);
+		}
+		return true;
 	}
 	
-	public void recalculateKinetics() {
+	private void recomputeKinetics() {
 		
-		// Check for opposite rotations, if so, skip calculations
-		if (isLocked()) {
-			setNetworkSpeed(0.0);
-		} else {
-			
-			// Calculate source speeds
-			double[] sources = this.components.int2ObjectEntrySet().stream()
-				.mapToDouble(c -> c.getValue().getSourceSpeed(getLevel()) * getTransmission(c.getIntKey()))
-				.distinct()
-				.toArray();
-			
-			// Find fastest source-speed in network (in both directions)
-			OptionalDouble maxSpeedH = DoubleStream.of(sources).filter(s -> s > 0).max();
-			OptionalDouble maxSpeedL = DoubleStream.of(sources).filter(s -> s < 0).min();
-			
-			// Check if any source available
-			if (maxSpeedH.isEmpty() && maxSpeedL.isEmpty()) {
-				setNetworkSpeed(0.0);
-				setState(PowerNetState.INACTIVE);
-			} 
-			
-			// Check for reversed sources
-			else if (maxSpeedH.isPresent() && maxSpeedL.isPresent()) {
-				setNetworkSpeed(0.0);
-				setState(PowerNetState.INACTIVE);
+		if (!this.components2ratioMap.isEmpty()) {
+
+			if (this.component2speedMap.isEmpty()) {
+				
+				// Recompute speed map
+				Queue<Integer> nextEntries = new ArrayDeque<>();
+				List<Entry<RefPair, Double>> toCompute = new ArrayList<>();
+				nextEntries.add(components2ratioMap.keySet().stream().findAny().get().refId1);
+				toCompute.addAll(this.components2ratioMap.entrySet());
+				
+				compute: while (nextEntries.size() > 0 && !isLocked()) {
+					int refId = nextEntries.poll();
+					
+					for (int i = 0;i < toCompute.size(); i++) {
+						var e = toCompute.get(i);
+						if (e.getKey().refId2 == refId) {
+							if (!computeSpeeds(e.getKey().refId1, refId, e.getValue())) break compute;
+							nextEntries.add(e.getKey().refId1);
+						} else if (e.getKey().refId1 == refId) {
+							if (!computeSpeeds(refId, e.getKey().refId2, e.getValue())) break compute;
+							nextEntries.add(e.getKey().refId2);
+						} else continue;	
+						toCompute.remove(i--);
+					}
+				}
+				
 			}
 			
-			else {
+			// Check for opposite rotations, if so, skip calculations
+			if (isLocked()) {
+				setNetworkSpeed(0.0);
+			} else {
 				
-				double speed = maxSpeedL.orElseGet(() -> maxSpeedH.getAsDouble());
+				// Calculate source speeds
+				double[] sources = this.components.int2ObjectEntrySet().stream()
+					.mapToDouble(c -> c.getValue().getSourceSpeed(getLevel()) * getTransmission(c.getIntKey()))
+					.distinct()
+					.toArray();
 				
-				// Calculate available torque
-				double torque = this.components.int2ObjectEntrySet().stream()
-					.filter(c -> c.getValue().getSourceSpeed(getLevel()) == 0)
-					.mapToDouble(c -> c.getValue().getTorque(getLevel()) / getTransmission(c.getIntKey()))
-					.sum();
+				// Find fastest source-speed in network (in both directions)
+				OptionalDouble maxSpeedH = DoubleStream.of(sources).filter(s -> s > 0).max();
+				OptionalDouble maxSpeedL = DoubleStream.of(sources).filter(s -> s < 0).min();
 				
-				// Calculate total load
-				double load = this.components.int2ObjectEntrySet().stream()
-						.filter(c -> c.getValue().getSourceSpeed(getLevel()) == 0)
-						.mapToDouble(c -> c.getValue().getTorque(getLevel()) / getTransmission(c.getIntKey()))
-						.sum();
-				
-				// Check for overload
-				if (load > torque) {
+				// Check if any source available
+				if (maxSpeedH.isEmpty() && maxSpeedL.isEmpty()) {
 					setNetworkSpeed(0.0);
 					setState(PowerNetState.INACTIVE);
 				} 
 				
+				// Check for reversed sources
+				else if (maxSpeedH.isPresent() && maxSpeedL.isPresent()) {
+					setNetworkSpeed(0.0);
+					setState(PowerNetState.INACTIVE);
+				}
+				
 				else {
 					
-					// Set network rotation speed
-					setNetworkSpeed(speed);
-					setState(PowerNetState.ACTIVE);
+					double speed = maxSpeedL.orElseGet(() -> maxSpeedH.getAsDouble());
+					
+					// Calculate available torque
+					double torque = this.components.int2ObjectEntrySet().stream()
+						.filter(c -> c.getValue().getSourceSpeed(getLevel()) == 0)
+						.mapToDouble(c -> c.getValue().getTorque(getLevel()) / getTransmission(c.getIntKey()))
+						.sum();
+					
+					// Calculate total load
+					double load = this.components.int2ObjectEntrySet().stream()
+							.filter(c -> c.getValue().getSourceSpeed(getLevel()) == 0)
+							.mapToDouble(c -> c.getValue().getTorque(getLevel()) / getTransmission(c.getIntKey()))
+							.sum();
+					
+					// Check for overload
+					if (load > torque) {
+						setNetworkSpeed(0.0);
+						setState(PowerNetState.INACTIVE);
+					} 
+					
+					else {
+						
+						// Set network rotation speed
+						setNetworkSpeed(speed);
+						setState(PowerNetState.ACTIVE);
+						
+					}
 					
 				}
 				
@@ -192,10 +243,23 @@ public class KineticNetwork extends SynchronizedFunctionalNetwork<KineticNetwork
 			.distinct()
 			.forEach(pos -> GameUtility.triggerClientSync(getLevel(), pos));
 		
+		
+	}
+	
+	@Override
+	public void afterChange() {
+		System.out.println("KineticNetwork size: " + this.components.size() + " " + this.hashCode());
+		recomputeKinetics();
 	}
 
+	@Override
+	public void onUpdate() {
+		System.out.println("Update KineticNetwork with size: " + this.components.size() + " " + this.hashCode());
+		recomputeKinetics();
+	}
+	
 	public double getTransmission(int refId) {
-		return this.component2ratioMap.getOrDefault(refId, 0.0);
+		return this.component2speedMap.getOrDefault(refId, 0.0);
 	}
 	
 	public void setNetworkSpeed(double speed) {
@@ -208,7 +272,7 @@ public class KineticNetwork extends SynchronizedFunctionalNetwork<KineticNetwork
 	
 	public void reset() {
 		this.components.clear();
-		this.component2ratioMap.clear();
+		this.component2speedMap.clear();
 		this.state = PowerNetState.INACTIVE;
 	}
 	

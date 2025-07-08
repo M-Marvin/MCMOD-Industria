@@ -1,6 +1,5 @@
 package de.m_marvin.industria.core.util.ufns;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,18 +11,20 @@ import java.util.function.Supplier;
 
 import com.google.common.collect.Queues;
 
-import de.m_marvin.industria.IndustriaCore;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.minecraft.nbt.CompoundTag;
 
-public class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace.Component<R>, N extends FunctionalNetworkSpace.FunctionalNetwork<N, R, C, A>, A> {
-
-	public static abstract class Component<R> {
-		
+public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace.Component<R>, N extends FunctionalNetworkSpace.FunctionalNetwork<N, R, C, A>, A> {
+	
+	
+	
+	public abstract static class Component<R> {
+		 
 		protected final IntSet referencedComponents = new IntOpenHashSet();
 		protected final R reference;
 		
@@ -49,12 +50,22 @@ public class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace.Componen
 			return false;
 		}
 		
+		public void serializeNbt(CompoundTag nbt) {
+//			nbt.put("Reference", serializeReference(this.reference));
+		}
+		
+		public void deserializeNbt(CompoundTag nbt) {
+//			this.reference = deserializeReference(nbt.get(null));
+			
+		}
+		
+			
 	}
 	
-	public static abstract class FunctionalNetwork<N extends FunctionalNetwork<N, R, C, A>, R, C extends FunctionalNetworkSpace.Component<R>, A> {
+	public abstract static class FunctionalNetwork<N extends FunctionalNetwork<N, R, C, A>, R, C extends FunctionalNetworkSpace.Component<R>, A> {
 		
 		protected final Int2ObjectMap<C> components = new Int2ObjectOpenHashMap<>();
-		
+
 		protected static <N extends FunctionalNetwork<N, ?, ?, ?>> N combineNetwork(N network1, N network2) {
 			network1.integrateNetwork(network2.components.keySet(), network2);
 			return network1;
@@ -75,21 +86,22 @@ public class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace.Componen
 		
 		@Override
 		public int hashCode() {
-			return components.hashCode();
+			return super.hashCode();
+			//return Objects.hash(components); Int2ObjectMap#hashCode() seems to be broken, always zero
 		}
 		
 		@Override
 		public boolean equals(Object obj) {
 			if (obj == this) return true;
 			if (obj instanceof FunctionalNetwork other) {
-				return other.components.equals(this);
+				return other.components.equals(this.components);
 			}
 			return false;
 		}
 		
 		protected abstract void afterPutComponent(int refId);
 		protected abstract void afterRemoveComponent(int refId);
-		protected abstract boolean afterParametrizedConnection(int refId1, int refId2, A parameter);
+		protected abstract void afterParametrizedConnection(int refId1, int refId2, A parameter);
 		protected abstract void afterIntegrateNetwork(IntSet refIds, N other);
 		
 	}
@@ -109,6 +121,9 @@ public class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace.Componen
 		this.networkFactory = networkFactory;
 		this.traceLimit = traceLimit;
 	}
+	
+	protected abstract CompoundTag serializeReference(R reference);
+	protected abstract R deserializeReference(CompoundTag tag);
 	
 	public Collection<N> listNetworks() {
 		return this.ref2network.values().stream().distinct().toList();
@@ -185,24 +200,9 @@ public class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace.Componen
 		newComponents.keySet().forEach(combinedNetwork::afterPutComponent);
 		
 		// Trigger new connection event
-		int toAdd = (int) components.values().stream().flatMap(Collection::stream).distinct().count();
-		if (toAdd > 0) {
-			List<ParametrizedReference<R, A>> addedRefs = new ArrayList<>();
-			int attempts = toAdd + 1;
-			while (toAdd > addedRefs.size() && attempts > 0) {
-				for (var entry : components.entrySet()) {
-					for (var pref : entry.getValue())
-						if (!addedRefs.contains(pref))
-							if (combinedNetwork.afterParametrizedConnection(this.referenceIds.getInt(entry.getKey().reference), this.referenceIds.getInt(pref.reference()), pref.paramter()))
-								addedRefs.add(pref);
-				}
-				attempts--;
-			}
-			if (attempts == 0) {
-				IndustriaCore.LOGGER.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-				IndustriaCore.LOGGER.warn("Unable to insert all parametrized references, reached itterator limit!");
-				IndustriaCore.LOGGER.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-			}
+		for (var entry : components.entrySet()) {
+			for (var pref : entry.getValue())
+				combinedNetwork.afterParametrizedConnection(this.referenceIds.getInt(entry.getKey().reference), this.referenceIds.getInt(pref.reference()), pref.paramter());
 		}
 
 		// Get a list of all new references and all potentially disconnected references

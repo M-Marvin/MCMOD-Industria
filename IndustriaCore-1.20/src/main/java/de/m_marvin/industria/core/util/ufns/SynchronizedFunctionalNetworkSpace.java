@@ -25,7 +25,7 @@ public abstract class SynchronizedFunctionalNetworkSpace<R, C extends Functional
 		super(networkFactory, traceLimit);
 		
 	}
-	
+
 	public static abstract class SynchronizedFunctionalNetwork<N extends SynchronizedFunctionalNetwork<N, R, C, A>, R, C extends FunctionalNetworkSpace.Component<R>, A> extends FunctionalNetwork<N, R, C, A> {
 		
 		public abstract void afterChange();
@@ -33,8 +33,8 @@ public abstract class SynchronizedFunctionalNetworkSpace<R, C extends Functional
 		
 	}
 	
-	public abstract C findComponentAt(R reference);
-	public abstract Collection<ParametrizedReference<R, A>> findConnectionsForComponent(C component);
+	protected abstract C findOrCreateComponentAt(R reference);
+	protected abstract Collection<ParametrizedReference<R, A>> findConnectionsForComponent(C component);
 	
 	// Update buffers
 	protected final Map<C, Collection<ParametrizedReference<R, A>>> putComponents = new HashMap<>();
@@ -62,7 +62,7 @@ public abstract class SynchronizedFunctionalNetworkSpace<R, C extends Functional
 			
 			switch (ticket.type()) {
 			case COMPONENT_PUT: {
-				C component = findComponentAt(ticket.reference());
+				C component = findOrCreateComponentAt(ticket.reference());
 				if (component == null) continue;
 				if (this.putComponents.containsKey(component)) continue;
 				this.putComponents.put(component, findConnectionsForComponent(component));

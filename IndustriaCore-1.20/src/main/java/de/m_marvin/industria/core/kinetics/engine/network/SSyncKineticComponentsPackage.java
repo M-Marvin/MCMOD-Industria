@@ -1,5 +1,6 @@
 package de.m_marvin.industria.core.kinetics.engine.network;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -18,10 +19,10 @@ import net.minecraftforge.network.NetworkEvent.Context;
 public class SSyncKineticComponentsPackage {
 	
 	public final ChunkPos chunkPos;
-	public final Set<KineticComponent> components;
+	public final Collection<KineticComponent> components;
 	public final SyncRequestType request;
 	
-	public SSyncKineticComponentsPackage(Set<KineticComponent> components, ChunkPos targetChunk, SyncRequestType request) {
+	public SSyncKineticComponentsPackage(Collection<KineticComponent> components, ChunkPos targetChunk, SyncRequestType request) {
 		this.chunkPos = targetChunk;
 		this.components = components;
 		this.request = request;
@@ -38,7 +39,7 @@ public class SSyncKineticComponentsPackage {
 		return chunkPos;
 	}
 	
-	public Set<KineticComponent> getComponents() {
+	public Collection<KineticComponent> getComponents() {
 		return components;
 	}
 	

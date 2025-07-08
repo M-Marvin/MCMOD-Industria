@@ -8,6 +8,7 @@ import de.m_marvin.industria.core.kinetics.engine.KineticNetwork;
 import de.m_marvin.industria.core.kinetics.types.blocks.IKineticBlock.KineticReference;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
+import de.m_marvin.industria.core.util.ufns.SynchronizedFunctionalNetworkSpace.UpdateType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -32,13 +33,14 @@ public class KineticUtility {
 //		return handler.updateNetwork(reference);
 //	}
 //	
-//	/**
-//	 * Recalculates the network at the reference and triggers updates for its components, does not cause the network to be rebuild
-//	 */
-//	public static void recalculateNetwork(Level level, KineticReference reference) {
-//		KineticHandlerCapabillity handler = GameUtility.getLevelCapability(level, Capabilities.KINETIC_HANDLER_CAPABILITY);
+	/**
+	 * Recalculates the network at the reference and triggers updates for its components, does not cause the network to be rebuild
+	 */
+	public static void recalculateNetwork(Level level, KineticReference reference) {
+		KineticHandlerCapabillity handler = GameUtility.getLevelCapability(level, Capabilities.KINETIC_HANDLER_CAPABILITY);
+		handler.updateTicket(reference, UpdateType.NETWORK_UPDATE);
 //		handler.recalculateNetwork(handler.getNetworkAt(reference));
-//	}
+	}
 //	
 //	/**
 //	 * Returns all networks with components at the position

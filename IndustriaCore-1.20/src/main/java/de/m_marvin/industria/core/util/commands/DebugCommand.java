@@ -7,10 +7,8 @@ import com.mojang.brigadier.context.CommandContext;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.engine.ElectricHandlerCapability;
+import de.m_marvin.industria.core.electrics.engine.ElectricHandlerCapability.ElectricComponent;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
-import de.m_marvin.industria.core.registries.Capabilities;
-import de.m_marvin.industria.core.util.GameUtility;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -47,13 +45,10 @@ public class DebugCommand {
 		));
 	}
 	
-	@SuppressWarnings("resource")
 	public static int dumpCircuit(CommandContext<CommandSourceStack> source, BlockPos position) {
 		ServerLevel level = source.getSource().getLevel();
-		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-		ElectricHandlerCapability.Component<Object, BlockPos, Object> component = handler.getComponentAt(position);
-		if (component == null) return 0;
-		ElectricNetwork network = handler.getCircuitWithComponent(component);
+		
+		ElectricNetwork network = ElectricUtility.getNetworkAt(level, position);
 		if (network == null) return 0;
 		String circuit = network.toString();
 		
@@ -65,9 +60,8 @@ public class DebugCommand {
 	
 	public static int printNodes(CommandContext<CommandSourceStack> source, BlockPos position) {
 		ServerLevel level = source.getSource().getLevel();
-		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
 		
-		ElectricHandlerCapability.Component<Object, BlockPos, Object> component = handler.getComponentAt(position);
+		ElectricComponent<Object, BlockPos, Object> component = ElectricUtility.getComponentAt(level, position);
 		if (component == null) return 0;
 		NodePos[] nodes = component.getNodes(level);
 		
@@ -76,7 +70,7 @@ public class DebugCommand {
 			source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.node_voltages.node", node.getNode()), false);
 			String[] lanes = ElectricUtility.getLaneLabelsSummarized(level, node);
 			for (int i = 0; i < lanes.length; i++) {
-				Optional<Double> potential = handler.getFloatingNodeVoltage(node, i, lanes[i]);
+				Optional<Double> potential = ElectricUtility.getFloatingNodeVoltage(level, node, i, lanes[i]);
 				final int id = i;
 				source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.node_voltages.lane", id, lanes[id], potential.isPresent() ? Double.toString(potential.get()) : "N/A"), false);
 			}

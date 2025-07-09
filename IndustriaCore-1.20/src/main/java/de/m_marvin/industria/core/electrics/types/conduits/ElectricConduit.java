@@ -76,7 +76,7 @@ public class ElectricConduit extends Conduit implements IElectricConduit {
 		Plotter template = CircuitTemplateManager.getInstance().getTemplate(Circuits.RESISTOR).plotter();
 		template.setProperty("resistance", this.resistance * instance.getLength());
 		
-		NodePos[] connections = getConnections(level, position, instance);
+		NodePos[] connections = getElectricConnections(level, position, instance);
 		String[] wireLabels = this.getWireLanes(level, position, instance, null);
 		for (int i = 0; i < wireLabels.length; i++) {
 			template.setNetworkNode("NET1", connections[0], i, wireLabels[i]);

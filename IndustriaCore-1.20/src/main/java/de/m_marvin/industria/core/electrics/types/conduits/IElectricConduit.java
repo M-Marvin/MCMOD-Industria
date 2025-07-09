@@ -38,7 +38,7 @@ public interface IElectricConduit extends IElectric<ConduitEntity, ConduitPos, C
 	}
 	
 	@Override
-	default NodePos[] getConnections(Level level, ConduitPos pos, ConduitEntity instance) {
+	default NodePos[] getElectricConnections(Level level, ConduitPos pos, ConduitEntity instance) {
 		return new NodePos[] { pos.getNodeA(), pos.getNodeB() };
 	}
 	

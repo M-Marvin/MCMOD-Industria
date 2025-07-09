@@ -76,21 +76,17 @@ public class KineticNetwork extends SynchronizedFunctionalNetwork<KineticNetwork
 		this.component2speedMap.clear();
 		setState(PowerNetState.INACTIVE);
 	}
-
-	private void clearEntries(int refId) {
-		
-		this.components2ratioMap.keySet().stream().filter(p -> p.has(refId)).toList().forEach(this.components2ratioMap::remove);
-		resetSpeedMap();
-	}
 	
 	@Override
 	protected void afterPutComponent(int refId) {
-		clearEntries(refId);
+		this.components2ratioMap.keySet().stream().filter(p -> p.has(refId)).toList().forEach(this.components2ratioMap::remove);
+		resetSpeedMap();
 	}
 
 	@Override
 	protected void afterRemoveComponent(int refId) {
-		clearEntries(refId);
+		this.components2ratioMap.keySet().stream().filter(p -> p.has(refId)).toList().forEach(this.components2ratioMap::remove);
+		resetSpeedMap();
 	}
 
 	@Override
@@ -270,11 +266,11 @@ public class KineticNetwork extends SynchronizedFunctionalNetwork<KineticNetwork
 		return speed;
 	}
 	
-	public void reset() {
-		this.components.clear();
-		this.component2speedMap.clear();
-		this.state = PowerNetState.INACTIVE;
-	}
+//	public void reset() {
+//		this.components.clear();
+//		this.component2speedMap.clear();
+//		this.state = PowerNetState.INACTIVE;
+//	}
 	
 	public boolean isEmpty() {
 		return components.isEmpty();

@@ -8,6 +8,7 @@ import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
 import de.m_marvin.industria.core.conduits.engine.network.SCConduitPackage;
 import de.m_marvin.industria.core.conduits.types.ConduitHitResult;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
+import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.contraptions.ContraptionUtility;
@@ -59,9 +60,17 @@ public class ConduitUtility {
 		return handler.getConduit(position);
 	}
 
+	public static Optional<ConduitEntity> getConduitAtNode(Level level, NodePos node) {
+		return getConduitAtNode(level, node.getBlock(), node.getNode());
+	}
+	
 	public static Optional<ConduitEntity> getConduitAtNode(Level level, BlockPos block, int node) {
 		ConduitHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		return handler.getConduitAtNode(block, node);
+	}
+	
+	public static List<ConduitEntity> getConduitsAtNode(Level level, NodePos node) {
+		return getConduitsAtNode(level, node.getBlock(), node.getNode());
 	}
 	
 	public static List<ConduitEntity> getConduitsAtNode(Level level, BlockPos position, int node) {

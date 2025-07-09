@@ -152,41 +152,4 @@ public class TemplateCommand {
 		return 1;
 	}
 	
-	@SuppressWarnings("resource")
-	public static int dumpCircuit(CommandContext<CommandSourceStack> source, BlockPos position) {
-		ServerLevel level = source.getSource().getLevel();
-		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-		ElectricHandlerCapability.Component<Object, BlockPos, Object> component = handler.getComponentAt(position);
-		if (component == null) return 0;
-		ElectricNetwork network = handler.getCircuitWithComponent(component);
-		if (network == null) return 0;
-		String circuit = network.toString();
-		
-		Minecraft.getInstance().keyboardHandler.setClipboard(circuit);
-		
-		source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.circuit_copied"), false);
-		return 1;
-	}
-	
-	public static int printNodes(CommandContext<CommandSourceStack> source, BlockPos position) {
-		ServerLevel level = source.getSource().getLevel();
-		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-		
-		ElectricHandlerCapability.Component<Object, BlockPos, Object> component = handler.getComponentAt(position);
-		if (component == null) return 0;
-		NodePos[] nodes = component.getNodes(level);
-		
-		source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.node_voltages.title", nodes.length), false);
-		for (NodePos node : nodes) {
-			source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.node_voltages.node", node.getNode()), false);
-			String[] lanes = ElectricUtility.getLaneLabelsSummarized(level, node);
-			for (int i = 0; i < lanes.length; i++) {
-				Optional<Double> potential = handler.getFloatingNodeVoltage(node, i, lanes[i]);
-				final int id = i;
-				source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.node_voltages.lane", id, lanes[id], potential.isPresent() ? Double.toString(potential.get()) : "N/A"), false);
-			}
-		}
-		return 1;
-	}
-	
 }

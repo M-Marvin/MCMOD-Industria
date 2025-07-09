@@ -1,5 +1,7 @@
 package de.m_marvin.industria.core.electrics;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -12,7 +14,7 @@ import com.google.common.base.Predicate;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.engine.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.engine.ElectricHandlerCapability;
-import de.m_marvin.industria.core.electrics.engine.ElectricHandlerCapability.Component;
+import de.m_marvin.industria.core.electrics.engine.ElectricHandlerCapability.ElectricComponent;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.CircuitTemplate.Plotter;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
@@ -39,55 +41,60 @@ public class ElectricUtility {
 	 */
 	public static <P> void updateNetwork(Level level, P position) {
 		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-		handler.updateNetwork(position);
+//		handler.updateNetwork(position);
 	}
 	
 	/*
 	 * Returns all components connected with the given node
 	 */
-	public static Set<ElectricHandlerCapability.Component<?, ?, ?>> findComponentsOnNode(Level level, NodePos node) {
-		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-		return handler.findComponentsOnNode(node);
+	public static Collection<ElectricHandlerCapability.ElectricComponent<?, ?, ?>> findComponentsOnNode(Level level, NodePos node) {
+		ElectricNetwork network = getNetworkAt(level, node.getBlock());
+		if (network == null) return Collections.emptySet();
+		return network.findComponentsOnNode(node);
 	}
 
 	/*
 	 * Returns all components located in the given chunk
 	 */
-	public static Set<Component<?, ?, ?>> findComponentsInChunk(Level level, ChunkPos chunkPos) {
+	public static Collection<ElectricComponent<?, ?, ?>> findComponentsInChunk(Level level, ChunkPos chunkPos) {
 		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-		return handler.findComponentsInChunk(chunkPos);
+//		return handler.findComponentsInChunk(chunkPos);
+		return null;
 	}
 	
-	/*
-	 * List all components connected with the given components
-	 */
-	public static Set<Component<?, ?, ?>> findComponentsConnectedWith(Level level, Component<?, ?, ?>... components) {
-		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-		return handler.findComponentsConnectedWith(components);
-	}
-	
+//	/*
+//	 * List all components connected with the given components
+//	 */
+//	public static Collection<ElectricComponent<?, ?, ?>> findComponentsConnectedWith(Level level, ElectricComponent<?, ?, ?>... components) {
+//		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
+////		return handler.findComponentsConnectedWith(components);
+//		
+//		handler.find
+//	}
+//	
 	/*
 	 * Returns the network for the given component
 	 */
-	public static ElectricNetwork getCircuitWithComponent(Level level, Component<?, ?, ?> component) {
+	public static ElectricNetwork getCircuitWithComponent(Level level, ElectricComponent<?, ?, ?> component) {
 		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-		return handler.getCircuitWithComponent(component);
+		return handler.findNetworkAt(component);
 	}
 	
 	/*
 	 * Searches for a component at the given position
 	 */
-	public static <I, P, T> Component<I, P, T> getComponentAt(Level level, P position) {
+	@SuppressWarnings("unchecked")
+	public static <I, P, T> ElectricComponent<I, P, T> getComponentAt(Level level, P position) {
 		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-		return handler.getComponentAt(position);
+		return (ElectricComponent<I, P, T>) handler.findComponentAt(position);
 	}
 	
 	/**
 	 * Checks if the component is registered as electric component and part of a valid network
 	 */
-	public static boolean isInNetwork(Level level, Component<?, ?, ?> component) {
+	public static boolean isInNetwork(Level level, ElectricComponent<?, ?, ?> component) {
 		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-		return handler.isInNetwork(component);
+		return handler.findNetworkAt(component) != null;
 	}
 
 	/**
@@ -95,7 +102,7 @@ public class ElectricUtility {
 	 */
 	public static boolean isInNetwork(Level level, Object pos) {
 		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-		return handler.isInNetwork(pos);
+		return handler.findNetworkAt(pos) != null;
 	}
 	
 	/**
@@ -103,26 +110,26 @@ public class ElectricUtility {
 	 */
 	public static ElectricNetwork getNetworkAt(Level level, Object pos) {
 		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-		return handler.getNetworkAt(pos);
+		return handler.findNetworkAt(pos);
 	}
 	
-	/**
-	 * Changes the state of the network with an component at the given position
-	 * Runs necessary updates and triggers events
-	 */
-	public static void setNetworkState(Level level, Object pos, PowerNetState state) {
-		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-		
-		handler.updateNetworkState(pos, state);
-		ElectricNetwork network = handler.getNetworkAt(pos);
-		if (network != null && !level.isClientSide()) {
-			if (state == PowerNetState.ACTIVE) {
-				handler.updateNetwork(pos);
-			} else {
-				handler.triggerUpdates(network);;
-			}
-		}
-	}
+//	/**
+//	 * Changes the state of the network with an component at the given position
+//	 * Runs necessary updates and triggers events
+//	 */
+//	public static void setNetworkState(Level level, Object pos, PowerNetState state) {
+//		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
+//		
+////		handler.updateNetworkState(pos, state);
+////		ElectricNetwork network = handler.getNetworkAt(pos);
+////		if (network != null && !level.isClientSide()) {
+////			if (state == PowerNetState.ACTIVE) {
+////				handler.updateNetwork(pos);
+////			} else {
+////				handler.triggerUpdates(network);;
+////			}
+////		}
+//	}
 	
 	/**
 	 * Summarizes the lanes of all components connected to the node.
@@ -135,7 +142,7 @@ public class ElectricUtility {
 	 * @return A summarized list of the lane nodes of all components
 	 */
 	public static String[] getLaneLabelsSummarized(Level level, NodePos node) {
-		List<String[]> laneLabels = getLaneLabels(level, node, Component::isWire);
+		List<String[]> laneLabels = getLaneLabels(level, node, ElectricComponent::isWire);
 		int laneCount = laneLabels.stream().mapToInt(l -> l.length).max().orElseGet(() -> 0);
 		String[] lanes = new String[laneCount];
 		
@@ -161,7 +168,7 @@ public class ElectricUtility {
 	 * @param componentPredicate A predicate for the components to look for
 	 * @return A list of all lane names, sorted per component
 	 */
-	public static List<String[]> getLaneLabels(Level level, NodePos node, Predicate<Component<?, ?, ?>> componentPredicate) {
+	public static List<String[]> getLaneLabels(Level level, NodePos node, Predicate<ElectricComponent<?, ?, ?>> componentPredicate) {
 		return findComponentsOnNode(level, node).stream().filter(componentPredicate).map(component -> component.getWireLanes(level, node)).toList();
 	}
 	
@@ -173,8 +180,8 @@ public class ElectricUtility {
 	 * @param componentPredicate The predicate for the components
 	 * @param laneLabels The lane labels to set
 	 */
-	public static void setLaneLabels(Level level, NodePos node, Predicate<Component<?, ?, ?>> componentPredicate, String[] laneLabels) {
-		List<Component<?, ?, ?>> cables = findComponentsOnNode(level, node).stream().filter(componentPredicate).toList();
+	public static void setLaneLabels(Level level, NodePos node, Predicate<ElectricComponent<?, ?, ?>> componentPredicate, String[] laneLabels) {
+		List<ElectricComponent<?, ?, ?>> cables = findComponentsOnNode(level, node).stream().filter(componentPredicate).toList();
 		for (int i = 0; i < cables.size(); i++) {
 			cables.get(i).setWireLanes(level, node, laneLabels);
 		}
@@ -252,7 +259,7 @@ public class ElectricUtility {
 	 * @param localLanes The internal node lane names
 	 */
 	public static void plotJoinTogether(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, BlockPos position, BlockState instance, int group, String... localLanes) {
-		NodePos[] nodes = block.getConnections(level, position, instance);
+		NodePos[] nodes = block.getElectricConnections(level, position, instance);
 		plotJoinTogether(plotter, level, block, position, instance, nodes, group, localLanes);
 	}
 	
@@ -295,7 +302,7 @@ public class ElectricUtility {
 	 * @param instance State of the electric component
 	 */
 	public static void plotConnectEquealNamed(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, BlockPos position, BlockState instance) {
-		NodePos[] nodes = block.getConnections(level, position, instance);
+		NodePos[] nodes = block.getElectricConnections(level, position, instance);
 		List<String[]> lanes = Stream.of(nodes).map(node -> ElectricUtility.getLaneLabelsSummarized(level, node)).toList();
 		
 		Plotter template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR).plotter();
@@ -320,17 +327,18 @@ public class ElectricUtility {
 	
 	@SuppressWarnings("resource")
 	private static Consumer<Packet<?>> trackingNetwork(final PacketDistributor<ElectricNetwork> distributor, final Supplier<ElectricNetwork> networkSupplier) {
-		return p -> {
-			ElectricNetwork network = networkSupplier.get();
-			network.getComponents().stream()
-					.map(Component::pos)
-					.filter(b -> b instanceof BlockPos)
-					.map(pos -> network.getLevel().getChunkAt((BlockPos) pos))
-					.distinct()
-					.flatMap(chunk -> ((ServerChunkCache)chunk.getLevel().getChunkSource()).chunkMap.getPlayers(chunk.getPos(), false).stream())
-					.distinct()
-					.forEach(e -> e.connection.send(p));
-		};
+//		return p -> {
+//			ElectricNetwork network = networkSupplier.get();
+//			network.listComponents().stream()
+//					.map(ElectricComponent::pos)
+//					.filter(b -> b instanceof BlockPos)
+//					.map(pos -> network.getLevel().getChunkAt((BlockPos) pos))
+//					.distinct()
+//					.flatMap(chunk -> ((ServerChunkCache)chunk.getLevel().getChunkSource()).chunkMap.getPlayers(chunk.getPos(), false).stream())
+//					.distinct()
+//					.forEach(e -> e.connection.send(p));
+//		};
+		return null;
 	}
 	
 }

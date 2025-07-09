@@ -28,7 +28,7 @@ public interface IElectric<I, P, T> {
 	
 	public default void updateNetwork(Level level, P position) {
 		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-		handler.updateNetwork(position);
+//		handler.updateNetwork(position);
 	}
 	
 	public void plotCircuit(Level level, I instance, P position, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter);
@@ -44,7 +44,7 @@ public interface IElectric<I, P, T> {
 	public double getMaxPowerGeneration(Level level, P pos, I instance);
 	public double getCurrentPower(Level level, P pos, I instance);
 	
-	public NodePos[] getConnections(Level level, P pos, I instance);
+	public NodePos[] getElectricConnections(Level level, P pos, I instance);
 	public String[] getWireLanes(Level level, P pos, I instance, NodePos node);
 	public void setWireLanes(Level level, P pos, I instance, NodePos node, String[] laneLabels);
 	public boolean isWire();

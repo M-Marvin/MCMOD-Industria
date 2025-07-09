@@ -142,7 +142,7 @@ public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider,
 				connectorBlock = masterBlock;
 			}
 			
-			NodePos[] nodes = connectorBlock.getConnections(level, position, state);
+			NodePos[] nodes = connectorBlock.getElectricConnections(level, position, state);
 			ConduitNode[] connections = connectorBlock.getConduitNodes(level, position, state);
 			Vec3i center = new Vec3i(8, 8, 8);
 			Direction blockFacing = state.getValue(BlockStateProperties.FACING);

@@ -1,11 +1,12 @@
 package de.m_marvin.industria.core.electrics.engine.network;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
 
 import de.m_marvin.industria.core.electrics.engine.ClientElectricPackageHandler;
-import de.m_marvin.industria.core.electrics.engine.ElectricHandlerCapability.Component;
+import de.m_marvin.industria.core.electrics.engine.ElectricHandlerCapability.ElectricComponent;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.util.types.PowerNetState;
 import net.minecraft.nbt.CompoundTag;
@@ -18,22 +19,22 @@ import net.minecraftforge.network.NetworkEvent;
 public class SUpdateElectricNetworkPackage {
 	
 	public final String dataList;
-	public final Set<Component<?, ?, ?>> components;
+	public final Collection<ElectricComponent<?, Object, ?>> components;
 	public final PowerNetState state;
 	
 	public SUpdateElectricNetworkPackage(ElectricNetwork network) {
 		this.dataList = network.printDataList();
-		this.components = network.getComponents();
+		this.components = network.listComponents();
 		this.state = network.getState();;
 	}
 	
-	public SUpdateElectricNetworkPackage(Set<Component<?, ?, ?>> components, String dataList, PowerNetState state) {
+	public SUpdateElectricNetworkPackage(Collection<ElectricComponent<?, Object, ?>> components, String dataList, PowerNetState state) {
 		this.dataList = dataList;
 		this.components = components;
 		this.state = state;
 	}
 	
-	public Set<Component<?, ?, ?>> getComponents() {
+	public Collection<ElectricComponent<?, Object, ?>> getComponents() {
 		return components;
 	}
 	
@@ -47,7 +48,7 @@ public class SUpdateElectricNetworkPackage {
 	
 	public static void encode(SUpdateElectricNetworkPackage msg, FriendlyByteBuf buff) {
 		buff.writeInt(msg.components.size());
-		for (Component<?, ?, ?> component : msg.components) {
+		for (ElectricComponent<?, ?, ?> component : msg.components) {
 			CompoundTag componentTag = new CompoundTag();
 			component.serializeNbt(componentTag);
 			buff.writeNbt(componentTag);
@@ -58,11 +59,11 @@ public class SUpdateElectricNetworkPackage {
 	
 	public static SUpdateElectricNetworkPackage decode(FriendlyByteBuf buff) {
 		int componentCount = buff.readInt();
-		Set<Component<?, ?, ?>> components = new HashSet<>();
+		Set<ElectricComponent<?, Object, ?>> components = new HashSet<>();
 		for (int i = 0; i < componentCount; i++) {
 			CompoundTag componentTag = buff.readNbt();
-			Component<?, ?, ?> component = Component.deserializeNbt(componentTag);
-			components.add(component);
+//			ElectricComponent<?, ?, ?> component = ElectricComponent.deserializeNbt(componentTag);
+//			components.add(component);
 		}
 		String dataList = buff.readUtf();
 		PowerNetState state = buff.readEnum(PowerNetState.class);

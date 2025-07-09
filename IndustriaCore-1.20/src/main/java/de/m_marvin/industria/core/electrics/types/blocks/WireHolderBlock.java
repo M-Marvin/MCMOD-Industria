@@ -10,7 +10,7 @@ import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.CircuitTemplateManager;
-import de.m_marvin.industria.core.electrics.engine.ElectricHandlerCapability.Component;
+import de.m_marvin.industria.core.electrics.engine.ElectricHandlerCapability.ElectricComponent;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.CircuitTemplate.Plotter;
 import de.m_marvin.industria.core.registries.Circuits;
@@ -83,8 +83,8 @@ public class WireHolderBlock extends Block implements IElectricBlock, ITooltipAd
 	@Override
 	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
 		
-		NodePos node = this.getConnections(level, position, instance)[0];
-		List<String[]> cableLanes = ElectricUtility.getLaneLabels(level, node, Component::isWire);
+		NodePos node = this.getElectricConnections(level, position, instance)[0];
+		List<String[]> cableLanes = ElectricUtility.getLaneLabels(level, node, ElectricComponent::isWire);
 		int laneCount = cableLanes.stream().mapToInt(l -> l.length).max().orElse(0);
 
 		Plotter template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR).plotter();
@@ -118,7 +118,7 @@ public class WireHolderBlock extends Block implements IElectricBlock, ITooltipAd
 	}
 	
 	@Override
-	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {
+	public NodePos[] getElectricConnections(Level level, BlockPos pos, BlockState instance) {
 		return IntStream.range(0, NODE_COUNT).mapToObj(i -> new NodePos(pos, i)).toArray(i -> new NodePos[i]);
 	}
 

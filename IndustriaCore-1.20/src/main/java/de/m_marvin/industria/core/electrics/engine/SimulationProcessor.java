@@ -92,6 +92,7 @@ public class SimulationProcessor {
 					this.currentTask = tasks.poll();
 				}
 				if (this.currentTask == null) continue;
+				if (this.currentTask.network.isPlotEmpty()) continue;
 				String netList = this.currentTask.network.getNetList();
 				boolean result = processNetList(netList);
 				this.currentTask.completable.complete(result);

@@ -54,7 +54,6 @@ public class CircuitSwitch extends AbstractWidget {
 	public static final void onFuseTripped(ElectricNetworkEvent.FuseTripedEvent event) {
 		if (!event.getLevel().isClientSide()) return;
 		
-		@SuppressWarnings("resource")
 		Screen screen = Minecraft.getInstance().screen;
 		
 		if (screen != null) {
@@ -62,8 +61,8 @@ public class CircuitSwitch extends AbstractWidget {
 				if (widget instanceof CircuitSwitch cswitch) {
 					
 					BlockPos switchComponent = cswitch.getComponentPos();
-					boolean b = event.getNetwork().getComponents().stream()
-						.filter(c -> c.pos().equals(switchComponent))
+					boolean b = event.getNetwork().listComponents().stream()
+						.filter(c -> c.reference().equals(switchComponent))
 						.count() > 0;
 					
 					if (b) {

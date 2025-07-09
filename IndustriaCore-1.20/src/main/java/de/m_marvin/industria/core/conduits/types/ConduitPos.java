@@ -1,8 +1,6 @@
 package de.m_marvin.industria.core.conduits.types;
 
-import java.io.StringReader;
 import java.util.Objects;
-import java.util.Properties;
 
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.univec.impl.Vec3d;
@@ -230,28 +228,6 @@ public class ConduitPos {
 		@Override
 		public String toString() {
 			return "NodePos{block=[" + this.block.getX() + " " + block.getY() + " " + block.getZ() + "],node=" + this.node + "}";
-		}
-		
-		public static String getLaneName(String keyString) {
-			try {
-				Properties props = new Properties();
-				props.load(new StringReader(keyString));
-				return props.getProperty("lane");
-			} catch (Exception e) {
-				return "";
-			}
-		}
-		
-		public static NodePos getFromKeyString(String keyString) {
-			try {
-				Properties props = new Properties();
-				props.load(new StringReader(keyString));
-				BlockPos position = BlockPos.of(Long.valueOf(props.getProperty("pos")));
-				int node = Integer.valueOf(props.getProperty("id"));
-				return new NodePos(position, node);
-			} catch (Exception e) {
-				return null;
-			}
 		}
 		
 	}

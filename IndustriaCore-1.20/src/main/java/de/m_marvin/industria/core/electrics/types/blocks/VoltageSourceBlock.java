@@ -94,7 +94,7 @@ public class VoltageSourceBlock extends BaseEntityBlock implements IElectricBloc
 	}
 	
 	@Override
-	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {
+	public NodePos[] getElectricConnections(Level level, BlockPos pos, BlockState instance) {
 		return NODES.getNodePositions(pos);
 	}
 	

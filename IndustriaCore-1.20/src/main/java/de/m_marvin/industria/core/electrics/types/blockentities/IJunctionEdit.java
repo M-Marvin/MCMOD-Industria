@@ -4,7 +4,7 @@ import java.util.List;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.engine.ElectricHandlerCapability.Component;
+import de.m_marvin.industria.core.electrics.engine.ElectricHandlerCapability.ElectricComponent;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public interface IJunctionEdit {
 	
 	public default void setCableWireLabels(NodePos node, String[] laneLabels) {
-		ElectricUtility.setLaneLabels(this.getJunctionLevel(), node, Component::isWire, laneLabels);
+		ElectricUtility.setLaneLabels(this.getJunctionLevel(), node, ElectricComponent::isWire, laneLabels);
 	}
 	
 	public default String[] getInternalWireLabels(NodePos node) {
@@ -39,7 +39,7 @@ public interface IJunctionEdit {
 		BlockPos pos = this.getJunctionBlockPos();
 		BlockState state = level.getBlockState(pos);
 		if (state.getBlock() instanceof IElectricBlock connector) {
-			return connector.getConnections(level, pos, state);
+			return connector.getElectricConnections(level, pos, state);
 		}
 		return new NodePos[] {};
 	}

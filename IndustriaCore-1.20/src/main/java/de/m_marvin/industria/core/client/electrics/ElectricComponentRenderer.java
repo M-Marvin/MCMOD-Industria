@@ -17,7 +17,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
@@ -76,11 +75,11 @@ public class ElectricComponentRenderer {
 			Vec3d playerPosition = Vec3d.fromVec(Minecraft.getInstance().player.position());
 			int renderDistance = Minecraft.getInstance().options.renderDistance().get() * 16;
 			
-			for (ElectricHandlerCapability.Component<?, ?, ?> component : electricHolder.getComponents()) {
+			for (ElectricHandlerCapability.ElectricComponent<?, ?, ?> component : electricHolder.listComponents()) {
 				
-				if (component.type() instanceof Block) {
-					
-					BlockPos pos = (BlockPos) component.pos();
+				if (component.isBlock()) {
+
+					BlockPos pos = component.asBlockPos();
 					
 					double distance = playerPosition.dist(ContraptionUtility.ensureWorldCoordinates(clientLevel, pos, Vec3d.fromVec(pos)));
 					if (distance < renderDistance * renderDistance) drawElectricFrame(clientLevel, bufferSource, matrixStack, pos, partialTicks);

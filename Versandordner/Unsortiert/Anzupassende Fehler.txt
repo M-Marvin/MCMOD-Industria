@@ -1,9 +1,3 @@
-- Gold- und Eisennugget anpassen
-- Spule, Kristalle usw -> Umschaltbare Detail(un)qualität
-- Metalltexturen ingame mit denen in der Metallansammlungs-PNG abgleichen, einige scheinen noch fehlerhaft (veraltet) zu sein.
-- Detail, das man noch anpassen könnte: Staubpartikel fallen langsam aus verbrannten Blöcken, wie bei schwebendem Kies. Beim Drauftreten oder Draufhauen noch etwas mehr
-- Änderung der Wägeplattenrezepte -> Metallplatten beötigt (???)
-
 -ANZUPASSENDE STEINARTEN (POLIERT): (Endstein?)
 
 Generell bitte lieber aus dem Versandordner->Unsortiert die Texturen kopieren als aus dem alten Mod-Ordner, da der VO->Unortiert immer aktuelle(re) Versionen enthält.

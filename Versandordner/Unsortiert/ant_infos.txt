@@ -3,15 +3,15 @@ Braun            Gemäßigte Biome, Neutral, Schwarmagressivität    z.B. Wald, 
 Sandfarben/Beige Trockenwarme Biome, Neutral, Schwarmagressivität z.B. Savanne, Mesa
 
 EVTL andere Modelle für:
-Grün             Feuchtwarme Biome, Agressiv                      z.B. Jungle
-Feuerameise      Gemäßigte und Trockenwarme Biome, Agressiv       z.B. Wald, Plains, Savanne
+Grün             Feuchtwarme Biome, Aggressiv                      z.B. Jungle
+Feuerameise      Gemäßigte und Trockenwarme Biome, Aggressiv       z.B. Wald, Plains, Savanne
 
-Keine Ameisen: Verschneite Biome, Kalte Biome, Gebirgsbiome, Ozeane, Pilzland, Höhlen
+Keine Ameisen: Verschneite Biome, Kalte Biome, Hochgebirgsbiome, Ozeane, Pilzland, Höhlen
 
 Nahkampfangriff : Ameise nähert sich Spieler und verursacht Schaden (vgl Zombie)
 Fernkampfangriff: Ameise verspritzt Säure (Partikel) aus 5-10 Blöcken Abstand auf Spieler, verursacht Schaden (evtl Effekt, der das Sichtfeld beeinträchtigt?) (vgl Lama)
 
-Können (wie Silberfische  bei Stein) bei Inaktivität den Ameisenhügelerdblock "befallen". Spawnen beim Abbau des Blocks aggressiv. (Können evtl auch ohne Abbau spawnen, dann aber neutral?)
+Können (wie Silberfische  bei Stein) bei Inaktivität den Ameisenhügelerdblock "befallen" (Allerdings mehr als eine, wie im Bienennest / -stock). Spawnen beim Abbau des Blocks aggressiv. (Können evtl auch ohne Abbau spawnen, dann aber neutral?)
 Bei Spawnen und Befallen kurze Partikel-Grab-Animation?
 
 ===

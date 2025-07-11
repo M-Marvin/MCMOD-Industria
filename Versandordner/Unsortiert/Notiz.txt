@@ -2,7 +2,7 @@ Features und Details, die man noch ergänzen könnte:
 
 1. Kleine Flammen-/Rauch-Partikel beim Generator vor dem unteren Gitter, wenn er an ist, wie beim normalen Ofen. Bei den elektrische betriebenen Öfen evtl etwas ähnliches, aber keine Flammen. Vllt rötlich-transparente kleine Wölkchen?
 
-2. Meh... -x-Vanadium-x- ->Palladium! als ganz normales Erz... Es ist so eigenartig, dass man jetzt so viele verschiedene Verfahren zur Gewinnung von Metallen hat (Erz direkt, Ausquetschen, Ausquetschen bei Oxiden, Legieren im Ofen, Hochofen, Lösungen von Alu und Wolfram und dieses seltsame Schlacke-Aussaugen...). Kann man das nicht weglassen? Das brächte mehr Kontinuität und außerdem ist das viel zu genau für ein Spiel, das kann man auf weniger Details runterreduzieren und das ersparte auch das komische Aluoxid... Außerdem vermisse ich das Erz und das Rohvanadiumitem und den Block. D:
+2. Es gibt Pillager-Außenposten... wo sind Pillager-Hauptlager? Neue Struktur mit versch. Gebäuden und evtl neuen Illager-Arten.
 
 3. Anpassung Natrium
 
@@ -60,7 +60,7 @@ Laubhaufen, die vom Spieler platziert wurden, werden nicht weggeweht.
 
 19. Das komische neue System mit dem Getrockneten Ghast überarbeiten.
     Passend zu verdächtigem Sand und verdächtigem Kies, den man durchsuchen kann: verdächtiger Seelensand, der zwischen den Nethergerippen generiert.
-    In ihm kann man getrocknete Ghast-Hautfetzen finden sowie Ghast-Eier. Anders als bei verdächtigem Sand oder Kies gibt es hier jedoch eine Gefahr: Beim Abpinseln kann man nicht nur Items finden, sondern auch die "Seelen" im Sand freilegen. Dann wandern bläuliche Seelen- und Flammenpartikel zum Spieler und er erhält Schaden.
+    In ihm kann man getrocknete Ghast-Hautfetzen finden sowie Ghast-Eier. Anders als bei verdächtigem Sand oder Kies gibt es hier jedoch eine Gefahr: Beim Abpinseln kann man nicht nur Items finden, sondern auch die "Seelen" im Sand freilegen. Dann wandern bläuliche Seelen- und Flammenpartikel zum Spieler und er erhält Schaden. (Mgöglicherweise sogar ein neuer kleiner blauer Vex-artiger Mob?)
     Andere zu findende Items sind Knochen.
     Da die Nethergerippe sehr häufig sind, generiert verdächtiger Seelensand nur an wenigen von ihnen und nur wenige Blöcke pro Nethergerippe-Struktur.
 
@@ -69,3 +69,21 @@ Laubhaufen, die vom Spieler platziert wurden, werden nicht weggeweht.
     Den Ghastling (und damit auch den fröhlichen Ghast) erhält man, wenn man die Ghast-Eier in Wasser schlüpfen lässt. Außerhalb des Wassers schlüpfen sie nicht.
 
     Den getrockneten Ghast-Block kann man dann... ja, KA. Der ist komisch. Braucht man den? Nur noch als reine Deko aus Bastions-Truhen?
+
+20. Komplexere Aufbereitung aller Metalle (vgl. Silber in Anno 1800)
+
+21. Höhlendimension - Eine Art Unterwelt mit ausschließlich Höhlen
+    neue Erze usw.
+    verschiedene Biome u.ä, große Biome, versch. Bereiche (höhen- und yz-bedingt)
+
+22. https://www.bing.com/images/search?view=detailV2&ccid=pObj36%2bo&id=C1D4F068CA3315C9BBBFB5C325D78B78D88F8AF9&thid=OIP.pObj36-o7_cnQO1tCUuCBgHaEK&mediaurl=https%3a%2f%2fstatic.planetminecraft.com%2ffiles%2fimage%2fminecraft%2ftexture-pack%2f2021%2f495%2f14268982_xl.jpg&cdnurl=https%3a%2f%2fth.bing.com%2fth%2fid%2fR.a4e6e3dfafa8eff72740ed6d094b8206%3frik%3d%252bYqP2HiL1yXDtQ%26pid%3dImgRaw%26r%3d0&exph=1080&expw=1920&q=minecraft+sheep+temperature+variants&simid=608019442850733597&FORM=IRPRST&ck=6CE721BA914E3E8717CFF682A83562C5&selectedIndex=282&itb=0
+
+23. Spule, Kristalle usw -> Umschaltbare Detail(un)Qualität
+
+24. Detail, das man noch anpassen könnte: Staubpartikel fallen langsam aus verbrannten Blöcken, wie bei schwebendem Kies. Beim Drauftreten oder Draufhauen noch etwas mehr
+
+25. Änderung der Wägeplattenrezepte -> Metallplatten beötigt (???)
+
+26. Gold- und Eisennugget anpassen an Farbschema aus Industria
+
+27. Metalltexturen ingame mit denen in der Metallansammlungs-PNG abgleichen, einige scheinen noch fehlerhaft (veraltet) zu sein.

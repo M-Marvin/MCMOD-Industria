@@ -17,6 +17,8 @@ import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.types.PowerNetState;
 import de.m_marvin.industria.core.util.ufns.SynchronizedFunctionalNetworkSpace.SynchronizedFunctionalNetwork;
 import it.unimi.dsi.fastutil.ints.IntSet;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.level.Level;
 
 public class KineticNetwork extends SynchronizedFunctionalNetwork<KineticNetwork, KineticReference, KineticHandlerCapabillity.KineticComponent, Double> {
@@ -38,39 +40,63 @@ public class KineticNetwork extends SynchronizedFunctionalNetwork<KineticNetwork
 		this.level = level;
 	}
 	
+	@Override
+	public void serializeNbt(CompoundTag nbt) {
+		super.serializeNbt(nbt);
+		
+		ListTag ratiosNbt = new ListTag();
+		for (var e : this.components2ratioMap.entrySet()) {
+			CompoundTag ratioNbt = new CompoundTag();
+			ratioNbt.putInt("RefId1", e.getKey().refId1);
+			ratioNbt.putInt("RefId2", e.getKey().refId2);
+			ratioNbt.putDouble("Ratio", e.getValue());
+			ratiosNbt.add(ratioNbt);
+		}
+		nbt.put("Ratios", ratiosNbt);
+		
+		ListTag speedsNbt = new ListTag();
+		for (var e : this.component2speedMap.entrySet()) {
+			CompoundTag speedNbt = new CompoundTag();
+			speedNbt.putInt("RefId", e.getKey());
+			speedNbt.putDouble("Speed", e.getValue());
+			speedsNbt.add(speedNbt);
+		}
+		nbt.put("Speeds", speedsNbt);
+		
+		nbt.putDouble("NetworkSpeed", this.speed);
+		nbt.putString("State", this.state.name().toLowerCase());
+	}
+	
+	@Override
+	public void deserializeNbt(CompoundTag nbt) {
+		super.deserializeNbt(nbt);
+		
+		ListTag ratiosNbt = nbt.getList("Ratios", 10);
+		this.components2ratioMap.clear();
+		for (int i = 0; i < ratiosNbt.size(); i++) {
+			CompoundTag ratioNbt = ratiosNbt.getCompound(i);
+			int refId1 = ratioNbt.getInt("RefId1");
+			int refId2 = ratioNbt.getInt("RefId2");
+			double ratio = ratioNbt.getDouble("Ratio");
+			this.components2ratioMap.put(new RefPair(refId1, refId2), ratio);
+		}
+		
+		ListTag speedsNbt = nbt.getList("Speeds", 10);
+		this.component2speedMap.clear();
+		for (int i = 0; i < speedsNbt.size(); i++) {
+			CompoundTag speedNbt = speedsNbt.getCompound(i);
+			int refId = speedNbt.getInt("RefId");
+			double speed = speedNbt.getDouble("Speed");
+			this.component2speedMap.put(refId, speed);
+		}
+		
+		this.speed = nbt.getDouble("NetworkSpeed");
+		this.state = PowerNetState.valueOf(nbt.getString("State").toUpperCase());
+	}
+	
 	public Level getLevel() {
 		return level.get();
 	}
-	
-//	public CompoundTag saveNBT(KineticHandlerCapabillity handler) {
-//		CompoundTag tag = new CompoundTag();
-//		ListTag componentsTag = new ListTag();
-//		for (Component component : this.components.values()) {
-//			if (component == null) continue;
-//			try {
-//				CompoundTag compTag = new CompoundTag();
-//				component.serializeNbt(compTag);
-//				compTag.putDouble("Ratio", this.component2ratioMap.getOrDefault(component, 0.0));
-//				componentsTag.add(compTag);
-//			} catch (Exception e) {
-//				IndustriaCore.LOGGER.error("Failed to serialize kinetic component at " + component.reference() + "!");
-//				e.printStackTrace();
-//			}
-//		}
-//		tag.put("Components", componentsTag);
-//		tag.putString("State", this.state.name().toLowerCase());
-//		return tag;
-//	}
-//	
-//	public void loadNBT(KineticHandlerCapabillity handler, CompoundTag tag) {
-//		ListTag componentsTag = tag.getList("Components", ListTag.TAG_COMPOUND);
-//		componentsTag.stream().forEach((componentTag) -> {
-//			Component component = Component.deserializeNbt((CompoundTag) componentTag);
-//			this.components.put(component.reference(), component);
-//			this.component2ratioMap.put(component, ((CompoundTag) componentTag).getDouble("Ratio"));
-//		});
-//		this.state = PowerNetState.valueOf(tag.getString("State").toUpperCase());
-//	}
 	
 	private void resetSpeedMap() {
 		this.component2speedMap.clear();
@@ -210,9 +236,7 @@ public class KineticNetwork extends SynchronizedFunctionalNetwork<KineticNetwork
 					if (load > torque) {
 						setNetworkSpeed(0.0);
 						setState(PowerNetState.INACTIVE);
-					} 
-					
-					else {
+					} else {
 						
 						// Set network rotation speed
 						setNetworkSpeed(speed);
@@ -244,13 +268,11 @@ public class KineticNetwork extends SynchronizedFunctionalNetwork<KineticNetwork
 	
 	@Override
 	public void afterChange() {
-		System.out.println("KineticNetwork size: " + this.components.size() + " " + this.hashCode());
 		recomputeKinetics();
 	}
 
 	@Override
 	public void onUpdate() {
-		System.out.println("Update KineticNetwork with size: " + this.components.size() + " " + this.hashCode());
 		recomputeKinetics();
 	}
 	
@@ -265,12 +287,6 @@ public class KineticNetwork extends SynchronizedFunctionalNetwork<KineticNetwork
 	public double getSpeed() {
 		return speed;
 	}
-	
-//	public void reset() {
-//		this.components.clear();
-//		this.component2speedMap.clear();
-//		this.state = PowerNetState.INACTIVE;
-//	}
 	
 	public boolean isEmpty() {
 		return components.isEmpty();

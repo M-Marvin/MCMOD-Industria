@@ -4,7 +4,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -19,27 +18,25 @@ import java.util.stream.Stream;
 
 import com.google.common.collect.Maps;
 
-import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.client.electrics.events.ElectricNetworkEvent;
-import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
-import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.ElectricHandlerCapability.ElectricComponent;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
 import de.m_marvin.industria.core.util.types.PowerNetState;
 import de.m_marvin.industria.core.util.ufns.SynchronizedFunctionalNetworkSpace;
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
+import de.m_marvin.unimap.api.MultiBiMap;
+import de.m_marvin.unimap.impl.HashMultiBiMap;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 
 public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.SynchronizedFunctionalNetwork<ElectricNetwork, Object, ElectricComponent<?, Object, ?>, NodePos> {
 	
 	protected final Supplier<Level> level;
-	// FIXME Requires UnifiedMaps, we need an Int2ObjectBiMultiMap here
-	protected Int2ObjectArrayMap<NodePos> ref2nodeMap = new Int2ObjectArrayMap<NodePos>();
+	protected MultiBiMap<Integer, NodePos> ref2nodeMap = new HashMultiBiMap<Integer, NodePos>();
 	protected Map<String, Double> nodeVoltages = Maps.newHashMap();
 	protected double maxPower;
 	protected double currentConsumtion;
@@ -60,80 +57,66 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 		return level.get();
 	}
 	
-//	public CompoundTag saveNBT(ElectricHandlerCapability handler) {
-//		CompoundTag tag = new CompoundTag();
-//		ListTag componentsTag = new ListTag();
-//		for (Component<?, ?, ?> component : this.components) {
-//			if (component == null) continue;
-//			try {
-//				CompoundTag compTag = new CompoundTag();
-//				component.serializeNbt(compTag);
-//				componentsTag.add(compTag);
-//			} catch (Exception e) {
-//				IndustriaCore.LOGGER.error("Failed to serialize electric component at " + component.pos() + "!");
-//				e.printStackTrace();
-//			}
-//		}
-//		tag.put("Components", componentsTag);
-//		if (!this.isEmpty() && !this.isPlotEmpty() && this.components.size() > 1) {
-//			String circuitName = handler.saveCircuit(this.netList, printDataList());
-//			tag.putString("Circuit", circuitName);
-//		}
-//		tag.putString("State", this.state.name().toLowerCase());
-//		return tag;
-//	}
-//	
-//	public void loadNBT(ElectricHandlerCapability handler, CompoundTag tag) {
-//		ListTag componentsTag = tag.getList("Components", ListTag.TAG_COMPOUND);
-//		componentsTag.stream().forEach((componentTag) -> {
-//			this.components.add(Component.deserializeNbt((CompoundTag) componentTag));
-//		});
-//		if (tag.contains("Circuit")) {
-//			String circuitName = tag.getString("Circuit");
-//			String[] lists = handler.loadCircuit(circuitName);
-//			this.netList = lists[0];
-//			this.parseDataList(lists[1]);
-//		}
-//		this.state = PowerNetState.valueOf(tag.getString("State").toUpperCase());
-//	}
+	@Override
+	public void serializeNbt(CompoundTag nbt) {
+		super.serializeNbt(nbt);
+		
+		ListTag nodesNbt = new ListTag();
+		for (var e : this.ref2nodeMap.entrySet()) {
+			CompoundTag nodeNbt = new CompoundTag();
+			nodeNbt.putInt("RefId", e.getKey());
+			nodeNbt.put("Node", e.getValue().writeNBT(new CompoundTag()));
+			nodesNbt.add(nodeNbt);
+		}
+		nbt.put("Nodes", nodesNbt);
+		
+		CompoundTag voltagesNbt = new CompoundTag();
+		for (var e : this.nodeVoltages.entrySet()) {
+			voltagesNbt.putDouble(e.getKey(), e.getValue());
+		}
+		nbt.put("Voltages", voltagesNbt);
+		
+		nbt.putDouble("MaxPower", this.maxPower);
+		nbt.putDouble("CurrentConsumtion", this.currentConsumtion);
+		nbt.putDouble("CurrentProduction", this.currentProduction);
+		nbt.putString("State", this.state.name().toLowerCase());
+	}
+	
+	@Override
+	public void deserializeNbt(CompoundTag nbt) {
+		super.deserializeNbt(nbt);
 
+		ListTag nodesNbt = nbt.getList("Nodes", 10);
+		this.ref2nodeMap.clear();
+		for (int i = 0; i < nodesNbt.size(); i++) {
+			CompoundTag nodeNbt = nodesNbt.getCompound(i);
+			int refId = nodeNbt.getInt("RefId");
+			NodePos node = NodePos.readNBT(nodeNbt.getCompound("Node"));
+			this.ref2nodeMap.put(refId, node);
+		}
+		
+		CompoundTag voltagesNbt = nbt.getCompound("Voltages");
+		this.nodeVoltages.clear();
+		for (String node : voltagesNbt.getAllKeys()) {
+			this.nodeVoltages.put(node, voltagesNbt.getDouble(node));
+		}
+		
+		this.maxPower = nbt.getDouble("MaxPower");
+		this.currentConsumtion = nbt.getDouble("CurrentConsumtion");
+		this.currentProduction = nbt.getDouble("CurrentProduction");
+		this.state = PowerNetState.valueOf(nbt.getString("State").toUpperCase());
+	}
+	
 	@Override
 	public void afterChange() {
-		// TODO Auto-generated method stub
-		
-		System.out.println("ELECTRIC NETWORK SIZE: " + this.components.size());
-		
 		recomputeElectrics();
 	}
 
 	@Override
 	public void onUpdate() {
-		// TODO Auto-generated method stub
-
 		recomputeElectrics();
 	}
 	
-//	private void buildCircuit(ElectricComponent<?, ?, ?> component, ElectricNetwork circuit) {
-//		buildCircuit0(component, null, circuit);
-//		circuit.complete(this.level.getGameTime());
-//	}
-//	private void buildCircuit0(ElectricComponent<?, ?, ?> component, NodePos node, ElectricNetwork circuit) {
-//		
-//		if (circuit.getComponents().contains(component)) return;
-//		
-//		circuit.getComponents().add(component);
-//		circuit.plotComponentDescriptor(component);
-//		component.plotCircuit(level, circuit, template -> circuit.plotTemplate(component, template));
-//		
-//		for (NodePos node2 : component.getNodes(level)) {
-//			if (node2.equals(node) || this.node2componentMap.get(node2) == null) continue; 
-//			for (Component<?, ?, ?> component2 : this.node2componentMap.get(node2)) {
-//				buildCircuit0(component2, node2, circuit);
-//			}
-//		}
-//	
-//	}
-
 	protected void resetNetlist() {
 		this.circuitBuilder = new StringBuilder();
 		this.netList = "";
@@ -210,20 +193,14 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 	protected void afterParametrizedConnection(int refId1, int refId2, NodePos parameter) {
 		this.ref2nodeMap.put(refId1, parameter);
 		this.ref2nodeMap.put(refId2, parameter);
-		System.out.println("REF2NODE: " + this.ref2nodeMap.size() + " " + parameter);
 	}
 	
 	public Collection<ElectricComponent<?, ?, ?>> findComponentsOnNode(NodePos node) {
 		List<ElectricComponent<?, ?, ?>> components = new ArrayList<>();
-		this.ref2nodeMap.int2ObjectEntrySet().stream()
-			.filter(e -> e.getValue().equals(node))
-			.map(e -> this.components.get(e.getIntKey()))
-			.forEach(e -> components.add(e));
-		
-		System.out.println("FOR NODE: " + node + " " + this.level.get().isClientSide());
-		for (var c : components)
-			System.out.println("- " + c.type());
-		
+		for (Integer refId : this.ref2nodeMap.getKeys(node)) {
+			ElectricComponent<?, ?, ?> component = this.components.get(refId.intValue());
+			if (component != null) components.add(component);
+		}
 		return components;
 	}
 

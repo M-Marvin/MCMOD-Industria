@@ -73,7 +73,7 @@ class ServerLevelRedirect extends ServerLevel {
 		this.block = null;
 	}
 	
-	public static ServerLevelRedirect newRedirect(VirtualBlock virtualBlock, ServerLevel level) {
+	public static ServerLevelRedirect newRedirect(VirtualBlock virtualBlock, Level level) {
 		try {
 			/* WARNING unsafe code section, this code operates directly on the native memory, 
 			 * bypassing any java restrictions */

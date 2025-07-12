@@ -9,6 +9,9 @@ import java.util.Objects;
 import java.util.Queue;
 import java.util.function.Supplier;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+
 public abstract class SynchronizedFunctionalNetworkSpace<R, C extends FunctionalNetworkSpace.Component<R>, N extends SynchronizedFunctionalNetworkSpace.SynchronizedFunctionalNetwork<N, R, C, A>, A> extends FunctionalNetworkSpace<R, C, N, A> {
 	
 	public static enum UpdateType {
@@ -21,9 +24,8 @@ public abstract class SynchronizedFunctionalNetworkSpace<R, C extends Functional
 	
 	protected Queue<UpdateTicket<R>> updateTickets = new ArrayDeque<>();
 	
-	public SynchronizedFunctionalNetworkSpace(Supplier<N> networkFactory, int traceLimit) {
-		super(networkFactory, traceLimit);
-		
+	public SynchronizedFunctionalNetworkSpace(Supplier<N> networkFactory, Supplier<C> componentFactory, int traceLimit) {
+		super(networkFactory, componentFactory, traceLimit);
 	}
 
 	public static abstract class SynchronizedFunctionalNetwork<N extends SynchronizedFunctionalNetwork<N, R, C, A>, R, C extends FunctionalNetworkSpace.Component<R>, A> extends FunctionalNetwork<N, R, C, A> {
@@ -36,10 +38,40 @@ public abstract class SynchronizedFunctionalNetworkSpace<R, C extends Functional
 	protected abstract C findOrCreateComponentAt(R reference);
 	protected abstract Collection<ParametrizedReference<R, A>> findConnectionsForComponent(C component);
 	
-	// Update buffers
-	protected final Map<C, Collection<ParametrizedReference<R, A>>> putComponents = new HashMap<>();
-	protected final Collection<R> removeReferences = new HashSet<>();
-	protected final Collection<R> updateReferences = new HashSet<>();
+	@Override
+	public void serializeNbt(CompoundTag nbt) {
+		super.serializeNbt(nbt);
+		
+		ListTag updateTicketsNbt = new ListTag();
+		for (UpdateTicket<R> ticket : this.updateTickets) {
+			CompoundTag ticketNbt = new CompoundTag();
+			ticketNbt.putInt("Delay", ticket.delay());
+			ticketNbt.put("Reference", serializeReference(ticket.reference()));
+			ticketNbt.putString("Type", ticket.type().name().toLowerCase());
+			updateTicketsNbt.add(ticketNbt);
+		}
+		nbt.put("UpdateTickets", updateTicketsNbt);
+		
+	}
+	
+	@Override
+	public void deserializeNbt(CompoundTag nbt) {
+		super.deserializeNbt(nbt);
+		
+		ListTag updateTicketsNbt = new ListTag();
+		this.updateTickets.clear();
+		for (int i = 0; i < updateTicketsNbt.size(); i++) {
+			CompoundTag ticketNbt = updateTicketsNbt.getCompound(i);
+			int delay = ticketNbt.getInt("Delay");
+			R reference = deserializeReference(ticketNbt.getCompound("Reference"));
+			UpdateType type = UpdateType.valueOf(ticketNbt.getString("Type").toUpperCase());
+			this.updateTickets.add(new UpdateTicket<R>(delay, reference, type));
+		}
+		
+	}
+
+	protected abstract CompoundTag serializeReference(R reference);
+	protected abstract R deserializeReference(CompoundTag tag);
 	
 	public void scheduledUpdateTicket(R reference, UpdateType type, int delay) {
 		this.updateTickets.add(new UpdateTicket<R>(delay, reference, type));
@@ -48,6 +80,11 @@ public abstract class SynchronizedFunctionalNetworkSpace<R, C extends Functional
 	public void updateTicket(R reference, UpdateType type) {
 		this.updateTickets.add(new UpdateTicket<R>(0, reference, type));
 	}
+
+	// Update buffers
+	protected final Map<C, Collection<ParametrizedReference<R, A>>> putComponents = new HashMap<>();
+	protected final Collection<R> removeReferences = new HashSet<>();
+	protected final Collection<R> updateReferences = new HashSet<>();
 	
 	public void processUpdates() {
 		

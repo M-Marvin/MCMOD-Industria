@@ -16,10 +16,13 @@ import de.m_marvin.industria.core.util.ufns.FriendlyFunctionalNetworkSpace;
 import de.m_marvin.industria.core.util.ufns.FunctionalNetworkSpace;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -30,9 +33,10 @@ import net.minecraftforge.event.level.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
-public class KineticHandlerCapabillity extends FriendlyFunctionalNetworkSpace<KineticReference, KineticHandlerCapabillity.KineticComponent, KineticNetwork, Double> implements ICapabilitySerializable<ListTag> {
+public class KineticHandlerCapabillity extends FriendlyFunctionalNetworkSpace<KineticReference, KineticHandlerCapabillity.KineticComponent, KineticNetwork, Double> implements ICapabilitySerializable<CompoundTag> {
 	
 	/* Capability handling */
 	
@@ -53,61 +57,30 @@ public class KineticHandlerCapabillity extends FriendlyFunctionalNetworkSpace<Ki
 	}
 
 	@Override
-	protected CompoundTag serializeReference(KineticReference reference) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected KineticReference deserializeReference(CompoundTag tag) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ListTag serializeNBT() {
-		ListTag networksNbt = new ListTag();
-		
-//		int componentCount = 0;
-//		for (KineticNetwork kineticNetwork : this.kineticNetworks) {
-//			kineticNetwork.removeInvalidComponents();
-//			if (kineticNetwork.isEmpty()) continue;
-//			networksNbt.add(kineticNetwork.saveNBT(this));
-//			componentCount += kineticNetwork.getComponents().size();
-//		}
-//		
-//		IndustriaCore.LOGGER.info("Saved " + networksNbt.size() + " kinetic networks");
-//		IndustriaCore.LOGGER.info("Saved " + componentCount + " kinetic components");
-		return networksNbt;
+	public CompoundTag serializeNBT() {
+		CompoundTag tag = new CompoundTag();
+		serializeNbt(tag);
+		return tag;
 	}
 	
 	@Override
-	public void deserializeNBT(ListTag nbt) {
-//		this.pos2componentMap.clear();
-//		this.kineticNetworks.clear();
-//		this.component2kineticMap.clear();
-//		
-//		for (int i = 0; i < nbt.size(); i++) {
-//			CompoundTag kineticTag = nbt.getCompound(i);
-//			KineticNetwork kineticNetwork = new KineticNetwork(() -> this.level);
-//			kineticNetwork.loadNBT(this, kineticTag);
-//			if (!kineticNetwork.isEmpty()) {
-//				this.kineticNetworks.add(kineticNetwork);
-//				kineticNetwork.getComponents().forEach((component) -> {
-//					this.component2kineticMap.put(component, kineticNetwork);
-//					if (!this.pos2componentMap.containsValue(component)) {
-//						this.addToNetwork(component);
-//					}
-//				});
-//			}
-//		}
-//		
-//		IndustriaCore.LOGGER.info("Loaded " + this.kineticNetworks.size() + "/" + nbt.size() + " kinetic networks");
-//		IndustriaCore.LOGGER.info("Loaded " + this.pos2componentMap.size() + " kinetic components");
+	public void serializeNbt(CompoundTag nbt) {
+		super.serializeNbt(nbt);
+		
+		IndustriaCore.LOGGER.info("Saved " + this.ref2network.values().stream().distinct().count() + " kinetic networks");
+		IndustriaCore.LOGGER.info("Saved " + this.referenceIds.size() + " kinetic components");
+	}
+	
+	@Override
+	public void deserializeNBT(CompoundTag nbt) {
+		super.deserializeNbt(nbt);
+
+		IndustriaCore.LOGGER.info("Loaded " + this.ref2network.values().stream().distinct().count() + " kinetic networks");
+		IndustriaCore.LOGGER.info("Loaded " + this.referenceIds.size() + " kinetic components");
 	}
 	
 	public KineticHandlerCapabillity(Level level) {
-		super(() -> new KineticNetwork(() -> level), 1024); // TODO trace limit config
+		super(() -> new KineticNetwork(() -> level), () -> new KineticComponent(null, null, null), 1024); // TODO trace limit config
 		this.level = level;
 	}
 	
@@ -160,7 +133,17 @@ public class KineticHandlerCapabillity extends FriendlyFunctionalNetworkSpace<Ki
 	}
 	
 	/* Kinetic handling */
-	
+
+	@Override
+	protected CompoundTag serializeReference(KineticReference reference) {
+		return reference.writeNbt();
+	}
+
+	@Override
+	protected KineticReference deserializeReference(CompoundTag tag) {
+		return KineticReference.readNbt(tag);
+	}
+
 	/**
 	 * Represents a component in the kinetic networks
 	 */
@@ -169,9 +152,32 @@ public class KineticHandlerCapabillity extends FriendlyFunctionalNetworkSpace<Ki
 		protected IKineticBlock type;
 		
 		public KineticComponent(KineticReference reference, IKineticBlock type, BlockState instance) {
-			super(reference);
+			this.reference = reference;
 			this.type = type;
 			this.instance = instance;
+		}
+		
+		@SuppressWarnings("deprecation")
+		public boolean deserializeNbt(CompoundTag nbt) {
+			super.deserializeNbt(nbt);
+			ResourceLocation typeName = new ResourceLocation(nbt.getString("Type"));
+			Block typeObject = ForgeRegistries.BLOCKS.getValue(typeName);
+			if (typeObject instanceof IKineticBlock type) {
+				this.reference = KineticReference.readNbt(nbt.getCompound("Reference"));
+				this.type = type;
+				this.instance = NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), nbt.getCompound("State"));
+				return true;
+			}
+			return false;
+		}
+		
+		@Override
+		public void serializeNbt(CompoundTag nbt) {
+			super.serializeNbt(nbt);
+			nbt.put("Reference", reference().writeNbt());
+			if (this.type instanceof Block typeBlock)
+				nbt.putString("Type", ForgeRegistries.BLOCKS.getKey(typeBlock).toString());
+			nbt.put("State", NbtUtils.writeBlockState(instance));
 		}
 		
 		public IKineticBlock type() {
@@ -191,23 +197,6 @@ public class KineticHandlerCapabillity extends FriendlyFunctionalNetworkSpace<Ki
 		public String toString() {
 			return "Component{reference=" + this.reference() + ",type=" + this.type.toString() + ",instance=" + (this.instance(null) == null ? "N/A" : this.instance(null).toString()) + "}#hash=" + this.hashCode();
 		}
-
-//		public void serializeNbt(CompoundTag nbt) {
-//			nbt.put("Reference", reference.serialize());
-//			if (this.type instanceof Block typeBlock) nbt.putString("Type", ForgeRegistries.BLOCKS.getKey(typeBlock).toString());
-//			nbt.put("State", NbtUtils.writeBlockState(instance));
-//		}
-//		public static Component deserializeNbt(CompoundTag nbt) {
-//			ResourceLocation typeName = new ResourceLocation(nbt.getString("Type"));
-//			Block typeObject = ForgeRegistries.BLOCKS.getValue(typeName);
-//			if (typeObject instanceof IKineticBlock type) {
-//				KineticReference reference = KineticReference.deserialize(nbt.getCompound("Reference"));
-//				@SuppressWarnings("deprecation")
-//				BlockState instance = NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), nbt.getCompound("State"));
-//				return new Component(reference, type, instance);
-//			}
-//			return null;
-//		}
 		
 		public TransmissionNode[] getTransmissionNodes(Level level) {
 			return this.type.getTransmissionNodes(level, reference.pos(), instance);

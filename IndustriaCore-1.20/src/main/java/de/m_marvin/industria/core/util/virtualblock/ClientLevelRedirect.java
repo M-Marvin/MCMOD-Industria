@@ -72,7 +72,7 @@ class ClientLevelRedirect extends ClientLevel {
 		this.block = null;
 	}
 	
-	public static ClientLevelRedirect newRedirect(VirtualBlock virtualBlock, ClientLevel level) {
+	public static ClientLevelRedirect newRedirect(VirtualBlock virtualBlock, Level level) {
 		try {
 			/* WARNING unsafe code section, this code operates directly on the native memory, 
 			 * bypassing any java restrictions */

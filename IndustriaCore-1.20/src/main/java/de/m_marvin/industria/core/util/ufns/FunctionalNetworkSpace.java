@@ -18,27 +18,40 @@ import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 
 public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace.Component<R>, N extends FunctionalNetworkSpace.FunctionalNetwork<N, R, C, A>, A> {
 	
-	
-	
 	public abstract static class Component<R> {
-		 
-		protected final IntSet referencedComponents = new IntOpenHashSet();
-		protected final R reference;
 		
-		public Component(R reference) {
-			this.reference = reference;
+		protected final IntSet referencedComponents = new IntOpenHashSet();
+		protected R reference;
+		
+		public Component() {}
+		
+		public boolean deserializeNbt(CompoundTag nbt) {
+			this.referencedComponents.clear();
+			for (int i : nbt.getIntArray("Referenced"))
+				this.referencedComponents.add(i);
+			return true;
+		}
+		
+		public void serializeNbt(CompoundTag nbt) {
+			nbt.putIntArray("Referenced", this.referencedComponents.toIntArray());
 		}
 		
 		public R reference() {
 			return reference;
 		}
-
+		
 		@Override
 		public int hashCode() {
-			return this.reference.hashCode();
+			return Objects.hash(this.reference);
+		}
+		
+		@Override
+		public String toString() {
+			return "Component{ref=" + reference().toString() + "}";
 		}
 		
 		@Override
@@ -50,16 +63,6 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 			return false;
 		}
 		
-		public void serializeNbt(CompoundTag nbt) {
-//			nbt.put("Reference", serializeReference(this.reference));
-		}
-		
-		public void deserializeNbt(CompoundTag nbt) {
-//			this.reference = deserializeReference(nbt.get(null));
-			
-		}
-		
-			
 	}
 	
 	public abstract static class FunctionalNetwork<N extends FunctionalNetwork<N, R, C, A>, R, C extends FunctionalNetworkSpace.Component<R>, A> {
@@ -70,6 +73,9 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 			network1.integrateNetwork(network2.components.keySet(), network2);
 			return network1;
 		}
+		
+		public void serializeNbt(CompoundTag nbt) {}
+		public void deserializeNbt(CompoundTag nbt) {}
 		
 		protected void integrateNetwork(IntSet references, N other) {
 			references.forEach(ref -> {
@@ -109,6 +115,7 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 	public static record ParametrizedReference<R, A>(R reference, A paramter) {}
 	
 	protected final Supplier<N> networkFactory;
+	protected final Supplier<C> componentFactory;
 	protected final int traceLimit;
 	
 	protected final Object2IntMap<R> referenceIds = new Object2IntOpenHashMap<>();
@@ -117,13 +124,64 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 	
 	private static final long MAX_IDS = 0xFFFFFFFFL;
 	
-	public FunctionalNetworkSpace(Supplier<N> networkFactory, int traceLimit) {
+	public FunctionalNetworkSpace(Supplier<N> networkFactory, Supplier<C> componentFactory, int traceLimit) {
 		this.networkFactory = networkFactory;
+		this.componentFactory = componentFactory;
 		this.traceLimit = traceLimit;
 	}
 	
-	protected abstract CompoundTag serializeReference(R reference);
-	protected abstract R deserializeReference(CompoundTag tag);
+	public void serializeNbt(CompoundTag nbt) {
+		
+		ListTag componentsNbt = new ListTag();
+		for (var e : this.components.int2ObjectEntrySet()) {
+			CompoundTag componentNbt = new CompoundTag();
+			e.getValue().serializeNbt(componentNbt);
+			componentNbt.putInt("ReferenceId", e.getIntKey());
+			componentsNbt.add(componentNbt);
+		}
+		nbt.put("Components", componentsNbt);
+		
+		ListTag networksNbt = new ListTag();
+		for (var network : this.ref2network.values().stream().distinct().toList()) {
+			CompoundTag networkNbt = new CompoundTag();
+			network.serializeNbt(networkNbt);
+			int[] networkRefIds = network.listComponents().stream().mapToInt(c -> this.referenceIds.getInt(c.reference())).toArray();
+			networkNbt.putIntArray("ReferenceIds", networkRefIds);
+			networksNbt.add(networkNbt);
+		}
+		nbt.put("Networks", networksNbt);
+		
+	}
+	
+	public void deserializeNbt(CompoundTag nbt) {
+		
+		this.referenceIds.clear();
+		this.ref2network.clear();
+		this.components.clear();
+		
+		ListTag componentsNbt = nbt.getList("Components", 10);
+		for (int i = 0; i < componentsNbt.size(); i++) {
+			CompoundTag componentNbt = componentsNbt.getCompound(i);
+			C component = this.componentFactory.get();
+			if (!component.deserializeNbt(componentNbt)) continue;
+			int refId = componentNbt.getInt("ReferenceId");
+			this.referenceIds.put(component.reference(), refId);
+			this.components.put(refId, component);
+		}
+		
+		ListTag networksNbt = nbt.getList("Networks", 10);
+		for (int i = 0; i < networksNbt.size(); i++) {
+			CompoundTag networkNbt = networksNbt.getCompound(i);
+			N network = networkFactory.get();
+			int[] refIds = networkNbt.getIntArray("ReferenceIds");
+			for (int refId : refIds) {
+				network.components.put(refId, this.components.get(refId));
+				this.ref2network.put(refId, network);
+			}
+			network.deserializeNbt(networkNbt);
+		}
+		
+	}
 	
 	public Collection<N> listNetworks() {
 		return this.ref2network.values().stream().distinct().toList();

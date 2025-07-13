@@ -45,14 +45,14 @@ public interface IKineticBlock {
 			return new KineticReference(pos, partId);
 		}
 		
-		public CompoundTag serialize() {
+		public CompoundTag writeNbt() {
 			CompoundTag nbt = new CompoundTag();
 			nbt.put("Position", NbtUtils.writeBlockPos(pos));
 			nbt.putInt("PartId", partId);
 			return nbt;
 		}
 		
-		public static KineticReference deserialize(CompoundTag nbt) {
+		public static KineticReference readNbt(CompoundTag nbt) {
 			BlockPos position = NbtUtils.readBlockPos(nbt.getCompound("Position"));
 			int partId = nbt.getInt("PartId");
 			return new KineticReference(position, partId);

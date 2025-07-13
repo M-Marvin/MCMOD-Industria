@@ -5,12 +5,10 @@ import java.util.function.Supplier;
 import com.google.common.base.Objects;
 
 import de.m_marvin.industria.core.util.types.StateTransform;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -40,11 +38,7 @@ public class VirtualBlock {
 	}
 	
 	public void setLevel(Level level) {
-		if (level.isClientSide()) {
-			this.level = ClientLevelRedirect.newRedirect(this, (ClientLevel) level);
-		} else {
-			this.level = ServerLevelRedirect.newRedirect(this, (ServerLevel) level);
-		}
+		this.level = LevelRedirect.newLevelRedirect(this, level);
 		if (this.blockEntity != null)
 			this.blockEntity.setLevel(this.level);
 	}

@@ -23,16 +23,15 @@ import de.m_marvin.industria.core.electrics.types.IElectric;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.conduits.IElectricConduit;
-import de.m_marvin.industria.core.kinetics.engine.KineticHandlerCapabillity;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
-import de.m_marvin.industria.core.util.types.PowerNetState;
 import de.m_marvin.industria.core.util.ufns.FriendlyFunctionalNetworkSpace;
 import de.m_marvin.industria.core.util.ufns.FunctionalNetworkSpace;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -47,7 +46,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
-public class ElectricHandlerCapability extends FriendlyFunctionalNetworkSpace<Object, ElectricComponent<?, Object, ?>, ElectricNetwork, NodePos> implements ICapabilitySerializable<ListTag> {
+public class ElectricHandlerCapability extends FriendlyFunctionalNetworkSpace<Object, ElectricComponent<?, Object, ?>, ElectricNetwork, NodePos> implements ICapabilitySerializable<CompoundTag> {
 	
 	public static final String CIRCUIT_FILE_NAME = "circuit_";
 	public static final String CIRCUIT_FILE_EXTENSION = ".net";
@@ -72,57 +71,36 @@ public class ElectricHandlerCapability extends FriendlyFunctionalNetworkSpace<Ob
 //	private final HashMap<NodePos, Set<Component<?, ?, ?>>> node2componentMap = new HashMap<NodePos, Set<Component<?, ?, ?>>>();
 //	private final HashSet<ElectricNetwork> circuitNetworks = new HashSet<ElectricNetwork>();
 //	private final HashMap<Component<?, ?, ?>, ElectricNetwork> component2circuitMap = new HashMap<Component<?, ?, ?>, ElectricNetwork>();
-	private int circuitFileCounter;
+//	private int circuitFileCounter;
 	
 	public Level getLevel() {
 		return level;
 	}
+
+	@Override
+	public CompoundTag serializeNBT() {
+		CompoundTag tag = new CompoundTag();
+		serializeNbt(tag);
+		return tag;
+	}
+
+	@Override
+	public void deserializeNBT(CompoundTag nbt) {
+		super.deserializeNbt(nbt);
+		
+		IndustriaCore.LOGGER.info("Loaded " + this.ref2network.values().stream().distinct().count() + " electric networks");
+		IndustriaCore.LOGGER.info("Loaded " + this.referenceIds.size() + " electric components");
+	}
 	
-//	@Override
-//	public ListTag serializeNBT() {
-//		this.circuitFileCounter = 0;
-//		
-//		ListTag networksNbt = new ListTag();
-//		int componentCount = 0;
-//		for (ElectricNetwork circuitNetwork : this.circuitNetworks) {
-//			circuitNetwork.removeInvalidComponents();
-//			if (circuitNetwork.isEmpty()) continue;
-//			networksNbt.add(circuitNetwork.saveNBT(this));
-//			componentCount += circuitNetwork.getComponents().size();
-//		}
+	@Override
+	public void serializeNbt(CompoundTag nbt) {
+		super.serializeNbt(nbt);
 //		cleanupUnusedCircuitFiles();
-//		
-//		IndustriaCore.LOGGER.info("Saved " + networksNbt.size() + " electric networks");
-//		IndustriaCore.LOGGER.info("Saved " + componentCount + " electric components");
-//		return networksNbt;
-//	}
-//	
-//	@Override
-//	public void deserializeNBT(ListTag nbt) {
-//		this.pos2componentMap.clear();
-//		this.node2componentMap.clear();
-//		this.circuitNetworks.clear();
-//		this.component2circuitMap.clear();
-//		
-//		for (int i = 0; i < nbt.size(); i++) {
-//			CompoundTag circuitTag = nbt.getCompound(i);
-//			ElectricNetwork circuitNetwork = new ElectricNetwork(() -> this.level, "ingame-level-circuit");
-//			circuitNetwork.loadNBT(this, circuitTag);
-//			if (!circuitNetwork.isEmpty()) {
-//				this.circuitNetworks.add(circuitNetwork);
-//				circuitNetwork.getComponents().forEach((component) -> {
-//					this.component2circuitMap.put(component, circuitNetwork);
-//					if (!this.pos2componentMap.containsValue(component)) {
-//						this.addToNetwork(component);
-//					}
-//				});
-//			}
-//		}
-//		
-//		IndustriaCore.LOGGER.info("Loaded " + this.circuitNetworks.size() + "/" + nbt.size() + " electric networks");
-//		IndustriaCore.LOGGER.info("Loaded " + this.pos2componentMap.size() + " electric components");
-//	}
-//	
+		
+		IndustriaCore.LOGGER.info("Saved " + this.ref2network.values().stream().distinct().count() + " electric networks");
+		IndustriaCore.LOGGER.info("Saved " + this.referenceIds.size() + " electric components");
+	}
+	
 //	public String saveCircuit(String netList, String dataList) {
 //		if (this.level instanceof ServerLevel serverLevel) {
 //			String circuit = CIRCUIT_FILE_NAME + circuitFileCounter++;
@@ -200,8 +178,9 @@ public class ElectricHandlerCapability extends FriendlyFunctionalNetworkSpace<Ob
 //		}
 //	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ElectricHandlerCapability(Level level) {
-		super(() -> new ElectricNetwork(() -> level), 1024);
+		super(() -> new ElectricNetwork(() -> level), () -> new ElectricComponent(null, null, null), 1024);
 		this.level = level;
 	}
 	
@@ -301,31 +280,27 @@ public class ElectricHandlerCapability extends FriendlyFunctionalNetworkSpace<Ob
 	}
 	
 	/* ElectricNetwork handling */
-
-	@Override
-	public ListTag serializeNBT() {
-		// TODO Auto-generated method stub
-		return new ListTag();
-	}
-
-	@Override
-	public void deserializeNBT(ListTag nbt) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	@Override
 	protected CompoundTag serializeReference(Object reference) {
-		// TODO Auto-generated method stub
-		return null;
+		if (reference instanceof BlockPos blockPos) {
+			return NbtUtils.writeBlockPos(blockPos);
+		} else if (reference instanceof ConduitPos conduitPos) {
+			return conduitPos.writeNBT(new CompoundTag());
+		} else {
+			throw new IllegalArgumentException("Not a valid electric network reference: " + reference.getClass());
+		}
 	}
 	
 	@Override
 	protected Object deserializeReference(CompoundTag tag) {
-		// TODO Auto-generated method stub
-		return null;
+		if (tag.contains("NodeA")) {
+			return ConduitPos.readNBT(tag);
+		} else {
+			return NbtUtils.readBlockPos(tag);
+		}
 	}
-
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	protected ElectricComponent<?, Object, ?> findOrCreateComponentAt(Object reference) {
@@ -389,20 +364,53 @@ public class ElectricHandlerCapability extends FriendlyFunctionalNetworkSpace<Ob
 		
 	}
 	
-	
 	/**
 	 * Represents a component (can be a conduit or a block) in the electric networks
 	 */
-	public static class ElectricComponent<I, P, T> extends FunctionalNetworkSpace.Component<P> {
+	public static class ElectricComponent<I, P, T> extends FunctionalNetworkSpace.Component<Object> {
 		protected boolean hasChanged;
 		protected I instance;
 		protected IElectric<I, P, T> type;
 		
 		public ElectricComponent(P pos, IElectric<I, P, T> type, I instance) {
-			super(pos);
+			this.reference = pos;
 			this.type = type;
 			this.instance = instance;
 			this.hasChanged = true;
+		}
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		public boolean deserializeNbt(CompoundTag nbt) {
+			super.deserializeNbt(nbt);
+			
+			IElectric.Type componentType = IElectric.Type.valueOf(nbt.getString("ComponentType").toUpperCase());
+			ResourceLocation typeName = new ResourceLocation(nbt.getString("Type"));
+			Object typeObject = componentType.getRegistry().getValue(typeName);
+			if (typeObject instanceof IElectric) {
+				this.type = (IElectric<I, P, T>) typeObject;
+				this.instance = type.deserializeNBTInstance(nbt);
+				this.reference = type.deserializeNBTPosition(nbt);
+				return true;
+			}
+			return false;
+		}
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		public void serializeNbt(CompoundTag nbt) {
+			super.serializeNbt(nbt);
+			
+			IElectric.Type componentType = IElectric.Type.getType(this.type);
+			this.type.serializeNBTPosition((P) reference(), nbt);
+			nbt.putString("Type", componentType.getRegistry().getKey(this.type).toString());
+			nbt.putString("ComponentType", componentType.name().toLowerCase());
+			this.type.serializeNBTInstance(instance, nbt);
+		}
+		
+		@Override
+		public String toString() {
+			return "Component{pos=" + this.reference() + ",type=" + this.type.toString() + ",instance=" + (this.instance(null) == null ? "N/A" : this.instance(null).toString()) + "}#hash=" + this.hashCode();
 		}
 		
 		public void setChanged() {
@@ -444,10 +452,11 @@ public class ElectricHandlerCapability extends FriendlyFunctionalNetworkSpace<Ob
 		public IElectric<I, P, T> type() {
 			return type;
 		}
-		
+
+		@SuppressWarnings("unchecked")
 		public I instance(Level level) {
 			if ((this.hasChanged || !this.type.isInstanceValid(level, instance)) && level != null) {
-				Optional<I> instanceLoaded = this.type.getInstance(level, this.reference());
+				Optional<I> instanceLoaded = this.type.getInstance(level, (P) this.reference());
 				if (instanceLoaded.isPresent()) {
 					this.instance = instanceLoaded.get();
 					this.hasChanged = false;
@@ -455,64 +464,29 @@ public class ElectricHandlerCapability extends FriendlyFunctionalNetworkSpace<Ob
 			}
 			return instance;
 		}
-		
-//		@Override
-//		public int hashCode() {
-//			return Objects.hashCode(this.type, this.pos);
-//		}
-//		
-//		@Override
-//		public String toString() {
-//			return "Component{pos=" + this.pos() + ",type=" + this.type.toString() + ",instance=" + (this.instance(null) == null ? "N/A" : this.instance(null).toString()) + "}#hash=" + this.hashCode();
-//		}
-//		
-//		@Override
-//		public boolean equals(Object obj) {
-//			if (obj == this) return true;
-//			if (obj instanceof Component other) {
-//				return this.type.equals(other.type) && this.pos.equals(other.pos);
-//			}
-//			return false;
-//		}
-		
-//		public void serializeNbt(CompoundTag nbt) {
-//			IElectric.Type componentType = IElectric.Type.getType(this.type);
-//			this.type.serializeNBTPosition(pos, nbt);
-//			nbt.putString("Type", componentType.getRegistry().getKey(this.type).toString());
-//			nbt.putString("ComponentType", componentType.name().toLowerCase());
-//			this.type.serializeNBTInstance(instance, nbt);
-//		}
-//		public static <I, P, T> Component<I, P, T> deserializeNbt(CompoundTag nbt) {
-//			IElectric.Type componentType = IElectric.Type.valueOf(nbt.getString("ComponentType").toUpperCase());
-//			ResourceLocation typeName = new ResourceLocation(nbt.getString("Type"));
-//			Object typeObject = componentType.getRegistry().getValue(typeName);
-//			if (typeObject instanceof IElectric) {
-//				@SuppressWarnings("unchecked")
-//				IElectric<I, P, T> type = (IElectric<I, P, T>) typeObject;
-//				P position = type.deserializeNBTPosition(nbt);
-//				I instance = type.deserializeNBTInstance(nbt);
-//				return new Component<I, P, T>(position, type, instance);
-//			}
-//			return null;
-//		}
+		@SuppressWarnings("unchecked")
 		public void plotCircuit(Level level, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
-			type.plotCircuit(level, instance(level), reference(), circuit, plotter);
+			type.plotCircuit(level, instance(level), (P) reference(), circuit, plotter);
 		}
+		@SuppressWarnings("unchecked")
 		public NodePos[] getNodes(Level level) {
-			return type.getElectricConnections(level, reference(), instance(level));
+			return type.getElectricConnections(level, (P) reference(), instance(level));
 		}
+		@SuppressWarnings("unchecked")
 		public void onNetworkChange(Level level) {
-			type.onNetworkNotify(level, instance(level), reference());
+			type.onNetworkNotify(level, instance(level), (P) reference());
 		}
+		@SuppressWarnings("unchecked")
 		public String[] getWireLanes(Level level, NodePos node) {
-			return type.getWireLanes(level, reference(), instance(level), node);
+			return type.getWireLanes(level, (P) reference(), instance(level), node);
 		}
+		@SuppressWarnings("unchecked")
 		public void setWireLanes(Level level, NodePos node, String[] laneLabels) {
-			String[] oldLanes = type.getWireLanes(level, reference(), instance(level), node);
-			type.setWireLanes(level, reference(), instance(level), node, laneLabels);
+			String[] oldLanes = type.getWireLanes(level, (P) reference(), instance(level), node);
+			type.setWireLanes(level, (P) reference(), instance(level), node, laneLabels);
 			for (int i = 0; i < oldLanes.length && i < laneLabels.length; i++) {
 				if (!oldLanes[i].equals(laneLabels[i])) {
-					ElectricUtility.updateNetwork(level, reference());
+					ElectricUtility.updateNetwork(level, (P) reference());
 					return;
 				}
 			}
@@ -520,14 +494,17 @@ public class ElectricHandlerCapability extends FriendlyFunctionalNetworkSpace<Ob
 		public boolean isWire() {
 			return type.isWire();
 		}
+		@SuppressWarnings("unchecked")
 		public ChunkPos getAffectedChunk(Level level) {
-			return type.getAffectedChunk(level, reference());
+			return type.getAffectedChunk(level, (P) reference());
 		}
+		@SuppressWarnings("unchecked")
 		public double getMaxPowerGeneration(Level level) {
-			return type.getMaxPowerGeneration(level, reference(), this.instance(level));
+			return type.getMaxPowerGeneration(level, (P) reference(), this.instance(level));
 		}
+		@SuppressWarnings("unchecked")
 		public double getCurrentPower(Level level) {
-			return type.getCurrentPower(level, reference(), this.instance(level));
+			return type.getCurrentPower(level, (P) reference(), this.instance(level));
 		}
 	}
 	
@@ -840,5 +817,5 @@ public class ElectricHandlerCapability extends FriendlyFunctionalNetworkSpace<Ob
 ////		}
 ////		
 //	}
-
+	
 }

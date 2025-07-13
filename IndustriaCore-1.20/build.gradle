@@ -93,11 +93,15 @@ minecraft {
         client {
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', mod_id
+            
+            dependencies {
+            
+			}
         }
 
         server {
             property 'forge.enabledGameTestNamespaces', mod_id
-            args '--nogui'
+            //args '--nogui'
         }
 
         // This run config launches GameTestServer and runs all registered gametests, then exits.
@@ -172,6 +176,16 @@ repositories {
         }
 	}
 	maven {
+		url 'https://maven.pkg.github.com/m-marvin/library-unifiedmaps'
+		credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+        }
+        content {
+        	includeGroup "de.m_marvin.unimap"
+        }
+	}
+	maven {
 		url 'https://maven.pkg.github.com/valkyrienskies/valkyrien-skies-2'
 		credentials {
 		    username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
@@ -226,11 +240,17 @@ dependencies {
 	minecraftLibrary("de.m_marvin.univec:univec:${univec_version}")
 	api("de.m_marvin.univec:univec:${univec_version}")
 	
+	// UnifiedMaps
+	shade("de.m_marvin.unimap:unimap:${unimap_version}")
+	minecraftLibrary("de.m_marvin.unimap:unimap:${unimap_version}")
+	api("de.m_marvin.unimap:unimap:${unimap_version}")
+	
 	// Debugging
-	runtimeOnly fg.deobf("curse.maven:atlasviewer-633577:4882554")
-	runtimeOnly fg.deobf("curse.maven:oculus-581495:6020952")
-	runtimeOnly fg.deobf("curse.maven:embeddium-908741:5681725")
 	runtimeOnly fg.deobf("curse.maven:jei-238222:6075247")
+	// vvv Remove before starting server vvv
+//	runtimeOnly fg.deobf("curse.maven:atlasviewer-633577:4882554")
+//	runtimeOnly fg.deobf("curse.maven:oculus-581495:6020952")
+//	runtimeOnly fg.deobf("curse.maven:embeddium-908741:5681725")
 	
 	//runtimeOnly fg.deobf("maven.modrinth:cosmic-horizons-cosmos:0.0.7.3")
 	

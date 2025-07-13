@@ -68,7 +68,7 @@ public class KineticComponentRenderer {
 	
 	/* private render methods, called by the render event */
 	
-	@SuppressWarnings({ "resource", "deprecation" })
+	@SuppressWarnings({ "deprecation" })
 	private static void drawDebugFrames(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, float partialTicks) {
 		
 		LazyOptional<KineticHandlerCapabillity> optionalKineticHolder = clientLevel.getCapability(Capabilities.KINETIC_HANDLER_CAPABILITY);

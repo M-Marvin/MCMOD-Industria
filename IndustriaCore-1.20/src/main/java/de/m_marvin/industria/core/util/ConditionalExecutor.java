@@ -46,8 +46,13 @@ public class ConditionalExecutor implements Executor {
 		Iterator<Supplier<Boolean>> condItr = this.taskQueue.keySet().iterator();
 		while (condItr.hasNext()) {
 			Supplier<Boolean> condition = condItr.next();
-			if (condition.get()) {
-				this.taskQueue.get(condition).run();
+			try {
+				if (condition.get()) {
+					this.taskQueue.get(condition).run();
+					condItr.remove();
+				}
+			} catch (Exception e) {
+				IndustriaCore.LOGGER.warn("Task on conditial execution queue threw an exception: ", e);
 				condItr.remove();
 			}
 		}

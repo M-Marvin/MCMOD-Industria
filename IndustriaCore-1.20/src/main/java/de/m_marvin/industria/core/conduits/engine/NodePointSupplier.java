@@ -55,8 +55,8 @@ public class NodePointSupplier {
 	
 	public static final Vec3i BLOCK_CENTER = new Vec3i(8, 8, 8);
 	
-	public static final BiFunction<Vec3i, Object, Vec3i> FACING_HORIZONTAL_MODIFIER_DEFAULT_NORTH = (position, prop) -> MathUtility.rotatePoint(position.sub(BLOCK_CENTER), (float) MathUtility.directionHoriziontalAngleDegrees((Direction) prop), true, Axis.Y).add(BLOCK_CENTER);
-	public static final BiFunction<Vec3i, Object, Vec3i> FACING_MODIFIER_DEFAULT_NORTH = (position, prop) -> MathUtility.rotatePoint(position.sub(BLOCK_CENTER), (float) MathUtility.directionHoriziontalAngleDegrees((Direction) prop), true, ((Direction) prop).getAxis() == Axis.Y ? Axis.X : Axis.Y).add(BLOCK_CENTER);
+	public static final BiFunction<Vec3i, Object, Vec3i> FACING_HORIZONTAL_MODIFIER_DEFAULT_NORTH = (position, prop) -> MathUtility.rotatePoint(position.sub(BLOCK_CENTER), (float) MathUtility.directionHorizontalAngleDegrees((Direction) prop), true, Axis.Y).add(BLOCK_CENTER);
+	public static final BiFunction<Vec3i, Object, Vec3i> FACING_MODIFIER_DEFAULT_NORTH = (position, prop) -> MathUtility.rotatePoint(position.sub(BLOCK_CENTER), (float) MathUtility.directionHorizontalAngleDegrees((Direction) prop), true, ((Direction) prop).getAxis() == Axis.Y ? Axis.X : Axis.Y).add(BLOCK_CENTER);
 	public static final BiFunction<Vec3i, Object, Vec3i> ATTACH_FACE_MODIFIER_DEFAULT_WALL = (position, prop) -> {
 		switch ((AttachFace) prop) {
 		case CEILING: return MathUtility.rotatePoint(position.sub(8, 8, 8), -90, true, Axis.X).add(8, 8, 8);

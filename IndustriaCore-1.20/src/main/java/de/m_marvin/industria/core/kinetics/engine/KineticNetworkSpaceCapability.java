@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.kinetics.engine.network.SSyncKineticComponentsPackage;
+import de.m_marvin.industria.core.kinetics.engine.network.SUpdateKineticNetworkPackage;
 import de.m_marvin.industria.core.kinetics.types.blocks.IKineticBlock;
 import de.m_marvin.industria.core.kinetics.types.blocks.IKineticBlock.KineticReference;
 import de.m_marvin.industria.core.kinetics.types.blocks.IKineticBlock.TransmissionNode;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -36,15 +38,15 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
-public class KineticHandlerCapabillity extends FriendlyFunctionalNetworkSpace<KineticReference, KineticHandlerCapabillity.KineticComponent, KineticNetwork, Double> implements ICapabilitySerializable<CompoundTag> {
+public class KineticNetworkSpaceCapability extends FriendlyFunctionalNetworkSpace<KineticReference, KineticNetworkSpaceCapability.KineticComponent, KineticNetwork, Double> implements ICapabilitySerializable<CompoundTag> {
 	
 	/* Capability handling */
 	
-	private LazyOptional<KineticHandlerCapabillity> holder = LazyOptional.of(() -> this);
+	private LazyOptional<KineticNetworkSpaceCapability> holder = LazyOptional.of(() -> this);
 	
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-		if (cap == Capabilities.KINETIC_HANDLER_CAPABILITY) {
+		if (cap == Capabilities.KINETIC_NETWORK_SPACE_CAPABILITY) {
 			return holder.cast();
 		}
 		return LazyOptional.empty();
@@ -79,7 +81,7 @@ public class KineticHandlerCapabillity extends FriendlyFunctionalNetworkSpace<Ki
 		IndustriaCore.LOGGER.info("Loaded " + this.referenceIds.size() + " kinetic components");
 	}
 	
-	public KineticHandlerCapabillity(Level level) {
+	public KineticNetworkSpaceCapability(Level level) {
 		super(() -> new KineticNetwork(() -> level), () -> new KineticComponent(null, null, null), 1024); // TODO trace limit config
 		this.level = level;
 	}
@@ -88,46 +90,59 @@ public class KineticHandlerCapabillity extends FriendlyFunctionalNetworkSpace<Ki
 	
 	@SubscribeEvent
 	public static void onLevelTick(TickEvent.LevelTickEvent event) {
-		KineticHandlerCapabillity handler = GameUtility.getLevelCapability(event.level, Capabilities.KINETIC_HANDLER_CAPABILITY);
-		handler.processUpdates();
+		KineticNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(event.level, Capabilities.KINETIC_NETWORK_SPACE_CAPABILITY);
+		networkSpace.processUpdates();
 	}
 	
 	@SubscribeEvent
 	public static void onBlockStateChange(BlockEvent.NeighborNotifyEvent event) {
 		Level level = (Level) event.getLevel();
-		KineticHandlerCapabillity handler = GameUtility.getLevelCapability(level, Capabilities.KINETIC_HANDLER_CAPABILITY);
+		KineticNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.KINETIC_NETWORK_SPACE_CAPABILITY);
 		
 		// Always remove components at this block pos, this prevents wrong connections from things like assembly to an compound
-		for (KineticReference reference : handler.listReferences()) {
-			if (reference.pos().equals(event.getPos()))
-				handler.updateTicket(reference, UpdateType.COMPONENT_REMOVE);
+		for (KineticReference reference : networkSpace.listReferences()) {
+			if (reference.pos().equals(event.getPos())) {
+				networkSpace.updateTicket(reference, UpdateType.COMPONENT_REMOVE);
+				KineticComponent component = networkSpace.findComponentAt(reference);
+				if (component == null) continue;
+				IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> (LevelChunk) level.getChunk(event.getPos())), new SSyncKineticComponentsPackage(component, new ChunkPos(event.getPos()), SyncRequestType.REMOVED));
+			}
 		}
 		
 		if (event.getState().getBlock() instanceof IKineticBlock kinetic) {
 			Stream.of(kinetic.getTransmissionNodes(level, event.getPos(), event.getState()))
 				.map(TransmissionNode::reference)
 				.distinct()
-				.forEach(ref -> handler.updateTicket(ref, UpdateType.COMPONENT_PUT));;
+				.forEach(ref -> {
+					networkSpace.updateTicketCompletable(ref, UpdateType.COMPONENT_PUT).thenAccept(v -> {
+						KineticComponent component = networkSpace.findComponentAt(ref);
+						IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> (LevelChunk) level.getChunk(event.getPos())), new SSyncKineticComponentsPackage(component, new ChunkPos(event.getPos()), SyncRequestType.REMOVED));
+					});
+				});;
 		}
 	}
-	
-	// TODO
 	
 	@SubscribeEvent
 	public static void onClientLoadsChunk(ChunkWatchEvent.Watch event) {
 		Level level = event.getPlayer().level();
-		KineticHandlerCapabillity kineticHandler = GameUtility.getLevelCapability(level, Capabilities.KINETIC_HANDLER_CAPABILITY);
-		Collection<KineticComponent> components = kineticHandler.findComponentsInChunk(event.getPos());
+		KineticNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.KINETIC_NETWORK_SPACE_CAPABILITY);
+		Collection<KineticComponent> components = networkSpace.findComponentsInChunk(event.getPos());
 		
 		if (!components.isEmpty()) {
-			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(event::getPlayer), new SSyncKineticComponentsPackage(components, event.getChunk().getPos(), SyncRequestType.ADDED));
+			// We should not need this here, since the update network package already sends all components
+			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(event::getPlayer), new SSyncKineticComponentsPackage(components, event.getPos(), SyncRequestType.ADDED));
+			
+			Collection<KineticNetwork> networks = components.stream().map(networkSpace::findNetworkAt).distinct().toList();
+			for (var network : networks) {
+				IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(event::getPlayer), new SUpdateKineticNetworkPackage(network));
+			}
 		}
 	}
 	
 	@SubscribeEvent
 	public static void onClientUnloadsChunk(ChunkWatchEvent.UnWatch event) {
 		Level level = event.getPlayer().level();
-		KineticHandlerCapabillity kinteticHandler = GameUtility.getLevelCapability(level, Capabilities.KINETIC_HANDLER_CAPABILITY);
+		KineticNetworkSpaceCapability kinteticHandler = GameUtility.getLevelCapability(level, Capabilities.KINETIC_NETWORK_SPACE_CAPABILITY);
 		Collection<KineticComponent> components = kinteticHandler.findComponentsInChunk(event.getPos());
 		
 		if (!components.isEmpty()) {
@@ -264,7 +279,7 @@ public class KineticHandlerCapabillity extends FriendlyFunctionalNetworkSpace<Ki
 	/**
 	 * Returns all networks with an component at the given position
 	 */
-	public Collection<KineticNetwork> getNetworksAt(BlockPos position) {
+	public Collection<KineticNetwork> findNetworksAt(BlockPos position) {
 		Collection<KineticComponent> components = findComponentsAt(position);
 		return components.stream()
 			.map(r -> findNetworkAt(r.reference()))

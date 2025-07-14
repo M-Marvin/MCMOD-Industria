@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 import de.m_marvin.industria.core.kinetics.engine.ClientKineticPackageHandler;
-import de.m_marvin.industria.core.kinetics.engine.KineticHandlerCapabillity.KineticComponent;
+import de.m_marvin.industria.core.kinetics.engine.KineticNetworkSpaceCapability.KineticComponent;
 import de.m_marvin.industria.core.util.types.SyncRequestType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;

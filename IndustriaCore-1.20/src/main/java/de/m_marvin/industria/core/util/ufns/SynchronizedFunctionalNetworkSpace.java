@@ -127,16 +127,23 @@ public abstract class SynchronizedFunctionalNetworkSpace<R, C extends Functional
 			}
 		}
 		
+		Set<N> networks = new HashSet<N>();
+		
 		// Perform removal operations
 		if (!this.removeReferences.isEmpty()) {
-			removeComponents(this.removeReferences).forEach(SynchronizedFunctionalNetwork::afterChange);
+			networks.addAll(removeComponents(this.removeReferences));
 			this.removeReferences.clear();
 		}
 		
 		// Perform put operations
 		if (!this.putComponents.isEmpty()) {
-			putComponents(this.putComponents).forEach(SynchronizedFunctionalNetwork::afterChange);
+			networks.addAll(putComponents(this.putComponents));
 			this.putComponents.clear();
+		}
+
+		for (var n : networks) {
+			if (n.listComponents().isEmpty()) continue;
+			n.afterChange();
 		}
 		
 		// Perform network updates

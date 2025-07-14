@@ -1,8 +1,11 @@
 package de.m_marvin.industria.core.kinetics.engine;
 
+import java.util.Collection;
+import java.util.concurrent.CompletableFuture;
+
 import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.core.kinetics.engine.KineticHandlerCapabillity.KineticComponent;
 import de.m_marvin.industria.core.kinetics.engine.network.SSyncKineticComponentsPackage;
+import de.m_marvin.industria.core.kinetics.engine.network.SUpdateKineticNetworkPackage;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.types.SyncRequestType;
@@ -18,24 +21,37 @@ public class ClientKineticPackageHandler {
 
 	public static void handleSyncComponentsServer(SSyncKineticComponentsPackage msg, NetworkEvent.Context ctx) {
 		Level level = Minecraft.getInstance().level;
-		KineticHandlerCapabillity handler = GameUtility.getLevelCapability(level, Capabilities.KINETIC_HANDLER_CAPABILITY);
+		KineticNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.KINETIC_NETWORK_SPACE_CAPABILITY);
+		
 		for (var c : msg.getComponents()) {
-			handler.updateTicket(c.reference(), msg.request == SyncRequestType.ADDED ? UpdateType.COMPONENT_PUT : UpdateType.COMPONENT_REMOVE);
+			networkSpace.updateTicket(c.reference(), msg.request == SyncRequestType.ADDED ? UpdateType.COMPONENT_PUT : UpdateType.COMPONENT_REMOVE);
 		}
 	}
 
-//	@SuppressWarnings("resource")
-//	public static void handleUpdateNetwork(SUpdateKineticNetworkPackage msg, Context context) {
-//		
-//		Level level = Minecraft.getInstance().level;
-//		KineticHandlerCapabillity handler = GameUtility.getLevelCapability(level, Capabilities.KINETIC_HANDLER_CAPABILITY);
-//
-//		Optional<Component> c = msg.getComponents().stream().findAny();
-//
-//		handler.injectNodeVoltages(msg.getComponents(), msg.getDataList());
-//		if (c.isPresent())
-//			handler.updateNetworkState(c.get().pos(), msg.getState());
-//		
-//	}
+	public static void handleUpdateNetwork(SUpdateKineticNetworkPackage msg, NetworkEvent.Context context) {
+		Level level = Minecraft.getInstance().level;
+		KineticNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.KINETIC_NETWORK_SPACE_CAPABILITY);
+		
+		// Add components to create network
+		CompletableFuture.allOf(
+				msg.getComponents().stream()
+				.map(c -> networkSpace.updateTicketCompletable(c.reference(), UpdateType.COMPONENT_PUT))
+				.toArray(CompletableFuture[]::new)
+			).thenAccept(v -> {
+				
+				// On the client the network might be split because of unloaded chunks/components
+				Collection<KineticNetwork> networks = msg.getComponents().stream().map(networkSpace::findNetworkAt).distinct().toList();
+				for (var n : networks) {
+					n.setSpeedMap(msg.getSpeedMap());
+					n.setNetworkSpeed(msg.getSpeed());
+					n.setMaxPower(msg.getMaxPower());
+					n.setCurrentProduction(msg.getCurrentProduction());
+					n.setCurrentConsumtion(msg.getCurrentConsumtion());
+					n.setState(msg.getState());
+				}
+				
+			});
+		
+	}
 	
 }

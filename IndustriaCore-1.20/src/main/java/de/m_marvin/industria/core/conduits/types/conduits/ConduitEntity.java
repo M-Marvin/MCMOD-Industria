@@ -29,6 +29,7 @@ public class ConduitEntity {
 	}
 	
 	public ConduitEntity dismantle(Level level) {
+		if (this.shape == null) return this;
 		this.conduit.onDismantle(level, position, this);
 		this.conduit.dismantleShape(level, this);
 		this.shape = null;

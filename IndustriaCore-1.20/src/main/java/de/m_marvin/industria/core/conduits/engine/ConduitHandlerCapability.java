@@ -285,8 +285,8 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 		BlockPos max = MathUtility.getMaxCorner(pos1, pos2);
 		List<ConduitEntity> conduits = new ArrayList<ConduitEntity>();
  		for (ConduitEntity con : this.conduits) {
- 			boolean na = MathUtility.isBetweenInclusive(min, max, con.getPosition().getNodeApos());
- 			boolean nb = MathUtility.isBetweenInclusive(min, max, con.getPosition().getNodeBpos());
+ 			boolean na = MathUtility.isWithinInclusive(min, max, con.getPosition().getNodeApos());
+ 			boolean nb = MathUtility.isWithinInclusive(min, max, con.getPosition().getNodeBpos());
 			if (includeExternal ? na || nb : na && nb) {
 				conduits.add(con);
 			}

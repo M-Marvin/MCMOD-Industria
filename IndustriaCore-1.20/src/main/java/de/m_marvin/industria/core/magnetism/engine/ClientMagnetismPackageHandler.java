@@ -18,7 +18,6 @@ public class ClientMagnetismPackageHandler {
 	
 	/* Handle SSyncConduitPackage package */
 	
-	@SuppressWarnings("resource")
 	public static void handleSyncMagneticFromServer(SSyncMagneticPackage msg, Context ctx) {
 		
 		ConditionalExecutor.CLIENT_TICK_EXECUTOR.executeAsSoonAs(() -> {

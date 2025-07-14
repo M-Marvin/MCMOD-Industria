@@ -26,7 +26,7 @@ import de.m_marvin.industria.core.client.electrics.events.ElectricNetworkEvent;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability.ElectricComponent;
-import de.m_marvin.industria.core.electrics.engine.network.SUpdateNetworkPackage;
+import de.m_marvin.industria.core.electrics.engine.network.SUpdateElectricNetworkPackage;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
 import de.m_marvin.industria.core.util.ConditionalExecutor;
 import de.m_marvin.industria.core.util.types.PowerNetState;
@@ -43,19 +43,19 @@ import net.minecraftforge.common.MinecraftForge;
 public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.SynchronizedFunctionalNetwork<ElectricNetwork, Object, ElectricComponent<?, Object, ?>, NodePos> {
 	
 	private final Supplier<Level> level;
+	
 	private MultiBiMap<Integer, NodePos> ref2nodeMap = new HashMultiBiMap<Integer, NodePos>();
 	private Map<String, Double> nodeVoltages = Maps.newHashMap();
 	private double maxPower;
 	private double currentConsumtion;
 	private double currentProduction;
+	private PowerNetState state = PowerNetState.ACTIVE;
 	
 	private long templateCounter;
 	private StringBuilder circuitBuilder;
 	private String groundNode;
 	private String netList = "";
 
-	protected PowerNetState state = PowerNetState.ACTIVE;
-	
 	public ElectricNetwork(Supplier<Level> level) {
 		this.level = level;
 		resetNetlist(); // When loading the chunk (and as such initially constructing the network) the new network has to be in reset state
@@ -145,11 +145,6 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 		if (this.groundNode == null) this.groundNode = template.getAnyNode();
 	}
 	
-	/**
-	 * Triggered by update tickets for the network only on the server-
-	 * Rebuilds the netlist and starts an new simulation.
-	 * After completetion, the simulation will trigger {@link ElectricNetwork#recomputeTotalAndUpdate()}
-	 */
 	public void recomputeElectrics() {
 		
 		// Only rebuild netlist if it has been reset befpre
@@ -165,48 +160,62 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 			
 		}
 		
-		// No simulation if empty
-		if (isEmpty() || this.groundNode == null) return;
-		
-		ElectricNetworkSpaceCapability.getSimulationProcessor().processNetwork(this).thenAcceptAsync(state -> {
-			
-			if (!state) {
-				tripFuse();
-				MinecraftForge.EVENT_BUS.post(new ElectricNetworkEvent.FuseTripedEvent(getLevel(), this));
-				return;
-			}
-
-			// Recalculate network global variables
-			this.maxPower = 0;
-			this.currentConsumtion = 0;
-			this.currentProduction = 0;
-			for (ElectricComponent<?, ?, ?> c : listComponents()) {
-				this.maxPower += c.getMaxPowerGeneration(getLevel());
-				double p = c.getCurrentPower(getLevel());
-				if (p > 0) {
-					this.currentProduction += p;
-				} else {
-					this.currentConsumtion += -p;
-				}
-			}
+		if (this.isTripped()) {
+			this.nodeVoltages.clear();
 
 			// Send update to clients
-			IndustriaCore.NETWORK.send(ElectricUtility.TRACKING_NETWORK.with(() -> this), new SUpdateNetworkPackage(this));
+			IndustriaCore.NETWORK.send(ElectricUtility.TRACKING_NETWORK.with(() -> this), new SUpdateElectricNetworkPackage(this));
 			
 			// Notify components
 			updateComponents();
 			
-		}, ConditionalExecutor.SERVER_TICK_EXECUTOR);
+		} else {
+
+			// No simulation if empty
+			if (isEmpty() || this.groundNode == null) return;
+			
+			ElectricNetworkSpaceCapability.getSimulationProcessor().processNetwork(this).thenAcceptAsync(state -> {
+				
+				if (!state) {
+					tripFuse();
+					MinecraftForge.EVENT_BUS.post(new ElectricNetworkEvent.FuseTripedEvent(getLevel(), this));
+					return;
+				}
+
+				// Recalculate network global variables
+				this.maxPower = 0;
+				this.currentConsumtion = 0;
+				this.currentProduction = 0;
+				for (ElectricComponent<?, ?, ?> c : listComponents()) {
+					this.maxPower += c.getMaxPowerGeneration(getLevel());
+					double p = c.getCurrentPower(getLevel());
+					if (p > 0) {
+						this.currentProduction += p;
+					} else {
+						this.currentConsumtion += -p;
+					}
+				}
+				
+				if (this.currentConsumtion > this.currentProduction) {
+					this.nodeVoltages.clear();
+					setState(PowerNetState.INACTIVE);
+				} else {
+					setState(PowerNetState.ACTIVE);
+				}
+				
+				// Send update to clients
+				IndustriaCore.NETWORK.send(ElectricUtility.TRACKING_NETWORK.with(() -> this), new SUpdateElectricNetworkPackage(this));
+				
+				// Notify components
+//				updateComponents();
+				
+			}, ConditionalExecutor.SERVER_TICK_EXECUTOR);
+			
+		}
 		
 	}
 	
-	/**
-	 * Triggered by an completing simulation or some other function which affect the networks state.
-	 * Notifies the components about the changes.
-	 */
-	public synchronized void updateComponents() {
-		
-		// Trigger component updates
+	public void updateComponents() {
 		for (var c : listComponents()) {
 			c.onNetworkChange(getLevel());
 		}

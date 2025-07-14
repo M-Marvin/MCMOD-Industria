@@ -20,7 +20,7 @@ import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability.ElectricComponent;
 import de.m_marvin.industria.core.electrics.engine.network.SSyncElectricComponentsPackage;
-import de.m_marvin.industria.core.electrics.engine.network.SUpdateNetworkPackage;
+import de.m_marvin.industria.core.electrics.engine.network.SUpdateElectricNetworkPackage;
 import de.m_marvin.industria.core.electrics.types.IElectric;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
@@ -122,6 +122,7 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 			});
 		} else {
 			ElectricComponent<?, Object, ?> component = networkSpace.findComponentAt(event.getPos());
+			if (component == null) return;
 			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> (LevelChunk) level.getChunk(event.getPos())), new SSyncElectricComponentsPackage(component, new ChunkPos(event.getPos()), SyncRequestType.REMOVED));
 			networkSpace.updateTicket(event.getPos(), UpdateType.COMPONENT_REMOVE);
 		}
@@ -146,15 +147,15 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 	public static void onClientLoadsChunk(ChunkWatchEvent.Watch event) {
 		Level level = event.getPlayer().level();
 		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
-		Collection<ElectricComponent<?, Object, ?>> componentsInChunk = networkSpace.findComponentsInChunk(event.getPos());
+		Collection<ElectricComponent<?, Object, ?>> components = networkSpace.findComponentsInChunk(event.getPos());
 		
-		if (!componentsInChunk.isEmpty()) {
+		if (!components.isEmpty()) {
 			// We should not need this here, since the update network package already sends all components
 //			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> event.getChunk()), new SSyncElectricComponentsPackage(componentsInChunk, event.getPos(), SyncRequestType.ADDED));
 			
-			Collection<ElectricNetwork> networks = componentsInChunk.stream().map(networkSpace::findNetworkAt).distinct().toList();
+			Collection<ElectricNetwork> networks = components.stream().map(networkSpace::findNetworkAt).distinct().toList();
 			for (var network : networks) {
-				IndustriaCore.NETWORK.send(ElectricUtility.TRACKING_NETWORK.with(() -> network), new SUpdateNetworkPackage(network));
+				IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(event::getPlayer), new SUpdateElectricNetworkPackage(network));
 			}
 		}
 	}
@@ -164,6 +165,7 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 		Level level = event.getPlayer().level();
 		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
 		Collection<ElectricComponent<?, Object, ?>> components = networkSpace.findComponentsInChunk(event.getPos());
+		
 		if (!components.isEmpty()) {
 			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(event::getPlayer), new SSyncElectricComponentsPackage(components, event.getPos(), SyncRequestType.REMOVED));
 		}

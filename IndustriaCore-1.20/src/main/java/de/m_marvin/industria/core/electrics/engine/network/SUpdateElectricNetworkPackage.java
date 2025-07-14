@@ -16,16 +16,16 @@ import net.minecraftforge.network.NetworkEvent;
 /*
  * Tells the client that components need to be updated with new node voltages
  */
-public class SUpdateNetworkPackage {
+public class SUpdateElectricNetworkPackage {
 	
-	public final String dataList;
-	public final Collection<ElectricComponent<?, Object, ?>> components;
-	public final double maxPower;
-	public final double currentConsumtion;
-	public final double currentProduction;
-	public final PowerNetState state;
+	private final String dataList;
+	private final Collection<ElectricComponent<?, Object, ?>> components;
+	private final double maxPower;
+	private final double currentConsumtion;
+	private final double currentProduction;
+	private final PowerNetState state;
 	
-	public SUpdateNetworkPackage(ElectricNetwork network) {
+	public SUpdateElectricNetworkPackage(ElectricNetwork network) {
 		this.dataList = network.printDataList();
 		this.components = network.listComponents();
 		this.state = network.getState();
@@ -34,7 +34,7 @@ public class SUpdateNetworkPackage {
 		this.currentProduction = network.getCurrentProduction();
 	}
 	
-	public SUpdateNetworkPackage(Set<ElectricComponent<?, Object, ?>> components, String dataList, PowerNetState state, double maxPower, double currentProduction, double currentConsumtion) {
+	public SUpdateElectricNetworkPackage(Set<ElectricComponent<?, Object, ?>> components, String dataList, PowerNetState state, double maxPower, double currentProduction, double currentConsumtion) {
 		this.dataList = dataList;
 		this.components = components;
 		this.state = state;
@@ -67,7 +67,7 @@ public class SUpdateNetworkPackage {
 		return currentProduction;
 	}
 	
-	public static void encode(SUpdateNetworkPackage msg, FriendlyByteBuf buff) {
+	public static void encode(SUpdateElectricNetworkPackage msg, FriendlyByteBuf buff) {
 		buff.writeInt(msg.components.size());
 		for (ElectricComponent<?, ?, ?> component : msg.components) {
 			CompoundTag componentTag = new CompoundTag();
@@ -81,7 +81,7 @@ public class SUpdateNetworkPackage {
 		buff.writeDouble(msg.currentConsumtion);
 	}
 	
-	public static SUpdateNetworkPackage decode(FriendlyByteBuf buff) {
+	public static SUpdateElectricNetworkPackage decode(FriendlyByteBuf buff) {
 		int componentCount = buff.readInt();
 		Set<ElectricComponent<?, Object, ?>> components = new HashSet<>();
 		for (int i = 0; i < componentCount; i++) {
@@ -96,10 +96,10 @@ public class SUpdateNetworkPackage {
 		double maxPower = buff.readDouble();
 		double currentProduction = buff.readDouble();
 		double currentConsumtion = buff.readDouble();
-		return new SUpdateNetworkPackage(components, dataList, state, maxPower, currentProduction, currentConsumtion);
+		return new SUpdateElectricNetworkPackage(components, dataList, state, maxPower, currentProduction, currentConsumtion);
 	}
 	
-	public static void handle(SUpdateNetworkPackage msg, Supplier<NetworkEvent.Context> ctx) {
+	public static void handle(SUpdateElectricNetworkPackage msg, Supplier<NetworkEvent.Context> ctx) {
 		
 		ctx.get().enqueueWork(() -> {
 			ClientElectricPackageHandler.handleUpdateNetwork(msg, ctx.get());

@@ -7,7 +7,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.client.physics.ClientPhysicsUtility;
 import de.m_marvin.industria.core.contraptions.ContraptionUtility;
-import de.m_marvin.industria.core.kinetics.engine.KineticHandlerCapabillity;
+import de.m_marvin.industria.core.kinetics.engine.KineticNetworkSpaceCapability;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.client.Minecraft;
@@ -71,14 +71,14 @@ public class KineticComponentRenderer {
 	@SuppressWarnings({ "deprecation" })
 	private static void drawDebugFrames(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, float partialTicks) {
 		
-		LazyOptional<KineticHandlerCapabillity> optionalKineticHolder = clientLevel.getCapability(Capabilities.KINETIC_HANDLER_CAPABILITY);
+		LazyOptional<KineticNetworkSpaceCapability> optionalKineticHolder = clientLevel.getCapability(Capabilities.KINETIC_NETWORK_SPACE_CAPABILITY);
 		if (optionalKineticHolder.isPresent()) {
-			KineticHandlerCapabillity kineticHolder = optionalKineticHolder.resolve().get();
+			KineticNetworkSpaceCapability kineticHolder = optionalKineticHolder.resolve().get();
 			
 			Vec3d playerPosition = Vec3d.fromVec(Minecraft.getInstance().player.position());
 			int renderDistance = Minecraft.getInstance().options.renderDistance().get() * 16;
 			
-			for (KineticHandlerCapabillity.KineticComponent component : kineticHolder.listComponents()) {
+			for (KineticNetworkSpaceCapability.KineticComponent component : kineticHolder.listComponents()) {
 				
 				BlockPos pos = component.reference().pos();
 				

@@ -11,9 +11,10 @@ import de.m_marvin.industria.core.electrics.engine.network.CPlayerSwitchNetworkP
 import de.m_marvin.industria.core.electrics.engine.network.CUpdateJunctionLanesPackage;
 import de.m_marvin.industria.core.electrics.engine.network.SSyncCircuitTemplatesPackage;
 import de.m_marvin.industria.core.electrics.engine.network.SSyncElectricComponentsPackage;
-import de.m_marvin.industria.core.electrics.engine.network.SUpdateNetworkPackage;
+import de.m_marvin.industria.core.electrics.engine.network.SUpdateElectricNetworkPackage;
 import de.m_marvin.industria.core.kinetics.engine.network.CEditMotorPackage;
 import de.m_marvin.industria.core.kinetics.engine.network.SSyncKineticComponentsPackage;
+import de.m_marvin.industria.core.kinetics.engine.network.SUpdateKineticNetworkPackage;
 import de.m_marvin.industria.core.magnetism.engine.network.SMagneticInfluencePackage;
 import de.m_marvin.industria.core.magnetism.engine.network.SSyncMagneticPackage;
 import de.m_marvin.industria.core.magnetism.engine.network.SUpdateMagneticFieldPackage;
@@ -36,7 +37,7 @@ public class NetworkPackages {
 		network.registerMessage(id++, CUpdateJunctionLanesPackage.class, CUpdateJunctionLanesPackage::encode, CUpdateJunctionLanesPackage::decode, CUpdateJunctionLanesPackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		network.registerMessage(id++, SSyncElectricComponentsPackage.class, SSyncElectricComponentsPackage::encode, SSyncElectricComponentsPackage::decode, SSyncElectricComponentsPackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		network.registerMessage(id++, CEditPowerSourcePackage.class, CEditPowerSourcePackage::encode, CEditPowerSourcePackage::decode, CEditPowerSourcePackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		network.registerMessage(id++, SUpdateNetworkPackage.class, SUpdateNetworkPackage::encode, SUpdateNetworkPackage::decode, SUpdateNetworkPackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+		network.registerMessage(id++, SUpdateElectricNetworkPackage.class, SUpdateElectricNetworkPackage::encode, SUpdateElectricNetworkPackage::decode, SUpdateElectricNetworkPackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		network.registerMessage(id++, SSyncMagneticPackage.class, SSyncMagneticPackage::encode, SSyncMagneticPackage::decode, SSyncMagneticPackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		network.registerMessage(id++, SMagneticInfluencePackage.SAddInfluencePackage.class, SMagneticInfluencePackage.SAddInfluencePackage::encode, SMagneticInfluencePackage.SAddInfluencePackage::decode, SMagneticInfluencePackage.SAddInfluencePackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		network.registerMessage(id++, SMagneticInfluencePackage.SRemoveInfluencePackage.class, SMagneticInfluencePackage.SRemoveInfluencePackage::encode, SMagneticInfluencePackage.SRemoveInfluencePackage::decode, SMagneticInfluencePackage.SRemoveInfluencePackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
@@ -46,6 +47,7 @@ public class NetworkPackages {
 		network.registerMessage(id++, CPlayerSwitchNetworkPackage.class, CPlayerSwitchNetworkPackage::encode, CPlayerSwitchNetworkPackage::decode, CPlayerSwitchNetworkPackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		network.registerMessage(id++, SSyncVS2BlockInfoPackage.class, SSyncVS2BlockInfoPackage::encode, SSyncVS2BlockInfoPackage::decode, SSyncVS2BlockInfoPackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		network.registerMessage(id++, SSyncKineticComponentsPackage.class, SSyncKineticComponentsPackage::encode, SSyncKineticComponentsPackage::decode, SSyncKineticComponentsPackage::handle);
+		network.registerMessage(id++, SUpdateKineticNetworkPackage.class, SUpdateKineticNetworkPackage::encode, SUpdateKineticNetworkPackage::decode, SUpdateKineticNetworkPackage::handle);
 		network.registerMessage(id++, CEditMotorPackage.class, CEditMotorPackage::encode, CEditMotorPackage::decode, CEditMotorPackage::handle);
 	}
 	

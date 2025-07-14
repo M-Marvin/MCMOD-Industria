@@ -126,7 +126,7 @@ public class MathUtility {
 		return v;
 	}
 	
-	public static boolean isBetweenInclusive(BlockPos minPos, BlockPos maxPos, BlockPos testPos) {
+	public static boolean isWithinInclusive(BlockPos minPos, BlockPos maxPos, BlockPos testPos) {
 		return	minPos.getX() <= testPos.getX() && maxPos.getX() >= testPos.getX() &&
 				minPos.getY() <= testPos.getY() && maxPos.getY() >= testPos.getY() &&
 				minPos.getZ() <= testPos.getZ() && maxPos.getZ() >= testPos.getZ();
@@ -255,7 +255,7 @@ public class MathUtility {
 		return new Vec3i(middleX, middleY, middleZ);
 	}
 	
-	public static double directionHoriziontalAngleDegrees(Direction direction) {
+	public static double directionHorizontalAngleDegrees(Direction direction) {
 		switch (direction) {
 		case NORTH: return 0;
 		case SOUTH: return 180;

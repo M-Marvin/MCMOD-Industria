@@ -79,7 +79,7 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 		
 		protected void integrateNetwork(IntSet references, N other) {
 			references.forEach(ref -> {
-				C component = other.components.get(ref);
+				C component = other.components.remove(ref);
 				if (component != null)
 					this.components.put(ref, component);
 			});

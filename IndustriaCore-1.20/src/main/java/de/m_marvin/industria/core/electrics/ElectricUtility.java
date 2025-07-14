@@ -300,7 +300,7 @@ public class ElectricUtility {
 	}
 	
 	/**
-	 * Send to all tracking the ElectricNetwork in the Supplier {@link #with(Supplier)} ElectricNetwork
+	 * Send to all tracking the ElectricNetwork in the Supplier {@link #with(Supplier)}
 	 */
 	public static final PacketDistributor<ElectricNetwork> TRACKING_NETWORK = new PacketDistributor<>(ElectricUtility::trackingNetwork, NetworkDirection.PLAY_TO_CLIENT);
 	

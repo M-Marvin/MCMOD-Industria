@@ -7,7 +7,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.client.physics.ClientPhysicsUtility;
 import de.m_marvin.industria.core.contraptions.ContraptionUtility;
-import de.m_marvin.industria.core.electrics.engine.ElectricHandlerCapability;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.client.Minecraft;
@@ -68,14 +68,14 @@ public class ElectricComponentRenderer {
 	@SuppressWarnings("resource")
 	private static void drawDebugFrames(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, float partialTicks) {
 		
-		LazyOptional<ElectricHandlerCapability> optionalElectricHolder = clientLevel.getCapability(Capabilities.ELECTRIC_HANDLER_CAPABILITY);
+		LazyOptional<ElectricNetworkSpaceCapability> optionalElectricHolder = clientLevel.getCapability(Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
 		if (optionalElectricHolder.isPresent()) {
-			ElectricHandlerCapability electricHolder = optionalElectricHolder.resolve().get();
+			ElectricNetworkSpaceCapability electricHolder = optionalElectricHolder.resolve().get();
 			
 			Vec3d playerPosition = Vec3d.fromVec(Minecraft.getInstance().player.position());
 			int renderDistance = Minecraft.getInstance().options.renderDistance().get() * 16;
 			
-			for (ElectricHandlerCapability.ElectricComponent<?, ?, ?> component : electricHolder.listComponents()) {
+			for (ElectricNetworkSpaceCapability.ElectricComponent<?, ?, ?> component : electricHolder.listComponents()) {
 				
 				if (component.isBlock()) {
 

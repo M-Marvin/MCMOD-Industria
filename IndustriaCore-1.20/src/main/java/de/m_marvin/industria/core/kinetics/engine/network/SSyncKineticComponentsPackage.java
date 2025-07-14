@@ -50,9 +50,9 @@ public class SSyncKineticComponentsPackage {
 	public static void encode(SSyncKineticComponentsPackage msg, FriendlyByteBuf buff) {
 		buff.writeInt(msg.components.size());
 		for (KineticComponent component : msg.components) {
-//			CompoundTag componentTag = new CompoundTag();
-//			component.serializeNbt(componentTag);
-//			buff.writeNbt(componentTag);
+			CompoundTag componentTag = new CompoundTag();
+			component.serializeNbt(componentTag);
+			buff.writeNbt(componentTag);
 		}
 		buff.writeChunkPos(msg.chunkPos);
 		buff.writeEnum(msg.request);
@@ -62,9 +62,10 @@ public class SSyncKineticComponentsPackage {
 		int componentCount = buff.readInt();
 		Set<KineticComponent> components = new HashSet<>();
 		for (int i = 0; i < componentCount; i++) {
-//			CompoundTag componentTag = buff.readNbt();
-//			KineticComponent component = KineticComponent.deserializeNbt(componentTag);
-//			components.add(component);
+			CompoundTag componentTag = buff.readNbt();
+			KineticComponent component = new KineticComponent(null, null, null);
+			component.deserializeNbt(componentTag);
+			components.add(component);
 		}
 		ChunkPos chunkPos = buff.readChunkPos();
 		SyncRequestType request = buff.readEnum(SyncRequestType.class);

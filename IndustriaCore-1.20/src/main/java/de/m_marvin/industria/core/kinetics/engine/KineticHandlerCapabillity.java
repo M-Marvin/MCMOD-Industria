@@ -111,6 +111,8 @@ public class KineticHandlerCapabillity extends FriendlyFunctionalNetworkSpace<Ki
 		}
 	}
 	
+	// TODO
+	
 	@SubscribeEvent
 	public static void onClientLoadsChunk(ChunkWatchEvent.Watch event) {
 		Level level = event.getPlayer().level();
@@ -127,6 +129,7 @@ public class KineticHandlerCapabillity extends FriendlyFunctionalNetworkSpace<Ki
 		Level level = event.getPlayer().level();
 		KineticHandlerCapabillity kinteticHandler = GameUtility.getLevelCapability(level, Capabilities.KINETIC_HANDLER_CAPABILITY);
 		Collection<KineticComponent> components = kinteticHandler.findComponentsInChunk(event.getPos());
+		
 		if (!components.isEmpty()) {
 			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(event::getPlayer), new SSyncKineticComponentsPackage(components, event.getPos(), SyncRequestType.REMOVED));
 		}

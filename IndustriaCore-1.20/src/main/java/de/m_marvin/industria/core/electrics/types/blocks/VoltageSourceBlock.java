@@ -90,7 +90,7 @@ public class VoltageSourceBlock extends BaseEntityBlock implements IElectricBloc
 
 	@Override
 	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {
-		GameUtility.triggerUpdate(level, position);
+		GameUtility.triggerClientSync(level, position);
 	}
 	
 	@Override

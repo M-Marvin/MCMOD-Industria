@@ -1,15 +1,16 @@
 package de.m_marvin.industria.core.electrics.engine;
 
-import java.util.Optional;
+import java.util.Collection;
+import java.util.concurrent.CompletableFuture;
 
 import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.core.electrics.engine.ElectricHandlerCapability.ElectricComponent;
 import de.m_marvin.industria.core.electrics.engine.network.SSyncCircuitTemplatesPackage;
 import de.m_marvin.industria.core.electrics.engine.network.SSyncElectricComponentsPackage;
-import de.m_marvin.industria.core.electrics.engine.network.SUpdateElectricNetworkPackage;
+import de.m_marvin.industria.core.electrics.engine.network.SUpdateNetworkPackage;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.types.SyncRequestType;
+import de.m_marvin.industria.core.util.ufns.SynchronizedFunctionalNetworkSpace.UpdateType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
@@ -20,51 +21,42 @@ import net.minecraftforge.network.NetworkEvent.Context;
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE, value=Dist.CLIENT)
 public class ClientElectricPackageHandler {
 
-	/* Handle SSyncComponentsPackage package */
-	
-	@SuppressWarnings("resource")
 	public static void handleSyncComponentsServer(SSyncElectricComponentsPackage msg, NetworkEvent.Context ctx) {
-//		Level level = Minecraft.getInstance().level;
-//		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-//		
-//		if (msg.request == SyncRequestType.ADDED) {
-//			Object position = null;
-//			for (ElectricComponent<?, ?, ?> component : msg.components) {
-//				if (component.instance(null) == null) continue;
-//				if (!handler.isInNetwork(component)) {
-//					handler.addToNetwork(component);
-//					if (position == null) position = component.pos();
-//				}
-//			}
-//		} else {
-//			for (ElectricComponent<?, ?, ?> component : msg.components) {
-//				handler.removeFromNetwork(component.pos);
-//			}
-//		}
+		Level level = Minecraft.getInstance().level;
+		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
+		for (var c : msg.getComponents()) {
+			networkSpace.updateTicket(c.reference(), msg.request == SyncRequestType.ADDED ? UpdateType.COMPONENT_PUT : UpdateType.COMPONENT_REMOVE);
+		}
 	}
 
-	/* Handle SUpdateNetworkPackage */
-	
-	@SuppressWarnings("resource")
-	public static void handleUpdateNetwork(SUpdateElectricNetworkPackage msg, Context context) {
+	public static void handleUpdateNetwork(SUpdateNetworkPackage msg, Context context) {
+		Level level = Minecraft.getInstance().level;
+		ElectricNetworkSpaceCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
 		
-//		Level level = Minecraft.getInstance().level;
-//		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-//
-//		Optional<ElectricComponent<?, ?, ?>> c = msg.getComponents().stream().findAny();
-//
-//		handler.injectNodeVoltages(msg.getComponents(), msg.getDataList());
-//		if (c.isPresent())
-//			handler.updateNetworkState(c.get().pos(), msg.getState());
+		// Add components to create network
+		CompletableFuture.allOf(
+				msg.getComponents().stream()
+				.map(c -> handler.updateTicketCompletable(c.reference(), UpdateType.COMPONENT_PUT))
+				.toArray(CompletableFuture[]::new)
+			).thenAccept(v -> {
+
+				// On the client the network might be split because of unloaded chunks/components
+				Collection<ElectricNetwork> networks = msg.getComponents().stream().map(handler::findNetworkAt).distinct().toList();
+				for (var n : networks) {
+					n.parseDataList(msg.getDataList());
+					n.setState(msg.getState());
+					n.setMaxPower(msg.getMaxPower());
+					n.setCurrentProduction(msg.getCurrentProduction());
+					n.setCurrentConsumtion(msg.getCurrentConsumtion());
+					n.updateComponents();
+				}
+				
+			});
 		
 	}
-	
-	/* Handle SSyncCircuitTemplatesPackage */
 	
 	public static void handleSyncCircuitTemplates(SSyncCircuitTemplatesPackage msg, Context context) {
 		CircuitTemplateManager.updateClientTemplates(msg.getCircuitTemplates());
 	}
-	
-	/* End of package handling */
 	
 }

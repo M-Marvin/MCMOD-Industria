@@ -6,6 +6,7 @@ import de.m_marvin.industria.core.kinetics.engine.network.SSyncKineticComponents
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.types.SyncRequestType;
+import de.m_marvin.industria.core.util.ufns.SynchronizedFunctionalNetworkSpace.UpdateType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
@@ -15,29 +16,14 @@ import net.minecraftforge.network.NetworkEvent;
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE, value=Dist.CLIENT)
 public class ClientKineticPackageHandler {
 
-	/* Handle SSyncComponentsPackage package */
-	
-	@SuppressWarnings("resource")
 	public static void handleSyncComponentsServer(SSyncKineticComponentsPackage msg, NetworkEvent.Context ctx) {
 		Level level = Minecraft.getInstance().level;
 		KineticHandlerCapabillity handler = GameUtility.getLevelCapability(level, Capabilities.KINETIC_HANDLER_CAPABILITY);
-		
-//		if (msg.request == SyncRequestType.ADDED) {
-//			for (KineticComponent component : msg.components) {
-//				if (component.instance(null) == null) continue;
-//				if (!handler.isInNetwork(component)) {
-//					handler.addToNetwork(component);
-//				}
-//			}
-//		} else {
-//			for (KineticComponent component : msg.components) {
-//				handler.removeFromNetwork(component.reference());
-//			}
-//		}
+		for (var c : msg.getComponents()) {
+			handler.updateTicket(c.reference(), msg.request == SyncRequestType.ADDED ? UpdateType.COMPONENT_PUT : UpdateType.COMPONENT_REMOVE);
+		}
 	}
 
-	/* Handle SUpdateNetworkPackage */
-	
 //	@SuppressWarnings("resource")
 //	public static void handleUpdateNetwork(SUpdateKineticNetworkPackage msg, Context context) {
 //		
@@ -51,7 +37,5 @@ public class ClientKineticPackageHandler {
 //			handler.updateNetworkState(c.get().pos(), msg.getState());
 //		
 //	}
-	
-	/* End of package handling */
 	
 }

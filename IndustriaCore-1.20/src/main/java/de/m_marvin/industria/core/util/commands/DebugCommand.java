@@ -7,7 +7,7 @@ import com.mojang.brigadier.context.CommandContext;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.engine.ElectricHandlerCapability.ElectricComponent;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability.ElectricComponent;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
@@ -48,7 +48,7 @@ public class DebugCommand {
 	public static int dumpCircuit(CommandContext<CommandSourceStack> source, BlockPos position) {
 		ServerLevel level = source.getSource().getLevel();
 		
-		ElectricNetwork network = ElectricUtility.getNetworkAt(level, position);
+		ElectricNetwork network = ElectricUtility.findNetworkAt(level, position);
 		if (network == null) return 0;
 		String circuit = network.toString();
 		
@@ -61,7 +61,7 @@ public class DebugCommand {
 	public static int printNodes(CommandContext<CommandSourceStack> source, BlockPos position) {
 		ServerLevel level = source.getSource().getLevel();
 		
-		ElectricComponent<Object, BlockPos, Object> component = ElectricUtility.getComponentAt(level, position);
+		ElectricComponent<Object, BlockPos, Object> component = ElectricUtility.findComponentAt(level, position);
 		if (component == null) return 0;
 		NodePos[] nodes = component.getNodes(level);
 		

@@ -18,7 +18,7 @@ import net.minecraftforge.network.NetworkEvent.Context;
 public class ServerElectricPackageHandler {
 	
 	public static void handlePlayerSwitchNetwork(CPlayerSwitchNetworkPackage msg, Context ctx) {
-//		ElectricUtility.setNetworkState(ctx.getSender().level(), msg.getComponent(), msg.getState() ? PowerNetState.ACTIVE : PowerNetState.INACTIVE);
+		ElectricUtility.setNetworkState(ctx.getSender().level(), msg.getComponent(), msg.getState() ? PowerNetState.ACTIVE : PowerNetState.INACTIVE);
 	}
 	
 	public static void handleUpdateJunctionLanes(CUpdateJunctionLanesPackage msg, Context ctx) {

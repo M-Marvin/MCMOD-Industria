@@ -46,7 +46,7 @@ public class CircuitSwitch extends AbstractWidget {
 		this.level = level;
 		this.componentPos = componentPos;
 
-		ElectricNetwork network = ElectricUtility.getNetworkAt(this.level, this.componentPos);
+		ElectricNetwork network = ElectricUtility.findNetworkAt(this.level, this.componentPos);
 		updateLeverState(network != null ? network.isOnline() : false);
 	}
 
@@ -83,7 +83,7 @@ public class CircuitSwitch extends AbstractWidget {
 	@Override
 	protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
 		
-		ElectricNetwork network = ElectricUtility.getNetworkAt(this.level, this.componentPos);
+		ElectricNetwork network = ElectricUtility.findNetworkAt(this.level, this.componentPos);
 		
 		// Background
 		pGuiGraphics.blit(this.texture, this.getX(), this.getY(), 212, 1, 43, 87);

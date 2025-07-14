@@ -6,11 +6,9 @@ import java.util.function.Supplier;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
-import de.m_marvin.industria.core.electrics.engine.ElectricHandlerCapability;
+import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
-import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.registries.Conduits;
-import de.m_marvin.industria.core.util.GameUtility;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -27,8 +25,7 @@ public interface IElectric<I, P, T> {
 	}
 	
 	public default void updateNetwork(Level level, P position) {
-		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-//		handler.updateNetwork(position);
+		ElectricUtility.updateNetwork(level, position);
 	}
 	
 	public void plotCircuit(Level level, I instance, P position, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter);
@@ -52,9 +49,6 @@ public interface IElectric<I, P, T> {
 	public Optional<I> getInstance(Level level, P pos);
 	public boolean isInstanceValid(Level level, I instance);
 	
-	/**
-	 * WARNING: Is called on an another thread, do not interact with the world to much, limit access to the level to triggering updates.
-	 */
 	public default void onNetworkNotify(Level level, I instance, P position) {}
 	
 	public static enum Type {

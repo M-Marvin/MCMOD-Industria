@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -13,8 +12,8 @@ import com.google.common.base.Predicate;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.engine.CircuitTemplateManager;
-import de.m_marvin.industria.core.electrics.engine.ElectricHandlerCapability;
-import de.m_marvin.industria.core.electrics.engine.ElectricHandlerCapability.ElectricComponent;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability.ElectricComponent;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.CircuitTemplate.Plotter;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
@@ -23,6 +22,7 @@ import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.registries.Circuits;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.types.PowerNetState;
+import de.m_marvin.industria.core.util.ufns.SynchronizedFunctionalNetworkSpace.UpdateType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerChunkCache;
@@ -40,15 +40,15 @@ public class ElectricUtility {
 	 * Triggers an update for the network at the given position
 	 */
 	public static <P> void updateNetwork(Level level, P position) {
-		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-//		handler.updateNetwork(position);
+		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
+		networkSpace.updateTicket(position, UpdateType.NETWORK_UPDATE);
 	}
-	
+
 	/*
 	 * Returns all components connected with the given node
 	 */
-	public static Collection<ElectricHandlerCapability.ElectricComponent<?, ?, ?>> findComponentsOnNode(Level level, NodePos node) {
-		ElectricNetwork network = getNetworkAt(level, node.getBlock());
+	public static Collection<ElectricNetworkSpaceCapability.ElectricComponent<?, ?, ?>> findComponentsOnNode(Level level, NodePos node) {
+		ElectricNetwork network = findNetworkAt(level, node.getBlock());
 		if (network == null) return Collections.emptySet();
 		return network.findComponentsOnNode(node);
 	}
@@ -56,80 +56,59 @@ public class ElectricUtility {
 	/*
 	 * Returns all components located in the given chunk
 	 */
-	public static Collection<ElectricComponent<?, ?, ?>> findComponentsInChunk(Level level, ChunkPos chunkPos) {
-		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-//		return handler.findComponentsInChunk(chunkPos);
-		return null;
+	public static Collection<ElectricComponent<?, Object, ?>> findComponentsInChunk(Level level, ChunkPos chunkPos) {
+		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
+		return networkSpace.findComponentsInChunk(chunkPos);
 	}
 	
-//	/*
-//	 * List all components connected with the given components
-//	 */
-//	public static Collection<ElectricComponent<?, ?, ?>> findComponentsConnectedWith(Level level, ElectricComponent<?, ?, ?>... components) {
-//		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-////		return handler.findComponentsConnectedWith(components);
-//		
-//		handler.find
-//	}
-//	
 	/*
 	 * Returns the network for the given component
 	 */
-	public static ElectricNetwork getCircuitWithComponent(Level level, ElectricComponent<?, ?, ?> component) {
-		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-		return handler.findNetworkAt(component);
+	public static ElectricNetwork findCircuitWithComponent(Level level, ElectricComponent<?, ?, ?> component) {
+		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
+		return networkSpace.findNetworkAt(component);
 	}
 	
 	/*
 	 * Searches for a component at the given position
 	 */
 	@SuppressWarnings("unchecked")
-	public static <I, P, T> ElectricComponent<I, P, T> getComponentAt(Level level, P position) {
-		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-		return (ElectricComponent<I, P, T>) handler.findComponentAt(position);
+	public static <I, P, T> ElectricComponent<I, P, T> findComponentAt(Level level, P position) {
+		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
+		return (ElectricComponent<I, P, T>) networkSpace.findComponentAt(position);
 	}
 	
 	/**
 	 * Checks if the component is registered as electric component and part of a valid network
 	 */
 	public static boolean isInNetwork(Level level, ElectricComponent<?, ?, ?> component) {
-		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-		return handler.findNetworkAt(component) != null;
+		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
+		return networkSpace.findNetworkAt(component) != null;
 	}
 
 	/**
 	 * Checks if the component is registered as electric component and part of a valid network
 	 */
 	public static boolean isInNetwork(Level level, Object pos) {
-		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-		return handler.findNetworkAt(pos) != null;
+		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
+		return networkSpace.findNetworkAt(pos) != null;
 	}
 	
 	/**
 	 * Returns the electric network with an component at the fiven position
 	 */
-	public static ElectricNetwork getNetworkAt(Level level, Object pos) {
-		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-		return handler.findNetworkAt(pos);
+	public static ElectricNetwork findNetworkAt(Level level, Object pos) {
+		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
+		return networkSpace.findNetworkAt(pos);
 	}
 	
-//	/**
-//	 * Changes the state of the network with an component at the given position
-//	 * Runs necessary updates and triggers events
-//	 */
-//	public static void setNetworkState(Level level, Object pos, PowerNetState state) {
-//		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-//		
-////		handler.updateNetworkState(pos, state);
-////		ElectricNetwork network = handler.getNetworkAt(pos);
-////		if (network != null && !level.isClientSide()) {
-////			if (state == PowerNetState.ACTIVE) {
-////				handler.updateNetwork(pos);
-////			} else {
-////				handler.triggerUpdates(network);;
-////			}
-////		}
-//	}
+	/**
+	 * Changes the state of the network with an component at the given position
+	 * Runs necessary updates and triggers events
+	 */
+	public static void setNetworkState(Level level, Object pos, PowerNetState state) {
+		findNetworkAt(level, pos).setState(state);
+	}
 	
 	/**
 	 * Summarizes the lanes of all components connected to the node.
@@ -196,8 +175,8 @@ public class ElectricUtility {
 	 * @return The potential of the node relative to the network ground potential
 	 */
 	public static Optional<Double> getFloatingNodeVoltage(Level level, NodePos node, int laneId, String lane) {
-		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-		return handler.getFloatingNodeVoltage(node, laneId, lane);
+		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
+		return networkSpace.getFloatingNodeVoltage(node, laneId, lane);
 	}
 
 	/**
@@ -209,8 +188,8 @@ public class ElectricUtility {
 	 * @return The potential of the node relative to the network ground potential
 	 */
 	public static Optional<Double> getFloatingLocalNodeVoltage(Level level, BlockPos position, String lane, int group) {
-		ElectricHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_HANDLER_CAPABILITY);
-		return handler.getFloatingLocalNodeVoltage(position, lane, group);
+		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
+		return networkSpace.getFloatingLocalNodeVoltage(position, lane, group);
 	}
 	
 	/**
@@ -325,20 +304,16 @@ public class ElectricUtility {
 	 */
 	public static final PacketDistributor<ElectricNetwork> TRACKING_NETWORK = new PacketDistributor<>(ElectricUtility::trackingNetwork, NetworkDirection.PLAY_TO_CLIENT);
 	
-	@SuppressWarnings("resource")
 	private static Consumer<Packet<?>> trackingNetwork(final PacketDistributor<ElectricNetwork> distributor, final Supplier<ElectricNetwork> networkSupplier) {
-//		return p -> {
-//			ElectricNetwork network = networkSupplier.get();
-//			network.listComponents().stream()
-//					.map(ElectricComponent::pos)
-//					.filter(b -> b instanceof BlockPos)
-//					.map(pos -> network.getLevel().getChunkAt((BlockPos) pos))
-//					.distinct()
-//					.flatMap(chunk -> ((ServerChunkCache)chunk.getLevel().getChunkSource()).chunkMap.getPlayers(chunk.getPos(), false).stream())
-//					.distinct()
-//					.forEach(e -> e.connection.send(p));
-//		};
-		return null;
+		return p -> {
+			ElectricNetwork network = networkSupplier.get();
+			network.listComponents().stream()
+				.map(c -> c.getAffectedChunk(network.getLevel()))
+				.distinct()
+				.flatMap(chunk -> ((ServerChunkCache) network.getLevel().getChunkSource()).chunkMap.getPlayers(chunk, false).stream())
+				.distinct()
+				.forEach(e -> e.connection.send(p));
+		};
 	}
-	
+
 }

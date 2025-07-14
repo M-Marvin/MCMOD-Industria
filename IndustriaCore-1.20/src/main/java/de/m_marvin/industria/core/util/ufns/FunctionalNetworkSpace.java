@@ -182,6 +182,10 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 		}
 		
 	}
+
+	public int getReferenceId(R reference) {
+		return this.referenceIds.getInt(reference);
+	}
 	
 	public Collection<N> listNetworks() {
 		return this.ref2network.values().stream().distinct().toList();

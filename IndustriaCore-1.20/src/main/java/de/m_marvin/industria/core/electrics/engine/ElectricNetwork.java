@@ -14,14 +14,21 @@ import java.util.function.Supplier;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import com.google.common.base.Functions;
 import com.google.common.collect.Maps;
 
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.client.electrics.events.ElectricNetworkEvent;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
-import de.m_marvin.industria.core.electrics.engine.ElectricHandlerCapability.ElectricComponent;
+import de.m_marvin.industria.core.electrics.ElectricUtility;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability.ElectricComponent;
+import de.m_marvin.industria.core.electrics.engine.network.SUpdateNetworkPackage;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
+import de.m_marvin.industria.core.util.ConditionalExecutor;
 import de.m_marvin.industria.core.util.types.PowerNetState;
 import de.m_marvin.industria.core.util.ufns.SynchronizedFunctionalNetworkSpace;
 import de.m_marvin.unimap.api.MultiBiMap;
@@ -35,22 +42,23 @@ import net.minecraftforge.common.MinecraftForge;
 
 public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.SynchronizedFunctionalNetwork<ElectricNetwork, Object, ElectricComponent<?, Object, ?>, NodePos> {
 	
-	protected final Supplier<Level> level;
-	protected MultiBiMap<Integer, NodePos> ref2nodeMap = new HashMultiBiMap<Integer, NodePos>();
-	protected Map<String, Double> nodeVoltages = Maps.newHashMap();
-	protected double maxPower;
-	protected double currentConsumtion;
-	protected double currentProduction;
+	private final Supplier<Level> level;
+	private MultiBiMap<Integer, NodePos> ref2nodeMap = new HashMultiBiMap<Integer, NodePos>();
+	private Map<String, Double> nodeVoltages = Maps.newHashMap();
+	private double maxPower;
+	private double currentConsumtion;
+	private double currentProduction;
 	
-	protected long templateCounter;
-	protected StringBuilder circuitBuilder;
-	protected String groundNode;
-	protected String netList = "";
+	private long templateCounter;
+	private StringBuilder circuitBuilder;
+	private String groundNode;
+	private String netList = "";
 
 	protected PowerNetState state = PowerNetState.ACTIVE;
 	
 	public ElectricNetwork(Supplier<Level> level) {
 		this.level = level;
+		resetNetlist(); // When loading the chunk (and as such initially constructing the network) the new network has to be in reset state
 	}
 	
 	public Level getLevel() {
@@ -109,12 +117,16 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 	
 	@Override
 	public void afterChange() {
-		recomputeElectrics();
+		if (!getLevel().isClientSide())
+			recomputeElectrics();
 	}
 
 	@Override
 	public void onUpdate() {
-		recomputeElectrics();
+		if (!getLevel().isClientSide()) {
+			resetNetlist();
+			recomputeElectrics();
+		}
 	}
 	
 	protected void resetNetlist() {
@@ -133,10 +145,14 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 		if (this.groundNode == null) this.groundNode = template.getAnyNode();
 	}
 	
+	/**
+	 * Triggered by update tickets for the network only on the server-
+	 * Rebuilds the netlist and starts an new simulation.
+	 * After completetion, the simulation will trigger {@link ElectricNetwork#recomputeTotalAndUpdate()}
+	 */
 	public void recomputeElectrics() {
 		
-//		if (this.level.get().isClientSide) return;
-		
+		// Only rebuild netlist if it has been reset befpre
 		if (this.netList.isEmpty() && this.groundNode == null && this.circuitBuilder != null) {
 			
 			for (var component : listComponents()) {
@@ -152,50 +168,69 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 		// No simulation if empty
 		if (isEmpty() || this.groundNode == null) return;
 		
-		ElectricHandlerCapability.getSimulationProcessor().processNetwork(this).thenAccept(state -> {
+		ElectricNetworkSpaceCapability.getSimulationProcessor().processNetwork(this).thenAcceptAsync(state -> {
+			
 			if (!state) {
 				tripFuse();
 				MinecraftForge.EVENT_BUS.post(new ElectricNetworkEvent.FuseTripedEvent(getLevel(), this));
+				return;
 			}
-//			triggerUpdates(this);
+
+			// Recalculate network global variables
+			this.maxPower = 0;
+			this.currentConsumtion = 0;
+			this.currentProduction = 0;
+			for (ElectricComponent<?, ?, ?> c : listComponents()) {
+				this.maxPower += c.getMaxPowerGeneration(getLevel());
+				double p = c.getCurrentPower(getLevel());
+				if (p > 0) {
+					this.currentProduction += p;
+				} else {
+					this.currentConsumtion += -p;
+				}
+			}
+
+			// Send update to clients
+			IndustriaCore.NETWORK.send(ElectricUtility.TRACKING_NETWORK.with(() -> this), new SUpdateNetworkPackage(this));
 			
-//			listComponents().forEach(c -> c.onNetworkChange(getLevel()));
-//			IndustriaCore.NETWORK.send(ElectricUtility.TRACKING_NETWORK.with(() -> this), new SUpdateElectricNetworkPackage(this));
+			// Notify components
+			updateComponents();
 			
-		});
-		
-//		final ElectricNetwork circuitFinalized = circuit;
-//		circuit.getComponents().forEach((comp) -> {
-//			ElectricNetwork previousNetwork = this.component2circuitMap.put(comp, circuitFinalized);
-//			if (previousNetwork != null && previousNetwork != circuitFinalized) {
-//				previousNetwork.getComponents().remove(comp);
-//				if (previousNetwork.getComponents().isEmpty()) {
-//					this.circuitNetworks.remove(previousNetwork);
-//				}
-//			}
-//		});
+		}, ConditionalExecutor.SERVER_TICK_EXECUTOR);
 		
 	}
 	
+	/**
+	 * Triggered by an completing simulation or some other function which affect the networks state.
+	 * Notifies the components about the changes.
+	 */
+	public synchronized void updateComponents() {
+		
+		// Trigger component updates
+		for (var c : listComponents()) {
+			c.onNetworkChange(getLevel());
+		}
+	}
+	
 	@Override
-	protected void afterPutComponent(int refId) {
+	protected synchronized void afterPutComponent(int refId) {
 		this.ref2nodeMap.remove(refId);
 		resetNetlist();
 	}
 
 	@Override
-	protected void afterRemoveComponent(int refId) {
+	protected synchronized void afterRemoveComponent(int refId) {
 		this.ref2nodeMap.remove(refId);
 		resetNetlist();
 	}
 
 	@Override
-	protected void afterParametrizedConnection(int refId1, int refId2, NodePos parameter) {
+	protected synchronized void afterParametrizedConnection(int refId1, int refId2, NodePos parameter) {
 		this.ref2nodeMap.put(refId1, parameter);
 		this.ref2nodeMap.put(refId2, parameter);
 	}
 	
-	public Collection<ElectricComponent<?, ?, ?>> findComponentsOnNode(NodePos node) {
+	public synchronized Collection<ElectricComponent<?, ?, ?>> findComponentsOnNode(NodePos node) {
 		List<ElectricComponent<?, ?, ?>> components = new ArrayList<>();
 		for (Integer refId : this.ref2nodeMap.getKeys(node)) {
 			ElectricComponent<?, ?, ?> component = this.components.get(refId.intValue());
@@ -205,11 +240,14 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 	}
 
 	@Override
-	protected void afterIntegrateNetwork(IntSet refIds, ElectricNetwork other) {
+	protected synchronized void afterIntegrateNetwork(IntSet refIds, ElectricNetwork other) {
 		for (int refId : refIds) {
 			if (other.ref2nodeMap.containsKey(refId))
 				this.ref2nodeMap.put(refId, other.ref2nodeMap.get(refId));
 		}
+		// This is mainly for the client, on the server the node voltages get overridden after an update anyway
+		this.nodeVoltages.putAll(other.nodeVoltages);
+		resetNetlist();
 	}
 	
 	private String filterSingularMatrixNodes(String netlist) {
@@ -269,6 +307,17 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 	public synchronized Map<String, Double> getNodeVoltages() {
 		return nodeVoltages;
 	}
+
+	public synchronized Map<String, Double> getNodeVoltages(Level level, ElectricComponent<?, Object, ?> component) {
+		return Stream
+				.of(component.getNodes(level))
+				.flatMap(node -> {
+					String[] lanes = component.getWireLanes(level, node);
+					return IntStream.range(0, lanes.length)
+							.mapToObj(i -> getNodeKeyString(node, i, lanes[i]));
+				})
+				.collect(Collectors.toMap(Functions.identity(), this.nodeVoltages::get));
+	}
 	
 	public synchronized boolean parseDataList(String dataList) {
 		this.nodeVoltages.clear();
@@ -276,32 +325,27 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 			.map(s -> s.split("\t"))
 			.filter(s -> s.length == 2)
 			.forEach(s -> this.nodeVoltages.put(s[0], Double.valueOf(s[1].split(" V")[0])));
-
-		recalculateLoads();
 		return this.nodeVoltages.size() > 0;
 	}
 	
-	public synchronized void recalculateLoads() {
-		this.maxPower = 0;
-		this.currentConsumtion = 0;
-		this.currentProduction = 0;
-		for (ElectricComponent<?, ?, ?> c : listComponents()) {
-			this.maxPower += c.getMaxPowerGeneration(getLevel());
-			double p = c.getCurrentPower(getLevel());
-			if (p > 0) {
-				this.currentProduction += p;
-			} else {
-				this.currentConsumtion += -p;
-			}
-		}
+	public void setMaxPower(double maxPower) {
+		this.maxPower = maxPower;
 	}
 	
 	public double getMaxPower() {
 		return maxPower;
 	}
 	
+	public void setCurrentConsumtion(double currentConsumtion) {
+		this.currentConsumtion = currentConsumtion;
+	}
+	
 	public double getCurrentConsumtion() {
 		return currentConsumtion;
+	}
+	
+	public void setCurrentProduction(double currentProduction) {
+		this.currentProduction = currentProduction;
 	}
 	
 	public double getCurrentProduction() {
@@ -314,7 +358,7 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 	
 	public void setState(PowerNetState state) {
 		this.state = state;
-		recalculateLoads();
+		updateComponents();
 	}
 	
 	public PowerNetState getState() {

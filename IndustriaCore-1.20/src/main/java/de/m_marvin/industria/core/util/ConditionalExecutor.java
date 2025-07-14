@@ -3,6 +3,7 @@ package de.m_marvin.industria.core.util;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.Executor;
 import java.util.function.Supplier;
 
 import de.m_marvin.industria.IndustriaCore;
@@ -11,12 +12,17 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
-public class ConditionalExecutor {
+public class ConditionalExecutor implements Executor {
 	
 	private Map<Supplier<Boolean>, Runnable> taskQueue = new HashMap<>();
 	private long tickcounter = 0L;
 	
 	public ConditionalExecutor() {}
+
+	@Override
+	public void execute(Runnable command) {
+		this.taskQueue.put(() -> true, command);
+	}
 	
 	public void executeAfterDelay(Runnable task, int delay) {
 		long startTimeStamp = this.tickcounter;
@@ -33,11 +39,7 @@ public class ConditionalExecutor {
 	}
 	
 	public void executeAsSoonAs(Runnable task, Supplier<Boolean> condition) {
-		if (condition.get()) {
-			task.run();
-		} else {
-			this.taskQueue.put(condition, task);
-		}
+		this.taskQueue.put(condition, task);
 	}
 	
 	public void tryExecuteFromQueue() {

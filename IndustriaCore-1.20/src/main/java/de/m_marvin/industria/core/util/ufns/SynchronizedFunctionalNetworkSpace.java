@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 import net.minecraft.nbt.CompoundTag;
@@ -20,7 +22,7 @@ public abstract class SynchronizedFunctionalNetworkSpace<R, C extends Functional
 		NETWORK_UPDATE
 	}
 	
-	public static record UpdateTicket<R>(int delay, R reference, UpdateType type) {} 
+	public static record UpdateTicket<R>(int delay, R reference, UpdateType type, CompletableFuture<Void> future) {} 
 	
 	protected Queue<UpdateTicket<R>> updateTickets = new ArrayDeque<>();
 	
@@ -65,7 +67,7 @@ public abstract class SynchronizedFunctionalNetworkSpace<R, C extends Functional
 			int delay = ticketNbt.getInt("Delay");
 			R reference = deserializeReference(ticketNbt.getCompound("Reference"));
 			UpdateType type = UpdateType.valueOf(ticketNbt.getString("Type").toUpperCase());
-			this.updateTickets.add(new UpdateTicket<R>(delay, reference, type));
+			this.updateTickets.add(new UpdateTicket<R>(delay, reference, type, null));
 		}
 		
 	}
@@ -74,11 +76,17 @@ public abstract class SynchronizedFunctionalNetworkSpace<R, C extends Functional
 	protected abstract R deserializeReference(CompoundTag tag);
 	
 	public void scheduledUpdateTicket(R reference, UpdateType type, int delay) {
-		this.updateTickets.add(new UpdateTicket<R>(delay, reference, type));
+		this.updateTickets.add(new UpdateTicket<R>(delay, reference, type, null));
 	}
-	
+
+	public CompletableFuture<Void> updateTicketCompletable(R reference, UpdateType type) {
+		CompletableFuture<Void> future = new CompletableFuture<>();
+		this.updateTickets.add(new UpdateTicket<R>(0, reference, type, future));
+		return future;
+	}
+
 	public void updateTicket(R reference, UpdateType type) {
-		this.updateTickets.add(new UpdateTicket<R>(0, reference, type));
+		this.updateTickets.add(new UpdateTicket<R>(0, reference, type, null));
 	}
 
 	// Update buffers
@@ -89,12 +97,15 @@ public abstract class SynchronizedFunctionalNetworkSpace<R, C extends Functional
 	public void processUpdates() {
 		
 		// Search for updates and fill buffers
+		Set<UpdateTicket<R>> processingTickets = new HashSet<SynchronizedFunctionalNetworkSpace.UpdateTicket<R>>();
 		while (this.updateTickets.size() > 0) {
 			UpdateTicket<R> ticket = this.updateTickets.poll();
 			
 			if (ticket.delay() > 0) {
-				this.updateTickets.add(new UpdateTicket<>(ticket.delay() - 1, ticket.reference(), ticket.type()));
+				this.updateTickets.add(new UpdateTicket<R>(ticket.delay() - 1, ticket.reference(), ticket.type(), ticket.future()));
 				continue;
+			} else {
+				processingTickets.add(ticket);
 			}
 			
 			switch (ticket.type()) {
@@ -139,6 +150,11 @@ public abstract class SynchronizedFunctionalNetworkSpace<R, C extends Functional
 				.forEach(SynchronizedFunctionalNetwork::onUpdate);
 			this.updateReferences.clear();
 		}
+		
+		for (var u : processingTickets)
+			if (u.future() != null)
+				u.future().complete(null);
+		processingTickets.clear();
 		
 	}
 	

@@ -98,7 +98,7 @@ public abstract class SynchronizedFunctionalNetworkSpace<R, C extends Functional
 		
 		// Search for updates and fill buffers
 		Set<UpdateTicket<R>> processingTickets = new HashSet<SynchronizedFunctionalNetworkSpace.UpdateTicket<R>>();
-		while (this.updateTickets.size() > 0) {
+		while (this.updateTickets.size() > 0 && (this.putComponents.size() + this.removeReferences.size() + this.updateReferences.size()) < 100) {
 			UpdateTicket<R> ticket = this.updateTickets.poll();
 			
 			if (ticket.delay() > 0) {

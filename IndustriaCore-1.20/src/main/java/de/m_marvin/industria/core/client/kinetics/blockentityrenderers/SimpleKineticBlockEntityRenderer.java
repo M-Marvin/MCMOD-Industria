@@ -33,8 +33,6 @@ public class SimpleKineticBlockEntityRenderer<T extends BlockEntity & IKineticBl
 			pPoseStack.pushPose();
 		
 			BlockState state = part.state();
-			BakedModel model = dispatcher.getBlockModel(state);
-			ModelData data = ModelData.EMPTY;
 			Axis axis = part.rotationAxis();
 			float rotationalOffset = (float) part.axialOffset();
 			float rotationalSpeed = (float) part.rotationRatio();
@@ -49,7 +47,9 @@ public class SimpleKineticBlockEntityRenderer<T extends BlockEntity & IKineticBl
 			case Z: pPoseStack.mulPose(com.mojang.math.Axis.ZP.rotation(rotation - rotationalOffset)); break;
 			}
 			pPoseStack.translate(-0.5, -0.5, -0.5);
-
+			
+			BakedModel model = dispatcher.getBlockModel(state);
+			ModelData data = ModelData.EMPTY;
 			for (net.minecraft.client.renderer.RenderType rt : model.getRenderTypes(state, pBlockEntity.getLevel().getRandom(), data))
 				this.dispatcher.getModelRenderer().renderModel(pPoseStack.last(), pBuffer.getBuffer(net.minecraftforge.client.RenderTypeHelper.getEntityRenderType(rt, false)), state, model, 1F, 1F, 1F, pPackedLight, pPackedOverlay, data, rt);
 

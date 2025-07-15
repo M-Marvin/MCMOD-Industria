@@ -141,11 +141,7 @@ public class ConduitPos {
 	
 	@Override
 	public int hashCode() {
-		int prime = 31;
-		int result = 1;
-		result = prime * result + ((this.nodeA != null) ? 0 : this.nodeA.hashCode());
-		result = prime * result + ((this.nodeB != null) ? 0 : this.nodeB.hashCode());
-		return result;
+		return Objects.hash(this.nodeA, this.nodeB);
 	}
 	
 	@Override

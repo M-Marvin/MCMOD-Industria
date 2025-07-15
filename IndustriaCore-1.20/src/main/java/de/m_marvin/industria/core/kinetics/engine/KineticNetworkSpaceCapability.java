@@ -92,6 +92,7 @@ public class KineticNetworkSpaceCapability extends FriendlyFunctionalNetworkSpac
 	public static void onLevelTick(TickEvent.LevelTickEvent event) {
 		KineticNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(event.level, Capabilities.KINETIC_NETWORK_SPACE_CAPABILITY);
 		networkSpace.processUpdates();
+		
 	}
 	
 	@SubscribeEvent
@@ -130,11 +131,11 @@ public class KineticNetworkSpaceCapability extends FriendlyFunctionalNetworkSpac
 		
 		if (!components.isEmpty()) {
 			// We should not need this here, since the update network package already sends all components
-			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(event::getPlayer), new SSyncKineticComponentsPackage(components, event.getPos(), SyncRequestType.ADDED));
+//			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(event::getPlayer), new SSyncKineticComponentsPackage(components, event.getPos(), SyncRequestType.ADDED));
 			
-			Collection<KineticNetwork> networks = components.stream().map(networkSpace::findNetworkAt).distinct().toList();
+			Collection<KineticNetwork> networks = components.stream().map(networkSpace::findNetworkAt).filter(Objects::nonNull).distinct().toList();
 			for (var network : networks) {
-				IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(event::getPlayer), new SUpdateKineticNetworkPackage(network));
+				IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(event::getPlayer), new SUpdateKineticNetworkPackage(components, network));
 			}
 		}
 	}

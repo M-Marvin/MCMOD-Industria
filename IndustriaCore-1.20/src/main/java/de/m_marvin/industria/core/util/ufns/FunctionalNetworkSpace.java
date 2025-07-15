@@ -13,6 +13,7 @@ import com.google.common.collect.Queues;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntIterator;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -78,7 +79,22 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 		public void deserializeNbt(CompoundTag nbt) {}
 		
 		protected void integrateNetwork(IntSet references, N other) {
-			references.forEach(ref -> {
+			IntIterator referenceIterator = references.iterator();
+			
+			while (referenceIterator.hasNext()) {
+				int ref = referenceIterator.nextInt();
+				C component = other.components.get(ref);
+				// Use the iterator to remove if the supplied key set is backed by this map, otherwise we would invalidate the iterator!
+				if (references == other.components.keySet())
+					referenceIterator.remove();
+				else
+					other.components.remove(ref);
+				if (component != null)
+					this.components.put(ref, component);
+			}
+			
+			
+			references.intStream().forEach(ref -> {
 				C component = other.components.remove(ref);
 				if (component != null)
 					this.components.put(ref, component);
@@ -145,7 +161,7 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 		for (var network : this.ref2network.values().stream().distinct().toList()) {
 			CompoundTag networkNbt = new CompoundTag();
 			network.serializeNbt(networkNbt);
-			int[] networkRefIds = network.listComponents().stream().mapToInt(c -> this.referenceIds.getInt(c.reference())).toArray();
+			int[] networkRefIds = network.listComponents().stream().filter(Objects::nonNull).mapToInt(c -> this.referenceIds.getInt(c.reference())).toArray();
 			networkNbt.putIntArray("ReferenceIds", networkRefIds);
 			networksNbt.add(networkNbt);
 		}
@@ -175,7 +191,9 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 			N network = networkFactory.get();
 			int[] refIds = networkNbt.getIntArray("ReferenceIds");
 			for (int refId : refIds) {
-				network.components.put(refId, this.components.get(refId));
+				C component = this.components.get(refId);
+				if (component == null) continue;
+				network.components.put(refId, component);
 				this.ref2network.put(refId, network);
 			}
 			network.deserializeNbt(networkNbt);
@@ -205,9 +223,9 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 	
 	private int newComponentId(R reference) {
 		int id = reference.hashCode();
-		if (components.size() == MAX_IDS)
+		if (referenceIds.size() == MAX_IDS)
 			throw new RuntimeException("ID overflow");
-		while (components.containsKey(id))
+		while (referenceIds.containsValue(id))
 			id++;
 		return id;
 	}
@@ -346,7 +364,7 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 		
 		// Cleanup references, remove invalid references within the trace's components
 		for (IntSet trace : traces.keySet()) {
-			trace.intStream().mapToObj(this.components).forEach(component -> {
+			trace.intStream().mapToObj(this.components).filter(Objects::nonNull).forEach(component -> {
 				for (var itr = component.referencedComponents.iterator(); itr.hasNext();)
 					if (!trace.contains(itr.nextInt())) itr.remove();
 			});

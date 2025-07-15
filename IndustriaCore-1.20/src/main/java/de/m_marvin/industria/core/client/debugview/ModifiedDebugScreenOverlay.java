@@ -77,6 +77,10 @@ public class ModifiedDebugScreenOverlay {
 		}
 	}
 	
+	private static long bytesToMegabytes(long pBytes) {
+		return pBytes / 1024L / 1024L;
+	}
+	
 	public static void fillDebugInformation(List<Component[]> debugLines) {
 		
 		// Currently unused, maybe switching on and off individual sections ?
@@ -94,11 +98,18 @@ public class ModifiedDebugScreenOverlay {
 			String fps = fpsString.substring(0, fpsString.indexOf(' '));
 			String gpu = fpsString.substring(fpsString.lastIndexOf(' '));
 			IntegratedServer integratedserver = mc.getSingleplayerServer();
+
+			long i = Runtime.getRuntime().maxMemory();
+			long j = Runtime.getRuntime().totalMemory();
+			long k = Runtime.getRuntime().freeMemory();
+			long l = j - k;
 			
 			debugLines.add(new Component[] { mdl("[§b§lSystem§r]") });
+			debugLines.add(new Component[] { mdl(" §bJava: §r%s %dbit", System.getProperty("java.version"), mc.is64Bit() ? 64 : 32) });
 			debugLines.add(new Component[] { mdl(" §bMinecraft: §r%s/%s", SharedConstants.getCurrentVersion().getName(), mc.getLaunchedVersion()) });
 			debugLines.add(new Component[] { mdl(" §bClient Brand: §r%s ", ClientBrandRetriever.getClientModName()) });
 			debugLines.add(new Component[] { mdl(" §bFPS: §r%s §bGPU:§r%s", fps, gpu) });
+			debugLines.add(new Component[] { mdl(" §bMemory: §r% 2d%% %03d/%03dMB", l * 100L / i, bytesToMegabytes(l), bytesToMegabytes(i)) });
 			
 			if (integratedserver != null)
 				debugLines.add(new Component[] { mdl(" §bTPSmax: §r%d/20 §bTms: §r%.02f ms/50 ms", Math.max(0, Math.round(1000F /integratedserver.getAverageTickTime())), integratedserver.getAverageTickTime()) });

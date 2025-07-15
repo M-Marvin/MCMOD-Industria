@@ -33,6 +33,15 @@ public class SUpdateElectricNetworkPackage {
 		this.currentConsumtion = network.getCurrentConsumtion();
 		this.currentProduction = network.getCurrentProduction();
 	}
+
+	public SUpdateElectricNetworkPackage(Collection<ElectricComponent<?, Object, ?>> components, ElectricNetwork network) {
+		this.components = network.listComponents().stream().filter(components::contains).toList();
+		this.dataList = network.printDataList();
+		this.state = network.getState();
+		this.maxPower = network.getMaxPower();
+		this.currentConsumtion = network.getCurrentConsumtion();
+		this.currentProduction = network.getCurrentProduction();
+	}
 	
 	public SUpdateElectricNetworkPackage(Set<ElectricComponent<?, Object, ?>> components, String dataList, PowerNetState state, double maxPower, double currentProduction, double currentConsumtion) {
 		this.dataList = dataList;

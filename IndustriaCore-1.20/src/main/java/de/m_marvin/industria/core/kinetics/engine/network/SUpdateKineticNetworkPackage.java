@@ -38,6 +38,16 @@ public class SUpdateKineticNetworkPackage {
 		this.networkSpeed = network.getNetworkSpeed();
 		this.state = network.getState();
 	}
+
+	public SUpdateKineticNetworkPackage(Collection<KineticComponent> components, KineticNetwork network) {
+		this.components = network.listComponents().stream().filter(components::contains).toList();
+		this.speedMap = network.getSpeedMap();
+		this.maxPower = network.getMaxPower();
+		this.currentConsumtion = network.getCurrentConsumtion();
+		this.currentProduction = network.getCurrentProduction();
+		this.networkSpeed = network.getNetworkSpeed();
+		this.state = network.getState();
+	}
 	
 	public SUpdateKineticNetworkPackage(Collection<KineticComponent> components, Map<KineticReference, Double> speedMap, double speed, double maxPower, double currentProduction, double currentConsumtion, PowerNetState state) {
 		this.components = components;

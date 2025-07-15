@@ -155,7 +155,7 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 			
 			Collection<ElectricNetwork> networks = components.stream().map(networkSpace::findNetworkAt).distinct().toList();
 			for (var network : networks) {
-				IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(event::getPlayer), new SUpdateElectricNetworkPackage(network));
+				IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(event::getPlayer), new SUpdateElectricNetworkPackage(components, network));
 			}
 		}
 	}

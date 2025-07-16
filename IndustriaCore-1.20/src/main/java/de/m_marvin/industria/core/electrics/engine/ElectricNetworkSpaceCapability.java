@@ -3,6 +3,7 @@ package de.m_marvin.industria.core.electrics.engine;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -153,7 +154,7 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 			// We should not need this here, since the update network package already sends all components
 //			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> event.getChunk()), new SSyncElectricComponentsPackage(componentsInChunk, event.getPos(), SyncRequestType.ADDED));
 			
-			Collection<ElectricNetwork> networks = components.stream().map(networkSpace::findNetworkAt).distinct().toList();
+			Collection<ElectricNetwork> networks = components.stream().map(networkSpace::findNetworkAt).filter(Objects::nonNull).distinct().toList();
 			for (var network : networks) {
 				IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(event::getPlayer), new SUpdateElectricNetworkPackage(components, network));
 			}

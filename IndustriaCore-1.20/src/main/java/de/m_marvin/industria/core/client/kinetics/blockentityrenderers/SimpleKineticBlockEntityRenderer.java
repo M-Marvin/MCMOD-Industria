@@ -3,6 +3,7 @@ package de.m_marvin.industria.core.client.kinetics.blockentityrenderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import de.m_marvin.industria.core.client.util.ClientTimer;
+import de.m_marvin.industria.core.client.util.RenderTest;
 import de.m_marvin.industria.core.kinetics.types.blockentities.IKineticBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -10,10 +11,14 @@ import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.ModelData;
+import net.minecraftforge.event.TickEvent.RenderTickEvent;
 
 public class SimpleKineticBlockEntityRenderer<T extends BlockEntity & IKineticBlockEntity> implements BlockEntityRenderer<T> {
 	
@@ -48,11 +53,16 @@ public class SimpleKineticBlockEntityRenderer<T extends BlockEntity & IKineticBl
 			}
 			pPoseStack.translate(-0.5, -0.5, -0.5);
 			
+			
+			
 			BakedModel model = dispatcher.getBlockModel(state);
 			ModelData data = ModelData.EMPTY;
 			for (net.minecraft.client.renderer.RenderType rt : model.getRenderTypes(state, pBlockEntity.getLevel().getRandom(), data))
 				this.dispatcher.getModelRenderer().renderModel(pPoseStack.last(), pBuffer.getBuffer(net.minecraftforge.client.RenderTypeHelper.getEntityRenderType(rt, false)), state, model, 1F, 1F, 1F, pPackedLight, pPackedOverlay, data, rt);
 
+			pPoseStack.translate(0, 1, 0);
+			RenderTest.renderBlock(state, pPoseStack, pPackedLight, pPackedOverlay);
+			
 			pPoseStack.popPose();
 			
 		}

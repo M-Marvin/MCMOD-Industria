@@ -160,7 +160,7 @@ public class ModifiedDebugScreenOverlay {
 		if (showPosition) {
 
 			debugLines.add(new Component[] { mdl("[§b§lPosition§r]") });
-			debugLines.add(new Component[] { mdl(" §cX §aY §9Z"), 		mdl("§bPlayer "), 						mdl(""),									mdl(""),								mdl("§bTargeted Block"), mdl(""), mdl("")  });
+			debugLines.add(new Component[] { mdl(" §cX §aY §9Z"), 		mdl("§bPlayer "), 						mdl(""),									mdl(""),								mdl("§bBlock"), mdl(""), mdl("")  });
 			debugLines.add(new Component[] { mdl(" §bAbsolute: "), 		mdl("§c%.02f ", playerPosition.x), 		mdl("§a%.02f ", playerPosition.y), 			mdl("§9%.02f ", playerPosition.z),	 	mdl(blockDirection != null ? "§c%.02f " : "§8N/A", blockPosition.x), 		mdl(blockDirection != null ? "§a%.02f " : "", blockPosition.y), 			mdl(blockDirection != null ? "§9%.02f" : "", blockPosition.z) });
 			debugLines.add(new Component[] { mdl(" §bBlock: "), 		mdl("§c%d ", playerBlockPos.getX()), 	mdl("§a%d ", playerBlockPos.getY()), 		mdl("§9%d", playerBlockPos.getZ()),	 	mdl(blockDirection != null ? "§c%d " : "§8N/A", blockBlockPos.getX()), 	mdl(blockDirection != null ? "§a%d " : "", blockBlockPos.getY()), 		mdl(blockDirection != null ? "§9%d" : "", blockBlockPos.getZ()) });
 			debugLines.add(new Component[] { mdl(" §bChunk: "), 		mdl("§c%d ", playerChunk.x), 			mdl("§a[%d] ", playerChunkSection), 		mdl("§9%d", playerChunk.z),				mdl(blockDirection != null ? "§c%d " : "§8N/A", blockChunk.x), 			mdl(blockDirection != null ? "§a[%d] " : "", blockChunkSection), 		mdl(blockDirection != null ? "§9%d" : "", blockChunk.z) });

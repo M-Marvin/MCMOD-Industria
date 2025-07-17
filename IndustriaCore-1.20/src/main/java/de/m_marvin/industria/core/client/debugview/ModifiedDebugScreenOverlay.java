@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.core.Config;
 import de.m_marvin.industria.core.compound.types.blocks.CompoundBlock;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.types.DiagonalDirection;
@@ -53,7 +54,7 @@ public class ModifiedDebugScreenOverlay {
 	@SubscribeEvent
 	public static void onOverlayRender(RenderGuiOverlayEvent.Pre event) {
 		
-		if (event.getOverlay().id().equals(DEBUG_SCREEN_ID) && MC.get().options.renderDebug) {
+		if (event.getOverlay().id().equals(DEBUG_SCREEN_ID) && MC.get().options.renderDebug && Config.USE_ALTERNATE_F3SCREEN.get()) {
 
 			event.setCanceled(true);
 			

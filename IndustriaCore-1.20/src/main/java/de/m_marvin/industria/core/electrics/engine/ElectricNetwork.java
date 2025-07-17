@@ -206,9 +206,6 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 				// Send update to clients
 				IndustriaCore.NETWORK.send(ElectricUtility.TRACKING_NETWORK.with(() -> this), new SUpdateElectricNetworkPackage(this));
 				
-				// Notify components
-//				updateComponents();
-				
 			}, ConditionalExecutor.SERVER_TICK_EXECUTOR);
 			
 		}

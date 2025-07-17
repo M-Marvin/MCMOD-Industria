@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.core.Config;
 import de.m_marvin.industria.core.kinetics.engine.network.SSyncKineticComponentsPackage;
 import de.m_marvin.industria.core.kinetics.engine.network.SUpdateKineticNetworkPackage;
 import de.m_marvin.industria.core.kinetics.types.blocks.IKineticBlock;
@@ -82,7 +83,7 @@ public class KineticNetworkSpaceCapability extends FriendlyFunctionalNetworkSpac
 	}
 	
 	public KineticNetworkSpaceCapability(Level level) {
-		super(() -> new KineticNetwork(() -> level), () -> new KineticComponent(null, null, null), 1024); // TODO trace limit config
+		super(() -> new KineticNetwork(() -> level), () -> new KineticComponent(null, null, null), Config.KINETIC_NETWORK_TRACE_DEPTH.get());
 		this.level = level;
 	}
 	

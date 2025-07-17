@@ -99,7 +99,7 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ElectricNetworkSpaceCapability(Level level) {
-		super(() -> new ElectricNetwork(() -> level), () -> new ElectricComponent(null, null, null), 1024);
+		super(() -> new ElectricNetwork(() -> level), () -> new ElectricComponent(null, null, null), Config.ELECTRIC_NETWORK_TRACE_DEPTH.get());
 		this.level = level;
 	}
 	

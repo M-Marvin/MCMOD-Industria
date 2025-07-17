@@ -5,24 +5,22 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 
+import javax.annotation.Nullable;
+
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
-import org.valkyrienskies.core.impl.shadow.po;
 
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.PoseStack.Pose;
 import com.mojang.blaze3d.vertex.VertexBuffer;
 import com.mojang.blaze3d.vertex.VertexBuffer.Usage;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.math.Axis;
 
 import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.core.registries.Blocks;
-import de.m_marvin.univec.impl.Vec3f;
-import de.m_marvin.univec.impl.Vec4f;
+import de.m_marvin.industria.core.Config;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
@@ -31,9 +29,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -46,32 +42,25 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
 @Mod.EventBusSubscriber(bus=Bus.FORGE, modid=IndustriaCore.MODID, value=Dist.CLIENT)
-public class RenderTest {
-
-	// FIXME ANIMATED BLOCK RENDERING OPTIMIZATION
+public class SingleBlockBatchedRenderer {
 	
-	@SubscribeEvent
-	public static void onRenderTick(RenderLevelStageEvent event) {
-		
-		if (event.getStage() == Stage.AFTER_SOLID_BLOCKS) {
+	private SingleBlockBatchedRenderer() {}
+	
+	private static final Supplier<BlockRenderDispatcher> DISPATCHER = () -> Minecraft.getInstance().getBlockRenderer();
+	private static final Supplier<RandomSource> RANDOM = () -> Minecraft.getInstance().level.random;
+	private static final BufferBuilder INTERMEDIATE_BUFFER = new BufferBuilder(2048);
 
-			processDraws();
-			
-			drawRequests.clear();
-			
-			vertexCaches.values().forEach(v -> v.close());
-			vertexCaches.clear();
-			
-		}
-		
-	}
+	private static boolean useOptimization = false;
 
-	private static Supplier<BlockRenderDispatcher> dispatcher = () -> Minecraft.getInstance().getBlockRenderer();
-	private static Supplier<RandomSource> random = () -> Minecraft.getInstance().level.random;
+	private static Matrix4f cameraMatrix;
+	private static Matrix4f inverseCameraMatrix;
 	
 	private static Int2ObjectMap<VertexBuffer> vertexCaches = new Int2ObjectOpenHashMap<VertexBuffer>();
+	private static Set<DrawRequest> drawRequests = new HashSet<>();
 
-	private record DrawRequest(Matrix4f pose, Vec3f translation, RenderType type, int modelHash) implements Comparable<DrawRequest> {
+//	private static int lastCacheSize = 0;
+	
+	private static record DrawRequest(Matrix4f translation, RenderType type, int modelHash) implements Comparable<DrawRequest> {
 
 		@Override
 		public int compareTo(DrawRequest o) {
@@ -80,56 +69,82 @@ public class RenderTest {
 		
 	}
 	
-	private static Set<DrawRequest> drawRequests = new HashSet<>();
-	
-	public static void renderBlock(BlockState state, PoseStack poseStack, int packedLight, int packedOverlay) {
+	@SubscribeEvent
+	public static void onRenderTick(RenderLevelStageEvent event) {
 		
-		BakedModel model = dispatcher.get().getBlockModel(state);	
-		for (net.minecraft.client.renderer.RenderType rt : model.getRenderTypes(state, random.get(), ModelData.EMPTY))
-			renderToCache(state, model, poseStack, rt, packedLight, packedOverlay);
+		if (event.getStage() == Stage.AFTER_SKY) {
 		
-	}
-	
-	private static final BufferBuilder cachingBufferBuilder = new BufferBuilder(2048);
-	
-	private static void renderToCache(BlockState state, BakedModel model, PoseStack poseStack, RenderType rt, int packedLight, int packedOverlay) {
-
-		RenderType flushingRenderType = RenderTypeHelper.getEntityRenderType(rt, false);
-		int hash = Objects.hash(state, rt, packedLight, packedOverlay);
-		
-		Matrix4f pose = poseStack.last().pose();
-//		Vec3f translation = new Vec3f(pose.m30(), pose.m31(), pose.m32());
-		Matrix4f p2 = new Matrix4f(pose);
-		
-		if (!vertexCaches.containsKey(hash)) {
+			var camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+			Vec3 cameraOffset = camera.getPosition();
+			cameraMatrix = new Matrix4f();
+			cameraMatrix.rotate(Axis.XP.rotationDegrees(camera.getXRot()));
+			cameraMatrix.rotate(Axis.YP.rotationDegrees(camera.getYRot() + 180.0F));
+			cameraMatrix.translate((float)- cameraOffset.x, (float)- cameraOffset.y, (float) -cameraOffset.z);
+			inverseCameraMatrix = new Matrix4f(cameraMatrix).invert();
 			
-			VertexBuffer vbuff = new VertexBuffer(Usage.STATIC);;
+		} else if (event.getStage() == Stage.AFTER_BLOCK_ENTITIES) {
 			
-			BufferBuilder buff = cachingBufferBuilder;
-
-			buff.begin(flushingRenderType.mode(), flushingRenderType.format());
+//			System.out.println(String.format("RENDER TEST: IN CACHE: %d, DRAWS: %s, UPLOADS: %d", vertexCaches.size(), drawRequests.size(), lastCacheSize - vertexCaches.size()));
+//			lastCacheSize = vertexCaches.size();
 			
-//			poseStack.pushPose();
-//			poseStack.translate(-translation.x, -translation.y, -translation.z);
+			processDraws();
 			
-			dispatcher.get().getModelRenderer().renderModel(new PoseStack().last(), buff, state, model, 1F, 1F, 1F, packedLight, packedOverlay, ModelData.EMPTY, rt);
+			drawRequests.clear();
 			
-//			poseStack.popPose();
-			
-			vbuff.bind();
-			vbuff.upload(buff.end());
-			buff.clear();
-			
-			vertexCaches.put(hash, vbuff);
+			vertexCaches.values().forEach(VertexBuffer::close);
+			vertexCaches.clear();
 			
 		}
 		
-		drawRequests.add(new DrawRequest(p2, new Vec3f(0, 0, 0), flushingRenderType, hash));
+	}
+	
+	public static void reloadConfig() {
+		useOptimization = Config.USE_SINGLE_BATCHED_BLOCK_RENDERER.get();
+	}
+	
+	public static void renderBlock(BlockState state, PoseStack poseStack, @Nullable MultiBufferSource buffer, int packedLight, int packedOverlay, int svar) {
 		
-//		processDraws();
+		BakedModel model = DISPATCHER.get().getBlockModel(state);	
+		for (net.minecraft.client.renderer.RenderType rt : model.getRenderTypes(state, RANDOM.get(), ModelData.EMPTY))
+			if (useOptimization)
+				renderToCache(state, model, poseStack, rt, packedLight, packedOverlay, svar);
+			else if (buffer != null)
+				DISPATCHER.get().getModelRenderer().renderModel(poseStack.last(), buffer.getBuffer(net.minecraftforge.client.RenderTypeHelper.getEntityRenderType(rt, false)), state, model, 1F, 1F, 1F, packedLight, packedOverlay, ModelData.EMPTY, rt);
 		
 	}
 	
+	private static void renderToCache(BlockState state, BakedModel model, PoseStack poseStack, RenderType rt, int packedLight, int packedOverlay, int svar) {
+
+		RenderType flushingRenderType = RenderTypeHelper.getEntityRenderType(rt, false);
+		int hash = Objects.hash(state, rt, packedLight, packedOverlay, svar);
+		
+		VertexBuffer cache = vertexCaches.get(hash);
+		
+		if (cache == null) {
+			
+			cache = new VertexBuffer(Usage.STATIC);
+			
+			INTERMEDIATE_BUFFER.begin(flushingRenderType.mode(), flushingRenderType.format());
+			
+			PoseStack test = new PoseStack();
+			test.last().pose().mul(cameraMatrix);
+			test.last().normal().mul(cameraMatrix.normal(new Matrix3f()));
+			
+			DISPATCHER.get().getModelRenderer().renderModel(test.last(), INTERMEDIATE_BUFFER, state, model, 1F, 1F, 1F, packedLight, packedOverlay, ModelData.EMPTY, rt);
+			
+			cache.bind();
+			cache.upload(INTERMEDIATE_BUFFER.end());
+			INTERMEDIATE_BUFFER.clear();
+			
+			vertexCaches.put(hash, cache);
+			
+		}
+
+		Matrix4f worldTranslation = poseStack.last().pose().mul(inverseCameraMatrix, new Matrix4f());
+		
+		drawRequests.add(new DrawRequest(worldTranslation, flushingRenderType, hash));
+		
+	}
 	
 	public static void processDraws() {
 		
@@ -149,13 +164,9 @@ public class RenderTest {
 
 			VertexBuffer cached = vertexCaches.get(request.modelHash);
 			
+			Matrix4f translation = new Matrix4f(RenderSystem.getModelViewMatrix()).mul(request.translation);
 			
-			
-			Matrix4f translation = request.pose; //new Matrix4f().translateLocal(request.translation.x, request.translation.y, request.translation.z);
-			
-			Matrix4f mat = new Matrix4f(translation).mul(RenderSystem.getModelViewMatrix());
-
-			setupShaderDynamicState(RenderSystem.getShader(), mat);
+			setupShaderDynamicState(RenderSystem.getShader(), translation);
 			
 			cached.bind();
 			cached.draw();

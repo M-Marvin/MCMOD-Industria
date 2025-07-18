@@ -13,7 +13,6 @@ import com.google.common.collect.Queues;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.ints.IntIterator;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -79,27 +78,14 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 		public void deserializeNbt(CompoundTag nbt) {}
 		
 		protected void integrateNetwork(IntSet references, N other) {
-			IntIterator referenceIterator = references.iterator();
+			IntSet immutableReferences = new IntOpenHashSet(references);
 			
-			while (referenceIterator.hasNext()) {
-				int ref = referenceIterator.nextInt();
-				C component = other.components.get(ref);
-				// Use the iterator to remove if the supplied key set is backed by this map, otherwise we would invalidate the iterator!
-				if (references == other.components.keySet())
-					referenceIterator.remove();
-				else
-					other.components.remove(ref);
-				if (component != null)
-					this.components.put(ref, component);
-			}
-			
-			
-			references.intStream().forEach(ref -> {
+			immutableReferences.intStream().forEach(ref -> {
 				C component = other.components.remove(ref);
 				if (component != null)
 					this.components.put(ref, component);
 			});
-			afterIntegrateNetwork(references, other);
+			afterIntegrateNetwork(immutableReferences, other);
 		}
 		
 		public Collection<C> listComponents() {

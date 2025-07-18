@@ -103,11 +103,12 @@ public class ElectroMagneticCoilBlockEntityRenderer implements BlockEntityRender
 	}
 	
 	protected void renderWindings(MultiBufferSource pBuffer, PoseStack pPoseStack, int pPackedLight, Conduit type, int windings, float windingHeight, float width, float depth) {
-
+		
 		VertexConsumer vertexBuffer = pBuffer.getBuffer(RenderType.entitySolid(ConduitTextureManager.LOCATION_CONDUITS));
 		TextureAtlasSprite texture = ConduitTextureManager.getInstance().get(type);
 		int thickness = type.getConduitType().getThickness();
-		
+
+
 		for (int i = 0; i < windings; i++) {
 
 			Vec3d p1 = new Vec3d(2F * 0.0625F, 			2 * 0.0625F + (i + 0) * windingHeight, 		2F * 0.0625F);
@@ -116,10 +117,10 @@ public class ElectroMagneticCoilBlockEntityRenderer implements BlockEntityRender
 			Vec3d p4 = new Vec3d(2F * 0.0625F, 			2 * 0.0625F + (i + 0.75F) * windingHeight,	2F * 0.0625F + depth);
 			Vec3d p5 = new Vec3d(2F * 0.0625F, 			2 * 0.0625F + (i + 1F) * windingHeight, 	2F * 0.0625F);
 
-			ConduitRenderer.drawConduitSegment(vertexBuffer, pPoseStack, 0xFFFFFF, pPackedLight, p1, p2, thickness, 0, texture);
-			ConduitRenderer.drawConduitSegment(vertexBuffer, pPoseStack, 0xFFFFFF, pPackedLight, p2, p3, thickness, 0, texture);
-			ConduitRenderer.drawConduitSegment(vertexBuffer, pPoseStack, 0xFFFFFF, pPackedLight, p3, p4, thickness, 0, texture);
-			ConduitRenderer.drawConduitSegment(vertexBuffer, pPoseStack, 0xFFFFFF, pPackedLight, p4, p5, thickness, 0, texture);
+			ConduitRenderer.drawConduitSegment(vertexBuffer, pPoseStack, 0xFFFFFFFF, pPackedLight, p1, p2, thickness, 0, texture);
+			ConduitRenderer.drawConduitSegment(vertexBuffer, pPoseStack, 0xFFFFFFFF, pPackedLight, p2, p3, thickness, 0, texture);
+			ConduitRenderer.drawConduitSegment(vertexBuffer, pPoseStack, 0xFFFFFFFF, pPackedLight, p3, p4, thickness, 0, texture);
+			ConduitRenderer.drawConduitSegment(vertexBuffer, pPoseStack, 0xFFFFFFFF, pPackedLight, p4, p5, thickness, 0, texture);
 			
 		}
 		

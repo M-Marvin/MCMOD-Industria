@@ -10,7 +10,6 @@ import de.m_marvin.industria.core.contraptions.ContraptionUtility;
 import de.m_marvin.industria.core.contraptions.engine.types.attachment.ForcesInducer;
 import de.m_marvin.industria.core.contraptions.engine.types.contraption.Contraption;
 import de.m_marvin.industria.core.contraptions.engine.types.contraption.ServerContraption;
-import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

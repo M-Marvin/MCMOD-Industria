@@ -2,6 +2,7 @@ package de.m_marvin.industria.core.electrics.engine;
 
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -160,11 +161,8 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 			
 		}
 		
-		if (this.isTripped()) {
+		if (!isOnline()) {
 			this.nodeVoltages.clear();
-
-			// Send update to clients
-			IndustriaCore.NETWORK.send(ElectricUtility.TRACKING_NETWORK.with(() -> this), new SUpdateElectricNetworkPackage(this));
 			
 			// Notify components
 			updateComponents();
@@ -174,14 +172,14 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 			// No simulation if empty
 			if (isEmpty() || this.groundNode == null) return;
 			
-			ElectricNetworkSpaceCapability.getSimulationProcessor().processNetwork(this).thenAcceptAsync(state -> {
+			ElectricNetworkSpaceCapability.getSimulationProcessor().processNetwork(this::getNetList).thenAcceptAsync(data -> {
 				
-				if (!state) {
+				if (data.isEmpty() || !parseDataList(data.get())) {
 					tripFuse();
 					MinecraftForge.EVENT_BUS.post(new ElectricNetworkEvent.FuseTripedEvent(getLevel(), this));
 					return;
 				}
-
+				
 				// Recalculate network global variables
 				this.maxPower = 0;
 				this.currentConsumtion = 0;
@@ -196,15 +194,12 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 					}
 				}
 				
-				if (this.currentConsumtion > this.currentProduction) {
+				if (this.currentConsumtion - this.currentProduction > 1.0) {
 					this.nodeVoltages.clear();
-					setState(PowerNetState.INACTIVE);
+					tripFuse();
 				} else {
-					setState(PowerNetState.ACTIVE);
+					updateComponents();
 				}
-				
-				// Send update to clients
-				IndustriaCore.NETWORK.send(ElectricUtility.TRACKING_NETWORK.with(() -> this), new SUpdateElectricNetworkPackage(this));
 				
 			}, ConditionalExecutor.SERVER_TICK_EXECUTOR);
 			
@@ -213,30 +208,37 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 	}
 	
 	public void updateComponents() {
+
+		// Send update to clients
+		if (!getLevel().isClientSide())
+			IndustriaCore.NETWORK.send(ElectricUtility.TRACKING_NETWORK.with(() -> this), new SUpdateElectricNetworkPackage(this));
+		
 		for (var c : listComponents()) {
 			c.onNetworkChange(getLevel());
 		}
 	}
 	
 	@Override
-	protected synchronized void afterPutComponent(int refId) {
+	protected void afterPutComponent(int refId) {
+		this.ref2nodeMap.remove(refId);
+		this.ref2nodeMap.putAll(refId, Arrays.asList(this.components.get(refId).getNodes(getLevel())));
+		resetNetlist();
+	}
+
+	@Override
+	protected void afterRemoveComponent(int refId) {
 		this.ref2nodeMap.remove(refId);
 		resetNetlist();
 	}
 
 	@Override
-	protected synchronized void afterRemoveComponent(int refId) {
-		this.ref2nodeMap.remove(refId);
-		resetNetlist();
-	}
-
-	@Override
-	protected synchronized void afterParametrizedConnection(int refId1, int refId2, NodePos parameter) {
-		this.ref2nodeMap.put(refId1, parameter);
-		this.ref2nodeMap.put(refId2, parameter);
+	protected void afterParametrizedConnection(int refId1, int refId2, NodePos parameter) {
+//		Adding the nodes in afterPutComponent should work more reliably with bugged or de-synced components
+//		this.ref2nodeMap.put(refId1, parameter);
+//		this.ref2nodeMap.put(refId2, parameter);
 	}
 	
-	public synchronized Collection<ElectricComponent<?, ?, ?>> findComponentsOnNode(NodePos node) {
+	public Collection<ElectricComponent<?, ?, ?>> findComponentsOnNode(NodePos node) {
 		List<ElectricComponent<?, ?, ?>> components = new ArrayList<>();
 		for (Integer refId : this.ref2nodeMap.getKeys(node)) {
 			ElectricComponent<?, ?, ?> component = this.components.get(refId.intValue());
@@ -246,10 +248,12 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 	}
 
 	@Override
-	protected synchronized void afterIntegrateNetwork(IntSet refIds, ElectricNetwork other) {
+	protected void afterIntegrateNetwork(IntSet refIds, ElectricNetwork other) {
+		if (other.state != PowerNetState.ACTIVE)
+			this.state = other.state;
 		for (int refId : refIds) {
 			if (other.ref2nodeMap.containsKey(refId))
-				this.ref2nodeMap.put(refId, other.ref2nodeMap.get(refId));
+				this.ref2nodeMap.putAll(refId, other.ref2nodeMap.getAll(refId));
 		}
 		// This is mainly for the client, on the server the node voltages get overridden after an update anyway
 		this.nodeVoltages.putAll(other.nodeVoltages);
@@ -310,11 +314,11 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 		return isPlotEmpty() ? "EMPTY" : (this.netList == null ? this.circuitBuilder.toString() : netList);
 	}
 	
-	public synchronized Map<String, Double> getNodeVoltages() {
+	public Map<String, Double> getNodeVoltages() {
 		return nodeVoltages;
 	}
 
-	public synchronized Map<String, Double> getNodeVoltages(Level level, ElectricComponent<?, Object, ?> component) {
+	public Map<String, Double> getNodeVoltages(Level level, ElectricComponent<?, Object, ?> component) {
 		return Stream
 				.of(component.getNodes(level))
 				.flatMap(node -> {
@@ -325,7 +329,7 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 				.collect(Collectors.toMap(Functions.identity(), this.nodeVoltages::get));
 	}
 	
-	public synchronized boolean parseDataList(String dataList) {
+	public boolean parseDataList(String dataList) {
 		this.nodeVoltages.clear();
 		Stream.of(dataList.split("\n"))
 			.map(s -> s.split("\t"))
@@ -336,6 +340,11 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 	
 	public void setMaxPower(double maxPower) {
 		this.maxPower = maxPower;
+	}
+	
+	public float getNetworkLoad() {
+		if (!isOnline() || getCurrentConsumtion() == 0) return 0F;
+		return (float) Math.min(1F, Math.max(0F, getCurrentConsumtion() / getMaxPower()));
 	}
 	
 	public double getMaxPower() {
@@ -391,13 +400,13 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 		return sb.toString();
 	}
 	
-	public synchronized Optional<Double> getFloatingNodeVoltage(NodePos node, int laneId, String lane) {
+	public Optional<Double> getFloatingNodeVoltage(NodePos node, int laneId, String lane) {
 		String nodeName = getNodeKeyString(node, laneId, lane);
 		if (!this.nodeVoltages.containsKey(nodeName)) return Optional.empty();
 		return Optional.of(isOnline() ? this.nodeVoltages.get(nodeName) : 0.0);
 	}
 
-	public synchronized Optional<Double> getFloatingLocalNodeVoltage(BlockPos position, String lane, int group) {
+	public Optional<Double> getFloatingLocalNodeVoltage(BlockPos position, String lane, int group) {
 		String nodeName = getLocalNodeKeyString(position, lane, group);
 		if (!this.nodeVoltages.containsKey(nodeName)) return Optional.empty();
 		return Optional.of(isOnline() ? this.nodeVoltages.get(nodeName) : 0.0);

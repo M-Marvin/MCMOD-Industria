@@ -1,6 +1,7 @@
 package de.m_marvin.industria.core.electrics.engine;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import de.m_marvin.industria.IndustriaCore;
@@ -40,10 +41,11 @@ public class ClientElectricPackageHandler {
 				.map(c -> networkSpace.updateTicketCompletable(c.reference(), UpdateType.COMPONENT_PUT))
 				.toArray(CompletableFuture[]::new)
 			).thenAccept(v -> {
-
+				
 				// On the client the network might be split because of unloaded chunks/components
-				Collection<ElectricNetwork> networks = msg.getComponents().stream().map(networkSpace::findNetworkAt).distinct().toList();
+				Collection<ElectricNetwork> networks = msg.getComponents().stream().map(networkSpace::findNetworkAt).filter(Objects::nonNull).distinct().toList();
 				for (var n : networks) {
+					if (n == null) continue;
 					n.parseDataList(msg.getDataList());
 					n.setMaxPower(msg.getMaxPower());
 					n.setCurrentProduction(msg.getCurrentProduction());

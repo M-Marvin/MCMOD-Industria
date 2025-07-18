@@ -238,7 +238,7 @@ public class PortableCoalGeneratorBlock extends BaseEntityFixedMultiBlock implem
 	}
 	
 	@Override
-	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {
+	public NodePos[] getElectricConnections(Level level, BlockPos pos, BlockState instance) {
 		return getMBPos(instance).equals(new Vec3i(1, 0, 0)) ? NODES.getNodePositions(pos) : new NodePos[0];
 	}
 

@@ -248,9 +248,9 @@ dependencies {
 	// Debugging
 	runtimeOnly fg.deobf("curse.maven:jei-238222:6075247")
 	// vvv Remove before starting server vvv
-//	runtimeOnly fg.deobf("curse.maven:atlasviewer-633577:4882554")
-//	runtimeOnly fg.deobf("curse.maven:oculus-581495:6020952")
-//	runtimeOnly fg.deobf("curse.maven:embeddium-908741:5681725")
+	runtimeOnly fg.deobf("curse.maven:atlasviewer-633577:4882554")
+	runtimeOnly fg.deobf("curse.maven:oculus-581495:6020952")
+	runtimeOnly fg.deobf("curse.maven:embeddium-908741:5681725")
 	
 	//runtimeOnly fg.deobf("maven.modrinth:cosmic-horizons-cosmos:0.0.7.3")
 	

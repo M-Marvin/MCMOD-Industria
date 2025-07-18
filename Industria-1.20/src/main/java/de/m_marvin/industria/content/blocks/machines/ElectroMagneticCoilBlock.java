@@ -238,7 +238,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	}
 
 	@Override
-	public NodePos[] getConnections(Level level, BlockPos position, BlockState instance) {
+	public NodePos[] getElectricConnections(Level level, BlockPos position, BlockState instance) {
 		if (level.getBlockEntity(position) instanceof ElectroMagneticCoilBlockEntity coil) {
 			if (coil.isMaster()) return coil.getMaster().getConnections();
 		}

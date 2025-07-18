@@ -42,6 +42,7 @@ public class ClientKineticPackageHandler {
 				// On the client the network might be split because of unloaded chunks/components
 				Collection<KineticNetwork> networks = msg.getComponents().stream().map(networkSpace::findNetworkAt).distinct().toList();
 				for (var n : networks) {
+					if (n == null) continue;
 					n.setSpeedMap(msg.getSpeedMap());
 					n.setNetworkSpeed(msg.getSpeed());
 					n.setMaxPower(msg.getMaxPower());

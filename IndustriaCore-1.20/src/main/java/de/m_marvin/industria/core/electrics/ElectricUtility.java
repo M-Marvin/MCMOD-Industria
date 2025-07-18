@@ -107,7 +107,11 @@ public class ElectricUtility {
 	 * Runs necessary updates and triggers events
 	 */
 	public static void setNetworkState(Level level, Object pos, PowerNetState state) {
-		findNetworkAt(level, pos).setState(state);
+		ElectricNetwork network = findNetworkAt(level, pos);
+		if (network != null) {
+			network.setState(state);
+			updateNetwork(level, pos);
+		}
 	}
 	
 	/**

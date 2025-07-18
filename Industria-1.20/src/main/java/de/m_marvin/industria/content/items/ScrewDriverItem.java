@@ -5,7 +5,6 @@ import de.m_marvin.industria.core.scrollinput.engine.ScrollInputListener.ScrollC
 import de.m_marvin.industria.core.scrollinput.type.items.IScrollOverride;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.state.BlockState;
 

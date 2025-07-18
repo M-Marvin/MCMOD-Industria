@@ -98,8 +98,7 @@ public class CircuitSwitch extends AbstractWidget {
 		renderLamps(pGuiGraphics, this.lampState, this.lampState == 1 ? 1F : lm);
 		
 		// Network load bar
-		float load = (float) Math.min(1F, Math.max(0F, network.getCurrentConsumtion() / network.getMaxPower()));
-		renderBar(pGuiGraphics, load);
+		renderBar(pGuiGraphics, network.getNetworkLoad());
 		
 		// Lever Arrows
 		int a = (!this.leverState && network.isTripped()) ? (int) (this.time % 40 / 10) : 0;

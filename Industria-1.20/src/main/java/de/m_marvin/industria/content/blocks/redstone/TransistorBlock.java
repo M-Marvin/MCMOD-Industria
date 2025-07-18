@@ -139,7 +139,7 @@ public class TransistorBlock extends DiodeLikeBlock implements EntityBlock, IEle
 	}
 	
 	@Override
-	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {
+	public NodePos[] getElectricConnections(Level level, BlockPos pos, BlockState instance) {
 		return IntStream.range(0, NODE_COUNT).mapToObj(i -> new NodePos(pos, i)).toArray(i -> new NodePos[i]);
 	}
 

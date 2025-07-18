@@ -252,7 +252,7 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 			Set<ParametrizedReference<Object, NodePos>> connections = new HashSet<>();
 			for (NodePos node : nodes) {
 				for (ConduitEntity conduit : ConduitUtility.getConduitsAtNode(level, node)) {
-					if (conduit instanceof IElectricConduit) {
+					if (conduit.getConduit() instanceof IElectricConduit) {
 						connections.add(new ParametrizedReference<Object, NodePos>(conduit.getPosition(), node));
 					}
 				}

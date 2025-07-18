@@ -266,12 +266,13 @@ public class KineticNetwork extends SynchronizedFunctionalNetwork<KineticNetwork
 			
 		}
 		
-		// Send update to clients
-		IndustriaCore.NETWORK.send(KineticUtility.TRACKING_NETWORK.with(() -> this), new SUpdateKineticNetworkPackage(this));
-		
 	}
 	
 	public void updateComponents() {
+
+		// Send update to clients
+		if (!getLevel().isClientSide())
+			IndustriaCore.NETWORK.send(KineticUtility.TRACKING_NETWORK.with(() -> this), new SUpdateKineticNetworkPackage(this));
 		
 		// Update rotation speeds
 		for (Entry<Integer, KineticComponent> c : this.components.int2ObjectEntrySet()) {

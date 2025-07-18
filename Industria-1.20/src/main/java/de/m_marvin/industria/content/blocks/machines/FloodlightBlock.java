@@ -168,7 +168,7 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 	}
 	
 	@Override
-	public NodePos[] getConnections(Level level, BlockPos pos, BlockState instance) {
+	public NodePos[] getElectricConnections(Level level, BlockPos pos, BlockState instance) {
 		return NODES.getNodePositions(pos);
 	}
 	

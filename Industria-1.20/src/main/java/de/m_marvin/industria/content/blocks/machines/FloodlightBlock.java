@@ -84,14 +84,14 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 		if (pState.getValue(BlockStateProperties.ATTACH_FACE) == AttachFace.WALL) {
 			return VoxelShapeUtility.transformation()
 					.centered()
-					.rotateY(pState.getValue(BlockStateProperties.HORIZONTAL_FACING).get2DDataValue() * 90)
+					.rotateY(pState.getValue(BlockStateProperties.HORIZONTAL_FACING).get2DDataValue() * -90)
 					.uncentered()
 					.transform(SHAPE);
 		} else {
 			VoxelShape s = VoxelShapeUtility.transformation()
 					.centered()
-					.rotateX(pState.getValue(BlockStateProperties.ATTACH_FACE) == AttachFace.CEILING ? -90 : 90)
-					.rotateY(pState.getValue(BlockStateProperties.HORIZONTAL_FACING).get2DDataValue() * 90)
+					.rotateX(pState.getValue(BlockStateProperties.ATTACH_FACE) == AttachFace.CEILING ? 90 : -90)
+					.rotateY(pState.getValue(BlockStateProperties.HORIZONTAL_FACING).get2DDataValue() * -90)
 					.uncentered()
 					.transform(SHAPE);
 			return s;

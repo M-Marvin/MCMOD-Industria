@@ -108,7 +108,7 @@ public class BeltBlock extends BaseEntityBlock implements IKineticBlock {
 				
 				VoxelShape shape = pState.getValue(IS_END) ? SHAPE_SLOPE_END : SHAPE_SLOPE;
 				
-				int angle = orientation.getAngleFromPositiveX() - 45;
+				int angle = orientation.getAngleFromPositiveX() + 45;
 				if (axis == Axis.Z) angle = -angle + 90;
 				if (axis == Axis.Y) angle -= 90;
 				
@@ -124,12 +124,13 @@ public class BeltBlock extends BaseEntityBlock implements IKineticBlock {
 				VoxelShape shape = pState.getValue(IS_END) ? SHAPE_STRAIGHT_END : SHAPE_STRAIGHT;
 
 				int angle = orientation.getAngleFromPositiveX();
-				if (axis == Axis.Y) angle -= 90;
+				if (axis == Axis.X) angle += 90;
+				if (axis == Axis.Z) angle -= 90;
 				
 				return VoxelShapeUtility.transformation()
 						.centered()
 						.rotateFromAxisX(axis)
-						.rotateAround(axis, angle)
+						.rotateAround(axis, -angle)
 						.uncentered()
 						.transform(shape);
 				

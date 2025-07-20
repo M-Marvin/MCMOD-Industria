@@ -82,5 +82,9 @@
 	{
 		"block": "industria:portable_fuel_generator",
 		"mass": 1500
+	},
+	{
+		"block": "industria:electro_magnetic_coil",
+		"mass": 6000
 	}
 ]

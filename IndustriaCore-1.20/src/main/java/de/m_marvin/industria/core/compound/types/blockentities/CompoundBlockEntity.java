@@ -20,8 +20,10 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class CompoundBlockEntity extends BlockEntity implements IKineticBlockEntity {
 
@@ -53,9 +55,10 @@ public class CompoundBlockEntity extends BlockEntity implements IKineticBlockEnt
 		return parts;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public int countParts() {
 		return (int) parts.values().stream()
-			.filter(v -> !v.getState().isAir())
+			.filter(v -> !v.getState().isAir() && !v.getState().liquid())
 			.count();
 	}
 	
@@ -66,10 +69,16 @@ public class CompoundBlockEntity extends BlockEntity implements IKineticBlockEnt
 	public void checkCompound() {
 		int i = countParts();
 		if (i == 0) {
-			level.setBlockAndUpdate(worldPosition, Blocks.AIR.defaultBlockState());
+			if (getBlockState().getValue(BlockStateProperties.WATERLOGGED))
+				level.setBlockAndUpdate(worldPosition, Blocks.WATER.defaultBlockState());
+			else
+				level.setBlockAndUpdate(worldPosition, Blocks.AIR.defaultBlockState());
 		} else if (i == 1) {
 			VirtualBlock part = parts.values().stream().filter(v -> !v.getState().isAir()).findAny().get();
-			level.setBlockAndUpdate(worldPosition, part.getState());
+			BlockState state = part.getState();
+			if (state.getBlock() instanceof SimpleWaterloggedBlock)
+				state = state.setValue(BlockStateProperties.WATERLOGGED, getBlockState().getValue(BlockStateProperties.WATERLOGGED));
+			level.setBlockAndUpdate(worldPosition, state);
 			if (part.getBlockEntity() != null) {
 				level.setBlockEntity(part.getBlockEntity());
 				part.getBlockEntity().setLevel(level);
@@ -105,6 +114,17 @@ public class CompoundBlockEntity extends BlockEntity implements IKineticBlockEnt
 		for (; this.parts.containsKey(id); id++)
 			if (this.parts.get(id).getState().isAir()) break;
 		var virtualBlock = this.parts.get(id);
+		
+		// Do not allow waterlogged blocks in compound, instead apply water logging to compound
+		if (state.getBlock() instanceof SimpleWaterloggedBlock) {
+			if (state.getValue(BlockStateProperties.WATERLOGGED)) {
+				state = state.setValue(BlockStateProperties.WATERLOGGED, false);
+				if (!getBlockState().getValue(BlockStateProperties.WATERLOGGED)) {
+					getLevel().setBlockAndUpdate(getBlockPos(), getBlockState().setValue(BlockStateProperties.WATERLOGGED, true));
+				}
+			}
+		}
+		
 		if (!this.parts.containsKey(id)) {
 			virtualBlock = new VirtualBlock(this::getBlockPos);
 			virtualBlock.setBlock(state);
@@ -134,11 +154,12 @@ public class CompoundBlockEntity extends BlockEntity implements IKineticBlockEnt
 		getLevel().scheduleTick(getBlockPos(), getBlockState().getBlock(), 1);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void saveAdditional(CompoundTag pTag) {
 		CompoundTag parts = new CompoundTag();
 		for (var part : this.parts.entrySet()) {
-			if (part.getValue().getState().isAir()) continue;
+			if (part.getValue().getState().isAir() && !part.getValue().getState().liquid()) continue;
 			parts.put(Integer.toString(part.getKey()), part.getValue().serialize());
 		}
 		pTag.put("Parts", parts);

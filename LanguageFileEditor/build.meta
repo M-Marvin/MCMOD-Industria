@@ -1,0 +1,59 @@
+import de.m_marvin.metabuild.core.script.BuildScript;
+import de.m_marvin.metabuild.java.script.JavaBuildScript;
+import de.m_marvin.metabuild.maven.Maven;
+import de.m_marvin.metabuild.maven.types.Repository;
+import de.m_marvin.metabuild.maven.types.Repository.Credentials;
+
+public class Buildfile extends JavaBuildScript {
+	
+	@Override
+	public void init() {
+		
+		projectName = "LanguageFileEditor";
+		
+		super.init();
+		
+		makeRunnable();
+		packageExecutable();
+		
+	}
+	
+	@Override
+	public void manifest() {
+		
+		jar.metainfo.put("Main-Class", "de.m_marvin.languagefileeditor.LanguageFileEditor");
+		
+	}
+	
+	@Override
+	public void repositories() {
+		
+		dependencies.repository(new Repository(
+				"GHP - OpenUI", 
+				"https://maven.pkg.github.com/m-marvin/library-openui",
+				new Credentials(
+						() -> System.getenv("GITHUB_ACTOR"), 
+						() -> System.getenv("GITHUB_TOKEN")
+				)
+		));
+		
+		dependencies.repository(Maven.mavenCentral());
+		
+		dependencies.repository(Maven.mavenLocal());
+		
+	}
+	
+	@Override
+	public void dependencies() {
+		
+		dependencies.implementation("org.lwjgl:lwjgl:3.3.3:natives-windows");
+		dependencies.implementation("org.lwjgl:lwjgl-opengl:3.3.3:natives-windows");
+		
+		dependencies.implementation("de.m_marvin.openui:openui:1.3.4");
+		
+		dependencies.implementation("de.m_marvin.simplelogging:simplelogging:2.3");
+		dependencies.implementation("de.m_marvin.gframe:gframe:1.4.4");
+		
+	}
+	
+}

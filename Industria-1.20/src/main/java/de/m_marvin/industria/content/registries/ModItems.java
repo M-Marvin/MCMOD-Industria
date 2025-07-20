@@ -4,6 +4,8 @@ import de.m_marvin.industria.content.Industria;
 import de.m_marvin.industria.content.items.ConduitCableItem;
 import de.m_marvin.industria.content.items.ConduitCoilItem;
 import de.m_marvin.industria.content.items.ScrewDriverItem;
+import de.m_marvin.industria.core.compound.types.items.CompoundableBlockItem;
+import de.m_marvin.industria.core.kinetics.types.items.BeltItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
@@ -62,6 +64,14 @@ public class ModItems {
 	public static final RegistryObject<BlockItem> IONIC_THRUSTER						= ITEMS.register("ionic_thruster", () -> new BlockItem(ModBlocks.IONIC_THRUSTER.get(), new Item.Properties()));
 	
 	public static final RegistryObject<BlockItem> REDSTONE_TRANSITOR					= ITEMS.register("redstone_transistor", () -> new BlockItem(ModBlocks.REDSTONE_TRANSISTOR.get(), new Item.Properties()));
+	
+	public static final RegistryObject<BlockItem> IRON_SHAFT							= ITEMS.register("iron_shaft", () -> new CompoundableBlockItem(ModBlocks.IRON_SHAFT.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> SHORT_IRON_SHAFT_1					= ITEMS.register("short_iron_shaft_1", () -> new CompoundableBlockItem(ModBlocks.SHORT_IRON_SHAFT_1.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> SHORT_IRON_SHAFT_2					= ITEMS.register("short_iron_shaft_2", () -> new CompoundableBlockItem(ModBlocks.SHORT_IRON_SHAFT_2.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> OAK_WOOD_GEAR							= ITEMS.register("oak_wood_gear", () -> new CompoundableBlockItem(ModBlocks.OAK_WOOD_GEAR.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> LARGE_OAK_WOOD_GEAR					= ITEMS.register("large_oak_wood_gear", () -> new CompoundableBlockItem(ModBlocks.LARGE_OAK_WOOD_GEAR.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> RUBBER_BELT							= ITEMS.register("rubber_belt", () -> new BeltItem(ModBlocks.RUBBER_BELT.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> BELT_SHAFT							= ITEMS.register("belt_shaft", () -> new CompoundableBlockItem(ModBlocks.BELT_SHAFT.get(), new Item.Properties()));
 	
 	public static final RegistryObject<Item> ALUMINUM_INGOT								= ITEMS.register("aluminum_ingot", () -> new Item(new Item.Properties()));
 	public static final RegistryObject<Item> BRASS_INGOT								= ITEMS.register("brass_ingot", () -> new Item(new Item.Properties()));
@@ -578,8 +588,8 @@ public class ModItems {
 			})
 			.build()
 	);
-	public static final RegistryObject<CreativeModeTab> MACHINES_TAB = CREATIVE_MODE_TABS.register("machines", () -> CreativeModeTab.builder()
-			.title(Component.translatable("industria.creative_tab.machines"))
+	public static final RegistryObject<CreativeModeTab> ELECTRICS_TAB = CREATIVE_MODE_TABS.register("electrics", () -> CreativeModeTab.builder()
+			.title(Component.translatable("industria.creative_tab.electrics"))
 			.icon(() -> TIN_WIRE_HOLDER.get().getDefaultInstance())
 			.displayItems((displayParams, output) -> {
 				output.accept(COPPER_WIRE.get().getDefaultInstance());
@@ -621,6 +631,20 @@ public class ModItems {
 				output.accept(REDSTONE_TRANSITOR.get().getDefaultInstance());
 			})
 			.build()
+	);
+	public static final RegistryObject<CreativeModeTab> KINETICS_TAB = CREATIVE_MODE_TABS.register("kinetics", () -> CreativeModeTab.builder()
+			.title(Component.translatable("industria.creative_tab.kinetics"))
+			.icon(() -> OAK_WOOD_GEAR.get().getDefaultInstance())
+			.displayItems((displayParams, output) -> {
+				output.accept(IRON_SHAFT.get().getDefaultInstance());
+				output.accept(SHORT_IRON_SHAFT_2.get().getDefaultInstance());
+				output.accept(SHORT_IRON_SHAFT_1.get().getDefaultInstance());
+				output.accept(OAK_WOOD_GEAR.get().getDefaultInstance());
+				output.accept(LARGE_OAK_WOOD_GEAR.get().getDefaultInstance());
+				output.accept(RUBBER_BELT.get().getDefaultInstance());
+				output.accept(BELT_SHAFT.get().getDefaultInstance());
+			})
+			.build()	
 	);
 	public static final RegistryObject<CreativeModeTab> TOOLS_TAB = CREATIVE_MODE_TABS.register("tools", () -> CreativeModeTab.builder()
 			.title(Component.translatable("industria.creative_tab.tools"))

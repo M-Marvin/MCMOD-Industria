@@ -14,15 +14,18 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class ShaftBlock extends BaseEntityBlock implements IKineticBlock {
+public class ShaftBlock extends BaseEntityBlock implements IKineticBlock, SimpleWaterloggedBlock {
 
 	public static final EnumProperty<Axis> AXIS = BlockStateProperties.AXIS;
 
@@ -30,11 +33,17 @@ public class ShaftBlock extends BaseEntityBlock implements IKineticBlock {
 	
 	public ShaftBlock(Properties pProperties) {
 		super(pProperties);
+		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false).setValue(AXIS, Axis.X));
 	}
 	
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> pBuilder) {
-		pBuilder.add(AXIS);
+		pBuilder.add(AXIS, BlockStateProperties.WATERLOGGED);
+	}
+
+	@Override
+	public FluidState getFluidState(BlockState pState) {
+		return pState.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource().defaultFluidState() : Fluids.EMPTY.defaultFluidState();
 	}
 	
 	@Override
@@ -56,7 +65,8 @@ public class ShaftBlock extends BaseEntityBlock implements IKineticBlock {
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext pContext) {
 		Axis axis = pContext.getClickedFace().getAxis();
-		return this.defaultBlockState().setValue(AXIS, axis);
+		boolean waterlogged = pContext.getLevel().getFluidState(pContext.getClickedPos()).isSourceOfType(Fluids.WATER);
+		return this.defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, waterlogged).setValue(AXIS, axis);
 	}
 	
 	@Override

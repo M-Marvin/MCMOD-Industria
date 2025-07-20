@@ -2,6 +2,8 @@ package de.m_marvin.industria.content.registries;
 
 import de.m_marvin.industria.content.Industria;
 import de.m_marvin.industria.content.blockentities.ConduitCoilBlockEntity;
+import de.m_marvin.industria.content.blockentities.kinetics.BaseBeltBlockEntity;
+import de.m_marvin.industria.content.blockentities.kinetics.BaseSimpleKineticBlockEntity;
 import de.m_marvin.industria.content.blockentities.machines.ElectroMagneticCoilBlockEntity;
 import de.m_marvin.industria.content.blockentities.machines.FloodlightBlockEntity;
 import de.m_marvin.industria.content.blockentities.machines.IonicThrusterBlockEntity;
@@ -28,5 +30,15 @@ public class ModBlockEntityTypes {
 	public static final RegistryObject<BlockEntityType<IonicThrusterBlockEntity>>			IONIC_THRUSTER				= BLOCK_ENTITY_TYPES.register("ionic_thruster", () -> BlockEntityType.Builder.of(IonicThrusterBlockEntity::new, ModBlocks.IONIC_THRUSTER.get()).build(null));
 	public static final RegistryObject<BlockEntityType<TransistorBlockEntity>> 				TRANSISTOR					= BLOCK_ENTITY_TYPES.register("transistor", () -> BlockEntityType.Builder.of(TransistorBlockEntity::new, ModBlocks.REDSTONE_TRANSISTOR.get()).build(null));
 	public static final RegistryObject<BlockEntityType<ElectroMagneticCoilBlockEntity>> 	ELECTRO_MAGNETIC_COIL		= BLOCK_ENTITY_TYPES.register("electro_magnetic_coil", () -> BlockEntityType.Builder.of(ElectroMagneticCoilBlockEntity::new, ModBlocks.ELECTRO_MAGNETIC_COIL.get()).build(null));
+	
+	public static final RegistryObject<BlockEntityType<BaseSimpleKineticBlockEntity>> 		BASE_SIMPLE_KINETIC 		= BLOCK_ENTITY_TYPES.register("simple_kinetic", () -> BlockEntityType.Builder.of(BaseSimpleKineticBlockEntity::new,
+			ModBlocks.IRON_SHAFT.get(),
+			ModBlocks.SHORT_IRON_SHAFT_1.get(),
+			ModBlocks.SHORT_IRON_SHAFT_2.get(),
+			ModBlocks.OAK_WOOD_GEAR.get(),
+			ModBlocks.LARGE_OAK_WOOD_GEAR.get(),
+			ModBlocks.BELT_SHAFT.get()
+			).build(null));
+	public static final RegistryObject<BlockEntityType<BaseBeltBlockEntity>>				BASE_BELT					= BLOCK_ENTITY_TYPES.register("base_belt", () -> BlockEntityType.Builder.of(BaseBeltBlockEntity::new, ModBlocks.RUBBER_BELT.get()).build(null));
 	
 }

@@ -34,17 +34,20 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, IElectricInfoProvider {
+public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, IElectricInfoProvider, SimpleWaterloggedBlock {
 	
 	public static final NodePointSupplier NODES = NodePointSupplier.define()
 			.addNode(NodeTypes.ELECTRIC, 2, new Vec3i(0, 8, 13))
@@ -57,6 +60,7 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 	
 	public FloodlightBlock(Properties pProperties) {
 		super(pProperties);
+		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false));
 	}
 
 	@Override
@@ -65,6 +69,11 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 		pBuilder.add(BlockStateProperties.ATTACH_FACE);
 		pBuilder.add(BlockStateProperties.LIT);
 		pBuilder.add(BlockStateProperties.WATERLOGGED);
+	}
+
+	@Override
+	public FluidState getFluidState(BlockState pState) {
+		return pState.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource().defaultFluidState() : Fluids.EMPTY.defaultFluidState();
 	}
 	
 	@Override
@@ -76,7 +85,8 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 		} else {
 			blockstate = this.defaultBlockState().setValue(BlockStateProperties.ATTACH_FACE, AttachFace.WALL).setValue(BlockStateProperties.HORIZONTAL_FACING, direction.getOpposite());
 		}
-		return blockstate.setValue(BlockStateProperties.LIT, false);
+		boolean waterlogged = pContext.getLevel().getFluidState(pContext.getClickedPos()).isSourceOfType(Fluids.WATER);
+		return blockstate.setValue(BlockStateProperties.WATERLOGGED, waterlogged).setValue(BlockStateProperties.LIT, false);
 	}
 	
 	@Override

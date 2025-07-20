@@ -61,6 +61,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -77,6 +79,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	
 	public ElectroMagneticCoilBlock(Properties pProperties) {
 		super(pProperties);
+		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false));
 	}
 	
 	@Override
@@ -134,6 +137,12 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
 		if (pLevel.getBlockEntity(pPos) instanceof ElectroMagneticCoilBlockEntity coil) {
 			if (coil.isMaster()) {
+				
+				if (pState.getBlock() == pNewState.getBlock()) {
+					if (pState.equals(pNewState.setValue(BlockStateProperties.WATERLOGGED, pState.getValue(BlockStateProperties.WATERLOGGED))))
+						return;
+				}
+				
 				coil.dropWires();
 			}
 		}
@@ -157,6 +166,11 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 		pBuilder.add(ModBlockStateProperties.CONNECT);
 		pBuilder.add(BlockStateProperties.WATERLOGGED);
 	}
+
+	@Override
+	public FluidState getFluidState(BlockState pState) {
+		return pState.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource().defaultFluidState() : Fluids.EMPTY.defaultFluidState();
+	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext pContext) {
@@ -164,7 +178,8 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 		Direction facing = pContext.getNearestLookingDirection();
 		BlockState attachState = pContext.getLevel().getBlockState(pContext.getClickedPos().relative(attachFace));
 		if (attachState.getBlock() instanceof ElectroMagneticCoilBlock) facing = attachState.getValue(BlockStateProperties.FACING);
-		return super.getStateForPlacement(pContext)
+		boolean waterlogged = pContext.getLevel().getFluidState(pContext.getClickedPos()).isSourceOfType(Fluids.WATER);
+		return this.defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, waterlogged)
 				.setValue(BlockStateProperties.NORTH, false)
 				.setValue(BlockStateProperties.SOUTH, false)
 				.setValue(BlockStateProperties.EAST, false)
@@ -418,6 +433,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 									.setValue(BlockStateProperties.WEST, x == min.getX() ? false : outerBlock)
 									.setValue(BlockStateProperties.UP, y == max.getY() ? false : outerBlock)
 									.setValue(BlockStateProperties.DOWN, y == min.getY() ? false : outerBlock);
+//									.setValue(BlockStateProperties.WATERLOGGED, state2.getValue(BlockStateProperties.WATERLOGGED));
 							
 							if (!connectedState.equals(state2)) {
 								hasChanged = true;
@@ -499,13 +515,8 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 		updateConnections(pLevel, pPos, pState);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-		
-		InteractionResult r = GameUtility.openJunctionBlockEntityUI(pLevel, pPos, pPlayer, pHand);
-		if (r != InteractionResult.PASS) return r;
-		
 		if (pLevel.getBlockEntity(pPos) instanceof ElectroMagneticCoilBlockEntity transformer) {
 			ElectroMagneticCoilBlockEntity transformerMaster = transformer.getMaster();
 			ItemStack handItem = pPlayer.getItemInHand(pHand);
@@ -602,7 +613,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 				
 			}
 		}
-		return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
+		return InteractionResult.PASS;
 	}
 	
 	@Override

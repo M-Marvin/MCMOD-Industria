@@ -18,18 +18,21 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class GearBlock extends BaseEntityBlock implements IKineticBlock {
+public class GearBlock extends BaseEntityBlock implements IKineticBlock, SimpleWaterloggedBlock {
 	
 	public static final EnumProperty<Axis> AXIS = BlockStateProperties.AXIS;
 	public static final EnumProperty<AxisOffset> POS = Blocks.PROP_GEAR_POS;
@@ -38,6 +41,7 @@ public class GearBlock extends BaseEntityBlock implements IKineticBlock {
 	
 	public GearBlock(Properties pProperties) {
 		super(pProperties);
+		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false).setValue(AXIS, Axis.X).setValue(POS, AxisOffset.CENTER));
 	}
 	
 	@Override
@@ -55,7 +59,12 @@ public class GearBlock extends BaseEntityBlock implements IKineticBlock {
 	
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> pBuilder) {
-		pBuilder.add(AXIS, POS);
+		pBuilder.add(AXIS, POS, BlockStateProperties.WATERLOGGED);
+	}
+	
+	@Override
+	public FluidState getFluidState(BlockState pState) {
+		return pState.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource().defaultFluidState() : Fluids.EMPTY.defaultFluidState();
 	}
 	
 	@Override
@@ -90,7 +99,8 @@ public class GearBlock extends BaseEntityBlock implements IKineticBlock {
 			if (axisHit < 5) offset = AxisOffset.BACK;
 			if (axisHit > 10) offset = AxisOffset.FRONT;
 		}
-		return this.defaultBlockState().setValue(AXIS, axis).setValue(POS, offset);
+		boolean waterlogged = pContext.getLevel().getFluidState(pContext.getClickedPos()).isSourceOfType(Fluids.WATER);
+		return this.defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, waterlogged).setValue(AXIS, axis).setValue(POS, offset);
 	}
 
 	@Override

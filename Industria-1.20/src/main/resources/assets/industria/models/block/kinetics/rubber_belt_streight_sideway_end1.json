@@ -1,0 +1,7 @@
+{
+	"parent": "industriacore:block/belt_streight_sideway_end1",
+	"textures": {
+		"0": "industria:block/kinetics/rubber_belt",
+		"particle": "industria:block/kinetics/rubber_belt_particle"
+	}
+}

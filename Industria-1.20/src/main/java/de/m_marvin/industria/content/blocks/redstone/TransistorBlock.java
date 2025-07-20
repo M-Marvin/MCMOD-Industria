@@ -125,7 +125,7 @@ public class TransistorBlock extends DiodeLikeBlock implements EntityBlock, IEle
 	
 	@Override
 	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-		return GameUtility.openElectricBlockEntityUI(pLevel, pPos, pPlayer, pHand);
+		return GameUtility.openJunctionBlockEntityUI(pLevel, pPos, pPlayer, pHand);
 	}
 	
 	@Override

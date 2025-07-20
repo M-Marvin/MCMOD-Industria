@@ -19,17 +19,20 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class BeltBlock extends BaseEntityBlock implements IKineticBlock {
+public class BeltBlock extends BaseEntityBlock implements IKineticBlock, SimpleWaterloggedBlock {
 	
 	public static final EnumProperty<Axis> AXIS = BlockStateProperties.AXIS;
 	public static final EnumProperty<DiagonalPlanarDirection> ORIENTATION = Blocks.PROP_PLANAR_ORIENTATION;
@@ -77,13 +80,17 @@ public class BeltBlock extends BaseEntityBlock implements IKineticBlock {
 	
 	public BeltBlock(Properties pProperties) {
 		super(pProperties);
+		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false).setValue(AXIS, Axis.X).setValue(ORIENTATION, DiagonalPlanarDirection.X_POS).setValue(IS_END, false));
 	}
 
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> pBuilder) {
-		pBuilder.add(AXIS);
-		pBuilder.add(ORIENTATION);
-		pBuilder.add(IS_END);
+		pBuilder.add(AXIS, ORIENTATION, IS_END, BlockStateProperties.WATERLOGGED);
+	}
+
+	@Override
+	public FluidState getFluidState(BlockState pState) {
+		return pState.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource().defaultFluidState() : Fluids.EMPTY.defaultFluidState();
 	}
 	
 	@Override

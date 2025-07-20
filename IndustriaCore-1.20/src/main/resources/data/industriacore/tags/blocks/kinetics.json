@@ -6,7 +6,8 @@
 		"industriacore:shaft",
 		"industriacore:short_shaft_1",
 		"industriacore:short_shaft_2",
-		"industriacore:motor",
-		"industriacore:compound_kinetic"
+		"industriacore:belt_shaft",
+		"industriacore:belt",
+		"industriacore:motor"
 	]
 }

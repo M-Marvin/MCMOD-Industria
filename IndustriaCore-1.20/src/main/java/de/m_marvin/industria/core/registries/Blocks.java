@@ -42,7 +42,7 @@ public class Blocks {
 	public static final RegistryObject<Block> SHORT_SHAFT_1 =		BLOCKS.register("short_shaft_1", () -> new ShortShaftBlock(false, Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(-1.0F, 3600000.0F).noLootTable()));
 	public static final RegistryObject<Block> SHORT_SHAFT_2 =		BLOCKS.register("short_shaft_2", () -> new ShortShaftBlock(true, Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(-1.0F, 3600000.0F).noLootTable()));
 	public static final RegistryObject<Block> MOTOR = 				BLOCKS.register("motor", () -> new MotorBlock(Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(-1.0F, 3600000.0F).noLootTable()));
-	public static final RegistryObject<Block> COMPOUND_BLOCK = 		BLOCKS.register("compound_block", () -> new CompoundBlock(Properties.of().strength(-1F, 3600000.0F).mapColor(MapColor.COLOR_ORANGE).noLootTable().noParticlesOnBreak().dynamicShape()));
+	public static final RegistryObject<Block> COMPOUND_BLOCK = 		BLOCKS.register("compound_block", () -> new CompoundBlock(Properties.of().strength(-1F, 3600000.0F).mapColor(MapColor.COLOR_ORANGE).noLootTable().noParticlesOnBreak().dynamicShape().forceSolidOn()));
 	public static final RegistryObject<BeltBlock> BELT = 			BLOCKS.register("belt", () -> new BeltBlock(Properties.of().strength(-1F, 3600000.0F).mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops().noLootTable()));
 	public static final RegistryObject<Block> BELT_SHAFT = 			BLOCKS.register("belt_shaft", () -> new BeltShaftBlock(Properties.of().mapColor(MapColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(-1.0F, 3600000.0F).noLootTable()));
 	

@@ -36,6 +36,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -50,6 +52,7 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricBlock,
 	
 	public JunctionBoxBlock(Properties pProperties) {
 		super(pProperties);
+		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false).setValue(BlockStateProperties.FACING, Direction.NORTH));
 	}
 
 	@Override
@@ -64,7 +67,12 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricBlock,
 
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> pBuilder) {
-		pBuilder.add(BlockStateProperties.FACING);
+		pBuilder.add(BlockStateProperties.FACING, BlockStateProperties.WATERLOGGED);
+	}
+
+	@Override
+	public FluidState getFluidState(BlockState pState) {
+		return pState.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource().defaultFluidState() : Fluids.EMPTY.defaultFluidState();
 	}
 	
 	@Override
@@ -83,7 +91,8 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricBlock,
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		final Direction preferred = context.getClickedFace().getOpposite();
-		return (BlockState) this.defaultBlockState().setValue(BlockStateProperties.FACING, preferred);
+		boolean waterlogged = context.getLevel().getFluidState(context.getClickedPos()).isSourceOfType(Fluids.WATER);
+		return (BlockState) this.defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, waterlogged).setValue(BlockStateProperties.FACING, preferred);
 	}
 
 	@Override

@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"facing=north": { "model": "industria:block/kinetics/short_iron_shaft_2" },
+		"facing=south": { "model": "industria:block/kinetics/short_iron_shaft_2", "y": -180 },
+		"facing=east": { "model": "industria:block/kinetics/short_iron_shaft_2", "y": 90 },
+		"facing=west": { "model": "industria:block/kinetics/short_iron_shaft_2", "y": -90 },
+		"facing=up": { "model": "industria:block/kinetics/short_iron_shaft_2", "x": -90 },
+		"facing=down": { "model": "industria:block/kinetics/short_iron_shaft_2", "x": 90 }
+	}
+}

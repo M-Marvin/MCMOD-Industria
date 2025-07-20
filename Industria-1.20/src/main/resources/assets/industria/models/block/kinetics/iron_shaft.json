@@ -1,0 +1,7 @@
+{
+	"parent": "industriacore:block/shaft",
+	"textures": {
+		"2": "industria:block/kinetics/iron_shaft",
+		"particle": "industria:block/kinetics/iron_shaft"
+	}
+}

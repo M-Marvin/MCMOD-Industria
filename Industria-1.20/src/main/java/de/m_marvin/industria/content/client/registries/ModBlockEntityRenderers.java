@@ -3,6 +3,8 @@ package de.m_marvin.industria.content.client.registries;
 import de.m_marvin.industria.content.Industria;
 import de.m_marvin.industria.content.client.blockentityrenderer.ElectroMagneticCoilBlockEntityRenderer;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
+import de.m_marvin.industria.core.client.kinetics.blockentityrenderers.BeltBlockEntityRenderer;
+import de.m_marvin.industria.core.client.kinetics.blockentityrenderers.SimpleKineticBlockEntityRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent.RegisterRenderers;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -15,6 +17,8 @@ public class ModBlockEntityRenderers {
 	public static void onClientSetup(RegisterRenderers event) {
 		
 		event.registerBlockEntityRenderer(ModBlockEntityTypes.ELECTRO_MAGNETIC_COIL.get(), ElectroMagneticCoilBlockEntityRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntityTypes.BASE_SIMPLE_KINETIC.get(), SimpleKineticBlockEntityRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntityTypes.BASE_BELT.get(), BeltBlockEntityRenderer::new);
 		
 	}
 	

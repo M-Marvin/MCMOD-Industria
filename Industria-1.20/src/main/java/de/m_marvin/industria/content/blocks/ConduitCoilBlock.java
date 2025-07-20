@@ -6,22 +6,26 @@ import de.m_marvin.industria.content.registries.ModBlockStateProperties;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class ConduitCoilBlock extends BaseEntityBlock {
+public class ConduitCoilBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
 	
 	public static final VoxelShape SHAPE_0 = Shapes.join(Shapes.or(VoxelShapeUtility.box(0, 0, 0, 16, 16, 2), VoxelShapeUtility.box(0, 0, 14, 16, 16, 16), VoxelShapeUtility.box(5, 5, 2, 11, 11, 14)), VoxelShapeUtility.box(6, 6, 0, 10, 10, 16), BooleanOp.ONLY_FIRST);
 	public static final VoxelShape SHAPE_1 = Shapes.join(Shapes.or(VoxelShapeUtility.box(0, 0, 0, 16, 16, 2), VoxelShapeUtility.box(0, 0, 14, 16, 16, 16), VoxelShapeUtility.box(4, 4, 2, 12, 12, 14)), VoxelShapeUtility.box(6, 6, 0, 10, 10, 16), BooleanOp.ONLY_FIRST);
@@ -34,6 +38,7 @@ public class ConduitCoilBlock extends BaseEntityBlock {
 	public ConduitCoilBlock(Properties pProperties, boolean holdConduits) {
 		super(pProperties);
 		this.holdsConduits = holdConduits;
+		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false).setValue(BlockStateProperties.AXIS, Axis.X).setValue(ModBlockStateProperties.LAYERS, 4));
 	}
 
 	public boolean holdsConduits() {
@@ -60,13 +65,18 @@ public class ConduitCoilBlock extends BaseEntityBlock {
 	
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> pBuilder) {
-		pBuilder.add(BlockStateProperties.AXIS);
-		pBuilder.add(ModBlockStateProperties.LAYERS);
+		pBuilder.add(BlockStateProperties.AXIS, ModBlockStateProperties.LAYERS, BlockStateProperties.WATERLOGGED);
+	}
+
+	@Override
+	public FluidState getFluidState(BlockState pState) {
+		return pState.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource().defaultFluidState() : Fluids.EMPTY.defaultFluidState();
 	}
 	
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-		BlockState state = defaultBlockState().setValue(BlockStateProperties.AXIS, pContext.getNearestLookingDirection().getAxis());
+		boolean waterlogged = pContext.getLevel().getFluidState(pContext.getClickedPos()).isSourceOfType(Fluids.WATER);
+		BlockState state = this.defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, waterlogged).setValue(BlockStateProperties.AXIS, pContext.getNearestLookingDirection().getAxis());
 		if (holdsConduits) {
 			int wireLength = Math.max(1, Math.min(4, (int) (pContext.getItemInHand().getOrCreateTag().getInt("WireLength") / (float) ConduitCoilItem.MAX_WIRES_ON_COIL * 4)));
 			state = state.setValue(ModBlockStateProperties.LAYERS, wireLength);

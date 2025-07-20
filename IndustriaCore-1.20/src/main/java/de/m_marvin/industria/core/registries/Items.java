@@ -3,7 +3,6 @@ package de.m_marvin.industria.core.registries;
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.compound.types.items.CompoundableBlockItem;
 import de.m_marvin.industria.core.conduits.types.items.AbstractConduitItem;
-import de.m_marvin.industria.core.kinetics.types.blocks.BeltBlock;
 import de.m_marvin.industria.core.kinetics.types.items.BeltItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -33,8 +32,8 @@ public class Items {
 	public static final RegistryObject<BlockItem> SHORT_SHAFT_2 = 	ITEMS.register("short_shaft_2", () -> new CompoundableBlockItem(Blocks.SHORT_SHAFT_2.get(), new Item.Properties().rarity(Rarity.EPIC)));
 	public static final RegistryObject<BlockItem> MOTOR = 			ITEMS.register("motor", () -> new BlockItem(Blocks.MOTOR.get(), new Item.Properties().rarity(Rarity.EPIC)));
 	public static final RegistryObject<BlockItem> COMPOUND_BLOCK =	ITEMS.register("compound_block", () -> new BlockItem(Blocks.COMPOUND_BLOCK.get(), new Item.Properties().rarity(Rarity.EPIC)));
-	public static final RegistryObject<BlockItem> BELT =			ITEMS.register("belt", () -> new BeltItem<BeltBlock>(Blocks.BELT.get(), new Item.Properties().rarity(Rarity.EPIC)));
-	public static final RegistryObject<BlockItem> BELT_SHAFT = 			ITEMS.register("belt_shaft", () -> new CompoundableBlockItem(Blocks.BELT_SHAFT.get(), new Item.Properties().rarity(Rarity.EPIC)));
+	public static final RegistryObject<BlockItem> BELT =			ITEMS.register("belt", () -> new BeltItem(Blocks.BELT.get(), new Item.Properties().rarity(Rarity.EPIC)));
+	public static final RegistryObject<BlockItem> BELT_SHAFT = 		ITEMS.register("belt_shaft", () -> new CompoundableBlockItem(Blocks.BELT_SHAFT.get(), new Item.Properties().rarity(Rarity.EPIC)));
 	
 	public static final RegistryObject<AbstractConduitItem> ELECTRIC_WIRE = ITEMS.register("electric_wire", () -> new AbstractConduitItem(new Item.Properties().rarity(Rarity.EPIC), Conduits.ELECTRIC_CONDUIT) {
 		@Override

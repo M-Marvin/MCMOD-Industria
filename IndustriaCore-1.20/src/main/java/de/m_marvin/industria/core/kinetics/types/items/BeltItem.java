@@ -17,12 +17,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.Fluids;
 
-public class BeltItem<T extends BeltBlock> extends CompoundableBlockItem implements IScrollOverride {
+public class BeltItem extends CompoundableBlockItem implements IScrollOverride {
 	
-	protected final T belt;
+	protected final BeltBlock belt;
 	
-	public BeltItem(T block, Properties pProperties) {
+	public BeltItem(BeltBlock block, Properties pProperties) {
 		super(block, pProperties);
 		this.belt = block;
 	}
@@ -111,6 +112,8 @@ public class BeltItem<T extends BeltBlock> extends CompoundableBlockItem impleme
 		
 		DiagonalDirection direction = DiagonalDirection.getNearest(diff.getX(), diff.getY(), diff.getZ());
 		DiagonalPlanarDirection orientation = direction.onPlanarWithAxis(axis);
+		if (orientation == null) return InteractionResult.FAIL;
+		
 		BlockState middleState = this.belt.defaultBlockState()
 				.setValue(BeltBlock.AXIS, axis)
 				.setValue(BeltBlock.IS_END, false)
@@ -119,22 +122,26 @@ public class BeltItem<T extends BeltBlock> extends CompoundableBlockItem impleme
 		// Check if middle blocks can be placed
 		for (int i = 1; i < blocks - 1; i++) {
 			BlockPos pos = pos1.offset(direction.getNormal().x * i, direction.getNormal().y * i, direction.getNormal().z * i);
-			
-			if (!tryPlaceCompound(context.getLevel(), pos, middleState, true))
+
+			boolean waterlogged = context.getLevel().getFluidState(pos).isSourceOfType(Fluids.WATER);
+			if (!tryPlaceCompound(context.getLevel(), pos, middleState.setValue(BlockStateProperties.WATERLOGGED, waterlogged), true))
 				return InteractionResult.FAIL;
 		}
 		
 		// CHeck if end blocks can be placed
-		BlockState endState1 = middleState.setValue(BeltBlock.IS_END, true);
-		BlockState endState2 = endState1.setValue(BeltBlock.ORIENTATION, orientation.getOposite());
+		boolean waterlogged1 = context.getLevel().getFluidState(pos1).isSourceOfType(Fluids.WATER);
+		boolean waterlogged2 = context.getLevel().getFluidState(pos2).isSourceOfType(Fluids.WATER);
+		BlockState endState1 = middleState.setValue(BlockStateProperties.WATERLOGGED, waterlogged1).setValue(BeltBlock.IS_END, true);
+		BlockState endState2 = endState1.setValue(BlockStateProperties.WATERLOGGED, waterlogged2).setValue(BeltBlock.ORIENTATION, orientation.getOposite());
 		if (!tryPlaceCompound(context.getLevel(), pos1, endState1, true)) return InteractionResult.FAIL;
 		if (!tryPlaceCompound(context.getLevel(), pos2, endState2, true)) return InteractionResult.FAIL;
 		
 		// Place middle blocks
 		for (int i = 1; i < blocks - 1; i++) {
 			BlockPos pos = pos1.offset(direction.getNormal().x * i, direction.getNormal().y * i, direction.getNormal().z * i);
-			
-			tryPlaceCompound(context.getLevel(), pos, middleState, false);
+
+			boolean waterlogged = context.getLevel().getFluidState(pos).isSourceOfType(Fluids.WATER);
+			tryPlaceCompound(context.getLevel(), pos, middleState.setValue(BlockStateProperties.WATERLOGGED, waterlogged), false);
 		}
 		
 		// Place end blocks

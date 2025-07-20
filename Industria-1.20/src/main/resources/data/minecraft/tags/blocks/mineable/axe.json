@@ -6,9 +6,12 @@
 		"industria:tin_wire_coil",
 		"industria:gold_wire_coil",
 		"industria:aluminum_wire_coil",
-	"industria:insulated_copper_wire_coil",
+		"industria:insulated_copper_wire_coil",
 		"industria:insulated_tin_wire_coil",
 		"industria:insulated_gold_wire_coil",
-		"industria:insulated_aluminum_wire_coil"
+		"industria:insulated_aluminum_wire_coil",
+		
+		"industria:oak_wood_gear",
+		"industria:large_oak_wood_gear"
 	]
 }

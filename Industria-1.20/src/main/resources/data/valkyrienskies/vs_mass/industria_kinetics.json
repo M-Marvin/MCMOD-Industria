@@ -1,0 +1,34 @@
+[
+	{
+		"block": "industria:iron_shaft",
+		"mass": 300
+	},
+	{
+		"block": "industria:short_iron_shaft_1",
+		"mass": 100
+	},
+	{
+		"block": "industria:short_iron_shaft_2",
+		"mass": 200
+	},
+	{
+		"block": "industria:oak_wood_gear",
+		"mass": 150
+	},
+	{
+		"block": "industria:large_oak_wood_gear",
+		"mass": 300
+	},
+	{
+		"block": "industria:rubber_belt",
+		"mass": 80
+	},
+	{
+		"block": "industria:belt_shaft",
+		"mass": 300
+	},
+	{
+		"block": "industria:",
+		"mass": 4000
+	}
+]

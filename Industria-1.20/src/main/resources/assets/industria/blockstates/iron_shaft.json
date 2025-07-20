@@ -1,0 +1,7 @@
+{
+	"variants": {
+		"axis=y": { "model": "industria:block/kinetics/iron_shaft", "x": -90 },
+		"axis=x": { "model": "industria:block/kinetics/iron_shaft", "y": 90 },
+		"axis=z": { "model": "industria:block/kinetics/iron_shaft" }
+	}
+}

@@ -1,0 +1,12 @@
+{
+	"replace": false,
+	"values": [
+		"industria:iron_shaft",
+		"industria:short_iron_shaft_1",
+		"industria:short_iron_shaft_2",
+		"industria:oak_wood_gear",
+		"industria:large_oak_wood_gear",
+		"industria:rubber_belt",
+		"industria:belt_shaft"
+	]
+}

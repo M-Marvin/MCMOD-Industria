@@ -17,11 +17,11 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.SimpleBakedModel;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class BeltBlockentityRenderer implements BlockEntityRenderer<BeltBlockEntity> {
+public class BeltBlockEntityRenderer implements BlockEntityRenderer<BeltBlockEntity> {
 
 	protected final BlockRenderDispatcher dispatcher;
 	
-	public BeltBlockentityRenderer(BlockEntityRendererProvider.Context context) {
+	public BeltBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
 		this.dispatcher = context.getBlockRenderDispatcher();
 	}
 	

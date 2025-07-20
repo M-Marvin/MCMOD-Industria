@@ -17,16 +17,19 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class ShortShaftBlock extends BaseEntityBlock implements IKineticBlock {
+public class ShortShaftBlock extends BaseEntityBlock implements IKineticBlock, SimpleWaterloggedBlock {
 
 	public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
 
@@ -37,11 +40,17 @@ public class ShortShaftBlock extends BaseEntityBlock implements IKineticBlock {
 	public ShortShaftBlock(boolean isLong, Properties pProperties) {
 		super(pProperties);
 		this.isLong = isLong;
+		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false).setValue(FACING, Direction.NORTH));
 	}
 	
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> pBuilder) {
-		pBuilder.add(FACING);
+		pBuilder.add(FACING, BlockStateProperties.WATERLOGGED);
+	}
+
+	@Override
+	public FluidState getFluidState(BlockState pState) {
+		return pState.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource().defaultFluidState() : Fluids.EMPTY.defaultFluidState();
 	}
 	
 	@Override
@@ -68,7 +77,8 @@ public class ShortShaftBlock extends BaseEntityBlock implements IKineticBlock {
 			double d = facing.getAxis().choose(v.x, v.y, v.z);
 			if (d > 0) facing = facing.getOpposite();
 		}
-		return this.defaultBlockState().setValue(FACING, facing);
+		boolean waterlogged = pContext.getLevel().getFluidState(pContext.getClickedPos()).isSourceOfType(Fluids.WATER);
+		return this.defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, waterlogged).setValue(FACING, facing);
 	}
 	
 	@Override

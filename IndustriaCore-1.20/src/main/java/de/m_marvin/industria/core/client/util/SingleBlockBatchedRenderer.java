@@ -122,7 +122,7 @@ public class SingleBlockBatchedRenderer {
 		
 		if (cache == null) {
 			
-			cache = new VertexBuffer(Usage.STATIC);
+			cache = new VertexBuffer(Usage.DYNAMIC);
 			
 			INTERMEDIATE_BUFFER.begin(flushingRenderType.mode(), flushingRenderType.format());
 			
@@ -180,71 +180,78 @@ public class SingleBlockBatchedRenderer {
 	
 	private static void setupShaderDynamicState(ShaderInstance pShader, Matrix4f pModelViewMatrix) {
 
-	       if (pShader.MODEL_VIEW_MATRIX != null) {
-	          pShader.MODEL_VIEW_MATRIX.set(pModelViewMatrix);
-	       }
+		if (pShader.MODEL_VIEW_MATRIX != null) {
+				pShader.MODEL_VIEW_MATRIX.set(pModelViewMatrix);
+		}
 
-	       pShader.apply();
-	       
+		pShader.apply();
+		
 	}
 	
 	private static void setupShaderState(ShaderInstance pShader, Matrix4f pProjectionMatrix, VertexFormat.Mode mode) {
-	      for(int i = 0; i < 12; ++i) {
-	          int j = RenderSystem.getShaderTexture(i);
-	          pShader.setSampler("Sampler" + i, j);
-	       }
-
-	       if (pShader.PROJECTION_MATRIX != null) {
-	          pShader.PROJECTION_MATRIX.set(pProjectionMatrix);
-	       }
-
-	       if (pShader.INVERSE_VIEW_ROTATION_MATRIX != null) {
-	          pShader.INVERSE_VIEW_ROTATION_MATRIX.set(RenderSystem.getInverseViewRotationMatrix());
-	       }
-
-	       if (pShader.COLOR_MODULATOR != null) {
-	          pShader.COLOR_MODULATOR.set(RenderSystem.getShaderColor());
-	       }
-
-	       if (pShader.GLINT_ALPHA != null) {
-	          pShader.GLINT_ALPHA.set(RenderSystem.getShaderGlintAlpha());
-	       }
-
-	       if (pShader.FOG_START != null) {
-	          pShader.FOG_START.set(RenderSystem.getShaderFogStart());
-	       }
-
-	       if (pShader.FOG_END != null) {
-	          pShader.FOG_END.set(RenderSystem.getShaderFogEnd());
-	       }
-
-	       if (pShader.FOG_COLOR != null) {
-	          pShader.FOG_COLOR.set(RenderSystem.getShaderFogColor());
-	       }
-
-	       if (pShader.FOG_SHAPE != null) {
-	          pShader.FOG_SHAPE.set(RenderSystem.getShaderFogShape().getIndex());
-	       }
-
-	       if (pShader.TEXTURE_MATRIX != null) {
-	          pShader.TEXTURE_MATRIX.set(RenderSystem.getTextureMatrix());
-	       }
-
-	       if (pShader.GAME_TIME != null) {
-	          pShader.GAME_TIME.set(RenderSystem.getShaderGameTime());
-	       }
-
-	       if (pShader.SCREEN_SIZE != null) {
-	          Window window = Minecraft.getInstance().getWindow();
-	          pShader.SCREEN_SIZE.set((float)window.getWidth(), (float)window.getHeight());
-	       }
-
-	       if (pShader.LINE_WIDTH != null && (mode == VertexFormat.Mode.LINES || mode == VertexFormat.Mode.LINE_STRIP)) {
-	          pShader.LINE_WIDTH.set(RenderSystem.getShaderLineWidth());
-	       }
-
-	       RenderSystem.setupShaderLights(pShader);
-	       pShader.apply();
+		for(int i = 0; i < 12; ++i) {
+			int j = RenderSystem.getShaderTexture(i);
+			pShader.setSampler("Sampler" + i, j);
+		}
+		
+		if (pShader.PROJECTION_MATRIX != null) {
+			pShader.PROJECTION_MATRIX.set(pProjectionMatrix);
+		}
+		
+		if (pShader.INVERSE_VIEW_ROTATION_MATRIX != null) {
+			pShader.INVERSE_VIEW_ROTATION_MATRIX.set(RenderSystem.getInverseViewRotationMatrix());
+		}
+		
+		if (pShader.COLOR_MODULATOR != null) {
+			pShader.COLOR_MODULATOR.set(RenderSystem.getShaderColor());
+		}
+		
+		if (pShader.GLINT_ALPHA != null) {
+			pShader.GLINT_ALPHA.set(RenderSystem.getShaderGlintAlpha());
+		}
+		
+//		if (pShader.FOG_START != null) {
+//			pShader.FOG_START.set(RenderSystem.getShaderFogStart());
+//		}
+//		
+//		if (pShader.FOG_END != null) {
+//			pShader.FOG_END.set(RenderSystem.getShaderFogEnd());
+//		}
+//		
+//		if (pShader.FOG_COLOR != null) {
+//			pShader.FOG_COLOR.set(RenderSystem.getShaderFogColor());
+//		}
+//		
+//		if (pShader.FOG_SHAPE != null) {
+//			pShader.FOG_SHAPE.set(RenderSystem.getShaderFogShape().getIndex());
+//		}
+		/**
+		 * Fog does not work with this rendering method, but is not relevant for block entities
+		 * anyway, since they have a limited render distance.
+		 */
+		if (pShader.FOG_COLOR != null) {
+			pShader.FOG_COLOR.set(new float[] {0, 0, 0, 0});
+		}
+		
+		if (pShader.TEXTURE_MATRIX != null) {
+			pShader.TEXTURE_MATRIX.set(RenderSystem.getTextureMatrix());
+		}
+		
+		if (pShader.GAME_TIME != null) {
+			pShader.GAME_TIME.set(RenderSystem.getShaderGameTime());
+		}
+		
+		if (pShader.SCREEN_SIZE != null) {
+			Window window = Minecraft.getInstance().getWindow();
+			pShader.SCREEN_SIZE.set((float)window.getWidth(), (float)window.getHeight());
+		}
+		
+		if (pShader.LINE_WIDTH != null && (mode == VertexFormat.Mode.LINES || mode == VertexFormat.Mode.LINE_STRIP)) {
+			pShader.LINE_WIDTH.set(RenderSystem.getShaderLineWidth());
+		}
+		
+		RenderSystem.setupShaderLights(pShader);
+		pShader.apply();
 	}
 	
 }

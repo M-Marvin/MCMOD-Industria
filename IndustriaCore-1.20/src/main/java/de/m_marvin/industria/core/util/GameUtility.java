@@ -43,12 +43,16 @@ public class GameUtility {
 	
 	private GameUtility() {}
 	
+	public static boolean isHoldingScrewdriver(Player pPlayer) {
+		return pPlayer.getItemInHand(InteractionHand.MAIN_HAND).is(Tags.Items.SCREW_DRIVERS);
+	}
+	
 	public static <T extends BlockEntity & IJunctionEdit> AbstractContainerMenu openJunctionScreenOr(T blockEntity, int containerId, Player player, Inventory inventory, Supplier<AbstractContainerMenu> container) {
-		return player.getItemInHand(InteractionHand.MAIN_HAND).is(Tags.Items.SCREW_DRIVERS) ? new JunctionBoxContainer<T>(containerId, inventory, blockEntity) : container.get();
+		return isHoldingScrewdriver(player) ? new JunctionBoxContainer<T>(containerId, inventory, blockEntity) : container.get();
 	}
 
 	public static InteractionResult openJunctionBlockEntityUI(Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand) {
-		if (!pPlayer.getItemInHand(pHand).is(Tags.Items.SCREW_DRIVERS)) return InteractionResult.PASS;
+		if (!isHoldingScrewdriver(pPlayer)) return InteractionResult.PASS;
 		return openBlockEntityUI(pLevel, pPos, pPlayer, pHand);
 	}
 

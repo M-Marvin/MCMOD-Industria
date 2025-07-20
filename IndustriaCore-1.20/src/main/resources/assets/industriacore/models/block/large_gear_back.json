@@ -1,4 +1,5 @@
 {
+	"render_type": "cutout",
 	"credit": "Made with Blockbench",
 	"textures": {
 		"3": "industriacore:block/gear_side",

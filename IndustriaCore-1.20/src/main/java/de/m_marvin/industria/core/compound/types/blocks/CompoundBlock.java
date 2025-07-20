@@ -19,6 +19,7 @@ import de.m_marvin.industria.core.magnetism.MagnetismUtility;
 import de.m_marvin.industria.core.magnetism.types.blocks.IMagneticBlock;
 import de.m_marvin.industria.core.registries.Blocks;
 import de.m_marvin.industria.core.util.MathUtility;
+import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.industria.core.util.types.StateTransform;
 import de.m_marvin.industria.core.util.virtualblock.VirtualBlock;
 import de.m_marvin.univec.impl.Vec3d;
@@ -33,6 +34,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.ClipContext.Fluid;
@@ -45,12 +47,15 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -63,17 +68,23 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.IPlantable;
 
-public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMagneticBlock {
+public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMagneticBlock, SimpleWaterloggedBlock {
 	
 	public static final EnumProperty<StateTransform> TRANSFORM = Blocks.PROP_TRANSFORM;
 	
 	public CompoundBlock(Properties pProperties) {
 		super(pProperties);
+		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false).setValue(TRANSFORM, StateTransform.NONE));
 	}
 	
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> pBuilder) {
-		pBuilder.add(TRANSFORM);
+		pBuilder.add(TRANSFORM, BlockStateProperties.WATERLOGGED);
+	}
+	
+	@Override
+	public FluidState getFluidState(BlockState pState) {
+		return pState.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource().defaultFluidState() : Fluids.EMPTY.defaultFluidState();
 	}
 	
 	@Override
@@ -97,6 +108,16 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 	@Override
 	public RenderShape getRenderShape(BlockState pState) {
 		return RenderShape.ENTITYBLOCK_ANIMATED;
+	}
+
+	@Override
+	public boolean canBeReplaced(BlockState pState, net.minecraft.world.level.material.Fluid pFluid) {
+		return false;
+	}
+	
+	@Override
+	public boolean canBeReplaced(BlockState pState, BlockPlaceContext pUseContext) {
+		return false;
 	}
 	
 	@Override
@@ -131,7 +152,7 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 	
 	public static <T> T performOnTargetedAndReturn(BlockGetter level, BlockPos pos, Player player, Supplier<T> fallback, BiFunction<CompoundBlockEntity, VirtualBlock, T> action) {
 		if (level == null) return fallback.get();
-		ClipContext clip = MathUtility.getPlayerPOVClipContext(level, player, Fluid.ANY, player.getBlockReach());
+		ClipContext clip = MathUtility.getPlayerPOVClipContext(level, player, Fluid.NONE, player.getBlockReach());
 		BlockHitResult hit = level.clip(clip);
 		if (hit.getType() == Type.MISS) return fallback.get();
 		if (level.getBlockEntity(pos) instanceof CompoundBlockEntity compound) {
@@ -147,7 +168,7 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 
 	public static boolean performOnTargeted(BlockGetter level, BlockPos pos, Player player, BiConsumer<CompoundBlockEntity, VirtualBlock> action) {
 		if (level == null) return false;
-		ClipContext clip = MathUtility.getPlayerPOVClipContext(level, player, Fluid.ANY, player.getBlockReach());
+		ClipContext clip = MathUtility.getPlayerPOVClipContext(level, player, Fluid.NONE, player.getBlockReach());
 		BlockHitResult hit = level.clip(clip);
 		if (hit.getType() == Type.MISS) return false;
 		if (level.getBlockEntity(pos) instanceof CompoundBlockEntity compound) {
@@ -221,7 +242,6 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 	
 	/* Block Function Redirects  */
 
-	@SuppressWarnings("resource")
 	@Override
 	public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
 		if (!performOnTargeted(pLevel, pPos, pPlayer, 
@@ -229,7 +249,6 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 		super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
 	}
 	
-	@SuppressWarnings("resource")
 	@Override
 	public void playerDestroy(Level pLevel, Player pPlayer, BlockPos pPos, BlockState pState, BlockEntity pBlockEntity,ItemStack pTool) {
 		if (!performOnTargeted(pLevel, pPos, pPlayer, 
@@ -237,28 +256,24 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 		super.playerDestroy(pLevel, pPlayer, pPos, pState, pBlockEntity, pTool);
 	}
 
-	@SuppressWarnings("resource")
 	@Override
 	public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
 		performOnAll(pLevel, pPos, 
 				(compound, p) -> p.getState().getBlock().animateTick(p.getState(), p.getLevel(), p.getPos(), pRandom));
 	}
 	
-	@SuppressWarnings("resource")
 	@Override
 	public void entityInside(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity) {
 		performOnAll(pLevel, pPos, 
 				(compound, p) -> p.getState().entityInside(p.getLevel(), p.getPos(), pEntity));
 	}
 
-	@SuppressWarnings("resource")
 	@Override
 	public void onBlockExploded(BlockState state, Level level, BlockPos pos, Explosion explosion) {
 		performOnAll(level, pos, 
 				(compound, p) -> p.getBlock().onBlockExploded(p.getState(), p.getLevel(), p.getPos(), explosion));
 	}
 	
-	@SuppressWarnings("resource")
 	@Override
 	public void onCaughtFire(BlockState state, Level level, BlockPos pos, @Nullable Direction direction, @Nullable LivingEntity igniter) {
 		performOnAll(level, pos, 
@@ -272,14 +287,12 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 				(compound, p) -> p.getBlock().updateIndirectNeighbourShapes(p.getState(), p.getLevel(), p.getPos(), pFlags, pRecursionLeft));
 	}
 	
-	@SuppressWarnings("resource")
 	@Override
 	public void stepOn(Level pLevel, BlockPos pPos, BlockState pState, Entity pEntity) {
 		performOnAll(pLevel, pPos, 
 				(compound, p) -> p.getBlock().stepOn(p.getLevel(), p.getPos(), p.getState(), pEntity));
 	}
 	
-	@SuppressWarnings("resource")
 	@Override
 	public void wasExploded(Level pLevel, BlockPos pPos, Explosion pExplosion) {
 		performOnAll(pLevel, pPos, 
@@ -301,21 +314,20 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 				});
 	}
 
-	@SuppressWarnings({ "resource" })
 	@Override
 	public void onProjectileHit(Level pLevel, BlockState pState, BlockHitResult hit, Projectile pProjectile) {
 		performOnAll(pLevel, hit.getBlockPos(), 
 				(compound, p) -> p.getState().onProjectileHit(p.getLevel(), p.getState(), hit, pProjectile));
 	}
 	
-	@SuppressWarnings({ "deprecation", "resource" })
+	@SuppressWarnings("deprecation")
 	@Override
 	public void attack(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer) {
 		performOnTargeted(pLevel, pPos, pPlayer, 
 				(compound, part) -> part.getBlock().attack(part.getState(), part.getLevel(), part.getPos(), pPlayer));
 	}
 
-	@SuppressWarnings({ "deprecation", "resource" })
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
 		performOnAll(pLevel, pPos, 
@@ -323,21 +335,20 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 		super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
 	}
 
-	@SuppressWarnings({ "deprecation", "resource" })
+	@SuppressWarnings("deprecation")
 	@Override
 	public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pNeighborBlock, BlockPos pNeighborPos, boolean pMovedByPiston) {
 		performOnAll(pLevel, pPos, 
 				(compound, p) -> p.getBlock().neighborChanged(p.getState(), p.getLevel(), p.getPos(), pNeighborBlock, pNeighborPos, pMovedByPiston));
 	}
 
-	@SuppressWarnings("resource")
 	@Override
 	public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
 		performOnAll(pLevel, pPos, 
 				(compound, p) -> p.getState().randomTick((ServerLevel) p.getLevel(), p.getPos(), pRandom));
 	}
 
-	@SuppressWarnings({ "deprecation", "resource" })
+	@SuppressWarnings("deprecation")
 	@Override
 	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
 		if (pState.getValue(TRANSFORM) != StateTransform.NONE)
@@ -346,7 +357,6 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 				(compound, p) -> p.getBlock().tick(p.getState(), (ServerLevel) p.getLevel(), p.getPos(), pRandom));
 	}
 
-	@SuppressWarnings("resource")
 	@Override
 	public boolean addLandingEffects(BlockState state1, ServerLevel level, BlockPos pos, BlockState state2, LivingEntity entity, int numberOfParticles) {
 		return performOnAllAndCombine(level, pos, 
@@ -355,7 +365,6 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 				CompoundBlock::trueIfAny);
 	}
 	
-	@SuppressWarnings("resource")
 	@Override
 	public boolean addRunningEffects(BlockState state, Level level, BlockPos pos, Entity entity) {
 		return performOnAllAndCombine(level, pos, 
@@ -745,10 +754,13 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 	@SuppressWarnings("deprecation")
 	@Override
 	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-		return performOnAllAndCombine(pLevel, pPos, 
+		VoxelShape shape = performOnAllAndCombine(pLevel, pPos, 
 				() -> super.getShape(pState, pLevel, pPos, pContext), 
 				(compound, p) -> p.getBlock().getShape(p.getState(), p.getLevel(), p.getPos(), pContext), 
 				Shapes::or);
+		// particle engine seems to just assume no shape is ever empty, so it will crash if the shape here is empty
+		if (shape.isEmpty()) return VoxelShapeUtility.box(0, 0, 0, 16, 16, 16);
+		return shape;
 	}
 
 	@SuppressWarnings("deprecation")

@@ -1,0 +1,152 @@
+{
+	"multipart": [
+		{
+			"apply": {
+				"model": "industria:block/fences/light_wires_north"
+			},
+			"when": {
+				"north": "mesh"
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/light_wires_south"
+			},
+			"when": {
+				"south": "mesh"
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/light_wires_north",
+				"y": 90
+			},
+			"when": {
+				"east": "mesh"
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/light_wires_south",
+				"y": 90
+			},
+			"when": {
+				"west": "mesh"
+			}
+		},
+		
+		{
+			"apply": {
+				"model": "industria:block/fences/light_wires_north_long"
+			},
+			"when": {
+				"north": "post"
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/light_wires_south_long"
+			},
+			"when": {
+				"south": "post"
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/light_wires_north_long",
+				"y": 90
+			},
+			"when": {
+				"east": "post"
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/light_wires_south_long",
+				"y": 90
+			},
+			"when": {
+				"west": "post"
+			}
+		},
+		
+		
+		{
+			"apply": {
+				"model": "industria:block/fences/light_wires_north_base"
+			},
+			"when": {
+				"north": "mesh",
+				"has_base": true
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/light_wires_south_base"
+			},
+			"when": {
+				"south": "mesh",
+				"has_base": true
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/light_wires_north_base",
+				"y": 90
+			},
+			"when": {
+				"east": "mesh",
+				"has_base": true
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/light_wires_south_base",
+				"y": 90
+			},
+			"when": {
+				"west": "mesh",
+				"has_base": true
+			}
+		},
+		
+		{
+			"apply": {
+				"model": "industria:block/fences/light_wires_north_long_base"
+			},
+			"when": {
+				"north": "post",
+				"has_base": true
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/light_wires_south_long_base"
+			},
+			"when": {
+				"south": "post",
+				"has_base": true
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/light_wires_north_long_base",
+				"y": 90
+			},
+			"when": {
+				"east": "post",
+				"has_base": true
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/light_wires_south_long_base",
+				"y": 90
+			},
+			"when": {
+				"west": "post",
+				"has_base": true
+			}
+		}
+	]
+}

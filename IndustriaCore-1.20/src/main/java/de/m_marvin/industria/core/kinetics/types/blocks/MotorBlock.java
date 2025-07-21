@@ -41,7 +41,7 @@ public class MotorBlock extends BaseEntityBlock implements IKineticBlock, Simple
 	
 	public MotorBlock(Properties pProperties) {
 		super(pProperties);
-		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false).setValue(FACING, Direction.NORTH));
+		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false));
 	}
 	
 	@Override

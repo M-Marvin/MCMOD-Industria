@@ -7,12 +7,16 @@ import de.m_marvin.industria.content.blocks.WeatheringCopperPlatesFullBlock;
 import de.m_marvin.industria.content.blocks.WeatheringIronFullBlock;
 import de.m_marvin.industria.content.blocks.WeatheringSteelFullBlock;
 import de.m_marvin.industria.content.blocks.WeatheringTinFullBlock;
+import de.m_marvin.industria.content.blocks.fences.ModularFenceBaseBlock;
+import de.m_marvin.industria.content.blocks.fences.ModularFenceMeshBlock;
+import de.m_marvin.industria.content.blocks.fences.ModularFencePostBlock;
 import de.m_marvin.industria.content.blocks.kinetics.BaseBeltBlock;
 import de.m_marvin.industria.content.blocks.kinetics.BaseBeltShaftBlock;
 import de.m_marvin.industria.content.blocks.kinetics.BaseGearBlock;
 import de.m_marvin.industria.content.blocks.kinetics.BaseLargeGearBlock;
 import de.m_marvin.industria.content.blocks.kinetics.BaseShaftBlock;
 import de.m_marvin.industria.content.blocks.kinetics.BaseShortShaftBlock;
+import de.m_marvin.industria.content.blocks.machines.ConveyorBeltBlock;
 import de.m_marvin.industria.content.blocks.machines.ElectroMagneticCoilBlock;
 import de.m_marvin.industria.content.blocks.machines.FloodlightBlock;
 import de.m_marvin.industria.content.blocks.machines.IonicThrusterBlock;
@@ -21,11 +25,13 @@ import de.m_marvin.industria.content.blocks.machines.PortableFuelGeneratorBlock;
 import de.m_marvin.industria.content.blocks.redstone.TransistorBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.JunctionBoxBlock;
 import de.m_marvin.industria.core.electrics.types.blocks.WireHolderBlock;
+import de.m_marvin.industria.core.util.types.DiagonalPlanarDirection;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LightBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.WeatheringCopper.WeatherState;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -49,10 +55,10 @@ public class ModBlocks {
 	public static final RegistryObject<Block> ALUMINUM_WIRE_COIL				= BLOCKS.register("aluminum_wire_coil", () -> new ConduitCoilBlock(Properties.of().strength(4, 4).sound(SoundType.WOOD), true));
 	
 	public static final RegistryObject<Block> LIGHT_AIR 						= BLOCKS.register("light_air_block", () -> new LightBlock(Properties.of().replaceable().noCollission().air().strength(-1.0F, 3600000.8F).noLootTable().noOcclusion().lightLevel(LightBlock.LIGHT_EMISSION)));
-	public static final RegistryObject<Block> COPPER_WIRE_HOLDER 				= BLOCKS.register("copper_wire_holder", () -> new WireHolderBlock(Properties.of().strength(3, 3).sound(SoundType.METAL)));
-	public static final RegistryObject<Block> GOLD_WIRE_HOLDER 					= BLOCKS.register("gold_wire_holder", () -> new WireHolderBlock(Properties.of().strength(3, 3).sound(SoundType.METAL)));
-	public static final RegistryObject<Block> TIN_WIRE_HOLDER 					= BLOCKS.register("tin_wire_holder", () -> new WireHolderBlock(Properties.of().strength(3, 3).sound(SoundType.METAL)));
-	public static final RegistryObject<Block> ALUMINUM_WIRE_HOLDER 				= BLOCKS.register("aluminum_wire_holder", () -> new WireHolderBlock(Properties.of().strength(3, 3).sound(SoundType.METAL)));
+	public static final RegistryObject<Block> COPPER_WIRE_HOLDER 				= BLOCKS.register("copper_wire_holder", () -> new WireHolderBlock(Properties.of().strength(3, 3).noOcclusion().sound(SoundType.METAL)));
+	public static final RegistryObject<Block> GOLD_WIRE_HOLDER 					= BLOCKS.register("gold_wire_holder", () -> new WireHolderBlock(Properties.of().strength(3, 3).noOcclusion().sound(SoundType.METAL)));
+	public static final RegistryObject<Block> TIN_WIRE_HOLDER 					= BLOCKS.register("tin_wire_holder", () -> new WireHolderBlock(Properties.of().strength(3, 3).noOcclusion().sound(SoundType.METAL)));
+	public static final RegistryObject<Block> ALUMINUM_WIRE_HOLDER 				= BLOCKS.register("aluminum_wire_holder", () -> new WireHolderBlock(Properties.of().strength(3, 3).noOcclusion().sound(SoundType.METAL)));
 	public static final RegistryObject<Block> IRON_JUNCTION_BOX 				= BLOCKS.register("iron_junction_box", () -> new JunctionBoxBlock(Properties.of().strength(3F, 3F).sound(SoundType.METAL)));
 	public static final RegistryObject<Block> ZINC_JUNCTION_BOX 				= BLOCKS.register("zinc_junction_box", () -> new JunctionBoxBlock(Properties.of().strength(3F, 3F).sound(SoundType.METAL)));
 	public static final RegistryObject<Block> BRASS_JUNCTION_BOX 				= BLOCKS.register("brass_junction_box", () -> new JunctionBoxBlock(Properties.of().strength(3F, 3F).sound(SoundType.METAL)));
@@ -73,7 +79,13 @@ public class ModBlocks {
 	public static final RegistryObject<BaseBeltBlock> RUBBER_BELT				= BLOCKS.register("rubber_belt", () -> new BaseBeltBlock(Properties.of().strength(0.8F).sound(SoundType.WOOL)));
 	public static final RegistryObject<Block> BELT_SHAFT						= BLOCKS.register("belt_shaft", () -> new BaseBeltShaftBlock(Properties.of().strength(2, 1.5F).sound(SoundType.METAL)));
 	
+	public static final RegistryObject<ConveyorBeltBlock> CONVEYOR_BELT			= BLOCKS.register("conveyor_belt", () -> new ConveyorBeltBlock(Properties.of().strength(0.8F).sound(SoundType.WOOL)));
+	
 	public static final RegistryObject<Block> REDSTONE_TRANSISTOR				= BLOCKS.register("redstone_transistor", () -> new TransistorBlock(Properties.of().strength(0, 12).sound(SoundType.STONE)));
+	
+	public static final RegistryObject<Block> STEEL_FENCE_POST					= BLOCKS.register("steel_fence_post", () -> new ModularFencePostBlock(Properties.of().strength(6, 10).sound(SoundType.METAL)));
+	public static final RegistryObject<Block> LIGHT_FENCE_WIRES					= BLOCKS.register("light_fence_wires", () -> new ModularFenceMeshBlock(Properties.of().strength(6, 10).sound(SoundType.METAL)));
+	public static final RegistryObject<Block> CONCRETE_FENCE_BASE				= BLOCKS.register("concrete_fence_base", () -> new ModularFenceBaseBlock(Properties.of().strength(6, 10).sound(SoundType.STONE)));
 	
 	public static final RegistryObject<Block> RAW_ZINC_BLOCK					= BLOCKS.register("raw_zinc_block", () -> new Block(Properties.of().strength(5, 6).sound(SoundType.STONE)));
 	public static final RegistryObject<Block> RAW_LEAD_BLOCK					= BLOCKS.register("raw_lead_block", () -> new Block(Properties.of().strength(5, 6).sound(SoundType.STONE)));
@@ -174,5 +186,15 @@ public class ModBlocks {
 	public static final RegistryObject<Block> WAXED_EXPOSED_BRASS_PLATES		= BLOCKS.register("waxed_exposed_brass_plates", () -> new Block(Properties.of().strength(2, 3).sound(SoundType.METAL)));
 	public static final RegistryObject<Block> WAXED_OXIDIZED_BRASS_PLATES		= BLOCKS.register("waxed_oxidized_brass_plates", () -> new Block(Properties.of().strength(2, 3).sound(SoundType.METAL)));
 	public static final RegistryObject<Block> REDSTONE_ALLOY_PLATES				= BLOCKS.register("redstone_alloy_plates", () -> new Block(Properties.of().strength(2, 3).sound(SoundType.METAL)));
+	
+
+	/* BlockStateProperties */
+	public static final EnumProperty<DiagonalPlanarDirection> ORIENTATION_NON_VERTICAL = EnumProperty.create("orientation", DiagonalPlanarDirection.class, 
+			DiagonalPlanarDirection.X_NEG,
+			DiagonalPlanarDirection.X_NEG_Y_NEG,
+			DiagonalPlanarDirection.X_NEG_Y_POS,
+			DiagonalPlanarDirection.X_POS,
+			DiagonalPlanarDirection.X_POS_Y_NEG,
+			DiagonalPlanarDirection.X_POS_Y_POS);
 	
 }

@@ -1,0 +1,81 @@
+{
+	"multipart": [
+		{
+			"apply": {
+				"model": "industria:block/fences/steel_fence_post_base"
+			},
+			"when": {
+				"facing": "north|south",
+				"has_base": true
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/steel_fence_post_base",
+				"y": 90
+			},
+			"when": {
+				"facing": "east|west",
+				"has_base": true
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/steel_fence_post"
+			},
+			"when": {
+				"facing": "north|south",
+				"is_top": false
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/steel_fence_post",
+				"y": 90
+			},
+			"when": {
+				"facing": "east|west",
+				"is_top": false
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/steel_fence_post_top"
+			},
+			"when": {
+				"is_top": true,
+				"facing": "north"
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/steel_fence_post_top",
+				"y": 180
+			},
+			"when": {
+				"is_top": true,
+				"facing": "south"
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/steel_fence_post_top",
+				"y": 90
+			},
+			"when": {
+				"is_top": true,
+				"facing": "east"
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/steel_fence_post_top",
+				"y": -90
+			},
+			"when": {
+				"is_top": true,
+				"facing": "west"
+			}
+		}
+	]
+}

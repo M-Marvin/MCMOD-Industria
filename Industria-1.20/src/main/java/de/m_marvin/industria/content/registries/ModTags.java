@@ -13,6 +13,10 @@ public class ModTags {
 
 		public static final TagKey<Block> BLOCK_SCREW_DRIVER_PICKUP = createBlock("screw_driver_pickup");
 		public static final TagKey<Block> ELECTRO_MAGNETIC_COILS = createBlock("electro_magnetic_coils");
+
+		public static final TagKey<Block> MODULAR_FENCE_MESHES = createBlock("modular_fence_meshes");
+		public static final TagKey<Block> MODULAR_FENCE_POSTS = createBlock("modular_fence_posts");
+		public static final TagKey<Block> MODULAR_FENCE_BASES = createBlock("modular_fence_bases");
 		
 		private static TagKey<Block> createBlock(String name) {
 			return TagKey.create(Registries.BLOCK, new ResourceLocation(Industria.MODID, name));

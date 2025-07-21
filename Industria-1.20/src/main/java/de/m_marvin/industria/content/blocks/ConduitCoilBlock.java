@@ -38,7 +38,7 @@ public class ConduitCoilBlock extends BaseEntityBlock implements SimpleWaterlogg
 	public ConduitCoilBlock(Properties pProperties, boolean holdConduits) {
 		super(pProperties);
 		this.holdsConduits = holdConduits;
-		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false).setValue(BlockStateProperties.AXIS, Axis.X).setValue(ModBlockStateProperties.LAYERS, 4));
+		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false));
 	}
 
 	public boolean holdsConduits() {

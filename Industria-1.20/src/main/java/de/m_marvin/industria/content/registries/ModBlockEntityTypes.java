@@ -39,6 +39,9 @@ public class ModBlockEntityTypes {
 			ModBlocks.LARGE_OAK_WOOD_GEAR.get(),
 			ModBlocks.BELT_SHAFT.get()
 			).build(null));
-	public static final RegistryObject<BlockEntityType<BaseBeltBlockEntity>>				BASE_BELT					= BLOCK_ENTITY_TYPES.register("base_belt", () -> BlockEntityType.Builder.of(BaseBeltBlockEntity::new, ModBlocks.RUBBER_BELT.get()).build(null));
+	public static final RegistryObject<BlockEntityType<BaseBeltBlockEntity>>				BASE_BELT					= BLOCK_ENTITY_TYPES.register("base_belt", () -> BlockEntityType.Builder.of(BaseBeltBlockEntity::new,
+			ModBlocks.RUBBER_BELT.get(),
+			ModBlocks.CONVEYOR_BELT.get()
+			).build(null));
 	
 }

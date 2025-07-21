@@ -1,11 +1,9 @@
-package de.m_marvin.industria.core.kinetics.types.items;
+package de.m_marvin.industria.content.items.machines;
 
+import de.m_marvin.industria.content.blocks.machines.ConveyorBeltBlock;
 import de.m_marvin.industria.core.compound.types.blocks.CompoundBlock;
-import de.m_marvin.industria.core.compound.types.items.CompoundableBlockItem;
-import de.m_marvin.industria.core.kinetics.types.blocks.BeltBlock;
+import de.m_marvin.industria.core.kinetics.types.items.BeltItem;
 import de.m_marvin.industria.core.registries.Tags;
-import de.m_marvin.industria.core.scrollinput.engine.ScrollInputListener.ScrollContext;
-import de.m_marvin.industria.core.scrollinput.type.items.IScrollOverride;
 import de.m_marvin.industria.core.util.types.DiagonalDirection;
 import de.m_marvin.industria.core.util.types.DiagonalPlanarDirection;
 import net.minecraft.core.BlockPos;
@@ -15,20 +13,16 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluids;
 
-public class BeltItem extends CompoundableBlockItem implements IScrollOverride {
-	
-	protected final BeltBlock belt;
-	
-	public BeltItem(BeltBlock block, Properties pProperties) {
+public class ConveyorBeltItem extends BeltItem {
+
+	public ConveyorBeltItem(ConveyorBeltBlock block, Properties pProperties) {
 		super(block, pProperties);
-		this.belt = block;
 	}
-	
+
 	@Override
 	public InteractionResult useOn(UseOnContext pContext) {
 		
@@ -48,8 +42,11 @@ public class BeltItem extends CompoundableBlockItem implements IScrollOverride {
 			if (!shaftState.is(Tags.Blocks.BELT_SHAFTS) || !shaftState.hasProperty(BlockStateProperties.AXIS))
 				return InteractionResult.FAIL;
 			
+			if (shaftState.getValue(BlockStateProperties.AXIS).isVertical())
+				return InteractionResult.FAIL;
+			
 			// Set first position
-			tag.putString("Axis", shaftState.getValue(BeltBlock.AXIS).getName());
+			tag.putString("Axis", shaftState.getValue(BlockStateProperties.AXIS).getName());
 			tag.put("FirstPos", NbtUtils.writeBlockPos(pos));
 			stack.setTag(tag);
 			return InteractionResult.sidedSuccess(pContext.getLevel().isClientSide());
@@ -79,7 +76,7 @@ public class BeltItem extends CompoundableBlockItem implements IScrollOverride {
 			
 			// Check if axis match
 			Axis secondAxis = shaftState.getValue(BlockStateProperties.AXIS);
-			if (firstAxis != secondAxis)
+			if (firstAxis != secondAxis || secondAxis.isVertical())
 				return InteractionResult.FAIL;
 			
 			// Remove first position
@@ -92,6 +89,7 @@ public class BeltItem extends CompoundableBlockItem implements IScrollOverride {
 		
 	}
 
+	@Override
 	protected InteractionResult tryPlaceBetween(UseOnContext context, BlockPos pos1, BlockPos pos2, Axis axis) {
 		
 		BlockPos diff = pos2.subtract(pos1);
@@ -99,9 +97,9 @@ public class BeltItem extends CompoundableBlockItem implements IScrollOverride {
 		if (axis.choose(diff.getX(), diff.getY(), diff.getZ()) > 0)
 			return InteractionResult.FAIL;
 		// Ends have to be horizontal, vertical or diagonal (45 degree) to another
-		int diff1 = Math.abs(axis.choose(diff.getY(), diff.getZ(), diff.getX()));
-		int diff2 = Math.abs(axis.choose(diff.getZ(), diff.getX(), diff.getY()));
-		if (diff1 != diff2 && diff1 != 0 && diff2 != 0)
+		int diff1 = Math.abs(axis.choose(diff.getY(), diff.getZ(), diff.getY()));
+		int diff2 = Math.abs(axis.choose(diff.getZ(), diff.getX(), diff.getX()));
+		if ((diff1 != diff2 && diff1 != 0) || diff2 == 0)
 			return InteractionResult.FAIL;
 		
 		// Number of blocks to place
@@ -116,9 +114,9 @@ public class BeltItem extends CompoundableBlockItem implements IScrollOverride {
 		if (orientation == null) return InteractionResult.FAIL;
 		
 		BlockState middleState = this.belt.defaultBlockState()
-				.setValue(BeltBlock.AXIS, axis)
-				.setValue(BeltBlock.IS_END, false)
-				.setValue(BeltBlock.ORIENTATION, orientation);
+				.setValue(ConveyorBeltBlock.AXIS, axis)
+				.setValue(ConveyorBeltBlock.IS_END, false)
+				.setValue(ConveyorBeltBlock.ORIENTATION, orientation);
 		
 		// Check if middle blocks can be placed
 		for (int i = 1; i < blocks - 1; i++) {
@@ -132,8 +130,8 @@ public class BeltItem extends CompoundableBlockItem implements IScrollOverride {
 		// CHeck if end blocks can be placed
 		boolean waterlogged1 = context.getLevel().getFluidState(pos1).isSourceOfType(Fluids.WATER);
 		boolean waterlogged2 = context.getLevel().getFluidState(pos2).isSourceOfType(Fluids.WATER);
-		BlockState endState1 = middleState.setValue(BlockStateProperties.WATERLOGGED, waterlogged1).setValue(BeltBlock.IS_END, true);
-		BlockState endState2 = endState1.setValue(BlockStateProperties.WATERLOGGED, waterlogged2).setValue(BeltBlock.ORIENTATION, orientation.getOposite());
+		BlockState endState1 = middleState.setValue(BlockStateProperties.WATERLOGGED, waterlogged1).setValue(ConveyorBeltBlock.IS_END, true);
+		BlockState endState2 = endState1.setValue(BlockStateProperties.WATERLOGGED, waterlogged2).setValue(ConveyorBeltBlock.ORIENTATION, orientation.getOposite());
 		if (!tryPlaceCompound(context.getLevel(), pos1, endState1, true)) return InteractionResult.FAIL;
 		if (!tryPlaceCompound(context.getLevel(), pos2, endState2, true)) return InteractionResult.FAIL;
 		
@@ -156,14 +154,5 @@ public class BeltItem extends CompoundableBlockItem implements IScrollOverride {
 		return InteractionResult.sidedSuccess(context.getLevel().isClientSide());
 		
 	}
-	
-	@Override
-	public boolean overridesScroll(ScrollContext context) {
-		CompoundTag tag =  context.getItemInHand().getTag();
-		return tag != null && tag.contains("FirstPos");
-	}
-
-	@Override
-	public void onScroll(ScrollContext context) {}
 	
 }

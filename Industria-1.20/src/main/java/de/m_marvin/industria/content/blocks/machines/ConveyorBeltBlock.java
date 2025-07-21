@@ -1,5 +1,7 @@
-package de.m_marvin.industria.core.kinetics.types.blocks;
+package de.m_marvin.industria.content.blocks.machines;
 
+import de.m_marvin.industria.content.blocks.kinetics.BaseBeltBlock;
+import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.core.compound.types.blocks.CompoundBlock;
 import de.m_marvin.industria.core.kinetics.types.blockentities.BeltBlockEntity;
 import de.m_marvin.industria.core.registries.Blocks;
@@ -7,35 +9,32 @@ import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility.ShapeType;
 import de.m_marvin.industria.core.util.types.DiagonalDirection;
 import de.m_marvin.industria.core.util.types.DiagonalPlanarDirection;
+import de.m_marvin.univec.impl.Vec2i;
+import de.m_marvin.univec.impl.Vec3d;
+import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class BeltBlock extends BaseEntityBlock implements IKineticBlock, SimpleWaterloggedBlock {
+public class ConveyorBeltBlock extends BaseBeltBlock {
 	
-	public static final EnumProperty<Axis> AXIS = BlockStateProperties.AXIS;
-	public static final EnumProperty<DiagonalPlanarDirection> ORIENTATION = Blocks.PROP_PLANAR_ORIENTATION;
+	public static final EnumProperty<Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
+	public static final EnumProperty<DiagonalPlanarDirection> ORIENTATION = ModBlocks.ORIENTATION_NON_VERTICAL;
 	public static final BooleanProperty IS_END = Blocks.PROP_IS_END;
 
 	public static final VoxelShape SHAPE_STRAIGHT = Shapes.or(VoxelShapeUtility.box(1, 3, 0, 15, 4, 16), VoxelShapeUtility.box(1, 12, 0, 15, 13, 16));
@@ -78,9 +77,8 @@ public class BeltBlock extends BaseEntityBlock implements IKineticBlock, SimpleW
 			VoxelShapeUtility.box(1, 8, 14, 15, 10, 16)
 			);
 	
-	public BeltBlock(Properties pProperties) {
+	public ConveyorBeltBlock(Properties pProperties) {
 		super(pProperties);
-		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false));
 	}
 
 	@Override
@@ -88,11 +86,6 @@ public class BeltBlock extends BaseEntityBlock implements IKineticBlock, SimpleW
 		pBuilder.add(AXIS, ORIENTATION, IS_END, BlockStateProperties.WATERLOGGED);
 	}
 
-	@Override
-	public FluidState getFluidState(BlockState pState) {
-		return pState.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource().defaultFluidState() : Fluids.EMPTY.defaultFluidState();
-	}
-	
 	@Override
 	public RenderShape getRenderShape(BlockState pState) {
 		return RenderShape.ENTITYBLOCK_ANIMATED;
@@ -174,7 +167,7 @@ public class BeltBlock extends BaseEntityBlock implements IKineticBlock, SimpleW
 	}
 	
 	public boolean isValidConnectedBelt(BlockState pState, DiagonalDirection direction) {
-		if (pState.getBlock() instanceof BeltBlock) {
+		if (pState.getBlock() instanceof ConveyorBeltBlock) {
 			DiagonalDirection d = DiagonalDirection.fromPlanarAndAxis(pState.getValue(ORIENTATION), pState.getValue(AXIS));
 			if (direction == d) return true;
 			if (direction == d.getOposite() && !pState.getValue(IS_END)) return true;
@@ -182,7 +175,6 @@ public class BeltBlock extends BaseEntityBlock implements IKineticBlock, SimpleW
 		return false;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pNeighborBlock, BlockPos pNeighborPos, boolean pMovedByPiston) {		
 		DiagonalDirection direction1 = DiagonalDirection.fromPlanarAndAxis(pState.getValue(ORIENTATION), pState.getValue(AXIS));
@@ -192,25 +184,7 @@ public class BeltBlock extends BaseEntityBlock implements IKineticBlock, SimpleW
 		
 		if (pNeighborPos.equals(pos1) || (!pState.getValue(IS_END) && pNeighborPos.equals(pos2)))
 			pLevel.scheduleTick(pPos, this, 1);
-		
-		super.neighborChanged(pState, pLevel, pPos, pNeighborBlock, pNeighborPos, pMovedByPiston);
 	}
-	
-	@SuppressWarnings("deprecation")
-	@Override
-	public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
-		updateDiagonalBelts(pState, pLevel, pPos);
-		super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
-	}
-	
-	@Override
-	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-		if (!canSurvive(pState, pLevel, pPos))
-			pLevel.destroyBlock(pPos, true);
-	}
-	
-	@Override
-	public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {}
 	
 	public void updateDiagonalBelts(BlockState pState, Level pLevel, BlockPos pPos) {
 		DiagonalDirection direction1 = DiagonalDirection.fromPlanarAndAxis(pState.getValue(ORIENTATION), pState.getValue(AXIS));
@@ -226,11 +200,6 @@ public class BeltBlock extends BaseEntityBlock implements IKineticBlock, SimpleW
 		}
 	}
 	
-	@Override
-	public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-		return new BeltBlockEntity(pPos, pState);
-	}
-
 	@Override
 	public TransmissionNode[] getTransmissionNodes(LevelAccessor level, BlockPos pos, BlockState state) {
 		Axis axis = state.getValue(AXIS);
@@ -250,4 +219,38 @@ public class BeltBlock extends BaseEntityBlock implements IKineticBlock, SimpleW
 		}
 	}
 
+	@Override
+	public void entityInside(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity) {
+		
+		// FIXME diagonal belt hitbox problem
+		
+		if (pLevel.getBlockEntity(pPos) instanceof BeltBlockEntity belt) {
+
+			Axis axis = pState.getValue(AXIS);
+			DiagonalPlanarDirection orientation = pState.getValue(ORIENTATION);
+			double rpm = belt.getRPM(0);
+			
+			Vec2i vdir = new Vec2i(orientation.getNormal());
+			vdir.x = Math.abs(vdir.x);
+			
+			Vec3i pushDirection;
+			switch (axis) {
+			case Z: pushDirection = new Vec3i(-vdir.x, -vdir.y, 0); break;
+			case X: pushDirection = new Vec3i(0, -vdir.y, vdir.x); break;
+			default: return;
+			}
+
+			Vec3d force = new Vec3d(pushDirection).mul(rpm * 0.0012F);
+			
+			Vec3 motion = pEntity.getDeltaMovement();
+			pEntity.setDeltaMovement(
+					force.x == 0 ? motion.x : force.x, 
+					force.y == 0 ? motion.y : force.y, 
+					force.z == 0 ? motion.z : force.z
+			);
+			
+		}
+		
+	}
+	
 }

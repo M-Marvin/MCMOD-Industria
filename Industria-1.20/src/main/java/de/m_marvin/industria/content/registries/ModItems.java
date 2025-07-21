@@ -4,6 +4,7 @@ import de.m_marvin.industria.content.Industria;
 import de.m_marvin.industria.content.items.ConduitCableItem;
 import de.m_marvin.industria.content.items.ConduitCoilItem;
 import de.m_marvin.industria.content.items.ScrewDriverItem;
+import de.m_marvin.industria.content.items.machines.ConveyorBeltItem;
 import de.m_marvin.industria.core.compound.types.items.CompoundableBlockItem;
 import de.m_marvin.industria.core.kinetics.types.items.BeltItem;
 import net.minecraft.core.registries.Registries;
@@ -72,6 +73,12 @@ public class ModItems {
 	public static final RegistryObject<BlockItem> LARGE_OAK_WOOD_GEAR					= ITEMS.register("large_oak_wood_gear", () -> new CompoundableBlockItem(ModBlocks.LARGE_OAK_WOOD_GEAR.get(), new Item.Properties()));
 	public static final RegistryObject<BlockItem> RUBBER_BELT							= ITEMS.register("rubber_belt", () -> new BeltItem(ModBlocks.RUBBER_BELT.get(), new Item.Properties()));
 	public static final RegistryObject<BlockItem> BELT_SHAFT							= ITEMS.register("belt_shaft", () -> new CompoundableBlockItem(ModBlocks.BELT_SHAFT.get(), new Item.Properties()));
+	
+	public static final RegistryObject<BlockItem> CONVEYOR_BELT							= ITEMS.register("conveyor_belt", () -> new ConveyorBeltItem(ModBlocks.CONVEYOR_BELT.get(), new Item.Properties()));
+
+	public static final RegistryObject<BlockItem> STEEL_FENCE_POST						= ITEMS.register("steel_fence_post", () -> new BlockItem(ModBlocks.STEEL_FENCE_POST.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> LIGHT_FENCE_WIRES						= ITEMS.register("light_fence_wires", () -> new BlockItem(ModBlocks.LIGHT_FENCE_WIRES.get(), new Item.Properties()));
+	public static final RegistryObject<BlockItem> CONCRETE_FENCE_BASE					= ITEMS.register("concrete_fence_base", () -> new BlockItem(ModBlocks.CONCRETE_FENCE_BASE.get(), new Item.Properties()));
 	
 	public static final RegistryObject<Item> ALUMINUM_INGOT								= ITEMS.register("aluminum_ingot", () -> new Item(new Item.Properties()));
 	public static final RegistryObject<Item> BRASS_INGOT								= ITEMS.register("brass_ingot", () -> new Item(new Item.Properties()));
@@ -433,7 +440,11 @@ public class ModItems {
 				output.accept(WAXED_EXPOSED_BRASS_PLATES.get().getDefaultInstance());
 				output.accept(WAXED_WEATHERED_BRASS_PLATES.get().getDefaultInstance());
 				output.accept(WAXED_OXIDIZED_BRASS_PLATES.get().getDefaultInstance());
-			
+				
+				output.accept(STEEL_FENCE_POST.get().getDefaultInstance());
+				output.accept(LIGHT_FENCE_WIRES.get().getDefaultInstance());
+				output.accept(CONCRETE_FENCE_BASE.get().getDefaultInstance());
+				
 			})
 			.build()
 	);
@@ -592,6 +603,7 @@ public class ModItems {
 			.title(Component.translatable("industria.creative_tab.electrics"))
 			.icon(() -> TIN_WIRE_HOLDER.get().getDefaultInstance())
 			.displayItems((displayParams, output) -> {
+				
 				output.accept(COPPER_WIRE.get().getDefaultInstance());
 				output.accept(ALUMINUM_WIRE.get().getDefaultInstance());
 				output.accept(GOLD_WIRE.get().getDefaultInstance());
@@ -622,12 +634,6 @@ public class ModItems {
 				
 				output.accept(ELECTRO_MAGNETIC_COIL.get().getDefaultInstance());
 				
-				output.accept(BRASS_FLOODLIGHT.get().getDefaultInstance());
-				output.accept(STEEL_FLOODLIGHT.get().getDefaultInstance());
-				output.accept(PORTABLE_FUEL_GENERATOR.get().getDefaultInstance());
-				output.accept(PORTABLE_COAL_GENERATOR.get().getDefaultInstance());
-				output.accept(IONIC_THRUSTER.get().getDefaultInstance());
-				
 				output.accept(REDSTONE_TRANSITOR.get().getDefaultInstance());
 			})
 			.build()
@@ -636,6 +642,7 @@ public class ModItems {
 			.title(Component.translatable("industria.creative_tab.kinetics"))
 			.icon(() -> OAK_WOOD_GEAR.get().getDefaultInstance())
 			.displayItems((displayParams, output) -> {
+				
 				output.accept(IRON_SHAFT.get().getDefaultInstance());
 				output.accept(SHORT_IRON_SHAFT_2.get().getDefaultInstance());
 				output.accept(SHORT_IRON_SHAFT_1.get().getDefaultInstance());
@@ -643,14 +650,32 @@ public class ModItems {
 				output.accept(LARGE_OAK_WOOD_GEAR.get().getDefaultInstance());
 				output.accept(RUBBER_BELT.get().getDefaultInstance());
 				output.accept(BELT_SHAFT.get().getDefaultInstance());
+				
 			})
 			.build()	
+	);
+	public static final RegistryObject<CreativeModeTab> MACHINERY_TAB = CREATIVE_MODE_TABS.register("machinery", () -> CreativeModeTab.builder()
+			.title(Component.translatable("industria.creative_tab.machinery"))
+			.icon(() -> PORTABLE_COAL_GENERATOR.get().getDefaultInstance())
+			.displayItems((displayParams, output) -> {
+
+				output.accept(BRASS_FLOODLIGHT.get().getDefaultInstance());
+				output.accept(STEEL_FLOODLIGHT.get().getDefaultInstance());
+				output.accept(PORTABLE_FUEL_GENERATOR.get().getDefaultInstance());
+				output.accept(PORTABLE_COAL_GENERATOR.get().getDefaultInstance());
+				output.accept(IONIC_THRUSTER.get().getDefaultInstance());
+				output.accept(CONVEYOR_BELT.get().getDefaultInstance());
+				
+			})
+			.build()
 	);
 	public static final RegistryObject<CreativeModeTab> TOOLS_TAB = CREATIVE_MODE_TABS.register("tools", () -> CreativeModeTab.builder()
 			.title(Component.translatable("industria.creative_tab.tools"))
 			.icon(() -> SCREW_DRIVER.get().getDefaultInstance())
 			.displayItems((displayParams, output) -> {
+				
 				output.accept(SCREW_DRIVER.get().getDefaultInstance());
+				
 			})
 			.build()
 	);

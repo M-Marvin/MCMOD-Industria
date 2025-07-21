@@ -33,7 +33,7 @@ public class ShaftBlock extends BaseEntityBlock implements IKineticBlock, Simple
 	
 	public ShaftBlock(Properties pProperties) {
 		super(pProperties);
-		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false).setValue(AXIS, Axis.X));
+		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false));
 	}
 	
 	@Override

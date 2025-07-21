@@ -40,7 +40,7 @@ public class ShortShaftBlock extends BaseEntityBlock implements IKineticBlock, S
 	public ShortShaftBlock(boolean isLong, Properties pProperties) {
 		super(pProperties);
 		this.isLong = isLong;
-		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false).setValue(FACING, Direction.NORTH));
+		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false));
 	}
 	
 	@Override

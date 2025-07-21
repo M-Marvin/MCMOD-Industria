@@ -41,7 +41,7 @@ public class LargeGearBlock extends BaseEntityBlock implements IKineticBlock, Si
 	
 	public LargeGearBlock(Properties pProperties) {
 		super(pProperties);
-		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false).setValue(AXIS, Axis.X).setValue(POS, AxisOffset.CENTER));
+		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false));
 	}
 
 	@Override

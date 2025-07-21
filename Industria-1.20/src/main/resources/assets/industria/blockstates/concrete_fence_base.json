@@ -1,0 +1,170 @@
+{
+	"multipart": [
+		{
+			"apply": {
+				"model": "industria:block/fences/concrete_fence_base_center"
+			},
+			"when": {
+				"OR": [
+					{
+						"facing": "north|south",
+						"has_post": true,
+						"is_tall": false
+					},
+					{
+						"facing": "north|south",
+						"north": false,
+						"south": false,
+						"east": false,
+						"west": false,
+						"is_tall": false
+					}
+				]
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/concrete_fence_base_center",
+				"y": 90
+			},
+			"when": {
+				"OR": [
+					{
+						"facing": "east|west",
+						"has_post": true,
+						"is_tall": false
+					},
+					{
+						"facing": "east|west",
+						"north": false,
+						"south": false,
+						"east": false,
+						"west": false,
+						"is_tall": false
+					}
+				]
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/concrete_fence_base_north"
+			},
+			"when": {
+				"north": true,
+						"is_tall": false
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/concrete_fence_base_south"
+			},
+			"when": {
+				"south": true,
+						"is_tall": false
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/concrete_fence_base_north",
+				"y": 90
+			},
+			"when": {
+				"east": true,
+						"is_tall": false
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/concrete_fence_base_south",
+				"y": 90
+			},
+			"when": {
+				"west": true,
+						"is_tall": false
+			}
+		},
+			{
+			"apply": {
+				"model": "industria:block/fences/concrete_fence_base_center_tall"
+			},
+			"when": {
+				"OR": [
+					{
+						"facing": "north|south",
+						"has_post": true,
+						"is_tall": true
+					},
+					{
+						"facing": "north|south",
+						"north": false,
+						"south": false,
+						"east": false,
+						"west": false,
+						"is_tall": true
+					}
+				]
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/concrete_fence_base_center_tall",
+				"y": 90
+			},
+			"when": {
+				"OR": [
+					{
+						"facing": "east|west",
+						"has_post": true,
+						"is_tall": true
+					},
+					{
+						"facing": "east|west",
+						"north": false,
+						"south": false,
+						"east": false,
+						"west": false,
+						"is_tall": true
+					}
+				]
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/concrete_fence_base_north_tall"
+			},
+			"when": {
+				"north": true,
+						"is_tall": true
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/concrete_fence_base_south_tall"
+			},
+			"when": {
+				"south": true,
+						"is_tall": true
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/concrete_fence_base_north_tall",
+				"y": 90
+			},
+			"when": {
+				"east": true,
+						"is_tall": true
+			}
+		},
+		{
+			"apply": {
+				"model": "industria:block/fences/concrete_fence_base_south_tall",
+				"y": 90
+			},
+			"when": {
+				"west": true,
+						"is_tall": true
+			}
+		}
+	]
+}

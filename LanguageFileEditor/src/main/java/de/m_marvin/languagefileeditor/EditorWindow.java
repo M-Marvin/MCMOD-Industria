@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.FileDialog;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.Scrollbar;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -31,6 +32,7 @@ import de.m_marvin.openui.flatmono.WindowFlatMono;
 import de.m_marvin.openui.flatmono.components.ButtonComponent;
 import de.m_marvin.openui.flatmono.components.GroupBox;
 import de.m_marvin.openui.flatmono.components.LabelComponent;
+import de.m_marvin.openui.flatmono.components.ScrollBarComponent;
 import de.m_marvin.openui.flatmono.components.TextFieldComponent;
 import de.m_marvin.simplelogging.Log;
 import de.m_marvin.univec.impl.Vec2i;
@@ -41,6 +43,7 @@ public class EditorWindow extends WindowFlatMono {
 	protected ButtonComponent openLangFileBtn;
 	protected ButtonComponent saveLangFilesBtn;
 	
+	protected ScrollBarComponent listBar;
 	protected GroupBox tableArea;
 	
 	public EditorWindow() {
@@ -82,6 +85,12 @@ public class EditorWindow extends WindowFlatMono {
 		this.tableArea.setSizeMax(new Vec2i(10000, 10000));
 		getRootComponent().addComponent(this.tableArea);
 		
+//		this.listBar = new ScrollBarComponent(false, 1000, 1);
+//		this.listBar.setLayoutData(new BorderLayout.BorderLayoutData(BorderSection.LEFT));
+//		this.listBar.getSizeMax().y = 10000;
+//		this.listBar.getSizeMin().y = 100;
+//		getRootComponent().addComponent(this.listBar);
+		
 		getRootComponent().setLayout(new BorderLayout());
 		getRootComponent().autoSetMaxAndMinSize();
 		autoSetMinAndMaxSize();
@@ -101,6 +110,8 @@ public class EditorWindow extends WindowFlatMono {
 	
 	protected Map<String, String> rootEntries;
 	protected Map<File, Map<String, String>> langEntries = new LinkedHashMap<File, Map<String,String>>();
+	
+	public static final Font LANG_FONT = new Font("Consolas", 0, 11);
 	
 	protected File requestFileSelection(File lastFile) {
 		
@@ -189,14 +200,20 @@ public class EditorWindow extends WindowFlatMono {
 		int row = 1;
 		for (String key : this.rootEntries.keySet()) {
 			
-			LabelComponent keyLabel = new LabelComponent(key, Color.GREEN);
-			keyLabel.setFont(new Font("Consolas", 0, 16));
+			LabelComponent keyLabel = new LabelComponent(key.length() > 47 ? "..." + key.substring(key.length() - 47) : key, Color.GREEN);
+			keyLabel.setFont(LANG_FONT);
 			keyLabel.setLayoutData(new GridLayout.GridLayoutData(0, row));
+			keyLabel.setSize(new Vec2i(300, 8));
+			keyLabel.fixSize();
 			keyLabel.setCenterText(false);
 			this.tableArea.addComponent(keyLabel);
 			
 			TextFieldComponent rootLangField = new TextFieldComponent(Color.WHITE, Color.GRAY);
 			rootLangField.setLayoutData(new GridLayout.GridLayoutData(1, row));
+			rootLangField.setFont(LANG_FONT);
+			rootLangField.setSize(new Vec2i(300, 8));
+			rootLangField.fixSize();
+			rootLangField.setMargin(0, 0, 0, 0);
 			rootLangField.setText(this.rootEntries.getOrDefault(key, ""));
 			this.tableArea.addComponent(rootLangField);
 			
@@ -205,6 +222,10 @@ public class EditorWindow extends WindowFlatMono {
 
 				TextFieldComponent langField = new TextFieldComponent(Color.WHITE, Color.GRAY);
 				langField.setLayoutData(new GridLayout.GridLayoutData(col, row));
+				langField.setFont(LANG_FONT);
+				langField.setSize(new Vec2i(300, 8));
+				langField.fixSize();
+				langField.setMargin(0, 0, 0, 0);
 				langField.setText(this.langEntries.get(lang).getOrDefault(key, ""));;
 				this.tableArea.addComponent(langField);
 				

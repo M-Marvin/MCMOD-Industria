@@ -99,7 +99,7 @@
 "block.industriacore.gear":				"Kleines Zahnrad",
 "block.industriacore.large_gear":			"Großes Zahnrad",
 "block.industriacore.shaft":				"Welle",
-"block.industriacore.motor":				"Rotationsquelle",
+"block.industriacore.motor":				"Motor",
 "block.industriacore.compound_block":		"Verbundblock",
 "item.industriacore.electric_wire":			"Kabel",
 "conduit.industriacore.electric_conduit":		"Kabel",

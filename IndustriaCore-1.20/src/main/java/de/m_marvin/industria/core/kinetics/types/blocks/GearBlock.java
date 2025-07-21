@@ -41,7 +41,7 @@ public class GearBlock extends BaseEntityBlock implements IKineticBlock, SimpleW
 	
 	public GearBlock(Properties pProperties) {
 		super(pProperties);
-		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false).setValue(AXIS, Axis.X).setValue(POS, AxisOffset.CENTER));
+		registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false));
 	}
 	
 	@Override

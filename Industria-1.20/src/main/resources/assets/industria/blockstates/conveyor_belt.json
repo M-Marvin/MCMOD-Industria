@@ -1,33 +1,33 @@
 {
 	"variants": {
-		"axis=x,is_end=false,orientation=x_positive": { "model": "industria:block/kinetics/rubber_belt_streight", "y": 0 },
-		"axis=x,is_end=false,orientation=x_negative": { "model": "industria:block/kinetics/rubber_belt_streight", "y": 0 },
-		"axis=x,is_end=true,orientation=x_negative": { "model": "industria:block/kinetics/rubber_belt_streight_end1", "y": 0 },
-		"axis=x,is_end=true,orientation=x_positive": { "model": "industria:block/kinetics/rubber_belt_streight_end2", "y": 0 },
+		"axis=x,is_end=false,orientation=x_positive": { "model": "industria:block/machines/conveyor/conveyor_belt_streight", "y": 0 },
+		"axis=x,is_end=false,orientation=x_negative": { "model": "industria:block/machines/conveyor/conveyor_belt_streight", "y": 0 },
+		"axis=x,is_end=true,orientation=x_negative": { "model": "industria:block/machines/conveyor/conveyor_belt_streight_end1", "y": 0 },
+		"axis=x,is_end=true,orientation=x_positive": { "model": "industria:block/machines/conveyor/conveyor_belt_streight_end2", "y": 0 },
 		
-		"axis=z,is_end=false,orientation=x_positive": { "model": "industria:block/kinetics/rubber_belt_streight", "y": 90 },
-		"axis=z,is_end=false,orientation=x_negative": { "model": "industria:block/kinetics/rubber_belt_streight", "y": 90 },
-		"axis=z,is_end=true,orientation=x_positive": { "model": "industria:block/kinetics/rubber_belt_streight_end1", "y": 90 },
-		"axis=z,is_end=true,orientation=x_negative": { "model": "industria:block/kinetics/rubber_belt_streight_end2", "y": 90 },
+		"axis=z,is_end=false,orientation=x_positive": { "model": "industria:block/machines/conveyor/conveyor_belt_streight", "y": 90 },
+		"axis=z,is_end=false,orientation=x_negative": { "model": "industria:block/machines/conveyor/conveyor_belt_streight", "y": 90 },
+		"axis=z,is_end=true,orientation=x_positive": { "model": "industria:block/machines/conveyor/conveyor_belt_streight_end1", "y": 90 },
+		"axis=z,is_end=true,orientation=x_negative": { "model": "industria:block/machines/conveyor/conveyor_belt_streight_end2", "y": 90 },
 		
-		"axis=x,is_end=false,orientation=x_pos_y_pos": { "model": "industria:block/kinetics/rubber_belt_slope_down" },
-		"axis=x,is_end=false,orientation=x_neg_y_neg": { "model": "industria:block/kinetics/rubber_belt_slope_down" },
-		"axis=x,is_end=true,orientation=x_neg_y_neg": { "model": "industria:block/machines/conveyor_belt_slope_end1_down" },
-		"axis=x,is_end=true,orientation=x_pos_y_pos": { "model": "industria:block/kinetics/rubber_belt_slope_end2_down" },
+		"axis=x,is_end=false,orientation=x_pos_y_pos": { "model": "industria:block/machines/conveyor/conveyor_belt_slope_down" },
+		"axis=x,is_end=false,orientation=x_neg_y_neg": { "model": "industria:block/machines/conveyor/conveyor_belt_slope_down" },
+		"axis=x,is_end=true,orientation=x_neg_y_neg": { "model": "industria:block/machines/conveyor/conveyor_belt_slope_end1_down" },
+		"axis=x,is_end=true,orientation=x_pos_y_pos": { "model": "industria:block/machines/conveyor/conveyor_belt_slope_end2_down" },
 		
-		"axis=z,is_end=false,orientation=x_pos_y_pos": { "model": "industria:block/kinetics/rubber_belt_slope_up", "y": 90 },
-		"axis=z,is_end=false,orientation=x_neg_y_neg": { "model": "industria:block/kinetics/rubber_belt_slope_up", "y": 90 },
-		"axis=z,is_end=true,orientation=x_neg_y_neg": { "model": "industria:block/kinetics/rubber_belt_slope_end2_up", "y": 90 },
-		"axis=z,is_end=true,orientation=x_pos_y_pos": { "model": "industria:block/kinetics/rubber_belt_slope_end1_up", "y": 90 },
+		"axis=z,is_end=false,orientation=x_pos_y_pos": { "model": "industria:block/machines/conveyor/conveyor_belt_slope_up", "y": 90 },
+		"axis=z,is_end=false,orientation=x_neg_y_neg": { "model": "industria:block/machines/conveyor/conveyor_belt_slope_up", "y": 90 },
+		"axis=z,is_end=true,orientation=x_neg_y_neg": { "model": "industria:block/machines/conveyor/conveyor_belt_slope_end2_up", "y": 90 },
+		"axis=z,is_end=true,orientation=x_pos_y_pos": { "model": "industria:block/machines/conveyor/conveyor_belt_slope_end1_up", "y": 90 },
 		
-		"axis=x,is_end=false,orientation=x_neg_y_pos": { "model": "industria:block/kinetics/rubber_belt_slope_up" },
-		"axis=x,is_end=false,orientation=x_pos_y_neg": { "model": "industria:block/kinetics/rubber_belt_slope_up" },
-		"axis=x,is_end=true,orientation=x_pos_y_neg": { "model": "industria:block/kinetics/rubber_belt_slope_end2_up" },
-		"axis=x,is_end=true,orientation=x_neg_y_pos": { "model": "industria:block/kinetics/rubber_belt_slope_end1_up" },
+		"axis=x,is_end=false,orientation=x_neg_y_pos": { "model": "industria:block/machines/conveyor/conveyor_belt_slope_up" },
+		"axis=x,is_end=false,orientation=x_pos_y_neg": { "model": "industria:block/machines/conveyor/conveyor_belt_slope_up" },
+		"axis=x,is_end=true,orientation=x_pos_y_neg": { "model": "industria:block/machines/conveyor/conveyor_belt_slope_end2_up" },
+		"axis=x,is_end=true,orientation=x_neg_y_pos": { "model": "industria:block/machines/conveyor/conveyor_belt_slope_end1_up" },
 		
-		"axis=z,is_end=false,orientation=x_neg_y_pos": { "model": "industria:block/kinetics/rubber_belt_slope_down", "y": 90 },
-		"axis=z,is_end=false,orientation=x_pos_y_neg": { "model": "industria:block/kinetics/rubber_belt_slope_down", "y": 90 },
-		"axis=z,is_end=true,orientation=x_neg_y_pos": { "model": "industria:block/kinetics/rubber_belt_slope_end2_down", "y": 90 },
-		"axis=z,is_end=true,orientation=x_pos_y_neg": { "model": "industria:block/machines/conveyor_belt_slope_end1_down", "y": 90 }
+		"axis=z,is_end=false,orientation=x_neg_y_pos": { "model": "industria:block/machines/conveyor/conveyor_belt_slope_down", "y": 90 },
+		"axis=z,is_end=false,orientation=x_pos_y_neg": { "model": "industria:block/machines/conveyor/conveyor_belt_slope_down", "y": 90 },
+		"axis=z,is_end=true,orientation=x_neg_y_pos": { "model": "industria:block/machines/conveyor/conveyor_belt_slope_end2_down", "y": 90 },
+		"axis=z,is_end=true,orientation=x_pos_y_neg": { "model": "industria:block/machines/conveyor/conveyor_belt_slope_end1_down", "y": 90 }
 	}
 }

@@ -1,0 +1,7 @@
+{
+	"parent": "industriacore:block/belt_streight",
+	"textures": {
+		"0": "industriacore:block/belt",
+		"particle": "industriacore:block/belt_particle"
+	}
+}

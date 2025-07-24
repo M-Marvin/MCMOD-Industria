@@ -1,6 +1,5 @@
 package de.m_marvin.industria.content.blocks.fences;
 
-import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
@@ -42,15 +41,15 @@ public class ModularFenceMeshBlock extends Block {
 	public static final EnumProperty<Mesh> EAST = EnumProperty.create("east", Mesh.class);
 	public static final EnumProperty<Mesh> WEST = EnumProperty.create("west", Mesh.class);
 	
-	public static final VoxelShape SHAPE_PLANE_NORTH = VoxelShapeUtility.box(7, 0, 0, 9, 16, 8);
-	public static final VoxelShape SHAPE_PLANE_SOUTH = VoxelShapeUtility.box(7, 0, 8, 9, 16, 16);
-	public static final VoxelShape SHAPE_PLANE_EAST = VoxelShapeUtility.box(8, 0, 7, 16, 16, 9);
-	public static final VoxelShape SHAPE_PLANE_WEST = VoxelShapeUtility.box(0, 0, 7, 8, 16, 9);
-	public static final VoxelShape SHAPE_PLANE_NORTH_LONG = VoxelShapeUtility.box(7, 0, -9, 9, 16, 8);
-	public static final VoxelShape SHAPE_PLANE_SOUTH_LONG = VoxelShapeUtility.box(7, 0, 8, 9, 16, 24);
-	public static final VoxelShape SHAPE_PLANE_EAST_LONG = VoxelShapeUtility.box(8, 0, 7, 24, 16, 9);
-	public static final VoxelShape SHAPE_PLANE_WEST_LONG = VoxelShapeUtility.box(-8, 0, 7, 8, 16, 9);
-	public static final VoxelShape SHAPE_NONE = VoxelShapeUtility.box(7, 0, 7, 9, 16, 9);
+	public static final VoxelShape SHAPE_PLANE_NORTH = box(7, 0, 0, 9, 16, 8);
+	public static final VoxelShape SHAPE_PLANE_SOUTH = box(7, 0, 8, 9, 16, 16);
+	public static final VoxelShape SHAPE_PLANE_EAST = box(8, 0, 7, 16, 16, 9);
+	public static final VoxelShape SHAPE_PLANE_WEST = box(0, 0, 7, 8, 16, 9);
+	public static final VoxelShape SHAPE_PLANE_NORTH_LONG = box(7, 0, -9, 9, 16, 8);
+	public static final VoxelShape SHAPE_PLANE_SOUTH_LONG = box(7, 0, 8, 9, 16, 24);
+	public static final VoxelShape SHAPE_PLANE_EAST_LONG = box(8, 0, 7, 24, 16, 9);
+	public static final VoxelShape SHAPE_PLANE_WEST_LONG = box(-8, 0, 7, 8, 16, 9);
+	public static final VoxelShape SHAPE_NONE = box(7, 0, 7, 9, 16, 9);
 	
 	public ModularFenceMeshBlock(Properties pProperties) {
 		super(pProperties);

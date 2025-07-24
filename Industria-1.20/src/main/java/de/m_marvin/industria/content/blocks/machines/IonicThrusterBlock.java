@@ -49,7 +49,7 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 			.addModifier(BlockStateProperties.ATTACH_FACE, NodePointSupplier.ATTACH_FACE_MODIFIER_DEFAULT_WALL)
 			.addModifier(BlockStateProperties.HORIZONTAL_FACING, NodePointSupplier.FACING_MODIFIER_DEFAULT_NORTH);
 	
-	public static final VoxelShape SHAPE = VoxelShapeUtility.box(1, 1, 0, 15, 15, 15);
+	public static final VoxelShape SHAPE = box(1, 1, 0, 15, 15, 15);
 	
 	public static final IntegerParameter PARAMETER_MAX_THRUSTER_THRUST = new IntegerParameter("maxThrusterThrust", 1000);
 	

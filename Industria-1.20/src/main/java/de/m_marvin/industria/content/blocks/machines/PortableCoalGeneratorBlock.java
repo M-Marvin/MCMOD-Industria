@@ -58,7 +58,7 @@ public class PortableCoalGeneratorBlock extends BaseEntityFixedMultiBlock implem
 			.addNode(NodeTypes.ELECTRIC, 4, new Vec3i(8, 8, 16))
 			.addModifier(BlockStateProperties.HORIZONTAL_FACING, NodePointSupplier.FACING_HORIZONTAL_MODIFIER_DEFAULT_NORTH);
 	
-	public static final VoxelShape SHAPE = Shapes.or(VoxelShapeUtility.box(0, 4, 3, 14, 14, 13), VoxelShapeUtility.box(0, 3, 0, 11, 12, 3), VoxelShapeUtility.box(7, 14, 5, 13, 17, 11));
+	public static final VoxelShape SHAPE = Shapes.or(box(0, 4, 3, 14, 14, 13), box(0, 3, 0, 11, 12, 3), box(7, 14, 5, 13, 17, 11));
 	
 	public static final FloatParameter PARAMETER_WATTS_PER_WATER_MB = new FloatParameter("wattsPerWaterMB", 100000);
 	public static final FloatParameter PARAMETER_WATTS_PER_FUEL_TICK = new FloatParameter("wattsPerFuelTick", 1000);

@@ -29,7 +29,7 @@ public class ShaftBlock extends BaseEntityBlock implements IKineticBlock, Simple
 
 	public static final EnumProperty<Axis> AXIS = BlockStateProperties.AXIS;
 
-	public static final VoxelShape SHAPE = VoxelShapeUtility.box(6, 0, 6, 10, 16, 10);
+	public static final VoxelShape SHAPE = box(6, 0, 6, 10, 16, 10);
 	
 	public ShaftBlock(Properties pProperties) {
 		super(pProperties);

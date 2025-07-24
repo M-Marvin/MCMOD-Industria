@@ -6,7 +6,6 @@ import de.m_marvin.industria.content.registries.ModBlockStateProperties;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -27,11 +26,11 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class ConduitCoilBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
 	
-	public static final VoxelShape SHAPE_0 = Shapes.join(Shapes.or(VoxelShapeUtility.box(0, 0, 0, 16, 16, 2), VoxelShapeUtility.box(0, 0, 14, 16, 16, 16), VoxelShapeUtility.box(5, 5, 2, 11, 11, 14)), VoxelShapeUtility.box(6, 6, 0, 10, 10, 16), BooleanOp.ONLY_FIRST);
-	public static final VoxelShape SHAPE_1 = Shapes.join(Shapes.or(VoxelShapeUtility.box(0, 0, 0, 16, 16, 2), VoxelShapeUtility.box(0, 0, 14, 16, 16, 16), VoxelShapeUtility.box(4, 4, 2, 12, 12, 14)), VoxelShapeUtility.box(6, 6, 0, 10, 10, 16), BooleanOp.ONLY_FIRST);
-	public static final VoxelShape SHAPE_2 = Shapes.join(Shapes.or(VoxelShapeUtility.box(0, 0, 0, 16, 16, 2), VoxelShapeUtility.box(0, 0, 14, 16, 16, 16), VoxelShapeUtility.box(3, 3, 2, 13, 13, 14)), VoxelShapeUtility.box(6, 6, 0, 10, 10, 16), BooleanOp.ONLY_FIRST);
-	public static final VoxelShape SHAPE_3 = Shapes.join(Shapes.or(VoxelShapeUtility.box(0, 0, 0, 16, 16, 2), VoxelShapeUtility.box(0, 0, 14, 16, 16, 16), VoxelShapeUtility.box(2, 2, 2, 14, 14, 14)), VoxelShapeUtility.box(6, 6, 0, 10, 10, 16), BooleanOp.ONLY_FIRST);
-	public static final VoxelShape SHAPE_4 = Shapes.join(Shapes.or(VoxelShapeUtility.box(0, 0, 0, 16, 16, 2), VoxelShapeUtility.box(0, 0, 14, 16, 16, 16), VoxelShapeUtility.box(1, 1, 2, 15, 15, 14)), VoxelShapeUtility.box(6, 6, 0, 10, 10, 16), BooleanOp.ONLY_FIRST);
+	public static final VoxelShape SHAPE_0 = Shapes.join(Shapes.or(box(0, 0, 0, 16, 16, 2), box(0, 0, 14, 16, 16, 16), box(5, 5, 2, 11, 11, 14)), box(6, 6, 0, 10, 10, 16), BooleanOp.ONLY_FIRST);
+	public static final VoxelShape SHAPE_1 = Shapes.join(Shapes.or(box(0, 0, 0, 16, 16, 2), box(0, 0, 14, 16, 16, 16), box(4, 4, 2, 12, 12, 14)), box(6, 6, 0, 10, 10, 16), BooleanOp.ONLY_FIRST);
+	public static final VoxelShape SHAPE_2 = Shapes.join(Shapes.or(box(0, 0, 0, 16, 16, 2), box(0, 0, 14, 16, 16, 16), box(3, 3, 2, 13, 13, 14)), box(6, 6, 0, 10, 10, 16), BooleanOp.ONLY_FIRST);
+	public static final VoxelShape SHAPE_3 = Shapes.join(Shapes.or(box(0, 0, 0, 16, 16, 2), box(0, 0, 14, 16, 16, 16), box(2, 2, 2, 14, 14, 14)), box(6, 6, 0, 10, 10, 16), BooleanOp.ONLY_FIRST);
+	public static final VoxelShape SHAPE_4 = Shapes.join(Shapes.or(box(0, 0, 0, 16, 16, 2), box(0, 0, 14, 16, 16, 16), box(1, 1, 2, 15, 15, 14)), box(6, 6, 0, 10, 10, 16), BooleanOp.ONLY_FIRST);
 	
 	protected final boolean holdsConduits;
 	

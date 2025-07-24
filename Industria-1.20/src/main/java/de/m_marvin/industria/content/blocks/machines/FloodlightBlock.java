@@ -56,7 +56,7 @@ public class FloodlightBlock extends BaseEntityBlock implements IElectricBlock, 
 			.addModifier(BlockStateProperties.ATTACH_FACE, NodePointSupplier.ATTACH_FACE_MODIFIER_DEFAULT_WALL)
 			.addModifier(BlockStateProperties.HORIZONTAL_FACING, NodePointSupplier.FACING_MODIFIER_DEFAULT_NORTH);
 	
-	public static final VoxelShape SHAPE = Shapes.or(VoxelShapeUtility.box(0, 1, 0, 16, 15, 6), VoxelShapeUtility.box(0, 0, 6, 16, 16, 10));
+	public static final VoxelShape SHAPE = Shapes.or(box(0, 1, 0, 16, 15, 6), box(0, 0, 6, 16, 16, 10));
 	
 	public FloodlightBlock(Properties pProperties) {
 		super(pProperties);

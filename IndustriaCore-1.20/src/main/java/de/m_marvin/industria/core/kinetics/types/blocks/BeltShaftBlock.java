@@ -13,7 +13,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class BeltShaftBlock extends ShaftBlock {
 
-	public static final VoxelShape SHAPE = Shapes.join(VoxelShapeUtility.box(5, 2, 5, 11, 14, 11), ShaftBlock.SHAPE, BooleanOp.ONLY_FIRST);
+	public static final VoxelShape SHAPE = Shapes.join(box(5, 2, 5, 11, 14, 11), ShaftBlock.SHAPE, BooleanOp.ONLY_FIRST);
 	
 	public BeltShaftBlock(Properties pProperties) {
 		super(pProperties);

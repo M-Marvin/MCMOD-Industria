@@ -33,7 +33,7 @@ public class ShortShaftBlock extends BaseEntityBlock implements IKineticBlock, S
 
 	public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
 
-	public static final Function<Boolean, VoxelShape> SHAPE = isLong -> VoxelShapeUtility.box(6, 6, 0, 10, 10, isLong ? 10 : 5);
+	public static final Function<Boolean, VoxelShape> SHAPE = isLong -> box(6, 6, 0, 10, 10, isLong ? 10 : 5);
 	
 	protected final boolean isLong;
 	

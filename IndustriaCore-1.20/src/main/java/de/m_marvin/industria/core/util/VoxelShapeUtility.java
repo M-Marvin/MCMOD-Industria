@@ -21,17 +21,6 @@ public class VoxelShapeUtility {
 	
 	private VoxelShapeUtility() {}
 	
-	public static VoxelShape box(float ax, float ay, float az, float bx, float by, float bz) {
-		return Shapes.create(
-				(ax > bx ? bx : ax) * 0.0625F, 
-				(ay > by ? by : ay) * 0.0625F, 
-				(az > bz ? bz : az) * 0.0625F, 
-				(ax <= bx ? bx : ax) * 0.0625F, 
-				(ay <= by ? by : ay) * 0.0625F, 
-				(az <= bz ? bz : az) * 0.0625F
-		);
-	}
-
 	public static VoxelShape create(float ax, float ay, float az, float bx, float by, float bz) {
 		return Shapes.create(
 				(ax > bx ? bx : ax), 

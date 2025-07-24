@@ -19,7 +19,6 @@ import de.m_marvin.industria.core.magnetism.MagnetismUtility;
 import de.m_marvin.industria.core.magnetism.types.blocks.IMagneticBlock;
 import de.m_marvin.industria.core.registries.Blocks;
 import de.m_marvin.industria.core.util.MathUtility;
-import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.industria.core.util.types.StateTransform;
 import de.m_marvin.industria.core.util.virtualblock.VirtualBlock;
 import de.m_marvin.univec.impl.Vec3d;
@@ -759,7 +758,7 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 				(compound, p) -> p.getBlock().getShape(p.getState(), p.getLevel(), p.getPos(), pContext), 
 				Shapes::or);
 		// particle engine seems to just assume no shape is ever empty, so it will crash if the shape here is empty
-		if (shape.isEmpty()) return VoxelShapeUtility.box(0, 0, 0, 16, 16, 16);
+		if (shape.isEmpty()) return box(0, 0, 0, 16, 16, 16);
 		return shape;
 	}
 

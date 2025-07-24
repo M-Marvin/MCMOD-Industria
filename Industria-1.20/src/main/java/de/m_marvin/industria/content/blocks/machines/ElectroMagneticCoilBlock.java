@@ -74,8 +74,8 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	public static final DoubleParameter MAGNET_RESISTANCE = new DoubleParameter("magnetResistance", 10);
 	public static final int CONNECTION_PER_NODE = 1;
 	
-	public static final VoxelShape DOWN_SHAPE =VoxelShapeUtility.box(0, 0, 0, 16, 2, 16);
-	public static final VoxelShape UP_SHAPE = VoxelShapeUtility.box(0, 14, 0, 16, 16, 16);
+	public static final VoxelShape DOWN_SHAPE =box(0, 0, 0, 16, 2, 16);
+	public static final VoxelShape UP_SHAPE = box(0, 14, 0, 16, 16, 16);
 	
 	public ElectroMagneticCoilBlock(Properties pProperties) {
 		super(pProperties);

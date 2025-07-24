@@ -37,7 +37,7 @@ public class GearBlock extends BaseEntityBlock implements IKineticBlock, SimpleW
 	public static final EnumProperty<Axis> AXIS = BlockStateProperties.AXIS;
 	public static final EnumProperty<AxisOffset> POS = Blocks.PROP_GEAR_POS;
 	
-	public static final VoxelShape SHAPE = Shapes.join(VoxelShapeUtility.box(0, 6, 0, 16, 10, 16), ShaftBlock.SHAPE, BooleanOp.ONLY_FIRST);
+	public static final VoxelShape SHAPE = Shapes.join(box(0, 6, 0, 16, 10, 16), ShaftBlock.SHAPE, BooleanOp.ONLY_FIRST);
 	
 	public GearBlock(Properties pProperties) {
 		super(pProperties);

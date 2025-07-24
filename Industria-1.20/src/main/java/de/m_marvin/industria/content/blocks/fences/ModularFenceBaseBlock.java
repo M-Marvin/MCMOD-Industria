@@ -1,8 +1,8 @@
 package de.m_marvin.industria.content.blocks.fences;
 
-import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -25,17 +25,21 @@ public class ModularFenceBaseBlock extends Block {
 	public static final BooleanProperty EAST = BlockStateProperties.EAST;
 	public static final BooleanProperty WEST = BlockStateProperties.WEST;
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-	
-	public static final VoxelShape SHAPE_PLANE_NORTH = VoxelShapeUtility.box(3, 0, 0, 13, 9, 8);
-	public static final VoxelShape SHAPE_PLANE_SOUTH = VoxelShapeUtility.box(3, 0, 8, 13, 9, 16);
-	public static final VoxelShape SHAPE_PLANE_EAST = VoxelShapeUtility.box(8, 0, 3, 16, 9, 13);
-	public static final VoxelShape SHAPE_PLANE_WEST = VoxelShapeUtility.box(0, 0, 3, 8, 9, 13);
-	public static final VoxelShape SHAPE_CENTER = VoxelShapeUtility.box(3, 0, 2, 13, 11, 14);
-	public static final VoxelShape SHAPE_PLANE_NORTH_TALL = VoxelShapeUtility.box(3, 0, 0, 13, 16, 8);
-	public static final VoxelShape SHAPE_PLANE_SOUTH_TALL = VoxelShapeUtility.box(3, 0, 8, 13, 16, 16);
-	public static final VoxelShape SHAPE_PLANE_EAST_TALL = VoxelShapeUtility.box(8, 0, 3, 16, 16, 13);
-	public static final VoxelShape SHAPE_PLANE_WEST_TALL = VoxelShapeUtility.box(0, 0, 3, 8, 16, 13);
-	public static final VoxelShape SHAPE_CENTER_TALL = VoxelShapeUtility.box(3, 0, 2, 13, 16, 14);
+
+	public static final VoxelShape SHAPE_CENTER = box(3, 0, 3, 13, 9, 13);
+	public static final VoxelShape SHAPE_CENTER_TALL = box(3, 0, 3, 13, 16, 13);
+	public static final VoxelShape SHAPE_PLANE_NORTH = box(3, 0, 0, 13, 9, 8);
+	public static final VoxelShape SHAPE_PLANE_SOUTH = box(3, 0, 8, 13, 9, 16);
+	public static final VoxelShape SHAPE_PLANE_EAST = box(8, 0, 3, 16, 9, 13);
+	public static final VoxelShape SHAPE_PLANE_WEST = box(0, 0, 3, 8, 9, 13);
+	public static final VoxelShape SHAPE_CENTER_POST = box(3, 0, 2, 13, 11, 14);
+	public static final VoxelShape SHAPE_CENTER_POST_R = box(2, 0, 3, 14, 11, 13);
+	public static final VoxelShape SHAPE_PLANE_NORTH_TALL = box(3, 0, 0, 13, 16, 8);
+	public static final VoxelShape SHAPE_PLANE_SOUTH_TALL = box(3, 0, 8, 13, 16, 16);
+	public static final VoxelShape SHAPE_PLANE_EAST_TALL = box(8, 0, 3, 16, 16, 13);
+	public static final VoxelShape SHAPE_PLANE_WEST_TALL = box(0, 0, 3, 8, 16, 13);
+	public static final VoxelShape SHAPE_CENTER_POST_TALL = box(3, 0, 2, 13, 16, 14);
+	public static final VoxelShape SHAPE_CENTER_POST_TALL_R = box(2, 0, 3, 14, 16, 13);
 	
 	public ModularFenceBaseBlock(Properties pProperties) {
 		super(pProperties);
@@ -59,13 +63,10 @@ public class ModularFenceBaseBlock extends Block {
 				shape = Shapes.or(shape, SHAPE_PLANE_EAST_TALL);
 			if (pState.getValue(WEST))
 				shape = Shapes.or(shape, SHAPE_PLANE_WEST_TALL);
-			if (pState.getValue(HAS_POST) || shape.isEmpty()) {
-				shape = Shapes.or(shape, VoxelShapeUtility.transformation()
-					.centered()
-					.rotateY(pState.getValue(FACING).get2DDataValue() * 90)
-					.uncentered()
-					.transform(SHAPE_CENTER_TALL)
-				);
+			if (pState.getValue(HAS_POST)) {
+				shape = Shapes.or(shape, pState.getValue(FACING).getAxis() == Axis.X ? SHAPE_CENTER_POST_TALL : SHAPE_CENTER_POST_TALL_R);
+			} else {
+				shape = Shapes.or(shape, SHAPE_CENTER_TALL);
 			}
 		} else {
 			if (pState.getValue(NORTH))
@@ -76,13 +77,10 @@ public class ModularFenceBaseBlock extends Block {
 				shape = Shapes.or(shape, SHAPE_PLANE_EAST);
 			if (pState.getValue(WEST))
 				shape = Shapes.or(shape, SHAPE_PLANE_WEST);
-			if (pState.getValue(HAS_POST) || shape.isEmpty()) {
-				shape = Shapes.or(shape, VoxelShapeUtility.transformation()
-					.centered()
-					.rotateY(pState.getValue(FACING).get2DDataValue() * 90)
-					.uncentered()
-					.transform(SHAPE_CENTER)
-				);
+			if (pState.getValue(HAS_POST)) {
+				shape = Shapes.or(shape, pState.getValue(FACING).getAxis() == Axis.X ? SHAPE_CENTER_POST : SHAPE_CENTER_POST_R);
+			} else {
+				shape = Shapes.or(shape, SHAPE_CENTER);
 			}
 		}
 		return shape;

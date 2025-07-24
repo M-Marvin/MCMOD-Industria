@@ -1,7 +1,6 @@
 package de.m_marvin.industria.content.blocks.fences;
 
 import de.m_marvin.industria.content.registries.ModTags;
-import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -22,8 +21,8 @@ public class ModularFencePostBlock extends Block {
 	public static final BooleanProperty HAS_BASE = BooleanProperty.create("has_base");
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	
-	public static final VoxelShape SHAPE_POST = VoxelShapeUtility.box(5, 0, 5, 11, 16, 11);
-	public static final VoxelShape SHAPE_POST_TOP = VoxelShapeUtility.box(5, 0, 5, 11, 11, 11);
+	public static final VoxelShape SHAPE_POST = box(5, 0, 5, 11, 16, 11);
+	public static final VoxelShape SHAPE_POST_TOP = box(5, 0, 5, 11, 11, 11);
 	
 	public ModularFencePostBlock(Properties pProperties) {
 		super(pProperties);

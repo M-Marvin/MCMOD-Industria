@@ -4,6 +4,7 @@ import de.m_marvin.industria.content.Industria;
 import de.m_marvin.industria.content.blockentities.ConduitCoilBlockEntity;
 import de.m_marvin.industria.content.blockentities.kinetics.BaseBeltBlockEntity;
 import de.m_marvin.industria.content.blockentities.kinetics.BaseSimpleKineticBlockEntity;
+import de.m_marvin.industria.content.blockentities.machines.ConveyorBeltBlockEntity;
 import de.m_marvin.industria.content.blockentities.machines.ElectroMagneticCoilBlockEntity;
 import de.m_marvin.industria.content.blockentities.machines.FloodlightBlockEntity;
 import de.m_marvin.industria.content.blockentities.machines.IonicThrusterBlockEntity;
@@ -40,8 +41,8 @@ public class ModBlockEntityTypes {
 			ModBlocks.BELT_SHAFT.get()
 			).build(null));
 	public static final RegistryObject<BlockEntityType<BaseBeltBlockEntity>>				BASE_BELT					= BLOCK_ENTITY_TYPES.register("base_belt", () -> BlockEntityType.Builder.of(BaseBeltBlockEntity::new,
-			ModBlocks.RUBBER_BELT.get(),
-			ModBlocks.CONVEYOR_BELT.get()
+			ModBlocks.RUBBER_BELT.get()
 			).build(null));
+	public static final RegistryObject<BlockEntityType<ConveyorBeltBlockEntity>>			CONVEYOR_BELT				= BLOCK_ENTITY_TYPES.register("conveyor_belt", () -> BlockEntityType.Builder.of(ConveyorBeltBlockEntity::new, ModBlocks.CONVEYOR_BELT.get()).build(null));
 	
 }

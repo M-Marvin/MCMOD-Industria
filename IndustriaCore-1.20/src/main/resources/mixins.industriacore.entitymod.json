@@ -1,0 +1,9 @@
+{
+	"required": false,
+	"package": "de.m_marvin.industria.core.entitymod.engine.mixin",
+	"mixins": [
+		"EntityUpStepModifier"
+	],
+	"refmap": "mixins.industriacore.refmap.json",
+	"minVersion": "0.8"
+}

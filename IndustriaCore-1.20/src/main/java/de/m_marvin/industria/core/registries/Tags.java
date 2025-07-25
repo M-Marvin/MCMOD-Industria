@@ -19,6 +19,9 @@ public class Tags {
 		public static final TagKey<Block> COMPOUNDABLE = tag("compoundable");
 		public static final TagKey<Block> BELT_SHAFTS = tag("belt_shafts");
 		
+		public static final TagKey<Block> ENTITY_UP_STEP_HALF_BLOCK = tag("entity_up_step_half_block");
+		public static final TagKey<Block> ENTITY_UP_STEP_ONE_BLOCK = tag("entity_up_step_one_block");
+		
 		private static TagKey<Block> tag(String name) {
 			return BlockTags.create(new ResourceLocation(IndustriaCore.MODID, name));
 		}

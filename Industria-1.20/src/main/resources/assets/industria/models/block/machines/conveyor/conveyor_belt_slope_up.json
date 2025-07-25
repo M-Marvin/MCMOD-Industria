@@ -1,7 +1,7 @@
 {
 	"parent": "industriacore:block/belt_slope_up",
 	"textures": {
-		"0": "industriacore:block/belt_belt",
+		"0": "industriacore:block/belt",
 		"particle": "industriacore:block/belt_particle"
 	}
 }

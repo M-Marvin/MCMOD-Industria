@@ -19,6 +19,7 @@ public class ModBlockEntityRenderers {
 		event.registerBlockEntityRenderer(ModBlockEntityTypes.ELECTRO_MAGNETIC_COIL.get(), ElectroMagneticCoilBlockEntityRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntityTypes.BASE_SIMPLE_KINETIC.get(), SimpleKineticBlockEntityRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntityTypes.BASE_BELT.get(), BeltBlockEntityRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntityTypes.CONVEYOR_BELT.get(), BeltBlockEntityRenderer::new);
 		
 	}
 	

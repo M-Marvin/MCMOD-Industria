@@ -76,6 +76,10 @@ public class BeltItem extends CompoundableBlockItem implements IScrollOverride {
 			if (!shaftState.is(Tags.Blocks.BELT_SHAFTS) || !shaftState.hasProperty(BlockStateProperties.AXIS))
 				return InteractionResult.FAIL;
 			
+			// Check if same block
+			if (firstPos.equals(secondPos))
+				return InteractionResult.FAIL;
+			
 			// Check if axis match
 			Axis secondAxis = shaftState.getValue(BlockStateProperties.AXIS);
 			if (firstAxis != secondAxis)

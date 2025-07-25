@@ -7,6 +7,9 @@ import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility.ShapeType;
 import de.m_marvin.industria.core.util.types.DiagonalDirection;
 import de.m_marvin.industria.core.util.types.DiagonalPlanarDirection;
+import de.m_marvin.univec.impl.Vec2i;
+import de.m_marvin.univec.impl.Vec3d;
+import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.server.level.ServerLevel;
@@ -28,6 +31,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -250,4 +254,36 @@ public class BeltBlock extends BaseEntityBlock implements IKineticBlock, SimpleW
 		}
 	}
 
+	@Override
+	public void stepOn(Level pLevel, BlockPos pPos, BlockState pState, Entity pEntity) {
+
+		if (pLevel.getBlockEntity(pPos) instanceof BeltBlockEntity belt) {
+
+			Axis axis = pState.getValue(AXIS);
+			DiagonalPlanarDirection orientation = pState.getValue(ORIENTATION);
+			double rpm = belt.getRPM(0);
+			
+			Vec2i vdir = new Vec2i(orientation.getNormal());
+			vdir.x = Math.abs(vdir.x);
+			
+			Vec3i pushDirection;
+			switch (axis) {
+			case Z: pushDirection = new Vec3i(-vdir.x, vdir.y, 0); break;
+			case X: pushDirection = new Vec3i(0, vdir.y, vdir.x); break;
+			default: return;
+			}
+			
+			Vec3d force = new Vec3d(pushDirection).mul(rpm * 0.0012F, rpm * 0.00012F, rpm * 0.0012F);
+			
+			Vec3 motion = pEntity.getDeltaMovement();
+			pEntity.setDeltaMovement(
+					force.x == 0 ? motion.x : force.x, 
+					force.y == 0 ? motion.y : force.y, 
+					force.z == 0 ? motion.z : force.z
+			);
+			
+		}
+		
+	}
+	
 }

@@ -4,7 +4,6 @@ import de.m_marvin.industria.content.blocks.kinetics.BaseBeltBlock;
 import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.core.compound.types.blocks.CompoundBlock;
 import de.m_marvin.industria.core.kinetics.types.blockentities.BeltBlockEntity;
-import de.m_marvin.industria.core.registries.Blocks;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility.ShapeType;
 import de.m_marvin.industria.core.util.types.DiagonalDirection;
@@ -24,7 +23,6 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -35,35 +33,13 @@ public class ConveyorBeltBlock extends BaseBeltBlock {
 	
 	public static final EnumProperty<Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
 	public static final EnumProperty<DiagonalPlanarDirection> ORIENTATION = ModBlocks.ORIENTATION_NON_VERTICAL;
-	public static final BooleanProperty IS_END = Blocks.PROP_IS_END;
+	
+	public static final VoxelShape SHAPE_STRAIGHT_END = Shapes.or(box(1, 3, 1, 15, 4, 16), box(1, 12, 1, 15, 13, 16), box(1, 4, 0, 15, 12, 1));
 
-	public static final VoxelShape SHAPE_STRAIGHT = Shapes.or(box(1, 3, 0, 15, 4, 16), box(1, 12, 0, 15, 13, 16));
-	public static final VoxelShape SHAPE_STRAIGHT_END = Shapes.or(box(1, 3, 4, 15, 4, 16), box(1, 12, 4, 15, 13, 16), box(1, 4, 3, 15, 12, 4));
-	public static final VoxelShape SHAPE_SLOPE = Shapes.or(
-			// TOP
-			box(1, 6, 0, 15, 8, 2),
-			box(1, 8, 2, 15, 10, 4),
-			box(1, 11.5F, 4, 15, 12, 6),
-			box(1, 10, 4, 15, 12, 4.5F),
-			box(1, 12, 6, 15, 14, 8),
-			box(1, 14, 8, 15, 16, 10),
-			box(1, 16, 10, 15, 18, 12),
-			box(1, 18, 12, 15, 20, 14),
-			box(1, 20, 14, 15, 22, 16),
-			// BOTTOM
-			box(1, -6, 0, 15, -4, 2),
-			box(1, -4, 2, 15, -2, 4),
-			box(1, -2, 4, 15, 0, 6),
-			box(1, 0, 6, 15, 2, 8),
-			box(1, 2, 8, 15, 4, 10),
-			box(1, 4, 10, 15, 4.5F, 12),
-			box(1, 4, 11.5F, 15, 6, 12),
-			box(1, 6, 12, 15, 8, 14),
-			box(1, 8, 14, 15, 10, 16)
-			);
 	public static final VoxelShape SHAPE_SLOPE_END = Shapes.or(
 			// TOP
-			box(1, 4, 4, 15, 12, 4.5F),
+			box(1, 1, 3, 15, 10, 4),
+			box(1, 10, 4, 15, 12, 4.5F),
 			box(1, 11.5F, 4, 15, 12, 6),
 			box(1, 12, 6, 15, 14, 8),
 			box(1, 14, 8, 15, 16, 10),
@@ -71,8 +47,8 @@ public class ConveyorBeltBlock extends BaseBeltBlock {
 			box(1, 18, 12, 15, 20, 14),
 			box(1, 20, 14, 15, 22, 16),
 			// BOTTOM
-			box(1, 4, 4, 15, 4.5F, 12),
-			box(1, 4, 11.5F, 15, 6, 12),
+			box(1, 0, 4, 15, 1, 12),
+			box(1, 1, 12, 15, 6, 13),
 			box(1, 6, 12, 15, 8, 14),
 			box(1, 8, 14, 15, 10, 16)
 			);
@@ -218,11 +194,9 @@ public class ConveyorBeltBlock extends BaseBeltBlock {
 			};
 		}
 	}
-
+	
 	@Override
-	public void entityInside(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity) {
-		
-		// FIXME diagonal belt hitbox problem
+	public void stepOn(Level pLevel, BlockPos pPos, BlockState pState, Entity pEntity) {
 		
 		if (pLevel.getBlockEntity(pPos) instanceof BeltBlockEntity belt) {
 
@@ -235,12 +209,12 @@ public class ConveyorBeltBlock extends BaseBeltBlock {
 			
 			Vec3i pushDirection;
 			switch (axis) {
-			case Z: pushDirection = new Vec3i(-vdir.x, -vdir.y, 0); break;
-			case X: pushDirection = new Vec3i(0, -vdir.y, vdir.x); break;
+			case Z: pushDirection = new Vec3i(-vdir.x, vdir.y, 0); break;
+			case X: pushDirection = new Vec3i(0, vdir.y, vdir.x); break;
 			default: return;
 			}
-
-			Vec3d force = new Vec3d(pushDirection).mul(rpm * 0.0012F);
+			
+			Vec3d force = new Vec3d(pushDirection).mul(rpm * 0.0012F, rpm * 0.00012F, rpm * 0.0012F);
 			
 			Vec3 motion = pEntity.getDeltaMovement();
 			pEntity.setDeltaMovement(

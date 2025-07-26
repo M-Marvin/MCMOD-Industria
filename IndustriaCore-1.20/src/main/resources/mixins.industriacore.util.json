@@ -1,6 +1,6 @@
 {
 	"required": false,
-	"package": "de.m_marvin.industria.core.entitymod.engine.mixin",
+	"package": "de.m_marvin.industria.core.util.mixin",
 	"mixins": [
 		"EntityUpStepModifier"
 	],

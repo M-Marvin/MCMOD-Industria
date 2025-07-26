@@ -2,6 +2,7 @@ package de.m_marvin.industria.content.blocks.machines;
 
 import de.m_marvin.industria.content.blockentities.machines.ConveyorBeltBlockEntity;
 import de.m_marvin.industria.content.blocks.kinetics.BaseBeltBlock;
+import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.core.compound.types.blocks.CompoundBlock;
 import de.m_marvin.industria.core.kinetics.types.blockentities.BeltBlockEntity;
@@ -22,6 +23,8 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -39,18 +42,18 @@ public class ConveyorBeltBlock extends BaseBeltBlock {
 	public static final VoxelShape SHAPE_STRAIGHT_END = Shapes.or(box(1, 3, 1, 15, 4, 16), box(1, 12, 1, 15, 13, 16), box(1, 4, 0, 15, 12, 1));
 	
 	public static final VoxelShape SHAPE_SLOPE_END = Shapes.or(
-				box(0, 2, 6, 15, 4, 8),
-				box(0, 3, 1, 15, 4, 6),
-				box(0, 12, 1, 15, 13, 10),
-				box(0, 6, 14, 15, 8, 16),
-				box(0, 8, 12, 15, 10, 14),
-				box(0, 10, 11.5, 15, 12, 12),
-				box(0, 11.5, 10, 15, 12, 12),
-				box(0, -6, 14, 15, -4, 16),
-				box(0, -4, 12, 15, -2, 14),
-				box(0, -2, 10, 15, 0, 12),
-				box(0, 4, 0, 15, 12, 1),
-				box(0, 0, 8, 15, 2, 10)
+				box(1, 2, 6, 15, 4, 8),
+				box(1, 3, 1, 15, 4, 6),
+				box(1, 12, 1, 15, 13, 10),
+				box(1, 6, 14, 15, 8, 16),
+				box(1, 8, 12, 15, 10, 14),
+				box(1, 10, 11.5, 15, 12, 12),
+				box(1, 11.5, 10, 15, 12, 12),
+				box(1, -6, 14, 15, -4, 16),
+				box(1, -4, 12, 15, -2, 14),
+				box(1, -2, 10, 15, 0, 12),
+				box(1, 4, 0, 15, 12, 1),
+				box(1, 0, 8, 15, 2, 10)
 			);
 	
 	public ConveyorBeltBlock(Properties pProperties) {
@@ -60,6 +63,11 @@ public class ConveyorBeltBlock extends BaseBeltBlock {
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
 		return new ConveyorBeltBlockEntity(pPos, pState);
+	}
+	
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+	      return createTickerHelper(pBlockEntityType, ModBlockEntityTypes.CONVEYOR_BELT.get(), ConveyorBeltBlockEntity::moveItemsTick);
 	}
 	
 	@Override

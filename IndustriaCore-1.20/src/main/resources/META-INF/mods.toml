@@ -28,7 +28,7 @@ description='''Example mod description.\nNewline characters can be used and will
 config="mixins.industriacore.ssdplugin.json"
 
 [[mixins]]
-config="mixins.industriacore.entitymod.json"
+config="mixins.industriacore.util.json"
 
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.industriacore]] #optional

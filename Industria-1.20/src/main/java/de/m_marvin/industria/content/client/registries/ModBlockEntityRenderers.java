@@ -1,6 +1,7 @@
 package de.m_marvin.industria.content.client.registries;
 
 import de.m_marvin.industria.content.Industria;
+import de.m_marvin.industria.content.client.blockentityrenderer.ConveyorBeltBlockEntityRenderer;
 import de.m_marvin.industria.content.client.blockentityrenderer.ElectroMagneticCoilBlockEntityRenderer;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.core.client.kinetics.blockentityrenderers.BeltBlockEntityRenderer;
@@ -19,7 +20,7 @@ public class ModBlockEntityRenderers {
 		event.registerBlockEntityRenderer(ModBlockEntityTypes.ELECTRO_MAGNETIC_COIL.get(), ElectroMagneticCoilBlockEntityRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntityTypes.BASE_SIMPLE_KINETIC.get(), SimpleKineticBlockEntityRenderer::new);
 		event.registerBlockEntityRenderer(ModBlockEntityTypes.BASE_BELT.get(), BeltBlockEntityRenderer::new);
-		event.registerBlockEntityRenderer(ModBlockEntityTypes.CONVEYOR_BELT.get(), BeltBlockEntityRenderer::new);
+		event.registerBlockEntityRenderer(ModBlockEntityTypes.CONVEYOR_BELT.get(), ConveyorBeltBlockEntityRenderer::new);
 		
 	}
 	

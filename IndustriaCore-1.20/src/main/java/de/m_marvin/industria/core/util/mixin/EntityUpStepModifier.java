@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core.entitymod.engine.mixin;
+package de.m_marvin.industria.core.util.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -24,6 +24,7 @@ public abstract class EntityUpStepModifier {
 	
 	@Overwrite
 	public float maxUpStep() {
+		// FIXME [VS2dep] entity up step tags on contraptions (Block#stepOn not working)
 		return CompoundBlock.performOnAllAndCombine(level(), getOnPosLegacy(), 
 				() -> {
 					BlockState stepOnState = level().getBlockState(getOnPosLegacy());

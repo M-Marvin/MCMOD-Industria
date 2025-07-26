@@ -27,6 +27,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class CompoundBlockEntity extends BlockEntity implements IKineticBlockEntity {
 
+	// FIXME container blocks in compounds
+	
 	protected static record KineticPart() {}
 	
 	protected Map<Integer, VirtualBlock> parts = new HashMap<>();

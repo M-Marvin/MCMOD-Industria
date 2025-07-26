@@ -258,7 +258,7 @@ dependencies {
 
 mixin {
 	add sourceSets.main, 'mixins.industriacore.refmap.json'
-	config 'mixins.industriacore.entitymod.json'
+	config 'mixins.industriacore.util.json'
 	config 'mixins.industriacore.ssdplugin.json'
 }
 

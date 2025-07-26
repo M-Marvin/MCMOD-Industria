@@ -1,6 +1,7 @@
 {
 	"replace": false,
 	"values": [
-		"industria:rubber_belt"
+		"industria:rubber_belt",
+		"industria:conveyor_belt"
 	]
 }

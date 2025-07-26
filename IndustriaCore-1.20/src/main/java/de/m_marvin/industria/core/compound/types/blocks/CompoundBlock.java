@@ -17,6 +17,7 @@ import de.m_marvin.industria.core.compound.types.blockentities.CompoundBlockEnti
 import de.m_marvin.industria.core.kinetics.types.blocks.IKineticBlock;
 import de.m_marvin.industria.core.magnetism.MagnetismUtility;
 import de.m_marvin.industria.core.magnetism.types.blocks.IMagneticBlock;
+import de.m_marvin.industria.core.registries.BlockEntityTypes;
 import de.m_marvin.industria.core.registries.Blocks;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.types.StateTransform;
@@ -28,6 +29,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.WorldlyContainerHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -49,6 +52,8 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -67,7 +72,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.IPlantable;
 
-public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMagneticBlock, SimpleWaterloggedBlock {
+public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMagneticBlock, SimpleWaterloggedBlock, WorldlyContainerHolder {
 	
 	public static final EnumProperty<StateTransform> TRANSFORM = Blocks.PROP_TRANSFORM;
 	
@@ -242,6 +247,11 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 	/* Block Function Redirects  */
 
 	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+		return createTickerHelper(pBlockEntityType, BlockEntityTypes.COMPOUND_BLOCK.get(), CompoundBlockEntity::tickPartBlockEntities);
+	}
+	
+	@Override
 	public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
 		if (!performOnTargeted(pLevel, pPos, pPlayer, 
 				(compound, part) -> part.getBlock().playerWillDestroy(part.getLevel(), part.getPos(), part.getState(), pPlayer)))
@@ -331,7 +341,6 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 	public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
 		performOnAll(pLevel, pPos, 
 				(compound, part) -> part.getBlock().onRemove(part.getState(), part.getLevel(), part.getPos(), pNewState.is(this) ? part.getState() : pNewState, pMovedByPiston));
-		super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -539,7 +548,7 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 				CompoundBlock::trueIfAll);
 	}
 
-	@SuppressWarnings({ "deprecation", "resource" })
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean triggerEvent(BlockState pState, Level pLevel, BlockPos pPos, int pId, int pParam) {
 		return performOnAllAndCombine(pLevel, pPos, 
@@ -637,7 +646,7 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 				CompoundBlock::sumInt));
 	}
 
-	@SuppressWarnings({ "deprecation", "resource" })
+	@SuppressWarnings("deprecation")
 	@Override
 	public int getAnalogOutputSignal(BlockState pState, Level pLevel, BlockPos pPos) {
 		return Math.min(15, performOnAllAndCombine(pLevel, pPos, 
@@ -724,7 +733,7 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 				(compound, part) -> part.getBlock().getCloneItemStack(part.getState(), target, part.getLevel(), part.getPos(), player));
 	}
 
-	@SuppressWarnings({ "deprecation", "resource" })
+	@SuppressWarnings("deprecation")
 	@Override
 	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
 		return performOnTargetedAndReturn(pLevel, pPos, pPlayer, 
@@ -813,6 +822,12 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 					}
 				});
 		return super.updateShape(pState, pDirection, pNeighborState, pLevel, pPos, pNeighborPos);
+	}
+
+	@Override
+	public WorldlyContainer getContainer(BlockState pState, LevelAccessor pLevel, BlockPos pPos) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

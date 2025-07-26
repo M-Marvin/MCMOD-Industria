@@ -36,21 +36,26 @@ public class ConveyorBeltBlockEntityRenderer extends BeltBlockEntityRenderer {
 			
 			Axis axis = pBlockEntity.getBlockState().getValue(ConveyorBeltBlock.AXIS);
 			DiagonalPlanarDirection orientation = pBlockEntity.getBlockState().getValue(ConveyorBeltBlock.ORIENTATION);
+			boolean isEnd = pBlockEntity.getBlockState().getValue(ConveyorBeltBlock.IS_END);
+
+			float motionSpeed = (float) pBlockEntity.getRPM(0) * 0.0006F;
+			
+			boolean isHorizontal = orientation.getNormal().y == 0;
+			boolean isUpwards = orientation.getNormal().x == orientation.getNormal().y ^ motionSpeed > 0;
+			boolean isEndHorizontal = isEnd && orientation.getNormal().y < 0 == motionSpeed > 0;
 			
 			if (axis == Axis.X)
 				pPoseStack.rotateAround(com.mojang.math.Axis.YN.rotation((float) (Math.PI / 2)), 0.0F, 0.0F, 0.0F);
-			if (orientation.getNormal().x < 0)
-				pPoseStack.rotateAround(com.mojang.math.Axis.YN.rotation((float) (Math.PI)), 0.0F, 0.0F, 0.0F);
-			
-
-			float motionSpeed = (float) pBlockEntity.getRPM(0) * 0.0006F;
+			else
+				pPoseStack.rotateAround(com.mojang.math.Axis.YN.rotation((float) (-Math.PI)), 0.0F, 0.0F, 0.0F);
 			
 			for (var item : conveyor.getItems()) {
 				
 				float pos = item.position + motionSpeed * pPartialTick;
+				float posY = pos * ((isHorizontal || isEndHorizontal) ? 0 : isUpwards ? 1 : -1);
 				
 				pPoseStack.pushPose();
-				pPoseStack.translate(pos, 0, 0);
+				pPoseStack.translate(pos, posY, 0);
 				
 				itemDispatcher.get().renderStatic(item.stack, ItemDisplayContext.GROUND, pPackedLight, pPackedOverlay, pPoseStack, pBuffer, conveyor.getLevel(), 0);
 				

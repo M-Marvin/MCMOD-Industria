@@ -15,6 +15,8 @@ import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.world.Container;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -63,6 +65,18 @@ public class ConveyorBeltBlock extends BaseBeltBlock {
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
 		return new ConveyorBeltBlockEntity(pPos, pState);
+	}
+	
+	@Override
+	public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
+		if (!pState.is(pNewState.getBlock())) {
+			BlockEntity blockentity = pLevel.getBlockEntity(pPos);
+			if (blockentity instanceof Container) {
+				Containers.dropContents(pLevel, pPos, (Container) blockentity);
+			}
+		}
+		
+		super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
 	}
 	
 	@Override

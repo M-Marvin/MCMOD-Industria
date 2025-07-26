@@ -14,10 +14,15 @@ import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.types.StateTransform;
 import de.m_marvin.industria.core.util.virtualblock.VirtualBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.Container;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
@@ -25,11 +30,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
-public class CompoundBlockEntity extends BlockEntity implements IKineticBlockEntity {
-
-	// FIXME container blocks in compounds
-	
-	protected static record KineticPart() {}
+public class CompoundBlockEntity extends BlockEntity implements IKineticBlockEntity, WorldlyContainer {
 	
 	protected Map<Integer, VirtualBlock> parts = new HashMap<>();
 	
@@ -78,12 +79,15 @@ public class CompoundBlockEntity extends BlockEntity implements IKineticBlockEnt
 		} else if (i == 1) {
 			VirtualBlock part = parts.values().stream().filter(v -> !v.getState().isAir()).findAny().get();
 			BlockState state = part.getState();
+			BlockEntity partBlockEntity = part.getBlockEntity();
+			part.setBlockEntity(null); // Prevent the block from dropping its items or interact with its BE in other ways because of its removal
 			if (state.getBlock() instanceof SimpleWaterloggedBlock)
 				state = state.setValue(BlockStateProperties.WATERLOGGED, getBlockState().getValue(BlockStateProperties.WATERLOGGED));
+			level.setBlockAndUpdate(worldPosition, de.m_marvin.industria.core.registries.Blocks.ERROR_BLOCK.get().defaultBlockState());
 			level.setBlockAndUpdate(worldPosition, state);
-			if (part.getBlockEntity() != null) {
-				level.setBlockEntity(part.getBlockEntity());
-				part.getBlockEntity().setLevel(level);
+			if (partBlockEntity != null) {
+				level.setBlockEntity(partBlockEntity);
+				partBlockEntity.setLevel(level);
 			} else {
 				level.removeBlockEntity(worldPosition);
 			}
@@ -211,6 +215,100 @@ public class CompoundBlockEntity extends BlockEntity implements IKineticBlockEnt
 	@Override
 	public CompoundPart[] getVisualParts() {
 		return new CompoundPart[0];
+	}
+	
+	public static void tickPartBlockEntities(Level pLevel, BlockPos pPos, BlockState pState, CompoundBlockEntity pBlockEntity) {
+		for (var part : pBlockEntity.getParts().values()) {
+			part.tickBlockEntity();
+		}
+	}
+
+	@Override
+	public void clearContent() {
+		for (var part : getParts().values())
+			if (part.getBlockEntity() instanceof Container container)
+				container.clearContent();
+	}
+
+	@Override
+	public int getContainerSize() {
+		int size = 0;
+		for (var part : getParts().values())
+			if (part.getBlockEntity() instanceof Container container)
+				size += container.getContainerSize();
+		return size;
+	}
+
+	@Override
+	public ItemStack getItem(int pSlot) {
+		int size = 0;
+		for (var part : getParts().values())
+			if (part.getBlockEntity() instanceof Container container) {
+				size += container.getContainerSize();
+				if (size > pSlot) 
+					return container.getItem(pSlot - size + container.getContainerSize());
+			}
+		return ItemStack.EMPTY;
+	}
+
+	@Override
+	public ItemStack removeItem(int pSlot, int pAmount) {
+		int size = 0;
+		for (var part : getParts().values())
+			if (part.getBlockEntity() instanceof Container container) {
+				size += container.getContainerSize();
+				if (size > pSlot) 
+					return container.removeItem(pSlot - size + container.getContainerSize(), pAmount);
+			}
+		return ItemStack.EMPTY;
+	}
+
+	@Override
+	public ItemStack removeItemNoUpdate(int pSlot) {
+		int size = 0;
+		for (var part : getParts().values())
+			if (part.getBlockEntity() instanceof Container container) {
+				size += container.getContainerSize();
+				if (size > pSlot) 
+					return container.removeItemNoUpdate(pSlot - size + container.getContainerSize());
+			}
+		return ItemStack.EMPTY;
+	}
+
+	@Override
+	public void setItem(int pSlot, ItemStack pStack) {
+		int size = 0;
+		for (var part : getParts().values())
+			if (part.getBlockEntity() instanceof Container container) {
+				size += container.getContainerSize();
+				if (size > pSlot) {
+					container.setItem(pSlot - size + container.getContainerSize(), pStack);
+					return;
+				}
+			}
+	}
+
+	@Override
+	public boolean stillValid(Player pPlayer) {
+		return false; // UIs not supported in compounds
+	}
+
+	@Override
+	public int[] getSlotsForFace(Direction pSide) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean canPlaceItemThroughFace(int pIndex, ItemStack pItemStack, Direction pDirection) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean canTakeItemThroughFace(int pIndex, ItemStack pStack, Direction pDirection) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 }

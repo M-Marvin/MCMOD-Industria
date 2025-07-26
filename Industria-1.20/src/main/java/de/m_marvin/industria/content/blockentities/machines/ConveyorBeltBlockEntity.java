@@ -1,15 +1,30 @@
 package de.m_marvin.industria.content.blockentities.machines;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
+
+import org.valkyrienskies.core.impl.shadow.pl;
 
 import de.m_marvin.industria.content.blockentities.kinetics.BaseBeltBlockEntity;
+import de.m_marvin.industria.content.blocks.machines.ConveyorBeltBlock;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
+import de.m_marvin.industria.content.registries.ModTags;
+import de.m_marvin.industria.core.compound.types.blocks.CompoundBlock;
 import de.m_marvin.industria.core.util.GameUtility;
+import de.m_marvin.industria.core.util.types.DiagonalPlanarDirection;
+import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.Container;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.WorldlyContainerHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -26,6 +41,11 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 			this.position = 0F;
 		}
 		
+//		@Override
+//		public String toString() {
+//			return "[" + this.stack.toString() + " @ " + this.position + "]";
+//		}
+		
 	}
 	
 	protected final int itemsPerSection = 3;
@@ -38,11 +58,125 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 	public static void moveItemsTick(Level pLevel, BlockPos pPos, BlockState pState, ConveyorBeltBlockEntity pBlockEntity) {
 		
 		float motionSpeed = (float) pBlockEntity.getRPM(0) * 0.0006F;
-		
-		for (var item : pBlockEntity.items) {
-			item.position += motionSpeed;
-			item.position = item.position % 1.0F;
+		boolean itemToPush = false;
+
+		Iterator<ItemOnBelt> itemIter = pBlockEntity.items.iterator();
+		while (itemIter.hasNext()) {
+			ItemOnBelt item = itemIter.next();
+			if (item.stack.isEmpty()) itemIter.remove();
+			if (item.position < 1.0F && item.position > -1.0F)
+				item.position += motionSpeed;
+			else
+				itemToPush = true;
 		}
+		
+		if (itemToPush)
+			tryPushItemOut(pLevel, pPos, pState, pBlockEntity);
+		
+	}
+	
+	protected static void tryPushItemOut(Level pLevel, BlockPos pPos, BlockState pState, ConveyorBeltBlockEntity pBlockEntity) {
+		
+		Axis axis = pState.getValue(ConveyorBeltBlock.AXIS);
+		DiagonalPlanarDirection orientation = pState.getValue(ConveyorBeltBlock.ORIENTATION);
+		boolean isEnd = pState.getValue(ConveyorBeltBlock.IS_END);
+		
+		Direction handingDirection = null;
+		if (axis == Axis.Z)
+			handingDirection = pBlockEntity.rpm > 0 ? Direction.WEST : Direction.EAST;
+		else
+			handingDirection = pBlockEntity.rpm > 0 ? Direction.SOUTH : Direction.NORTH;
+		BlockPos handTo = pPos.relative(handingDirection);
+		
+		boolean isHorizontal = orientation.getNormal().y == 0;
+		boolean isUpwards = orientation.getNormal().x == orientation.getNormal().y ^ pBlockEntity.rpm > 0;
+		boolean isEndHorizontal = isEnd && orientation.getNormal().y < 0 == pBlockEntity.rpm > 0;
+		
+		handTo = handTo.offset(0, (isHorizontal || isEndHorizontal) ? 0 : isUpwards ? 1 : -1, 0);
+		
+		BlockState targetState = pLevel.getBlockState(handTo);
+		boolean handsToBelt = CompoundBlock.performOnAllAndCombine(pLevel, handTo, 
+				() -> targetState.is(ModTags.Blocks.CONVEYOR_BELTS),
+				(compound, p) -> p.getState().is(ModTags.Blocks.CONVEYOR_BELTS),
+				Boolean::logicalOr);
+		
+		if (!handsToBelt) {
+			if (tryHandItemTo(pLevel, pBlockEntity, handTo.above(), handingDirection))
+				return;
+		}
+		if (tryHandItemTo(pLevel, pBlockEntity, handTo, handingDirection))
+			return;
+		
+		if (!targetState.isFaceSturdy(pLevel, pPos, handingDirection.getOpposite())) {
+			
+			if (pBlockEntity.items.isEmpty()) return;
+			ItemOnBelt toDrop = pBlockEntity.items.get(0);
+			if (toDrop.stack.isEmpty()) return;
+			
+			GameUtility.dropItem(pLevel, toDrop.stack, Vec3f.fromVec(handTo).add(0.5F, 1.5F, 0.5F), 0.3F, 0.4F);
+			pBlockEntity.items.remove(toDrop);
+			
+		}
+		
+	}
+	
+	protected static boolean tryHandItemTo(Level pLevel, ConveyorBeltBlockEntity pBlockEntity, BlockPos pTarget, Direction direction) {
+		
+//		pLevel.addParticle(new BlockParticleOption(ParticleTypes.BLOCK_MARKER, de.m_marvin.industria.core.registries.Blocks.ERROR_BLOCK.get().defaultBlockState()), pTarget.getX() + 0.5, pTarget.getY() + 0.5, pTarget.getZ() + 0.5, 0, 0, 0);
+		
+		BlockState targetState = pLevel.getBlockState(pTarget);
+		
+		if (targetState.getBlock() instanceof WorldlyContainerHolder containerHolder) {
+			WorldlyContainer container = containerHolder.getContainer(targetState, pLevel, pTarget);
+			if (container != null && tryTransferItemTo(pBlockEntity, container, direction))
+				return true;	
+		} else if (pLevel.getBlockEntity(pTarget) instanceof Container container) {
+			return tryTransferItemTo(pBlockEntity, container, direction);
+		}
+		
+		return false;
+		
+	}
+	
+	protected static boolean tryTransferItemTo(ConveyorBeltBlockEntity pBlockEntity, Container container, Direction direction) {
+		
+		if (pBlockEntity.items.isEmpty()) return true;
+		ItemOnBelt toTransfer = pBlockEntity.items.get(0);
+		if (toTransfer.position < 1.0F && toTransfer.position > -1.0F) return true;
+		
+		if (container instanceof WorldlyContainer worldlyContainer) {
+			for (int slot : worldlyContainer.getSlotsForFace(direction.getOpposite())) {
+				if (worldlyContainer.canPlaceItemThroughFace(slot, toTransfer.stack, direction.getOpposite()))
+					if (mergeItemsTo(pBlockEntity, toTransfer, worldlyContainer, slot)) return true;
+			}
+		} else {
+			for (int slot = 0; slot < container.getContainerSize(); slot++) {
+				if (mergeItemsTo(pBlockEntity, toTransfer, container, slot)) return true;
+			}
+		}
+
+		return true; // The container does not accept items, but its still an container the belt connects to
+		
+	}
+	
+	protected static boolean mergeItemsTo(ConveyorBeltBlockEntity pBlockEntity, ItemOnBelt toTransfer, Container container, int slot) {
+		
+		ItemStack inTarget = container.getItem(slot);
+		if (inTarget.isEmpty()) {
+			container.setItem(slot, toTransfer.stack);
+			pBlockEntity.items.remove(toTransfer);
+			return true;
+		} else if (inTarget.getItem() == toTransfer.stack.getItem() && Objects.equals(inTarget.getTag(), toTransfer.stack.getTag())) {
+			int transferCount = Math.min(inTarget.getMaxStackSize() - inTarget.getCount(), toTransfer.stack.getCount());
+			inTarget.grow(transferCount);
+			toTransfer.stack.shrink(transferCount);
+			if (toTransfer.stack.isEmpty()) {
+				pBlockEntity.items.remove(toTransfer);
+				return true;
+			}
+		}
+		
+		return false;
 		
 	}
 	

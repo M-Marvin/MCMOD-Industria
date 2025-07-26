@@ -45,9 +45,9 @@ public class CompoundableBlockItem extends BlockItem {
 			
 			if (canCompound(level, pos, replaceState, null, null, placeState)) {
 				BlockEntity replaceEntity = level.getBlockEntity(pos);
+				level.removeBlockEntity(pos); // Prevent the replaced block droping inventory items or interacting otherwise with the BE when removing
 				level.setBlockAndUpdate(pos, Blocks.COMPOUND_BLOCK.get().defaultBlockState());
 				if (level.getBlockEntity(pos) instanceof CompoundBlockEntity compound) {
-					level.setBlockAndUpdate(pos, Blocks.COMPOUND_BLOCK.get().defaultBlockState());
 					compound.addPart(replaceState, replaceEntity);
 					replaceState = level.getBlockState(pos);
 				}

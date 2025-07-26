@@ -1,5 +1,6 @@
 package de.m_marvin.industria.core.util.virtualblock;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.google.common.base.Objects;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class VirtualBlock {
@@ -26,6 +28,8 @@ public class VirtualBlock {
 	protected BlockState state;
 	protected BlockEntity blockEntity;
 	protected Runnable stateChangeEvent;
+	
+	private Optional<BlockEntityTicker<?>> ticker;
 	
 	public VirtualBlock(Supplier<BlockPos> pos) {
 		this.pos = pos;
@@ -75,20 +79,16 @@ public class VirtualBlock {
 		try {
 			this.block = state.getBlock();
 			this.state = state;
-			if (this.state.hasBlockEntity() && block instanceof EntityBlock entityBlock) {
-				this.blockEntity = entityBlock.newBlockEntity(getPos(), state);
-				this.blockEntity.setLevel(this.level);
-			} else {
-				this.blockEntity = null;
-			}
 			if (this.stateChangeEvent != null)
 				this.stateChangeEvent.run();
+			this.ticker = null;
 		} catch (Throwable e) {
 			throw new IllegalArgumentException("illegal candiate for virtual block: " + state.toString(), e);
 		}
 	}
 	
 	public void setBlockEntity(BlockEntity blockEntity) {
+		this.ticker = null;
 		this.blockEntity = blockEntity;
 		if (this.blockEntity != null)
 			this.blockEntity.setLevel(getLevel());
@@ -103,7 +103,25 @@ public class VirtualBlock {
 	}
 	
 	public BlockEntity getBlockEntity() {
+		if (this.state.getBlock() instanceof EntityBlock entityBlock && this.blockEntity == null)
+			setBlockEntity(entityBlock.newBlockEntity(getPos(), getState()));
 		return blockEntity;
+	}
+	
+	public <T extends BlockEntity> void tickBlockEntity() {
+		if (getBlockEntity() != null)
+			tickBlockTicker(getBlockEntity());
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected <T extends BlockEntity> void tickBlockTicker(T blockEntity) {
+		if (this.ticker == null) {
+			this.ticker = Optional.ofNullable(getState().getTicker(getLevel(), blockEntity.getType()));
+		}
+		if (this.ticker.isPresent()) {
+			BlockEntityTicker<T> ticker = (BlockEntityTicker<T>) this.ticker.get();
+			ticker.tick(getLevel(), getPos(), getState(), blockEntity);
+		}
 	}
 	
 	public CompoundTag serialize() {
@@ -120,6 +138,8 @@ public class VirtualBlock {
 		BlockState state = NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), nbt.getCompound("State"));
 		VirtualBlock virtualBlock = new VirtualBlock(pos);
 		virtualBlock.setBlock(state);
+		if (state.getBlock() instanceof EntityBlock entityBlock)
+			virtualBlock.setBlockEntity(entityBlock.newBlockEntity(virtualBlock.getPos(), state));
 		if (virtualBlock.blockEntity != null) {
 			virtualBlock.blockEntity.deserializeNBT(nbt.getCompound("BlockEntity"));
 		}

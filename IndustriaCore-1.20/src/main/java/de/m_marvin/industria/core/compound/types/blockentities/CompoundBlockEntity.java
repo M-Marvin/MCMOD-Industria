@@ -1,9 +1,12 @@
 package de.m_marvin.industria.core.compound.types.blockentities;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import de.m_marvin.industria.core.compound.engine.VirtualBlock;
 import de.m_marvin.industria.core.compound.types.blocks.CompoundBlock;
 import de.m_marvin.industria.core.kinetics.types.blockentities.IKineticBlockEntity;
 import de.m_marvin.industria.core.kinetics.types.blocks.IKineticBlock;
@@ -12,7 +15,6 @@ import de.m_marvin.industria.core.kinetics.types.blocks.IKineticBlock.Transmissi
 import de.m_marvin.industria.core.registries.BlockEntityTypes;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.types.StateTransform;
-import de.m_marvin.industria.core.util.virtualblock.VirtualBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -289,26 +291,59 @@ public class CompoundBlockEntity extends BlockEntity implements IKineticBlockEnt
 	}
 
 	@Override
-	public boolean stillValid(Player pPlayer) {
-		return false; // UIs not supported in compounds
-	}
-
-	@Override
 	public int[] getSlotsForFace(Direction pSide) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Integer> slots = new ArrayList<>();
+		int offset = 0;
+		for (var part : getParts().values()) {
+			if (part.getBlockEntity() instanceof Container container) {
+				if (container instanceof WorldlyContainer wcontainer) {
+					for (int i : wcontainer.getSlotsForFace(pSide))
+						slots.add(i + offset);
+				} else {
+					for (int i = 0; i < container.getContainerSize(); i++)
+						slots.add(i + offset);
+				}
+				offset += container.getContainerSize();
+			}
+		}
+		return slots.stream().mapToInt(Integer::intValue).toArray();
 	}
 
 	@Override
 	public boolean canPlaceItemThroughFace(int pIndex, ItemStack pItemStack, Direction pDirection) {
-		// TODO Auto-generated method stub
+		int size = 0;
+		for (var part : getParts().values())
+			if (part.getBlockEntity() instanceof Container container) {
+				size += container.getContainerSize();
+				if (size > pIndex) {
+					if (container instanceof WorldlyContainer wcontainer)
+						return wcontainer.canPlaceItemThroughFace(pIndex - size + container.getContainerSize(), pItemStack, pDirection);
+					else
+						return true;
+				}
+			}
 		return false;
 	}
 
 	@Override
 	public boolean canTakeItemThroughFace(int pIndex, ItemStack pStack, Direction pDirection) {
-		// TODO Auto-generated method stub
+		int size = 0;
+		for (var part : getParts().values())
+			if (part.getBlockEntity() instanceof Container container) {
+				size += container.getContainerSize();
+				if (size > pIndex) {
+					if (container instanceof WorldlyContainer wcontainer)
+						return wcontainer.canTakeItemThroughFace(pIndex - size + container.getContainerSize(), pStack, pDirection);
+					else
+						return true;
+				}
+			}
 		return false;
 	}
-	
+
+	@Override
+	public boolean stillValid(Player pPlayer) {
+		return false; // UIs not supported in compounds
+	}
+
 }

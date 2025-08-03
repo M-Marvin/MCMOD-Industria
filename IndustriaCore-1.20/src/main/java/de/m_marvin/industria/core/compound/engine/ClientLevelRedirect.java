@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core.util.virtualblock;
+package de.m_marvin.industria.core.compound.engine;
 
 import java.util.Collection;
 import java.util.List;
@@ -102,7 +102,7 @@ class ClientLevelRedirect extends ClientLevel {
 	@Override
 	public BlockEntity getBlockEntity(BlockPos pPos) {
 		if (pPos.equals(block.getPos())) 
-			return block.blockEntity;
+			return block.getBlockEntity();
 		return level.getBlockEntity(pPos);
 	}
 

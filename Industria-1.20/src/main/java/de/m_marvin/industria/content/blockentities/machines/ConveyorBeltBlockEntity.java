@@ -5,8 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-import org.valkyrienskies.core.impl.shadow.pl;
-
 import de.m_marvin.industria.content.blockentities.kinetics.BaseBeltBlockEntity;
 import de.m_marvin.industria.content.blocks.machines.ConveyorBeltBlock;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
@@ -18,8 +16,6 @@ import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.Container;
@@ -41,10 +37,10 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 			this.position = 0F;
 		}
 		
-//		@Override
-//		public String toString() {
-//			return "[" + this.stack.toString() + " @ " + this.position + "]";
-//		}
+		@Override
+		public String toString() {
+			return "[" + this.stack.toString() + " @ " + this.position + "]";
+		}
 		
 	}
 	

@@ -1,9 +1,9 @@
 package de.m_marvin.industria.core.compound.types.items;
 
+import de.m_marvin.industria.core.compound.engine.VirtualBlock;
 import de.m_marvin.industria.core.compound.types.blockentities.CompoundBlockEntity;
 import de.m_marvin.industria.core.registries.Blocks;
 import de.m_marvin.industria.core.registries.Tags;
-import de.m_marvin.industria.core.util.virtualblock.VirtualBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.BlockItem;

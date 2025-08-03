@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core.util.virtualblock;
+package de.m_marvin.industria.core.compound.engine;
 
 import net.minecraft.world.level.Level;
 

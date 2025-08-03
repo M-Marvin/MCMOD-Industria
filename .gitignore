@@ -30,3 +30,27 @@ forge
 share
 
 *.db
+Industria-1.20/src/main/resources/assets/industria/models/block/fences/concrete_fence_base_center.json
+Industria-1.20/src/main/resources/assets/industria/models/block/fences/concrete_fence_base_center_tall.json
+Industria-1.20/src/main/resources/assets/industria/models/block/fences/concrete_fence_base_north.json
+Industria-1.20/src/main/resources/assets/industria/models/block/fences/concrete_fence_base_north_tall.json
+Industria-1.20/src/main/resources/assets/industria/models/block/fences/concrete_fence_base_south.json
+Industria-1.20/src/main/resources/assets/industria/models/block/fences/concrete_fence_base_south_tall.json
+Industria-1.20/src/main/resources/assets/industria/models/block/fences/light_wires_north.json
+Industria-1.20/src/main/resources/assets/industria/models/block/fences/light_wires_north_base.json
+Industria-1.20/src/main/resources/assets/industria/models/block/fences/light_wires_north_long.json
+Industria-1.20/src/main/resources/assets/industria/models/block/fences/light_wires_north_long_base.json
+Industria-1.20/src/main/resources/assets/industria/models/block/fences/light_wires_south.json
+Industria-1.20/src/main/resources/assets/industria/models/block/fences/light_wires_south_base.json
+Industria-1.20/src/main/resources/assets/industria/models/block/fences/light_wires_south_long.json
+Industria-1.20/src/main/resources/assets/industria/models/block/fences/light_wires_south_long_base.json
+Industria-1.20/src/main/resources/assets/industria/models/block/fences/steel_fence_post.json
+Industria-1.20/src/main/resources/assets/industria/models/block/fences/steel_fence_post_base.json
+Industria-1.20/src/main/resources/assets/industria/models/block/fences/steel_fence_post_top.json
+Industria-1.20/src/main/resources/assets/industria/models/block/fences/steel_wires.json
+Industria-1.20/src/main/resources/assets/industria/textures/block/fences/base.png
+Industria-1.20/src/main/resources/assets/industria/textures/block/fences/large.png
+Industria-1.20/src/main/resources/assets/industria/textures/block/fences/light_wires.png
+Industria-1.20/src/main/resources/assets/industria/textures/block/fences/steel_pole.png
+Industria-1.20/src/main/resources/assets/industria/textures/block/fences/top_0.png
+Industria-1.20/src/main/resources/assets/industria/textures/block/fences/top_1.png

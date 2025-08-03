@@ -6,9 +6,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import de.m_marvin.industria.content.blockentities.machines.ConveyorBeltBlockEntity;
 import de.m_marvin.industria.content.blocks.machines.ConveyorBeltBlock;
+import de.m_marvin.industria.content.client.AnimatedTransform;
 import de.m_marvin.industria.core.client.kinetics.blockentityrenderers.BeltBlockEntityRenderer;
 import de.m_marvin.industria.core.kinetics.types.blockentities.BeltBlockEntity;
 import de.m_marvin.industria.core.util.types.DiagonalPlanarDirection;
+import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context;
@@ -48,14 +50,36 @@ public class ConveyorBeltBlockEntityRenderer extends BeltBlockEntityRenderer {
 				pPoseStack.rotateAround(com.mojang.math.Axis.YN.rotation((float) (Math.PI / 2)), 0.0F, 0.0F, 0.0F);
 			else
 				pPoseStack.rotateAround(com.mojang.math.Axis.YN.rotation((float) (-Math.PI)), 0.0F, 0.0F, 0.0F);
+			pPoseStack.translate(-0.5F, 0.0F, 0.0F);
+			
+			AnimatedTransform itemTransform = null;
+			if (isHorizontal) {
+				itemTransform = AnimatedTransform.
+						firstLinear(new Vec3f(1.0F, 0.0F, 0.0F));
+			} else {
+//				if (isUpwards) {
+//					itemTransform = AnimatedTransform
+//							.firstAngular(new Vec3f(0.0F, 0.5F, 0.0F), new Vec3f(0, 0, 1.0F).mul((float) Math.PI / 4))
+//							.thenLinear(new Vec3f(1.0F, 0.0F, 0.0F))
+//							.then
+//				} else {
+//					
+//				}
+			}
+			
+			if (itemTransform == null) {
+
+				pPoseStack.popPose();
+				
+				return;
+				
+			}
 			
 			for (var item : conveyor.getItems()) {
 				
-				float pos = item.position + motionSpeed * pPartialTick;
-				float posY = pos * ((isHorizontal || isEndHorizontal) ? 0 : isUpwards ? 1 : -1);
-				
 				pPoseStack.pushPose();
-				pPoseStack.translate(pos, posY, 0);
+				
+				itemTransform.transform(pPoseStack, item.position + motionSpeed * pPartialTick);
 				
 				itemDispatcher.get().renderStatic(item.stack, ItemDisplayContext.GROUND, pPackedLight, pPackedOverlay, pPoseStack, pBuffer, conveyor.getLevel(), 0);
 				

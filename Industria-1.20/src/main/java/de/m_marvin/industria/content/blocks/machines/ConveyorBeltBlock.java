@@ -81,7 +81,7 @@ public class ConveyorBeltBlock extends BaseBeltBlock {
 	
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-	      return createTickerHelper(pBlockEntityType, ModBlockEntityTypes.CONVEYOR_BELT.get(), ConveyorBeltBlockEntity::moveItemsTick);
+		return createTickerHelper(pBlockEntityType, ModBlockEntityTypes.CONVEYOR_BELT.get(), ConveyorBeltBlockEntity::moveItemsTick);
 	}
 	
 	@Override

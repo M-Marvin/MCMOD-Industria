@@ -3,6 +3,7 @@ package de.m_marvin.industria.core.compound.types.blocks;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.Nullable;
 
+import de.m_marvin.industria.core.compound.engine.VirtualBlock;
 import de.m_marvin.industria.core.compound.types.blockentities.CompoundBlockEntity;
 import de.m_marvin.industria.core.kinetics.types.blocks.IKineticBlock;
 import de.m_marvin.industria.core.magnetism.MagnetismUtility;
@@ -21,7 +23,6 @@ import de.m_marvin.industria.core.registries.BlockEntityTypes;
 import de.m_marvin.industria.core.registries.Blocks;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.types.StateTransform;
-import de.m_marvin.industria.core.util.virtualblock.VirtualBlock;
 import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,8 +30,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.WorldlyContainer;
-import net.minecraft.world.WorldlyContainerHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -72,7 +71,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.IPlantable;
 
-public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMagneticBlock, SimpleWaterloggedBlock, WorldlyContainerHolder {
+public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMagneticBlock, SimpleWaterloggedBlock {
 	
 	public static final EnumProperty<StateTransform> TRANSFORM = Blocks.PROP_TRANSFORM;
 	
@@ -203,6 +202,21 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 		if (level.getBlockEntity(pos) instanceof CompoundBlockEntity compound) {
 			Optional<Entry<T, Long>> result = compound.getParts().values().stream()
 				.map(p -> action.apply(compound, p))
+				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+				.entrySet()
+				.stream()
+				.max(Map.Entry.comparingByValue());
+			return result.isPresent() ? result.get().getKey() : fallback.get();
+		}
+		return fallback.get();
+	}
+
+	public static <T> T performOnAllAndChoseCommonNonNull(BlockGetter level, BlockPos pos, Supplier<T> fallback, BiFunction<CompoundBlockEntity, VirtualBlock, T> action) {
+		if (level == null) return fallback.get();
+		if (level.getBlockEntity(pos) instanceof CompoundBlockEntity compound) {
+			Optional<Entry<T, Long>> result = compound.getParts().values().stream()
+				.map(p -> action.apply(compound, p))
+				.filter(Objects::nonNull)
 				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
 				.entrySet()
 				.stream()
@@ -824,10 +838,11 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 		return super.updateShape(pState, pDirection, pNeighborState, pLevel, pPos, pNeighborPos);
 	}
 
-	@Override
-	public WorldlyContainer getContainer(BlockState pState, LevelAccessor pLevel, BlockPos pPos) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public WorldlyContainer getContainer(BlockState pState, LevelAccessor pLevel, BlockPos pPos) {
+//		return performOnAllAndChoseCommonNonNull(pLevel, pPos, 
+//				() -> null, 
+//				(compound, p) -> p.getBlock() instanceof WorldlyContainerHolder holder ? holder.getContainer(p.getState(), p.getLevel(), p.getPos()) : null);
+//	}
 	
 }

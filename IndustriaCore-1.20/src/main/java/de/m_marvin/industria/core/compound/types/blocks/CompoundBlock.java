@@ -234,6 +234,20 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 		}
 	}
 	
+	public static <T extends BlockEntity> T getBlockEntityMaybeInCompound(BlockGetter level, BlockPos pos, Class<T> type) {
+		BlockEntity blockEntity = level.getBlockEntity(pos);
+		if (blockEntity instanceof CompoundBlockEntity compound) {
+			for (VirtualBlock part : compound.getParts().values()) {
+				if (type.isInstance(part.getBlockEntity())) {
+					return type.cast(part.getBlockEntity());
+				}
+			}
+		} else if (type.isInstance(blockEntity)) {
+			return type.cast(blockEntity);
+		}
+		return null;
+	}
+	
 	public static boolean trueIfAny(boolean a, boolean b) {
 		return a || b;
 	}

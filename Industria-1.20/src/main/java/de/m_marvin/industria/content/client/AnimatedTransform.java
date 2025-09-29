@@ -12,6 +12,7 @@ public abstract class AnimatedTransform {
 		protected final Vec3f linear;
 		
 		protected LinearTransform(Vec3f linear) {
+			super();
 			this.linear = linear;
 		}
 		
@@ -28,6 +29,7 @@ public abstract class AnimatedTransform {
 		protected final Vec3f rotation;
 		
 		protected AngularTransform(Vec3f origin, Vec3f rotation) {
+			super();
 			this.origin = origin;
 			this.rotation = rotation;
 		}
@@ -45,6 +47,7 @@ public abstract class AnimatedTransform {
 		protected final Vec3f scale;
 		
 		protected ScaleTransform(Vec3f scale) {
+			super();
 			this.scale = scale;
 		}
 		
@@ -56,16 +59,31 @@ public abstract class AnimatedTransform {
 	}
 	
 	protected AnimatedTransform nextTransform = null;
+	protected AnimatedTransform firstTransform = null;
+	
+	protected AnimatedTransform() {
+		this.firstTransform = this;
+	}
 	
 	protected abstract void applyTransform(PoseStack pose, float delta); 
 	
+	protected int countTransforms() {
+		return this.nextTransform != null ? this.nextTransform.countTransforms() + 1 : 1;
+	}
+	
+	public AnimatedTransform fromStart() {
+		return this.firstTransform;
+	}
+	
 	public void transform(PoseStack pose, float animate) {
-		if (animate < 1.0F) {
-			applyTransform(pose, animate);
+		int transforms = countTransforms();
+		float localDelta = animate * transforms;
+		if (localDelta < 1.0F) {
+			applyTransform(pose, localDelta);
 		} else {
 			applyTransform(pose, 1.0F);
 			if (nextTransform != null)
-				nextTransform.transform(pose, animate - 1.0F);
+				nextTransform.transform(pose, (localDelta - 1) / (transforms - 1));
 		}
 	}
 
@@ -74,7 +92,9 @@ public abstract class AnimatedTransform {
 	}
 
 	public AnimatedTransform thenLinear(Vec3f linear) {
-		return this.nextTransform = firstLinear(linear);
+		this.nextTransform = firstLinear(linear);
+		this.nextTransform.firstTransform = this.firstTransform;
+		return this.nextTransform;
 	}
 
 	public static AnimatedTransform firstAngular(Vec3f origin, Vec3f rotation) {
@@ -82,7 +102,9 @@ public abstract class AnimatedTransform {
 	}
 
 	public AnimatedTransform thenAngular(Vec3f origin, Vec3f rotation) {
-		return this.nextTransform = firstAngular(origin, rotation);
+		this.nextTransform = firstAngular(origin, rotation);
+		this.nextTransform.firstTransform = this.firstTransform;
+		return this.nextTransform;
 	}
 
 	public static AnimatedTransform firstScale(Vec3f scale) {
@@ -90,7 +112,9 @@ public abstract class AnimatedTransform {
 	}
 
 	public AnimatedTransform thenScale(Vec3f scale) {
-		return this.nextTransform = firstScale(scale);
+		this.nextTransform = firstScale(scale);
+		this.nextTransform.firstTransform = this.firstTransform;
+		return this.nextTransform;
 	}
 
 }

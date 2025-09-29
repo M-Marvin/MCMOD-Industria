@@ -11,8 +11,10 @@ import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.content.registries.ModTags;
 import de.m_marvin.industria.core.compound.types.blocks.CompoundBlock;
 import de.m_marvin.industria.core.util.GameUtility;
+import de.m_marvin.industria.core.util.NBTUtility;
 import de.m_marvin.industria.core.util.types.DiagonalPlanarDirection;
 import de.m_marvin.univec.impl.Vec3f;
+import de.m_marvin.univec.impl.Vec3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -24,6 +26,7 @@ import net.minecraft.world.WorldlyContainerHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Container {
@@ -31,10 +34,12 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 	public static class ItemOnBelt {
 		public final ItemStack stack;
 		public float position;
+		public Vec3f insertedFrom;
 		
 		public ItemOnBelt(ItemStack item) {
 			this.stack = item;
 			this.position = 0F;
+			this.insertedFrom = new Vec3f();
 		}
 		
 		@Override
@@ -51,16 +56,32 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 		super(ModBlockEntityTypes.CONVEYOR_BELT.get(), pPos, pBlockState);
 	}
 	
+	public Vec3i getVisualBeltDirection() {
+		Axis axis = getBlockState().getValue(ConveyorBeltBlock.AXIS);
+		DiagonalPlanarDirection orientation = getBlockState().getValue(ConveyorBeltBlock.ORIENTATION);
+		boolean isHorizontal = orientation.getNormal().y == 0;
+		boolean isUpwards = !isHorizontal && (orientation.getNormal().x == orientation.getNormal().y ^ axis == Axis.Z);
+		
+		Vec3i beltDir = new Vec3i(0, 0, 0);
+		if (axis == Axis.X)
+			beltDir = new Vec3i(0, isUpwards ? 1 : 0, 1);
+		else
+			beltDir = new Vec3i(-1, isUpwards ? 1 : 0, 0);
+		if (getRPM(0) < 0) beltDir.mulI(-1);
+		
+		return beltDir;
+	}
+	
 	public static void moveItemsTick(Level pLevel, BlockPos pPos, BlockState pState, ConveyorBeltBlockEntity pBlockEntity) {
 		
-		float motionSpeed = (float) pBlockEntity.getRPM(0) * 0.0006F;
+		float motionSpeed = (float) Math.abs(pBlockEntity.getRPM(0)) * 0.0006F;
 		boolean itemToPush = false;
 
 		Iterator<ItemOnBelt> itemIter = pBlockEntity.items.iterator();
 		while (itemIter.hasNext()) {
 			ItemOnBelt item = itemIter.next();
 			if (item.stack.isEmpty()) itemIter.remove();
-			if (item.position < 1.0F && item.position > -1.0F)
+			if (item.position < 1.0F)
 				item.position += motionSpeed;
 			else
 				itemToPush = true;
@@ -116,18 +137,33 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 		
 	}
 	
+	protected ItemOnBelt getLastInserted() {
+		return this.items.size() == 0 ? null : this.items.get(this.items.size() - 1);
+	}
+	
 	protected static boolean tryHandItemTo(Level pLevel, ConveyorBeltBlockEntity pBlockEntity, BlockPos pTarget, Direction direction) {
 		
-//		pLevel.addParticle(new BlockParticleOption(ParticleTypes.BLOCK_MARKER, de.m_marvin.industria.core.registries.Blocks.ERROR_BLOCK.get().defaultBlockState()), pTarget.getX() + 0.5, pTarget.getY() + 0.5, pTarget.getZ() + 0.5, 0, 0, 0);
-		
-		BlockState targetState = pLevel.getBlockState(pTarget);
+		BlockEntity blockEntity = CompoundBlock.getBlockEntityMaybeInCompound(pLevel, pTarget, ConveyorBeltBlockEntity.class);
+		if (blockEntity == null)
+			blockEntity = pLevel.getBlockEntity(pTarget);
+		BlockState targetState = blockEntity != null ? blockEntity.getBlockState() : pLevel.getBlockState(pTarget);
 		
 		if (targetState.getBlock() instanceof WorldlyContainerHolder containerHolder) {
 			WorldlyContainer container = containerHolder.getContainer(targetState, pLevel, pTarget);
 			if (container != null && tryTransferItemTo(pBlockEntity, container, direction))
 				return true;	
-		} else if (pLevel.getBlockEntity(pTarget) instanceof Container container) {
-			return tryTransferItemTo(pBlockEntity, container, direction);
+		} else if (blockEntity instanceof Container container) {
+			if (tryTransferItemTo(pBlockEntity, container, direction)) {
+		
+				if (blockEntity instanceof ConveyorBeltBlockEntity conveyor) {
+					ItemOnBelt item = conveyor.getLastInserted();
+					if (item != null) {
+						item.insertedFrom = Vec3f.fromVec(conveyor.getBlockPos()).sub(Vec3f.fromVec(pBlockEntity.getBlockPos()));
+						item.position = -1F;
+						conveyor.setChanged();
+					}
+				}
+			}
 		}
 		
 		return false;
@@ -186,6 +222,7 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 			CompoundTag itemTag = itemsTag.getCompound(i);
 			ItemOnBelt item = new ItemOnBelt(ItemStack.of(itemTag.getCompound("Item")));
 			item.position = itemTag.getFloat("Position");
+			item.insertedFrom = NBTUtility.loadVector3f(itemTag.getCompound("InsertedFrom"));
 			this.items.add(item);
 		}
 	}
@@ -198,6 +235,7 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 		for (int i = 0; i < this.items.size(); i++) {
 			CompoundTag itemTag = new CompoundTag();
 			itemTag.putFloat("Position", this.items.get(i).position);
+			itemTag.put("InsertedFrom", NBTUtility.writeVector3f(this.items.get(i).insertedFrom));
 			itemTag.put("Item", this.items.get(i).stack.save(new CompoundTag()));
 			itemsTag.add(itemTag);
 		}
@@ -212,6 +250,7 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 		for (int i = 0; i < this.items.size(); i++) {
 			CompoundTag itemTag = new CompoundTag();
 			itemTag.putFloat("Position", this.items.get(i).position);
+			itemTag.put("InsertedFrom", NBTUtility.writeVector3f(this.items.get(i).insertedFrom));
 			itemTag.put("Item", this.items.get(i).stack.save(new CompoundTag()));
 			itemsTag.add(itemTag);
 		}

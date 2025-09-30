@@ -59,15 +59,18 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 	public Vec3i getVisualBeltDirection() {
 		Axis axis = getBlockState().getValue(ConveyorBeltBlock.AXIS);
 		DiagonalPlanarDirection orientation = getBlockState().getValue(ConveyorBeltBlock.ORIENTATION);
-		boolean isHorizontal = orientation.getNormal().y == 0;
+		boolean isReversed = getRPM(0) < 0;
+		boolean isEnd = getBlockState().getValue(ConveyorBeltBlock.IS_END);
+		boolean isHorizontal = orientation.getNormal().y == 0 || (isEnd && (axis == Axis.Z ^ orientation.getNormal().x < 0 ^ isReversed));
 		boolean isUpwards = !isHorizontal && (orientation.getNormal().x == orientation.getNormal().y ^ axis == Axis.Z);
+		boolean isDownwards = !isHorizontal && !isUpwards;
 		
 		Vec3i beltDir = new Vec3i(0, 0, 0);
 		if (axis == Axis.X)
-			beltDir = new Vec3i(0, isUpwards ? 1 : 0, 1);
+			beltDir = new Vec3i(0, isUpwards ? 1 : isDownwards ? -1 : 0, 1);
 		else
-			beltDir = new Vec3i(-1, isUpwards ? 1 : 0, 0);
-		if (getRPM(0) < 0) beltDir.mulI(-1);
+			beltDir = new Vec3i(-1, isUpwards ? 1 : isDownwards ? -1 : 0, 0);
+		if (isReversed) beltDir.mulI(-1);
 		
 		return beltDir;
 	}

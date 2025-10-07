@@ -30,6 +30,7 @@ import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -46,6 +47,7 @@ public class SingleBlockBatchedRenderer {
 	
 	private SingleBlockBatchedRenderer() {}
 	
+	private static final Supplier<ProfilerFiller> PROFILER = () -> Minecraft.getInstance().getProfiler();
 	private static final Supplier<BlockRenderDispatcher> DISPATCHER = () -> Minecraft.getInstance().getBlockRenderer();
 	private static final Supplier<RandomSource> RANDOM = () -> Minecraft.getInstance().level.random;
 	private static final BufferBuilder INTERMEDIATE_BUFFER = new BufferBuilder(2048);
@@ -83,6 +85,8 @@ public class SingleBlockBatchedRenderer {
 			inverseCameraMatrix = new Matrix4f(cameraMatrix).invert();
 			
 		} else if (event.getStage() == Stage.AFTER_BLOCK_ENTITIES) {
+
+			PROFILER.get().push(IndustriaCore.MODID + "single_block_batch");
 			
 //			System.out.println(String.format("RENDER TEST: IN CACHE: %d, DRAWS: %s, UPLOADS: %d", vertexCaches.size(), drawRequests.size(), lastCacheSize - vertexCaches.size()));
 //			lastCacheSize = vertexCaches.size();
@@ -93,6 +97,8 @@ public class SingleBlockBatchedRenderer {
 			
 			vertexCaches.values().forEach(VertexBuffer::close);
 			vertexCaches.clear();
+
+			PROFILER.get().pop();
 			
 		}
 		

@@ -1,5 +1,7 @@
 package de.m_marvin.industria.core.client.conduits;
 
+import java.util.function.Supplier;
+
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
@@ -34,6 +36,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
@@ -50,12 +53,17 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.FORGE, modid=IndustriaCore.MODID, value=Dist.CLIENT)
 public class ConduitRenderer {
+
+	private static final Supplier<ProfilerFiller> PROFILER = () -> Minecraft.getInstance().getProfiler();
 	
 	@SuppressWarnings("resource")
 	@SubscribeEvent
 	public static void onWorldRender(RenderLevelStageEvent event) {
 		
-		if (event.getStage() == Stage.AFTER_PARTICLES) {
+		if (event.getStage() == Stage.AFTER_SOLID_BLOCKS) {
+			
+			// TODO conduit shader to improve performance
+			PROFILER.get().push(IndustriaCore.MODID + ":conduits");
 			
 			MultiBufferSource.BufferSource source = Minecraft.getInstance().renderBuffers().bufferSource();
 			PoseStack matrixStack = event.getPoseStack();
@@ -89,6 +97,8 @@ public class ConduitRenderer {
 			matrixStack.popPose();
 			
 			RenderSystem.disableDepthTest();
+			
+			PROFILER.get().pop();
 			
 		}
 		

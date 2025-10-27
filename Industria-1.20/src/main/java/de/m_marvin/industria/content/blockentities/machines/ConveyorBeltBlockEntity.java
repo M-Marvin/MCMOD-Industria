@@ -30,27 +30,34 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Container {
 	
-	public static class ItemOnBelt {
+	public class ItemOnBelt {
 		public final ItemStack stack;
 		public float position;
+		public float rotation;
+		public float offset;
+		
 		public Vec3f insertedFrom;
 		public final long insertedAt;
+		public boolean isClogged;
 		
-		public ItemOnBelt(ItemStack item, long insertedAt) {
+		// TODO custom item placement renderer
+		
+		public ItemOnBelt(ItemStack item, long insertedAt, float position, float rotation) {
 			this.insertedAt = insertedAt;
 			this.stack = item;
-			this.position = 0F;
+			this.position = position;
+			this.rotation = rotation;
 			this.insertedFrom = new Vec3f();
 		}
 		
 		@Override
 		public String toString() {
-			return "[" + this.stack.toString() + " @ " + this.position + "]";
+			return "[" + this.stack.toString() + " @ " + this.offset + "]";
 		}
-		
 	}
-	
-	protected final int itemsPerSection = 3;
+
+	protected final float itemSpacing = 0.25F;
+	protected final int itemsPerSection = (int) Math.floor(1F / this.itemSpacing);
 	protected final List<ItemOnBelt> items = new ArrayList<ConveyorBeltBlockEntity.ItemOnBelt>();
 	
 	public ConveyorBeltBlockEntity(BlockPos pPos, BlockState pBlockState) {
@@ -81,32 +88,60 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 	}
 	
 	public static void moveItemsTick(Level pLevel, BlockPos pPos, BlockState pState, ConveyorBeltBlockEntity pBlockEntity) {
-		
 		float motionSpeed = (float) Math.abs(pBlockEntity.getItemTransportSpeed());
-		
-		boolean blocked = false;
-		for (ItemOnBelt item : pBlockEntity.items)
-			if (item.position >= 1.0F) {
-				blocked = true;
-				break;
-			}
+		float conveyorItemDistance = pBlockEntity.itemSpacing * 2; // convert from block to -1 to +1 range
 		
 		Iterator<ItemOnBelt> itemIter = pBlockEntity.items.iterator();
+		ItemOnBelt prevItem = null;
 		while (itemIter.hasNext()) {
 			ItemOnBelt item = itemIter.next();
-			if (item.stack.isEmpty()) {
-				itemIter.remove();
-				continue;
+			
+			if (item.insertedAt != pLevel.getGameTime() && (!item.isClogged || !pBlockEntity.level.isClientSide())) {
+				if (prevItem == null) {
+					// check if item should be pushed to next container
+					if (item.offset + motionSpeed >= 1.0F - conveyorItemDistance) {
+						
+						// try to move item to the next container
+						item.offset += motionSpeed; // additional movement tick to prevent stutter in transition
+						if (tryPushItemOut(pLevel, pPos, pState, pBlockEntity, item)) {
+							itemIter.remove();
+							item.isClogged = false;
+							pBlockEntity.setChanged();
+							GameUtility.triggerClientSync(pLevel, pPos);
+						} else if (!item.isClogged) {
+							item.offset = 1.0F - conveyorItemDistance;
+							item.isClogged = true;
+							pBlockEntity.setChanged();
+							GameUtility.triggerClientSync(pLevel, pPos);
+						} else {
+							item.offset -= motionSpeed; // undo additional tick to prevent stutter when item stopped
+						}
+					} else {
+						// just increment position
+						item.offset += motionSpeed;
+						item.isClogged = false;
+						pBlockEntity.setChanged();
+					}
+				} else {
+					// just increment position
+					if (item.offset + motionSpeed < prevItem.offset - conveyorItemDistance) {
+						item.offset += motionSpeed;
+						if (item.isClogged) {
+							item.isClogged = false;
+							GameUtility.triggerClientSync(pLevel, pPos);
+						}
+						pBlockEntity.setChanged();
+					} else if (!item.isClogged) {
+						item.offset = prevItem.offset - conveyorItemDistance;
+						item.isClogged = true;
+						pBlockEntity.setChanged();
+						GameUtility.triggerClientSync(pLevel, pPos);
+					}
+				}
 			}
-			if (item.position < 1.0F && item.insertedAt != pLevel.getGameTime() && !blocked)
-				item.position += motionSpeed;
-			 if (item.position >= 1.0F && tryPushItemOut(pLevel, pPos, pState, pBlockEntity, item)) {
-				itemIter.remove();
-				pBlockEntity.setChanged();
-			}
+			
+			prevItem = item;
 		}
-		
-		// TODO make it stop move items if push fails
 		
 	}
 	
@@ -139,6 +174,7 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 			
 			if (itemToPush.stack.isEmpty()) return true;
 			
+			// TODO better velocity vector for dropped items
 			GameUtility.dropItem(pLevel, itemToPush.stack, Vec3f.fromVec(handTo).add(0.5F, 1.5F, 0.5F), 0.3F, 0.4F);
 			return true;
 			
@@ -172,7 +208,9 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 					ItemOnBelt item = conveyor.getLastInserted();
 					if (item != null) {
 						item.insertedFrom = Vec3f.fromVec(conveyor.getBlockPos()).sub(Vec3f.fromVec(pBlockEntity.getBlockPos()));
-						item.position = itemToPush.position - 2F;
+						item.offset = itemToPush.offset - 2F;
+						item.position = itemToPush.position;
+						item.rotation = itemToPush.rotation;
 						conveyor.setChanged();
 					}
 				}
@@ -189,7 +227,6 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 	protected static boolean tryTransferItemTo(ConveyorBeltBlockEntity pBlockEntity, Container container, Direction direction, ItemOnBelt itemToPush) {
 		
 		if (pBlockEntity.items.isEmpty()) return true;
-//		if (itemToPush.position < 1.0F && itemToPush.position > -1.0F) return true; TODO
 		
 		if (container instanceof WorldlyContainer worldlyContainer) {
 			for (int slot : worldlyContainer.getSlotsForFace(direction.getOpposite())) {
@@ -210,8 +247,7 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 		
 		ItemStack inTarget = container.getItem(slot);
 		if (inTarget.isEmpty()) {
-//			if (!pBlockEntity.level.isClientSide) TODO better synchronization ?
-				container.setItem(slot, toTransfer.stack);
+			container.setItem(slot, toTransfer.stack);
 //			pBlockEntity.items.remove(toTransfer);
 			return true;
 		} // else if (inTarget.getItem() == toTransfer.stack.getItem() && Objects.equals(inTarget.getTag(), toTransfer.stack.getTag())) {
@@ -225,6 +261,8 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 //			}
 //		}
 		
+		// TODO do stack items in containers
+		
 		return false;
 		
 	}
@@ -237,10 +275,14 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 		this.items.clear();
 		for (int i = 0; i < itemsTag.size(); i++) {
 			CompoundTag itemTag = itemsTag.getCompound(i);
-			ItemOnBelt item = new ItemOnBelt(ItemStack.of(itemTag.getCompound("Item")), 0L);
-			item.position = itemTag.getFloat("Position");
-			item.insertedFrom = NBTUtility.loadVector3f(itemTag.getCompound("InsertedFrom"));
-			this.items.add(item);
+			ItemStack item = ItemStack.of(itemTag.getCompound("Item"));
+			float position = itemTag.getFloat("Position");
+			float rotation = itemTag.getFloat("Rotation");
+			ItemOnBelt itemOnBelt = new ItemOnBelt(item, 0L, position, rotation);
+			itemOnBelt.offset = itemTag.getFloat("offset");
+			itemOnBelt.isClogged = itemTag.getBoolean("isClogged");
+			itemOnBelt.insertedFrom = NBTUtility.loadVector3f(itemTag.getCompound("insertedFrom"));
+			this.items.add(itemOnBelt);
 		}
 	}
 	
@@ -249,11 +291,15 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 		super.saveAdditional(pTag);
 		
 		ListTag itemsTag = new ListTag();
-		for (int i = 0; i < this.items.size(); i++) {
+		for (ItemOnBelt item : this.items) {
+			if (item.stack.isEmpty()) continue;
 			CompoundTag itemTag = new CompoundTag();
-			itemTag.putFloat("Position", this.items.get(i).position);
-			itemTag.put("InsertedFrom", NBTUtility.writeVector3f(this.items.get(i).insertedFrom));
-			itemTag.put("Item", this.items.get(i).stack.save(new CompoundTag()));
+			itemTag.putFloat("offset", item.offset);
+			itemTag.putBoolean("isClogged", item.isClogged);
+			itemTag.put("insertedFrom", NBTUtility.writeVector3f(item.insertedFrom));
+			itemTag.put("Item", item.stack.save(new CompoundTag()));
+			itemTag.putFloat("Position", item.position);
+			itemTag.putFloat("Rotation", item.rotation);
 			itemsTag.add(itemTag);
 		}
 		pTag.put("ItemsOnBelt", itemsTag);
@@ -264,11 +310,15 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 		CompoundTag tag = super.getUpdateTag();
 		
 		ListTag itemsTag = new ListTag();
-		for (int i = 0; i < this.items.size(); i++) {
+		for (ItemOnBelt item : this.items) {
+			if (item.stack.isEmpty()) continue;
 			CompoundTag itemTag = new CompoundTag();
-			itemTag.putFloat("Position", this.items.get(i).position);
-			itemTag.put("InsertedFrom", NBTUtility.writeVector3f(this.items.get(i).insertedFrom));
-			itemTag.put("Item", this.items.get(i).stack.save(new CompoundTag()));
+			itemTag.putFloat("offset", item.offset);
+			itemTag.putBoolean("isClogged", item.isClogged);
+			itemTag.put("insertedFrom", NBTUtility.writeVector3f(item.insertedFrom));
+			itemTag.put("Item", item.stack.save(new CompoundTag()));
+			itemTag.putFloat("Position", item.position);
+			itemTag.putFloat("Rotation", item.rotation);
 			itemsTag.add(itemTag);
 		}
 		tag.put("ItemsOnBelt", itemsTag);
@@ -296,6 +346,8 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 
 	@Override
 	public ItemStack getItem(int pSlot) {
+//		if (this.items.size() > pSlot)
+//			return this.items.get(pSlot).stack.isEmpty()
 		return this.items.size() > pSlot ? this.items.get(pSlot).stack : ItemStack.EMPTY;
 	}
 
@@ -303,12 +355,10 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 	public ItemStack removeItem(int pSlot, int pAmount) {
 		ItemStack stack = getItem(pSlot);
 		if (stack.getCount() <= pAmount) {
-			int c = stack.getCount();
-			ItemStack s = new ItemStack(stack.getItem(), c);
-			stack.shrink(c);
+			this.items.remove(pSlot);
 			setChanged();
 			GameUtility.triggerClientSync(level, worldPosition);
-			return s;
+			return stack;
 		} else {
 			stack.shrink(pAmount);
 			setChanged();
@@ -331,11 +381,13 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 	public void setItem(int pSlot, ItemStack pStack) {
 		if (pSlot > this.items.size() || pSlot >= this.itemsPerSection)
 			return;
+		float position = this.level.random.nextFloat() * 0.5F - 0.25F;
+		float rotation = (float) (this.level.random.nextFloat() * 360 - 180);
 		if (pSlot < this.items.size()) {
-			ItemOnBelt onBelt = this.items.set(pSlot, new ItemOnBelt(pStack, this.level.getGameTime()));
-			this.items.get(pSlot).position = onBelt.position;
+			ItemOnBelt onBelt = this.items.set(pSlot, new ItemOnBelt(pStack, this.level.getGameTime(), position, rotation));
+			this.items.get(pSlot).offset = onBelt.offset;
 		} else {
-			this.items.add(new ItemOnBelt(pStack, this.level.getGameTime()));
+			this.items.add(new ItemOnBelt(pStack, this.level.getGameTime(), position, rotation));
 		}
 		setChanged();
 		GameUtility.triggerClientSync(level, worldPosition);

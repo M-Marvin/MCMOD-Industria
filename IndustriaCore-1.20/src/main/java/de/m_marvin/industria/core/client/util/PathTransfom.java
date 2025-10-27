@@ -63,9 +63,10 @@ public class PathTransfom {
 	}
 	
 	public PathTransfom translate(Vec3f translation) {
-		Vec3f translationImmuatable = translation.copy();
+		Vec3f translationImmutable = translation.copy();
+		if (translationImmutable.length() == 0) return this;
 		this.transforms.add(new TransformSpan(this.interpolationStart, this.interpolationEnd, (poseStack, interpolation) -> {
-			Vec3f v = translationImmuatable.mul(interpolation);
+			Vec3f v = translationImmutable.mul(interpolation);
 			poseStack.translate(v.x, v.y, v.z);
 		}));
 		return this;
@@ -76,11 +77,12 @@ public class PathTransfom {
 	}
 	
 	public PathTransfom rotate(Vec3f origin, Vec3f rotation) {
-		Vec3f originImmuatable = origin.copy();
-		Vec3f rotationImmuatable = rotation.copy();
+		Vec3f originImmutable = origin.copy();
+		Vec3f rotationImmutable = rotation.copy();
+		if (rotationImmutable.length() == 0) return this;
 		this.transforms.add(new TransformSpan(this.interpolationStart, this.interpolationEnd, (poseStack, interpolation) -> {
-			Quaternionf rot = new Quaternionf(rotationImmuatable.normalize(), rotationImmuatable.length() * interpolation);
-			poseStack.rotateAround(new org.joml.Quaternionf(rot.i, rot.j, rot.k, rot.r), originImmuatable.x, originImmuatable.y, originImmuatable.z);
+			Quaternionf rot = new Quaternionf(rotationImmutable.normalize(), rotationImmutable.length() * interpolation);
+			poseStack.rotateAround(new org.joml.Quaternionf(rot.i, rot.j, rot.k, rot.r), originImmutable.x, originImmutable.y, originImmutable.z);
 		}));
 		return this;
 	}
@@ -90,9 +92,9 @@ public class PathTransfom {
 	}
 	
 	public PathTransfom scale(Vec3f scale) {
-		Vec3f scaleImmuatable = scale.copy();
+		Vec3f scaleImmutable = scale.copy();
 		this.transforms.add(new TransformSpan(this.interpolationStart, this.interpolationEnd, (poseStack, interpolation) -> {
-			Vec3f v = scaleImmuatable.mul(interpolation);
+			Vec3f v = scaleImmutable.mul(interpolation);
 			poseStack.scale(v.x, v.y, v.z);
 		}));
 		return this;

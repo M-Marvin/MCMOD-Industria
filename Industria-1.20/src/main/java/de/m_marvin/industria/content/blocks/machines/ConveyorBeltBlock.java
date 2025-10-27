@@ -38,6 +38,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class ConveyorBeltBlock extends BaseBeltBlock {
 	
+	// TODO allow placement and removal of items using right click
+	// TODO collect drops on the belt
+	
 	public static final EnumProperty<Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
 	public static final EnumProperty<DiagonalPlanarDirection> ORIENTATION = ModBlocks.ORIENTATION_NON_VERTICAL;
 	

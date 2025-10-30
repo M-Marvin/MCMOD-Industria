@@ -9,6 +9,7 @@ import de.m_marvin.industria.content.registries.ModConduits;
 import de.m_marvin.industria.content.registries.ModItems;
 import de.m_marvin.industria.content.registries.ModMenuTypes;
 import de.m_marvin.industria.content.registries.ModRecipeTypes;
+import de.m_marvin.industria.content.types.ModItemDisplayContext;
 import de.m_marvin.industria.core.registries.NetworkPackages;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
@@ -33,6 +34,7 @@ public class Industria {
 		ModBlockEntityTypes.register();
 		//ModCommandArguments.register();
 		ModRecipeTypes.register();
+		ModItemDisplayContext.register();
 		
 	}
 	

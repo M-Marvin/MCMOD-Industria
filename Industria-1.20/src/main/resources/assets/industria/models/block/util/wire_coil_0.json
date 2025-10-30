@@ -1,6 +1,7 @@
 {
 	"render_type": "cutout_mipped",
 	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
 	"textures": {
 		"1": "copper_wire_coil",
 		"5": "oak_wire_coil_edge",

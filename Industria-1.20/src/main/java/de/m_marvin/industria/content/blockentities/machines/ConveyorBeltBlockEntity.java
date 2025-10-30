@@ -22,11 +22,13 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.world.Container;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.WorldlyContainerHolder;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Container {
 	
@@ -39,8 +41,6 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 		public Vec3f insertedFrom;
 		public final long insertedAt;
 		public boolean isClogged;
-		
-		// TODO custom item placement renderer
 		
 		public ItemOnBelt(ItemStack item, long insertedAt, float position, float rotation) {
 			this.insertedAt = insertedAt;
@@ -164,18 +164,22 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 				Boolean::logicalOr);
 		
 		if (!handsToBelt) {
-			int r = tryHandItemTo(pLevel, pBlockEntity, handTo.above(), handingDirection, itemToPush);
+			int r = tryHandItemTo(pLevel, pBlockEntity, handTo.above(), handingDirection, itemToPush, false);
 			if (r != -1) return r == 1;
 		}
-		int r = tryHandItemTo(pLevel, pBlockEntity, handTo, handingDirection, itemToPush);
+		int r = tryHandItemTo(pLevel, pBlockEntity, handTo, handingDirection, itemToPush, handsToBelt);
 		if (r != -1) return r == 1;
 		
 		if (!targetState.isFaceSturdy(pLevel, pPos, handingDirection.getOpposite()) && !handsToBelt) {
 			
 			if (itemToPush.stack.isEmpty()) return true;
 			
-			// TODO better velocity vector for dropped items
-			GameUtility.dropItem(pLevel, itemToPush.stack, Vec3f.fromVec(handTo).add(0.5F, 1.5F, 0.5F), 0.3F, 0.4F);
+			Vec3f dropVelocity = new Vec3f(beltDir).mul((float) Math.abs(pBlockEntity.getRPM(0)) * 0.001F);
+			Vec3f dropPosition = Vec3f.fromVec(handTo).add(0.5F, 0.8F, 0.5F);
+			ItemEntity drop = new ItemEntity(pLevel, dropPosition.x, dropPosition.y, dropPosition.z, itemToPush.stack);
+			drop.setDeltaMovement(dropVelocity.writeTo(new Vec3(0, 0, 0)));
+			pLevel.addFreshEntity(drop);
+			
 			return true;
 			
 		}
@@ -187,7 +191,7 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 		return this.items.size() == 0 ? null : this.items.get(this.items.size() - 1);
 	}
 	
-	protected static int tryHandItemTo(Level pLevel, ConveyorBeltBlockEntity pBlockEntity, BlockPos pTarget, Direction direction, ItemOnBelt itemToPush) {
+	protected static int tryHandItemTo(Level pLevel, ConveyorBeltBlockEntity pBlockEntity, BlockPos pTarget, Direction direction, ItemOnBelt itemToPush, boolean handsToBelt) {
 		
 		BlockEntity blockEntity = CompoundBlock.getBlockEntityMaybeInCompound(pLevel, pTarget, ConveyorBeltBlockEntity.class);
 		if (blockEntity == null)
@@ -197,13 +201,13 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 		if (targetState.getBlock() instanceof WorldlyContainerHolder containerHolder) {
 			WorldlyContainer container = containerHolder.getContainer(targetState, pLevel, pTarget);
 			if (container != null) {
-				if (tryTransferItemTo(pBlockEntity, container, direction, itemToPush))
+				if (tryTransferItemTo(pBlockEntity, container, direction, itemToPush, !handsToBelt))
 					return 1;
 				return 0;
 			}
 		} else if (blockEntity instanceof Container container) {
-			if (tryTransferItemTo(pBlockEntity, container, direction, itemToPush)) {
-		
+			if (tryTransferItemTo(pBlockEntity, container, direction, itemToPush, !handsToBelt)) {
+				
 				if (blockEntity instanceof ConveyorBeltBlockEntity conveyor) {
 					ItemOnBelt item = conveyor.getLastInserted();
 					if (item != null) {
@@ -224,18 +228,18 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 		
 	}
 	
-	protected static boolean tryTransferItemTo(ConveyorBeltBlockEntity pBlockEntity, Container container, Direction direction, ItemOnBelt itemToPush) {
+	protected static boolean tryTransferItemTo(ConveyorBeltBlockEntity pBlockEntity, Container container, Direction direction, ItemOnBelt itemToPush, boolean doStack) {
 		
 		if (pBlockEntity.items.isEmpty()) return true;
 		
 		if (container instanceof WorldlyContainer worldlyContainer) {
 			for (int slot : worldlyContainer.getSlotsForFace(direction.getOpposite())) {
 				if (worldlyContainer.canPlaceItemThroughFace(slot, itemToPush.stack, direction.getOpposite()))
-					if (mergeItemsTo(pBlockEntity, itemToPush, worldlyContainer, slot)) return true;
+					if (mergeItemsTo(pBlockEntity, itemToPush, worldlyContainer, slot, doStack)) return true;
 			}
 		} else {
 			for (int slot = 0; slot < container.getContainerSize(); slot++) {
-				if (mergeItemsTo(pBlockEntity, itemToPush, container, slot)) return true;
+				if (mergeItemsTo(pBlockEntity, itemToPush, container, slot, doStack)) return true;
 			}
 		}
 
@@ -243,28 +247,18 @@ public class ConveyorBeltBlockEntity extends BaseBeltBlockEntity implements Cont
 		
 	}
 	
-	protected static boolean mergeItemsTo(ConveyorBeltBlockEntity pBlockEntity, ItemOnBelt toTransfer, Container container, int slot) {
-		
+	protected static boolean mergeItemsTo(ConveyorBeltBlockEntity pBlockEntity, ItemOnBelt toTransfer, Container container, int slot, boolean doStack) {
 		ItemStack inTarget = container.getItem(slot);
 		if (inTarget.isEmpty()) {
 			container.setItem(slot, toTransfer.stack);
-//			pBlockEntity.items.remove(toTransfer);
 			return true;
-		} // else if (inTarget.getItem() == toTransfer.stack.getItem() && Objects.equals(inTarget.getTag(), toTransfer.stack.getTag())) {
-//			int transferCount = Math.min(inTarget.getMaxStackSize() - inTarget.getCount(), toTransfer.stack.getCount());
-//			if (pBlockEntity.level.isClientSide)
-//				inTarget.grow(transferCount);
-//			toTransfer.stack.shrink(transferCount);
-//			if (toTransfer.stack.isEmpty()) {
-//				pBlockEntity.items.remove(toTransfer);
-//				return true;
-//			}
-//		}
-		
-		// TODO do stack items in containers
-		
+		} else if (doStack && ItemStack.isSameItemSameTags(inTarget, toTransfer.stack)) {
+			int transferCount = Math.min(inTarget.getMaxStackSize() - inTarget.getCount(), toTransfer.stack.getCount());
+			inTarget.grow(transferCount);
+			toTransfer.stack.shrink(transferCount);
+			return toTransfer.stack.isEmpty();
+		}
 		return false;
-		
 	}
 	
 	@Override

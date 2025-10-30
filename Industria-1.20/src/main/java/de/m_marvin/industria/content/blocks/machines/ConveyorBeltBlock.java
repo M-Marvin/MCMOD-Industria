@@ -6,6 +6,7 @@ import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.core.compound.types.blocks.CompoundBlock;
 import de.m_marvin.industria.core.kinetics.types.blockentities.BeltBlockEntity;
+import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility.ShapeType;
 import de.m_marvin.industria.core.util.types.DiagonalDirection;
@@ -17,7 +18,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Entity.RemovalReason;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -31,6 +38,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -38,8 +46,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class ConveyorBeltBlock extends BaseBeltBlock {
 	
-	// TODO allow placement and removal of items using right click
-	// TODO collect drops on the belt
+	// NOTE: Some functions here are copied from the base belt because of the changed definition of the ORIENTATION block state field !
 	
 	public static final EnumProperty<Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
 	public static final EnumProperty<DiagonalPlanarDirection> ORIENTATION = ModBlocks.ORIENTATION_NON_VERTICAL;
@@ -262,7 +269,32 @@ public class ConveyorBeltBlock extends BaseBeltBlock {
 	public void stepOn(Level pLevel, BlockPos pPos, BlockState pState, Entity pEntity) {
 		
 		if (pLevel.getBlockEntity(pPos) instanceof BeltBlockEntity belt) {
-
+			
+			if (belt instanceof ConveyorBeltBlockEntity conveyor && pEntity instanceof ItemEntity itemEntity) {
+				
+				ItemStack item = itemEntity.getItem();
+				
+				for (int slot = 0; slot < conveyor.getContainerSize(); slot++) {
+					if (!conveyor.canPlaceItem(slot, item)) continue;
+					ItemStack itemInSlot = conveyor.getItem(slot);
+					if (itemInSlot.isEmpty()) {
+						conveyor.setItem(slot, item);
+						item = ItemStack.EMPTY;
+					} else if (ItemStack.isSameItemSameTags(item, itemInSlot) && itemInSlot.getCount() < itemInSlot.getMaxStackSize()) {
+						int transfer = Math.min(itemInSlot.getMaxStackSize() - itemInSlot.getCount(), item.getCount());
+						itemInSlot.grow(transfer);
+						item.shrink(transfer);
+						conveyor.setChanged();
+						GameUtility.triggerClientSync(pLevel, pPos);
+					}
+					if (item.isEmpty()) {
+						itemEntity.remove(RemovalReason.KILLED);
+						return;
+					}
+				}
+				
+			}
+			
 			Axis axis = pState.getValue(AXIS);
 			DiagonalPlanarDirection orientation = pState.getValue(ORIENTATION);
 			double rpm = belt.getRPM(0);
@@ -288,6 +320,20 @@ public class ConveyorBeltBlock extends BaseBeltBlock {
 			
 		}
 		
+	}
+	
+	@Override
+	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+
+		// TODO allow placement and removal of items using right click
+		
+		if (pLevel.getBlockEntity(pPos) instanceof ConveyorBeltBlockEntity conveyor) {
+			
+			
+			
+		}
+		
+		return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
 	}
 	
 }

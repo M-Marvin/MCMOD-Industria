@@ -6,7 +6,6 @@ import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.content.registries.ModBlocks;
 import de.m_marvin.industria.core.compound.types.blocks.CompoundBlock;
 import de.m_marvin.industria.core.kinetics.types.blockentities.BeltBlockEntity;
-import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility.ShapeType;
 import de.m_marvin.industria.core.util.types.DiagonalDirection;
@@ -271,28 +270,16 @@ public class ConveyorBeltBlock extends BaseBeltBlock {
 		if (pLevel.getBlockEntity(pPos) instanceof BeltBlockEntity belt) {
 			
 			if (belt instanceof ConveyorBeltBlockEntity conveyor && pEntity instanceof ItemEntity itemEntity) {
-				
 				ItemStack item = itemEntity.getItem();
-				
 				for (int slot = 0; slot < conveyor.getContainerSize(); slot++) {
 					if (!conveyor.canPlaceItem(slot, item)) continue;
 					ItemStack itemInSlot = conveyor.getItem(slot);
 					if (itemInSlot.isEmpty()) {
 						conveyor.setItem(slot, item);
-						item = ItemStack.EMPTY;
-					} else if (ItemStack.isSameItemSameTags(item, itemInSlot) && itemInSlot.getCount() < itemInSlot.getMaxStackSize()) {
-						int transfer = Math.min(itemInSlot.getMaxStackSize() - itemInSlot.getCount(), item.getCount());
-						itemInSlot.grow(transfer);
-						item.shrink(transfer);
-						conveyor.setChanged();
-						GameUtility.triggerClientSync(pLevel, pPos);
-					}
-					if (item.isEmpty()) {
 						itemEntity.remove(RemovalReason.KILLED);
 						return;
 					}
 				}
-				
 			}
 			
 			Axis axis = pState.getValue(AXIS);
@@ -310,26 +297,49 @@ public class ConveyorBeltBlock extends BaseBeltBlock {
 			}
 			
 			Vec3d force = new Vec3d(pushDirection).mul(rpm * 0.0012F, rpm * 0.00012F, rpm * 0.0012F);
-			
 			Vec3 motion = pEntity.getDeltaMovement();
 			pEntity.setDeltaMovement(
 					force.x == 0 ? motion.x : force.x, 
 					force.y == 0 ? motion.y : force.y, 
 					force.z == 0 ? motion.z : force.z
 			);
-			
 		}
 		
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-
-		// TODO allow placement and removal of items using right click
 		
 		if (pLevel.getBlockEntity(pPos) instanceof ConveyorBeltBlockEntity conveyor) {
 			
-			
+			ItemStack itemInHand = pPlayer.getItemInHand(pHand);
+			if (itemInHand.isEmpty()) {
+				
+				boolean tookItem = false;
+				for (int slot = conveyor.getContainerSize(); slot >= 0; slot--) {
+					ItemStack itemInSlot = conveyor.getItem(slot);
+					if (itemInSlot.isEmpty()) continue;
+					if (!conveyor.canTakeItem(pPlayer.getInventory(), slot, itemInSlot)) continue;
+					if (!pPlayer.getInventory().add(itemInSlot)) continue;
+					conveyor.removeItem(slot, itemInHand.getCount());
+					tookItem = true;
+				}
+				return tookItem ? InteractionResult.SUCCESS : InteractionResult.PASS;
+				
+			} else {
+				
+				for (int slot = 0; slot < conveyor.getContainerSize(); slot++) {
+					if (!conveyor.canPlaceItem(slot, itemInHand)) continue;
+					ItemStack itemInSlot = conveyor.getItem(slot);
+					if (itemInSlot.isEmpty()) {
+						conveyor.setItem(slot, itemInHand);
+						pPlayer.setItemInHand(pHand, ItemStack.EMPTY);
+						return InteractionResult.CONSUME;
+					}
+				}
+				
+			}
 			
 		}
 		

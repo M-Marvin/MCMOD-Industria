@@ -1,12 +1,9 @@
 {
 	"render_type": "cutout_mipped",
 	"credit": "Made with Blockbench",
-	"parent": "minecraft:block/block",
+	"parent": "industria:block/util/wire_coil",
 	"textures": {
-		"1": "copper_wire_coil",
-		"5": "oak_wire_coil_edge",
-		"6": "oak_wire_coil_side",
-		"particle": "oak_wire_coil_edge"
+		"particle": "#edge"
 	},
 	"elements": [
 		{
@@ -14,12 +11,12 @@
 			"from": [0, 0, 14],
 			"to": [16, 16, 16],
 			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#6"},
-				"east": {"uv": [14, 0, 16, 16], "texture": "#5"},
-				"south": {"uv": [0, 0, 16, 16], "texture": "#6"},
-				"west": {"uv": [14, 0, 16, 16], "rotation": 180, "texture": "#5"},
-				"up": {"uv": [14, 0, 16, 16], "rotation": 270, "texture": "#5"},
-				"down": {"uv": [14, 0, 16, 16], "rotation": 90, "texture": "#5"}
+				"north": {"uv": [0, 0, 16, 16], "texture": "#side"},
+				"east": {"uv": [14, 0, 16, 16], "texture": "#edge"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#side"},
+				"west": {"uv": [14, 0, 16, 16], "rotation": 180, "texture": "#edge"},
+				"up": {"uv": [14, 0, 16, 16], "rotation": 270, "texture": "#edge"},
+				"down": {"uv": [14, 0, 16, 16], "rotation": 90, "texture": "#edge"}
 			}
 		},
 		{
@@ -27,12 +24,12 @@
 			"from": [0, 0, 0],
 			"to": [16, 16, 2],
 			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#6"},
-				"east": {"uv": [14, 0, 16, 16], "texture": "#5"},
-				"south": {"uv": [0, 0, 16, 16], "texture": "#6"},
-				"west": {"uv": [0, 0, 2, 16], "rotation": 180, "texture": "#5"},
-				"up": {"uv": [14, 0, 16, 16], "rotation": 270, "texture": "#5"},
-				"down": {"uv": [0, 0, 2, 16], "rotation": 90, "texture": "#5"}
+				"north": {"uv": [0, 0, 16, 16], "texture": "#side"},
+				"east": {"uv": [14, 0, 16, 16], "texture": "#edge"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#side"},
+				"west": {"uv": [0, 0, 2, 16], "rotation": 180, "texture": "#edge"},
+				"up": {"uv": [14, 0, 16, 16], "rotation": 270, "texture": "#edge"},
+				"down": {"uv": [0, 0, 2, 16], "rotation": 90, "texture": "#edge"}
 			}
 		},
 		{
@@ -40,10 +37,10 @@
 			"from": [4, 4, 2],
 			"to": [12, 12, 14],
 			"faces": {
-				"east": {"uv": [2, 4, 14, 12], "texture": "#1"},
-				"west": {"uv": [2, 4, 14, 12], "rotation": 180, "texture": "#1"},
-				"up": {"uv": [2, 4, 14, 12], "rotation": 270, "texture": "#1"},
-				"down": {"uv": [2, 4, 14, 12], "rotation": 90, "texture": "#1"}
+				"east": {"uv": [2, 4, 14, 12], "texture": "#coil"},
+				"west": {"uv": [2, 4, 14, 12], "rotation": 180, "texture": "#coil"},
+				"up": {"uv": [2, 4, 14, 12], "rotation": 270, "texture": "#coil"},
+				"down": {"uv": [2, 4, 14, 12], "rotation": 90, "texture": "#coil"}
 			}
 		},
 		{
@@ -51,48 +48,11 @@
 			"from": [10, 10, 16],
 			"to": [6, 6, 0],
 			"faces": {
-				"east": {"uv": [6, 0, 10, 16], "rotation": 90, "texture": "#5"},
-				"west": {"uv": [6, 0, 10, 16], "rotation": 90, "texture": "#5"},
-				"up": {"uv": [6, 0, 10, 16], "texture": "#5"},
-				"down": {"uv": [6, 0, 10, 16], "rotation": 180, "texture": "#5"}
+				"east": {"uv": [6, 0, 10, 16], "rotation": 90, "texture": "#edge"},
+				"west": {"uv": [6, 0, 10, 16], "rotation": 90, "texture": "#edge"},
+				"up": {"uv": [6, 0, 10, 16], "texture": "#edge"},
+				"down": {"uv": [6, 0, 10, 16], "rotation": 180, "texture": "#edge"}
 			}
 		}
-	],
-	"display": {
-		"thirdperson_righthand": {
-			"rotation": [75, 45, 0],
-			"translation": [0, 2.5, 0],
-			"scale": [0.375, 0.375, 0.375]
-		},
-		"thirdperson_lefthand": {
-			"rotation": [75, 45, 0],
-			"translation": [0, 2.5, 0],
-			"scale": [0.375, 0.375, 0.375]
-		},
-		"firstperson_righthand": {
-			"rotation": [0, 45, 0],
-			"scale": [0.4, 0.4, 0.4]
-		},
-		"firstperson_lefthand": {
-			"rotation": [0, 225, 0],
-			"scale": [0.4, 0.4, 0.4]
-		},
-		"ground": {
-			"translation": [0, 3, 0],
-			"scale": [0.25, 0.25, 0.25]
-		},
-		"gui": {
-			"rotation": [30, 225, 0],
-			"scale": [0.625, 0.625, 0.625]
-		},
-		"head": {
-			"rotation": [-180, 45, 0],
-			"translation": [0, 9.5, 0],
-			"scale": [0.375, 0.375, 0.375]
-		},
-		"fixed": {
-			"rotation": [0, 90, 0],
-			"scale": [0.5, 0.5, 0.5]
-		}
-	}
+	]
 }

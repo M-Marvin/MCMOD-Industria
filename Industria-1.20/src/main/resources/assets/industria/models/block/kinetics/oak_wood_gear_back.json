@@ -1,10 +1,9 @@
 {
 	"parent": "industriacore:block/gear_back",
 	"textures": {
-		"1": "industria:block/kinetics/oak_wood_gear_front",
-		"3": "industria:block/kinetics/oak_wood_gear_side",
-		"4": "industria:block/kinetics/oak_wood_gear_front2",
-		"6": "industria:block/kinetics/oak_wood_gear_teeth",
-		"particle": "industria:block/kinetics/oak_wood_gear_front2"
+		"front": "industria:block/kinetics/oak_wood_gear_front",
+		"side": "industria:block/kinetics/oak_wood_gear_side",
+		"front2": "industria:block/kinetics/oak_wood_gear_front2",
+		"teeth": "industria:block/kinetics/oak_wood_gear_teeth"
 	}
 }

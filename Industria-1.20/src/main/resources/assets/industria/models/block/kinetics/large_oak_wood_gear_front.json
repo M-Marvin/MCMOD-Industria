@@ -1,11 +1,10 @@
 {
 	"parent": "industriacore:block/large_gear_front",
 	"textures": {
-		"3": "industria:block/kinetics/oak_wood_gear_side",
-		"4": "industria:block/kinetics/large_oak_wood_gear_front",
-		"5": "industria:block/kinetics/large_oak_wood_gear_side",
-		"7": "industria:block/kinetics/large_oak_wood_gear_teeth",
-		"8": "industria:block/kinetics/large_oak_wood_gear_front2",
-		"particle": "industria:block/kinetics/large_oak_wood_gear_front2"
+		"center": "industria:block/kinetics/oak_wood_gear_side",
+		"front": "industria:block/kinetics/large_oak_wood_gear_front",
+		"side": "industria:block/kinetics/large_oak_wood_gear_side",
+		"teeth": "industria:block/kinetics/large_oak_wood_gear_teeth",
+		"front2": "industria:block/kinetics/large_oak_wood_gear_front2"
 	}
 }

@@ -1,10 +1,9 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "industria:block/util/copper_wire_coil",
-		"5": "industria:block/util/wire_coil_edge",
-		"6": "industria:block/util/wire_coil_side",
-		"particle": "industria:block/util/wire_coil_edge"
+		"coil": "industria:block/util/copper_wire_coil",
+		"edge": "industria:block/util/wire_coil_edge",
+		"side": "industria:block/util/wire_coil_side"
 	},
 	"parent": "industria:block/util/wire_coil_3"
 }

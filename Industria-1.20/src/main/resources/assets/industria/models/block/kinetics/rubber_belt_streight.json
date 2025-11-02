@@ -1,7 +1,7 @@
 {
 	"parent": "industriacore:block/belt_streight",
 	"textures": {
-		"0": "industria:block/kinetics/rubber_belt",
+		"belt": "industria:block/kinetics/rubber_belt",
 		"particle": "industria:block/kinetics/rubber_belt_particle"
 	}
 }

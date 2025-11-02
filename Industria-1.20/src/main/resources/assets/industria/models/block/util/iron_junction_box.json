@@ -1,8 +1,7 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "industria:block/util/iron_junction_box",
-		"particle": "industria:block/util/iron_junction_box"
+		"box": "industria:block/util/iron_junction_box"
 	},
 	"parent": "industria:block/util/junction_box"
 }

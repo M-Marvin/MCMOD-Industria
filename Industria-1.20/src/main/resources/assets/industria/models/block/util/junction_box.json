@@ -1,32 +1,32 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "industria:block/junction_box",
-		"particle": "industria:block/junction_box"
+		"box": "industria:block/junction_box",
+		"particle": "#box"
 	},
 	"elements": [
 		{
 			"from": [3, 0, 3],
 			"to": [13, 2, 13],
 			"faces": {
-				"north": {"uv": [3, 14, 13, 16], "texture": "#0"},
-				"east": {"uv": [0, 3, 2, 13], "rotation": 270, "texture": "#0"},
-				"south": {"uv": [3, 0, 13, 2], "rotation": 180, "texture": "#0"},
-				"west": {"uv": [14, 3, 16, 13], "rotation": 90, "texture": "#0"},
+				"north": {"uv": [3, 14, 13, 16], "texture": "#box"},
+				"east": {"uv": [0, 3, 2, 13], "rotation": 270, "texture": "#box"},
+				"south": {"uv": [3, 0, 13, 2], "rotation": 180, "texture": "#box"},
+				"west": {"uv": [14, 3, 16, 13], "rotation": 90, "texture": "#box"},
 				"up": {"uv": [3, 3, 13, 13], "texture": "#missing"},
-				"down": {"uv": [3, 3, 13, 13], "rotation": 180, "texture": "#0"}
+				"down": {"uv": [3, 3, 13, 13], "rotation": 180, "texture": "#box"}
 			}
 		},
 		{
 			"from": [3, 2, 3],
 			"to": [13, 3, 13],
 			"faces": {
-				"north": {"uv": [3, 13, 13, 14], "texture": "#0"},
-				"east": {"uv": [2, 3, 3, 13], "rotation": 270, "texture": "#0"},
-				"south": {"uv": [3, 2, 13, 3], "rotation": 180, "texture": "#0"},
-				"west": {"uv": [13, 3, 14, 13], "rotation": 90, "texture": "#0"},
-				"up": {"uv": [3, 3, 13, 13], "rotation": 180, "texture": "#0"},
-				"down": {"uv": [3, 3, 13, 13], "texture": "#0"}
+				"north": {"uv": [3, 13, 13, 14], "texture": "#box"},
+				"east": {"uv": [2, 3, 3, 13], "rotation": 270, "texture": "#box"},
+				"south": {"uv": [3, 2, 13, 3], "rotation": 180, "texture": "#box"},
+				"west": {"uv": [13, 3, 14, 13], "rotation": 90, "texture": "#box"},
+				"up": {"uv": [3, 3, 13, 13], "rotation": 180, "texture": "#box"},
+				"down": {"uv": [3, 3, 13, 13], "texture": "#box"}
 			}
 		}
 	],
@@ -65,6 +65,11 @@
 		"fixed": {
 			"rotation": [-90, 0, 0],
 			"translation": [0, 0, -6.75]
+		},
+		"industria:conveyor": {
+			"rotation": [0, 0, 0],
+			"translation": [0, 3, 0],
+			"scale": [0.4, 0.4, 0.4]
 		}
 	}
 }

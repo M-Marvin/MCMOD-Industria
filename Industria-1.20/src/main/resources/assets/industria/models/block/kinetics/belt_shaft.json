@@ -1,7 +1,6 @@
 {
 	"parent": "industriacore:block/belt_shaft",
 	"textures": {
-		"0": "industria:block/kinetics/belt_shaft",
-		"particle": "industria:block/kinetics/belt_shaft"
+		"shaft": "industria:block/kinetics/belt_shaft"
 	}
 }

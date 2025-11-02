@@ -1,0 +1,10 @@
+{
+	"forge": {
+        "loader": "industriacore:baked_animated"
+    },
+    "baked_animation": {
+    	"animation_name": "belt",
+    	"factor_u": 0.0,
+    	"factor_v": 1.0
+    }
+}

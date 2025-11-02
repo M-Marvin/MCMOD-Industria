@@ -40,7 +40,7 @@ public class BeltBlockEntityRenderer implements BlockEntityRenderer<BeltBlockEnt
 
 		BakedModel model = dispatcher.getBlockModel(state);
 		if (model instanceof SimpleBakedModel simpleModel) {
-			AdvancedBakedAnimation.shiftTextureUV(simpleModel, 0F, animation * 0.5F, tex -> true);
+			AdvancedBakedAnimation.shiftTextureUV(simpleModel, 0F, animation * 0.5F, "belt");
 		}
 
 		SingleBlockBatchedRenderer.renderBlock(state, pPoseStack, pBuffer, pPackedLight, pPackedOverlay, Objects.hash(animation));

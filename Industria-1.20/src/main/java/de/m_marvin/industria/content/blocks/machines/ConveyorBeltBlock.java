@@ -333,7 +333,8 @@ public class ConveyorBeltBlock extends BaseBeltBlock {
 					if (!conveyor.canPlaceItem(slot, itemInHand)) continue;
 					ItemStack itemInSlot = conveyor.getItem(slot);
 					if (itemInSlot.isEmpty()) {
-						conveyor.setItem(slot, itemInHand);
+						if (!pLevel.isClientSide)
+							conveyor.setItem(slot, itemInHand);
 						pPlayer.setItemInHand(pHand, ItemStack.EMPTY);
 						return InteractionResult.CONSUME;
 					}

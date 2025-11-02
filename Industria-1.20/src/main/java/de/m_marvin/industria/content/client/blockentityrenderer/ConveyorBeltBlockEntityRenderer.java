@@ -110,7 +110,7 @@ public class ConveyorBeltBlockEntityRenderer extends BeltBlockEntityRenderer {
 		transform
 			.at(-2.0F)
 				.translate(v1)
-				.between(-0.5F, 0.5F)
+			.between(-0.5F, 0.5F)
 				.translate(v2.sub(v1))
 			.at(-2.0F)
 				.rotate(0F, 0F, 0F, 0F, (float) Math.toRadians(itemRotation), 0F);

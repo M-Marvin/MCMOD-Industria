@@ -245,7 +245,6 @@ public class ModifiedDebugScreenOverlay {
 	
 	public static void drawDebugLines(GuiGraphics graphics, List<Component[]> debugLines, int offset) {
 
-		@SuppressWarnings("resource")
 		Font font = MC.get().font;
 		int lastColumns = 0;
 		int lineOffset = 0;

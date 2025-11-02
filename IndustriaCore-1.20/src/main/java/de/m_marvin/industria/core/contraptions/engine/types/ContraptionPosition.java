@@ -109,8 +109,7 @@ public class ContraptionPosition {
 				this.velocity.isPresent() ? this.velocity.get().writeTo(new Vector3d()) : new Vector3d(), 
 				this.omega.isPresent() ? this.omega.get().writeTo(new Vector3d()) : new Vector3d(), 
 				DIMENSION_REGISTRY + ":" + this.dimension.toString(), 
-				this.scale.isPresent() ? this.scale.get() : null, 
-				null
+				this.scale.isPresent() ? this.scale.get() : null
 		);
 	}
 	

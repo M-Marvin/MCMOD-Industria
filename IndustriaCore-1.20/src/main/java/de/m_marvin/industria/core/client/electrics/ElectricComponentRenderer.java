@@ -30,7 +30,6 @@ public class ElectricComponentRenderer {
 
 	protected static float animationTicks;
 
-	@SuppressWarnings("resource")
 	@SubscribeEvent
 	public static void onWorldRender(RenderLevelStageEvent event) {
 
@@ -65,7 +64,6 @@ public class ElectricComponentRenderer {
 	
 	/* private render methods, called by the render event */
 	
-	@SuppressWarnings("resource")
 	private static void drawDebugFrames(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, float partialTicks) {
 		
 		LazyOptional<ElectricNetworkSpaceCapability> optionalElectricHolder = clientLevel.getCapability(Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);

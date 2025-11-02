@@ -48,7 +48,6 @@ public class ScrollInputListener {
 		performScrollOverrides(event, InteractionHand.OFF_HAND);
 	}
 
-	@SuppressWarnings("resource")
 	protected static void performScrollOverrides(InputEvent.MouseScrollingEvent event, InteractionHand hand) {
 		
 		Player player = Minecraft.getInstance().player;

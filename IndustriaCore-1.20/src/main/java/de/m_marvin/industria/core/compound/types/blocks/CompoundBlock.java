@@ -715,7 +715,6 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 				CompoundBlock::sumFloat);
 	}
 
-	@SuppressWarnings("resource")
 	@Override
 	public double getCoefficient(Level level, BlockState state, BlockPos pos) {
 		return performOnAllAndCombine(level, pos, 
@@ -738,7 +737,6 @@ public class CompoundBlock extends BaseEntityBlock implements IKineticBlock, IMa
 				});
 	}
 
-	@SuppressWarnings("resource")
 	@Override
 	public Vec3d getFieldVector(Level level, BlockState state, BlockPos blockPos) {
 		return performOnAllAndCombine(level, blockPos, 

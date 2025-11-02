@@ -56,7 +56,6 @@ public class ConduitRenderer {
 
 	private static final Supplier<ProfilerFiller> PROFILER = () -> Minecraft.getInstance().getProfiler();
 	
-	@SuppressWarnings("resource")
 	@SubscribeEvent
 	public static void onWorldRender(RenderLevelStageEvent event) {
 		
@@ -180,7 +179,6 @@ public class ConduitRenderer {
 		
 	}
 
-	@SuppressWarnings("resource")
 	protected static void drawConduits(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, float partialTicks) {
 		
 		LazyOptional<ConduitHandlerCapability> optionalConduitHolder = clientLevel.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
@@ -262,7 +260,6 @@ public class ConduitRenderer {
 		
 	}
 	
-	@SuppressWarnings("resource")
 	public static void drawNodeDebug(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel level, float partialTicks, BlockPos pos, ConduitNode node, int nodeId) {
 		
 		Vec3d position = node.getWorldRenderPosition(level, pos);
@@ -303,7 +300,6 @@ public class ConduitRenderer {
 		}
 	}
 
-	@SuppressWarnings("resource")
 	public static void drawNodeSymbol(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel level, int ticks, float partialTicks, BlockPos pos, ConduitNode node, int nodeId) {
 		
 		Vec3d position = node.getWorldRenderPosition(level, pos);

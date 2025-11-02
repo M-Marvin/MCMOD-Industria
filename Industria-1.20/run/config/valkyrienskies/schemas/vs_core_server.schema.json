@@ -88,33 +88,6 @@
       "format" : "double",
       "description" : "Ship unload distance in blocks"
     },
-    "sp" : {
-      "type" : "object",
-      "properties" : {
-        "enableBlockCornerConnectivity" : {
-          "type" : "boolean",
-          "description" : "Enable/Disable Block Corner Connectivity (WARNING! May significantly increase memory usage)"
-        },
-        "enableBlockEdgeConnectivity" : {
-          "type" : "boolean",
-          "description" : "Enable/Disable Block Edge Connectivity (WARNING! May significantly increase memory usage)"
-        },
-        "enableConnectivity" : {
-          "type" : "boolean",
-          "description" : "Enable/Disable Connectivity (May reduce memory usage)"
-        },
-        "enableWorldConnectivity" : {
-          "type" : "boolean",
-          "description" : "Enable/Disable World Connectivity (WARNING! May significantly increase memory usage)"
-        },
-        "verboseConnectivityLogging" : {
-          "type" : "boolean",
-          "description" : "Enable verbose logging of connectivity (May result in very large log files)"
-        }
-      },
-      "additionalProperties" : false,
-      "title" : "Connectivity Settings (Experimental)"
-    },
     "udpPort" : {
       "type" : "integer",
       "format" : "int32",

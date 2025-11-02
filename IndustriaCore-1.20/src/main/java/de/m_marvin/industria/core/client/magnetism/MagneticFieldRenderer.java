@@ -35,7 +35,6 @@ public class MagneticFieldRenderer {
 
 	protected static float animationTicks;
 
-	@SuppressWarnings("resource")
 	@SubscribeEvent
 	public static void onWorldRender(RenderLevelStageEvent event) {
 		
@@ -74,7 +73,6 @@ public class MagneticFieldRenderer {
 	
 	/* private render methods, called by the render event */
 	
-	@SuppressWarnings("resource")
 	private static void drawDebugFields(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, float partialTicks) {
 		
 		LazyOptional<MagnetismHandlerCapability> optionalMagneticHolder = clientLevel.getCapability(Capabilities.MAGNETISM_HANDLER_CAPABILITY);

@@ -41,15 +41,13 @@ public class ClientMagnetismPackageHandler {
 	
 	/* Handle SMagneticInfluencePackage package */
 	
-	@SuppressWarnings("resource")
 	public static void handleRemoveInfluence(SRemoveInfluencePackage msg, Context ctx) {
 		// Delay to make sure package gets processed after block state changes
 		ConditionalExecutor.CLIENT_TICK_EXECUTOR.executeAfterDelay(() -> {
 			MagnetismUtility.removeFieldInfluence(Minecraft.getInstance().level, msg.getPosition());
 		}, 0);
 	}
-
-	@SuppressWarnings("resource")
+	
 	public static void handleAddInfluence(SAddInfluencePackage msg, Context ctx) {
 		// Delay to make sure package gets processed after block state changes
 		ConditionalExecutor.CLIENT_TICK_EXECUTOR.executeAfterDelay(() -> {
@@ -59,7 +57,6 @@ public class ClientMagnetismPackageHandler {
 
 	/* Handle SUpdateMagneticFieldPackage */
 	
-	@SuppressWarnings("resource")
 	public static void handleUpdateMagneticField(SUpdateMagneticFieldPackage msg, Context context) {
 		
 		Level level = Minecraft.getInstance().level;

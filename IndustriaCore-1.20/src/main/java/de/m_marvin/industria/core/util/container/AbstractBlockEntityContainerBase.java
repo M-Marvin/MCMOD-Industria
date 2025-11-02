@@ -28,7 +28,6 @@ public abstract class AbstractBlockEntityContainerBase<T extends BlockEntity> ex
 		this.init();
 	}
 	
-	@SuppressWarnings("resource")
 	private static BlockEntity getClientBlockEntity(FriendlyByteBuf data) {
 		
 		BlockPos pos = data.readBlockPos();

@@ -25,7 +25,6 @@ public class ClientConduitPackageHandler {
 	
 	/* Handle SSyncConduitPackage package */
 	
-	@SuppressWarnings("resource")
 	public static void handleSyncConduitsFromServer(SSyncConduitPackage msg, NetworkEvent.Context ctx) {
 		ConditionalExecutor.CLIENT_TICK_EXECUTOR.executeAsSoonAs(() -> {
 			
@@ -49,12 +48,10 @@ public class ClientConduitPackageHandler {
 	
 	/* Handle SCConduitPackage package */
 	
-	@SuppressWarnings("resource")
 	public static void handlePlaceConduit(SCPlaceConduitPackage msg, Context ctx) {
 		ConduitUtility.setConduit(Minecraft.getInstance().level, msg.getPosition(), msg.getConduit(), msg.getLength());
 	}
 	
-	@SuppressWarnings("resource")
 	public static void handleRemoveConduit(SCBreakConduitPackage msg, Context ctx) {
 		ConduitUtility.removeConduit(Minecraft.getInstance().level, msg.getPosition(), msg.dropItems());
 	}

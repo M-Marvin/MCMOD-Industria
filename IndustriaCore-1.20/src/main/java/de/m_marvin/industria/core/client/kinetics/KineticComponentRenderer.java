@@ -33,7 +33,6 @@ public class KineticComponentRenderer {
 
 	protected static float animationTicks;
 
-	@SuppressWarnings("resource")
 	@SubscribeEvent
 	public static void onWorldRender(RenderLevelStageEvent event) {
 

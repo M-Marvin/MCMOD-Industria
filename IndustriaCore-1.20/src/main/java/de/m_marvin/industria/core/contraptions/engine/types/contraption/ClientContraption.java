@@ -13,7 +13,6 @@ public class ClientContraption extends Contraption {
 		this.ship = ship;
 	}
 	
-	@SuppressWarnings("resource")
 	@Override
 	public Level getLevel() {
 		return Minecraft.getInstance().level;

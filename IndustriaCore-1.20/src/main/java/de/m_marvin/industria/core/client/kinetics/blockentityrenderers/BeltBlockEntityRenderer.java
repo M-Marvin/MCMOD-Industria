@@ -18,7 +18,9 @@ import net.minecraft.client.resources.model.SimpleBakedModel;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class BeltBlockEntityRenderer implements BlockEntityRenderer<BeltBlockEntity> {
-
+	
+	// TODO Flywheel Visual implementation for Belt
+	
 	protected final BlockRenderDispatcher dispatcher;
 	
 	public BeltBlockEntityRenderer(BlockEntityRendererProvider.Context context) {

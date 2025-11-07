@@ -99,6 +99,7 @@ public class KineticNetworkSpaceCapability extends FriendlyFunctionalNetworkSpac
 	@SubscribeEvent
 	public static void onBlockStateChange(BlockEvent.NeighborNotifyEvent event) {
 		Level level = (Level) event.getLevel();
+		if (level.isClientSide()) return;
 		KineticNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.KINETIC_NETWORK_SPACE_CAPABILITY);
 		
 		// Always remove components at this block pos, this prevents wrong connections from things like assembly to an compound

@@ -76,7 +76,8 @@ public class ConduitRenderer {
 			
 			if (!Minecraft.getInstance().getEntityRenderDispatcher().shouldRenderHitBoxes()) {
 				
-				drawConduits(matrixStack, source, level, event.getPartialTick());
+				// TODO CONDUIT RENDERING
+//				drawConduits(matrixStack, source, level, event.getPartialTick());
 				
 			} else {
 				

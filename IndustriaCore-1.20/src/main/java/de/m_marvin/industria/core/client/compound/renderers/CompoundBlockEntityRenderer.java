@@ -40,10 +40,10 @@ public class CompoundBlockEntityRenderer<T extends CompoundBlockEntity> implemen
 			
 			if (block.getState().getRenderShape() == RenderShape.MODEL) {
 				
-				renderCompoundBlock(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, block.getLevel(), block.getState());
+//				renderCompoundBlock(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, block.getLevel(), block.getState());
 				
 			} else if (block.getState().getRenderShape() == RenderShape.ENTITYBLOCK_ANIMATED && block.getBlockEntity() != null) {
-				
+				// TODO check for replacing visuals
 				renderCompoundBlockEntity(pPoseStack, pBuffer, pPartialTick, pPackedLight, pPackedOverlay, block.getBlockEntity());
 				
 			}

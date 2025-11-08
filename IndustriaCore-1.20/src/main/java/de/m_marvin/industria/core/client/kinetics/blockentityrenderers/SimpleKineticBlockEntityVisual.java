@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 
 import de.m_marvin.industria.core.client.util.ClientTimer;
-import de.m_marvin.industria.core.client.util.FlywheelModels;
+import de.m_marvin.industria.core.client.util.FlywheelUtility;
 import de.m_marvin.industria.core.kinetics.types.blockentities.IKineticBlockEntity;
 import de.m_marvin.industria.core.kinetics.types.blockentities.SimpleKineticBlockEntity;
 import dev.engine_room.flywheel.api.instance.Instance;
@@ -50,7 +50,7 @@ public class SimpleKineticBlockEntityVisual extends AbstractBlockEntityVisual<Si
 	}
 	
 	protected void createInstance(InstancerProvider instanceProvider, IKineticBlockEntity.CompoundPart visualPart, float blockSpeed) {
-		Model model = FlywheelModels.blockForceBaked(visualPart.state());
+		Model model = FlywheelUtility.modelOfBlockForceBaked(visualPart.state());
 		TransformedInstance instance = instanceProvider.instancer(InstanceTypes.TRANSFORMED, model).createInstance();
 		instance.translate(getVisualPosition()).center();
 		this.baseTransform.set(instance.pose);

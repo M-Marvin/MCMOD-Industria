@@ -202,8 +202,6 @@ repositories {
         	includeGroup "org.valkyrienskies"
         }
 	}
-    maven { url = 'https://maven.minecraftforge.net' }
-    
     maven {
         name = "Modrinth Maven"
         url = "https://api.modrinth.com/maven"
@@ -211,7 +209,7 @@ repositories {
             includeGroup("maven.modrinth")
         }
     }
-    
+    maven { url = 'https://maven.minecraftforge.net' }
 }
 
 configurations {
@@ -241,7 +239,7 @@ dependencies {
 	// Flywheel
 	compileOnly fg.deobf("dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:${flywheel_version}")
     runtimeOnly fg.deobf("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
-    runtimeOnly fg.deobf("maven.modrinth:colorwheel:${colorwheel_version}")
+    //runtimeOnly fg.deobf("maven.modrinth:colorwheel:${colorwheel_version}")
 	
  	// ElectronFlow
 	shade("de.m_marvin.electronflow:jelectronflow:${electronflow_version}")

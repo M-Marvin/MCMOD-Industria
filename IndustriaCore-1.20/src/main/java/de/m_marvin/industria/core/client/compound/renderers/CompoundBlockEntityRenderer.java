@@ -2,6 +2,7 @@ package de.m_marvin.industria.core.client.compound.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import de.m_marvin.industria.core.client.util.FlywheelUtility;
 import de.m_marvin.industria.core.compound.types.blockentities.CompoundBlockEntity;
 import de.m_marvin.industria.core.registries.Blocks;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -29,7 +30,9 @@ public class CompoundBlockEntityRenderer<T extends CompoundBlockEntity> implemen
 	@Override
 	public void render(T pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
 		
-		if (pBlockEntity.getParts().isEmpty()) {
+		boolean skipFlywheelBlocks = FlywheelUtility.isFlywheelEnabled();
+		
+		if (pBlockEntity.getParts().isEmpty() && !skipFlywheelBlocks) {
 			
 			renderCompoundBlock(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pBlockEntity.getLevel(), Blocks.COMPOUND_BLOCK.get().defaultBlockState());
 			return;
@@ -38,12 +41,15 @@ public class CompoundBlockEntityRenderer<T extends CompoundBlockEntity> implemen
 		
 		for (var block : pBlockEntity.getParts().values()) {
 			
-			if (block.getState().getRenderShape() == RenderShape.MODEL) {
+			if (block.getState().getRenderShape() == RenderShape.MODEL && !skipFlywheelBlocks) {
 				
-//				renderCompoundBlock(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, block.getLevel(), block.getState());
+				renderCompoundBlock(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, block.getLevel(), block.getState());
 				
 			} else if (block.getState().getRenderShape() == RenderShape.ENTITYBLOCK_ANIMATED && block.getBlockEntity() != null) {
-				// TODO check for replacing visuals
+				
+				// skip block entity renderers which are replaced by an flywheel visual
+				if (skipFlywheelBlocks && FlywheelUtility.hasFlywheelVisual(block.getBlockEntity())) continue;
+				
 				renderCompoundBlockEntity(pPoseStack, pBuffer, pPartialTick, pPackedLight, pPackedOverlay, block.getBlockEntity());
 				
 			}

@@ -4,8 +4,8 @@ import java.util.Objects;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import de.m_marvin.industria.core.client.util.AdvancedBakedAnimation;
 import de.m_marvin.industria.core.client.util.ClientTimer;
+import de.m_marvin.industria.core.client.util.ShiftedTextureAnimation;
 import de.m_marvin.industria.core.client.util.SingleBlockBatchedRenderer;
 import de.m_marvin.industria.core.kinetics.types.blockentities.BeltBlockEntity;
 import net.minecraft.client.Minecraft;
@@ -18,8 +18,6 @@ import net.minecraft.client.resources.model.SimpleBakedModel;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class BeltBlockEntityRenderer implements BlockEntityRenderer<BeltBlockEntity> {
-	
-	// TODO Flywheel Visual implementation for Belt
 	
 	protected final BlockRenderDispatcher dispatcher;
 	
@@ -42,7 +40,7 @@ public class BeltBlockEntityRenderer implements BlockEntityRenderer<BeltBlockEnt
 
 		BakedModel model = dispatcher.getBlockModel(state);
 		if (model instanceof SimpleBakedModel simpleModel) {
-			AdvancedBakedAnimation.shiftTextureUV(simpleModel, 0F, animation * 0.5F, "belt");
+			ShiftedTextureAnimation.shiftTextureUV(simpleModel, 0F, animation * 0.5F, "belt");
 		}
 
 		SingleBlockBatchedRenderer.renderBlock(state, pPoseStack, pBuffer, pPackedLight, pPackedOverlay, Objects.hash(animation));

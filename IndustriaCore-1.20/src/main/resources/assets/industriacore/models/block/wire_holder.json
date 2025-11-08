@@ -1,6 +1,7 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
+		"tex": "industriacore:block/wire_holder",
 		"particle": "#tex"
 	},
 	"elements": [

@@ -39,17 +39,17 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Bus.FORGE, value=Dist.CLIENT)
-public class AdvancedBakedAnimation {
+public class ShiftedTextureAnimation {
 
-	public static class BakedAnimationTextureSprite extends TextureAtlasSprite {
+	public static class ShiftedTextureAnimationSprite extends TextureAtlasSprite {
 		
-		public static class BakedAnimationSpriteContents extends SpriteContents {
+		public static class ShiftedTextureAnimationSpriteContents extends SpriteContents {
 			
 			private final float factorU;
 			private final float factorV;
 			private final String animationName;
 			
-			public BakedAnimationSpriteContents(ResourceLocation name, FrameSize frameSize, NativeImage image,
+			public ShiftedTextureAnimationSpriteContents(ResourceLocation name, FrameSize frameSize, NativeImage image,
 					AnimationMetadataSection animationMeta, ForgeTextureMetadata forgeMeta,
 					float factorU, float factorV, String animationName) {
 				super(name, frameSize, image, animationMeta, forgeMeta);
@@ -72,43 +72,43 @@ public class AdvancedBakedAnimation {
 			
 		}
 		
-		protected BakedAnimationTextureSprite(ResourceLocation pAtlasLocation, BakedAnimationSpriteContents pContents, int pOriginX, int pOriginY, int pX, int pY) {
+		protected ShiftedTextureAnimationSprite(ResourceLocation pAtlasLocation, ShiftedTextureAnimationSpriteContents pContents, int pOriginX, int pOriginY, int pX, int pY) {
 			super(pAtlasLocation, pContents, pOriginX, pOriginY, pX, pY);
 		}
 		
 		public float getFactorU() {
-			return ((BakedAnimationSpriteContents) contents()).getFactorU();
+			return ((ShiftedTextureAnimationSpriteContents) contents()).getFactorU();
 		}
 		
 		public float getFactorV() {
-			return ((BakedAnimationSpriteContents) contents()).getFactorV();
+			return ((ShiftedTextureAnimationSpriteContents) contents()).getFactorV();
 		}
 		
 		public String getAnimationName() {
-			return ((BakedAnimationSpriteContents) contents()).getAnimationName();
+			return ((ShiftedTextureAnimationSpriteContents) contents()).getAnimationName();
 		}
 		
 	}
 	
-	public static class BakedAnimationTextureAtlasSpriteLoader implements ITextureAtlasSpriteLoader {
+	public static class ShiftedTextureAnimationTextureAtlasSpriteLoader implements ITextureAtlasSpriteLoader {
 		
-		public static class BakedAnmiationMetadata {
+		public static class ShiftedTextureAnmiationMetadata {
 			
 			public static final Section SERIALIZER = new Section();
 			
-			public static class Section implements MetadataSectionSerializer<BakedAnmiationMetadata> {
+			public static class Section implements MetadataSectionSerializer<ShiftedTextureAnmiationMetadata> {
 				
 				@Override
 				public String getMetadataSectionName() {
-					return "baked_animation";
+					return "shifted_texture";
 				}
 	
 				@Override
-				public BakedAnmiationMetadata fromJson(JsonObject pJson) {
+				public ShiftedTextureAnmiationMetadata fromJson(JsonObject pJson) {
 					String animationName = pJson.has("animation_name") ? pJson.get("animation_name").getAsString() : "";
 					float factorU = pJson.has("factor_U") ? pJson.get("factor_u").getAsFloat() : 1.0f;
 					float factorV = pJson.has("factor_v") ? pJson.get("factor_v").getAsFloat() : 1.0f;
-					return new BakedAnmiationMetadata(animationName, factorU, factorV);
+					return new ShiftedTextureAnmiationMetadata(animationName, factorU, factorV);
 				}
 				
 			}
@@ -117,7 +117,7 @@ public class AdvancedBakedAnimation {
 			private final float factorU;
 			private final float factorV;
 			
-			public BakedAnmiationMetadata(String animationName, float factorU, float factorV) {
+			public ShiftedTextureAnmiationMetadata(String animationName, float factorU, float factorV) {
 				this.animationName = animationName;
 				this.factorU = factorU;
 				this.factorV = factorV;
@@ -141,9 +141,9 @@ public class AdvancedBakedAnimation {
 		public SpriteContents loadContents(ResourceLocation name, Resource resource, FrameSize frameSize,
 				NativeImage image, AnimationMetadataSection animationMeta, ForgeTextureMetadata forgeMeta) {
 			try {
-				Optional<BakedAnmiationMetadata> metadata = resource.metadata().getSection(BakedAnmiationMetadata.SERIALIZER);
+				Optional<ShiftedTextureAnmiationMetadata> metadata = resource.metadata().getSection(ShiftedTextureAnmiationMetadata.SERIALIZER);
 				if (metadata.isPresent()) {
-					return new BakedAnimationTextureSprite.BakedAnimationSpriteContents(
+					return new ShiftedTextureAnimationSprite.ShiftedTextureAnimationSpriteContents(
 							name, frameSize, image, animationMeta, forgeMeta,
 							metadata.get().getFactorU(),
 							metadata.get().getFactorV(),
@@ -151,7 +151,7 @@ public class AdvancedBakedAnimation {
 							);
 				}
 			} catch (IOException e) {
-	            IndustriaCore.LOGGER.error("Unable to get Baked Animation metadata for {}, falling back to vanilla loading", name);
+	            IndustriaCore.LOGGER.error("Unable to get Shifted Texture Animation metadata for {}, falling back to vanilla loading", name);
 	            e.printStackTrace();
 			}
 			return new SpriteContents(name, frameSize, image, animationMeta, forgeMeta);
@@ -160,35 +160,36 @@ public class AdvancedBakedAnimation {
 		@Override
 		public @NotNull TextureAtlasSprite makeSprite(ResourceLocation atlasName, SpriteContents contents,
 				int atlasWidth, int atlasHeight, int spriteX, int spriteY, int mipmapLevel) {
-			if (contents instanceof BakedAnimationTextureSprite.BakedAnimationSpriteContents)
-				return new BakedAnimationTextureSprite(atlasName, (BakedAnimationTextureSprite.BakedAnimationSpriteContents) contents, atlasWidth, atlasHeight, spriteX, spriteY);			
+			if (contents instanceof ShiftedTextureAnimationSprite.ShiftedTextureAnimationSpriteContents)
+				return new ShiftedTextureAnimationSprite(atlasName, (ShiftedTextureAnimationSprite.ShiftedTextureAnimationSpriteContents) contents, atlasWidth, atlasHeight, spriteX, spriteY);			
 			return null;
 		}
 		
 	}
 	
-	private AdvancedBakedAnimation() {}
+	private ShiftedTextureAnimation() {}
+	
+	/* Implementation of UV animation with vanilla BakedModel */
 	
 	public static void shiftTextureUV(SimpleBakedModel model, float shiftU, float shiftV, String... animationNames) {
-		List<String> textures = Arrays.asList(animationNames);
-		shiftTextureUV(model, shiftU, shiftV, textures::contains);
+		List<String> animations = Arrays.asList(animationNames);
+		shiftTextureUV(model, shiftU, shiftV, animations::contains);
 	}
 	
 	public static void shiftTextureUV(SimpleBakedModel model, float shiftU, float shiftV, Predicate<String> animationNames) {
-		for (Direction d : Direction.values()) {
+		for (Direction d : Direction.values())
 			for (BakedQuad quad : model.getQuads(null, d, null))
-				if (quad.getSprite() instanceof BakedAnimationTextureSprite bakedAnimSprite && animationNames.test(bakedAnimSprite.getAnimationName()))
+				if (quad.getSprite() instanceof ShiftedTextureAnimationSprite bakedAnimSprite && animationNames.test(bakedAnimSprite.getAnimationName()))
 					shiftTextureUV(quad, bakedAnimSprite, shiftU, shiftV);
-		}
 		for (BakedQuad quad : model.getQuads(null, null, null))
-			if (quad.getSprite() instanceof BakedAnimationTextureSprite bakedAnimSprite && animationNames.test(bakedAnimSprite.getAnimationName()))
+			if (quad.getSprite() instanceof ShiftedTextureAnimationSprite bakedAnimSprite && animationNames.test(bakedAnimSprite.getAnimationName()))
 				shiftTextureUV(quad, bakedAnimSprite, shiftU, shiftV);
 	}
 	
 	private static final ByteBuffer CONVERSION_BUFFER = ByteBuffer.allocate(4);
 	private static final Map<BakedQuad, float[]> CACHED_DEFAULT_UV = new HashMap<>(); 
 	
-	private static float[] getUVDefault(BakedQuad quad) {
+	public static float[] getUVDefault(BakedQuad quad) {
 		float[] UV = CACHED_DEFAULT_UV.get(quad);
 		if (UV == null) {
 			int[] data = quad.getVertices();
@@ -203,7 +204,7 @@ public class AdvancedBakedAnimation {
 		return UV;
 	}
 	
-	public static void shiftTextureUV(BakedQuad quad, BakedAnimationTextureSprite sprite, float shiftU, float shiftV) {
+	public static void shiftTextureUV(BakedQuad quad, ShiftedTextureAnimationSprite sprite, float shiftU, float shiftV) {
 		
 		int[] data = quad.getVertices();
 		int vertecies = data.length / 8;
@@ -228,7 +229,7 @@ public class AdvancedBakedAnimation {
 				
 				// Clear the UV state cache on reloading the assets
 				CACHED_DEFAULT_UV.clear();
-				IndustriaCore.LOGGER.debug("Cleared baked animation UV cache!");
+				IndustriaCore.LOGGER.debug("Cleared shifted texture animation UV cache!");
 				return null;
 			}
 		});

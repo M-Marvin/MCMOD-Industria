@@ -1,7 +1,7 @@
 package de.m_marvin.industria.core.client.registries;
 
 import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.core.client.util.AdvancedBakedAnimation;
+import de.m_marvin.industria.core.client.util.ShiftedTextureAnimation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterTextureAtlasSpriteLoadersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -13,7 +13,7 @@ public class TextureAtlasSpriteLoaders {
 	@SubscribeEvent
 	public static void onRegisterSTextureAtlasSpriteLoaders(RegisterTextureAtlasSpriteLoadersEvent event) {
 		
-		event.register("baked_animated", new AdvancedBakedAnimation.BakedAnimationTextureAtlasSpriteLoader());
+		event.register("shifted_texture", new ShiftedTextureAnimation.ShiftedTextureAnimationTextureAtlasSpriteLoader());
 		
 	}
 	

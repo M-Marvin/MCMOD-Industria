@@ -1,8 +1,8 @@
 {
 	"forge": {
-        "loader": "industriacore:baked_animated"
+        "loader": "industriacore:shifted_texture"
     },
-    "baked_animation": {
+    "shifted_texture": {
     	"animation_name": "belt",
     	"factor_u": 0.0,
     	"factor_v": 1.0

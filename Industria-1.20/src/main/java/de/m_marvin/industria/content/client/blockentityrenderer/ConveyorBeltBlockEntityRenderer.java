@@ -8,6 +8,7 @@ import de.m_marvin.industria.content.blockentities.machines.ConveyorBeltBlockEnt
 import de.m_marvin.industria.content.blockentities.machines.ConveyorBeltBlockEntity.ItemOnBelt;
 import de.m_marvin.industria.content.types.ModItemDisplayContext;
 import de.m_marvin.industria.core.client.kinetics.blockentityrenderers.BeltBlockEntityRenderer;
+import de.m_marvin.industria.core.client.util.FlywheelUtility;
 import de.m_marvin.industria.core.client.util.PathTransfom;
 import de.m_marvin.industria.core.kinetics.types.blockentities.BeltBlockEntity;
 import de.m_marvin.univec.impl.Vec3f;
@@ -26,7 +27,9 @@ public class ConveyorBeltBlockEntityRenderer extends BeltBlockEntityRenderer {
 
 	@Override
 	public void render(BeltBlockEntity pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
-		super.render(pBlockEntity, pPartialTick, pPoseStack, pBuffer, pPackedLight, pPackedOverlay);
+		
+		if (!FlywheelUtility.isFlywheelEnabled())
+			super.render(pBlockEntity, pPartialTick, pPoseStack, pBuffer, pPackedLight, pPackedOverlay);
 		
 		if (pBlockEntity instanceof ConveyorBeltBlockEntity conveyor) {
 			

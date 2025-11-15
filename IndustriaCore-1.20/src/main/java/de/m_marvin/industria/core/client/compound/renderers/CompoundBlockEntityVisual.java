@@ -189,6 +189,8 @@ public class CompoundBlockEntityVisual extends AbstractBlockEntityVisual<Compoun
 	public Plan<TickableVisual.Context> planTick() {
 		return NestedPlan.of(this.partTickPlans, RunnablePlan.of(ctx -> {
 			
+			// TODO move this into update() and call from block entity
+			// NOTE: requires some changes to how the compound block entities sync with the client trough the compound
 			Iterator<subVisual> iter = this.parts.values().iterator();
 			while (iter.hasNext()) {
 				subVisual subVisual = iter.next();

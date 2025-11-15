@@ -48,7 +48,7 @@ public class CompoundBlockEntityRenderer<T extends CompoundBlockEntity> implemen
 			} else if (block.getState().getRenderShape() == RenderShape.ENTITYBLOCK_ANIMATED && block.getBlockEntity() != null) {
 				
 				// skip block entity renderers which are replaced by an flywheel visual
-				if (skipFlywheelBlocks && FlywheelUtility.hasFlywheelVisual(block.getBlockEntity())) continue;
+				if (skipFlywheelBlocks && FlywheelUtility.shouldSkipVanillaRenderer(block.getBlockEntity())) continue;
 				
 				renderCompoundBlockEntity(pPoseStack, pBuffer, pPartialTick, pPackedLight, pPackedOverlay, block.getBlockEntity());
 				

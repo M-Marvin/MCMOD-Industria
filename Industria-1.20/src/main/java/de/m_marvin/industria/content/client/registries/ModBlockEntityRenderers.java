@@ -32,10 +32,10 @@ public class ModBlockEntityRenderers {
 
 	@SubscribeEvent
 	public static void registerVisuals(FMLClientSetupEvent event) {
-		// TODO flywheel conduit renderer
+		// TODO ELECTRO_MAGNETIC_COIL flywheel conduit renderer
 		VisualizerRegistry.setVisualizer(ModBlockEntityTypes.BASE_SIMPLE_KINETIC.get(), new SimpleBlockEntityVisualizer<BaseSimpleKineticBlockEntity>(SimpleKineticBlockEntityVisual::new, b -> true));
 		VisualizerRegistry.setVisualizer(ModBlockEntityTypes.BASE_BELT.get(), new SimpleBlockEntityVisualizer<BaseBeltBlockEntity>(BeltBlockEntityVisual::new, b -> true));
-		VisualizerRegistry.setVisualizer(ModBlockEntityTypes.CONVEYOR_BELT.get(), new SimpleBlockEntityVisualizer<ConveyorBeltBlockEntity>(BeltBlockEntityVisual::new, b -> true)); // TODO flywheel conveyor item renderer
+		VisualizerRegistry.setVisualizer(ModBlockEntityTypes.CONVEYOR_BELT.get(), new SimpleBlockEntityVisualizer<ConveyorBeltBlockEntity>(BeltBlockEntityVisual::new, b -> false));
 	}
 	
 }

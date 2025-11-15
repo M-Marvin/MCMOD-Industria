@@ -34,7 +34,7 @@ public class FlywheelUtility {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <T extends BlockEntity> boolean hasFlywheelVisual(BlockEntity blockEntity) {
+	public static <T extends BlockEntity> boolean shouldSkipVanillaRenderer(BlockEntity blockEntity) {
 		BlockEntityType<T> blockEntityType = (BlockEntityType<T>) blockEntity.getType();
 		BlockEntityVisualizer<? super T> visualizer = VisualizerRegistry.getVisualizer(blockEntityType);
 		return visualizer != null && visualizer.skipVanillaRender((T) blockEntity);

@@ -91,9 +91,9 @@ public class WireHolderBlock extends Block implements IElectricBlock, ITooltipAd
 	}
 
 	@Override
-	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
+	public void plotCircuit(Level level, BlockState instance, ElectricReference reference, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
 		
-		NodePos node = this.getElectricConnections(level, position, instance)[0];
+		NodePos node = this.getElectricConnections(level, reference, instance)[0];
 		List<String[]> cableLanes = ElectricUtility.getLaneLabels(level, node, ElectricComponent::isWire);
 		int laneCount = cableLanes.stream().mapToInt(l -> l.length).max().orElse(0);
 
@@ -118,27 +118,27 @@ public class WireHolderBlock extends Block implements IElectricBlock, ITooltipAd
 	}
 	
 	@Override
-	public double getCurrentPower(Level level, BlockPos pos, BlockState instance) {
+	public double getCurrentPower(Level level, ElectricReference reference, BlockState instance) {
 		return 0;
 	}
 	
 	@Override
-	public double getMaxPowerGeneration(Level level, BlockPos pos, BlockState instance) {
+	public double getMaxPowerGeneration(Level level, ElectricReference reference, BlockState instance) {
 		return 0;
 	}
 	
 	@Override
-	public NodePos[] getElectricConnections(Level level, BlockPos pos, BlockState instance) {
-		return IntStream.range(0, NODE_COUNT).mapToObj(i -> new NodePos(pos, i)).toArray(i -> new NodePos[i]);
+	public NodePos[] getElectricConnections(Level level, ElectricReference reference, BlockState instance) {
+		return IntStream.range(0, NODE_COUNT).mapToObj(i -> new NodePos(reference.block(), i)).toArray(i -> new NodePos[i]);
 	}
 
 	@Override
-	public String[] getWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node) {
+	public String[] getWireLanes(Level level, ElectricReference reference, BlockState instance, NodePos node) {
 		return new String[] {};
 	}
 
 	@Override
-	public void setWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node, String[] laneLabels) {}
+	public void setWireLanes(Level level, ElectricReference reference, BlockState instance, NodePos node, String[] laneLabels) {}
 	
 	private boolean canAttachTo(BlockGetter pBlockReader, BlockPos pPos, Direction pDirection) {
 		BlockState blockstate = pBlockReader.getBlockState(pPos);

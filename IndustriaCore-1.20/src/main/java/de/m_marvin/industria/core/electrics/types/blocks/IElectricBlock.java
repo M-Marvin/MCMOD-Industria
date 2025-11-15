@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.electrics.types.IElectric;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -13,44 +12,34 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-public interface IElectricBlock extends IConduitConnector, IElectric<BlockState, BlockPos, Block> {
+public interface IElectricBlock extends IConduitConnector, IElectric<BlockState, Block> {
 	
 	@Override
-	default void serializeNBTInstance(BlockState instance, CompoundTag nbt) {
+	default void serializeNBT(BlockState instance, CompoundTag nbt) {
 		nbt.put("State", NbtUtils.writeBlockState(instance));
-	}
-	
-	@Override
-	default void serializeNBTPosition(BlockPos position, CompoundTag nbt) {
-		nbt.put("Position", NbtUtils.writeBlockPos(position));
 	}
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	default BlockState deserializeNBTInstance(CompoundTag nbt) {
+	default BlockState deserializeNBT(CompoundTag nbt) {
 		return NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), nbt.getCompound("State"));
 	}
 
-	@Override
-	default BlockPos deserializeNBTPosition(CompoundTag nbt) {
-		return NbtUtils.readBlockPos(nbt.getCompound("Position"));
-	}
-	
 	@Override
 	default boolean isWire() {
 		return false;
 	}
 
 	@Override
-	default ChunkPos getAffectedChunk(Level level, BlockPos position) {
-		return new ChunkPos(position);
+	default ChunkPos getAffectedChunk(Level level, ElectricReference reference) {
+		return new ChunkPos(reference.block());
 	}
 	
 	@Override
-	default Optional<BlockState> getInstance(Level level, BlockPos pos) {
-		BlockState state = level.getBlockState(pos);
+	default Optional<BlockState> getInstance(Level level, ElectricReference reference) {
+		BlockState state = level.getBlockState(reference.block());
 		if (state.isAir()) return Optional.empty();
-		return Optional.of(level.getBlockState(pos));
+		return Optional.of(level.getBlockState(reference.block()));
 	}
 	
 	@Override

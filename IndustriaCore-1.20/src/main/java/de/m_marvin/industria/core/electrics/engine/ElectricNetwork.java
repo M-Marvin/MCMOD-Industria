@@ -28,6 +28,7 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability.ElectricComponent;
 import de.m_marvin.industria.core.electrics.engine.network.SUpdateElectricNetworkPackage;
+import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
 import de.m_marvin.industria.core.util.ConditionalExecutor;
 import de.m_marvin.industria.core.util.types.PowerNetState;
@@ -41,7 +42,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 
-public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.SynchronizedFunctionalNetwork<ElectricNetwork, Object, ElectricComponent<?, Object, ?>, NodePos> {
+public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.SynchronizedFunctionalNetwork<ElectricNetwork, ElectricReference, ElectricComponent<?, ?>, NodePos> {
 	
 	private final Supplier<Level> level;
 	
@@ -136,11 +137,11 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 		this.groundNode = null;
 	}
 	
-	protected void plotComponentDescriptor(ElectricComponent<?, ?, ?> component) {
+	protected void plotComponentDescriptor(ElectricComponent<?, ?> component) {
 		this.circuitBuilder.append("\n* Component " + component.type().toString() + " " + component.reference().toString() + "\n");
 	}
 	
-	protected void plotTemplate(ElectricComponent<?, ?, ?> component, ICircuitPlot template) {
+	protected void plotTemplate(ElectricComponent<?, ?> component, ICircuitPlot template) {
 		template.prepare(templateCounter++);
 		this.circuitBuilder.append(template.plot());
 		if (this.groundNode == null) this.groundNode = template.getAnyNode();
@@ -184,7 +185,7 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 				this.maxPower = 0;
 				this.currentConsumtion = 0;
 				this.currentProduction = 0;
-				for (ElectricComponent<?, ?, ?> c : listComponents()) {
+				for (ElectricComponent<?, ?> c : listComponents()) {
 					this.maxPower += c.getMaxPowerGeneration(getLevel());
 					double p = c.getCurrentPower(getLevel());
 					if (p > 0) {
@@ -238,10 +239,10 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 //		this.ref2nodeMap.put(refId2, parameter);
 	}
 	
-	public Collection<ElectricComponent<?, ?, ?>> findComponentsOnNode(NodePos node) {
-		List<ElectricComponent<?, ?, ?>> components = new ArrayList<>();
+	public Collection<ElectricComponent<?, ?>> findComponentsOnNode(NodePos node) {
+		List<ElectricComponent<?, ?>> components = new ArrayList<>();
 		for (Integer refId : this.ref2nodeMap.getKeys(node)) {
-			ElectricComponent<?, ?, ?> component = this.components.get(refId.intValue());
+			ElectricComponent<?, ?> component = this.components.get(refId.intValue());
 			if (component != null) components.add(component);
 		}
 		return components;
@@ -318,7 +319,7 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 		return nodeVoltages;
 	}
 
-	public Map<String, Double> getNodeVoltages(Level level, ElectricComponent<?, Object, ?> component) {
+	public Map<String, Double> getNodeVoltages(Level level, ElectricComponent<?, ?> component) {
 		return Stream
 				.of(component.getNodes(level))
 				.flatMap(node -> {

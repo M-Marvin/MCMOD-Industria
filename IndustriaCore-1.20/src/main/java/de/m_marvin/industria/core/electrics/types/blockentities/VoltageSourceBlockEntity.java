@@ -2,6 +2,7 @@ package de.m_marvin.industria.core.electrics.types.blockentities;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
+import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.InternalNodeConstructor;
@@ -65,7 +66,7 @@ public class VoltageSourceBlockEntity extends BlockEntity implements MenuProvide
 		this.power = Math.max(parametrics.getPowerMin(), Math.min(parametrics.getPowerMax(), power));
 		this.voltage = Math.max(parametrics.getVoltageMin(), Math.min(parametrics.getVoltageMax(), voltage));
 		this.setChanged();
-		ElectricUtility.updateNetwork(level, worldPosition);
+		ElectricUtility.updateNetwork(level, ElectricReference.block(worldPosition));
 	}
 	
 	public int getPower() {

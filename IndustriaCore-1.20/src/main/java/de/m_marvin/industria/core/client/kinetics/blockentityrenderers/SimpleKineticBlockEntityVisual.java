@@ -34,14 +34,12 @@ public class SimpleKineticBlockEntityVisual extends AbstractBlockEntityVisual<Si
 	}
 	
 	private final Map<IKineticBlockEntity.CompoundPart, VisualInstance> instances = new HashMap<>();
-	private final SimpleKineticBlockEntity blockEntity;
 	private IKineticBlockEntity.CompoundPart[] lastVisuals;
 
 	protected final Matrix4f baseTransform = new Matrix4f();
 
 	public SimpleKineticBlockEntityVisual(VisualizationContext ctx, SimpleKineticBlockEntity blockEntity, float partialTick) {
 		super(ctx, blockEntity, partialTick);
-		this.blockEntity = blockEntity;
 		this.lastVisuals = this.blockEntity.getVisualParts();
 		
 		float blockSpeed = (float) blockEntity.getRPM(0);

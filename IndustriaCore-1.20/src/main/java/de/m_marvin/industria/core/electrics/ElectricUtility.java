@@ -16,6 +16,7 @@ import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability.ElectricComponent;
 import de.m_marvin.industria.core.electrics.types.CircuitTemplate.Plotter;
+import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.registries.Capabilities;
@@ -37,18 +38,18 @@ public class ElectricUtility {
 	private ElectricUtility() {}
 	
 	/**
-	 * Triggers an update for the network at the given position
+	 * Triggers an update for the network at the given reference
 	 */
-	public static <P> void updateNetwork(Level level, P position) {
+	public static <P> void updateNetwork(Level level, ElectricReference reference) {
 		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
-		networkSpace.updateTicket(position, UpdateType.NETWORK_UPDATE);
+		networkSpace.updateTicket(reference, UpdateType.NETWORK_UPDATE);
 	}
 
 	/*
 	 * Returns all components connected with the given node
 	 */
-	public static Collection<ElectricNetworkSpaceCapability.ElectricComponent<?, ?, ?>> findComponentsOnNode(Level level, NodePos node) {
-		ElectricNetwork network = findNetworkAt(level, node.getBlock());
+	public static Collection<ElectricNetworkSpaceCapability.ElectricComponent<?, ?>> findComponentsOnNode(Level level, NodePos node) {
+		ElectricNetwork network = findNetworkAt(level, ElectricReference.block(node.getBlock()));
 		if (network == null) return Collections.emptySet();
 		return network.findComponentsOnNode(node);
 	}
@@ -56,7 +57,7 @@ public class ElectricUtility {
 	/*
 	 * Returns all components located in the given chunk
 	 */
-	public static Collection<ElectricComponent<?, Object, ?>> findComponentsInChunk(Level level, ChunkPos chunkPos) {
+	public static Collection<ElectricComponent<?, ?>> findComponentsInChunk(Level level, ChunkPos chunkPos) {
 		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
 		return networkSpace.findComponentsInChunk(chunkPos);
 	}
@@ -64,24 +65,24 @@ public class ElectricUtility {
 	/*
 	 * Returns the network for the given component
 	 */
-	public static ElectricNetwork findCircuitWithComponent(Level level, ElectricComponent<?, ?, ?> component) {
+	public static ElectricNetwork findCircuitWithComponent(Level level, ElectricComponent<?, ?> component) {
 		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
 		return networkSpace.findNetworkAt(component);
 	}
 	
 	/*
-	 * Searches for a component at the given position
+	 * Searches for a component at the given reference
 	 */
 	@SuppressWarnings("unchecked")
-	public static <I, P, T> ElectricComponent<I, P, T> findComponentAt(Level level, P position) {
+	public static <I, T> ElectricComponent<I, T> findComponentAt(Level level, ElectricReference reference) {
 		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
-		return (ElectricComponent<I, P, T>) networkSpace.findComponentAt(position);
+		return (ElectricComponent<I, T>) networkSpace.findComponentAt(reference);
 	}
 	
 	/**
 	 * Checks if the component is registered as electric component and part of a valid network
 	 */
-	public static boolean isInNetwork(Level level, ElectricComponent<?, ?, ?> component) {
+	public static boolean isInNetwork(Level level, ElectricComponent<?, ?> component) {
 		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
 		return networkSpace.findNetworkAt(component) != null;
 	}
@@ -89,28 +90,28 @@ public class ElectricUtility {
 	/**
 	 * Checks if the component is registered as electric component and part of a valid network
 	 */
-	public static boolean isInNetwork(Level level, Object pos) {
+	public static boolean isInNetwork(Level level, ElectricReference reference) {
 		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
-		return networkSpace.findNetworkAt(pos) != null;
+		return networkSpace.findNetworkAt(reference) != null;
 	}
 	
 	/**
-	 * Returns the electric network with an component at the fiven position
+	 * Returns the electric network with an component at the given reference
 	 */
-	public static ElectricNetwork findNetworkAt(Level level, Object pos) {
+	public static ElectricNetwork findNetworkAt(Level level, ElectricReference reference) {
 		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
-		return networkSpace.findNetworkAt(pos);
+		return networkSpace.findNetworkAt(reference);
 	}
 	
 	/**
-	 * Changes the state of the network with an component at the given position
+	 * Changes the state of the network with an component at the given reference
 	 * Runs necessary updates and triggers events
 	 */
-	public static void setNetworkState(Level level, Object pos, PowerNetState state) {
-		ElectricNetwork network = findNetworkAt(level, pos);
+	public static void setNetworkState(Level level, ElectricReference reference, PowerNetState state) {
+		ElectricNetwork network = findNetworkAt(level, reference);
 		if (network != null) {
 			network.setState(state);
-			updateNetwork(level, pos);
+			updateNetwork(level, reference);
 		}
 	}
 	
@@ -151,7 +152,7 @@ public class ElectricUtility {
 	 * @param componentPredicate A predicate for the components to look for
 	 * @return A list of all lane names, sorted per component
 	 */
-	public static List<String[]> getLaneLabels(Level level, NodePos node, Predicate<ElectricComponent<?, ?, ?>> componentPredicate) {
+	public static List<String[]> getLaneLabels(Level level, NodePos node, Predicate<ElectricComponent<?, ?>> componentPredicate) {
 		return findComponentsOnNode(level, node).stream().filter(componentPredicate).map(component -> component.getWireLanes(level, node)).toList();
 	}
 	
@@ -163,8 +164,8 @@ public class ElectricUtility {
 	 * @param componentPredicate The predicate for the components
 	 * @param laneLabels The lane labels to set
 	 */
-	public static void setLaneLabels(Level level, NodePos node, Predicate<ElectricComponent<?, ?, ?>> componentPredicate, String[] laneLabels) {
-		List<ElectricComponent<?, ?, ?>> cables = findComponentsOnNode(level, node).stream().filter(componentPredicate).toList();
+	public static void setLaneLabels(Level level, NodePos node, Predicate<ElectricComponent<?, ?>> componentPredicate, String[] laneLabels) {
+		List<ElectricComponent<?, ?>> cables = findComponentsOnNode(level, node).stream().filter(componentPredicate).toList();
 		for (int i = 0; i < cables.size(); i++) {
 			cables.get(i).setWireLanes(level, node, laneLabels);
 		}
@@ -173,7 +174,7 @@ public class ElectricUtility {
 	/**
 	 * Returns the node potential of the node (the voltage relative to "network global ground")
 	 * @param level The level of the node
-	 * @param node The position of the node
+	 * @param node The reference of the node
 	 * @param laneId The lane id of the node
 	 * @param lane The lane name of the node
 	 * @return The potential of the node relative to the network ground potential
@@ -184,23 +185,23 @@ public class ElectricUtility {
 	}
 
 	/**
-	 * Returns the node potential of the local node lane of the component at the given position (the voltage relative to "network global ground")
+	 * Returns the node potential of the local node lane of the component at the given reference (the voltage relative to "network global ground")
 	 * @param level The level of the node
-	 * @param position The position of the component
+	 * @param reference The reference of the component
 	 * @param lane The lane name of the local node
 	 * @param group Group id of the local node
 	 * @return The potential of the node relative to the network ground potential
 	 */
-	public static Optional<Double> getFloatingLocalNodeVoltage(Level level, BlockPos position, String lane, int group) {
+	public static Optional<Double> getFloatingLocalNodeVoltage(Level level, BlockPos reference, String lane, int group) {
 		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
-		return networkSpace.getFloatingLocalNodeVoltage(position, lane, group);
+		return networkSpace.getFloatingLocalNodeVoltage(reference, lane, group);
 	}
 	
 	/**
 	 * Returns the voltage between two nodes
 	 * @param level The level of the two nodes
-	 * @param nodeP The first nodes position
-	 * @param nodeN The second nodes position
+	 * @param nodeP The first nodes reference
+	 * @param nodeN The second nodes reference
 	 * @param laneIdP The first nodes lane id
 	 * @param laneIdN The second nodes lane id
 	 * @param laneP The first nodes lane name
@@ -215,18 +216,18 @@ public class ElectricUtility {
 	}
 	
 	/**
-	 * Returns the node voltage between two the local node lanes of the component at the given position
+	 * Returns the node voltage between two the local node lanes of the component at the given reference
 	 * @param level The level of the node
-	 * @param position The position of the component
+	 * @param reference The reference of the component
 	 * @param laneP The first lane name of the local node
 	 * @param laneN The second lane name of the local node
 	 * @param groupP Group id of the first local node
 	 * @param groupN Group id of the second local node
 	 * @return The voltage between the two nodes (first node potential - second node potential)
 	 */
-	public static Optional<Double> getVoltageBetweenLocal(Level level, BlockPos position, String laneP, int groupP, String laneN, int groupN) {
-		Optional<Double> v1 = ElectricUtility.getFloatingLocalNodeVoltage(level, position, laneN, groupN);
-		Optional<Double> v2 = ElectricUtility.getFloatingLocalNodeVoltage(level, position, laneP, groupP);
+	public static Optional<Double> getVoltageBetweenLocal(Level level, BlockPos reference, String laneP, int groupP, String laneN, int groupN) {
+		Optional<Double> v1 = ElectricUtility.getFloatingLocalNodeVoltage(level, reference, laneN, groupN);
+		Optional<Double> v2 = ElectricUtility.getFloatingLocalNodeVoltage(level, reference, laneP, groupP);
 		if (v1.isEmpty() || v2.isEmpty()) return Optional.empty();
 		return Optional.of(v2.get() - v1.get());
 	}
@@ -236,14 +237,14 @@ public class ElectricUtility {
 	 * @param plotter Plotter to use for plotting the junction resistors
 	 * @param level Level of the electric component
 	 * @param block Block of the electric component
-	 * @param position Position of the electric component
+	 * @param reference Reference of the electric component
 	 * @param instance State of the electric component
 	 * @param group Group id of the local node
 	 * @param localLanes The internal node lane names
 	 */
-	public static void plotJoinTogether(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, BlockPos position, BlockState instance, int group, String... localLanes) {
-		NodePos[] nodes = block.getElectricConnections(level, position, instance);
-		plotJoinTogether(plotter, level, block, position, instance, nodes, group, localLanes);
+	public static void plotJoinTogether(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, ElectricReference reference, BlockState instance, int group, String... localLanes) {
+		NodePos[] nodes = block.getElectricConnections(level, reference, instance);
+		plotJoinTogether(plotter, level, block, reference, instance, nodes, group, localLanes);
 	}
 	
 	/**
@@ -251,13 +252,13 @@ public class ElectricUtility {
 	 * @param plotter Plotter to use for plotting the junction resistors
 	 * @param level Level of the electric component
 	 * @param block Block of the electric component
-	 * @param position Position of the electric component
+	 * @param reference Reference of the electric component
 	 * @param instance State of the electric component
 	 * @param nodes Nodes to connect with inner lane
 	 * @param group Group id of the local node
 	 * @param localLanes The internal node lane names
 	 */
-	public static void plotJoinTogether(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, BlockPos position, BlockState instance, NodePos[] nodes, int group, String... localLanes) {
+	public static void plotJoinTogether(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, ElectricReference reference, BlockState instance, NodePos[] nodes, int group, String... localLanes) {
 		List<String[]> lanes = Stream.of(nodes).map(node -> getLaneLabelsSummarized(level, node)).toList();
 		
 		Plotter template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR).plotter();
@@ -268,7 +269,7 @@ public class ElectricUtility {
 				for (String localLaneName : localLanes) {
 					if (wireLanes[i1].equals(localLaneName)) {
 						template.setNetworkNode("NET1", nodes[i], i1, wireLanes[i1]);
-						template.setNetworkLocalNode("NET2", position, localLaneName, group);
+						template.setNetworkLocalNode("NET2", reference.block(), localLaneName, group);
 						plotter.accept(template);
 					}
 				}
@@ -281,11 +282,11 @@ public class ElectricUtility {
 	 * @param plotter Plotter to use for plotting the junction resistors
 	 * @param level Level of the electric component
 	 * @param block Block of the electric component
-	 * @param position Position of the electric component
+	 * @param reference Reference of the electric component
 	 * @param instance State of the electric component
 	 */
-	public static void plotConnectEquealNamed(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, BlockPos position, BlockState instance) {
-		NodePos[] nodes = block.getElectricConnections(level, position, instance);
+	public static void plotConnectEquealNamed(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, ElectricReference reference, BlockState instance) {
+		NodePos[] nodes = block.getElectricConnections(level, reference, instance);
 		List<String[]> lanes = Stream.of(nodes).map(node -> ElectricUtility.getLaneLabelsSummarized(level, node)).toList();
 		
 		Plotter template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR).plotter();
@@ -296,7 +297,7 @@ public class ElectricUtility {
 				String wireLabel = wireLanes[i1];
 				if (!wireLabel.isEmpty()) {
 					template.setNetworkNode("NET1", nodes[i], i1, wireLabel);
-					template.setNetworkNode("NET2", new NodePos(position, 0), 0, "junction_" + wireLabel);
+					template.setNetworkNode("NET2", new NodePos(reference.block(), 0), 0, "junction_" + wireLabel);
 					plotter.accept(template);
 				}
 			}

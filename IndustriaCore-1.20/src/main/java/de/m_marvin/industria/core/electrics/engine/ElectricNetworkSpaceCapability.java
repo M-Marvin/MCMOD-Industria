@@ -23,6 +23,7 @@ import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapabilit
 import de.m_marvin.industria.core.electrics.engine.network.SSyncElectricComponentsPackage;
 import de.m_marvin.industria.core.electrics.engine.network.SUpdateElectricNetworkPackage;
 import de.m_marvin.industria.core.electrics.types.IElectric;
+import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
 import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.conduits.IElectricConduit;
@@ -34,7 +35,6 @@ import de.m_marvin.industria.core.util.ufns.FunctionalNetworkSpace;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -52,7 +52,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
 
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
-public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpace<Object, ElectricComponent<?, Object, ?>, ElectricNetwork, NodePos> implements ICapabilitySerializable<CompoundTag> {
+public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpace<ElectricReference, ElectricComponent<?, ?>, ElectricNetwork, NodePos> implements ICapabilitySerializable<CompoundTag> {
 	
 	/* Capability handling */
 	
@@ -116,30 +116,32 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 		Level level = (Level) event.getLevel();
 		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
 		
+		ElectricReference reference = ElectricReference.block(event.getPos());
 		if (event.getState().getBlock() instanceof IElectricBlock electric && electric.getConnectorMasterPos(level, event.getPos(), event.getState()).equals(event.getPos())) {
-			networkSpace.updateTicketCompletable(event.getPos(), UpdateType.COMPONENT_PUT).thenAccept(v -> {
-				ElectricComponent<?, Object, ?> component = networkSpace.findComponentAt(event.getPos());
+			networkSpace.updateTicketCompletable(reference, UpdateType.COMPONENT_PUT).thenAccept(v -> {
+				ElectricComponent<?, ?> component = networkSpace.findComponentAt(reference);
 				IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> (LevelChunk) level.getChunk(event.getPos())), new SSyncElectricComponentsPackage(component, new ChunkPos(event.getPos()), SyncRequestType.ADDED));
 			});
 		} else {
-			ElectricComponent<?, Object, ?> component = networkSpace.findComponentAt(event.getPos());
+			ElectricComponent<?, ?> component = networkSpace.findComponentAt(reference);
 			if (component == null) return;
 			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> (LevelChunk) level.getChunk(event.getPos())), new SSyncElectricComponentsPackage(component, new ChunkPos(event.getPos()), SyncRequestType.REMOVED));
-			networkSpace.updateTicket(event.getPos(), UpdateType.COMPONENT_REMOVE);
+			networkSpace.updateTicket(reference, UpdateType.COMPONENT_REMOVE);
 		}
 	}
 	
 	@SubscribeEvent
-	public static void onConduitStateChange(ConduitEvent event) { // NOTE Fired on client and server
+	public static void onConduitEntityChange(ConduitEvent event) { // NOTE Fired on client and server
 		Level level = (Level) event.getLevel();
 		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
 		
-		if (event.getConduitState().getConduit() instanceof IElectricConduit) {
+		ElectricReference reference = ElectricReference.conduit(event.getPosition());
+		if (event.getConduitEntity().getConduit() instanceof IElectricConduit) {
 			// We don't need to send SSyncElectricComponentsPackage packages, since this event also triggers on the client by default
 			if (event instanceof ConduitPlaceEvent) {
-				networkSpace.updateTicket(event.getPosition(), UpdateType.COMPONENT_PUT);
+				networkSpace.updateTicket(reference, UpdateType.COMPONENT_PUT);
 			} else if (event instanceof ConduitBreakEvent) {
-				networkSpace.updateTicket(event.getPosition(), UpdateType.COMPONENT_REMOVE);
+				networkSpace.updateTicket(reference, UpdateType.COMPONENT_REMOVE);
 			}
 		}
 	}
@@ -148,7 +150,7 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 	public static void onClientLoadsChunk(ChunkWatchEvent.Watch event) {
 		Level level = event.getPlayer().level();
 		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
-		Collection<ElectricComponent<?, Object, ?>> components = networkSpace.findComponentsInChunk(event.getPos());
+		Collection<ElectricComponent<?, ?>> components = networkSpace.findComponentsInChunk(event.getPos());
 		
 		if (!components.isEmpty()) {
 			// We should not need this here, since the update network package already sends all components
@@ -165,10 +167,10 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 	public static void onClientUnloadsChunk(ChunkWatchEvent.UnWatch event) {
 		Level level = event.getPlayer().level();
 		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
-		Collection<ElectricComponent<?, Object, ?>> components = networkSpace.findComponentsInChunk(event.getPos());
+		Collection<ElectricComponent<?, ?>> components = networkSpace.findComponentsInChunk(event.getPos());
 		
 		if (!components.isEmpty()) {
-			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(event::getPlayer), new SSyncElectricComponentsPackage(components, event.getPos(), SyncRequestType.REMOVED));
+			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(event::getPlayer), new SSyncElectricComponentsPackage(components.stream().map(ElectricComponent::reference).toList(), event.getPos(), SyncRequestType.REMOVED));
 		}
 	}
 	
@@ -199,47 +201,36 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 	/* ElectricNetwork handling */
 	
 	@Override
-	protected CompoundTag serializeReference(Object reference) {
-		if (reference instanceof BlockPos blockPos) {
-			return NbtUtils.writeBlockPos(blockPos);
-		} else if (reference instanceof ConduitPos conduitPos) {
-			return conduitPos.writeNBT(new CompoundTag());
-		} else {
-			throw new IllegalArgumentException("Not a valid electric network reference: " + reference.getClass());
-		}
+	protected CompoundTag serializeReference(ElectricReference reference) {
+		return reference.writeNbt();
 	}
 	
 	@Override
-	protected Object deserializeReference(CompoundTag tag) {
-		if (tag.contains("NodeA")) {
-			return ConduitPos.readNBT(tag);
-		} else {
-			return NbtUtils.readBlockPos(tag);
-		}
+	protected ElectricReference deserializeReference(CompoundTag tag) {
+		return ElectricReference.readNbt(tag);
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	protected ElectricComponent<?, Object, ?> findOrCreateComponentAt(Object reference) {
+	protected ElectricComponent<?, ?> findOrCreateComponentAt(ElectricReference reference) {
 		
-		if (reference instanceof BlockPos blockPosition) {
-			BlockState blockState = this.level.getBlockState(blockPosition);
+		if (reference.isBlock()) {
+			BlockState blockState = this.level.getBlockState(reference.block());
 			if (blockState.getBlock() instanceof IElectricBlock electricBlock) {
 				// Yeah, this is not optimal, but BlockPos and ConduitPos have no common Interface or Super-Class
-				return (ElectricComponent) new ElectricComponent<BlockState, BlockPos, Block>(blockPosition, electricBlock, blockState);
+				return new ElectricComponent<BlockState, Block>(reference, electricBlock, blockState);
 			}
-		} else if (reference instanceof ConduitPos conduitPosition) {
-			Optional<ConduitEntity> conduitEntity = ConduitUtility.getConduit(this.level, conduitPosition);
+		} else if (reference.isConduit()) {
+			Optional<ConduitEntity> conduitEntity = ConduitUtility.getConduit(this.level, reference.conduit());
 			if (conduitEntity.isPresent() && conduitEntity.get().getConduit() instanceof IElectricConduit electricConduit) {
 				// Yeah, this is not optimal, but BlockPos and ConduitPos have no common Interface or Super-Class
-				return (ElectricComponent) new ElectricComponent<ConduitEntity, ConduitPos, Conduit>(conduitPosition, electricConduit, conduitEntity.get());
+				return new ElectricComponent<ConduitEntity, Conduit>(ElectricReference.conduit(reference.conduit()), electricConduit, conduitEntity.get());
 			}
 		}
 		return null;
 	}
 
 	@Override
-	protected Collection<ParametrizedReference<Object, NodePos>> findConnectionsForComponent(ElectricComponent<?, Object, ?> component) {
+	protected Collection<ParametrizedReference<ElectricReference, NodePos>> findConnectionsForComponent(ElectricComponent<?, ?> component) {
 		
 		if (component.isBlock()) {
 			
@@ -247,13 +238,13 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 			BlockPos position = component.asBlockPos();
 			BlockState state = component.asBlockState(this.level);
 			
-			NodePos[] nodes = block.getElectricConnections(this.level, position, state);
+			NodePos[] nodes = block.getElectricConnections(this.level, ElectricReference.block(position), state);
 			
-			Set<ParametrizedReference<Object, NodePos>> connections = new HashSet<>();
+			Set<ParametrizedReference<ElectricReference, NodePos>> connections = new HashSet<>();
 			for (NodePos node : nodes) {
 				for (ConduitEntity conduit : ConduitUtility.getConduitsAtNode(level, node)) {
 					if (conduit.getConduit() instanceof IElectricConduit) {
-						connections.add(new ParametrizedReference<Object, NodePos>(conduit.getPosition(), node));
+						connections.add(new ParametrizedReference<ElectricReference, NodePos>(ElectricReference.conduit(conduit.getPosition()), node));
 					}
 				}
 			}
@@ -265,12 +256,12 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 			
 			NodePos[] nodes = new NodePos[] { position.getNodeA(), position.getNodeB() };
 			
-			Set<ParametrizedReference<Object, NodePos>> connections = new HashSet<>();
+			Set<ParametrizedReference<ElectricReference, NodePos>> connections = new HashSet<>();
 			for (NodePos node : nodes) {
 				BlockPos blockPosition = node.getBlock();
 				BlockState blockState = this.level.getBlockState(blockPosition);
 				if (blockState.getBlock() instanceof IElectricBlock) {
-					connections.add(new ParametrizedReference<Object, ConduitPos.NodePos>(blockPosition, node));
+					connections.add(new ParametrizedReference<ElectricReference, ConduitPos.NodePos>(ElectricReference.block(blockPosition), node));
 				}
 			}
 			return connections;
@@ -284,12 +275,12 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 	/**
 	 * Represents a component (can be a conduit or a block) in the electric networks
 	 */
-	public static class ElectricComponent<I, P, T> extends FunctionalNetworkSpace.Component<Object> {
+	public static class ElectricComponent<I, T> extends FunctionalNetworkSpace.Component<ElectricReference> {
 		protected boolean hasChanged;
 		protected I instance;
-		protected IElectric<I, P, T> type;
+		protected IElectric<I, T> type;
 		
-		public ElectricComponent(P pos, IElectric<I, P, T> type, I instance) {
+		public ElectricComponent(ElectricReference pos, IElectric<I, T> type, I instance) {
 			this.reference = pos;
 			this.type = type;
 			this.instance = instance;
@@ -305,24 +296,23 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 			ResourceLocation typeName = new ResourceLocation(nbt.getString("Type"));
 			Object typeObject = componentType.getRegistry().getValue(typeName);
 			if (typeObject instanceof IElectric) {
-				this.type = (IElectric<I, P, T>) typeObject;
-				this.instance = type.deserializeNBTInstance(nbt);
-				this.reference = type.deserializeNBTPosition(nbt);
+				this.type = (IElectric<I, T>) typeObject;
+				this.instance = type.deserializeNBT(nbt);
+				this.reference = ElectricReference.readNbt(nbt.getCompound("Position"));
 				return true;
 			}
 			return false;
 		}
 		
-		@SuppressWarnings("unchecked")
 		@Override
 		public void serializeNbt(CompoundTag nbt) {
 			super.serializeNbt(nbt);
 			
 			IElectric.Type componentType = IElectric.Type.getType(this.type);
-			this.type.serializeNBTPosition((P) reference(), nbt);
+			nbt.put("Position", reference.writeNbt());
 			nbt.putString("Type", componentType.getRegistry().getKey(this.type).toString());
 			nbt.putString("ComponentType", componentType.name().toLowerCase());
-			this.type.serializeNBTInstance(instance, nbt);
+			this.type.serializeNBT(instance, nbt);
 		}
 		
 		@Override
@@ -343,11 +333,11 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 		}
 		
 		public BlockPos asBlockPos() {
-			return (BlockPos) reference();
+			return reference().block();
 		}
 		
 		public ConduitPos asConduitPos() {
-			return (ConduitPos) reference();
+			return reference().conduit();
 		}
 		
 		public BlockState asBlockState(Level level) {
@@ -366,14 +356,13 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 			return (IElectricConduit) type();
 		}
 		
-		public IElectric<I, P, T> type() {
+		public IElectric<I, T> type() {
 			return type;
 		}
 
-		@SuppressWarnings("unchecked")
 		public I instance(Level level) {
 			if ((this.hasChanged || !this.type.isInstanceValid(level, instance)) && level != null) {
-				Optional<I> instanceLoaded = this.type.getInstance(level, (P) this.reference());
+				Optional<I> instanceLoaded = this.type.getInstance(level, reference);
 				if (instanceLoaded.isPresent()) {
 					this.instance = instanceLoaded.get();
 					this.hasChanged = false;
@@ -381,29 +370,24 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 			}
 			return instance;
 		}
-		@SuppressWarnings("unchecked")
 		public void plotCircuit(Level level, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
-			type.plotCircuit(level, instance(level), (P) reference(), circuit, plotter);
+			type.plotCircuit(level, instance(level), reference, circuit, plotter);
 		}
-		@SuppressWarnings("unchecked")
 		public NodePos[] getNodes(Level level) {
-			return type.getElectricConnections(level, (P) reference(), instance(level));
+			return type.getElectricConnections(level, reference, instance(level));
 		}
-		@SuppressWarnings("unchecked")
 		public void onNetworkChange(Level level) {
-			type.onNetworkNotify(level, instance(level), (P) reference());
+			type.onNetworkNotify(level, instance(level), reference);
 		}
-		@SuppressWarnings("unchecked")
 		public String[] getWireLanes(Level level, NodePos node) {
-			return type.getWireLanes(level, (P) reference(), instance(level), node);
+			return type.getWireLanes(level, reference, instance(level), node);
 		}
-		@SuppressWarnings("unchecked")
 		public void setWireLanes(Level level, NodePos node, String[] laneLabels) {
-			String[] oldLanes = type.getWireLanes(level, (P) reference(), instance(level), node);
-			type.setWireLanes(level, (P) reference(), instance(level), node, laneLabels);
+			String[] oldLanes = type.getWireLanes(level, reference, instance(level), node);
+			type.setWireLanes(level, reference, instance(level), node, laneLabels);
 			for (int i = 0; i < oldLanes.length && i < laneLabels.length; i++) {
 				if (!oldLanes[i].equals(laneLabels[i])) {
-					ElectricUtility.updateNetwork(level, (P) reference());
+					ElectricUtility.updateNetwork(level, reference);
 					return;
 				}
 			}
@@ -411,24 +395,21 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 		public boolean isWire() {
 			return type.isWire();
 		}
-		@SuppressWarnings("unchecked")
 		public ChunkPos getAffectedChunk(Level level) {
-			return type.getAffectedChunk(level, (P) reference());
+			return type.getAffectedChunk(level, reference);
 		}
-		@SuppressWarnings("unchecked")
 		public double getMaxPowerGeneration(Level level) {
-			return type.getMaxPowerGeneration(level, (P) reference(), this.instance(level));
+			return type.getMaxPowerGeneration(level, reference, this.instance(level));
 		}
-		@SuppressWarnings("unchecked")
 		public double getCurrentPower(Level level) {
-			return type.getCurrentPower(level, (P) reference(), this.instance(level));
+			return type.getCurrentPower(level, reference, this.instance(level));
 		}
 	}
 	
 	/**
 	 * Returns a set containing all components in the given chunk
 	 */
-	public Collection<ElectricComponent<?, Object, ?>> findComponentsInChunk(ChunkPos chunkPos) {
+	public Collection<ElectricComponent<?, ?>> findComponentsInChunk(ChunkPos chunkPos) {
 		return listComponents().stream().filter(c -> c.getAffectedChunk(level).equals(chunkPos)).toList();
 	}
 	
@@ -437,7 +418,7 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 	 * NOTE: Floating means that the voltage is referenced to "global ground", meaning a second voltage is required to calculate the actual difference (the voltage) between the two nodes.
 	 */
 	public Optional<Double> getFloatingNodeVoltage(NodePos node, int laneId, String lane) {
-		ElectricNetwork network = findNetworkAt(node.getBlock());
+		ElectricNetwork network = findNetworkAt(ElectricReference.block(node.getBlock()));
 		if (network != null) {
 			return network.getFloatingNodeVoltage(node, laneId, lane);
 		}
@@ -449,11 +430,11 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 	 * NOTE: Floating means that the voltage is referenced to "global ground", meaning a second voltage is required to calculate the actual difference (the voltage) between the two nodes.
 	 */
 	public Optional<Double> getFloatingLocalNodeVoltage(BlockPos position, String lane, int group) {
-		ElectricNetwork network = findNetworkAt(position);
+		ElectricNetwork network = findNetworkAt(ElectricReference.block(position));
 		if (network != null) {
 			return network.getFloatingLocalNodeVoltage(position, lane, group);
 		}
 		return Optional.empty();
 	}
-	
+
 }

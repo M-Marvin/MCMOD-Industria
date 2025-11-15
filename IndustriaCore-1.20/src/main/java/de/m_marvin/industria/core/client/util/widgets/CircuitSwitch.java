@@ -9,6 +9,7 @@ import de.m_marvin.industria.core.client.util.GraphicsUtility;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.engine.network.CPlayerSwitchNetworkPackage;
+import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
 import de.m_marvin.industria.core.util.ConditionalExecutor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -46,7 +47,7 @@ public class CircuitSwitch extends AbstractWidget {
 		this.level = level;
 		this.componentPos = componentPos;
 
-		ElectricNetwork network = ElectricUtility.findNetworkAt(this.level, this.componentPos);
+		ElectricNetwork network = ElectricUtility.findNetworkAt(this.level, ElectricReference.block(this.componentPos));
 		updateLeverState(network != null ? network.isOnline() : false);
 	}
 
@@ -62,7 +63,7 @@ public class CircuitSwitch extends AbstractWidget {
 					
 					BlockPos switchComponent = cswitch.getComponentPos();
 					boolean b = event.getNetwork().listComponents().stream()
-						.filter(c -> c.reference().equals(switchComponent))
+						.filter(c -> c.isBlock() && c.reference().block().equals(switchComponent))
 						.count() > 0;
 					
 					if (b) {
@@ -83,7 +84,7 @@ public class CircuitSwitch extends AbstractWidget {
 	@Override
 	protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
 		
-		ElectricNetwork network = ElectricUtility.findNetworkAt(this.level, this.componentPos);
+		ElectricNetwork network = ElectricUtility.findNetworkAt(this.level, ElectricReference.block(this.componentPos));
 		
 		// Background
 		pGuiGraphics.blit(this.texture, this.getX(), this.getY(), 212, 1, 43, 87);

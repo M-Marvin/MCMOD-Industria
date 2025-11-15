@@ -12,7 +12,6 @@ import de.m_marvin.industria.core.kinetics.engine.KineticNetwork;
 import de.m_marvin.industria.core.kinetics.engine.KineticNetworkSpaceCapability.KineticComponent;
 import de.m_marvin.industria.core.kinetics.types.blocks.IKineticBlock.KineticReference;
 import de.m_marvin.industria.core.util.types.PowerNetState;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -21,7 +20,7 @@ import net.minecraftforge.network.NetworkEvent;
  */
 public class SUpdateKineticNetworkPackage {
 	
-	private final Collection<KineticComponent> components;
+	private final Collection<KineticReference> components;
 	private final Map<KineticReference, Double> speedMap;
 	private final double networkSpeed;
 	private final double maxPower;
@@ -30,7 +29,7 @@ public class SUpdateKineticNetworkPackage {
 	private final PowerNetState state;
 	
 	public SUpdateKineticNetworkPackage(KineticNetwork network) {
-		this.components = network.listComponents();
+		this.components = network.listComponents().stream().map(KineticComponent::reference).toList();
 		this.speedMap = network.getSpeedMap();
 		this.maxPower = network.getMaxPower();
 		this.currentConsumtion = network.getCurrentConsumtion();
@@ -40,7 +39,7 @@ public class SUpdateKineticNetworkPackage {
 	}
 
 	public SUpdateKineticNetworkPackage(Collection<KineticComponent> components, KineticNetwork network) {
-		this.components = network.listComponents().stream().filter(components::contains).toList();
+		this.components = network.listComponents().stream().filter(components::contains).map(KineticComponent::reference).toList();
 		this.speedMap = network.getSpeedMap();
 		this.maxPower = network.getMaxPower();
 		this.currentConsumtion = network.getCurrentConsumtion();
@@ -49,7 +48,7 @@ public class SUpdateKineticNetworkPackage {
 		this.state = network.getState();
 	}
 	
-	public SUpdateKineticNetworkPackage(Collection<KineticComponent> components, Map<KineticReference, Double> speedMap, double speed, double maxPower, double currentProduction, double currentConsumtion, PowerNetState state) {
+	public SUpdateKineticNetworkPackage(Collection<KineticReference> components, Map<KineticReference, Double> speedMap, double speed, double maxPower, double currentProduction, double currentConsumtion, PowerNetState state) {
 		this.components = components;
 		this.speedMap = speedMap;
 		this.networkSpeed = speed;
@@ -59,7 +58,7 @@ public class SUpdateKineticNetworkPackage {
 		this.state = state;
 	}
 	
-	public Collection<KineticComponent> getComponents() {
+	public Collection<KineticReference> getComponents() {
 		return components;
 	}
 	
@@ -89,10 +88,8 @@ public class SUpdateKineticNetworkPackage {
 	
 	public static void encode(SUpdateKineticNetworkPackage msg, FriendlyByteBuf buff) {
 		buff.writeInt(msg.components.size());
-		for (KineticComponent component : msg.components) {
-			CompoundTag componentTag = new CompoundTag();
-			component.serializeNbt(componentTag);
-			buff.writeNbt(componentTag);
+		for (KineticReference component : msg.components) {
+			component.writeBuff(buff);
 		}
 		buff.writeInt(msg.speedMap.size());
 		for (var e : msg.speedMap.entrySet()) {
@@ -108,12 +105,9 @@ public class SUpdateKineticNetworkPackage {
 	
 	public static SUpdateKineticNetworkPackage decode(FriendlyByteBuf buff) {
 		int componentCount = buff.readInt();
-		Set<KineticComponent> components = new HashSet<>();
+		Set<KineticReference> components = new HashSet<>();
 		for (int i = 0; i < componentCount; i++) {
-			CompoundTag componentTag = buff.readNbt();
-			KineticComponent component = new KineticComponent(null, null, null);
-			component.deserializeNbt(componentTag);
-			components.add(component);
+			components.add(KineticReference.readBuff(buff));
 		}
 		int entryCount = buff.readInt();
 		Map<KineticReference, Double> speedMap = new HashMap<KineticReference, Double>();

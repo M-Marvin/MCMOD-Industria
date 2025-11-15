@@ -19,13 +19,11 @@ import net.minecraft.client.resources.model.BakedModel;
 
 public class BeltBlockEntityVisual extends AbstractBlockEntityVisual<BeltBlockEntity> implements SimpleDynamicVisual {
 
-	private BeltBlockEntity blockEntity;
 	private ShiftedTextureInstance instance;
 	private BakedModel bakedModel;
 	
 	public BeltBlockEntityVisual(VisualizationContext ctx, BeltBlockEntity blockEntity, float partialTick) {
 		super(ctx, blockEntity, partialTick);
-		this.blockEntity = blockEntity;
 		this.bakedModel = Minecraft.getInstance().getBlockRenderer().getBlockModel(blockEntity.getBlockState());
 		
 		Model model = FlywheelUtility.modelOfBlockForceBaked(blockEntity.getBlockState());

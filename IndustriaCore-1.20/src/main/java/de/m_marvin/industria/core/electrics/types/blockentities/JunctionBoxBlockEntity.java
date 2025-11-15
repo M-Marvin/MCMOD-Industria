@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
+import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
@@ -142,7 +143,7 @@ public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider,
 				connectorBlock = masterBlock;
 			}
 			
-			NodePos[] nodes = connectorBlock.getElectricConnections(level, position, state);
+			NodePos[] nodes = connectorBlock.getElectricConnections(level, ElectricReference.block(position), state);
 			ConduitNode[] connections = connectorBlock.getConduitNodes(level, position, state);
 			Vec3i center = new Vec3i(8, 8, 8);
 			Direction blockFacing = state.getValue(BlockStateProperties.FACING);

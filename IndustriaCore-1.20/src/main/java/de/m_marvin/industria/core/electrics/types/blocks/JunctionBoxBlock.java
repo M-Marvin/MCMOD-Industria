@@ -101,32 +101,32 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricBlock,
 	}
 	
 	@Override
-	public NodePos[] getElectricConnections(Level level, BlockPos pos, BlockState instance) {
-		return NODES.getNodePositions(pos);
+	public NodePos[] getElectricConnections(Level level, ElectricReference reference, BlockState instance) {
+		return NODES.getNodePositions(reference.block());
 	}
 	
 	@Override
-	public String[] getWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node) {
+	public String[] getWireLanes(Level level, ElectricReference reference, BlockState instance, NodePos node) {
 		return new String[0];
 	}
 
 	@Override
-	public void setWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node, String[] laneLabels) {}
+	public void setWireLanes(Level level, ElectricReference reference, BlockState instance, NodePos node, String[] laneLabels) {}
 	
 	@Override
-	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
-		if (level.getBlockEntity(position) instanceof IJunctionEdit) {
-			ElectricUtility.plotConnectEquealNamed(plotter, level, this, position, instance);
+	public void plotCircuit(Level level, BlockState instance, ElectricReference reference, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
+		if (level.getBlockEntity(reference.block()) instanceof IJunctionEdit) {
+			ElectricUtility.plotConnectEquealNamed(plotter, level, this, reference, instance);
 		}
 	}
 
 	@Override
-	public double getCurrentPower(Level level, BlockPos pos, BlockState instance) {
+	public double getCurrentPower(Level level, ElectricReference reference, BlockState instance) {
 		return 0;
 	}
 	
 	@Override
-	public double getMaxPowerGeneration(Level level, BlockPos pos, BlockState instance) {
+	public double getMaxPowerGeneration(Level level, ElectricReference reference, BlockState instance) {
 		return 0;
 	}
 	

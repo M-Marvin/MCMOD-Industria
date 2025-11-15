@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
@@ -56,6 +57,15 @@ public interface IKineticBlock {
 			BlockPos position = NbtUtils.readBlockPos(nbt.getCompound("Position"));
 			int partId = nbt.getInt("PartId");
 			return new KineticReference(position, partId);
+		}
+
+		public void writeBuff(FriendlyByteBuf buff) {
+			buff.writeBlockPos(this.pos);
+			buff.writeInt(this.partId);
+		}
+		
+		public static KineticReference readBuff(FriendlyByteBuf buff) {
+			return new KineticReference(buff.readBlockPos(), buff.readInt());
 		}
 		
 	}

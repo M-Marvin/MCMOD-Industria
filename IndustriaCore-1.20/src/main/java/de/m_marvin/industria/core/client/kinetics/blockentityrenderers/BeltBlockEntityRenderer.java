@@ -8,7 +8,6 @@ import de.m_marvin.industria.core.client.util.ClientTimer;
 import de.m_marvin.industria.core.client.util.ShiftedTextureAnimation;
 import de.m_marvin.industria.core.client.util.SingleBlockBatchedRenderer;
 import de.m_marvin.industria.core.kinetics.types.blockentities.BeltBlockEntity;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -27,8 +26,6 @@ public class BeltBlockEntityRenderer implements BlockEntityRenderer<BeltBlockEnt
 	
 	@Override
 	public void render(BeltBlockEntity pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
-
-		pPartialTick = Minecraft.getInstance().getFrameTime();
 
 		pPoseStack.pushPose();
 	

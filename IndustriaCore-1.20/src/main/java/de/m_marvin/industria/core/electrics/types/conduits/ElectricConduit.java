@@ -52,7 +52,7 @@ public class ElectricConduit extends Conduit implements IElectricConduit {
 	}
 	
 	@Override
-	public String[] getWireLanes(Level level, ConduitPos pos, ConduitEntity instance, NodePos node) {
+	public String[] getWireLanes(Level level, ElectricReference reference, ConduitEntity instance, NodePos node) {
 		if (instance instanceof ElectricConduitEntity entity) {
 			return entity.getWireLanes();
 		}
@@ -60,7 +60,7 @@ public class ElectricConduit extends Conduit implements IElectricConduit {
 	}
 	
 	@Override
-	public void setWireLanes(Level level, ConduitPos pos, ConduitEntity instance, NodePos node, String[] laneLabels) {
+	public void setWireLanes(Level level, ElectricReference reference, ConduitEntity instance, NodePos node, String[] laneLabels) {
 		if (instance instanceof ElectricConduitEntity entity) {
 			entity.setWireLanes(laneLabels);
 		}
@@ -72,12 +72,12 @@ public class ElectricConduit extends Conduit implements IElectricConduit {
 	}
 	
 	@Override
-	public void plotCircuit(Level level, ConduitEntity instance, ConduitPos position, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
+	public void plotCircuit(Level level, ConduitEntity instance, ElectricReference reference, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
 		Plotter template = CircuitTemplateManager.getInstance().getTemplate(Circuits.RESISTOR).plotter();
 		template.setProperty("resistance", this.resistance * instance.getLength());
 		
-		NodePos[] connections = getElectricConnections(level, position, instance);
-		String[] wireLabels = this.getWireLanes(level, position, instance, null);
+		NodePos[] connections = getElectricConnections(level, reference, instance);
+		String[] wireLabels = this.getWireLanes(level, reference, instance, null);
 		for (int i = 0; i < wireLabels.length; i++) {
 			template.setNetworkNode("NET1", connections[0], i, wireLabels[i]);
 			template.setNetworkNode("NET2", connections[1], i, wireLabels[i]);

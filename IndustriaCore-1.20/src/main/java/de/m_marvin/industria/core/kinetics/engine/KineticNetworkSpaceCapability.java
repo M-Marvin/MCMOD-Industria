@@ -108,7 +108,7 @@ public class KineticNetworkSpaceCapability extends FriendlyFunctionalNetworkSpac
 				networkSpace.updateTicket(reference, UpdateType.COMPONENT_REMOVE);
 				KineticComponent component = networkSpace.findComponentAt(reference);
 				if (component == null) continue;
-				IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> (LevelChunk) level.getChunk(event.getPos())), new SSyncKineticComponentsPackage(component, new ChunkPos(event.getPos()), SyncRequestType.REMOVED));
+				IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> (LevelChunk) level.getChunk(event.getPos())), new SSyncKineticComponentsPackage(component.reference(), new ChunkPos(event.getPos()), SyncRequestType.REMOVED));
 			}
 		}
 		
@@ -119,7 +119,7 @@ public class KineticNetworkSpaceCapability extends FriendlyFunctionalNetworkSpac
 				.forEach(ref -> {
 					networkSpace.updateTicketCompletable(ref, UpdateType.COMPONENT_PUT).thenAccept(v -> {
 						KineticComponent component = networkSpace.findComponentAt(ref);
-						IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> (LevelChunk) level.getChunk(event.getPos())), new SSyncKineticComponentsPackage(component, new ChunkPos(event.getPos()), SyncRequestType.REMOVED));
+						IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> (LevelChunk) level.getChunk(event.getPos())), new SSyncKineticComponentsPackage(component.reference(), new ChunkPos(event.getPos()), SyncRequestType.REMOVED));
 					});
 				});;
 		}
@@ -149,7 +149,7 @@ public class KineticNetworkSpaceCapability extends FriendlyFunctionalNetworkSpac
 		Collection<KineticComponent> components = kinteticHandler.findComponentsInChunk(event.getPos());
 		
 		if (!components.isEmpty()) {
-			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(event::getPlayer), new SSyncKineticComponentsPackage(components, event.getPos(), SyncRequestType.REMOVED));
+			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(event::getPlayer), new SSyncKineticComponentsPackage(components.stream().map(KineticComponent::reference).toList(), event.getPos(), SyncRequestType.REMOVED));
 		}
 	}
 	

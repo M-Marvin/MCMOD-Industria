@@ -2,6 +2,7 @@ package de.m_marvin.industria.core.electrics.types.blocks;
 
 import java.util.function.Supplier;
 
+import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
 import de.m_marvin.industria.core.parametrics.BlockParametrics;
 import de.m_marvin.industria.core.parametrics.engine.BlockParametricsManager;
 import net.minecraft.core.BlockPos;
@@ -12,7 +13,7 @@ public interface IElectricInfoProvider {
 
 	public double getVoltage(BlockState state, Level level, BlockPos pos);
 	public default double getPower(BlockState state, Level level, BlockPos pos) {
-		if (this instanceof IElectricBlock block) return Math.abs(block.getCurrentPower(level, pos, state));
+		if (this instanceof IElectricBlock block) return Math.abs(block.getCurrentPower(level, ElectricReference.block(pos), state));
 		return 0.0;
 	}
 	

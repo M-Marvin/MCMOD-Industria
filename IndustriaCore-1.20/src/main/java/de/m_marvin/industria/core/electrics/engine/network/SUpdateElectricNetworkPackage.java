@@ -8,8 +8,8 @@ import java.util.function.Supplier;
 import de.m_marvin.industria.core.electrics.engine.ClientElectricPackageHandler;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability.ElectricComponent;
+import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
 import de.m_marvin.industria.core.util.types.PowerNetState;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -19,7 +19,7 @@ import net.minecraftforge.network.NetworkEvent;
 public class SUpdateElectricNetworkPackage {
 	
 	private final String dataList;
-	private final Collection<ElectricComponent<?, Object, ?>> components;
+	private final Collection<ElectricReference> components;
 	private final double maxPower;
 	private final double currentConsumtion;
 	private final double currentProduction;
@@ -27,15 +27,15 @@ public class SUpdateElectricNetworkPackage {
 	
 	public SUpdateElectricNetworkPackage(ElectricNetwork network) {
 		this.dataList = network.printDataList();
-		this.components = network.listComponents();
+		this.components = network.listComponents().stream().map(ElectricComponent::reference).toList();
 		this.state = network.getState();
 		this.maxPower = network.getMaxPower();
 		this.currentConsumtion = network.getCurrentConsumtion();
 		this.currentProduction = network.getCurrentProduction();
 	}
 
-	public SUpdateElectricNetworkPackage(Collection<ElectricComponent<?, Object, ?>> components, ElectricNetwork network) {
-		this.components = network.listComponents().stream().filter(components::contains).toList();
+	public SUpdateElectricNetworkPackage(Collection<ElectricComponent<?, ?>> components, ElectricNetwork network) {
+		this.components = network.listComponents().stream().filter(components::contains).map(ElectricComponent::reference).toList();
 		this.dataList = network.printDataList();
 		this.state = network.getState();
 		this.maxPower = network.getMaxPower();
@@ -43,7 +43,7 @@ public class SUpdateElectricNetworkPackage {
 		this.currentProduction = network.getCurrentProduction();
 	}
 	
-	public SUpdateElectricNetworkPackage(Set<ElectricComponent<?, Object, ?>> components, String dataList, PowerNetState state, double maxPower, double currentProduction, double currentConsumtion) {
+	public SUpdateElectricNetworkPackage(Set<ElectricReference> components, String dataList, PowerNetState state, double maxPower, double currentProduction, double currentConsumtion) {
 		this.dataList = dataList;
 		this.components = components;
 		this.state = state;
@@ -52,7 +52,7 @@ public class SUpdateElectricNetworkPackage {
 		this.currentConsumtion = currentConsumtion;
 	}
 
-	public Collection<ElectricComponent<?, Object, ?>> getComponents() {
+	public Collection<ElectricReference> getComponents() {
 		return components;
 	}
 	
@@ -78,11 +78,8 @@ public class SUpdateElectricNetworkPackage {
 	
 	public static void encode(SUpdateElectricNetworkPackage msg, FriendlyByteBuf buff) {
 		buff.writeInt(msg.components.size());
-		for (ElectricComponent<?, ?, ?> component : msg.components) {
-			CompoundTag componentTag = new CompoundTag();
-			component.serializeNbt(componentTag);
-			buff.writeNbt(componentTag);
-		}
+		for (ElectricReference component : msg.components)
+			component.writeBuff(buff);
 		buff.writeUtf(msg.dataList);
 		buff.writeEnum(msg.state);
 		buff.writeDouble(msg.maxPower);
@@ -92,14 +89,9 @@ public class SUpdateElectricNetworkPackage {
 	
 	public static SUpdateElectricNetworkPackage decode(FriendlyByteBuf buff) {
 		int componentCount = buff.readInt();
-		Set<ElectricComponent<?, Object, ?>> components = new HashSet<>();
-		for (int i = 0; i < componentCount; i++) {
-			CompoundTag componentTag = buff.readNbt();
-			@SuppressWarnings({ "rawtypes", "unchecked" })
-			ElectricComponent<?, Object, ?> component = new ElectricComponent(null, null, null);
-			component.deserializeNbt(componentTag);
-			components.add(component);
-		}
+		Set<ElectricReference> components = new HashSet<>();
+		for (int i = 0; i < componentCount; i++)
+			components.add(ElectricReference.readBuff(buff));
 		String dataList = buff.readUtf();
 		PowerNetState state = buff.readEnum(PowerNetState.class);
 		double maxPower = buff.readDouble();

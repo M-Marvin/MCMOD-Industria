@@ -73,7 +73,7 @@ public class ElectricComponentRenderer {
 			Vec3d playerPosition = Vec3d.fromVec(Minecraft.getInstance().player.position());
 			int renderDistance = Minecraft.getInstance().options.renderDistance().get() * 16;
 			
-			for (ElectricNetworkSpaceCapability.ElectricComponent<?, ?, ?> component : electricHolder.listComponents()) {
+			for (ElectricNetworkSpaceCapability.ElectricComponent<?, ?> component : electricHolder.listComponents()) {
 				
 				if (component.isBlock()) {
 

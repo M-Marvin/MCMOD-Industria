@@ -9,6 +9,7 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability.ElectricComponent;
+import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -48,7 +49,7 @@ public class DebugCommand {
 	public static int dumpCircuit(CommandContext<CommandSourceStack> source, BlockPos position) {
 		ServerLevel level = source.getSource().getLevel();
 		
-		ElectricNetwork network = ElectricUtility.findNetworkAt(level, position);
+		ElectricNetwork network = ElectricUtility.findNetworkAt(level, ElectricReference.block(position));
 		if (network == null) return 0;
 		String circuit = network.toString();
 		
@@ -61,7 +62,7 @@ public class DebugCommand {
 	public static int printNodes(CommandContext<CommandSourceStack> source, BlockPos position) {
 		ServerLevel level = source.getSource().getLevel();
 		
-		ElectricComponent<Object, BlockPos, Object> component = ElectricUtility.findComponentAt(level, position);
+		ElectricComponent<Object, Object> component = ElectricUtility.findComponentAt(level, ElectricReference.block(position));
 		if (component == null) return 0;
 		NodePos[] nodes = component.getNodes(level);
 		

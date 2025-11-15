@@ -24,7 +24,7 @@ public class ClientKineticPackageHandler {
 		KineticNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.KINETIC_NETWORK_SPACE_CAPABILITY);
 		
 		for (var c : msg.getComponents()) {
-			networkSpace.updateTicket(c.reference(), msg.request == SyncRequestType.ADDED ? UpdateType.COMPONENT_PUT : UpdateType.COMPONENT_REMOVE);
+			networkSpace.updateTicket(c, msg.request == SyncRequestType.ADDED ? UpdateType.COMPONENT_PUT : UpdateType.COMPONENT_REMOVE);
 		}
 	}
 
@@ -35,7 +35,7 @@ public class ClientKineticPackageHandler {
 		// Add components to create network
 		CompletableFuture.allOf(
 				msg.getComponents().stream()
-				.map(c -> networkSpace.updateTicketCompletable(c.reference(), UpdateType.COMPONENT_PUT))
+				.map(c -> networkSpace.updateTicketCompletable(c, UpdateType.COMPONENT_PUT))
 				.toArray(CompletableFuture[]::new)
 			).thenAccept(v -> {
 				

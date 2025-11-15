@@ -108,12 +108,12 @@ public class ConduitPos {
 		return nodeB.getNode();
 	}
 	
-	public void write(FriendlyByteBuf buff) {
+	public void writeBuff(FriendlyByteBuf buff) {
 		this.nodeA.write(buff);
 		this.nodeB.write(buff);
 	}
 	
-	public static ConduitPos read(FriendlyByteBuf buff) {
+	public static ConduitPos readBuff(FriendlyByteBuf buff) {
 		NodePos nodeA = NodePos.read(buff);
 		NodePos nodeB = NodePos.read(buff);
 		return new ConduitPos(nodeA, nodeB);
@@ -137,6 +137,10 @@ public class ConduitPos {
 		NodePos nodeA = NodePos.readNBT(nbt.getCompound("NodeA"), relative);
 		NodePos nodeB = NodePos.readNBT(nbt.getCompound("NodeB"), relative);
 		return new ConduitPos(nodeA, nodeB);
+	}
+	
+	public static boolean isValidConduitPos(CompoundTag tag) {
+		return tag.contains("NodeA") && tag.contains("NodeB");
 	}
 	
 	@Override

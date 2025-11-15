@@ -43,13 +43,13 @@ public class SCConduitPackage {
 		}
 		
 		public static void encode(SCPlaceConduitPackage msg, FriendlyByteBuf buff) {
-			msg.position.write(buff);
+			msg.position.writeBuff(buff);
 			buff.writeResourceLocation(Conduits.CONDUITS_REGISTRY.get().getKey(msg.conduit));
 			buff.writeDouble(msg.length);
 		}
 		
 		public static SCPlaceConduitPackage decode(FriendlyByteBuf buff) {
-			ConduitPos position = ConduitPos.read(buff);
+			ConduitPos position = ConduitPos.readBuff(buff);
 			Conduit conduit = Conduits.CONDUITS_REGISTRY.get().getValue(buff.readResourceLocation());
 			double length = buff.readDouble();
 			return new SCPlaceConduitPackage(position, conduit, length);
@@ -85,12 +85,12 @@ public class SCConduitPackage {
 		}
 		
 		public static void encode(SCBreakConduitPackage msg, FriendlyByteBuf buff) {
-			msg.position.write(buff);
+			msg.position.writeBuff(buff);
 			buff.writeBoolean(msg.dropItems);
 		}
 		
 		public static SCBreakConduitPackage decode(FriendlyByteBuf buff) {
-			ConduitPos position = ConduitPos.read(buff);
+			ConduitPos position = ConduitPos.readBuff(buff);
 			boolean dropItems = buff.readBoolean();
 			return new SCBreakConduitPackage(position, dropItems);
 		}

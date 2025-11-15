@@ -7,7 +7,7 @@ import net.minecraft.world.phys.BlockHitResult;
 public class ConduitHitResult {
 	
 	protected BlockHitResult blockResult;
-	protected ConduitEntity conduitState;
+	protected ConduitEntity conduitEntity;
 	protected Vec3d hitPos;
 	protected int node1, node2;
 	
@@ -15,16 +15,16 @@ public class ConduitHitResult {
 		this.blockResult = result;
 	}
 
-	protected ConduitHitResult(ConduitEntity conduitState, Vec3d hitPos, int node1, int node2) {
+	protected ConduitHitResult(ConduitEntity conduitEntity, Vec3d hitPos, int node1, int node2) {
 		super();
-		this.conduitState = conduitState;
+		this.conduitEntity = conduitEntity;
 		this.hitPos = hitPos;
 		this.node1 = node1;
 		this.node2 = node2;
 	}
 
-	public static ConduitHitResult hit(ConduitEntity conduitState, Vec3d hitPos, int node1, int node2) {
-		return new ConduitHitResult(conduitState, hitPos, node1, node2);
+	public static ConduitHitResult hit(ConduitEntity conduitEntity, Vec3d hitPos, int node1, int node2) {
+		return new ConduitHitResult(conduitEntity, hitPos, node1, node2);
 	}
 	
 	public static ConduitHitResult miss() {
@@ -44,11 +44,11 @@ public class ConduitHitResult {
 	}
 	
 	public boolean isHit() {
-		return this.conduitState != null && this.hitPos != null && node1 >= 0 && node2 >= 0;
+		return this.conduitEntity != null && this.hitPos != null && node1 >= 0 && node2 >= 0;
 	}
 	
-	public ConduitEntity getConduitState() {
-		return conduitState;
+	public ConduitEntity getConduitEntity() {
+		return conduitEntity;
 	}
 
 	public Vec3d getHitPos() {

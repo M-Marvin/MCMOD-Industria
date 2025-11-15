@@ -10,12 +10,12 @@ public class ConduitEvent extends Event {
 	
     private final LevelAccessor level;
 	private final ConduitPos position;
-	private final ConduitEntity conduitState;
+	private final ConduitEntity conduitEntity;
 	
-	public ConduitEvent(LevelAccessor level, ConduitPos position, ConduitEntity conduitState) {
+	public ConduitEvent(LevelAccessor level, ConduitPos position, ConduitEntity conduitEntity) {
 		this.level = level;
 		this.position = position;
-		this.conduitState = conduitState;
+		this.conduitEntity = conduitEntity;
 	}
 	
 	public LevelAccessor getLevel() {
@@ -26,8 +26,8 @@ public class ConduitEvent extends Event {
 		return position;
 	}
 	
-	public ConduitEntity getConduitState() {
-		return conduitState;
+	public ConduitEntity getConduitEntity() {
+		return conduitEntity;
 	}
 	
 	@Cancelable
@@ -35,8 +35,8 @@ public class ConduitEvent extends Event {
 		
 		public boolean dropItems;
 		
-		public ConduitBreakEvent(LevelAccessor level, ConduitPos position, ConduitEntity conduitState, boolean dropItems) {
-			super(level, position, conduitState);
+		public ConduitBreakEvent(LevelAccessor level, ConduitPos position, ConduitEntity conduitEntity, boolean dropItems) {
+			super(level, position, conduitEntity);
 			this.dropItems = dropItems;
 		}
 
@@ -50,8 +50,8 @@ public class ConduitEvent extends Event {
 	@Cancelable
 	public static class ConduitPlaceEvent extends ConduitEvent {
 		
-		public ConduitPlaceEvent(LevelAccessor level, ConduitPos position, ConduitEntity conduitState) {
-			super(level, position, conduitState);
+		public ConduitPlaceEvent(LevelAccessor level, ConduitPos position, ConduitEntity conduitEntity) {
+			super(level, position, conduitEntity);
 		}
 		
 		@Override
@@ -63,16 +63,16 @@ public class ConduitEvent extends Event {
 	
 	public static class ConduitLoadEvent extends ConduitEvent {
 		
-		public ConduitLoadEvent(LevelAccessor level, ConduitPos position, ConduitEntity conduitState) {
-			super(level, position, conduitState);
+		public ConduitLoadEvent(LevelAccessor level, ConduitPos position, ConduitEntity conduitEntity) {
+			super(level, position, conduitEntity);
 		}
 		
 	}
 
 	public static class ConduitUnloadEvent extends ConduitEvent {
 
-		public ConduitUnloadEvent(LevelAccessor level, ConduitPos position, ConduitEntity conduitState) {
-			super(level, position, conduitState);
+		public ConduitUnloadEvent(LevelAccessor level, ConduitPos position, ConduitEntity conduitEntity) {
+			super(level, position, conduitEntity);
 		}
 		
 	}

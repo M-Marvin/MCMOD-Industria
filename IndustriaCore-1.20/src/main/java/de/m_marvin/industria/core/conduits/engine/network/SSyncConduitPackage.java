@@ -23,19 +23,21 @@ import net.minecraftforge.network.NetworkEvent;
  */
 public class SSyncConduitPackage {
 	
+	// TODO rewrite sync packages, especially conduits, allow for post creation update packages
+	
 	public final ChunkPos chunkPos;
 	public final List<ConduitEntity> conduits;
 	public final SyncRequestType request;
 	
-	public SSyncConduitPackage(List<ConduitEntity> conduitStates, ChunkPos targetChunk, SyncRequestType request) {
-		this.conduits = conduitStates;
+	public SSyncConduitPackage(List<ConduitEntity> conduitEntitys, ChunkPos targetChunk, SyncRequestType request) {
+		this.conduits = conduitEntitys;
 		this.chunkPos = targetChunk;
 		this.request = request;
 	}
 	
-	public SSyncConduitPackage(ConduitEntity conduitState, ChunkPos targetChunk, SyncRequestType request) {
+	public SSyncConduitPackage(ConduitEntity conduitEntity, ChunkPos targetChunk, SyncRequestType request) {
 		this.conduits = new ArrayList<ConduitEntity>();
-		this.conduits.add(conduitState);
+		this.conduits.add(conduitEntity);
 		this.chunkPos = targetChunk;
 		this.request = request;
 	}
@@ -52,12 +54,12 @@ public class SSyncConduitPackage {
 		buff.writeEnum(msg.request);
 		buff.writeChunkPos(msg.chunkPos);
 		buff.writeInt(msg.conduits.size());
-		for (ConduitEntity conduitState : msg.conduits) {
-			conduitState.getPosition().write(buff);
-			buff.writeDouble(conduitState.getLength());
-			buff.writeResourceLocation(Conduits.CONDUITS_REGISTRY.get().getKey(conduitState.getConduit()));
-			conduitState.getShape().writeUpdateData(buff);
-			buff.writeNbt(conduitState.getUpdateTag());
+		for (ConduitEntity conduitEntity : msg.conduits) {
+			conduitEntity.getPosition().writeBuff(buff);
+			buff.writeDouble(conduitEntity.getLength());
+			buff.writeResourceLocation(Conduits.CONDUITS_REGISTRY.get().getKey(conduitEntity.getConduit()));
+			conduitEntity.getShape().writeUpdateData(buff);
+			buff.writeNbt(conduitEntity.getUpdateTag());
 		}
 	}
 	
@@ -65,9 +67,9 @@ public class SSyncConduitPackage {
 		SyncRequestType status = buff.readEnum(SyncRequestType.class);
 		ChunkPos chunkPos = buff.readChunkPos();
 		int count = buff.readInt();
-		List<ConduitEntity> conduitStates = new ArrayList<ConduitEntity>();
+		List<ConduitEntity> conduitEntitys = new ArrayList<ConduitEntity>();
 		for (int i = 0; i < count; i++) {
-			ConduitPos position = ConduitPos.read(buff);
+			ConduitPos position = ConduitPos.readBuff(buff);
 			double length = buff.readDouble();
 			ResourceLocation conduitName = buff.readResourceLocation();
 			ConduitShape shape = new ConduitShape(null, null, 0);
@@ -80,12 +82,12 @@ public class SSyncConduitPackage {
 				continue;
 			}
 			Conduit conduit = Conduits.CONDUITS_REGISTRY.get().getValue(conduitName);
-			ConduitEntity conduitState = conduit.newConduitEntity(position, conduit, length);
-			conduitState.setShape(shape);
-			conduitState.readUpdateTag(buff.readNbt());
-			conduitStates.add(conduitState);
+			ConduitEntity conduitEntity = conduit.newConduitEntity(position, conduit, length);
+			conduitEntity.setShape(shape);
+			conduitEntity.readUpdateTag(buff.readNbt());
+			conduitEntitys.add(conduitEntity);
 		}
-		return new SSyncConduitPackage(conduitStates, chunkPos, status);
+		return new SSyncConduitPackage(conduitEntitys, chunkPos, status);
 	}
 	
 	public static void handle(SSyncConduitPackage msg, Supplier<NetworkEvent.Context> ctx) {

@@ -103,8 +103,8 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 		List<ConduitEntity> conduits = handler.getConduitsInChunk(event.getPos(), true);	
 		if (conduits.size() > 0) {
 			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(() -> event.getPlayer()), new SSyncConduitPackage(conduits, event.getPos(), SyncRequestType.ADDED));
-			for (ConduitEntity conduitState : conduits) {
-				MinecraftForge.EVENT_BUS.post(new ConduitLoadEvent(level, conduitState.getPosition(), conduitState));
+			for (ConduitEntity conduitEntity : conduits) {
+				MinecraftForge.EVENT_BUS.post(new ConduitLoadEvent(level, conduitEntity.getPosition(), conduitEntity));
 			}
 		}
 	}
@@ -117,8 +117,8 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 		List<ConduitEntity> conduits = handler.getConduitsInChunk(event.getPos(), true);	
 		if (conduits.size() > 0) {
 			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(() -> event.getPlayer()), new SSyncConduitPackage(conduits, event.getPos(), SyncRequestType.REMOVED));
-			for (ConduitEntity conduitState : conduits) {
-				MinecraftForge.EVENT_BUS.post(new ConduitUnloadEvent(level, conduitState.getPosition(), conduitState));
+			for (ConduitEntity conduitEntity : conduits) {
+				MinecraftForge.EVENT_BUS.post(new ConduitUnloadEvent(level, conduitEntity.getPosition(), conduitEntity));
 			}
 		}
 	}
@@ -139,8 +139,8 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 		LazyOptional<ConduitHandlerCapability> conduitHolder = level.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
 		if (conduitHolder.isPresent()) {
 			BlockPos nodePos = event.getPos();
-			List<ConduitEntity> conduitStates = conduitHolder.resolve().get().getConduitsAtBlock(nodePos);
-			for (ConduitEntity con : conduitStates) {
+			List<ConduitEntity> conduitEntitys = conduitHolder.resolve().get().getConduitsAtBlock(nodePos);
+			for (ConduitEntity con : conduitEntitys) {
 				con.getConduit().onNodeStateChange(level, nodePos, event.getState(), con);
 			}
 		}
@@ -202,21 +202,22 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 			return false;
 		}
 		
-		ConduitEntity conduitState = conduit.newConduitEntity(position, conduit, length);
+		ConduitEntity conduitEntity = conduit.newConduitEntity(position, conduit, length);
+		conduitEntity.setLevel(this.level);
 		
-		Event event = new ConduitPlaceEvent(this.level, position, conduitState);
+		Event event = new ConduitPlaceEvent(this.level, position, conduitEntity);
 		MinecraftForge.EVENT_BUS.post(event);
 		
 		if (!event.isCanceled()) {
-			if (!addConduit(conduitState)) {
+			if (!addConduit(conduitEntity)) {
 				return false;
 			}
-			conduitState.getConduit().onPlace(level, position, conduitState);
+			conduitEntity.getConduit().onPlace(level, position, conduitEntity);
 
 			if (!this.level.isClientSide()) {
 				// Send package to client just to make sure it is up to date, should already be the case if placed trough an player.
 				BlockPos middle = MathUtility.getMiddleBlock(nodeApos, nodeBpos);
-				IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middle)), new SSyncConduitPackage(conduitState, level.getChunkAt(middle).getPos(), SyncRequestType.ADDED));
+				IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middle)), new SSyncConduitPackage(conduitEntity, level.getChunkAt(middle).getPos(), SyncRequestType.ADDED));
 			}
 			return true;
 		}
@@ -228,18 +229,19 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	 * Removes a conduit from the world, called on server AND client side to synchronize conduits
 	 * Does not automatically sync the two sides!
 	 */
-	public boolean removeConduit(ConduitEntity conduitState) {
-		if (level.isLoaded(conduitState.getPosition().getNodeApos()) && level.isLoaded(conduitState.getPosition().getNodeBpos())) {
-			if (conduits.contains(conduitState)) {
-				if (this.conduits.remove(conduitState)) {
+	public boolean removeConduit(ConduitEntity conduitEntity) {
+		if (level.isLoaded(conduitEntity.getPosition().getNodeApos()) && level.isLoaded(conduitEntity.getPosition().getNodeBpos())) {
+			if (conduits.contains(conduitEntity)) {
+				if (this.conduits.remove(conduitEntity)) {
 					
 					if (!this.level.isClientSide()) {
 						// Send package to client just to make sure it is up to date, should already be the case if removed trough an player.
-						BlockPos middle = MathUtility.getMiddleBlock(conduitState.getPosition().getNodeApos(), conduitState.getPosition().getNodeBpos());
-						IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middle)), new SSyncConduitPackage(conduitState, level.getChunkAt(middle).getPos(), SyncRequestType.REMOVED));
+						BlockPos middle = MathUtility.getMiddleBlock(conduitEntity.getPosition().getNodeApos(), conduitEntity.getPosition().getNodeBpos());
+						IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middle)), new SSyncConduitPackage(conduitEntity, level.getChunkAt(middle).getPos(), SyncRequestType.REMOVED));
 					}
 					
-					conduitState.dismantle(level);
+					conduitEntity.dismantle();
+					conduitEntity.setLevel(null);
 					return true;
 				}
 			}
@@ -251,11 +253,12 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	 * Adds a conduit to the world, called on server AND client side to synchronize conduits
 	 * Does not automatically sync the two sides!
 	 */
-	public boolean addConduit(ConduitEntity conduitState) {
-		if (level.isLoaded(conduitState.getPosition().getNodeApos()) && level.isLoaded(conduitState.getPosition().getNodeBpos())) {
-			if (!conduits.contains(conduitState)) {
-				conduitState.build(level);
-				this.conduits.add(conduitState);
+	public boolean addConduit(ConduitEntity conduitEntity) {
+		if (level.isLoaded(conduitEntity.getPosition().getNodeApos()) && level.isLoaded(conduitEntity.getPosition().getNodeBpos())) {
+			if (!conduits.contains(conduitEntity)) {
+				conduitEntity.setLevel(level);
+				conduitEntity.build();
+				this.conduits.add(conduitEntity);
 				return true;
 			}
 		}
@@ -404,8 +407,11 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	public void update() {
 		
 		for (ConduitEntity conduit : this.getConduits()) {
-			if (this.preBuildLoad) conduit.build(level);
-			conduit.updateShape(level);
+			if (this.preBuildLoad) {
+				conduit.setLevel(this.level);
+				conduit.build();
+			}
+			conduit.updateShape();
 		}
 		this.preBuildLoad = false;
 		

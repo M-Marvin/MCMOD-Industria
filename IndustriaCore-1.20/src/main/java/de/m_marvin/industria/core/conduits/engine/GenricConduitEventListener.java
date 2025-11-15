@@ -37,7 +37,7 @@ public class GenricConduitEventListener {
 			
 			ConduitHitResult hitResult = ConduitUtility.clipConduits(event.getLevel(), clipContext, true);
 			if (hitResult.isHit()) {
-				ConduitEntity conduit = hitResult.getConduitState();
+				ConduitEntity conduit = hitResult.getConduitEntity();
 				ConduitUtility.removeConduit(event.getLevel(), conduit.getPosition(), !player.isCreative());
 				
 				ItemStack toolItem = event.getEntity().getMainHandItem();

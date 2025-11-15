@@ -10,6 +10,7 @@ import net.minecraft.world.level.Level;
 
 public class ConduitEntity {
 	
+	protected Level level;
 	protected ConduitPos position;
 	protected double length;
 	protected Conduit conduit;
@@ -21,14 +22,22 @@ public class ConduitEntity {
 		this.length = length;
 	}
 	
-	public ConduitEntity build(Level level) {
+	public void setLevel(Level level) {
+		this.level = level;
+	}
+	
+	public Level getLevel() {
+		return level;
+	}
+	
+	public ConduitEntity build() {
 		this.conduit.onBuild(level, position, this);
 		this.shape = conduit.buildShape(level, this);
-		updateShape(level);
+		updateShape();
 		return this;
 	}
 	
-	public ConduitEntity dismantle(Level level) {
+	public ConduitEntity dismantle() {
 		if (this.shape == null) return this;
 		this.conduit.onDismantle(level, position, this);
 		this.conduit.dismantleShape(level, this);
@@ -36,7 +45,7 @@ public class ConduitEntity {
 		return this;
 	}
 	
-	public void updateShape(Level level) {
+	public void updateShape() {
 		assert this.shape != null : "Can't update un-build conduit!";
 		this.conduit.updatePhysicalNodes(level, this);
 	}

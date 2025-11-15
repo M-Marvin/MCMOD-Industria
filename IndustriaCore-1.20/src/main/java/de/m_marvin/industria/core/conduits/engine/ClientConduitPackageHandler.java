@@ -32,14 +32,14 @@ public class ClientConduitPackageHandler {
 			ConduitHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
 			
 			if (msg.getRquest() == SyncRequestType.ADDED) {
-				for (ConduitEntity conduitState : msg.conduits) {
-					handler.addConduit(conduitState);
-					MinecraftForge.EVENT_BUS.post(new ConduitLoadEvent(level, conduitState.getPosition(), conduitState));
+				for (ConduitEntity conduitEntity : msg.conduits) {
+					handler.addConduit(conduitEntity);
+					MinecraftForge.EVENT_BUS.post(new ConduitLoadEvent(level, conduitEntity.getPosition(), conduitEntity));
 				}
 			} else if (msg.getRquest() == SyncRequestType.REMOVED) {
-				for (ConduitEntity conduitState : msg.conduits) {
-					handler.removeConduit(conduitState);
-					MinecraftForge.EVENT_BUS.post(new ConduitUnloadEvent(level, conduitState.getPosition(), conduitState));
+				for (ConduitEntity conduitEntity : msg.conduits) {
+					handler.removeConduit(conduitEntity);
+					MinecraftForge.EVENT_BUS.post(new ConduitUnloadEvent(level, conduitEntity.getPosition(), conduitEntity));
 				}
 			}
 			

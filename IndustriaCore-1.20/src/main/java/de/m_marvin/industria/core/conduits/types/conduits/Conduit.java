@@ -85,43 +85,43 @@ public class Conduit {
 		return this.item;
 	}
 	
-	public int getColorAt(ClientLevel level, Vec3d nodePos, ConduitEntity conduitState) {
+	public int getColorAt(ClientLevel level, Vec3d nodePos, ConduitEntity conduitEntity) {
 		return 0xFFFFFFFF;
 	}
 	
-	public void onNodeStateChange(Level level, BlockPos nodePos, BlockState nodeState, ConduitEntity conduitState) {
+	public void onNodeStateChange(Level level, BlockPos nodePos, BlockState nodeState, ConduitEntity conduitEntity) {
 		if (nodeState.getBlock() instanceof IConduitConnector) {
-			int nodeId = conduitState.getPosition().getNodeApos().equals(nodePos) ? conduitState.getPosition().getNodeAid() : conduitState.getPosition().getNodeBid();
+			int nodeId = conduitEntity.getPosition().getNodeApos().equals(nodePos) ? conduitEntity.getPosition().getNodeAid() : conduitEntity.getPosition().getNodeBid();
 			if (((IConduitConnector) nodeState.getBlock()).getConduitNodes(level, nodePos, nodeState).length <= nodeId) {
-				ConduitUtility.removeConduit(level, conduitState.getPosition(), true);
+				ConduitUtility.removeConduit(level, conduitEntity.getPosition(), true);
 			}
 		} else {
-			ConduitUtility.removeConduit(level, conduitState.getPosition(), true);
+			ConduitUtility.removeConduit(level, conduitEntity.getPosition(), true);
 		}
 	}
 	
-	public void onDismantle(@Nullable Level level, ConduitPos position, ConduitEntity conduitState) {}
-	public void onBuild(@Nullable Level level, ConduitPos position, ConduitEntity conduitState) {}
+	public void onDismantle(@Nullable Level level, ConduitPos position, ConduitEntity conduitEntity) {}
+	public void onBuild(@Nullable Level level, ConduitPos position, ConduitEntity conduitEntity) {}
 	
-	public void onPlace(Level level, ConduitPos position, ConduitEntity conduitState) {
+	public void onPlace(Level level, ConduitPos position, ConduitEntity conduitEntity) {
 		
-		Vec3d nodeA = Vec3d.fromVec(ContraptionUtility.ensureWorldBlockCoordinates(level, conduitState.getPosition().getNodeApos(), conduitState.getPosition().getNodeApos()));
-		Vec3d nodeB = Vec3d.fromVec(ContraptionUtility.ensureWorldBlockCoordinates(level, conduitState.getPosition().getNodeBpos(), conduitState.getPosition().getNodeBpos()));
+		Vec3d nodeA = Vec3d.fromVec(ContraptionUtility.ensureWorldBlockCoordinates(level, conduitEntity.getPosition().getNodeApos(), conduitEntity.getPosition().getNodeApos()));
+		Vec3d nodeB = Vec3d.fromVec(ContraptionUtility.ensureWorldBlockCoordinates(level, conduitEntity.getPosition().getNodeBpos(), conduitEntity.getPosition().getNodeBpos()));
 		Vec3d middle = nodeA.sub(nodeB).mul(0.5).add(nodeB);
 		
 		level.playLocalSound(middle.x, middle.y, middle.z, this.getSoundType().getBreakSound(), SoundSource.BLOCKS, this.getSoundType().getVolume(), this.getSoundType().getPitch(), false);
 		
 	}
 	
-	public void onBreak(Level level, ConduitPos position, ConduitEntity conduitState, boolean dropItems) {
+	public void onBreak(Level level, ConduitPos position, ConduitEntity conduitEntity, boolean dropItems) {
 		
-		Vec3d nodeA = Vec3d.fromVec(ContraptionUtility.ensureWorldBlockCoordinates(level, conduitState.getPosition().getNodeApos(), conduitState.getPosition().getNodeApos()));
-		Vec3d nodeB = Vec3d.fromVec(ContraptionUtility.ensureWorldBlockCoordinates(level, conduitState.getPosition().getNodeBpos(), conduitState.getPosition().getNodeBpos()));
+		Vec3d nodeA = Vec3d.fromVec(ContraptionUtility.ensureWorldBlockCoordinates(level, conduitEntity.getPosition().getNodeApos(), conduitEntity.getPosition().getNodeApos()));
+		Vec3d nodeB = Vec3d.fromVec(ContraptionUtility.ensureWorldBlockCoordinates(level, conduitEntity.getPosition().getNodeBpos(), conduitEntity.getPosition().getNodeBpos()));
 		Vec3d middle = nodeA.sub(nodeB).mul(0.5).add(nodeB);
 		Vec3d nodeOrigin = MathUtility.getMinCorner(nodeA, nodeB);
 		
 		if (dropItems && !level.isClientSide() && getItem() != null) {
-			int wireCost = (int) Math.ceil(conduitState.getLength() / (float) BLOCKS_PER_WIRE_ITEM);
+			int wireCost = (int) Math.ceil(conduitEntity.getLength() / (float) BLOCKS_PER_WIRE_ITEM);
 			for (int i = 0; i < wireCost; i++) {
 				if (level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS))
 					GameUtility.dropItem(level, new ItemStack(getItem()), Vec3f.fromVec(middle).add(new Vec3f(0.5F, 0.5F, 0.5F)), 0.5F, 0.1F);
@@ -131,8 +131,8 @@ public class Conduit {
 		level.playLocalSound(middle.x, middle.y, middle.z, this.getSoundType().getBreakSound(), SoundSource.BLOCKS, this.getSoundType().getVolume(), this.getSoundType().getPitch(), false);
 		
 		if (!level.isClientSide()) {
-			for (Vec3d node : conduitState.getShape().nodes) {
-				((ServerLevel) level).sendParticles(new ConduitParticleOption(ParticleTypes.CONDUIT.get(), conduitState.getConduit()), node.x + nodeOrigin.x, node.y + nodeOrigin.y, node.z + nodeOrigin.z, 10, 0.2F, 0.2F, 0.2F, 1);
+			for (Vec3d node : conduitEntity.getShape().nodes) {
+				((ServerLevel) level).sendParticles(new ConduitParticleOption(ParticleTypes.CONDUIT.get(), conduitEntity.getConduit()), node.x + nodeOrigin.x, node.y + nodeOrigin.y, node.z + nodeOrigin.z, 10, 0.2F, 0.2F, 0.2F, 1);
 			}
 		}
 		

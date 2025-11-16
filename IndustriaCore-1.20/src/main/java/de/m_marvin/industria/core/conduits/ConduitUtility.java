@@ -5,25 +5,25 @@ import java.util.Optional;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
-import de.m_marvin.industria.core.conduits.engine.network.SCConduitPackage;
+import de.m_marvin.industria.core.conduits.engine.network.SUpdateConduitEntity;
 import de.m_marvin.industria.core.conduits.types.ConduitHitResult;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
-import de.m_marvin.industria.core.contraptions.ContraptionUtility;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec3d;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult.Type;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
+import net.minecraft.world.phys.Vec3;
 
 public class ConduitUtility {
 	
@@ -31,28 +31,23 @@ public class ConduitUtility {
 	
 	public static boolean setConduit(Level level, ConduitPos position, Conduit conduit, double length) {
 		ConduitHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
-		if (handler.placeConduit(position, conduit, length) && !level.isClientSide()) {
-			// This is just to make sure events are triggered on both side
-			BlockPos middlePos = MathUtility.getMiddleBlock(
-					ContraptionUtility.ensureWorldBlockCoordinates(level, position.getNodeApos(), position.getNodeApos()), 
-					ContraptionUtility.ensureWorldBlockCoordinates(level, position.getNodeBpos(), position.getNodeBpos()));
-			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middlePos)), new SCConduitPackage.SCPlaceConduitPackage(position, conduit, length));
-			return true;
-		}
-		return false;
+		return handler.placeConduit(position, conduit, length);
 	}
 	
 	public static boolean removeConduit(Level level, ConduitPos position, boolean dropItems) {
 		ConduitHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
-		if (handler.breakConduit(position, dropItems) && !level.isClientSide()) {
-			// This is just to make sure events are triggered on both side
-			BlockPos middlePos = MathUtility.getMiddleBlock(
-					ContraptionUtility.ensureWorldBlockCoordinates(level, position.getNodeApos(), position.getNodeApos()), 
-					ContraptionUtility.ensureWorldBlockCoordinates(level, position.getNodeBpos(), position.getNodeBpos()));
-			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middlePos)), new SCConduitPackage.SCBreakConduitPackage(position, dropItems));
-			return true;
+		return handler.breakConduit(position, dropItems);
+	}
+	
+	public static void triggerClientSync(Level level, ConduitPos position) {
+		if (!level.isClientSide()) return;
+		Optional<ConduitEntity> conduit = getConduit(level, position);
+		if (conduit.isPresent()) {
+			CompoundTag updateTag = conduit.get().getUpdateTag();
+			
+			BlockPos middle = MathUtility.getMiddleBlock(position.getNodeApos(), position.getNodeBpos());
+			IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middle)), new SUpdateConduitEntity(position, conduit.get().getConduit(), updateTag));
 		}
-		return false;
 	}
 	
 	public static Optional<ConduitEntity> getConduit(Level level, ConduitPos position) {

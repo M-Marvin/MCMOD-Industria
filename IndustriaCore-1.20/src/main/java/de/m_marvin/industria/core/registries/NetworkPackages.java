@@ -3,8 +3,9 @@ package de.m_marvin.industria.core.registries;
 import java.util.Optional;
 
 import de.m_marvin.industria.core.conduits.engine.network.CChangeConduitPlacementLengthPackage;
-import de.m_marvin.industria.core.conduits.engine.network.SCConduitPackage;
-import de.m_marvin.industria.core.conduits.engine.network.SSyncConduitPackage;
+import de.m_marvin.industria.core.conduits.engine.network.SSyncAddedConduits;
+import de.m_marvin.industria.core.conduits.engine.network.SSyncRemovedConduits;
+import de.m_marvin.industria.core.conduits.engine.network.SUpdateConduitEntity;
 import de.m_marvin.industria.core.contraptions.engine.VS2MassSyncPatch.SSyncVS2BlockInfoPackage;
 import de.m_marvin.industria.core.electrics.engine.network.CEditPowerSourcePackage;
 import de.m_marvin.industria.core.electrics.engine.network.CPlayerSwitchNetworkPackage;
@@ -29,10 +30,10 @@ public class NetworkPackages {
 	
 	public static void setupPackages(SimpleChannel network) {
 		int id = 0;
-		network.registerMessage(id++, SSyncConduitPackage.class, SSyncConduitPackage::encode, SSyncConduitPackage::decode, SSyncConduitPackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+		network.registerMessage(id++, SSyncAddedConduits.class, SSyncAddedConduits::encode, SSyncAddedConduits::decode, SSyncAddedConduits::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+		network.registerMessage(id++, SSyncRemovedConduits.class, SSyncRemovedConduits::encode, SSyncRemovedConduits::decode, SSyncRemovedConduits::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+		network.registerMessage(id++, SUpdateConduitEntity.class, SUpdateConduitEntity::encode, SUpdateConduitEntity::decode, SUpdateConduitEntity::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		network.registerMessage(id++, CChangeConduitPlacementLengthPackage.class, CChangeConduitPlacementLengthPackage::encode, CChangeConduitPlacementLengthPackage::decode, CChangeConduitPlacementLengthPackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		network.registerMessage(id++, SCConduitPackage.SCPlaceConduitPackage.class, SCConduitPackage.SCPlaceConduitPackage::encode, SCConduitPackage.SCPlaceConduitPackage::decode, SCConduitPackage.SCPlaceConduitPackage::handle);
-		network.registerMessage(id++, SCConduitPackage.SCBreakConduitPackage.class, SCConduitPackage.SCBreakConduitPackage::encode, SCConduitPackage.SCBreakConduitPackage::decode, SCConduitPackage.SCBreakConduitPackage::handle);
 		network.registerMessage(id++, CScrollInputPackage.class, CScrollInputPackage::encode, CScrollInputPackage::decode, CScrollInputPackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		network.registerMessage(id++, CUpdateJunctionLanesPackage.class, CUpdateJunctionLanesPackage::encode, CUpdateJunctionLanesPackage::decode, CUpdateJunctionLanesPackage::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 		network.registerMessage(id++, SSyncElectricComponentsPackage.class, SSyncElectricComponentsPackage::encode, SSyncElectricComponentsPackage::decode, SSyncElectricComponentsPackage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));

@@ -5,11 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.core.conduits.engine.network.SSyncConduitPackage;
-import de.m_marvin.industria.core.conduits.events.ConduitEvent.ConduitBreakEvent;
-import de.m_marvin.industria.core.conduits.events.ConduitEvent.ConduitLoadEvent;
-import de.m_marvin.industria.core.conduits.events.ConduitEvent.ConduitPlaceEvent;
-import de.m_marvin.industria.core.conduits.events.ConduitEvent.ConduitUnloadEvent;
+import de.m_marvin.industria.core.conduits.engine.network.SSyncAddedConduits;
+import de.m_marvin.industria.core.conduits.engine.network.SSyncRemovedConduits;
+import de.m_marvin.industria.core.conduits.events.ConduitEvent;
 import de.m_marvin.industria.core.conduits.types.ConduitHitResult;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
@@ -20,7 +18,7 @@ import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.registries.Conduits;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
-import de.m_marvin.industria.core.util.types.SyncRequestType;
+import de.m_marvin.industria.core.util.types.EventStage;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.core.BlockPos;
@@ -102,9 +100,10 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 		
 		List<ConduitEntity> conduits = handler.getConduitsInChunk(event.getPos(), true);	
 		if (conduits.size() > 0) {
-			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(() -> event.getPlayer()), new SSyncConduitPackage(conduits, event.getPos(), SyncRequestType.ADDED));
+			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(() -> event.getPlayer()), new SSyncAddedConduits(conduits, event.getPos()));
 			for (ConduitEntity conduitEntity : conduits) {
-				MinecraftForge.EVENT_BUS.post(new ConduitLoadEvent(level, conduitEntity.getPosition(), conduitEntity));
+				Event eventPost = new ConduitEvent.ConduitWatchEvent(level, conduitEntity.getPosition(), conduitEntity, EventStage.POST, event.getPlayer());
+				MinecraftForge.EVENT_BUS.post(eventPost);
 			}
 		}
 	}
@@ -116,9 +115,10 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 		
 		List<ConduitEntity> conduits = handler.getConduitsInChunk(event.getPos(), true);	
 		if (conduits.size() > 0) {
-			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(() -> event.getPlayer()), new SSyncConduitPackage(conduits, event.getPos(), SyncRequestType.REMOVED));
+			IndustriaCore.NETWORK.send(PacketDistributor.PLAYER.with(() -> event.getPlayer()), new SSyncRemovedConduits(conduits.stream().map(ConduitEntity::getPosition).toList(), event.getPos()));
 			for (ConduitEntity conduitEntity : conduits) {
-				MinecraftForge.EVENT_BUS.post(new ConduitUnloadEvent(level, conduitEntity.getPosition(), conduitEntity));
+				Event eventPost = new ConduitEvent.ConduitUnwatchEvent(level, conduitEntity.getPosition(), conduitEntity, EventStage.POST, event.getPlayer());
+				MinecraftForge.EVENT_BUS.post(eventPost);
 			}
 		}
 	}
@@ -150,23 +150,31 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	
 	/*
 	 * Removes the conduit at the given position if a conduit exists, and triggers events for particles, sound and other stuff
+	 * Also sends the changes to the clients.
 	 */
 	public boolean breakConduit(ConduitPos position, boolean dropItems) {
-		ConduitEntity conduitToRemove = null;
-		for (ConduitEntity con : this.conduits) {
-			if (con.getPosition().equals(position)) {
-				conduitToRemove = con;
-				break;
-			}
-		}
-		if (conduitToRemove != null) {
+		Optional<ConduitEntity> conduitToRemove = getConduit(position);
+		if (conduitToRemove.isPresent()) {
 			
-			Event event = new ConduitBreakEvent(this.level, position, conduitToRemove, dropItems);
-			MinecraftForge.EVENT_BUS.post(event);
+			Event eventPre = new ConduitEvent.ConduitBreakEvent(this.level, position, conduitToRemove.get(), EventStage.PRE, dropItems);
+			MinecraftForge.EVENT_BUS.post(eventPre);
 			
-			if (!event.isCanceled()) {
-				conduitToRemove.getConduit().onBreak(level, position, conduitToRemove, dropItems);
-				return removeConduit(conduitToRemove);
+			if (!eventPre.isCanceled()) {
+				conduitToRemove.get().getConduit().onBreak(level, position, conduitToRemove.get(), dropItems);
+				if (!removeConduit(conduitToRemove.get())) return false;
+				
+				Event eventPost = new ConduitEvent.ConduitBreakEvent(this.level, position, conduitToRemove.get(), EventStage.POST, dropItems);
+				MinecraftForge.EVENT_BUS.post(eventPost);
+				
+				if (!this.level.isClientSide()) {
+					
+					BlockPos middle = MathUtility.getMiddleBlock(position.getNodeApos(), position.getNodeBpos());
+
+					IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middle)), new SSyncRemovedConduits(position, level.getChunk(middle).getPos()));
+					
+				}
+				
+				return true;
 			}
 			
 		}
@@ -174,7 +182,8 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	}
 	
 	/*
-	 * Places a new conduit in the world if both nodes are free, and triggers events for particles, sound and other stuff
+	 * Places a new conduit in the world if both nodes are free, and triggers events for particles, sound and other stuff.
+	 * Also sends the changes to the clients.
 	 */
 	public boolean placeConduit(ConduitPos position, Conduit conduit, double length) {
 		if (conduit == Conduits.NONE.get()) {
@@ -205,19 +214,21 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 		ConduitEntity conduitEntity = conduit.newConduitEntity(position, conduit, length);
 		conduitEntity.setLevel(this.level);
 		
-		Event event = new ConduitPlaceEvent(this.level, position, conduitEntity);
-		MinecraftForge.EVENT_BUS.post(event);
+		Event eventPre = new ConduitEvent.ConduitPlaceEvent(this.level, position, conduitEntity, EventStage.PRE);
+		MinecraftForge.EVENT_BUS.post(eventPre);
 		
-		if (!event.isCanceled()) {
+		if (!eventPre.isCanceled()) {
 			if (!addConduit(conduitEntity)) {
 				return false;
 			}
 			conduitEntity.getConduit().onPlace(level, position, conduitEntity);
-
+			
+			Event eventPost = new ConduitEvent.ConduitPlaceEvent(this.level, position, conduitEntity, EventStage.POST);
+			MinecraftForge.EVENT_BUS.post(eventPost);
+			
 			if (!this.level.isClientSide()) {
-				// Send package to client just to make sure it is up to date, should already be the case if placed trough an player.
 				BlockPos middle = MathUtility.getMiddleBlock(nodeApos, nodeBpos);
-				IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middle)), new SSyncConduitPackage(conduitEntity, level.getChunkAt(middle).getPos(), SyncRequestType.ADDED));
+				IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middle)), new SSyncAddedConduits(conduitEntity, level.getChunk(middle).getPos()));
 			}
 			return true;
 		}
@@ -229,19 +240,30 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	 * Removes a conduit from the world, called on server AND client side to synchronize conduits
 	 * Does not automatically sync the two sides!
 	 */
+	public boolean removeConduit(ConduitPos position) {
+		Optional<ConduitEntity> conduitEntity = getConduit(position);
+		if (conduitEntity.isEmpty()) return false;
+		return removeConduit(conduitEntity.get());
+	}
+
+	/*
+	 * Removes a conduit from the world, called on server AND client side to synchronize conduits
+	 * Does not automatically sync the two sides!
+	 */
 	public boolean removeConduit(ConduitEntity conduitEntity) {
 		if (level.isLoaded(conduitEntity.getPosition().getNodeApos()) && level.isLoaded(conduitEntity.getPosition().getNodeBpos())) {
 			if (conduits.contains(conduitEntity)) {
+
+				Event eventPre = new ConduitEvent.ConduitRemoveEvent(level, conduitEntity.getPosition(), conduitEntity, EventStage.PRE);
+				MinecraftForge.EVENT_BUS.post(eventPre);
+				
 				if (this.conduits.remove(conduitEntity)) {
-					
-					if (!this.level.isClientSide()) {
-						// Send package to client just to make sure it is up to date, should already be the case if removed trough an player.
-						BlockPos middle = MathUtility.getMiddleBlock(conduitEntity.getPosition().getNodeApos(), conduitEntity.getPosition().getNodeBpos());
-						IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middle)), new SSyncConduitPackage(conduitEntity, level.getChunkAt(middle).getPos(), SyncRequestType.REMOVED));
-					}
-					
 					conduitEntity.dismantle();
 					conduitEntity.setLevel(null);
+
+					Event eventPost = new ConduitEvent.ConduitRemoveEvent(level, conduitEntity.getPosition(), conduitEntity, EventStage.POST);
+					MinecraftForge.EVENT_BUS.post(eventPost);
+					
 					return true;
 				}
 			}
@@ -255,12 +277,24 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 	 */
 	public boolean addConduit(ConduitEntity conduitEntity) {
 		if (level.isLoaded(conduitEntity.getPosition().getNodeApos()) && level.isLoaded(conduitEntity.getPosition().getNodeBpos())) {
-			if (!conduits.contains(conduitEntity)) {
-				conduitEntity.setLevel(level);
-				conduitEntity.build();
-				this.conduits.add(conduitEntity);
-				return true;
+			Optional<ConduitEntity> existingConduit = getConduit(conduitEntity.getPosition());
+			
+			if (existingConduit.isPresent()) {
+				if (existingConduit.get() == conduitEntity) return false;
+				removeConduit(existingConduit.get());
 			}
+			
+			Event eventPre = new ConduitEvent.ConduitAddEvent(level, conduitEntity.getPosition(), conduitEntity, EventStage.PRE);
+			MinecraftForge.EVENT_BUS.post(eventPre);
+			
+			conduitEntity.setLevel(level);
+			conduitEntity.build();
+			this.conduits.add(conduitEntity);
+			
+			Event eventPost = new ConduitEvent.ConduitAddEvent(level, conduitEntity.getPosition(), conduitEntity, EventStage.POST);
+			MinecraftForge.EVENT_BUS.post(eventPost);
+			
+			return true;
 		}
 		return false;
 	}
@@ -408,8 +442,16 @@ public class ConduitHandlerCapability implements ICapabilitySerializable<ListTag
 		
 		for (ConduitEntity conduit : this.getConduits()) {
 			if (this.preBuildLoad) {
+
+				Event eventPre = new ConduitEvent.ConduitAddEvent(level, conduit.getPosition(), conduit, EventStage.PRE);
+				MinecraftForge.EVENT_BUS.post(eventPre);
+				
 				conduit.setLevel(this.level);
 				conduit.build();
+
+				Event eventPost = new ConduitEvent.ConduitAddEvent(level, conduit.getPosition(), conduit, EventStage.POST);
+				MinecraftForge.EVENT_BUS.post(eventPost);
+				
 			}
 			conduit.updateShape();
 		}

@@ -17,6 +17,7 @@ import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.conduits.IElectricConduit;
 import de.m_marvin.industria.core.kinetics.types.blocks.IKineticBlock;
 import de.m_marvin.industria.core.registries.Tags;
+import de.m_marvin.industria.core.util.types.EventStage;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
@@ -97,8 +98,8 @@ public class FixAttachmentsCommand {
 			
 			if (!fixedBlocks.contains(pos)) {
 				
-				Event event = new BlockEvent.NeighborNotifyEvent(level, pos, state, EnumSet.allOf(Direction.class), false);
-				MinecraftForge.EVENT_BUS.post(event);
+				Event eventBlock = new BlockEvent.NeighborNotifyEvent(level, pos, state, EnumSet.allOf(Direction.class), false);
+				MinecraftForge.EVENT_BUS.post(eventBlock);
 				fixedBlocks.add(pos);
 				
 				for (ConduitEntity conduit : ConduitUtility.getConduitsAtBlock(level, pos)) {
@@ -106,8 +107,8 @@ public class FixAttachmentsCommand {
 					if (conduit.getConduit() instanceof IElectricConduit) {
 						
 						if (!fixedConduits.contains(conduit.getPosition())) {
-							Event event2 = new ConduitEvent.ConduitPlaceEvent(level, conduit.getPosition(), conduit);
-							MinecraftForge.EVENT_BUS.post(event2);
+							Event eventConduit = new ConduitEvent.ConduitPlaceEvent(level, conduit.getPosition(), conduit, EventStage.POST);
+							MinecraftForge.EVENT_BUS.post(eventConduit);
 							fixedConduits.add(conduit.getPosition());
 						}
 						

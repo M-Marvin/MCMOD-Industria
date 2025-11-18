@@ -136,7 +136,7 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
 		
 		ElectricReference reference = ElectricReference.conduit(event.getPosition());
-		if (event.getConduitEntity().getConduit() instanceof IElectricConduit) {
+		if (event.getConduitEntity().getConduitState().getConduit() instanceof IElectricConduit) {
 			// We don't need to send SSyncElectricComponentsPackage packages, since this event also triggers on the client by default
 			if (event instanceof ConduitPlaceEvent) {
 				networkSpace.updateTicket(reference, UpdateType.COMPONENT_PUT);
@@ -221,7 +221,7 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 			}
 		} else if (reference.isConduit()) {
 			Optional<ConduitEntity> conduitEntity = ConduitUtility.getConduit(this.level, reference.conduit());
-			if (conduitEntity.isPresent() && conduitEntity.get().getConduit() instanceof IElectricConduit electricConduit) {
+			if (conduitEntity.isPresent() && conduitEntity.get().getConduitState().getConduit() instanceof IElectricConduit electricConduit) {
 				// Yeah, this is not optimal, but BlockPos and ConduitPos have no common Interface or Super-Class
 				return new ElectricComponent<ConduitEntity, Conduit>(ElectricReference.conduit(reference.conduit()), electricConduit, conduitEntity.get());
 			}
@@ -243,7 +243,7 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 			Set<ParametrizedReference<ElectricReference, NodePos>> connections = new HashSet<>();
 			for (NodePos node : nodes) {
 				for (ConduitEntity conduit : ConduitUtility.getConduitsAtNode(level, node)) {
-					if (conduit.getConduit() instanceof IElectricConduit) {
+					if (conduit.getConduitState().getConduit() instanceof IElectricConduit) {
 						connections.add(new ParametrizedReference<ElectricReference, NodePos>(ElectricReference.conduit(conduit.getPosition()), node));
 					}
 				}

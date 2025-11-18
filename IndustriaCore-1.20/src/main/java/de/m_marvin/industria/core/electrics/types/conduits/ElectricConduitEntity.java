@@ -3,7 +3,6 @@ package de.m_marvin.industria.core.electrics.types.conduits;
 import java.util.Arrays;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
-import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -13,8 +12,8 @@ public class ElectricConduitEntity extends ConduitEntity {
 	
 	protected String[] wireLanes;
 	
-	public ElectricConduitEntity(ConduitPos position, Conduit conduit, double length, int laneCount) {
-		super(position, conduit, length);
+	public ElectricConduitEntity(ConduitPos position,float length, int laneCount) {
+		super(position, length);
 		this.wireLanes = new String[laneCount];
 		Arrays.fill(this.wireLanes, "");
 		if (laneCount >= 2) {

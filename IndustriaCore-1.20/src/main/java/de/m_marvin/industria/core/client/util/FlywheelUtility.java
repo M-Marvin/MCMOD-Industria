@@ -2,6 +2,9 @@ package de.m_marvin.industria.core.client.util;
 
 import java.util.function.Supplier;
 
+import de.m_marvin.industria.core.client.conduits.ConduitModelManager;
+import de.m_marvin.industria.core.conduits.types.ConduitState;
+import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import dev.engine_room.flywheel.api.backend.BackendManager;
 import dev.engine_room.flywheel.api.model.Model;
 import dev.engine_room.flywheel.api.visualization.BlockEntityVisualizer;
@@ -18,7 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class FlywheelUtility {
 	
-	private static final Supplier<BlockRenderDispatcher> BLOCK_RENDER_DISPATCHER = () -> Minecraft.getInstance().getBlockRenderer();
+	private static final Supplier<BlockRenderDispatcher> BLOCK_RENDER_DISPATCHER = Minecraft.getInstance()::getBlockRenderer;
 	
 	private static final RendererReloadCache<BlockState, Model> BLOCK_STATE = new RendererReloadCache<>(state -> {
 		BakedModel bakedModel = BLOCK_RENDER_DISPATCHER.get().getBlockModel(state);
@@ -31,6 +34,22 @@ public class FlywheelUtility {
 	
 	public static Model modelOfBlock(BlockState state) {
 		return Models.block(state);
+	}
+	
+	public static Model modelOfBlockBaked(BakedModel model) {
+		return BakedModelBuilder.create(model).build();
+	}
+
+	public static Model modelOfConduit(ConduitEntity conduitEntity) {
+		return modelOfConduit(conduitEntity.getConduitState());
+	}
+	
+	public static Model modelOfConduit(ConduitState conduitState) {
+		return modelOfConduitModel(ConduitModelManager.getModel(conduitState));
+	}
+	
+	public static Model modelOfConduitModel(BakedModel model) {
+		return BakedModelBuilder.create(model).materialFunc(ConduitModelManager::getMaterial).build();
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -13,9 +13,8 @@ import com.mojang.math.Axis;
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.client.util.GraphicsUtility;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
-import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
+import de.m_marvin.industria.core.conduits.engine.ConduitHolderCapability;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
-import de.m_marvin.industria.core.conduits.types.ConduitType;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitShape;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
@@ -55,6 +54,8 @@ import net.minecraftforge.fml.common.Mod;
 public class ConduitRenderer {
 
 	private static final Supplier<ProfilerFiller> PROFILER = () -> Minecraft.getInstance().getProfiler();
+	
+	
 	
 	@SubscribeEvent
 	public static void onWorldRender(RenderLevelStageEvent event) {
@@ -108,9 +109,9 @@ public class ConduitRenderer {
 	
 	protected static void drawDebugConduits(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, float partialTicks) {
 		
-		LazyOptional<ConduitHandlerCapability> optionalConduitHolder = clientLevel.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
+		LazyOptional<ConduitHolderCapability> optionalConduitHolder = clientLevel.getCapability(Capabilities.CONDUIT_HOLDER_CAPABILITY);
 		if (optionalConduitHolder.isPresent()) {
-			ConduitHandlerCapability conduitHolder = optionalConduitHolder.resolve().get();
+			ConduitHolderCapability conduitHolder = optionalConduitHolder.resolve().get();
 			for (ConduitEntity conduit : conduitHolder.getConduits()) {
 				drawConduitDebug(matrixStack, bufferSource, clientLevel, partialTicks, conduit);
 			}
@@ -145,9 +146,9 @@ public class ConduitRenderer {
 	
 	protected static void drawConduitSymbols(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, int ticks, float partialTicks) {
 		
-		LazyOptional<ConduitHandlerCapability> optionalConduitHolder = clientLevel.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
+		LazyOptional<ConduitHolderCapability> optionalConduitHolder = clientLevel.getCapability(Capabilities.CONDUIT_HOLDER_CAPABILITY);
 		if (optionalConduitHolder.isPresent()) {
-			ConduitHandlerCapability conduitHolder = optionalConduitHolder.resolve().get();
+			ConduitHolderCapability conduitHolder = optionalConduitHolder.resolve().get();
 			for (ConduitEntity conduit : conduitHolder.getConduits()) {
 				drawConduitNodesSymbols(matrixStack, bufferSource, clientLevel, ticks, partialTicks, conduit);
 			}
@@ -182,16 +183,16 @@ public class ConduitRenderer {
 
 	protected static void drawConduits(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel clientLevel, float partialTicks) {
 		
-		LazyOptional<ConduitHandlerCapability> optionalConduitHolder = clientLevel.getCapability(Capabilities.CONDUIT_HANDLER_CAPABILITY);
+		LazyOptional<ConduitHolderCapability> optionalConduitHolder = clientLevel.getCapability(Capabilities.CONDUIT_HOLDER_CAPABILITY);
 		if (optionalConduitHolder.isPresent()) {
 			
-			ConduitHandlerCapability conduitHolder = optionalConduitHolder.resolve().get();
+			ConduitHolderCapability conduitHolder = optionalConduitHolder.resolve().get();
 			
-			VertexConsumer vertexConsumer =  bufferSource.getBuffer(RenderType.entityTranslucent(ConduitTextureManager.LOCATION_CONDUITS));
+			VertexConsumer vertexConsumer =  bufferSource.getBuffer(RenderType.entityTranslucent(ConduitModelManager.LOCATION_CONDUITS));
 			
 			for (ConduitEntity conduit : conduitHolder.getConduits()) {
 				
-				TextureAtlasSprite sprite = ConduitTextureManager.getInstance().get(conduit.getConduit());
+				TextureAtlasSprite sprite = ConduitModelManager.getModel(conduit.getConduitState()).getParticleIcon();
 				Vec3d playerPosition = Vec3d.fromVec(Minecraft.getInstance().player.position());
 				
 				BlockState nodeAstate = clientLevel.getBlockState(conduit.getPosition().getNodeApos());
@@ -351,11 +352,10 @@ public class ConduitRenderer {
 		poseStack.translate(nodeOrigin.getX(), nodeOrigin.getY(), nodeOrigin.getZ());
 		
 		ConduitShape shape = conduit.getShape();
-		ConduitType type = conduit.getConduit().getConduitType();
 		
 		if (shape != null) {
 			
-			int size = type.getThickness();
+			float size = conduit.getConduitState().getThickness(conduit);
 			int blockLight = 0;
 			int skyLight = 0;
 			
@@ -393,7 +393,7 @@ public class ConduitRenderer {
 				skyLight = (clientLevel.getBrightness(LightLayer.SKY, nodeBlockPos) * 1 + skyLight * 2) / 3;
 				
 				int packedLight = LightTexture.pack(blockLight, skyLight);
-				int segmentColor = conduit.getConduit().getColorAt(clientLevel, nodeA, conduit);
+				int segmentColor = 0xFFFFFFFF;
 				
 				Vec3d nodeAinterpolated = shape.lastPos[i - 1].lerp(nodeA, (double) partialTicks);
 				Vec3d nodeBinterpolated = shape.lastPos[i - 0].lerp(nodeB, (double) partialTicks);
@@ -408,7 +408,7 @@ public class ConduitRenderer {
 		
 	}
 	
-	public static double drawConduitSegment(VertexConsumer vertexConsumer, PoseStack poseStack, int color, int packedLight, Vec3d start, Vec3d end, int width, float lengthOffset, TextureAtlasSprite sprite) {
+	public static double drawConduitSegment(VertexConsumer vertexConsumer, PoseStack poseStack, int color, int packedLight, Vec3d start, Vec3d end, float width, float lengthOffset, TextureAtlasSprite sprite) {
 		
 		Vec3d lineVec = end.sub(start);
 		Vec3d lineNormal = lineVec.normalize();
@@ -420,19 +420,19 @@ public class ConduitRenderer {
 		poseStack.translate(start.x, start.y, start.z);
 		poseStack.mulPose(new org.joml.Quaternionf(rotation.i(), rotation.j(), rotation.k(), rotation.r()));
 		
-		float textureOvershot = (lengthOffset + (float) length) % (ConduitTextureManager.TEXTURE_MAP_WIDTH / 16F) - (float) length;
+		float textureOvershot = (lengthOffset + (float) length) % (ConduitModelManager.TEXTURE_MAP_WIDTH / 16F) - (float) length;
 		
 		if (textureOvershot < 0) {
 
-			drawConduitSegmentPartial(vertexConsumer, poseStack, color, packedLight, (float) -textureOvershot, width / 16F, 4F + textureOvershot, sprite);
+			drawConduitSegmentPartial(vertexConsumer, poseStack, color, packedLight, (float) -textureOvershot, width, 4F + textureOvershot, sprite);
 			poseStack.pushPose();
 			poseStack.translate(0, 0, -textureOvershot);
-			drawConduitSegmentPartial(vertexConsumer, poseStack, color, packedLight, (float) length + textureOvershot, width / 16F, 0, sprite);
+			drawConduitSegmentPartial(vertexConsumer, poseStack, color, packedLight, (float) length + textureOvershot, width, 0, sprite);
 			poseStack.popPose();
 			
 		} else {
 
-			drawConduitSegmentPartial(vertexConsumer, poseStack, color, packedLight, (float) length, width / 16F, textureOvershot, sprite);
+			drawConduitSegmentPartial(vertexConsumer, poseStack, color, packedLight, (float) length, width, textureOvershot, sprite);
 			
 		}
 		
@@ -456,23 +456,23 @@ public class ConduitRenderer {
 		float uf = sprite.getU1() - sprite.getU0();
 		float vf = sprite.getV1() - sprite.getV0();
 		
-		float uvX0 = sprite.getU0() + (flo / ConduitTextureManager.TEXTURE_MAP_WIDTH) * uf;
-		float uvYb0 = sprite.getV0() + (0 * fw / ConduitTextureManager.TEXTURE_MAP_HEIGHT) * vf;
-		float uvYt0 = sprite.getV0() + (1 * fw / ConduitTextureManager.TEXTURE_MAP_HEIGHT) * vf;
-		float uvYe0 = sprite.getV0() + (2 * fw / ConduitTextureManager.TEXTURE_MAP_HEIGHT) * vf;
-		float uvYw0 = sprite.getV0() + (3 * fw / ConduitTextureManager.TEXTURE_MAP_HEIGHT) * vf;
-		float uvX1 = sprite.getU0() + ((flo + fl) / ConduitTextureManager.TEXTURE_MAP_WIDTH) * uf;
-		float uvYb1 = sprite.getV0() + (1 * fw / ConduitTextureManager.TEXTURE_MAP_HEIGHT) * vf;
-		float uvYt1 = sprite.getV0() + (2 * fw / ConduitTextureManager.TEXTURE_MAP_HEIGHT) * vf;
-		float uvYe1 = sprite.getV0() + (3 * fw / ConduitTextureManager.TEXTURE_MAP_HEIGHT) * vf;
-		float uvYw1 = sprite.getV0() + (4 * fw / ConduitTextureManager.TEXTURE_MAP_HEIGHT) * vf;
+		float uvX0 = sprite.getU0() + (flo / ConduitModelManager.TEXTURE_MAP_WIDTH) * uf;
+		float uvYb0 = sprite.getV0() + (0 * fw / ConduitModelManager.TEXTURE_MAP_HEIGHT) * vf;
+		float uvYt0 = sprite.getV0() + (1 * fw / ConduitModelManager.TEXTURE_MAP_HEIGHT) * vf;
+		float uvYe0 = sprite.getV0() + (2 * fw / ConduitModelManager.TEXTURE_MAP_HEIGHT) * vf;
+		float uvYw0 = sprite.getV0() + (3 * fw / ConduitModelManager.TEXTURE_MAP_HEIGHT) * vf;
+		float uvX1 = sprite.getU0() + ((flo + fl) / ConduitModelManager.TEXTURE_MAP_WIDTH) * uf;
+		float uvYb1 = sprite.getV0() + (1 * fw / ConduitModelManager.TEXTURE_MAP_HEIGHT) * vf;
+		float uvYt1 = sprite.getV0() + (2 * fw / ConduitModelManager.TEXTURE_MAP_HEIGHT) * vf;
+		float uvYe1 = sprite.getV0() + (3 * fw / ConduitModelManager.TEXTURE_MAP_HEIGHT) * vf;
+		float uvYw1 = sprite.getV0() + (4 * fw / ConduitModelManager.TEXTURE_MAP_HEIGHT) * vf;
 		
 		float uvEXn0 = sprite.getU0() + (0) * uf;
-		float uvEXs0 = sprite.getU0() + (fw * 1 / ConduitTextureManager.TEXTURE_MAP_WIDTH) * uf;
-		float uvEXn1 = sprite.getU0() + (fw * 1 / ConduitTextureManager.TEXTURE_MAP_WIDTH) * uf;
-		float uvEXs1 = sprite.getU0() + (fw * 2 / ConduitTextureManager.TEXTURE_MAP_WIDTH) * uf;
-		float uvEY0 = sprite.getV0() + (fw * 4 / ConduitTextureManager.TEXTURE_MAP_HEIGHT) * vf;
-		float uvEY1 = sprite.getV0() + (fw * 5 / ConduitTextureManager.TEXTURE_MAP_HEIGHT) * vf;
+		float uvEXs0 = sprite.getU0() + (fw * 1 / ConduitModelManager.TEXTURE_MAP_WIDTH) * uf;
+		float uvEXn1 = sprite.getU0() + (fw * 1 / ConduitModelManager.TEXTURE_MAP_WIDTH) * uf;
+		float uvEXs1 = sprite.getU0() + (fw * 2 / ConduitModelManager.TEXTURE_MAP_WIDTH) * uf;
+		float uvEY0 = sprite.getV0() + (fw * 4 / ConduitModelManager.TEXTURE_MAP_HEIGHT) * vf;
+		float uvEY1 = sprite.getV0() + (fw * 5 / ConduitModelManager.TEXTURE_MAP_HEIGHT) * vf;
 		
 		// Bottom
 		vertex(vertexConsumer, pose, normal, -fwh, -fwh, 0, 		0, -1, 0, 	uvX0, uvYb0, packedLight, color);

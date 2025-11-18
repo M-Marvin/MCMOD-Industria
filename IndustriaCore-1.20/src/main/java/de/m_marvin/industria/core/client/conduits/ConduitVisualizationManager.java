@@ -4,11 +4,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.m_marvin.industria.IndustriaCore;
+import de.m_marvin.industria.core.conduits.engine.ConduitHolderCapability;
 import de.m_marvin.industria.core.conduits.events.ConduitEvent.ConduitAddEvent;
 import de.m_marvin.industria.core.conduits.events.ConduitEvent.ConduitRemoveEvent;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
+import de.m_marvin.industria.core.registries.Capabilities;
+import de.m_marvin.industria.core.util.ConditionalExecutor;
+import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.types.EventStage;
+import dev.engine_room.flywheel.api.event.EndClientResourceReloadEvent;
 import dev.engine_room.flywheel.lib.visualization.VisualizationHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -31,8 +38,6 @@ public class ConduitVisualizationManager {
 		conduitEffects.put(event.getConduitEntity(), effect);
 		VisualizationHelper.queueAdd(effect);
 		
-		System.out.println(conduitEffects.size() + "<" + effect);
-		
 	}
 
 	@SubscribeEvent
@@ -44,8 +49,7 @@ public class ConduitVisualizationManager {
 		if (effect == null) return;
 		VisualizationHelper.queueRemove(effect);
 		conduitEffects.remove(event.getConduitEntity());
-
-		System.out.println(conduitEffects.size() + ">" + effect);
+		
 	}
 	
 	@SubscribeEvent
@@ -57,6 +61,27 @@ public class ConduitVisualizationManager {
 			conduitEffects.clear();
 		}
 		
+	}
+
+	@Mod.EventBusSubscriber(modid = IndustriaCore.MODID, bus = Bus.MOD, value = Dist.CLIENT)
+	public static class ConduitVisualizerReloadListener {
+		@SubscribeEvent
+		public static void onResourceReloadRegister(EndClientResourceReloadEvent event) {
+			
+			ConditionalExecutor.CLIENT_TICK_EXECUTOR.execute(() -> {
+				ClientLevel level = Minecraft.getInstance().level;
+				if (level == null) return;
+				conduitEffects.clear();
+				ConduitHolderCapability conduitHolder = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HOLDER_CAPABILITY);
+				if (conduitHolder == null) return;
+				conduitHolder.getConduits().forEach(conduitEntity -> {
+					ConduitEffect<ConduitEntity> effect = new ConduitEffect<ConduitEntity>(conduitEntity);
+					conduitEffects.put(conduitEntity, effect);
+					VisualizationHelper.queueAdd(effect);
+				});
+			});
+			
+		}
 	}
 	
 }

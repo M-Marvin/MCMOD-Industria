@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 
 import org.jetbrains.annotations.Nullable;
 
-import de.m_marvin.industria.core.client.flyinstances.ShiftedTextureInstance;
+import de.m_marvin.industria.core.client.flwinstances.ShiftedTextureInstance;
 import de.m_marvin.industria.core.client.registries.FlwInstanceTypes;
 import de.m_marvin.industria.core.client.util.ClientTimer;
 import de.m_marvin.industria.core.client.util.FlywheelUtility;

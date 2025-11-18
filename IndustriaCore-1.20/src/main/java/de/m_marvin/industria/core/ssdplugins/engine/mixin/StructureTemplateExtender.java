@@ -128,7 +128,10 @@ public abstract class StructureTemplateExtender implements IStructureTemplateExt
 		
 	}
 	
-	@Inject(at = @At("RETURN"), method = "fillFromWorld(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/Vec3i;ZLnet/minecraft/world/level/block/Block;)V")
+	@Inject( 
+			method = "fillFromWorld(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/Vec3i;ZLnet/minecraft/world/level/block/Block;)V",
+			at = @At("RETURN")
+	)
 	private void fillFromWorld( Level pLevel, BlockPos pPos, Vec3i pSize, boolean pWithEntities, @Nullable Block pToIgnore, CallbackInfo callback) {
 		
 		if (pSize.getX() >= 1 && pSize.getY() >= 1 && pSize.getZ() >= 1) {

@@ -1,8 +1,8 @@
 package de.m_marvin.industria.core.client.conduits;
 
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.client.util.FlywheelUtility;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
-import de.m_marvin.industria.core.registries.Blocks;
 import dev.engine_room.flywheel.api.model.Model;
 import dev.engine_room.flywheel.api.visual.EffectVisual;
 import dev.engine_room.flywheel.api.visual.LightUpdatedVisual;
@@ -11,7 +11,11 @@ import dev.engine_room.flywheel.lib.instance.InstanceTypes;
 import dev.engine_room.flywheel.lib.instance.OrientedInstance;
 import dev.engine_room.flywheel.lib.visual.AbstractVisual;
 import net.minecraft.core.BlockPos;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
+@Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Bus.MOD, value=Dist.CLIENT)
 public class ConduitVisual<T extends ConduitEntity> extends AbstractVisual implements EffectVisual<ConduitEffect<T>>, LightUpdatedVisual {
 	
 	private final T conduit;
@@ -26,9 +30,10 @@ public class ConduitVisual<T extends ConduitEntity> extends AbstractVisual imple
 		this.pos = conduit.getPosition().getNodeApos();
 		this.visualPos = this.pos.subtract(ctx.renderOrigin());
 		
-		Model model = FlywheelUtility.modelOfBlock(Blocks.ERROR_BLOCK.get().defaultBlockState());
+		Model model = FlywheelUtility.modelOfConduit(conduit);
 		this.testInstance = ctx.instancerProvider().instancer(InstanceTypes.ORIENTED, model).createInstance();
 		this.testInstance.position(getVisualPos()).setChanged();
+		
 	}
 	
 	public BlockPos getVisualPos() {

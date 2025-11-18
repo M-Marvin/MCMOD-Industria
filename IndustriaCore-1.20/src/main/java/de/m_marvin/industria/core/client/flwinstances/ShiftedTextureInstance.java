@@ -1,4 +1,4 @@
-package de.m_marvin.industria.core.client.flyinstances;
+package de.m_marvin.industria.core.client.flwinstances;
 
 import java.util.Arrays;
 import java.util.List;

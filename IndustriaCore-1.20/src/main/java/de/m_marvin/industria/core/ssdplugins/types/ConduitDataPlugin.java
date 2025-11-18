@@ -7,7 +7,7 @@ import java.util.stream.StreamSupport;
 
 import org.apache.commons.compress.utils.Lists;
 
-import de.m_marvin.industria.core.conduits.engine.ConduitHandlerCapability;
+import de.m_marvin.industria.core.conduits.engine.ConduitHolderCapability;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
@@ -57,7 +57,7 @@ public class ConduitDataPlugin extends StructureDataPlugin<ListTag> {
 	
 	private static boolean placeInWorld(ServerLevel level, BlockPos offset, StructurePlaceSettings settings, RandomSource random, int flags, VanillaTemplateData vanillaData, ListTag pluginData) {
 		
-		ConduitHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
+		ConduitHolderCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HOLDER_CAPABILITY);
 		
 		for (Tag conduitTag : pluginData) {
 			if (conduitTag instanceof CompoundTag conduitNbt) {
@@ -70,7 +70,7 @@ public class ConduitDataPlugin extends StructureDataPlugin<ListTag> {
 				
 				// If position already occupied, remove current conduit
 				Optional<ConduitEntity> replacedConduitEntity = handler.getConduit(position);
-				if (replacedConduitEntity.isPresent() && replacedConduitEntity.get().getConduit() != conduitEntity.getConduit()) {
+				if (replacedConduitEntity.isPresent() && !replacedConduitEntity.get().getConduitState().equals(conduitEntity.getConduitState())) {
 					handler.removeConduit(replacedConduitEntity.get());
 				}
 				
@@ -81,7 +81,7 @@ public class ConduitDataPlugin extends StructureDataPlugin<ListTag> {
 				GameUtility.triggerUpdate(level, np2);
 				
 				// Place conduit
-				if (handler.placeConduit(position, conduitEntity.getConduit(), conduitEntity.getLength())) {
+				if (handler.placeConduit(position, conduitEntity.getConduitState(), conduitEntity.getLength())) {
 					Optional<ConduitEntity> placedConduitEntity = handler.getConduit(position);
 					if (placedConduitEntity.isPresent()) {
 						placedConduitEntity.get().loadAdditional(conduitNbt);
@@ -97,7 +97,7 @@ public class ConduitDataPlugin extends StructureDataPlugin<ListTag> {
 	
 	private static void serializeConduits(Level level, BlockPos origin, VanillaTemplateData vanillaData, ListTag pluginData) {
 
-		ConduitHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
+		ConduitHolderCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HOLDER_CAPABILITY);
 		
 		// Search for conduits connected to blocks of the template and all blocks part of the template
 		List<ConduitEntity> conduitsInBounds = Lists.newArrayList();

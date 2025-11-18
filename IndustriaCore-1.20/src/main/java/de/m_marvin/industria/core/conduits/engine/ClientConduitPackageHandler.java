@@ -29,7 +29,7 @@ public class ClientConduitPackageHandler {
 		ConditionalExecutor.CLIENT_TICK_EXECUTOR.executeAsSoonAs(() -> {
 
 			Level level = Minecraft.getInstance().level;
-			ConduitHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
+			ConduitHolderCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HOLDER_CAPABILITY);
 			
 			for (ConduitEntity conduitEntity : msg.conduits) {
 				handler.addConduit(conduitEntity);
@@ -45,7 +45,7 @@ public class ClientConduitPackageHandler {
 		ConditionalExecutor.CLIENT_TICK_EXECUTOR.execute(() -> {
 
 			Level level = Minecraft.getInstance().level;
-			ConduitHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HANDLER_CAPABILITY);
+			ConduitHolderCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HOLDER_CAPABILITY);
 			
 			for (ConduitPos conduit : msg.conduits)
 				handler.removeConduit(conduit);
@@ -61,7 +61,7 @@ public class ClientConduitPackageHandler {
 			Level level = Minecraft.getInstance().level;
 			Optional<ConduitEntity> conduitEntity = ConduitUtility.getConduit(level, msg.getPosition());
 			
-			if (conduitEntity.isPresent() && conduitEntity.get().getConduit() == msg.getConduit()) {
+			if (conduitEntity.isPresent() && conduitEntity.get().getConduitState().getConduit() == msg.getConduit()) {
 				conduitEntity.get().readUpdateTag(msg.getUpdateTag());
 			}
 			

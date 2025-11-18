@@ -1,24 +1,24 @@
 package de.m_marvin.industria.core.conduits.types.conduits;
 
+import com.google.common.base.Objects;
+
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
+import de.m_marvin.industria.core.conduits.types.ConduitState;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitShape;
-import de.m_marvin.industria.core.registries.Conduits;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 
 public class ConduitEntity {
 	
 	protected Level level;
 	protected ConduitPos position;
-	protected double length;
-	protected Conduit conduit;
+	protected ConduitState state;
 	protected ConduitShape shape;
+	protected float length;
 	
-	public ConduitEntity(ConduitPos position, Conduit conduit, double length) {
+	public ConduitEntity(ConduitPos position, float length) {
 		this.position = position;
-		this.conduit = conduit;
 		this.length = length;
 	}
 	
@@ -30,24 +30,32 @@ public class ConduitEntity {
 		return level;
 	}
 	
+	public void setConduitState(ConduitState state) {
+		this.state = state;
+	}
+	
+	public ConduitState getConduitState() {
+		return state;
+	}
+	
 	public ConduitEntity build() {
-		this.conduit.onBuild(level, position, this);
-		this.shape = conduit.buildShape(level, this);
+		this.state.onBuild(this);
+		this.shape = this.state.buildShape(this);
 		updateShape();
 		return this;
 	}
 	
 	public ConduitEntity dismantle() {
 		if (this.shape == null) return this;
-		this.conduit.onDismantle(level, position, this);
-		this.conduit.dismantleShape(level, this);
+		this.state.onDismantle(this);
+		this.state.dismantleShape(this);
 		this.shape = null;
 		return this;
 	}
 	
 	public void updateShape() {
 		assert this.shape != null : "Can't update un-build conduit!";
-		this.conduit.updatePhysicalNodes(level, this);
+		this.state.updateShape(this);
 	}
 	
 	public CompoundTag save() {
@@ -55,11 +63,13 @@ public class ConduitEntity {
 	}
 	
 	public CompoundTag save(BlockPos relative) {
+		if (this.state == null) return null;
 		CompoundTag tag = new CompoundTag();
 		tag.put("Position", this.position.writeNBT(new CompoundTag(), relative));
-		tag.putString("Conduit", Conduits.CONDUITS_REGISTRY.get().getKey(this.conduit).toString());
-		tag.putDouble("Length", this.length);
-		if (this.shape != null) tag.put("Shape", this.shape.save());
+		tag.put("Conduit", this.state.writeNbt());
+		tag.putFloat("Length", this.length);
+		if (this.shape != null) 
+			tag.put("Shape", this.shape.save());
 		this.saveAdditional(tag);
 		return tag;
 	}
@@ -69,16 +79,18 @@ public class ConduitEntity {
 	}
 	
 	public static ConduitEntity load(CompoundTag tag, BlockPos relative) {
-		ResourceLocation conduitName = new ResourceLocation(tag.getString("Conduit"));
-		Conduit conduit = Conduits.CONDUITS_REGISTRY.get().getValue(conduitName);
-		if (conduit == null) return null;
+		ConduitState conduitState = ConduitState.loadNbt(tag.getCompound("Conduit"));
+		if (conduitState == null)
+			return null;
 		ConduitPos position = ConduitPos.readNBT(tag.getCompound("Position"), relative);
-		double length = tag.getDouble("Length");
+		float length = tag.getFloat("Length");
 		ConduitShape shape = tag.contains("Shape") ? ConduitShape.load(tag.getCompound("Shape")) : null;
-		ConduitEntity state = conduit.newConduitEntity(position, conduit, length);
-		if (shape != null) state.setShape(shape);
-		state.loadAdditional(tag);
-		return state;
+		ConduitEntity conduitEntity = conduitState.getConduit().newConduitEntity(position, length);
+		conduitEntity.setConduitState(conduitState);
+		if (shape != null)
+			conduitEntity.setShape(shape);
+		conduitEntity.loadAdditional(tag);
+		return conduitEntity;
 	}
 	
 	public void saveAdditional(CompoundTag tag) {};
@@ -94,15 +106,11 @@ public class ConduitEntity {
 		this.shape = shape;
 	}
 	
-	public Conduit getConduit() {
-		return conduit;
-	}
-
 	public ConduitPos getPosition() {
 		return position;
 	}
 	
-	public double getLength() {
+	public float getLength() {
 		return length;
 	}
 	
@@ -110,21 +118,17 @@ public class ConduitEntity {
 	public boolean equals(Object obj) {
 		if (obj instanceof ConduitEntity other) {
 			return 	other.getPosition().equals(this.getPosition()) &
-					other.conduit == this.conduit;
+					Objects.equal(this.state, other.state);
 		}
 		return false;
 	}
 	
 	@Override
 	public String toString() {
-		return "PlacedConduit{conduit=" + Conduits.CONDUITS_REGISTRY.get().getKey(this.conduit) + 
+		return "ConduitEntity{conduit=" + this.state.toString() + 
 				",length=" + this.length +
 				",position=" + this.position.toString() + 
 				"}";
  	}
-
-	public int getNodeCount() {
-		return 2;
-	}
 	
 }

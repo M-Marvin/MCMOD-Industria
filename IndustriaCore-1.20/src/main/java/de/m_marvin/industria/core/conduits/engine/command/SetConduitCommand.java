@@ -5,20 +5,17 @@ import java.util.Optional;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.FloatArgumentType;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
 import de.m_marvin.industria.core.conduits.ConduitUtility;
+import de.m_marvin.industria.core.conduits.types.ConduitInput;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
-import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
-import de.m_marvin.industria.core.registries.Conduits;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 
 public class SetConduitCommand {
@@ -29,26 +26,26 @@ public class SetConduitCommand {
 		)
 		.then(
 				Commands.argument("nodeApos", BlockPosArgument.blockPos())
-				.then(
-						Commands.argument("nodeAid", IntegerArgumentType.integer(0))
+				.then(  // TODO context aware arguments seem not to work
+						Commands.argument("nodeAid", NodeIdArgument.onBlock(ctx -> BlockPosArgument.getBlockPos(ctx, "nodeApos")))
 						.then(
 								Commands.argument("nodeBpos", BlockPosArgument.blockPos())
 								.then(
-										Commands.argument("nodeBid", IntegerArgumentType.integer(0))
+										Commands.argument("nodeBid", NodeIdArgument.onBlock(ctx -> BlockPosArgument.getBlockPos(ctx, "nodeBpos")))
 										.then(
-												Commands.argument("conduit", ConduitArgument.conduit())
+												Commands.argument("conduit", ConduitStateArgument.conduit())
 												.executes((source) ->
-														setConduit(source, BlockPosArgument.getLoadedBlockPos(source, "nodeApos"), BlockPosArgument.getLoadedBlockPos(source, "nodeBpos"), IntegerArgumentType.getInteger(source, "nodeAid"), IntegerArgumentType.getInteger(source, "nodeBid"), ConduitArgument.getConduit(source, "conduit"), 1, false)
+														setConduit(source, BlockPosArgument.getLoadedBlockPos(source, "nodeApos"), BlockPosArgument.getLoadedBlockPos(source, "nodeBpos"), NodeIdArgument.getNodeId(source, "nodeAid"), NodeIdArgument.getNodeId(source, "nodeBid"), ConduitStateArgument.getConduit(source, "conduit"), 1, false)
 												)
 												.then(
 														Commands.argument("length", FloatArgumentType.floatArg(1F, 3F))
 														.executes((source) -> 
-																setConduit(source, BlockPosArgument.getLoadedBlockPos(source, "nodeApos"), BlockPosArgument.getLoadedBlockPos(source, "nodeBpos"), IntegerArgumentType.getInteger(source, "nodeAid"), IntegerArgumentType.getInteger(source, "nodeBid"), ConduitArgument.getConduit(source, "conduit"), FloatArgumentType.getFloat(source, "length"), false)
+																setConduit(source, BlockPosArgument.getLoadedBlockPos(source, "nodeApos"), BlockPosArgument.getLoadedBlockPos(source, "nodeBpos"), NodeIdArgument.getNodeId(source, "nodeAid"), NodeIdArgument.getNodeId(source, "nodeBid"), ConduitStateArgument.getConduit(source, "conduit"), FloatArgumentType.getFloat(source, "length"), false)
 														)
 														.then(
 																Commands.literal("destroy")
 																.executes((source) ->
-																		setConduit(source, BlockPosArgument.getLoadedBlockPos(source, "nodeApos"), BlockPosArgument.getLoadedBlockPos(source, "nodeBpos"), IntegerArgumentType.getInteger(source, "nodeAid"), IntegerArgumentType.getInteger(source, "nodeBid"), ConduitArgument.getConduit(source, "conduit"), FloatArgumentType.getFloat(source, "length"), true)
+																		setConduit(source, BlockPosArgument.getLoadedBlockPos(source, "nodeApos"), BlockPosArgument.getLoadedBlockPos(source, "nodeBpos"), NodeIdArgument.getNodeId(source, "nodeAid"), NodeIdArgument.getNodeId(source, "nodeBid"), ConduitStateArgument.getConduit(source, "conduit"), FloatArgumentType.getFloat(source, "length"), true)
 																)
 														)
 												)
@@ -59,20 +56,19 @@ public class SetConduitCommand {
 		));		
 	}
 	
-	public static int setConduit(CommandContext<CommandSourceStack> source, BlockPos nodeApos, BlockPos nodeBpos, int nodeAid, int nodeBid, ResourceLocation conduitKey, float length, boolean drop) {
+	public static int setConduit(CommandContext<CommandSourceStack> source, BlockPos nodeApos, BlockPos nodeBpos, int nodeAid, int nodeBid, ConduitInput conduit, float length, boolean drop) {
 		ServerLevel level = source.getSource().getLevel();
 		ConduitPos position = new ConduitPos(nodeApos, nodeBpos, nodeAid, nodeBid);
-		Conduit conduit = Conduits.CONDUITS_REGISTRY.get().getValue(conduitKey);
 		
 		Optional<ConduitEntity> existingConduit = ConduitUtility.getConduit(level, position);
 		if (existingConduit.isPresent()) {
 			ConduitUtility.removeConduit(level, position, drop);
 		}
 		
-		double conduitLength = Math.ceil(position.calculateMinConduitLength(level)) * length;
+		float conduitLength = (float) (Math.ceil(position.calculateMinConduitLength(level)) * length);
 		
-		if (conduit != Conduits.NONE.get()) {
-			if (ConduitUtility.setConduit(level, position, conduit, conduitLength)) {
+		if (!conduit.getState().isNone()) {
+			if (conduit.place(level, position, conduitLength)) {
 				source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.setconduit.success", nodeApos.getX(), nodeApos.getY(), nodeApos.getZ()), true);
 				return Command.SINGLE_SUCCESS;
 			} else {

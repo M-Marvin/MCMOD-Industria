@@ -1,8 +1,10 @@
 {
-	"required": false,
+	"required": true,
 	"package": "de.m_marvin.industria.core.util.mixin",
 	"mixins": [
-		"EntityUpStepModifier"
+		"EntityUpStepModifier",
+		"BlockModelAlternateAtlasParsing",
+		"ModelManagerCustomAtlasesMixin"
 	],
 	"refmap": "mixins.industriacore.refmap.json",
 	"minVersion": "0.8"

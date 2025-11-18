@@ -3,7 +3,7 @@ package de.m_marvin.industria.core.client.registries;
 import org.lwjgl.system.MemoryUtil;
 
 import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.core.client.flyinstances.ShiftedTextureInstance;
+import de.m_marvin.industria.core.client.flwinstances.ShiftedTextureInstance;
 import de.m_marvin.industria.core.client.util.EvenMoreMemoryOps;
 import dev.engine_room.flywheel.api.instance.InstanceType;
 import dev.engine_room.flywheel.api.layout.FloatRepr;

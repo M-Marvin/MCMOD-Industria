@@ -3,6 +3,7 @@ package de.m_marvin.industria.core.conduits.types.items;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
+import de.m_marvin.industria.core.conduits.types.ConduitState;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.univec.impl.Vec3d;
@@ -59,6 +60,7 @@ public interface IConduitItem {
 		BlockPos clicked = context.getClickedPos();
 		Direction face = context.getClickedFace();
 		BlockState clickedState = level.getBlockState(clicked);
+		
 		if (clickedState.getBlock() instanceof IConduitConnector connector) {
 			
 			BlockPos masterPos = connector.getConnectorMasterPos(level, clicked, clickedState);
@@ -69,10 +71,11 @@ public interface IConduitItem {
 				connector = masterConnector;
 			}
 			
-			if (connector.hasFreeConduitNode(level, clicked, clickedState, type -> type.canConnectWith(this.getConduit()))) {
+			if (connector.hasFreeConduitNode(level, clicked, clickedState, type -> type.canConnectWith(this.getConduit().defaultConduitState())))
 				return clicked;
-			}
+			
 		} else {
+			
 			clickedState = level.getBlockState(clicked.relative(face.getOpposite()));
 			if (clickedState.getBlock() instanceof IConduitConnector connector) {
 				
@@ -84,11 +87,12 @@ public interface IConduitItem {
 					connector = masterConnector;
 				}
 				
-				if (connector.hasFreeConduitNode(level, clicked.relative(face.getOpposite()), clickedState, type -> type.canConnectWith(this.getConduit()))) {
+				if (connector.hasFreeConduitNode(level, clicked.relative(face.getOpposite()), clickedState, type -> type.canConnectWith(this.getConduit().defaultConduitState())))
 					return clicked.relative(face.getOpposite());
-				}
 			}
+			
 		}
+		
 		return null;
 	}
 	
@@ -112,19 +116,22 @@ public interface IConduitItem {
 					int secondNodeId = tryGetNode(context, secondNodePos);
 					if (secondNodeId >= 0) {
 						float placementLengthModifier = Math.max(itemTag.getFloat("Length"), 1);
-
 						ConduitPos conduitPos = new ConduitPos(firstNodePos, secondNodePos, firstNodeId, secondNodeId);
-						
 						int conduitLengthBlocks = (int) Math.ceil(conduitPos.calculateMinConduitLength(context.getLevel()) * placementLengthModifier);
-						int maxLength = Math.min(this.getConduit().getConduitType().getClampingLength(), getMaxPlacingLength(context.getItemInHand()));
+						int maxLength = Math.min(this.getConduit().getClampingLength(), getMaxPlacingLength(context.getItemInHand()));
 						
 						if (conduitLengthBlocks <= maxLength) {
 							
 							itemTag.remove("FirstNode");
 							itemTag.remove("Length");
 							context.getItemInHand().setTag(itemTag.isEmpty() ? null : itemTag);
+							
+							ConduitState conduitState = getConduit().beforePlace(context.getLevel(), firstNodePos, secondNodePos, conduitLengthBlocks);
+							if (conduitState == null)
+								return InteractionResult.FAIL;
+							
 							if (!context.getLevel().isClientSide()) {
-								if (ConduitUtility.setConduit(context.getLevel(), conduitPos, this.getConduit(), conduitLengthBlocks)) {
+								if (ConduitUtility.setConduit(context.getLevel(), conduitPos, conduitState, conduitLengthBlocks)) {
 									context.getPlayer().displayClientMessage(Component.translatable("industriacore.item.info.conduit.placed"), true);
 									onPlaced(context, conduitLengthBlocks);
 								} else {

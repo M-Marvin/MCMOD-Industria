@@ -2,7 +2,7 @@ package de.m_marvin.industria.core.conduits.types;
 
 import java.util.function.Predicate;
 
-import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
+import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.contraptions.ContraptionUtility;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3i;
@@ -87,12 +87,20 @@ public class ConduitNode {
 		public boolean canConnectWith(NodeType type) {
 			return this.typePredicate.test(type);
 		}
-		
-		public boolean canConnectWith(Conduit conduit) {
-			for (NodeType type : conduit.getValidNodeTypes()) {
+
+		public boolean canConnectWith(NodeType[] validTypes) {
+			for (NodeType type : validTypes) {
 				if (canConnectWith(type)) return true;
 			}
 			return false;
+		}
+		
+		public boolean canConnectWith(ConduitState state, ConduitEntity entity) {
+			return canConnectWith(state.getValidNodeTypes(entity));
+		}
+
+		public boolean canConnectWith(ConduitState state) {
+			return canConnectWith(state.getConduit().getValidNodeTypes());
 		}
 		
 	}

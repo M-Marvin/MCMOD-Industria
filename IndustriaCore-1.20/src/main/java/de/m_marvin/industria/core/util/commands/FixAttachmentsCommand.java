@@ -104,7 +104,7 @@ public class FixAttachmentsCommand {
 				
 				for (ConduitEntity conduit : ConduitUtility.getConduitsAtBlock(level, pos)) {
 					
-					if (conduit.getConduit() instanceof IElectricConduit) {
+					if (conduit.getConduitState().getConduit() instanceof IElectricConduit) {
 						
 						if (!fixedConduits.contains(conduit.getPosition())) {
 							Event eventConduit = new ConduitEvent.ConduitPlaceEvent(level, conduit.getPosition(), conduit, EventStage.POST);

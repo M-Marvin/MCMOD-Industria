@@ -6,7 +6,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 
-import de.m_marvin.industria.core.client.conduits.ConduitTextureManager;
+import de.m_marvin.industria.core.client.conduits.ConduitModelManager;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -21,7 +21,7 @@ public class ParticleRenderTypes {
 			RenderSystem.disableBlend();
 			RenderSystem.depthMask(true);
 			RenderSystem.setShader(GameRenderer::getParticleShader);
-			RenderSystem.setShaderTexture(0, ConduitTextureManager.LOCATION_CONDUITS);
+			RenderSystem.setShaderTexture(0, ConduitModelManager.LOCATION_CONDUITS);
 			p_107448_.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
 		}
 		public void end(Tesselator p_107451_) {

@@ -4,7 +4,6 @@ import java.util.function.Consumer;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
-import de.m_marvin.industria.core.conduits.types.ConduitType;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.electrics.engine.CircuitTemplateManager;
@@ -12,18 +11,15 @@ import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.types.CircuitTemplate.Plotter;
 import de.m_marvin.industria.core.registries.Circuits;
 import de.m_marvin.industria.core.registries.NodeTypes;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.SoundType;
 
 public class ElectricConduit extends Conduit implements IElectricConduit {
 	
 	public final int wireCount;
 	public final double resistance;
 	
-	public ElectricConduit(ConduitType type, Item item, ResourceLocation texture, SoundType sound, int wireCount, double resistance) {
-		super(type, item, texture, sound, NodeTypes.ELECTRIC);
+	public ElectricConduit(Properties properties, int wireCount, double resistance) {
+		super(properties.validNodes(NodeTypes.ELECTRIC));
 		this.wireCount = wireCount;
 		this.resistance = resistance;
 	}
@@ -33,8 +29,8 @@ public class ElectricConduit extends Conduit implements IElectricConduit {
 	}
 	
 	@Override
-	public ConduitEntity newConduitEntity(ConduitPos position, Conduit conduit, double length) {
-		return new ElectricConduitEntity(position, conduit, length, this.wireCount);
+	public ConduitEntity newConduitEntity(ConduitPos position, float length) {
+		return new ElectricConduitEntity(position, length, this.wireCount);
 	}
 	
 	protected int searchForLabel(String[] lables, String label) {

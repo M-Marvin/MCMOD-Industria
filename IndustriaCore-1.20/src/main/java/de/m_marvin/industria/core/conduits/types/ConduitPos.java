@@ -27,7 +27,6 @@ public class ConduitPos {
 	}
 	
 	public double calculateMinConduitLength(Level level) {
-		
 		BlockState nodeAstate = level.getBlockState(this.nodeA.getBlock());
 		BlockState nodeBstate = level.getBlockState(this.nodeB.getBlock());
 		if (nodeAstate.getBlock() instanceof IConduitConnector nodeAconnector && nodeBstate.getBlock() instanceof IConduitConnector nodeBconnector) {

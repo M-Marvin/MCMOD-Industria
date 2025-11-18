@@ -1,0 +1,30 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"render_type": "cutout",
+	"atlas": "industriacore:textures/atlas/conduits.png",
+	"textures": {
+		"1": "industriacore:chain_test",
+		"particle": "industriacore:chain_test"
+	},
+	"elements": [
+		{
+			"from": [8, 6.5, 0],
+			"to": [8, 9.5, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 7.5, 0]},
+			"faces": {
+				"east": {"uv": [3, 0, 6, 16], "rotation": 90, "texture": "#1"},
+				"west": {"uv": [3, 16, 6, 0], "rotation": 90, "texture": "#1"}
+			}
+		},
+		{
+			"from": [6.5, 8, 0],
+			"to": [9.5, 8, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [6.5, 7, 0]},
+			"faces": {
+				"up": {"uv": [0, 0, 3, 16], "texture": "#1"},
+				"down": {"uv": [0, 16, 3, 0], "texture": "#1"}
+			}
+		}
+	]
+}

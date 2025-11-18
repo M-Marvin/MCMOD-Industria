@@ -34,29 +34,29 @@ public class ElectricComponentRenderer {
 	public static void onWorldRender(RenderLevelStageEvent event) {
 
 		if (event.getStage() == Stage.AFTER_PARTICLES) {
-			
-			animationTicks = event.getRenderTick() + event.getPartialTick();
-			
-			BufferSource source = Minecraft.getInstance().renderBuffers().bufferSource();
-			PoseStack matrixStack = event.getPoseStack();
-			ClientLevel level = Minecraft.getInstance().level;
-			
-			RenderSystem.enableDepthTest();
-			
-			Vec3 offset = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
-			matrixStack.pushPose();
-			matrixStack.translate(-offset.x, -offset.y, -offset.z);
-			
+
 			if (Minecraft.getInstance().getEntityRenderDispatcher().shouldRenderHitBoxes()) {
+					
+				animationTicks = event.getRenderTick() + event.getPartialTick();
+				
+				BufferSource source = Minecraft.getInstance().renderBuffers().bufferSource();
+				PoseStack matrixStack = event.getPoseStack();
+				ClientLevel level = Minecraft.getInstance().level;
+				
+				RenderSystem.enableDepthTest();
+				
+				Vec3 offset = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+				matrixStack.pushPose();
+				matrixStack.translate(-offset.x, -offset.y, -offset.z);
 				
 				drawDebugFrames(matrixStack, source, level, event.getPartialTick());
-				
+					
+				source.endBatch();
+				matrixStack.popPose();
+					
+				RenderSystem.disableDepthTest();
+
 			}
-			
-			source.endBatch();
-			matrixStack.popPose();
-			
-			RenderSystem.disableDepthTest();
 			
 		}
 		

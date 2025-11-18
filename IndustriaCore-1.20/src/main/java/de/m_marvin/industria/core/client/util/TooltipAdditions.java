@@ -120,7 +120,7 @@ public class TooltipAdditions {
 		}
 		
 		addTooltip(tooltips, Component.translatable("industriacore.tooltip.conduit.name", Formatter.build().appand(conduit.getName()).withStyle(color).component()));
-		addTooltip(tooltips, Component.translatable("industriacore.tooltip.conduit.maxClampDistance", conduit.getConduitType().getClampingLength()));
+		addTooltip(tooltips, Component.translatable("industriacore.tooltip.conduit.maxClampDistance", conduit.getClampingLength()));
 		
 		if (conduit instanceof ElectricConduit electricConduit) {
 			addTooltip(tooltips, Component.translatable("industriacore.tooltip.electricconduit.resistance", electricConduit.getResistancePerBlock()));

@@ -2,7 +2,7 @@ package de.m_marvin.industria.core.client.conduits;
 
 import de.m_marvin.industria.core.client.registries.ParticleRenderTypes;
 import de.m_marvin.industria.core.conduits.engine.particles.ConduitParticleOption;
-import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
+import de.m_marvin.industria.core.conduits.types.ConduitState;
 import de.m_marvin.univec.impl.Vec2f;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
@@ -17,17 +17,19 @@ public class ConduitBreakParticle extends SingleQuadParticle {
 	private final Vec2f uv0;
 	private final Vec2f uv1;
 	
-	public ConduitBreakParticle(ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed, Conduit conduit) {
+	@SuppressWarnings("deprecation")
+	public ConduitBreakParticle(ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed, ConduitState conduit) {
 		super(pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed);
 		this.gravity = 1.0F;
 		
-		this.sprite = ConduitTextureManager.getInstance().get(conduit);
-		
-		float particleSize = random.nextFloat() * conduit.getConduitType().getThickness();
-		float particleWidth = particleSize / ConduitTextureManager.TEXTURE_MAP_HEIGHT;
-		float particleHeight = particleSize / ConduitTextureManager.TEXTURE_MAP_HEIGHT;
+		this.sprite = ConduitModelManager.getModel(conduit).getParticleIcon();
+		// TODO
+		float thikness = conduit.getConduit().getThickness() * 16F;
+		float particleSize = random.nextFloat() * thikness;
+		float particleWidth = particleSize / 16F;
+		float particleHeight = particleSize / 16F;
 		float particleU0 = random.nextFloat() * (1 - particleWidth);
-		float particleV0 = random.nextFloat() * ((conduit.getConduitType().getThickness() * 4F / ConduitTextureManager.TEXTURE_MAP_HEIGHT) - particleHeight);
+		float particleV0 = random.nextFloat() * ((thikness * 4F / 16F) - particleHeight);
 		
 		this.quadSize = particleSize / 16F;
 		this.uv0 = new Vec2f(

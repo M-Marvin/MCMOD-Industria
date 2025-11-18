@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalInt;
 
-import javax.annotation.Nullable;
-
 import org.joml.Vector3d;
 import org.valkyrienskies.core.apigame.constraints.VSConstraint;
 import org.valkyrienskies.core.apigame.constraints.VSRopeConstraint;
@@ -13,11 +11,13 @@ import org.valkyrienskies.core.apigame.constraints.VSRopeConstraint;
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.engine.particles.ConduitParticleOption;
+import de.m_marvin.industria.core.conduits.types.ConduitBehavior;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitNode.NodeType;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
-import de.m_marvin.industria.core.conduits.types.ConduitType;
+import de.m_marvin.industria.core.conduits.types.ConduitState;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
+import de.m_marvin.industria.core.conduits.types.items.AbstractConduitItem;
 import de.m_marvin.industria.core.contraptions.ContraptionUtility;
 import de.m_marvin.industria.core.contraptions.engine.types.contraption.ServerContraption;
 import de.m_marvin.industria.core.registries.Conduits;
@@ -27,7 +27,6 @@ import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.NBTUtility;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -43,53 +42,122 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class Conduit {
+public class Conduit extends ConduitBehavior implements ItemLike {
 
 	public static final int BLOCKS_PER_WIRE_ITEM = 2;
 	
-	private ConduitType conduitType;
+	private final StateDefinition<Conduit, ConduitState> stateDefinition;
+	private final ConduitState defaultConduitState;
 	private Item item;
-	private ResourceLocation texture;
-	private SoundType soundType;
-	private NodeType[] validNodeTypes;
 	
-	public Conduit(ConduitType type, Item item, ResourceLocation texture, SoundType sound, NodeType... validNodeTypes) {
-		this.conduitType = type;
-		this.item = item;
-		this.texture = texture;
-		this.soundType = sound;
-		this.validNodeTypes = validNodeTypes;
+	public Conduit(ConduitBehavior.Properties properties) {
+		super(properties);
+		
+		StateDefinition.Builder<Conduit, ConduitState> builder = new StateDefinition.Builder<Conduit, ConduitState>(this);
+		this.createStateDefinition(builder);
+		this.stateDefinition = builder.create(Conduit::defaultConduitState, ConduitState::new);
+		this.defaultConduitState = this.stateDefinition.any();
+	}
+
+	public StateDefinition<Conduit, ConduitState> getStateDefinition() {
+		return this.stateDefinition;
 	}
 	
-	public void appendHoverText(List<Component> tooltip, TooltipFlag flags) {}
-	
-	public SoundType getSoundType() {
-		return soundType;
+	public float getNodeMass(ConduitState state, ConduitEntity conduitEntity) {
+		return getNodeMass();
 	}
 	
-	public ConduitType getConduitType() {
-		return conduitType;
+	public float getStiffness(ConduitState state, ConduitEntity conduitEntity) {
+		return getStiffness();
 	}
 	
-	public ResourceLocation getTexture() {
-		return texture;
+	public int getClampingLength(ConduitState state, ConduitEntity conduitEntity) {
+		return getClampingLength();
 	}
 	
-	public Item getItem() {
+	public float getThickness(ConduitState state, ConduitEntity conduitEntity) {
+		return getThickness();
+	}
+	
+	public float getSegmentLength(ConduitState state, ConduitEntity conduitEntity) {
+		return getSegmentLength();
+	}
+	
+	public double getConstraintCompensation(ConduitState state, ConduitEntity conduitEntitiy) {
+		return getConstraintCompensation();
+	}
+
+	public double getConstraintForce(ConduitState state, ConduitEntity conduitEntitiy) {
+		return getConstraintForce();
+	}
+	
+	public SoundType getSoundType(ConduitState state, ConduitEntity conduitEntity) {
+		return getSoundType();
+	}
+	
+	public NodeType[] getValidNodeTypes(ConduitState state, ConduitEntity conduitEntity) {
+		return getValidNodeTypes();
+	}
+
+	public ConduitEntity newConduitEntity(ConduitPos position, float length) {
+		 return new ConduitEntity(position, length);
+	}
+
+	public Component getName() {
+		ResourceLocation conduitKey = Conduits.CONDUITS_REGISTRY.get().getKey(this);
+		return Component.translatable("conduit." + conduitKey.getNamespace() + "." + conduitKey.getPath());
+	}
+
+	@Override
+	public String toString() {
+		ResourceLocation conduitKey = Conduits.CONDUITS_REGISTRY.get().getKey(this);
+		return "Conduit{" + conduitKey.toString() + "}";
+	}
+	
+	protected void createStateDefinition(StateDefinition.Builder<Conduit, ConduitState> builder) {}
+
+	public final ConduitState defaultConduitState() {
+		return this.defaultConduitState;
+	}
+	
+	@Override
+	public Item asItem() {
+		if (this.item == null) {
+			this.item = AbstractConduitItem.byConduit(this);
+		}
 		return this.item;
 	}
+
+	public void appendHoverText(List<Component> tooltip, TooltipFlag flags) {}
 	
-	public int getColorAt(ClientLevel level, Vec3d nodePos, ConduitEntity conduitEntity) {
-		return 0xFFFFFFFF;
+	@SuppressWarnings("deprecation")
+	public List<ItemStack> getDrops(ConduitState state, ConduitEntity conduitEntity) {
+		Level level = conduitEntity.getLevel();
+		int conduitCost = (int) Math.ceil(conduitEntity.getLength() / (float) BLOCKS_PER_WIRE_ITEM);
+		Item conduitItem = asItem();
+		if (conduitItem == null) return List.of();
+		int stacks = level.getRandom().nextIntBetweenInclusive(conduitCost / conduitItem.getMaxStackSize() + 1, conduitCost);
+		List<ItemStack> drops = new ArrayList<ItemStack>();
+		for (int i = 1; i <= stacks; i++) {
+			int maxCount = Math.min(conduitItem.getMaxStackSize(), conduitCost - (stacks - i));
+			int minCount = Math.max(1, conduitCost - (stacks - i) * conduitItem.getMaxStackSize());
+			int count = level.getRandom().nextIntBetweenInclusive(minCount, maxCount);
+			conduitCost -= count;
+			drops.add(new ItemStack(conduitItem, count));
+		}
+		return drops;
 	}
 	
-	public void onNodeStateChange(Level level, BlockPos nodePos, BlockState nodeState, ConduitEntity conduitEntity) {
+	public void onNodeStateChange(BlockPos nodePos, BlockState nodeState, ConduitState state, ConduitEntity conduitEntity) {
+		Level level = conduitEntity.getLevel();
 		if (nodeState.getBlock() instanceof IConduitConnector) {
 			int nodeId = conduitEntity.getPosition().getNodeApos().equals(nodePos) ? conduitEntity.getPosition().getNodeAid() : conduitEntity.getPosition().getNodeBid();
 			if (((IConduitConnector) nodeState.getBlock()).getConduitNodes(level, nodePos, nodeState).length <= nodeId) {
@@ -100,233 +168,131 @@ public class Conduit {
 		}
 	}
 	
-	public void onDismantle(@Nullable Level level, ConduitPos position, ConduitEntity conduitEntity) {}
-	public void onBuild(@Nullable Level level, ConduitPos position, ConduitEntity conduitEntity) {}
+	public void onDismantle(ConduitState state, ConduitEntity conduitEntity) {}
+	public void onBuild(ConduitState state, ConduitEntity conduitEntity) {}
 	
-	public void onPlace(Level level, ConduitPos position, ConduitEntity conduitEntity) {
-		
+	public ConduitState beforePlace(Level level, BlockPos nodePosA, BlockPos nodePosB, float length) {
+		return defaultConduitState();
+	}
+	
+	public void onPlace(ConduitState state, ConduitEntity conduitEntity) {
+		Level level = conduitEntity.getLevel();
 		Vec3d nodeA = Vec3d.fromVec(ContraptionUtility.ensureWorldBlockCoordinates(level, conduitEntity.getPosition().getNodeApos(), conduitEntity.getPosition().getNodeApos()));
 		Vec3d nodeB = Vec3d.fromVec(ContraptionUtility.ensureWorldBlockCoordinates(level, conduitEntity.getPosition().getNodeBpos(), conduitEntity.getPosition().getNodeBpos()));
 		Vec3d middle = nodeA.sub(nodeB).mul(0.5).add(nodeB);
-		
-		level.playLocalSound(middle.x, middle.y, middle.z, this.getSoundType().getBreakSound(), SoundSource.BLOCKS, this.getSoundType().getVolume(), this.getSoundType().getPitch(), false);
-		
+		SoundType soundType = state.getSoundType(conduitEntity);
+		level.playLocalSound(middle.x, middle.y, middle.z, soundType.getBreakSound(), SoundSource.BLOCKS, soundType.getVolume(), soundType.getPitch(), false);
 	}
 	
-	public void onBreak(Level level, ConduitPos position, ConduitEntity conduitEntity, boolean dropItems) {
-		
+	public void onBreak(ConduitState state, ConduitEntity conduitEntity, boolean dropItems) {
+
+		Level level = conduitEntity.getLevel();
 		Vec3d nodeA = Vec3d.fromVec(ContraptionUtility.ensureWorldBlockCoordinates(level, conduitEntity.getPosition().getNodeApos(), conduitEntity.getPosition().getNodeApos()));
 		Vec3d nodeB = Vec3d.fromVec(ContraptionUtility.ensureWorldBlockCoordinates(level, conduitEntity.getPosition().getNodeBpos(), conduitEntity.getPosition().getNodeBpos()));
 		Vec3d middle = nodeA.sub(nodeB).mul(0.5).add(nodeB);
 		Vec3d nodeOrigin = MathUtility.getMinCorner(nodeA, nodeB);
 		
-		if (dropItems && !level.isClientSide() && getItem() != null) {
-			int wireCost = (int) Math.ceil(conduitEntity.getLength() / (float) BLOCKS_PER_WIRE_ITEM);
-			for (int i = 0; i < wireCost; i++) {
-				if (level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS))
-					GameUtility.dropItem(level, new ItemStack(getItem()), Vec3f.fromVec(middle).add(new Vec3f(0.5F, 0.5F, 0.5F)), 0.5F, 0.1F);
+		if (dropItems && !level.isClientSide() && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
+			List<ItemStack> drops = state.getDrops(conduitEntity);
+			for (int i = 0; i < drops.size(); i++) {
+				Vec3f position = new Vec3f(nodeA.add(nodeB.sub(nodeA).mul(i / (double) drops.size())));
+				GameUtility.dropItem(level, drops.get(i), position, 0.5F, 0.1F);
 			}
 		}
 		
-		if (dropItems)
-			level.playLocalSound(middle.x, middle.y, middle.z, this.getSoundType().getBreakSound(), SoundSource.BLOCKS, this.getSoundType().getVolume(), this.getSoundType().getPitch(), false);
+		level.playLocalSound(middle.x, middle.y, middle.z, this.getSoundType().getBreakSound(), SoundSource.BLOCKS, this.getSoundType().getVolume(), this.getSoundType().getPitch(), false);
 		
-		if (!level.isClientSide() && dropItems) {
+		if (!level.isClientSide()) {
 			for (Vec3d node : conduitEntity.getShape().nodes) {
-				((ServerLevel) level).sendParticles(new ConduitParticleOption(ParticleTypes.CONDUIT.get(), conduitEntity.getConduit()), node.x + nodeOrigin.x, node.y + nodeOrigin.y, node.z + nodeOrigin.z, 10, 0.2F, 0.2F, 0.2F, 1);
+				((ServerLevel) level).sendParticles(new ConduitParticleOption(ParticleTypes.CONDUIT.get(), state), node.x + nodeOrigin.x, node.y + nodeOrigin.y, node.z + nodeOrigin.z, 10, 0.2F, 0.2F, 0.2F, 1);
 			}
 		}
 		
 	}
 	
-	public void dismantleShape(Level level, ConduitEntity conduit) {
+	public void dismantleShape(ConduitState state, ConduitEntity conduit) {
 		
-		ConduitShape shape = conduit.getShape();
- 		if (shape.constraint.isPresent() && !level.isClientSide()) ContraptionUtility.removeConstraint(level, shape.constraint.getAsInt());
+ 		if (conduit.getShape().constraint.isPresent() && !conduit.getLevel().isClientSide())
+ 			ContraptionUtility.removeConstraint(conduit.getLevel(), conduit.getShape().constraint.getAsInt());
 		
 	}
 	
-	public ConduitShape buildShape(Level level, ConduitEntity conduit) {
+	public ConduitShape buildShape(ConduitState state, ConduitEntity conduitEntity) {
 		
-		Vec3d pointStart = conduit.getPosition().calculateWorldNodeA(level);
-		Vec3d pointEnd = conduit.getPosition().calculateWorldNodeB(level);
+		Level level = conduitEntity.getLevel();
+		Vec3d pointStart = conduitEntity.getPosition().calculateWorldNodeA(level);
+		Vec3d pointEnd = conduitEntity.getPosition().calculateWorldNodeB(level);
 		Vec3d origin = new Vec3d(Math.min(pointStart.x, pointEnd.x), Math.min(pointStart.y, pointEnd.y), Math.min(pointStart.z, pointEnd.z)).sub(0.5, 0.5, 0.5);
 		pointStart.subI(origin);
 		pointEnd.subI(origin);
-		
-		ConduitShape shape = conduit.getShape();
-		
-		if (shape == null) {
 
-			int nodesPerBlock = conduit.getNodeCount();
+		float segmentLength = state.getSegmentLength(conduitEntity);
+		Vec3d connectionVec = pointEnd.copy().sub(pointStart);
+		Double spanDistance = connectionVec.length();
+		int segmentCount = (int) Math.round(conduitEntity.getLength() / segmentLength);
+		segmentLength = conduitEntity.getLength() / segmentCount;
+		double segmentPlacementLength = spanDistance / segmentCount;
+		connectionVec.normalizeI();
+		
+		List<Vec3d> nodes = new ArrayList<>();
+		for (int i = 0; i <= segmentCount; i++)
+			nodes.add(connectionVec.mul(segmentPlacementLength * i).add(pointStart));
+		
+		ConduitShape shape = ConduitShape.construct(nodes, segmentLength);
+		
+		if (!conduitEntity.getLevel().isClientSide()) {
+			shape.contraptionA = ContraptionUtility.getContraptionOfBlock(level, conduitEntity.getPosition().getNodeApos());
+			shape.contraptionB = ContraptionUtility.getContraptionOfBlock(level, conduitEntity.getPosition().getNodeBpos());
+			long contraptionIdA = shape.contraptionA == null ? ContraptionUtility.getGroundBodyId(level) : shape.contraptionA.getId();
+			long contraptionIdB = shape.contraptionB == null ? ContraptionUtility.getGroundBodyId(level) : shape.contraptionB.getId();
 			
-			Vec3d connectionVec = pointEnd.copy().sub(pointStart);
-			double spanDistance = connectionVec.length();
-			double cornerSegments = conduit.getLength() * nodesPerBlock;
-			double beamLength = conduit.getLength() / (cornerSegments + 1);
-			double beamPlacementLength = spanDistance / (cornerSegments + 1);
-			connectionVec.normalizeI();
-			
-			List<Vec3d> nodes = new ArrayList<>();
-			nodes.add(pointStart);
-			for (int i = 1; i <= cornerSegments; i++) {
-				nodes.add(connectionVec.mul(beamPlacementLength * i).add(pointStart));
-			}
-			nodes.add(pointEnd);
-			
-			shape = new ConduitShape(nodes, beamLength);
-			
+			double comp = state.getConstraintCompensation(conduitEntity);
+			double force = state.getConstraintForce(conduitEntity);
+			Vec3d contraptionNodePosA = conduitEntity.getPosition().calculateContraptionNodeA(level);
+			Vec3d contraptionNodePosB = conduitEntity.getPosition().calculateContraptionNodeB(level);
+			VSConstraint constraint = new VSRopeConstraint(contraptionIdA, contraptionIdB, comp, contraptionNodePosA.writeTo(new Vector3d()), contraptionNodePosB.writeTo(new Vector3d()), force, conduitEntity.getLength());
+				shape.constraint = OptionalInt.of(ContraptionUtility.addConstraint(level, constraint));
 		}
 		
-	  	return shape;
+		return shape;
 		
 	}
 	
-	public void updatePhysicalNodes(Level level, ConduitEntity conduit) {
-		ConduitShape shape = conduit.getShape();
+	public void updateShape(ConduitState state, ConduitEntity conduit) {
+		
+		Level level = conduit.getLevel();
 		BlockPos nodeApos = conduit.getPosition().getNodeApos();
 		BlockState nodeAstate = level.getBlockState(nodeApos);
 		BlockPos nodeBpos = conduit.getPosition().getNodeBpos();
 		BlockState nodeBstate = level.getBlockState(nodeBpos);
-		
+
 		if ((nodeAstate.getBlock() instanceof IConduitConnector && nodeBstate.getBlock() instanceof IConduitConnector)) {
 			
 			ConduitNode nodeA = ((IConduitConnector) nodeAstate.getBlock()).getConduitNode(level, nodeApos, nodeAstate, conduit.getPosition().getNodeAid());
 			ConduitNode nodeB = ((IConduitConnector) nodeBstate.getBlock()).getConduitNode(level, nodeBpos, nodeBstate, conduit.getPosition().getNodeBid());
+			
 			if (nodeA == null || nodeB == null) {
 				IndustriaCore.LOGGER.warn("Invalid conduit at " + nodeApos + " - " + nodeBpos);
 				return;
 			}
-			Vec3d pointStart = nodeA.getWorldPosition(level, nodeApos);
-			Vec3d pointEnd = nodeB.getWorldPosition(level, nodeBpos);
-			Vec3d origin = new Vec3d(Math.min(pointStart.x, pointEnd.x), Math.min(pointStart.y, pointEnd.y), Math.min(pointStart.z, pointEnd.z)).sub(0.5, 0.5, 0.5);
-			pointStart.subI(origin);
-			pointEnd.subI(origin);
 			
-			if (shape != null) {
-								
-				// Integrate nodes
-				for (int i = 0; i < shape.nodes.length - 0; i++) {
-					Vec3d temp = shape.nodes[i].copy();
-					shape.nodes[i].addI(shape.nodes[i].copy().sub(shape.lastPos[i]));
-					shape.lastPos[i] = temp;
-				}
-				
-				for (int itteration = 1; itteration <= 10; itteration++) {
-	
-					// Solve beams
-					for (int i = 1; i < shape.nodes.length; i++) {
-						
-						Vec3d node1 = shape.nodes[i];
-						Vec3d node2 = shape.nodes[i - 1];
-						
-						// Calculate spring deformation
-						//double constraintCompensation = pointStart.dist(pointEnd) / conduit.getLength()* 0.3F;
-						Vec3d delta = node1.sub(node2);
-						double deltalength = delta.length(); // Math.sqrt(delta.dot(delta));
-						double diff = (float) ((deltalength - shape.beamLength) / deltalength);
-						
-						// Reform spring
-						double stiffness = conduit.getConduit().getConduitType().getStiffness();
-						//double stiffnessLinear = (float) (1 - Math.pow((1 - stiffness), 1 / itteration)); 
-						node2.addI(delta.copy().mul(diff * 0.5).mul(stiffness));
-						node1.subI(delta.copy().mul(diff * 0.5).mul(stiffness));
-						
-					}
-					
-				}
-				
-				// Accumulate gravity
-				for (int i = 1; i < shape.nodes.length - 1; i++) {
-					shape.lastPos[i].addI(GameUtility.getWorldGravity(level).copy().mul(conduit.getConduit().getConduitType().getNodeMass()));
-				}
-				
-				// Solve collision
-				for (int i = 1; i < shape.nodes.length - 1; i++) {
-					
-					Vec3d nodePos = shape.nodes[i].copy().add(Vec3f.fromVec(origin));
-					BlockPos nodeBlockPos = MathUtility.toBlockPos(nodePos);
-					
-					if (!nodeBlockPos.equals(conduit.getPosition().getNodeApos()) && !nodeBlockPos.equals(conduit.getPosition().getNodeBpos())) {
-						
-						VoxelShape collisionShape = level.getBlockState(nodeBlockPos).getCollisionShape(level, nodeBlockPos);
-						
-						if (!collisionShape.isEmpty()) {
-							
-							AABB bounds = collisionShape.bounds().move(nodeBlockPos);
-							
-							Vec3d surface = nodePos.copy();
-							double dist = 1;
-							
-							for (Direction d :
-								Direction.values()) {
-								
-								Vec3d surfacePoint = nodePos.copy();
-								if (d.getAxis() == Axis.X && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.x = (float) bounds.maxX;
-								if (d.getAxis() == Axis.X && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.x = (float) bounds.minX;
-								if (d.getAxis() == Axis.Y && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.y = (float) bounds.maxY;
-								if (d.getAxis() == Axis.Y && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.y = (float) bounds.minY;
-								if (d.getAxis() == Axis.Z && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.z = (float) bounds.maxZ;
-								if (d.getAxis() == Axis.Z && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.z = (float) bounds.minZ;
-								
-								double distance = nodePos.copy().sub(surfacePoint).length();
-								
-								if (distance < dist && distance > 0) {
-									dist = distance;
-									surface = surfacePoint;
-								}
-								
-							}
-							
-							if (dist == 1F) surface.z = (float) bounds.maxZ;
-							
-							surface.subI(Vec3f.fromVec(origin));
-							
-							shape.nodes[i].setI(surface.x, surface.y, surface.z);
-	 						shape.lastPos[i] = shape.nodes[i];
-							
-						}
-						
-					}
-					
-				}
-				
-				// Re-Attach nodes to conduit ends
-				shape.nodes[0].setI(pointStart);
-				shape.nodes[shape.nodes.length - 1].setI(pointEnd);
-				
-				// Update temporary fields
-				shape.shapeNodeA = shape.nodes[0].add(origin);
-				shape.shapeNodeB = shape.nodes[shape.nodes.length - 1].add(origin);
-				shape.contraptionNodeA = conduit.getPosition().calculateContraptionNodeA(level);
-				shape.contraptionNodeB = conduit.getPosition().calculateContraptionNodeB(level);
-				
-				// Create constraint if not already existing
-				if (!level.isClientSide() && shape.constraint.isEmpty()) {
-					
-					shape.contraptionA = ContraptionUtility.getContraptionOfBlock(level, nodeApos);
-					shape.contraptionB = ContraptionUtility.getContraptionOfBlock(level, nodeBpos);
-					
-					long contraptionIdA = shape.contraptionA == null ? ContraptionUtility.getGroundBodyId(level) : shape.contraptionA.getId();
-					long contraptionIdB = shape.contraptionB == null ? ContraptionUtility.getGroundBodyId(level) : shape.contraptionB.getId();
-					
-					double comp = 1e-10;
-					double force = 1e10;
-					VSConstraint constraint = new VSRopeConstraint(contraptionIdA, contraptionIdB, comp, shape.contraptionNodeA.writeTo(new Vector3d()), shape.contraptionNodeB.writeTo(new Vector3d()), force, conduit.getLength() + 1);
- 					shape.constraint = OptionalInt.of(ContraptionUtility.addConstraint(level, constraint));
-					
-				}
-				
-			}
+			// update the world position of the start and end point in the shape data
+			conduit.getShape().shapeNodeA = nodeA.getWorldPosition(level, nodeApos);
+			conduit.getShape().shapeNodeB = nodeB.getWorldPosition(level, nodeBpos);
+			conduit.getShape().contraptionNodeA = nodeA.getContraptionPosition(nodeApos);
+			conduit.getShape().contraptionNodeB = nodeB.getContraptionPosition(nodeBpos);
 			
 		}
+		
+		conduit.getShape().stepPhysics(state, conduit);
 		
 	}
 	
 	public static class ConduitShape {
+		public int breakingPoint;
 		public Vec3d[] nodes;
 		public Vec3d[] lastPos;
-		public double beamLength;
+		public double segmentLength;
 		
 		// Temporary data that gets not saved
 		public OptionalInt constraint = OptionalInt.empty();
@@ -337,36 +303,38 @@ public class Conduit {
 		public Vec3d shapeNodeA = new Vec3d();
 		public Vec3d shapeNodeB = new Vec3d();
 		
-		public ConduitShape(List<Vec3d> nodes, double beamLength) {
-			this.nodes = nodes.toArray(new Vec3d[] {});
-			this.lastPos = nodes.toArray(new Vec3d[] {});
-			this.beamLength = beamLength;
-		}
+		private ConduitShape() {}
 		
-		public ConduitShape(Vec3d[] nodes, Vec3d[] lastPos, double beamLength) {
-			this.nodes = nodes;
-			this.lastPos = lastPos;
-			this.beamLength = beamLength;
+		public static ConduitShape construct(List<Vec3d> nodes, double segmentLength) {
+			ConduitShape shape = new ConduitShape();
+			shape.nodes = nodes.toArray(Vec3d[]::new);
+			shape.lastPos = nodes.toArray(Vec3d[]::new);
+			shape.segmentLength = segmentLength;
+			shape.breakingPoint = -1;
+			return shape;
 		}
 		
 		public static ConduitShape load(CompoundTag tag) {
-			double beamLength = tag.getDouble("SegmentLength");
+			ConduitShape shape = new ConduitShape();
+			shape.segmentLength = tag.getDouble("SegmentLength");
+			shape.breakingPoint = tag.getInt("BreakingPoint");
 			ListTag nodesTag = tag.getList("Nodes", 10);
 			if (nodesTag == null) return null;
-			Vec3d[] nodes = new Vec3d[nodesTag.size()];
-			Vec3d[] lastPos = new Vec3d[nodesTag.size()];
-			for (int i = 0; i < nodes.length; i++) {
+			shape.lastPos = new Vec3d[nodesTag.size()];
+			shape.nodes = new Vec3d[nodesTag.size()];
+			for (int i = 0; i < shape.nodes.length; i++) {
 				CompoundTag nodeTag = nodesTag.getCompound(i);
-				lastPos[i] = NBTUtility.loadVector3d(nodeTag.getCompound("LastPos"));
-				nodes[i] = NBTUtility.loadVector3d(nodeTag.getCompound("Node"));
+				shape.lastPos[i] = NBTUtility.loadVector3d(nodeTag.getCompound("LastPos"));
+				shape.nodes[i] = NBTUtility.loadVector3d(nodeTag.getCompound("Node"));
 			}
-			if (nodes.length < 3) return null;
-			return new ConduitShape(nodes, lastPos, beamLength);
+			if (shape.lastPos.length < 3) return null;
+			return shape;
 		}
 		
 		public CompoundTag save() {
 			CompoundTag tag = new CompoundTag();
-			tag.putDouble("SegmentLength", this.beamLength);
+			tag.putDouble("SegmentLength", this.segmentLength);
+			tag.putInt("BreakingPoint", this.breakingPoint);
 			ListTag nodes = new ListTag();
 			for (int i = 0; i < this.nodes.length; i++) {
 				CompoundTag nodeTag = new CompoundTag();
@@ -379,7 +347,8 @@ public class Conduit {
 		}
 		
 		public void readUpdateData(FriendlyByteBuf buff) {
-			this.beamLength = buff.readDouble();
+			this.segmentLength = buff.readDouble();
+			this.breakingPoint = buff.readInt();
 			int nodeCount = buff.readInt();
 			if (this.nodes == null || nodeCount != this.nodes.length) {
 				this.nodes = new Vec3d[nodeCount];
@@ -392,7 +361,8 @@ public class Conduit {
 		}
 		
 		public void writeUpdateData(FriendlyByteBuf buff) {
-			buff.writeDouble(beamLength);
+			buff.writeDouble(this.segmentLength);
+			buff.writeInt(this.breakingPoint);
 			buff.writeInt(this.nodes.length);
 			for (int i = 0; i < this.nodes.length; i++) {
 				NBTUtility.writeVector3d(this.nodes[i], buff);
@@ -400,25 +370,110 @@ public class Conduit {
 			}
 		}
 		
-	}
-
-	public ConduitEntity newConduitEntity(ConduitPos position, Conduit conduit, double length) {
-		 return new ConduitEntity(position, conduit, length);
-	}
-
-	public Component getName() {
-		ResourceLocation conduitKey = Conduits.CONDUITS_REGISTRY.get().getKey(this);
-		return Component.translatable("conduit." + conduitKey.getNamespace() + "." + conduitKey.getPath());
-	}
-
-	public NodeType[] getValidNodeTypes() {
-		return this.validNodeTypes;
-	}
+		public void stepPhysics(ConduitState state, ConduitEntity conduitEntity) {
+			
+			Level level = conduitEntity.getLevel();
+			double stiffness = state.getStiffness(conduitEntity);
+			double nodeMass = state.getNodeMass(conduitEntity);
 	
-	@Override
-	public String toString() {
-		ResourceLocation conduitKey = Conduits.CONDUITS_REGISTRY.get().getKey(this);
-		return "Conduit{" + conduitKey.toString() + "}";
+			Vec3d pointStart = this.shapeNodeA;
+			Vec3d pointEnd = this.shapeNodeB;
+			Vec3d origin = new Vec3d(Math.min(pointStart.x, pointEnd.x), Math.min(pointStart.y, pointEnd.y), Math.min(pointStart.z, pointEnd.z)).sub(0.5, 0.5, 0.5);
+			pointStart.subI(origin);
+			pointEnd.subI(origin);
+			
+			// Integrate nodes
+			for (int i = 0; i < this.nodes.length - 0; i++) {
+				Vec3d temp = this.nodes[i].copy();
+				this.nodes[i].addI(this.nodes[i].copy().sub(this.lastPos[i]));
+				this.lastPos[i] = temp;
+			}
+			
+			for (int itteration = 1; itteration <= 10; itteration++) {
+
+				// Solve beams
+				for (int i = 1; i < this.nodes.length; i++) {
+					
+					Vec3d node1 = this.nodes[i];
+					Vec3d node2 = this.nodes[i - 1];
+					
+					// Calculate spring deformation
+					//double constraintCompensation = pointStart.dist(pointEnd) / conduit.getLength()* 0.3F;
+					Vec3d delta = node1.sub(node2);
+					double deltalength = delta.length(); // Math.sqrt(delta.dot(delta));
+					double diff = (float) ((deltalength - this.segmentLength) / deltalength);
+					
+					// Reform spring
+					//double stiffnessLinear = (float) (1 - Math.pow((1 - stiffness), 1 / itteration)); 
+					node2.addI(delta.mul(diff * 0.5).mul(stiffness));
+					node1.subI(delta.mul(diff * 0.5).mul(stiffness));
+					
+				}
+				
+			}
+
+			// Re-Attach first and last node
+			this.nodes[0].setI(pointStart);
+			this.nodes[this.nodes.length - 1].setI(pointEnd);
+			
+			// Accumulate gravity
+			for (int i = 1; i < this.nodes.length - 1; i++) {
+				this.lastPos[i].addI(new Vec3d(GameUtility.getWorldGravity(level)).mul(nodeMass));
+			}
+			
+			// Solve collision
+			for (int i = 1; i < this.nodes.length - 1; i++) {
+
+				Vec3d nodePos = this.nodes[i].copy().add(Vec3f.fromVec(origin));
+				BlockPos nodeBlockPos = MathUtility.toBlockPos(nodePos);
+				
+				if (!nodeBlockPos.equals(conduitEntity.getPosition().getNodeApos()) && !nodeBlockPos.equals(conduitEntity.getPosition().getNodeBpos())) {
+					
+					VoxelShape collisionShape = level.getBlockState(nodeBlockPos).getCollisionShape(level, nodeBlockPos);
+					
+					if (!collisionShape.isEmpty()) {
+						
+						AABB bounds = collisionShape.bounds().move(nodeBlockPos);
+						
+						Vec3d surface = nodePos.copy();
+						double dist = 1;
+						
+						// find closest point outside of the blocks bounds, which is not inside an another solid block
+						for (Direction d : Direction.values()) {
+							
+							Vec3d surfacePoint = nodePos.copy();
+							if (d.getAxis() == Axis.X && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.x = (float) bounds.maxX;
+							if (d.getAxis() == Axis.X && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.x = (float) bounds.minX;
+							if (d.getAxis() == Axis.Y && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.y = (float) bounds.maxY;
+							if (d.getAxis() == Axis.Y && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.y = (float) bounds.minY;
+							if (d.getAxis() == Axis.Z && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.z = (float) bounds.maxZ;
+							if (d.getAxis() == Axis.Z && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.z = (float) bounds.minZ;
+							
+							double distance = nodePos.copy().sub(surfacePoint).length();
+							
+							if (distance < dist && distance > 0) {
+								dist = distance;
+								surface = surfacePoint;
+							}
+							
+						}
+						
+						// if the block was completely surrounded, just move up
+						if (dist == 1) surface.z = (float) bounds.maxZ;
+						
+						surface.subI(Vec3f.fromVec(origin));
+						
+						this.nodes[i].setI(surface.x, surface.y, surface.z);
+						this.lastPos[i] = this.nodes[i];
+						
+					}
+					
+				}
+				
+			}
+			
+		}
+		
 	}
 	
 }

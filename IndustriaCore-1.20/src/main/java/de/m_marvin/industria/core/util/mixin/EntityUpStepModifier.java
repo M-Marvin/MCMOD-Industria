@@ -1,8 +1,10 @@
 package de.m_marvin.industria.core.util.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import de.m_marvin.industria.core.compound.types.blocks.CompoundBlock;
 import de.m_marvin.industria.core.registries.Tags;
@@ -22,10 +24,12 @@ public abstract class EntityUpStepModifier {
 	@Shadow
 	public abstract BlockPos getOnPosLegacy();
 	
-	@Overwrite
-	public float maxUpStep() {
-		// FIXME [VS2dep] entity up step tags on contraptions (Block#stepOn not working)
-		return CompoundBlock.performOnAllAndCombine(level(), getOnPosLegacy(), 
+	@Inject(
+			method = "maxUpStep()F",
+			at = @At("HEAD")
+	)
+	public void maxUpStepModified(CallbackInfoReturnable<Float> callback) {
+		float modifiedUpStep = CompoundBlock.performOnAllAndCombine(level(), getOnPosLegacy(), 
 				() -> {
 					BlockState stepOnState = level().getBlockState(getOnPosLegacy());
 					if (stepOnState.is(Tags.Blocks.ENTITY_UP_STEP_ONE_BLOCK)) {
@@ -45,7 +49,8 @@ public abstract class EntityUpStepModifier {
 						return maxUpStep;
 					}
 				}, 
-				Math::max);		
+				Math::max);
+		if (modifiedUpStep != maxUpStep) callback.setReturnValue(modifiedUpStep);
 	}
 	
 }

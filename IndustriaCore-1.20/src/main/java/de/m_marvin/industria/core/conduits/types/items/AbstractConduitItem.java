@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public abstract class AbstractConduitItem extends Item implements IAdjustableConduitItem {
 	
@@ -34,6 +35,12 @@ public abstract class AbstractConduitItem extends Item implements IAdjustableCon
 	public void appendHoverText(ItemStack pStack, Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
 		this.conduit.get().appendHoverText(pTooltipComponents, pIsAdvanced);
 		super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
+	}
+	
+	public static Item byConduit(Conduit conduit) {
+		return ForgeRegistries.ITEMS.getValues().stream().filter(item -> {
+			return item instanceof AbstractConduitItem conduitItem && conduitItem.getConduit() == conduit;
+		}).findAny().orElseGet(() -> null);
 	}
 	
 }

@@ -7,6 +7,12 @@ import java.util.function.Supplier;
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.Config;
 import de.m_marvin.industria.core.compound.types.blocks.CompoundBlock;
+import de.m_marvin.industria.core.conduits.ConduitUtility;
+import de.m_marvin.industria.core.conduits.types.ConduitHitResult;
+import de.m_marvin.industria.core.conduits.types.ConduitState;
+import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
+import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
+import de.m_marvin.industria.core.registries.Conduits;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.types.DiagonalDirection;
 import de.m_marvin.univec.impl.Vec2f;
@@ -19,6 +25,8 @@ import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -84,12 +92,13 @@ public class ModifiedDebugScreenOverlay {
 	
 	public static void fillDebugInformation(List<Component[]> debugLines) {
 		
-		// Currently unused, maybe switching on and off individual sections ?
+		// TODO Currently unused, maybe switching on and off individual sections ?
 		boolean showSystem = true;
 		boolean showClient = true;
 		boolean showEnvironment = true;
 		boolean showPosition = true;
 		boolean showBlock = true;
+		boolean showConduit = true;
 		
 		Minecraft mc = MC.get();
 		
@@ -143,8 +152,8 @@ public class ModifiedDebugScreenOverlay {
 		if (playerOrientation.x < -180) playerOrientation.x += +360;
 		Vec3 playerNormal = mc.cameraEntity.getLookAngle();
 		DiagonalDirection playerDirection = DiagonalDirection.getNearest(playerNormal.x, playerNormal.y, playerNormal.z);
-		
 		BlockHitResult targetedBlockHit = MathUtility.getPlayerPOVHitResult(mc.level, mc.player, Fluid.NONE, 32);
+		ConduitHitResult targetedConduitHit = ConduitUtility.clipConduits(mc.level, MathUtility.getPlayerPOVClipContext(mc.level, mc.player, Fluid.NONE, 32), true);
 		Vec3 blockPosition = Vec3.ZERO;
 		BlockPos blockBlockPos = BlockPos.ZERO;
 		Direction blockDirection = null;
@@ -234,6 +243,31 @@ public class ModifiedDebugScreenOverlay {
 			}
 
 			debugLines.add(new Component[] { mdl("") });
+			
+		}
+		
+		if (targetedConduitHit.isHit() && showConduit) {
+
+			ConduitEntity conduitEntity = targetedConduitHit.getConduitEntity();
+			ConduitState conduitState = conduitEntity.getConduitState();
+			Conduit conduit = conduitState.getConduit();
+			ResourceLocation conduitId = Conduits.CONDUITS_REGISTRY.get().getKey(conduit);
+			
+			debugLines.add(new Component[] { mdl("[§b§lConduit§r]") });
+			debugLines.add(new Component[] { mdl(" §bConduit ID: "),		mdl("§5%s", conduitId.toString()) });
+
+			for (var prop : conduitState.getProperties()) {
+				Object value = conduitState.getValue(prop);
+				String valueName = value.toString();
+				if (value instanceof StringRepresentable s) valueName = s.getSerializedName();
+				debugLines.add(new Component[] { mdl(" §3%s: ", prop.getName()), mdl("%s", valueName) });
+			}
+			
+			CompoundTag tag = new CompoundTag();
+			conduitEntity.saveAdditional(tag);
+			Component tagComponent = NbtUtils.toPrettyComponent(tag);
+
+			debugLines.add(new Component[] { mdl(" §bConduit Entity: "),		tagComponent });
 			
 		}
 		

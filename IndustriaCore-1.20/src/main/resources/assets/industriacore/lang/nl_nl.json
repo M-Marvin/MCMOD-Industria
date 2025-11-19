@@ -65,6 +65,10 @@
 "industriacore.argument.contraption.selector.missing":			"Ontbrekend selectortype",
 "industriacore.argument.contraption.invalid":				"Ongeldige naam of ongeldig UUID",
 
+"industriacore.argument.contraption.selector.all":			"Alle apparaten",
+"industriacore.argument.contraption.selector.nearest":			"Dichtstbijzijende apparaat",
+"industriacore.argument.contraption.selector.self":			"Dit apparaat",
+"industriacore.argument.contraption.selector.random":			"Willekeurig apparaat",
 "industriacore.argument.contraption.options.name.description":		"Naam van het apparaat",
 "industriacore.argument.contraption.options.distance.description":	"Afstand tot het apparaat",
 "industriacore.argument.contraption.options.x.description":		"Positie van het apparaat op de X-coördinaat",

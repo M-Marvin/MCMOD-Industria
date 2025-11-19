@@ -65,6 +65,10 @@
 "industriacore.argument.contraption.selector.missing":			"Lipsește tipul de selector",
 "industriacore.argument.contraption.invalid":				"Nume sau UUID nevalid",
 
+"industriacore.argument.contraption.selector.all":			"Toate dispozitivele",
+"industriacore.argument.contraption.selector.nearest":			"Cel mai apropiat dispozitiv",
+"industriacore.argument.contraption.selector.self":			"Acest dispositiv",
+"industriacore.argument.contraption.selector.random":			"Dispositiv aleatoriu",
 "industriacore.argument.contraption.options.name.description":		"Numele dispozitivului",
 "industriacore.argument.contraption.options.distance.description":	"Distanța până la dispozitiv",
 "industriacore.argument.contraption.options.x.description":		"Poziția dispozitivului pe axă x",

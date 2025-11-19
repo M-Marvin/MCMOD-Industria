@@ -65,6 +65,10 @@
 "industriacore.argument.contraption.selector.missing":			"Chýba typ selektora",
 "industriacore.argument.contraption.invalid":				"Chybné meno alebo UUID",
 
+"industriacore.argument.contraption.selector.all":			"Všetky zariadenia",
+"industriacore.argument.contraption.selector.nearest":			"Najbližšie zariadenie",
+"industriacore.argument.contraption.selector.self":			"Toto zariadenie",
+"industriacore.argument.contraption.selector.random":			"Náhodné zariadenie",
 "industriacore.argument.contraption.options.name.description":		"Názov zariadenia",
 "industriacore.argument.contraption.options.distance.description":	"Vzdialenosť k zariadeniu",
 "industriacore.argument.contraption.options.x.description":		"Poloha zariadenia na súradnici X",

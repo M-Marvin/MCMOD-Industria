@@ -65,7 +65,7 @@
 "industriacore.argument.contraption.selector.missing":					"Missing selector type",
 "industriacore.argument.contraption.invalid":							"Invalid name or UUID",
 
-"industriacore.argument.contraption.selector.all":						"All contraption",
+"industriacore.argument.contraption.selector.all":						"All contraptions",
 "industriacore.argument.contraption.selector.nearest":					"Nearest contraption",
 "industriacore.argument.contraption.selector.self":						"This contraption",
 "industriacore.argument.contraption.selector.random":					"Random contraption",

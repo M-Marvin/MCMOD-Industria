@@ -65,6 +65,10 @@
 "industriacore.argument.contraption.selector.missing":			"Falta el tipo de selector",
 "industriacore.argument.contraption.invalid":				"Nombre o UUID no válidos",
 
+"industriacore.argument.contraption.selector.all":			"Todos dispositivos",
+"industriacore.argument.contraption.selector.nearest":			"Dispositivo más cercano",
+"industriacore.argument.contraption.selector.self":			"Este dispositivo",
+"industriacore.argument.contraption.selector.random":			"Dispositivo aleatorio",
 "industriacore.argument.contraption.options.name.description":		"Nombre del dispositivo",
 "industriacore.argument.contraption.options.distance.description":	"Distancia al dispositivo",
 "industriacore.argument.contraption.options.x.description":		"Posición del dispositivo en la coordenada X",

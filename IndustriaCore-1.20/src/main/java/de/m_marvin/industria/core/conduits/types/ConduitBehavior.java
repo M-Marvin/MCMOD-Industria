@@ -65,7 +65,7 @@ public class ConduitBehavior {
 	
 	public static class Properties {
 		
-		protected float nodeMass = 0.00015F;
+		protected float nodeMass = 0.003F;
 		protected float stiffness = 1F;
 		protected int clampingLength = 128;
 		protected float thickness = 0.0625F;

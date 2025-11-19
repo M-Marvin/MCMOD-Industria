@@ -219,26 +219,32 @@ public class Conduit extends ConduitBehavior implements ItemLike {
 	
 	public ConduitShape buildShape(ConduitState state, ConduitEntity conduitEntity) {
 		
+		ConduitShape shape = conduitEntity.getShape();
 		Level level = conduitEntity.getLevel();
-		Vec3d pointStart = conduitEntity.getPosition().calculateWorldNodeA(level);
-		Vec3d pointEnd = conduitEntity.getPosition().calculateWorldNodeB(level);
-		Vec3d origin = new Vec3d(Math.min(pointStart.x, pointEnd.x), Math.min(pointStart.y, pointEnd.y), Math.min(pointStart.z, pointEnd.z)).sub(0.5, 0.5, 0.5);
-		pointStart.subI(origin);
-		pointEnd.subI(origin);
+		
+		if (shape == null) {
+			
+			Vec3d pointStart = conduitEntity.getPosition().calculateWorldNodeA(level);
+			Vec3d pointEnd = conduitEntity.getPosition().calculateWorldNodeB(level);
+			Vec3d origin = new Vec3d(Math.min(pointStart.x, pointEnd.x), Math.min(pointStart.y, pointEnd.y), Math.min(pointStart.z, pointEnd.z)).sub(0.5, 0.5, 0.5);
+			pointStart.subI(origin);
+			pointEnd.subI(origin);
 
-		float segmentLength = state.getSegmentLength(conduitEntity);
-		Vec3d connectionVec = pointEnd.copy().sub(pointStart);
-		Double spanDistance = connectionVec.length();
-		int segmentCount = (int) Math.round(conduitEntity.getLength() / segmentLength);
-		segmentLength = conduitEntity.getLength() / segmentCount;
-		double segmentPlacementLength = spanDistance / segmentCount;
-		connectionVec.normalizeI();
-		
-		List<Vec3d> nodes = new ArrayList<>();
-		for (int i = 0; i <= segmentCount; i++)
-			nodes.add(connectionVec.mul(segmentPlacementLength * i).add(pointStart));
-		
-		ConduitShape shape = ConduitShape.construct(nodes, segmentLength);
+			float segmentLength = state.getSegmentLength(conduitEntity);
+			Vec3d connectionVec = pointEnd.sub(pointStart);
+			Double spanDistance = connectionVec.length();
+			int segmentCount = (int) Math.round(conduitEntity.getLength() / segmentLength);
+			segmentLength = conduitEntity.getLength() / segmentCount;
+			double segmentPlacementLength = spanDistance / segmentCount;
+			connectionVec.normalizeI();
+			
+			List<Vec3d> nodes = new ArrayList<>();
+			for (int i = 0; i <= segmentCount; i++)
+				nodes.add(connectionVec.mul(segmentPlacementLength * i).add(pointStart));
+			
+			shape = ConduitShape.construct(nodes, segmentLength);
+			
+		}
 		
 		if (!conduitEntity.getLevel().isClientSide()) {
 			shape.contraptionA = ContraptionUtility.getContraptionOfBlock(level, conduitEntity.getPosition().getNodeApos());
@@ -376,8 +382,8 @@ public class Conduit extends ConduitBehavior implements ItemLike {
 			double stiffness = state.getStiffness(conduitEntity);
 			double nodeMass = state.getNodeMass(conduitEntity);
 	
-			Vec3d pointStart = this.shapeNodeA;
-			Vec3d pointEnd = this.shapeNodeB;
+			Vec3d pointStart = this.shapeNodeA.copy();
+			Vec3d pointEnd = this.shapeNodeB.copy();
 			Vec3d origin = new Vec3d(Math.min(pointStart.x, pointEnd.x), Math.min(pointStart.y, pointEnd.y), Math.min(pointStart.z, pointEnd.z)).sub(0.5, 0.5, 0.5);
 			pointStart.subI(origin);
 			pointEnd.subI(origin);
@@ -385,7 +391,7 @@ public class Conduit extends ConduitBehavior implements ItemLike {
 			// Integrate nodes
 			for (int i = 0; i < this.nodes.length - 0; i++) {
 				Vec3d temp = this.nodes[i].copy();
-				this.nodes[i].addI(this.nodes[i].copy().sub(this.lastPos[i]));
+				this.nodes[i].addI(this.nodes[i].sub(this.lastPos[i]));
 				this.lastPos[i] = temp;
 			}
 			
@@ -398,15 +404,26 @@ public class Conduit extends ConduitBehavior implements ItemLike {
 					Vec3d node2 = this.nodes[i - 1];
 					
 					// Calculate spring deformation
-					//double constraintCompensation = pointStart.dist(pointEnd) / conduit.getLength()* 0.3F;
+//					double constraintCompensation = pointStart.dist(pointEnd) / conduit.getLength()* 0.3F;
 					Vec3d delta = node1.sub(node2);
 					double deltalength = delta.length(); // Math.sqrt(delta.dot(delta));
 					double diff = (float) ((deltalength - this.segmentLength) / deltalength);
 					
+					// The outer nodes are fixed, apply all correction force to the inner nodes
+					double f1 = 0.5;
+					double f2 = 0.5;
+					if (i == 1) {
+						f1 = 1.0;
+						f2 = 0.0;
+					} else if (i == this.nodes.length - 1) {
+						f1 = 0.0;
+						f2 = 1.0;
+					}
+					
 					// Reform spring
-					//double stiffnessLinear = (float) (1 - Math.pow((1 - stiffness), 1 / itteration)); 
-					node2.addI(delta.mul(diff * 0.5).mul(stiffness));
-					node1.subI(delta.mul(diff * 0.5).mul(stiffness));
+//					double stiffnessLinear = (float) (1 - Math.pow((1 - stiffness), 1 / itteration)); 
+					node2.addI(delta.mul(diff * f2).mul(stiffness));
+					node1.subI(delta.mul(diff * f1).mul(stiffness));
 					
 				}
 				
@@ -418,55 +435,54 @@ public class Conduit extends ConduitBehavior implements ItemLike {
 			
 			// Accumulate gravity
 			for (int i = 1; i < this.nodes.length - 1; i++) {
-				this.lastPos[i].addI(new Vec3d(GameUtility.getWorldGravity(level)).mul(nodeMass));
+				this.nodes[i].subI(new Vec3d(GameUtility.getWorldGravity(level)).mul(nodeMass));
 			}
 			
 			// Solve collision
 			for (int i = 1; i < this.nodes.length - 1; i++) {
 
-				Vec3d nodePos = this.nodes[i].copy().add(Vec3f.fromVec(origin));
+				Vec3d nodePos = this.nodes[i].add(Vec3f.fromVec(origin));
 				BlockPos nodeBlockPos = MathUtility.toBlockPos(nodePos);
 				
-				if (!nodeBlockPos.equals(conduitEntity.getPosition().getNodeApos()) && !nodeBlockPos.equals(conduitEntity.getPosition().getNodeBpos())) {
+				VoxelShape collisionShape = level.getBlockState(nodeBlockPos).getCollisionShape(level, nodeBlockPos);
+				
+				if (!collisionShape.isEmpty()) {
 					
-					VoxelShape collisionShape = level.getBlockState(nodeBlockPos).getCollisionShape(level, nodeBlockPos);
+					AABB bounds = collisionShape.bounds().move(nodeBlockPos);
 					
-					if (!collisionShape.isEmpty()) {
+					Vec3d surface = nodePos.copy();
+					double dist = 1;
+					
+					// find closest point outside of the blocks bounds, which is not inside an another solid block
+					for (Direction d : Direction.values()) {
 						
-						AABB bounds = collisionShape.bounds().move(nodeBlockPos);
+						Vec3d surfacePoint = nodePos.copy();
+						if (d.getAxis() == Axis.X && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.x = (float) bounds.maxX;
+						if (d.getAxis() == Axis.X && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.x = (float) bounds.minX;
+						if (d.getAxis() == Axis.Y && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.y = (float) bounds.maxY;
+						if (d.getAxis() == Axis.Y && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.y = (float) bounds.minY;
+						if (d.getAxis() == Axis.Z && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.z = (float) bounds.maxZ;
+						if (d.getAxis() == Axis.Z && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.z = (float) bounds.minZ;
 						
-						Vec3d surface = nodePos.copy();
-						double dist = 1;
+						double distance = nodePos.sub(surfacePoint).length();
 						
-						// find closest point outside of the blocks bounds, which is not inside an another solid block
-						for (Direction d : Direction.values()) {
-							
-							Vec3d surfacePoint = nodePos.copy();
-							if (d.getAxis() == Axis.X && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.x = (float) bounds.maxX;
-							if (d.getAxis() == Axis.X && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.x = (float) bounds.minX;
-							if (d.getAxis() == Axis.Y && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.y = (float) bounds.maxY;
-							if (d.getAxis() == Axis.Y && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.y = (float) bounds.minY;
-							if (d.getAxis() == Axis.Z && d.getAxisDirection() == AxisDirection.POSITIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.z = (float) bounds.maxZ;
-							if (d.getAxis() == Axis.Z && d.getAxisDirection() == AxisDirection.NEGATIVE && !level.getBlockState(nodeBlockPos.relative(d)).isCollisionShapeFullBlock(level, nodeBlockPos.relative(d))) surfacePoint.z = (float) bounds.minZ;
-							
-							double distance = nodePos.copy().sub(surfacePoint).length();
-							
-							if (distance < dist && distance > 0) {
-								dist = distance;
-								surface = surfacePoint;
-							}
-							
+						if (distance < dist && distance > 0) {
+							dist = distance;
+							surface = surfacePoint;
 						}
 						
-						// if the block was completely surrounded, just move up
-						if (dist == 1) surface.z = (float) bounds.maxZ;
-						
-						surface.subI(Vec3f.fromVec(origin));
-						
-						this.nodes[i].setI(surface.x, surface.y, surface.z);
-						this.lastPos[i] = this.nodes[i];
-						
 					}
+					
+					// if the block was completely surrounded, just move up
+					if (dist == 1) surface.z = (float) bounds.maxZ;
+					
+					// move to surface
+					surface.subI(Vec3f.fromVec(origin));
+					this.nodes[i].setI(surface.x, surface.y, surface.z);
+					
+					// cancel horizontal momentum, acts as friction
+					this.lastPos[i].x = surface.x;
+					this.lastPos[i].z = surface.z;
 					
 				}
 				

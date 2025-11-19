@@ -1,0 +1,8 @@
+{
+	"parent": "industriacore:conduit/square_conduit_4",
+	"textures": {
+		"conduit": "industriacore:conduit/electric_wire",
+		"particle": "industriacore:conduit/electric_wire_particle"
+	},
+	"atlas": "industriacore:textures/atlas/conduits.png"
+}

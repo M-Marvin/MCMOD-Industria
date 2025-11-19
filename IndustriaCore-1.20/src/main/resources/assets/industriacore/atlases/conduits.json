@@ -3,7 +3,7 @@
 		{
 			"type": "directory",
 			"source": "conduit",
-			"prefix": ""
+			"prefix": "conduit/"
 		}
 	]
 }

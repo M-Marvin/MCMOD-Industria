@@ -28,7 +28,7 @@ public class Conduits {
 		CONDUITS.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 	
-	public static final RegistryObject<Conduit> NONE = 				CONDUITS.register("none", () -> new Conduit(Properties.of().soundType(SoundType.STONE).validNodes(NodeTypes.ALL)));
+	public static final RegistryObject<Conduit> NONE = 				CONDUITS.register("none", () -> new Conduit(Properties.of().segmentLength(1).soundType(SoundType.STONE).validNodes(NodeTypes.ALL)));
 	public static final RegistryObject<Conduit> ELECTRIC_CONDUIT =	CONDUITS.register("electric_conduit", () -> new ElectricConduit(Properties.of().soundType(SoundType.WOOL).validNodes(NodeTypes.ELECTRIC), 2, 0.1));
 	
 }

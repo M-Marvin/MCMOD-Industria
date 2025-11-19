@@ -66,9 +66,8 @@ public class ConduitVisualizationManager {
 	@Mod.EventBusSubscriber(modid = IndustriaCore.MODID, bus = Bus.MOD, value = Dist.CLIENT)
 	public static class ConduitVisualizerReloadListener {
 		@SubscribeEvent
-		public static void onResourceReloadRegister(EndClientResourceReloadEvent event) {
-			
-			ConditionalExecutor.CLIENT_TICK_EXECUTOR.execute(() -> {
+		public static void onResourceReload(EndClientResourceReloadEvent event) {	
+			ConditionalExecutor.CLIENT_TICK_EXECUTOR.executeAfterDelay(() -> {
 				ClientLevel level = Minecraft.getInstance().level;
 				if (level == null) return;
 				conduitEffects.clear();
@@ -79,8 +78,7 @@ public class ConduitVisualizationManager {
 					conduitEffects.put(conduitEntity, effect);
 					VisualizationHelper.queueAdd(effect);
 				});
-			});
-			
+			}, 10);
 		}
 	}
 	

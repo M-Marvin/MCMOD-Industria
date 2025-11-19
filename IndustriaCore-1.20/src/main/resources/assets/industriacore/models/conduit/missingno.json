@@ -1,0 +1,22 @@
+{
+	"textures": {
+		"missing": "minecraft:missingno",
+		"particle": "#missing"
+	},
+	"elements": [
+		{
+			"from": [-2, -2, -8],
+			"to": [2, 2, 10],
+			"color": 8,
+			"faces": {
+				"north": {"uv": [0, 0, 4, 4], "texture": "#missing"},
+				"east": {"uv": [0, 0, 16, 4], "texture": "#missing"},
+				"south": {"uv": [0, 0, 4, 4], "texture": "#missing"},
+				"west": {"uv": [0, 0, 16, 4], "texture": "#missing"},
+				"up": {"uv": [0, 0, 4, 16], "texture": "#missing"},
+				"down": {"uv": [0, 0, 4, 16], "texture": "#missing"}
+			}
+		}
+	],
+	"atlas": "industriacore:textures/atlas/conduits.png"
+}

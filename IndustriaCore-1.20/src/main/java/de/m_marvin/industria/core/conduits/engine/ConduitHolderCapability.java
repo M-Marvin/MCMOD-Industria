@@ -14,6 +14,7 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.ConduitState;
 import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
+import de.m_marvin.industria.core.contraptions.ContraptionUtility;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
@@ -34,6 +35,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent.LevelTickEvent;
+import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -125,6 +127,7 @@ public class ConduitHolderCapability implements ICapabilitySerializable<ListTag>
 	@SubscribeEvent
 	// Ticking conduits on both sides
 	public static void onWorldTick(LevelTickEvent event) {
+		if (event.phase == Phase.START) return;
 		Level level = event.level;
 		ConduitHolderCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONDUIT_HOLDER_CAPABILITY);
 		
@@ -167,8 +170,9 @@ public class ConduitHolderCapability implements ICapabilitySerializable<ListTag>
 				
 				if (!this.level.isClientSide()) {
 					
-					BlockPos middle = MathUtility.getMiddleBlock(position.getNodeApos(), position.getNodeBpos());
-
+					BlockPos nodeAposWorld = ContraptionUtility.ensureWorldBlockCoordinates(level, position.getNodeApos(), position.getNodeApos());
+					BlockPos nodeBposWorld = ContraptionUtility.ensureWorldBlockCoordinates(level, position.getNodeBpos(), position.getNodeBpos());
+					BlockPos middle = MathUtility.getMiddleBlock(nodeAposWorld, nodeBposWorld);
 					IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middle)), new SSyncRemovedConduits(position, level.getChunk(middle).getPos()));
 					
 				}
@@ -224,7 +228,9 @@ public class ConduitHolderCapability implements ICapabilitySerializable<ListTag>
 			MinecraftForge.EVENT_BUS.post(eventPost);
 			
 			if (!this.level.isClientSide()) {
-				BlockPos middle = MathUtility.getMiddleBlock(nodeApos, nodeBpos);
+				BlockPos nodeAposWorld = ContraptionUtility.ensureWorldBlockCoordinates(level, nodeApos, nodeApos);
+				BlockPos nodeBposWorld = ContraptionUtility.ensureWorldBlockCoordinates(level, nodeBpos, nodeBpos);
+				BlockPos middle = MathUtility.getMiddleBlock(nodeAposWorld, nodeBposWorld);
 				IndustriaCore.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(middle)), new SSyncAddedConduits(conduitEntity, level.getChunk(middle).getPos()));
 			}
 			return true;
@@ -403,8 +409,8 @@ public class ConduitHolderCapability implements ICapabilitySerializable<ListTag>
 				Vec3d cornerMin = MathUtility.getMinCorner(nodeApos, nodeBpos).sub(0.5, 0.5, 0.5);
 				
 				for (int i = 1; i < conduit.getShape().nodes.length; i++) {
-					Vec3d nodeA = conduit.getShape().nodes[i - 1].copy().add(Vec3f.fromVec(cornerMin));
-					Vec3d nodeB = conduit.getShape().nodes[i].copy().add(Vec3f.fromVec(cornerMin));
+					Vec3d nodeA = conduit.getShape().nodes[i - 1].add(Vec3f.fromVec(cornerMin));
+					Vec3d nodeB = conduit.getShape().nodes[i].add(Vec3f.fromVec(cornerMin));
 					Optional<Vec3d> hitPoint = MathUtility.getHitPoint(nodeA, nodeB, Vec3d.fromVec(context.getFrom()), Vec3d.fromVec(context.getTo()), conduit.getConduitState().getThickness(conduit) / 2F);
 					
 					if (hitPoint.isPresent()) {

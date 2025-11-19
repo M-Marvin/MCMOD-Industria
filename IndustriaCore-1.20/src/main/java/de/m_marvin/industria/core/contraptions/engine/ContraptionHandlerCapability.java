@@ -105,7 +105,7 @@ public class ContraptionHandlerCapability implements ICapabilitySerializable<Com
 			contraptionTagsList.add(contraptionTags);
 		}
 		tag.put("ContraptionTags", contraptionTagsList);
-		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Saved " + contraptionTagsList.size() + "/" + this.contraptionTags.size() + " constraption tags");
+		IndustriaCore.LOGGER.info("Saved " + contraptionTagsList.size() + "/" + this.contraptionTags.size() + " constraption tags");
 		return tag;
 	}
 
@@ -121,7 +121,7 @@ public class ContraptionHandlerCapability implements ICapabilitySerializable<Com
 			for (int i2 = 0; i2 < tagList.size(); i2++) tags.add(tagList.getString(i2));
 			this.contraptionTags.put(contraptionId, tags);
 		}
-		IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.DEBUG ,"Loaded " + this.contraptionTags.size() + "/" + contraptionTagList.size() + " contraption tags");
+		IndustriaCore.LOGGER.info("Loaded " + this.contraptionTags.size() + "/" + contraptionTagList.size() + " contraption tags");
 	}
 	
 	/* Event handling */

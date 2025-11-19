@@ -1,6 +1,7 @@
 package de.m_marvin.industria.core.client.util;
 
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import de.m_marvin.industria.core.client.conduits.ConduitModelManager;
 import de.m_marvin.industria.core.conduits.types.ConduitState;
@@ -40,12 +41,16 @@ public class FlywheelUtility {
 		return BakedModelBuilder.create(model).build();
 	}
 
-	public static Model modelOfConduit(ConduitEntity conduitEntity) {
-		return modelOfConduit(conduitEntity.getConduitState());
+	public static Model[] modelsOfConduit(ConduitEntity conduitEntity) {
+		return modelsOfConduit(conduitEntity.getConduitState());
 	}
 	
-	public static Model modelOfConduit(ConduitState conduitState) {
-		return modelOfConduitModel(ConduitModelManager.getModel(conduitState));
+	public static Model[] modelsOfConduit(ConduitState conduitState) {
+		return modelsOfConduitModels(ConduitModelManager.getModels(conduitState));
+	}
+	
+	public static Model[] modelsOfConduitModels(BakedModel[] models) {
+		return Stream.of(models).map(FlywheelUtility::modelOfConduitModel).toArray(Model[]::new);
 	}
 	
 	public static Model modelOfConduitModel(BakedModel model) {

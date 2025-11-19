@@ -20,6 +20,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
+import net.minecraft.core.SectionPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
@@ -336,12 +337,12 @@ public class MathUtility {
 	}
 	
 	public static Set<ChunkPos> getChunksOnLine(Vec2f from, Vec2f to) {	
-		Vec2f lineVec = to.copy().sub(from);
-		Vec2f chunkOff = from.copy().module(16F);
+		Vec2f lineVec = to.sub(from);
+		Vec2f chunkOff = from.module(16F);
 		chunkOff.x = lineVec.x() < 0 ? -(16 - chunkOff.x()) : chunkOff.x();
 		chunkOff.y = lineVec.y() < 0 ? -(16 - chunkOff.y()) : chunkOff.y();
-		Vec2f worldOff = from.copy().sub(chunkOff);
-		Vec2f lineRlativeTarget = to.copy().sub(worldOff);
+		Vec2f worldOff = from.sub(chunkOff);
+		Vec2f lineRlativeTarget = to.sub(worldOff);
 		
 		int insecsX = (int) Math.floor(Math.abs(lineRlativeTarget.x()) / 16);
 		int insecsZ = (int) Math.floor(Math.abs(lineRlativeTarget.y()) / 16);
@@ -362,6 +363,46 @@ public class MathUtility {
 			chunks.add(new ChunkPos(new BlockPos(chunkX, 0, chunkZ)));
 		}
 		
+		return chunks;
+	}
+
+	public static Set<SectionPos> getSectionsOnLine(Vec3f from, Vec3f to) {	
+		Vec3f lineVec = to.sub(from);
+		Vec3f chunkOff = from.module(16F);
+		chunkOff.x = lineVec.x() < 0 ? -(16 - chunkOff.x()) : chunkOff.x();
+		chunkOff.y = lineVec.y() < 0 ? -(16 - chunkOff.y()) : chunkOff.y();
+		chunkOff.z = lineVec.z() < 0 ? -(16 - chunkOff.z()) : chunkOff.z();
+		Vec3f worldOff = from.sub(chunkOff);
+		Vec3f lineRlativeTarget = to.sub(worldOff);
+		
+		int insecsX = (int) Math.floor(Math.abs(lineRlativeTarget.x()) / 16);
+		int insecsY = (int) Math.floor(Math.abs(lineRlativeTarget.y()) / 16);
+		int insecsZ = (int) Math.floor(Math.abs(lineRlativeTarget.z()) / 16);
+		
+		Set<SectionPos> chunks = new HashSet<SectionPos>();
+		chunks.add(SectionPos.of(toBlockPos(from.x, from.z, from.y)));
+		
+		for (int insecX = 1; insecX <= insecsX; insecX++) {
+			int chunkX = (int) (worldOff.x + insecX * (lineVec.x() < 0 ? -16 : 16));
+			if (lineVec.x() < 0) chunkX -= 1;
+			int chunkY = (int) ((Math.abs(chunkX - from.x()) / Math.abs(lineVec.x())) * lineVec.y() + from.y());
+			int chunkZ = (int) ((Math.abs(chunkX - from.x()) / Math.abs(lineVec.x())) * lineVec.z() + from.z());
+			chunks.add(SectionPos.of(new BlockPos(chunkX, chunkY, chunkZ)));
+		}
+		for (int insecY = 1; insecY <= insecsY; insecY++) {
+			int chunkY = (int) (worldOff.y + insecY * (lineVec.y() < 0 ? -16 : 16));
+			if (lineVec.y() < 0) chunkY -= 1;
+			int chunkX = (int) ((Math.abs(chunkY - from.y()) / Math.abs(lineVec.y())) * lineVec.x() + from.x());
+			int chunkZ = (int) ((Math.abs(chunkY - from.y()) / Math.abs(lineVec.y())) * lineVec.z() + from.z());
+			chunks.add(SectionPos.of(new BlockPos(chunkX, chunkY, chunkZ)));
+		}
+		for (int insecZ = 1; insecZ <= insecsZ; insecZ++) {
+			int chunkZ = (int) (worldOff.z + insecZ * (lineVec.z() < 0 ? -16 : 16));
+			if (lineVec.z() < 0) chunkZ -= 1;
+			int chunkX = (int) ((Math.abs(chunkZ - from.z()) / Math.abs(lineVec.z())) * lineVec.x() + from.x());
+			int chunkY = (int) ((Math.abs(chunkZ - from.z()) / Math.abs(lineVec.z())) * lineVec.y() + from.y());
+			chunks.add(SectionPos.of(new BlockPos(chunkX, chunkY, chunkZ)));
+		}
 		return chunks;
 	}
 	
@@ -398,13 +439,13 @@ public class MathUtility {
 	}
 	
 	public static boolean isOnLine(Vec3d point, Vec3d line1, Vec3d line2, double t) {
-		return line1.copy().sub(point).length() + line2.copy().sub(point).length() <= line1.copy().sub(line2).length() + t;
+		return line1.sub(point).length() + line2.copy().sub(point).length() <= line1.sub(line2).length() + t;
 	}
 	
 	public static Optional<Vec3d> getHitPoint(Vec3d lineA1, Vec3d lineA2, Vec3d lineB1, Vec3d lineB2, double tolerance) {
 		Vec3d[] shortesLine = lineInfinityIntersection(lineA1, lineA2, lineB1, lineB2);
 		if (isOnLine(shortesLine[0], lineA1, lineA2, 0.1F) && isOnLine(shortesLine[1], lineB1, lineB2, 0.1F)) {
-			if (shortesLine[0].copy().sub(shortesLine[1]).length() <= tolerance) return Optional.of(shortesLine[0]);
+			if (shortesLine[0].sub(shortesLine[1]).length() <= tolerance) return Optional.of(shortesLine[0]);
 		}
 		return Optional.empty();
 	}
@@ -412,7 +453,7 @@ public class MathUtility {
 	public static boolean doLinesCross(Vec3d lineA1, Vec3d lineA2, Vec3d lineB1, Vec3d lineB2, double tolerance) {
 		Vec3d[] shortesLine = lineInfinityIntersection(lineA1, lineA2, lineB1, lineB2);
 		if (isOnLine(shortesLine[0], lineA1, lineA2, 0.1F) && isOnLine(shortesLine[1], lineB1, lineB2, 0.1F)) {
-			return shortesLine[0].copy().sub(shortesLine[1]).length() <= tolerance;
+			return shortesLine[0].sub(shortesLine[1]).length() <= tolerance;
 		}
 		return false;
 	}

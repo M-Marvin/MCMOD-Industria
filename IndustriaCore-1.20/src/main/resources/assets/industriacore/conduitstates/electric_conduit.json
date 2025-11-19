@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"": { "segments": [ 
+			"industriacore:conduit/electric_conduit_1", 
+			"industriacore:conduit/electric_conduit_2", 
+			"industriacore:conduit/electric_conduit_3" , 
+			"industriacore:conduit/electric_conduit_4" 
+		] }
+	}
+}

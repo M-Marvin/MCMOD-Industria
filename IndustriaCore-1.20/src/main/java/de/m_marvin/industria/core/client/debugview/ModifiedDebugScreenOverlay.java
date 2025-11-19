@@ -92,7 +92,7 @@ public class ModifiedDebugScreenOverlay {
 	
 	public static void fillDebugInformation(List<Component[]> debugLines) {
 		
-		// TODO Currently unused, maybe switching on and off individual sections ?
+		// TODO modified debug view settings
 		boolean showSystem = true;
 		boolean showClient = true;
 		boolean showEnvironment = true;

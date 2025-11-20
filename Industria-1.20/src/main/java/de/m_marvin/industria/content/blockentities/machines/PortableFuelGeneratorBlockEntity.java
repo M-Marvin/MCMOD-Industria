@@ -12,6 +12,7 @@ import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.content.registries.ModRecipeTypes;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
+import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
@@ -101,7 +102,7 @@ public class PortableFuelGeneratorBlockEntity extends BlockEntity implements IJu
 			pBlockEntity.canRun = pBlockEntity.canRun();
 			pBlockEntity.level.setBlockAndUpdate(pPos, pState.setValue(BlockStateProperties.LIT, pBlockEntity.canRun));
 			pBlockEntity.setChanged();
-			ElectricUtility.updateNetwork(pLevel, pPos);
+			ElectricUtility.updateNetwork(pLevel, ElectricReference.block(pPos));
 			GameUtility.triggerClientSync(pBlockEntity.level, pBlockEntity.worldPosition);
 		}
 		

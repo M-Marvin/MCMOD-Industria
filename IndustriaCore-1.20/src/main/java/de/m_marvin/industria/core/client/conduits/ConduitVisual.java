@@ -10,6 +10,7 @@ import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.univec.impl.Vec2f;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
+import de.m_marvin.univec.impl.Vec3i;
 import dev.engine_room.flywheel.api.instance.Instancer;
 import dev.engine_room.flywheel.api.model.Model;
 import dev.engine_room.flywheel.api.visual.EffectVisual;
@@ -66,7 +67,9 @@ public class ConduitVisual<T extends ConduitEntity> extends AbstractVisual imple
 		if (shape == null) return;
 		
 		int segments = shape.nodes.length - 1;
-		Vec3f origin = new Vec3f(shape.shapeNodeA.min(shape.shapeNodeB));
+		Vec3i renderOrigin = Vec3i.fromVec(renderOrigin());
+		Vec3f nodeOrigin = new Vec3f(shape.shapeNodeA.min(shape.shapeNodeB));
+		Vec3f nodeRenderOrigin = nodeOrigin.sub(renderOrigin);
 		for (int segment = 0; segment < segments; segment++) {
 			
 			Vec3d node1 = shape.lastPos[segment + 0].lerp(shape.nodes[segment + 0], (double) partialTick);
@@ -74,7 +77,7 @@ public class ConduitVisual<T extends ConduitEntity> extends AbstractVisual imple
 			
 			Vec3f position = new Vec3f(node1);
 			Vec3f direction = new Vec3f(node2.sub(node1));
-			position.addI(origin).subI(0.5F, 0.5F, 0.5F);
+			position.addI(nodeRenderOrigin).subI(0.5F, 0.5F, 0.5F);
 			
 			float angleHorizontal = -(float) new Vec2f(direction.x, direction.z).angle(new Vec2f(0F, -1F));
 			Vec2f directionProjection = new Vec2f((float) Math.sqrt(direction.x * direction.x + direction.z * direction.z), direction.y).normalize();
@@ -90,8 +93,8 @@ public class ConduitVisual<T extends ConduitEntity> extends AbstractVisual imple
 					.scaleZ(scale)
 					.setChanged();
 			
-			int light1 = LevelRenderer.getLightColor(conduit.getLevel(), MathUtility.toBlockPos(node1.add(origin).sub(0.5, 0.5, 0.5)));
-			int light2 = LevelRenderer.getLightColor(conduit.getLevel(), MathUtility.toBlockPos(node2.add(origin).sub(0.5, 0.5, 0.5)));
+			int light1 = LevelRenderer.getLightColor(conduit.getLevel(), MathUtility.toBlockPos(node1.add(nodeOrigin).sub(0.5, 0.5, 0.5)));
+			int light2 = LevelRenderer.getLightColor(conduit.getLevel(), MathUtility.toBlockPos(node2.add(nodeOrigin).sub(0.5, 0.5, 0.5)));
 			FlatLit.relight((light1 + light2) / 2, this.segmentInstances[segment]);
 			
 		}

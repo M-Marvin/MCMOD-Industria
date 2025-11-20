@@ -253,13 +253,13 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	}
 
 	@Override
-	public NodePos[] getElectricConnections(Level level, BlockPos position, BlockState instance) {
-		if (level.getBlockEntity(position) instanceof ElectroMagneticCoilBlockEntity coil) {
+	public NodePos[] getElectricConnections(Level level, ElectricReference reference, BlockState instance) {
+		if (level.getBlockEntity(reference.block()) instanceof ElectroMagneticCoilBlockEntity coil) {
 			if (coil.isMaster()) return coil.getMaster().getConnections();
 		}
 		return new NodePos[0];
 	}
-
+	
 	@Override
 	public BlockPos getConnectorMasterPos(Level level, BlockPos position, BlockState state) {
 		if (level.getBlockEntity(position) instanceof ElectroMagneticCoilBlockEntity coil) {
@@ -269,16 +269,16 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	}
 	
 	@Override
-	public String[] getWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node) {
+	public String[] getWireLanes(Level level, ElectricReference reference, BlockState instance, NodePos node) {
 		return new String[0];
 	}
-
-	@Override
-	public void setWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node, String[] laneLabels) {}
 	
 	@Override
-	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork network, Consumer<ICircuitPlot> plotter) {
-		if (level.getBlockEntity(position) instanceof ElectroMagneticCoilBlockEntity coil) {
+	public void setWireLanes(Level level, ElectricReference reference, BlockState instance, NodePos node, String[] laneLabels) {}
+	
+	@Override
+	public void plotCircuit(Level level, BlockState instance, ElectricReference reference, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {	
+		if (level.getBlockEntity(reference.block()) instanceof ElectroMagneticCoilBlockEntity coil) {
 			
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			
@@ -288,29 +288,29 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 			
 			if (coil.getWindingsPrimary() > 0 && coil.getWindingsSecundary() > 0) {
 				
-				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, inputNodes, 0, "L", "N");
-				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, outputNodes, 1, "L", "N");
+				ElectricUtility.plotJoinTogether(plotter, level, this, reference, instance, inputNodes, 0, "L", "N");
+				ElectricUtility.plotJoinTogether(plotter, level, this, reference, instance, outputNodes, 1, "L", "N");
 				
 				double windingRatio = coil.getWindingsSecundary() / (double) coil.getWindingsPrimary();
 				
 				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.TRANSFORMER).plotter();
 				templateSource.setProperty("winding_ratio", 1 / windingRatio);
-				templateSource.setNetworkLocalNode("VDC_A", position, "L", 0);
-				templateSource.setNetworkLocalNode("GND_A", position, "N", 0);
-				templateSource.setNetworkLocalNode("VDC_B", position, "L", 1);
-				templateSource.setNetworkLocalNode("GND_B", position, "N", 1);
+				templateSource.setNetworkLocalNode("VDC_A", reference.block(), "L", 0);
+				templateSource.setNetworkLocalNode("GND_A", reference.block(), "N", 0);
+				templateSource.setNetworkLocalNode("VDC_B", reference.block(), "L", 1);
+				templateSource.setNetworkLocalNode("GND_B", reference.block(), "N", 1);
 				plotter.accept(templateSource);
 				
 			} else if (coil.getWindingsPrimary() > 0) {
 				
-				ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, nodes, 1, "L", "N");
+				ElectricUtility.plotJoinTogether(plotter, level, this, reference, instance, nodes, 1, "L", "N");
 				
 				double resistance = parametrics.getParameter(MAGNET_RESISTANCE);
 				
 				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.RESISTOR).plotter();
 				templateSource.setProperty("resistance", resistance);
-				templateSource.setNetworkLocalNode("NET1", position, "L", 1);
-				templateSource.setNetworkLocalNode("NET2", position, "N", 1);
+				templateSource.setNetworkLocalNode("NET1", reference.block(), "L", 1);
+				templateSource.setNetworkLocalNode("NET2", reference.block(), "N", 1);
 				plotter.accept(templateSource);
 				
 			}
@@ -319,12 +319,12 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	}
 	
 	@Override
-	public double getMaxPowerGeneration(Level level, BlockPos pos, BlockState instance) {
+	public double getMaxPowerGeneration(Level level, ElectricReference reference, BlockState instance) {
 		return 0;
 	}
 	
 	@Override
-	public double getCurrentPower(Level level, BlockPos pos, BlockState instance) {
+	public double getCurrentPower(Level level, ElectricReference reference, BlockState instance) {
 		return 0;
 	}
 	
@@ -336,10 +336,10 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 	}
 	
 	@Override
-	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {
-		level.scheduleTick(position, this, 1);
+	public void onNetworkNotify(Level level, BlockState instance, ElectricReference reference) {
+		level.scheduleTick(reference.block(), this, 1);
 	}
-
+	
 	protected boolean findConnectableBlocks(Level level, BlockPos pos, BlockState state, Direction relative, boolean attached, int limit, int depth, List<BlockPos> connectedBlocks) {
 		if (!state.is(ModTags.Blocks.ELECTRO_MAGNETIC_COILS)) return true;
 		if (relative != null) {
@@ -557,7 +557,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 							handItem.hurtAndBreak(1, pPlayer, (p) -> {});
 						}
 						
-						ElectricUtility.updateNetwork(pLevel, transformerMaster.getBlockPos());
+						ElectricUtility.updateNetwork(pLevel, ElectricReference.block(transformerMaster.getBlockPos()));
 						GameUtility.triggerClientSync(pLevel, transformerMaster.getBlockPos());
 						
 						return InteractionResult.SUCCESS;
@@ -602,7 +602,7 @@ public class ElectroMagneticCoilBlock extends BaseEntityBlock implements IBaseEn
 							handItem.shrink(wiresPerWinding);
 						}
 						
-						ElectricUtility.updateNetwork(pLevel, transformerMaster.getBlockPos());
+						ElectricUtility.updateNetwork(pLevel, ElectricReference.block(transformerMaster.getBlockPos()));
 						GameUtility.triggerClientSync(pLevel, transformerMaster.getBlockPos());
 						
 						return InteractionResult.SUCCESS;

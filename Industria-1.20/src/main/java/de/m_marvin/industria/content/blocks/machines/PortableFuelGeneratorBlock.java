@@ -118,12 +118,11 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 	}
 
 	@Override
-	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
-		
-		if (level.getBlockEntity(position) instanceof PortableFuelGeneratorBlockEntity generator) {
+	public void plotCircuit(Level level, BlockState instance, ElectricReference reference, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
+		if (level.getBlockEntity(reference.block()) instanceof PortableFuelGeneratorBlockEntity generator) {
 			
 			String[] wireLanes = generator.getNodeLanes();
-			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, wireLanes[0], wireLanes[1]);
+			ElectricUtility.plotJoinTogether(plotter, level, this, reference, instance, 0, wireLanes[0], wireLanes[1]);
 			
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			int targetPower = generator.canRun() ? parametrics.getNominalPower() : 0;
@@ -133,9 +132,9 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.VOLTAGE_SOURCE).plotter();
 				templateSource.setProperty("nominal_voltage", targetVoltage);
 				templateSource.setProperty("power_limit", targetVoltage > 0 ? targetPower : 0);
-				templateSource.setNetworkLocalNode("VDC", position, wireLanes[0], 0);
-				templateSource.setNetworkLocalNode("GND", position, wireLanes[1], 0);
-				templateSource.setNetworkLocalNode("SHUNT", position, "SHUNT", 1);
+				templateSource.setNetworkLocalNode("VDC", reference.block(), wireLanes[0], 0);
+				templateSource.setNetworkLocalNode("GND", reference.block(), wireLanes[1], 0);
+				templateSource.setNetworkLocalNode("SHUNT", reference.block(), "SHUNT", 1);
 				plotter.accept(templateSource);
 			}
 			
@@ -144,8 +143,8 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 	}
 	
 	@Override
-	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {
-		GameUtility.triggerClientSync(level, position);
+	public void onNetworkNotify(Level level, BlockState instance, ElectricReference reference) {
+		GameUtility.triggerClientSync(level, reference.block());
 	}
 	
 	@Override
@@ -158,11 +157,11 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 	}
 	
 	@Override
-	public double getCurrentPower(Level level, BlockPos pos, BlockState instance) {
-		if (level.getBlockEntity(pos) instanceof PortableFuelGeneratorBlockEntity generator) {
+	public double getCurrentPower(Level level, ElectricReference reference, BlockState instance) {
+		if (level.getBlockEntity(reference.block()) instanceof PortableFuelGeneratorBlockEntity generator) {
 			String[] wireLanes = generator.getNodeLanes();
-			double shuntVoltage = ElectricUtility.getVoltageBetweenLocal(level, pos, "SHUNT", 1, wireLanes[0], 0).orElse(0.0);
-			double sourceVoltage = ElectricUtility.getVoltageBetweenLocal(level, pos, wireLanes[0], 0, wireLanes[1], 0).orElse(0.0);
+			double shuntVoltage = ElectricUtility.getVoltageBetweenLocal(level, reference.block(), "SHUNT", 1, wireLanes[0], 0).orElse(0.0);
+			double sourceVoltage = ElectricUtility.getVoltageBetweenLocal(level, reference.block(), wireLanes[0], 0, wireLanes[1], 0).orElse(0.0);
 			double sourceCurrent = shuntVoltage / Circuits.SHUNT_RESISTANCE;
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			double powerUsed = Math.min(sourceVoltage * sourceCurrent, parametrics.getPowerMax());
@@ -172,27 +171,27 @@ public class PortableFuelGeneratorBlock extends BaseEntityBlock implements IElec
 	}
 	
 	@Override
-	public double getMaxPowerGeneration(Level level, BlockPos pos, BlockState instance) {
+	public double getMaxPowerGeneration(Level level, ElectricReference reference, BlockState instance) {
 		BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 		return parametrics.getPowerMax();
 	}
 	
 	@Override
-	public NodePos[] getElectricConnections(Level level, BlockPos pos, BlockState instance) {
-		return NODES.getNodePositions(pos);
+	public NodePos[] getElectricConnections(Level level, ElectricReference reference, BlockState instance) {
+		return NODES.getNodePositions(reference.block());
 	}
-
+	
 	@Override
-	public String[] getWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node) {
-		if (level.getBlockEntity(pos) instanceof PortableFuelGeneratorBlockEntity generator) {
+	public String[] getWireLanes(Level level, ElectricReference reference, BlockState instance, NodePos node) {
+		if (level.getBlockEntity(reference.block()) instanceof PortableFuelGeneratorBlockEntity generator) {
 			return generator.getNodeLanes();
 		}
 		return new String[0];
 	}
 
 	@Override
-	public void setWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node, String[] laneLabels) {
-		if (level.getBlockEntity(pos) instanceof PortableFuelGeneratorBlockEntity generator) {
+	public void setWireLanes(Level level, ElectricReference reference, BlockState instance, NodePos node, String[] laneLabels) {
+		if (level.getBlockEntity(reference.block()) instanceof PortableFuelGeneratorBlockEntity generator) {
 			generator.setNodeLanes(laneLabels);
 		}
 	}

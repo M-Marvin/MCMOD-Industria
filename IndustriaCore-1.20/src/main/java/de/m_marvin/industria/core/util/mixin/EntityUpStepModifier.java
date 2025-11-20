@@ -26,7 +26,8 @@ public abstract class EntityUpStepModifier {
 	
 	@Inject(
 			method = "maxUpStep()F",
-			at = @At("HEAD")
+			at = @At("HEAD"),
+			cancellable = true
 	)
 	public void maxUpStepModified(CallbackInfoReturnable<Float> callback) {
 		float modifiedUpStep = CompoundBlock.performOnAllAndCombine(level(), getOnPosLegacy(), 

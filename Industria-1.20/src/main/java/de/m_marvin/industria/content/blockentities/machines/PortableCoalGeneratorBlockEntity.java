@@ -8,6 +8,7 @@ import de.m_marvin.industria.content.container.PortableCoalGeneratorContainer;
 import de.m_marvin.industria.content.registries.ModBlockEntityTypes;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
+import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
@@ -118,7 +119,7 @@ public class PortableCoalGeneratorBlockEntity extends FixedMultiBlockEntity<Port
 				BlockPos second = multiBlock.getBlockAtMBPos(center, pBlockEntity.getBlockState(), new Vec3i(1, 0, 0));
 				pBlockEntity.level.setBlockAndUpdate(center, pBlockEntity.level.getBlockState(center).setValue(BlockStateProperties.LIT, pBlockEntity.canRun));
 				pBlockEntity.level.setBlockAndUpdate(second, pBlockEntity.level.getBlockState(second).setValue(BlockStateProperties.LIT, pBlockEntity.canRun));
-				ElectricUtility.updateNetwork(pLevel, second);
+				ElectricUtility.updateNetwork(pLevel, ElectricReference.block(second));
 			}
 			GameUtility.triggerClientSync(pBlockEntity.level, pBlockEntity.worldPosition);
 			pBlockEntity.setChanged();

@@ -86,22 +86,22 @@ public class TransistorBlock extends DiodeLikeBlock implements EntityBlock, IEle
 
 	@Override
 	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-		ElectricUtility.updateNetwork(pLevel, pPos);
+		ElectricUtility.updateNetwork(pLevel, ElectricReference.block(pPos));
 	}
 	
 	@Override
-	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
-		if (level.getBlockEntity(position) instanceof TransistorBlockEntity regulator && instance.getBlock() == this) {
+	public void plotCircuit(Level level, BlockState instance, ElectricReference reference, ElectricNetwork circuit,	Consumer<ICircuitPlot> plotter) {
+		if (level.getBlockEntity(reference.block()) instanceof TransistorBlockEntity regulator && instance.getBlock() == this) {
 			
 			String[] wireLanes = regulator.getNodeLanes();
-			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, wireLanes[0], wireLanes[1]);
+			ElectricUtility.plotJoinTogether(plotter, level, this, reference, instance, 0, wireLanes[0], wireLanes[1]);
 			
-			boolean active = level.getBlockState(position).getValue(BlockStateProperties.POWERED);
+			boolean active = level.getBlockState(reference.block()).getValue(BlockStateProperties.POWERED);
 			
 			if (active) {
 				Plotter resistor = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR).plotter();
-				resistor.setNetworkLocalNode("NET1", position, wireLanes[0], 0);
-				resistor.setNetworkLocalNode("NET2", position, wireLanes[1], 0);
+				resistor.setNetworkLocalNode("NET1", reference.block(), wireLanes[0], 0);
+				resistor.setNetworkLocalNode("NET2", reference.block(), wireLanes[1], 0);
 				plotter.accept(resistor);
 			}
 			
@@ -109,18 +109,18 @@ public class TransistorBlock extends DiodeLikeBlock implements EntityBlock, IEle
 	}
 	
 	@Override
-	public double getCurrentPower(Level level, BlockPos pos, BlockState instance) {
+	public double getCurrentPower(Level level, ElectricReference reference, BlockState instance) {
 		return 0;
 	}
 	
 	@Override
-	public double getMaxPowerGeneration(Level level, BlockPos pos, BlockState instance) {
+	public double getMaxPowerGeneration(Level level, ElectricReference reference, BlockState instance) {
 		return 0;
 	}
 	
 	@Override
-	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {
-		GameUtility.triggerClientSync(level, position);
+	public void onNetworkNotify(Level level, BlockState instance, ElectricReference reference) {
+		GameUtility.triggerClientSync(level, reference.block());
 	}
 	
 	@Override
@@ -139,21 +139,21 @@ public class TransistorBlock extends DiodeLikeBlock implements EntityBlock, IEle
 	}
 	
 	@Override
-	public NodePos[] getElectricConnections(Level level, BlockPos pos, BlockState instance) {
-		return IntStream.range(0, NODE_COUNT).mapToObj(i -> new NodePos(pos, i)).toArray(i -> new NodePos[i]);
+	public NodePos[] getElectricConnections(Level level, ElectricReference reference, BlockState instance) {
+		return IntStream.range(0, NODE_COUNT).mapToObj(i -> new NodePos(reference.block(), i)).toArray(i -> new NodePos[i]);
 	}
-
+	
 	@Override
-	public String[] getWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node) {
-		if (level.getBlockEntity(pos) instanceof TransistorBlockEntity regulator) {
+	public String[] getWireLanes(Level level, ElectricReference reference, BlockState instance, NodePos node) {
+		if (level.getBlockEntity(reference.block()) instanceof TransistorBlockEntity regulator) {
 			return regulator.getNodeLanes();
 		}
 		return new String[0];
 	}
-
+	
 	@Override
-	public void setWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node, String[] laneLabels) {
-		if (level.getBlockEntity(pos) instanceof TransistorBlockEntity regulator) {
+	public void setWireLanes(Level level, ElectricReference reference, BlockState instance, NodePos node, String[] laneLabels) {
+		if (level.getBlockEntity(reference.block()) instanceof TransistorBlockEntity regulator) {
 			regulator.setNodeLanes(laneLabels);
 		}
 	}

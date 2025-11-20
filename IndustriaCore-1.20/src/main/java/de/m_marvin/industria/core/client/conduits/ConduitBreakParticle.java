@@ -25,8 +25,8 @@ public class ConduitBreakParticle extends SingleQuadParticle {
 		this.sprite = ConduitModelManager.getModels(conduit)[0].getParticleIcon();
 		float thickness = conduit.getConduit().getThickness() * 16F;
 		float particleSize = random.nextFloat() * thickness;
-		float particleWidth = particleSize / 16F;
-		float particleHeight = particleSize / 16F;
+		float particleWidth = particleSize / this.sprite.contents().width();
+		float particleHeight = particleSize / this.sprite.contents().height();
 		float particleU0 = random.nextFloat() * (1 - particleWidth);
 		float particleV0 = random.nextFloat() * ((thickness * 4F / 16F) - particleHeight);
 		

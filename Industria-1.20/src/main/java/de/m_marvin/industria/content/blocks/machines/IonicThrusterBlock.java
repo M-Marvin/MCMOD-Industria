@@ -92,16 +92,16 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 	}
 
 	@Override
-	public NodePos[] getElectricConnections(Level level, BlockPos pos, BlockState instance) {
-		return NODES.getNodePositions(pos);
+	public NodePos[] getElectricConnections(Level level, ElectricReference reference, BlockState instance) {
+		return NODES.getNodePositions(reference.block());
 	}
 	
 	@Override
-	public void plotCircuit(Level level, BlockState instance, BlockPos position, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
-		if (level.getBlockEntity(position) instanceof IonicThrusterBlockEntity thruster) {
+	public void plotCircuit(Level level, BlockState instance, ElectricReference reference, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
+		if (level.getBlockEntity(reference.block()) instanceof IonicThrusterBlockEntity thruster) {
 			
 			String[] thrusterLanes = thruster.getNodeLanes();
-			ElectricUtility.plotJoinTogether(plotter, level, this, position, instance, 0, thrusterLanes[0], thrusterLanes[1]);
+			ElectricUtility.plotJoinTogether(plotter, level, this, reference, instance, 0, thrusterLanes[0], thrusterLanes[1]);
 			
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
 			int targetVoltage = parametrics.getNominalVoltage();
@@ -110,8 +110,8 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 			Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.CONSTANT_POWER_LOAD).plotter();
 			templateSource.setProperty("nominal_power", targetPower);
 			templateSource.setProperty("nominal_voltage", targetVoltage);
-			templateSource.setNetworkLocalNode("VDC", position, thrusterLanes[0], 0);
-			templateSource.setNetworkLocalNode("GND", position, thrusterLanes[1], 0);
+			templateSource.setNetworkLocalNode("VDC", reference.block(), thrusterLanes[0], 0);
+			templateSource.setNetworkLocalNode("GND", reference.block(), thrusterLanes[1], 0);
 			plotter.accept(templateSource);
 			
 		}
@@ -127,25 +127,25 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 	}
 	
 	@Override
-	public double getCurrentPower(Level level, BlockPos pos, BlockState instance) {
-		if (level.getBlockEntity(pos) instanceof IonicThrusterBlockEntity thruster) {
+	public double getCurrentPower(Level level, ElectricReference reference, BlockState instance) {
+		if (level.getBlockEntity(reference.block()) instanceof IonicThrusterBlockEntity thruster) {
 			String[] wireLanes = thruster.getNodeLanes();
 			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
-			double voltage = ElectricUtility.getVoltageBetweenLocal(level, pos, wireLanes[0], 0, wireLanes[1], 0).orElse(0.0);
+			double voltage = ElectricUtility.getVoltageBetweenLocal(level, reference.block(), wireLanes[0], 0, wireLanes[1], 0).orElse(0.0);
 			return -parametrics.getPowerV(voltage);
 		}
 		return 0.0;
 	}
 	
 	@Override
-	public double getMaxPowerGeneration(Level level, BlockPos pos, BlockState instance) {
+	public double getMaxPowerGeneration(Level level, ElectricReference reference, BlockState instance) {
 		return 0;
 	}
 	
 	@Override
-	public void onNetworkNotify(Level level, BlockState instance, BlockPos position) {
-		GameUtility.triggerClientSync(level, position);
-		level.scheduleTick(position, this, 1);
+	public void onNetworkNotify(Level level, BlockState instance, ElectricReference reference) {
+		GameUtility.triggerClientSync(level, reference.block());
+		level.scheduleTick(reference.block(), this, 1);
 	}
 	
 	@Override
@@ -171,16 +171,16 @@ public class IonicThrusterBlock extends AbstractThrusterBlock implements IElectr
 	}
 	
 	@Override
-	public String[] getWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node) {
-		if (level.getBlockEntity(pos) instanceof IonicThrusterBlockEntity thruster) {
+	public String[] getWireLanes(Level level, ElectricReference reference, BlockState instance, NodePos node) {
+		if (level.getBlockEntity(reference.block()) instanceof IonicThrusterBlockEntity thruster) {
 			return thruster.getNodeLanes();
 		}
 		return new String[0];
 	}
 
 	@Override
-	public void setWireLanes(Level level, BlockPos pos, BlockState instance, NodePos node, String[] laneLabels) {
-		if (level.getBlockEntity(pos) instanceof IonicThrusterBlockEntity thruster) {
+	public void setWireLanes(Level level, ElectricReference reference, BlockState instance, NodePos node, String[] laneLabels) {
+		if (level.getBlockEntity(reference.block()) instanceof IonicThrusterBlockEntity thruster) {
 			thruster.setNodeLanes(laneLabels);
 		}
 	}

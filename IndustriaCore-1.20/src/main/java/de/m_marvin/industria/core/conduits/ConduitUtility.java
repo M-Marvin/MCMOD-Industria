@@ -107,7 +107,7 @@ public class ConduitUtility {
 		if (cResult.isHit() && !skipBlockClip) {
 			Vec3d newTarget = cResult.getHitPos().copy();
 			Vec3d blockDistance = Vec3d.fromVec(context.getTo()).sub(Vec3d.fromVec(context.getFrom()));
-			blockDistance.normalize();
+			blockDistance.tryNormalize();
 			newTarget.add(blockDistance.mul(-0.1));
 			context.to = newTarget.writeTo(new Vec3(0, 0, 0));
 			

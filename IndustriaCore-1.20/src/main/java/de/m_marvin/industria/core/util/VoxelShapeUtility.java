@@ -8,6 +8,7 @@ import de.m_marvin.unimat.api.IQuaternionMath.EulerOrder;
 import de.m_marvin.unimat.impl.Matrix4f;
 import de.m_marvin.unimat.impl.Quaternionf;
 import de.m_marvin.univec.api.IVector4;
+import de.m_marvin.univec.impl.Vec3f;
 import de.m_marvin.univec.impl.Vec3i;
 import de.m_marvin.univec.impl.Vec4f;
 import net.minecraft.core.Direction;
@@ -57,7 +58,7 @@ public class VoxelShapeUtility {
 	
 	public static class VoxelShapeRotationBuilder {
 		
-		private Matrix4f matrix = new Matrix4f();
+		private Matrix4f matrix = new Matrix4f().identityI();
 		private VoxelShapeRotationBuilder() {}
 		
 		public VoxelShapeRotationBuilder centered() {
@@ -70,9 +71,9 @@ public class VoxelShapeUtility {
 		
 		public VoxelShapeRotationBuilder rotateFromNorth(Direction direction) {
 			if (direction.getAxis() == Axis.Y) {
-				return rotateX(direction.getAxisDirection() == AxisDirection.POSITIVE ? 90 : -90);
+				return rotateX(direction.getAxisDirection() == AxisDirection.POSITIVE ? -90 : 90);
 			} else {
-				return rotateY((direction.get2DDataValue() - 2) * -90);
+				return rotateY((direction.get2DDataValue() - 2) * 90);
 			}
 		}
 		
@@ -123,25 +124,25 @@ public class VoxelShapeUtility {
 		}
 		
 		public VoxelShapeRotationBuilder rotate(int x, int y, int z) {
-			this.matrix = new Matrix4f(new Quaternionf(new Vec3i(x, y, z), EulerOrder.XYZ, true)).mul(this.matrix);
+			this.matrix.mulI(Matrix4f.rotation(new Quaternionf(new Vec3i(x, y, z), EulerOrder.XYZ, true)));
 			return this;
 		}
 
 		public VoxelShapeRotationBuilder offset(int x, int y, int z) {
-			this.matrix = Matrix4f.translateMatrix(x * 0.0625F, y * 0.0625F, z * 0.0625F).mul(this.matrix);
+			this.matrix.mulI(Matrix4f.translate(new Vec3f(x * 0.0625F, y * 0.0625F, z * 0.0625F)));
 			return this;
 		}
 		
 		public VoxelShapeRotationBuilder scale(float x, float y, float z) {
-			this.matrix = Matrix4f.scaleMatrix(x, y, z).mul(this.matrix);
+			this.matrix.mulI(Matrix4f.scale(new Vec3f(x, y, z)));
 			return this;
 		}
 		
 		public VoxelShape transform(VoxelShape shape) {
 			if (shape.isEmpty()) return shape;
 			return shape.toAabbs().stream().map(aabb -> {
-				IVector4<Float> av = this.matrix.translate(new Vec4f((float) aabb.minX, (float) aabb.minY, (float) aabb.minZ, 1F));
-				IVector4<Float> bv = this.matrix.translate(new Vec4f((float) aabb.maxX, (float) aabb.maxY, (float) aabb.maxZ, 1F));
+				IVector4<Float> av = this.matrix.transformVec4(new Vec4f((float) aabb.minX, (float) aabb.minY, (float) aabb.minZ, 1F));
+				IVector4<Float> bv = this.matrix.transformVec4(new Vec4f((float) aabb.maxX, (float) aabb.maxY, (float) aabb.maxZ, 1F));
 				return VoxelShapeUtility.create(av.x(), av.y(), av.z(), bv.x(), bv.y(), bv.z());
 			}).reduce(Shapes::or).get();
 		}

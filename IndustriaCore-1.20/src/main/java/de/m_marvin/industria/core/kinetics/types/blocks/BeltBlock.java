@@ -126,7 +126,7 @@ public class BeltBlock extends BaseEntityBlock implements IKineticBlock, SimpleW
 				return VoxelShapeUtility.transformation()
 						.centered()
 						.rotateFromAxisX(axis)
-						.rotateAround(axis, -angle)
+						.rotateAround(axis, angle)
 						.uncentered()
 						.transform(shape);
 				
@@ -141,7 +141,7 @@ public class BeltBlock extends BaseEntityBlock implements IKineticBlock, SimpleW
 				return VoxelShapeUtility.transformation()
 						.centered()
 						.rotateFromAxisX(axis)
-						.rotateAround(axis, -angle)
+						.rotateAround(axis, angle)
 						.uncentered()
 						.transform(shape);
 				

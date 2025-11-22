@@ -80,7 +80,7 @@ public class ConduitVisual<T extends ConduitEntity> extends AbstractVisual imple
 			position.addI(nodeRenderOrigin).subI(0.5F, 0.5F, 0.5F);
 			
 			float angleHorizontal = -(float) new Vec2f(direction.x, direction.z).angle(new Vec2f(0F, -1F));
-			Vec2f directionProjection = new Vec2f((float) Math.sqrt(direction.x * direction.x + direction.z * direction.z), direction.y).normalize();
+			Vec2f directionProjection = new Vec2f((float) Math.sqrt(direction.x * direction.x + direction.z * direction.z), direction.y).tryNormalize();
 			float angleVertical = (float) directionProjection.angle(new Vec2f(1F, 0F));
 			float scale = (float) (direction.length() / shape.segmentLength);
 			

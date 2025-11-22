@@ -228,7 +228,7 @@ public class ConduitVanillaRenderer {
 			if (nodeA != null && nodeB != null) {
 				Vec3d nodeAworldPosition = nodeA.getWorldRenderPosition(level, conduit.getPosition().getNodeApos());
 				Vec3d nodeBworldPosition = nodeB.getWorldRenderPosition(level, conduit.getPosition().getNodeBpos());
-				Vec3f normal = new Vec3f(nodeAworldPosition.sub(nodeBworldPosition)).normalize();
+				Vec3f normal = new Vec3f(nodeAworldPosition.sub(nodeBworldPosition)).tryNormalize();
 				Vec3d nodeOrigin = MathUtility.getMinCorner(nodeAworldPosition, nodeBworldPosition).sub(0.5, 0.5, 0.5);
 				Vec4f color = new Vec4f(0.5F, 1.0F, 0.5F, 1F);
 				
@@ -358,7 +358,7 @@ public class ConduitVanillaRenderer {
 				position.addI(origin).subI(0.5F, 0.5F, 0.5F);
 				
 				float angleHorizontal = -(float) new Vec2f(direction.x, direction.z).angle(new Vec2f(0F, -1F));
-				Vec2f directionProjection = new Vec2f((float) Math.sqrt(direction.x * direction.x + direction.z * direction.z), direction.y).normalize();
+				Vec2f directionProjection = new Vec2f((float) Math.sqrt(direction.x * direction.x + direction.z * direction.z), direction.y).tryNormalize();
 				float angleVertical = (float) directionProjection.angle(new Vec2f(1F, 0F));
 				float scale = (float) (direction.length() / shape.segmentLength);
 				

@@ -47,7 +47,7 @@ public abstract class GearTransmissions implements IKineticBlock.TransmissionTyp
 		@Override
 		public BlockPos[] pos(TransmissionNode n) {
 			Vec3i v = Vec3i.fromVec(n.pos()).sub(Vec3i.fromVec(n.reference().pos()));
-			if (v.lengthSqrt() != 0) {
+			if (v.lengthSqr() != 0) {
 				Direction offset = MathUtility.getVecDirection(v);
 				return new BlockPos[] {
 					n.pos().relative(offset).relative(n.axis(), +1),

@@ -46,7 +46,7 @@ public enum DiagonalDirection implements StringRepresentable {
 	private DiagonalDirection(String name, Vec3i normal, int data3d, int oposite, Direction horizontal, Direction vertical) {
 		this.name = name;
 		this.normal = normal;
-		this.normalized = new Vec3f(normal).normalize();
+		this.normalized = new Vec3f(normal).tryNormalize();
 		this.data3d = data3d;
 		this.oposite = oposite;
 		this.horizontal = horizontal;

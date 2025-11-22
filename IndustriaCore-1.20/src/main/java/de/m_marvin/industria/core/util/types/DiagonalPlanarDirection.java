@@ -32,7 +32,7 @@ public enum DiagonalPlanarDirection implements StringRepresentable {
 	private DiagonalPlanarDirection(String name, Vec2i normal, int data2d, int oposite, int angle) {
 		this.name = name;
 		this.normal = normal;
-		this.normalized = new Vec2f(normal).normalize();
+		this.normalized = new Vec2f(normal).tryNormalize();
 		this.data2d = data2d;
 		this.oposite = oposite;
 		this.angle = angle;

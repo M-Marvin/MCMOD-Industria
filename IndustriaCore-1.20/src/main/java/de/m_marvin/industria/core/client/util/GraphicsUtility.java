@@ -43,7 +43,7 @@ public class GraphicsUtility {
 		Matrix4f pose = matrixStack.last().pose();
 		Matrix3f normal = matrixStack.last().normal();
 		
-		Vec3f normalv = vector.normalize();
+		Vec3f normalv = vector.tryNormalize();
 		Vec3f vector2 = origin.add(vector);
 		
 		vertexConsumer.vertex(pose, origin.x, origin.y, origin.z).color(r, g, b, a).normal(normal, normalv.x, normalv.y, normalv.z).endVertex();

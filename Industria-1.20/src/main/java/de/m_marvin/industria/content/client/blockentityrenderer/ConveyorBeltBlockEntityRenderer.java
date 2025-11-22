@@ -104,9 +104,9 @@ public class ConveyorBeltBlockEntityRenderer extends BeltBlockEntityRenderer {
 			
 		}
 
-		Vec3f va = insertionDirection.length() > 0 ? insertionDirection.mul(1F, 0F, 1F).normalize() : new Vec3f();
+		Vec3f va = insertionDirection.length() > 0 ? insertionDirection.mul(1F, 0F, 1F).tryNormalize() : new Vec3f();
 		Vec3f v1 = new Vec3f(va.mul(itemPosition).z, 0F, va.mul(itemPosition).x);
-		Vec3f vb = beltDirection.length() > 0 ? beltDirection.mul(1F, 0F, 1F).normalize() : new Vec3f();
+		Vec3f vb = beltDirection.length() > 0 ? beltDirection.mul(1F, 0F, 1F).tryNormalize() : new Vec3f();
 		Vec3f v2 = new Vec3f(vb.mul(itemPosition).z, 0F, vb.mul(itemPosition).x);
 		
 		/* additional offsets for each item */

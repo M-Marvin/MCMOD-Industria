@@ -143,6 +143,10 @@ public class ConduitState extends StateHolder<Conduit, ConduitState> {
 		return getConduit().getDrops(this, entity);
 	}
 	
+	public boolean collidesWithBlock(BlockPos pos, ConduitEntity entity) {
+		return getConduit().collidesWithBlock(pos, this, entity);
+	}
+	
 	public ConduitShape buildShape(ConduitEntity entity) {
 		return getConduit().buildShape(this, entity);
 	}

@@ -90,14 +90,14 @@ public class MotorBlock extends BaseEntityBlock implements IKineticBlock, Simple
 	
 	@Override
 	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-		return VoxelShapeUtility.stateCachedShape(ShapeType.MISC, pState, () -> {
+//		return VoxelShapeUtility.stateCachedShape(ShapeType.MISC, pState, () -> {
 			Direction facing = pState.getValue(FACING);
 			return VoxelShapeUtility.transformation()
 					.centered()
 					.rotateFromNorth(facing)
 					.uncentered()
 					.transform(facing.getAxis() == Axis.Y ? SHAPE : SHAPE_HORIZONTAL);
-		});
+//		});
 	}
 	
 	@Override

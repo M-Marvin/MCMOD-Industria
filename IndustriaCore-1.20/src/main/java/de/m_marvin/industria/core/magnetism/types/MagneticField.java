@@ -245,7 +245,7 @@ public class MagneticField {
 		
 		Vec3d offset = otherCenter.sub(thisCenter);
 		double angle = offset.angle(thisFieldVector);
-		Vec3d angleVec = offset.cross(thisFieldVector).normalize();
+		Vec3d angleVec = offset.cross(thisFieldVector).tryNormalize();
 		Quaterniond interactionVecRot = new Quaterniond(angleVec, angle * -2.0);
 		
 		return thisFieldVector.mul(this.getIntensityLinearAt(offset.length())).transform(interactionVecRot);
@@ -373,7 +373,7 @@ public class MagneticField {
 		double strengthLinear = v1.length() * v2.length() * linearForceMultiplier;
 		double alignmentAngle = strengthLinear > 0 ? v1.angle(v2) : 0;
 		
-		Vec3d attractingVector = offset.normalize();
+		Vec3d attractingVector = offset.tryNormalize();
 		Vec3d attractionForce = attractingVector.mul(strengthLinear).mul(Math.cos(alignmentAngle));
 		
 		// Calculate linear force applied between induced fields

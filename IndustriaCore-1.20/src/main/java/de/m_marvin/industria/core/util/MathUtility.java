@@ -1,6 +1,7 @@
 package de.m_marvin.industria.core.util;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +10,7 @@ import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import de.m_marvin.industria.core.util.types.Pair;
 import de.m_marvin.unimat.impl.Quaterniond;
 import de.m_marvin.unimat.impl.Quaternionf;
 import de.m_marvin.univec.impl.Vec2f;
@@ -36,6 +38,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class MathUtility {
 
@@ -171,7 +174,7 @@ public class MathUtility {
 	
 	public static Direction getPosDirection(BlockPos pos1, BlockPos pos2) {
 		if (pos1.equals(pos2)) return null;
-		return getVecDirection(Vec3d.fromVec(pos1.subtract(pos2)).normalize());
+		return getVecDirection(Vec3d.fromVec(pos1.subtract(pos2)).tryNormalize());
 	}
 	
 	public static Direction getVecDirection(Vec3i v) {
@@ -183,7 +186,7 @@ public class MathUtility {
 	}
 	
 	public static Direction getVecDirection(Vec3d v) {
-		v = v.normalize();
+		v = v.tryNormalize();
 		Vec3d v2 = v.abs();
 		if (v2.x > v2.y && v2.x > v2.z) {
 			return v.x > 0 ? Direction.EAST : Direction.WEST;
@@ -513,8 +516,8 @@ public class MathUtility {
 	public static Vec2f[] makeBezierVectors2D(Vec2f p1, Vec2f v1, Vec2f p2, Vec2f v2, float vecmaxlen) {
 		float dist = p1.dist(p2);
 		
-		Vec2f p1b = p1.add(v1.mul(dist / 2)); // p2.sub(p1).mul(v1.abs()).add(p1);
-		Vec2f p2b = p2.add(v2.mul(dist / 2)); // p1.sub(p2).mul(v2.abs()).add(p2);
+		Vec2f p1b = p1.add(v1.mul(dist / 2));
+		Vec2f p2b = p2.add(v2.mul(dist / 2));
 		Vec2f[] points = new Vec2f[] {p1, p1b, p2b, p2};
 		float distance = p1.dist(p2);
 		Vec2f[] vecs = new Vec2f[Math.round(distance / vecmaxlen)];
@@ -528,6 +531,25 @@ public class MathUtility {
 		}
 		
 		return vecs;
+	}
+	
+	public static Optional<Vec3d> closestPointOfShape(VoxelShape shape, Vec3d point) {
+		Optional<Vec3> p = shape.closestPointTo(point.writeTo(new Vec3(0, 0, 0)));
+		if (p.isEmpty())
+			return Optional.empty();
+		return Optional.of(Vec3d.fromVec(p.get()));
+	}
+	
+	
+	public static boolean isPointInShape(VoxelShape shape, Vec3d point) {
+		List<Pair<Vec3d, Vec3d>> boxes = new ArrayList<Pair<Vec3d,Vec3d>>();
+		shape.forAllBoxes((minX, minY, minZ, maxX, maxY, maxZ) ->
+			boxes.add(new Pair<>(new Vec3d(minX, minY, minZ), new Vec3d(maxX, maxY, maxZ))));
+		
+		if (boxes.isEmpty())
+			return false;
+		
+		return boxes.stream().map(box -> point.clamp(box.first(), box.second()).distSqr(point) < 0.000625).reduce((a, b) -> a || b).get();
 	}
 	
 }

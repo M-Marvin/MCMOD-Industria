@@ -81,7 +81,7 @@ public class PathTransfom {
 		Vec3f rotationImmutable = rotation.copy();
 		if (rotationImmutable.length() == 0) return this;
 		this.transforms.add(new TransformSpan(this.interpolationStart, this.interpolationEnd, (poseStack, interpolation) -> {
-			Quaternionf rot = new Quaternionf(rotationImmutable.normalize(), rotationImmutable.length() * interpolation);
+			Quaternionf rot = new Quaternionf(rotationImmutable.tryNormalize(), rotationImmutable.length() * interpolation);
 			poseStack.rotateAround(new org.joml.Quaternionf(rot.i, rot.j, rot.k, rot.r), originImmutable.x, originImmutable.y, originImmutable.z);
 		}));
 		return this;

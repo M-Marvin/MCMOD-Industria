@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"": { "segments": [
+			"industria:conduit/aluminum_wire_1",
+			"industria:conduit/aluminum_wire_2",
+			"industria:conduit/aluminum_wire_3",
+			"industria:conduit/aluminum_wire_4"
+		] }
+	}
+}

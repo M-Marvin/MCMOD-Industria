@@ -79,6 +79,10 @@ public class Conduit extends ConduitBehavior implements ItemLike {
 		return getStiffness();
 	}
 	
+	public float getTension(ConduitState state, ConduitEntity conduitEntity) {
+		return getTension();
+	}
+	
 	public int getClampingLength(ConduitState state, ConduitEntity conduitEntity) {
 		return getClampingLength();
 	}
@@ -403,6 +407,7 @@ public class Conduit extends ConduitBehavior implements ItemLike {
 				this.lastPos[i] = temp;
 			}
 			
+			double inverseTension = 1.0 / state.getTension(conduitEntity);
 			for (int itteration = 1; itteration <= 10; itteration++) {
 
 				// solve beams
@@ -413,8 +418,8 @@ public class Conduit extends ConduitBehavior implements ItemLike {
 					
 					// calculate spring deformation
 					Vec3d delta = node1.sub(node2);
-					double deltalength = delta.length(); // Math.sqrt(delta.dot(delta));
-					double diff = (float) ((deltalength - this.segmentLength) / deltalength);
+					double deltalength = delta.length();
+					double diff = (float) ((deltalength - (this.segmentLength * inverseTension)) / deltalength);
 					
 					// the outer nodes are fixed, apply all correction force to the inner nodes
 					double f1 = 0.5;
@@ -444,7 +449,7 @@ public class Conduit extends ConduitBehavior implements ItemLike {
 				this.nodes[i].subI(new Vec3d(GameUtility.getWorldGravity(level)).mul(nodeMass));
 			}
 			
-			// solve collision
+			// solve collision TODO limit max velocity
 			for (int i = 1; i < this.nodes.length - 1; i++) {
 
 				Vec3d nodePos = this.nodes[i].add(Vec3f.fromVec(origin));
@@ -479,7 +484,7 @@ public class Conduit extends ConduitBehavior implements ItemLike {
 							if (d.getAxis() == Axis.Z && d.getAxisDirection() == AxisDirection.NEGATIVE)
 								surfacePoint.z = (float) bounds.minZ;
 
-							double distance = nodePos.sub(surfacePoint).length();
+							double distance = nodePos.dist(surfacePoint);
 							
 							if (distance < dist) {
 								dist = distance;
@@ -494,6 +499,7 @@ public class Conduit extends ConduitBehavior implements ItemLike {
 					if (dist == 1) {
 						surface.setI(nodePos);
 						surface.setY((double) bounds.maxY);
+						dist = nodePos.dist(surface);
 					}
 					
 					// move to surface

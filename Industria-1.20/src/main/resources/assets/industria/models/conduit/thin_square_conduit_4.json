@@ -1,0 +1,18 @@
+{
+	"texture_size": [32, 16],
+	"elements": [
+		{
+			"from": [-1.5, -1.5, -4],
+			"to": [1.5, 1.5, 4],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-0.5, -0.5, 0]},
+			"faces": {
+				"north": {"uv": [0, 12, 1.5, 15], "texture": "#conduit"},
+				"east": {"uv": [0, 6, 4, 9], "texture": "#conduit"},
+				"south": {"uv": [1.5, 12, 3, 15], "texture": "#conduit"},
+				"west": {"uv": [0, 0, 4, 3], "rotation": 180, "texture": "#conduit"},
+				"up": {"uv": [4, 6, 0, 3], "rotation": 90, "texture": "#conduit"},
+				"down": {"uv": [0, 12, 4, 9], "rotation": 90, "texture": "#conduit"}
+			}
+		}
+	]
+}

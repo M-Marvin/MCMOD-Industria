@@ -1,0 +1,8 @@
+{
+	"parent": "industria:conduit/thin_square_conduit_2",
+	"textures": {
+		"conduit": "industria:conduit/aluminum_wire",
+		"particle": "industria:conduit/aluminum_wire_particle"
+	},
+	"atlas": "industriacore:textures/atlas/conduits.png"
+}

@@ -216,13 +216,11 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 		if (reference.isBlock()) {
 			BlockState blockState = this.level.getBlockState(reference.block());
 			if (blockState.getBlock() instanceof IElectricBlock electricBlock) {
-				// Yeah, this is not optimal, but BlockPos and ConduitPos have no common Interface or Super-Class
 				return new ElectricComponent<BlockState, Block>(reference, electricBlock, blockState);
 			}
 		} else if (reference.isConduit()) {
 			Optional<ConduitEntity> conduitEntity = ConduitUtility.getConduit(this.level, reference.conduit());
 			if (conduitEntity.isPresent() && conduitEntity.get().getConduitState().getConduit() instanceof IElectricConduit electricConduit) {
-				// Yeah, this is not optimal, but BlockPos and ConduitPos have no common Interface or Super-Class
 				return new ElectricComponent<ConduitEntity, Conduit>(ElectricReference.conduit(reference.conduit()), electricConduit, conduitEntity.get());
 			}
 		}

@@ -19,7 +19,7 @@ public interface IAdjustableConduitItem extends IConduitItem, IScrollOverride {
 	@Override
 	public default void onScroll(ScrollContext context) {
 		CompoundTag itemTag = context.getItemInHand().getOrCreateTag();
-		float placementLength = (float) MathUtility.clamp(itemTag.getFloat("Length") + context.getScroll() * 0.1F, 1F, 3F);
+		float placementLength = (float) MathUtility.clamp(itemTag.getFloat("Length") + context.getScroll() * 0.1F, 1F, 3F); // TODO adjust conduit length multiplier
 		IndustriaCore.NETWORK.sendToServer(new CChangeConduitPlacementLengthPackage(placementLength));
 		context.getPlayer().displayClientMessage(Component.translatable("industriacore.item.info.conduit.changeLength", Math.round(placementLength * 10.0) / 10.0), true);
 	}

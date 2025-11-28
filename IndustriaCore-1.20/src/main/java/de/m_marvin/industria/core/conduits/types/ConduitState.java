@@ -111,6 +111,10 @@ public class ConduitState extends StateHolder<Conduit, ConduitState> {
 		return getConduit().getStiffness(this, entity);
 	}
 	
+	public float getTension(ConduitEntity entitity) {
+		return getConduit().getTension(this, entitity);
+	}
+	
 	public int getClampingLength(ConduitEntity entity) {
 		return getConduit().getClampingLength(this, entity);
 	}

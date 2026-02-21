@@ -139,5 +139,5 @@ siete, sietí, sieťam, siete, sieťach, sietami  => DAT un LOK -ťa- statt -tia
 NOM    GEN    DAT     AKK    LOK      INSTR
 
 zoznam (Liste) nach Schema MASK-3 mit Ausnahmen
-zoznam,  zoznamu,  zoznamu,  zoznam,  zozname,   zoznamom   => GEN -u statt - a wegen Endung -m-
-zoznamy, zoznamov, zoznamom, zoznamy, zoznamoch, zozmamami  => INSTR -ami statt -mi
+zoznam,  zoznamu,  zoznamu,  zoznam,  zozname,   zoznamom   => GEN -u statt -a wegen Endung -m-
+zoznamy, zoznamov, zoznamom, zoznamy, zoznamoch, zoznamami  => INSTR -ami statt -mi

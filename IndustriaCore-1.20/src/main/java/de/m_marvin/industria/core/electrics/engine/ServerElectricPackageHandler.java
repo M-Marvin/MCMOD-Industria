@@ -1,15 +1,12 @@
 package de.m_marvin.industria.core.electrics.engine;
 
-import java.util.Optional;
-
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.engine.network.CEditPowerSourcePackage;
-import de.m_marvin.industria.core.electrics.engine.network.CPlayerSwitchNetworkPackage;
+import de.m_marvin.industria.core.electrics.engine.network.CSwitchNetworkStatePackage;
 import de.m_marvin.industria.core.electrics.engine.network.CUpdateJunctionLanesPackage;
 import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
-import de.m_marvin.industria.core.electrics.types.blockentities.VoltageSourceBlockEntity;
-import de.m_marvin.industria.core.registries.BlockEntityTypes;
+import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
+import de.m_marvin.industria.core.util.container.AbstractBlockContainerMenu;
 import de.m_marvin.industria.core.util.types.PowerNetState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -18,8 +15,15 @@ import net.minecraftforge.network.NetworkEvent.Context;
 
 public class ServerElectricPackageHandler {
 	
-	public static void handlePlayerSwitchNetwork(CPlayerSwitchNetworkPackage msg, Context ctx) {
-		ElectricUtility.setNetworkState(ctx.getSender().level(), ElectricReference.block(msg.getComponent()), msg.getState() ? PowerNetState.ACTIVE : PowerNetState.INACTIVE);
+	public static void handlePlayerSwitchNetwork(CSwitchNetworkStatePackage msg, Context ctx) {
+		
+		if (ctx.getSender().containerMenu instanceof AbstractBlockContainerMenu menu && menu.containerId == msg.getContainerId()) {
+			if (menu.getBlockState().getBlock() instanceof IElectricBlock electric) {
+				BlockPos masterPos = electric.getConnectorMasterPos(menu.getLevel(), menu.getBlockPos(), menu.getBlockState());
+				ElectricUtility.setNetworkState(menu.getLevel(), ElectricReference.block(masterPos), msg.getState() ? PowerNetState.ACTIVE : PowerNetState.INACTIVE);
+			}
+		}
+		
 	}
 	
 	public static void handleUpdateJunctionLanes(CUpdateJunctionLanesPackage msg, Context ctx) {
@@ -33,15 +37,6 @@ public class ServerElectricPackageHandler {
 			} else {
 				junctionEditEntity.setCableWireLabels(msg.getCableNode(), msg.getLaneLabels());
 			}
-		}
-		
-	}
-
-	public static void handleEditPowerSource(CEditPowerSourcePackage msg, Context context) {
-		
-		Optional<VoltageSourceBlockEntity> powerSource = context.getSender().level().getBlockEntity(msg.getPos(), BlockEntityTypes.VOLTAGE_SOURCE.get());
-		if (powerSource.isPresent()) {
-			powerSource.get().setVoltageAndPower(msg.getVoltage(), msg.getPower());
 		}
 		
 	}

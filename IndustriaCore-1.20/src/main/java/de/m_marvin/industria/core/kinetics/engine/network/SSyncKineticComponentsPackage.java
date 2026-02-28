@@ -67,8 +67,8 @@ public class SSyncKineticComponentsPackage {
 	public static void handle(SSyncKineticComponentsPackage msg, Supplier<Context> ctx) {
 		ctx.get().enqueueWork(() -> {
 			ClientKineticPackageHandler.handleSyncComponentsServer(msg, ctx.get());
+			ctx.get().setPacketHandled(true);
 		});
-		ctx.get().setPacketHandled(true);
 	}
 	
 }

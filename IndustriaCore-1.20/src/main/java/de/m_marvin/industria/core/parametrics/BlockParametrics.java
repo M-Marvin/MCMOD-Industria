@@ -116,28 +116,28 @@ public class BlockParametrics {
 		return getParameter(PARAMETER_MAGNETIC_VECTOR);
 	}
 	
-	public double getPowerV(double voltage) {
-		double loadResistance = getNominalResistance();
-		return (voltage / loadResistance) * voltage;
-	}
-	
-	public double getPowerPercentageP(double power) {
-		int powerMin = getPowerMin();
-		int powerMax = getPowerMax();
-		int d = powerMax - powerMin;
-		return (powerMin <= 0 ? 0.0 : Math.min(power / (double) powerMin, 1)) + (d <= 0 ? 0.0 : Math.max((power - powerMin) / (double) d, 0));
-	}
+//	public double getPowerV(double voltage) {
+//		double loadResistance = getNominalResistance();
+//		return (voltage / loadResistance) * voltage;
+//	}
+//	
+//	public double getPowerPercentageP(double power) {
+//		int powerMin = getPowerMin();
+//		int powerMax = getPowerMax();
+//		int d = powerMax - powerMin;
+//		return (powerMin <= 0 ? 0.0 : Math.min(power / (double) powerMin, 1)) + (d <= 0 ? 0.0 : Math.max((power - powerMin) / (double) d, 0));
+//	}
 
-	public double getPowerPercentageV(double voltage) {
-		return getPowerPercentageP(getPowerV(voltage));
-	}
+//	public double getPowerPercentageV(double voltage) {
+//		return getPowerPercentageP(getPowerV(voltage));
+//	}
 
-	public double getVoltageOvershoot(double voltage) {
-		int voltageMin = getVoltageMin();
-		int voltageMax = getVoltageMax();
-		int d = voltageMax - voltageMin;
-		return (voltageMin <= 0 ? 0.0 : Math.min(voltage / (double) voltageMin, 1)) + (d <= 0 ? 0.0 : Math.max((voltage - voltageMin) / d, 0));
-	}
+//	public double getVoltageOvershoot(double voltage) {
+//		int voltageMin = getVoltageMin();
+//		int voltageMax = getVoltageMax();
+//		int d = voltageMax - voltageMin;
+//		return (voltageMin <= 0 ? 0.0 : Math.min(voltage / (double) voltageMin, 1)) + (d <= 0 ? 0.0 : Math.max((voltage - voltageMin) / d, 0));
+//	}
 	
 	public double getExplodeChance(double voltagePercentage, double powerPercentage) {
 		return Math.max(0, voltagePercentage - 2) + Math.max(0, powerPercentage - 2);

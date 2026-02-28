@@ -1,7 +1,7 @@
 package de.m_marvin.industria.core.client.electrics;
 
 import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.core.client.electrics.events.ElectricNetworkEvent;
+import de.m_marvin.industria.core.electrics.events.ElectricNetworkEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;

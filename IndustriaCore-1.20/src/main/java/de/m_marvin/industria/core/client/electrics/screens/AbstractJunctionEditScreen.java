@@ -9,7 +9,7 @@ import com.mojang.math.Axis;
 import de.m_marvin.industria.core.client.electrics.screens.AbstractJunctionEditScreen.CableNode.WireNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
-import de.m_marvin.industria.core.electrics.types.containers.AbstractJunctionEditContainer;
+import de.m_marvin.industria.core.electrics.types.containers.AbstractJunctionEditMenu;
 import de.m_marvin.industria.core.util.MathUtility;
 import de.m_marvin.industria.core.util.types.PlanarDirection;
 import de.m_marvin.univec.impl.Vec2f;
@@ -25,7 +25,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public abstract class AbstractJunctionEditScreen<B extends BlockEntity & IJunctionEdit, C extends AbstractJunctionEditContainer<B>> extends AbstractContainerScreen<C> {
+public abstract class AbstractJunctionEditScreen<B extends BlockEntity & IJunctionEdit, C extends AbstractJunctionEditMenu<B>> extends AbstractContainerScreen<C> {
 	
 	public static final int[] WIRE_COLORS = {
 			0x9E511A,

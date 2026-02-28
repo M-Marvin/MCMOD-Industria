@@ -5,7 +5,7 @@ import de.m_marvin.industria.core.client.electrics.screens.JunctionBoxScreen;
 import de.m_marvin.industria.core.client.electrics.screens.VoltageSourceScreen;
 import de.m_marvin.industria.core.client.kinetics.screens.MotorScreen;
 import de.m_marvin.industria.core.electrics.types.blockentities.JunctionBoxBlockEntity;
-import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
+import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxMenu;
 import de.m_marvin.industria.core.registries.MenuTypes;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.MenuScreens.ScreenConstructor;
@@ -23,10 +23,10 @@ public class Screens {
 	public static void onClientSetup(FMLClientSetupEvent event) {
 		// FIXME what is going on here with gradle ???
 //		MenuScreens.register(MenuTypes.JUNCTION_BOX.get(), JunctionBoxScreen::new);
-		MenuScreens.register(MenuTypes.JUNCTION_BOX.get(), new ScreenConstructor<JunctionBoxContainer<JunctionBoxBlockEntity>, JunctionBoxScreen<JunctionBoxBlockEntity, JunctionBoxContainer<JunctionBoxBlockEntity>>>() {
+		MenuScreens.register(MenuTypes.JUNCTION_BOX.get(), new ScreenConstructor<JunctionBoxMenu<JunctionBoxBlockEntity>, JunctionBoxScreen<JunctionBoxBlockEntity, JunctionBoxMenu<JunctionBoxBlockEntity>>>() {
 			@Override
-			public JunctionBoxScreen<JunctionBoxBlockEntity, JunctionBoxContainer<JunctionBoxBlockEntity>> create(JunctionBoxContainer<JunctionBoxBlockEntity> pMenu, Inventory pInventory, Component pTitle) {
-				return new JunctionBoxScreen<JunctionBoxBlockEntity, JunctionBoxContainer<JunctionBoxBlockEntity>>(pMenu, pInventory, pTitle);
+			public JunctionBoxScreen<JunctionBoxBlockEntity, JunctionBoxMenu<JunctionBoxBlockEntity>> create(JunctionBoxMenu<JunctionBoxBlockEntity> pMenu, Inventory pInventory, Component pTitle) {
+				return new JunctionBoxScreen<JunctionBoxBlockEntity, JunctionBoxMenu<JunctionBoxBlockEntity>>(pMenu, pInventory, pTitle);
 			}
 		});
 		MenuScreens.register(MenuTypes.VOLTAGE_SOURCE.get(), VoltageSourceScreen::new);

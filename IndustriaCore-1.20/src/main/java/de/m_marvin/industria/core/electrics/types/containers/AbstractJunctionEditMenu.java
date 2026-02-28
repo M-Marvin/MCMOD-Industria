@@ -6,29 +6,19 @@ import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.network.CUpdateJunctionLanesPackage;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
 import de.m_marvin.industria.core.util.MathUtility;
-import de.m_marvin.industria.core.util.container.AbstractBlockEntityContainerBase;
-import net.minecraft.network.FriendlyByteBuf;
+import de.m_marvin.industria.core.util.container.AbstractBlockContainerMenu;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public abstract class AbstractJunctionEditContainer<T extends BlockEntity & IJunctionEdit> extends AbstractBlockEntityContainerBase<T> {
-
-	public AbstractJunctionEditContainer(MenuType<?> type, int id, Inventory playerInv, FriendlyByteBuf data) {
-		super(type, id, playerInv, data);
-	}
-
-	public AbstractJunctionEditContainer(MenuType<?> type, int id, Inventory playerInv, T tileEntity) {
-		super(type, id, playerInv, tileEntity);
-	}
-
-	@Override
-	public int getSlots() {
-		return 0;
-	}
+public abstract class AbstractJunctionEditMenu<T extends BlockEntity & IJunctionEdit> extends AbstractBlockContainerMenu {
 	
-	@Override
-	public void init() {}
+	protected final T blockEntity;
+	
+	public AbstractJunctionEditMenu(MenuType<?> type, int id, Inventory playerInv, T junctionBlockEntity) {
+		super(type, id, playerInv, junctionBlockEntity.getBlockPos(), new DummyContainer(junctionBlockEntity.getBlockPos()));
+		this.blockEntity = junctionBlockEntity;
+	}
 	
 	public void setWireLabels(NodePos node, String[] labels) {
 		blockEntity.setCableWireLabels(node, labels);

@@ -93,8 +93,8 @@ public class VS2MassSyncPatch {
 			
 			ctx.get().enqueueWork(() -> {
 				clientMassInfoCache = msg.getMassInfo();
+				ctx.get().setPacketHandled(true);
 			});
-			ctx.get().setPacketHandled(true);
 			
 		}
 		

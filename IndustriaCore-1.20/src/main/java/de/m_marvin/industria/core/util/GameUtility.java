@@ -9,9 +9,10 @@ import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.contraptions.ContraptionUtility;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
-import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
+import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxMenu;
 import de.m_marvin.industria.core.registries.Blocks;
 import de.m_marvin.industria.core.registries.Tags;
+import de.m_marvin.industria.core.util.container.IDataSlotContainer;
 import de.m_marvin.univec.impl.Vec3d;
 import de.m_marvin.univec.impl.Vec3f;
 import net.minecraft.core.BlockPos;
@@ -48,7 +49,7 @@ public class GameUtility {
 	}
 	
 	public static <T extends BlockEntity & IJunctionEdit> AbstractContainerMenu openJunctionScreenOr(T blockEntity, int containerId, Player player, Inventory inventory, Supplier<AbstractContainerMenu> container) {
-		return isHoldingScrewdriver(player) ? new JunctionBoxContainer<T>(containerId, inventory, blockEntity) : container.get();
+		return isHoldingScrewdriver(player) ? new JunctionBoxMenu<T>(containerId, inventory, blockEntity) : container.get();
 	}
 
 	public static InteractionResult openJunctionBlockEntityUI(Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand) {
@@ -66,7 +67,11 @@ public class GameUtility {
 			BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
 			if (blockEntity instanceof MenuProvider provider) {
 				triggerClientSync(pLevel, pPos);
-				NetworkHooks.openScreen((ServerPlayer) pPlayer, provider, pPos);
+				NetworkHooks.openScreen((ServerPlayer) pPlayer, provider, buff -> {
+					buff.writeBlockPos(pPos);
+					if (blockEntity instanceof IDataSlotContainer dataContainer)
+						buff.writeVarIntArray(dataContainer.getContainerData().getRawData());
+				});
 			}
 			return InteractionResult.SUCCESS;
 		}

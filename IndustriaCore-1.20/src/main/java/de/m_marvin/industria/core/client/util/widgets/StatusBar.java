@@ -1,97 +1,124 @@
 package de.m_marvin.industria.core.client.util.widgets;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import de.m_marvin.industria.core.client.util.GraphicsUtility;
-import net.minecraft.client.gui.Font;
+import de.m_marvin.industria.core.util.MathUtility;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 
-public class StatusBar extends AbstractWidget {
+public class StatusBar extends AbstractScaleWidget {
 	
-	protected ResourceLocation texture = GraphicsUtility.UTILITY_WIDGETS_TEXTURE;
-	protected final Font font;
-	protected float redRange;
-	protected float greenRange;
-	protected float percentageOffset;
-	protected float state;
-	protected Component percentageText;
+	public static record BarSegment(float start, float end, float red, float green, float blue) {}
 	
-	public StatusBar(Font font, int x, int y, int length, Component title, float greenRange, float redRange, float percentageOffset) {
-		super(x, y, Math.min(length, 164), 16, title);
-		this.greenRange = greenRange;
-		this.redRange = redRange;
-		this.percentageOffset = percentageOffset;
-		this.font = font;
-		updatePercentageString();
-	}
-	
-	public void setTexture(ResourceLocation texture) {
-		this.texture = texture;
-	}
-	
-	public void setRedRange(float redRange) {
-		this.redRange = redRange;
-	}
-	
-	public float getGreenRange() {
-		return greenRange;
-	}
-	
-	public void setGreenRange(float greenRange) {
-		this.greenRange = greenRange;
-	}
-	
-	public void setStatus(float precentage) {
-		this.state = Math.max(0, precentage);
-		updatePercentageString();
-	}
-	
-	public Font getFont() {
-		return font;
-	}
-	
-	protected void updatePercentageString() {
-		percentageText = Component.literal(String.format("%.0f%%", (state / percentageOffset) * 100));
+	public StatusBar(int x, int y, int length, Component message) {
+		super(x, y, Math.max(length, 16), 12, message, GraphicsUtility.UTILITY_WIDGETS_TEXTURE_CREATIVE);
+		this.scale1 = 0;
+		this.scale2 = 0;
+		this.segments = new BarSegment[] { new BarSegment(0F, 1F, 1F, 1F, 1F) };
 	}
 	
 	@Override
 	protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
 		
-		pGuiGraphics.blit(texture, this.getX(), this.getY() + 1, 1, 36, this.getWidth() - 1, 12);
-		pGuiGraphics.blit(texture, this.getX() + this.getWidth() - 1, this.getY() + 1, 162, 36, 1, 12);
+		pGuiGraphics.blit(this.texture, getX(), getY(), 1, 1, 1, this.height);
+		pGuiGraphics.blitRepeating(this.texture, getX() + 1, getY(), this.width - 2, this.height, 1, 1, 128, 12);
+		pGuiGraphics.blit(this.texture, getX() + this.width - 1, getY(), 128, 1, 1, this.height);
 		
-		float length = this.getWidth() - 2;
-		int l = Math.round(Math.min(1, state) * length);
-		int lg = Math.round(this.greenRange * length);
-		int lr = Math.round(this.redRange * length);
-		int color = 0xFFFFFF;
-		if (l > 0) {
-			pGuiGraphics.blit(texture, this.getX() + 1, this.getY() + 2, 2, 13, Math.min(lg, l), 10);
+		renderBar(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+		
+		renderScale(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+		
+		pGuiGraphics.pose().pushPose();
+		pGuiGraphics.pose().translate(getX() + 4, getY() + 4, 0);
+		pGuiGraphics.pose().scale(0.5F, 0.5F, 0.5F);
+		pGuiGraphics.drawString(getFont(), getInfo(), 0, 0, 0xFFFFFFFF);
+		pGuiGraphics.pose().popPose();
+
+		pGuiGraphics.drawString(getFont(), getMessage(), getX() + 1, getY() - 9, 0xFFFFFFFF);
+		
+	}
+	
+	protected void renderBar(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+
+		int tlength = this.width - 2;
+		int progress = Math.round(this.state * tlength);
+		
+		if (progress > 0) {
+			for (var segment : this.segments) {
+				if (segment.start() >= this.state) break;
+				
+				int x = Math.round(segment.start() * tlength);
+				int l = Math.min(progress, Math.round(segment.end() * tlength)) - x;
+				if (l == 0) break;
+				
+				RenderSystem.setShaderColor(segment.red(), segment.green(), segment.blue(), 1.0F);
+				GraphicsUtility.UI.blitTilable(pGuiGraphics, this.texture, getX() + 1 + x, getY(), 2 + x, 15, l, this.height, 2, 15, 126, 12);
+				
+			}
+			RenderSystem.setShaderColor(1, 1, 1, 1);
 		}
-		if (l >= lg) {
-			pGuiGraphics.blit(texture, this.getX() + 1 + lg, this.getY() + 2, 2, 25, Math.min(lr, l) - lg, 10);
-			color = 0x009F00;
+		
+	}
+	
+	protected void renderScale(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+		
+		if (this.scale1 < 1F)
+			return;
+
+		int tlength = this.width - 2;
+		float sl1 = tlength / this.scale1;
+		float sl2 = this.scale2 < 1F ? sl1 : sl1 / this.scale2;
+		float so1 = (tlength * this.zero) % sl1;
+		float so2 = this.scale2 < 1F ? so1 : (tlength * this.zero) % sl2;
+		for (float p1 = so2; p1 < tlength; p1 += sl2) {
+			
+			pGuiGraphics.pose().pushPose();
+			pGuiGraphics.pose().translate(p1 - 0.5F, 0, 0);
+
+			if (Math.abs((p1 - so1 + 0.01F) % sl1) < 0.02F)
+				pGuiGraphics.blit(this.texture, getX() - 1, getY(), 158, 36, 5, 10);
+			else
+				pGuiGraphics.blit(this.texture, getX() - 1, getY(), 165, 36, 5, 10);
+			
+			pGuiGraphics.pose().popPose();
+			
 		}
-		if (l > lr) {
-			pGuiGraphics.blit(texture, this.getX() + 1 + lr, this.getY() + 2, 2, 1, l - lr, 10);
-			color = 0xFF0000;
+		
+	}
+	
+	protected void renderColorBar(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+
+		int tlength = this.width - 2;
+		
+		for (int i = 0; i < this.segments.length; i++) {
+			var segment = this.segments[i];
+			int x = Math.round(segment.start() * tlength);
+			int l = Math.round((segment.end() - segment.start()) * tlength);
+			
+			pGuiGraphics.fill(getX() + 4 + x, getY() + 13, getX() - 1 + x + l, getY() + 14, MathUtility.toIntegerColor(segment.red(), segment.green(), segment.blue(), 1F));
 		}
-		
-		if (lg > 0) pGuiGraphics.blit(texture, this.getX() + lg, this.getY(), 2, 50, 3, 15);
-		if (lr > 0) pGuiGraphics.blit(texture, this.getX() + lr, this.getY(), 2, 50, 3, 15);
-		
-		pGuiGraphics.drawString(this.font, this.percentageText, this.getX() + 2, this.getY() + 3, color);
-		pGuiGraphics.drawString(font, getMessage(), this.getX() + 2, this.getY() - 8, 0xFFFFFF);
-		
+
+		for (int i = 1; i < this.segments.length; i++) {
+			var segment = this.segments[i];
+			int x = Math.round(segment.start() * tlength);
+			
+			pGuiGraphics.blit(this.texture, getX() + x, getY() - 1, 131, 1, 3, 15);
+		}
+
 	}
 
 	@Override
+	protected boolean clicked(double pMouseX, double pMouseY) {
+		return false;
+	}
+	
+	@Override
 	protected void updateWidgetNarration(NarrationElementOutput pNarrationElementOutput) {
 		pNarrationElementOutput.add(NarratedElementType.TITLE, getMessage());
-		pNarrationElementOutput.add(NarratedElementType.TITLE, this.percentageText);
+		pNarrationElementOutput.add(NarratedElementType.TITLE, getInfo());
 	}
 	
 }

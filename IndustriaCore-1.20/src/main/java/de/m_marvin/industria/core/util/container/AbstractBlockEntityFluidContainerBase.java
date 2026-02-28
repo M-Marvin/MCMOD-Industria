@@ -1,9 +1,11 @@
 package de.m_marvin.industria.core.util.container;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
@@ -11,22 +13,17 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.SoundActions;
 
-public abstract class AbstractBlockEntityFluidContainerBase<T extends BlockEntity> extends AbstractBlockEntityContainerBase<T> implements IFluidSlotContainer {
+// FIXME rewrite fluid containers/slots/screens
+public abstract class AbstractBlockEntityFluidContainerBase<T extends BlockEntity> extends AbstractBlockContainerMenu implements IFluidSlotContainer {
 	
-	private NonNullList<FluidSlot> fluidSlots;
-	
-	public AbstractBlockEntityFluidContainerBase(MenuType<?> type, int id, Inventory playerInv, FriendlyByteBuf data) {
-		super(type, id, playerInv, data);
-		
-	}
+	private NonNullList<FluidSlot> fluidSlots = NonNullList.create();
 
-	public AbstractBlockEntityFluidContainerBase(MenuType<?> type, int id, Inventory playerInv, T tileEntity) {
-		super(type, id, playerInv, tileEntity);
+	public AbstractBlockEntityFluidContainerBase(MenuType<?> type, int id, Inventory playerInv, FriendlyByteBuf extraData, Container container) {
+		super(type, id, playerInv, extraData, container);
 	}
 	
-	@Override
-	public void init() {
-		this.fluidSlots = NonNullList.create();
+	public AbstractBlockEntityFluidContainerBase(MenuType<?> type, int id, Inventory playerInv, BlockPos blockPos, Container container) {
+		super(type, id, playerInv, blockPos, container);
 	}
 	
 	@Override

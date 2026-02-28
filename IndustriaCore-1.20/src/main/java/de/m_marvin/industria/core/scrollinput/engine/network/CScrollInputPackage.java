@@ -52,8 +52,8 @@ public class CScrollInputPackage {
 		
 		ctx.get().enqueueWork(() -> {
 			ServerScrollPackageHandler.handleScrollPackage(msg, null);
+			ctx.get().setPacketHandled(true);
 		});
-		ctx.get().setPacketHandled(true);
 		
 	}
 	

@@ -3,28 +3,24 @@ package de.m_marvin.industria.core.electrics;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import com.google.common.base.Predicate;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
-import de.m_marvin.industria.core.electrics.engine.CircuitTemplateManager;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitElement;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitNode;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ComponentCircuitContext;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability.ElectricComponent;
-import de.m_marvin.industria.core.electrics.types.CircuitTemplate.Plotter;
 import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
-import de.m_marvin.industria.core.electrics.types.IElectric.ICircuitPlot;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.registries.Capabilities;
-import de.m_marvin.industria.core.registries.Circuits;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.types.PowerNetState;
 import de.m_marvin.industria.core.util.ufns.SynchronizedFunctionalNetworkSpace.UpdateType;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.world.level.ChunkPos;
@@ -146,7 +142,7 @@ public class ElectricUtility {
 	}
 
 	/**
-	 * Collects a list (one entry per component connected to the node) of lists of lane labels of the components connected to the given node.
+	 * Collects a list (one entry per component connected to the node) of arrays of lane labels of the components connected to the given node.
 	 * @param level Level of the node
 	 * @param node The node to search for components on
 	 * @param componentPredicate A predicate for the components to look for
@@ -171,30 +167,9 @@ public class ElectricUtility {
 		}
 	}
 	
-	/**
-	 * Returns the node potential of the node (the voltage relative to "network global ground")
-	 * @param level The level of the node
-	 * @param node The reference of the node
-	 * @param laneId The lane id of the node
-	 * @param lane The lane name of the node
-	 * @return The potential of the node relative to the network ground potential
-	 */
-	public static Optional<Double> getFloatingNodeVoltage(Level level, NodePos node, int laneId, String lane) {
+	public static double getFloatingNodeVoltage(Level level, CircuitNode node) {
 		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
-		return networkSpace.getFloatingNodeVoltage(node, laneId, lane);
-	}
-
-	/**
-	 * Returns the node potential of the local node lane of the component at the given reference (the voltage relative to "network global ground")
-	 * @param level The level of the node
-	 * @param reference The reference of the component
-	 * @param lane The lane name of the local node
-	 * @param group Group id of the local node
-	 * @return The potential of the node relative to the network ground potential
-	 */
-	public static Optional<Double> getFloatingLocalNodeVoltage(Level level, BlockPos reference, String lane, int group) {
-		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
-		return networkSpace.getFloatingLocalNodeVoltage(reference, lane, group);
+		return networkSpace.getFloatingNodeVoltage(node);
 	}
 	
 	/**
@@ -208,101 +183,135 @@ public class ElectricUtility {
 	 * @param laneN The second nodes lane name
 	 * @return The voltage between the two nodes (first node potential - second node potential)
 	 */
-	public static Optional<Double> getVoltageBetween(Level level, NodePos nodeP, NodePos nodeN, int laneIdP, int laneIdN, String laneP, String laneN) {
-		Optional<Double> v1 = ElectricUtility.getFloatingNodeVoltage(level, nodeN, laneIdN, laneN);
-		Optional<Double> v2 = ElectricUtility.getFloatingNodeVoltage(level, nodeP, laneIdP, laneP);
-		if (v1.isEmpty() || v2.isEmpty()) return Optional.empty();
-		return Optional.of(v2.get() - v1.get());
+	public static double getVoltageBetween(Level level, CircuitNode nodeA, CircuitNode nodeB) {
+		double v1 = ElectricUtility.getFloatingNodeVoltage(level, nodeA);
+		double v2 = ElectricUtility.getFloatingNodeVoltage(level, nodeB);
+		return v1 - v2;
+	}
+
+	public static double getElementCurrent(Level level, CircuitElement element) {
+		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
+		return networkSpace.getElementCurrent(element);
 	}
 	
-	/**
-	 * Returns the node voltage between two the local node lanes of the component at the given reference
-	 * @param level The level of the node
-	 * @param reference The reference of the component
-	 * @param laneP The first lane name of the local node
-	 * @param laneN The second lane name of the local node
-	 * @param groupP Group id of the first local node
-	 * @param groupN Group id of the second local node
-	 * @return The voltage between the two nodes (first node potential - second node potential)
-	 */
-	public static Optional<Double> getVoltageBetweenLocal(Level level, BlockPos reference, String laneP, int groupP, String laneN, int groupN) {
-		Optional<Double> v1 = ElectricUtility.getFloatingLocalNodeVoltage(level, reference, laneN, groupN);
-		Optional<Double> v2 = ElectricUtility.getFloatingLocalNodeVoltage(level, reference, laneP, groupP);
-		if (v1.isEmpty() || v2.isEmpty()) return Optional.empty();
-		return Optional.of(v2.get() - v1.get());
+	// TODO
+//	/**
+//	 * Plots junction resistors to connect all node lanes of the supplied nodes to the internal lane and node (if the names match).
+//	 * @param plotter Plotter to use for plotting the junction resistors
+//	 * @param level Level of the electric component
+//	 * @param block Block of the electric component
+//	 * @param reference Reference of the electric component
+//	 * @param instance State of the electric component
+//	 * @param group Group id of the local node
+//	 * @param localLanes The internal node lane names
+//	 */
+	public static void installJunctionResistors(Level level, ComponentCircuitContext context, IElectricBlock block, ElectricReference reference, BlockState instance, double junctionResistance, CircuitNode[] targetNodes) {
+		NodePos[] conduitNodes = block.getElectricConnections(level, reference, instance);
+		installJunctionResistors(level, context, reference, junctionResistance, conduitNodes, targetNodes);
 	}
-	
-	/**
-	 * Plots junction resistors to connect all node lanes of the supplied nodes to the internal lane and node (if the names match).
-	 * @param plotter Plotter to use for plotting the junction resistors
-	 * @param level Level of the electric component
-	 * @param block Block of the electric component
-	 * @param reference Reference of the electric component
-	 * @param instance State of the electric component
-	 * @param group Group id of the local node
-	 * @param localLanes The internal node lane names
-	 */
-	public static void plotJoinTogether(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, ElectricReference reference, BlockState instance, int group, String... localLanes) {
-		NodePos[] nodes = block.getElectricConnections(level, reference, instance);
-		plotJoinTogether(plotter, level, block, reference, instance, nodes, group, localLanes);
-	}
-	
-	/**
-	 * Plots junction resistors to connect all node lanes of the supplied nodes to the internal lane and node (if the names match).
-	 * @param plotter Plotter to use for plotting the junction resistors
-	 * @param level Level of the electric component
-	 * @param block Block of the electric component
-	 * @param reference Reference of the electric component
-	 * @param instance State of the electric component
-	 * @param nodes Nodes to connect with inner lane
-	 * @param group Group id of the local node
-	 * @param localLanes The internal node lane names
-	 */
-	public static void plotJoinTogether(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, ElectricReference reference, BlockState instance, NodePos[] nodes, int group, String... localLanes) {
-		List<String[]> lanes = Stream.of(nodes).map(node -> getLaneLabelsSummarized(level, node)).toList();
-		
-		Plotter template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR).plotter();
-		
-		for (int i = 0; i < nodes.length; i++) {
-			String[] wireLanes = lanes.get(i);
-			for (int i1 = 0; i1 < wireLanes.length; i1++) {
-				for (String localLaneName : localLanes) {
-					if (wireLanes[i1].equals(localLaneName)) {
-						template.setNetworkNode("NET1", nodes[i], i1, wireLanes[i1]);
-						template.setNetworkLocalNode("NET2", reference.block(), localLaneName, group);
-						plotter.accept(template);
+
+	// TODO
+//	/**
+//	 * Plots junction resistors to connect all node lanes of the supplied nodes to the internal lane and node (if the names match).
+//	 * @param plotter Plotter to use for plotting the junction resistors
+//	 * @param level Level of the electric component
+//	 * @param block Block of the electric component
+//	 * @param reference Reference of the electric component
+//	 * @param instance State of the electric component
+//	 * @param nodes Nodes to connect with inner lane
+//	 * @param group Group id of the local node
+//	 * @param localLanes The internal node lane names
+//	 */
+	public static void installJunctionResistors(Level level, ComponentCircuitContext context, ElectricReference reference, double junctionResistance, NodePos[] conduitNodes, CircuitNode[] targetNodes) {
+		int i = 0;
+		for (NodePos conduitNode : conduitNodes) {
+			for (String lane : getLaneLabelsSummarized(level, conduitNode)) {
+				for (CircuitNode targetNode : targetNodes) {
+					if (targetNode.nodeName().equals(lane)) {
+						context.installResistor(CircuitElement.element(reference, "Rjunction_" + i++), targetNode, CircuitNode.node(conduitNode, lane), 0.0);
 					}
 				}
 			}
 		}
 	}
-
-	/**
-	 * Plots junction resistors to connect all equally named lanes of the conduits connected to the given component
-	 * @param plotter Plotter to use for plotting the junction resistors
-	 * @param level Level of the electric component
-	 * @param block Block of the electric component
-	 * @param reference Reference of the electric component
-	 * @param instance State of the electric component
-	 */
-	public static void plotConnectEquealNamed(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, ElectricReference reference, BlockState instance) {
-		NodePos[] nodes = block.getElectricConnections(level, reference, instance);
-		List<String[]> lanes = Stream.of(nodes).map(node -> ElectricUtility.getLaneLabelsSummarized(level, node)).toList();
-		
-		Plotter template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR).plotter();
-		
-		for (int i = 0; i < nodes.length; i++) {
-			String[] wireLanes = lanes.get(i);
-			for (int i1 = 0; i1 < wireLanes.length; i1++) {
-				String wireLabel = wireLanes[i1];
-				if (!wireLabel.isEmpty()) {
-					template.setNetworkNode("NET1", nodes[i], i1, wireLabel);
-					template.setNetworkNode("NET2", new NodePos(reference.block(), 0), 0, "junction_" + wireLabel);
-					plotter.accept(template);
-				}
+	
+	public static void installJunctionResistors(Level level, ComponentCircuitContext context, IElectricBlock block, ElectricReference reference, BlockState instance, double junctionResistance) {
+		NodePos[] conduitNodes = block.getElectricConnections(level, reference, instance);
+		installJunctionResistors(level, context, reference, junctionResistance, conduitNodes);
+	}
+	
+//	/**
+//	 * Plots junction resistors to connect all equally named lanes of the conduits connected to the given component
+//	 * @param plotter Plotter to use for plotting the junction resistors
+//	 * @param level Level of the electric component
+//	 * @param block Block of the electric component
+//	 * @param reference Reference of the electric component
+//	 * @param instance State of the electric component
+//	 */
+	public static void installJunctionResistors(Level level, ComponentCircuitContext context, ElectricReference reference, double junctionResistance, NodePos[] conduitNodes) {
+		for (NodePos conduitNode : conduitNodes) {
+			for (String lane : getLaneLabelsSummarized(level, conduitNode)) {
+				context.installResistor(CircuitElement.element(reference, "Rjunction_" + lane), CircuitNode.internal(reference, "junction_" + lane), CircuitNode.node(conduitNode, lane), 0.0);
 			}
 		}
 	}
+	
+//	/**
+//	 * Plots junction resistors to connect all node lanes of the supplied nodes to the internal lane and node (if the names match).
+//	 * @param plotter Plotter to use for plotting the junction resistors
+//	 * @param level Level of the electric component
+//	 * @param block Block of the electric component
+//	 * @param reference Reference of the electric component
+//	 * @param instance State of the electric component
+//	 * @param nodes Nodes to connect with inner lane
+//	 * @param group Group id of the local node
+//	 * @param localLanes The internal node lane names
+//	 */
+//	public static void plotJoinTogether(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, ElectricReference reference, BlockState instance, NodePos[] nodes, int group, String... localLanes) {
+//		List<String[]> lanes = Stream.of(nodes).map(node -> getLaneLabelsSummarized(level, node)).toList();
+//		
+//		Plotter template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR).plotter();
+//		
+//		for (int i = 0; i < nodes.length; i++) {
+//			String[] wireLanes = lanes.get(i);
+//			for (int i1 = 0; i1 < wireLanes.length; i1++) {
+//				for (String localLaneName : localLanes) {
+//					if (wireLanes[i1].equals(localLaneName)) {
+//						template.setNetworkNode("NET1", nodes[i], i1, wireLanes[i1]);
+//						template.setNetworkLocalNode("NET2", reference.block(), localLaneName, group);
+//						plotter.accept(template);
+//					}
+//				}
+//			}
+//		}
+//	}
+//
+//	/**
+//	 * Plots junction resistors to connect all equally named lanes of the conduits connected to the given component
+//	 * @param plotter Plotter to use for plotting the junction resistors
+//	 * @param level Level of the electric component
+//	 * @param block Block of the electric component
+//	 * @param reference Reference of the electric component
+//	 * @param instance State of the electric component
+//	 */
+//	public static void plotConnectEquealNamed(Consumer<ICircuitPlot> plotter, Level level, IElectricBlock block, ElectricReference reference, BlockState instance) {
+//		NodePos[] nodes = block.getElectricConnections(level, reference, instance);
+//		List<String[]> lanes = Stream.of(nodes).map(node -> ElectricUtility.getLaneLabelsSummarized(level, node)).toList();
+//		
+//		Plotter template = CircuitTemplateManager.getInstance().getTemplate(Circuits.JUNCTION_RESISTOR).plotter();
+//		
+//		for (int i = 0; i < nodes.length; i++) {
+//			String[] wireLanes = lanes.get(i);
+//			for (int i1 = 0; i1 < wireLanes.length; i1++) {
+//				String wireLabel = wireLanes[i1];
+//				if (!wireLabel.isEmpty()) {
+//					template.setNetworkNode("NET1", nodes[i], i1, wireLabel);
+//					template.setNetworkNode("NET2", new NodePos(reference.block(), 0), 0, "junction_" + wireLabel);
+//					plotter.accept(template);
+//				}
+//			}
+//		}
+//	}
 	
 	/**
 	 * Send to all tracking the ElectricNetwork in the Supplier {@link #with(Supplier)}
@@ -320,5 +329,5 @@ public class ElectricUtility {
 				.forEach(e -> e.connection.send(p));
 		};
 	}
-
+	
 }

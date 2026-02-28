@@ -1,7 +1,6 @@
 package de.m_marvin.industria.core.electrics.types;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
@@ -88,12 +87,18 @@ public interface IElectric<I, T> {
 		ElectricUtility.updateNetwork(level, reference);
 	}
 	
-	public void plotCircuit(Level level, I instance, ElectricReference reference, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter);
+
+	public void installCircuitElements(Level level, ElectricReference reference, I instance, ElectricNetwork.ComponentCircuitContext context);
+	public default void stepCircuitElements(Level level, ElectricReference reference, I instance, ElectricNetwork.ComponentCircuitContext context) {}
+	public default void afterNetworkStep(Level level, ElectricReference reference, I instance, ElectricNetwork network) {}
+	
 	public void serializeNBT(I instance, CompoundTag nbt);
 	public I deserializeNBT(CompoundTag nbt);
 	
-	public double getMaxPowerGeneration(Level level, ElectricReference reference, I instance);
-	public double getCurrentPower(Level level, ElectricReference reference, I instance);
+	// TODO rename for clarity
+//	public double getMaxPowerGeneration(Level level, ElectricReference reference, I instance);
+//	public double getCurrentPower(Level level, ElectricReference reference, I instance);
+	
 	
 	public NodePos[] getElectricConnections(Level level, ElectricReference reference, I instance);
 	public String[] getWireLanes(Level level, ElectricReference reference, I instance, NodePos node);
@@ -102,8 +107,6 @@ public interface IElectric<I, T> {
 	public ChunkPos getAffectedChunk(Level level, ElectricReference reference);
 	public Optional<I> getInstance(Level level, ElectricReference reference);
 	public boolean isInstanceValid(Level level, I instance);
-	
-	public default void onNetworkNotify(Level level, I instance, ElectricReference reference) {}
 	
 	public static enum Type {
 		

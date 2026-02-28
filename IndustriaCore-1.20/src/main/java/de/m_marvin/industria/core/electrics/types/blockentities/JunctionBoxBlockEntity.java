@@ -8,9 +8,9 @@ import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
-import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
-import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
-import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.InternalNodeConstructor;
+import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxMenu;
+import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxMenu.ExternalNodeConstructor;
+import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxMenu.InternalNodeConstructor;
 import de.m_marvin.industria.core.registries.BlockEntityTypes;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
@@ -167,7 +167,7 @@ public class JunctionBoxBlockEntity extends BlockEntity implements MenuProvider,
 	}
 
 	@Override
-	public <B extends BlockEntity & IJunctionEdit> void setupScreenConduitNodes(JunctionBoxContainer<B> junctionBoxContainer, NodePos[] conduitNodes, ExternalNodeConstructor externalNodeConstructor, InternalNodeConstructor internalNodeConstructor) {
+	public <B extends BlockEntity & IJunctionEdit> void setupScreenConduitNodes(JunctionBoxMenu<B> junctionBoxContainer, NodePos[] conduitNodes, ExternalNodeConstructor externalNodeConstructor, InternalNodeConstructor internalNodeConstructor) {
 		externalNodeConstructor.construct(new Vec2i(69, 8), 	PlanarDirection.Y_POS, 	conduitNodes[0]);
 		externalNodeConstructor.construct(new Vec2i(69, 112), 	PlanarDirection.Y_NEG, 	conduitNodes[1]);
 		externalNodeConstructor.construct(new Vec2i(8, 69), 	PlanarDirection.X_NEG, 	conduitNodes[2]);

@@ -31,15 +31,15 @@ public interface IElectricConduit extends IElectric<ConduitEntity, Conduit> {
 		return new NodePos[] { reference.conduit().getNodeA(), reference.conduit().getNodeB() };
 	}
 	
-	@Override
-	default double getCurrentPower(Level level, ElectricReference reference, ConduitEntity instance) {
-		return 0;
-	}
-	
-	@Override
-	default double getMaxPowerGeneration(Level level, ElectricReference reference, ConduitEntity instance) {
-		return 0;
-	}
+//	@Override
+//	default double getCurrentPower(Level level, ElectricReference reference, ConduitEntity instance) {
+//		return 0;
+//	}
+//	
+//	@Override
+//	default double getMaxPowerGeneration(Level level, ElectricReference reference, ConduitEntity instance) {
+//		return 0;
+//	}
 	
 	public int getWireCount();
 	

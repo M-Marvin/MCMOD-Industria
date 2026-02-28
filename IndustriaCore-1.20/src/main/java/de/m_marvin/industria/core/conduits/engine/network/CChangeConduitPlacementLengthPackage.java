@@ -34,8 +34,8 @@ public class CChangeConduitPlacementLengthPackage {
 		
 		ctx.get().enqueueWork(() -> {
 			ServerConduitPackageHandler.handleChangePlacementLength(msg, ctx.get());
+			ctx.get().setPacketHandled(true);
 		});
-		ctx.get().setPacketHandled(true);
 		
 	}
 	

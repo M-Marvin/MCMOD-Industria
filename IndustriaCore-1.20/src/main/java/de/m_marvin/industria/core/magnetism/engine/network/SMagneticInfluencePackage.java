@@ -37,8 +37,8 @@ public class SMagneticInfluencePackage {
 		public static void handle(SAddInfluencePackage msg, Supplier<NetworkEvent.Context> ctx) {
 			ctx.get().enqueueWork(() -> {
 				ClientMagnetismPackageHandler.handleAddInfluence(msg, ctx.get());
-			});	
-			ctx.get().setPacketHandled(true);	
+				ctx.get().setPacketHandled(true);	
+			});
 		}
 		
 	}
@@ -67,8 +67,8 @@ public class SMagneticInfluencePackage {
 		public static void handle(SRemoveInfluencePackage msg, Supplier<NetworkEvent.Context> ctx) {
 			ctx.get().enqueueWork(() -> {
 				ClientMagnetismPackageHandler.handleRemoveInfluence(msg, ctx.get());
+				ctx.get().setPacketHandled(true);
 			});
-			ctx.get().setPacketHandled(true);
 		}
 		
 	}

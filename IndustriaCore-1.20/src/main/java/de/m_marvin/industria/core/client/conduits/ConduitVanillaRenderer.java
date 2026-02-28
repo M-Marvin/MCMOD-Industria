@@ -20,6 +20,7 @@ import de.m_marvin.industria.core.conduits.types.blocks.IConduitConnector;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit.ConduitShape;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.registries.Capabilities;
+import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.registries.Tags;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
@@ -36,6 +37,7 @@ import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
@@ -259,7 +261,7 @@ public class ConduitVanillaRenderer {
 		
 		Vec3d position = node.getWorldRenderPosition(level, pos);
 		int colori = node.getType().getColor().getColor();
-		Vec4f color = MathUtility.toVecColor(colori);
+		Vec4f color = MathUtility.toVecColorNoAlpha(colori);
 		double halfSize = 1.5 / 16.0;
 		Vec3d boxMin = position.sub(halfSize, halfSize, halfSize);
 		Vec3d boxMax = position.add(halfSize, halfSize, halfSize);
@@ -277,7 +279,7 @@ public class ConduitVanillaRenderer {
 		matrixStack.translate(0, 0, 4 * 0.0635F);
 		matrixStack.scale(0.01F, -0.01F, 0.01F);
 		String info = "Id:" + nodeId;
-		GraphicsUtility.drawStringCentered(matrixStack, bufferSource, info, 0, 0, color.x, color.y, color.z, color.w);
+		GraphicsUtility.Spacial.drawStringCentered(matrixStack, bufferSource, info, 0, 0, color.x, color.y, color.z, color.w);
 		matrixStack.popPose();
 		
 	}
@@ -298,8 +300,7 @@ public class ConduitVanillaRenderer {
 	public static void drawNodeSymbol(PoseStack matrixStack, MultiBufferSource bufferSource, ClientLevel level, int ticks, float partialTicks, BlockPos pos, ConduitNode node, int nodeId) {
 		
 		Vec3d position = node.getWorldRenderPosition(level, pos);
-		int colori = node.getType().getColor().getColor();
-		Vec4f color = MathUtility.toVecColor(colori);
+		Vec4f color = MathUtility.toVecColorNoAlpha(node.getType().getColor().getColor());
 		double halfSize = 1.5 / 16.0;
 		Vec3d boxMin = position.sub(halfSize, halfSize, halfSize);
 		Vec3d boxMax = position.add(halfSize, halfSize, halfSize);
@@ -318,22 +319,13 @@ public class ConduitVanillaRenderer {
 		matrixStack.translate(position.x, position.y + 0.1 + o, position.z);
 		matrixStack.mulPose(Axis.YN.rotationDegrees(Minecraft.getInstance().player.yHeadRot + 180));
 		matrixStack.translate(0, 0, 4 * 0.0635F);
-		
-		Matrix4f pose = matrixStack.last().pose();
-		Matrix3f normal = matrixStack.last().normal();
-		float w = 6 / 16F;
-		
-		VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.outline(node.getType().getSymbolTexture()));
-		vertex(vertexConsumer, pose, normal, w/2, 0, 0, 	0, 0, 1, 	1, 0, 15728880, colori);
-		vertex(vertexConsumer, pose, normal, w/2, w , 0, 	0, 0, 1, 	1, 1, 15728880, colori);
-		vertex(vertexConsumer, pose, normal, -w/2, w, 0, 	0, 0, 1, 	0, 1, 15728880, colori);
-		vertex(vertexConsumer, pose, normal, -w/2, 0, 0, 	0, 0, 1, 	0, 0, 15728880, colori);
-		
-		matrixStack.scale(0.01F, -0.01F, 0.01F);
+		matrixStack.scale(0.0125F, -0.0125F, 0.0125F);
 		
 		int conduitCount = ConduitUtility.getConduitsAtNode(level, pos, nodeId).size();
 		String info = conduitCount + "/" + node.getMaxConnections();
-		GraphicsUtility.drawStringCentered(matrixStack, bufferSource, info, 0, 0, color.x, color.y, color.z, color.w);
+		GraphicsUtility.Spacial.drawTextureCentered(matrixStack, bufferSource, node.getType().getSymbolTexture(), 0, -5, 16, 16, color.x, color.y, color.z, color.w);
+		GraphicsUtility.Spacial.drawStringCentered(matrixStack, bufferSource, info, 0, 0, color.x, color.y, color.z, color.w);
+
 		matrixStack.popPose();
 		
 	}
@@ -386,10 +378,6 @@ public class ConduitVanillaRenderer {
 			
 		}
 		
-	}
-	
-	protected static void vertex(VertexConsumer vertexBuilder, Matrix4f pose, Matrix3f normal, float x, float y, float z, float nx, float ny, float nz, float u, float v, int light, int color) {
-		vertexBuilder.vertex(pose, x, y, z).color(color).uv(u, v).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(normal, nx, ny, nz).endVertex();
 	}
 	
 }

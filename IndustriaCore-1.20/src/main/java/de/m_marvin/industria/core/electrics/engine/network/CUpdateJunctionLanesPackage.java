@@ -53,8 +53,8 @@ public class CUpdateJunctionLanesPackage {
 		
 		ctx.get().enqueueWork(() -> {
 			ServerElectricPackageHandler.handleUpdateJunctionLanes(msg, ctx.get());
+			ctx.get().setPacketHandled(true);
 		});
-		ctx.get().setPacketHandled(true);
 		
 	}
 	

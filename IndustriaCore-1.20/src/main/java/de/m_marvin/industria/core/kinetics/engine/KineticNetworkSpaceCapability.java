@@ -31,6 +31,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -91,9 +92,9 @@ public class KineticNetworkSpaceCapability extends FriendlyFunctionalNetworkSpac
 	
 	@SubscribeEvent
 	public static void onLevelTick(TickEvent.LevelTickEvent event) {
+		if (event.phase != Phase.END) return;
 		KineticNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(event.level, Capabilities.KINETIC_NETWORK_SPACE_CAPABILITY);
 		networkSpace.processUpdates();
-		
 	}
 	
 	@SubscribeEvent

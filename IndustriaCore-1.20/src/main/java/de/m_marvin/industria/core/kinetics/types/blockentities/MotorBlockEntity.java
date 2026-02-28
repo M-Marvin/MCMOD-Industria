@@ -1,9 +1,11 @@
 package de.m_marvin.industria.core.kinetics.types.blockentities;
 
 import de.m_marvin.industria.core.kinetics.types.blocks.ShortShaftBlock;
-import de.m_marvin.industria.core.kinetics.types.containers.MotorContainer;
+import de.m_marvin.industria.core.kinetics.types.containers.MotorMenu;
 import de.m_marvin.industria.core.registries.BlockEntityTypes;
 import de.m_marvin.industria.core.registries.Blocks;
+import de.m_marvin.industria.core.util.container.AbstractBlockContainerMenu.DummyContainer;
+import de.m_marvin.industria.core.util.container.FriendlyContainerData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -22,6 +24,12 @@ public class MotorBlockEntity extends SimpleKineticBlockEntity implements MenuPr
 	
 	public MotorBlockEntity(BlockPos pPos, BlockState pBlockState) {
 		super(BlockEntityTypes.MOTOR.get(), pPos, pBlockState);
+	}
+	
+	public FriendlyContainerData getContainerData() {
+		return FriendlyContainerData.empty()
+				.nextDoubleItem(this::getSourceTorque, this::setSourceTorque)
+				.nextDoubleItem(this::getSourceRPM, this::setSourceRPM);
 	}
 	
 	public double getSourceRPM() {
@@ -83,7 +91,7 @@ public class MotorBlockEntity extends SimpleKineticBlockEntity implements MenuPr
 
 	@Override
 	public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-		return new MotorContainer(pContainerId, pPlayerInventory, this);
+		return new MotorMenu(pContainerId, pPlayerInventory, getBlockPos(), new DummyContainer(getBlockPos()), getContainerData());
 	}
 
 	@Override

@@ -1,14 +1,13 @@
 package de.m_marvin.industria.core.client.util.screens;
 
-import de.m_marvin.industria.core.client.util.widgets.AbstractTickableWidget;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.texture.Tickable;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 
-public abstract class AbstractContainerWidgetScreen<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> {
-
-	public AbstractContainerWidgetScreen(T pMenu, Inventory pPlayerInventory, Component pTitle) {
+public abstract class AbstractTickableWidgedContainerScreen<T extends AbstractContainerMenu> extends AbstractCompoundableWidgetContainerScreen<T> {
+	
+	public AbstractTickableWidgedContainerScreen(T pMenu, Inventory pPlayerInventory, Component pTitle) {
 		super(pMenu, pPlayerInventory, pTitle);
 	}
 	
@@ -20,7 +19,7 @@ public abstract class AbstractContainerWidgetScreen<T extends AbstractContainerM
 	
 	@Override
 	protected void containerTick() {
-		this.children().forEach(s -> { if (s instanceof AbstractTickableWidget t) t.tick(); });
+		this.children().forEach(s -> { if (s instanceof Tickable t) t.tick(); });
 		super.containerTick();
 	}
 	

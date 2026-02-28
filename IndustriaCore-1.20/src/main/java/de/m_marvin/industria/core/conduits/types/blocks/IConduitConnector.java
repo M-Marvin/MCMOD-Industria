@@ -1,6 +1,6 @@
 package de.m_marvin.industria.core.conduits.types.blocks;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 
 import de.m_marvin.industria.core.conduits.ConduitUtility;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
@@ -28,7 +28,7 @@ public interface IConduitConnector {
 	public default boolean hasFreeConduitNode(Level level, BlockPos pos, BlockState state, Predicate<NodeType> type) {
 		ConduitNode[] nodes = getConduitNodes(level, pos, state);
 		for (int nodeId = 0; nodeId < nodes.length; nodeId++) {
-			if (!type.apply(nodes[nodeId].getType())) continue;
+			if (!type.test(nodes[nodeId].getType())) continue;
 			if (ConduitUtility.getConduitsAtNode(level, pos, nodeId).size() < nodes[nodeId].getMaxConnections()) {
 				return true;
 			}

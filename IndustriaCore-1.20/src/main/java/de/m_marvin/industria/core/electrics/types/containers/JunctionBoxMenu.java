@@ -10,21 +10,18 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public class JunctionBoxContainer<T extends BlockEntity & IJunctionEdit> extends AbstractJunctionEditContainer<T> {
+public class JunctionBoxMenu<T extends BlockEntity & IJunctionEdit> extends AbstractJunctionEditMenu<T> {
 
-	public JunctionBoxContainer(MenuType<?> type, int id, Inventory playerInv, FriendlyByteBuf data) {
-		super(type, id, playerInv, data);
-	}
-
-	public JunctionBoxContainer(MenuType<?> type, int id, Inventory playerInv, T tileEntity) {
+	public JunctionBoxMenu(MenuType<?> type, int id, Inventory playerInv, T tileEntity) {
 		super(type, id, playerInv, tileEntity);
 	}
-
-	public JunctionBoxContainer(int id, Inventory playerInv, FriendlyByteBuf data) {
-		super(MenuTypes.JUNCTION_BOX.get(), id, playerInv, data);
+	
+	@SuppressWarnings("unchecked")
+	public JunctionBoxMenu(int id, Inventory playerInv, FriendlyByteBuf data) {
+		super(MenuTypes.JUNCTION_BOX.get(), id, playerInv, (T) playerInv.player.level().getBlockEntity(data.readBlockPos()));
 	}
-
-	public JunctionBoxContainer(int id, Inventory playerInv, T tileEntity) {
+	
+	public JunctionBoxMenu(int id, Inventory playerInv, T tileEntity) {
 		super(MenuTypes.JUNCTION_BOX.get(), id, playerInv, tileEntity);
 	}
 	

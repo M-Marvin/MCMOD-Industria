@@ -251,6 +251,10 @@ dependencies {
 	minecraftLibrary("de.m_marvin.electronflow:jelectronflow:${electronflow_version}")
 	api("de.m_marvin.electronflow:jelectronflow:${electronflow_version}")
 	
+	shade("de.m_marvin.electronflow:electronflow-jlti:0.3-alpha-SNAPSHOT")
+	minecraftLibrary("de.m_marvin.electronflow:electronflow-jlti:0.3-alpha-SNAPSHOT")
+	api("de.m_marvin.electronflow:electronflow-jlti:0.3-alpha-SNAPSHOT")
+	
 	// UnifiedVectors
 	shade("de.m_marvin.univec:univec:${univec_version}")
 	minecraftLibrary("de.m_marvin.univec:univec:${univec_version}")
@@ -267,8 +271,6 @@ dependencies {
 	runtimeOnly fg.deobf("curse.maven:atlasviewer-633577:4882554")
 	runtimeOnly fg.deobf("curse.maven:oculus-581495:6020952")
 	runtimeOnly fg.deobf("curse.maven:embeddium-908741:5681725")
-	
-	//runtimeOnly fg.deobf("maven.modrinth:cosmic-horizons-cosmos:0.0.7.3")
 	
 }
 

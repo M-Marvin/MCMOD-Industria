@@ -7,9 +7,9 @@ import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability.ElectricComponent;
 import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
-import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
-import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.ExternalNodeConstructor;
-import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer.InternalNodeConstructor;
+import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxMenu;
+import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxMenu.ExternalNodeConstructor;
+import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxMenu.InternalNodeConstructor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -48,6 +48,6 @@ public interface IJunctionEdit {
 	public boolean connectsOnlyToInternal();
 	public Level getJunctionLevel();
 	public BlockPos getJunctionBlockPos();
-	public <B extends BlockEntity & IJunctionEdit> void setupScreenConduitNodes(JunctionBoxContainer<B> abstractJunctionBoxScreen, NodePos[] conduitNodes, ExternalNodeConstructor externalNodeConstructor, InternalNodeConstructor internalNodeConstructor);
+	public <B extends BlockEntity & IJunctionEdit> void setupScreenConduitNodes(JunctionBoxMenu<B> abstractJunctionBoxScreen, NodePos[] conduitNodes, ExternalNodeConstructor externalNodeConstructor, InternalNodeConstructor internalNodeConstructor);
 	
 }

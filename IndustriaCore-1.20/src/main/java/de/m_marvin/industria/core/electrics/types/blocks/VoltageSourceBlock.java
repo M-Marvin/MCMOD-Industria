@@ -1,19 +1,17 @@
 package de.m_marvin.industria.core.electrics.types.blocks;
 
-import java.util.function.Consumer;
-
+import de.m_marvin.industria.core.client.util.ClientTimer;
 import de.m_marvin.industria.core.client.util.TooltipAdditions;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.engine.CircuitTemplateManager;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
-import de.m_marvin.industria.core.electrics.types.CircuitTemplate.Plotter;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitElement;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitNode;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ComponentCircuitContext;
 import de.m_marvin.industria.core.electrics.types.blockentities.VoltageSourceBlockEntity;
 import de.m_marvin.industria.core.parametrics.BlockParametrics;
 import de.m_marvin.industria.core.parametrics.engine.BlockParametricsManager;
-import de.m_marvin.industria.core.registries.Circuits;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
@@ -36,7 +34,7 @@ import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class VoltageSourceBlock extends BaseEntityBlock implements IElectricBlock, IElectricInfoProvider, ITooltipAdditionsModifier {
+public class VoltageSourceBlock extends BaseEntityBlock implements IElectricBlock, ITooltipAdditionsModifier {
 	
 	public static final NodePointSupplier NODES = NodePointSupplier.define()
 			.addNode(NodeTypes.ELECTRIC, 8, new Vec3i(8, 8, 0))
@@ -67,30 +65,47 @@ public class VoltageSourceBlock extends BaseEntityBlock implements IElectricBloc
 	}
 	
 	@Override
-	public void plotCircuit(Level level, BlockState instance, ElectricReference reference, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
-
+	public void installCircuitElements(Level level, ElectricReference reference, BlockState instance, ComponentCircuitContext context) {
+		
 		if (level.getBlockEntity(reference.block()) instanceof VoltageSourceBlockEntity source) {
 
+//			String[] sourceLanes = source.getNodeLanes();
+//			NodePos node = new NodePos(reference.block(), 0);
+//			CircuitNode cnodeGround = CircuitNode.node(node, sourceLanes[0]);
+//			CircuitNode cnodeLine = CircuitNode.node(node, sourceLanes[1]);
+//			CircuitNode cnodeInternal = CircuitNode.internal(reference, "internal");
+//			context.installVoltage(CircuitElement.element(reference, "Ugen"), cnodeGround, cnodeInternal, source.getVoltage());
+//			context.installResistor(CircuitElement.element(reference, "Rinternal"), cnodeInternal, cnodeLine, 1);
+//			
 			String[] sourceLanes = source.getNodeLanes();
-			ElectricUtility.plotJoinTogether(plotter, level, this, reference, instance, 0, sourceLanes[0], sourceLanes[1]);
-			
-			if (source.getPower() > 0) {
-				Plotter templateSource = CircuitTemplateManager.getInstance().getTemplate(Circuits.VOLTAGE_SOURCE).plotter();
-				templateSource.setProperty("nominal_voltage", source.getVoltage());
-				templateSource.setProperty("power_limit", source.getPower());
-				templateSource.setNetworkLocalNode("VDC", reference.block(), sourceLanes[0], 0);
-				templateSource.setNetworkLocalNode("GND", reference.block(), sourceLanes[1], 0);
-				templateSource.setNetworkLocalNode("SHUNT", reference.block(), "SHUNT", 1);
-				plotter.accept(templateSource);
-			}
+			NodePos node = new NodePos(reference.block(), 0);
+			CircuitNode cnodeGround = CircuitNode.node(node, sourceLanes[0]);
+			CircuitNode cnodeLine = CircuitNode.node(node, sourceLanes[1]);
+			context.installVoltage(CircuitElement.element(reference, "Ugen"), cnodeGround, cnodeLine, source.getVoltage());
 			
 		}
 		
 	}
-
+	
+	
+	
 	@Override
-	public void onNetworkNotify(Level level, BlockState instance, ElectricReference reference) {
-		GameUtility.triggerClientSync(level, reference.block());
+	public void stepCircuitElements(Level level, ElectricReference reference, BlockState instance, ComponentCircuitContext context) {
+
+		if (level.getBlockEntity(reference.block()) instanceof VoltageSourceBlockEntity source) {
+			
+			CircuitElement sourceElement = CircuitElement.element(reference, "Ugen");
+			if (context.readVoltage(sourceElement) != source.getVoltage())
+				context.changeVoltage(sourceElement, source.getVoltage());
+			
+			// TODO power limitation
+			
+			// TODO for testing
+//			float f = (ClientTimer.getTicks() % 100) / 100F;
+//			context.changeVoltage(CircuitElement.element(reference, "Ugen"), source.getVoltage() * f);
+			
+		}
+		
 	}
 	
 	@Override
@@ -98,36 +113,37 @@ public class VoltageSourceBlock extends BaseEntityBlock implements IElectricBloc
 		return NODES.getNodePositions(reference.block());
 	}
 	
-	@Override
-	public double getVoltage(BlockState state, Level level, BlockPos pos) {
-		if (level.getBlockEntity(pos) instanceof VoltageSourceBlockEntity source) {
-			String[] wireLanes = source.getNodeLanes();
-			return ElectricUtility.getVoltageBetweenLocal(level, pos, wireLanes[0], 0, wireLanes[1], 0).orElseGet(() -> 0.0);
-		}
-		return 0.0;
-	}
+//	@Override
+//	public double getVoltage(BlockState state, Level level, BlockPos pos) {
+//		if (level.getBlockEntity(pos) instanceof VoltageSourceBlockEntity source) {
+//			String[] wireLanes = source.getNodeLanes();
+//			NodePos node = new NodePos(pos, 0);
+//			return ElectricUtility.getVoltageBetween(level, CircuitNode.node(node, wireLanes[0]), CircuitNode.node(node, wireLanes[1]));
+//		}
+//		return 0.0;
+//	}
 	
-	@Override
-	public double getCurrentPower(Level level, ElectricReference reference, BlockState instance) {
-		if (level.getBlockEntity(reference.block()) instanceof VoltageSourceBlockEntity source) {
-			String[] wireLanes = source.getNodeLanes();
-			double shuntVoltage = ElectricUtility.getVoltageBetweenLocal(level, reference.block(), "SHUNT", 1, wireLanes[0], 0).orElse(0.0);
-			double sourceVoltage = ElectricUtility.getVoltageBetweenLocal(level, reference.block(), wireLanes[0], 0, wireLanes[1], 0).orElse(0.0);
-			double sourceCurrent = shuntVoltage / Circuits.SHUNT_RESISTANCE;
-			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
-			double powerUsed = Math.min(sourceVoltage * sourceCurrent, parametrics.getPowerMax());
-			return Math.max(powerUsed > 1.0 ? parametrics.getPowerMin() : 0, powerUsed);
-		}
-		return 0.0;
-	}
-	
-	@Override
-	public double getMaxPowerGeneration(Level level, ElectricReference reference, BlockState instance) {
-		if (level.getBlockEntity(reference.block()) instanceof VoltageSourceBlockEntity source) {
-			return source.getPower();
-		}
-		return 0.0;
-	}
+//	@Override
+//	public double getCurrentPower(Level level, ElectricReference reference, BlockState instance) {
+//		if (level.getBlockEntity(reference.block()) instanceof VoltageSourceBlockEntity source) {
+//			String[] wireLanes = source.getNodeLanes();
+//			NodePos node = new NodePos(reference.block(), 0);
+//			double current = ElectricUtility.getElementCurrent(level, CircuitElement.element(reference, "Ugen"));
+//			double voltage = ElectricUtility.getVoltageBetween(level, CircuitNode.node(node, wireLanes[0]), CircuitNode.node(node, wireLanes[1]));
+//			BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(this);
+//			double powerUsed = Math.min(voltage * current, parametrics.getPowerMax());
+//			return Math.max(powerUsed > 1.0 ? parametrics.getPowerMin() : 0, powerUsed);
+//		}
+//		return 0.0;
+//	}
+//	
+//	@Override
+//	public double getMaxPowerGeneration(Level level, ElectricReference reference, BlockState instance) {
+//		if (level.getBlockEntity(reference.block()) instanceof VoltageSourceBlockEntity source) {
+//			return source.getPower();
+//		}
+//		return 0.0;
+//	}
 	
 	@Override
 	public String[] getWireLanes(Level level, ElectricReference reference, BlockState instance, NodePos node) {

@@ -1,6 +1,5 @@
 package de.m_marvin.industria.core.util;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -46,39 +45,38 @@ public class MathUtility {
 	
 	public static final double ANGULAR_VELOCITY_TO_ROTATIONS_PER_SECOND = (180.0 / Math.PI) / 360.0;
 	public static final double ROTATIONS_PER_SECOND_TO_ANGULAR_VELOCITY = 360 / (180.0 / Math.PI);
-
-	public static Direction.Axis rotate(Rotation rotation, Direction.Axis axis) {
-		switch (rotation) {
-		  case COUNTERCLOCKWISE_90:
-		  case CLOCKWISE_90:
-			  switch (axis) {
-				  case X:
-					  return Direction.Axis.Z;
-				  case Z:
-					  return Direction.Axis.X;
-				  default:
-					  return axis;
-			  }
-		  default:
-			  return axis;
-		}
-	}
 	
 	public static int toIntegerColor(int r, int g, int b, int a) {
-		return new Color(r, g, b, a).getRGB();
+		return	((a & 0xFF) << 24) |
+                ((r & 0xFF) << 16) |
+                ((g & 0xFF) << 8)  |
+                ((b & 0xFF) << 0);
 	}
 	
 	public static int toIntegerColor(float r, float g, float b, float a) {
-		return new Color(r, g, b, a).getRGB();
+		return toIntegerColor(Math.round(r * 255), Math.round(g * 255), Math.round(b * 255), Math.round(a * 255));
 	}
 	
 	public static int toIntegerColor(Vec4f color) {
-		return new Color(color.x, color.y, color.z, color.w).getRGB();
+		return toIntegerColor(color.x, color.y, color.z, color.w);
+	}
+
+	public static Vec4f toVecColorNoAlpha(int color) {
+		return new Vec4f(
+				((color >> 16) & 0xFF) / 255F,
+				((color >> 8) & 0xFF) / 255F,
+				((color >> 0) & 0xFF) / 255F,
+				1F
+		);
 	}
 	
 	public static Vec4f toVecColor(int color) {
-		Color colorc = new Color(color);
-		return new Vec4f(colorc.getRed() / 255F, colorc.getGreen() / 255F, colorc.getBlue() / 255F, colorc.getAlpha() / 255F);
+		return new Vec4f(
+				((color >> 16) & 0xFF) / 255F,
+				((color >> 8) & 0xFF) / 255F,
+				((color >> 0) & 0xFF) / 255F,
+				((color >> 24) & 0xFF) / 255F
+		);
 	}
 	
 	public static Direction getFacingDirection(Entity entity) {
@@ -140,6 +138,23 @@ public class MathUtility {
 		return angle % 360;
 	}
 
+	public static Direction.Axis rotate(Rotation rotation, Direction.Axis axis) {
+		switch (rotation) {
+		  case COUNTERCLOCKWISE_90:
+		  case CLOCKWISE_90:
+			  switch (axis) {
+				  case X:
+					  return Direction.Axis.Z;
+				  case Z:
+					  return Direction.Axis.X;
+				  default:
+					  return axis;
+			  }
+		  default:
+			  return axis;
+		}
+	}
+	
 	public static Direction[] getDirectionsOrthogonal(Axis axis) {
 		return Stream.of(Direction.values()).filter(d -> d.getAxis() != axis).toArray(Direction[]::new);
 	}

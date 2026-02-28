@@ -2,36 +2,21 @@ package de.m_marvin.industria.core.client.util.widgets;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.core.client.electrics.events.ElectricNetworkEvent;
 import de.m_marvin.industria.core.client.util.ClientTimer;
 import de.m_marvin.industria.core.client.util.GraphicsUtility;
-import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
-import de.m_marvin.industria.core.electrics.engine.network.CPlayerSwitchNetworkPackage;
-import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
-import de.m_marvin.industria.core.util.ConditionalExecutor;
-import net.minecraft.client.Minecraft;
+import de.m_marvin.industria.core.util.types.PowerNetState;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
-@Mod.EventBusSubscriber(modid = IndustriaCore.MODID, bus = Bus.FORGE, value = Dist.CLIENT)
+//@Mod.EventBusSubscriber(modid = IndustriaCore.MODID, bus = Bus.FORGE, value = Dist.CLIENT)
 public class CircuitSwitch extends AbstractWidget {
 
-	protected final ResourceLocation texture = GraphicsUtility.UTILITY_WIDGETS_TEXTURE;
-	protected final Level level;
-	protected final BlockPos componentPos;
+	protected ResourceLocation texture = GraphicsUtility.UTILITY_WIDGETS_TEXTURE;
+//	protected final Level level;
+//	protected final BlockPos componentPos;
 	
 	protected float time;
 	protected int lampState = 0;
@@ -40,69 +25,75 @@ public class CircuitSwitch extends AbstractWidget {
 	protected float leverReleaseTime;
 	protected boolean leverGrabbed = false;
 	protected double leverGrabPos;
+
 	protected boolean leverState = false;
+	protected PowerNetState networkState = PowerNetState.INACTIVE;
+	protected float loadState = 0.0F;
 	
-	public CircuitSwitch(int pX, int pY, Level level, BlockPos componentPos) {
+	public CircuitSwitch(int pX, int pY) {
 		super(pX, pY, 43, 87, Component.literal("power_switch"));
-		this.level = level;
-		this.componentPos = componentPos;
-
-		ElectricNetwork network = ElectricUtility.findNetworkAt(this.level, ElectricReference.block(this.componentPos));
-		updateLeverState(network != null ? network.isOnline() : false);
-	}
-
-	@SubscribeEvent
-	public static final void onFuseTripped(ElectricNetworkEvent.FuseTripedEvent event) {
-		if (!event.getLevel().isClientSide()) return;
-		
-		Screen screen = Minecraft.getInstance().screen;
-		
-		if (screen != null) {
-			for (GuiEventListener widget : screen.children()) {
-				if (widget instanceof CircuitSwitch cswitch) {
-					
-					BlockPos switchComponent = cswitch.getComponentPos();
-					boolean b = event.getNetwork().listComponents().stream()
-						.filter(c -> c.isBlock() && c.reference().block().equals(switchComponent))
-						.count() > 0;
-					
-					if (b) {
-						cswitch.resetLeverLever();
-						break;
-					}
-					
-				}
-			}
-		}
-		
+//		this.level = level;
+//		this.componentPos = componentPos;
+//
+//		ElectricNetwork network = ElectricUtility.findNetworkAt(this.level, ElectricReference.block(this.componentPos));
+//		updateLeverState(network != null ? network.isOnline() : false);
 	}
 	
-	public BlockPos getComponentPos() {
-		return componentPos;
+	public void setTexture(ResourceLocation texture) {
+		this.texture = texture;
 	}
+
+//	@SubscribeEvent
+//	public static final void onFuseTripped(ElectricNetworkEvent.FuseTripedEvent event) {
+//		if (!event.getLevel().isClientSide()) return;
+//		
+//		Screen screen = Minecraft.getInstance().screen;
+//		
+//		if (screen != null) {
+//			for (GuiEventListener widget : screen.children()) {
+//				if (widget instanceof CircuitSwitch cswitch) {
+//					
+//					BlockPos switchComponent = cswitch.getComponentPos();
+//					boolean b = event.getNetwork().listComponents().stream()
+//						.filter(c -> c.isBlock() && c.reference().block().equals(switchComponent))
+//						.count() > 0;
+//					
+//					if (b) {
+//						cswitch.resetLeverLever();
+//						break;
+//					}
+//					
+//				}
+//			}
+//		}
+//		
+//	}
+	
+//	public BlockPos getComponentPos() {
+//		return componentPos;
+//	}
 	
 	@Override
 	protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
 		
-		ElectricNetwork network = ElectricUtility.findNetworkAt(this.level, ElectricReference.block(this.componentPos));
-		
 		// Background
-		pGuiGraphics.blit(this.texture, this.getX(), this.getY(), 212, 1, 43, 87);
+		pGuiGraphics.blit(this.texture, this.getX(), this.getY(), 197, 1, 43, 87);
 		
-		if (network == null) return;
 		this.time = ClientTimer.getRenderTicks();
+		boolean hasTriped = this.networkState == PowerNetState.FAILED;
+		boolean isOnline = this.networkState == PowerNetState.ACTIVE;
 		
 		// Status Lamps
 		float lm = (float) Math.sin(this.time % 15 / 15F * Math.PI * 2);
-		int ns = network.isOnline() != this.leverState ? 2 : (network.isTripped() ? 3 : (this.leverState ? 1 : 0));
+		int ns = isOnline != this.leverState ? 2 : (hasTriped ? 3 : (this.leverState ? 1 : 0));
 		if (lm <= 0.0F || ns == 1) this.lampState = ns;
 		renderLamps(pGuiGraphics, this.lampState, this.lampState == 1 ? 1F : lm);
 		
 		// Network load bar
-		renderBar(pGuiGraphics, network.getNetworkLoad());
+		renderBar(pGuiGraphics, this.loadState);
 		
 		// Lever Arrows
-		int a = (!this.leverState && network.isTripped()) ? (int) (this.time % 40 / 10) : 0;
+		int a = (!this.leverState && hasTriped) ? (int) (this.time % 40 / 10) : 0;
 		renderArrows(pGuiGraphics, a);
 		
 		// Lever
@@ -127,16 +118,24 @@ public class CircuitSwitch extends AbstractWidget {
 	}
 	
 	public void onLeverChanges() {
-		if (!this.leverState) {
-			ConditionalExecutor.CLIENT_TICK_EXECUTOR.executeAfterDelay(() -> IndustriaCore.NETWORK.sendToServer(new CPlayerSwitchNetworkPackage(this.componentPos, this.leverState)), 40);
-		} else {
-			IndustriaCore.NETWORK.sendToServer(new CPlayerSwitchNetworkPackage(this.componentPos, !this.leverState));
-		}
+//		if (!this.leverState) {
+//			ConditionalExecutor.CLIENT_TICK_EXECUTOR.executeAfterDelay(() -> IndustriaCore.NETWORK.sendToServer(new CPlayerSwitchNetworkPackage(this.componentPos, this.leverState)), 40);
+//		} else {
+//			IndustriaCore.NETWORK.sendToServer(new CPlayerSwitchNetworkPackage(this.componentPos, !this.leverState));
+//		}
 	}
 	
-	public void updateLeverState(boolean state) {
+	public void setLeverState(boolean state) {
 		this.leverState = state;
 		this.leverPosition = this.leverState ? 33F : 0F;
+	}
+	
+	public void setNetworkState(PowerNetState networkState) {
+		this.networkState = networkState;
+	}
+	
+	public void setLoadState(float loadState) {
+		this.loadState = loadState;
 	}
 	
 	@Override
@@ -210,14 +209,14 @@ public class CircuitSwitch extends AbstractWidget {
 	public void renderLever(GuiGraphics pGuiGraphics, float position) {
 
 		float a = (float) Math.cos((1 - position) * Math.PI);
-		int sp = Math.round(a * 19) + 19;
-		int bp = Math.round(a * 1.5F + 0.2F) + 21;
+		int sp = Math.round(a * 19);
+		int bp =  Math.round(a * 1.5F + 0.5F);
 		int bh = Math.round(a * 15);
 		
 		RenderSystem.disableCull();
-		pGuiGraphics.blit(this.texture, this.getX() + 5, this.getY() + 9 + bp, 31, bh, 217, 117, 31, 15, 256, 256);
+		pGuiGraphics.blit(this.texture, this.getX() + 5, this.getY() + 30 + bp, 31, bh, 217, 105, 31, 15, 256, 256);
 		RenderSystem.enableCull();
-		pGuiGraphics.blit(this.texture, this.getX() + 5, this.getY() + 9 + sp, 217, 94, 31, 5);
+		pGuiGraphics.blit(this.texture, this.getX() + 5, this.getY() + 28 + sp, 217, 94, 31, 5);
 		
 	}
 	

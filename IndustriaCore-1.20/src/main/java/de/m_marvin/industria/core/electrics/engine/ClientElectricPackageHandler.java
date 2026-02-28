@@ -5,7 +5,6 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.core.electrics.engine.network.SSyncCircuitTemplatesPackage;
 import de.m_marvin.industria.core.electrics.engine.network.SSyncElectricComponentsPackage;
 import de.m_marvin.industria.core.electrics.engine.network.SUpdateElectricNetworkPackage;
 import de.m_marvin.industria.core.registries.Capabilities;
@@ -46,19 +45,11 @@ public class ClientElectricPackageHandler {
 				Collection<ElectricNetwork> networks = msg.getComponents().stream().map(networkSpace::findNetworkAt).filter(Objects::nonNull).distinct().toList();
 				for (var n : networks) {
 					if (n == null) continue;
-					n.parseDataList(msg.getDataList());
-					n.setMaxPower(msg.getMaxPower());
-					n.setCurrentProduction(msg.getCurrentProduction());
-					n.setCurrentConsumtion(msg.getCurrentConsumtion());
 					n.setState(msg.getState());
 				}
 				
 			});
 		
-	}
-	
-	public static void handleSyncCircuitTemplates(SSyncCircuitTemplatesPackage msg, Context context) {
-		CircuitTemplateManager.updateClientTemplates(msg.getCircuitTemplates());
 	}
 	
 }

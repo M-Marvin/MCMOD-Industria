@@ -67,8 +67,8 @@ public class SSyncMagneticPackage {
 		
 		ctx.get().enqueueWork(() -> {
 			ClientMagnetismPackageHandler.handleSyncMagneticFromServer(msg, ctx.get());
+			ctx.get().setPacketHandled(true);
 		});
-		ctx.get().setPacketHandled(true);
 		
 	}
 	

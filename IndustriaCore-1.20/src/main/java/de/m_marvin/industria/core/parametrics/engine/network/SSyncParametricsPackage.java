@@ -46,8 +46,8 @@ public class SSyncParametricsPackage {
 		
 		ctx.get().enqueueWork(() -> {
 			ClientParametricsPackageHandler.handleSyncParametricsFromServer(msg, ctx.get());
+			ctx.get().setPacketHandled(true);
 		});
-		ctx.get().setPacketHandled(true);
 		
 	}
 	

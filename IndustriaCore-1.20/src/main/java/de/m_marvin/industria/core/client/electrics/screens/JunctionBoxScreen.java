@@ -5,14 +5,14 @@ import java.util.List;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
-import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxContainer;
+import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public class JunctionBoxScreen<B extends BlockEntity & IJunctionEdit, C extends JunctionBoxContainer<B>> extends AbstractJunctionEditScreen<B, C> {
+public class JunctionBoxScreen<B extends BlockEntity & IJunctionEdit, C extends JunctionBoxMenu<B>> extends AbstractJunctionEditScreen<B, C> {
 
 	public static final ResourceLocation JUNCTION_BOX_UI_LOCATION = new ResourceLocation(IndustriaCore.MODID, "textures/gui/junction_box.png");
 	

@@ -1,21 +1,18 @@
 package de.m_marvin.industria.core.client.kinetics.screens;
 
-import de.m_marvin.industria.IndustriaCore;
-import de.m_marvin.industria.core.client.util.screens.AbstractContainerWidgetScreen;
-import de.m_marvin.industria.core.kinetics.engine.network.CEditMotorPackage;
-import de.m_marvin.industria.core.kinetics.types.blockentities.MotorBlockEntity;
-import de.m_marvin.industria.core.kinetics.types.containers.MotorContainer;
+import de.m_marvin.industria.core.client.util.screens.AbstractTickableWidgedContainerScreen;
+import de.m_marvin.industria.core.kinetics.types.containers.MotorMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
-public class MotorScreen extends AbstractContainerWidgetScreen<MotorContainer> {
+public class MotorScreen extends AbstractTickableWidgedContainerScreen<MotorMenu> {
 	
 	protected EditBox rpmField;
 	protected EditBox torqueField;
 	
-	public MotorScreen(MotorContainer pMenu, Inventory pPlayerInventory, Component pTitle) {
+	public MotorScreen(MotorMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
 		super(pMenu, pPlayerInventory, pTitle);
 	}
 
@@ -25,12 +22,12 @@ public class MotorScreen extends AbstractContainerWidgetScreen<MotorContainer> {
 		
 		this.rpmField = new EditBox(font, this.leftPos + 95, this.topPos + 30, 80, 20, Component.translatable("industriacore.power_source.voltage"));
 		this.rpmField.setMaxLength(5);
-		this.rpmField.setValue(Double.toString(this.menu.getBlockEntity().getSourceRPM()));
+		this.rpmField.setValue(Double.toString(this.menu.getRPM()));
 		this.addRenderableWidget(this.rpmField);
 		
 		this.torqueField = new EditBox(font, this.leftPos + 5, this.topPos + 30, 80, 20, Component.translatable("industriacore.power_source.power"));
 		this.torqueField.setMaxLength(5);
-		this.torqueField.setValue(Double.toString(this.menu.getBlockEntity().getSourceTorque()));
+		this.torqueField.setValue(Double.toString(this.menu.getTorque()));
 		this.addRenderableWidget(this.torqueField);
 		
 		this.titleLabelY = 0;
@@ -38,24 +35,16 @@ public class MotorScreen extends AbstractContainerWidgetScreen<MotorContainer> {
 		
 	}
 	
-	public void setMotor(double rpm, double torque) {
-		MotorBlockEntity motor = this.menu.getBlockEntity();
-		motor.setSourceRPM(rpm);
-		motor.setSourceTorque(torque);
-		IndustriaCore.NETWORK.sendToServer(new CEditMotorPackage(this.menu.getBlockEntity().getBlockPos(), rpm, torque));
-	}
-	
 	@Override
 	public void onClose() {
-		double rpm = this.menu.getBlockEntity().getSourceRPM();
-		double torque = this.menu.getBlockEntity().getSourceTorque();
 		try {
-			rpm = Double.parseDouble(this.rpmField.getValue());
+			double rpm = Double.parseDouble(this.rpmField.getValue());
+			this.menu.setRPM(rpm);
 		} catch (NumberFormatException e) {}
 		try {
-			torque = Double.parseDouble(this.torqueField.getValue());
+			double torque = Double.parseDouble(this.torqueField.getValue());
+			this.menu.setTorque(torque);
 		} catch (NumberFormatException e) {}
-		setMotor(rpm, torque);
 		super.onClose();
 	}
 	

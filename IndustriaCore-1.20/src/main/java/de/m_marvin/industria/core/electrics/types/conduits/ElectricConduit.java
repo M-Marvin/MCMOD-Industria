@@ -1,15 +1,12 @@
 package de.m_marvin.industria.core.electrics.types.conduits;
 
-import java.util.function.Consumer;
-
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
-import de.m_marvin.industria.core.electrics.engine.CircuitTemplateManager;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
-import de.m_marvin.industria.core.electrics.types.CircuitTemplate.Plotter;
-import de.m_marvin.industria.core.registries.Circuits;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitElement;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitNode;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ComponentCircuitContext;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import net.minecraft.world.level.Level;
 
@@ -68,16 +65,11 @@ public class ElectricConduit extends Conduit implements IElectricConduit {
 	}
 	
 	@Override
-	public void plotCircuit(Level level, ConduitEntity instance, ElectricReference reference, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
-		Plotter template = CircuitTemplateManager.getInstance().getTemplate(Circuits.RESISTOR).plotter();
-		template.setProperty("resistance", this.resistance * instance.getLength());
-		
+	public void installCircuitElements(Level level, ElectricReference reference, ConduitEntity instance, ComponentCircuitContext context) {
 		NodePos[] connections = getElectricConnections(level, reference, instance);
 		String[] wireLabels = this.getWireLanes(level, reference, instance, null);
 		for (int i = 0; i < wireLabels.length; i++) {
-			template.setNetworkNode("NET1", connections[0], i, wireLabels[i]);
-			template.setNetworkNode("NET2", connections[1], i, wireLabels[i]);
-			plotter.accept(template);
+			context.installResistor(CircuitElement.element(reference, "Rwire_" + i), CircuitNode.node(connections[0], wireLabels[i]), CircuitNode.node(connections[1], wireLabels[i]), this.getResistancePerBlock() * instance.getLength());
 		}
 	}
 	

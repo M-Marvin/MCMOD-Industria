@@ -68,8 +68,8 @@ public class SSyncElectricComponentsPackage {
 	public static void handle(SSyncElectricComponentsPackage msg, Supplier<Context> ctx) {
 		ctx.get().enqueueWork(() -> {
 			ClientElectricPackageHandler.handleSyncComponentsServer(msg, ctx.get());
+			ctx.get().setPacketHandled(true);
 		});
-		ctx.get().setPacketHandled(true);
 	}
 	
 }

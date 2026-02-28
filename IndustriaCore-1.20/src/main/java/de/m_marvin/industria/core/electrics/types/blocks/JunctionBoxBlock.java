@@ -1,15 +1,12 @@
 package de.m_marvin.industria.core.electrics.types.blocks;
 
-import java.util.function.Consumer;
-
 import de.m_marvin.industria.core.client.util.TooltipAdditions;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.contraptions.ContraptionUtility;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
-import de.m_marvin.industria.core.electrics.types.blockentities.IJunctionEdit;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ComponentCircuitContext;
 import de.m_marvin.industria.core.electrics.types.blockentities.JunctionBoxBlockEntity;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
@@ -114,21 +111,26 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricBlock,
 	public void setWireLanes(Level level, ElectricReference reference, BlockState instance, NodePos node, String[] laneLabels) {}
 	
 	@Override
-	public void plotCircuit(Level level, BlockState instance, ElectricReference reference, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
-		if (level.getBlockEntity(reference.block()) instanceof IJunctionEdit) {
-			ElectricUtility.plotConnectEquealNamed(plotter, level, this, reference, instance);
-		}
-	}
-
-	@Override
-	public double getCurrentPower(Level level, ElectricReference reference, BlockState instance) {
-		return 0;
+	public void installCircuitElements(Level level, ElectricReference reference, BlockState instance, ComponentCircuitContext context) {
+		ElectricUtility.installJunctionResistors(level, context, this, reference, instance, 0.01);
 	}
 	
-	@Override
-	public double getMaxPowerGeneration(Level level, ElectricReference reference, BlockState instance) {
-		return 0;
-	}
+//	@Override
+//	public void plotCircuit(Level level, BlockState instance, ElectricReference reference, ElectricNetwork circuit, Consumer<ICircuitPlot> plotter) {
+//		if (level.getBlockEntity(reference.block()) instanceof IJunctionEdit) {
+//			ElectricUtility.plotConnectEquealNamed(plotter, level, this, reference, instance);
+//		}
+//	}
+//
+//	@Override
+//	public double getCurrentPower(Level level, ElectricReference reference, BlockState instance) {
+//		return 0;
+//	}
+//	
+//	@Override
+//	public double getMaxPowerGeneration(Level level, ElectricReference reference, BlockState instance) {
+//		return 0;
+//	}
 	
 	public Direction getBlockFacing(Level level, BlockState state, BlockPos position) {
 		return ContraptionUtility.optionalContraptionTransform(level, position, (transform, direction) -> ContraptionUtility.toWorldDirection(transform, direction), state.getValue(BlockStateProperties.FACING));

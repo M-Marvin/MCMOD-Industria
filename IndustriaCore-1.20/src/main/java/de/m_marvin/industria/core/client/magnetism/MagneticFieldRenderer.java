@@ -140,13 +140,13 @@ public class MagneticFieldRenderer {
         		r, g, b, 1F,
         		r, g, b);
 		
-		GraphicsUtility.renderVector(
+		GraphicsUtility.Spacial.renderVector(
 				vertexconsumer, matrixStack, 
 				new Vec3f(0.5F, 0.5F, 0.5F), 
 				new Vec3f(fieldVector),
 				255, 0, 0, 255);
 
-		GraphicsUtility.renderVector(
+		GraphicsUtility.Spacial.renderVector(
 				vertexconsumer, matrixStack, 
 				new Vec3f(0.5F, 0.5F, 0.5F), 
 				new Vec3f(inducedVector),
@@ -182,13 +182,13 @@ public class MagneticFieldRenderer {
 
 		ClientPhysicsUtility.ensureWorldTransformTo(clientLevel, matrixStack, pos);
 		
-		GraphicsUtility.renderVector(
+		GraphicsUtility.Spacial.renderVector(
 				vertexconsumer, matrixStack, 
 				magneticCenter, 
 				new Vec3f(fieldVectorLinear).sub(new Vec3f(0.2F, 0.2F, 0.2F)),
 				255, 0, 0, 255);
 		
-		GraphicsUtility.renderVector(
+		GraphicsUtility.Spacial.renderVector(
 				vertexconsumer, matrixStack, 
 				magneticCenter.add(new Vec3f(0.2F, 0.2F, 0.2F)), 
 				new Vec3f(fieldVectorInduced),

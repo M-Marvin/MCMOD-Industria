@@ -54,8 +54,8 @@ public class SSyncRemovedConduits {
 		
 		ctx.get().enqueueWork(() -> {
 			ClientConduitPackageHandler.handleSyncRemovedConduitsFromServer(msg, ctx.get());
+			ctx.get().setPacketHandled(true);
 		});
-		ctx.get().setPacketHandled(true);
 		
 	}
 	

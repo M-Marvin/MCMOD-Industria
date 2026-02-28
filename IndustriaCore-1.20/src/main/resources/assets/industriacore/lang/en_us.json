@@ -114,8 +114,9 @@
 
 "industriacore.ui.motor.rpm":											"Rotation Speed",
 "industriacore.ui.motor.torque":										"Torque",
-"industriacore.ui.voltage_source.voltage":								"Voltage",
-"industriacore.ui.voltage_source.power":								"Power",
+"industriacore.ui.electrical.voltage":									"Voltage",
+"industriacore.ui.electrical.power":									"Power",
+"industriacore.ui.electrical.mainfuse":									"Main Fuse",
 
 "industriacore.tooltip.conduit.name":									"Conduit: %1$s",
 "industriacore.tooltip.conduit.maxClampDistance":						"Range: %1$s m",

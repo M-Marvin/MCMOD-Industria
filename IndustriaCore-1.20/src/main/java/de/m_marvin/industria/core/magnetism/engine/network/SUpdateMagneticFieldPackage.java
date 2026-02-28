@@ -35,8 +35,8 @@ public class SUpdateMagneticFieldPackage {
 		
 		ctx.get().enqueueWork(() -> {
 			ClientMagnetismPackageHandler.handleUpdateMagneticField(msg, ctx.get());
+			ctx.get().setPacketHandled(true);
 		});
-		ctx.get().setPacketHandled(true);
 		
 	}
 	

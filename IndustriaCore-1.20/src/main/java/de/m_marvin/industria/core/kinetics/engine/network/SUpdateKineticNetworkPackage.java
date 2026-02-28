@@ -128,8 +128,8 @@ public class SUpdateKineticNetworkPackage {
 		
 		ctx.get().enqueueWork(() -> {
 			ClientKineticPackageHandler.handleUpdateNetwork(msg, ctx.get());
+			ctx.get().setPacketHandled(true);
 		});
-		ctx.get().setPacketHandled(true);
 		
 	}
 	

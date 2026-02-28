@@ -124,17 +124,17 @@ public class VoxelShapeUtility {
 		}
 		
 		public VoxelShapeRotationBuilder rotate(int x, int y, int z) {
-			this.matrix.mulI(Matrix4f.rotation(new Quaternionf(new Vec3i(x, y, z), EulerOrder.XYZ, true)));
+			this.matrix = Matrix4f.rotation(new Quaternionf(new Vec3i(x, y, z), EulerOrder.XYZ, true)).mul(this.matrix);
 			return this;
 		}
 
 		public VoxelShapeRotationBuilder offset(int x, int y, int z) {
-			this.matrix.mulI(Matrix4f.translate(new Vec3f(x * 0.0625F, y * 0.0625F, z * 0.0625F)));
+			this.matrix = Matrix4f.translate(new Vec3f(x * 0.0625F, y * 0.0625F, z * 0.0625F)).mulI(this.matrix);
 			return this;
 		}
 		
 		public VoxelShapeRotationBuilder scale(float x, float y, float z) {
-			this.matrix.mulI(Matrix4f.scale(new Vec3f(x, y, z)));
+			this.matrix = Matrix4f.scale(new Vec3f(x, y, z)).mulI(this.matrix);
 			return this;
 		}
 		

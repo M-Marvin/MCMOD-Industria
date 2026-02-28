@@ -1,45 +1,61 @@
 package de.m_marvin.industria.core.util.container;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
-public abstract class AbstractBlockEntityContainerBase<T extends BlockEntity> extends AbstractContainerMenu {
+public abstract class AbstractBlockContainerMenu extends AbstractContainerMenu {
 	
-	protected Inventory playerInv;
-	protected T blockEntity;
+	protected final BlockPos blockPos;
+	protected final Inventory playerInv;
+	protected final Container container;
 	
-	@SuppressWarnings("unchecked")
-	public AbstractBlockEntityContainerBase(MenuType<?> type, int id, Inventory playerInv, FriendlyByteBuf data) {
-		this(type, id, playerInv, (T) getClientBlockEntity(data));
-	}
-	
-	public AbstractBlockEntityContainerBase(MenuType<?> type, int id, Inventory playerInv, T tileEntity) {
+	public AbstractBlockContainerMenu(MenuType<?> type, int id, Inventory playerInv, FriendlyByteBuf extraData, Container container) {
 		super(type, id);
-		this.blockEntity = tileEntity;
 		this.playerInv = playerInv;
-		this.init();
+		this.blockPos = extraData.readBlockPos();
+		this.container = container;
 	}
 	
-	private static BlockEntity getClientBlockEntity(FriendlyByteBuf data) {
-		
-		BlockPos pos = data.readBlockPos();
-		BlockEntity te = Minecraft.getInstance().level.getBlockEntity(pos);
-		return te;
-		
+	public AbstractBlockContainerMenu(MenuType<?> type, int id, Inventory playerInv, BlockPos blockPos, Container container) {
+		super(type, id);
+		this.blockPos = blockPos;
+		this.container = container;
+		this.playerInv = playerInv;
 	}
 	
-	public abstract int getSlots();
-
+	public BlockPos getBlockPos() {
+		return blockPos;
+	}
+	
+	public Level getLevel() {
+		return playerInv.player.level();
+	}
+	
+	public BlockEntity getBlockEntity() {
+		return getLevel().getBlockEntity(getBlockPos());
+	}
+	
+	public BlockState getBlockState() {
+		return getLevel().getBlockState(getBlockPos());
+	}
+	
+	public Container getContainer() {
+		return container;
+	}
+	
 	public int getFirstNonPlayerSlot() {
-		return this.slots.size() - getSlots();
+		return this.slots.size() - container.getContainerSize();
 	}
 	
 	protected boolean moveItemStackTo(ItemStack pStack, int pIndex) {
@@ -71,8 +87,6 @@ public abstract class AbstractBlockEntityContainerBase<T extends BlockEntity> ex
 		return itemstack;
 	}
 	
-	public abstract void init();
-	
 	public void initPlayerInventory(Inventory playerInventory, int offsetX, int offsetY) {
 		for(int k = 0; k < 3; ++k) {
 			for(int i1 = 0; i1 < 9; ++i1) {
@@ -85,11 +99,7 @@ public abstract class AbstractBlockEntityContainerBase<T extends BlockEntity> ex
 	}
 	
 	public boolean stillValid(Player pPlayer) {
-		return pPlayer.distanceToSqr((double)this.blockEntity.getBlockPos().getX() + 0.5D, (double)this.blockEntity.getBlockPos().getY() + 0.5D, (double)this.blockEntity.getBlockPos().getZ() + 0.5D) <= 64.0D;
-	}
-	
-	public T getBlockEntity() {
-		return blockEntity;
+		return this.container.stillValid(pPlayer);
 	}
 	
 	public static class CraftingResultSlot extends Slot {
@@ -103,6 +113,21 @@ public abstract class AbstractBlockEntityContainerBase<T extends BlockEntity> ex
 			return false;
 		}
 			
+	}
+	
+	public static class DummyContainer extends SimpleContainer {
+		
+		private final BlockPos pos;
+		
+		public DummyContainer(BlockPos pos) {
+			this.pos = pos;
+		}
+		
+		@Override
+		public boolean stillValid(Player pPlayer) {
+			return pPlayer.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= 64.0;
+		}
+		
 	}
 	
 }

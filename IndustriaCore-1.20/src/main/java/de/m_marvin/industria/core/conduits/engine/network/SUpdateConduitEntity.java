@@ -56,8 +56,8 @@ public class SUpdateConduitEntity {
 		
 		ctx.get().enqueueWork(() -> {
 			ClientConduitPackageHandler.handleUpdateConduitEntityFromServer(msg, ctx.get());
+			ctx.get().setPacketHandled(true);
 		});
-		ctx.get().setPacketHandled(true);
 		
 	}
 	

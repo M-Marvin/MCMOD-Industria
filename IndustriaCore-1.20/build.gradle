@@ -149,6 +149,7 @@ repositories {
     maven {
         url = 'https://maven.valkyrienskies.org' // For VS-Core
         content {
+			excludeGroup "net.jodah.typetools"
         	//excludeGroup "org.valkyrienskies.core"
         }
     }

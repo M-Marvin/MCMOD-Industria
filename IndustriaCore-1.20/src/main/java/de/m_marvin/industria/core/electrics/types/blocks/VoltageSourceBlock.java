@@ -1,11 +1,13 @@
 package de.m_marvin.industria.core.electrics.types.blocks;
 
+import de.m_marvin.electronflow.nltisolver.elements.Diode;
 import de.m_marvin.industria.core.client.util.ClientTimer;
 import de.m_marvin.industria.core.client.util.TooltipAdditions;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitElement;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitNode;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ComponentCircuitContext;
@@ -79,9 +81,11 @@ public class VoltageSourceBlock extends BaseEntityBlock implements IElectricBloc
 //			
 			String[] sourceLanes = source.getNodeLanes();
 			NodePos node = new NodePos(reference.block(), 0);
-			CircuitNode cnodeGround = CircuitNode.node(node, sourceLanes[0]);
-			CircuitNode cnodeLine = CircuitNode.node(node, sourceLanes[1]);
-			context.installVoltage(CircuitElement.element(reference, "Ugen"), cnodeGround, cnodeLine, source.getVoltage());
+			CircuitNode cnodeGround = CircuitNode.node(node, sourceLanes[1]);
+			CircuitNode cnodeIntern = CircuitNode.internal(reference, "internal");
+			CircuitNode cnodeLine = CircuitNode.node(node, sourceLanes[0]);
+			context.installVoltage(CircuitElement.element(reference, "Ugen"), cnodeIntern, cnodeGround, source.getVoltage());
+			context.installDiode(CircuitElement.element(reference, "Dbackflow"), cnodeIntern, cnodeLine, Diode.DEFAULT_MODEL);
 			
 		}
 		
@@ -94,18 +98,47 @@ public class VoltageSourceBlock extends BaseEntityBlock implements IElectricBloc
 
 		if (level.getBlockEntity(reference.block()) instanceof VoltageSourceBlockEntity source) {
 			
+			
 			CircuitElement sourceElement = CircuitElement.element(reference, "Ugen");
-			if (context.readVoltage(sourceElement) != source.getVoltage())
-				context.changeVoltage(sourceElement, source.getVoltage());
+			double current = -ElectricUtility.getElementCurrent(level, sourceElement);
+			double voltage = source.getVoltage();
+			double lastVoltage = context.readVoltage(sourceElement);
+			double power = current * lastVoltage;
+			if (power < 0)
+				power = 0;
+			if (power > source.getPower()) {
+				double eqres = lastVoltage / current;
+				voltage = Math.sqrt(eqres * source.getPower());
+			}
 			
-			// TODO power limitation
+			if (Math.abs(lastVoltage - voltage) > 0.001)
+				context.changeVoltage(sourceElement, lastVoltage + (voltage - lastVoltage) * 0.2);
 			
-			// TODO for testing
-//			float f = (ClientTimer.getTicks() % 100) / 100F;
-//			context.changeVoltage(CircuitElement.element(reference, "Ugen"), source.getVoltage() * f);
+			
+//			CircuitElement sourceElement = CircuitElement.element(reference, "Ugen");
+//			double lastVoltage = context.readVoltage(sourceElement);
+//			double current = source.getDeviceCurrent();
+//			double voltage = source.getVoltage();
+//			double power = current * lastVoltage;
+//			if (power < 0)
+//				power = 0;
+//			if (power > source.getPower() || lastVoltage > voltage) {
+//				lastVoltage -= Math.max(lastVoltage - voltage, (power - source.getPower()) * 0.01);
+//			} else if (power < source.getPower() && lastVoltage < voltage) {
+//				lastVoltage += Math.max(voltage - lastVoltage, (source.getPower() - power) * 0.01);
+//			}
+//			
+//			if (Math.abs(lastVoltage - voltage) > 0.001)
+//				context.changeVoltage(sourceElement, lastVoltage);
 			
 		}
 		
+	}
+	
+	@Override
+	public void afterNetworkStep(Level level, ElectricReference reference, BlockState instance, ElectricNetwork network) {
+		// TODO Auto-generated method stub
+		IElectricBlock.super.afterNetworkStep(level, reference, instance, network);
 	}
 	
 	@Override

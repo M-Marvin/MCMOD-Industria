@@ -18,6 +18,7 @@ import de.m_marvin.industria.core.contraptions.engine.types.ContraptionPosition;
 import de.m_marvin.industria.core.contraptions.engine.types.contraption.ClientContraption;
 import de.m_marvin.industria.core.contraptions.engine.types.contraption.Contraption;
 import de.m_marvin.industria.core.contraptions.engine.types.contraption.ServerContraption;
+import de.m_marvin.industria.core.registries.Blocks;
 import de.m_marvin.industria.core.registries.Capabilities;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
@@ -248,6 +249,7 @@ public class ContraptionUtility {
 	}
 	
 	public static boolean isSolidContraptionBlock(BlockState state) {
+		if (state.getBlock() == Blocks.ERROR_BLOCK.get()) return false;
 		double mass = VS2MassSyncPatch.getPatchedBlockMass(state);
 		return mass > 0 && state.getCollisionShape(null, null) != null;
 	}

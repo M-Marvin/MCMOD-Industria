@@ -71,15 +71,18 @@ public class VoltageSourceScreen extends AbstractTickableWidgedContainerScreen<V
 	protected void containerTick() {
 		super.containerTick();
 		
-		double voltage = this.menu.getDeviceVoltage();
-		double current = this.menu.getDeviceCurrent();
-		double power = voltage * current;
+		float voltage = this.menu.getDeviceVoltage();
+		float current = this.menu.getDeviceCurrent();
+		float power = voltage * current;
 		
-		this.voltMeter.setState(this.voltMeterScaler.getScaleValue((float) voltage));
-		this.voltMeter.setInfo(Component.literal(String.format("%.3f %sV", voltage * this.voltMeterScaler.getMagnitudeFactor(), this.voltMeterScaler.getMagnitudeSymbol())));
-		this.powerMeter.setState(this.powerMeterScaler.getScaleValue((float) this.menu.getDeviceCurrent() * (float) this.menu.getDeviceVoltage()));
-		this.powerMeter.setInfo(Component.literal(String.format("%.3f %sW", power * this.powerMeterScaler.getMagnitudeFactor(), this.powerMeterScaler.getMagnitudeSymbol())));
-		
+		if (Double.isFinite(voltage)) {
+			this.voltMeter.setState(this.voltMeterScaler.getScaleValue(voltage));
+			this.voltMeter.setInfo(Component.literal(String.format("%.3f %sV", voltage * this.voltMeterScaler.getMagnitudeFactor(), this.voltMeterScaler.getMagnitudeSymbol())));
+		}
+		if (Double.isFinite(power)) {
+			this.powerMeter.setState(this.powerMeterScaler.getScaleValue(this.menu.getDeviceCurrent() * this.menu.getDeviceVoltage()));
+			this.powerMeter.setInfo(Component.literal(String.format("%.3f %sW", power * this.powerMeterScaler.getMagnitudeFactor(), this.powerMeterScaler.getMagnitudeSymbol())));
+		}
 	}
 
 	@Override

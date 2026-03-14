@@ -3,15 +3,18 @@ package de.m_marvin.industria.core.client.util.widgets;
 import java.util.stream.Stream;
 
 import de.m_marvin.industria.core.client.util.widgets.StatusBar.BarSegment;
+import net.minecraft.client.renderer.texture.Tickable;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-public abstract class AbstractScaleWidget extends AbstractTextureWidget {
+public abstract class AbstractScaleWidget extends AbstractTextureWidget implements Tickable {
 	
 	protected float scale1;
 	protected float scale2;
 	protected float zero;
 	protected float state;
+	protected float displayState;
+	protected boolean initialized = false;
 	protected BarSegment[] segments;
 	protected Component info;
 
@@ -24,6 +27,13 @@ public abstract class AbstractScaleWidget extends AbstractTextureWidget {
 		this.scale1 = scale1;
 		this.scale2 = scale2;
 		this.zero = zero;
+	}
+	
+	@Override
+	public void tick() {
+		
+		this.displayState += (this.state - this.displayState) * 0.1F;
+		
 	}
 	
 	public float getScale1() {
@@ -48,6 +58,10 @@ public abstract class AbstractScaleWidget extends AbstractTextureWidget {
 	
 	public void setState(float state) {
 		this.state = state;
+		if (!this.initialized) {
+			this.displayState = this.state;
+			this.initialized = true;
+		}
 	}
 	
 	public float getState() {

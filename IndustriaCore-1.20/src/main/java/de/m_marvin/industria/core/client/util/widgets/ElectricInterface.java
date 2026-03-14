@@ -65,7 +65,7 @@ public class ElectricInterface extends AbstractCompoundWidget implements Tickabl
 	
 	@SubscribeEvent
 	public static void onNetworkStateChange(ElectricNetworkEvent.StateChangeEvent event) {
-		if (event.getStage() == EventStage.PRE || !event.getLevel().isClientSide()) return;
+		if (event.getStage() == EventStage.PRE || !event.getLevel().isClientSide() || Minecraft.getInstance().screen == null) return;
 		for (var child : Minecraft.getInstance().screen.children())
 			if (child instanceof ElectricInterface interfaceWidget && interfaceWidget.getNetwork() == event.getNetwork())
 				interfaceWidget.onNetworkStateChange(event.getNewState());

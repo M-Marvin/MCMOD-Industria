@@ -28,8 +28,8 @@ public class VoltageSourceBlockEntity extends AbstractSourceBlockEntity {
 		return FriendlyContainerData.empty()
 				.nextIntItem(this::getVoltage, this::setVoltage)
 				.nextIntItem(this::getPower, this::setPower)
-				.nextDoubleItem(this::getDeviceVoltage, null)
-				.nextDoubleItem(this::getDeviceCurrent, null);
+				.nextFloatItem(() -> (float) getDeviceVoltage(), null)
+				.nextFloatItem(() -> (float) getDeviceCurrent(), null);
 	}
 	
 	@Override
@@ -49,7 +49,7 @@ public class VoltageSourceBlockEntity extends AbstractSourceBlockEntity {
 	
 	@Override
 	public double getDeviceCurrent() {
-		return getDeviceCurrent("Ugen");
+		return -getDeviceCurrent("Ugen");
 	}
 	
 }

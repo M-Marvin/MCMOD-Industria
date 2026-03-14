@@ -79,24 +79,24 @@ public class VoxelShapeUtility {
 		
 		public VoxelShapeRotationBuilder rotateFromAxisX(Axis axis) {
 			switch (axis) {
-			case Y: return rotateZ(+90);
-			case Z: return rotateY(-90);
+			case Y: return rotateZ(-90);
+			case Z: return rotateY(+90);
 			default: return this;
 			}
 		}
 
 		public VoxelShapeRotationBuilder rotateFromAxisY(Axis axis) {
 			switch (axis) {
-			case X: return rotateZ(-90);
-			case Z: return rotateX(+90);
+			case X: return rotateZ(+90);
+			case Z: return rotateX(-90);
 			default: return this;
 			}
 		}
 		
 		public VoxelShapeRotationBuilder rotateFromAxisZ(Axis axis) {
 			switch (axis) {
-			case X: return rotateY(+90);
-			case Y: return rotateX(-90);
+			case X: return rotateY(-90);
+			case Y: return rotateX(+90);
 			default: return this;
 			}
 		}

@@ -69,10 +69,7 @@ public abstract class AbstractSourceBlockEntity extends BlockEntity implements M
 		if (getBlockState().getBlock() instanceof IElectricBlock electric) {
 			BlockPos masterPos = electric.getConnectorMasterPos(level, worldPosition, getBlockState());
 			ElectricReference reference = ElectricReference.block(masterPos);
-			NodePos[] nodes = electric.getElectricConnections(level, reference, getBlockState());
-			if (nodes.length >= 1) {
-				return ElectricUtility.getElementCurrent(level, CircuitElement.element(reference, sourceElement));
-			}
+			return ElectricUtility.getElementCurrent(level, CircuitElement.element(reference, sourceElement));
 		}
 		return 0.0;
 	}

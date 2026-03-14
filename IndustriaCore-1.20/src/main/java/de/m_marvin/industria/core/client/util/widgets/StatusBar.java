@@ -44,11 +44,11 @@ public class StatusBar extends AbstractScaleWidget {
 	protected void renderBar(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
 
 		int tlength = this.width - 2;
-		int progress = Math.round(this.state * tlength);
+		int progress = Math.round(this.displayState * tlength);
 		
 		if (progress > 0) {
 			for (var segment : this.segments) {
-				if (segment.start() >= this.state) break;
+				if (segment.start() >= this.displayState) break;
 				
 				int x = Math.round(segment.start() * tlength);
 				int l = Math.min(progress, Math.round(segment.end() * tlength)) - x;

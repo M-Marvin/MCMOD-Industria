@@ -1,8 +1,11 @@
 package de.m_marvin.industria.core.util.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
+import de.m_marvin.electronflow.nltisolver.DecimalPrefixFormater;
+import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
@@ -42,6 +45,18 @@ public class DebugCommand {
 								printNodes(source, BlockPosArgument.getBlockPos(source, "pos"))
 						)
 				)
+		)
+		.then(
+				Commands.literal("log_network")
+				.then(
+						Commands.argument("pos", BlockPosArgument.blockPos())
+						.then(
+								Commands.argument("enable", BoolArgumentType.bool())
+								.executes((source) ->
+										debugLog(source, BlockPosArgument.getBlockPos(source, "pos"), BoolArgumentType.getBool(source, "enable"))
+								)
+						)
+				)
 		));
 	}
 	
@@ -72,8 +87,22 @@ public class DebugCommand {
 			for (int i = 0; i < lanes.length; i++) {
 				double potential = ElectricUtility.getFloatingNodeVoltage(level, CircuitNode.node(node, lanes[i]));
 				final int id = i;
-				source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.node_voltages.lane", id, lanes[id], Double.toString(potential)), false);
+				source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.node_voltages.lane", id, lanes[id], DecimalPrefixFormater.formatDouble(potential)), false);
 			}
+		}
+		return 1;
+	}
+	
+	public static int debugLog(CommandContext<CommandSourceStack> source, BlockPos position, boolean enable) {
+		ServerLevel level = source.getSource().getLevel();
+		
+		ElectricNetwork network = ElectricUtility.findNetworkAt(level, ElectricReference.block(position));
+		if (network == null) return 0;
+		network.getNetworkSolver().debug(enable ? line -> IndustriaCore.LOGGER.debug(line) : null);
+		if (enable) {
+			source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.log_network.enable"), false);
+		} else {
+			source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.log_network.disable"), false);
 		}
 		return 1;
 	}

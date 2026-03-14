@@ -10,13 +10,15 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import de.m_marvin.electronflow.ltisolver.elements.Current;
-import de.m_marvin.electronflow.ltisolver.elements.Element;
-import de.m_marvin.electronflow.ltisolver.elements.Resistor;
-import de.m_marvin.electronflow.ltisolver.elements.Voltage;
-import de.m_marvin.electronflow.ltisolver.network.IndexedNetwork;
-import de.m_marvin.electronflow.ltisolver.network.IndexedNetwork.StampingContext.StampingMode;
-import de.m_marvin.electronflow.ltisolver.network.NetworkSolver;
+import de.m_marvin.electronflow.nltisolver.elements.Current;
+import de.m_marvin.electronflow.nltisolver.elements.Diode;
+import de.m_marvin.electronflow.nltisolver.elements.Diode.DiodeModel;
+import de.m_marvin.electronflow.nltisolver.elements.Element;
+import de.m_marvin.electronflow.nltisolver.elements.Resistor;
+import de.m_marvin.electronflow.nltisolver.elements.Voltage;
+import de.m_marvin.electronflow.nltisolver.network.IndexedNetwork;
+import de.m_marvin.electronflow.nltisolver.solver.NetworkSolver;
+import de.m_marvin.electronflow.nltisolver.solver.NetworkSolverException;
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
@@ -41,9 +43,11 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 	
 	private MultiBiMap<Integer, NodePos> ref2nodeMap = new HashMultiBiMap<Integer, NodePos>();
 	private PowerNetState state = PowerNetState.ACTIVE;
-
+	
 	private Map<CircuitElement, Circuit> element2circuitMap = new HashMap<CircuitElement, Circuit>();
 	private Map<CircuitNode, Circuit> node2circuitMap = new HashMap<CircuitNode, Circuit>();
+
+	private NetworkSolver networkSolver = NetworkSolver.standard().limSingular(1E-20).iterLim(500);
 	
 	public static record CircuitNode(NodePos conduitNode, ElectricReference componentReference, String nodeName) {
 		
@@ -94,10 +98,9 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 	private class Circuit {
 		
 		private IndexedNetwork indexedNetwork = null;
-		private NetworkSolver networkSolver = new NetworkSolver();
 		private Set<CircuitNode> nodes = new HashSet<CircuitNode>();
 		private Map<CircuitElement, Element> elements = new HashMap<CircuitElement, Element>();
-		private StampingMode restampMode = StampingMode.FULL_MATRICES;
+		private boolean changed = false;
 		
 		public double getNodePotential(CircuitNode node) {
 			try {
@@ -116,18 +119,6 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 			}
 		}
 
-		public void requireRestamp(StampingMode mode) {
-			switch (mode) {
-			case FULL_MATRICES:
-				this.restampMode = StampingMode.FULL_MATRICES;
-				return;
-			case FORCING_VECTOR: 
-				if (this.restampMode != StampingMode.FULL_MATRICES)
-					this.restampMode = StampingMode.FORCING_VECTOR;
-				return;
-			}
-		}
-		
 		@Override
 		public String toString() {
 			return this.indexedNetwork != null ? this.indexedNetwork.toString() : "EMPTY";
@@ -141,7 +132,7 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 				.distinct()
 				.map(Circuit::toString)
 				.reduce((a, b) -> a + "\n---\n" + b)
-				.orElseGet(() -> "EMPTYY");
+				.orElseGet(() -> "EMPTY");
 	}
 	
 	public ElectricNetwork(Supplier<Level> level) {
@@ -150,6 +141,10 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 	
 	public Level getLevel() {
 		return level.get();
+	}
+	
+	public NetworkSolver getNetworkSolver() {
+		return networkSolver;
 	}
 	
 	@Override
@@ -241,6 +236,7 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 			}).orElseGet(Circuit::new);
 			circuit.elements.put(elementKey, element);
 			circuit.nodes.addAll(List.of(nodes));
+			circuit.changed = true;
 			ElectricNetwork.this.element2circuitMap.put(elementKey, circuit);
 			for (var node : nodes)
 				ElectricNetwork.this.node2circuitMap.put(node, circuit);
@@ -258,14 +254,43 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 			install(new Current(element.elementString(), nodeA.nodeString(), nodeB.nodeString(), value), element, nodeA, nodeB);
 		}
 		
+		public void installDiode(CircuitElement element, CircuitNode nodeA, CircuitNode nodeB, DiodeModel model) {
+			install(new Diode(element.elementString(), nodeA.nodeString(), nodeB.nodeString(), model), element, nodeA, nodeB);
+		}
+		
 		public void changeVoltage(CircuitElement element, double value) {
 			Circuit circuit = circuitOfElement(element);
 			if (circuit != null && circuit.elements.get(element) instanceof Voltage vsource) {
 				vsource.setVoltage(value);
-				circuit.requireRestamp(StampingMode.FORCING_VECTOR);
+				circuit.changed = true;
 			}
 		}
 
+		public void changeCurrent(CircuitElement element, double value) {
+			Circuit circuit = circuitOfElement(element);
+			if (circuit != null && circuit.elements.get(element) instanceof Current isource) {
+				isource.setCurrent(value);
+				circuit.changed = true;
+			}
+		}
+
+		public void changeResistance(CircuitElement element, double value) {
+			Circuit circuit = circuitOfElement(element);
+			if (circuit != null && circuit.elements.get(element) instanceof Resistor resistor) {
+				resistor.setResistance(value);
+				circuit.changed = true;
+			}
+		}
+		
+
+		public void changeDiode(CircuitElement element, DiodeModel value) {
+			Circuit circuit = circuitOfElement(element);
+			if (circuit != null && circuit.elements.get(element) instanceof Diode diode) {
+				diode.setModel(value);
+				circuit.changed = true;
+			}
+		}
+		
 		public double readVoltage(CircuitElement element) {
 			Circuit circuit = circuitOfElement(element);
 			if (circuit != null && circuit.elements.get(element) instanceof Voltage vsource) {
@@ -289,21 +314,13 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 			}
 			return 0.0;
 		}
-		
-		public void changeCurrent(CircuitElement element, double value) {
-			Circuit circuit = circuitOfElement(element);
-			if (circuit != null && circuit.elements.get(element) instanceof Current isource) {
-				isource.setCurrent(value);
-				circuit.requireRestamp(StampingMode.FORCING_VECTOR);
-			}
-		}
 
-		public void changeResistance(CircuitElement element, double value) {
+		public DiodeModel readDiode(CircuitElement element) {
 			Circuit circuit = circuitOfElement(element);
-			if (circuit != null && circuit.elements.get(element) instanceof Resistor resistor) {
-				resistor.setResistance(value);
-				circuit.requireRestamp(StampingMode.FULL_MATRICES);
+			if (circuit != null && circuit.elements.get(element) instanceof Diode diode) {
+				return diode.getModel();
 			}
+			return null;
 		}
 		
 		public double nodePotential(CircuitNode node) {
@@ -348,25 +365,14 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 		});
 		
 	}
-	
+
 	public void stepElectrics() {
 		
-//		this.maxPower = 0;
-//		this.currentConsumtion = 0;
-//		this.currentProduction = 0;
-		
-		if (isOnline()) {
+		if (isOnline() && !this.element2circuitMap.isEmpty()) {
 
 			for (var component : listComponents()) {
 				try {
 					component.stepCircuitElements(getLevel(), new ComponentCircuitContext(component, false));
-
-//					this.maxPower += component.getMaxPowerGeneration(getLevel());
-//					double p = component.getCurrentPower(getLevel());
-//					if (p < 0)
-//						this.currentConsumtion -= p;
-//					else
-//						this.currentProduction += p;
 				} catch (Exception e) {
 					IndustriaCore.LOGGER.warn("Exception while stepping circuit component: " + component.reference(), e);
 					tripFuse();
@@ -374,29 +380,19 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 			}
 			
 			this.element2circuitMap.values().stream().distinct().forEach(circuit -> {
-				
-				if (circuit.restampMode != null) {
-					circuit.indexedNetwork.stampMatrices(circuit.restampMode);
+				if (circuit.changed) {
 					try {
-						if (circuit.restampMode == StampingMode.FULL_MATRICES)
-							circuit.networkSolver.initialize(circuit.indexedNetwork);
-						circuit.networkSolver.solve();
-					} catch (IllegalArgumentException e) { // matrix singular exception
-						circuit.restampMode = null;
-						tripFuse();
+						networkSolver.solve(circuit.indexedNetwork);
+						circuit.changed = false;
+					} catch (NetworkSolverException e) {						
+						this.tripFuse();
 					}
-					circuit.restampMode = null;
 				}
-				
 			});
 			
 		}
 		
-		for (var component : listComponents()) {
-
-			listComponents().forEach(c -> c.afterNetworkStep(level.get(), this));
-			
-		}
+		listComponents().forEach(c -> c.afterNetworkStep(level.get(), this));
 		
 	}
 	
@@ -449,13 +445,14 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 			if (stateChangeEvent.isCanceled()) return;
 			
 			this.state = state;
-			if (!getLevel().isClientSide())
-				IndustriaCore.NETWORK.send(ElectricUtility.TRACKING_NETWORK.with(() -> this), new SUpdateElectricNetworkPackage(this));
 			
 			if (isTripped())
 				MinecraftForge.EVENT_BUS.post(new ElectricNetworkEvent.FuseTripedEvent(getLevel(), this));
 			MinecraftForge.EVENT_BUS.post(new ElectricNetworkEvent.StateChangeEvent(getLevel(), this, this.state, EventStage.POST));
 		}
+		
+		if (!getLevel().isClientSide())
+			IndustriaCore.NETWORK.send(ElectricUtility.TRACKING_NETWORK.with(() -> this), new SUpdateElectricNetworkPackage(this));
 	}
 	
 	public PowerNetState getState() {

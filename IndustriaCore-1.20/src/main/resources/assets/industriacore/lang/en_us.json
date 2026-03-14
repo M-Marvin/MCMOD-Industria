@@ -46,6 +46,8 @@
 "industriacore.commands.debug.node_voltages.node":						"ID: %d",
 "industriacore.commands.debug.node_voltages.lane":						"→ %d '%s': %d V",
 "industriacore.commands.debug.circuit_copied":							"Circuit netlist copied to clipboard",
+"industriacore.commands.debug.log_network.enable":						"Circuit simulation data is now printed to game log",
+"industriacore.commands.debug.log_network.disable":						"Circuit simulation data is no longer printed to game log",
 
 "industriacore.argument.rotation.invalid":								"Invalid rotation: '%s'",
 "industriacore.argument.mirror.invalid":								"Invalid mirroring: '%s'",

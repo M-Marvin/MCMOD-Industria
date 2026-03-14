@@ -30,7 +30,7 @@ public class AnalogGauge extends AbstractScaleWidget {
 		renderScale(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
 		
 		pGuiGraphics.pose().pushPose();
-		translateScala(pGuiGraphics, this.state);
+		translateScala(pGuiGraphics, this.displayState);
 		pGuiGraphics.pose().translate(-2.5F, -21, 0);
 		pGuiGraphics.blit(this.texture, 0, 0, 137, 36, 5, 23);
 		pGuiGraphics.pose().popPose();

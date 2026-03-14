@@ -26,20 +26,12 @@ public abstract class AbstractSourceMenu extends AbstractBlockDataContainerMenu 
 		getDataContainer().setInt(1, power);
 	}
 	
-	public int getVoltage() {
-		return getDataContainer().getInt(0);
+	public float getDeviceVoltage() {
+		return getDataContainer().getFloat(2);
 	}
 	
-	public void setVoltage(int voltage) {
-		getDataContainer().setInt(0, voltage);
-	}
-	
-	public double getDeviceVoltage() {
-		return getDataContainer().getDouble(2);
-	}
-	
-	public double getDeviceCurrent() {
-		return getDataContainer().getDouble(4);
+	public float getDeviceCurrent() {
+		return getDataContainer().getFloat(3);
 	}
 	
 }

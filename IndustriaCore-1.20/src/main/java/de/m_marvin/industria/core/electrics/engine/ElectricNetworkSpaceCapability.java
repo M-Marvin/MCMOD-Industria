@@ -67,7 +67,7 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 		return LazyOptional.empty();
 	}
 	
-	private static SimulationProcessor simulationProcessor;
+//	private static SimulationProcessor simulationProcessor;
 	
 	private final Level level;
 	
@@ -181,27 +181,27 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 	
 	/* SPICE worker thread */
 
-	public static SimulationProcessor getSimulationProcessor() {
-		if (!hasProcessor()) startupProcessor();
-		return simulationProcessor;
-	}
-	
-	public static boolean hasProcessor() {
-		return simulationProcessor != null && simulationProcessor.isRunning();
-	}
-	
-	public static void startupProcessor() {
-		if (hasProcessor()) {
-			IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.WARN, "Electric network processor already running, this is not right!");
-		}
-		if (simulationProcessor == null) simulationProcessor = new SimulationProcessor(Config.ELECTIRC_SIMULATION_THREADS.get());
-		simulationProcessor.start();
-		Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdownProcessor()));
-	}
-	
-	public static void shutdownProcessor() {
-		simulationProcessor.shutdown();
-	}
+//	public static SimulationProcessor getSimulationProcessor() {
+//		if (!hasProcessor()) startupProcessor();
+//		return simulationProcessor;
+//	}
+//	
+//	public static boolean hasProcessor() {
+//		return simulationProcessor != null && simulationProcessor.isRunning();
+//	}
+//	
+//	public static void startupProcessor() {
+//		if (hasProcessor()) {
+//			IndustriaCore.LOGGER.log(org.apache.logging.log4j.Level.WARN, "Electric network processor already running, this is not right!");
+//		}
+//		if (simulationProcessor == null) simulationProcessor = new SimulationProcessor(Config.ELECTIRC_SIMULATION_THREADS.get());
+//		simulationProcessor.start();
+//		Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdownProcessor()));
+//	}
+//	
+//	public static void shutdownProcessor() {
+//		simulationProcessor.shutdown();
+//	}
 	
 	/* ElectricNetwork handling */
 	
@@ -420,7 +420,7 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 			
 			network.stepElectrics();
 //			// TODO multi-threadding
-//			listComponents().forEach(c -> c.afterNetworkStep(level, network));
+			
 			
 		}
 		

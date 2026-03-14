@@ -120,16 +120,16 @@ public class FriendlyContainerData implements ContainerData {
 		return nextItem(new DataItem<>(this.items.size(), 2, Long.class, setter, getter));
 	}
 
-	public FriendlyContainerData nextFloatItem(Supplier<Double> getter, Consumer<Double> setter) {
-		return nextItem(new DataItem<>(this.items.size(), 1, Double.class, setter, getter));
+	public FriendlyContainerData nextFloatItem(Supplier<Float> getter, Consumer<Float> setter) {
+		return nextItem(new DataItem<>(this.items.size(), 1, Float.class, setter, getter));
 	}
 
 	public FriendlyContainerData nextDoubleItem(Supplier<Double> getter, Consumer<Double> setter) {
 		return nextItem(new DataItem<>(this.items.size(), 2, Double.class, setter, getter));
 	}
 
-	public FriendlyContainerData nextBooleanItem(Supplier<Double> getter, Consumer<Double> setter) {
-		return nextItem(new DataItem<>(this.items.size(), 1, Double.class, setter, getter));
+	public FriendlyContainerData nextBooleanItem(Supplier<Boolean> getter, Consumer<Boolean> setter) {
+		return nextItem(new DataItem<>(this.items.size(), 1, Boolean.class, setter, getter));
 	}
 	
 	public <T extends Enum<T>> FriendlyContainerData nextEnumItem(Supplier<T> getter, Consumer<T> setter, Class<T> clazz) {
@@ -145,7 +145,7 @@ public class FriendlyContainerData implements ContainerData {
 	}
 
 	public FriendlyContainerData nextFloatItemStatic() {
-		return nextItem(new DataItem<>(this.items.size(), 1, Double.class));
+		return nextItem(new DataItem<>(this.items.size(), 1, Float.class));
 	}
 
 	public FriendlyContainerData nextDoubleItemStatic() {

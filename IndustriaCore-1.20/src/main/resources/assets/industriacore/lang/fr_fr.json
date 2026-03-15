@@ -45,7 +45,7 @@
 "industriacore.commands.debug.node_voltages.title":		"Nœuds disponibles: %d",
 "industriacore.commands.debug.node_voltages.node":		"ID: %d",
 "industriacore.commands.debug.node_voltages.lane":		"→ %d \"%s\": %d V",
-"industriacore.commands.debug.circuit_copied":			"Liste des réseaux de circuits copiée dans le presse-papiers",
+"industriacore.commands.debug.circuit_copied":			"Liste des réseaux de circuits copiée au presse-papiers",
 
 "industriacore.argument.rotation.invalid":								"Rotation invalide: \"%s\"",
 "industriacore.argument.mirror.invalid":								"Mise en miroir des axes invalide: \"%s\"",

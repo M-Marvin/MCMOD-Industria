@@ -60,7 +60,7 @@ Laubhaufen, die vom Spieler platziert wurden, werden nicht weggeweht.
 
 19. Das komische neue System mit dem Getrockneten Ghast überarbeiten.
     Passend zu verdächtigem Sand und verdächtigem Kies, den man durchsuchen kann: verdächtiger Seelensand, der zwischen den Nethergerippen generiert.
-    In ihm kann man getrocknete Ghast-Hautfetzen finden sowie Ghast-Eier. Anders als bei verdächtigem Sand oder Kies gibt es hier jedoch eine Gefahr: Beim Abpinseln kann man nicht nur Items finden, sondern auch die "Seelen" im Sand freilegen. Dann wandern bläuliche Seelen- und Flammenpartikel zum Spieler und er erhält Schaden. (Mgöglicherweise sogar ein neuer kleiner blauer Vex-artiger Mob?)
+    In ihm kann man getrocknete Ghast-Hautfetzen finden sowie Ghast-Eier. Anders als bei verdächtigem Sand oder Kies gibt es hier jedoch eine Gefahr: Beim Abpinseln kann man nicht nur Items finden, sondern auch die "Seelen" im Sand freilegen. Dann wandern bläuliche Seelen- und Flammenpartikel zum Spieler und er erhält Schaden. (Möglicherweise sogar ein neuer kleiner blauer Vex-artiger Mob?)
     Andere zu findende Items sind Knochen.
     Da die Nethergerippe sehr häufig sind, generiert verdächtiger Seelensand nur an wenigen von ihnen und nur wenige Blöcke pro Nethergerippe-Struktur.
 
@@ -82,8 +82,10 @@ Laubhaufen, die vom Spieler platziert wurden, werden nicht weggeweht.
 
 24. Detail, das man noch anpassen könnte: Staubpartikel fallen langsam aus verbrannten Blöcken, wie bei schwebendem Kies. Beim Drauftreten oder Draufhauen noch etwas mehr
 
-25. Änderung der Wägeplattenrezepte -> Metallplatten beötigt (???)
+25. Änderung der Wägeplattenrezepte -> Metallplatten benötigt (???)
 
 26. Gold- und Eisennugget anpassen an Farbschema aus Industria
 
 27. Metalltexturen ingame mit denen in der Metallansammlungs-PNG abgleichen, einige scheinen noch fehlerhaft (veraltet) zu sein.
+
+28. Schwefelwürfel-Mob droppt bei Tod "Schwefelschleim", aus dem man einige Dinge heraus-extrahieren kann, bei Feuertod droppt er Schwefelrückstand.

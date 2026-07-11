@@ -1,6 +1,7 @@
 package de.m_marvin.industria.core.magnetism.engine;
 
 import org.valkyrienskies.core.api.ships.PhysShip;
+import org.valkyrienskies.core.api.world.PhysLevel;
 import org.valkyrienskies.core.impl.game.ships.PhysShipImpl;
 
 import de.m_marvin.industria.core.contraptions.engine.types.attachment.ForcesInducer;
@@ -28,7 +29,7 @@ public class MagneticForceInducer extends ForcesInducer {
 	}
 	
 	@Override
-	public void applyForces(PhysShip contraptionPhysics) {
+	public void physTick(PhysShip contraptionPhysics, PhysLevel contraptionLevel) {
 		
 		if (getLevel() == null) return;
 		MagnetismHandlerCapability handler = GameUtility.getLevelCapability(this.getLevel(), Capabilities.MAGNETISM_HANDLER_CAPABILITY);
@@ -49,7 +50,6 @@ public class MagneticForceInducer extends ForcesInducer {
 			}
 			
 		}
-		
 	}
-
+	
 }

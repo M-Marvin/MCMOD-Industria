@@ -1,5 +1,0 @@
-{
-	"Properties": [ "id", "winding_ratio" ],
-	"Networks": [ "VDC_A", "GND_A", "VDC_B", "GND_B" ],
-	"IdProperty": "id"
-}

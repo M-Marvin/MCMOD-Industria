@@ -23,7 +23,7 @@ public class Tags {
 		public static final TagKey<Block> ENTITY_UP_STEP_ONE_BLOCK = tag("entity_up_step_one_block");
 		
 		private static TagKey<Block> tag(String name) {
-			return BlockTags.create(new ResourceLocation(IndustriaCore.MODID, name));
+			return BlockTags.create(ResourceLocation.tryBuild(IndustriaCore.MODID, name));
 		}
 		
 	}
@@ -35,7 +35,7 @@ public class Tags {
 		public static final TagKey<Item> CUTTERS = tag("cutters");
 		
 		private static TagKey<Item> tag(String name) {
-			return ItemTags.create(new ResourceLocation(IndustriaCore.MODID, name));
+			return ItemTags.create(ResourceLocation.tryBuild(IndustriaCore.MODID, name));
 		}
 		
 	}

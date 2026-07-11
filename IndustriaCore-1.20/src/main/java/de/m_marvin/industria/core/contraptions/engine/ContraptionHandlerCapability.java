@@ -1,13 +1,12 @@
 package de.m_marvin.industria.core.contraptions.engine;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.StreamSupport;
 
 import org.joml.Vector3d;
@@ -16,10 +15,12 @@ import org.joml.primitives.AABBic;
 import org.valkyrienskies.core.api.ships.ClientShip;
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
-import org.valkyrienskies.core.apigame.constraints.VSConstraint;
-import org.valkyrienskies.core.apigame.world.ServerShipWorldCore;
-import org.valkyrienskies.core.apigame.world.ShipWorldCore;
+import org.valkyrienskies.core.internal.joints.VSJoint;
+import org.valkyrienskies.core.internal.world.VsiServerShipWorld;
+import org.valkyrienskies.core.internal.world.VsiShipWorld;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
+import org.valkyrienskies.mod.common.ValkyrienSkiesMod;
+import org.valkyrienskies.mod.common.util.GameToPhysicsAdapter;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.contraptions.ContraptionUtility;
@@ -65,7 +66,6 @@ import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 @Mod.EventBusSubscriber(modid = IndustriaCore.MODID, bus = Bus.FORGE)
 public class ContraptionHandlerCapability implements ICapabilitySerializable<CompoundTag> {
@@ -151,7 +151,7 @@ public class ContraptionHandlerCapability implements ICapabilitySerializable<Com
 	
 	public long getGroundBodyId() {
 		if (this.level.isClientSide()) return -1;
-		ServerShipWorldCore shipWorld = getShipWorld();
+		VsiServerShipWorld shipWorld = getShipWorld();
 		return shipWorld.getDimensionToGroundBodyIdImmutable().get(Registries.DIMENSION.location().toString() + ":" + getDimension().toString());
 	}
 	
@@ -160,8 +160,12 @@ public class ContraptionHandlerCapability implements ICapabilitySerializable<Com
 	/* Accessing contraptions */
 
 	@SuppressWarnings("unchecked")
-	public <T extends ShipWorldCore> T getShipWorld() {
+	public <T extends VsiShipWorld> T getShipWorld() {
 		return (T) VSGameUtilsKt.getShipObjectWorld(level);
+	}
+	
+	public GameToPhysicsAdapter getGTPA() {
+		return ValkyrienSkiesMod.getOrCreateGTPA(VSGameUtilsKt.getDimensionId(getLevel()));
 	}
 
 	public <T extends Contraption> List<T> getAllContraptions(boolean onlyThisDimension) {
@@ -274,7 +278,7 @@ public class ContraptionHandlerCapability implements ICapabilitySerializable<Com
 				otherLevel.setBlock(middle, Blocks.ERROR_BLOCK.get().defaultBlockState(), 3);
 				
 				// Teleport ship
-				ServerShipWorldCore shipWorld = getShipWorld();
+				VsiServerShipWorld shipWorld = getShipWorld();
 				shipWorld.teleportShip(contraption.getShip(), position.toTeleport(contraption, useGeometricCenter));
 				
 				// Place structure in new dimension at center of ship
@@ -297,7 +301,7 @@ public class ContraptionHandlerCapability implements ICapabilitySerializable<Com
 		} else {
 
 			// Just teleport ship, no reallocation required
-			ServerShipWorldCore shipWorld = getShipWorld();
+			VsiServerShipWorld shipWorld = getShipWorld();
 			shipWorld.teleportShip(contraption.getShip(), position.toTeleport(contraption, useGeometricCenter));
 			
 			return true;
@@ -351,7 +355,7 @@ public class ContraptionHandlerCapability implements ICapabilitySerializable<Com
 			} finally {
 
 				// The ship is empty, this should never happen, remove manually to prevent further problems
-				ServerShipWorldCore shipWorld = getShipWorld();
+				VsiServerShipWorld shipWorld = getShipWorld();
 				shipWorld.deleteShip(contraption.getShip());
 				
 			}
@@ -361,7 +365,7 @@ public class ContraptionHandlerCapability implements ICapabilitySerializable<Com
 		}
 
 		// The ship is empty, this should never happen, remove manually to prevent further problems
-		ServerShipWorldCore shipWorld = getShipWorld();
+		VsiServerShipWorld shipWorld = getShipWorld();
 		shipWorld.deleteShip(contraption.getShip());
 		return true;
 		
@@ -500,36 +504,24 @@ public class ContraptionHandlerCapability implements ICapabilitySerializable<Com
 		
 	}
 	
-	public int addConstraint(VSConstraint constraint) {
-		ServerShipWorldCore shipWorld = getShipWorld();
-		return shipWorld.createNewConstraint(constraint);
+	public CompletableFuture<Integer> addConstraint(VSJoint constraint) {
+		CompletableFuture<Integer> result = new CompletableFuture<Integer>();
+		getGTPA().addJoint(constraint, 0, result::complete);
+		return result;
 	}
 	
 	public boolean removeConstaint(int constraintId) {
-		ServerShipWorldCore shipWorld = getShipWorld();
-		return shipWorld.removeConstraint(constraintId);
+		boolean removed = getGTPA().getJointById(constraintId) != null;
+		getGTPA().removeJoint(constraintId);
+		return removed;		
 	}
 	
-	public VSConstraint getConstraint(int constraintId) {
+	public VSJoint getConstraint(int constraintId) {
 		return getAllConstraints().get(constraintId);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public Map<Integer, VSConstraint> getAllConstraints() {
-		// FIXME [VS2dep] This is horrible!!! hopefully VS2 adds an API for that soon ...
-		Map<Integer, VSConstraint> constraints = null;
-		try {
-			ServerShipWorldCore shipWorld = getShipWorld();
-			Field constraintField = ObfuscationReflectionHelper.findField(ServerShipWorldCore.class, "constraints");
-			constraintField.setAccessible(true);
-			constraints = (Map<Integer, VSConstraint>) constraintField.get(shipWorld);
-		} catch (Exception e) {
-			IndustriaCore.LOGGER.error("Something went wrong, but the code on that point is janky anyway ...");
-			e.printStackTrace();
-			constraints = new HashMap<>();
-		}
-		return constraints;
+	public Map<Integer, VSJoint> getAllConstraints() {
+		return getGTPA().getAllJoints();
 	}
-	
 	
 }

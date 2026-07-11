@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class JunctionBoxScreen<B extends BlockEntity & IJunctionEdit, C extends JunctionBoxMenu<B>> extends AbstractJunctionEditScreen<B, C> {
 
-	public static final ResourceLocation JUNCTION_BOX_UI_LOCATION = new ResourceLocation(IndustriaCore.MODID, "textures/gui/junction_box.png");
+	public static final ResourceLocation JUNCTION_BOX_UI_LOCATION = ResourceLocation.tryBuild(IndustriaCore.MODID, "textures/gui/junction_box.png");
 	
 	public JunctionBoxScreen(C pMenu, Inventory pPlayerInventory, Component pTitle) {
 		super(pMenu, pPlayerInventory, pTitle);

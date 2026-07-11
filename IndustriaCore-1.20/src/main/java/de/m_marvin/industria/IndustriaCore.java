@@ -12,6 +12,7 @@ import de.m_marvin.industria.core.registries.BlockEntityTypes;
 import de.m_marvin.industria.core.registries.Blocks;
 import de.m_marvin.industria.core.registries.CommandArguments;
 import de.m_marvin.industria.core.registries.Conduits;
+import de.m_marvin.industria.core.registries.ContraptionAttachments;
 import de.m_marvin.industria.core.registries.Items;
 import de.m_marvin.industria.core.registries.MenuTypes;
 import de.m_marvin.industria.core.registries.NetworkPackages;
@@ -20,6 +21,7 @@ import de.m_marvin.industria.core.registries.StructureDataPlugins;
 import de.m_marvin.univec.VectorParser;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 
@@ -28,9 +30,9 @@ public class IndustriaCore {
 	
 	public static final String MODID = "industriacore";
 	public static final Logger LOGGER = LogManager.getLogger();
-	public static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(new ResourceLocation(MODID, "main"), () -> NetworkPackages.PROTOCOL_VERSION, NetworkPackages.PROTOCOL_VERSION::equals, NetworkPackages.PROTOCOL_VERSION::equals);
+	public static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(ResourceLocation.tryBuild(MODID, "main"), () -> NetworkPackages.PROTOCOL_VERSION, NetworkPackages.PROTOCOL_VERSION::equals, NetworkPackages.PROTOCOL_VERSION::equals);
 	
-	public IndustriaCore() {
+	public IndustriaCore(FMLJavaModLoadingContext modctx) {
 				
 		/* Begin of UniVec deobfuscation configuration */
 		
@@ -47,16 +49,17 @@ public class IndustriaCore {
 
 		/* End of UniVec deobfuscation configuration */
 		
-		Config.register();
+		Config.register(modctx);
 		NetworkPackages.setupPackages(NETWORK);
-		Conduits.register();
-		MenuTypes.register();
-		ParticleTypes.register();
-		Blocks.register();
-		Items.register();
-		BlockEntityTypes.register();
-		CommandArguments.register();
-		StructureDataPlugins.register();
+		Conduits.register(modctx);
+		MenuTypes.register(modctx);
+		ParticleTypes.register(modctx);
+		Blocks.register(modctx);
+		Items.register(modctx);
+		BlockEntityTypes.register(modctx);
+		CommandArguments.register(modctx);
+		StructureDataPlugins.register(modctx);
+		ContraptionAttachments.register(modctx);
 		
 	}
 	

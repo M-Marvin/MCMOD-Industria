@@ -1,4 +1,0 @@
-
-* DC Voltage converter [ n_winding_ratio=P{winding_ratio} ]
-ZT1_P{id} N{VDC_A} N{GND_A} N{VDC_B} N{GND_B} H[ 0.0 P{winding_ratio} P{winding_ratio} 0.0 ]
-R1_P{id} N{GND_A} N{GND_B} 1G

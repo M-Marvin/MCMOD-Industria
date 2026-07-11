@@ -110,11 +110,11 @@ public abstract class Contraption {
 	}
 	
 	public double getOmega() {
-		return this.getShip().getOmega().length();
+		return this.getShip().getAngularVelocity().length();
 	}
 	
 	public Vec3d getOmegaVec() {
-		return Vec3d.fromVec(this.getShip().getOmega());
+		return Vec3d.fromVec(this.getShip().getAngularVelocity());
 	}
 
 	public double getSize() {

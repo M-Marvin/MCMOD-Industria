@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nodalElement name="L" nonLinear="false" timeVariant="true">
+	<node name="p_A" constant="i_A"/>
+	<node name="p_B" constant="i_B"/>
+	<local name="i_coil" constant="u_coil"/>
+	<variable name="L" default="1.0"/>
+	<stampE>
+				p_A		p_B		i_coil
+		i_A		0		0		1
+		i_B		0		0		-1
+		u_coil	1		-1		0-L
+	</stampE>
+</nodalElement>

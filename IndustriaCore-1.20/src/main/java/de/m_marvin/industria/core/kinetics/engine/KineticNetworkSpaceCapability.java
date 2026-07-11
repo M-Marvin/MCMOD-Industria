@@ -182,7 +182,7 @@ public class KineticNetworkSpaceCapability extends FriendlyFunctionalNetworkSpac
 		@SuppressWarnings("deprecation")
 		public boolean deserializeNbt(CompoundTag nbt) {
 			super.deserializeNbt(nbt);
-			ResourceLocation typeName = new ResourceLocation(nbt.getString("Type"));
+			ResourceLocation typeName = ResourceLocation.tryParse(nbt.getString("Type"));
 			Block typeObject = ForgeRegistries.BLOCKS.getValue(typeName);
 			if (typeObject instanceof IKineticBlock type) {
 				this.reference = KineticReference.readNbt(nbt.getCompound("Reference"));

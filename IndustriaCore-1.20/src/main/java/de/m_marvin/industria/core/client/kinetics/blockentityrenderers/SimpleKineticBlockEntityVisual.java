@@ -100,5 +100,5 @@ public class SimpleKineticBlockEntityVisual extends AbstractBlockEntityVisual<Si
 		for (var visualPair : this.instances.entrySet())
 			animate(visualPair.getKey(), visualPair.getValue(), blockSpeed);
 	}
-
+	
 }

@@ -198,7 +198,7 @@ public abstract class StructureTemplateExtender implements IStructureTemplateExt
 		this.pluginData.clear();
 		CompoundTag pluginTag = pTag.getCompound("plugins");
 		pluginTag.getAllKeys().forEach(k -> {
-			this.pluginData.put(new ResourceLocation(k), pluginTag.get(k));
+			this.pluginData.put(ResourceLocation.tryParse(k), pluginTag.get(k));
 		});
 	}
 	

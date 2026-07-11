@@ -18,8 +18,8 @@ import net.minecraftforge.registries.RegistryObject;
 public class CommandArguments {
 
 	private static final DeferredRegister<ArgumentTypeInfo<?, ?>> COMMAND_ARGUMENT_TYPES = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, IndustriaCore.MODID);
-	public static void register() {
-		COMMAND_ARGUMENT_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+	public static void register(FMLJavaModLoadingContext modctx) {
+		COMMAND_ARGUMENT_TYPES.register(modctx.getModEventBus());
 	}
 	
 	public static final RegistryObject<SingletonArgumentInfo<Vec3RelativeArgument>> VEC3 = COMMAND_ARGUMENT_TYPES.register("vec3", () ->

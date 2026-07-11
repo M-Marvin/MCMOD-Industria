@@ -5,6 +5,6 @@ import net.minecraft.resources.ResourceLocation;
 
 public class ConduitConnectionTypes {
 	
-	public static final ResourceLocation ELECTRIC = new ResourceLocation(IndustriaCore.MODID, "electic");
+	public static final ResourceLocation ELECTRIC = ResourceLocation.tryBuild(IndustriaCore.MODID, "electic");
 	
 }

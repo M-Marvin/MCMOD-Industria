@@ -16,8 +16,8 @@ import net.minecraftforge.registries.RegistryObject;
 public class BlockEntityTypes {
 
 	private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, IndustriaCore.MODID);
-	public static void register() {
-		BLOCK_ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+	public static void register(FMLJavaModLoadingContext modctx) {
+		BLOCK_ENTITY_TYPES.register(modctx.getModEventBus());
 	}
 	
 	public static final RegistryObject<BlockEntityType<JunctionBoxBlockEntity>> JUNCTION_BOX = BLOCK_ENTITY_TYPES.register("junction_box", () -> BlockEntityType.Builder.of(JunctionBoxBlockEntity::new).build(null));

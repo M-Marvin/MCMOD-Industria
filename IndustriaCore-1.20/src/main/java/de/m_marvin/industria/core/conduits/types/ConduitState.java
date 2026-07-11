@@ -55,7 +55,7 @@ public class ConduitState extends StateHolder<Conduit, ConduitState> {
 		if (!tag.contains("Name", 8)) {
 			return Conduits.NONE.get().defaultConduitState();
 		} else {
-			ResourceLocation resourcelocation = new ResourceLocation(tag.getString("Name"));
+			ResourceLocation resourcelocation = ResourceLocation.tryParse(tag.getString("Name"));
 			@Nullable Conduit conduit = Conduits.CONDUITS_REGISTRY.get().getValue(resourcelocation);
 			if (conduit == null) {
 				return Conduits.NONE.get().defaultConduitState();

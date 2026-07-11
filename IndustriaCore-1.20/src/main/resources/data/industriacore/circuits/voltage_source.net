@@ -1,6 +1,0 @@
-
-* Voltage source [ v_nominal=P{nominal_voltage}, P_max=P{power_limit} ]
-D1_P{id} N001_P{id} N{SHUNT} D
-R1_P{id} N{SHUNT} N{VDC} 1m
-B1_P{id} N001_P{id} N{GND} V=min(P{nominal_voltage},P{power_limit}/max(1m,+I(R1_P{id})))
-.model D D

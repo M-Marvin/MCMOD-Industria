@@ -49,7 +49,7 @@ public class VoltageSourceBlockEntity extends AbstractSourceBlockEntity {
 	
 	@Override
 	public double getDeviceCurrent() {
-		return -getDeviceCurrent("Ugen");
+		return -getDeviceCurrent("source", "i_src");
 	}
 	
 }

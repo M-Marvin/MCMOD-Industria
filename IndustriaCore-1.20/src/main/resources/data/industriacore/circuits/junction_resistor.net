@@ -1,3 +1,0 @@
-
-* Junction resistor [ r_fixed=0.015 ]
-R1_P{id} N{NET1} N{NET2} 1u

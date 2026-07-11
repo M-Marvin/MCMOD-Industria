@@ -5,10 +5,10 @@ import de.m_marvin.industria.core.client.util.SingleBlockBatchedRenderer;
 import de.m_marvin.industria.core.magnetism.types.MagneticField;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class Config {
@@ -109,10 +109,10 @@ public class Config {
 		
 	}
 	
-	public static void register() {
-		ModLoadingContext.get().registerConfig(Type.COMMON, CONFIG_COMMON);
-		ModLoadingContext.get().registerConfig(Type.SERVER, CONFIG_SERVER);
-		ModLoadingContext.get().registerConfig(Type.CLIENT, CONFIG_CLIENT);
+	public static void register(FMLJavaModLoadingContext modctx) {
+		modctx.registerConfig(Type.COMMON, CONFIG_COMMON);
+		modctx.registerConfig(Type.SERVER, CONFIG_SERVER);
+		modctx.registerConfig(Type.CLIENT, CONFIG_CLIENT);
 	}
 	
 	@SubscribeEvent

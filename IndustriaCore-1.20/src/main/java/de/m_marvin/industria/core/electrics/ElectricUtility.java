@@ -18,6 +18,7 @@ import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapabilit
 import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.registries.Capabilities;
+import de.m_marvin.industria.core.registries.ElectricElements;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.types.PowerNetState;
 import de.m_marvin.industria.core.util.ufns.SynchronizedFunctionalNetworkSpace.UpdateType;
@@ -28,6 +29,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor;
+import tvnlnna.nodal.NodalElementState;
 
 public class ElectricUtility {
 	
@@ -188,10 +190,10 @@ public class ElectricUtility {
 		double v2 = ElectricUtility.getFloatingNodeVoltage(level, nodeB);
 		return v1 - v2;
 	}
-
-	public static double getElementCurrent(Level level, CircuitElement element) {
+	
+	public static NodalElementState getElementState(Level level, CircuitElement element) {
 		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
-		return networkSpace.getElementCurrent(element);
+		return networkSpace.getElement(element);
 	}
 	
 	// TODO
@@ -228,7 +230,11 @@ public class ElectricUtility {
 			for (String lane : getLaneLabelsSummarized(level, conduitNode)) {
 				for (CircuitNode targetNode : targetNodes) {
 					if (targetNode.nodeName().equals(lane)) {
-						context.installResistor(CircuitElement.element(reference, "Rjunction_" + i++), targetNode, CircuitNode.node(conduitNode, lane), 0.0);
+//						context.installResistor(CircuitElement.element(reference, "junction_" + i++), targetNode, CircuitNode.node(conduitNode, lane), 0.0);
+						NodalElementState resistorState = context.install(
+								ElectricElements.RESISTOR.get(), CircuitElement.element(reference, "junction_" + i++), 
+								CircuitNode.internal(reference, "junction_" + lane), CircuitNode.node(conduitNode, lane));
+						resistorState.setParameter("R", 0.01); // TODO
 					}
 				}
 			}
@@ -251,7 +257,11 @@ public class ElectricUtility {
 	public static void installJunctionResistors(Level level, ComponentCircuitContext context, ElectricReference reference, double junctionResistance, NodePos[] conduitNodes) {
 		for (NodePos conduitNode : conduitNodes) {
 			for (String lane : getLaneLabelsSummarized(level, conduitNode)) {
-				context.installResistor(CircuitElement.element(reference, "Rjunction_" + lane), CircuitNode.internal(reference, "junction_" + lane), CircuitNode.node(conduitNode, lane), 0.0);
+//				context.installResistor(CircuitElement.element(reference, "Rjunction_" + lane), CircuitNode.internal(reference, "junction_" + lane), CircuitNode.node(conduitNode, lane), 0.0);
+				NodalElementState resistorState = context.install(
+						ElectricElements.RESISTOR.get(), CircuitElement.element(reference, "junction_" + lane), 
+						CircuitNode.internal(reference, "junction_" + lane), CircuitNode.node(conduitNode, lane));
+				resistorState.setParameter("R", 0.01); // TODO
 			}
 		}
 	}

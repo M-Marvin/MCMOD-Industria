@@ -168,7 +168,7 @@ public class CompoundBlockEntityVisual extends AbstractBlockEntityVisual<Compoun
 				subVisual.dynamicBlockEntityVisual.get().collectCrumblingInstances(consumer);
 		}
 	}
-
+	
 	@Override
 	public void updateLight(float partialTick) {
 		for (subVisual subVisual : this.parts.values()) {
@@ -227,5 +227,5 @@ public class CompoundBlockEntityVisual extends AbstractBlockEntityVisual<Compoun
 		if (this.fallbackInstance != null)
 			removeFallbackInstance();
 	}
-
+	
 }

@@ -12,6 +12,7 @@ import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitElemen
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitNode;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ComponentCircuitContext;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability.ElectricComponent;
+import de.m_marvin.industria.core.registries.ElectricElements;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility.ShapeType;
@@ -35,6 +36,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import tvnlnna.nodal.NodalElementState;
 
 public class WireHolderBlock extends Block implements IElectricBlock, ITooltipAdditionsModifier, SimpleWaterloggedBlock {
 	
@@ -104,7 +106,11 @@ public class WireHolderBlock extends Block implements IElectricBlock, ITooltipAd
 						lt[i] = lanes[i];
 						continue;
 					} else {
-						context.installResistor(CircuitElement.element(reference, "Rjoint_" + id++), CircuitNode.node(node, lt[i]), CircuitNode.node(node, lanes[i]), 0.01);
+//						context.installResistor(CircuitElement.element(reference, "Rjoint_" + id++), CircuitNode.node(node, lt[i]), CircuitNode.node(node, lanes[i]), 0.01);
+						NodalElementState resistorState = context.install(
+								ElectricElements.RESISTOR.get(), CircuitElement.element(reference, "joint_" + id++), 
+								CircuitNode.node(node, lt[i]), CircuitNode.node(node, lanes[i]));
+						resistorState.setParameter("R", 0.01); // TODO
 					}
 				}
 			}

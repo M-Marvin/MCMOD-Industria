@@ -1,379 +1,249 @@
 buildscript {
-    repositories {
-        // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' } // Required for VS2 (And for some reason required to use parchantment mappings ?)
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT' // Required for VS2
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath 'org.parchmentmc:librarian:1.+'
-    }
+	repositories {
+		gradlePluginPortal()
+		// These repositories are only for Gradle plugins, put any other repositories in the repository block further below
+		maven {
+			url 'https://repo.spongepowered.org/repository/maven-public/'
+		}
+	}
+	dependencies {
+		classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+
+		// Make sure this version matches the one included in Kotlin for Forge
+		classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22'
+
+	}
 }
 
 plugins {
-    id 'eclipse'
-    id 'idea'
-    id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
-    
-   // id 'org.jetbrains.kotlin.jvm' version '1.8.21'
-  //  id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.21'
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
-    id 'org.spongepowered.mixin' version '0.7.+' // Required for VS2 and mixins
+	id 'maven-publish'
+	id 'eclipse'
+
+	id 'net.neoforged.moddev.legacyforge' version '2.0.137'
 }
 
-apply plugin: 'com.github.johnrengelman.shadow'
-apply plugin: 'java-library'
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'maven-publish'
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
+// While _we_ don't use kotlin, this is still needed for VS to compile properly
+// (It used to be included transitively, but now we don't use a transitive VS dep)
+apply plugin: "org.jetbrains.kotlin.jvm"
 
-version = minecraft_version + '-' + mod_version
-group = mod_group_id
+apply plugin: 'maven-publish'
 
 base {
-    archivesName = mod_id
+	archivesName = "${archives_base_name}-${mod_version}"
 }
 
-// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java {
+	toolchain.languageVersion = JavaLanguageVersion.of(17)
+}
 
-println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
-minecraft {
-    // The mappings can be changed at any time and must be in the following format.
-    // Channel:   Version:
-    // official   MCVersion             Official field/method names from Mojang mapping files
-    // parchment  YYYY.MM.DD-MCVersion  Open community-sourced parameter names and javadocs layered on top of official
-    mappings channel: mapping_channel, version: mapping_version
+legacyForge {
+	version = "${minecraft_version}-${forge_version}"
 
- 	accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
- 	
-    // When true, this property will have all Eclipse/IntelliJ IDEA run configurations run the "prepareX" task for the given run configuration before launching the game.
-    // In most cases, it is not necessary to enable.
-    // enableEclipsePrepareRuns = true
-    // enableIdeaPrepareRuns = true
+	// Validate AT files and raise errors when they have invalid targets
+	// This option is false by default, but turning it on is recommended
+	validateAccessTransformers = true
 
-    // This property allows configuring Gradle's ProcessResources task(s) to run on IDE output locations before launching the game.
-    // It is REQUIRED to be set to true for this template to function.
-    // See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
-    copyIdeResources = true
+	runs {
+		client {
+			client()
+		}
+		data {
+			data()
+		}
+		server {
+			server()
+		}
+	}
 
-    // When true, this property will add the folder name of all declared run configurations to generated IDE run configurations.
-    // The folder name can be set on a run configuration using the "folderName" property.
-    // By default, the folder name of a run configuration is the name of the Gradle project containing it.
-    // generateRunFolders = true
+	mods {
+		// Should this be vsch instead of testproject? I'm not sure
+		testproject {
+			sourceSet sourceSets.main
+		}
+	}
+}
 
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
-    runs {
-        // applies to all the run configs below
-        configureEach {
-            workingDirectory project.file('run')
+mixin {
+	add sourceSets.main, "mixins.vsch.refmap.json"
 
-            // Recommended logging data for a userdev environment
-            // The markers can be added/remove as needed separated by commas.
-            // "SCAN": For mods scan.
-            // "REGISTRIES": For firing of registry events.
-            // "REGISTRYDUMP": For getting the contents of all registries.
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            // Recommended logging level for the console
-            // You can set various levels here.
-            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-            property 'forge.logging.console.level', 'debug'
-
-            // Enable flywheel mixin refmap remapping
-			property 'mixin.env.remapRefMap', 'true'
-			property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        client {
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', mod_id
-            
-            dependencies {
-            
-			}
-        }
-
-        server {
-            property 'forge.enabledGameTestNamespaces', mod_id
-            //args '--nogui'
-        }
-
-        // This run config launches GameTestServer and runs all registered gametests, then exits.
-        // By default, the server will crash when no gametests are provided.
-        // The gametest system is also enabled by default for other run configs under the /test command.
-        gameTestServer {
-            property 'forge.enabledGameTestNamespaces', mod_id
-        }
-
-        data {
-            // example of overriding the workingDirectory set in configureEach above
-            workingDirectory project.file('run-data')
-
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-        }
-    }
+	config "vsch.mixins.json"
 }
 
 // Include resources generated by data generators.
 sourceSets.main.resources { srcDir 'src/generated/resources' }
+
 repositories {
 	mavenCentral()
-	maven {
+	mavenLocal()
+
+	maven { // mixins
         url = 'https://repo.spongepowered.org/repository/maven-public/'
         content {
         	includeGroup "org.spongepowered"
         }
     }
-    maven {
-        name = "ParchmentMC"
-        url = "https://maven.parchmentmc.org"
-    }
+    
+    // Mods from curse forge (such as JEI)
     maven {
         url "https://cursemaven.com"
         content {
             includeGroup "curse.maven"
         }
     }
-    mavenLocal()
-    maven {
-        url = 'https://maven.valkyrienskies.org' // For VS-Core
-        content {
-			excludeGroup "net.jodah.typetools"
-        	//excludeGroup "org.valkyrienskies.core"
-        }
-    }
-    maven {
-        url = 'https://thedarkcolour.github.io/KotlinForForge/' // Kotlin for Forge
-        content {
-        	includeGroup "net.minecraftforge"
-        }
-    }
+    
+//	maven {
+//		url = "https://modmaven.dev/"
+//	}
+
+	// Should mirror a lot of our deps, including Create, CC:T, KFF? and anything else VS has in its dev enviroment
+	// However we still include the other mavens, just in case it goes down
+	maven {
+		name = "Valkyrien Skies Internal"
+		url = "https://maven.valkyrienskies.org"
+		content {
+			excludeGroup("org.spongepowered")
+			excludeGroup("thedarkcolour")
+		}
+	}
+	
+	// Mainly for create flywheel and colorwheel
     maven {
         name "createmod maven"
         url "https://maven.createmod.net/"
     }
+    
 	maven {
-		url 'https://maven.pkg.github.com/m-marvin/library-electronflow'
-		credentials {
-            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
-            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
-        }
-        content {
-        	includeGroup "de.m_marvin.electronflow"
-        }
+		name = "ParchmentMC"
+		url = "https://maven.parchmentmc.org"
 	}
+
+	// Required to make VS2 work
+	maven {
+		name = "Kotlin for Forge"
+		url = "https://thedarkcolour.github.io/KotlinForForge/"
+		content {
+			includeModule("thedarkcolour", "kotlinforforge")
+		}
+	}
+	
+	// Custom libraries, adding one github repository somehow gives access to all of them ...
 	maven {
 		url 'https://maven.pkg.github.com/m-marvin/library-unifiedvectors'
 		credentials {
             username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
             password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
         }
-        content {
-        	includeGroup "de.m_marvin.univec"
-        }
 	}
-	maven {
-		url 'https://maven.pkg.github.com/m-marvin/library-unifiedmaps'
-		credentials {
-            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
-            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
-        }
-        content {
-        	includeGroup "de.m_marvin.unimap"
-        }
-	}
-	maven {
-		url 'https://maven.pkg.github.com/valkyrienskies/valkyrien-skies-2'
-		credentials {
-		    username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
-            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
-		}
-		content {
-        	includeGroup "org.valkyrienskies"
-        }
-	}
-    maven {
-        name = "Modrinth Maven"
-        url = "https://api.modrinth.com/maven"
-        content {
-            includeGroup("maven.modrinth")
-        }
-    }
-    maven { url = 'https://maven.minecraftforge.net' }
-}
 
-configurations {
-    shade
-    implementation.extendsFrom shade
 }
 
 dependencies {
-
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-	
-	// Enable mixin processor
-	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-	
+	// region mixins
+	annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
 	compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.0"))
-    implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.5.0")) {
-        jarJar.ranged(it, "[0.5.0,)")
-    }
+	jarJar(implementation("io.github.llamalad7:mixinextras-forge:0.5.0")) {
+		version {
+			strictly '[0.5.0,)'
+			prefer '0.5.0'
+		}
+	}
+	// endregion
+
+	// region Valkyrien Skies
+	implementation("org.valkyrienskies.core:api:${vs_core_version}") { transitive = false
+		exclude group: 'org.joml', module: ''
+	}
+	implementation("org.valkyrienskies.core:internal:${vs_core_version}") { transitive = false
+		exclude group: 'org.joml', module: ''
+	}
+	implementation("org.valkyrienskies.core:util:${vs_core_version}") { transitive = false
+		exclude group: 'org.joml', module: ''
+	}
+	implementation("org.valkyrienskies.core:impl:${vs_core_version}") { transitive = false
+		exclude group: 'org.joml', module: ''
+	}
+	modApi("org.valkyrienskies:valkyrienskies-120-forge:${vs2_version}") { transitive = false
+		exclude group: 'org.valkyrienskies.core', module: ''
+	}
+	// endregion
+
+	// region VS deps
+	implementation "com.fasterxml.jackson.core:jackson-annotations:2.13.3"
+	compileOnly("org.joml:joml:1.10.4")
+	compileOnly("org.joml:joml-primitives:1.10.0")
+	modImplementation "thedarkcolour:kotlinforforge:4.11.0"
+	// endregion
 	
-	// Valkyrien Skies 2
-	implementation fg.deobf("org.valkyrienskies:valkyrienskies-120-forge:${vs2_version}")
+	// region Industria deps
+	jarJar(implementation("de.m_marvin.electronflow:tvnl-nna:${tvnl_nna_version}"))
+	jarJar(implementation("de.m_marvin.univec:univec:${univec_version}"))
+	jarJar(implementation("de.m_marvin.unimap:unimap:${unimap_version}"))
+	// endregion
 	
-	// Valkyrien Skies Core API
-	implementation("org.valkyrienskies.core:api:$vs_core_version")
-    implementation("org.valkyrienskies.core:api-game:$vs_core_version")
-    implementation("org.valkyrienskies.core:util:$vs_core_version")
-    implementation("org.valkyrienskies.core:impl:$vs_core_version")
-    
-	// Kotlin for Forge (required by VS2)
-	runtimeOnly fg.deobf("curse.maven:kotlinforforge-351264:$forge_kotlin_version")
+	// region compat
+	modImplementation("dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:${flywheel_version}")
+	modImplementation("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
+	// endregion
 	
-	// Flywheel
-	compileOnly fg.deobf("dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:${flywheel_version}")
-    runtimeOnly fg.deobf("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
-    //runtimeOnly fg.deobf("maven.modrinth:colorwheel:${colorwheel_version}")
-	
- 	// ElectronFlow
-//	shade("de.m_marvin.electronflow:jelectronflow:${electronflow_version}")
-//	minecraftLibrary("de.m_marvin.electronflow:jelectronflow:${electronflow_version}")
-//	api("de.m_marvin.electronflow:jelectronflow:${electronflow_version}")
-	
-	shade("de.m_marvin.electronflow:electronflow-jnlti:0.3-alpha-SNAPSHOT")
-	minecraftLibrary("de.m_marvin.electronflow:electronflow-jnlti:0.3-alpha-SNAPSHOT")
-	api("de.m_marvin.electronflow:electronflow-jnlti:0.3-alpha-SNAPSHOT")
-	
-	// UnifiedVectors
-	shade("de.m_marvin.univec:univec:${univec_version}")
-	minecraftLibrary("de.m_marvin.univec:univec:${univec_version}")
-	api("de.m_marvin.univec:univec:${univec_version}")
-	
-	// UnifiedMaps
-	shade("de.m_marvin.unimap:unimap:${unimap_version}")
-	minecraftLibrary("de.m_marvin.unimap:unimap:${unimap_version}")
-	api("de.m_marvin.unimap:unimap:${unimap_version}")
-	
-	// Debugging
-	runtimeOnly fg.deobf("curse.maven:jei-238222:6075247")
+	// region debugging
+	modRuntimeOnly("curse.maven:jei-238222:6075247")
 	// vvv Remove before starting server vvv
-	runtimeOnly fg.deobf("curse.maven:atlasviewer-633577:4882554")
-	runtimeOnly fg.deobf("curse.maven:oculus-581495:6020952")
-	runtimeOnly fg.deobf("curse.maven:embeddium-908741:5681725")
+	modRuntimeOnly("curse.maven:atlasviewer-633577:4882554")
+	modRuntimeOnly("curse.maven:oculus-581495:6020952")
+	modRuntimeOnly("curse.maven:embeddium-908741:5681725")
+	// endregion
 	
 }
 
-mixin {
-	add sourceSets.main, 'mixins.industriacore.refmap.json'
-	config 'mixins.industriacore.util.json'
-	config 'mixins.industriacore.ssdplugin.json'
+configurations {
+	shade
+	implementation.extendsFrom shade
 }
 
-// This block of code expands all declared replace properties in the specified resource targets.
-// A missing property will result in an error. Properties are expanded using ${} Groovy notation.
-// When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
-// See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
-tasks.named('processResources', ProcessResources).configure {
-    var replaceProperties = [
-            minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
-            forge_version: forge_version, forge_version_range: forge_version_range,
-            loader_version_range: loader_version_range,
-            mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
-            mod_authors: mod_authors, // mod_description: mod_description,
-    ]
-    inputs.properties replaceProperties
+processResources {
+	var replaceProperties = [
+		mod_id          : mod_id,
+		mod_name        : mod_name,
+		mod_license     : mod_license,
+		mod_version     : mod_version,
+		mod_authors     : mod_authors,
+		mod_description : mod_description,
 
-    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
-        expand replaceProperties + [project: project]
-    }
+		minecraft_version       : minecraft_version,
+		minecraft_version_range : minecraft_version_range,
+		forge_version           : forge_version,
+		forge_version_range     : forge_version_range,
+		loader_version_range    : loader_version_range,
+
+		// This property isn't used right now in mods.toml
+		vs2_version: vs2_version.split("\\+").first(), // gradle.properties will have git commit version, but public releases won't
+	]
+
+	inputs.properties replaceProperties
+
+	filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+		expand replaceProperties + [project: project]
+	}
 }
 
-// Example for how to get properties into the manifest for reading at runtime.
-tasks.named('jar', Jar).configure {
-    manifest {
-        attributes([
-                'Specification-Title'     : mod_id,
-                'Specification-Vendor'    : mod_authors,
-                'Specification-Version'   : '1', // We are version 1 of ourselves
-                'Implementation-Title'    : project.name,
-                'Implementation-Version'  : project.jar.archiveVersion,
-                'Implementation-Vendor'   : mod_authors,
-                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-
-	archiveClassifier = 'slim'
-}
-
-shadowJar {
-    archiveClassifier = ''
-    configurations = [project.configurations.shade]
-    //relocate 'com.example.example-thing', "${project.group}.relocated.example-thing"
-    finalizedBy 'reobfShadowJar'
-}
-
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
-task mojmapJar(type: ShadowJar) {
-  archiveClassifier.set("mojmap")
-  group = 'build'
-  from sourceSets.main.output
-  configurations = [project.configurations.shade]
-}
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-  archiveClassifier.set("sources")
-  from sourceSets.main.allSource
-}
-
-assemble.dependsOn shadowJar
-
-reobf {
-    shadowJar {}
-}
-
-java {
-    withSourcesJar()
-}
-
-publishing {
-    publications {
-        register('mavenJava', MavenPublication) {
-            groupId = 'de.m_marvin.industria'
-        	artifactId = "industriacore"
-        	
-        	artifact shadowJar
-            artifact mojmapJar
-            artifact sourcesJar
-        }
-    }
-    repositories {
-        maven {
-            url "file://${project.projectDir}/mcmodsrepo"
-        }
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/m-marvin/mcmod-industria")
-            credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
-                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
+jar {
+	manifest {
+		attributes([
+            'Specification-Title'     : mod_id,
+	        'Specification-Vendor'    : mod_authors,
+	        'Specification-Version'   : '1', // We are version 1 of ourselves
+	        'Implementation-Title'    : project.name,
+	        'Implementation-Version'  : project.jar.archiveVersion,
+	        'Implementation-Vendor'   : mod_authors,
+	        'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+		])
+	}
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+	options.encoding = 'UTF-8'
+}
+
+publishing {
+	
 }

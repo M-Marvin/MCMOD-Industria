@@ -18,12 +18,12 @@ import net.minecraftforge.registries.RegistryObject;
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD,modid=IndustriaCore.MODID)
 public class StructureDataPlugins {
 	
-	public static final ResourceKey<Registry<StructureDataPlugin<?>>> DATA_PLUGINS_KEY = ResourceKey.createRegistryKey(new ResourceLocation(IndustriaCore.MODID, "structure_data_plugins"));
+	public static final ResourceKey<Registry<StructureDataPlugin<?>>> DATA_PLUGINS_KEY = ResourceKey.createRegistryKey(ResourceLocation.tryBuild(IndustriaCore.MODID, "structure_data_plugins"));
 	public static final DeferredRegister<StructureDataPlugin<?>> DATA_PLUGINS = DeferredRegister.create(DATA_PLUGINS_KEY, IndustriaCore.MODID);
 	public static final Supplier<IForgeRegistry<StructureDataPlugin<?>>> DATA_PLUGINS_REGISTRY = DATA_PLUGINS.makeRegistry(() -> new RegistryBuilder<StructureDataPlugin<?>>().disableSaving());
 	
-    public static void register() {
-    	DATA_PLUGINS.register(FMLJavaModLoadingContext.get().getModEventBus());
+    public static void register(FMLJavaModLoadingContext modctx) {
+    	DATA_PLUGINS.register(modctx.getModEventBus());
 	}
 	
 	public static final RegistryObject<ConduitDataPlugin> CONDUTIS = DATA_PLUGINS.register("conduits", ConduitDataPlugin::new);

@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class ParticleRenderTypes {
 	
-	public static final ResourceLocation LOCATION_CONDUITS = new ResourceLocation("textures/atlas/conduits.png");
+	public static final ResourceLocation LOCATION_CONDUITS = ResourceLocation.tryParse("textures/atlas/conduits.png");
 	
 	public static final ParticleRenderType CONDUIT_SHEET_OPAQUE = new ParticleRenderType() {
 		public void begin(BufferBuilder p_107448_, TextureManager p_107449_) {

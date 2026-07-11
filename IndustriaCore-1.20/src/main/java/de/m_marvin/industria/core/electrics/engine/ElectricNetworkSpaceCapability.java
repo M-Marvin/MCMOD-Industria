@@ -51,6 +51,7 @@ import net.minecraftforge.event.level.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
+import tvnlnna.nodal.NodalElementState;
 
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpace<ElectricReference, ElectricComponent<?, ?>, ElectricNetwork, NodePos> implements ICapabilitySerializable<CompoundTag> {
@@ -452,12 +453,11 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 		return 0.0;
 	}
 	
-	public double getElementCurrent(CircuitElement element) {
+	public NodalElementState getElement(CircuitElement element) {
 		ElectricNetwork network = findNetworkAt(element.componentReference());
-		if (network != null) {
-			return network.getElementCurrent(element);
-		}
-		return 0.0;
+		if (network != null)
+			return network.getElementState(element);
+		return null;
 	}
 	
 }

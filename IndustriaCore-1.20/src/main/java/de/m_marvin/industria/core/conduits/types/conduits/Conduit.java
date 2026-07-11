@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalInt;
 
+import org.joml.Quaterniond;
 import org.joml.Vector3d;
-import org.valkyrienskies.core.apigame.constraints.VSConstraint;
-import org.valkyrienskies.core.apigame.constraints.VSRopeConstraint;
+import org.valkyrienskies.core.internal.joints.VSDistanceJoint;
+import org.valkyrienskies.core.internal.joints.VSJoint;
+import org.valkyrienskies.core.internal.joints.VSJointMaxForceTorque;
+import org.valkyrienskies.core.internal.joints.VSJointPose;
 
 import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.ConduitUtility;
@@ -268,8 +271,15 @@ public class Conduit extends ConduitBehavior implements ItemLike {
 			double force = state.getConstraintForce(conduitEntity);
 			Vec3d contraptionNodePosA = conduitEntity.getPosition().calculateContraptionNodeA(level);
 			Vec3d contraptionNodePosB = conduitEntity.getPosition().calculateContraptionNodeB(level);
-			VSConstraint constraint = new VSRopeConstraint(contraptionIdA, contraptionIdB, comp, contraptionNodePosA.writeTo(new Vector3d()), contraptionNodePosB.writeTo(new Vector3d()), force, conduitEntity.getLength());
-				shape.constraint = OptionalInt.of(ContraptionUtility.addConstraint(level, constraint));
+			VSJoint constraint = new VSDistanceJoint(contraptionIdA, new VSJointPose(
+					contraptionNodePosA.writeTo(new Vector3d()), new Quaterniond()), 
+					contraptionIdB, new VSJointPose(contraptionNodePosB.writeTo(new Vector3d()), new Quaterniond()), 
+					new VSJointMaxForceTorque((float) force, 0F), comp, 
+					0F, conduitEntity.getLength(), null, null, null);
+//TODO			VSJoint constraint = new VSDistanceJoint(contraptionIdA, contraptionIdB, comp, contraptionNodePosA.writeTo(new Vector3d()), contraptionNodePosB.writeTo(new Vector3d()), force, conduitEntity.getLength());
+			shape.constraint = OptionalInt.empty();
+			final var shapeF = shape;
+			ContraptionUtility.addConstraint(level, constraint).thenApply(constraintId -> shapeF.constraint = OptionalInt.of(constraintId));
 		}
 		
 		return shape;

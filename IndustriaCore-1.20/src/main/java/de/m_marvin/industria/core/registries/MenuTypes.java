@@ -15,8 +15,8 @@ import net.minecraftforge.registries.RegistryObject;
 public class MenuTypes {
 
 	private static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, IndustriaCore.MODID);
-	public static void register() {
-		MENU_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+	public static void register(FMLJavaModLoadingContext modctx) {
+		MENU_TYPES.register(modctx.getModEventBus());
 	}
 	
 	public static final RegistryObject<MenuType<JunctionBoxMenu<JunctionBoxBlockEntity>>> JUNCTION_BOX = 	MENU_TYPES.register("junction_box", () -> IForgeMenuType.create(JunctionBoxMenu::new));

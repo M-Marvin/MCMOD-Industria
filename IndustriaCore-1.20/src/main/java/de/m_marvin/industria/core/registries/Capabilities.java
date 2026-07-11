@@ -35,11 +35,11 @@ public class Capabilities {
 		
 		@SubscribeEvent
 		public static void attachCapabilities(AttachCapabilitiesEvent<Level> event) {
-			event.addCapability(new ResourceLocation(IndustriaCore.MODID, "conduits"), new ConduitHolderCapability(event.getObject()));
-			event.addCapability(new ResourceLocation(IndustriaCore.MODID, "electrics"), new ElectricNetworkSpaceCapability(event.getObject()));
-			event.addCapability(new ResourceLocation(IndustriaCore.MODID, "contraption"), new ContraptionHandlerCapability(event.getObject()));
-			event.addCapability(new ResourceLocation(IndustriaCore.MODID, "magnetism"), new MagnetismHandlerCapability(event.getObject()));
-			event.addCapability(new ResourceLocation(IndustriaCore.MODID, "kinetics"), new KineticNetworkSpaceCapability(event.getObject()));
+			event.addCapability(ResourceLocation.tryBuild(IndustriaCore.MODID, "conduits"), new ConduitHolderCapability(event.getObject()));
+			event.addCapability(ResourceLocation.tryBuild(IndustriaCore.MODID, "electrics"), new ElectricNetworkSpaceCapability(event.getObject()));
+			event.addCapability(ResourceLocation.tryBuild(IndustriaCore.MODID, "contraption"), new ContraptionHandlerCapability(event.getObject()));
+			event.addCapability(ResourceLocation.tryBuild(IndustriaCore.MODID, "magnetism"), new MagnetismHandlerCapability(event.getObject()));
+			event.addCapability(ResourceLocation.tryBuild(IndustriaCore.MODID, "kinetics"), new KineticNetworkSpaceCapability(event.getObject()));
 		}
 		
 	}

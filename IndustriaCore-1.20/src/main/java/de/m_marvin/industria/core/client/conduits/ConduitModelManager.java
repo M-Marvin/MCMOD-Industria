@@ -57,8 +57,8 @@ public class ConduitModelManager {
 	private static final String CONDUIT_STATE_FOLDER = "conduitstates";
 	private static final String PATH_JSON_SUFIX = ".json";
 	
-	public static final ResourceLocation LOCATION_CONDUITS = new ResourceLocation(IndustriaCore.MODID, "textures/atlas/conduits.png");
-	public static final ResourceLocation MISSING_MODEL = new ResourceLocation(IndustriaCore.MODID, "conduit/missingno");
+	public static final ResourceLocation LOCATION_CONDUITS = ResourceLocation.tryBuild(IndustriaCore.MODID, "textures/atlas/conduits.png");
+	public static final ResourceLocation MISSING_MODEL = ResourceLocation.tryBuild(IndustriaCore.MODID, "conduit/missingno");
 	
 	private static Map<ConduitState, BakedModel[]> state2modelMap = new HashMap<>();
 	private static Map<ConduitState, ResourceLocation[]> state2modelLocationMap;
@@ -66,7 +66,7 @@ public class ConduitModelManager {
 	@SubscribeEvent
 	public static void onRegisterAtlases(ModelAtlasRegisterEvent event) {
 		// the primary conduit texture atlas used for all conduit models
-		event.register(LOCATION_CONDUITS, new ResourceLocation(IndustriaCore.MODID, "conduits"));
+		event.register(LOCATION_CONDUITS, ResourceLocation.tryBuild(IndustriaCore.MODID, "conduits"));
 	}
 	
 	@SubscribeEvent
@@ -121,7 +121,7 @@ public class ConduitModelManager {
 		ResourceManager resourceManager = RESOURCE_MANAGER.get();
 		return Conduits.CONDUITS_REGISTRY.get().getEntries().stream().map(conduitEntry -> {
 			ResourceLocation conduitId = conduitEntry.getKey().location();
-			ResourceLocation stateDefinitionLocation = new ResourceLocation(conduitId.getNamespace(), CONDUIT_STATE_FOLDER + "/" + conduitId.getPath() + PATH_JSON_SUFIX);
+			ResourceLocation stateDefinitionLocation = ResourceLocation.tryBuild(conduitId.getNamespace(), CONDUIT_STATE_FOLDER + "/" + conduitId.getPath() + PATH_JSON_SUFIX);
 			Optional<Resource> stateDefinitionResource = resourceManager.getResource(stateDefinitionLocation);
 			if (stateDefinitionResource.isEmpty()) {
 				LOGGER.warn("Missing conduit state definition json for conduit {}:\n   {}", conduitId, stateDefinitionLocation);
@@ -162,10 +162,10 @@ public class ConduitModelManager {
 			if (segmentsJson.isJsonArray() && segmentsJson.getAsJsonArray().size() > 0) {
 				modelLocations = segmentsJson.getAsJsonArray().asList().stream()
 						.map(JsonElement::getAsString)
-						.map(ResourceLocation::new)
+						.map(ResourceLocation::parse)
 						.toArray(ResourceLocation[]::new);
 			} else if (segmentsJson.isJsonPrimitive()) {
-				modelLocations = new ResourceLocation[] { new ResourceLocation(segmentsJson.getAsString()) };
+				modelLocations = new ResourceLocation[] { ResourceLocation.tryParse(segmentsJson.getAsString()) };
 			} else {
 				LOGGER.warn("Invalid segments entry for conduit state definition: {}#{}", conduitId, variantKey);
 				return new Pair<>(state, new ResourceLocation[] {MISSING_MODEL});

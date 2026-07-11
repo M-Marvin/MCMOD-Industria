@@ -53,5 +53,5 @@ public class BeltBlockEntityVisual extends AbstractBlockEntityVisual<BeltBlockEn
 	protected void _delete() {
 		this.instance.delete();
 	}
-
+	
 }

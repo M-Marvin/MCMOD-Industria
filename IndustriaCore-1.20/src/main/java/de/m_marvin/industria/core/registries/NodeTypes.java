@@ -7,8 +7,8 @@ import net.minecraft.resources.ResourceLocation;
 
 public class NodeTypes {
 	
-	public static final NodeType ALL = NodeType.fromPredicate(ChatFormatting.LIGHT_PURPLE, new ResourceLocation(IndustriaCore.MODID, "textures/node/all.png"), type -> true);
-	public static final NodeType ELECTRIC = NodeType.fromPredicate(ChatFormatting.YELLOW, new ResourceLocation(IndustriaCore.MODID, "textures/node/electric.png"), type -> type == NodeTypes.ELECTRIC);
-	public static final NodeType FLUID = NodeType.fromPredicate(ChatFormatting.AQUA, new ResourceLocation(IndustriaCore.MODID, "textures/node/fluid.png"), type -> type == NodeTypes.FLUID);
+	public static final NodeType ALL = NodeType.fromPredicate(ChatFormatting.LIGHT_PURPLE, ResourceLocation.tryBuild(IndustriaCore.MODID, "textures/node/all.png"), type -> true);
+	public static final NodeType ELECTRIC = NodeType.fromPredicate(ChatFormatting.YELLOW, ResourceLocation.tryBuild(IndustriaCore.MODID, "textures/node/electric.png"), type -> type == NodeTypes.ELECTRIC);
+	public static final NodeType FLUID = NodeType.fromPredicate(ChatFormatting.AQUA, ResourceLocation.tryBuild(IndustriaCore.MODID, "textures/node/fluid.png"), type -> type == NodeTypes.FLUID);
 	
 }

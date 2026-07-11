@@ -28,8 +28,8 @@ import net.minecraftforge.registries.RegistryObject;
 public class Blocks {
 
 	private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, IndustriaCore.MODID);
-	public static void register() {
-		BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
+	public static void register(FMLJavaModLoadingContext modctx) {
+		BLOCKS.register(modctx.getModEventBus());
 	}
 	
 	public static final RegistryObject<Block> ERROR_BLOCK =			BLOCKS.register("error_block", () -> new Block(Properties.of().noParticlesOnBreak().mapColor(MapColor.COLOR_RED).strength(0F, 3600000F).noLootTable().noOcclusion()));

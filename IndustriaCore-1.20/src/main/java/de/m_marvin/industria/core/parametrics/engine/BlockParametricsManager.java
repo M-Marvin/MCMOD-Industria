@@ -95,7 +95,7 @@ public class BlockParametricsManager extends SimplePreparableReloadListener<Map<
 	}
 	
 	protected ResourceLocation getPreparedJsonPath(ResourceLocation rl) {
-		return new ResourceLocation(rl.getNamespace(), this.directory + "/" + rl.getPath() + PATH_JSON_SUFIX);
+		return ResourceLocation.tryBuild(rl.getNamespace(), this.directory + "/" + rl.getPath() + PATH_JSON_SUFIX);
 	}
 	
 	@Override
@@ -109,7 +109,7 @@ public class BlockParametricsManager extends SimplePreparableReloadListener<Map<
 			ResourceLocation resourceLocation = resourceEntry.getKey();
 			String path = resourceLocation.getPath();
 			int i = path.indexOf("/");
-			ResourceLocation namedLocation = new ResourceLocation(resourceLocation.getNamespace(), path.substring(i + 1, path.length() - PATH_JSON_SUFIX.length()));
+			ResourceLocation namedLocation = ResourceLocation.tryBuild(resourceLocation.getNamespace(), path.substring(i + 1, path.length() - PATH_JSON_SUFIX.length()));
 			
 			try {
 				Resource resource = resourceEntry.getValue();

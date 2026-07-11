@@ -54,19 +54,23 @@ public class ServerContraption extends Contraption {
 	}
 	
 	public <T> T getAttachment(Class<T> attachmentClass) {
-		return getShip().getAttachment(attachmentClass);
-	}
-	
-	protected <T> void saveAttachment(Class<T> clazz, T value) {
-		// This is a workaround to the broken Ship#saveAttachement() method on all Ship instances, except the LoadedServerShip
 		ServerShipWorld shipWorld = VSGameUtilsKt.getShipObjectWorld(getLevel());
 		Optional<LoadedServerShip> loadedShip = shipWorld.getLoadedShips().stream().filter(s -> s.getId() == getId()).findAny();
 		if (loadedShip.isEmpty()) {
-			getShip().saveAttachment(clazz, value);
+			IndustriaCore.LOGGER.warn("unable to get LoadedServerShip instance of contraption " + getId());
+			return null;
+		}
+		return loadedShip.get().getAttachment(attachmentClass);
+	}
+	
+	protected <T> void saveAttachment(Class<T> clazz, T value) {
+		ServerShipWorld shipWorld = VSGameUtilsKt.getShipObjectWorld(getLevel());
+		Optional<LoadedServerShip> loadedShip = shipWorld.getLoadedShips().stream().filter(s -> s.getId() == getId()).findAny();
+		if (loadedShip.isEmpty()) {
 			IndustriaCore.LOGGER.warn("unable to get LoadedServerShip instance of contraption " + getId());
 			return;
 		}
-		loadedShip.get().saveAttachment(clazz, value);
+		loadedShip.get().setAttachment(value);
 	}
 	
 	public <T extends ContraptionAttachment> void removeAttachment(Class<T> attachmentClass) {

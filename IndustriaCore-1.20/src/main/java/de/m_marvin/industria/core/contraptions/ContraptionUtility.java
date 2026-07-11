@@ -2,13 +2,14 @@ package de.m_marvin.industria.core.contraptions;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 
 import org.joml.Matrix4dc;
 import org.joml.Vector3d;
 import org.joml.Vector4d;
 import org.valkyrienskies.core.api.ships.properties.ShipTransform;
-import org.valkyrienskies.core.apigame.constraints.VSConstraint;
+import org.valkyrienskies.core.internal.joints.VSJoint;
 import org.valkyrienskies.mod.common.BlockStateInfo;
 
 import de.m_marvin.industria.core.contraptions.engine.ContraptionHandlerCapability;
@@ -213,7 +214,7 @@ public class ContraptionUtility {
 	
 	/* Constraints */
 	
-	public static int addConstraint(Level level, VSConstraint constraint) {
+	public static CompletableFuture<Integer> addConstraint(Level level, VSJoint constraint) {
 		ContraptionHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONTRAPTION_HANDLER_CAPABILITY);
 		return handler.addConstraint(constraint);
 	}
@@ -228,7 +229,7 @@ public class ContraptionUtility {
 		return handler.getAllConstraints().keySet();
 	}
 	
-	public static VSConstraint getConstraintInstance(Level level, int constraint) {
+	public static VSJoint getConstraintInstance(Level level, int constraint) {
 		ContraptionHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONTRAPTION_HANDLER_CAPABILITY);
 		return handler.getConstraint(constraint);
 	}

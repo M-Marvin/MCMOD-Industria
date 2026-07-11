@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nodalElement name="U" nonLinear="false" timeVariant="false">
+	<node name="p_A" constant="i_A"/>
+	<node name="p_B" constant="i_B"/>
+	<local name="i_src" constant="u_src"/>
+	<variable name="U" default="1.0"/>
+	<stampA>
+				p_A		p_B		i_src
+		i_A		0.0		0.0		1.0
+		i_B		0.0		0.0		-1.0
+		u_src	1.0		-1.0	0.0
+	</stampA>
+	<stampZ>
+		i_A		0.0
+		i_B		0.0
+		u_src	U
+	</stampZ>
+</nodalElement>

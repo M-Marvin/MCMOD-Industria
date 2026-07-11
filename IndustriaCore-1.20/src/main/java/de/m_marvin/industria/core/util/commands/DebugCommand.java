@@ -4,8 +4,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
-import de.m_marvin.electronflow.nltisolver.DecimalPrefixFormater;
-import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
@@ -87,7 +85,8 @@ public class DebugCommand {
 			for (int i = 0; i < lanes.length; i++) {
 				double potential = ElectricUtility.getFloatingNodeVoltage(level, CircuitNode.node(node, lanes[i]));
 				final int id = i;
-				source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.node_voltages.lane", id, lanes[id], DecimalPrefixFormater.formatDouble(potential)), false);
+				// FIXME
+				//source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.node_voltages.lane", id, lanes[id], DecimalPrefixFormater.formatDouble(potential)), false);
 			}
 		}
 		return 1;
@@ -98,7 +97,7 @@ public class DebugCommand {
 		
 		ElectricNetwork network = ElectricUtility.findNetworkAt(level, ElectricReference.block(position));
 		if (network == null) return 0;
-		network.getNetworkSolver().debug(enable ? line -> IndustriaCore.LOGGER.debug(line) : null);
+		//network.getNetworkSolver().debug(enable ? line -> IndustriaCore.LOGGER.debug(line) : null);
 		if (enable) {
 			source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.log_network.enable"), false);
 		} else {

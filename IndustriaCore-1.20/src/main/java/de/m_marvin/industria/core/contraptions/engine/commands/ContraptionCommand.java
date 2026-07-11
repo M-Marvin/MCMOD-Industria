@@ -408,7 +408,7 @@ public class ContraptionCommand {
 			
 			contraptionPos.setPosition(newPosition);
 			contraptionPos.setDimension(dimension);
-			if (rotation != null) contraptionPos.setOrientation(new Quaterniond(newRotation, EulerOrder.XYZ, true));
+			if (rotation != null) contraptionPos.setOrientation(new Quaterniond().setEulerI(newRotation, EulerOrder.XYZ, true));
 			
 			if (ContraptionUtility.teleportContraption(contraption, contraptionPos)) teleported++;
 			

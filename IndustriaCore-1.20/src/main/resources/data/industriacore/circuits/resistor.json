@@ -1,5 +1,0 @@
-{
-	"Properties": [ "id", "resistance" ],
-	"Networks": [ "NET1", "NET2" ],
-	"IdProperty": "id"
-}

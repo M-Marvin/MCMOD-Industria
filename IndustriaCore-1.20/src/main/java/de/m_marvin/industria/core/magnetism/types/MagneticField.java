@@ -248,7 +248,7 @@ public class MagneticField {
 		Vec3d angleVec = offset.cross(thisFieldVector).tryNormalize();
 		Quaterniond interactionVecRot = new Quaterniond(angleVec, angle * -2.0);
 		
-		return thisFieldVector.mul(this.getIntensityLinearAt(offset.length())).transform(interactionVecRot);
+		return interactionVecRot.transform(thisFieldVector.mul(this.getIntensityLinearAt(offset.length())));
 	}
 
 	// Called when block state changes in the field occur

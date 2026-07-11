@@ -17,8 +17,8 @@ import net.minecraftforge.registries.RegistryObject;
 public class Items {
 	
 	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, IndustriaCore.MODID);
-	public static void register() {
-		ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+	public static void register(FMLJavaModLoadingContext modctx) {
+		ITEMS.register(modctx.getModEventBus());
 	}
 	
 	public static final RegistryObject<BlockItem> ERROR_BLCOK = 	ITEMS.register("error_block", () -> new BlockItem(Blocks.ERROR_BLOCK.get(), new Item.Properties().rarity(Rarity.EPIC)));

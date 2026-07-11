@@ -51,17 +51,17 @@ public class LocalVec3Relative extends LocalCoordinates implements Vec3Relative 
 	@Override
 	public Vec3d getPosition(Vec3d sourceOffset, Vec3d sourceOrientation) {
 		
-		Quaterniond rotation = new Quaterniond(sourceOrientation, EulerOrder.XYZ, true);
-		return sourceOffset.add(new Vec3d(this.left, this.up, this.forwards).transform(rotation));
+		Quaterniond rotation = new Quaterniond().setEulerI(sourceOrientation, EulerOrder.XYZ, true);
+		return rotation.transform(sourceOffset.add(new Vec3d(this.left, this.up, this.forwards)));
 		
 	}
 	
 	@Override
 	public Vec3d getRotation(Vec3d sourceRotation, Vec3d sourceOrientation) {
 		
-		Quaterniond rotation = new Quaterniond(sourceOrientation, EulerOrder.XYZ, true);
-		Quaterniond localRotation = new Quaterniond(new Vec3d(this.left, this.up, this.forwards), EulerOrder.XYZ, true);
-		Quaterniond currentRotation = new Quaterniond(sourceRotation, EulerOrder.XYZ, true);
+		Quaterniond rotation = new Quaterniond().setEulerI(sourceOrientation, EulerOrder.XYZ, true);
+		Quaterniond localRotation = new Quaterniond().setEulerI(new Vec3d(this.left, this.up, this.forwards), EulerOrder.XYZ, true);
+		Quaterniond currentRotation = new Quaterniond().setEulerI(sourceRotation, EulerOrder.XYZ, true);
 		return rotation.mul(localRotation).mul(currentRotation).euler(EulerOrder.XYZ, true);
 		
 	}

@@ -333,19 +333,19 @@ public class MathUtility {
 	public static Vec3d rotatePoint(Vec3d point, Vec3d axis, float angle, boolean degrees) {
 		if (degrees) angle = (float) Math.toRadians(angle);
 		Quaterniond quat = new Quaterniond(axis, angle);
-		return point.transform(quat);
+		return quat.transform(point);
 	}
 	
 	public static Vec3f rotatePoint(Vec3f point, Vec3f axis, float angle, boolean degrees) {
 		if (degrees) angle = (float) Math.toRadians(angle);
 		Quaternionf quat = new Quaternionf(axis, angle);
-		return point.transform(quat);
+		return quat.transform(point);
 	}
 	
 	public static Vec3i rotatePoint(Vec3i point, Vec3f axis, float angle, boolean degrees) {
 		if (degrees) angle = (float) Math.toRadians(angle);
 		Quaternionf quat = new Quaternionf(axis, angle);
-		Vec3f transform = new Vec3f(point).transform(quat);
+		Vec3f transform = quat.transform(point);
 		return new Vec3i(Math.round(transform.x), Math.round(transform.y), Math.round(transform.z));
 	}
 	

@@ -4,7 +4,6 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitElement;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitNode;
-import de.m_marvin.industria.core.electrics.types.IElectric;
 import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxMenu;
@@ -14,7 +13,6 @@ import de.m_marvin.industria.core.parametrics.BlockParametrics;
 import de.m_marvin.industria.core.parametrics.engine.BlockParametricsManager;
 import de.m_marvin.industria.core.registries.BlockEntityTypes;
 import de.m_marvin.industria.core.registries.Blocks;
-import de.m_marvin.industria.core.util.container.FriendlyContainerData;
 import de.m_marvin.industria.core.util.container.IDataSlotContainer;
 import de.m_marvin.industria.core.util.types.PlanarDirection;
 import de.m_marvin.univec.impl.Vec2i;
@@ -28,6 +26,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import tvnlnna.nodal.NodalElementState;
 
 public abstract class AbstractSourceBlockEntity extends BlockEntity implements MenuProvider, IDataSlotContainer, IJunctionEdit {
 
@@ -65,11 +64,12 @@ public abstract class AbstractSourceBlockEntity extends BlockEntity implements M
 	// since the element names of the sources circuit are defined in the block, leave it to the source block implementation
 	// to call the function below with the correct element name
 	
-	protected double getDeviceCurrent(String sourceElement) {
+	protected double getDeviceCurrent(String sourceElement, String paramater) {
 		if (getBlockState().getBlock() instanceof IElectricBlock electric) {
 			BlockPos masterPos = electric.getConnectorMasterPos(level, worldPosition, getBlockState());
 			ElectricReference reference = ElectricReference.block(masterPos);
-			return ElectricUtility.getElementCurrent(level, CircuitElement.element(reference, sourceElement));
+			NodalElementState sourceState = ElectricUtility.getElementState(level, CircuitElement.element(reference, sourceElement));
+			return sourceState != null ? sourceState.getParamter(paramater) : 0.0;
 		}
 		return 0.0;
 	}

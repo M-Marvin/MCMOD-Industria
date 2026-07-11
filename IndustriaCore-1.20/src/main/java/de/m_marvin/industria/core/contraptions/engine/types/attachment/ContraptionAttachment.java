@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.valkyrienskies.core.api.ships.ServerShip;
 import org.valkyrienskies.core.api.ships.Ship;
-import org.valkyrienskies.core.apigame.world.ShipWorldCore;
+import org.valkyrienskies.core.internal.world.VsiShipWorld;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -42,7 +42,7 @@ public class ContraptionAttachment {
 		if (this.contraption == null) {
 			
 			if (ContraptionHandlerCapability.getStaticServer() == null) return null;
-			ShipWorldCore shipWorld = VSGameUtilsKt.getShipObjectWorld(ContraptionHandlerCapability.getStaticServer());
+			VsiShipWorld shipWorld = VSGameUtilsKt.getShipObjectWorld(ContraptionHandlerCapability.getStaticServer());
 			Optional<Ship> ship = shipWorld.getAllShips().stream().filter(s -> s.getId() == contraptionId).findAny();
 			if (ship.isPresent() && ship.get() instanceof ServerShip sship) {
 				ServerLevel level = VSGameUtilsKt.getLevelFromDimensionId(ContraptionHandlerCapability.getStaticServer(), ship.get().getChunkClaimDimension());

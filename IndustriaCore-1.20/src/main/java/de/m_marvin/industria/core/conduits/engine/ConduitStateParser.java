@@ -59,7 +59,7 @@ public class ConduitStateParser {
 	private final boolean allowNbt;
 	private final Map<Property<?>, Comparable<?>> properties = Maps.newHashMap();
 	private final Map<String, String> vagueProperties = Maps.newHashMap();
-	private ResourceLocation id = new ResourceLocation("");
+	private ResourceLocation id = null;
 	@Nullable
 	private StateDefinition<Conduit, ConduitState> definition;
 	@Nullable

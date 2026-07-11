@@ -1,19 +1,15 @@
 package de.m_marvin.industria.core.electrics.types.blocks;
 
-import de.m_marvin.electronflow.nltisolver.elements.Diode;
-import de.m_marvin.industria.core.client.util.ClientTimer;
 import de.m_marvin.industria.core.client.util.TooltipAdditions;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
-import de.m_marvin.industria.core.electrics.ElectricUtility;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitElement;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitNode;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ComponentCircuitContext;
 import de.m_marvin.industria.core.electrics.types.blockentities.VoltageSourceBlockEntity;
-import de.m_marvin.industria.core.parametrics.BlockParametrics;
-import de.m_marvin.industria.core.parametrics.engine.BlockParametricsManager;
+import de.m_marvin.industria.core.registries.ElectricElements;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.MathUtility;
@@ -35,6 +31,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
+import tvnlnna.nodal.NodalElementState;
 
 public class VoltageSourceBlock extends BaseEntityBlock implements IElectricBlock, ITooltipAdditionsModifier {
 	
@@ -70,7 +67,18 @@ public class VoltageSourceBlock extends BaseEntityBlock implements IElectricBloc
 	public void installCircuitElements(Level level, ElectricReference reference, BlockState instance, ComponentCircuitContext context) {
 		
 		if (level.getBlockEntity(reference.block()) instanceof VoltageSourceBlockEntity source) {
-
+			
+			String[] sourceLanes = source.getNodeLanes();
+			NodePos node = new NodePos(reference.block(), 0);
+			CircuitNode cnodeGround = CircuitNode.node(node, sourceLanes[1]);
+//			CircuitNode cnodeIntern = CircuitNode.internal(reference, "internal");
+			CircuitNode cnodeLine = CircuitNode.node(node, sourceLanes[0]);
+			NodalElementState sourceState = context.install(
+					ElectricElements.VOLTAGE_FIXED.get(), CircuitElement.element(reference, "source"), 
+					cnodeLine, cnodeGround);
+			sourceState.setParameter("U", source.getVoltage());
+			sourceState.setParameter("P", source.getPower());
+			
 //			String[] sourceLanes = source.getNodeLanes();
 //			NodePos node = new NodePos(reference.block(), 0);
 //			CircuitNode cnodeGround = CircuitNode.node(node, sourceLanes[0]);
@@ -79,13 +87,13 @@ public class VoltageSourceBlock extends BaseEntityBlock implements IElectricBloc
 //			context.installVoltage(CircuitElement.element(reference, "Ugen"), cnodeGround, cnodeInternal, source.getVoltage());
 //			context.installResistor(CircuitElement.element(reference, "Rinternal"), cnodeInternal, cnodeLine, 1);
 //			
-			String[] sourceLanes = source.getNodeLanes();
-			NodePos node = new NodePos(reference.block(), 0);
-			CircuitNode cnodeGround = CircuitNode.node(node, sourceLanes[1]);
-			CircuitNode cnodeIntern = CircuitNode.internal(reference, "internal");
-			CircuitNode cnodeLine = CircuitNode.node(node, sourceLanes[0]);
-			context.installVoltage(CircuitElement.element(reference, "Ugen"), cnodeIntern, cnodeGround, source.getVoltage());
-			context.installDiode(CircuitElement.element(reference, "Dbackflow"), cnodeIntern, cnodeLine, Diode.DEFAULT_MODEL);
+//			String[] sourceLanes = source.getNodeLanes();
+//			NodePos node = new NodePos(reference.block(), 0);
+//			CircuitNode cnodeGround = CircuitNode.node(node, sourceLanes[1]);
+////			CircuitNode cnodeIntern = CircuitNode.internal(reference, "internal");
+//			CircuitNode cnodeLine = CircuitNode.node(node, sourceLanes[0]);
+//			context.installVoltage(CircuitElement.element(reference, "PVgen"), cnodeLine, cnodeGround, source.getVoltage(), source.getPower());
+////			context.installDiode(CircuitElement.element(reference, "Dbackflow"), cnodeIntern, cnodeLine, Diode.DEFAULT_MODEL);
 			
 		}
 		
@@ -98,21 +106,29 @@ public class VoltageSourceBlock extends BaseEntityBlock implements IElectricBloc
 
 		if (level.getBlockEntity(reference.block()) instanceof VoltageSourceBlockEntity source) {
 			
+			NodalElementState sourceState = context.getElement(CircuitElement.element(reference, "Ugen"));
+			sourceState.setParameter("U", source.getVoltage());
+			sourceState.setParameter("P", source.getPower());
 			
-			CircuitElement sourceElement = CircuitElement.element(reference, "Ugen");
-			double current = -ElectricUtility.getElementCurrent(level, sourceElement);
-			double voltage = source.getVoltage();
-			double lastVoltage = context.readVoltage(sourceElement);
-			double power = current * lastVoltage;
-			if (power < 0)
-				power = 0;
-			if (power > source.getPower()) {
-				double eqres = lastVoltage / current;
-				voltage = Math.sqrt(eqres * source.getPower());
-			}
-			
-			if (Math.abs(lastVoltage - voltage) > 0.001)
-				context.changeVoltage(sourceElement, lastVoltage + (voltage - lastVoltage) * 0.2);
+//			NodalElement element;
+//
+//			CircuitElement sourceElement = CircuitElement.element(reference, "Ugen");
+//			NodalElementState s = element.newInstance(sourceElement.elementString());
+//			
+//			CircuitElement sourceElement = CircuitElement.element(reference, "Ugen");
+//			double current = -ElectricUtility.getElementCurrent(level, sourceElement);
+//			double voltage = source.getVoltage();
+//			double lastVoltage = context.readVoltage(sourceElement);
+//			double power = current * lastVoltage;
+//			if (power < 0)
+//				power = 0;
+//			if (power > source.getPower()) {
+//				double eqres = lastVoltage / current;
+//				voltage = Math.sqrt(eqres * source.getPower());
+//			}
+//			
+//			if (Math.abs(lastVoltage - voltage) > 0.001)
+//				context.changeVoltage(sourceElement, lastVoltage + (voltage - lastVoltage) * 0.2);
 			
 			
 //			CircuitElement sourceElement = CircuitElement.element(reference, "Ugen");

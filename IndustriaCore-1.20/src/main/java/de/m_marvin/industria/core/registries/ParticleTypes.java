@@ -14,8 +14,8 @@ import net.minecraftforge.registries.RegistryObject;
 public class ParticleTypes {
 	
 	private static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, IndustriaCore.MODID);
-	public static void register() {
-		PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+	public static void register(FMLJavaModLoadingContext modctx) {
+		PARTICLE_TYPES.register(modctx.getModEventBus());
 	}
 	
 	public static final RegistryObject<ParticleType<ConduitParticleOption>> CONDUIT = PARTICLE_TYPES.register("conduit", () -> (ParticleType<ConduitParticleOption>) new AdvancedParticleType<ConduitParticleOption>(false, ConduitParticleOption.DESERIALIZER, ConduitParticleOption::codec));

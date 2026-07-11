@@ -24,8 +24,8 @@ public class GraphicsUtility {
 
 	private GraphicsUtility() {}
 
-	public static final ResourceLocation UTILITY_WIDGETS_TEXTURE = new ResourceLocation(IndustriaCore.MODID, "textures/gui/utility_widgets.png");
-	public static final ResourceLocation UTILITY_WIDGETS_TEXTURE_CREATIVE = new ResourceLocation(IndustriaCore.MODID, "textures/gui/utility_widgets_creative.png");
+	public static final ResourceLocation UTILITY_WIDGETS_TEXTURE = ResourceLocation.tryBuild(IndustriaCore.MODID, "textures/gui/utility_widgets.png");
+	public static final ResourceLocation UTILITY_WIDGETS_TEXTURE_CREATIVE = ResourceLocation.tryBuild(IndustriaCore.MODID, "textures/gui/utility_widgets_creative.png");
 	
 	public static class Spacial {
 

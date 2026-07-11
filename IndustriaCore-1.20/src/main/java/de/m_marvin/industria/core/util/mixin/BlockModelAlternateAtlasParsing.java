@@ -21,7 +21,7 @@ public abstract class BlockModelAlternateAtlasParsing {
 	private ResourceLocation getAlternateAtlasIfSpecified(ResourceLocation originalAtlas, JsonObject modelJson) {
 		
 		if (modelJson.has("atlas"))
-			return new ResourceLocation(modelJson.get("atlas").getAsString());
+			return ResourceLocation.tryParse(modelJson.get("atlas").getAsString());
 		return originalAtlas;
 		
 	}

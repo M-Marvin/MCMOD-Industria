@@ -7,8 +7,10 @@ import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitElement;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitNode;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ComponentCircuitContext;
+import de.m_marvin.industria.core.registries.ElectricElements;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import net.minecraft.world.level.Level;
+import tvnlnna.nodal.NodalElementState;
 
 public class ElectricConduit extends Conduit implements IElectricConduit {
 	
@@ -69,7 +71,11 @@ public class ElectricConduit extends Conduit implements IElectricConduit {
 		NodePos[] connections = getElectricConnections(level, reference, instance);
 		String[] wireLabels = this.getWireLanes(level, reference, instance, null);
 		for (int i = 0; i < wireLabels.length; i++) {
-			context.installResistor(CircuitElement.element(reference, "Rwire_" + i), CircuitNode.node(connections[0], wireLabels[i]), CircuitNode.node(connections[1], wireLabels[i]), this.getResistancePerBlock() * instance.getLength());
+//			context.installResistor(CircuitElement.element(reference, "Rwire_" + i), CircuitNode.node(connections[0], wireLabels[i]), CircuitNode.node(connections[1], wireLabels[i]), this.getResistancePerBlock() * instance.getLength());
+			NodalElementState resistorState = context.install(
+					ElectricElements.RESISTOR.get(), CircuitElement.element(reference, "wire_" + i), 
+					CircuitNode.node(connections[0], wireLabels[i]), CircuitNode.node(connections[1], wireLabels[i]));
+			resistorState.setParameter("R", this.getResistancePerBlock() * instance.getLength());
 		}
 	}
 	

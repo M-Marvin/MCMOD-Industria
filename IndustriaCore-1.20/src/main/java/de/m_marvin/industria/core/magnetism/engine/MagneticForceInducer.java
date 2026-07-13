@@ -12,7 +12,7 @@ import de.m_marvin.industria.core.util.GameUtility;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 
-public class MagneticForceInducer extends ForcesInducer {
+public final class MagneticForceInducer extends ForcesInducer {
 	
 	protected LongOpenHashSet fields = new LongOpenHashSet();
 

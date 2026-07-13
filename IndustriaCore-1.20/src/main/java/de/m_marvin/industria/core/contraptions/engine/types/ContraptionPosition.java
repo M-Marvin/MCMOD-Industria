@@ -105,7 +105,7 @@ public class ContraptionPosition {
 	public ShipTeleportData toTeleport() {
 		return new ShipTeleportDataImpl(
 				this.position.writeTo(new Vector3d()), 
-				new org.joml.Quaterniond(this.orientation.i, this.orientation.j, this.orientation.k, this.orientation.r), 
+				new org.joml.Quaterniond(this.orientation.i, this.orientation.j, this.orientation.k, this.orientation.r).normalize(), 
 				this.velocity.isPresent() ? this.velocity.get().writeTo(new Vector3d()) : new Vector3d(), 
 				this.omega.isPresent() ? this.omega.get().writeTo(new Vector3d()) : new Vector3d(), 
 				DIMENSION_REGISTRY + ":" + this.dimension.toString(), 

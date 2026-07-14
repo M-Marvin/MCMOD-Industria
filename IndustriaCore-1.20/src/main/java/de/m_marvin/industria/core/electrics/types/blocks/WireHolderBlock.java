@@ -78,7 +78,7 @@ public class WireHolderBlock extends Block implements IElectricBlock, ITooltipAd
 		return VoxelShapeUtility.stateCachedShape(ShapeType.MISC, pState, () -> {
 			return VoxelShapeUtility.transformation()
 					.centered()
-					.rotateX(-90)
+					.rotateX(90)
 					.rotateFromNorth(pState.getValue(BlockStateProperties.FACING))
 					.uncentered()
 					.transform(SHAPE);

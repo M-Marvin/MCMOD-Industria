@@ -82,20 +82,19 @@ public class NodePointSupplier {
 	public ConduitNode[] getNodes(BlockState state) {
 		if (!state2nodes.containsKey(state)) {
 			List<ConduitNode> nodes = new ArrayList<>();
-			for (int i = 0; i < this.nodes.size(); i++) {
-				nodes.add(new ConduitNode(this.nodes.get(i).getType(),this.nodes.get(i).getMaxConnections(), this.nodes.get(i).getOffset()));
+			for (var node : this.nodes) {
+				nodes.add(new ConduitNode(node.getType(), node.getMaxConnections(), node.getOffset()));
 			}
 			for (Property<?> property : state.getProperties()) {
 				if (this.modifiers.containsKey(property)) {
-					for (int i = 0; i < nodes.size(); i++) {
-						ConduitNode node = nodes.get(i);
+					for (var node : nodes) {
 						Vec3i originalPosition = node.getOffset();
 						Vec3i modifiedPosition = this.modifiers.get(property).apply(originalPosition, state.getValue(property));
 						node.changeOffset(modifiedPosition);	
 					}
 				}
 			}
-			state2nodes.put(state, nodes.toArray(i -> new ConduitNode[i]));
+			state2nodes.put(state, nodes.toArray(ConduitNode[]::new));
 		}
 		return state2nodes.get(state);
 	}

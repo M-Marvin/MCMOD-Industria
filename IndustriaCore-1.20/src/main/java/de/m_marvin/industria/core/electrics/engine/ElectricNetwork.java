@@ -265,7 +265,7 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 	}
 	
 	public void rebuildCircuits() {
-			
+		
 		resetCircuits();
 	
 		for (var component : listComponents()) {
@@ -284,7 +284,10 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 
 	public void stepElectrics() {
 		
-		if (isOnline() && !this.element2circuitMap.isEmpty()) {
+		if (this.element2circuitMap.isEmpty())
+			rebuildCircuits();
+		
+		if (isOnline()) {
 
 			for (var component : listComponents()) {
 				try {

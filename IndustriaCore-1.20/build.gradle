@@ -21,6 +21,12 @@ plugins {
 	id 'net.neoforged.moddev.legacyforge' version '2.0.137'
 }
 
+allprojects {
+    eclipse.project {
+        natures 'org.eclipse.buildship.core.gradleprojectnature'
+    }
+}
+
 // While _we_ don't use kotlin, this is still needed for VS to compile properly
 // (It used to be included transitively, but now we don't use a transitive VS dep)
 apply plugin: "org.jetbrains.kotlin.jvm"

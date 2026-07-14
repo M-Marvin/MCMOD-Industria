@@ -236,10 +236,10 @@ public class ContraptionUtility {
 	
 	/* Util stuff */
 
-	public static long getGroundBodyId(Level level) {
-		ContraptionHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONTRAPTION_HANDLER_CAPABILITY);
-		return handler.getGroundBodyId();
-	}
+//	public static long getGroundBodyId(Level level) {
+//		ContraptionHandlerCapability handler = GameUtility.getLevelCapability(level, Capabilities.CONTRAPTION_HANDLER_CAPABILITY);
+//		return handler.getGroundBodyId();
+//	}
 	
 	public static void triggerBlockChange(Level level, BlockPos pos, BlockState prevState, BlockState newState) {
 		BlockStateInfo.INSTANCE.onSetBlock(level, pos, prevState, newState);

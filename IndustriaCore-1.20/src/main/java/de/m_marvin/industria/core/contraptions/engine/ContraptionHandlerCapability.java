@@ -149,11 +149,11 @@ public class ContraptionHandlerCapability implements ICapabilitySerializable<Com
 		return this.level.dimension().location();
 	}
 	
-	public long getGroundBodyId() {
-		if (this.level.isClientSide()) return -1;
-		VsiServerShipWorld shipWorld = getShipWorld();
-		return shipWorld.getDimensionToGroundBodyIdImmutable().get(Registries.DIMENSION.location().toString() + ":" + getDimension().toString());
-	}
+//	public long getGroundBodyId() {
+//		if (this.level.isClientSide()) return -1;
+//		VsiServerShipWorld shipWorld = getShipWorld();
+//		return shipWorld.getDimensionToGroundBodyIdImmutable().get(Registries.DIMENSION.location().toString() + ":" + getDimension().toString());
+//	}
 	
 	
 	
@@ -401,7 +401,7 @@ public class ContraptionHandlerCapability implements ICapabilitySerializable<Com
 		
 		// Create new contraption at center of bounds
 		Vec3d contraptionWorldPos = MathUtility.getMiddle(structureCornerMin, structureCornerMax);
-		ContraptionPosition contraptionPosition = new ContraptionPosition(new Quaterniond(new Vec3d(0, 1, 1), 0), contraptionWorldPos, this.getDimension());
+		ContraptionPosition contraptionPosition = new ContraptionPosition(new Quaterniond(new Vec3d(0, 0, 0), 1), contraptionWorldPos, this.getDimension());
 		ServerContraption contraption = createContraptionAt(contraptionPosition, scale);
 		
 		// Create template from world blocks
@@ -435,7 +435,8 @@ public class ContraptionHandlerCapability implements ICapabilitySerializable<Com
 		}
 		
 		// Set the final position gain, since the contraption moves slightly if blocks are added
-		if (contraption != null) teleportContraption(contraption, contraptionPosition, true);
+		if (contraption != null) 
+			teleportContraption(contraption, contraptionPosition, true);
 		
 		return true;
 		
@@ -468,7 +469,7 @@ public class ContraptionHandlerCapability implements ICapabilitySerializable<Com
 		
 		// Create new contraption at min corner
 		Vec3d shipPos = Vec3d.fromVec(templateOrigin).addI(Vec3d.fromVec(template.getSize()).div(2.0));
-		ContraptionPosition contraptionPosition = new ContraptionPosition(new Quaterniond(new Vec3d(0, 1, 1), 0), shipPos, this.getDimension());
+		ContraptionPosition contraptionPosition = new ContraptionPosition(new Quaterniond(new Vec3d(0, 0, 0), 1), shipPos, this.getDimension());
 		ServerContraption contraption = createContraptionAt(contraptionPosition, scale);
 		
 		// Place blocks on ship
@@ -497,7 +498,7 @@ public class ContraptionHandlerCapability implements ICapabilitySerializable<Com
 			this.level.removeBlock(contraptionCenter, false);
 		}
 
-		// Set the final position gain, since the contraption moves slightly if blocks are added
+		// Set the final position again, since the contraption moves slightly if blocks are added
 		if (contraption != null) teleportContraption(contraption, contraptionPosition, true);
 		
 		return true;

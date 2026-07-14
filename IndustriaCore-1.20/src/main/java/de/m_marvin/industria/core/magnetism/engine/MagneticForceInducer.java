@@ -50,6 +50,7 @@ public final class MagneticForceInducer extends ForcesInducer {
 			}
 			
 		}
+		
 	}
 	
 }

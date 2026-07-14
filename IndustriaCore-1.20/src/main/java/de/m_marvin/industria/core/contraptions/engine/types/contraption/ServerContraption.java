@@ -74,7 +74,13 @@ public class ServerContraption extends Contraption {
 	}
 	
 	public <T extends ContraptionAttachment> void removeAttachment(Class<T> attachmentClass) {
-		saveAttachment(attachmentClass, null);
+		ServerShipWorld shipWorld = VSGameUtilsKt.getShipObjectWorld(getLevel());
+		Optional<LoadedServerShip> loadedShip = shipWorld.getLoadedShips().stream().filter(s -> s.getId() == getId()).findAny();
+		if (loadedShip.isEmpty()) {
+			IndustriaCore.LOGGER.warn("unable to get LoadedServerShip instance of contraption " + getId());
+			return;
+		}
+		loadedShip.get().removeAttachment(attachmentClass);
 	}
 	
 	@SuppressWarnings("unchecked")

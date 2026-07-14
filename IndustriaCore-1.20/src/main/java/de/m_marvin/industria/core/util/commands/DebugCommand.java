@@ -10,6 +10,7 @@ import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitNode;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability.ElectricComponent;
 import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
+import de.m_marvin.industria.core.util.DecimalPrefixFormater;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -85,8 +86,7 @@ public class DebugCommand {
 			for (int i = 0; i < lanes.length; i++) {
 				double potential = ElectricUtility.getFloatingNodeVoltage(level, CircuitNode.node(node, lanes[i]));
 				final int id = i;
-				// FIXME
-				//source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.node_voltages.lane", id, lanes[id], DecimalPrefixFormater.formatDouble(potential)), false);
+				source.getSource().sendSuccess(() -> Component.translatable("industriacore.commands.debug.node_voltages.lane", id, lanes[id], DecimalPrefixFormater.formatDouble(potential)), false);
 			}
 		}
 		return 1;

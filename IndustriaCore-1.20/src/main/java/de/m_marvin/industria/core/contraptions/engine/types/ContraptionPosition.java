@@ -91,12 +91,11 @@ public class ContraptionPosition {
 		if (useGeometricCenter) {
 			AABBic shipBounds = contraption.getShip().getShipAABB();
 			Vec3d shipCoordCenter = MathUtility.getMiddle(new Vec3d(shipBounds.minX(), shipBounds.minY(), shipBounds.minZ()), new Vec3d(shipBounds.maxX(), shipBounds.maxY(), shipBounds.maxZ()));
-			Vec3d shipCoordMassCenter = Vec3d.fromVec(contraption.getShip().getKinematics().getPositionInModel()).add(new Vec3d(0.5, 0.5, 0.5)); // TODO verify center of mass which came from ShipIntertiaData before
+			Vec3d shipCoordMassCenter = Vec3d.fromVec(contraption.getShip().getInertiaData().getCenterOfMass());
 			Vec3d centerOfMassOffset = ContraptionUtility.toWorldPos(contraption.getShip().getTransform(), shipCoordMassCenter).sub(ContraptionUtility.toWorldPos(contraption.getShip().getTransform(), shipCoordCenter));
 			
 			ContraptionPosition temp = new ContraptionPosition(this);
 			temp.getPosition().addI(centerOfMassOffset);
-			
 			return temp.toTeleport();
 		}
 		return toTeleport();

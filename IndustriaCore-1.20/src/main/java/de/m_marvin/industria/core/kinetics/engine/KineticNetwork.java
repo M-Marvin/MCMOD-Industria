@@ -257,7 +257,6 @@ public class KineticNetwork extends SynchronizedFunctionalNetwork<KineticNetwork
 				if (this.currentConsumtion > this.currentProduction) {
 					this.speed = 0;
 					setState(PowerNetState.INACTIVE);
-					System.out.println("TEST1");
 				} else {
 					setState(PowerNetState.ACTIVE);
 				}

@@ -18,7 +18,7 @@ public class ConduitNode {
 	private final NodeType type;
 	
 	public ConduitNode(NodeType type, int maxConnections, Vec3i offset) {
-		this.offset = offset;
+		this.offset = offset.copy();
 		this.maxConnections = maxConnections;
 		this.type = type;
 	}

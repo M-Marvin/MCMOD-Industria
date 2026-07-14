@@ -264,22 +264,24 @@ public class Conduit extends ConduitBehavior implements ItemLike {
 		if (!conduitEntity.getLevel().isClientSide()) {
 			shape.contraptionA = ContraptionUtility.getContraptionOfBlock(level, conduitEntity.getPosition().getNodeApos());
 			shape.contraptionB = ContraptionUtility.getContraptionOfBlock(level, conduitEntity.getPosition().getNodeBpos());
-			long contraptionIdA = shape.contraptionA == null ? ContraptionUtility.getGroundBodyId(level) : shape.contraptionA.getId();
-			long contraptionIdB = shape.contraptionB == null ? ContraptionUtility.getGroundBodyId(level) : shape.contraptionB.getId();
+			Long contraptionIdA = shape.contraptionA == null ? null : shape.contraptionA.getId();
+			Long contraptionIdB = shape.contraptionB == null ? null : shape.contraptionB.getId();
 			
-			double comp = state.getConstraintCompensation(conduitEntity);
-			double force = state.getConstraintForce(conduitEntity);
-			Vec3d contraptionNodePosA = conduitEntity.getPosition().calculateContraptionNodeA(level);
-			Vec3d contraptionNodePosB = conduitEntity.getPosition().calculateContraptionNodeB(level);
-			VSJoint constraint = new VSDistanceJoint(contraptionIdA, new VSJointPose(
-					contraptionNodePosA.writeTo(new Vector3d()), new Quaterniond()), 
-					contraptionIdB, new VSJointPose(contraptionNodePosB.writeTo(new Vector3d()), new Quaterniond()), 
-					new VSJointMaxForceTorque((float) force, 0F), comp, 
-					0F, conduitEntity.getLength(), null, null, null);
-//TODO			VSJoint constraint = new VSDistanceJoint(contraptionIdA, contraptionIdB, comp, contraptionNodePosA.writeTo(new Vector3d()), contraptionNodePosB.writeTo(new Vector3d()), force, conduitEntity.getLength());
 			shape.constraint = OptionalInt.empty();
-			final var shapeF = shape;
-			ContraptionUtility.addConstraint(level, constraint).thenApply(constraintId -> shapeF.constraint = OptionalInt.of(constraintId));
+			if (contraptionIdA != contraptionIdB)  {
+				double comp = state.getConstraintCompensation(conduitEntity);
+				double force = state.getConstraintForce(conduitEntity);
+				Vec3d contraptionNodePosA = conduitEntity.getPosition().calculateContraptionNodeA(level);
+				Vec3d contraptionNodePosB = conduitEntity.getPosition().calculateContraptionNodeB(level);
+				VSJoint constraint = new VSDistanceJoint(
+						contraptionIdA, new VSJointPose(contraptionNodePosA.writeTo(new Vector3d()), new Quaterniond()), 
+						contraptionIdB, new VSJointPose(contraptionNodePosB.writeTo(new Vector3d()), new Quaterniond()), 
+						new VSJointMaxForceTorque((float) force, (float) force), comp, 
+						0F, conduitEntity.getLength(), null, null, null);
+				final var shapeF = shape;
+				ContraptionUtility.addConstraint(level, constraint).thenApply(constraintId -> shapeF.constraint = OptionalInt.of(constraintId));
+			}
+			
 		}
 		
 		return shape;

@@ -4,12 +4,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
-import de.m_marvin.unimat.api.IQuaternionMath.EulerOrder;
 import de.m_marvin.unimat.impl.Matrix4f;
 import de.m_marvin.unimat.impl.Quaternionf;
 import de.m_marvin.univec.api.IVector4;
 import de.m_marvin.univec.impl.Vec3f;
-import de.m_marvin.univec.impl.Vec3i;
 import de.m_marvin.univec.impl.Vec4f;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -71,9 +69,9 @@ public class VoxelShapeUtility {
 		
 		public VoxelShapeRotationBuilder rotateFromNorth(Direction direction) {
 			if (direction.getAxis() == Axis.Y) {
-				return rotateX(direction.getAxisDirection() == AxisDirection.POSITIVE ? -90 : 90);
+				return rotateX(direction.getAxisDirection() == AxisDirection.POSITIVE ? 90 : -90);
 			} else {
-				return rotateY((direction.get2DDataValue() - 2) * 90);
+				return rotateY((direction.get2DDataValue() - 2) * -90);
 			}
 		}
 		
@@ -87,8 +85,8 @@ public class VoxelShapeUtility {
 
 		public VoxelShapeRotationBuilder rotateFromAxisY(Axis axis) {
 			switch (axis) {
-			case X: return rotateZ(+90);
-			case Z: return rotateX(-90);
+			case X: return rotateZ(-90);
+			case Z: return rotateX(+90);
 			default: return this;
 			}
 		}
@@ -124,7 +122,7 @@ public class VoxelShapeUtility {
 		}
 		
 		public VoxelShapeRotationBuilder rotate(int x, int y, int z) {
-			this.matrix = Matrix4f.rotation(new Quaternionf().setEulerI(new Vec3i(x, y, z), EulerOrder.XYZ, true)).mul(this.matrix);
+			this.matrix = Matrix4f.rotation(new Quaternionf().setVectorI(new Vec3f(x, y, z), true)).mul(this.matrix);
 			return this;
 		}
 

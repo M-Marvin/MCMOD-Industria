@@ -246,7 +246,7 @@ public class MagneticField {
 		Vec3d offset = otherCenter.sub(thisCenter);
 		double angle = offset.angle(thisFieldVector);
 		Vec3d angleVec = offset.cross(thisFieldVector).tryNormalize();
-		Quaterniond interactionVecRot = new Quaterniond(angleVec, angle * -2.0);
+		Quaterniond interactionVecRot = new Quaterniond().setVectorAngleI(angleVec, angle * -2.0, false);
 		
 		return interactionVecRot.transform(thisFieldVector.mul(this.getIntensityLinearAt(offset.length())));
 	}

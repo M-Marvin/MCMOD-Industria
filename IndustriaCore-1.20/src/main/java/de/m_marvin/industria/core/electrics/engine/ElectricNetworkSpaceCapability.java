@@ -297,7 +297,7 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 			super.deserializeNbt(nbt);
 			
 			IElectric.Type componentType = IElectric.Type.valueOf(nbt.getString("ComponentType").toUpperCase());
-			ResourceLocation typeName = new ResourceLocation(nbt.getString("Type"));
+			ResourceLocation typeName = ResourceLocation.tryParse(nbt.getString("Type"));
 			Object typeObject = componentType.getRegistry().getValue(typeName);
 			if (typeObject instanceof IElectric) {
 				this.type = (IElectric<I, T>) typeObject;

@@ -144,13 +144,13 @@ public class MagneticFieldRenderer {
 				vertexconsumer, matrixStack, 
 				new Vec3f(0.5F, 0.5F, 0.5F), 
 				new Vec3f(fieldVector),
-				255, 0, 0, 255);
+				1F, 0, 0, 1F);
 
 		GraphicsUtility.Spacial.renderVector(
 				vertexconsumer, matrixStack, 
 				new Vec3f(0.5F, 0.5F, 0.5F), 
 				new Vec3f(inducedVector),
-				0, 255, 0, 255);
+				0, 1F, 0, 1F);
 		
 		matrixStack.popPose();
 		
@@ -186,13 +186,13 @@ public class MagneticFieldRenderer {
 				vertexconsumer, matrixStack, 
 				magneticCenter, 
 				new Vec3f(fieldVectorLinear).sub(new Vec3f(0.2F, 0.2F, 0.2F)),
-				255, 0, 0, 255);
+				1F, 0, 0, 1F);
 		
 		GraphicsUtility.Spacial.renderVector(
 				vertexconsumer, matrixStack, 
 				magneticCenter.add(new Vec3f(0.2F, 0.2F, 0.2F)), 
 				new Vec3f(fieldVectorInduced),
-				0, 255, 0, 255);
+				0, 1F, 0, 1F);
 
 		LevelRenderer.renderLineBox(
         		matrixStack, vertexconsumer, 

@@ -106,7 +106,7 @@ public class VoltageSourceBlock extends BaseEntityBlock implements IElectricBloc
 
 		if (level.getBlockEntity(reference.block()) instanceof VoltageSourceBlockEntity source) {
 			
-			NodalElementState sourceState = context.getElement(CircuitElement.element(reference, "Ugen"));
+			NodalElementState sourceState = context.getElement(CircuitElement.element(reference, "source"));
 			sourceState.setParameter("U", source.getVoltage());
 			sourceState.setParameter("P", source.getPower());
 			

@@ -330,21 +330,18 @@ public class MathUtility {
 		return rotatePoint(point, rotationAxis, angle, degrees);
 	}
 
-	public static Vec3d rotatePoint(Vec3d point, Vec3d axis, float angle, boolean degrees) {
-		if (degrees) angle = (float) Math.toRadians(angle);
-		Quaterniond quat = new Quaterniond(axis, angle);
+	public static Vec3d rotatePoint(Vec3d point, Vec3d axis, double angle, boolean degrees) {
+		Quaterniond quat = new Quaterniond().setVectorAngleI(axis, angle, degrees);
 		return quat.transform(point);
 	}
 	
 	public static Vec3f rotatePoint(Vec3f point, Vec3f axis, float angle, boolean degrees) {
-		if (degrees) angle = (float) Math.toRadians(angle);
-		Quaternionf quat = new Quaternionf(axis, angle);
+		Quaternionf quat = new Quaternionf().setVectorAngleI(axis, angle, degrees);
 		return quat.transform(point);
 	}
 	
 	public static Vec3i rotatePoint(Vec3i point, Vec3f axis, float angle, boolean degrees) {
-		if (degrees) angle = (float) Math.toRadians(angle);
-		Quaternionf quat = new Quaternionf(axis, angle);
+		Quaternionf quat = new Quaternionf().setVectorAngleI(axis, angle, degrees);
 		Vec3f transform = quat.transform(point);
 		return new Vec3i(Math.round(transform.x), Math.round(transform.y), Math.round(transform.z));
 	}

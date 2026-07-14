@@ -36,8 +36,6 @@ public class ModelManagerCustomAtlasesMixin {
 			at = @At(value = "FIELD", target = "net/minecraft/client/resources/model/ModelManager.VANILLA_ATLASES : Ljava/util/Map;")
 	)
 	private Map<ResourceLocation, ResourceLocation> getAtlases(Map<ResourceLocation, ResourceLocation> originalAtlases) {
-		System.out.println("CUSTOM ATLASES GET");
-		
 		if (vanillaAndCustomAtlases == null) {
 			Map<ResourceLocation, ResourceLocation> atlases = new HashMap<ResourceLocation, ResourceLocation>();
 			ModelAtlasRegisterEvent registerCustomAtlasesEvent = new ModelAtlasRegisterEvent(atlases);

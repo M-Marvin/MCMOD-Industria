@@ -1,0 +1,43 @@
+PIGMENTE:
+
+weiß:
+  Calciumcarbonat/Kohlensaurer Kalk (aus Kreide- oder Calcitgestein)
+  Zinkoxid
+
+hellgrau:
+  Calciumcarbonat/Kohlensaurer Kalk (aus Kreide- oder Calcitgestein)
+
+
+grau:
+
+schwarz:
+  Karbonschwarz
+
+braun:
+
+rot:
+  Eisenoxid
+  Zinnober
+
+orange:
+
+gelb:
+  Wolframvanadat
+  Blei-Zinn-Gelb
+
+hellgrün:
+
+dunkelgrün:
+
+türkis:
+
+hellblau:
+
+blau:
+  Lapislazuli / Ultramarin
+
+violett:
+
+magenta:
+
+rosa:

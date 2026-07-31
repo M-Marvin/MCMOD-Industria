@@ -1,3 +1,0 @@
--ANZUPASSENDE STEINARTEN (POLIERT): (Endstein?)
-
-Generell bitte lieber aus dem Versandordner->Unsortiert die Texturen kopieren als aus dem alten Mod-Ordner, da der VO->Unortiert immer aktuelle(re) Versionen enthält.

@@ -1,0 +1,34 @@
+Silbererz:
+ - Seltenheit etwa wie Lapislazuli
+ - zwischen y 32 und y -32
+ - Adergrößen etwa 1-3 Blöcke
+
+
+Bleierz:
+- Seltenheit etwa wie Redstone
+- zwischen y 70 und y -16
+- Adergrößen etwa 2-5 Blöcke
+
+
+Bauxit:
+ - Seltenheit etwa halb so oft wie Diorit/Andesit/Granitblasen
+ - nur in bestimmten Biomen: Jungle und Varianten, Gebirge und Varianten
+ - zwischen y 128 und y - 64
+ - Adergrößen wie bei Diorit/Andesit/Granit
+
+Wolframit:
+ - Seltenheit etwa 1/4 so oft wie Diorit/Andesit/Granitblasen
+ - zwischen y 48 und y -16
+ - Adergrößen etwa 1/3 wie bei Diorit/Andesit/Granit
+
+
+Zinkerz:
+ - Seltenheit etwa wie Kupfer (normale Generierung)
+ - zwischen y 64 und y -32
+ - Adergrößen etwa wie bei Gold
+
+
+Zinnerz:
+ - Seltenheit etwa wie Eisen
+ - zwischen y 96 und y 16
+ - Adergrößen etwa wie bei Gold

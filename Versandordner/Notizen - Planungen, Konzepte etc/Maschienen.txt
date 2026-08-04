@@ -16,3 +16,14 @@
 [x] Rohr
 [ ] Schlauch
 [x] Kabel
+
+Idee zur Herstellung der Metallteile vor der Freischaltung größerer Maschinen:
+Umfunktionierung des Vanilla-Schmelzofens:
+
+Zum Eingabe- und Ausgabeslot wird noch ein Formen-Slot hinzugefügt, in den eine Gussform eingelegt wird.
+Mit dieser Form kann ein Barren dann in die jeweilige Form umgewandelt werden (etwa Platte). So muss man, bevor man die Walzmaschine freischaltet, keine Barren
+in der Werkbank mit dem Hammer platthämmern. Die Formen sollten allerdings eine sehr geringe Haltbarkeit haben.
+Der Ofen muss weiterhin mit normalem Brennmaterial betrieben werden, außerdem kann die Form nicht mit einem Trichter eingelegt werden. So ist der Ofen wirklich nur
+am Anfang attraktiv hierfür.
+Legt man keine Form ein, kann er weiter für seine Vanilla-Funktion verwendet werden (schnelleres Schmelzen von metallischen und Stein-Objekten). Bei Schmelzen
+mit Formen ist er aber nicht schneller.

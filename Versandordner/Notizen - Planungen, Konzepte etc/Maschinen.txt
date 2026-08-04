@@ -27,3 +27,6 @@ Der Ofen muss weiterhin mit normalem Brennmaterial betrieben werden, außerdem k
 am Anfang attraktiv hierfür.
 Legt man keine Form ein, kann er weiter für seine Vanilla-Funktion verwendet werden (schnelleres Schmelzen von metallischen und Stein-Objekten). Bei Schmelzen
 mit Formen ist er aber nicht schneller.
+
+Diese Gussformen sollten recht günstig sein und etwa aus Ton, Erde oder Schlamm hergestellt werden, evtl im normalen Ofen gebrannt. Sie entsprechen nicht den Gussformen
+für die spätere, "richtige", Gießerei.

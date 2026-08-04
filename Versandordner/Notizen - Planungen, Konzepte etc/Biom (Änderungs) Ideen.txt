@@ -22,10 +22,10 @@
 
 #NEBELWALD
 -----------
-> Klima: feucht-warm bis gemäßigt, in höhreren Stufen gemäßigt bis kalt (kein Schnee)
+> Klima: feucht-warm bis gemäßigt, in höheren Stufen gemäßigt bis kalt (kein Schnee)
 > Boden: Gras
 > Flora: Gras, Hohes Gras, Farn, Hoher Farn, Gestrüpp, Eichen, Blumen (geringe Farbvarianz), Moos, selten Blütenbäume, Hängeranken
-> Fauna: Kiwis, Hühner, Schnecken, Libellen, selten Ozelots und Papageien
+> Fauna: Kiwis, Hühner, Schnecken, Libellen (selten Ozelots und Papageien ???)
 > Sonst: Hügelige Landschaft, Gischtfarbener Nebel, Seen mit kristallfarben-blauem Wasser, Steinsteilwände, Generierung z.B. am Gebirgsfuß
 > Strkt: -
 
@@ -56,7 +56,7 @@
 #KALKSINTERTERASSEN (Küstenbiom)
 --------------------------------
 > Klima: warm bis gemäßigt
-> Boden: Kalkstein, Wasser
+> Boden: Kazit, Wasser
 > Flora: -
 > Fauna: -
 > Sonst: -
@@ -71,7 +71,7 @@
 > Flora: Leuchtflechten, Braune Pilze
 > Fauna: Standart-Höhenmobs, Milben?
 > Sonst: Knochenfelsspitzen, -bögen, -korallen, verstärkt Magmaseen, Treppenklippen
-> Strkt: Standart-Höhenstrukturen, evtl neues Dungeon?
+> Strkt: Standart-Höhlenstrukturen, evtl neues Dungeon?
 
 ===============
 

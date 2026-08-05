@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nodalElement name="UP" nonLinear="true" timeVariant="false">
+	<node name="p_A" constant="i_A"/>
+	<node name="p_B" constant="i_B"/>
+	<local name="i_src" constant="u_src"/>
+	<variable name="U" default="1.0"/>
+	<variable name="P" default="1.0"/>
+	<variable name="eps" default="0.01"/>
+	<functions><![CDATA[
+		U_src(U,P,i_src):=0-i_src>P/U?0-P/i_src:U;
+	]]></functions>
+	<compute Ulcm="U_src(U,P,i_src)" derive="i_src"/>
+	<stampA>
+				p_A		p_B		i_src
+		i_A		0.0		0.0		1.0
+		i_B		0.0		0.0		-1.0
+		u_src	1.0		-1.0	Ulcmd
+	</stampA>
+	<stampZ>
+		i_A		0.0
+		i_B		0.0
+		u_src	Ulcm+i_src*Ulcmd
+	</stampZ>
+</nodalElement>

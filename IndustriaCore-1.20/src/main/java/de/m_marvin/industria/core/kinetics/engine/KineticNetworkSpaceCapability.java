@@ -84,9 +84,11 @@ public class KineticNetworkSpaceCapability extends FriendlyFunctionalNetworkSpac
 	}
 	
 	public KineticNetworkSpaceCapability(Level level) {
-		super(() -> new KineticNetwork(() -> level), () -> new KineticComponent(null, null, null), Config.KINETIC_NETWORK_TRACE_DEPTH.get());
+		super(Config.KINETIC_NETWORK_TRACE_DEPTH.get());
 		this.level = level;
 	}
+	
+	
 	
 	/* Event handling */
 	
@@ -157,6 +159,16 @@ public class KineticNetworkSpaceCapability extends FriendlyFunctionalNetworkSpac
 	/* Kinetic handling */
 
 	@Override
+	protected KineticNetwork newNetwork() {
+		return new KineticNetwork(() -> level);
+	}
+
+	@Override
+	protected KineticComponent newComponent() {
+		return new KineticComponent();
+	}
+
+	@Override
 	protected CompoundTag serializeReference(KineticReference reference) {
 		return reference.writeNbt();
 	}
@@ -172,6 +184,8 @@ public class KineticNetworkSpaceCapability extends FriendlyFunctionalNetworkSpac
 	public static class KineticComponent extends FunctionalNetworkSpace.Component<KineticReference> {
 		protected BlockState instance;
 		protected IKineticBlock type;
+		
+		public KineticComponent() {}
 		
 		public KineticComponent(KineticReference reference, IKineticBlock type, BlockState instance) {
 			this.reference = reference;

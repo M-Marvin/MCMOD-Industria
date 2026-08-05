@@ -10,9 +10,9 @@ import com.google.common.base.Predicate;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitElement;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitNode;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ComponentCircuitContext;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ElectricElement;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ElectricNode;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability.ElectricComponent;
 import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
@@ -169,7 +169,7 @@ public class ElectricUtility {
 		}
 	}
 	
-	public static double getFloatingNodeVoltage(Level level, CircuitNode node) {
+	public static double getFloatingNodeVoltage(Level level, ElectricNode node) {
 		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
 		return networkSpace.getFloatingNodeVoltage(node);
 	}
@@ -185,13 +185,13 @@ public class ElectricUtility {
 	 * @param laneN The second nodes lane name
 	 * @return The voltage between the two nodes (first node potential - second node potential)
 	 */
-	public static double getVoltageBetween(Level level, CircuitNode nodeA, CircuitNode nodeB) {
+	public static double getVoltageBetween(Level level, ElectricNode nodeA, ElectricNode nodeB) {
 		double v1 = ElectricUtility.getFloatingNodeVoltage(level, nodeA);
 		double v2 = ElectricUtility.getFloatingNodeVoltage(level, nodeB);
 		return v1 - v2;
 	}
 	
-	public static NodalElementState getElementState(Level level, CircuitElement element) {
+	public static NodalElementState getElementState(Level level, ElectricElement element) {
 		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
 		return networkSpace.getElement(element);
 	}
@@ -207,7 +207,7 @@ public class ElectricUtility {
 //	 * @param group Group id of the local node
 //	 * @param localLanes The internal node lane names
 //	 */
-	public static void installJunctionResistors(Level level, ComponentCircuitContext context, IElectricBlock block, ElectricReference reference, BlockState instance, double junctionResistance, CircuitNode[] targetNodes) {
+	public static void installJunctionResistors(Level level, ComponentCircuitContext context, IElectricBlock block, ElectricReference reference, BlockState instance, double junctionResistance, ElectricNode[] targetNodes) {
 		NodePos[] conduitNodes = block.getElectricConnections(level, reference, instance);
 		installJunctionResistors(level, context, reference, junctionResistance, conduitNodes, targetNodes);
 	}
@@ -224,16 +224,16 @@ public class ElectricUtility {
 //	 * @param group Group id of the local node
 //	 * @param localLanes The internal node lane names
 //	 */
-	public static void installJunctionResistors(Level level, ComponentCircuitContext context, ElectricReference reference, double junctionResistance, NodePos[] conduitNodes, CircuitNode[] targetNodes) {
+	public static void installJunctionResistors(Level level, ComponentCircuitContext context, ElectricReference reference, double junctionResistance, NodePos[] conduitNodes, ElectricNode[] targetNodes) {
 		int i = 0;
 		for (NodePos conduitNode : conduitNodes) {
 			for (String lane : getLaneLabelsSummarized(level, conduitNode)) {
-				for (CircuitNode targetNode : targetNodes) {
+				for (ElectricNode targetNode : targetNodes) {
 					if (targetNode.nodeName().equals(lane)) {
-//						context.installResistor(CircuitElement.element(reference, "junction_" + i++), targetNode, CircuitNode.node(conduitNode, lane), 0.0);
+//						context.installResistor(ElectricElement.element(reference, "junction_" + i++), targetNode, ElectricNode.node(conduitNode, lane), 0.0);
 						NodalElementState resistorState = context.install(
-								ElectricElements.RESISTOR.get(), CircuitElement.element(reference, "junction_" + i++), 
-								CircuitNode.internal(reference, "junction_" + lane), CircuitNode.node(conduitNode, lane));
+								ElectricElements.RESISTOR.get(), ElectricElement.element(reference, "junction_" + i++), 
+								ElectricNode.internal(reference, "junction_" + lane), ElectricNode.node(conduitNode, lane));
 						resistorState.setParameter("R", 0.01); // TODO
 					}
 				}
@@ -257,10 +257,10 @@ public class ElectricUtility {
 	public static void installJunctionResistors(Level level, ComponentCircuitContext context, ElectricReference reference, double junctionResistance, NodePos[] conduitNodes) {
 		for (NodePos conduitNode : conduitNodes) {
 			for (String lane : getLaneLabelsSummarized(level, conduitNode)) {
-//				context.installResistor(CircuitElement.element(reference, "Rjunction_" + lane), CircuitNode.internal(reference, "junction_" + lane), CircuitNode.node(conduitNode, lane), 0.0);
+//				context.installResistor(ElectricElement.element(reference, "Rjunction_" + lane), ElectricNode.internal(reference, "junction_" + lane), ElectricNode.node(conduitNode, lane), 0.0);
 				NodalElementState resistorState = context.install(
-						ElectricElements.RESISTOR.get(), CircuitElement.element(reference, "junction_" + lane), 
-						CircuitNode.internal(reference, "junction_" + lane), CircuitNode.node(conduitNode, lane));
+						ElectricElements.RESISTOR.get(), ElectricElement.element(reference, "junction_" + lane), 
+						ElectricNode.internal(reference, "junction_" + lane), ElectricNode.node(conduitNode, lane));
 				resistorState.setParameter("R", 0.01); // TODO
 			}
 		}

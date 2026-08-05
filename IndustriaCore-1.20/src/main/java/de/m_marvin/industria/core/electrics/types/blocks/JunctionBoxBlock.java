@@ -111,8 +111,10 @@ public class JunctionBoxBlock extends BaseEntityBlock implements IElectricBlock,
 	public void setWireLanes(Level level, ElectricReference reference, BlockState instance, NodePos node, String[] laneLabels) {}
 	
 	@Override
-	public void installCircuitElements(Level level, ElectricReference reference, BlockState instance, ComponentCircuitContext context) {
-		ElectricUtility.installJunctionResistors(level, context, this, reference, instance, 0.01);
+	public void updateElectricElements(Level level, ElectricReference reference, BlockState instance, ComponentCircuitContext context, boolean initialInstall) {
+		if (initialInstall) {
+			ElectricUtility.installJunctionResistors(level, context, this, reference, instance, 0.01);
+		}
 	}
 	
 //	@Override

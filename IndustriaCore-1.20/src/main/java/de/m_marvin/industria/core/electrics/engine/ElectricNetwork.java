@@ -32,28 +32,26 @@ import tvnlnna.nodal.NodalElement;
 import tvnlnna.nodal.NodalElementState;
 import tvnlnna.nodal.NodalNetwork;
 import tvnlnna.solver.NodalNetworkSolver;
-import tvnlnna.solver.NodalNetworkSolver_LAPACK;
 
 public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.SynchronizedFunctionalNetwork<ElectricNetwork, ElectricReference, ElectricComponent<?, ?>, NodePos> {
 	
 	private final Supplier<Level> level;
-	
+	private final NodalNetworkSolver networkSolver; // TODO //NetworkSolver.standard().limSingular(1E-20).iterLim(500);
+		
 	private MultiBiMap<Integer, NodePos> ref2nodeMap = new HashMultiBiMap<Integer, NodePos>();
 	private PowerNetState state = PowerNetState.ACTIVE;
 	
-	private Map<CircuitElement, Circuit> element2circuitMap = new HashMap<CircuitElement, Circuit>();
-	private Map<CircuitNode, Circuit> node2circuitMap = new HashMap<CircuitNode, Circuit>();
+	private Map<ElectricElement, ElectricCircuit> element2circuitMap = new HashMap<ElectricElement, ElectricCircuit>();
+	private Map<ElectricNode, ElectricCircuit> node2circuitMap = new HashMap<ElectricNode, ElectricCircuit>();
 
-	private NodalNetworkSolver networkSolver = NodalNetworkSolver_LAPACK.standard(); // TODO //NetworkSolver.standard().limSingular(1E-20).iterLim(500);
-	
-	public static record CircuitNode(NodePos conduitNode, ElectricReference componentReference, String nodeName) {
+	public static record ElectricNode(NodePos conduitNode, ElectricReference componentReference, String nodeName) {
 		
-		public static CircuitNode node(NodePos nodePos, String nodeName) {
-			return new CircuitNode(nodePos, null, nodeName);
+		public static ElectricNode node(NodePos nodePos, String nodeName) {
+			return new ElectricNode(nodePos, null, nodeName);
 		}
 		
-		public static CircuitNode internal(ElectricReference componentReference, String nodeName) {
-			return new CircuitNode(null, componentReference, nodeName);
+		public static ElectricNode internal(ElectricReference componentReference, String nodeName) {
+			return new ElectricNode(null, componentReference, nodeName);
 		}
 		
 		public boolean isInternal() {
@@ -80,30 +78,29 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 		
 	}
 	
-	public static record CircuitElement(ElectricReference componentReference, String elementName) {
+	public static record ElectricElement(ElectricReference componentReference, String elementName) {
 		
-		public static CircuitElement element(ElectricReference componentReference, String elementName) {
-			return new CircuitElement(componentReference, elementName);
+		public static ElectricElement element(ElectricReference componentReference, String elementName) {
+			return new ElectricElement(componentReference, elementName);
 		}
 		
 		public String elementString() {
-			return String.format("%s_%s", elementName, CircuitNode.referenceString(componentReference));
+			return String.format("%s_%s", elementName, ElectricNode.referenceString(componentReference));
 		}
 		
 	}
 	
-	private class Circuit {
+	private class ElectricCircuit {
 		
 		private NodalNetwork network = null;
-		private Set<CircuitNode> nodes = new HashSet<CircuitNode>();
-		private Map<CircuitElement, NodalElementState> elements = new HashMap<CircuitElement, NodalElementState>();
-		private boolean changed = false;
+		private Set<ElectricNode> nodes = new HashSet<ElectricNode>();
+		private Map<ElectricElement, NodalElementState> elements = new HashMap<ElectricElement, NodalElementState>();
 		
-		public double getNodePotential(CircuitNode node) {
+		public double getNodePotential(ElectricNode node) {
 			return this.network.getNodePotential(node.nodeString());
 		}
 		
-		public NodalElementState getElementState(CircuitElement element) {
+		public NodalElementState getElementState(ElectricElement element) {
 			return this.elements.get(element);
 		}
 		
@@ -118,13 +115,14 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 	public String toString() {
 		return this.element2circuitMap.values().stream()
 				.distinct()
-				.map(Circuit::toString)
+				.map(ElectricCircuit::toString)
 				.reduce((a, b) -> a + "\n---\n" + b)
 				.orElseGet(() -> "EMPTY");
 	}
 	
-	public ElectricNetwork(Supplier<Level> level) {
+	public ElectricNetwork(Supplier<Level> level, NodalNetworkSolver solver) {
 		this.level = level;
+		this.networkSolver = solver;
 	}
 	
 	public Level getLevel() {
@@ -189,11 +187,11 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 		rebuildCircuits();
 	}
 	
-	protected Circuit circuitOfNode(CircuitNode node) {
+	protected ElectricCircuit circuitOfNode(ElectricNode node) {
 		return this.node2circuitMap.get(node);
 	}
 	
-	protected Circuit circuitOfElement(CircuitElement element) {
+	protected ElectricCircuit circuitOfElement(ElectricElement element) {
 		return this.element2circuitMap.get(element);
 	}
 	
@@ -207,12 +205,19 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 			this.allowInstall = allowInstall;
 		}
 		
-		public NodalElementState install(NodalElement element, CircuitElement elementKey, CircuitNode... nodes) {
+		public NodalElementState getOrInstall(NodalElement elementDef, ElectricElement element, ElectricNode... nodes)  {
+			NodalElementState state = getElement(element);
+			if (state == null)
+				state = install(elementDef, element, nodes);
+			return state;
+		}
+		
+		public NodalElementState install(NodalElement elementDef, ElectricElement element, ElectricNode... nodes) {
 			if (!this.allowInstall)
 				throw new IllegalStateException("can not change circuit outside of install phase");
-			NodalElementState elementState = element.newInstance(elementKey.elementString());
-			elementState.setNodeNames(Stream.of(nodes).map(CircuitNode::nodeString).toArray(String[]::new));
-			Circuit circuit = Stream.of(nodes).map(ElectricNetwork.this::circuitOfNode).filter(o -> o != null).distinct().reduce((circuitA, circuitB) -> {
+			NodalElementState elementState = elementDef.newInstance(element.elementString());
+			elementState.setNodeNames(Stream.of(nodes).map(ElectricNode::nodeString).toArray(String[]::new));
+			ElectricCircuit circuit = Stream.of(nodes).map(ElectricNetwork.this::circuitOfNode).filter(o -> o != null).distinct().reduce((circuitA, circuitB) -> {
 					circuitA.nodes.addAll(circuitB.nodes);
 					circuitB.nodes.forEach(node -> {
 						ElectricNetwork.this.node2circuitMap.put(node, circuitA);
@@ -221,37 +226,30 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 					circuitB.elements.keySet().forEach(elementKey2 -> {
 						ElectricNetwork.this.element2circuitMap.put(elementKey2, circuitA);
 					});
+					circuitA.network = new NodalNetwork(circuitA.elements.values(), circuitA.nodes.stream().findAny().get().nodeString());
 					return circuitA;
-			}).orElseGet(Circuit::new);
-			circuit.elements.put(elementKey, elementState);
+			}).orElseGet(ElectricCircuit::new);
+			circuit.elements.put(element, elementState);
 			circuit.nodes.addAll(List.of(nodes));
-			circuit.changed = true;
-			ElectricNetwork.this.element2circuitMap.put(elementKey, circuit);
+			ElectricNetwork.this.element2circuitMap.put(element, circuit);
 			for (var node : nodes)
 				ElectricNetwork.this.node2circuitMap.put(node, circuit);
 			return elementState;
 		}
 		
-		public NodalElementState getElement(CircuitElement elementKey) {
-			Circuit circuit = circuitOfElement(elementKey);
+		public NodalElementState getElement(ElectricElement element) {
+			ElectricCircuit circuit = circuitOfElement(element);
 			if (circuit != null)
-				return circuit.elements.get(elementKey);
+				return circuit.elements.get(element);
 			return null;
 		}
 		
-		public double nodePotential(CircuitNode node) {
-			Circuit circuit = circuitOfNode(node);
+		public double nodePotential(ElectricNode node) {
+			ElectricCircuit circuit = circuitOfNode(node);
 			if (circuit != null)
 				return circuit.getNodePotential(node);
 			return 0.0;
 		}
-		
-//		public double elementCurrent(CircuitElement element) {
-//			Circuit circuit = circuitOfElement(element);
-//			if (circuit != null)
-//				return circuit.getElementCurrent(element);
-//			return 0.0;
-//		}
 		
 		public ElectricComponent<?, ?> getComponent() {
 			return component;
@@ -270,7 +268,7 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 	
 		for (var component : listComponents()) {
 			try {
-				component.installCircuitElements(getLevel(), new ComponentCircuitContext(component, true));
+				component.updateElectricElements(getLevel(), new ComponentCircuitContext(component, true), true);
 			} catch (Exception e) {
 				IndustriaCore.LOGGER.warn("Exception while installing circuit component: " + component.reference(), e);
 			}
@@ -282,7 +280,7 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 		
 	}
 
-	public void stepElectrics() {
+	public void stepElectrics(double timestep) {
 		
 		if (this.element2circuitMap.isEmpty())
 			rebuildCircuits();
@@ -291,18 +289,23 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 
 			for (var component : listComponents()) {
 				try {
-					component.stepCircuitElements(getLevel(), new ComponentCircuitContext(component, false));
+					component.updateElectricElements(getLevel(), new ComponentCircuitContext(component, false), false);
 				} catch (Exception e) {
 					IndustriaCore.LOGGER.warn("Exception while stepping circuit component: " + component.reference(), e);
 					tripFuse();
 				}
 			}
 			
+			double t0 = this.networkSolver.getSimulationTime();
 			this.element2circuitMap.values().stream().distinct().forEach(circuit -> {
 				try {
 					networkSolver.setNetwork(circuit.network);
-					networkSolver.setSimulationTime(this.level.get().getGameTime() * 0.05);
-					networkSolver.step(0.05);
+					if (circuit.network.getSystemMatrix_x() == null) {
+						networkSolver.resetAndInitSimulation();
+						networkSolver.step(0.0);
+					}
+					networkSolver.setSimulationTime(t0);
+					networkSolver.step(timestep);
 				} catch (NetworkSolverException e) {						
 					this.tripFuse();
 				}
@@ -310,21 +313,19 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 			
 		}
 		
-		listComponents().forEach(c -> c.afterNetworkStep(level.get(), this));
-		
 	}
 	
 	@Override
-	protected void afterPutComponent(int refId) {
+	protected void afterPutComponent(int refId, ElectricComponent<?, ?> component) {
 		resetCircuits();
 	}
 
 	@Override
-	protected void afterRemoveComponent(int refId) {
+	protected void afterRemoveComponent(int refId, ElectricComponent<?, ?> component) {
 		this.ref2nodeMap.remove(refId);
 		resetCircuits();
 	}
-
+	
 	@Override
 	protected void afterParametrizedConnection(int refId1, int refId2, NodePos parameter) {
 		this.ref2nodeMap.put(refId1, parameter);
@@ -385,17 +386,17 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 		return this.state == PowerNetState.ACTIVE;
 	}
 	
-	public double getFloatingNodeVoltage(CircuitNode node) {
+	public double getFloatingNodeVoltage(ElectricNode node) {
 		if (!isOnline())
 			return 0.0;
-		Circuit circuit = circuitOfNode(node);
+		ElectricCircuit circuit = circuitOfNode(node);
 		if (circuit == null)
 			return 0.0;
 		return circuit.getNodePotential(node);
 	}
 	
-	public NodalElementState getElementState(CircuitElement element) {
-		Circuit circuit = circuitOfElement(element);
+	public NodalElementState getElementState(ElectricElement element) {
+		ElectricCircuit circuit = circuitOfElement(element);
 		if (circuit == null)
 			return null;
 		return circuit.getElementState(element);

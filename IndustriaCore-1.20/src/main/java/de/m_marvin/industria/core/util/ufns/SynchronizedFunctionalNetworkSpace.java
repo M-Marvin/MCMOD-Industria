@@ -9,7 +9,6 @@ import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Supplier;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -26,8 +25,8 @@ public abstract class SynchronizedFunctionalNetworkSpace<R, C extends Functional
 	
 	protected Queue<UpdateTicket<R>> updateTickets = new ArrayDeque<>();
 	
-	public SynchronizedFunctionalNetworkSpace(Supplier<N> networkFactory, Supplier<C> componentFactory, int traceLimit) {
-		super(networkFactory, componentFactory, traceLimit);
+	public SynchronizedFunctionalNetworkSpace(int traceLimit) {
+		super(traceLimit);
 	}
 
 	public static abstract class SynchronizedFunctionalNetwork<N extends SynchronizedFunctionalNetwork<N, R, C, A>, R, C extends FunctionalNetworkSpace.Component<R>, A> extends FunctionalNetwork<N, R, C, A> {

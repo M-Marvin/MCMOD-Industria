@@ -8,8 +8,8 @@ import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
 import de.m_marvin.industria.core.conduits.types.ConduitNode;
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitElement;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitNode;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ElectricElement;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ElectricNode;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ComponentCircuitContext;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability.ElectricComponent;
 import de.m_marvin.industria.core.registries.ElectricElements;
@@ -91,29 +91,33 @@ public class WireHolderBlock extends Block implements IElectricBlock, ITooltipAd
 	}
 
 	@Override
-	public void installCircuitElements(Level level, ElectricReference reference, BlockState instance, ComponentCircuitContext context) {
-		
-		NodePos node = this.getElectricConnections(level, reference, instance)[0];
-		List<String[]> cableLanes = ElectricUtility.getLaneLabels(level, node, ElectricComponent::isWire);
-		int laneCount = cableLanes.stream().mapToInt(l -> l.length).max().orElse(0);
-		
-		String[] lt = new String[laneCount];
-		int id = 0;
-		for (int i = 0; i < laneCount; i++) {
-			for (String[] lanes : cableLanes) {
-				if (lanes.length > i) {
-					if (lt[i] == null || lt[i].equals(lanes[i])) {
-						lt[i] = lanes[i];
-						continue;
-					} else {
-//						context.installResistor(CircuitElement.element(reference, "Rjoint_" + id++), CircuitNode.node(node, lt[i]), CircuitNode.node(node, lanes[i]), 0.01);
-						NodalElementState resistorState = context.install(
-								ElectricElements.RESISTOR.get(), CircuitElement.element(reference, "joint_" + id++), 
-								CircuitNode.node(node, lt[i]), CircuitNode.node(node, lanes[i]));
-						resistorState.setParameter("R", 0.01); // TODO
+	public void updateElectricElements(Level level, ElectricReference reference, BlockState instance, ComponentCircuitContext context, boolean initialInstall) {
+
+		if (initialInstall) {
+			
+			NodePos node = this.getElectricConnections(level, reference, instance)[0];
+			List<String[]> cableLanes = ElectricUtility.getLaneLabels(level, node, ElectricComponent::isWire);
+			int laneCount = cableLanes.stream().mapToInt(l -> l.length).max().orElse(0);
+			
+			String[] lt = new String[laneCount];
+			int id = 0;
+			for (int i = 0; i < laneCount; i++) {
+				for (String[] lanes : cableLanes) {
+					if (lanes.length > i) {
+						if (lt[i] == null || lt[i].equals(lanes[i])) {
+							lt[i] = lanes[i];
+							continue;
+						} else {
+//							context.installResistor(CircuitElement.element(reference, "Rjoint_" + id++), CircuitNode.node(node, lt[i]), CircuitNode.node(node, lanes[i]), 0.01);
+							NodalElementState resistorState = context.install(
+									ElectricElements.RESISTOR.get(), ElectricElement.element(reference, "joint_" + id++), 
+									ElectricNode.node(node, lt[i]), ElectricNode.node(node, lanes[i]));
+							resistorState.setParameter("R", 0.01); // TODO
+						}
 					}
 				}
 			}
+			
 		}
 		
 	}

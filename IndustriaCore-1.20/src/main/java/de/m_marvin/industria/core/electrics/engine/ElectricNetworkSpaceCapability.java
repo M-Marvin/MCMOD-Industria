@@ -18,8 +18,8 @@ import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitElement;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitNode;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ElectricElement;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ElectricNode;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability.ElectricComponent;
 import de.m_marvin.industria.core.electrics.engine.network.SSyncElectricComponentsPackage;
 import de.m_marvin.industria.core.electrics.engine.network.SUpdateElectricNetworkPackage;
@@ -52,6 +52,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
 import tvnlnna.nodal.NodalElementState;
+import tvnlnna.solver.NodalNetworkSolver;
+import tvnlnna.solver.NodalNetworkSolver_LAPACK;
 
 @Mod.EventBusSubscriber(modid=IndustriaCore.MODID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpace<ElectricReference, ElectricComponent<?, ?>, ElectricNetwork, NodePos> implements ICapabilitySerializable<CompoundTag> {
@@ -99,19 +101,18 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 		IndustriaCore.LOGGER.info("Saved " + this.referenceIds.size() + " electric components");
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ElectricNetworkSpaceCapability(Level level) {
-		super(() -> new ElectricNetwork(() -> level), () -> new ElectricComponent(null, null, null), Config.ELECTRIC_NETWORK_TRACE_DEPTH.get());
+		super(Config.ELECTRIC_NETWORK_TRACE_DEPTH.get());
 		this.level = level;
 	}
-	
+
 	/* Event handling */
 
 	@SubscribeEvent
 	public static void onLevelTick(TickEvent.LevelTickEvent event) {
 		ElectricNetworkSpaceCapability networkSpace = GameUtility.getLevelCapability(event.level, Capabilities.ELECTRIC_NETWORK_SPACE_CAPABILITY);
 		if (event.phase == Phase.START && !event.level.isClientSide()) {
-			networkSpace.stepElectrics();
+			networkSpace.stepElectrics(0.05); // TODO tick rate fixed, no /tick available yet
 		} else if (event.phase == Phase.END) {
 			networkSpace.processUpdates();
 		}
@@ -206,6 +207,20 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 	
 	/* ElectricNetwork handling */
 	
+	protected NodalNetworkSolver newSolver() {
+		return NodalNetworkSolver_LAPACK.standard(); // TODO config for solver
+	}
+	
+	@Override
+	protected ElectricNetwork newNetwork() {
+		return new ElectricNetwork(() -> this.level, newSolver());
+	}
+
+	@Override
+	protected ElectricComponent<?, ?> newComponent() {
+		return new ElectricComponent<>();
+	}
+	
 	@Override
 	protected CompoundTag serializeReference(ElectricReference reference) {
 		return reference.writeNbt();
@@ -283,6 +298,8 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 		protected boolean hasChanged;
 		protected I instance;
 		protected IElectric<I, T> type;
+		
+		public ElectricComponent() {}
 		
 		public ElectricComponent(ElectricReference pos, IElectric<I, T> type, I instance) {
 			this.reference = pos;
@@ -375,16 +392,9 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 			return instance;
 		}
 		
-		public void installCircuitElements(Level level, ElectricNetwork.ComponentCircuitContext context) {
-			type.installCircuitElements(level, reference, instance(level), context);
+		public void updateElectricElements(Level level, ElectricNetwork.ComponentCircuitContext context, boolean initialInstall) {
+			type.updateElectricElements(level, reference, instance(level), context, initialInstall);
 		}
-		public void stepCircuitElements(Level level, ElectricNetwork.ComponentCircuitContext context) {
-			type.stepCircuitElements(level, reference, instance(level), context);
-		}
-		public void afterNetworkStep(Level level, ElectricNetwork network) {
-			type.afterNetworkStep(level, reference, instance(level), network);
-		}
-		
 		public NodePos[] getNodes(Level level) {
 			return type.getElectricConnections(level, reference, instance(level));
 		}
@@ -407,24 +417,12 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 		public ChunkPos getAffectedChunk(Level level) {
 			return type.getAffectedChunk(level, reference);
 		}
-//		public double getMaxPowerGeneration(Level level) {
-//			return type.getMaxPowerGeneration(level, reference, this.instance(level));
-//		}
-//		public double getCurrentPower(Level level) {
-//			return type.getCurrentPower(level, reference, this.instance(level));
-//		}
 	}
 	
-	public void stepElectrics() {
-		
+	public void stepElectrics(double timestep) {
 		for (var network : listNetworks()) {
-			
-			network.stepElectrics();
-//			// TODO multi-threadding
-			
-			
+			network.stepElectrics(timestep);
 		}
-		
 	}
 	
 	/**
@@ -438,7 +436,7 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 	 * Returns the floating voltage currently available on the given node.
 	 * NOTE: Floating means that the voltage is referenced to "global ground", meaning a second voltage is required to calculate the actual difference (the voltage) between the two nodes.
 	 */
-	public double getFloatingNodeVoltage(CircuitNode node) {
+	public double getFloatingNodeVoltage(ElectricNode node) {
 		if (node.isInternal()) {
 			ElectricNetwork network = findNetworkAt(node.componentReference());
 			if (network != null) {
@@ -453,11 +451,11 @@ public class ElectricNetworkSpaceCapability extends FriendlyFunctionalNetworkSpa
 		return 0.0;
 	}
 	
-	public NodalElementState getElement(CircuitElement element) {
+	public NodalElementState getElement(ElectricElement element) {
 		ElectricNetwork network = findNetworkAt(element.componentReference());
 		if (network != null)
 			return network.getElementState(element);
 		return null;
 	}
-	
+
 }

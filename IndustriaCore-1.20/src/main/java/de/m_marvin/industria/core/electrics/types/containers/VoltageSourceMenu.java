@@ -13,8 +13,8 @@ public class VoltageSourceMenu extends AbstractSourceMenu {
 	public VoltageSourceMenu(int pContainerId, Inventory playerInv, FriendlyByteBuf extraData) {
 		super(MenuTypes.VOLTAGE_SOURCE.get(), pContainerId, playerInv, extraData, new SimpleContainer(0),
 				FriendlyContainerData.empty()
-				.nextIntItemStatic()
-				.nextIntItemStatic()
+				.nextFloatItemStatic()
+				.nextFloatItemStatic()
 				.nextFloatItemStatic()
 				.nextFloatItemStatic()
 			);
@@ -26,12 +26,12 @@ public class VoltageSourceMenu extends AbstractSourceMenu {
 		checkContainerSize(container, 0);
 	}
 
-	public int getVoltage() {
-		return getDataContainer().getInt(0);
+	public float getVoltage() {
+		return getDataContainer().getFloat(0);
 	}
 	
-	public void setVoltage(int voltage) {
-		getDataContainer().setInt(0, voltage);
+	public void setVoltage(float voltage) {
+		getDataContainer().setFloat(0, voltage);
 	}
 	
 }

@@ -1,5 +1,6 @@
 package de.m_marvin.industria.core.util.ufns;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -7,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
-import java.util.function.Supplier;
 
 import com.google.common.collect.Queues;
 
@@ -92,6 +92,10 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 			return this.components.values();
 		}
 		
+		public C getComponent(int refId) {
+			return components.get(refId);
+		}
+		
 		@Override
 		public int hashCode() {
 			return super.hashCode();
@@ -107,8 +111,8 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 			return false;
 		}
 		
-		protected abstract void afterPutComponent(int refId);
-		protected abstract void afterRemoveComponent(int refId);
+		protected abstract void afterPutComponent(int refId, C component);
+		protected abstract void afterRemoveComponent(int refId, C component);
 		protected abstract void afterParametrizedConnection(int refId1, int refId2, A parameter);
 		protected abstract void afterIntegrateNetwork(IntSet refIds, N other);
 		
@@ -116,8 +120,6 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 
 	public static record ParametrizedReference<R, A>(R reference, A paramter) {}
 	
-	protected final Supplier<N> networkFactory;
-	protected final Supplier<C> componentFactory;
 	protected final int traceLimit;
 	
 	protected final Object2IntMap<R> referenceIds = new Object2IntOpenHashMap<>();
@@ -126,11 +128,12 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 	
 	private static final long MAX_IDS = 0xFFFFFFFFL;
 	
-	public FunctionalNetworkSpace(Supplier<N> networkFactory, Supplier<C> componentFactory, int traceLimit) {
-		this.networkFactory = networkFactory;
-		this.componentFactory = componentFactory;
+	public FunctionalNetworkSpace(int traceLimit) {
 		this.traceLimit = traceLimit;
 	}
+	
+	protected abstract N newNetwork();
+	protected abstract C newComponent();
 	
 	public void serializeNbt(CompoundTag nbt) {
 		
@@ -164,7 +167,7 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 		ListTag componentsNbt = nbt.getList("Components", 10);
 		for (int i = 0; i < componentsNbt.size(); i++) {
 			CompoundTag componentNbt = componentsNbt.getCompound(i);
-			C component = this.componentFactory.get();
+			C component = newComponent();
 			if (!component.deserializeNbt(componentNbt)) continue;
 			int refId = componentNbt.getInt("ReferenceId");
 			this.referenceIds.put(component.reference(), refId);
@@ -174,7 +177,7 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 		ListTag networksNbt = nbt.getList("Networks", 10);
 		for (int i = 0; i < networksNbt.size(); i++) {
 			CompoundTag networkNbt = networksNbt.getCompound(i);
-			N network = networkFactory.get();
+			N network = newNetwork();
 			int[] refIds = networkNbt.getIntArray("ReferenceIds");
 			for (int refId : refIds) {
 				C component = this.components.get(refId);
@@ -189,6 +192,14 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 
 	public int getReferenceId(R reference) {
 		return this.referenceIds.getInt(reference);
+	}
+	
+	public C getComponent(int refId) {
+		return this.components.get(refId);
+	}
+	
+	public N getNetworkCotnaining(int refId) {
+		return this.ref2network.get(refId);
 	}
 	
 	public Collection<N> listNetworks() {
@@ -214,6 +225,10 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 		while (referenceIds.containsValue(id))
 			id++;
 		return id;
+	}
+	
+	public N putComponent(C component, @SuppressWarnings("unchecked") ParametrizedReference<R, A>... connectedReferences) {
+		return putComponents(Collections.singletonMap(component, Arrays.asList(connectedReferences))).stream().findAny().get();
 	}
 	
 	public Collection<N> putComponents(Map<C, Collection<ParametrizedReference<R, A>>> components) {
@@ -252,7 +267,7 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 				.filter(Objects::nonNull)
 				.distinct()
 				.reduce(FunctionalNetwork::combineNetwork)
-				.orElseGet(this.networkFactory);
+				.orElseGet(this::newNetwork);
 		
 		// Add new components to network
 		combinedNetwork.components.putAll(newComponents);
@@ -263,7 +278,7 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 		});
 		
 		// Trigger put component event
-		newComponents.keySet().forEach(combinedNetwork::afterPutComponent);
+		newComponents.int2ObjectEntrySet().forEach(e -> combinedNetwork.afterPutComponent(e.getIntKey(), e.getValue()));
 		
 		// Trigger new connection event
 		for (var entry : components.entrySet()) {
@@ -281,6 +296,10 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 		
 	}
 	
+	public N removeComponent(R reference) {
+		return removeComponents(Collections.singleton(reference)).stream().findAny().orElseGet(() -> null);
+	}
+	
 	public Collection<N> removeComponents(Collection<R> references) {
 		Objects.requireNonNull(references);
 		
@@ -293,7 +312,7 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 			N network = this.ref2network.remove(refId);
 			if (network != null) {
 				network.components.remove(refId);
-				network.afterRemoveComponent(refId);
+				network.afterRemoveComponent(refId, component);
 			}
 			if (component != null)
 				refIds.addAll(component.referencedComponents);
@@ -333,7 +352,7 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 					comp = this.components.get(ref);
 					if (comp != null) {
 						network.components.put(ref, comp);
-						network.afterPutComponent(ref);
+						network.afterPutComponent(ref, comp);
 					}
 				}
 				
@@ -372,7 +391,7 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 			
 			// Assemble new networks for traces, and register them
 			return traces.entrySet().stream().map(traceEntry -> {
-				N network2 = this.networkFactory.get();
+				N network2 = newNetwork();
 				network2.integrateNetwork(traceEntry.getKey(), traceEntry.getValue());
 				
 				traceEntry.getKey().forEach(refId -> {

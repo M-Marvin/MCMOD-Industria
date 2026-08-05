@@ -4,10 +4,16 @@
 	<node name="p_B" constant="i_B"/>
 	<local name="i_coil" constant="u_coil"/>
 	<variable name="L" default="1.0"/>
-	<stampE>
+	<stampA>
 				p_A		p_B		i_coil
 		i_A		0		0		1
 		i_B		0		0		-1
-		u_coil	1		-1		0-L
+		u_coil	1		-1		0
+	</stampA>
+	<stampE>
+				p_A		p_B		i_coil
+		i_A		0		0		0
+		i_B		0		0		0
+		u_coil	0		0		0-L
 	</stampE>
 </nodalElement>

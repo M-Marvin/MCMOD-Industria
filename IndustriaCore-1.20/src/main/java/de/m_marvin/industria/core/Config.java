@@ -32,6 +32,7 @@ public class Config {
 	public static ForgeConfigSpec.IntValue ELECTIRC_SIMULATION_THREADS;
 	public static ForgeConfigSpec.ConfigValue<String> ELECTRIC_SIMULATION_COMMANDS;
 	public static ForgeConfigSpec.IntValue ELECTRIC_NETWORK_TRACE_DEPTH;
+	public static ForgeConfigSpec.IntValue ELECTRIC_CIRCUIT_TRACE_DEPTH;
 
 	public static final String CATEGORY_KINETICS = "kinetics";
 	public static ForgeConfigSpec.IntValue KINETIC_NETWORK_TRACE_DEPTH;
@@ -63,7 +64,11 @@ public class Config {
 		ELECTRIC_NETWORK_TRACE_DEPTH = BUILDER
 				.comment("When recomputing networks (spliting and combining), how deep the tracing algorithm should search, higher values might solve problems with large networks, but can cause significant lag.")
 				.defineInRange("electric_network_trace_depth", 2024, 1000, 10000000);
+		ELECTRIC_CIRCUIT_TRACE_DEPTH = BUILDER
+				.comment("When recomputing individual circuits of a network (spliting and combining), how deep the tracing algorithm should search, higher values might solve problems with large networks, but can cause significant lag.")
+				.defineInRange("electric_network_trace_depth", 2024, 1000, 10000000);
 		BUILDER.pop();
+		
 		
 		BUILDER.comment("Industria Core Kinetics settings").push(CATEGORY_KINETICS);
 		KINETIC_NETWORK_TRACE_DEPTH = BUILDER

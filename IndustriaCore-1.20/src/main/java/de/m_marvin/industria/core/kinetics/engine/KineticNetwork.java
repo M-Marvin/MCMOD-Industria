@@ -124,13 +124,13 @@ public class KineticNetwork extends SynchronizedFunctionalNetwork<KineticNetwork
 	}
 	
 	@Override
-	protected void afterPutComponent(int refId) {
+	protected void afterPutComponent(int refId, KineticComponent component) {
 		this.ref2ratioMap.keySet().stream().filter(p -> p.has(refId)).toList().forEach(this.ref2ratioMap::remove);
 		resetSpeedMap();
 	}
 
 	@Override
-	protected void afterRemoveComponent(int refId) {
+	protected void afterRemoveComponent(int refId, KineticComponent component) {
 		this.ref2ratioMap.keySet().stream().filter(p -> p.has(refId)).toList().forEach(this.ref2ratioMap::remove);
 		resetSpeedMap();
 	}

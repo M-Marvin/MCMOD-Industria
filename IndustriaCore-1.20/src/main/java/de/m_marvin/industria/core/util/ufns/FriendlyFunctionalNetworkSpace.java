@@ -1,11 +1,9 @@
 package de.m_marvin.industria.core.util.ufns;
 
-import java.util.function.Supplier;
-
 public abstract class FriendlyFunctionalNetworkSpace<R, C extends FunctionalNetworkSpace.Component<R>, N extends SynchronizedFunctionalNetworkSpace.SynchronizedFunctionalNetwork<N, R, C, A>, A> extends SynchronizedFunctionalNetworkSpace<R, C, N, A> {
 
-	public FriendlyFunctionalNetworkSpace(Supplier<N> networkFactory, Supplier<C> componentFactory, int traceLimit) {
-		super(networkFactory, componentFactory, traceLimit);
+	public FriendlyFunctionalNetworkSpace(int traceLimit) {
+		super(traceLimit);
 	}
 	
 	public C findComponentAt(R reference) {

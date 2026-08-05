@@ -8,6 +8,7 @@ import de.m_marvin.industria.core.util.GameUtility;
 import de.m_marvin.industria.core.util.container.AbstractBlockContainerMenu.DummyContainer;
 import de.m_marvin.industria.core.util.container.FriendlyContainerData;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -15,7 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class VoltageSourceBlockEntity extends AbstractSourceBlockEntity {
 
-	protected int voltage;
+	protected double voltage;
 	
 	public VoltageSourceBlockEntity(BlockPos pPos, BlockState pBlockState) {
 		super(pPos, pBlockState);
@@ -24,10 +25,22 @@ public class VoltageSourceBlockEntity extends AbstractSourceBlockEntity {
 	}
 	
 	@Override
+	protected void saveAdditional(CompoundTag pTag) {
+		super.saveAdditional(pTag);
+		pTag.putDouble("Voltage", this.voltage);
+	}
+	
+	@Override
+	public void load(CompoundTag pTag) {
+		super.load(pTag);
+		this.voltage = pTag.getDouble("Voltage");
+	}
+	
+	@Override
 	public FriendlyContainerData getContainerData() {
 		return FriendlyContainerData.empty()
-				.nextIntItem(this::getVoltage, this::setVoltage)
-				.nextIntItem(this::getPower, this::setPower)
+				.nextFloatItem(() -> (float) getVoltage(), this::setVoltage)
+				.nextFloatItem(() -> (float) getPower(), this::setPower)
 				.nextFloatItem(() -> (float) getDeviceVoltage(), null)
 				.nextFloatItem(() -> (float) getDeviceCurrent(), null);
 	}
@@ -37,13 +50,13 @@ public class VoltageSourceBlockEntity extends AbstractSourceBlockEntity {
 		return GameUtility.openJunctionScreenOr(this, pContainerId, pPlayer, pPlayerInventory, () -> new VoltageSourceMenu(pContainerId, pPlayerInventory, getBlockPos(), new DummyContainer(this.getBlockPos()), getContainerData()));
 	}
 	
-	public void setVoltage(int voltage) {
+	public void setVoltage(double voltage) {
 		BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(Blocks.VOLTAGE_SOURCE.get());
 		this.voltage = Math.max(parametrics.getVoltageMin(), Math.min(parametrics.getVoltageMax(), voltage));
 		this.setChanged();
 	}
 	
-	public int getVoltage() {
+	public double getVoltage() {
 		return this.voltage;
 	}
 	

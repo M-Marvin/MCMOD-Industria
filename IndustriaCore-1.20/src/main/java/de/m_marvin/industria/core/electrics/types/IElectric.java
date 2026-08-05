@@ -77,28 +77,15 @@ public interface IElectric<I, T> {
 		
 	}
 	
-	public static interface ICircuitPlot {
-		public void prepare(long templateId);
-		public String plot();
-		public String getAnyNode();
-	}
-	
 	public default void updateNetwork(Level level, ElectricReference reference) {
 		ElectricUtility.updateNetwork(level, reference);
 	}
 	
-
-	public void installCircuitElements(Level level, ElectricReference reference, I instance, ElectricNetwork.ComponentCircuitContext context);
-	public default void stepCircuitElements(Level level, ElectricReference reference, I instance, ElectricNetwork.ComponentCircuitContext context) {}
+	public void updateElectricElements(Level level, ElectricReference reference, I instance, ElectricNetwork.ComponentCircuitContext context, boolean initialInstall);
 	public default void afterNetworkStep(Level level, ElectricReference reference, I instance, ElectricNetwork network) {}
 	
 	public void serializeNBT(I instance, CompoundTag nbt);
 	public I deserializeNBT(CompoundTag nbt);
-	
-	// TODO rename for clarity
-//	public double getMaxPowerGeneration(Level level, ElectricReference reference, I instance);
-//	public double getCurrentPower(Level level, ElectricReference reference, I instance);
-	
 	
 	public NodePos[] getElectricConnections(Level level, ElectricReference reference, I instance);
 	public String[] getWireLanes(Level level, ElectricReference reference, I instance, NodePos node);

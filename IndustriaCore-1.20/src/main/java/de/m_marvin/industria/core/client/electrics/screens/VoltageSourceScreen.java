@@ -52,12 +52,12 @@ public class VoltageSourceScreen extends AbstractTickableWidgedContainerScreen<V
 		
 		this.voltageField = new EditBox(font, this.leftPos + 61, this.topPos + 70, 36, 20, Component.translatable("industriacore.ui.electrical.voltage"));
 		this.voltageField.setMaxLength(5);
-		this.voltageField.setValue(Integer.toString(this.menu.getVoltage()));
+		this.voltageField.setValue(Float.toString(this.menu.getVoltage()));
 		this.addRenderableWidget(this.voltageField);
 
 		this.powerField = new EditBox(font, this.leftPos + 121, this.topPos + 70, 36, 20, Component.translatable("industriacore.ui.electrical.power"));
 		this.powerField.setMaxLength(5);
-		this.powerField.setValue(Integer.toString(this.menu.getPower()));
+		this.powerField.setValue(Float.toString(this.menu.getPower()));
 		this.addRenderableWidget(this.powerField);
 		
 		this.titleLabelY = 0;
@@ -97,11 +97,11 @@ public class VoltageSourceScreen extends AbstractTickableWidgedContainerScreen<V
 	@Override
 	public void onClose() {
 		try {
-			int voltage = Integer.parseInt(this.voltageField.getValue());
+			float voltage = Float.parseFloat(this.voltageField.getValue());
 			this.menu.setVoltage(voltage);
 		} catch (NumberFormatException e) {}
 		try {
-			int power = Integer.parseInt(this.powerField.getValue());
+			float power = Float.parseFloat(this.powerField.getValue());
 			this.menu.setPower(power);
 		} catch (NumberFormatException e) {}
 		this.menu.sendDataToClient();

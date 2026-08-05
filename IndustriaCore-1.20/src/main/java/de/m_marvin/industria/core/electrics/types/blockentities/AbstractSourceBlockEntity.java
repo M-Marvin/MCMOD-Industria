@@ -2,8 +2,8 @@ package de.m_marvin.industria.core.electrics.types.blockentities;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
 import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitElement;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.CircuitNode;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ElectricElement;
+import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ElectricNode;
 import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
 import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxMenu;
@@ -31,7 +31,7 @@ import tvnlnna.nodal.NodalElementState;
 public abstract class AbstractSourceBlockEntity extends BlockEntity implements MenuProvider, IDataSlotContainer, IJunctionEdit {
 
 	protected String[] nodeLanes = new String[] {"L", "N"};
-	protected int power;
+	protected double power;
 	
 	public AbstractSourceBlockEntity(BlockPos pPos, BlockState pBlockState) {
 		super(BlockEntityTypes.VOLTAGE_SOURCE.get(), pPos, pBlockState);
@@ -50,13 +50,13 @@ public abstract class AbstractSourceBlockEntity extends BlockEntity implements M
 		}
 	}
 	
-	public void setPower(int power) {
+	public void setPower(double power) {
 		BlockParametrics parametrics = BlockParametricsManager.getInstance().getParametrics(Blocks.VOLTAGE_SOURCE.get());
 		this.power = Math.max(parametrics.getPowerMin(), Math.min(parametrics.getPowerMax(), power));
 		this.setChanged();
 	}
 	
-	public int getPower() {
+	public double getPower() {
 		return power;
 	}
 
@@ -68,7 +68,7 @@ public abstract class AbstractSourceBlockEntity extends BlockEntity implements M
 		if (getBlockState().getBlock() instanceof IElectricBlock electric) {
 			BlockPos masterPos = electric.getConnectorMasterPos(level, worldPosition, getBlockState());
 			ElectricReference reference = ElectricReference.block(masterPos);
-			NodalElementState sourceState = ElectricUtility.getElementState(level, CircuitElement.element(reference, sourceElement));
+			NodalElementState sourceState = ElectricUtility.getElementState(level, ElectricElement.element(reference, sourceElement));
 			return sourceState != null ? sourceState.getParamter(paramater) : 0.0;
 		}
 		return 0.0;
@@ -84,8 +84,8 @@ public abstract class AbstractSourceBlockEntity extends BlockEntity implements M
 			if (nodes.length >= 1) {
 				String[] lanes = electric.getWireLanes(level, reference, getBlockState(), nodes[0]);
 				if (lanes.length >= 2) {
-					CircuitNode node1 = CircuitNode.node(nodes[0], lanes[0]);
-					CircuitNode node2 = CircuitNode.node(nodes[0], lanes[1]);
+					ElectricNode node1 = ElectricNode.node(nodes[0], lanes[0]);
+					ElectricNode node2 = ElectricNode.node(nodes[0], lanes[1]);
 					return ElectricUtility.getVoltageBetween(level, node1, node2);
 				}
 			}
@@ -110,7 +110,7 @@ public abstract class AbstractSourceBlockEntity extends BlockEntity implements M
 		super.saveAdditional(pTag);
 		pTag.putString("LiveWireLane", this.nodeLanes[0]);
 		pTag.putString("NeutralWireLane", this.nodeLanes[1]);
-		pTag.putInt("Power", this.power);
+		pTag.putDouble("Power", this.power);
 	}
 	
 	@Override
@@ -118,7 +118,7 @@ public abstract class AbstractSourceBlockEntity extends BlockEntity implements M
 		super.load(pTag);
 		this.nodeLanes[0] = pTag.contains("LiveWireLane") ? pTag.getString("LiveWireLane") : "L";
 		this.nodeLanes[1] = pTag.contains("NeutralWireLane") ? pTag.getString("NeutralWireLane") : "N";
-		this.power = pTag.getInt("Power");
+		this.power = pTag.getDouble("Power");
 	}
 	
 	@Override
@@ -131,7 +131,7 @@ public abstract class AbstractSourceBlockEntity extends BlockEntity implements M
 		CompoundTag tag = new CompoundTag();
 		tag.putString("LiveWireLane", this.nodeLanes[0]);
 		tag.putString("NeutralWireLane", this.nodeLanes[1]);
-		tag.putInt("Power", this.power);
+		tag.putDouble("Power", this.power);
 		return tag;
 	}
 	

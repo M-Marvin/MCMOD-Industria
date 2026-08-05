@@ -14,5 +14,6 @@ public class ElectricElements {
 	public static final Supplier<NodalElement> CAPACITOR = () -> NetworkElementManager.getInstance().getElement(ResourceLocation.tryBuild(IndustriaCore.MODID, "capacitor"));
 	public static final Supplier<NodalElement> VOLTAGE_FIXED = () -> NetworkElementManager.getInstance().getElement(ResourceLocation.tryBuild(IndustriaCore.MODID, "voltage_independent"));
 	public static final Supplier<NodalElement> CURRENT_FIXED = () -> NetworkElementManager.getInstance().getElement(ResourceLocation.tryBuild(IndustriaCore.MODID, "current_independent"));
+	public static final Supplier<NodalElement> VOLTAGE_POWERLIMIT = () -> NetworkElementManager.getInstance().getElement(ResourceLocation.tryBuild(IndustriaCore.MODID, "voltage_power_limit"));
 	
 }

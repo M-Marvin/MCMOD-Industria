@@ -18,12 +18,12 @@ public abstract class AbstractSourceMenu extends AbstractBlockDataContainerMenu 
 		super(pMenuType, pContainerId, playerInv, blockPos, container, dataContainer);
 	}
 	
-	public int getPower() {
-		return getDataContainer().getInt(1);
+	public float getPower() {
+		return getDataContainer().getFloat(1);
 	}
 	
-	public void setPower(int power) {
-		getDataContainer().setInt(1, power);
+	public void setPower(float power) {
+		getDataContainer().setFloat(1, power);
 	}
 	
 	public float getDeviceVoltage() {

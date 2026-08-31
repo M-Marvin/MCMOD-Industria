@@ -153,7 +153,10 @@ dependencies {
 		}
 	}
 	// endregion
-
+	
+	// NodeNet
+	implementation "de.m_marvin.industria:nodenet:${minecraft_version}-${nodenet_version}:mojmap"
+ 	
 	// region Valkyrien Skies
 	implementation("org.valkyrienskies.core:api:${vs_core_version}") { transitive = false
 		exclude group: 'org.joml', module: ''
@@ -180,7 +183,7 @@ dependencies {
 	// endregion
 	
 	// region Industria deps
-	jarJar(implementation(additionalRuntimeClasspath("de.m_marvin.electronflow:tvnl-nna:${tvnl_nna_version}")))
+	//jarJar(implementation(additionalRuntimeClasspath("de.m_marvin.electronflow:tvnl-nna:${tvnl_nna_version}")))
 	jarJar(implementation(additionalRuntimeClasspath("de.m_marvin.univec:univec:${univec_version}")))
 	jarJar(implementation(additionalRuntimeClasspath("de.m_marvin.unimap:unimap:${unimap_version}")))
 	// endregion
@@ -251,5 +254,22 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 publishing {
-	
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/m-marvin/mcmod-industria")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+    publications {
+        maven(MavenPublication) {
+            groupId = 'de.m_marvin.industria'
+        	artifactId = 'industriacore'
+        
+			from components.java
+        }
+    }
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nodalElement name="G" nonLinear="false" timeVariant="false">
+	<node name="N_A" constant="M_A"/>
+	<node name="N_B" constant="M_B"/>
+	<local name="M_gear" constant="N_gear"/>
+	<variable name="K1"/>
+	<variable name="K2"/>
+	<stampA>
+				N_A	N_B	M_gear
+		M_A		0	0	K1
+		M_B		0	0	K2
+		N_gear	K1	K2	0
+	</stampA>
+</nodalElement>

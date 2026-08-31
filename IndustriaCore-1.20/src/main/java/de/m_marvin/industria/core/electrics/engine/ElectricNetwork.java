@@ -37,7 +37,7 @@ public class ElectricNetwork extends SynchronizedFunctionalNetworkSpace.Synchron
 	
 	private final Supplier<Level> level;
 	private final NodalNetworkSolver networkSolver; // TODO //NetworkSolver.standard().limSingular(1E-20).iterLim(500);
-		
+	
 	private MultiBiMap<Integer, NodePos> ref2nodeMap = new HashMultiBiMap<Integer, NodePos>();
 	private PowerNetState state = PowerNetState.ACTIVE;
 	

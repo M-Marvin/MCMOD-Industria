@@ -100,31 +100,31 @@ public abstract class AbstractThrusterBlock extends BaseEntityBlock {
 			return thrusters;
 		}
 		
-		@Override
-		public void applyForces(PhysShip contraption) {
-			
-			if (getLevel() != null) {
-
-				Vec3d massCenter = ContraptionUtility.toContraptionPos(contraption.getTransform(), Vec3d.fromVec(contraption.getTransform().getPositionInWorld()));
-				
-				for (Entry<Long, Double> thruster : thrusters.entrySet()) {
-					
-					BlockPos thrusterPos = BlockPos.of(thruster.getKey());
-					BlockState state = getLevel().getBlockState(thrusterPos);
-					if (state.getBlock() instanceof AbstractThrusterBlock thrusterBlock) {
-						double thrust = thruster.getValue();
-						if (Math.abs(thrust) >= 1) {
-							Direction direction = thrusterBlock.getThrustDirection(state);
-							Vec3d forceVec = new Vec3d(direction.getStepX(), direction.getStepY(), direction.getStepZ()).mul(thrust);
-							Vector3d forcePos = Vec3d.fromVec(thrusterPos).add(0.5, 0.5, 0.5).sub(massCenter).writeTo(new Vector3d());
-							contraption.applyRotDependentForceToPos(new Vector3d(forceVec.x, forceVec.y, forceVec.z), forcePos);
-						}
-					}
-					
-				}
-			}
-			
-		}
+//		@Override
+//		public void applyForces(PhysShip contraption) {
+//			
+//			if (getLevel() != null) {
+//
+//				Vec3d massCenter = ContraptionUtility.toContraptionPos(contraption.getTransform(), Vec3d.fromVec(contraption.getTransform().getPositionInWorld()));
+//				
+//				for (Entry<Long, Double> thruster : thrusters.entrySet()) {
+//					
+//					BlockPos thrusterPos = BlockPos.of(thruster.getKey());
+//					BlockState state = getLevel().getBlockState(thrusterPos);
+//					if (state.getBlock() instanceof AbstractThrusterBlock thrusterBlock) {
+//						double thrust = thruster.getValue();
+//						if (Math.abs(thrust) >= 1) {
+//							Direction direction = thrusterBlock.getThrustDirection(state);
+//							Vec3d forceVec = new Vec3d(direction.getStepX(), direction.getStepY(), direction.getStepZ()).mul(thrust);
+//							Vector3d forcePos = Vec3d.fromVec(thrusterPos).add(0.5, 0.5, 0.5).sub(massCenter).writeTo(new Vector3d());
+//							contraption.applyRotDependentForceToPos(new Vector3d(forceVec.x, forceVec.y, forceVec.z), forcePos);
+//						}
+//					}
+//					
+//				}
+//			}
+//			
+//		}
 		
 	}
 	

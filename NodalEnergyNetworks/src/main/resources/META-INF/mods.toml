@@ -1,0 +1,37 @@
+modLoader="javafml" #mandatory
+loaderVersion="[47,)"
+
+# The license for you mod. This is mandatory metadata and allows for easier comprehension of your redistributive properties.
+# Review your options at https://choosealicense.com/. All rights reserved is the default copyright stance, and is thus the default here.
+license="All Rights Reserved"
+
+# A URL to refer people to when problems occur with this mod
+#issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/" #optional
+
+# A list of mods - how many allowed here is determined by the individual mod loader
+[[mods]]
+modId="genet" #mandatory
+version="0.1.0" #mandatory
+displayName="Generalized Energy Networks" #mandatory
+# A URL to query for updates for this mod. See the JSON update specification https://docs.minecraftforge.net/en/latest/misc/updatechecker/
+#updateJSONURL="https://change.me.example.invalid/updates.json" #optional
+# A URL for the "homepage" for this mod, displayed in the mod UI
+#displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional
+logoFile="logo.png" #optional
+# A text field displayed in the mod UI
+#credits="" #optional
+authors="M_Marvin" #optional
+displayTest="MATCH_VERSION"
+description='''Example mod description.\nNewline characters can be used and will be replaced properly.'''
+
+#[[mixins]]
+#config="mixins.industriacore.ssdplugin.json"
+
+#[[mixins]]
+#config="mixins.industriacore.util.json"
+
+# Features are specific properties of the game environment, that you may want to declare you require. This example declares
+# that your mod requires GL version 3.2 or higher. Other features will be added. They are side aware so declaring this won't
+# stop your mod loading on the server for example.
+#[features.industriacore]
+#openGLVersion="[3.2,)"

@@ -1,21 +1,20 @@
 package de.m_marvin.genet.references;
 
-import dev.lukebemish.codecextras.structured.Structure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 
-public class BlockGridNode extends GridNode<BlockGridNode> {
+public class GridNodeBlockFace extends GridNode<GridNodeBlockFace> {
+	
+	public static Format<GridNodeBlockFace> FORMAT = Format.create(format -> {
+		var blockKey = format.add("block", BlockPos.CODEC, GridNodeBlockFace::getBlock);
+		var faceKey = format.add("face", Direction.CODEC, GridNodeBlockFace::getFace);
+		return ops -> new GridNodeBlockFace(blockKey.decode(ops), faceKey.decode(ops));
+	});
 	
 	private BlockPos block;
 	private Direction face;
 	
-	public BlockGridNode(BlockPos block, Direction face) {
-		super(Structure.record(structure -> {
-			var blockKey = structure.add("block", null, BlockGridNode::getBlock);
-			var faceKey = structure.add("face", null, BlockGridNode::getFace);
-			return container -> new BlockGridNode(blockKey.apply(container), faceKey.apply(container));
-		}));
-		
+	public GridNodeBlockFace(BlockPos block, Direction face) {
 		this.block = block;
 		this.face = face;
 	}
@@ -34,6 +33,11 @@ public class BlockGridNode extends GridNode<BlockGridNode> {
 	
 	public void setFace(Direction face) {
 		this.face = face;
+	}
+	
+	@Override
+	public Format<GridNodeBlockFace> getFormat() {
+		return FORMAT;
 	}
 	
 	@Override

@@ -8,9 +8,6 @@ buildscript {
 	}
 	dependencies {
 		classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
-
-		// Make sure this version matches the one included in Kotlin for Forge
-		classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22'
 	}
 }
 
@@ -34,7 +31,7 @@ base {
 }
 
 java {
-	toolchain.languageVersion = JavaLanguageVersion.of(17)
+	toolchain.languageVersion = JavaLanguageVersion.of(21)
 }
 
 legacyForge {
@@ -108,6 +105,12 @@ dependencies {
 		}
 	}
 	// endregion
+
+    implementation("dev.lukebemish:codecextras:${codec_extras_version}") {
+//        capabilities {
+ //           requireFeature('minecraft-neoforge')
+  //      }
+    }
 
 	// region Industria deps
 	jarJar(implementation(additionalRuntimeClasspath("de.m_marvin.electronflow:tvnl-nna:${tvnl_nna_version}")))

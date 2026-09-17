@@ -1,5 +1,8 @@
-package de.m_marvin.genet.references;
+package de.m_marvin.genet;
 
+import de.m_marvin.genet.references.GridNode;
+import de.m_marvin.genet.references.GridNode.Format;
+import de.m_marvin.genet.references.GridNode.Format.Key;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 

@@ -118,6 +118,9 @@ dependencies {
 	jarJar(implementation(additionalRuntimeClasspath("de.m_marvin.unimap:unimap:${unimap_version}")))
 	// endregion
 	
+	
+	implementation("com.mojang:datafixerupper:8.0.16");
+	
 }
 
 configurations {

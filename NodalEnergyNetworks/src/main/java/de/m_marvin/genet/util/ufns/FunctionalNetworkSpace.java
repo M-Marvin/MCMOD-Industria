@@ -24,20 +24,20 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 	
 	public abstract static class Component<R> {
 		
-		protected final IntSet referencedComponents = new IntOpenHashSet();
+		protected final IntSet linkedComponents = new IntOpenHashSet();
 		protected R reference;
 		
 		public Component() {}
 		
 		public boolean deserializeNbt(CompoundTag nbt) {
-			this.referencedComponents.clear();
-			for (int i : nbt.getIntArray("Referenced"))
-				this.referencedComponents.add(i);
+			this.linkedComponents.clear();
+			for (int i : nbt.getIntArray("Linked"))
+				this.linkedComponents.add(i);
 			return true;
 		}
 		
 		public void serializeNbt(CompoundTag nbt) {
-			nbt.putIntArray("Referenced", this.referencedComponents.toIntArray());
+			nbt.putIntArray("Linked", this.linkedComponents.toIntArray());
 		}
 		
 		public R reference() {
@@ -51,7 +51,7 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 		
 		@Override
 		public String toString() {
-			return "Component{ref=" + reference().toString() + "}";
+			return "Component{linked=" + reference().toString() + "}";
 		}
 		
 		@Override
@@ -252,17 +252,17 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 			// Register references in new component
 			components.get(entry.getValue()).forEach(ref -> {
 				if (this.referenceIds.containsKey(ref.reference()))
-					entry.getValue().referencedComponents.add(this.referenceIds.getInt(ref.reference()));
+					entry.getValue().linkedComponents.add(this.referenceIds.getInt(ref.reference()));
 			});
 
 			// Register references in other components
-			entry.getValue().referencedComponents.intStream().mapToObj(this.components::get).forEach(component2 -> {
-				component2.referencedComponents.add(entry.getIntKey());
+			entry.getValue().linkedComponents.intStream().mapToObj(this.components::get).forEach(component2 -> {
+				component2.linkedComponents.add(entry.getIntKey());
 			});
 		}
 		
 		// Check for referenced networks and combine them or create new network if no component had a network registered
-		N combinedNetwork = components.keySet().stream().flatMapToInt(c -> c.referencedComponents.intStream())
+		N combinedNetwork = components.keySet().stream().flatMapToInt(c -> c.linkedComponents.intStream())
 				.mapToObj(this.ref2network::get)
 				.filter(Objects::nonNull)
 				.distinct()
@@ -289,7 +289,7 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 		// Get a list of all new references and all potentially disconnected references
 		IntSet referencesToTrace = new IntOpenHashSet();
 		referencesToTrace.addAll(newComponents.keySet());
-		replacedComponents.stream().flatMapToInt(c -> c.referencedComponents.intStream()).distinct().forEach(referencesToTrace::add);
+		replacedComponents.stream().flatMapToInt(c -> c.linkedComponents.intStream()).distinct().forEach(referencesToTrace::add);
 		
 		// Check and split network if required
 		return traceAndSplit(referencesToTrace);
@@ -315,7 +315,7 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 				network.afterRemoveComponent(refId, component);
 			}
 			if (component != null)
-				refIds.addAll(component.referencedComponents);
+				refIds.addAll(component.linkedComponents);
 		}
 		
 		// Trace the references and split the networks if required
@@ -358,7 +358,7 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 				
 				if (comp != null) {
 					trace.add(ref);
-					traceQueue.addAll(comp.referencedComponents);
+					traceQueue.addAll(comp.linkedComponents);
 				}
 			}
 			
@@ -370,7 +370,7 @@ public abstract class FunctionalNetworkSpace<R, C extends FunctionalNetworkSpace
 		// Cleanup references, remove invalid references within the trace's components
 		for (IntSet trace : traces.keySet()) {
 			trace.intStream().mapToObj(this.components).filter(Objects::nonNull).forEach(component -> {
-				for (var itr = component.referencedComponents.iterator(); itr.hasNext();)
+				for (var itr = component.linkedComponents.iterator(); itr.hasNext();)
 					if (!trace.contains(itr.nextInt())) itr.remove();
 			});
 		}

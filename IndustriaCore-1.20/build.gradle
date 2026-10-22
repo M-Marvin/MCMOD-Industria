@@ -155,7 +155,7 @@ dependencies {
 	// endregion
 	
 	// NodeNet
-	implementation "de.m_marvin.industria:nodenet:${minecraft_version}-${nodenet_version}:mojmap"
+	implementation("de.m_marvin.industria:nodenet:${minecraft_version}-${nodenet_version}")
  	
 	// region Valkyrien Skies
 	implementation("org.valkyrienskies.core:api:${vs_core_version}") { transitive = false
@@ -186,6 +186,7 @@ dependencies {
 	//jarJar(implementation(additionalRuntimeClasspath("de.m_marvin.electronflow:tvnl-nna:${tvnl_nna_version}")))
 	jarJar(implementation(additionalRuntimeClasspath("de.m_marvin.univec:univec:${univec_version}")))
 	jarJar(implementation(additionalRuntimeClasspath("de.m_marvin.unimap:unimap:${unimap_version}")))
+	jarJar(implementation(additionalRuntimeClasspath("de.m_marvin.stdextras:stdextras:${stdextras_version}")))
 	// endregion
 	
 	// region compat

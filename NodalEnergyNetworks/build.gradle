@@ -120,6 +120,7 @@ dependencies {
 	jarJar(implementation(additionalRuntimeClasspath("de.m_marvin.electronflow:tvnl-nna:${tvnl_nna_version}")))
 	jarJar(implementation(additionalRuntimeClasspath("de.m_marvin.univec:univec:${univec_version}")))
 	jarJar(implementation(additionalRuntimeClasspath("de.m_marvin.unimap:unimap:${unimap_version}")))
+	jarJar(implementation(additionalRuntimeClasspath("de.m_marvin.stdextras:stdextras:${stdextras_version}")))
 	// endregion
 	
 }

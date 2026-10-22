@@ -1,18 +1,7 @@
 package de.m_marvin.industria.core.electrics.types.blocks;
 
-import java.util.List;
-import java.util.stream.IntStream;
-
 import de.m_marvin.industria.core.client.util.TooltipAdditions;
 import de.m_marvin.industria.core.conduits.engine.NodePointSupplier;
-import de.m_marvin.industria.core.conduits.types.ConduitNode;
-import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
-import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ElectricElement;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ElectricNode;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ComponentCircuitContext;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability.ElectricComponent;
-import de.m_marvin.industria.core.registries.ElectricElements;
 import de.m_marvin.industria.core.registries.NodeTypes;
 import de.m_marvin.industria.core.util.VoxelShapeUtility;
 import de.m_marvin.industria.core.util.VoxelShapeUtility.ShapeType;
@@ -23,7 +12,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -36,9 +24,8 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import tvnlnna.nodal.NodalElementState;
 
-public class WireHolderBlock extends Block implements IElectricBlock, ITooltipAdditionsModifier, SimpleWaterloggedBlock {
+public class WireHolderBlock extends Block implements ITooltipAdditionsModifier, SimpleWaterloggedBlock {
 	
 	public static final NodePointSupplier NODES = NodePointSupplier.define()
 			.addNode(NodeTypes.ELECTRIC, 8, new Vec3i(8, 8, 5))
@@ -85,65 +72,55 @@ public class WireHolderBlock extends Block implements IElectricBlock, ITooltipAd
 		});
 	}
 	
-	@Override
-	public ConduitNode[] getConduitNodes(Level level, BlockPos pos, BlockState state) {
-		return NODES.getNodes(state);
-	}
-
-	@Override
-	public void updateElectricElements(Level level, ElectricReference reference, BlockState instance, ComponentCircuitContext context, boolean initialInstall) {
-
-		if (initialInstall) {
-			
-			NodePos node = this.getElectricConnections(level, reference, instance)[0];
-			List<String[]> cableLanes = ElectricUtility.getLaneLabels(level, node, ElectricComponent::isWire);
-			int laneCount = cableLanes.stream().mapToInt(l -> l.length).max().orElse(0);
-			
-			String[] lt = new String[laneCount];
-			int id = 0;
-			for (int i = 0; i < laneCount; i++) {
-				for (String[] lanes : cableLanes) {
-					if (lanes.length > i) {
-						if (lt[i] == null || lt[i].equals(lanes[i])) {
-							lt[i] = lanes[i];
-							continue;
-						} else {
-//							context.installResistor(CircuitElement.element(reference, "Rjoint_" + id++), CircuitNode.node(node, lt[i]), CircuitNode.node(node, lanes[i]), 0.01);
-							NodalElementState resistorState = context.install(
-									ElectricElements.RESISTOR.get(), ElectricElement.element(reference, "joint_" + id++), 
-									ElectricNode.node(node, lt[i]), ElectricNode.node(node, lanes[i]));
-							resistorState.setParameter("R", 0.01); // TODO
-						}
-					}
-				}
-			}
-			
-		}
-		
-	}
-	
 //	@Override
-//	public double getCurrentPower(Level level, ElectricReference reference, BlockState instance) {
-//		return 0;
+//	public ConduitNode[] getConduitNodes(Level level, BlockPos pos, BlockState state) {
+//		return NODES.getNodes(state);
 //	}
-//	
+//
 //	@Override
-//	public double getMaxPowerGeneration(Level level, ElectricReference reference, BlockState instance) {
-//		return 0;
+//	public void updateElectricElements(Level level, ElectricReference reference, BlockState instance, ComponentCircuitContext context, boolean initialInstall) {
+//
+//		if (initialInstall) {
+//			
+//			NodePos node = this.getElectricConnections(level, reference, instance)[0];
+//			List<String[]> cableLanes = ElectricUtility.getLaneLabels(level, node, ElectricComponent::isWire);
+//			int laneCount = cableLanes.stream().mapToInt(l -> l.length).max().orElse(0);
+//			
+//			String[] lt = new String[laneCount];
+//			int id = 0;
+//			for (int i = 0; i < laneCount; i++) {
+//				for (String[] lanes : cableLanes) {
+//					if (lanes.length > i) {
+//						if (lt[i] == null || lt[i].equals(lanes[i])) {
+//							lt[i] = lanes[i];
+//							continue;
+//						} else {
+////							context.installResistor(CircuitElement.element(reference, "Rjoint_" + id++), CircuitNode.node(node, lt[i]), CircuitNode.node(node, lanes[i]), 0.01);
+//							NodalElementState resistorState = context.install(
+//									ElectricElements.RESISTOR.get(), ElectricElement.element(reference, "joint_" + id++), 
+//									ElectricNode.node(node, lt[i]), ElectricNode.node(node, lanes[i]));
+//							resistorState.setParameter("R", 0.01); // TODO
+//						}
+//					}
+//				}
+//			}
+//			
+//		}
+//		
 //	}
 	
-	@Override
-	public NodePos[] getElectricConnections(Level level, ElectricReference reference, BlockState instance) {
-		return IntStream.range(0, NODE_COUNT).mapToObj(i -> new NodePos(reference.block(), i)).toArray(i -> new NodePos[i]);
-	}
-
-	@Override
-	public String[] getWireLanes(Level level, ElectricReference reference, BlockState instance, NodePos node) {
-		return new String[] {};
-	}
-
-	@Override
-	public void setWireLanes(Level level, ElectricReference reference, BlockState instance, NodePos node, String[] laneLabels) {}
+//	@Override
+//	public NodePos[] getElectricConnections(Level level, ElectricReference reference, BlockState instance) {
+//		return IntStream.range(0, NODE_COUNT).mapToObj(i -> new NodePos(reference.block(), i)).toArray(i -> new NodePos[i]);
+//	}
+//
+//	@Override
+//	public String[] getWireLanes(Level level, ElectricReference reference, BlockState instance, NodePos node) {
+//		return new String[] {};
+//	}
+//
+//	@Override
+//	public void setWireLanes(Level level, ElectricReference reference, BlockState instance, NodePos node, String[] laneLabels) {}
 	
 	private boolean canAttachTo(BlockGetter pBlockReader, BlockPos pPos, Direction pDirection) {
 		BlockState blockstate = pBlockReader.getBlockState(pPos);

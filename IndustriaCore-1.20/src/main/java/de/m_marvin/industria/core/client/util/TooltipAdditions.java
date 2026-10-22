@@ -7,7 +7,6 @@ import de.m_marvin.industria.core.conduits.types.conduits.Conduit;
 import de.m_marvin.industria.core.conduits.types.items.AbstractConduitBlockItem;
 import de.m_marvin.industria.core.conduits.types.items.AbstractConduitItem;
 import de.m_marvin.industria.core.contraptions.ContraptionUtility;
-import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.conduits.ElectricConduit;
 import de.m_marvin.industria.core.magnetism.types.blocks.IMagneticBlock;
 import de.m_marvin.industria.core.parametrics.BlockParametrics;
@@ -72,7 +71,7 @@ public class TooltipAdditions {
 			
 			addPhysicsTooltips(tooltips, block);
 			
-			if (block instanceof IElectricBlock) addElectricTooltips(tooltips, block);
+//			if (block instanceof IElectricBlock) addElectricTooltips(tooltips, block);
 			if (block.defaultBlockState().is(Tags.Blocks.MAGNETIC)) addMagnetismTooltips(tooltips, block);
 		}
 		

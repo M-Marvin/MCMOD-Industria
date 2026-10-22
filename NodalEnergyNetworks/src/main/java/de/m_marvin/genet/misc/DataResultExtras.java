@@ -8,11 +8,14 @@ import java.util.stream.Stream;
 
 import com.mojang.serialization.DataResult;
 
+import de.m_marvin.stdextras.unstable.UnstableFunction;
+import de.m_marvin.stdextras.unstable.UnstableSupplier;
+
 public class DataResultExtras {
 	
 	private DataResultExtras() {}
 	
-	public static <A, B> Function<A, DataResult<B>> unstableNonNullMap(UnstableFunction<A, B> mapper) {
+	public static <A, B> Function<A, DataResult<B>> unstableNonNullMap(UnstableFunction<A, B, Exception> mapper) {
 		return a -> {
 			try {
 				B b = mapper.apply(a);
@@ -23,7 +26,7 @@ public class DataResultExtras {
 		};
 	}
 
-	public static <A, B> Function<A, DataResult<B>> unstableMap(UnstableFunction<A, B> mapper) {
+	public static <A, B> Function<A, DataResult<B>> unstableMap(UnstableFunction<A, B, Exception> mapper) {
 		return a -> {
 			try {
 				return DataResult.success(mapper.apply(a));
@@ -33,7 +36,7 @@ public class DataResultExtras {
 		};
 	}
 	
-	public static <T> DataResult<T> unstableNonNull(UnstableSupplier<T> supplier) {
+	public static <T> DataResult<T> unstableNonNull(UnstableSupplier<T, Exception> supplier) {
 		try {
 			T result = supplier.get();
 			return result == null ? DataResult.error(() -> "result is null") : DataResult.success(result);
@@ -42,7 +45,7 @@ public class DataResultExtras {
 		}
 	}
 	
-	public static <T> DataResult<T> unstable(UnstableSupplier<T> supplier) {
+	public static <T> DataResult<T> unstable(UnstableSupplier<T, Exception> supplier) {
 		try {
 			T result = supplier.get();
 			return DataResult.success(result);

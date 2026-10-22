@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nodalElement name="C" nonLinear="false" timeVariant="true">
+	<node name="p_A" constant="i_A"/>
+	<node name="p_B" constant="i_B"/>
+	<variable name="C"/>
+	<stampE>
+				p_A		p_B
+		i_A		C		0-C
+		i_B		0-C		C
+	</stampE>
+</nodalElement>

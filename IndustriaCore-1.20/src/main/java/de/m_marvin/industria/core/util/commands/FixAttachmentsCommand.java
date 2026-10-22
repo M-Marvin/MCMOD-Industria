@@ -1,6 +1,5 @@
 package de.m_marvin.industria.core.util.commands;
 
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,27 +8,14 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
-import de.m_marvin.industria.core.conduits.ConduitUtility;
-import de.m_marvin.industria.core.conduits.events.ConduitEvent;
 import de.m_marvin.industria.core.conduits.types.ConduitPos;
-import de.m_marvin.industria.core.conduits.types.conduits.ConduitEntity;
-import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
-import de.m_marvin.industria.core.electrics.types.conduits.IElectricConduit;
-import de.m_marvin.industria.core.kinetics.types.blocks.IKineticBlock;
-import de.m_marvin.industria.core.registries.Tags;
-import de.m_marvin.industria.core.util.types.EventStage;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.eventbus.api.Event;
 
 public class FixAttachmentsCommand {
 	
@@ -93,31 +79,31 @@ public class FixAttachmentsCommand {
 	
 	public static void fixBlockAndConduitsAt(Level level, BlockPos pos, Set<BlockPos> fixedBlocks, Set<ConduitPos> fixedConduits) {
 		
-		BlockState state = level.getBlockState(pos);
-		if (state.getBlock() instanceof IElectricBlock || state.is(Tags.Blocks.MAGNETIC) || state.getBlock() instanceof IKineticBlock) {
-			
-			if (!fixedBlocks.contains(pos)) {
-				
-				Event eventBlock = new BlockEvent.NeighborNotifyEvent(level, pos, state, EnumSet.allOf(Direction.class), false);
-				MinecraftForge.EVENT_BUS.post(eventBlock);
-				fixedBlocks.add(pos);
-				
-				for (ConduitEntity conduit : ConduitUtility.getConduitsAtBlock(level, pos)) {
-					
-					if (conduit.getConduitState().getConduit() instanceof IElectricConduit) {
-						
-						if (!fixedConduits.contains(conduit.getPosition())) {
-							Event eventConduit = new ConduitEvent.ConduitPlaceEvent(level, conduit.getPosition(), conduit, EventStage.POST);
-							MinecraftForge.EVENT_BUS.post(eventConduit);
-							fixedConduits.add(conduit.getPosition());
-						}
-						
-					}
-					
-				}
-			}
-			
-		}
+//		BlockState state = level.getBlockState(pos);
+//		if (state.getBlock() instanceof IElectricBlock || state.is(Tags.Blocks.MAGNETIC) || state.getBlock() instanceof IKineticBlock) {
+//			
+//			if (!fixedBlocks.contains(pos)) {
+//				
+//				Event eventBlock = new BlockEvent.NeighborNotifyEvent(level, pos, state, EnumSet.allOf(Direction.class), false);
+//				MinecraftForge.EVENT_BUS.post(eventBlock);
+//				fixedBlocks.add(pos);
+//				
+//				for (ConduitEntity conduit : ConduitUtility.getConduitsAtBlock(level, pos)) {
+//					
+//					if (conduit.getConduitState().getConduit() instanceof IElectricConduit) {
+//						
+//						if (!fixedConduits.contains(conduit.getPosition())) {
+//							Event eventConduit = new ConduitEvent.ConduitPlaceEvent(level, conduit.getPosition(), conduit, EventStage.POST);
+//							MinecraftForge.EVENT_BUS.post(eventConduit);
+//							fixedConduits.add(conduit.getPosition());
+//						}
+//						
+//					}
+//					
+//				}
+//			}
+//			
+//		}
 		
 	}
 	

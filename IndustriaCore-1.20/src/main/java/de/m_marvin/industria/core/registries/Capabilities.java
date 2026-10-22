@@ -4,7 +4,7 @@ import de.m_marvin.industria.IndustriaCore;
 import de.m_marvin.industria.core.conduits.engine.ConduitHolderCapability;
 import de.m_marvin.industria.core.contraptions.engine.ContraptionHandlerCapability;
 import de.m_marvin.industria.core.electrics.engine.ElectricNetworkSpaceCapability;
-import de.m_marvin.industria.core.kinetics.engine.KineticNetworkSpaceCapability;
+import de.m_marvin.industria.core.energy.engine.LevelBlockDomainIntegrator;
 import de.m_marvin.industria.core.magnetism.engine.MagnetismHandlerCapability;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
@@ -23,7 +23,9 @@ public class Capabilities {
 	public static final Capability<ElectricNetworkSpaceCapability> ELECTRIC_NETWORK_SPACE_CAPABILITY = CapabilityManager.get(new CapabilityToken<ElectricNetworkSpaceCapability>() {});
 	public static final Capability<ContraptionHandlerCapability> CONTRAPTION_HANDLER_CAPABILITY = CapabilityManager.get(new CapabilityToken<ContraptionHandlerCapability>() {});
 	public static final Capability<MagnetismHandlerCapability> MAGNETISM_HANDLER_CAPABILITY = CapabilityManager.get(new CapabilityToken<MagnetismHandlerCapability>() {});
-	public static final Capability<KineticNetworkSpaceCapability> KINETIC_NETWORK_SPACE_CAPABILITY = CapabilityManager.get(new CapabilityToken<KineticNetworkSpaceCapability>() {});
+//	public static final Capability<KineticNetworkSpaceCapability> KINETIC_NETWORK_SPACE_CAPABILITY = CapabilityManager.get(new CapabilityToken<KineticNetworkSpaceCapability>() {});
+	
+	public static final Capability<LevelBlockDomainIntegrator> LEVEL_BLOCK_INTEGRATOR = CapabilityManager.get(new CapabilityToken<LevelBlockDomainIntegrator>() {});
 	
 	@SubscribeEvent
 	public static void registerCapabilities(RegisterCapabilitiesEvent event) {
@@ -39,7 +41,7 @@ public class Capabilities {
 			event.addCapability(ResourceLocation.tryBuild(IndustriaCore.MODID, "electrics"), new ElectricNetworkSpaceCapability(event.getObject()));
 			event.addCapability(ResourceLocation.tryBuild(IndustriaCore.MODID, "contraption"), new ContraptionHandlerCapability(event.getObject()));
 			event.addCapability(ResourceLocation.tryBuild(IndustriaCore.MODID, "magnetism"), new MagnetismHandlerCapability(event.getObject()));
-			event.addCapability(ResourceLocation.tryBuild(IndustriaCore.MODID, "kinetics"), new KineticNetworkSpaceCapability(event.getObject()));
+//			event.addCapability(ResourceLocation.tryBuild(IndustriaCore.MODID, "kinetics"), new KineticNetworkSpaceCapability(event.getObject()));
 		}
 		
 	}

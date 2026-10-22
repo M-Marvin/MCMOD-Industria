@@ -1,11 +1,6 @@
 package de.m_marvin.industria.core.electrics.types.blockentities;
 
 import de.m_marvin.industria.core.conduits.types.ConduitPos.NodePos;
-import de.m_marvin.industria.core.electrics.ElectricUtility;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ElectricElement;
-import de.m_marvin.industria.core.electrics.engine.ElectricNetwork.ElectricNode;
-import de.m_marvin.industria.core.electrics.types.IElectric.ElectricReference;
-import de.m_marvin.industria.core.electrics.types.blocks.IElectricBlock;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxMenu;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxMenu.ExternalNodeConstructor;
 import de.m_marvin.industria.core.electrics.types.containers.JunctionBoxMenu.InternalNodeConstructor;
@@ -26,7 +21,6 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import tvnlnna.nodal.NodalElementState;
 
 public abstract class AbstractSourceBlockEntity extends BlockEntity implements MenuProvider, IDataSlotContainer, IJunctionEdit {
 
@@ -65,31 +59,31 @@ public abstract class AbstractSourceBlockEntity extends BlockEntity implements M
 	// to call the function below with the correct element name
 	
 	protected double getDeviceCurrent(String sourceElement, String paramater) {
-		if (getBlockState().getBlock() instanceof IElectricBlock electric) {
-			BlockPos masterPos = electric.getConnectorMasterPos(level, worldPosition, getBlockState());
-			ElectricReference reference = ElectricReference.block(masterPos);
-			NodalElementState sourceState = ElectricUtility.getElementState(level, ElectricElement.element(reference, sourceElement));
-			return sourceState != null ? sourceState.getParamter(paramater) : 0.0;
-		}
+//		if (getBlockState().getBlock() instanceof IElectricBlock electric) {
+//			BlockPos masterPos = electric.getConnectorMasterPos(level, worldPosition, getBlockState());
+//			ElectricReference reference = ElectricReference.block(masterPos);
+//			NodalElementState sourceState = ElectricUtility.getElementState(level, ElectricElement.element(reference, sourceElement));
+//			return sourceState != null ? sourceState.getParamter(paramater) : 0.0;
+//		}
 		return 0.0;
 	}
 	
 	public double getDeviceVoltage() {
 		// we assume here that all conduit nodes on the block serve the same function and have exactly two connectors for power
 		// more complex sources might need to override this
-		if (getBlockState().getBlock() instanceof IElectricBlock electric) {
-			BlockPos masterPos = electric.getConnectorMasterPos(level, worldPosition, getBlockState());
-			ElectricReference reference = ElectricReference.block(masterPos);
-			NodePos[] nodes = electric.getElectricConnections(level, reference, getBlockState());
-			if (nodes.length >= 1) {
-				String[] lanes = electric.getWireLanes(level, reference, getBlockState(), nodes[0]);
-				if (lanes.length >= 2) {
-					ElectricNode node1 = ElectricNode.node(nodes[0], lanes[0]);
-					ElectricNode node2 = ElectricNode.node(nodes[0], lanes[1]);
-					return ElectricUtility.getVoltageBetween(level, node1, node2);
-				}
-			}
-		}
+//		if (getBlockState().getBlock() instanceof IElectricBlock electric) {
+//			BlockPos masterPos = electric.getConnectorMasterPos(level, worldPosition, getBlockState());
+//			ElectricReference reference = ElectricReference.block(masterPos);
+//			NodePos[] nodes = electric.getElectricConnections(level, reference, getBlockState());
+//			if (nodes.length >= 1) {
+//				String[] lanes = electric.getWireLanes(level, reference, getBlockState(), nodes[0]);
+//				if (lanes.length >= 2) {
+//					ElectricNode node1 = ElectricNode.node(nodes[0], lanes[0]);
+//					ElectricNode node2 = ElectricNode.node(nodes[0], lanes[1]);
+//					return ElectricUtility.getVoltageBetween(level, node1, node2);
+//				}
+//			}
+//		}
 		return 0.0;
 	}
 	

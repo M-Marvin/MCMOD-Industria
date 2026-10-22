@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nodalElement name="N" nonLinear="false" timeVariant="false">
+	<node name="N_A" constant="M_A"/>
+	<local name="M_src" constant="N_src"/>
+	<variable name="N"/>
+	<stampA>
+				N_A	M_src
+		M_A		0	1
+		N_src	1	0
+	</stampA>
+	<stampZ>
+		M_A		0
+		N_src	N
+	</stampZ>
+</nodalElement>

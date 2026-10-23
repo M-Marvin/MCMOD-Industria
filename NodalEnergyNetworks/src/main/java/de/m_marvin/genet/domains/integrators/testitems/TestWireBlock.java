@@ -5,7 +5,7 @@ import de.m_marvin.genet.domains.TypeChain;
 import de.m_marvin.genet.domains.integrators.IDeviceImplementor;
 import de.m_marvin.genet.domains.integrators.LevelBlockDomainIntegrator.BlockDevice;
 import de.m_marvin.genet.network.nodal.Element;
-import de.m_marvin.genet.network.nodal.NodalElementManager;
+import de.m_marvin.genet.network.nodal.ElementManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -107,7 +107,6 @@ public class TestWireBlock extends Block implements IDeviceImplementor {
 
 	@Override
 	public void installDeviceElements(BlockDevice device) {
-		var resistorModel = NodeNet.MODELS.getElement(ResourceLocation.tryBuild(NodeNet.MODID, "electric/resistor"));
 		var innerNode = device.innerNode("junction");
 		for (var prop : device.getState().getProperties()) {
 			if (!device.getState().getValue((BooleanProperty) prop))
@@ -116,7 +115,7 @@ public class TestWireBlock extends Block implements IDeviceImplementor {
 			var name = device.elementName("R" + side.name());
 			var outerNode = device.outerNode(side);
 
-			var resistor = new Element<TypeChain, TypeChain>(name, resistorModel);
+			var resistor = NodeNet.ELEMENTS.<TypeChain, TypeChain>makeElement(name, ResourceLocation.tryBuild(NodeNet.MODID, "electric/resistor"));
 			resistor.getState().setNodeNames(innerNode, outerNode);
 			device.install(resistor);
 		}		

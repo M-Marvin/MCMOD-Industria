@@ -1,4 +1,4 @@
-package de.m_marvin.genet.network;
+package de.m_marvin.genet.misc;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -11,7 +11,12 @@ import de.m_marvin.unimap.types.MultiBiMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 
-public class Tracer {
+/**
+ * A helper class which provides a algorithm for building network sets from a node2element map and a set of starting nodes.
+ */
+public final class Tracer {
+	
+	private Tracer() {}
 	
 	@SuppressWarnings("deprecation")
 	public static List<IntSet> trace(MultiBiMap<Integer, Integer> node2element, Collection<Integer> startNodes) {

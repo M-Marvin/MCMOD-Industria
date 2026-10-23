@@ -61,10 +61,10 @@ public class LevelBlockDomainIntegrator extends TypeChainDomain.DomainIntegrator
 		public static final TypeChain.Format BLOCK_DEVICE = TypeChain.registerFormat(NodeNet.MODID, "block_device", TypeChain.Format.of(ResourceLocation.class, BlockPos.class));
 		/** represents a element within the device **/
 		public static final TypeChain.Format BLOCK_DEVICE_ELEMENT = TypeChain.registerFormat(NodeNet.MODID, "block_device_element", BLOCK_DEVICE.sub(String.class));
-		/** represents a node internal to the device on an element **/
-		public static final TypeChain.Format BLOCK_DEVICE_ELEMENT_NODE = TypeChain.registerFormat(NodeNet.MODID, "block_device_element_node", BLOCK_DEVICE.sub(String.class));
-		/** represents a node on the device within the domain **/
-		public static final TypeChain.Format BLOCK_DEVICE_FACE_NODE = TypeChain.registerFormat(NodeNet.MODID, "block_device_face_node", BLOCK_DEVICE.sub(Axis.class));
+		/** represents a node internal to the device **/
+		public static final TypeChain.Format BLOCK_DEVICE_INNER_NODE = TypeChain.registerFormat(NodeNet.MODID, "block_device_element_node", BLOCK_DEVICE.sub(String.class));
+		/** represents a node of the device which can connect to other devices **/
+		public static final TypeChain.Format BLOCK_DEVICE_OUTER_NODE = TypeChain.registerFormat(NodeNet.MODID, "block_device_face_node", BLOCK_DEVICE.sub(Axis.class));
 		// NOTE: Since an axis is used to represent nodes on the four sides of an block
 		// each value (X Y Z) describes a node POSITIVE from the block position.
 		// To represent a node on the opposite site, the position has to be decremented by 1 with the same axis value
@@ -72,24 +72,20 @@ public class LevelBlockDomainIntegrator extends TypeChainDomain.DomainIntegrator
 		public static TypeChain deviceName(Level level, BlockPos position) {
 			return BLOCK_DEVICE.of(level.dimensionTypeId().location(), position);
 		}
-
-		public static TypeChain deviceNode(Level level, BlockPos position, Direction side) {
-			if (side.getAxisDirection() == AxisDirection.POSITIVE)
-				return BLOCK_DEVICE_FACE_NODE.of(level.dimensionTypeId().location(), position, side.getAxis());
-			else
-				return BLOCK_DEVICE_FACE_NODE.of(level.dimensionTypeId().location(), position.relative(side), side.getAxis());
-		}
 		
 		public TypeChain elementName(String name) {
 			return BLOCK_DEVICE_ELEMENT.subChain(name(), name);
 		}
 		
 		public TypeChain innerNode(String name) {
-			return BLOCK_DEVICE_ELEMENT_NODE.subChain(name(), name);
+			return BLOCK_DEVICE_INNER_NODE.subChain(name(), name);
 		}
 		
 		public TypeChain outerNode(Direction side) {
-			return deviceNode(this.getLevel(), this.getPosition(), side);
+			if (side.getAxisDirection() == AxisDirection.POSITIVE)
+				return BLOCK_DEVICE_OUTER_NODE.of(getLevel().dimensionTypeId().location(), getPosition(), side.getAxis());
+			else
+				return BLOCK_DEVICE_OUTER_NODE.of(getLevel().dimensionTypeId().location(), getPosition().relative(side), side.getAxis());
 		}
 		
 		private BlockState cachedState = Blocks.VOID_AIR.defaultBlockState();
@@ -118,7 +114,7 @@ public class LevelBlockDomainIntegrator extends TypeChainDomain.DomainIntegrator
 				
 				TypeChain[] nodes = Stream.of(Direction.values())
 						.filter(side -> implementor.hasDeviceConnection(getLevel(), getPosition(), state, side) == FaceConnection.OPEN)
-						.map(side -> deviceNode(LevelBlockDomainIntegrator.this.getLevel(), getPosition(), side))
+						.map(side -> outerNode(side))
 						.toArray(TypeChain[]::new);
 				boolean nodesChanged = !Arrays.equals(this.cachedNodes, nodes);
 				

@@ -19,27 +19,15 @@ public class Grid<N, E> extends NetworkSpace<N, E, Device<N, E>, Grid<N, E>>.Net
 	}
 
 	@Override
-	protected void afterElementsAdded(Collection<Device<N, E>> elements) {
-		// TODO Auto-generated method stub
-		
-	}
+	protected void afterElementsAdded(Collection<Device<N, E>> elements) {}
 
 	@Override
-	protected void afterElementsRemoved(Collection<Device<N, E>> elements) {
-		// TODO Auto-generated method stub
-		
+	protected void afterElementsRemoved(Collection<Device<N, E>> elements) {}
+	
+	@Override
+	protected void clearNetwork() {
+		super.clearNetwork();
+		this.circuits.reset();
 	}
-
-//	@Override
-//	protected void afterElementsAdded(IntCollection elements) {
-//		elements.intStream()
-//			.mapToObj(this::getElementInstance)
-//			.forEach(device -> device.installToCircuit(this.circuits));;
-//	}
-//
-//	@Override
-//	protected void afterElementsRemoved() {
-//		this.circuits.reset();
-//	}
 	
 }

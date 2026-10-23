@@ -16,6 +16,7 @@ import de.m_marvin.basicxml.XMLInputStream;
 import de.m_marvin.basicxml.marshaling.XMLMarshalingException;
 import de.m_marvin.basicxml.marshaling.XMLUnmarshaler;
 import de.m_marvin.genet.NodeNet;
+import de.m_marvin.tvnlnna.nodal.INodalElement;
 import de.m_marvin.tvnlnna.nodal.NodalElement;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
@@ -26,7 +27,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class NodalElementManager extends SimplePreparableReloadListener<Map<ResourceLocation, NodalElement>> {
+public class ElementManager extends SimplePreparableReloadListener<Map<ResourceLocation, NodalElement>> {
 	
 	private static final Logger LOGGER = NodeNet.LOGGER;
 	private static final String PATH_XML_SUFIX = ".xml";
@@ -40,18 +41,23 @@ public class NodalElementManager extends SimplePreparableReloadListener<Map<Reso
 		event.addListener(this);
 	}
 	
-	public NodalElementManager(Gson gson, String directory) {
+	public ElementManager(Gson gson, String directory) {
 		this.unmarshaler = new XMLUnmarshaler(true, NodalElement.class);
 		this.directory = directory;
 		
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
-	public NodalElement getElement(ResourceLocation location) {
+	public NodalElement getElementModel(ResourceLocation location) {
 		if (!this.byLocation.containsKey(location)) {
 			LOGGER.error("Couldn't find nodel model '" + location + "'!");
 		}
-		return this.byLocation.get(location);
+		return this.byLocation.get(location); // FIXME fallback invalid model
+	}
+	
+	public <N, E> Element<N, E> makeElement(E name, ResourceLocation modelLocation) {
+		INodalElement model = getElementModel(modelLocation);
+		return new Element<N, E>(name, model);
 	}
 	
 	public Map<ResourceLocation, NodalElement> getElementDefinitions() {

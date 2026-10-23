@@ -1,17 +1,17 @@
 package de.m_marvin.genet.network.nodal;
 
 import de.m_marvin.genet.network.NetworkElement;
-import de.m_marvin.genet.network.NetworkSpace;
 import de.m_marvin.tvnlnna.nodal.INodalElement;
 import de.m_marvin.tvnlnna.nodal.NodalElementState;
+import de.m_marvin.tvnlnna.nodal.NodalNetwork;
 
 public class Element<N, E> implements NetworkElement<N, E, Circuit<N, E>> {
 	
+	private NodalNetwork<N, E> network;
 	private final NodalElementState<N, E> state;
 	
 	public Element(E reference, INodalElement elementDef) {
 		this.state = elementDef.newInstance(reference);
-		// TODO
 	}
 	
 	public NodalElementState<N, E> getState() {
@@ -30,14 +30,20 @@ public class Element<N, E> implements NetworkElement<N, E, Circuit<N, E>> {
 
 	@Override
 	public void onRemovalFromNetwork() {
-		// TODO Auto-generated method stub
+		if (this.network == null)
+			return;
 		
+		this.network.removeElement(this.state);
+		this.network = null;
 	}
 
 	@Override
-	public void onInsertionToNetwork(Circuit<N, E> network) {
-		// TODO Auto-generated method stub
-		
+	public void onInsertionToNetwork(Circuit<N, E> circuit) {
+		if (this.network != null)
+			throw new IllegalStateException("element is already inserted into a network: " + name());
+
+		this.network = circuit.getNodal();
+		this.network.addElement(this.state);
 	}
 
 }

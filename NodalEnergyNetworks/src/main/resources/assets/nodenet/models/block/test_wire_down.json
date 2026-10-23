@@ -1,0 +1,23 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "nodenet:block/test_wire",
+		"particle": "nodenet:block/test_wire"
+	},
+	"elements": [
+		{
+			"name": "down",
+			"from": [6, 0, 6],
+			"to": [10, 6, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [6, 6, 0]},
+			"faces": {
+				"north": {"uv": [6, 10, 10, 16], "texture": "#0"},
+				"east": {"uv": [6, 10, 10, 16], "texture": "#0"},
+				"south": {"uv": [6, 10, 10, 16], "texture": "#0"},
+				"west": {"uv": [6, 10, 10, 16], "texture": "#0"},
+				"down": {"uv": [10, 6, 6, 10], "texture": "#0"}
+			}
+		}
+	]
+}

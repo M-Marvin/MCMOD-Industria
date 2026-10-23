@@ -20,18 +20,10 @@ public class Circuit<N, E> extends NetworkSpace<N, E, Element<N, E>, Circuit<N, 
 	}
 	
 	@Override
-	protected void afterElementsAdded(Collection<Element<N, E>> elements) {
-		elements.stream()
-			.map(Element::getState)
-			.forEach(this.nodal::addElement);
-	}
+	protected void afterElementsAdded(Collection<Element<N, E>> elements) {}
 
 	@Override
-	protected void afterElementsRemoved(Collection<Element<N, E>> elements) {
-		elements.stream()
-			.map(Element::getState)
-			.forEach(this.nodal::removeElement);
-	}
+	protected void afterElementsRemoved(Collection<Element<N, E>> elements) {}
 	
 	@Override
 	protected void clearNetwork() {

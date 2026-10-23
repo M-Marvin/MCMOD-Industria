@@ -1,0 +1,57 @@
+{
+	"multipart": [
+		{
+			"apply": {
+				"model": "nodenet:block/test_wire_center"
+			}
+		},
+		{
+			"apply": {
+				"model": "nodenet:block/test_wire_north"
+			},
+			"when": {
+				"north": "true"
+			}
+		},
+		{
+			"apply": {
+				"model": "nodenet:block/test_wire_south"
+			},
+			"when": {
+				"south": "true"
+			}
+		},
+		{
+			"apply": {
+				"model": "nodenet:block/test_wire_east"
+			},
+			"when": {
+				"east": "true"
+			}
+		},
+		{
+			"apply": {
+				"model": "nodenet:block/test_wire_west"
+			},
+			"when": {
+				"west": "true"
+			}
+		},
+		{
+			"apply": {
+				"model": "nodenet:block/test_wire_up"
+			},
+			"when": {
+				"up": "true"
+			}
+		},
+		{
+			"apply": {
+				"model": "nodenet:block/test_wire_down"
+			},
+			"when": {
+				"down": "true"
+			}
+		}
+	]
+}

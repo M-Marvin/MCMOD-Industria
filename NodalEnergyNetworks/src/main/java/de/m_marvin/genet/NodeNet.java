@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import de.m_marvin.genet.domains.TypeChainDomain;
 import de.m_marvin.genet.domains.integrators.LevelBlockDomainIntegrator;
 import de.m_marvin.genet.domains.integrators.testitems.TestWireBlock;
-import de.m_marvin.genet.network.nodal.NodalElementManager;
+import de.m_marvin.genet.network.nodal.ElementManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.BlockItem;
@@ -40,8 +40,8 @@ public class NodeNet {
 
 	public static final Logger LOGGER = LogManager.getLogger();
 	
-	/** Default Nodal Model Definition Manager, loads Models from "data/modid/netmodels" **/
-	public static final NodalElementManager MODELS = new NodalElementManager(new Gson(), "netmodels");
+	/** Default ElementManager, loads Models from "data/modid/elements" **/
+	public static final ElementManager ELEMENTS = new ElementManager(new Gson(), "elements");
 	
 	/** Resource Key for the Domain Registry **/
 	public static final ResourceLocation DOMAINS_REGISTRY_LOCATION = ResourceLocation.tryBuild(NodeNet.MODID, "domains");

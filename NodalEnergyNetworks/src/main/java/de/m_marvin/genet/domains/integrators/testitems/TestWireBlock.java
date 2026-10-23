@@ -107,7 +107,7 @@ public class TestWireBlock extends Block implements IDeviceImplementor {
 
 	@Override
 	public void installDeviceElements(BlockDevice device) {
-		var resistorModel = NodeNet.MODELS.getElement(ResourceLocation.tryBuild(NodeNet.MODID, "resistor"));
+		var resistorModel = NodeNet.MODELS.getElement(ResourceLocation.tryBuild(NodeNet.MODID, "electric/resistor"));
 		var innerNode = device.innerNode("junction");
 		for (var prop : device.getState().getProperties()) {
 			if (!device.getState().getValue((BooleanProperty) prop))

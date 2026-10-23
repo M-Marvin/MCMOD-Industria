@@ -11,7 +11,8 @@ public class Circuit<N, E> extends NetworkSpace<N, E, Element<N, E>, Circuit<N, 
 	private final NodalNetwork<N, E> nodal = new NodalNetwork<>();
 	
 	public Circuit(CircuitSpace<N, E> networkSpace, IntCollection elements) {
-		networkSpace.super(elements);
+		networkSpace.super();
+		insertElements(elements);
 	}
 	
 	public NodalNetwork<N, E> getNodal() {

@@ -24,8 +24,6 @@ public abstract class Device<N, E> implements NetworkElement<N, E, Grid<N, E>> {
 		Element<N, E> replaced = this.elements.put(element.name(), element);
 		if (this.circuits != null)
 			this.circuits.insertElements(element);
-//		if (replaced != null)
-//			replaced.onRemovalFromNetwork();
 		return replaced;
 	}
 	
@@ -33,16 +31,12 @@ public abstract class Device<N, E> implements NetworkElement<N, E, Grid<N, E>> {
 		Element<N, E> removed = this.elements.remove(name);
 		if (this.circuits != null)
 			this.circuits.removeElements(name);
-//		if (removed != null)
-//			removed.onRemovalFromNetwork();
 		return removed;
 	}
 	
 	public void removeAllElements() {
 		if (this.circuits != null)
 			this.circuits.removeElements(this.elements.keySet());
-//		for (var removed : this.elements.values())
-//			removed.onRemovalFromNetwork();
 		this.elements.clear();
 	}
 	

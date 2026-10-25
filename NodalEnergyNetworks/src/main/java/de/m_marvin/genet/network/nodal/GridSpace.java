@@ -10,12 +10,12 @@ public class GridSpace<N, E> extends NetworkSpace<N, E, Device<N, E>, Grid<N, E>
 		return new Grid<N, E>(this, elements);
 	}
 
-	@Override
-	public void finalizeQueuedChanges() {
-		super.finalizeQueuedChanges();
-		this.ide2network.values().stream().distinct().forEach(network -> {
-			network.getCircuits().finalizeQueuedChanges();
-		});
-	}
+//	@Override
+//	public void finalizeQueuedChanges() {
+//		super.finalizeQueuedChanges();
+//		this.ide2network.values().stream().distinct().forEach(network -> {
+//			network.getCircuits().finalizeQueuedChanges();
+//		});
+//	}
 	
 }

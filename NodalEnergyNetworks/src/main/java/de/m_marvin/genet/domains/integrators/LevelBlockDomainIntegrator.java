@@ -109,7 +109,7 @@ public class LevelBlockDomainIntegrator extends TypeChainDomain.DomainIntegrator
 		@Override
 		public DeviceChangeResult onDeviceChange() {
 			
-			BlockState state = LevelBlockDomainIntegrator.this.getLevel().getBlockState(getPosition());
+			BlockState state = getLevel().getBlockState(getPosition());
 			if (state.getBlock() instanceof IDeviceImplementor implementor) {
 				
 				TypeChain[] nodes = Stream.of(Direction.values())

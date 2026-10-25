@@ -13,12 +13,12 @@ import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import com.google.common.collect.Streams;
-
 import de.m_marvin.genet.NodeNet;
 import de.m_marvin.genet.misc.OutOfIdError;
 import de.m_marvin.genet.misc.Tracer;
+import de.m_marvin.stdextras.ComparatorExtras;
 import de.m_marvin.stdextras.Pair;
+import de.m_marvin.stdextras.StreamExtras;
 import de.m_marvin.unimap.UniMap;
 import de.m_marvin.unimap.types.BiMap;
 import de.m_marvin.unimap.types.MultiBiMap;
@@ -161,7 +161,7 @@ public abstract class NetworkSpace<N, E, Ei extends NetworkElement<N, E, Ni>, Ni
 			}).distinct().toList();
 		
 		// trace connected elements and merge networks
-		for (IntSet traceIdes : Tracer.trace(this.idn2ide, idns)) {
+		for (IntSet traceIdes : Tracer.traceFromNodes(this.idn2ide, idns)) {
 			
 			// find networks contained within the trace, and separate elements without any network
 			Set<Ni> networksToMerge = new HashSet<Ni>();
@@ -179,7 +179,13 @@ public abstract class NetworkSpace<N, E, Ei extends NetworkElement<N, E, Ni>, Ni
 			Optional<Ni> network = networksToMerge.stream().max((n1, n2) -> Integer.compare(n1.elements.size(), n2.elements.size()));
 			if (network.isPresent())
 				network.get().merge(networksToMerge.stream().filter(n -> n != network.get()).toList(), netlessIdes);
-			Ni mergedNetwork = network.orElseGet(() -> createNetwork(netlessIdes));
+			Ni mergedNetwork = network.orElseGet(() -> {
+				// if there was no networks to merge (all new elements), create new network ...
+				Ni newNetwork = createNetwork(netlessIdes);
+				// ... and perform required operations on potential inner network
+				newNetwork.finalizeSubSpace(FinalizationPhase.INSERTIONS);
+				return newNetwork;
+			});
 			
 			// update element network mappings
 			mergedNetwork.elements.forEach(ide -> this.ide2network.put(ide, mergedNetwork));
@@ -224,49 +230,83 @@ public abstract class NetworkSpace<N, E, Ei extends NetworkElement<N, E, Ni>, Ni
 	public final void removeElements(E... names) {
 		removeElements(Arrays.asList(names));
 	}
+
+	public static enum FinalizationPhase {
+		REMOVALS,INSERTIONS;
+	}
+	
+	/**
+	 * This method needs to be called periodically to apply queued changes made by the {@link NetworkSpace#insertElements(Collection)} and {@link NetworkSpace#removeElements(Collection)} methods.<br>
+	 * It is fine to call it in between calls to these function to process all requests queued up to that point, but ideally this function should be called every tick my some central event handler to guarantee synronized processing of all requests once every tick.<br><br>
+	 * This method will first process the removal requests, then the insertion requests.
+	 */
+	public void finalizeQueuedChanges() {
+		finalizeQueuedChanges(FinalizationPhase.REMOVALS);
+		finalizeQueuedChanges(FinalizationPhase.INSERTIONS);
+	}
 	
 	/**
 	 * This method needs to be called periodically to apply queued changes made by the {@link NetworkSpace#insertElements(Collection)} and {@link NetworkSpace#removeElements(Collection)} methods.<br>
 	 * It is fine to call it in between calls to these function to process all requests queued up to that point, but ideally this function should be called every tick my some central event handler to guarantee synronized processing of all requests once every tick.
+	 * @param phase Weather to process the removal or insertion requests
 	 */
-	public void finalizeQueuedChanges() {
+	public void finalizeQueuedChanges(FinalizationPhase phase) {
 		
-		// check for conflicting elements which have to be removed before insertion
-		Stream<E> removeForReplace = this.insertionQueue.stream()
-			.map(Ei::name)
-			.filter(name -> !this.removalQueue.contains(name))
-			.filter(this.element2ide::containsKey);
-		
-		// build list of elements to remove
-		Collection<E> toRemove = Stream.concat(removeForReplace, this.removalQueue.stream()).toList();
-		
-		// remove elements
-		directRemoveElements(toRemove);
-		
-		// insert elements
-		directInsertElements(this.insertionQueue);
-		
-		// clear queue
-		this.removalQueue.clear();
-		this.insertionQueue.clear();
+		if (phase == FinalizationPhase.REMOVALS && (!this.removalQueue.isEmpty() || !this.insertionQueue.isEmpty())) {
+
+			// check for conflicting elements which have to be removed before insertion
+			Stream<E> removeForReplace = this.insertionQueue.stream()
+				.map(Ei::name)
+				.filter(name -> !this.removalQueue.contains(name))
+				.filter(this.element2ide::containsKey);
+			
+			// build list of elements to remove
+			Collection<E> toRemove = Stream.concat(removeForReplace, this.removalQueue.stream()).toList();
+			
+//			NodeNet.LOGGER.info(">>>> Network Space Finalization : REMOVAL : {} <<<<", this.toString());
+//			NodeNet.LOGGER.info("Queued: {}", this.removalQueue);
+//			NodeNet.LOGGER.info("Total: {}", toRemove);
+
+			try {
+				
+				// remove elements
+				directRemoveElements(toRemove);
+				
+			} catch (Exception e) {
+				NodeNet.LOGGER.warn("unabel to finalize queued removals on network space, network might be persistently corrupted: {}", this, e);
+			}
+
+			// clear queue
+			this.removalQueue.clear();
+
+//			NodeNet.LOGGER.info(">>>> STATUS : {} <<<<", this.toString());
+			
+		} else if (phase == FinalizationPhase.INSERTIONS && !this.insertionQueue.isEmpty()) {
+
+//			NodeNet.LOGGER.info(">>>> Network Space Finalization : INSERTION : {} <<<<", this.toString());
+//			NodeNet.LOGGER.info("Queued: {}", this.insertionQueue);
+
+			try {
+				
+				// insert elements
+				directInsertElements(this.insertionQueue);
+				
+			} catch (Exception e) {
+				NodeNet.LOGGER.warn("unabel to finalize queued insertions on network space, network might be persistently corrupted: {}", this, e);
+			}
+
+			// clear queue
+			this.insertionQueue.clear();
+
+//			NodeNet.LOGGER.info(">>>> STATUS : {} <<<<", this.toString());
+			
+		}
 		
 	}
 	
-	/**
-	 * Resets this network space by clearing all internal variables.
-	 * <b>This is not the same as removing all elements</b>, resetting the network discards all networks and element instances held within it <b>without triggering any removal events</b>.
-	 * It is not guaranteed that the networks and element instances are usable in a different network after this.<br>
-	 * Usually this method is used to quickly clear the network space and make it ready to accept new elements and build entirely new networks, without retaining anything from what was stored in it before.
-	 */
-	public void reset() {
-		this.element2ide.clear();
-		this.node2idn.clear();
-		this.lastElementId = 0;
-		this.lastNodeId = 0;
-		this.ide2instance.clear();
-		this.ide2network.clear();
-		this.removalQueue.clear();
-		this.insertionQueue.clear();
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName() + this.ide2network.values().stream().distinct().toList();
 	}
 	
 	/**
@@ -276,11 +316,6 @@ public abstract class NetworkSpace<N, E, Ei extends NetworkElement<N, E, Ni>, Ni
 	public abstract class Network implements NetworkAccessor<N, E, Ei, Ni> {
 		
 		protected final IntSet elements = new IntOpenHashSet();
-		
-// DON'T USE THIS, CAUSES CONSTRUCTOR CALL ORDER PROBLEMS
-//		public Network(IntCollection elements) {
-//			insertElements(elements);
-//		}
 		
 		public Network() {}
 		
@@ -295,6 +330,12 @@ public abstract class NetworkSpace<N, E, Ei extends NetworkElement<N, E, Ni>, Ni
 		 * @param elements The element instances which where inserted to this network
 		 */
 		protected abstract void afterElementsRemoved(Collection<Ei> elements);
+		
+		/**
+		 * Called whenever changes to the network where made and inner network spaces might need to be notified to run their {@link NetworkSpace#finalizeQueuedChanges(FinalizationPhase)} routine.
+		 * @param phase The finalization phase required to run
+		 */
+		protected abstract void finalizeSubSpace(FinalizationPhase phase);
 		
 		/**
 		 * Directly inserts a new element to this network by its network space wide unique IDE (IDentification of Element)<br>
@@ -327,7 +368,7 @@ public abstract class NetworkSpace<N, E, Ei extends NetworkElement<N, E, Ni>, Ni
 		 * @param elements The IDEs to remove
 		 */
 		protected final void removeElements(IntCollection element) {
-			Collection<Ei> instances = elements.intStream()
+			Collection<Ei> instances = element.intStream()
 				.peek(this.elements::remove)
 				.mapToObj(ide -> new Pair<>(ide, NetworkSpace.this.ide2instance.get(ide)))
 				.filter(pair -> pair.second() != null)
@@ -343,64 +384,57 @@ public abstract class NetworkSpace<N, E, Ei extends NetworkElement<N, E, Ni>, Ni
 			afterElementsRemoved(instances);
 		}
 		
-		/**
-		 * Clears the network, removing all elements and reseting any stored states to default.
-		 * <b>This method should never be called outside of the network space base class.</b><br>
-		 * This method does not perform any network rebuilding and if called improperly, will cause persistent corruption of the network space data.<br><br>
-		 * However, it is perfectly fine to override this method to perform additional actions required to reset the network to its default state (such as reseting additional variables in sub-classes)
-		 */
-		protected void clearNetwork() {
-			this.elements.clear();
-		}
-		
 		protected final void merge(Collection<Ni> networks, IntCollection elements) {
 			IntStream insertions = IntStream.concat(
 				networks.stream()
 					.flatMapToInt(network -> {
+						// remove the elements from the network ...
 						IntList ides = IntArrayList.toList(network.getElements());
 						network.removeElements(ides);
+						// ... and perform the requred changes on the potential inner network space (to free the inner elements up for re-insertion)
+						network.finalizeSubSpace(FinalizationPhase.REMOVALS);
 						return ides.intStream();
 					})
 					.distinct(),
 				elements.intStream()
 			).distinct();
+			// insert all elements to this network ...
 			insertElements(IntArrayList.toList(insertions));
+			// ... and perform the required changes here as well
+			finalizeSubSpace(FinalizationPhase.INSERTIONS);
 		}
 		
 		@SuppressWarnings({ "unchecked" })
-		protected final Collection<Ni> split(IntCollection nodes) {;
-			List<IntSet> traces = Tracer.trace(NetworkSpace.this.idn2ide, nodes).stream()
-					.peek(ides -> {
-						ides.intStream()
-							.mapToObj(NetworkSpace.this.ide2network::get)
-							.filter(Objects::nonNull)
-							.distinct()
-							.forEach(network -> network.removeElements(ides));
-					}).toList();
-			clearNetwork();
-			if (traces.isEmpty())
+		protected final Collection<Ni> split(Collection<Integer> startNodes) {
+			List<IntSet> traces = Tracer.traceFromElements(NetworkSpace.this.idn2ide, this.elements, startNodes).stream()
+				.sorted(ComparatorExtras.inverse(ComparatorExtras.toInt(IntSet::size)))
+				.toList();
+			
+			// nothing to do here, the entire network will be discarded (it contains no relevant elements)
+			if (traces.isEmpty()) {
+				// run this anyway, this might mean all elements have been removed (and thus are still waiting to be processed)
+				finalizeSubSpace(FinalizationPhase.REMOVALS);
+
+				this.elements.clear();
 				return Collections.emptyList();
-			traces.stream().limit(1).forEach(elements -> {
-				insertElements(elements);
-			});
-			return Streams.concat(Stream.of((Ni) this),  traces.stream().skip(1).map(NetworkSpace.this::createNetwork)).toList();
-		}
-		
-		@Override
-		public final int hashCode() {
-			return Objects.hash(this.elements);
-		}
-		
-		@Override
-		public final boolean equals(Object obj) {
-			if (obj instanceof NetworkSpace.Network other)
-				return other.elements.equals(this.elements);
-			return false;
+			}
+			
+			Stream<Ni> newNetworks = StreamExtras.forFirst(traces.stream(), elements -> {
+				// for the first resulting network, reuse this, remove everything which moved to another network ...
+				removeElements(IntArrayList.toList(this.elements.intStream().filter(i -> !elements.contains(i))));
+				// ... and perform the required operations on the potential inner network space (to free up the inner elements for re-insertion)
+				finalizeSubSpace(FinalizationPhase.REMOVALS);
+			// create new networks for the other elements (and perform the required insertion changes there as well)
+			}).map(NetworkSpace.this::createNetwork).peek(network -> network.finalizeSubSpace(FinalizationPhase.INSERTIONS));
+			
+			// return this and the new networks as a result
+			return Stream.concat(Stream.of((Ni) this), newNetworks).toList();
+			
 		}
 		
 		@Override
 		public String toString() {
-			return "Network" + this.elements.toString();
+			return this.getClass().getSimpleName() + this.elements.toString();
 		}
 		
 		/* >>>>>> Utility Methods <<<<<< */

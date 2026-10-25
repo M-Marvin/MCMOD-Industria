@@ -1,5 +1,7 @@
 package de.m_marvin.genet.network.nodal;
 
+import java.util.Objects;
+
 import de.m_marvin.genet.network.NetworkElement;
 import de.m_marvin.tvnlnna.nodal.INodalElement;
 import de.m_marvin.tvnlnna.nodal.NodalElementState;
@@ -46,4 +48,21 @@ public class Element<N, E> implements NetworkElement<N, E, Circuit<N, E>> {
 		this.network.addElement(this.state);
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(name());
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Element other)
+			return other.name().equals(this.name());
+		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName() + "{" + name() + "}";
+	}
+	
 }

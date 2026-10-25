@@ -2,6 +2,7 @@ package de.m_marvin.genet.network.nodal;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import de.m_marvin.genet.network.NetworkElement;
 
@@ -62,6 +63,23 @@ public abstract class Device<N, E> implements NetworkElement<N, E, Grid<N, E>> {
 		
 		this.circuits = network.getCircuits();
 		this.circuits.insertElements(this.elements.values());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name());
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Element other)
+			return other.name().equals(this.name());
+		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return "Device{" + name() + "}";
 	}
 	
 }

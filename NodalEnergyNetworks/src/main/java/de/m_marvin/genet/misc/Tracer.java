@@ -3,11 +3,16 @@ package de.m_marvin.genet.misc;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.OptionalInt;
 import java.util.Queue;
+import java.util.function.IntPredicate;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
 import de.m_marvin.unimap.types.MultiBiMap;
+import it.unimi.dsi.fastutil.ints.IntCollection;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 
@@ -19,7 +24,15 @@ public final class Tracer {
 	private Tracer() {}
 	
 	@SuppressWarnings("deprecation")
-	public static List<IntSet> trace(MultiBiMap<Integer, Integer> node2element, Collection<Integer> startNodes) {
+	public static List<IntSet> traceFromElements(MultiBiMap<Integer, Integer> node2element, IntCollection elements, Collection<Integer> startNodes) {
+		Collection<Integer> validNodes = startNodes.stream()
+			.filter(idn -> node2element.getAll(idn).stream().filter(elements::contains).count() > 0)
+			.toList();
+		return traceFromNodes(node2element, validNodes);
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static List<IntSet> traceFromNodes(MultiBiMap<Integer, Integer> node2element, Collection<Integer> startNodes) {
 		
 		IntSet tracedNodes = new IntOpenHashSet();
 		List<IntSet> traces = new ArrayList<>();
@@ -40,7 +53,7 @@ public final class Tracer {
 				for (int ide : node2element.getAll(idn)) {
 					// add element to the current trace
 					if (!trace.add(ide))
-						continue; // element already added
+						continue; // element already added or invalid
 					// update node to element map
 					node2element.getKeys(ide).stream()
 						.filter(Predicate.not(tracedNodes::contains))

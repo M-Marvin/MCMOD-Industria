@@ -4,8 +4,6 @@ import de.m_marvin.genet.NodeNet;
 import de.m_marvin.genet.domains.TypeChain;
 import de.m_marvin.genet.domains.integrators.IDeviceImplementor;
 import de.m_marvin.genet.domains.integrators.LevelBlockDomainIntegrator.BlockDevice;
-import de.m_marvin.genet.network.nodal.Element;
-import de.m_marvin.genet.network.nodal.ElementManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;

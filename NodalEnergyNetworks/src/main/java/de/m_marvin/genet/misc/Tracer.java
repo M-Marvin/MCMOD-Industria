@@ -3,13 +3,9 @@ package de.m_marvin.genet.misc;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.OptionalInt;
 import java.util.Queue;
-import java.util.function.IntPredicate;
 import java.util.function.Predicate;
-import java.util.stream.IntStream;
 
 import de.m_marvin.unimap.types.MultiBiMap;
 import it.unimi.dsi.fastutil.ints.IntCollection;

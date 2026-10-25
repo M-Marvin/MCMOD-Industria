@@ -29,10 +29,4 @@ public class Circuit<N, E> extends NetworkSpace<N, E, Element<N, E>, Circuit<N, 
 	@Override
 	protected void finalizeSubSpace(FinalizationPhase phase) {}
 	
-//	@Override
-//	protected void clearNetwork() {
-//		super.clearNetwork();
-//		this.nodal.reset();
-//	}
-	
 }

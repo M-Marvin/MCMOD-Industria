@@ -3,7 +3,9 @@ package de.m_marvin.genet.network;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
@@ -20,6 +22,8 @@ import de.m_marvin.stdextras.ComparatorExtras;
 import de.m_marvin.stdextras.Pair;
 import de.m_marvin.stdextras.StreamExtras;
 import de.m_marvin.unimap.UniMap;
+import de.m_marvin.unimap.impl.ModularBiMap;
+import de.m_marvin.unimap.impl.ModularMultiMap;
 import de.m_marvin.unimap.types.BiMap;
 import de.m_marvin.unimap.types.MultiBiMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -51,7 +55,7 @@ public abstract class NetworkSpace<N, E, Ei extends NetworkElement<N, E, Ni>, Ni
 	// network space wide element and network mappings
 	protected final MultiBiMap<Integer, Integer> idn2ide = UniMap.HASH_FAST.newMultiBiMap();
 	protected final Int2ObjectMap<Ei> ide2instance = new Int2ObjectOpenHashMap<>();
-	protected final BiMap<Integer, Ni> ide2network = UniMap.HASH_FAST.newBiMap();
+	protected final BiMap<Integer, Ni> ide2network = new ModularBiMap<Integer, Ni>(new HashMap<Integer, Ni>(), new ModularMultiMap<Ni, Integer>(new IdentityHashMap<Ni, Set<Integer>>(), HashSet::new));
 	
 	/**
 	 * This method is called if a new network needs to be constructed.

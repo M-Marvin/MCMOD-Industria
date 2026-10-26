@@ -7,10 +7,13 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
 
+import de.m_marvin.genet.domains.TypeChain;
 import de.m_marvin.genet.domains.TypeChainDomain;
 import de.m_marvin.genet.domains.integrators.LevelBlockDomainIntegrator;
+import de.m_marvin.genet.domains.integrators.testitems.TestVoltageBlock;
 import de.m_marvin.genet.domains.integrators.testitems.TestWireBlock;
 import de.m_marvin.genet.network.nodal.ElementManager;
+import de.m_marvin.genet.network.nodal.SimulationEngine;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.BlockItem;
@@ -43,6 +46,9 @@ public class NodeNet {
 	/** Default ElementManager, loads Models from "data/modid/elements" **/
 	public static final ElementManager ELEMENTS = new ElementManager(new Gson(), "elements");
 	
+	/** Default Nodal Network Simulation Engine **/
+	public static final SimulationEngine<TypeChain, TypeChain> SIMULATOR = new SimulationEngine<TypeChain, TypeChain>();
+	
 	/** Resource Key for the Domain Registry **/
 	public static final ResourceLocation DOMAINS_REGISTRY_LOCATION = ResourceLocation.tryBuild(NodeNet.MODID, "domains");
 	private static final DeferredRegister<TypeChainDomain> DOMAINS = DeferredRegister.create(DOMAINS_REGISTRY_LOCATION, NodeNet.MODID);
@@ -50,7 +56,7 @@ public class NodeNet {
 	public static final Supplier<IForgeRegistry<TypeChainDomain>> DOMAINS_REGISTRY = DOMAINS.makeRegistry(() -> RegistryBuilder.<TypeChainDomain>of(DOMAINS_REGISTRY_LOCATION).disableSync().disableSaving());
 	
 	/** Default Global Domain, used for Level Blocks by default Integrator across all Dimensions **/
-	public static final RegistryObject<TypeChainDomain> GLOBAL = DOMAINS.register("global", TypeChainDomain::new);
+	public static final RegistryObject<TypeChainDomain> GLOBAL = DOMAINS.register("global", () -> new TypeChainDomain(SIMULATOR));
 	
 	/** Default Level Block Integrator, implementing connections between neighboring blocks **/
 	public static final Capability<LevelBlockDomainIntegrator> LEVEL_BLOCK_INTEGRATOR = CapabilityManager.get(new CapabilityToken<LevelBlockDomainIntegrator>() {});
@@ -60,6 +66,8 @@ public class NodeNet {
 	
 	public static final RegistryObject<Block> TEST_WIRE = BLOCKS.register("test_wire", () -> new TestWireBlock(Properties.of().mapColor(MapColor.COLOR_PURPLE).requiresCorrectToolForDrops().strength(-1.0F, 3600000.0F).noLootTable()));
 	public static final RegistryObject<Item> TEST_WIRE_ITEM = ITEMS.register("test_wire", () -> new BlockItem(TEST_WIRE.get(), new Item.Properties()));
+	public static final RegistryObject<Block> TEST_VOLTAGE = BLOCKS.register("test_voltage", () -> new TestVoltageBlock(Properties.of().mapColor(MapColor.COLOR_PURPLE).requiresCorrectToolForDrops().strength(-1.0F, 3600000.0F).noLootTable()));
+	public static final RegistryObject<Item> TEST_VOLTAGE_ITEM = ITEMS.register("test_voltage", () -> new BlockItem(TEST_VOLTAGE.get(), new Item.Properties()));
 	
 	public NodeNet(FMLJavaModLoadingContext modctx) {
 

@@ -1,14 +1,38 @@
 package de.m_marvin.genet.domains;
 
 import de.m_marvin.genet.NodeNet;
+import de.m_marvin.genet.network.nodal.Circuit;
+import de.m_marvin.genet.network.nodal.CircuitSpace;
 import de.m_marvin.genet.network.nodal.Device;
+import de.m_marvin.genet.network.nodal.Grid;
 import de.m_marvin.genet.network.nodal.GridSpace;
+import de.m_marvin.genet.network.nodal.SimulationEngine;
 import net.minecraft.resources.ResourceLocation;
 
 public class TypeChainDomain extends GridSpace<TypeChain, TypeChain> {
 	
+	private final SimulationEngine<TypeChain, TypeChain> simulator;
+	
+	public TypeChainDomain(SimulationEngine<TypeChain, TypeChain> simulator) {
+		this.simulator = simulator;
+	}
+	
 	public ResourceLocation getDomainName() {
 		return NodeNet.DOMAINS_REGISTRY.get().getKey(this);
+	}
+	
+	public SimulationEngine<TypeChain, TypeChain> getSimulator() {
+		return simulator;
+	}
+	
+	public void tick() {
+		finalizeQueuedChanges();
+		
+		getNetworks()
+			.map(Grid::getCircuits)
+			.flatMap(CircuitSpace::getNetworks)
+			.map(Circuit::getNodal)
+			.forEach(network -> this.simulator.submit(network, 20));
 	}
 	
 	public class DomainIntegrator {

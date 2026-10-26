@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=north": { "model": "nodenet:block/test_voltage" },
+		"facing=south": { "model": "nodenet:block/test_voltage", "y": 180 },
+		"facing=east": { "model": "nodenet:block/test_voltage", "y": -90 },
+		"facing=west": { "model": "nodenet:block/test_voltage", "y": 90 }
+	}
+}

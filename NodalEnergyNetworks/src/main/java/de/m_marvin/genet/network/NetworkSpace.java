@@ -607,4 +607,8 @@ public abstract class NetworkSpace<N, E, Ei extends NetworkElement<N, E, Ni>, Ni
 		return getElementNetwork(getElementId(elementName));
 	}
 	
+	public Stream<Ni> getNetworks() {
+		return this.ide2network.values().stream().distinct();
+	}
+	
 }

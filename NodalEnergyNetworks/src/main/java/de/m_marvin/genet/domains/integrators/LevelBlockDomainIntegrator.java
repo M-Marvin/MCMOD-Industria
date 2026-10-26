@@ -98,8 +98,6 @@ public class LevelBlockDomainIntegrator extends TypeChainDomain.DomainIntegrator
 		
 		public BlockDevice(TypeChain name) {
 			super(name);
-//			if (!syncFromLevel())
-//				throw new IllegalStateException("device block is not a block device: " + name);
 		}
 		
 		public Level getLevel() {
@@ -165,7 +163,7 @@ public class LevelBlockDomainIntegrator extends TypeChainDomain.DomainIntegrator
 	@SubscribeEvent
 	public void onLevelTick(TickEvent.LevelTickEvent event) {
 		if (event.phase == Phase.END && event.type == Type.LEVEL && event.side == LogicalSide.SERVER)
-			NodeNet.GLOBAL.get().finalizeQueuedChanges();
+			NodeNet.GLOBAL.get().tick();
 	}
 	
 	@SubscribeEvent

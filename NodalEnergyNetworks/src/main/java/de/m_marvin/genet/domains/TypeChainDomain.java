@@ -11,14 +11,19 @@ import net.minecraft.resources.ResourceLocation;
 
 public class TypeChainDomain extends GridSpace<TypeChain, TypeChain> {
 	
-	private final SimulationEngine<TypeChain, TypeChain> simulator;
-	
-	public TypeChainDomain(SimulationEngine<TypeChain, TypeChain> simulator) {
-		this.simulator = simulator;
-	}
+	private SimulationEngine<TypeChain, TypeChain> simulator;
 	
 	public ResourceLocation getDomainName() {
 		return NodeNet.DOMAINS_REGISTRY.get().getKey(this);
+	}
+	
+	public void setSimulator(SimulationEngine<TypeChain, TypeChain> simulator) {
+		this.simulator = simulator;
+	}
+	
+	public void resetDomain() {
+		this.simulator = null;
+		resetNetworkSpace();
 	}
 	
 	public SimulationEngine<TypeChain, TypeChain> getSimulator() {
@@ -28,11 +33,12 @@ public class TypeChainDomain extends GridSpace<TypeChain, TypeChain> {
 	public void tick() {
 		finalizeQueuedChanges();
 		
-		getNetworks()
-			.map(Grid::getCircuits)
-			.flatMap(CircuitSpace::getNetworks)
-			.map(Circuit::getNodal)
-			.forEach(network -> this.simulator.submit(network, 20));
+		if (this.simulator != null)
+			getNetworks()
+				.map(Grid::getCircuits)
+				.flatMap(CircuitSpace::getNetworks)
+				.map(Circuit::getNodal)
+				.forEach(network -> this.simulator.submit(network, 20));
 	}
 	
 	public class DomainIntegrator {

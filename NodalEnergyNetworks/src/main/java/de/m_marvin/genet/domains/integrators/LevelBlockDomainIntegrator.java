@@ -159,12 +159,12 @@ public class LevelBlockDomainIntegrator extends TypeChainDomain.DomainIntegrator
 		
 	}
 	
-	// TODO this should happen somewhere else ... idealy where save/load is handled later on ...
-	@SubscribeEvent
-	public void onLevelTick(TickEvent.LevelTickEvent event) {
-		if (event.phase == Phase.END && event.type == Type.LEVEL && event.side == LogicalSide.SERVER)
-			NodeNet.GLOBAL.get().tick();
-	}
+//	// TODO this should happen somewhere else ... idealy where save/load is handled later on ...
+//	@SubscribeEvent
+//	public void onLevelTick(TickEvent.LevelTickEvent event) {
+//		if (event.phase == Phase.END && event.type == Type.LEVEL && event.side == LogicalSide.SERVER)
+//			NodeNet.GLOBAL.get().tick();
+//	}
 	
 	@SubscribeEvent
 	public void onBlockStateChange(BlockEvent.NeighborNotifyEvent event) {

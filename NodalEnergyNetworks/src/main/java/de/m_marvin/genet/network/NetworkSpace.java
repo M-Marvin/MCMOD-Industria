@@ -57,6 +57,19 @@ public abstract class NetworkSpace<N, E, Ei extends NetworkElement<N, E, Ni>, Ni
 	protected final Int2ObjectMap<Ei> ide2instance = new Int2ObjectOpenHashMap<>();
 	protected final BiMap<Integer, Ni> ide2network = new ModularBiMap<Integer, Ni>(new HashMap<Integer, Ni>(), new ModularMultiMap<Ni, Integer>(new IdentityHashMap<Ni, Set<Integer>>(), HashSet::new));
 	
+	public void resetNetworkSpace() {
+		this.node2idn.clear();
+		this.element2ide.clear();
+		this.idn2ide.clear();
+		this.ide2instance.clear();
+		this.ide2network.clear();
+		this.lastElementId = 0;
+		this.lastElementId = 0;
+		
+		this.insertionQueue.clear();
+		this.removalQueue.clear();
+	}
+	
 	/**
 	 * This method is called if a new network needs to be constructed.
 	 * The algorithms try to reuse existing instances as much as possible, but if networks are split new ones need to be constructed.
@@ -267,9 +280,9 @@ public abstract class NetworkSpace<N, E, Ei extends NetworkElement<N, E, Ni>, Ni
 			// build list of elements to remove
 			Collection<E> toRemove = Stream.concat(removeForReplace, this.removalQueue.stream()).toList();
 			
-//			NodeNet.LOGGER.info(">>>> Network Space Finalization : REMOVAL : {} <<<<", this.toString());
-//			NodeNet.LOGGER.info("Queued: {}", this.removalQueue);
-//			NodeNet.LOGGER.info("Total: {}", toRemove);
+			NodeNet.LOGGER.info(">>>> Network Space Finalization : REMOVAL : {} <<<<", this.toString());
+			NodeNet.LOGGER.info("Queued: {}", this.removalQueue);
+			NodeNet.LOGGER.info("Total: {}", toRemove);
 
 			try {
 				
@@ -283,12 +296,12 @@ public abstract class NetworkSpace<N, E, Ei extends NetworkElement<N, E, Ni>, Ni
 			// clear queue
 			this.removalQueue.clear();
 
-//			NodeNet.LOGGER.info(">>>> STATUS : {} <<<<", this.toString());
+			NodeNet.LOGGER.info(">>>> STATUS : {} <<<<", this.toString());
 			
 		} else if (phase == FinalizationPhase.INSERTIONS && !this.insertionQueue.isEmpty()) {
 
-//			NodeNet.LOGGER.info(">>>> Network Space Finalization : INSERTION : {} <<<<", this.toString());
-//			NodeNet.LOGGER.info("Queued: {}", this.insertionQueue);
+			NodeNet.LOGGER.info(">>>> Network Space Finalization : INSERTION : {} <<<<", this.toString());
+			NodeNet.LOGGER.info("Queued: {}", this.insertionQueue);
 
 			try {
 				
@@ -302,7 +315,7 @@ public abstract class NetworkSpace<N, E, Ei extends NetworkElement<N, E, Ni>, Ni
 			// clear queue
 			this.insertionQueue.clear();
 
-//			NodeNet.LOGGER.info(">>>> STATUS : {} <<<<", this.toString());
+			NodeNet.LOGGER.info(">>>> STATUS : {} <<<<", this.toString());
 			
 		}
 		

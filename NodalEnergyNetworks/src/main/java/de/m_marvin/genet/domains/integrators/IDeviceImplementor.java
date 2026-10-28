@@ -32,7 +32,8 @@ public interface IDeviceImplementor {
 	public void installDeviceElements(BlockDevice device);
 	
 	/**
-	 * Invoked when the state of the device has changed, to allow the block to apply changes to thbe elements if it wants.
+	 * Invoked when the state of the device has changed, to allow the block to apply changes to the elements if it wants.
+	 * Only called when {@link IDeviceImplementor#doesDeviceKeepElements(Level, BlockPos, BlockState, BlockState)} returns true.
 	 * @param device
 	 */
 	default public void updateDeviceElements(BlockDevice device) {}

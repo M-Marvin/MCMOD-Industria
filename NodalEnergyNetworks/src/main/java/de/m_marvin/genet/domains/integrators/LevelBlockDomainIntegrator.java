@@ -117,8 +117,9 @@ public class LevelBlockDomainIntegrator extends TypeChainDomain.DomainIntegrator
 						.map(side -> outerNode(side))
 						.toArray(TypeChain[]::new);
 				boolean nodesChanged = !Arrays.equals(this.cachedNodes, nodes);
+				if (nodesChanged) onRemovalFromNetwork(); // the device will be re-inserted, prevent the folowing calls to queue insertion requests before that is done.
 				
-				if (nodesChanged || !implementor.doesDeviceKeepElements(getLevel(), getPosition(), this.cachedState, state)) {
+				if (!implementor.doesDeviceKeepElements(getLevel(), getPosition(), this.cachedState, state)) {
 					removeAllElements();
 					this.cachedState = state;
 					this.cachedBlock = implementor;

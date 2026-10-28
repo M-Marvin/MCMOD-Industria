@@ -120,6 +120,11 @@ public class TestWireBlock extends Block implements IDeviceImplementor {
 	}
 	
 	@Override
+	public boolean doesDeviceKeepElements(Level level, BlockPos pos, BlockState state, BlockState stateNew) {
+		return false;
+	}
+	
+	@Override
 	public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
 		return super.getCollisionShape(state, level, pos, context);
 	}

@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 import de.m_marvin.genet.NodeNet;
+import de.m_marvin.tvnlnna.NetworkSolverException;
 import de.m_marvin.tvnlnna.nodal.NodalNetwork;
 import de.m_marvin.tvnlnna.solver.NodalNetworkSolver;
 import de.m_marvin.tvnlnna.solver.NodalNetworkSolver_LAPACK;
@@ -18,107 +19,98 @@ public class SimulationEngine<N, E> {
 	
 	private final MinecraftServer gameServer;
 	private final Supplier<NodalNetworkSolver<N, E>> backendFactory;
-	private final ForkJoinPool executor;
 	private final Map<NodalNetwork<N, E>, SimulationTask> activeTasks = new IdentityHashMap<NodalNetwork<N,E>, SimulationEngine<N,E>.SimulationTask>();
+	
+	public static final double NOMINAL_BASE_TICK_TIME = 0.05;
+	public static final double NOMINAL_SIM_TICK_TIME = 0.05;
 	
 	public SimulationEngine(MinecraftServer server) {
 		this.gameServer = server;
 		
-		this.executor = new ForkJoinPool(
-				4, // TODO config
-				ForkJoinSimulationWorkerThread::new, 
-				this::onThreadError, 
-				true, 
-				4, // TODO config
-				4, // TODO config
-				1, 
-				null, 
-				10, 
-				TimeUnit.SECONDS
-			);
-		
 		this.backendFactory = NodalNetworkSolver_LAPACK::standard; // TODO config
+		
+		
 		
 	}
 	
 	public boolean shutdown() {
-		try {
-			return this.executor.awaitTermination(10, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {
-			NodeNet.LOGGER.warn("Simulation Engine Shutdown: Exception during Executor Shutdown", e);
-			return false;
-		}
+//		try {
+//			return this.executor.awaitTermination(10, TimeUnit.SECONDS);
+//		} catch (InterruptedException e) {
+//			NodeNet.LOGGER.warn("Simulation Engine Shutdown: Exception during Executor Shutdown", e);
+//			return false;
+//		}
 	}
 	
 	public int getTickTime() {
 		return this.gameServer.getTickCount();
 	}
 	
-	protected class ForkJoinSimulationWorkerThread extends ForkJoinWorkerThread {
+	public double getSimulationTime() {
+		return getTickTime() * NOMINAL_BASE_TICK_TIME;
+	}
+	
+	
+	
+//	private void onThreadError(Thread simulationThread, Throwable error) {
+//		NodeNet.LOGGER.error("Exception within Simulation Engine Worker: {}", simulationThread.getName(), error);
+//	}
+	
+	public static class SimulationWorkerThread extends Thread {
 		
-		private final NodalNetworkSolver<N, E> solverBackend;
+		private static int simulationWorkerIndex = 0;
 		
-		protected ForkJoinSimulationWorkerThread(ForkJoinPool pool) {
-			super(pool);
-			this.solverBackend = SimulationEngine.this.backendFactory.get();
+		public SimulationWorkerThread(ThreadGroup group) {
+			super(group, "NodelSimulationWorker-" + simulationWorkerIndex++);
+		}
+		
+		@Override
+		public void run() {
 			
-			setName("NodalSimulationWorker-" + getPoolIndex());
-		}
-		
-		public NodalNetworkSolver<N, E> getSolverBackend() {
-			return solverBackend;
+			
+			
 		}
 		
 	}
 	
-	private void onThreadError(Thread simulationThread, Throwable error) {
-		NodeNet.LOGGER.error("Exception within Simulation Engine Worker: {}", simulationThread.getName(), error);
-	}
-	
-	public class SimulationTask extends ForkJoinTask<Void> {
+	public class SimulationTask {
 		
-		private static final long serialVersionUID = -5422172476180704241L;
-		
+		private final NodalNetworkSolver<N, E> solver;
 		private final NodalNetwork<N, E> network;
+		private NetworkSolverException exception = null;
 		private volatile long expiration;
 		
 		public SimulationTask(NodalNetwork<N, E> network, int timeout) {
 			this.network = network;
 			updateTimeout(timeout);
+			
+			this.solver = SimulationEngine.this.backendFactory.get();
+			this.solver.setNetwork(this.network);
+			this.solver.setSimulationTime(SimulationEngine.this.getSimulationTime());
+			this.solver.resetAndInitSimulation();
 		}
 		
 		public void updateTimeout(int timeout) {
 			this.expiration = getTickTime() + timeout;
 		}
 		
-		@SuppressWarnings("unchecked")
-		public NodalNetworkSolver<N, E> getSolverBackend() {
-			if (Thread.currentThread() instanceof SimulationEngine<?, ?>.ForkJoinSimulationWorkerThread simulationThread) {
-				return (NodalNetworkSolver<N, E>) simulationThread.getSolverBackend();
-			}
-			throw new UnsupportedOperationException("attepmted to run simulation task in generic executor service");
+		public NetworkSolverException getException() {
+			return exception;
 		}
 		
-		@Override
-		public Void getRawResult() {
-			return null;
-		}
-
-		@Override
-		protected void setRawResult(Void value) {}
-
-		@Override
-		protected boolean exec() {
+		public boolean runStep() {
 			
-			NodalNetworkSolver<N, E> solver = getSolverBackend();
-			
-			System.out.println(solver + " :: " + System.identityHashCode(this.network));
-//			solver.setNetwork(this.network);
-//			solver.setSimulationTime( 0.0 ); // Uh ...
-//			
-//			solver.step( 0.0 );
+			if (this.exception == null) {
+				try {
+					this.solver.step(NOMINAL_BASE_TICK_TIME);
+				} catch (NetworkSolverException e) {
+					this.exception = e;
+					NodeNet.LOGGER.warn("simulation halted, solver exception during simulation of network:\n{}", this.network, e);
+				}
+			}
 			
 			return getTickTime() > this.expiration;
+			
 		}
 		
 	}

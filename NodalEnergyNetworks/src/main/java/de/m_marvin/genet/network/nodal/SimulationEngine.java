@@ -6,9 +6,12 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.ForkJoinWorkerThread;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import de.m_marvin.genet.NodeNet;
+import de.m_marvin.stdextras.periodic.PeriodicExecutorService;
+import de.m_marvin.stdextras.periodic.PeriodicExecutor.PeriodicTask;
 import de.m_marvin.tvnlnna.NetworkSolverException;
 import de.m_marvin.tvnlnna.nodal.NodalNetwork;
 import de.m_marvin.tvnlnna.solver.NodalNetworkSolver;
@@ -20,6 +23,7 @@ public class SimulationEngine<N, E> {
 	private final MinecraftServer gameServer;
 	private final Supplier<NodalNetworkSolver<N, E>> backendFactory;
 	private final Map<NodalNetwork<N, E>, SimulationTask> activeTasks = new IdentityHashMap<NodalNetwork<N,E>, SimulationEngine<N,E>.SimulationTask>();
+	private final PeriodicExecutorService simulationService;
 	
 	public static final double NOMINAL_BASE_TICK_TIME = 0.05;
 	public static final double NOMINAL_SIM_TICK_TIME = 0.05;
@@ -29,17 +33,22 @@ public class SimulationEngine<N, E> {
 		
 		this.backendFactory = NodalNetworkSolver_LAPACK::standard; // TODO config
 		
-		
+		this.simulationService = null; // TODO no working implementation yet ...
 		
 	}
 	
 	public boolean shutdown() {
-//		try {
-//			return this.executor.awaitTermination(10, TimeUnit.SECONDS);
-//		} catch (InterruptedException e) {
-//			NodeNet.LOGGER.warn("Simulation Engine Shutdown: Exception during Executor Shutdown", e);
-//			return false;
-//		}
+		try {
+			this.simulationService.shutdown();
+			if (!this.simulationService.awaitTermination(10, TimeUnit.SECONDS)) {
+				this.simulationService.shutdownNow();
+				NodeNet.LOGGER.warn("Simulation Engine Shutdown: Termination Abnormal");
+			}
+			return true;
+		} catch (InterruptedException e) {
+			NodeNet.LOGGER.warn("Simulation Engine Shutdown: Exception during Executor Shutdown", e);
+			return false;
+		}
 	}
 	
 	public int getTickTime() {
@@ -56,24 +65,24 @@ public class SimulationEngine<N, E> {
 //		NodeNet.LOGGER.error("Exception within Simulation Engine Worker: {}", simulationThread.getName(), error);
 //	}
 	
-	public static class SimulationWorkerThread extends Thread {
-		
-		private static int simulationWorkerIndex = 0;
-		
-		public SimulationWorkerThread(ThreadGroup group) {
-			super(group, "NodelSimulationWorker-" + simulationWorkerIndex++);
-		}
-		
-		@Override
-		public void run() {
-			
-			
-			
-		}
-		
-	}
+//	public static class SimulationWorkerThread extends Thread {
+//		
+//		private static int simulationWorkerIndex = 0;
+//		
+//		public SimulationWorkerThread(ThreadGroup group) {
+//			super(group, "NodelSimulationWorker-" + simulationWorkerIndex++);
+//		}
+//		
+//		@Override
+//		public void run() {
+//			
+//			
+//			
+//		}
+//		
+//	}
 	
-	public class SimulationTask {
+	public class SimulationTask extends PeriodicTask {
 		
 		private final NodalNetworkSolver<N, E> solver;
 		private final NodalNetwork<N, E> network;
@@ -98,7 +107,8 @@ public class SimulationEngine<N, E> {
 			return exception;
 		}
 		
-		public boolean runStep() {
+		@Override
+		public boolean exec(int lastPeriod, int lastExecution, BooleanSupplier hasTime) {
 			
 			if (this.exception == null) {
 				try {
@@ -125,7 +135,7 @@ public class SimulationEngine<N, E> {
 		SimulationTask task = this.activeTasks.get(network);
 		if (task == null) {
 			task = new SimulationTask(network, timeout);
-			this.executor.submit(task);
+			this.simulationService.submit(task);
 			this.activeTasks.put(network, task);
 		} else {
 			task.updateTimeout(timeout);

@@ -2,16 +2,13 @@ package de.m_marvin.genet.network.nodal;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.ForkJoinTask;
-import java.util.concurrent.ForkJoinWorkerThread;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import de.m_marvin.genet.NodeNet;
-import de.m_marvin.stdextras.periodic.PeriodicExecutorService;
 import de.m_marvin.stdextras.periodic.PeriodicExecutor.PeriodicTask;
+import de.m_marvin.stdextras.periodic.PeriodicThreadPool;
 import de.m_marvin.tvnlnna.NetworkSolverException;
 import de.m_marvin.tvnlnna.nodal.NodalNetwork;
 import de.m_marvin.tvnlnna.solver.NodalNetworkSolver;
@@ -19,22 +16,36 @@ import de.m_marvin.tvnlnna.solver.NodalNetworkSolver_LAPACK;
 import net.minecraft.server.MinecraftServer;
 
 public class SimulationEngine<N, E> {
+
+	public static final double NOMINAL_BASE_TICK_TIME = 0.05;
 	
 	private final MinecraftServer gameServer;
 	private final Supplier<NodalNetworkSolver<N, E>> backendFactory;
 	private final Map<NodalNetwork<N, E>, SimulationTask> activeTasks = new IdentityHashMap<NodalNetwork<N,E>, SimulationEngine<N,E>.SimulationTask>();
-	private final PeriodicExecutorService simulationService;
-	
-	public static final double NOMINAL_BASE_TICK_TIME = 0.05;
-	public static final double NOMINAL_SIM_TICK_TIME = 0.05;
+	private final PeriodicThreadPool simulationService;
+	private int simulationStepTime = 50000;
 	
 	public SimulationEngine(MinecraftServer server) {
 		this.gameServer = server;
 		
 		this.backendFactory = NodalNetworkSolver_LAPACK::standard; // TODO config
 		
-		this.simulationService = null; // TODO no working implementation yet ...
+		this.simulationService = new PeriodicThreadPool(
+				this.simulationStepTime, 
+				4, // TODO config
+				"NodeNet-Worker-"
+		);
 		
+	}
+	
+	// TODO adjust when server tick time is changed
+	public void setSimulationStepTime(int stepTime) {
+		this.simulationStepTime = stepTime;
+		this.simulationService.setPeriodeTime(this.simulationStepTime);
+	}
+	
+	public int getSimulationStepTime() {
+		return simulationStepTime;
 	}
 	
 	public boolean shutdown() {
@@ -58,29 +69,6 @@ public class SimulationEngine<N, E> {
 	public double getSimulationTime() {
 		return getTickTime() * NOMINAL_BASE_TICK_TIME;
 	}
-	
-	
-	
-//	private void onThreadError(Thread simulationThread, Throwable error) {
-//		NodeNet.LOGGER.error("Exception within Simulation Engine Worker: {}", simulationThread.getName(), error);
-//	}
-	
-//	public static class SimulationWorkerThread extends Thread {
-//		
-//		private static int simulationWorkerIndex = 0;
-//		
-//		public SimulationWorkerThread(ThreadGroup group) {
-//			super(group, "NodelSimulationWorker-" + simulationWorkerIndex++);
-//		}
-//		
-//		@Override
-//		public void run() {
-//			
-//			
-//			
-//		}
-//		
-//	}
 	
 	public class SimulationTask extends PeriodicTask {
 		
@@ -108,11 +96,11 @@ public class SimulationEngine<N, E> {
 		}
 		
 		@Override
-		public boolean exec(int lastPeriod, int lastExecution, BooleanSupplier hasTime) {
+		public boolean exec(long lastPeriod, long lastExecution, BooleanSupplier hasTime) {
 			
 			if (this.exception == null) {
 				try {
-					this.solver.step(NOMINAL_BASE_TICK_TIME);
+					this.solver.step(SimulationEngine.this.simulationStepTime);
 				} catch (NetworkSolverException e) {
 					this.exception = e;
 					NodeNet.LOGGER.warn("simulation halted, solver exception during simulation of network:\n{}", this.network, e);

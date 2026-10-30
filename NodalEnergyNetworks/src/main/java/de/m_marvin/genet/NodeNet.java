@@ -6,7 +6,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
-import com.mojang.realmsclient.client.Request.Get;
 
 import de.m_marvin.genet.domains.TypeChain;
 import de.m_marvin.genet.domains.TypeChainDomain;
@@ -15,7 +14,6 @@ import de.m_marvin.genet.domains.integrators.testitems.TestVoltageBlock;
 import de.m_marvin.genet.domains.integrators.testitems.TestWireBlock;
 import de.m_marvin.genet.network.nodal.ElementManager;
 import de.m_marvin.genet.network.nodal.SimulationEngine;
-import net.minecraft.client.telemetry.events.WorldLoadEvent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.BlockItem;

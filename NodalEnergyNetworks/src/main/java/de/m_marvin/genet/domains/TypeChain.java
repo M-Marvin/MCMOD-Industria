@@ -16,7 +16,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 
 import de.m_marvin.genet.misc.DataResultExtras;
-import de.m_marvin.stdextras.StreamExtras;
+import de.m_marvin.stdextras.streams.StreamExtras;
 import de.m_marvin.unimap.UniMap;
 import de.m_marvin.unimap.types.BiMap;
 import net.minecraft.core.BlockPos;

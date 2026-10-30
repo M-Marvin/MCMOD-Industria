@@ -8,8 +8,8 @@ import java.util.stream.Stream;
 
 import com.mojang.serialization.DataResult;
 
-import de.m_marvin.stdextras.unstable.UnstableFunction;
-import de.m_marvin.stdextras.unstable.UnstableSupplier;
+import de.m_marvin.stdextras.functional.UnstableFunction;
+import de.m_marvin.stdextras.functional.UnstableSupplier;
 
 public class DataResultExtras {
 	

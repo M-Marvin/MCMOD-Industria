@@ -47,7 +47,7 @@ public class Element<N, E> implements NetworkElement<N, E, Circuit<N, E>> {
 		this.network = circuit.getNodal();
 		this.network.addElement(this.state);
 	}
-
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(name());
